@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts ===
+//// [tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts] ////
+
+=== thisInArrowFunctionInStaticInitializer1.ts ===
 function log(a) { }
 >log : Symbol(log, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 0))
 >a : Symbol(a, Decl(thisInArrowFunctionInStaticInitializer1.ts, 0, 13))

@@ -2,7 +2,7 @@
 
 // @Filename: b.ts
 ////import /*alias1Definition*/alias1 = require("fileb");
-////module Module {
+////namespace Module {
 ////    export import /*alias2Definition*/alias2 = alias1;
 ////}
 ////
@@ -23,7 +23,7 @@
 ////    x;
 ////}
 
-verify.goToDefinition([
-    [["alias1Type", "alias1Value"], "alias1Definition"],
-    [["alias2Type", "alias2Value"], "alias2Definition"]
-]);
+verify.baselineGoToDefinition(
+    "alias1Type", "alias1Value",
+    "alias2Type", "alias2Value",
+);

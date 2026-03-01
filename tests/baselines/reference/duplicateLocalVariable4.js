@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLocalVariable4.ts] ////
+
 //// [duplicateLocalVariable4.ts]
 enum E{
 a
@@ -7,6 +9,7 @@ var x = E;
 var x = E.a;
 
 //// [duplicateLocalVariable4.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

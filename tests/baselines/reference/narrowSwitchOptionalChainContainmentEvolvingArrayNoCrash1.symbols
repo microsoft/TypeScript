@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts] ////
+
+=== narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts ===
+let foo = [];
+>foo : Symbol(foo, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 0, 3))
+
+switch (foo?.length) {
+>foo?.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 0, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+  case 1:
+    foo[0];
+>foo : Symbol(foo, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 0, 3))
+}
+
+let bar = [];
+>bar : Symbol(bar, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 7, 3))
+
+switch (bar?.length) {
+>bar?.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 7, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+  case 1: {
+    bar.push("baz");
+>bar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 7, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    const arr: string[] = bar;
+>arr : Symbol(arr, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 12, 9))
+>bar : Symbol(bar, Decl(narrowSwitchOptionalChainContainmentEvolvingArrayNoCrash1.ts, 7, 3))
+  }
+}
+

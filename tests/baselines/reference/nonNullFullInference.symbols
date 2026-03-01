@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/nonNullFullInference.ts] ////
+
+=== nonNullFullInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/19577
+
+function testNonNullInference(numbers: number[]) {
+>testNonNullInference : Symbol(testNonNullInference, Decl(nonNullFullInference.ts, 0, 0))
+>numbers : Symbol(numbers, Decl(nonNullFullInference.ts, 2, 30))
+
+    let last;
+>last : Symbol(last, Decl(nonNullFullInference.ts, 3, 7))
+
+    for (const n of numbers) {
+>n : Symbol(n, Decl(nonNullFullInference.ts, 5, 14))
+>numbers : Symbol(numbers, Decl(nonNullFullInference.ts, 2, 30))
+
+        if (n % 2) {
+>n : Symbol(n, Decl(nonNullFullInference.ts, 5, 14))
+
+            return n;
+>n : Symbol(n, Decl(nonNullFullInference.ts, 5, 14))
+        }
+
+        last = n;
+>last : Symbol(last, Decl(nonNullFullInference.ts, 3, 7))
+>n : Symbol(n, Decl(nonNullFullInference.ts, 5, 14))
+    }
+
+    last;
+>last : Symbol(last, Decl(nonNullFullInference.ts, 3, 7))
+
+    last!;
+>last : Symbol(last, Decl(nonNullFullInference.ts, 3, 7))
+}
+
+function testNonNullInferenceWithArrays(numbers: number[]) {
+>testNonNullInferenceWithArrays : Symbol(testNonNullInferenceWithArrays, Decl(nonNullFullInference.ts, 15, 1))
+>numbers : Symbol(numbers, Decl(nonNullFullInference.ts, 17, 40))
+
+    let result;
+>result : Symbol(result, Decl(nonNullFullInference.ts, 18, 7))
+
+    const arr = [];
+>arr : Symbol(arr, Decl(nonNullFullInference.ts, 19, 9))
+
+    for (const n of numbers) {
+>n : Symbol(n, Decl(nonNullFullInference.ts, 21, 14))
+>numbers : Symbol(numbers, Decl(nonNullFullInference.ts, 17, 40))
+
+        if (n % 2) {
+>n : Symbol(n, Decl(nonNullFullInference.ts, 21, 14))
+
+            return [n];
+>n : Symbol(n, Decl(nonNullFullInference.ts, 21, 14))
+        }
+
+        arr.push(n);
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(nonNullFullInference.ts, 19, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(nonNullFullInference.ts, 21, 14))
+
+        result = arr;
+>result : Symbol(result, Decl(nonNullFullInference.ts, 18, 7))
+>arr : Symbol(arr, Decl(nonNullFullInference.ts, 19, 9))
+    }
+
+    result;
+>result : Symbol(result, Decl(nonNullFullInference.ts, 18, 7))
+
+    result!;
+>result : Symbol(result, Decl(nonNullFullInference.ts, 18, 7))
+}

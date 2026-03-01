@@ -1,27 +1,40 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames29_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames29_ES6.ts] ////
+
+=== computedPropertyNames29_ES6.ts ===
 class C {
 >C : C
+>  : ^
 
     bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
         () => {
 >() => {            var obj = {                [this.bar()]() { } // needs capture            };        } : () => void
+>                                                                                                         : ^^^^^^^^^^
 
             var obj = {
 >obj : { [x: number]: () => void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                [this.bar()]() { } // needs capture            } : { [x: number]: () => void; }
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 [this.bar()]() { } // needs capture
 >[this.bar()] : () => void
+>             : ^^^^^^^^^^
 >this.bar() : number
+>           : ^^^^^^
 >this.bar : () => number
+>         : ^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
             };
         }
         return 0;
 >0 : 0
+>  : ^
     }
 }

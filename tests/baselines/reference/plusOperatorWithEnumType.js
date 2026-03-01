@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithEnumType.ts] ////
+
 //// [plusOperatorWithEnumType.ts]
 // + operator on enum type
 
@@ -19,6 +21,7 @@ var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 +ENUM, ENUM1;
 
 //// [plusOperatorWithEnumType.js]
+"use strict";
 // + operator on enum type
 var ENUM;
 (function (ENUM) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfReferencingFile.ts] ////
+
 //// [selfReferencingFile.ts]
 ///<reference path='selfReferencingFile.ts'/>
 
@@ -6,9 +8,7 @@ class selfReferencingFile {
 }
 
 //// [selfReferencingFile.js]
+"use strict";
 ///<reference path='selfReferencingFile.ts'/>
-var selfReferencingFile = /** @class */ (function () {
-    function selfReferencingFile() {
-    }
-    return selfReferencingFile;
-}());
+class selfReferencingFile {
+}

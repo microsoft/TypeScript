@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck28.ts] ////
+
 //// [generatorTypeCheck28.ts]
 function* g(): IterableIterator<(x: string) => number> {
     yield * {
@@ -8,6 +10,7 @@ function* g(): IterableIterator<(x: string) => number> {
 }
 
 //// [generatorTypeCheck28.js]
+"use strict";
 function* g() {
     yield* {
         *[Symbol.iterator]() {

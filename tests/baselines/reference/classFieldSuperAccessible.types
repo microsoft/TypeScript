@@ -1,0 +1,113 @@
+//// [tests/cases/compiler/classFieldSuperAccessible.ts] ////
+
+=== classFieldSuperAccessible.ts ===
+class A extends class Expr {} {
+>A : A
+>  : ^
+>class Expr {} : Expr
+>              : ^^^^
+>Expr : typeof Expr
+>     : ^^^^^^^^^^^
+
+    static {
+        console.log(super.name);
+>console.log(super.name) : void
+>                        : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>super.name : string
+>           : ^^^^^^
+>super : typeof Expr
+>      : ^^^^^^^^^^^
+>name : string
+>     : ^^^^^^
+    }
+}
+class B extends Number {
+>B : B
+>  : ^
+>Number : Number
+>       : ^^^^^^
+
+    static {
+        console.log(super.EPSILON);
+>console.log(super.EPSILON) : void
+>                           : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>super.EPSILON : number
+>              : ^^^^^^
+>super : NumberConstructor
+>      : ^^^^^^^^^^^^^^^^^
+>EPSILON : number
+>        : ^^^^^^
+    }
+}
+class C extends Array {
+>C : C
+>  : ^
+>Array : any[]
+>      : ^^^^^
+
+    foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+        console.log(super.length);
+>console.log(super.length) : void
+>                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>super.length : number
+>             : ^^^^^^
+>super : any[]
+>      : ^^^^^
+>length : number
+>       : ^^^^^^
+    }
+}
+
+class D {
+>D : D
+>  : ^
+
+    accessor b = () => {}
+>b : () => void
+>  : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+}
+class E extends D {
+>E : E
+>  : ^
+>D : D
+>  : ^
+
+    foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+        super.b()
+>super.b() : void
+>          : ^^^^
+>super.b : () => void
+>        : ^^^^^^^^^^
+>super : D
+>      : ^
+>b : () => void
+>  : ^^^^^^^^^^
+    }
+}
+

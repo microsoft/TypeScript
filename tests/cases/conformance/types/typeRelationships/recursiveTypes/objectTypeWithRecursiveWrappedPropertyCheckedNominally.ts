@@ -1,3 +1,4 @@
+// @target: es2015
 // Types with infinitely expanding recursive types are type checked nominally
 
 class List<T> {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts] ////
+
 //// [invalidTaggedTemplateEscapeSequences.ts]
 function tag (str: any, ...args: any[]): any {
   return str
@@ -26,6 +28,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 
 
 //// [invalidTaggedTemplateEscapeSequences.js]
+"use strict";
 function tag(str, ...args) {
     return str;
 }

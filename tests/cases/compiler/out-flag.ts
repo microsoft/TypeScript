@@ -1,8 +1,8 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @sourcemap: true
 // @declaration: true
 // @module: commonjs
-//// @out: bin\
+//// @outFile: bin\
 // @removeComments: false
 
 // my class comments

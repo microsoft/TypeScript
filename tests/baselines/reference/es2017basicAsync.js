@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es2017basicAsync.ts] ////
+
 //// [es2017basicAsync.ts]
 async (): Promise<void> => {
     await 0;
@@ -47,6 +49,7 @@ class AsyncClass {
 
 
 //// [es2017basicAsync.js]
+"use strict";
 async () => {
     await 0;
 };

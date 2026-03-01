@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefFunction.ts] ////
+
 //// [foo.js]
 /**
  * @typedef {{
@@ -16,6 +18,7 @@ const send = handlers => new Promise((resolve, reject) => {
 })
 
 //// [foo.js]
+"use strict";
 /**
  * @typedef {{
  *   [id: string]: [Function, Function];

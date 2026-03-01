@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseVoidErrorCallback.ts] ////
+
 //// [promiseVoidErrorCallback.ts]
 interface T1 {
     __t1: string;
@@ -28,6 +30,7 @@ var x3 = f1()
 });
 
 //// [promiseVoidErrorCallback.js]
+"use strict";
 function f1() {
     return Promise.resolve({ __t1: "foo_t1" });
 }

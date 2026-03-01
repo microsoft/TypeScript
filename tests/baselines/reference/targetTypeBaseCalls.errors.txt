@@ -1,9 +1,9 @@
-tests/cases/compiler/targetTypeBaseCalls.ts(9,19): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/targetTypeBaseCalls.ts(13,23): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/targetTypeBaseCalls.ts(17,61): error TS2322: Type 'number' is not assignable to type 'string'.
+targetTypeBaseCalls.ts(9,19): error TS2322: Type 'number' is not assignable to type 'string'.
+targetTypeBaseCalls.ts(13,23): error TS2322: Type 'number' is not assignable to type 'string'.
+targetTypeBaseCalls.ts(17,61): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/targetTypeBaseCalls.ts (3 errors) ====
+==== targetTypeBaseCalls.ts (3 errors) ====
     function foo(x: (s: string) => void) { }
      
      

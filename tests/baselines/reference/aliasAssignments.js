@@ -15,18 +15,15 @@ y = moduleA; // should be error
 
 //// [aliasAssignments_moduleA.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someClass = void 0;
-var someClass = /** @class */ (function () {
-    function someClass() {
-    }
-    return someClass;
-}());
+class someClass {
+}
 exports.someClass = someClass;
 //// [aliasAssignments_1.js]
 "use strict";
-exports.__esModule = true;
-var moduleA = require("./aliasAssignments_moduleA");
+Object.defineProperty(exports, "__esModule", { value: true });
+const moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error
 var y = 1;

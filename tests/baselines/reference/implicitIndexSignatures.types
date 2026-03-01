@@ -1,257 +1,420 @@
-=== tests/cases/compiler/implicitIndexSignatures.ts ===
+//// [tests/cases/compiler/implicitIndexSignatures.ts] ////
+
+=== implicitIndexSignatures.ts ===
 type StringMap = { [x: string]: string };
->StringMap : { [x: string]: string; }
+>StringMap : StringMap
+>          : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 const empty1 = {};
 >empty1 : {}
+>       : ^^
 >{} : {}
+>   : ^^
 
 let empty2: {};
 >empty2 : {}
+>       : ^^
 
 const names1 = { a: "foo", b: "bar" };
 >names1 : { a: string; b: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "foo", b: "bar" } : { a: string; b: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >b : string
+>  : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 
 let names2: { a: string, b: string };
 >names2 : { a: string; b: string; }
+>       : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 let map: StringMap;
 >map : StringMap
+>    : ^^^^^^^^^
 
 map = { x: "xxx", y: "yyy" };
 >map = { x: "xxx", y: "yyy" } : { x: string; y: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : StringMap
+>    : ^^^^^^^^^
 >{ x: "xxx", y: "yyy" } : { x: string; y: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"xxx" : "xxx"
+>      : ^^^^^
 >y : string
+>  : ^^^^^^
 >"yyy" : "yyy"
+>      : ^^^^^
 
 map = empty1;
 >map = empty1 : {}
+>             : ^^
 >map : StringMap
+>    : ^^^^^^^^^
 >empty1 : {}
+>       : ^^
 
 map = empty2;
 >map = empty2 : {}
+>             : ^^
 >map : StringMap
+>    : ^^^^^^^^^
 >empty2 : {}
+>       : ^^
 
 map = names1;
 >map = names1 : { a: string; b: string; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : StringMap
+>    : ^^^^^^^^^
 >names1 : { a: string; b: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 map = names2;
 >map = names2 : { a: string; b: string; }
+>             : ^^^^^      ^^^^^      ^^^
 >map : StringMap
+>    : ^^^^^^^^^
 >names2 : { a: string; b: string; }
+>       : ^^^^^      ^^^^^      ^^^
 
 declare function getStringIndexValue<T>(map: { [x: string]: T }): T;
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >map : { [x: string]: T; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 declare function getNumberIndexValue<T>(map: { [x: number]: T }): T;
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >map : { [x: number]: T; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     const o1 = { a: 1, b: 2 };
 >o1 : { a: number; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     let o2: { a: number, b: number };
 >o2 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     const v1 = getStringIndexValue(o1);
 >v1 : number
+>   : ^^^^^^
 >getStringIndexValue(o1) : number
+>                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o1 : { a: number; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const v2 = getStringIndexValue(o2);
 >v2 : number
+>   : ^^^^^^
 >getStringIndexValue(o2) : number
+>                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o2 : { a: number; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     const o1 = { a: "1", b: "2" };
 >o1 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: "1", b: "2" } : { a: string; b: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"1" : "1"
+>    : ^^^
 >b : string
+>  : ^^^^^^
 >"2" : "2"
+>    : ^^^
 
     let o2: { a: string, b: string };
 >o2 : { a: string; b: string; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     const v1 = getStringIndexValue(o1);
 >v1 : string
+>   : ^^^^^^
 >getStringIndexValue(o1) : string
+>                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o1 : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const v2 = getStringIndexValue(o2);
 >v2 : string
+>   : ^^^^^^
 >getStringIndexValue(o2) : string
+>                        : ^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o2 : { a: string; b: string; }
+>   : ^^^^^      ^^^^^      ^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     const o1 = { a: 1, b: "2" };
 >o1 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: "2" } : { a: number; b: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"2" : "2"
+>    : ^^^
 
     let o2: { a: number, b: string };
 >o2 : { a: number; b: string; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     const v1 = getStringIndexValue(o1);
 >v1 : string | number
+>   : ^^^^^^^^^^^^^^^
 >getStringIndexValue(o1) : string | number
+>                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o1 : { a: number; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const v2 = getStringIndexValue(o2);
 >v2 : string | number
+>   : ^^^^^^^^^^^^^^^
 >getStringIndexValue(o2) : string | number
+>                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o2 : { a: number; b: string; }
+>   : ^^^^^      ^^^^^      ^^^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     const o1 = { 0: "0", 1: "1", count: 2 };
 >o1 : { 0: string; 1: string; count: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0: "0", 1: "1", count: 2 } : { 0: string; 1: string; count: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : string
+>  : ^^^^^^
 >"0" : "0"
+>    : ^^^
 >1 : string
+>  : ^^^^^^
 >"1" : "1"
+>    : ^^^
 >count : number
+>      : ^^^^^^
 >2 : 2
+>  : ^
 
     let o2: { 0: string, 1: string, count: number };    
 >o2 : { 0: string; 1: string; count: number; }
+>   : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^
 >0 : string
+>  : ^^^^^^
 >1 : string
+>  : ^^^^^^
 >count : number
+>      : ^^^^^^
 
     const v1 = getStringIndexValue(o1);
 >v1 : string | number
+>   : ^^^^^^^^^^^^^^^
 >getStringIndexValue(o1) : string | number
+>                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o1 : { 0: string; 1: string; count: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const v2 = getStringIndexValue(o2);
 >v2 : string | number
+>   : ^^^^^^^^^^^^^^^
 >getStringIndexValue(o2) : string | number
+>                        : ^^^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o2 : { 0: string; 1: string; count: number; }
+>   : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^
 
     const v3 = getNumberIndexValue(o1);
 >v3 : string
+>   : ^^^^^^
 >getNumberIndexValue(o1) : string
+>                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o1 : { 0: string; 1: string; count: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const v4 = getNumberIndexValue(o2);
 >v4 : string
+>   : ^^^^^^
 >getNumberIndexValue(o2) : string
+>                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >o2 : { 0: string; 1: string; count: number; }
+>   : ^^^^^      ^^^^^      ^^^^^^^^^      ^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     enum E1 { A, B }
 >E1 : E1
+>   : ^^
 >A : E1.A
+>  : ^^^^
 >B : E1.B
+>  : ^^^^
 
     enum E2 { A = "A", B = "B" }
 >E2 : E2
+>   : ^^
 >A : E2.A
+>  : ^^^^
 >"A" : "A"
+>    : ^^^
 >B : E2.B
+>  : ^^^^
 >"B" : "B"
+>    : ^^^
 
     enum E3 { A = 0, B = "B" }
 >E3 : E3
+>   : ^^
 >A : E3.A
+>  : ^^^^
 >0 : 0
+>  : ^
 >B : E3.B
+>  : ^^^^
 >"B" : "B"
+>    : ^^^
 
     const v1 = getStringIndexValue(E1);
 >v1 : string | E1
+>   : ^^^^^^^^^^^
 >getStringIndexValue(E1) : string | E1
+>                        : ^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >E1 : typeof E1
+>   : ^^^^^^^^^
 
     const v2 = getStringIndexValue(E2);
 >v2 : E2
+>   : ^^
 >getStringIndexValue(E2) : E2
+>                        : ^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >E2 : typeof E2
+>   : ^^^^^^^^^
 
     const v3 = getStringIndexValue(E3);
 >v3 : string | E3.A
+>   : ^^^^^^^^^^^^^
 >getStringIndexValue(E3) : string | E3.A
+>                        : ^^^^^^^^^^^^^
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >E3 : typeof E3
+>   : ^^^^^^^^^
 
     const v4 = getNumberIndexValue(E1);
 >v4 : string
+>   : ^^^^^^
 >getNumberIndexValue(E1) : string
+>                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >E1 : typeof E1
+>   : ^^^^^^^^^
 
     const v5 = getNumberIndexValue(E2);
 >v5 : unknown
+>   : ^^^^^^^
 >getNumberIndexValue(E2) : unknown
+>                        : ^^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >E2 : typeof E2
+>   : ^^^^^^^^^
 
     const v6 = getNumberIndexValue(E3);
 >v6 : string
+>   : ^^^^^^
 >getNumberIndexValue(E3) : string
+>                        : ^^^^^^
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
+>                    : ^ ^^   ^^                   ^^^^^ 
 >E3 : typeof E3
+>   : ^^^^^^^^^
 }
 

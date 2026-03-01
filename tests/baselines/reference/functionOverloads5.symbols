@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads5.ts ===
+//// [tests/cases/compiler/functionOverloads5.ts] ////
+
+=== functionOverloads5.ts ===
 class baz { 
 >baz : Symbol(baz, Decl(functionOverloads5.ts, 0, 0))
 

@@ -1,112 +1,193 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6.ts] ////
+
+=== usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport6.js");
 >x : typeof x
+>  : ^^^^^^^^
 >require("./lateBoundAssignmentDeclarationSupport6.js") : typeof x
+>                                                       : ^^^^^^^^
 >require : any
+>        : ^^^
 >"./lateBoundAssignmentDeclarationSupport6.js" : "./lateBoundAssignmentDeclarationSupport6.js"
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const inst =  new x.F();
 >inst : x.F
+>     : ^^^
 >new x.F() : x.F
+>          : ^^^
 >x.F : typeof x.F
+>    : ^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >F : typeof x.F
+>  : ^^^^^^^^^^
 
 const y = inst["my-fake-sym"];
 >y : any
+>  : ^^^
 >inst["my-fake-sym"] : any
+>                    : ^^^
 >inst : x.F
+>     : ^^^
 >"my-fake-sym" : "my-fake-sym"
+>              : ^^^^^^^^^^^^^
 
 const z = inst[x.S];
 >z : any
+>  : ^^^
 >inst[x.S] : any
+>          : ^^^
 >inst : x.F
+>     : ^^^
 >x.S : unique symbol
+>    : ^^^^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >S : unique symbol
+>  : ^^^^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6.js ===
+=== lateBoundAssignmentDeclarationSupport6.js ===
 // currently unsupported
 const _sym = Symbol();
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const _str = "my-fake-sym";
 >_str : "my-fake-sym"
+>     : ^^^^^^^^^^^^^
 >"my-fake-sym" : "my-fake-sym"
+>              : ^^^^^^^^^^^^^
 
 function F() {
 >F : typeof F
+>  : ^^^^^^^^
 }
 F.prototype.defsAClass = true;
 >F.prototype.defsAClass = true : true
+>                              : ^^^^
 >F.prototype.defsAClass : any
+>                       : ^^^
 >F.prototype : any
+>            : ^^^
 >F : typeof F
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >defsAClass : any
+>           : ^^^
 >true : true
+>     : ^^^^
 
 Object.defineProperty(F.prototype, _str, {value: "ok"});
 >Object.defineProperty(F.prototype, _str, {value: "ok"}) : any
+>                                                        : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >F.prototype : any
+>            : ^^^
 >F : typeof F
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >_str : "my-fake-sym"
+>     : ^^^^^^^^^^^^^
 >{value: "ok"} : { value: string; }
+>              : ^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 
 Object.defineProperty(F.prototype, _sym, {value: "ok"});
 >Object.defineProperty(F.prototype, _sym, {value: "ok"}) : any
+>                                                        : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >F.prototype : any
+>            : ^^^
 >F : typeof F
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 >{value: "ok"} : { value: string; }
+>              : ^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 
 const inst =  new F();
 >inst : F
+>     : ^
 >new F() : F
+>        : ^
 >F : typeof F
+>  : ^^^^^^^^
 
 const _y = inst[_str];
 >_y : any
+>   : ^^^
 >inst[_str] : any
+>           : ^^^
 >inst : F
+>     : ^
 >_str : "my-fake-sym"
+>     : ^^^^^^^^^^^^^
 
 const _z = inst[_sym];
 >_z : any
+>   : ^^^
 >inst[_sym] : any
+>           : ^^^
 >inst : F
+>     : ^
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 
 module.exports.F = F;
 >module.exports.F = F : typeof F
+>                     : ^^^^^^^^
 >module.exports.F : typeof F
+>                 : ^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >F : typeof F
+>  : ^^^^^^^^
 >F : typeof F
+>  : ^^^^^^^^
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
+>                        : ^^^^^^^^^^^^^
 >module.exports.S : unique symbol
+>                 : ^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >S : unique symbol
+>  : ^^^^^^^^^^^^^
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 

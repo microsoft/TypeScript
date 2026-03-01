@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment1.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment1.ts] ////
+
+=== logicalAssignment1.ts ===
 declare let a: string | undefined
 >a : Symbol(a, Decl(logicalAssignment1.ts, 0, 11))
 

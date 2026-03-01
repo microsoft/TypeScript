@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperatorInTempalteString4ES6.ts] ////
+
 //// [emitExponentiationOperatorInTempalteString4ES6.ts]
 var t1 = 10;
 var t2 = 10;
@@ -27,6 +29,7 @@ var s;
 `hello ${typeof (t1 ** t2 ** t1)}`;
 
 //// [emitExponentiationOperatorInTempalteString4ES6.js]
+"use strict";
 var t1 = 10;
 var t2 = 10;
 var s;

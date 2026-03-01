@@ -1,42 +1,59 @@
-=== tests/cases/compiler/reverseMappedTypeAssignableToIndex.ts ===
+//// [tests/cases/compiler/reverseMappedTypeAssignableToIndex.ts] ////
+
+=== reverseMappedTypeAssignableToIndex.ts ===
 // Simple mapped type and inferrence
 type Mapped<T> = { [K in keyof T]: { name: T[K] } };
 >Mapped : Mapped<T>
+>       : ^^^^^^^^^
 >name : T[K]
+>     : ^^^^
 
 type InferFromMapped<T> = T extends Mapped<infer R> ? R : never;
 >InferFromMapped : InferFromMapped<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
 // Object literal type and associated mapped type
 // Note that in the real code we don't have a direct reference to LiteralType
 type LiteralType = {
->LiteralType : { first: "first"; second: "second"; }
+>LiteralType : LiteralType
+>            : ^^^^^^^^^^^
 
 	first: "first";
 >first : "first"
+>      : ^^^^^^^
 
 	second: "second";
 >second : "second"
+>       : ^^^^^^^^
 }
 type MappedLiteralType = {
->MappedLiteralType : { first: {    name: "first";}; second: {    name: "second";}; }
+>MappedLiteralType : MappedLiteralType
+>                  : ^^^^^^^^^^^^^^^^^
 
 	first: { name: "first" },
 >first : { name: "first"; }
+>      : ^^^^^^^^       ^^^
 >name : "first"
+>     : ^^^^^^^
 
 	second: { name: "second" },
 >second : { name: "second"; }
+>       : ^^^^^^^^        ^^^
 >name : "second"
+>     : ^^^^^^^^
 
 };
 
 type Inferred = InferFromMapped<MappedLiteralType>;
 >Inferred : { first: "first"; second: "second"; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // UNEXPECTED resolves to false
 type Test1 = Inferred extends Record<any, string> ? true : false;
 >Test1 : true
+>      : ^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 

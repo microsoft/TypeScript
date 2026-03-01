@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts] ////
+
+=== controlFlowNullishCoalesce.ts ===
 // assignments in shortcutting rhs
 let a: number;
 >a : Symbol(a, Decl(controlFlowNullishCoalesce.ts, 1, 3))

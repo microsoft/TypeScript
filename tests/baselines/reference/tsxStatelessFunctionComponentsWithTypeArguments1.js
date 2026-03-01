@@ -1,4 +1,8 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments1.tsx] ////
+
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
@@ -31,21 +35,22 @@ declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // OK
     function Baz(key1, value) {
-        var a0 = <ComponentWithTwoAttributes key1={key1} value={value}/>;
-        var a1 = <ComponentWithTwoAttributes {...{ key1: key1, value: value }} key="Component"/>;
+        let a0 = <ComponentWithTwoAttributes key1={key1} value={value}/>;
+        let a1 = <ComponentWithTwoAttributes {...{ key1, value: value }} key="Component"/>;
     }
     // OK
     function createLink(func) {
-        var o = <Link func={func}/>;
+        let o = <Link func={func}/>;
     }
     function createLink1(func) {
-        var o = <Link func={func}/>;
+        let o = <Link func={func}/>;
     }
     // OK
-    var i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={function (val) { }}/>;
+    let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }}/>;
 });

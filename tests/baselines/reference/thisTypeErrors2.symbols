@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeErrors2.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeErrors2.ts] ////
+
+=== thisTypeErrors2.ts ===
 class Base {
 >Base : Symbol(Base, Decl(thisTypeErrors2.ts, 0, 0))
 

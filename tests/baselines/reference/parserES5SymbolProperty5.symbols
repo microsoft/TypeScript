@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts ===
-class C {
->C : Symbol(C, Decl(parserES5SymbolProperty5.ts, 0, 0))
-
-    [Symbol.isRegExp]: string;
->[Symbol.isRegExp] : Symbol(C[Symbol.isRegExp], Decl(parserES5SymbolProperty5.ts, 0, 9))
-}

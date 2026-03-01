@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module.d.ts ===
+//// [tests/cases/compiler/importTypeGenericArrowTypeParenthesized.ts] ////
+
+=== module.d.ts ===
 declare module "module" {
 >"module" : Symbol("module", Decl(module.d.ts, 0, 0))
 
@@ -14,7 +16,7 @@ declare module "module" {
 >Modifier : Symbol(Modifier, Decl(module.d.ts, 0, 25))
 >T : Symbol(T, Decl(module.d.ts, 3, 23))
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { fn } from "module";
 >fn : Symbol(fn, Decl(index.ts, 0, 8))
 

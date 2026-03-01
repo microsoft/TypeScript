@@ -1,26 +1,26 @@
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts(1,5): error TS6188: Numeric separators are not allowed here.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts(1,3): error TS6188: Numeric separators are not allowed here.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts(1,2): error TS6188: Numeric separators are not allowed here.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts(1,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts(1,3): error TS2304: Cannot find name 'B0101'.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts(1,6): error TS6189: Multiple consecutive numeric separators are not permitted.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts(1,13): error TS6189: Multiple consecutive numeric separators are not permitted.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts(1,3): error TS6188: Numeric separators are not allowed here.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts(1,4): error TS6188: Numeric separators are not allowed here.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts(1,5): error TS6188: Numeric separators are not allowed here.
+1.ts(1,5): error TS6188: Numeric separators are not allowed here.
+2.ts(1,3): error TS6188: Numeric separators are not allowed here.
+3.ts(1,2): error TS6188: Numeric separators are not allowed here.
+3.ts(1,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+3.ts(1,3): error TS2304: Cannot find name 'B0101'.
+4.ts(1,6): error TS6189: Multiple consecutive numeric separators are not permitted.
+5.ts(1,13): error TS6189: Multiple consecutive numeric separators are not permitted.
+6.ts(1,3): error TS6188: Numeric separators are not allowed here.
+6.ts(1,4): error TS6188: Numeric separators are not allowed here.
+6.ts(1,5): error TS6188: Numeric separators are not allowed here.
 
 
-==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts (1 errors) ====
+==== 1.ts (1 errors) ====
     0b00_
         ~
 !!! error TS6188: Numeric separators are not allowed here.
     
-==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts (1 errors) ====
+==== 2.ts (1 errors) ====
     0b_110
       ~
 !!! error TS6188: Numeric separators are not allowed here.
     
-==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts (3 errors) ====
+==== 3.ts (3 errors) ====
     0_B0101
      ~
 !!! error TS6188: Numeric separators are not allowed here.
@@ -29,17 +29,17 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts(1,5): error
       ~~~~~
 !!! error TS2304: Cannot find name 'B0101'.
     
-==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts (1 errors) ====
+==== 4.ts (1 errors) ====
     0b01__11
          ~
 !!! error TS6189: Multiple consecutive numeric separators are not permitted.
     
-==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts (1 errors) ====
+==== 5.ts (1 errors) ====
     0B0110_0110__
                 ~
 !!! error TS6189: Multiple consecutive numeric separators are not permitted.
     
-==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts (3 errors) ====
+==== 6.ts (3 errors) ====
     0b___0111010_0101_1
       ~
 !!! error TS6188: Numeric separators are not allowed here.

@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportInterfaceWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts] ////
+
 //// [ExportInterfaceWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts]
-module A {
+namespace A {
 
     export interface Point {
         x: number;
@@ -23,6 +25,7 @@ module A {
 
 
 //// [ExportInterfaceWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.js]
+"use strict";
 var A;
 (function (A) {
     A.Origin = { x: 0, y: 0 };

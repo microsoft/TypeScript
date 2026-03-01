@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
+
 //// [symbolDeclarationEmit12.ts]
-module M {
+namespace M {
     interface I { }
     export class C {
         [Symbol.iterator]: I;
@@ -13,6 +15,7 @@ module M {
 }
 
 //// [symbolDeclarationEmit12.js]
+"use strict";
 var M;
 (function (M) {
     class C {
@@ -28,14 +31,13 @@ var M;
 
 
 //// [symbolDeclarationEmit12.d.ts]
-declare module M {
+declare namespace M {
     interface I {
     }
     export class C {
         [Symbol.iterator]: I;
-        [Symbol.toPrimitive](x: I): void;
         [Symbol.isConcatSpreadable](): I;
-        get [Symbol.toPrimitive](): any;
+        get [Symbol.toPrimitive](): I;
         set [Symbol.toPrimitive](x: I);
     }
     export {};

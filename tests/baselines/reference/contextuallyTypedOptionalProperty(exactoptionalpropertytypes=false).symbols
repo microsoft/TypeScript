@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/contextuallyTypedOptionalProperty.ts] ////
+
+=== contextuallyTypedOptionalProperty.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/55164
+
+declare function match<T>(cb: (value: T) => boolean): T;
+>match : Symbol(match, Decl(contextuallyTypedOptionalProperty.ts, 0, 0))
+>T : Symbol(T, Decl(contextuallyTypedOptionalProperty.ts, 2, 23))
+>cb : Symbol(cb, Decl(contextuallyTypedOptionalProperty.ts, 2, 26))
+>value : Symbol(value, Decl(contextuallyTypedOptionalProperty.ts, 2, 31))
+>T : Symbol(T, Decl(contextuallyTypedOptionalProperty.ts, 2, 23))
+>T : Symbol(T, Decl(contextuallyTypedOptionalProperty.ts, 2, 23))
+
+declare function foo(pos: { x?: number; y?: number }): boolean;
+>foo : Symbol(foo, Decl(contextuallyTypedOptionalProperty.ts, 2, 56))
+>pos : Symbol(pos, Decl(contextuallyTypedOptionalProperty.ts, 4, 21))
+>x : Symbol(x, Decl(contextuallyTypedOptionalProperty.ts, 4, 27))
+>y : Symbol(y, Decl(contextuallyTypedOptionalProperty.ts, 4, 39))
+
+foo({ y: match(y => y > 0) })
+>foo : Symbol(foo, Decl(contextuallyTypedOptionalProperty.ts, 2, 56))
+>y : Symbol(y, Decl(contextuallyTypedOptionalProperty.ts, 5, 5))
+>match : Symbol(match, Decl(contextuallyTypedOptionalProperty.ts, 0, 0))
+>y : Symbol(y, Decl(contextuallyTypedOptionalProperty.ts, 5, 15))
+>y : Symbol(y, Decl(contextuallyTypedOptionalProperty.ts, 5, 15))
+
+declare function foo2(point: [number?]): boolean;
+>foo2 : Symbol(foo2, Decl(contextuallyTypedOptionalProperty.ts, 5, 29))
+>point : Symbol(point, Decl(contextuallyTypedOptionalProperty.ts, 7, 22))
+
+foo2([match(y => y > 0)])
+>foo2 : Symbol(foo2, Decl(contextuallyTypedOptionalProperty.ts, 5, 29))
+>match : Symbol(match, Decl(contextuallyTypedOptionalProperty.ts, 0, 0))
+>y : Symbol(y, Decl(contextuallyTypedOptionalProperty.ts, 8, 12))
+>y : Symbol(y, Decl(contextuallyTypedOptionalProperty.ts, 8, 12))
+

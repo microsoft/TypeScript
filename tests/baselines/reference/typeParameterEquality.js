@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterEquality.ts] ////
+
 //// [typeParameterEquality.ts]
 class C {
     get x(): <T>(a: T) => T { return null; }
@@ -5,6 +7,7 @@ class C {
 }
 
 //// [typeParameterEquality.js]
+"use strict";
 class C {
     get x() { return null; }
     set x(p) { }

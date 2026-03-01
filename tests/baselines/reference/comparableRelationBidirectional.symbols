@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/comparableRelationBidirectional.ts] ////
+
+=== comparableRelationBidirectional.ts ===
+enum AutomationMode {
+>AutomationMode : Symbol(AutomationMode, Decl(comparableRelationBidirectional.ts, 0, 0))
+
+    NONE = "",
+>NONE : Symbol(AutomationMode.NONE, Decl(comparableRelationBidirectional.ts, 0, 21))
+
+    TIME = "time",
+>TIME : Symbol(AutomationMode.TIME, Decl(comparableRelationBidirectional.ts, 1, 14))
+
+    SYSTEM = "system",
+>SYSTEM : Symbol(AutomationMode.SYSTEM, Decl(comparableRelationBidirectional.ts, 2, 18))
+
+    LOCATION = "location",
+>LOCATION : Symbol(AutomationMode.LOCATION, Decl(comparableRelationBidirectional.ts, 3, 22))
+}
+
+interface ThemePreset {
+>ThemePreset : Symbol(ThemePreset, Decl(comparableRelationBidirectional.ts, 5, 1))
+
+    id: string;
+>id : Symbol(ThemePreset.id, Decl(comparableRelationBidirectional.ts, 7, 23))
+}
+
+interface Automation {
+>Automation : Symbol(Automation, Decl(comparableRelationBidirectional.ts, 9, 1))
+
+    mode: AutomationMode;
+>mode : Symbol(Automation.mode, Decl(comparableRelationBidirectional.ts, 11, 22))
+>AutomationMode : Symbol(AutomationMode, Decl(comparableRelationBidirectional.ts, 0, 0))
+}
+
+interface UserSettings {
+>UserSettings : Symbol(UserSettings, Decl(comparableRelationBidirectional.ts, 13, 1))
+
+    presets: ThemePreset[];
+>presets : Symbol(UserSettings.presets, Decl(comparableRelationBidirectional.ts, 15, 24))
+>ThemePreset : Symbol(ThemePreset, Decl(comparableRelationBidirectional.ts, 5, 1))
+
+    automation: Automation;
+>automation : Symbol(UserSettings.automation, Decl(comparableRelationBidirectional.ts, 16, 27))
+>Automation : Symbol(Automation, Decl(comparableRelationBidirectional.ts, 9, 1))
+}
+
+interface ExtensionData {
+>ExtensionData : Symbol(ExtensionData, Decl(comparableRelationBidirectional.ts, 18, 1))
+
+    settings: UserSettings;
+>settings : Symbol(ExtensionData.settings, Decl(comparableRelationBidirectional.ts, 20, 25))
+>UserSettings : Symbol(UserSettings, Decl(comparableRelationBidirectional.ts, 13, 1))
+}
+
+export function getMockData(): ExtensionData {
+>getMockData : Symbol(getMockData, Decl(comparableRelationBidirectional.ts, 22, 1))
+>ExtensionData : Symbol(ExtensionData, Decl(comparableRelationBidirectional.ts, 18, 1))
+
+    return {
+        settings: {
+>settings : Symbol(settings, Decl(comparableRelationBidirectional.ts, 25, 12))
+
+            presets: [],
+>presets : Symbol(presets, Decl(comparableRelationBidirectional.ts, 26, 19))
+
+            automation: {
+>automation : Symbol(automation, Decl(comparableRelationBidirectional.ts, 27, 24))
+
+                mode: "",
+>mode : Symbol(mode, Decl(comparableRelationBidirectional.ts, 28, 25))
+
+            },
+        } as UserSettings,
+>UserSettings : Symbol(UserSettings, Decl(comparableRelationBidirectional.ts, 13, 1))
+    }
+}
+

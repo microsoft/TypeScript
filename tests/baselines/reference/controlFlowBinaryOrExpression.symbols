@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts] ////
+
+=== controlFlowBinaryOrExpression.ts ===
 let x: string | number | boolean;
 >x : Symbol(x, Decl(controlFlowBinaryOrExpression.ts, 0, 3))
 
@@ -64,9 +66,9 @@ if (isNodeList(sourceObj)) {
 >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
 
     sourceObj.length;
->sourceObj.length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
->length : Symbol(NodeList.length, Decl(controlFlowBinaryOrExpression.ts, 10, 27))
+>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 }
 
 if (isHTMLCollection(sourceObj)) {
@@ -74,9 +76,9 @@ if (isHTMLCollection(sourceObj)) {
 >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
 
     sourceObj.length;
->sourceObj.length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>sourceObj.length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 >sourceObj : Symbol(sourceObj, Decl(controlFlowBinaryOrExpression.ts, 23, 3))
->length : Symbol(HTMLCollection.length, Decl(controlFlowBinaryOrExpression.ts, 14, 33))
+>length : Symbol(length, Decl(controlFlowBinaryOrExpression.ts, 10, 27), Decl(controlFlowBinaryOrExpression.ts, 14, 33))
 }
 
 if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {

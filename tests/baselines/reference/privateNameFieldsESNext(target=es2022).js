@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts] ////
+
 //// [privateNameFieldsESNext.ts]
 class C {
     a = 123;
@@ -21,6 +23,7 @@ class C {
 
 
 //// [privateNameFieldsESNext.js]
+"use strict";
 class C {
     constructor() {
         this.a = 123;

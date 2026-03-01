@@ -1,77 +1,115 @@
-=== tests/cases/compiler/typeParamExtendsOtherTypeParam.ts ===
+//// [tests/cases/compiler/typeParamExtendsOtherTypeParam.ts] ////
+
+=== typeParamExtendsOtherTypeParam.ts ===
 class A<T, U extends T> { }
 >A : A<T, U>
+>  : ^^^^^^^
 
 class B<T extends Object, U extends T> {
 >B : B<T, U>
+>  : ^^^^^^^
 
     data: A<Object, Object>;
 >data : A<Object, Object>
+>     : ^^^^^^^^^^^^^^^^^
 }
 
 // Below 2 should compile without error 
 var x: A< { a: string }, { a: string; b: number }>;
 >x : A<{ a: string; }, { a: string; b: number; }>
+>  : ^^^^^^^      ^^^^^^^^^^      ^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var y: B< { a: string }, { a: string; b: number }>;
 >y : B<{ a: string; }, { a: string; b: number; }>
+>  : ^^^^^^^      ^^^^^^^^^^      ^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 
 // Below should be in error
 var x1: A<{ a: string;}, { b: string }>;
 >x1 : A<{ a: string; }, { b: string; }>
+>   : ^^^^^^^      ^^^^^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var x2: A<{ a: string;}, { a: number }>;
 >x2 : A<{ a: string; }, { a: number; }>
+>   : ^^^^^^^      ^^^^^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var x3: B<{ a: string;}, { b: string }>;
 >x3 : B<{ a: string; }, { b: string; }>
+>   : ^^^^^^^      ^^^^^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var x4: B<{ a: string;}, { a: number }>;
 >x4 : B<{ a: string; }, { a: number; }>
+>   : ^^^^^^^      ^^^^^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 var x5: A<{ a: string; b: number }, { a: string }>;
 >x5 : A<{ a: string; b: number; }, { a: string; }>
+>   : ^^^^^^^      ^^^^^      ^^^^^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 var x6: B<{ a: string; b: number }, { a: string }>;
 >x6 : B<{ a: string; b: number; }, { a: string; }>
+>   : ^^^^^^^      ^^^^^      ^^^^^^^^^^      ^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 interface I1 {
     a: string;
 >a : string
+>  : ^^^^^^
 }
 
 interface I2 {
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 }
 
 var x7: A<I2, I1>;
 >x7 : A<I2, I1>
+>   : ^^^^^^^^^
 
 var x8: B<I2, I1>;
 >x8 : B<I2, I1>
+>   : ^^^^^^^^^
 

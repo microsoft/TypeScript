@@ -21,16 +21,6 @@ import { ios as ios2 } from "some-library/index";
 import { ios as ios3 } from "some-library/index.js";
 
 
-//// [/bin/node_modules/some-library/lib/index.ios.js]
-"use strict";
-exports.__esModule = true;
-function ios() { }
-exports.ios = ios;
-//// [/bin/node_modules/some-library/lib/index.js]
-"use strict";
-exports.__esModule = true;
-function base() { }
-exports.base = base;
 //// [/bin/test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

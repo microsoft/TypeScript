@@ -1,17 +1,26 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideMethod.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideMethod.ts] ////
+
+=== accessorsOverrideMethod.ts ===
 class A {
 >A : A
+>  : ^
 
     m() { }
 >m : () => void
+>  : ^^^^^^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     get m() { return () => 1 }
 >m : () => number
+>  : ^^^^^^^^^^^^
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern30.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern30.ts] ////
+
+=== iterableArrayPattern30.ts ===
 const [[k1, v1], [k2, v2]] = new Map([["", true], ["hello", true]])
 >k1 : Symbol(k1, Decl(iterableArrayPattern30.ts, 0, 8))
 >v1 : Symbol(v1, Decl(iterableArrayPattern30.ts, 0, 11))

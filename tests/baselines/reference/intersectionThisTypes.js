@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionThisTypes.ts] ////
+
 //// [intersectionThisTypes.ts]
 interface Thing1 {
     a: number;
@@ -42,6 +44,7 @@ function test(label: Label) {
 
 
 //// [intersectionThisTypes.js]
+"use strict";
 function f1(t) {
     t = t.self();
     t = t.me().self().me();
@@ -51,7 +54,7 @@ function f2(t) {
     t = t.me().self().me();
 }
 function test(label) {
-    var extended = label.extend({ id: 67 }).extend({ tag: "hello" });
+    const extended = label.extend({ id: 67 }).extend({ tag: "hello" });
     extended.id; // Ok
     extended.tag; // Ok
 }

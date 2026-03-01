@@ -13,4 +13,4 @@
 ////var i2: I2;
 ////i2.prop/*reference*/erty;
 
-verify.goToType("reference", "definition");
+verify.baselineGoToType("reference");

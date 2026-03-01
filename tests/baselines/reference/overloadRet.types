@@ -1,35 +1,54 @@
-=== tests/cases/compiler/overloadRet.ts ===
+//// [tests/cases/compiler/overloadRet.ts] ////
+
+=== overloadRet.ts ===
 interface I {
     f(s:string):number;  
 >f : { (s: string): number; (n: number): string; }
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     f(n:number):string;
 >f : { (s: string): number; (n: number): string; }
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     g(n:number):any; 
 >g : { (n: number): any; (n: number, m: number): string; }
+>  : ^^^ ^^      ^^^   ^^^ ^^      ^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     g(n:number,m:number):string;
 >g : { (n: number): any; (n: number, m: number): string; }
+>  : ^^^ ^^      ^^^   ^^^ ^^      ^^ ^^      ^^^      ^^^
 >n : number
+>  : ^^^^^^
 >m : number
+>  : ^^^^^^
 
     h(n:number):I;  
 >h : { (n: number): I; (b: boolean): number; }
+>  : ^^^ ^^      ^^^ ^^^ ^^       ^^^      ^^^
 >n : number
+>  : ^^^^^^
 
     h(b:boolean):number;
 >h : { (n: number): I; (b: boolean): number; }
+>  : ^^^ ^^      ^^^ ^^^ ^^       ^^^      ^^^
 >b : boolean
+>  : ^^^^^^^
 
     i(b:boolean):number;
 >i : { (b: boolean): number; (b: boolean): any; }
+>  : ^^^ ^^       ^^^      ^^^ ^^       ^^^   ^^^
 >b : boolean
+>  : ^^^^^^^
 
     i(b:boolean):any;
 >i : { (b: boolean): number; (b: boolean): any; }
+>  : ^^^ ^^       ^^^      ^^^ ^^       ^^^   ^^^
 >b : boolean
+>  : ^^^^^^^
 }

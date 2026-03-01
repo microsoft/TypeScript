@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/restParameters/emitRestParametersMethodES6.ts] ////
+
 //// [emitRestParametersMethodES6.ts]
 class C {
     constructor(name: string, ...rest) { }
@@ -15,6 +17,7 @@ class D {
 
 
 //// [emitRestParametersMethodES6.js]
+"use strict";
 class C {
     constructor(name, ...rest) { }
     bar(...rest) { }

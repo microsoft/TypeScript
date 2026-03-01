@@ -1,114 +1,177 @@
-=== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts ===
+//// [tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts] ////
+
+=== lateBoundDestructuringImplicitAnyError.ts ===
 let named = "foo";
 >named : string
+>      : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 let {[named]: prop} = {prop: "foo"};
 >named : string
+>      : ^^^^^^
 >prop : any
+>     : ^^^
 >{prop: "foo"} : { prop: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >prop : string
+>     : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 void prop;
 >void prop : undefined
+>          : ^^^^^^^^^
 >prop : any
+>     : ^^^
 
 const numIndexed: {[idx: number]: string} = null as any;
 >numIndexed : { [idx: number]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >idx : number
+>    : ^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const strIndexed: {[idx: string]: string} = null as any;
 >strIndexed : { [idx: string]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >idx : string
+>    : ^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 let numed = 6;
 >numed : number
+>      : ^^^^^^
 >6 : 6
+>  : ^
 
 const symed = Symbol();
 >symed : unique symbol
+>      : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 let symed2 = Symbol();
 >symed2 : symbol
+>       : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 let {[named]: prop2} = numIndexed;
 >named : string
+>      : ^^^^^^
 >prop2 : any
+>      : ^^^
 >numIndexed : { [idx: number]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop2;
 >void prop2 : undefined
+>           : ^^^^^^^^^
 >prop2 : any
+>      : ^^^
 
 let {[numed]: prop3} = numIndexed;
 >numed : number
+>      : ^^^^^^
 >prop3 : string
+>      : ^^^^^^
 >numIndexed : { [idx: number]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop3;
 >void prop3 : undefined
+>           : ^^^^^^^^^
 >prop3 : string
+>      : ^^^^^^
 
 let {[named]: prop4} = strIndexed;
 >named : string
+>      : ^^^^^^
 >prop4 : string
+>      : ^^^^^^
 >strIndexed : { [idx: string]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop4;
 >void prop4 : undefined
+>           : ^^^^^^^^^
 >prop4 : string
+>      : ^^^^^^
 
 let {[numed]: prop5} = strIndexed;
 >numed : number
+>      : ^^^^^^
 >prop5 : string
+>      : ^^^^^^
 >strIndexed : { [idx: string]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop5;
 >void prop5 : undefined
+>           : ^^^^^^^^^
 >prop5 : string
+>      : ^^^^^^
 
 let {[symed]: prop6} = numIndexed;
 >symed : unique symbol
+>      : ^^^^^^^^^^^^^
 >prop6 : any
+>      : ^^^
 >numIndexed : { [idx: number]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop6;
 >void prop6 : undefined
+>           : ^^^^^^^^^
 >prop6 : any
+>      : ^^^
 
 let {[symed]: prop7} = strIndexed;
 >symed : unique symbol
+>      : ^^^^^^^^^^^^^
 >prop7 : string
+>      : ^^^^^^
 >strIndexed : { [idx: string]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop7;
 >void prop7 : undefined
+>           : ^^^^^^^^^
 >prop7 : string
+>      : ^^^^^^
 
 let {[symed2]: prop8} = numIndexed;
 >symed2 : symbol
+>       : ^^^^^^
 >prop8 : any
+>      : ^^^
 >numIndexed : { [idx: number]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop8;
 >void prop8 : undefined
+>           : ^^^^^^^^^
 >prop8 : any
+>      : ^^^
 
 let {[symed2]: prop9} = strIndexed;
 >symed2 : symbol
+>       : ^^^^^^
 >prop9 : string
+>      : ^^^^^^
 >strIndexed : { [idx: string]: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 void prop9;
 >void prop9 : undefined
+>           : ^^^^^^^^^
 >prop9 : string
+>      : ^^^^^^
 

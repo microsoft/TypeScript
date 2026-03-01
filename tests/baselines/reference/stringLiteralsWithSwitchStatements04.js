@@ -1,6 +1,8 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts] ////
+
 //// [stringLiteralsWithSwitchStatements04.ts]
-let x: "foo";
-let y: "foo" | "bar"; 
+declare let x: "foo";
+declare let y: "foo" | "bar";
 
 declare function randBool(): boolean;
 
@@ -23,8 +25,7 @@ switch (y) {
 
 
 //// [stringLiteralsWithSwitchStatements04.js]
-var x;
-var y;
+"use strict";
 switch (y) {
     case "foo", x:
         break;

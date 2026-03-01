@@ -1,19 +1,27 @@
-=== tests/cases/compiler/enumIdentifierLiterals.ts ===
+//// [tests/cases/compiler/enumIdentifierLiterals.ts] ////
+
+=== enumIdentifierLiterals.ts ===
 enum Nums {
 >Nums : Nums
+>     : ^^^^
 
     1.0,
 >1.0 : (typeof Nums)["1"]
+>    : ^^^^^^^^^^^^^^^^^^
 
     11e-1,
 >11e-1 : (typeof Nums)["1.1"]
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     0.12e1,
 >0.12e1 : (typeof Nums)["1.2"]
+>       : ^^^^^^^^^^^^^^^^^^^^
 
     "13e-1",
 >"13e-1" : (typeof Nums)["13e-1"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     0xF00D
 >0xF00D : (typeof Nums)["61453"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 }

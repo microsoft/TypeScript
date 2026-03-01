@@ -1,16 +1,22 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/es6ImportEqualsExportModuleCommonJsError.ts] ////
+
+=== a.ts ===
 class a { }
 >a : a
+>  : ^
 
 export = a;
 >a : a
+>  : ^
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 a;
 >a : typeof a
+>  : ^^^^^^^^
 
 
 

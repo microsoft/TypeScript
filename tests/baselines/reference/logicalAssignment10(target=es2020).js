@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment10.ts] ////
+
 //// [logicalAssignment10.ts]
 var count = 0;
 var obj = {};
@@ -14,6 +16,7 @@ oobj["obj"][incr()] ??= incr();
 
 
 //// [logicalAssignment10.js]
+"use strict";
 var _a, _b, _c;
 var count = 0;
 var obj = {};

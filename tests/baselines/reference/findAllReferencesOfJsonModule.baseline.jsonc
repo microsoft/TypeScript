@@ -1,183 +1,105 @@
+// === findAllReferences ===
 // === /foo.ts ===
-// /*FIND ALL REFS*/import [|settings|] from "./settings.json";
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}settings|] from "./settings.json";|>
 // [|settings|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo.ts",
-      "kind": "alias",
-      "name": "import settings",
-      "textSpan": {
-        "start": 7,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "settings",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 39
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 8
-        },
-        "fileName": "/foo.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 39
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 8
-        },
-        "fileName": "/foo.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /foo.ts ===
+  // /*FIND ALL REFS*/<|import [|settings|] from "./settings.json";|>
+  // settings;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import settings",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "settings",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /foo.ts ===
-// import /*FIND ALL REFS*/[|settings|] from "./settings.json";
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}settings|] from "./settings.json";|>
 // [|settings|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo.ts",
-      "kind": "alias",
-      "name": "import settings",
-      "textSpan": {
-        "start": 7,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "settings",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 39
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 8
-        },
-        "fileName": "/foo.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 39
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 8
-        },
-        "fileName": "/foo.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /foo.ts ===
+  // <|import /*FIND ALL REFS*/[|settings|] from "./settings.json";|>
+  // settings;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import settings",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "settings",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /foo.ts ===
-// import [|settings|] from "./settings.json";
+// <|import [|{| isWriteAccess: true |}settings|] from "./settings.json";|>
 // /*FIND ALL REFS*/[|settings|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/foo.ts",
-      "kind": "alias",
-      "name": "import settings",
-      "textSpan": {
-        "start": 7,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "settings",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 39
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 8
-        },
-        "fileName": "/foo.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 39
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 8
-        },
-        "fileName": "/foo.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /foo.ts ===
+  // <|import [|settings|] from "./settings.json";|>
+  // /*FIND ALL REFS*/settings;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import settings",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "settings",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]

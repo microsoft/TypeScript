@@ -1,10 +1,15 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/doubleUnderscoreReactNamespace.ts] ////
+
+=== index.tsx ===
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     function __make (params: object): any;
 >__make : (params: object) => any
+>       : ^      ^^      ^^^^^   
 >params : object
+>       : ^^^^^^
 }
 
 declare var __foot: any;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitReturnInConstructors.ts ===
+//// [tests/cases/compiler/noImplicitReturnInConstructors.ts] ////
+
+=== noImplicitReturnInConstructors.ts ===
 class C {
 >C : Symbol(C, Decl(noImplicitReturnInConstructors.ts, 0, 0))
 

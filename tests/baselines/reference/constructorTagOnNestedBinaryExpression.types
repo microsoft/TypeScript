@@ -1,20 +1,31 @@
-=== tests/cases/conformance/jsdoc/constructorTagOnNestedBinaryExpression.js ===
+//// [tests/cases/conformance/jsdoc/constructorTagOnNestedBinaryExpression.ts] ////
+
+=== constructorTagOnNestedBinaryExpression.js ===
 // Fixes #35021
 /** @constructor */
 a = b = function c () {
 >a = b = function c () {    console.log(this)} : typeof c
+>                                              : ^^^^^^^^
 >a : error
 >b = function c () {    console.log(this)} : typeof c
+>                                          : ^^^^^^^^
 >b : error
 >function c () {    console.log(this)} : typeof c
+>                                      : ^^^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 
     console.log(this)
 >console.log(this) : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this : this
+>     : ^^^^
 
 };
 

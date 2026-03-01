@@ -7,7 +7,7 @@
 ////C.prototype.method = /*next*/ function (p) {}
 
 for (const marker of test.markerNames()) {
-    verify.docCommentTemplateAt(marker, 8,
+    verify.docCommentTemplateAt(marker, 7,
 `/**
  * 
  * @param {any} p

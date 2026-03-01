@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts] ////
+
 //// [asyncOrYieldAsBindingIdentifier1.ts]
 function f_let () {
     let await = 1
@@ -48,6 +50,7 @@ function * f4_const () {
 }
 
 //// [asyncOrYieldAsBindingIdentifier1.js]
+"use strict";
 function f_let() {
     let await = 1;
 }

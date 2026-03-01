@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializations1.ts] ////
+
 //// [genericSpecializations1.ts]
 interface IFoo<T> {
     foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T
@@ -16,21 +18,13 @@ class StringFoo3 implements IFoo<string> {
 }
 
 //// [genericSpecializations1.js]
-var IntFooBad = /** @class */ (function () {
-    function IntFooBad() {
-    }
-    IntFooBad.prototype.foo = function (x) { return null; };
-    return IntFooBad;
-}());
-var StringFoo2 = /** @class */ (function () {
-    function StringFoo2() {
-    }
-    StringFoo2.prototype.foo = function (x) { return null; };
-    return StringFoo2;
-}());
-var StringFoo3 = /** @class */ (function () {
-    function StringFoo3() {
-    }
-    StringFoo3.prototype.foo = function (x) { return null; };
-    return StringFoo3;
-}());
+"use strict";
+class IntFooBad {
+    foo(x) { return null; }
+}
+class StringFoo2 {
+    foo(x) { return null; }
+}
+class StringFoo3 {
+    foo(x) { return null; }
+}

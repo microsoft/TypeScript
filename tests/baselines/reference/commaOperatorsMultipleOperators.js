@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorsMultipleOperators.ts] ////
+
 //// [commaOperatorsMultipleOperators.ts]
 var ANY: any;
 var BOOLEAN: boolean;
@@ -27,6 +29,7 @@ var resultIsNumber2 = (null, true, 1);
 var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 
 //// [commaOperatorsMultipleOperators.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

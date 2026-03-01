@@ -1,27 +1,49 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/jsExpandoObjectDefineProperty.ts] ////
+
+=== index.js ===
 var chrome = {}
 >chrome : typeof chrome
+>       : ^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 >Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : typeof chrome
+>                                                                           : ^^^^^^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >chrome : typeof chrome
+>       : ^^^^^^^^^^^^^
 >'devtools' : "devtools"
+>           : ^^^^^^^^^^
 >{ value: {}, enumerable: true } : { value: {}; enumerable: true; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : {}
+>      : ^^
 >{} : {}
+>   : ^^
 >enumerable : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 
 chrome.devtools.inspectedWindow = {}
 >chrome.devtools.inspectedWindow = {} : {}
+>                                     : ^^
 >chrome.devtools.inspectedWindow : {}
+>                                : ^^
 >chrome.devtools : typeof chrome.devtools
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >chrome : typeof chrome
+>       : ^^^^^^^^^^^^^
 >devtools : typeof chrome.devtools
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >inspectedWindow : {}
+>                : ^^
 >{} : {}
+>   : ^^
 

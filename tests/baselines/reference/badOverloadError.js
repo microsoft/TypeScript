@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badOverloadError.ts] ////
+
 //// [badOverloadError.ts]
 function method() {
     var dictionary = <{ [index: string]: string; }>{};
@@ -5,6 +7,7 @@ function method() {
 
 
 //// [badOverloadError.js]
+"use strict";
 function method() {
     var dictionary = {};
 }

@@ -1,9 +1,9 @@
-tests/cases/conformance/decorators/class/constructableDecoratorOnClass01.ts(3,2): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+constructableDecoratorOnClass01.ts(3,2): error TS1238: Unable to resolve signature of class decorator when called as an expression.
   This expression is not callable.
     Type 'typeof CtorDtor' has no call signatures.
 
 
-==== tests/cases/conformance/decorators/class/constructableDecoratorOnClass01.ts (1 errors) ====
+==== constructableDecoratorOnClass01.ts (1 errors) ====
     class CtorDtor {}
     
     @CtorDtor

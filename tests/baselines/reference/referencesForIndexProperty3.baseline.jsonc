@@ -1,6 +1,7 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
 // interface Object {
-//     /*FIND ALL REFS*/[|toMyString|]();
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}toMyString|]();|>
 // }
 // 
 // var y: Object;
@@ -9,112 +10,81 @@
 // var x = {};
 // x["[|toMyString|]"]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-      "kind": "method",
-      "name": "(method) Object.toMyString(): any",
-      "textSpan": {
-        "start": 23,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Object",
-          "kind": "localName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "toMyString",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 23,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "contextSpan": {
-          "start": 23,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 87,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
+  // interface Object {
+  //     /*FIND ALL REFS*/<|[|toMyString|]();|>
+  // }
+  // 
+  // var y: Object;
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Object.toMyString(): any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Object",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "toMyString",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
 // interface Object {
-//     [|toMyString|]();
+//     <|[|toMyString|]();|>
 // }
 // 
 // var y: Object;
@@ -123,109 +93,84 @@
 // var x = {};
 // x["[|toMyString|]"]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-      "kind": "method",
-      "name": "(method) Object.toMyString(): any",
-      "textSpan": {
-        "start": 23,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Object",
-          "kind": "localName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "toMyString",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 23,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "contextSpan": {
-          "start": 23,
-          "length": 13
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 87,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
+  // interface Object {
+  //     <|[|toMyString|]();|>
+  // }
+  // 
+  // var y: Object;
+  // y./*FIND ALL REFS*/toMyString();
+  // 
+  // var x = {};
+  // x["toMyString"]();
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Object.toMyString(): any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Object",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "toMyString",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
 // interface Object {
-//     [|toMyString|]();
+//     <|[|toMyString|]();|>
 // }
 // 
 // var y: Object;
@@ -234,102 +179,74 @@
 // var x = {};
 // x["/*FIND ALL REFS*/[|toMyString|]"]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-      "kind": "method",
-      "name": "(method) Object.toMyString(): any",
-      "textSpan": {
-        "start": 23,
-        "length": 10
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Object",
-          "kind": "localName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "toMyString",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 23,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "contextSpan": {
-          "start": 23,
-          "length": 13
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 57,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 87,
-          "length": 10
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty3.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
+  // interface Object {
+  //     <|[|toMyString|]();|>
+  // }
+  // 
+  // var y: Object;
+  // y.toMyString();
+  // 
+  // var x = {};
+  // x["/*FIND ALL REFS*/toMyString"]();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Object.toMyString(): any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Object",
+      "kind": "localName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "toMyString",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

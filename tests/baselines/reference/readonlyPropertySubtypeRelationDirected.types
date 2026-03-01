@@ -1,202 +1,320 @@
-=== tests/cases/compiler/one.ts ===
+//// [tests/cases/compiler/readonlyPropertySubtypeRelationDirected.ts] ////
+
+=== one.ts ===
 export {};
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
 const two: { a: string } = { a: 'two' };
 >two : { a: string; }
+>    : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'two' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
 const one: { readonly a: string } = { a: 'one' };
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'one' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'one' : "one"
+>      : ^^^^^
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
+>          : ^^^^^^^
 
     // when `one` comes first in the conditional check, the return type of `doSomething` is inferred as `a` is readonly, but `a` is
     // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
     const three = (condition) ? one : two;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? one : two : { readonly a: string; }
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
+>            : ^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >two : { a: string; }
+>    : ^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
+>                : ^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
     // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
     three.a = 'foo2';
 >three.a = 'foo2' : "foo2"
+>                 : ^^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo2' : "foo2"
+>       : ^^^^^^
 
     return three;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 }
-=== tests/cases/compiler/two.ts ===
+=== two.ts ===
 export {};
 // When the non-readonly type is declared first, the unioned type of `three` in `doSomething` is never treated as readonly
 const two: { a: string } = { a: 'two' };
 >two : { a: string; }
+>    : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'two' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
 const one: { readonly a: string } = { a: 'one' };
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'one' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'one' : "one"
+>      : ^^^^^
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
+>          : ^^^^^^^
 
     // when `two` comes first in the conditional check, the return type of `doSomething` is inferred as not readonly but produces the same diagnostics as above
     // based on the declaration order of `one` and `two`
     const three = (condition) ? two : one;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? two : one : { readonly a: string; }
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
+>            : ^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 >two : { a: string; }
+>    : ^^^^^      ^^^
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
+>                : ^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
     // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
     three.a = 'foo2';
 >three.a = 'foo2' : "foo2"
+>                 : ^^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo2' : "foo2"
+>       : ^^^^^^
 
     return three;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 }
 
-=== tests/cases/compiler/three.ts ===
+=== three.ts ===
 export {};
 // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
 const one: { readonly a: string } = { a: 'one' };
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'one' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'one' : "one"
+>      : ^^^^^
 
 const two: { a: string } = { a: 'two' };
 >two : { a: string; }
+>    : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'two' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
+>          : ^^^^^^^
 
     // when `one` comes first in the conditional check, the return type of `doSomething` is inferred as `a` is readonly, but `a` is
     // only treated as readonly (i.e. it will produce a diagnostic if you try to assign to it) based on the order of declarations of `one` and `two` above
     const three = (condition) ? one : two;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? one : two : { readonly a: string; }
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
+>            : ^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >two : { a: string; }
+>    : ^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
+>                : ^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
     // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
     three.a = 'foo2';
 >three.a = 'foo2' : "foo2"
+>                 : ^^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo2' : "foo2"
+>       : ^^^^^^
 
     return three;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 }
 
-=== tests/cases/compiler/four.ts ===
+=== four.ts ===
 export {};
 // When the readonly type is declared first, the unioned type of `three` in `doSomething` is always treated as readonly by the compiler
 const one: { readonly a: string } = { a: 'one' };
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'one' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'one' : "one"
+>      : ^^^^^
 
 const two: { a: string } = { a: 'two' };
 >two : { a: string; }
+>    : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >{ a: 'two' } : { a: string; }
+>             : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
 function doSomething(condition: boolean) {
 >doSomething : (condition: boolean) => { readonly a: string; }
+>            : ^         ^^       ^^^^^^^^^^^^^^^^^^^      ^^^
 >condition : boolean
+>          : ^^^^^^^
 
     // when `two` comes first in the conditional check, the return type of `doSomething` is inferred as not readonly but produces the same diagnostics as above
     // based on the declaration order of `one` and `two`
     const three = (condition) ? two : one;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >(condition) ? two : one : { readonly a: string; }
+>                        : ^^^^^^^^^^^^^^      ^^^
 >(condition) : boolean
+>            : ^^^^^^^
 >condition : boolean
+>          : ^^^^^^^
 >two : { a: string; }
+>    : ^^^^^      ^^^
 >one : { readonly a: string; }
+>    : ^^^^^^^^^^^^^^      ^^^
 
     three.a = 'foo';
 >three.a = 'foo' : "foo"
+>                : ^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo' : "foo"
+>      : ^^^^^
 
     // the inferred (displayed?) type of `a` also depends on the order of the condition above. When `one` comes first, the displayed type is `any`
     // when `two` comes first, the displayed type is `string`, but the diagnostic will always correctly find that it's string
     three.a = 'foo2';
 >three.a = 'foo2' : "foo2"
+>                 : ^^^^^^
 >three.a : any
+>        : ^^^
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >a : any
+>  : ^^^
 >'foo2' : "foo2"
+>       : ^^^^^^
 
     return three;
 >three : { readonly a: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 }

@@ -1,10 +1,19 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentComputed.js ===
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentComputed.ts] ////
+
+=== thisPropertyAssignmentComputed.js ===
 this["a" + "b"] = 0
 >this["a" + "b"] = 0 : 0
+>                    : ^
 >this["a" + "b"] : any
+>                : ^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >"a" + "b" : string
+>          : ^^^^^^
 >"a" : "a"
+>    : ^^^
 >"b" : "b"
+>    : ^^^
 >0 : 0
+>  : ^
 

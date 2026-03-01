@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts] ////
+
+=== Protected6.ts ===
 class C {
 >C : C
+>  : ^
 
   static protected m() { }
 >m : () => void
+>  : ^^^^^^^^^^
 }

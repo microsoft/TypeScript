@@ -1,0 +1,82 @@
+//// [tests/cases/compiler/conflictingTypeParameterSymbolTransfer.ts] ////
+
+=== conflictingTypeParameterSymbolTransfer.ts ===
+// @strict
+
+// Via #56620
+class Base<U> { }
+>Base : Symbol(Base, Decl(conflictingTypeParameterSymbolTransfer.ts, 0, 0))
+>U : Symbol(U, Decl(conflictingTypeParameterSymbolTransfer.ts, 3, 11))
+
+export class C2<T> extends Base<unknown> {
+>C2 : Symbol(C2, Decl(conflictingTypeParameterSymbolTransfer.ts, 3, 17))
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 42))
+>Base : Symbol(Base, Decl(conflictingTypeParameterSymbolTransfer.ts, 0, 0))
+
+    T: number;
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 42))
+
+    constructor(T: number) {
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 6, 16))
+
+        super();
+>super : Symbol(Base, Decl(conflictingTypeParameterSymbolTransfer.ts, 0, 0))
+
+        // Should not error
+        this.T = T;
+>this.T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 42))
+>this : Symbol(C2, Decl(conflictingTypeParameterSymbolTransfer.ts, 3, 17))
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 16), Decl(conflictingTypeParameterSymbolTransfer.ts, 4, 42))
+>T : Symbol(T, Decl(conflictingTypeParameterSymbolTransfer.ts, 6, 16))
+
+        // Should error
+        let a: U = null;
+>a : Symbol(a, Decl(conflictingTypeParameterSymbolTransfer.ts, 12, 11))
+>U : Symbol(U)
+    }
+}
+
+// via #56689
+class Leg { }
+>Leg : Symbol(Leg, Decl(conflictingTypeParameterSymbolTransfer.ts, 14, 1))
+
+class Foo<t> extends Leg {
+>Foo : Symbol(Foo, Decl(conflictingTypeParameterSymbolTransfer.ts, 17, 13))
+>t : Symbol(t, Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 10), Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 26))
+>Leg : Symbol(Leg, Decl(conflictingTypeParameterSymbolTransfer.ts, 14, 1))
+
+    t = {} as t
+>t : Symbol(t, Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 10), Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 26))
+>t : Symbol(t, Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 10), Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 26))
+
+    // should allow this access since t was declared as a property on Foo
+    foo = this.t
+>foo : Symbol(Foo.foo, Decl(conflictingTypeParameterSymbolTransfer.ts, 19, 15))
+>this.t : Symbol(t, Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 10), Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 26))
+>this : Symbol(Foo, Decl(conflictingTypeParameterSymbolTransfer.ts, 17, 13))
+>t : Symbol(t, Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 10), Decl(conflictingTypeParameterSymbolTransfer.ts, 18, 26))
+}
+
+// via #56661
+class BaseClass { }
+>BaseClass : Symbol(BaseClass, Decl(conflictingTypeParameterSymbolTransfer.ts, 23, 1))
+
+class Item<data> extends BaseClass {
+>Item : Symbol(Item, Decl(conflictingTypeParameterSymbolTransfer.ts, 26, 19))
+>data : Symbol(data, Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 11), Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 36))
+>BaseClass : Symbol(BaseClass, Decl(conflictingTypeParameterSymbolTransfer.ts, 23, 1))
+
+    data: data;
+>data : Symbol(data, Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 11), Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 36))
+>data : Symbol(data, Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 11), Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 36))
+
+    getData() {
+>getData : Symbol(Item.getData, Decl(conflictingTypeParameterSymbolTransfer.ts, 28, 15))
+
+        // should OK
+        return this.data;
+>this.data : Symbol(data, Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 11), Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 36))
+>this : Symbol(Item, Decl(conflictingTypeParameterSymbolTransfer.ts, 26, 19))
+>data : Symbol(data, Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 11), Decl(conflictingTypeParameterSymbolTransfer.ts, 27, 36))
+    }
+}

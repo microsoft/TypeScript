@@ -1,38 +1,58 @@
-=== tests/cases/compiler/forwardRefInEnum.ts ===
+//// [tests/cases/compiler/forwardRefInEnum.ts] ////
+
+=== forwardRefInEnum.ts ===
 enum E1 {
 >E1 : E1
+>   : ^^
 
     // illegal case
     // forward reference to the element of the same enum
     X = Y, 
->X : E1
->Y : E1
+>X : E1.X
+>  : ^^^^
+>Y : E1.X
+>  : ^^^^
 
     X1 = E1["Y"], 
->X1 : E1
->E1["Y"] : E1
+>X1 : E1.X
+>   : ^^^^
+>E1["Y"] : E1.X
+>        : ^^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >"Y" : "Y"
+>    : ^^^
 
     // forward reference to the element of the same enum
     Y = E1.Z,
->Y : E1
->E1.Z : E1
+>Y : E1.X
+>  : ^^^^
+>E1.Z : E1.Z
+>     : ^^^^
 >E1 : typeof E1
->Z : E1
+>   : ^^^^^^^^^
+>Z : E1.Z
+>  : ^^^^
 
     Y1 = E1["Z"]
->Y1 : E1
->E1["Z"] : E1
+>Y1 : E1.X
+>   : ^^^^
+>E1["Z"] : E1.Z
+>        : ^^^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >"Z" : "Z"
+>    : ^^^
 }
 
 enum E1 {
 >E1 : E1
+>   : ^^
 
     Z = 4    
->Z : E1
+>Z : E1.Z
+>  : ^^^^
 >4 : 4
+>  : ^
 }
 

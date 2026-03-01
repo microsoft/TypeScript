@@ -89,90 +89,108 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 
 //// [component.js]
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-var _this = this;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
-var renderer2_1 = require("./renderer2");
-var MySFC = function (props) { return renderer2_1.predom.apply(void 0, __spreadArray(["p", null, props.x,
-    " + ",
-    props.y,
-    " = ",
-    props.x + props.y], _this.props.children, false)); };
-exports.MySFC = MySFC;
-var MyClass = /** @class */ (function () {
-    function MyClass(props) {
-        this.props = props;
-    }
-    MyClass.prototype.render = function () {
-        return renderer2_1.predom.apply(void 0, __spreadArray(["p", null, this.props.x,
-            " + ",
-            this.props.y,
-            " = ",
-            this.props.x + this.props.y], this.props.children, false));
-    };
-    return MyClass;
-}());
-exports.MyClass = MyClass;
-exports.tree = (0, renderer2_1.predom)(exports.MySFC, { x: 1, y: 2 },
-    (0, renderer2_1.predom)(MyClass, { x: 3, y: 4 }),
-    (0, renderer2_1.predom)(MyClass, { x: 5, y: 6 }));
-exports["default"] = (0, renderer2_1.predom)("h", null);
-//// [index.js]
-"use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
-exports.__esModule = true;
-/** @jsx dom */
-var renderer_1 = require("./renderer");
-var component_1 = require("./component");
-var elem = component_1["default"];
-elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
-var DOMSFC = function (props) { return (0, renderer_1.dom)("p", null,
+const renderer2_1 = require("./renderer2");
+const MySFC = (props) => (0, renderer2_1.predom)("p", null,
     props.x,
     " + ",
     props.y,
     " = ",
     props.x + props.y,
-    props.children); };
-var DOMClass = /** @class */ (function () {
-    function DOMClass(props) {
+    ...this.props.children);
+exports.MySFC = MySFC;
+class MyClass {
+    constructor(props) {
         this.props = props;
     }
-    DOMClass.prototype.render = function () {
-        return renderer_1.dom.apply(void 0, __spreadArray(["p", null, this.props.x,
+    render() {
+        return (0, renderer2_1.predom)("p", null,
+            this.props.x,
             " + ",
             this.props.y,
             " = ",
-            this.props.x + this.props.y], this.props.children, false));
+            this.props.x + this.props.y,
+            ...this.props.children);
+    }
+}
+exports.MyClass = MyClass;
+exports.tree = (0, renderer2_1.predom)(exports.MySFC, { x: 1, y: 2 },
+    (0, renderer2_1.predom)(MyClass, { x: 3, y: 4 }),
+    (0, renderer2_1.predom)(MyClass, { x: 5, y: 6 }));
+exports.default = (0, renderer2_1.predom)("h", null);
+//// [index.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
     };
-    return DOMClass;
-}());
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/** @jsx dom */
+const renderer_1 = require("./renderer");
+const component_1 = __importStar(require("./component"));
+let elem = component_1.default;
+elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
+const DOMSFC = (props) => (0, renderer_1.dom)("p", null,
+    props.x,
+    " + ",
+    props.y,
+    " = ",
+    props.x + props.y,
+    props.children);
+class DOMClass {
+    constructor(props) {
+        this.props = props;
+    }
+    render() {
+        return (0, renderer_1.dom)("p", null,
+            this.props.x,
+            " + ",
+            this.props.y,
+            " = ",
+            this.props.x + this.props.y,
+            ...this.props.children);
+    }
+}
 // Should work, everything is a DOM element
-var _tree = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 },
+const _tree = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 },
     (0, renderer_1.dom)(DOMClass, { x: 3, y: 4 }),
     (0, renderer_1.dom)(DOMClass, { x: 5, y: 6 }));
 // Should fail, no dom elements
-var _brokenTree = (0, renderer_1.dom)(component_1.MySFC, { x: 1, y: 2 },
+const _brokenTree = (0, renderer_1.dom)(component_1.MySFC, { x: 1, y: 2 },
     (0, renderer_1.dom)(component_1.MyClass, { x: 3, y: 4 }),
     (0, renderer_1.dom)(component_1.MyClass, { x: 5, y: 6 }));
 // Should fail, nondom isn't allowed as children of dom
-var _brokenTree2 = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 },
+const _brokenTree2 = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 },
     component_1.tree,
     component_1.tree);

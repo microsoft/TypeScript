@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(1,10): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(4,10): error TS2393: Duplicate function implementation.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(7,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts(8,1): error TS1128: Declaration or statement expected.
+parserErrorRecovery_ModuleElement2.ts(1,10): error TS2393: Duplicate function implementation.
+parserErrorRecovery_ModuleElement2.ts(4,10): error TS2393: Duplicate function implementation.
+parserErrorRecovery_ModuleElement2.ts(7,1): error TS1128: Declaration or statement expected.
+parserErrorRecovery_ModuleElement2.ts(8,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts (4 errors) ====
+==== parserErrorRecovery_ModuleElement2.ts (4 errors) ====
     function foo() {
              ~~~
 !!! error TS2393: Duplicate function implementation.

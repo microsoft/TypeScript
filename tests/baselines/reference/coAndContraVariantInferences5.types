@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/coAndContraVariantInferences5.ts] ////
+
+=== coAndContraVariantInferences5.ts ===
+type Thing = 'a' | 'b';
+>Thing : Thing
+>      : ^^^^^
+
+function f(
+>f : (options: SelectOptions<Thing>, onChange: (status: Thing | null) => void) => void
+>  : ^       ^^                    ^^        ^^                              ^^^^^    
+
+    options: SelectOptions<Thing>,
+>options : SelectOptions<Thing>
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+    onChange: (status: Thing | null) => void,
+>onChange : (status: Thing | null) => void
+>         : ^      ^^            ^^^^^    
+>status : Thing | null
+>       : ^^^^^^^^^^^^
+
+): void {
+    select({
+>select({        options,        onChange,    }) : void
+>                                                : ^^^^
+>select : <KeyT extends string>(props: SelectProps<KeyT>) => void
+>       : ^    ^^^^^^^^^      ^^     ^^                 ^^^^^    
+>{        options,        onChange,    } : { options: SelectOptions<Thing>; onChange: (status: Thing | null) => void; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^            ^^^^^    ^^^
+
+        options,
+>options : SelectOptions<Thing>
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+        onChange,
+>onChange : (status: Thing | null) => void
+>         : ^      ^^            ^^^^^    
+
+    });
+}
+
+declare function select<KeyT extends string>(props: SelectProps<KeyT>): void;
+>select : <KeyT extends string>(props: SelectProps<KeyT>) => void
+>       : ^    ^^^^^^^^^      ^^     ^^                 ^^^^^    
+>props : SelectProps<KeyT>
+>      : ^^^^^^^^^^^^^^^^^
+
+type SelectProps<KeyT extends string> = {
+>SelectProps : SelectProps<KeyT>
+>            : ^^^^^^^^^^^^^^^^^
+
+    options?: SelectOptions<KeyT>;
+>options : SelectOptions<KeyT> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    onChange: (key: KeyT) => void;
+>onChange : (key: KeyT) => void
+>         : ^   ^^    ^^^^^    
+>key : KeyT
+>    : ^^^^
+
+};
+
+type SelectOptions<KeyT extends string> =
+>SelectOptions : SelectOptions<KeyT>
+>              : ^^^^^^^^^^^^^^^^^^^
+
+    | Array<{key: KeyT}>
+>key : KeyT
+>    : ^^^^
+
+    | Array<KeyT>;
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures5.ts] ////
+
 //// [unionTypeCallSignatures5.ts]
 // #31485
 interface A {
@@ -14,4 +16,5 @@ fn(0);
 
 
 //// [unionTypeCallSignatures5.js]
+"use strict";
 fn(0);

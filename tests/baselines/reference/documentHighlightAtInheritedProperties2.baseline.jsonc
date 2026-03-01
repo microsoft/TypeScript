@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class class1 extends class1 {
+//    /*HIGHLIGHTS*/<|[|{| kind: "writtenReference" |}doStuff|]() { }|>
+//    propName: string;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    /*HIGHLIGHTS*/<|[|{| kind: "reference" |}propName|]: string;|>
+// }

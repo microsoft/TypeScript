@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter03.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter03.ts] ////
+
+=== emptyArrayBindingPatternParameter03.ts ===
 function f(a, []) {
 >f : Symbol(f, Decl(emptyArrayBindingPatternParameter03.ts, 0, 0))
 >a : Symbol(a, Decl(emptyArrayBindingPatternParameter03.ts, 0, 11))

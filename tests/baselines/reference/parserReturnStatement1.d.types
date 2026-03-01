@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserReturnStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserReturnStatement1.d.ts] ////
+
+=== parserReturnStatement1.d.ts ===
+
 return;
-No type information for this code.

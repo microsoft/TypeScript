@@ -1,71 +1,113 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldClassExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldClassExpression.ts] ////
+
+=== privateNameStaticFieldClassExpression.ts ===
 class B {
 >B : B
+>  : ^
 
     static #foo = class {
 >#foo : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class {        constructor() {            console.log("hello");            new B.#foo2();        }        static test = 123;        field = 10;    } : typeof (Anonymous class)
+>                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         constructor() {
             console.log("hello");
 >console.log("hello") : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
+>        : ^^^^^^^
 
             new B.#foo2();
 >new B.#foo2() : Foo
+>              : ^^^
 >B.#foo2 : typeof Foo
+>        : ^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
         }
         static test = 123;
 >test : number
+>     : ^^^^^^
 >123 : 123
+>    : ^^^
 
         field = 10;
 >field : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
     };
     static #foo2 = class Foo {
 >#foo2 : typeof Foo
+>      : ^^^^^^^^^^
 >class Foo {        static otherClass = 123;    } : typeof Foo
+>                                                 : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         static otherClass = 123;
 >otherClass : number
+>           : ^^^^^^
 >123 : 123
+>    : ^^^
 
     };
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         console.log(B.#foo.test)
 >console.log(B.#foo.test) : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >B.#foo.test : number
+>            : ^^^^^^
 >B.#foo : typeof (Anonymous class)
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >test : number
+>     : ^^^^^^
 
         B.#foo.test = 10;
 >B.#foo.test = 10 : 10
+>                 : ^^
 >B.#foo.test : number
+>            : ^^^^^^
 >B.#foo : typeof (Anonymous class)
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >test : number
+>     : ^^^^^^
 >10 : 10
+>   : ^^
 
         new B.#foo().field;
 >new B.#foo().field : number
+>                   : ^^^^^^
 >new B.#foo() : (Anonymous class)
+>             : ^^^^^^^^^^^^^^^^^
 >B.#foo : typeof (Anonymous class)
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >field : number
+>      : ^^^^^^
     }
 }
 

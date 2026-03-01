@@ -1,6 +1,7 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
 // class A {
-//     /*FIND ALL REFS*/[|constructor|](s: string) {}
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|](s: string) {}|>
 // }
 // class B extends A {
 //     constructor() { [|super|](""); }
@@ -16,211 +17,137 @@
 // const c = new C();
 // const d = new D();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-      "kind": "class",
-      "name": "class A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 41
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 25
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 82,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 198,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
+  // <|class [|A|] {
+  //     /*FIND ALL REFS*/constructor(s: string) {}
+  // }|>
+  // class B extends A {
+  //     constructor() { super(""); }
+  // }
+  // --- (line: 7) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class A",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
 // class A {
 //     constructor(s: string) {}
 // }
 // class B extends A {
-//     /*FIND ALL REFS*/[|constructor|]() { super(""); }
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}constructor|]() { super(""); }|>
 // }
 // class C extends B {
 //     constructor() {
-//         [|super|]();
+//         [|{| defId: 0 |}super|]();
 //     }
 // }
 // class D extends B { }
 // const a = new A("a");
-// const b = new [|B|]();
+// const b = new [|{| defId: 0 |}B|]();
 // const c = new C();
-// const d = new [|D|]();
+// const d = new [|{| defId: 1 |}D|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-      "kind": "class",
-      "name": "class B",
-      "textSpan": {
-        "start": 48,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 42,
-        "length": 54
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 66,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "contextSpan": {
-          "start": 66,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 220,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-      "kind": "class",
-      "name": "class D",
-      "textSpan": {
-        "start": 168,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 162,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 258,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
+  // class A {
+  //     constructor(s: string) {}
+  // }
+  // <|class [|{| defId: 0 |}B|] extends A {
+  //     /*FIND ALL REFS*/constructor() { super(""); }
+  // }|>
+  // class C extends B {
+  //     constructor() {
+  //         super();
+  //     }
+  // }
+  // <|class [|{| defId: 1 |}D|] extends B { }|>
+  // const a = new A("a");
+  // const b = new B();
+  // const c = new C();
+  // const d = new D();
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class B",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class D",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
-// class A {
-//     constructor(s: string) {}
-// }
-// class B extends A {
+// --- (line: 4) skipped ---
 //     constructor() { super(""); }
 // }
 // class C extends B {
-//     /*FIND ALL REFS*/[|constructor|]() {
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|]() {
 //         super();
-//     }
+//     }|>
 // }
 // class D extends B { }
 // const a = new A("a");
@@ -228,60 +155,43 @@
 // const c = new [|C|]();
 // const d = new D();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 103,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 97,
-        "length": 64
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "contextSpan": {
-          "start": 121,
-          "length": 38
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 239,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOfConstructor2.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOfConstructor2.ts ===
+  // --- (line: 3) skipped ---
+  // class B extends A {
+  //     constructor() { super(""); }
+  // }
+  // <|class [|C|] extends B {
+  //     /*FIND ALL REFS*/constructor() {
+  //         super();
+  //     }
+  // }|>
+  // class D extends B { }
+  // const a = new A("a");
+  // const b = new B();
+  // const c = new C();
+  // const d = new D();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

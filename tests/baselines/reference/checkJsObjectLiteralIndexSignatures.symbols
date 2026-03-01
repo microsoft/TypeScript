@@ -1,10 +1,12 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/checkJsObjectLiteralIndexSignatures.ts] ////
+
+=== file.js ===
 // @ts-check
 
 let n = Math.random();
 >n : Symbol(n, Decl(file.js, 2, 3))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 let s = `${n}`;

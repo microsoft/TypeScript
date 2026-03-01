@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInBasePropertyAndDerivedContainerOfBase01.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInBasePropertyAndDerivedContainerOfBase01.ts] ////
+
+=== thisTypeInBasePropertyAndDerivedContainerOfBase01.ts ===
 interface BoxOfFoo<T extends Foo> {
 >BoxOfFoo : Symbol(BoxOfFoo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 0))
 >T : Symbol(T, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 19))

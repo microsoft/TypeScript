@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitPostComments.ts] ////
+
 //// [emitPostComments.ts]
 var y = 10;
 /**
@@ -29,6 +31,7 @@ var y = 10;
 
 
 //// [emitPostComments.js]
+"use strict";
 var y = 10;
 /**
 * @name Foo

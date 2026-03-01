@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/signaturesUseJSDocForOptionalParameters.ts] ////
+
 //// [jsDocOptionality.js]
 function MyClass() {
   this.prop = null;
@@ -16,6 +18,7 @@ let c2 = pInst.optionalParam('hello', null)
 
 
 //// [out_1.js]
+"use strict";
 function MyClass() {
     this.prop = null;
 }
@@ -27,6 +30,6 @@ function MyClass() {
 MyClass.prototype.optionalParam = function (required, notRequired) {
     return this;
 };
-var pInst = new MyClass();
-var c1 = pInst.optionalParam('hello');
-var c2 = pInst.optionalParam('hello', null);
+let pInst = new MyClass();
+let c1 = pInst.optionalParam('hello');
+let c2 = pInst.optionalParam('hello', null);

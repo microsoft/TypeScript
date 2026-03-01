@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts] ////
+
 //// [privateNameNestedClassMethodShadowing.ts]
 class Base {
     #x() { };
@@ -16,6 +18,7 @@ class Base {
 
 
 //// [privateNameNestedClassMethodShadowing.js]
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -23,6 +26,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Base_instances, _Base_x;
 class Base {
+    ;
     constructor() {
         var _Derived_instances, _Derived_x;
         _Base_instances.add(this);
@@ -40,6 +44,5 @@ class Base {
         }
         _Derived_instances = new WeakSet(), _Derived_x = function _Derived_x() { };
     }
-    ;
 }
 _Base_instances = new WeakSet(), _Base_x = function _Base_x() { };

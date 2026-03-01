@@ -1,11 +1,11 @@
-tests/cases/compiler/missingReturnStatement1.ts(2,12): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+missingReturnStatement1.ts(2,12): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 
 
-==== tests/cases/compiler/missingReturnStatement1.ts (1 errors) ====
+==== missingReturnStatement1.ts (1 errors) ====
     class Foo {
         foo(): number {
                ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
             //return 4;
         }
     }

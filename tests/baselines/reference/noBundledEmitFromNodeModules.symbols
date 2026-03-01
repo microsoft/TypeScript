@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noBundledEmitFromNodeModules.ts] ////
+
 === /a.ts ===
 import { C } from "projB";
 >C : Symbol(C, Decl(a.ts, 0, 8))

@@ -1,52 +1,81 @@
-=== tests/cases/compiler/typePredicateInLoop.ts ===
+//// [tests/cases/compiler/typePredicateInLoop.ts] ////
+
+=== typePredicateInLoop.ts ===
 // Repro from #12101
 
 interface Type {
   type: number;
 >type : number
+>     : ^^^^^^
 }
 
 interface TypeExt extends Type {
   arr: Type[];
 >arr : Type[]
+>    : ^^^^^^
 }
 
 const guard = (arg: Type): arg is TypeExt => arg.type === 1;
 >guard : (arg: Type) => arg is TypeExt
+>      : ^   ^^    ^^^^^              
 >(arg: Type): arg is TypeExt => arg.type === 1 : (arg: Type) => arg is TypeExt
+>                                              : ^   ^^    ^^^^^              
 >arg : Type
+>    : ^^^^
 >arg.type === 1 : boolean
+>               : ^^^^^^^
 >arg.type : number
+>         : ^^^^^^
 >arg : Type
+>    : ^^^^
 >type : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 const otherFunc = (arg1: Type, arg2: TypeExt): void => {};
 >otherFunc : (arg1: Type, arg2: TypeExt) => void
+>          : ^    ^^    ^^    ^^       ^^^^^    
 >(arg1: Type, arg2: TypeExt): void => {} : (arg1: Type, arg2: TypeExt) => void
+>                                        : ^    ^^    ^^    ^^       ^^^^^    
 >arg1 : Type
+>     : ^^^^
 >arg2 : TypeExt
+>     : ^^^^^^^
 
 export function y(arg: Type): void {
 >y : (arg: Type) => void
+>  : ^   ^^    ^^^^^    
 >arg : Type
+>    : ^^^^
 
   if (guard(arg)) {
 >guard(arg) : boolean
+>           : ^^^^^^^
 >guard : (arg: Type) => arg is TypeExt
+>      : ^   ^^    ^^^^^              
 >arg : Type
+>    : ^^^^
 
     for (const ITEM of arg.arr) {
 >ITEM : Type
+>     : ^^^^
 >arg.arr : Type[]
+>        : ^^^^^^
 >arg : TypeExt
+>    : ^^^^^^^
 >arr : Type[]
+>    : ^^^^^^
 
       if (otherFunc(ITEM, arg)) {
 >otherFunc(ITEM, arg) : void
+>                     : ^^^^
 >otherFunc : (arg1: Type, arg2: TypeExt) => void
+>          : ^    ^^    ^^    ^^       ^^^^^    
 >ITEM : Type
+>     : ^^^^
 >arg : TypeExt
+>    : ^^^^^^^
       }
     }
   }

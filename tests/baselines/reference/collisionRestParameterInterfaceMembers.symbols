@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterInterfaceMembers.ts ===
+//// [tests/cases/compiler/collisionRestParameterInterfaceMembers.ts] ////
+
+=== collisionRestParameterInterfaceMembers.ts ===
 // call
 interface i1 {
 >i1 : Symbol(i1, Decl(collisionRestParameterInterfaceMembers.ts, 0, 0))

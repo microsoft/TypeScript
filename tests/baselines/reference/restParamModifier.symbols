@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParamModifier.ts ===
+//// [tests/cases/compiler/restParamModifier.ts] ////
+
+=== restParamModifier.ts ===
 class C {
 >C : Symbol(C, Decl(restParamModifier.ts, 0, 0))
 

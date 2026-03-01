@@ -1,4 +1,6 @@
-﻿// @removeComments: true
+﻿// @strict: false
+// @target: es2015
+// @removeComments: true
 
 class C {
     /*! remove pinned comment anywhere else */
@@ -6,7 +8,6 @@ class C {
     public foo(x: string, y: number) { }
 }
 
-// @Filename: file1.ts
 var x = 10;
 
 /*! remove pinned comment anywhere else */

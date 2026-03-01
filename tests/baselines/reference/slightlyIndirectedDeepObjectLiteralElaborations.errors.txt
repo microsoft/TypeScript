@@ -1,7 +1,7 @@
-tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts(16,17): error TS2322: Type 'number' is not assignable to type 'string'.
+slightlyIndirectedDeepObjectLiteralElaborations.ts(16,17): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts (1 errors) ====
+==== slightlyIndirectedDeepObjectLiteralElaborations.ts (1 errors) ====
     interface Foo {
         a: {
             b: {
@@ -20,7 +20,7 @@ tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts(16,17): 
                     d: 42
                     ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts:5:17: The expected type comes from property 'd' which is declared here on type '{ d: string; }'
+!!! related TS6500 slightlyIndirectedDeepObjectLiteralElaborations.ts:5:17: The expected type comes from property 'd' which is declared here on type '{ d: string; }'
                 }
             })
         }

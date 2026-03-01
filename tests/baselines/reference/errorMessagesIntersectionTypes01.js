@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorMessagesIntersectionTypes01.ts] ////
+
 //// [errorMessagesIntersectionTypes01.ts]
 interface Foo {
     fooProp: boolean;
@@ -17,6 +19,7 @@ let fooBar: FooBar = mixBar({
 });
 
 //// [errorMessagesIntersectionTypes01.js]
-var fooBar = mixBar({
+"use strict";
+let fooBar = mixBar({
     fooProp: "frizzlebizzle"
 });

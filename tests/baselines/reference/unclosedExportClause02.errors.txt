@@ -1,56 +1,32 @@
-tests/cases/compiler/t2.ts(1,10): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/t2.ts(1,13): error TS2304: Cannot find name 'from'.
-tests/cases/compiler/t2.ts(2,5): error TS1005: ',' expected.
-tests/cases/compiler/t3.ts(1,10): error TS2304: Cannot find name 'from'.
-tests/cases/compiler/t3.ts(2,5): error TS1005: ',' expected.
-tests/cases/compiler/t4.ts(1,10): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/t4.ts(1,17): error TS1005: ',' expected.
-tests/cases/compiler/t4.ts(1,17): error TS2304: Cannot find name 'from'.
-tests/cases/compiler/t4.ts(2,5): error TS1005: ',' expected.
-tests/cases/compiler/t5.ts(1,10): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/t5.ts(1,18): error TS2304: Cannot find name 'from'.
-tests/cases/compiler/t5.ts(2,5): error TS1005: ',' expected.
+t2.ts(1,13): error TS1005: '}' expected.
+t3.ts(1,10): error TS1005: '}' expected.
+t4.ts(1,17): error TS1005: ',' expected.
+t5.ts(1,18): error TS1005: '}' expected.
 
 
-==== tests/cases/compiler/t1.ts (0 errors) ====
+==== t1.ts (0 errors) ====
     export var x = "x";
     
-==== tests/cases/compiler/t2.ts (3 errors) ====
+==== t2.ts (1 errors) ====
     export { x, from
-             ~
-!!! error TS2304: Cannot find name 'x'.
                 ~~~~
-!!! error TS2304: Cannot find name 'from'.
+!!! error TS1005: '}' expected.
         "./t1";
-        ~~~~~~
-!!! error TS1005: ',' expected.
     
-==== tests/cases/compiler/t3.ts (2 errors) ====
+==== t3.ts (1 errors) ====
     export { from
              ~~~~
-!!! error TS2304: Cannot find name 'from'.
+!!! error TS1005: '}' expected.
         "./t1";
-        ~~~~~~
-!!! error TS1005: ',' expected.
     
-==== tests/cases/compiler/t4.ts (4 errors) ====
+==== t4.ts (1 errors) ====
     export { x as a from
-             ~
-!!! error TS2304: Cannot find name 'x'.
                     ~~~~
 !!! error TS1005: ',' expected.
-                    ~~~~
-!!! error TS2304: Cannot find name 'from'.
         "./t1";
-        ~~~~~~
-!!! error TS1005: ',' expected.
     
-==== tests/cases/compiler/t5.ts (3 errors) ====
+==== t5.ts (1 errors) ====
     export { x as a, from
-             ~
-!!! error TS2304: Cannot find name 'x'.
                      ~~~~
-!!! error TS2304: Cannot find name 'from'.
+!!! error TS1005: '}' expected.
         "./t1";
-        ~~~~~~
-!!! error TS1005: ',' expected.

@@ -1,7 +1,7 @@
-tests/cases/compiler/defaultKeywordWithoutExport1.ts(4,1): error TS1029: 'export' modifier must precede 'default' modifier.
+defaultKeywordWithoutExport1.ts(4,1): error TS1029: 'export' modifier must precede 'default' modifier.
 
 
-==== tests/cases/compiler/defaultKeywordWithoutExport1.ts (1 errors) ====
+==== defaultKeywordWithoutExport1.ts (1 errors) ====
     declare function decorator(constructor: any): any;
     
     @decorator

@@ -1,0 +1,581 @@
+//// [tests/cases/compiler/predicateSemantics.ts] ////
+
+=== predicateSemantics.ts ===
+declare let opt: number | undefined;
+>opt : number
+>    : ^^^^^^
+
+// OK: One or other operand is possibly nullish
+const test1 = (opt ? undefined : 32) ?? "possibly reached";
+>test1 : 32 | "possibly reached"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+>(opt ? undefined : 32) ?? "possibly reached" : 32 | "possibly reached"
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>(opt ? undefined : 32) : 32
+>                       : ^^
+>opt ? undefined : 32 : 32
+>                     : ^^
+>opt : number
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>32 : 32
+>   : ^^
+>"possibly reached" : "possibly reached"
+>                   : ^^^^^^^^^^^^^^^^^^
+
+// Not OK: Both operands nullish
+const test2 = (opt ? undefined : null) ?? "always reached";
+>test2 : "always reached"
+>      : ^^^^^^^^^^^^^^^^
+>(opt ? undefined : null) ?? "always reached" : "always reached"
+>                                             : ^^^^^^^^^^^^^^^^
+>(opt ? undefined : null) : null
+>                         : ^^^^
+>opt ? undefined : null : null
+>                       : ^^^^
+>opt : number
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>"always reached" : "always reached"
+>                 : ^^^^^^^^^^^^^^^^
+
+// Not OK: Both operands non-nullish
+const test3 = (opt ? 132 : 17) ?? "unreachable";
+>test3 : 132 | 17 | "unreachable"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>(opt ? 132 : 17) ?? "unreachable" : 132 | 17 | "unreachable"
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>(opt ? 132 : 17) : 132 | 17
+>                 : ^^^^^^^^
+>opt ? 132 : 17 : 132 | 17
+>               : ^^^^^^^^
+>opt : number
+>    : ^^^^^^
+>132 : 132
+>    : ^^^
+>17 : 17
+>   : ^^
+>"unreachable" : "unreachable"
+>              : ^^^^^^^^^^^^^
+
+// Parens
+const test4 = (opt ? (undefined) : (17)) ?? 42;
+>test4 : 17 | 42
+>      : ^^^^^^^
+>(opt ? (undefined) : (17)) ?? 42 : 17 | 42
+>                                 : ^^^^^^^
+>(opt ? (undefined) : (17)) : 17
+>                           : ^^
+>opt ? (undefined) : (17) : 17
+>                         : ^^
+>opt : number
+>    : ^^^^^^
+>(undefined) : undefined
+>            : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>(17) : 17
+>     : ^^
+>17 : 17
+>   : ^^
+>42 : 42
+>   : ^^
+
+// Should be OK (special case)
+if (!!true) {
+>!!true : boolean
+>       : ^^^^^^^
+>!true : boolean
+>      : ^^^^^^^
+>true : true
+>     : ^^^^
+
+}
+
+// Should be OK (special cases)
+while (0) { }
+>0 : 0
+>  : ^
+
+while (1) { }
+>1 : 1
+>  : ^
+
+while (true) { }
+>true : true
+>     : ^^^^
+
+while (false) { }
+>false : false
+>      : ^^^^^
+
+const p01 = {} ?? null;
+>p01 : {}
+>    : ^^
+>{} ?? null : {}
+>           : ^^
+>{} : {}
+>   : ^^
+
+const p02 = 0 > 1 ?? null;
+>p02 : boolean
+>    : ^^^^^^^
+>0 > 1 ?? null : boolean
+>              : ^^^^^^^
+>0 > 1 : boolean
+>      : ^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+
+const p03 = null ?? 1;
+>p03 : 1
+>    : ^
+>null ?? 1 : 1
+>          : ^
+>1 : 1
+>  : ^
+
+const p04 = null ?? null;
+>p04 : any
+>    : ^^^
+>null ?? null : null
+>             : ^^^^
+
+const p05 = (class foo { }) && null;
+>p05 : any
+>    : ^^^
+>(class foo { }) && null : null
+>                        : ^^^^
+>(class foo { }) : typeof foo
+>                : ^^^^^^^^^^
+>class foo { } : typeof foo
+>              : ^^^^^^^^^^
+>foo : typeof foo
+>    : ^^^^^^^^^^
+
+const p06 = (class foo { }) || null;
+>p06 : typeof foo
+>    : ^^^^^^^^^^
+>(class foo { }) || null : typeof foo
+>                        : ^^^^^^^^^^
+>(class foo { }) : typeof foo
+>                : ^^^^^^^^^^
+>class foo { } : typeof foo
+>              : ^^^^^^^^^^
+>foo : typeof foo
+>    : ^^^^^^^^^^
+
+const p07 = null ?? null ?? null;
+>p07 : any
+>    : ^^^
+>null ?? null ?? null : null
+>                     : ^^^^
+>null ?? null : null
+>             : ^^^^
+
+const p08 = null ?? opt ?? null;
+>p08 : number
+>    : ^^^^^^
+>null ?? opt ?? null : number
+>                    : ^^^^^^
+>null ?? opt : number
+>            : ^^^^^^
+>opt : number
+>    : ^^^^^^
+
+const p09 = null ?? (opt ? null : undefined) ?? null;
+>p09 : any
+>    : ^^^
+>null ?? (opt ? null : undefined) ?? null : null
+>                                         : ^^^^
+>null ?? (opt ? null : undefined) : null
+>                                 : ^^^^
+>(opt ? null : undefined) : null
+>                         : ^^^^
+>opt ? null : undefined : null
+>                       : ^^^^
+>opt : number
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+const p10 = opt ?? null ?? 1;
+>p10 : number
+>    : ^^^^^^
+>opt ?? null ?? 1 : number
+>                 : ^^^^^^
+>opt ?? null : number
+>            : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+const p11 = opt ?? null ?? null;
+>p11 : number
+>    : ^^^^^^
+>opt ?? null ?? null : number
+>                    : ^^^^^^
+>opt ?? null : number
+>            : ^^^^^^
+>opt : number
+>    : ^^^^^^
+
+const p12 = opt ?? (null ?? 1);
+>p12 : number
+>    : ^^^^^^
+>opt ?? (null ?? 1) : number
+>                   : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>(null ?? 1) : 1
+>            : ^
+>null ?? 1 : 1
+>          : ^
+>1 : 1
+>  : ^
+
+const p13 = opt ?? (null ?? null);
+>p13 : number
+>    : ^^^^^^
+>opt ?? (null ?? null) : number
+>                      : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>(null ?? null) : null
+>               : ^^^^
+>null ?? null : null
+>             : ^^^^
+
+const p14 = opt ?? (null ?? null ?? null);
+>p14 : number
+>    : ^^^^^^
+>opt ?? (null ?? null ?? null) : number
+>                              : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>(null ?? null ?? null) : null
+>                       : ^^^^
+>null ?? null ?? null : null
+>                     : ^^^^
+>null ?? null : null
+>             : ^^^^
+
+const p15 = opt ?? (opt ? null : undefined) ?? null;
+>p15 : number
+>    : ^^^^^^
+>opt ?? (opt ? null : undefined) ?? null : number
+>                                        : ^^^^^^
+>opt ?? (opt ? null : undefined) : number
+>                                : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>(opt ? null : undefined) : null
+>                         : ^^^^
+>opt ? null : undefined : null
+>                       : ^^^^
+>opt : number
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+const p16 = opt ?? 1 ?? 2;
+>p16 : number
+>    : ^^^^^^
+>opt ?? 1 ?? 2 : number
+>              : ^^^^^^
+>opt ?? 1 : number
+>         : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+const p17 = opt ?? (opt ? 1 : 2) ?? 3;
+>p17 : number
+>    : ^^^^^^
+>opt ?? (opt ? 1 : 2) ?? 3 : number
+>                          : ^^^^^^
+>opt ?? (opt ? 1 : 2) : number
+>                     : ^^^^^^
+>opt : number
+>    : ^^^^^^
+>(opt ? 1 : 2) : 1 | 2
+>              : ^^^^^
+>opt ? 1 : 2 : 1 | 2
+>            : ^^^^^
+>opt : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+const p21 = null ?? null ?? null ?? null;
+>p21 : any
+>    : ^^^
+>null ?? null ?? null ?? null : null
+>                             : ^^^^
+>null ?? null ?? null : null
+>                     : ^^^^
+>null ?? null : null
+>             : ^^^^
+
+const p22 = null ?? 1 ?? 1;
+>p22 : 1
+>    : ^
+>null ?? 1 ?? 1 : 1
+>               : ^
+>null ?? 1 : 1
+>          : ^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+const p23 = null ?? (opt ? 1 : 2) ?? 1;
+>p23 : 1 | 2
+>    : ^^^^^
+>null ?? (opt ? 1 : 2) ?? 1 : 1 | 2
+>                           : ^^^^^
+>null ?? (opt ? 1 : 2) : 1 | 2
+>                      : ^^^^^
+>(opt ? 1 : 2) : 1 | 2
+>              : ^^^^^
+>opt ? 1 : 2 : 1 | 2
+>            : ^^^^^
+>opt : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>1 : 1
+>  : ^
+
+// Outer expression tests
+while ({} as any) { }
+>{} as any : any
+>          : ^^^
+>{} : {}
+>   : ^^
+
+while ({} satisfies unknown) { }
+>{} satisfies unknown : {}
+>                     : ^^
+>{} : {}
+>   : ^^
+
+while ((<any>({}))) { }
+>(<any>({})) : any
+>            : ^^^
+><any>({}) : any
+>          : ^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+while ((({}))) { }
+>(({})) : {}
+>       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+declare let cond: any;
+>cond : any
+>     : ^^^
+
+// Should be OK
+console.log((cond || undefined) && 1 / cond);
+>console.log((cond || undefined) && 1 / cond) : void
+>                                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>(cond || undefined) && 1 / cond : number
+>                                : ^^^^^^
+>(cond || undefined) : any
+>                    : ^^^
+>cond || undefined : any
+>                  : ^^^
+>cond : any
+>     : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+>1 / cond : number
+>         : ^^^^^^
+>1 : 1
+>  : ^
+>cond : any
+>     : ^^^
+
+function foo(this: Object | undefined) {
+>foo : (this: Object | undefined) => Object | 0
+>    : ^    ^^                  ^^^^^^^^^^^^^^^
+>this : Object
+>     : ^^^^^^
+
+    // Should be OK
+    return this ?? 0;
+>this ?? 0 : 0 | Object
+>          : ^^^^^^^^^^
+>this : Object
+>     : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+>maybe : true
+>      : ^^^^
+>null as true | null : true
+>                    : ^^^^
+>true : true
+>     : ^^^^
+
+  let i = 0;
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  const d = (i++, maybe) ?? true; // ok
+>d : true
+>  : ^^^^
+>(i++, maybe) ?? true : true
+>                     : ^^^^
+>(i++, maybe) : true
+>             : ^^^^
+>i++, maybe : true
+>           : ^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>maybe : true
+>      : ^^^^
+>true : true
+>     : ^^^^
+
+  const e = (i++, i++) ?? true; // error
+>e : number | true
+>  : ^^^^^^^^^^^^^
+>(i++, i++) ?? true : number | true
+>                   : ^^^^^^^^^^^^^
+>(i++, i++) : number
+>           : ^^^^^^
+>i++, i++ : number
+>         : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+
+  const f = (maybe, i++) ?? true; // error
+>f : number | true
+>  : ^^^^^^^^^^^^^
+>(maybe, i++) ?? true : number | true
+>                     : ^^^^^^^^^^^^^
+>(maybe, i++) : number
+>             : ^^^^^^
+>maybe, i++ : number
+>           : ^^^^^^
+>maybe : true
+>      : ^^^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+>true : true
+>     : ^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+>X : X
+>  : ^
+
+  constructor() {
+    const p = new.target ?? 32;
+>p : 32 | typeof X
+>  : ^^^^^^^^^^^^^
+>new.target ?? 32 : 32 | typeof X
+>                 : ^^^^^^^^^^^^^
+>new.target : typeof X
+>           : ^^^^^^^^
+>target : typeof X
+>       : ^^^^^^^^
+>32 : 32
+>   : ^^
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
+>    : ^ ^^       ^^                    ^^^^^      ^^        ^^^^^        
+
+  strings: TemplateStringsArray,
+>strings : TemplateStringsArray
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+  ...values: number[]
+>values : number[]
+>       : ^^^^^^^^
+
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+>tag`foo${1}` ?? 32 : unknown
+>                   : ^^^^^^^
+>tag`foo${1}` : unknown
+>             : ^^^^^^^
+>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
+>    : ^ ^^       ^^                    ^^^^^      ^^        ^^^^^        
+>`foo${1}` : string
+>          : ^^^^^^
+>1 : 1
+>  : ^
+>32 : 32
+>   : ^^
+
+`foo${1}` ?? 32; // error
+>`foo${1}` ?? 32 : 32 | "foo1"
+>                : ^^^^^^^^^^^
+>`foo${1}` : "foo1"
+>          : ^^^^^^
+>1 : 1
+>  : ^
+>32 : 32
+>   : ^^
+
+`foo` ?? 32; // error
+>`foo` ?? 32 : 32 | "foo"
+>            : ^^^^^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+>32 : 32
+>   : ^^
+

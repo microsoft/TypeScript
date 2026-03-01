@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticClassProps.ts] ////
+
 //// [staticClassProps.ts]
 class C
 {
@@ -9,11 +11,9 @@ class C
 
 
 //// [staticClassProps.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    foo() {
     }
-    C.prototype.foo = function () {
-    };
-    C.z = 1;
-    return C;
-}());
+}
+C.z = 1;

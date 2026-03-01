@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedArgumentInference.ts] ////
+
 //// [undefinedArgumentInference.ts]
 function foo1<T>(f1: { x: T; y: T }): T {
 
@@ -9,6 +11,7 @@ var z1 = foo1({ x: undefined, y: undefined });
 
 
 //// [undefinedArgumentInference.js]
+"use strict";
 function foo1(f1) {
     return undefined;
 }

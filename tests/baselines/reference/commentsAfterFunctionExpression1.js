@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsAfterFunctionExpression1.ts] ////
+
 //// [commentsAfterFunctionExpression1.ts]
 var v = {
     f: a => 0 /*t1*/,
@@ -7,8 +9,9 @@ var v = {
 
 
 //// [commentsAfterFunctionExpression1.js]
+"use strict";
 var v = {
-    f: function (a) { return 0; } /*t1*/,
-    g: (function (a) { return 0; }) /*t2*/,
-    h: (function (a) { return 0; } /*t3*/)
+    f: a => 0 /*t1*/,
+    g: (a => 0) /*t2*/,
+    h: (a => 0 /*t3*/)
 };

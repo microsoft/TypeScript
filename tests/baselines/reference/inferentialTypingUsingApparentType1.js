@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferentialTypingUsingApparentType1.ts] ////
+
 //// [inferentialTypingUsingApparentType1.ts]
 function foo<T extends (p: string) => number>(x: T): T {
     return undefined;
@@ -6,7 +8,8 @@ function foo<T extends (p: string) => number>(x: T): T {
 foo(x => x.length);
 
 //// [inferentialTypingUsingApparentType1.js]
+"use strict";
 function foo(x) {
     return undefined;
 }
-foo(function (x) { return x.length; });
+foo(x => x.length);

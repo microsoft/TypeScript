@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedOverloadedSpecializedSignatures.ts] ////
+
 //// [inheritedOverloadedSpecializedSignatures.ts]
 interface A {
   (key:string):void;
@@ -54,6 +56,7 @@ var x9: void = c('generic');
 
 
 //// [inheritedOverloadedSpecializedSignatures.js]
+"use strict";
 var b;
 // Should not error
 b('foo').charAt(0);

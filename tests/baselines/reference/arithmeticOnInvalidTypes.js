@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arithmeticOnInvalidTypes.ts] ////
+
 //// [arithmeticOnInvalidTypes.ts]
 var x: Number;
 var y: Number;
@@ -7,6 +9,7 @@ var z3 = x * y;
 var z4 = x / y;
 
 //// [arithmeticOnInvalidTypes.js]
+"use strict";
 var x;
 var y;
 var z = x + y;

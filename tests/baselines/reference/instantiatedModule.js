@@ -1,7 +1,9 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/instantiatedModule.ts] ////
+
 //// [instantiatedModule.ts]
 // adding the var makes this an instantiated module
 
-module M {
+namespace M {
     export interface Point { x: number; y: number }
     export var Point = 1;
 }
@@ -19,7 +21,7 @@ var p1: M.Point;
 
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
-module M2 {
+namespace M2 {
     export class Point {
         x: number;
         y: number;
@@ -43,7 +45,7 @@ var p2: M2.Point;
 var p2 = new m2.Point();
 var p2 = new M2.Point();
 
-module M3 {
+namespace M3 {
     export enum Color { Blue, Red }
 }
 
@@ -61,6 +63,7 @@ var p3 = m3.Color.Blue;
 
 
 //// [instantiatedModule.js]
+"use strict";
 // adding the var makes this an instantiated module
 var M;
 (function (M) {
@@ -78,14 +81,11 @@ var p1;
 // makes this an instantiated mmodule
 var M2;
 (function (M2) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        Point.Origin = function () {
+    class Point {
+        static Origin() {
             return { x: 0, y: 0 };
-        };
-        return Point;
-    }());
+        }
+    }
     M2.Point = Point;
 })(M2 || (M2 = {}));
 var m2;
@@ -101,7 +101,7 @@ var p2 = new m2.Point();
 var p2 = new M2.Point();
 var M3;
 (function (M3) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";

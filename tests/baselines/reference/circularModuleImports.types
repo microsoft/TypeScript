@@ -1,15 +1,21 @@
-=== tests/cases/compiler/circularModuleImports.ts ===
-module M
+//// [tests/cases/compiler/circularModuleImports.ts] ////
+
+=== circularModuleImports.ts ===
+namespace M
  
 {
  
     import A = B;
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
  
     import B = A;
 >B : any
+>  : ^^^
 >A : any
+>  : ^^^
  
 }
 

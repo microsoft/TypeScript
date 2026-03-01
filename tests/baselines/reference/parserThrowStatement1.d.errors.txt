@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserThrowStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/parser/ecmascript5/Statements/parserThrowStatement1.d.ts(1,7): error TS2304: Cannot find name 'e'.
+parserThrowStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
+parserThrowStatement1.d.ts(1,7): error TS2304: Cannot find name 'e'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserThrowStatement1.d.ts (2 errors) ====
+==== parserThrowStatement1.d.ts (2 errors) ====
     throw e;
     ~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

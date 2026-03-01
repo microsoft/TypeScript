@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superInObjectLiterals_ES6.ts] ////
+
 //// [superInObjectLiterals_ES6.ts]
 var obj = {
     __proto__: {
@@ -60,6 +62,7 @@ class B extends A {
 }
 
 //// [superInObjectLiterals_ES6.js]
+"use strict";
 var obj = {
     __proto__: {
         method() {

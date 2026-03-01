@@ -1,38 +1,56 @@
-=== tests/cases/compiler/jsdocTypeCast.js ===
+//// [tests/cases/compiler/jsdocTypeCast.ts] ////
+
+=== jsdocTypeCast.js ===
 /**
  * @param {string} x
  */
  function f(x) {
 >f : (x: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     /** @type {'a' | 'b'} */
     let a = (x); // Error
 >a : "a" | "b"
+>  : ^^^^^^^^^
 >(x) : "a" | "b"
+>    : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     a;
 >a : "a" | "b"
+>  : ^^^^^^^^^
 
     /** @type {'a' | 'b'} */
     let b = (((x))); // Error
 >b : "a" | "b"
+>  : ^^^^^^^^^
 >(((x))) : "a" | "b"
+>        : ^^^^^^^^^
 >((x)) : string
+>      : ^^^^^^
 >(x) : string
+>    : ^^^^^^
 >x : string
+>  : ^^^^^^
 
     b;
 >b : "a" | "b"
+>  : ^^^^^^^^^
 
     /** @type {'a' | 'b'} */
     let c = /** @type {'a' | 'b'} */ (x); // Ok
 >c : "a" | "b"
+>  : ^^^^^^^^^
 >(x) : "a" | "b"
+>    : ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     c;
 >c : "a" | "b"
+>  : ^^^^^^^^^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts] ////
+
 //// [unionAndIntersectionInference1.ts]
 // Repro from #2264
 
@@ -98,6 +100,7 @@ const res: (() => void) & { func: any } = assign(() => {}, { func });
 
 
 //// [unionAndIntersectionInference1.js]
+"use strict";
 // Repro from #2264
 var y = undefined;
 function destructure(something, haveValue, haveY) {

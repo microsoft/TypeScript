@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueNotInIterationStatement3.ts] ////
+
 //// [continueNotInIterationStatement3.ts]
 switch (0) {
   default:
@@ -5,6 +7,7 @@ switch (0) {
 }
 
 //// [continueNotInIterationStatement3.js]
+"use strict";
 switch (0) {
     default:
         continue;

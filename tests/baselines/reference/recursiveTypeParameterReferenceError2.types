@@ -1,23 +1,31 @@
-=== tests/cases/compiler/recursiveTypeParameterReferenceError2.ts ===
+//// [tests/cases/compiler/recursiveTypeParameterReferenceError2.ts] ////
+
+=== recursiveTypeParameterReferenceError2.ts ===
 interface List<T> {
     data: T;
 >data : T
+>     : ^
 
     next: List<T>;
 >next : List<T>
+>     : ^^^^^^^
 
     owner: List<List<T>>;  // Error, recursive reference with wrapped T
 >owner : List<List<T>>
+>      : ^^^^^^^^^^^^^
 }
 
 interface List2<T> {
     data: T;
 >data : T
+>     : ^
 
     next: List2<T>;
 >next : List2<T>
+>     : ^^^^^^^^
 
     owner: List2<List2<string>>;  // Ok
 >owner : List2<List2<string>>
+>      : ^^^^^^^^^^^^^^^^^^^^
 }
 

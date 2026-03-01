@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-access.ts] ////
+
 //// [letDeclarations-access.ts]
 let x = 0
 
@@ -38,6 +40,7 @@ x.toString();
 
 
 //// [letDeclarations-access.js]
+"use strict";
 let x = 0;
 // No errors
 x = 1;

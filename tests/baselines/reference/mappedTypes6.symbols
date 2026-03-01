@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypes6.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes6.ts] ////
+
+=== mappedTypes6.ts ===
 type T00<T> = { [P in keyof T]: T[P] };
 >T00 : Symbol(T00, Decl(mappedTypes6.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypes6.ts, 0, 9))

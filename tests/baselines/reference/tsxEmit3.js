@@ -1,12 +1,14 @@
+//// [tests/cases/conformance/jsx/tsxEmit3.tsx] ////
+
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }
 
-module M {
+namespace M {
 	export class Foo { constructor() { } }
-	export module S {
+	export namespace S {
 		export class Bar { }
 
 		// Emit Foo
@@ -14,11 +16,11 @@ module M {
 	}
 }
 
-module M {
+namespace M {
 	// Emit M.Foo
 	Foo, <Foo />;
 
-	export module S {
+	export namespace S {
 		// Emit M.Foo
 		Foo, <Foo />;
 
@@ -28,12 +30,12 @@ module M {
 
 }
 
-module M {
+namespace M {
 	// Emit M.S.Bar
 	S.Bar, <S.Bar />;
 }
 
-module M {
+namespace M {
 	var M = 100;
 	// Emit M_1.Foo
 	Foo, <Foo />;
@@ -41,21 +43,17 @@ module M {
 
 
 //// [file.jsx]
+"use strict";
 var M;
 (function (M) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+        constructor() { }
+    }
     M.Foo = Foo;
-    var S;
+    let S;
     (function (S) {
-        var Bar = /** @class */ (function () {
-            function Bar() {
-            }
-            return Bar;
-        }());
+        class Bar {
+        }
         S.Bar = Bar;
         // Emit Foo
         // Foo, <Foo />;
@@ -64,7 +62,7 @@ var M;
 (function (M) {
     // Emit M.Foo
     M.Foo, <M.Foo />;
-    var S;
+    let S;
     (function (S) {
         // Emit M.Foo
         M.Foo, <M.Foo />;

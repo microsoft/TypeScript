@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts] ////
+
 //// [destructuringParameterDeclaration3ES6.ts]
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
@@ -46,6 +48,7 @@ foo1(1, 2, 3, E1.a, E.b);
 
 
 //// [destructuringParameterDeclaration3ES6.js]
+"use strict";
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
 function a1(...x) { }

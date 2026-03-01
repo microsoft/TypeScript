@@ -1,17 +1,23 @@
-=== tests/cases/compiler/missingFunctionImplementation.ts ===
+//// [tests/cases/compiler/missingFunctionImplementation.ts] ////
+
+=== missingFunctionImplementation.ts ===
 export class C1 {
 >C1 : C1
+>   : ^^
 
   m(): void;
 >m : () => void
+>  : ^^^^^^    
 }
 
 // merged with a namespace
 export class C2 {
 >C2 : C2
+>   : ^^
 
   m(): void;
 >m : () => void
+>  : ^^^^^^    
 }
 export namespace C2 { }
 
@@ -19,45 +25,60 @@ export namespace C2 { }
 // merged with a namespace, multiple overloads
 class C3 {
 >C3 : C3
+>   : ^^
 
   m(a, b);
 >m : { (a: any, b: any): any; (a: any): any; }
+>  : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
   m(a);
 >m : { (a: any, b: any): any; (a: any): any; }
+>  : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 }
 namespace C3 { }
 
 // static methods, multiple overloads
 class C4 {
 >C4 : C4
+>   : ^^
 
   static m(a): void;
 >m : (a: any) => void
+>  : ^ ^^^^^^^^^^    
 >a : any
+>  : ^^^
 }
 
 // static methods, multiple overloads
 class C5 {
 >C5 : C5
+>   : ^^
 
   static m(a): void;
 >m : { (a: any): void; (): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 >a : any
+>  : ^^^
 
   static m(): void;
 >m : { (a: any): void; (): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 }
 
 // merged with namespace, static methods
 class C6 {
 >C6 : C6
+>   : ^^
 
   static m(): void;
 >m : () => void
+>  : ^^^^^^    
 }
 namespace C6 {
 }
@@ -65,13 +86,17 @@ namespace C6 {
 // merged with namespace, static methods, multiple overloads
 class C7 {
 >C7 : C7
+>   : ^^
 
   static m(a): void;
 >m : { (a: any): void; (): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 >a : any
+>  : ^^^
 
   static m(): void;
 >m : { (a: any): void; (): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^
 }
 namespace C7 {
 }
@@ -79,77 +104,108 @@ namespace C7 {
 // merged with namespace, static methods, duplicate declarations
 class C8 {
 >C8 : C8
+>   : ^^
 
   static m(a): void;
 >m : { (a: any): void; (a: any, b: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 
   static m(a, b): void;
 >m : { (a: any): void; (a: any, b: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 namespace C8 {
 >C8 : typeof C8
+>   : ^^^^^^^^^
 
   export function m(a?, b?): void { }
 >m : (a?: any, b?: any) => void
+>  : ^ ^^^^^^^^ ^^^^^^^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 
 // merged with namespace, static methods, duplicate declarations
 class C9 {
 >C9 : C9
+>   : ^^
 
   static m(a): void { }
 >m : (a: any) => void
+>  : ^ ^^^^^^^^^^    
 >a : any
+>  : ^^^
 }
 namespace C9 {
 >C9 : typeof C9
+>   : ^^^^^^^^^
 
   export function m(a): void;
 >m : (a: any) => void
+>  : ^ ^^^^^^^^^^    
 >a : any
+>  : ^^^
 }
 
 // merged namespaces
 namespace N10 {
 >N10 : typeof N10
+>    : ^^^^^^^^^^
 
   export function m(a): void;
 >m : { (a: any): void; (a: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 }
 namespace N10 {
 >N10 : typeof N10
+>    : ^^^^^^^^^^
 
   export function m(a): void { }
 >m : { (a: any): void; (a: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 }
 
 // merged namespaces, duplicate defintions
 namespace N12 {
 >N12 : typeof N12
+>    : ^^^^^^^^^^
 
   export function m(a): void;
 >m : { (a: any): void; (): void; (a: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 
   export function m(): void;
 >m : { (a: any): void; (): void; (a: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 
   export function m(a?): void { }
 >m : { (a: any): void; (): void; (a: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 }
 namespace N12 {
 >N12 : typeof N12
+>    : ^^^^^^^^^^
 
   export function m(a): void { }
 >m : { (a: any): void; (): void; (a: any): void; }
+>  : ^^^ ^^^^^^^^    ^^^^^^    ^^^ ^^^^^^^^    ^^^
 >a : any
+>  : ^^^
 }
 

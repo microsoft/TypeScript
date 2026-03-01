@@ -1,420 +1,684 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts] ////
+
+=== noUncheckedIndexedAccess.ts ===
 type CheckBooleanOnly<T extends boolean> = any;
 >CheckBooleanOnly : any
+>                 : ^^^
 
 // Validate CheckBooleanOnly works - should error
 type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
 >T_ERR1 : any
+>       : ^^^
 
 enum NumericEnum1 { A, B, C }
 >NumericEnum1 : NumericEnum1
+>             : ^^^^^^^^^^^^
 >A : NumericEnum1.A
+>  : ^^^^^^^^^^^^^^
 >B : NumericEnum1.B
+>  : ^^^^^^^^^^^^^^
 >C : NumericEnum1.C
+>  : ^^^^^^^^^^^^^^
 
 enum NumericEnum2 { A = 0, B = 1 , C = 2 }
 >NumericEnum2 : NumericEnum2
+>             : ^^^^^^^^^^^^
 >A : NumericEnum2.A
+>  : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >B : NumericEnum2.B
+>  : ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >C : NumericEnum2.C
+>  : ^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 enum StringEnum1 { A = "Alpha", B = "Beta" }
 >StringEnum1 : StringEnum1
+>            : ^^^^^^^^^^^
 >A : StringEnum1.A
+>  : ^^^^^^^^^^^^^
 >"Alpha" : "Alpha"
+>        : ^^^^^^^
 >B : StringEnum1.B
+>  : ^^^^^^^^^^^^^
 >"Beta" : "Beta"
+>       : ^^^^^^
 
 declare const strMap: { [s: string]: boolean };
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 // All of these should be errors
 const e1: boolean = strMap["foo"];
 >e1 : boolean
+>   : ^^^^^^^
 >strMap["foo"] : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 const e2: boolean = strMap.bar;
 >e2 : boolean
+>   : ^^^^^^^
 >strMap.bar : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : boolean | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
 
 const e3: boolean = strMap[0];
 >e3 : boolean
+>   : ^^^^^^^
 >strMap[0] : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 const e4: boolean = strMap[0 as string | number];
 >e4 : boolean
+>   : ^^^^^^^
 >strMap[0 as string | number] : boolean | undefined
+>                             : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as string | number : string | number
+>                     : ^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 const e5: boolean = strMap[0 as string | 0 | 1];
 >e5 : boolean
+>   : ^^^^^^^
 >strMap[0 as string | 0 | 1] : boolean | undefined
+>                            : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as string | 0 | 1 : string | 0 | 1
+>                    : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 const e6: boolean = strMap[0 as 0 | 1];
 >e6 : boolean
+>   : ^^^^^^^
 >strMap[0 as 0 | 1] : boolean | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as 0 | 1 : 0 | 1
+>           : ^^^^^
 >0 : 0
+>  : ^
 
 const e7: boolean = strMap["foo" as "foo" | "baz"];
 >e7 : boolean
+>   : ^^^^^^^
 >strMap["foo" as "foo" | "baz"] : boolean | undefined
+>                               : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" as "foo" | "baz" : "foo" | "baz"
+>                       : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 const e8: boolean = strMap[NumericEnum1.A];
 >e8 : boolean
+>   : ^^^^^^^
 >strMap[NumericEnum1.A] : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumericEnum1.A : NumericEnum1.A
+>               : ^^^^^^^^^^^^^^
 >NumericEnum1 : typeof NumericEnum1
+>             : ^^^^^^^^^^^^^^^^^^^
 >A : NumericEnum1.A
+>  : ^^^^^^^^^^^^^^
 
 const e9: boolean = strMap[NumericEnum2.A];
 >e9 : boolean
+>   : ^^^^^^^
 >strMap[NumericEnum2.A] : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumericEnum2.A : NumericEnum2.A
+>               : ^^^^^^^^^^^^^^
 >NumericEnum2 : typeof NumericEnum2
+>             : ^^^^^^^^^^^^^^^^^^^
 >A : NumericEnum2.A
+>  : ^^^^^^^^^^^^^^
 
 const e10: boolean = strMap[StringEnum1.A];
 >e10 : boolean
+>    : ^^^^^^^
 >strMap[StringEnum1.A] : boolean | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >StringEnum1.A : StringEnum1.A
+>              : ^^^^^^^^^^^^^
 >StringEnum1 : typeof StringEnum1
+>            : ^^^^^^^^^^^^^^^^^^
 >A : StringEnum1.A
+>  : ^^^^^^^^^^^^^
 
 const e11: boolean = strMap[StringEnum1.A as StringEnum1];
 >e11 : boolean
+>    : ^^^^^^^
 >strMap[StringEnum1.A as StringEnum1] : boolean | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >StringEnum1.A as StringEnum1 : StringEnum1
+>                             : ^^^^^^^^^^^
 >StringEnum1.A : StringEnum1.A
+>              : ^^^^^^^^^^^^^
 >StringEnum1 : typeof StringEnum1
+>            : ^^^^^^^^^^^^^^^^^^
 >A : StringEnum1.A
+>  : ^^^^^^^^^^^^^
 
 const e12: boolean = strMap[NumericEnum1.A as NumericEnum1];
 >e12 : boolean
+>    : ^^^^^^^
 >strMap[NumericEnum1.A as NumericEnum1] : boolean | undefined
+>                                       : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumericEnum1.A as NumericEnum1 : NumericEnum1
+>                               : ^^^^^^^^^^^^
 >NumericEnum1.A : NumericEnum1.A
+>               : ^^^^^^^^^^^^^^
 >NumericEnum1 : typeof NumericEnum1
+>             : ^^^^^^^^^^^^^^^^^^^
 >A : NumericEnum1.A
+>  : ^^^^^^^^^^^^^^
 
 const e13: boolean = strMap[NumericEnum2.A as NumericEnum2];
 >e13 : boolean
+>    : ^^^^^^^
 >strMap[NumericEnum2.A as NumericEnum2] : boolean | undefined
+>                                       : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumericEnum2.A as NumericEnum2 : NumericEnum2
+>                               : ^^^^^^^^^^^^
 >NumericEnum2.A : NumericEnum2.A
+>               : ^^^^^^^^^^^^^^
 >NumericEnum2 : typeof NumericEnum2
+>             : ^^^^^^^^^^^^^^^^^^^
 >A : NumericEnum2.A
+>  : ^^^^^^^^^^^^^^
 
 const e14: boolean = strMap[null as any];
 >e14 : boolean
+>    : ^^^^^^^
 >strMap[null as any] : boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 // Should be OK
 const ok1: boolean | undefined = strMap["foo"];
 >ok1 : boolean | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
 >strMap["foo"] : boolean | undefined
+>              : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 const ok2: boolean | undefined = strMap.bar;
 >ok2 : boolean | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
 >strMap.bar : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : boolean | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
 
 type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
 >T_OK1 : any
+>      : ^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T_OK2 = CheckBooleanOnly<(typeof strMap)["foo"]>;
 >T_OK2 : any
+>      : ^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T_OK3 = CheckBooleanOnly<(typeof strMap)["bar" | "baz"]>;
 >T_OK3 : any
+>      : ^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T_OK4 = CheckBooleanOnly<(typeof strMap)[number]>;
 >T_OK4 : any
+>      : ^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T_OK5 = CheckBooleanOnly<(typeof strMap)[any]>;
 >T_OK5 : any
+>      : ^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Writes don't allow 'undefined'; all should be errors
 strMap["baz"] = undefined;
 >strMap["baz"] = undefined : undefined
+>                          : ^^^^^^^^^
 >strMap["baz"] : boolean
+>              : ^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 strMap.qua = undefined;
 >strMap.qua = undefined : undefined
+>                       : ^^^^^^^^^
 >strMap.qua : boolean
+>           : ^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >qua : boolean
+>    : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 strMap[0] = undefined;
 >strMap[0] = undefined : undefined
+>                      : ^^^^^^^^^
 >strMap[0] : boolean
+>          : ^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 strMap[null as any] = undefined;
 >strMap[null as any] = undefined : undefined
+>                                : ^^^^^^^^^
 >strMap[null as any] : boolean
+>                    : ^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // Numeric lookups are unaffected
 declare const numMap: { [s: number]: boolean };
 >numMap : { [s: number]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : number
+>  : ^^^^^^
 
 // All of these should be ok
 const num_ok1: boolean = numMap[0];
 >num_ok1 : boolean
+>        : ^^^^^^^
 >numMap[0] : boolean | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 >numMap : { [s: number]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 const num_ok2: boolean = numMap[0 as number];
 >num_ok2 : boolean
+>        : ^^^^^^^
 >numMap[0 as number] : boolean | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^
 >numMap : { [s: number]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as number : number
+>            : ^^^^^^
 >0 : 0
+>  : ^
 
 const num_ok3: boolean = numMap[0 as 0 | 1];
 >num_ok3 : boolean
+>        : ^^^^^^^
 >numMap[0 as 0 | 1] : boolean | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^
 >numMap : { [s: number]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as 0 | 1 : 0 | 1
+>           : ^^^^^
 >0 : 0
+>  : ^
 
 const num_ok4: boolean = numMap[NumericEnum1.A];
 >num_ok4 : boolean
+>        : ^^^^^^^
 >numMap[NumericEnum1.A] : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
 >numMap : { [s: number]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumericEnum1.A : NumericEnum1.A
+>               : ^^^^^^^^^^^^^^
 >NumericEnum1 : typeof NumericEnum1
+>             : ^^^^^^^^^^^^^^^^^^^
 >A : NumericEnum1.A
+>  : ^^^^^^^^^^^^^^
 
 const num_ok5: boolean = numMap[NumericEnum2.A];
 >num_ok5 : boolean
+>        : ^^^^^^^
 >numMap[NumericEnum2.A] : boolean | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^
 >numMap : { [s: number]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumericEnum2.A : NumericEnum2.A
+>               : ^^^^^^^^^^^^^^
 >NumericEnum2 : typeof NumericEnum2
+>             : ^^^^^^^^^^^^^^^^^^^
 >A : NumericEnum2.A
+>  : ^^^^^^^^^^^^^^
 
 // Generics
 function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
 >generic1 : <T extends { [s: string]: boolean; }>(arg: T) => boolean
+>         : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^       
 >s : string
+>  : ^^^^^^
 >arg : T
+>    : ^
 
     // Should error
     return arg["blah"];
 >arg["blah"] : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 >arg : T
+>    : ^
 >"blah" : "blah"
+>       : ^^^^^^
 }
 function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
 >generic2 : <T extends { [s: string]: boolean; }>(arg: T) => boolean
+>         : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^       
 >s : string
+>  : ^^^^^^
 >arg : T
+>    : ^
 
     // Should OK
     return arg["blah"]!;
 >arg["blah"]! : boolean
+>             : ^^^^^^^
 >arg["blah"] : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 >arg : T
+>    : ^
 >"blah" : "blah"
+>       : ^^^^^^
 }
 function generic3<T extends string>(arg: T): boolean {
 >generic3 : <T extends string>(arg: T) => boolean
+>         : ^ ^^^^^^^^^      ^^   ^^ ^^^^^       
 >arg : T
+>    : ^
 
     // Should error
     return strMap[arg];
 >strMap[arg] : boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^
 >strMap : { [s: string]: boolean; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : T
+>    : ^
 }
 
 // Element access into known properties is ok
 declare const obj1: { x: string, y: number, [key: string]: string | number };
 >obj1 : { [key: string]: string | number; x: string; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >key : string
+>    : ^^^^^^
 
 obj1["x"];
 >obj1["x"] : string
+>          : ^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >"x" : "x"
+>    : ^^^
 
 const y = "y";
 >y : "y"
+>  : ^^^
 >"y" : "y"
+>    : ^^^
 
 obj1[y];
 >obj1[y] : number
+>        : ^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >y : "y"
+>  : ^^^
 
 let yy = "y";
 >yy : string
+>   : ^^^^^^
 >"y" : "y"
+>    : ^^^
 
 obj1[yy];
 >obj1[yy] : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >yy : string
+>   : ^^^^^^
 
 let z = "z";
 >z : string
+>  : ^^^^^^
 >"z" : "z"
+>    : ^^^
 
 obj1[z];
 >obj1[z] : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : { [key: string]: string | number; x: string; y: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >z : string
+>  : ^^^^^^
 
 // Distributivity cases
 declare const strMapUnion: { [s: string]: boolean } | { [s: string]: number };
 >strMapUnion : { [s: string]: boolean; } | { [s: string]: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 // Should error
 const f1: boolean | number = strMapUnion["foo"];
 >f1 : number | boolean
+>   : ^^^^^^^^^^^^^^^^
 >strMapUnion["foo"] : number | boolean | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strMapUnion : { [s: string]: boolean; } | { [s: string]: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 // Symbol index signatures
 declare const s: unique symbol;
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 declare const symbolMap: { [s]: string };
 >symbolMap : { [s]: string; }
+>          : ^^^^^^^      ^^^
 >[s] : string
+>    : ^^^^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 const e15: string = symbolMap[s]; // Should OK
 >e15 : string
+>    : ^^^^^^
 >symbolMap[s] : string
+>             : ^^^^^^
 >symbolMap : { [s]: string; }
+>          : ^^^^^^^      ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 
 symbolMap[s] = undefined; // Should error
 >symbolMap[s] = undefined : undefined
+>                         : ^^^^^^^^^
 >symbolMap[s] : string
+>             : ^^^^^^
 >symbolMap : { [s]: string; }
+>          : ^^^^^^^      ^^^
 >s : unique symbol
+>  : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // Variadic tuples
 declare const nonEmptyStringArray: [string, ...string[]];
 >nonEmptyStringArray : [string, ...string[]]
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 
 const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
 >variadicOk1 : string
+>            : ^^^^^^
 >nonEmptyStringArray[0] : string
+>                       : ^^^^^^
 >nonEmptyStringArray : [string, ...string[]]
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 const variadicError1: string = nonEmptyStringArray[1]; // Should error
 >variadicError1 : string
+>               : ^^^^^^
 >nonEmptyStringArray[1] : string | undefined
+>                       : ^^^^^^^^^^^^^^^^^^
 >nonEmptyStringArray : [string, ...string[]]
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 // Generic index type
 declare const myRecord1: { a: string; b: string };
 >myRecord1 : { a: string; b: string; }
+>          : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 declare const myRecord2: { a: string; b: string, [key: string]: string };
 >myRecord2 : { [key: string]: string; a: string; b: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >key : string
+>    : ^^^^^^
 
 const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
->fn1 : <Key extends "a" | "b">(key: Key) => string
-><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends "a" | "b">(key: Key) => string
+>fn1 : <Key extends keyof typeof myRecord1>(key: Key) => string
+>    : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
+><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
+>                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
 >myRecord1 : { a: string; b: string; }
+>          : ^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 >myRecord1[key] : { a: string; b: string; }[Key]
+>               : ^^^^^      ^^^^^      ^^^^^^^^
 >myRecord1 : { a: string; b: string; }
+>          : ^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 
 const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
->fn2 : <Key extends "a" | "b">(key: Key) => string
-><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends "a" | "b">(key: Key) => string
+>fn2 : <Key extends keyof typeof myRecord1>(key: Key) => string
+>    : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
+><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
+>                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
 >myRecord1 : { a: string; b: string; }
+>          : ^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 >myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 
 const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
->fn3 : <Key extends string | number>(key: Key) => void
-><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends string | number>(key: Key) => void
+>fn3 : <Key extends keyof typeof myRecord2>(key: Key) => void
+>    : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^^^^^
+><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends keyof typeof myRecord2>(key: Key) => void
+>                                                                                                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 
     myRecord2[key] = undefined; // Should error
 >myRecord2[key] = undefined : undefined
+>                           : ^^^^^^^^^
 >myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     const v: string = myRecord2[key]; // Should error
 >v : string
->myRecord2[key] : string | undefined
+>  : ^^^^^^
+>myRecord2[key] : undefined
+>               : ^^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
 >key : Key
+>    : ^^^
 
 };
 

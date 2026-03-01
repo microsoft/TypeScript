@@ -1,0 +1,247 @@
+// === Completions ===
+=== /tests/cases/fourslash/a.ts ===
+// const xx: string = "aa";
+// function ff(): void {}
+// export {  };
+//          ^
+// | ----------------------------------------------------------------------
+// | function ff(): void
+// | const xx: string
+// | type
+// | ----------------------------------------------------------------------
+
+=== /tests/cases/fourslash/imports.ts ===
+// import {  } from "./exports";
+//          ^
+// | ----------------------------------------------------------------------
+// | const aa: () => void
+// | const ff: string
+// | type
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.ts",
+      "position": 57,
+      "name": "1"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "ff",
+          "kind": "function",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ff",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "xx",
+          "kind": "const",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "xx",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/imports.ts",
+      "position": 9,
+      "name": "2"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "aa",
+          "kind": "const",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "aa",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ff",
+          "kind": "const",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ff",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

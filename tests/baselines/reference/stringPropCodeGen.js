@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringPropCodeGen.ts] ////
+
 //// [stringPropCodeGen.ts]
 var a = {
 
@@ -14,6 +16,7 @@ a.bar.toString();
 
 
 //// [stringPropCodeGen.js]
+"use strict";
 var a = {
     "foo": function () { },
     "bar": 5

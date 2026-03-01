@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/illegalGenericWrapping1.ts] ////
+
 //// [illegalGenericWrapping1.ts]
 interface Sequence<T> {
     each(iterator: (value: T) => void ): void;
@@ -8,3 +10,4 @@ interface Sequence<T> {
 
 
 //// [illegalGenericWrapping1.js]
+"use strict";

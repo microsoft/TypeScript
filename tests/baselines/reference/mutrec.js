@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mutrec.ts] ////
+
 //// [mutrec.ts]
 interface A {
     x:B[];
@@ -43,6 +45,7 @@ g(i4);
 
 
 //// [mutrec.js]
+"use strict";
 function f(p) { return p; }
 ;
 var b;

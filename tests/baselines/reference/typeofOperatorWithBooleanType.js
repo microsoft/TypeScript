@@ -1,6 +1,8 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithBooleanType.ts] ////
+
 //// [typeofOperatorWithBooleanType.ts]
 // typeof  operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -8,8 +10,8 @@ class A {
     public a: boolean;
     static foo() { return false; }
 }
-module M {
-    export var n: boolean;
+namespace M {
+    export var n!: boolean;
 }
 
 var objA = new A();
@@ -39,9 +41,9 @@ typeof objA.a;
 typeof M.n;
 
 // use typeof in type query
-var z: boolean;
-var x: boolean[];
-var r: () => boolean;
+declare var z: boolean;
+declare var x: boolean[];
+declare var r: () => boolean;
 z: typeof BOOLEAN;
 r: typeof foo;
 var y = { a: true, b: false};
@@ -51,15 +53,11 @@ z: typeof A.foo;
 z: typeof M.n;
 
 //// [typeofOperatorWithBooleanType.js]
-// typeof  operator on boolean type
-var BOOLEAN;
+"use strict";
 function foo() { return true; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return false; };
-    return A;
-}());
+class A {
+    static foo() { return false; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -83,10 +81,6 @@ typeof foo();
 typeof true, false;
 typeof objA.a;
 typeof M.n;
-// use typeof in type query
-var z;
-var x;
-var r;
 z: typeof BOOLEAN;
 r: typeof foo;
 var y = { a: true, b: false };

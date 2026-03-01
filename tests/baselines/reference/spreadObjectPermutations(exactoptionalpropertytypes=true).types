@@ -1,0 +1,177 @@
+//// [tests/cases/compiler/spreadObjectPermutations.ts] ////
+
+=== spreadObjectPermutations.ts ===
+declare const a: { x: string | number };
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+declare const b: { x?: string | number };
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const c: { x?: string | number | undefined };
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const v_a = { ...a };
+>v_a : { x: string | number; }
+>    : ^^^^^               ^^^
+>{ ...a } : { x: string | number; }
+>         : ^^^^^               ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+
+const v_b = { ...b };
+>v_b : { x?: string | number; }
+>    : ^^^^^^               ^^^
+>{ ...b } : { x?: string | number; }
+>         : ^^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+
+const v_c = { ...c };
+>v_c : { x?: string | number | undefined; }
+>    : ^^^^^^                           ^^^
+>{ ...c } : { x?: string | number | undefined; }
+>         : ^^^^^^                           ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+
+const v_ab = { ...a, ...b };
+>v_ab : { x: string | number; }
+>     : ^^^^^               ^^^
+>{ ...a, ...b } : { x: string | number; }
+>               : ^^^^^               ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+
+const v_ac = { ...a, ...c };
+>v_ac : { x: string | number | undefined; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...a, ...c } : { x: string | number | undefined; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+
+const v_ba = { ...b, ...a };
+>v_ba : { x: string | number; }
+>     : ^^^^^               ^^^
+>{ ...b, ...a } : { x: string | number; }
+>               : ^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+
+const v_bc = { ...b, ...c };
+>v_bc : { x?: string | number; }
+>     : ^^^^^^               ^^^
+>{ ...b, ...c } : { x?: string | number; }
+>               : ^^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+
+const v_ca = { ...c, ...a };
+>v_ca : { x: string | number; }
+>     : ^^^^^               ^^^
+>{ ...c, ...a } : { x: string | number; }
+>               : ^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+
+const v_cb = { ...c, ...b };
+>v_cb : { x?: string | number | undefined; }
+>     : ^^^^^^                           ^^^
+>{ ...c, ...b } : { x?: string | number | undefined; }
+>               : ^^^^^^                           ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+
+const v_abc = { ...a, ...b, ...c };
+>v_abc : { x: string | number | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...a, ...b, ...c } : { x: string | number | undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+
+const v_acb = { ...a, ...c, ...b };
+>v_acb : { x: string | number | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...a, ...c, ...b } : { x: string | number | undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+
+const v_bac = { ...b, ...a, ...c };
+>v_bac : { x: string | number | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...b, ...a, ...c } : { x: string | number | undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+
+const v_bca = { ...b, ...c, ...a };
+>v_bca : { x: string | number; }
+>      : ^^^^^               ^^^
+>{ ...b, ...c, ...a } : { x: string | number; }
+>                     : ^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+
+const v_cab = { ...c, ...a, ...b };
+>v_cab : { x: string | number; }
+>      : ^^^^^               ^^^
+>{ ...c, ...a, ...b } : { x: string | number; }
+>                     : ^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+
+const v_cba = { ...c, ...b, ...a };
+>v_cba : { x: string | number; }
+>      : ^^^^^               ^^^
+>{ ...c, ...b, ...a } : { x: string | number; }
+>                     : ^^^^^               ^^^
+>c : { x?: string | number | undefined; }
+>  : ^^^^^^                           ^^^
+>b : { x?: string | number; }
+>  : ^^^^^^               ^^^
+>a : { x: string | number; }
+>  : ^^^^^               ^^^
+

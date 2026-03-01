@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendedInterfaceGenericType.ts] ////
+
 //// [extendedInterfaceGenericType.ts]
 interface Alpha<T> {
     takesArgOfT(arg: T): Alpha<T>;
@@ -12,6 +14,7 @@ betaOfNumber.takesArgOfT(5);
 
 
 //// [extendedInterfaceGenericType.js]
+"use strict";
 var alpha;
 var betaOfNumber = alpha.makeBetaOfNumber();
 betaOfNumber.takesArgOfT(5);

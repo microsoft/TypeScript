@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/assignmentToInstantiationExpression.ts] ////
+
+=== assignmentToInstantiationExpression.ts ===
+let obj: { fn?: <T>() => T } = {};
+>obj : Symbol(obj, Decl(assignmentToInstantiationExpression.ts, 0, 3))
+>fn : Symbol(fn, Decl(assignmentToInstantiationExpression.ts, 0, 10))
+>T : Symbol(T, Decl(assignmentToInstantiationExpression.ts, 0, 17))
+>T : Symbol(T, Decl(assignmentToInstantiationExpression.ts, 0, 17))
+
+obj.fn<number> = () => 1234;
+>obj.fn : Symbol(fn, Decl(assignmentToInstantiationExpression.ts, 0, 10))
+>obj : Symbol(obj, Decl(assignmentToInstantiationExpression.ts, 0, 3))
+>fn : Symbol(fn, Decl(assignmentToInstantiationExpression.ts, 0, 10))
+
+
+let getValue: <T>() => T;
+>getValue : Symbol(getValue, Decl(assignmentToInstantiationExpression.ts, 4, 3))
+>T : Symbol(T, Decl(assignmentToInstantiationExpression.ts, 4, 15))
+>T : Symbol(T, Decl(assignmentToInstantiationExpression.ts, 4, 15))
+
+getValue<number> = () => 1234;
+>getValue : Symbol(getValue, Decl(assignmentToInstantiationExpression.ts, 4, 3))
+
+
+let getValue2!: <T>() => T;
+>getValue2 : Symbol(getValue2, Decl(assignmentToInstantiationExpression.ts, 8, 3))
+>T : Symbol(T, Decl(assignmentToInstantiationExpression.ts, 8, 17))
+>T : Symbol(T, Decl(assignmentToInstantiationExpression.ts, 8, 17))
+
+getValue2<number> = () => 1234;
+>getValue2 : Symbol(getValue2, Decl(assignmentToInstantiationExpression.ts, 8, 3))
+

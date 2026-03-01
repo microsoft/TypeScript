@@ -1,0 +1,275 @@
+// === breakpoints ===
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: string): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (23 to 50)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (51 to 52)  SpanInfo: undefined
+--------------------------------
+4  >interface Robot {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (53 to 70)  SpanInfo: undefined
+--------------------------------
+5  >    name: string;
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (71 to 88)  SpanInfo: undefined
+--------------------------------
+6  >    skills: {
+
+    ~~~~~~~~~~~~~~                                => Pos: (89 to 102)  SpanInfo: undefined
+--------------------------------
+7  >        primary?: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (103 to 128)  SpanInfo: undefined
+--------------------------------
+8  >        secondary?: string;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (129 to 156)  SpanInfo: undefined
+--------------------------------
+9  >    };
+
+    ~~~~~~~                                       => Pos: (157 to 163)  SpanInfo: undefined
+--------------------------------
+10 >}
+
+    ~~                                            => Pos: (164 to 165)  SpanInfo: undefined
+--------------------------------
+11 >var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (166 to 254)  SpanInfo: {"start":166,"length":87}
+    >var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } }
+    >:=> (line 11, col 0) to (line 11, col 87)
+--------------------------------
+12 >function foo1(
+
+    ~~~~~~~~~~~~~~~                               => Pos: (255 to 269)  SpanInfo: {"start":475,"length":21}
+    >console.log(primaryA)
+    >:=> (line 19, col 4) to (line 19, col 25)
+--------------------------------
+13 >    {
+
+    ~~~~~~                                        => Pos: (270 to 275)  SpanInfo: {"start":284,"length":161}
+    >skills: {
+    >            primary: primaryA = "primary",
+    >            secondary: secondaryA = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 14, col 8) to (line 17, col 60)
+--------------------------------
+14 >        skills: {
+
+    ~~~~~~~~~~~~~~~                               => Pos: (276 to 290)  SpanInfo: {"start":284,"length":161}
+    >skills: {
+    >            primary: primaryA = "primary",
+    >            secondary: secondaryA = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 14, col 8) to (line 17, col 60)
+14 >        skills: {
+
+                   ~~~                            => Pos: (291 to 293)  SpanInfo: {"start":306,"length":29}
+    >primary: primaryA = "primary"
+    >:=> (line 15, col 12) to (line 15, col 41)
+--------------------------------
+15 >            primary: primaryA = "primary",
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   => Pos: (294 to 336)  SpanInfo: {"start":306,"length":29}
+    >primary: primaryA = "primary"
+    >:=> (line 15, col 12) to (line 15, col 41)
+--------------------------------
+16 >            secondary: secondaryA = "secondary"
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (337 to 384)  SpanInfo: {"start":349,"length":35}
+    >secondary: secondaryA = "secondary"
+    >:=> (line 16, col 12) to (line 16, col 47)
+--------------------------------
+17 >        } = { primary: "SomeSkill", secondary: "someSkill" }
+
+    ~~~~~~~~~                                     => Pos: (385 to 393)  SpanInfo: {"start":349,"length":35}
+    >secondary: secondaryA = "secondary"
+    >:=> (line 16, col 12) to (line 16, col 47)
+17 >        } = { primary: "SomeSkill", secondary: "someSkill" }
+
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (394 to 445)  SpanInfo: {"start":284,"length":161}
+    >skills: {
+    >            primary: primaryA = "primary",
+    >            secondary: secondaryA = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 14, col 8) to (line 17, col 60)
+--------------------------------
+18 >    }: Robot = robotA) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (446 to 467)  SpanInfo: {"start":284,"length":161}
+    >skills: {
+    >            primary: primaryA = "primary",
+    >            secondary: secondaryA = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 14, col 8) to (line 17, col 60)
+18 >    }: Robot = robotA) {
+
+                          ~~~                     => Pos: (468 to 470)  SpanInfo: {"start":475,"length":21}
+    >console.log(primaryA)
+    >:=> (line 19, col 4) to (line 19, col 25)
+--------------------------------
+19 >    console.log(primaryA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (471 to 497)  SpanInfo: {"start":475,"length":21}
+    >console.log(primaryA)
+    >:=> (line 19, col 4) to (line 19, col 25)
+--------------------------------
+20 >}
+
+    ~~                                            => Pos: (498 to 499)  SpanInfo: {"start":498,"length":1}
+    >}
+    >:=> (line 20, col 0) to (line 20, col 1)
+--------------------------------
+21 >function foo2(
+
+    ~~~~~~~~~~~~~~~                               => Pos: (500 to 514)  SpanInfo: {"start":750,"length":23}
+    >console.log(secondaryB)
+    >:=> (line 29, col 4) to (line 29, col 27)
+--------------------------------
+22 >    {
+
+    ~~~~~~                                        => Pos: (515 to 520)  SpanInfo: {"start":529,"length":20}
+    >name: nameC = "name"
+    >:=> (line 23, col 8) to (line 23, col 28)
+--------------------------------
+23 >        name: nameC = "name",
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (521 to 550)  SpanInfo: {"start":529,"length":20}
+    >name: nameC = "name"
+    >:=> (line 23, col 8) to (line 23, col 28)
+--------------------------------
+24 >        skills: {
+
+    ~~~~~~~~~~~~~~~                               => Pos: (551 to 565)  SpanInfo: {"start":559,"length":161}
+    >skills: {
+    >            primary: primaryB = "primary",
+    >            secondary: secondaryB = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 24, col 8) to (line 27, col 60)
+24 >        skills: {
+
+                   ~~~                            => Pos: (566 to 568)  SpanInfo: {"start":581,"length":29}
+    >primary: primaryB = "primary"
+    >:=> (line 25, col 12) to (line 25, col 41)
+--------------------------------
+25 >            primary: primaryB = "primary",
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   => Pos: (569 to 611)  SpanInfo: {"start":581,"length":29}
+    >primary: primaryB = "primary"
+    >:=> (line 25, col 12) to (line 25, col 41)
+--------------------------------
+26 >            secondary: secondaryB = "secondary"
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (612 to 659)  SpanInfo: {"start":624,"length":35}
+    >secondary: secondaryB = "secondary"
+    >:=> (line 26, col 12) to (line 26, col 47)
+--------------------------------
+27 >        } = { primary: "SomeSkill", secondary: "someSkill" }
+
+    ~~~~~~~~~                                     => Pos: (660 to 668)  SpanInfo: {"start":624,"length":35}
+    >secondary: secondaryB = "secondary"
+    >:=> (line 26, col 12) to (line 26, col 47)
+27 >        } = { primary: "SomeSkill", secondary: "someSkill" }
+
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (669 to 720)  SpanInfo: {"start":559,"length":161}
+    >skills: {
+    >            primary: primaryB = "primary",
+    >            secondary: secondaryB = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 24, col 8) to (line 27, col 60)
+--------------------------------
+28 >    }: Robot = robotA) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (721 to 742)  SpanInfo: {"start":559,"length":161}
+    >skills: {
+    >            primary: primaryB = "primary",
+    >            secondary: secondaryB = "secondary"
+    >        } = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 24, col 8) to (line 27, col 60)
+28 >    }: Robot = robotA) {
+
+                          ~~~                     => Pos: (743 to 745)  SpanInfo: {"start":750,"length":23}
+    >console.log(secondaryB)
+    >:=> (line 29, col 4) to (line 29, col 27)
+--------------------------------
+29 >    console.log(secondaryB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (746 to 774)  SpanInfo: {"start":750,"length":23}
+    >console.log(secondaryB)
+    >:=> (line 29, col 4) to (line 29, col 27)
+--------------------------------
+30 >}
+
+    ~~                                            => Pos: (775 to 776)  SpanInfo: {"start":775,"length":1}
+    >}
+    >:=> (line 30, col 0) to (line 30, col 1)
+--------------------------------
+31 >function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
+
+    ~~~~~~~~~~~~~~                                => Pos: (777 to 790)  SpanInfo: {"start":877,"length":27}
+    >console.log(skills.primary)
+    >:=> (line 32, col 4) to (line 32, col 31)
+31 >function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
+
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (791 to 869)  SpanInfo: {"start":793,"length":57}
+    >skills = { primary: "SomeSkill", secondary: "someSkill" }
+    >:=> (line 31, col 16) to (line 31, col 73)
+31 >function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
+
+                                                                                                 ~~~=> Pos: (870 to 872)  SpanInfo: {"start":877,"length":27}
+    >console.log(skills.primary)
+    >:=> (line 32, col 4) to (line 32, col 31)
+--------------------------------
+32 >    console.log(skills.primary);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (873 to 905)  SpanInfo: {"start":877,"length":27}
+    >console.log(skills.primary)
+    >:=> (line 32, col 4) to (line 32, col 31)
+--------------------------------
+33 >}
+
+    ~~                                            => Pos: (906 to 907)  SpanInfo: {"start":906,"length":1}
+    >}
+    >:=> (line 33, col 0) to (line 33, col 1)
+--------------------------------
+34 >foo1(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (908 to 921)  SpanInfo: {"start":908,"length":12}
+    >foo1(robotA)
+    >:=> (line 34, col 0) to (line 34, col 12)
+--------------------------------
+35 >foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (922 to 1007)  SpanInfo: {"start":922,"length":84}
+    >foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } })
+    >:=> (line 35, col 0) to (line 35, col 84)
+--------------------------------
+36 >foo2(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (1008 to 1021)  SpanInfo: {"start":1008,"length":12}
+    >foo2(robotA)
+    >:=> (line 36, col 0) to (line 36, col 12)
+--------------------------------
+37 >foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1022 to 1107)  SpanInfo: {"start":1022,"length":84}
+    >foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } })
+    >:=> (line 37, col 0) to (line 37, col 84)
+--------------------------------
+38 >foo3(robotA);
+
+    ~~~~~~~~~~~~~~                                => Pos: (1108 to 1121)  SpanInfo: {"start":1108,"length":12}
+    >foo3(robotA)
+    >:=> (line 38, col 0) to (line 38, col 12)
+--------------------------------
+39 >foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1122 to 1206)  SpanInfo: {"start":1122,"length":84}
+    >foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } })
+    >:=> (line 39, col 0) to (line 39, col 84)

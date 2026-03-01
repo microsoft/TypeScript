@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldInitializer.ts] ////
+
 //// [privateNameFieldInitializer.ts]
 class A {
     #field = 10;
@@ -6,6 +8,7 @@ class A {
 
 
 //// [privateNameFieldInitializer.js]
+"use strict";
 var _A_field, _A_uninitialized;
 class A {
     constructor() {

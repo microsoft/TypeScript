@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserKeywordsAsIdentifierName1.ts] ////
+
 //// [parserKeywordsAsIdentifierName1.ts]
 var big = {
    break : 0,
@@ -7,8 +9,9 @@ var big = {
 
 
 //// [parserKeywordsAsIdentifierName1.js]
+"use strict";
 var big = {
-    "break": 0,
-    "super": 0,
-    "const": 0
+    break: 0,
+    super: 0,
+    const: 0
 };

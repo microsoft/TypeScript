@@ -1,3 +1,5 @@
+/// <reference lib="es2021.promise" />
+
 interface ErrorOptions {
     cause?: unknown;
 }
@@ -45,11 +47,11 @@ interface AggregateErrorConstructor {
     new (
         errors: Iterable<any>,
         message?: string,
-        options?: ErrorOptions
+        options?: ErrorOptions,
     ): AggregateError;
     (
         errors: Iterable<any>,
         message?: string,
-        options?: ErrorOptions
+        options?: ErrorOptions,
     ): AggregateError;
 }

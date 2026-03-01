@@ -1,5 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList4.ts] ////
+
+=== parserErrorRecovery_ParameterList4.ts ===
 function f(a,¬) {
 >f : (a: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 }

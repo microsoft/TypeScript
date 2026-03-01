@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts] ////
+
+=== unionTypeInference.ts ===
 declare const b: boolean;
 >b : Symbol(b, Decl(unionTypeInference.ts, 0, 13))
 

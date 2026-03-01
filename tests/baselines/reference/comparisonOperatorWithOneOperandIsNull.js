@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts] ////
+
 //// [comparisonOperatorWithOneOperandIsNull.ts]
 enum E { a, b, c }
 
@@ -21,13 +23,13 @@ function foo<T>(t: T) {
     var foo_r8 = null !== t;
 }
 
-var a: boolean;
-var b: number;
-var c: string;
-var d: void;
-var e: E;
-var f: {};
-var g: string[];
+declare var a: boolean;
+declare var b: number;
+declare var c: string;
+declare var d: void;
+declare var e: E;
+declare var f: {};
+declare var g: string[];
 
 // operator <
 var r1a1 = null < a;
@@ -166,6 +168,7 @@ var r8b6 = f !== null;
 var r8b7 = g !== null;
 
 //// [comparisonOperatorWithOneOperandIsNull.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
@@ -190,13 +193,6 @@ function foo(t) {
     var foo_r7 = null === t;
     var foo_r8 = null !== t;
 }
-var a;
-var b;
-var c;
-var d;
-var e;
-var f;
-var g;
 // operator <
 var r1a1 = null < a;
 var r1a2 = null < b;

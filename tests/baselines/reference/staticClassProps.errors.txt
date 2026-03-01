@@ -1,8 +1,8 @@
-tests/cases/compiler/staticClassProps.ts(4,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/staticClassProps.ts(6,1): error TS1128: Declaration or statement expected.
+staticClassProps.ts(4,9): error TS1128: Declaration or statement expected.
+staticClassProps.ts(6,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/staticClassProps.ts (2 errors) ====
+==== staticClassProps.ts (2 errors) ====
     class C
     {
         public foo() {

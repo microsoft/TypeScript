@@ -1,19 +1,35 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNamesFragment.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNamesFragment.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== jsxJsxsCjsTransformSubstitutesNamesFragment.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <>
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><>  <p></p>  text  <div></div></> : JSX.Element
+>                                  : ^^^^^^^^^^^
 
   <p></p>
 ><p></p> : JSX.Element
+>        : ^^^^^^^^^^^
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 
   text
   <div></div>
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 </>
 

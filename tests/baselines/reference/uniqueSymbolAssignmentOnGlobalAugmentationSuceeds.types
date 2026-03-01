@@ -1,28 +1,44 @@
-=== tests/cases/compiler/uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts ===
+//// [tests/cases/compiler/uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts] ////
+
+=== uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts ===
 const FOO_SYMBOL = Symbol('Foo');
 >FOO_SYMBOL : unique symbol
+>           : ^^^^^^^^^^^^^
 >Symbol('Foo') : unique symbol
+>              : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'Foo' : "Foo"
+>      : ^^^^^
 
 declare global {
 >global : any
+>       : ^^^
 
     interface Promise<T> {
         [FOO_SYMBOL]?: number;
 >[FOO_SYMBOL] : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >FOO_SYMBOL : unique symbol
+>           : ^^^^^^^^^^^^^
     }
 }
 
 export function foo<T>(p: Promise<T>) {
 >foo : <T>(p: Promise<T>) => void
+>    : ^ ^^ ^^          ^^^^^^^^^
 >p : Promise<T>
+>  : ^^^^^^^^^^
 
     p[FOO_SYMBOL] = 3;
 >p[FOO_SYMBOL] = 3 : 3
+>                  : ^
 >p[FOO_SYMBOL] : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
 >p : Promise<T>
+>  : ^^^^^^^^^^
 >FOO_SYMBOL : unique symbol
+>           : ^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 }

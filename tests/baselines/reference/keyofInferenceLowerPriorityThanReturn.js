@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceLowerPriorityThanReturn.ts] ////
+
 //// [keyofInferenceLowerPriorityThanReturn.ts]
 // #22736
 declare class Write {
@@ -48,7 +50,8 @@ function f() {
 
 
 //// [keyofInferenceLowerPriorityThanReturn.js]
-var bookTable = null;
+"use strict";
+const bookTable = null;
 function insertOnConflictDoNothing(_table, _conflictTarget) {
     throw new Error();
 }

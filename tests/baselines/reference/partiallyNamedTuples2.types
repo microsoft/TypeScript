@@ -1,0 +1,60 @@
+//// [tests/cases/conformance/types/tuple/named/partiallyNamedTuples2.ts] ////
+
+=== partiallyNamedTuples2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55693
+interface MultiKeyMap<Keys extends readonly unknown[], Value> {
+  get<Key extends GetKeys<Keys>>(...key: Key): GetResult<Keys, Key, Value>;
+>get : <Key extends GetKeys<Keys>>(...key: Key) => GetResult<Keys, Key, Value>
+>    : ^   ^^^^^^^^^             ^^^^^   ^^   ^^^^^                           
+>key : Key
+>    : ^^^
+}
+type GetKeys<Keys extends readonly unknown[]> = Keys extends [
+>GetKeys : GetKeys<Keys>
+>        : ^^^^^^^^^^^^^
+
+  ...infer Remain,
+  infer _,
+]
+  ? Keys | GetKeys<Remain>
+  : Keys;
+type GetResult<
+>GetResult : GetResult<Id, Args, Value>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  Id extends readonly unknown[],
+  Args extends GetKeys<Id>,
+  Value,
+> = Args extends Id
+  ? Value | undefined
+  : Id extends [...Args, ...infer Rest]
+  ? Iterable<[...Rest, Value]>
+  : never;
+const x: MultiKeyMap<[id1: string, id2: string], object> = null!;
+>x : MultiKeyMap<[id1: string, id2: string], object>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null! : never
+>      : ^^^^^
+
+const id1 = "abc" as string;
+>id1 : string
+>    : ^^^^^^
+>"abc" as string : string
+>                : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+const matches = x.get(id1);
+>matches : Iterable<[id2: string, object]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.get(id1) : Iterable<[id2: string, object]>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.get : <Key extends [id1: string, id2: string] | [id1: string] | []>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
+>      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : MultiKeyMap<[id1: string, id2: string], object>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>get : <Key extends [id1: string, id2: string] | [id1: string] | []>(...key: Key) => GetResult<[id1: string, id2: string], Key, object>
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>id1 : string
+>    : ^^^^^^
+

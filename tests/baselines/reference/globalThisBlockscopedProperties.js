@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts] ////
+
 //// [globalThisBlockscopedProperties.ts]
 var x = 1
 const y = 2
@@ -18,9 +20,10 @@ declare let themAll: keyof typeof globalThis
 
 
 //// [globalThisBlockscopedProperties.js]
+"use strict";
 var x = 1;
-var y = 2;
-var z = 3;
+const y = 2;
+let z = 3;
 globalThis.x; // ok
 globalThis.y; // should error, no property 'y'
 globalThis.z; // should error, no property 'z'

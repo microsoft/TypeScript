@@ -1,21 +1,22 @@
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
+tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
   'P' could be instantiated with an arbitrary type which could be unrelated to '{}'.
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No overload matches this call.
+tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
     Type '{}' is not assignable to type 'Readonly<P>'.
   Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
     Type '{}' is not assignable to type 'Readonly<P>'.
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(17,14): error TS2322: Type 'P' is not assignable to type 'IntrinsicAttributes & P'.
+tsxNotUsingApparentTypeOfSFC.tsx(17,14): error TS2322: Type 'P' is not assignable to type 'IntrinsicAttributes & P'.
   Type 'P' is not assignable to type 'IntrinsicAttributes'.
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(18,14): error TS2769: No overload matches this call.
+tsxNotUsingApparentTypeOfSFC.tsx(18,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<P>): MyComponent', gave the following error.
     Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
       Type 'P' is not assignable to type 'IntrinsicAttributes'.
   Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
     Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+      Type 'P' is not assignable to type 'IntrinsicAttributes'.
 
 
-==== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx (4 errors) ====
+==== tsxNotUsingApparentTypeOfSFC.tsx (4 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import React from 'react';
@@ -45,7 +46,7 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(18,14): error TS2769: No o
                  ~~~~~
 !!! error TS2322: Type 'P' is not assignable to type 'IntrinsicAttributes & P'.
 !!! error TS2322:   Type 'P' is not assignable to type 'IntrinsicAttributes'.
-!!! related TS2208 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
+!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
         let q = <MyComponent {...wrappedProps} /> // should work
                  ~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -54,7 +55,9 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(18,14): error TS2769: No o
 !!! error TS2769:       Type 'P' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 2, '(props: P, context?: any): MyComponent', gave the following error.
 !!! error TS2769:     Type 'P' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
-!!! related TS2208 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
-!!! related TS2208 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: React.ReactNode; }> & Readonly<P>` constraint.
-!!! related TS2208 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: React.ReactNode; }> & Readonly<P>` constraint.
+!!! error TS2769:       Type 'P' is not assignable to type 'IntrinsicAttributes'.
+!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
+!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: React.ReactNode; }> & Readonly<P>` constraint.
+!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes` constraint.
+!!! related TS2208 tsxNotUsingApparentTypeOfSFC.tsx:5:15: This type parameter might need an `extends JSX.IntrinsicAttributes & JSX.IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: React.ReactNode; }> & Readonly<P>` constraint.
     }

@@ -1,46 +1,67 @@
-=== tests/cases/compiler/specializationsShouldNotAffectEachOther.ts ===
+//// [tests/cases/compiler/specializationsShouldNotAffectEachOther.ts] ////
+
+=== specializationsShouldNotAffectEachOther.ts ===
 interface Series  {
     data: string[];
 >data : string[]
+>     : ^^^^^^^^
 }
 
 var series: Series;
 >series : Series
+>       : ^^^^^^
 
 
 function foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
     var seriesExtent = (series) => null;
 >seriesExtent : (series: any) => any
+>             : ^      ^^^^^^^^^^^^^
 >(series) => null : (series: any) => any
+>                 : ^      ^^^^^^^^^^^^^
 >series : any
->null : null
 
     var series2: number[];
 >series2 : number[]
+>        : ^^^^^^^^
 
     series2.map(seriesExtent);
 >series2.map(seriesExtent) : any[]
+>                          : ^^^^^
 >series2.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>            : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >series2 : number[]
+>        : ^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >seriesExtent : (series: any) => any
+>             : ^      ^^^^^^^^^^^^^
 
     return null;
->null : null
 }
 
 
 var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 >keyExtent2 : any[]
+>           : ^^^^^
 >series.data.map(function (d: string) { return d; }) : string[]
+>                                                    : ^^^^^^^^
 >series.data.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>                : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >series.data : string[]
+>            : ^^^^^^^^
 >series : Series
+>       : ^^^^^^
 >data : string[]
+>     : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >function (d: string) { return d; } : (d: string) => string
+>                                   : ^ ^^      ^^^^^^^^^^^
 >d : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 

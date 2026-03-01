@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/deeplyDependentLargeArrayMutation2.ts] ////
+
+=== foo.js ===
 // Looking at this test and thinking "that's silly, nobody would write code like that" and thinking it's OK to break this test?
 // You'd be wrong - https://raw.githubusercontent.com/archilogic-com/3dio-js/master/build/3dio.js and plenty of other codebases
 // have js code exactly like this! This pattern (even at this size!) with a few more embellishments is a common way to encode

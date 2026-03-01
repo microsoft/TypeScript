@@ -8,7 +8,7 @@
     "Loading 'project/file3' from the root dir 'c:/root/src/', candidate location 'c:/root/src/project/file3'.",
     "Trying other entries in 'rootDirs'.",
     "Loading 'project/file3' from the root dir 'c:/root/generated/src', candidate location 'c:/root/generated/src/project/file3'.",
-    "File 'c:/root/generated/src/project/file3.ts' exist - use it as a name resolution result.",
+    "File 'c:/root/generated/src/project/file3.ts' exists - use it as a name resolution result.",
     "======== Module name './project/file3' was successfully resolved to 'c:/root/generated/src/project/file3.ts'. ========",
     "======== Resolving module '../file2' from 'c:/root/generated/src/project/file3.ts'. ========",
     "Module resolution kind is not specified, using 'Classic'.",
@@ -24,6 +24,6 @@
     "Loading 'file2' from the root dir 'c:/root/src', candidate location 'c:/root/src/file2'.",
     "File 'c:/root/src/file2.ts' does not exist.",
     "File 'c:/root/src/file2.tsx' does not exist.",
-    "File 'c:/root/src/file2.d.ts' exist - use it as a name resolution result.",
+    "File 'c:/root/src/file2.d.ts' exists - use it as a name resolution result.",
     "======== Module name '../file2' was successfully resolved to 'c:/root/src/file2.d.ts'. ========"
 ]

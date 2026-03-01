@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts] ////
+
 //// [classStaticBlock5.ts]
 class B {
     static a = 1;
@@ -17,6 +19,7 @@ class C extends B {
 
 
 //// [classStaticBlock5.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -32,7 +35,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var _this = this;
 var B = /** @class */ (function () {
     function B() {
     }

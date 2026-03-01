@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/tsxAttributeErrors.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeErrors.tsx] ////
+
+=== tsxAttributeErrors.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxAttributeErrors.tsx, 0, 0))
 

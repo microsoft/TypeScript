@@ -1,3 +1,10 @@
-[]
+// === findAllReferences ===
+// === /home/src/workspaces/project/a/a.ts ===
+// /// <reference path="../b/b.ts" />
+// /*FIND ALL REFS*/;
 
-[]
+
+
+// === findAllReferences ===
+// === /home/src/workspaces/project/b/b.ts ===
+// /*FIND ALL REFS*/;

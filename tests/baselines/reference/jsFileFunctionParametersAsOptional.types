@@ -1,31 +1,48 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/jsFileFunctionParametersAsOptional.ts] ////
+
+=== foo.js ===
 function f(a, b, c) { }
 >f : (a: any, b: any, c: any) => void
+>  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
 >b : any
 >c : any
 
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 f();
 >f() : void
+>    : ^^^^
 >f : (a: any, b: any, c: any) => void
+>  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 
 f(1);
 >f(1) : void
+>     : ^^^^
 >f : (a: any, b: any, c: any) => void
+>  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 f(1, 2);
 >f(1, 2) : void
+>        : ^^^^
 >f : (a: any, b: any, c: any) => void
+>  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 f(1, 2, 3);
 >f(1, 2, 3) : void
+>           : ^^^^
 >f : (a: any, b: any, c: any) => void
+>  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

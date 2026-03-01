@@ -1,130 +1,201 @@
-=== tests/cases/compiler/unusedPrivateStaticMembers.ts ===
+//// [tests/cases/compiler/unusedPrivateStaticMembers.ts] ////
+
+=== unusedPrivateStaticMembers.ts ===
 class Test1 {
 >Test1 : Test1
+>      : ^^^^^
 
     private static m1() {}
 >m1 : () => void
+>   : ^^^^^^^^^^
 
     public static test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         Test1.m1();
 >Test1.m1() : void
+>           : ^^^^
 >Test1.m1 : () => void
+>         : ^^^^^^^^^^
 >Test1 : typeof Test1
+>      : ^^^^^^^^^^^^
 >m1 : () => void
+>   : ^^^^^^^^^^
     }
 }
 
 class Test2 {
 >Test2 : Test2
+>      : ^^^^^
 
     private static p1 = 0
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     public static test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         Test2.p1;
 >Test2.p1 : number
+>         : ^^^^^^
 >Test2 : typeof Test2
+>      : ^^^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
     }
 }
 
 class Test3 {
 >Test3 : Test3
+>      : ^^^^^
 
     private static p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     private static m1() {}
 >m1 : () => void
+>   : ^^^^^^^^^^
 }
 
 class Test4 {
 >Test4 : Test4
+>      : ^^^^^
 
     private static m1(n: number): number {
 >m1 : (n: number) => number
+>   : ^ ^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 
         return (n === 0) ? 1 : (n * Test4.m1(n - 1));
 >(n === 0) ? 1 : (n * Test4.m1(n - 1)) : number
+>                                      : ^^^^^^
 >(n === 0) : boolean
+>          : ^^^^^^^
 >n === 0 : boolean
+>        : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 >(n * Test4.m1(n - 1)) : number
+>                      : ^^^^^^
 >n * Test4.m1(n - 1) : number
+>                    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >Test4.m1(n - 1) : number
+>                : ^^^^^^
 >Test4.m1 : (n: number) => number
+>         : ^ ^^      ^^^^^      
 >Test4 : typeof Test4
+>      : ^^^^^^^^^^^^
 >m1 : (n: number) => number
+>   : ^ ^^      ^^^^^      
 >n - 1 : number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 
     private static m2(n: number): number {
 >m2 : (n: number) => number
+>   : ^ ^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 
         return (n === 0) ? 1 : (n * Test4["m2"](n - 1));
 >(n === 0) ? 1 : (n * Test4["m2"](n - 1)) : number
+>                                         : ^^^^^^
 >(n === 0) : boolean
+>          : ^^^^^^^
 >n === 0 : boolean
+>        : ^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 >(n * Test4["m2"](n - 1)) : number
+>                         : ^^^^^^
 >n * Test4["m2"](n - 1) : number
+>                       : ^^^^^^
 >n : number
+>  : ^^^^^^
 >Test4["m2"](n - 1) : number
+>                   : ^^^^^^
 >Test4["m2"] : (n: number) => number
+>            : ^ ^^      ^^^^^      
 >Test4 : typeof Test4
+>      : ^^^^^^^^^^^^
 >"m2" : "m2"
+>     : ^^^^
 >n - 1 : number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 class Test5 {
 >Test5 : Test5
+>      : ^^^^^
 
     private static m1() {}
 >m1 : () => void
+>   : ^^^^^^^^^^
 
     public static test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         Test5["m1"]();
 >Test5["m1"]() : void
+>              : ^^^^
 >Test5["m1"] : () => void
+>            : ^^^^^^^^^^
 >Test5 : typeof Test5
+>      : ^^^^^^^^^^^^
 >"m1" : "m1"
+>     : ^^^^
     }
 }
 
 class Test6 {
 >Test6 : Test6
+>      : ^^^^^
 
     private static p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     public static test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         Test6["p1"];
 >Test6["p1"] : number
+>            : ^^^^^^
 >Test6 : typeof Test6
+>      : ^^^^^^^^^^^^
 >"p1" : "p1"
+>     : ^^^^
     }
 }
 

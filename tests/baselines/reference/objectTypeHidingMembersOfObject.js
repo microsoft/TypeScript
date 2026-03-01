@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfObject.ts] ////
+
 //// [objectTypeHidingMembersOfObject.ts]
 // all of these valueOf calls should return the type shown in the overriding signatures here
 
@@ -28,19 +30,17 @@ var b: {
 var r4: void = b.valueOf();
 
 //// [objectTypeHidingMembersOfObject.js]
+"use strict";
 // all of these valueOf calls should return the type shown in the overriding signatures here
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.valueOf = function () { };
-    return C;
-}());
+class C {
+    valueOf() { }
+}
 var c;
 var r1 = c.valueOf();
 var i;
 var r2 = i.valueOf();
 var a = {
-    valueOf: function () { }
+    valueOf: () => { }
 };
 var r3 = a.valueOf();
 var b;

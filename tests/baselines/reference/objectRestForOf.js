@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRestForOf.ts] ////
+
 //// [objectRestForOf.ts]
 let array: { x: number, y: string }[];
 for (let { x, ...restOf } of array) {
@@ -15,6 +17,7 @@ for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
 
 
 //// [objectRestForOf.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)

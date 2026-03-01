@@ -1,12 +1,12 @@
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts(20,17): error TS7006: Parameter 'arg' implicitly has an 'any' type.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts(23,17): error TS7006: Parameter 'arg' implicitly has an 'any' type.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts(31,20): error TS7006: Parameter 'arg' implicitly has an 'any' type.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts(34,20): error TS7006: Parameter 'arg' implicitly has an 'any' type.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts(42,29): error TS7006: Parameter 'arg' implicitly has an 'any' type.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts(45,29): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration02.ts(20,17): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration02.ts(23,17): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration02.ts(31,20): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration02.ts(34,20): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration02.ts(42,29): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration02.ts(45,29): error TS7006: Parameter 'arg' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts (6 errors) ====
+==== contextuallyTypedClassExpressionMethodDeclaration02.ts (6 errors) ====
     interface A {
         numProp: number;
     }

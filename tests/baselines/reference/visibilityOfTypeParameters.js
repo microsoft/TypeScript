@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/visibilityOfTypeParameters.ts] ////
+
 //// [visibilityOfTypeParameters.ts]
 export class MyClass {
     protected myMethod<T>(val: T): T {
@@ -7,16 +9,13 @@ export class MyClass {
 
 //// [visibilityOfTypeParameters.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    MyClass.prototype.myMethod = function (val) {
+class MyClass {
+    myMethod(val) {
         return val;
-    };
-    return MyClass;
-}());
+    }
+}
 exports.MyClass = MyClass;
 
 

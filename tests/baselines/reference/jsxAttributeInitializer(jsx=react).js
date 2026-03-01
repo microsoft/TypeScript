@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxAttributeInitializer.ts] ////
+
 //// [a.tsx]
 declare var React: any;
 
@@ -10,6 +12,7 @@ declare var React: any;
 
 
 //// [a.js]
+"use strict";
 React.createElement("div", null,
     React.createElement("div", { attr: React.createElement("div", null) }),
     React.createElement("div", { attr: React.createElement("div", null, "foo") }),

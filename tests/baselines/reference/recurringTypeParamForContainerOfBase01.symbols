@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/recurringTypeParamForContainerOfBase01.ts ===
+//// [tests/cases/conformance/types/typeParameters/recurringTypeParamForContainerOfBase01.ts] ////
+
+=== recurringTypeParamForContainerOfBase01.ts ===
 interface BoxOfFoo<T extends Foo<T>> {
 >BoxOfFoo : Symbol(BoxOfFoo, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 0))
 >T : Symbol(T, Decl(recurringTypeParamForContainerOfBase01.ts, 0, 19))

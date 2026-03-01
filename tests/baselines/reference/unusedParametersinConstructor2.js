@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersinConstructor2.ts] ////
+
 //// [unusedParametersinConstructor2.ts]
 class greeter {
     constructor(param1: string, param2: string) {
@@ -6,9 +8,9 @@ class greeter {
 }
 
 //// [unusedParametersinConstructor2.js]
-var greeter = /** @class */ (function () {
-    function greeter(param1, param2) {
+"use strict";
+class greeter {
+    constructor(param1, param2) {
         param2 = param2 + "dummy value";
     }
-    return greeter;
-}());
+}

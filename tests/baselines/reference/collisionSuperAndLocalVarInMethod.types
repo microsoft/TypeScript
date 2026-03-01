@@ -1,45 +1,65 @@
-=== tests/cases/compiler/collisionSuperAndLocalVarInMethod.ts ===
+//// [tests/cases/compiler/collisionSuperAndLocalVarInMethod.ts] ////
+
+=== collisionSuperAndLocalVarInMethod.ts ===
 var _super = 10; // No Error
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x() {
 >x : () => void
+>  : ^^^^^^^^^^
 
         var _super = 10; // No error
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class b extends Foo {
 >b : b
+>  : ^
 >Foo : Foo
+>    : ^^^
 
     public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         var _super = 10; // Should be error 
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class c extends Foo {
 >c : c
+>  : ^
 >Foo : Foo
+>    : ^^^
 
     public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         var x = () => {
 >x : () => void
+>  : ^^^^^^^^^^
 >() => {            var _super = 10; // Should be error        } : () => void
+>                                                                : ^^^^^^^^^^
 
             var _super = 10; // Should be error
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
         }
     }
 }

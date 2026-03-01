@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralParameterResolution.ts] ////
+
 //// [objectLiteralParameterResolution.ts]
 interface Foo{
     extend<T>(target: T, ...objs: any[]): T;
@@ -17,6 +19,7 @@ var s = $.extend({
 
 
 //// [objectLiteralParameterResolution.js]
+"use strict";
 var s = $.extend({
     type: "GET",
     data: "data",
@@ -25,5 +28,5 @@ var s = $.extend({
     dataType: "json",
     converters: { "text json": "" },
     traditional: true,
-    timeout: 12
+    timeout: 12,
 }, "");

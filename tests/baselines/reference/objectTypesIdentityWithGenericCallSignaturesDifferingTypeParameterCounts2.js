@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts] ////
+
 //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts]
 // object types are identical structurally
 
@@ -41,6 +43,7 @@ function foo15(x: I2); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.js]
+"use strict";
 // object types are identical structurally
 var a;
 function foo1(x) { }

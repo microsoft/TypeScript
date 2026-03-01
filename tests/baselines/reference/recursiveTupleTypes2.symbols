@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTupleTypes2.ts ===
+//// [tests/cases/compiler/recursiveTupleTypes2.ts] ////
+
+=== recursiveTupleTypes2.ts ===
 interface Tree1 {
 >Tree1 : Symbol(Tree1, Decl(recursiveTupleTypes2.ts, 0, 0))
 

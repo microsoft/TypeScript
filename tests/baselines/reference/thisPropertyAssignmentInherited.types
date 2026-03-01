@@ -1,0 +1,75 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentInherited.ts] ////
+
+=== thisPropertyAssignmentInherited.js ===
+export class Element {
+>Element : Element
+>        : ^^^^^^^
+
+  /**
+   * @returns {String}
+   */
+  get textContent() {
+>textContent : string
+>            : ^^^^^^
+
+    return  ''
+>'' : ""
+>   : ^^
+  }
+  set textContent(x) {}
+>textContent : string
+>            : ^^^^^^
+>x : string
+>  : ^^^^^^
+
+  cloneNode() { return this}
+>cloneNode : () => this
+>          : ^^^^^^^^^^
+>this : this
+>     : ^^^^
+}
+export class HTMLElement extends Element {}
+>HTMLElement : HTMLElement
+>            : ^^^^^^^^^^^
+>Element : Element
+>        : ^^^^^^^
+
+export class TextElement extends HTMLElement {
+>TextElement : TextElement
+>            : ^^^^^^^^^^^
+>HTMLElement : HTMLElement
+>            : ^^^^^^^^^^^
+
+  get innerHTML() { return this.textContent; }
+>innerHTML : string
+>          : ^^^^^^
+>this.textContent : string
+>                 : ^^^^^^
+>this : this
+>     : ^^^^
+>textContent : string
+>            : ^^^^^^
+
+  set innerHTML(html) { this.textContent = html; }
+>innerHTML : string
+>          : ^^^^^^
+>html : string
+>     : ^^^^^^
+>this.textContent = html : string
+>                        : ^^^^^^
+>this.textContent : string
+>                 : ^^^^^^
+>this : this
+>     : ^^^^
+>textContent : string
+>            : ^^^^^^
+>html : string
+>     : ^^^^^^
+
+  toString() {
+>toString : () => void
+>         : ^^^^^^^^^^
+  }
+}
+
+

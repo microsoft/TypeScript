@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_namespacedInterface.ts] ////
+
 === /defs.d.ts ===
 declare namespace N {
 >N : Symbol(N, Decl(defs.d.ts, 0, 0))

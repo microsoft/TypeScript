@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts] ////
+
 //// [parserErrorRecovery_ClassElement3.ts]
-module M {
+namespace M {
    ¬
    class C {
    }
@@ -8,14 +10,12 @@ module M {
    ¬
 
 //// [parserErrorRecovery_ClassElement3.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var E;
+    class C {
+    }
+    let E;
     (function (E) {
     })(E || (E = {}));
 })(M || (M = {}));

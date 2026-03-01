@@ -1,5 +1,9 @@
-=== tests/cases/conformance/es6/variableDeclarations/VariableDeclaration5_es6.ts ===
+//// [tests/cases/conformance/es6/variableDeclarations/VariableDeclaration5_es6.ts] ////
+
+=== VariableDeclaration5_es6.ts ===
 const a: number = 1
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

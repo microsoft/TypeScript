@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceOnly.ts] ////
+
 //// [interfaceOnly.ts]
 interface foo {
     foo();
@@ -5,6 +7,7 @@ interface foo {
 }
 
 //// [interfaceOnly.js]
+"use strict";
 
 
 //// [interfaceOnly.d.ts]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsAfterSpread.ts] ////
+
 //// [commentsAfterSpread.ts]
 const identity = (a) => a;
 
@@ -79,6 +81,7 @@ function k ({
 }
 
 //// [commentsAfterSpread.js]
+"use strict";
 const identity = (a) => a;
 const a = {
     ... /*#__PURE__*/identity({

@@ -1,9 +1,15 @@
-=== tests/cases/compiler/debuggerEmit.ts ===
+//// [tests/cases/compiler/debuggerEmit.ts] ////
+
+=== debuggerEmit.ts ===
 var x = function () { debugger; }
 >x : () => void
+>  : ^^^^^^^^^^
 >function () { debugger; } : () => void
+>                          : ^^^^^^^^^^
 
 x();
 >x() : void
+>    : ^^^^
 >x : () => void
+>  : ^^^^^^^^^^
 

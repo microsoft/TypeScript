@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of3.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of3.ts] ////
+
+=== for-of3.ts ===
 var v: any;
 >v : Symbol(v, Decl(for-of3.ts, 0, 3))
 

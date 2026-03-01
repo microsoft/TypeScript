@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeMatch2.ts ===
+//// [tests/cases/compiler/typeMatch2.ts] ////
+
+=== typeMatch2.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(typeMatch2.ts, 0, 0))
 

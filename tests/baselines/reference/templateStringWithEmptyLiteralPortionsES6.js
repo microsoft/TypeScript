@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithEmptyLiteralPortionsES6.ts] ////
+
 //// [templateStringWithEmptyLiteralPortionsES6.ts]
 var a = ``;
 
@@ -27,6 +29,7 @@ var m = `1${ 0 }2${ 0 }3`;
 
 
 //// [templateStringWithEmptyLiteralPortionsES6.js]
+"use strict";
 var a = ``;
 var b = `${0}`;
 var c = `1${0}`;

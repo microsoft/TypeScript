@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/varianceCantBeStrictWhileStructureIsnt.ts] ////
+
+=== varianceCantBeStrictWhileStructureIsnt.ts ===
+// under non-strict-function-types, all the below should work
+interface Foo<T> {
+    member: (cb: T) => void;
+>member : (cb: T) => void
+>       : ^  ^^ ^^^^^    
+>cb : T
+>   : ^
+}
+
+interface Bar<T> {
+    member: (cb: T) => void;
+>member : (cb: T) => void
+>       : ^  ^^ ^^^^^    
+>cb : T
+>   : ^
+}
+
+declare var a: Foo<string>;
+>a : Foo<string>
+>  : ^^^^^^^^^^^
+
+declare var b: Foo<"">;
+>b : Foo<"">
+>  : ^^^^^^^
+
+declare var a2: Bar<string>;
+>a2 : Bar<string>
+>   : ^^^^^^^^^^^
+
+declare var b2: Bar<"">;
+>b2 : Bar<"">
+>   : ^^^^^^^
+
+a = b;
+>a = b : Foo<"">
+>      : ^^^^^^^
+>a : Foo<string>
+>  : ^^^^^^^^^^^
+>b : Foo<"">
+>  : ^^^^^^^
+
+b = a;
+>b = a : Foo<string>
+>      : ^^^^^^^^^^^
+>b : Foo<"">
+>  : ^^^^^^^
+>a : Foo<string>
+>  : ^^^^^^^^^^^
+
+a2 = b2;
+>a2 = b2 : Bar<"">
+>        : ^^^^^^^
+>a2 : Bar<string>
+>   : ^^^^^^^^^^^
+>b2 : Bar<"">
+>   : ^^^^^^^
+
+b2 = a2;
+>b2 = a2 : Bar<string>
+>        : ^^^^^^^^^^^
+>b2 : Bar<"">
+>   : ^^^^^^^
+>a2 : Bar<string>
+>   : ^^^^^^^^^^^
+
+a = b2;
+>a = b2 : Bar<"">
+>       : ^^^^^^^
+>a : Foo<string>
+>  : ^^^^^^^^^^^
+>b2 : Bar<"">
+>   : ^^^^^^^
+
+b = a2;
+>b = a2 : Bar<string>
+>       : ^^^^^^^^^^^
+>b : Foo<"">
+>  : ^^^^^^^
+>a2 : Bar<string>
+>   : ^^^^^^^^^^^
+
+a2 = b;
+>a2 = b : Foo<"">
+>       : ^^^^^^^
+>a2 : Bar<string>
+>   : ^^^^^^^^^^^
+>b : Foo<"">
+>  : ^^^^^^^
+
+b2 = a;
+>b2 = a : Foo<string>
+>       : ^^^^^^^^^^^
+>b2 : Bar<"">
+>   : ^^^^^^^
+>a : Foo<string>
+>  : ^^^^^^^^^^^
+

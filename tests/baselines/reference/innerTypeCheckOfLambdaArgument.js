@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts] ////
+
 //// [innerTypeCheckOfLambdaArgument.ts]
 function takesCallback(callback: (n) =>any) {
 
@@ -14,6 +16,7 @@ takesCallback(
 
 
 //// [innerTypeCheckOfLambdaArgument.js]
+"use strict";
 function takesCallback(callback) {
 }
 takesCallback(function inner(n) {

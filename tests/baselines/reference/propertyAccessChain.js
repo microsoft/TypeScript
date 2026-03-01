@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.ts] ////
+
 //// [propertyAccessChain.ts]
 declare const o1: undefined | { b: string };
 o1?.b;

@@ -1,3 +1,20 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/jsdocLink5.ts ===
+// function g() { }
+// /**
+//  * {@link g()} {@link g() } {@link g ()} {@link g () 0} {@link g()1} {@link g() 2}
+//  * {@link u()} {@link u() } {@link u ()} {@link u () 0} {@link u()1} {@link u() 2}
+//  */
+// function f(x) {
+// }
+// f()
+// ^
+// | ----------------------------------------------------------------------
+// | function f(x: any): void
+// | {@link g()} {@link g() } {@link g()} {@link g() 0} {@link g()1} {@link g() 2}
+// | {@link u()} {@link u() } {@link u()} {@link u() 0} {@link u()1} {@link u() 2}
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +22,7 @@
       "position": 210,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

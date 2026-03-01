@@ -1,7 +1,7 @@
-tests/cases/compiler/moduleAugmentationGlobal7.ts(2,13): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+moduleAugmentationGlobal7.ts(2,13): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
 
 
-==== tests/cases/compiler/moduleAugmentationGlobal7.ts (1 errors) ====
+==== moduleAugmentationGlobal7.ts (1 errors) ====
     namespace A {
         declare global {
                 ~~~~~~

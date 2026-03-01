@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts] ////
+
 //// [inheritedMembersAndIndexSignaturesFromDifferentBases.ts]
 // indexer in B is a subtype of indexer in A
 interface A {
@@ -28,3 +30,4 @@ interface G extends A, B, C, E { } // should only report one error
 interface H extends A, F { } // Should report no error at all because error is internal to F
 
 //// [inheritedMembersAndIndexSignaturesFromDifferentBases.js]
+"use strict";

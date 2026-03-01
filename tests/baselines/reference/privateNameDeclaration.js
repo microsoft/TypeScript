@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDeclaration.ts] ////
+
 //// [privateNameDeclaration.ts]
 class A {
     #foo: string;
@@ -11,6 +13,7 @@ class A {
 
 
 //// [privateNameDeclaration.js]
+"use strict";
 var _A_foo, _A_bar;
 class A {
     constructor() {

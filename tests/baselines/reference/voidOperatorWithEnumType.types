@@ -1,85 +1,135 @@
-=== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithEnumType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithEnumType.ts] ////
+
+=== voidOperatorWithEnumType.ts ===
 // void  operator on enum type
 
 enum ENUM { };
 >ENUM : ENUM
+>     : ^^^^
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>      : ^^^^^
 >A : ENUM1.A
+>  : ^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >"" : (typeof ENUM1)[""]
+>   : ^^^^^^^^^^^^^^^^^^
 
 // enum type var
 var ResultIsAny1 = void ENUM;
 >ResultIsAny1 : any
 >void ENUM : undefined
+>          : ^^^^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 
 var ResultIsAny2 = void ENUM1;
 >ResultIsAny2 : any
 >void ENUM1 : undefined
+>           : ^^^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 
 // enum type expressions
 var ResultIsAny3 = void ENUM1["A"];
 >ResultIsAny3 : any
 >void ENUM1["A"] : undefined
+>                : ^^^^^^^^^
 >ENUM1["A"] : ENUM1.A
+>           : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
 var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
 >ResultIsAny4 : any
 >void (ENUM[0] + ENUM1["B"]) : undefined
+>                            : ^^^^^^^^^
 >(ENUM[0] + ENUM1["B"]) : string
+>                       : ^^^^^^
 >ENUM[0] + ENUM1["B"] : string
+>                     : ^^^^^^
 >ENUM[0] : string
+>        : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >0 : 0
+>  : ^
 >ENUM1["B"] : ENUM1.B
+>           : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 // multiple void  operators
 var ResultIsAny5 = void void ENUM;
 >ResultIsAny5 : any
 >void void ENUM : undefined
+>               : ^^^^^^^^^
 >void ENUM : undefined
+>          : ^^^^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 
 var ResultIsAny6 = void void void (ENUM[0] + ENUM1.B);
 >ResultIsAny6 : any
 >void void void (ENUM[0] + ENUM1.B) : undefined
+>                                   : ^^^^^^^^^
 >void void (ENUM[0] + ENUM1.B) : undefined
+>                              : ^^^^^^^^^
 >void (ENUM[0] + ENUM1.B) : undefined
+>                         : ^^^^^^^^^
 >(ENUM[0] + ENUM1.B) : string
+>                    : ^^^^^^
 >ENUM[0] + ENUM1.B : string
+>                  : ^^^^^^
 >ENUM[0] : string
+>        : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >0 : 0
+>  : ^
 >ENUM1.B : ENUM1.B
+>        : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 
 // miss assignment operators
 void ENUM;
 >void ENUM : undefined
+>          : ^^^^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 
 void ENUM1;
 >void ENUM1 : undefined
+>           : ^^^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 
 void ENUM1["B"];
 >void ENUM1["B"] : undefined
+>                : ^^^^^^^^^
 >ENUM1["B"] : ENUM1.B
+>           : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 void ENUM, ENUM1;
 >void ENUM, ENUM1 : typeof ENUM1
+>                 : ^^^^^^^^^^^^
 >void ENUM : undefined
+>          : ^^^^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 

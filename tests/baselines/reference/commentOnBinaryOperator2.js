@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnBinaryOperator2.ts] ////
+
 //// [commentOnBinaryOperator2.ts]
 var a = 'some'
     // comment
@@ -13,6 +15,7 @@ var c = 'some'
     'text';
 
 //// [commentOnBinaryOperator2.js]
+"use strict";
 var a = 'some'
     + 'text';
 var b = 'some'

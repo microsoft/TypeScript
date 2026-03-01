@@ -1,10 +1,10 @@
-tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts(5,22): error TS2449: Class 'A' used before its declaration.
-tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts(6,13): error TS2449: Class 'A' used before its declaration.
-tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts(7,6): error TS2449: Class 'A' used before its declaration.
-tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts(8,6): error TS2449: Class 'A' used before its declaration.
+classDeclarationShouldBeOutOfScopeInComputedNames.ts(5,22): error TS2449: Class 'A' used before its declaration.
+classDeclarationShouldBeOutOfScopeInComputedNames.ts(6,13): error TS2449: Class 'A' used before its declaration.
+classDeclarationShouldBeOutOfScopeInComputedNames.ts(7,6): error TS2449: Class 'A' used before its declaration.
+classDeclarationShouldBeOutOfScopeInComputedNames.ts(8,6): error TS2449: Class 'A' used before its declaration.
 
 
-==== tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts (4 errors) ====
+==== classDeclarationShouldBeOutOfScopeInComputedNames.ts (4 errors) ====
     class A {
         static readonly p1 = Symbol();
         static readonly p2 = Symbol();
@@ -12,18 +12,18 @@ tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts(8,6): 
         static readonly [A.p1] = 0;
                          ~
 !!! error TS2449: Class 'A' used before its declaration.
-!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
+!!! related TS2728 classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
         static [A.p2]() { return 0 };
                 ~
 !!! error TS2449: Class 'A' used before its declaration.
-!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
+!!! related TS2728 classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
         [A.p1]() { }
          ~
 !!! error TS2449: Class 'A' used before its declaration.
-!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
+!!! related TS2728 classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
         [A.p2] = 0
          ~
 !!! error TS2449: Class 'A' used before its declaration.
-!!! related TS2728 tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
+!!! related TS2728 classDeclarationShouldBeOutOfScopeInComputedNames.ts:1:7: 'A' is declared here.
     }
     

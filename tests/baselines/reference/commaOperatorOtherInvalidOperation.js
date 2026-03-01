@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts] ////
+
 //// [commaOperatorOtherInvalidOperation.ts]
 //Expect to have compiler errors
 //Comma operator in function arguments and return
@@ -14,6 +16,7 @@ function foo1<T1, T2>() {
 }
 
 //// [commaOperatorOtherInvalidOperation.js]
+"use strict";
 //Expect to have compiler errors
 //Comma operator in function arguments and return
 function foo(x, y) {

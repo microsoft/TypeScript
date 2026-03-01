@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateVariableInClass3.ts] ////
+
 //// [unusedPrivateVariableInClass3.ts]
 class greeter {
     private x: string;
@@ -6,8 +8,6 @@ class greeter {
 }
 
 //// [unusedPrivateVariableInClass3.js]
-var greeter = /** @class */ (function () {
-    function greeter() {
-    }
-    return greeter;
-}());
+"use strict";
+class greeter {
+}

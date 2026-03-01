@@ -1,3 +1,4 @@
+// @target: es2015
 function fn1<T, U>(t: T, u: U) {
     var r1 = t || t;
     var r2: T = t || t;

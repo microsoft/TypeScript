@@ -1,15 +1,15 @@
 /// <reference path="../fourslash.ts" />
 
-// @moduleResolution: node
-
-// @Filename: /a.js
+// @lib: es5
+// @moduleResolution: bundler
+// @Filename: /home/src/workspaces/project/a.js
 //// export const a = { /*end*/a: 'a' };
 
-// @Filename: /a.d.ts
+// @Filename: /home/src/workspaces/project/a.d.ts
 //// export declare const a: { a: string };
 
-// @Filename: /b.ts
+// @Filename: /home/src/workspaces/project/b.ts
 //// import { a } from './a';
 //// a.[|a/*start*/|]
 
-verify.goToSourceDefinition("start", "end");
+verify.baselineGoToSourceDefinition("start");

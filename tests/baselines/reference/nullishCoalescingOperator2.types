@@ -1,94 +1,130 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator2.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator2.ts] ////
+
+=== nullishCoalescingOperator2.ts ===
 declare const a1: 'literal' | undefined | null
 >a1 : "literal" | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const a2: '' | undefined | null
 >a2 : "" | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^^
 
 declare const a3: 1 | undefined | null
 >a3 : 1 | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 declare const a4: 0 | undefined | null
 >a4 : 0 | null | undefined
->null : null
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 declare const a5: true | undefined | null
 >a5 : true | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
 declare const a6: false | undefined | null
 >a6 : false | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
->null : null
+>      : ^^^^^
 
 declare const a7: unknown | null
 >a7 : unknown
->null : null
+>   : ^^^^^^^
 
 declare const a8: never | null
 >a8 : null
->null : null
+>   : ^^^^
 
 declare const a9: any | null
 >a9 : any
->null : null
 
 
 const aa1 = a1 ?? 'whatever'
 >aa1 : "literal" | "whatever"
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >a1 ?? 'whatever' : "literal" | "whatever"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >a1 : "literal" | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa2 = a2 ?? 'whatever'
 >aa2 : "" | "whatever"
+>    : ^^^^^^^^^^^^^^^
 >a2 ?? 'whatever' : "" | "whatever"
+>                 : ^^^^^^^^^^^^^^^
 >a2 : "" | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa3 = a3 ?? 'whatever'
 >aa3 : 1 | "whatever"
+>    : ^^^^^^^^^^^^^^
 >a3 ?? 'whatever' : 1 | "whatever"
+>                 : ^^^^^^^^^^^^^^
 >a3 : 1 | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa4 = a4 ?? 'whatever'
 >aa4 : 0 | "whatever"
+>    : ^^^^^^^^^^^^^^
 >a4 ?? 'whatever' : 0 | "whatever"
+>                 : ^^^^^^^^^^^^^^
 >a4 : 0 | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa5 = a5 ?? 'whatever'
 >aa5 : true | "whatever"
+>    : ^^^^^^^^^^^^^^^^^
 >a5 ?? 'whatever' : true | "whatever"
+>                 : ^^^^^^^^^^^^^^^^^
 >a5 : true | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa6 = a6 ?? 'whatever'
 >aa6 : false | "whatever"
+>    : ^^^^^^^^^^^^^^^^^^
 >a6 ?? 'whatever' : false | "whatever"
+>                 : ^^^^^^^^^^^^^^^^^^
 >a6 : false | null | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa7 = a7 ?? 'whatever'
 >aa7 : {}
+>    : ^^
 >a7 ?? 'whatever' : {}
+>                 : ^^
 >a7 : unknown
+>   : ^^^^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa8 = a8 ?? 'whatever'
 >aa8 : "whatever"
+>    : ^^^^^^^^^^
 >a8 ?? 'whatever' : "whatever"
+>                 : ^^^^^^^^^^
 >a8 : null
+>   : ^^^^
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa9 = a9 ?? 'whatever'
 >aa9 : any
 >a9 ?? 'whatever' : any
 >a9 : any
 >'whatever' : "whatever"
+>           : ^^^^^^^^^^
 

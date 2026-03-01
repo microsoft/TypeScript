@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts] ////
+
+=== collisionThisExpressionAndAmbientVarInGlobal.ts ===
 declare var _this: number; // no error as no code gen
 >_this : Symbol(_this, Decl(collisionThisExpressionAndAmbientVarInGlobal.ts, 0, 11))
 

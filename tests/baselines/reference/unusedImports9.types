@@ -1,22 +1,29 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/unusedImports9.ts] ////
+
+=== file2.ts ===
 import c = require('./file1')
 >c : typeof c
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export class Calculator {
 >Calculator : Calculator
+>           : ^^^^^^^^^^
 
     handleChar() {}
 >handleChar : () => void
+>           : ^^^^^^^^^^
 }
 
 export function test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
 }
 
 export function test2() {
 >test2 : () => void
+>      : ^^^^^^^^^^
 
 }
 

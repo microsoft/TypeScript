@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts ===
+//// [tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts] ////
+
+=== typeArgumentInferenceWithClassExpression2.ts ===
 function foo<T>(x = class { prop: T }): T {
 >foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 0))
 >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression2.ts, 0, 13))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericSignatureIdentity.ts ===
+//// [tests/cases/compiler/genericSignatureIdentity.ts] ////
+
+=== genericSignatureIdentity.ts ===
 // This test is here to remind us of our current limits of type identity checking.
 // Ideally all of the below declarations would be considered different (and thus errors)
 // but they aren't because we erase type parameters to type any and don't check that
@@ -6,33 +8,41 @@
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 
     <T extends Date>(x: T): T;
 >x : T
+>  : ^
 
 };
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 
     <T extends number>(x: T): T;
 >x : T
+>  : ^
 
 };
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 
     <T>(x: T): T;
 >x : T
+>  : ^
 
 };
 
 var x: {
 >x : <T extends Date>(x: T) => T
+>  : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 
     <T>(x: any): any;
 >x : any
+>  : ^^^
 
 };
 

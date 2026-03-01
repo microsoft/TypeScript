@@ -1,5 +1,0 @@
-=== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring.ts ===
-for (var [a, b] in []) {}
->a : Symbol(a, Decl(for-inStatementsDestructuring.ts, 0, 10))
->b : Symbol(b, Decl(for-inStatementsDestructuring.ts, 0, 12))
-

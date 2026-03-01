@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/breakInIterationOrSwitchStatement2.ts] ////
+
 //// [breakInIterationOrSwitchStatement2.ts]
 do {
   break;
@@ -5,6 +7,7 @@ do {
 while (true);
 
 //// [breakInIterationOrSwitchStatement2.js]
+"use strict";
 do {
     break;
 } while (true);

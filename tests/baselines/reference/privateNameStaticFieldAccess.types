@@ -1,27 +1,44 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts] ////
+
+=== privateNameStaticFieldAccess.ts ===
 class A {
 >A : A
+>  : ^
 
     static #myField = "hello world";
 >#myField : string
+>         : ^^^^^^
 >"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
 
     constructor() {
         console.log(A.#myField); //Ok
 >console.log(A.#myField) : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >A.#myField : string
+>           : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
         console.log(this.#myField); //Error
 >console.log(this.#myField) : void
+>                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#myField : any
+>              : ^^^
 >this : this
+>     : ^^^^
     }
 }
 

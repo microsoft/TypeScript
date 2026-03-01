@@ -1,3 +1,4 @@
+// @target: es2015
 class Shape {
     name: string;
     width: number;
@@ -150,4 +151,20 @@ function f30<T, K extends keyof T>() {
 
 function f31<T, K extends keyof T>() {
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+}
+
+// Repro from #51069
+
+class Test<T extends Record<string, number>> {
+  testy: T;
+
+  constructor(t: T) {
+    this.testy = t;
+  }
+
+  public t(key: keyof T): number {
+    this.testy[key] += 1; // Error
+
+    return this.testy[key];
+  }
 }

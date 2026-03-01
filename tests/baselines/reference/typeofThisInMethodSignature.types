@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/typeofThisInMethodSignature.ts] ////
+
+=== typeofThisInMethodSignature.ts ===
+// Repro from #54167
+
+export class A {
+>A : A
+>  : ^
+
+	x = 1
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+	a(x: typeof this.x): void {}
+>a : (x: typeof this.x) => void
+>  : ^ ^^             ^^^^^    
+>x : number
+>  : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>x : number
+>  : ^^^^^^
+}
+
+const a = new A().a(1);
+>a : void
+>  : ^^^^
+>new A().a(1) : void
+>             : ^^^^
+>new A().a : (x: typeof this.x) => void
+>          : ^ ^^             ^^^^^    
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+>a : (x: typeof this.x) => void
+>  : ^ ^^             ^^^^^    
+>1 : 1
+>  : ^
+

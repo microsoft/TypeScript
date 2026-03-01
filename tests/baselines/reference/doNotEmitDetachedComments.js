@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitDetachedComments.ts] ////
+
 //// [doNotEmitDetachedComments.ts]
 /*
 
@@ -28,6 +30,7 @@ function bar() { }
 
 
 //// [doNotEmitDetachedComments.js]
+"use strict";
 var x = 10;
 function foo() { }
 function bar() { }

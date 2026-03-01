@@ -1,8 +1,8 @@
-tests/cases/compiler/contextuallyTypingRestParameters.ts(3,9): error TS2322: Type 'string[]' is not assignable to type 'string'.
-tests/cases/compiler/contextuallyTypingRestParameters.ts(5,9): error TS2322: Type 'string[]' is not assignable to type 'string'.
+contextuallyTypingRestParameters.ts(3,9): error TS2322: Type 'string[]' is not assignable to type 'string'.
+contextuallyTypingRestParameters.ts(5,9): error TS2322: Type 'string[]' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/contextuallyTypingRestParameters.ts (2 errors) ====
+==== contextuallyTypingRestParameters.ts (2 errors) ====
     var x: (...y: string[]) => void = function (.../*3*/y) { 
         var t = y; 
         var x2: string = t; // This should be error

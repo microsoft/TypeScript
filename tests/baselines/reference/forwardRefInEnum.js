@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forwardRefInEnum.ts] ////
+
 //// [forwardRefInEnum.ts]
 enum E1 {
     // illegal case
@@ -15,6 +17,7 @@ enum E1 {
 
 
 //// [forwardRefInEnum.js]
+"use strict";
 var E1;
 (function (E1) {
     // illegal case

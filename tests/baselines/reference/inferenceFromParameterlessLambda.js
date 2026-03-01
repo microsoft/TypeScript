@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceFromParameterlessLambda.ts] ////
+
 //// [inferenceFromParameterlessLambda.ts]
 function foo<T>(o: Take<T>, i: Make<T>) { }
 interface Make<T> {
@@ -11,6 +13,7 @@ foo(n => n.length, () => 'hi');
 
 
 //// [inferenceFromParameterlessLambda.js]
+"use strict";
 function foo(o, i) { }
 // Infer string from second argument because it isn't context sensitive
-foo(function (n) { return n.length; }, function () { return 'hi'; });
+foo(n => n.length, () => 'hi');

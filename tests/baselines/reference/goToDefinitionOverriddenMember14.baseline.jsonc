@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember14.ts ===
+// class A {
+//     <|[|m|]() {}|>
+// }
+// class B extends A {}
+// class C extends B {
+//     /*GOTO DEF*/override m() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "m",
+    "containerName": "A",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

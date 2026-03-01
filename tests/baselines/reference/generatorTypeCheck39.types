@@ -1,27 +1,42 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts] ////
+
+=== generatorTypeCheck39.ts ===
 function decorator(x: any) {
 >decorator : (x: any) => (y: any) => void
+>          : ^ ^^   ^^^^^^   ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     return y => { };
 >y => { } : (y: any) => void
+>         : ^ ^^^^^^^^^^^^^^
 >y : any
+>  : ^^^
 }
 function* g() {
 >g : () => Generator<number, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     @decorator(yield 0)
 >decorator(yield 0) : (y: any) => void
+>                   : ^ ^^^^^^^^^^^^^^
 >decorator : (x: any) => (y: any) => void
+>          : ^ ^^   ^^^^^^   ^^^^^^^^^^^^
 >yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
 
     class C {
 >C : C
+>  : ^
 
         x = yield 0;
 >x : any
+>  : ^^^
 >yield 0 : any
+>        : ^^^
 >0 : 0
+>  : ^
     }
 }

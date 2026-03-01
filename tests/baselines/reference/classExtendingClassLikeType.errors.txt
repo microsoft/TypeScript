@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts(7,18): error TS2689: Cannot extend an interface 'Base'. Did you mean 'implements'?
-tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts(45,18): error TS2508: No base constructor has the specified number of type arguments.
-tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts(56,18): error TS2510: Base constructors must all have the same return type.
+classExtendingClassLikeType.ts(7,18): error TS2689: Cannot extend an interface 'Base'. Did you mean 'implements'?
+classExtendingClassLikeType.ts(45,18): error TS2508: No base constructor has the specified number of type arguments.
+classExtendingClassLikeType.ts(56,18): error TS2510: Base constructors must all have the same return type.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts (3 errors) ====
+==== classExtendingClassLikeType.ts (3 errors) ====
     interface Base<T, U> {
         x: T;
         y: U;

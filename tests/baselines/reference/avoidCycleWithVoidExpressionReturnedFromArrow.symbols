@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/avoidCycleWithVoidExpressionReturnedFromArrow.ts] ////
+
+=== avoidCycleWithVoidExpressionReturnedFromArrow.ts ===
+type HowlErrorCallback = (soundId: number, error: unknown) => void;
+>HowlErrorCallback : Symbol(HowlErrorCallback, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 0))
+>soundId : Symbol(soundId, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 26))
+>error : Symbol(error, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 42))
+
+interface HowlOptions {
+>HowlOptions : Symbol(HowlOptions, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 67))
+
+  onplayerror?: HowlErrorCallback | undefined;
+>onplayerror : Symbol(HowlOptions.onplayerror, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 2, 23))
+>HowlErrorCallback : Symbol(HowlErrorCallback, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 0))
+}
+
+class Howl {
+>Howl : Symbol(Howl, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 4, 1))
+
+  constructor(public readonly options: HowlOptions) {}
+>options : Symbol(Howl.options, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 14))
+>HowlOptions : Symbol(HowlOptions, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 0, 67))
+
+  once(name: "unlock", fn: () => void) {
+>once : Symbol(Howl.once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
+>name : Symbol(name, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 7))
+>fn : Symbol(fn, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 22))
+
+    console.log(name, fn);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 7))
+>fn : Symbol(fn, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 8, 22))
+  }
+}
+
+const instance = new Howl({
+>instance : Symbol(instance, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 13, 5))
+>Howl : Symbol(Howl, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 4, 1))
+
+  onplayerror: () => void instance.once("unlock", () => {}),
+>onplayerror : Symbol(onplayerror, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 13, 27))
+>instance.once : Symbol(Howl.once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
+>instance : Symbol(instance, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 13, 5))
+>once : Symbol(Howl.once, Decl(avoidCycleWithVoidExpressionReturnedFromArrow.ts, 7, 54))
+
+});
+

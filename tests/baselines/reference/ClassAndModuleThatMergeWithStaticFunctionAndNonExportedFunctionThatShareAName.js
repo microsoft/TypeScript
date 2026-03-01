@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts] ////
+
 //// [ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts]
 class Point {
     constructor(public x: number, public y: number) { }
@@ -5,45 +7,44 @@ class Point {
     static Origin(): Point { return { x: 0, y: 0 }; }
 }
 
-module Point {
+namespace Point {
     function Origin() { return ""; }// not an error, since not exported
 }
 
 
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
 
         static Origin(): Point { return { x: 0, y: 0 }; }
     }
 
-    export module Point {
+    export namespace Point {
         function Origin() { return ""; }// not an error since not exported
     }
 }
 
 //// [ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.js]
-var Point = /** @class */ (function () {
-    function Point(x, y) {
+"use strict";
+class Point {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    Point.Origin = function () { return { x: 0, y: 0 }; };
-    return Point;
-}());
+    static Origin() { return { x: 0, y: 0 }; }
+}
 (function (Point) {
     function Origin() { return ""; } // not an error, since not exported
 })(Point || (Point = {}));
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        Point.Origin = function () { return { x: 0, y: 0 }; };
-        return Point;
-    }());
+        static Origin() { return { x: 0, y: 0 }; }
+    }
     A.Point = Point;
     (function (Point) {
         function Origin() { return ""; } // not an error since not exported

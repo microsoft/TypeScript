@@ -1,12 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts(2,10): error TS1100: Invalid use of 'eval' in strict mode.
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts(2,10): error TS2384: Overload signatures must all be ambient or non-ambient.
+parserStrictMode8.ts(2,10): error TS1100: Invalid use of 'eval' in strict mode.
 
 
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts (2 errors) ====
+==== parserStrictMode8.ts (1 errors) ====
     "use strict";
     function eval() {
              ~~~~
 !!! error TS1100: Invalid use of 'eval' in strict mode.
-             ~~~~
-!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     }

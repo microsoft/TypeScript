@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopingInCatchBlocks.ts] ////
+
 //// [scopingInCatchBlocks.ts]
 try { } catch(ex1) { 
 	throw ex1;
@@ -11,6 +13,7 @@ var x = ex1; // should error
 
 
 //// [scopingInCatchBlocks.js]
+"use strict";
 try { }
 catch (ex1) {
     throw ex1;

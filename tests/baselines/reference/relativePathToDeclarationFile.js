@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
 
 //// [foo.d.ts]
-export declare module M2 {
+export declare namespace M2 {
 	export var x: boolean;
 }
 
 //// [other.d.ts]
-export declare module M2 {
+export declare namespace M2 {
 	export var x: string;
 }
 
@@ -28,10 +28,10 @@ if(foo.M2.x){
 
 //// [file1.js]
 "use strict";
-exports.__esModule = true;
-var foo = require("foo");
-var other = require("./other");
-var relMod = require("./sub/relMod");
+Object.defineProperty(exports, "__esModule", { value: true });
+const foo = require("foo");
+const other = require("./other");
+const relMod = require("./sub/relMod");
 if (foo.M2.x) {
     var x = new relMod(other.M2.x.charCodeAt(0));
 }

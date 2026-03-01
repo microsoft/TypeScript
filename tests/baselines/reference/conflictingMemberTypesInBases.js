@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conflictingMemberTypesInBases.ts] ////
+
 //// [conflictingMemberTypesInBases.ts]
 interface A {
     m: string;
@@ -15,3 +17,4 @@ interface E extends D { } // No duplicate error here
 
 
 //// [conflictingMemberTypesInBases.js]
+"use strict";

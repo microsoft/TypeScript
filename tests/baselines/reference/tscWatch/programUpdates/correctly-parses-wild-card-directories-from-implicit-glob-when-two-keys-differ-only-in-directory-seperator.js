@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/f1.ts]
 export const x = 1
@@ -5,8 +6,18 @@ export const x = 1
 //// [/user/username/projects/myproject/f2.ts]
 export const y = 1
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./",
+    "./**/*.json"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -17,75 +28,34 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["./","./**/*.json"]}
 
-
-/a/lib/tsc.js -w --extendedDiagnostics
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics
 Output::
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
 Synchronizing program
 CreatingProgramWith::
-  roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts"]
+  roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/tsconfig.json"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/f2.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/f1.ts
-/user/username/projects/myproject/f2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/f1.ts
-/user/username/projects/myproject/f2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/f1.ts (computed .d.ts during emit)
-/user/username/projects/myproject/f2.ts (computed .d.ts during emit)
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/f1.ts:
-  {"fileName":"/user/username/projects/myproject/f1.ts","pollingInterval":250}
-/user/username/projects/myproject/f2.ts:
-  {"fileName":"/user/username/projects/myproject/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
-exitCode:: ExitStatus.undefined
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/f1.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-exports.x = 1;
+export const x = 1;
 
 
 //// [/user/username/projects/myproject/f1.d.ts]
@@ -93,10 +63,7 @@ export declare const x = 1;
 
 
 //// [/user/username/projects/myproject/f2.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 1;
+export const y = 1;
 
 
 //// [/user/username/projects/myproject/f2.d.ts]
@@ -104,47 +71,114 @@ export declare const y = 1;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./f2.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./f1.ts","./f2.ts","./tsconfig.json"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},"-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}"],"root":[[2,4]],"options":{"composite":true},"latestChangedDtsFile":"./f2.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./f1.ts",
-      "./f2.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+  "fileNames": [
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+    "./f1.ts",
+    "./f2.ts",
+    "./tsconfig.json"
+  ],
+  "fileInfos": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./f1.ts": {
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./f1.ts": {
+      "original": {
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
-      "./f2.ts": {
+      "version": "-10906998252-export const x = 1",
+      "signature": "-7495133367-export declare const x = 1;\n"
+    },
+    "./f2.ts": {
+      "original": {
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
-      }
+      },
+      "version": "-10905812331-export const y = 1",
+      "signature": "-6203665398-export declare const y = 1;\n"
     },
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./f1.ts",
-      "./f2.ts"
-    ],
-    "latestChangedDtsFile": "./f2.d.ts"
+    "./tsconfig.json": {
+      "version": "-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}",
+      "signature": "-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}"
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./f1.ts",
+        "./f2.ts",
+        "./tsconfig.json"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true
+  },
+  "latestChangedDtsFile": "./f2.d.ts",
   "version": "FakeTSVersion",
-  "size": 863
+  "size": 1006
 }
 
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
+/user/username/projects/myproject/f1.ts: *new*
+  {}
+/user/username/projects/myproject/f2.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/tsconfig.json"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/myproject/f1.ts
+/user/username/projects/myproject/f2.ts
+/user/username/projects/myproject/tsconfig.json
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/myproject/f1.ts
+/user/username/projects/myproject/f2.ts
+/user/username/projects/myproject/tsconfig.json
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
+/user/username/projects/myproject/f1.ts (computed .d.ts during emit)
+/user/username/projects/myproject/f2.ts (computed .d.ts during emit)
+/user/username/projects/myproject/tsconfig.json (used version)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Add new file
 
@@ -157,12 +191,23 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
+  roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts","/user/username/projects/myproject/tsconfig.json"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/new-file.ts 250 undefined Source file
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.js :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -171,18 +216,128 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/new-file.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-[[90m12:00:47 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./f1.ts","./f2.ts","./new-file.ts","./tsconfig.json"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},"-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}"],"root":[[2,5]],"options":{"composite":true},"latestChangedDtsFile":"./new-file.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+    "./f1.ts",
+    "./f2.ts",
+    "./new-file.ts",
+    "./tsconfig.json"
+  ],
+  "fileInfos": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./f1.ts": {
+      "original": {
+        "version": "-10906998252-export const x = 1",
+        "signature": "-7495133367-export declare const x = 1;\n"
+      },
+      "version": "-10906998252-export const x = 1",
+      "signature": "-7495133367-export declare const x = 1;\n"
+    },
+    "./f2.ts": {
+      "original": {
+        "version": "-10905812331-export const y = 1",
+        "signature": "-6203665398-export declare const y = 1;\n"
+      },
+      "version": "-10905812331-export const y = 1",
+      "signature": "-6203665398-export declare const y = 1;\n"
+    },
+    "./new-file.ts": {
+      "original": {
+        "version": "-11960320495-export const z = 1;",
+        "signature": "-9207164725-export declare const z = 1;\n"
+      },
+      "version": "-11960320495-export const z = 1;",
+      "signature": "-9207164725-export declare const z = 1;\n"
+    },
+    "./tsconfig.json": {
+      "version": "-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}",
+      "signature": "-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}"
+    }
+  },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./f1.ts",
+        "./f2.ts",
+        "./new-file.ts",
+        "./tsconfig.json"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true
+  },
+  "latestChangedDtsFile": "./new-file.d.ts",
+  "version": "FakeTSVersion",
+  "size": 1131
+}
+
+//// [/user/username/projects/myproject/new-file.js]
+export const z = 1;
+
+
+//// [/user/username/projects/myproject/new-file.d.ts]
+export declare const z = 1;
+
+
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {}
+/user/username/projects/myproject/f1.ts:
+  {}
+/user/username/projects/myproject/f2.ts:
+  {}
+/user/username/projects/myproject/new-file.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/new-file.ts",
+  "/user/username/projects/myproject/tsconfig.json"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/f1.ts
 /user/username/projects/myproject/f2.ts
 /user/username/projects/myproject/new-file.ts
+/user/username/projects/myproject/tsconfig.json
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/new-file.ts
@@ -190,87 +345,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/new-file.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/f1.ts:
-  {"fileName":"/user/username/projects/myproject/f1.ts","pollingInterval":250}
-/user/username/projects/myproject/f2.ts:
-  {"fileName":"/user/username/projects/myproject/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/new-file.ts:
-  {"fileName":"/user/username/projects/myproject/new-file.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
-
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./f1.ts",
-      "./f2.ts",
-      "./new-file.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
-      },
-      "./f1.ts": {
-        "version": "-10906998252-export const x = 1",
-        "signature": "-7495133367-export declare const x = 1;\n"
-      },
-      "./f2.ts": {
-        "version": "-10905812331-export const y = 1",
-        "signature": "-6203665398-export declare const y = 1;\n"
-      },
-      "./new-file.ts": {
-        "version": "-11960320495-export const z = 1;",
-        "signature": "-9207164725-export declare const z = 1;\n"
-      }
-    },
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./f1.ts",
-      "./f2.ts",
-      "./new-file.ts"
-    ],
-    "latestChangedDtsFile": "./new-file.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 990
-}
-
-//// [/user/username/projects/myproject/new-file.js]
-"use strict";
-exports.__esModule = true;
-exports.z = void 0;
-exports.z = 1;
-
-
-//// [/user/username/projects/myproject/new-file.d.ts]
-export declare const z = 1;
-
-
 
 Change:: Import new file
 
@@ -283,24 +358,132 @@ Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
-[[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
+  roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts","/user/username/projects/myproject/tsconfig.json"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
-Program options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/f1.js] file written with same contents
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./new-file.ts","./f1.ts","./f2.ts","./tsconfig.json"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},"-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}"],"root":[[2,5]],"options":{"composite":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./new-file.d.ts","version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+    "./new-file.ts",
+    "./f1.ts",
+    "./f2.ts",
+    "./tsconfig.json"
+  ],
+  "fileIdsList": [
+    [
+      "./new-file.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "./new-file.ts": {
+      "original": {
+        "version": "-11960320495-export const z = 1;",
+        "signature": "-9207164725-export declare const z = 1;\n"
+      },
+      "version": "-11960320495-export const z = 1;",
+      "signature": "-9207164725-export declare const z = 1;\n"
+    },
+    "./f1.ts": {
+      "original": {
+        "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
+        "signature": "-7495133367-export declare const x = 1;\n"
+      },
+      "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
+      "signature": "-7495133367-export declare const x = 1;\n"
+    },
+    "./f2.ts": {
+      "original": {
+        "version": "-10905812331-export const y = 1",
+        "signature": "-6203665398-export declare const y = 1;\n"
+      },
+      "version": "-10905812331-export const y = 1",
+      "signature": "-6203665398-export declare const y = 1;\n"
+    },
+    "./tsconfig.json": {
+      "version": "-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}",
+      "signature": "-8420088156-{\n  \"compilerOptions\": {\n    \"composite\": true\n  },\n  \"include\": [\n    \"./\",\n    \"./**/*.json\"\n  ]\n}"
+    }
+  },
+  "root": [
+    [
+      [
+        2,
+        5
+      ],
+      [
+        "./new-file.ts",
+        "./f1.ts",
+        "./f2.ts",
+        "./tsconfig.json"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true
+  },
+  "referencedMap": {
+    "./f1.ts": [
+      "./new-file.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./new-file.d.ts",
+  "version": "FakeTSVersion",
+  "size": 1206
+}
+
+
+
+Program root files: [
+  "/user/username/projects/myproject/f1.ts",
+  "/user/username/projects/myproject/f2.ts",
+  "/user/username/projects/myproject/new-file.ts",
+  "/user/username/projects/myproject/tsconfig.json"
+]
+Program options: {
+  "composite": true,
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/new-file.ts
 /user/username/projects/myproject/f1.ts
 /user/username/projects/myproject/f2.ts
+/user/username/projects/myproject/tsconfig.json
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/f1.ts
@@ -308,83 +491,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/f1.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/f1.ts:
-  {"fileName":"/user/username/projects/myproject/f1.ts","pollingInterval":250}
-/user/username/projects/myproject/f2.ts:
-  {"fileName":"/user/username/projects/myproject/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/new-file.ts:
-  {"fileName":"/user/username/projects/myproject/new-file.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/f1.js] file written with same contents
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
-
-//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./new-file.ts",
-      "./f1.ts",
-      "./f2.ts"
-    ],
-    "fileNamesList": [
-      [
-        "./new-file.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
-      },
-      "./new-file.ts": {
-        "version": "-11960320495-export const z = 1;",
-        "signature": "-9207164725-export declare const z = 1;\n"
-      },
-      "./f1.ts": {
-        "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
-        "signature": "-7495133367-export declare const x = 1;\n"
-      },
-      "./f2.ts": {
-        "version": "-10905812331-export const y = 1",
-        "signature": "-6203665398-export declare const y = 1;\n"
-      }
-    },
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {
-      "./f1.ts": [
-        "./new-file.ts"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./f1.ts",
-      "./f2.ts",
-      "./new-file.ts"
-    ],
-    "latestChangedDtsFile": "./new-file.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1046
-}
-

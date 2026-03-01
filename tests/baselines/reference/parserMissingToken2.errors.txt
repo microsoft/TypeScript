@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts(1,2): error TS1161: Unterminated regular expression literal.
+parserMissingToken2.ts(1,1): error TS1161: Unterminated regular expression literal.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts (1 errors) ====
+==== parserMissingToken2.ts (1 errors) ====
     / b;
-     
+    ~~~
 !!! error TS1161: Unterminated regular expression literal.

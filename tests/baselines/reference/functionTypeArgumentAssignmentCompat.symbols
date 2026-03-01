@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts ===
+//// [tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts] ////
+
+=== functionTypeArgumentAssignmentCompat.ts ===
 var f : {
 >f : Symbol(f, Decl(functionTypeArgumentAssignmentCompat.ts, 0, 3))
 

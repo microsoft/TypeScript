@@ -1,10 +1,10 @@
-tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(115,29): error TS2304: Cannot find name 'IUploadResult'.
-tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(116,32): error TS2339: Property 'jsonToStat' does not exist on type 'FileService'.
-tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Cannot find name 'newFilePath'.
+variableDeclaratorResolvedDuringContextualTyping.ts(115,29): error TS2304: Cannot find name 'IUploadResult'.
+variableDeclaratorResolvedDuringContextualTyping.ts(116,32): error TS2339: Property 'jsonToStat' does not exist on type 'FileService'.
+variableDeclaratorResolvedDuringContextualTyping.ts(116,43): error TS2304: Cannot find name 'newFilePath'.
 
 
-==== tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts (3 errors) ====
-    module WinJS {
+==== variableDeclaratorResolvedDuringContextualTyping.ts (3 errors) ====
+    namespace WinJS {
         export interface ValueCallback {
             (value: any): any;
         }
@@ -69,7 +69,7 @@ tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(116,43)
         }
     }
     
-    module Services {
+    namespace Services {
         export interface IRequestService {
             /**
              * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -87,14 +87,14 @@ tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts(116,43)
         }
     }
     
-    module Errors {
+    namespace Errors {
         export class ConnectionError /* extends Error */ {
             constructor(request: XMLHttpRequest) {
             }
         }
     }
     
-    module Files {
+    namespace Files {
         export interface IUploadResult {
             stat: string;
             isNew: boolean;

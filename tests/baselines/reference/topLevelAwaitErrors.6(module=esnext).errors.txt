@@ -1,7 +1,7 @@
-tests/cases/conformance/externalModules/topLevelAwaitErrors.6.ts(2,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+topLevelAwaitErrors.6.ts(2,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 
 
-==== tests/cases/conformance/externalModules/topLevelAwaitErrors.6.ts (1 errors) ====
+==== topLevelAwaitErrors.6.ts (1 errors) ====
     // await in exported function name should fail
     export function await() {
                     ~~~~~

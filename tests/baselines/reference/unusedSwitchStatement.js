@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSwitchStatement.ts] ////
+
 //// [unusedSwitchStatement.ts]
 switch (1) {
     case 0:
@@ -15,23 +17,24 @@ switch (2) {
     case 0:
         let x;
     case 1:
-        x++;
+        x=1;
 }
 
 //// [unusedSwitchStatement.js]
+"use strict";
 switch (1) {
     case 0:
-        var x = void 0;
+        let x;
         break;
     case 1:
-        var c = 1;
+        const c = 1;
         break;
     default:
-        var z = 2;
+        let z = 2;
 }
 switch (2) {
     case 0:
-        var x = void 0;
+        let x;
     case 1:
-        x++;
+        x = 1;
 }

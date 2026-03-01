@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // ++ operator on any type
 
 var ANY: any;
@@ -7,7 +9,7 @@ var obj = {x:1,y:null};
 class A {
     public a: any;
 }
-module M {
+namespace M {
     export var n: any;
 }
 var objA = new A();

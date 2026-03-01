@@ -1,9 +1,11 @@
+//// [tests/cases/compiler/libTypeScriptOverrideSimple.ts] ////
+
 === /node_modules/@typescript/lib-dom/index.d.ts ===
 interface ABC { abc: string }
 >ABC : Symbol(ABC, Decl(index.d.ts, 0, 0))
 >abc : Symbol(ABC.abc, Decl(index.d.ts, 0, 15))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /// <reference lib="dom" />
 const a: ABC = { abc: "Hello" }
 >a : Symbol(a, Decl(index.ts, 1, 5))
@@ -13,3 +15,4 @@ const a: ABC = { abc: "Hello" }
 // This should fail because libdom has been replaced
 // by the module above ^
 window.localStorage
+

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnArrayElement4.ts] ////
+
 //// [commentOnArrayElement4.ts]
 const array = [
     /* element 1 */
@@ -7,7 +9,8 @@ const array = [
 
 
 //// [commentOnArrayElement4.js]
-var array = [
+"use strict";
+const array = [
     /* element 1 */
     1,
     /* end of element 1 */

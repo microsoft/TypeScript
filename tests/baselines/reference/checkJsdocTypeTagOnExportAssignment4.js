@@ -13,11 +13,12 @@ export default "";
 
 
 //// [checkJsdocTypeTagOnExportAssignment4.js]
+"use strict";
 //// [a.js]
 "use strict";
 /**
  * @typedef {number} Foo
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
-exports["default"] = "";
+exports.default = "";

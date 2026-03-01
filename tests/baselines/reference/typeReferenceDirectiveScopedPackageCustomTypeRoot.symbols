@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/typeReferenceDirectiveScopedPackageCustomTypeRoot.ts] ////
+
+=== /a.ts ===
+typesCache;
+>typesCache : Symbol(typesCache, Decl(index.d.ts, 0, 13))
+
+mangledAtTypesCache;
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(index.d.ts, 0, 13))
+
+nodeModulesCache;
+>nodeModulesCache : Symbol(nodeModulesCache, Decl(index.d.ts, 0, 13))
+
+mangledNodeModules;
+atTypesCache;
+mangledAtTypesCache;
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(index.d.ts, 0, 13))
+
+=== /types/@scoped/typescache/index.d.ts ===
+declare const typesCache: number;
+>typesCache : Symbol(typesCache, Decl(index.d.ts, 0, 13))
+
+=== /node_modules/@scoped/nodemodulescache/index.d.ts ===
+declare const nodeModulesCache: number;
+>nodeModulesCache : Symbol(nodeModulesCache, Decl(index.d.ts, 0, 13))
+
+=== /node_modules/@types/mangled__attypescache/index.d.ts ===
+declare const mangledAtTypesCache: number;
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(index.d.ts, 0, 13))
+

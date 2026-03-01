@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/parseJsxElementInUnaryExpressionNoCrash2.ts] ////
+
+=== a.js ===
+~<></> <
+>~<></> < : boolean
+>         : ^^^^^^^
+>~<></> : number
+>       : ^^^^^^
+><></> : any
+>      : ^^^
+
+> : any
+> : ^^^
+

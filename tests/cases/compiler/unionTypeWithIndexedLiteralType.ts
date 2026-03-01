@@ -1,3 +1,4 @@
+// @target: es2015
 interface I { x: number; }
 interface Idx { [index: string]: U; }
 type U = Idx | I | "lit";

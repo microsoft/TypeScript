@@ -1,0 +1,77 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConstructor.ts ===
+// class C {
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|]();|>
+//     <|[|{| kind: "reference" |}constructor|](x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](y: string, x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// 
+//         return;
+//     }|>
+// }
+// 
+// class D {
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConstructor.ts ===
+// class C {
+//     <|[|{| kind: "reference" |}constructor|]();|>
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](y: string, x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// 
+//         return;
+//     }|>
+// }
+// 
+// class D {
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConstructor.ts ===
+// class C {
+//     <|[|{| kind: "reference" |}constructor|]();|>
+//     <|[|{| kind: "reference" |}constructor|](x: number);|>
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](y: string, x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// 
+//         return;
+//     }|>
+// }
+// 
+// class D {
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesConstructor.ts ===
+// class C {
+//     <|[|{| kind: "reference" |}constructor|]();|>
+//     <|[|{| kind: "reference" |}constructor|](x: number);|>
+//     <|[|{| kind: "reference" |}constructor|](y: string, x: number);|>
+//     /*HIGHLIGHTS*/<|[|{| kind: "reference" |}constructor|](a?: any, ...r: any[]) {
+//         if (a === undefined && r.length === 0) {
+//             return;
+//         }
+// 
+//         return;
+//     }|>
+// }
+// 
+// class D {
+// --- (line: 15) skipped ---

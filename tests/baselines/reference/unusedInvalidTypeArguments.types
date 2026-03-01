@@ -1,99 +1,136 @@
+//// [tests/cases/compiler/unusedInvalidTypeArguments.ts] ////
+
 === /typeReference.ts ===
-// Tests that types are marked as used, even if used in places that don't accept type arguments.
-
-
 type N = number;
 >N : number
+>  : ^^^^^^
 
 type U = number;
 >U : number
+>  : ^^^^^^
 
 export type Z = U<N>;
 >Z : any
+>  : ^^^
 
 === /classReference.ts ===
 type N = number;
 >N : number
+>  : ^^^^^^
 
 class C { }
 >C : C
+>  : ^
 
 // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
 export class D extends C<N> {}
 >D : D
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 === /interface.ts ===
 import { Foo } from "unknown";
 >Foo : any
+>    : ^^^
 
 export interface I<T> { x: Foo<T>; }
 >x : Foo<T>
+>  : ^^^^^^
 
 === /call.ts ===
 import { foo } from "unknown";
 >foo : any
+>    : ^^^
 
 type T = number;
 >T : number
+>  : ^^^^^^
 
 foo<T>();
 >foo<T>() : any
+>         : ^^^
 >foo : any
+>    : ^^^
 
 === /new.ts ===
 import { Foo } from "unkown";
 >Foo : any
+>    : ^^^
 
 type T = number;
 >T : number
+>  : ^^^^^^
 
 new Foo<T>();
 >new Foo<T>() : any
+>             : ^^^
 >Foo : any
+>    : ^^^
 
 === /callAny.ts ===
 declare var g: any;
 >g : any
+>  : ^^^
 
 type U = number;
 >U : number
+>  : ^^^^^^
 
 g<U>();
 >g<U>() : any
+>       : ^^^
 >g : any
+>  : ^^^
 
 g<InvalidReference>(); // Should get error for type argument
 >g<InvalidReference>() : any
+>                      : ^^^
 >g : any
+>  : ^^^
 
 === /super.ts ===
 import { A, B } from "unknown";
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 
 type T = number;
 >T : number
+>  : ^^^^^^
 
 export class C extends A<B> {
 >C : C
+>  : ^
 >A : any
+>  : ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         super.m<T>(1);
 >super.m<T>(1) : any
+>              : ^^^
 >super.m : any
+>        : ^^^
 >super : any
+>      : ^^^
 >m : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         super.m<InvalidReference>(); // Should get error for type argument
 >super.m<InvalidReference>() : any
+>                            : ^^^
 >super.m : any
+>        : ^^^
 >super : any
+>      : ^^^
 >m : any
+>  : ^^^
     }
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/hidingIndexSignatures.ts] ////
+
 //// [hidingIndexSignatures.ts]
 interface A {
     [a: string]: {};
@@ -13,6 +15,7 @@ var a: A;
 a[""]; // Should be {}
 
 //// [hidingIndexSignatures.js]
+"use strict";
 var b;
 b[""]; // Should be number
 var a;

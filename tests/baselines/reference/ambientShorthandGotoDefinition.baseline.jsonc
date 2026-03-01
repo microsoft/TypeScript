@@ -1,0 +1,170 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/declarations.d.ts ===
+// <|declare module [|"jquery"|]|>
+
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import foo, {bar} from "jquery";
+// import * as baz from "jquery";
+// import bang = require("jquery");
+// [|foo|]/*GOTO DEF*/(bar, baz, bang);
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"jquery\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/declarations.d.ts ===
+// <|declare module [|"jquery"|]|>
+
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import /*GOTO DEF*/[|foo|], {bar} from "jquery";
+// import * as baz from "jquery";
+// import bang = require("jquery");
+// foo(bar, baz, bang);
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"jquery\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/declarations.d.ts ===
+// <|declare module [|"jquery"|]|>
+
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import foo, {bar} from "jquery";
+// import * as baz from "jquery";
+// import bang = require("jquery");
+// foo([|bar|]/*GOTO DEF*/, baz, bang);
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"jquery\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import foo, {bar} from "jquery";
+// <|import * as [|baz|] from "jquery";|>
+// import bang = require("jquery");
+// foo(bar, baz/*GOTO DEF*/, bang);
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "baz",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/declarations.d.ts ===
+// <|declare module [|"jquery"|]|>
+
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import foo, {bar} from "jquery";
+// import * as /*GOTO DEF*/[|baz|] from "jquery";
+// import bang = require("jquery");
+// foo(bar, baz, bang);
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"jquery\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/declarations.d.ts ===
+// <|declare module [|"jquery"|]|>
+
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import foo, {bar} from "jquery";
+// import * as baz from "jquery";
+// import bang = require("jquery");
+// foo(bar, baz, [|bang|]/*GOTO DEF*/);
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"jquery\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/declarations.d.ts ===
+// <|declare module [|"jquery"|]|>
+
+// === /tests/cases/fourslash/user.ts ===
+// ///<reference path="declarations.d.ts"/>
+// import foo, {bar} from "jquery";
+// import * as baz from "jquery";
+// import /*GOTO DEF*/[|bang|] = require("jquery");
+// foo(bar, baz, bang);
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"jquery\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false
+   }
+  ]

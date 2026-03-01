@@ -63,7 +63,7 @@ var Element;
         return {};
     }
     Element.createElement = createElement;
-})(Element = exports.Element || (exports.Element = {}));
+})(Element || (exports.Element = Element = {}));
 exports.createElement = Element.createElement;
 function toCamelCase(text) {
     return text[0].toLowerCase() + text.substring(1);

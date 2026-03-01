@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType11.ts] ////
+
 //// [symbolType11.ts]
 var s = Symbol.for("logical");
 s && s;
@@ -8,6 +10,7 @@ s || 1;
 ({}) || s;
 
 //// [symbolType11.js]
+"use strict";
 var s = Symbol.for("logical");
 s && s;
 s && [];

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeModifiers.ts] ////
+
 //// [mappedTypeModifiers.ts]
 type T = { a: number, b: string };
 type TP = { a?: number, b?: string };
@@ -99,6 +101,7 @@ function f4(x: { [P in keyof Foo]: Foo[P] }) {
 
 
 //// [mappedTypeModifiers.js]
+"use strict";
 var v00;
 var v00;
 var v00;

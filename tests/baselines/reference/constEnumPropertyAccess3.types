@@ -1,0 +1,188 @@
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess3.ts] ////
+
+=== constEnumPropertyAccess3.ts ===
+const enum E {
+>E : E
+>  : ^
+
+    A = ~1,
+>A : E.A
+>  : ^^^
+>~1 : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+
+    B = -1,
+>B : E.B
+>  : ^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+    C = ~(1 + 1),
+>C : E.C
+>  : ^^^
+>~(1 + 1) : number
+>         : ^^^^^^
+>(1 + 1) : number
+>        : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    D = -(1 + 2),
+>D : E.C
+>  : ^^^
+>-(1 + 2) : number
+>         : ^^^^^^
+>(1 + 2) : number
+>        : ^^^^^^
+>1 + 2 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+    E = 1 - 10,
+>E : E.E
+>  : ^^^
+>1 - 10 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>10 : 10
+>   : ^^
+}
+
+E.A.toString();
+>E.A.toString() : string
+>               : ^^^^^^
+>E.A.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E.B.toString();
+>E.B.toString() : string
+>               : ^^^^^^
+>E.B.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E.C.toString();
+>E.C.toString() : string
+>               : ^^^^^^
+>E.C.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>E.C : E.C
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>C : E.C
+>  : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E.D.toString();
+>E.D.toString() : string
+>               : ^^^^^^
+>E.D.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>E.D : E.C
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>D : E.C
+>  : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E["A"].toString();
+>E["A"].toString() : string
+>                  : ^^^^^^
+>E["A"].toString : (radix?: number) => string
+>                : ^     ^^^      ^^^^^      
+>E["A"] : E.A
+>       : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>"A" : "A"
+>    : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E["B"].toString();
+>E["B"].toString() : string
+>                  : ^^^^^^
+>E["B"].toString : (radix?: number) => string
+>                : ^     ^^^      ^^^^^      
+>E["B"] : E.B
+>       : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>"B" : "B"
+>    : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E["C"].toString();
+>E["C"].toString() : string
+>                  : ^^^^^^
+>E["C"].toString : (radix?: number) => string
+>                : ^     ^^^      ^^^^^      
+>E["C"] : E.C
+>       : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>"C" : "C"
+>    : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E["D"].toString();
+>E["D"].toString() : string
+>                  : ^^^^^^
+>E["D"].toString : (radix?: number) => string
+>                : ^     ^^^      ^^^^^      
+>E["D"] : E.C
+>       : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>"D" : "D"
+>    : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+E["E"].toString();
+>E["E"].toString() : string
+>                  : ^^^^^^
+>E["E"].toString : (radix?: number) => string
+>                : ^     ^^^      ^^^^^      
+>E["E"] : E.E
+>       : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>"E" : "E"
+>    : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+

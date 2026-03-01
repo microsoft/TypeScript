@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticAndMemberFunctions.ts] ////
+
 //// [staticAndMemberFunctions.ts]
 class T {
     static x() { }
@@ -5,10 +7,8 @@ class T {
 }
 
 //// [staticAndMemberFunctions.js]
-var T = /** @class */ (function () {
-    function T() {
-    }
-    T.x = function () { };
-    T.prototype.y = function () { };
-    return T;
-}());
+"use strict";
+class T {
+    static x() { }
+    y() { }
+}

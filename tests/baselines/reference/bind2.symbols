@@ -1,3 +1,4 @@
-=== tests/cases/compiler/bind2.ts ===
+//// [tests/cases/compiler/bind2.ts] ////
+
+=== bind2.ts ===
  
-No type information for this code.

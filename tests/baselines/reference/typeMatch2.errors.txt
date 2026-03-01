@@ -1,20 +1,18 @@
-tests/cases/compiler/typeMatch2.ts(3,2): error TS2739: Type '{}' is missing the following properties from type '{ x: number; y: number; }': x, y
-tests/cases/compiler/typeMatch2.ts(4,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-tests/cases/compiler/typeMatch2.ts(5,20): error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-  Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
-tests/cases/compiler/typeMatch2.ts(6,17): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-  Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
-tests/cases/compiler/typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+typeMatch2.ts(3,2): error TS2739: Type '{}' is missing the following properties from type '{ x: number; y: number; }': x, y
+typeMatch2.ts(4,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
+typeMatch2.ts(5,20): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+typeMatch2.ts(6,17): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
   Property 'g' is missing in type 'Animal' but required in type 'Giraffe'.
-tests/cases/compiler/typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
+typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
   Types of property 'f2' are incompatible.
     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
-tests/cases/compiler/typeMatch2.ts(34,26): error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-  Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
-tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
+      Property 'g' is missing in type 'Animal' but required in type 'Giraffe'.
+typeMatch2.ts(34,26): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+typeMatch2.ts(35,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
 
 
-==== tests/cases/compiler/typeMatch2.ts (8 errors) ====
+==== typeMatch2.ts (8 errors) ====
     function f1() {
     	var a = { x: 1, y: 2 };
     	a = {}; // error
@@ -23,15 +21,13 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
         a = { x: 1 }; // error
         ~
 !!! error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-!!! related TS2728 tests/cases/compiler/typeMatch2.ts:2:18: 'y' is declared here.
+!!! related TS2728 typeMatch2.ts:2:18: 'y' is declared here.
     	a = { x: 1, y: 2, z: 3 };
-    	                  ~~~~
-!!! error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+    	                  ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1, z: 3 };  // error
-                    ~~~~
-!!! error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+                    ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
     }
     
     class Animal { private a; }
@@ -47,7 +43,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
         ~~
 !!! error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
 !!! error TS2322:   Property 'g' is missing in type 'Animal' but required in type 'Giraffe'.
-!!! related TS2728 tests/cases/compiler/typeMatch2.ts:10:40: 'g' is declared here.
+!!! related TS2728 typeMatch2.ts:10:40: 'g' is declared here.
         var xa = { f1: 5, f2: aa };
         var xb = { f1: 5, f2: gg };
         xa = xb; // Should be ok
@@ -56,6 +52,8 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
 !!! error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
 !!! error TS2322:   Types of property 'f2' are incompatible.
 !!! error TS2322:     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+!!! error TS2322:       Property 'g' is missing in type 'Animal' but required in type 'Giraffe'.
+!!! related TS2728 typeMatch2.ts:10:40: 'g' is declared here.
     }
     
     function f4() {
@@ -68,13 +66,12 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
         a = { x: 1, y: undefined }; 
         a = { x: 1, y: _any }; 
         a = { x: 1, y: _any, z:1 }; 
-                             ~~~
-!!! error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+                             ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1 }; // error
         ~
 !!! error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-!!! related TS2728 tests/cases/compiler/typeMatch2.ts:30:21: 'y' is declared here.
+!!! related TS2728 typeMatch2.ts:30:21: 'y' is declared here.
         var mf = function m(n) { return false; };
         var zf = function z(n: number) { return true; };
         mf=zf;

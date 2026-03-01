@@ -1,238 +1,362 @@
-=== tests/cases/compiler/decls.d.ts ===
+//// [tests/cases/compiler/genericDefaultsJs.ts] ////
+
+=== decls.d.ts ===
 declare function f0<T>(x?: T): T;
 >f0 : <T>(x?: T) => T
+>   : ^ ^^ ^^^ ^^^^^ 
 >x : T
+>  : ^
 
 declare function f1<T, U = number>(x?: T): [T, U];
 >f1 : <T, U = number>(x?: T) => [T, U]
+>   : ^ ^^ ^^^^^^^^^^^ ^^^ ^^^^^      
 >x : T
+>  : ^
 
 declare class C0<T> {
 >C0 : C0<T>
+>   : ^^^^^
 
     y: T;
 >y : T
+>  : ^
 
     constructor(x?: T);
 >x : T
+>  : ^
 }
 declare class C1<T, U = number> {
 >C1 : C1<T, U>
+>   : ^^^^^^^^
 
     y: [T, U];
 >y : [T, U]
+>  : ^^^^^^
 
     constructor(x?: T);
 >x : T
+>  : ^
 }
-=== tests/cases/compiler/main.js ===
+=== main.js ===
 const f0_v0 = f0();
 >f0_v0 : any
 >f0() : any
 >f0 : <T>(x?: T) => T
+>   : ^ ^^ ^^^ ^^^^^ 
 
 const f0_v1 = f0(1);
 >f0_v1 : 1
+>      : ^
 >f0(1) : 1
+>      : ^
 >f0 : <T>(x?: T) => T
+>   : ^ ^^ ^^^ ^^^^^ 
 >1 : 1
+>  : ^
 
 const f1_c0 = f1();
 >f1_c0 : [any, number]
+>      : ^^^^^^^^^^^^^
 >f1() : [any, number]
+>     : ^^^^^^^^^^^^^
 >f1 : <T, U = number>(x?: T) => [T, U]
+>   : ^ ^^ ^^^^^^^^^^^ ^^^ ^^^^^      
 
 const f1_c1 = f1(1);
 >f1_c1 : [number, number]
+>      : ^^^^^^^^^^^^^^^^
 >f1(1) : [number, number]
+>      : ^^^^^^^^^^^^^^^^
 >f1 : <T, U = number>(x?: T) => [T, U]
+>   : ^ ^^ ^^^^^^^^^^^ ^^^ ^^^^^      
 >1 : 1
+>  : ^
 
 const C0_v0 = new C0();
 >C0_v0 : C0<any>
+>      : ^^^^^^^
 >new C0() : C0<any>
+>         : ^^^^^^^
 >C0 : typeof C0
+>   : ^^^^^^^^^
 
 const C0_v0_y = C0_v0.y;
 >C0_v0_y : any
 >C0_v0.y : any
 >C0_v0 : C0<any>
+>      : ^^^^^^^
 >y : any
+>  : ^^^
 
 const C0_v1 = new C0(1);
 >C0_v1 : C0<number>
+>      : ^^^^^^^^^^
 >new C0(1) : C0<number>
+>          : ^^^^^^^^^^
 >C0 : typeof C0
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 const C0_v1_y = C0_v1.y;
 >C0_v1_y : number
+>        : ^^^^^^
 >C0_v1.y : number
+>        : ^^^^^^
 >C0_v1 : C0<number>
+>      : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 
 const C1_v0 = new C1();
 >C1_v0 : C1<any, number>
+>      : ^^^^^^^^^^^^^^^
 >new C1() : C1<any, number>
+>         : ^^^^^^^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 
 const C1_v0_y = C1_v0.y;
 >C1_v0_y : [any, number]
+>        : ^^^^^^^^^^^^^
 >C1_v0.y : [any, number]
+>        : ^^^^^^^^^^^^^
 >C1_v0 : C1<any, number>
+>      : ^^^^^^^^^^^^^^^
 >y : [any, number]
+>  : ^^^^^^^^^^^^^
 
 const C1_v1 = new C1(1);
 >C1_v1 : C1<number, number>
+>      : ^^^^^^^^^^^^^^^^^^
 >new C1(1) : C1<number, number>
+>          : ^^^^^^^^^^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
 const C1_v1_y = C1_v1.y;
 >C1_v1_y : [number, number]
+>        : ^^^^^^^^^^^^^^^^
 >C1_v1.y : [number, number]
+>        : ^^^^^^^^^^^^^^^^
 >C1_v1 : C1<number, number>
+>      : ^^^^^^^^^^^^^^^^^^
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 
 class C0_B0 extends C0 {}
 >C0_B0 : C0_B0
+>      : ^^^^^
 >C0 : C0<any>
+>   : ^^^^^^^
 
 class C0_B1 extends C0 {
 >C0_B1 : C0_B1
+>      : ^^^^^
 >C0 : C0<any>
+>   : ^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof C0
+>      : ^^^^^^^^^
     }
 }
 class C0_B2 extends C0 {
 >C0_B2 : C0_B2
+>      : ^^^^^
 >C0 : C0<any>
+>   : ^^^^^^^
 
     constructor() {
         super(1);
 >super(1) : void
+>         : ^^^^
 >super : typeof C0
+>      : ^^^^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 const C0_B0_v0 = new C0_B0();
 >C0_B0_v0 : C0_B0
+>         : ^^^^^
 >new C0_B0() : C0_B0
+>            : ^^^^^
 >C0_B0 : typeof C0_B0
+>      : ^^^^^^^^^^^^
 
 const C0_B0_v0_y = C0_B0_v0.y;
 >C0_B0_v0_y : any
 >C0_B0_v0.y : any
 >C0_B0_v0 : C0_B0
+>         : ^^^^^
 >y : any
+>  : ^^^
 
 const C0_B0_v1 = new C0_B0(1);
 >C0_B0_v1 : C0_B0
+>         : ^^^^^
 >new C0_B0(1) : C0_B0
+>             : ^^^^^
 >C0_B0 : typeof C0_B0
+>      : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const C0_B0_v1_y = C0_B0_v1.y;
 >C0_B0_v1_y : any
 >C0_B0_v1.y : any
 >C0_B0_v1 : C0_B0
+>         : ^^^^^
 >y : any
+>  : ^^^
 
 const C0_B1_v0 = new C0_B1();
 >C0_B1_v0 : C0_B1
+>         : ^^^^^
 >new C0_B1() : C0_B1
+>            : ^^^^^
 >C0_B1 : typeof C0_B1
+>      : ^^^^^^^^^^^^
 
 const C0_B1_v0_y = C0_B1_v0.y;
 >C0_B1_v0_y : any
 >C0_B1_v0.y : any
 >C0_B1_v0 : C0_B1
+>         : ^^^^^
 >y : any
+>  : ^^^
 
 const C0_B2_v0 = new C0_B2();
 >C0_B2_v0 : C0_B2
+>         : ^^^^^
 >new C0_B2() : C0_B2
+>            : ^^^^^
 >C0_B2 : typeof C0_B2
+>      : ^^^^^^^^^^^^
 
 const C0_B2_v0_y = C0_B2_v0.y;
 >C0_B2_v0_y : any
 >C0_B2_v0.y : any
 >C0_B2_v0 : C0_B2
+>         : ^^^^^
 >y : any
+>  : ^^^
 
 class C1_B0 extends C1 {}
 >C1_B0 : C1_B0
+>      : ^^^^^
 >C1 : C1<any, number>
+>   : ^^^^^^^^^^^^^^^
 
 class C1_B1 extends C1 {
 >C1_B1 : C1_B1
+>      : ^^^^^
 >C1 : C1<any, number>
+>   : ^^^^^^^^^^^^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof C1
+>      : ^^^^^^^^^
     }
 }
 class C1_B2 extends C1 {
 >C1_B2 : C1_B2
+>      : ^^^^^
 >C1 : C1<any, number>
+>   : ^^^^^^^^^^^^^^^
 
     constructor() {
         super(1);
 >super(1) : void
+>         : ^^^^
 >super : typeof C1
+>      : ^^^^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 const C1_B0_v0 = new C1_B0();
 >C1_B0_v0 : C1_B0
+>         : ^^^^^
 >new C1_B0() : C1_B0
+>            : ^^^^^
 >C1_B0 : typeof C1_B0
+>      : ^^^^^^^^^^^^
 
 const C1_B0_v0_y = C1_B0_v0.y;
 >C1_B0_v0_y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B0_v0.y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B0_v0 : C1_B0
+>         : ^^^^^
 >y : [any, number]
+>  : ^^^^^^^^^^^^^
 
 const C1_B0_v1 = new C1_B0(1);
 >C1_B0_v1 : C1_B0
+>         : ^^^^^
 >new C1_B0(1) : C1_B0
+>             : ^^^^^
 >C1_B0 : typeof C1_B0
+>      : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 const C1_B0_v1_y = C1_B0_v1.y;
 >C1_B0_v1_y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B0_v1.y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B0_v1 : C1_B0
+>         : ^^^^^
 >y : [any, number]
+>  : ^^^^^^^^^^^^^
 
 const C1_B1_v0 = new C1_B1();
 >C1_B1_v0 : C1_B1
+>         : ^^^^^
 >new C1_B1() : C1_B1
+>            : ^^^^^
 >C1_B1 : typeof C1_B1
+>      : ^^^^^^^^^^^^
 
 const C1_B1_v0_y = C1_B1_v0.y;
 >C1_B1_v0_y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B1_v0.y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B1_v0 : C1_B1
+>         : ^^^^^
 >y : [any, number]
+>  : ^^^^^^^^^^^^^
 
 const C1_B2_v0 = new C1_B2();
 >C1_B2_v0 : C1_B2
+>         : ^^^^^
 >new C1_B2() : C1_B2
+>            : ^^^^^
 >C1_B2 : typeof C1_B2
+>      : ^^^^^^^^^^^^
 
 const C1_B2_v0_y = C1_B2_v0.y;
 >C1_B2_v0_y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B2_v0.y : [any, number]
+>           : ^^^^^^^^^^^^^
 >C1_B2_v0 : C1_B2
+>         : ^^^^^
 >y : [any, number]
+>  : ^^^^^^^^^^^^^
 

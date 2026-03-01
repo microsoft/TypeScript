@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/globalAugmentationModuleResolution.ts] ////
+
 //// [a.ts]
 export { };
 
@@ -7,4 +9,4 @@ declare global {
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

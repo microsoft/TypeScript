@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringMatchAll.ts ===
+//// [tests/cases/compiler/stringMatchAll.ts] ////
+
+=== stringMatchAll.ts ===
 const matches = "matchAll".matchAll(/\w/g);
 >matches : Symbol(matches, Decl(stringMatchAll.ts, 0, 5))
 >"matchAll".matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))

@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
+// @lib: es5
+
 ////[|const [|{| "contextRangeIndex": 0 |}external|] = true;|]
 ////
 ////function f({
@@ -14,4 +16,4 @@
 ////    oldName: newName = [|external|]
 ////} = obj;
 
-verify.rangesWithSameTextAreRenameLocations("external");
+verify.baselineRenameAtRangesWithText("external");

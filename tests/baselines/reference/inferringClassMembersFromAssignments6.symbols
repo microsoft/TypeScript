@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.ts] ////
+
+=== inferringClassMembersFromAssignments6.js ===
 function Foonly() {
 >Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
 
@@ -8,12 +10,12 @@ function Foonly() {
 
     self.x = 1
 >self.x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
->self : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
 >x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
 
     self.m = function() {
 >self.m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
->self : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
 >m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
 
         console.log(self.x)
@@ -37,7 +39,7 @@ Foonly.prototype.mreal = function() {
 
     self.y = 2
 >self.y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
->self : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 8, 7))
 >y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
 }
 const foo = new Foonly()

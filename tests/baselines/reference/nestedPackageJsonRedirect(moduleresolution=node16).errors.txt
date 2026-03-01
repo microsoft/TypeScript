@@ -1,0 +1,28 @@
+error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+
+!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+==== /node_modules/@restart/hooks/package.json (0 errors) ====
+    {
+        "name": "@restart/hooks",
+        "version": "0.3.25",
+        "main": "cjs/index.js",
+        "types": "cjs/index.d.ts",
+        "module": "esm/index.js"
+    }
+    
+==== /node_modules/@restart/hooks/useMergedRefs/package.json (0 errors) ====
+    {
+        "name": "@restart/hooks/useMergedRefs",
+        "private": true,
+        "main": "../cjs/useMergedRefs.js",
+        "module": "../esm/useMergedRefs.js",
+        "types": "../esm/useMergedRefs.d.ts"
+      }
+    
+==== /node_modules/@restart/hooks/esm/useMergedRefs.d.ts (0 errors) ====
+    export {};
+    
+==== /main.ts (0 errors) ====
+    import {} from "@restart/hooks/useMergedRefs";
+    

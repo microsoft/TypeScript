@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads26.ts] ////
+
 //// [functionOverloads26.ts]
 function foo():string;
 function foo(bar:string):number;
@@ -6,5 +8,6 @@ var x = foo('baz');
 
 
 //// [functionOverloads26.js]
+"use strict";
 function foo(bar) { return ''; }
 var x = foo('baz');

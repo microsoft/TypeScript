@@ -1,3 +1,26 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/script.ts ===
+// /**
+//  * {@link C}
+//  * @wat Makes a {@link C}. A default one.
+//  * {@link C()}
+//  * {@link C|postfix text}
+//  * {@link unformatted postfix text}
+//  * @see {@link C} its great
+//  */
+// function CC() {
+//          ^^
+// | ----------------------------------------------------------------------
+// | function CC(): void
+// | {@link C}
+// | @wat Makes a {@link C}. A default one.
+// | {@link C()}
+// | {@link Cpostfix text}
+// | {@link unformatted postfix text}
+// | @see {@link C} its great
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +28,7 @@
       "position": 177,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

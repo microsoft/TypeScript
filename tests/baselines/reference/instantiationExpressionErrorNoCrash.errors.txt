@@ -1,0 +1,28 @@
+instantiationExpressionErrorNoCrash.ts(15,38): error TS2344: Type 'typeof createCacheReducer<QR>' does not satisfy the constraint '(...args: any) => any'.
+  Type 'typeof createCacheReducer<QR>' provides no match for the signature '(...args: any): any'.
+instantiationExpressionErrorNoCrash.ts(15,64): error TS2635: Type '<N extends string, QR>(queries: { [QK in keyof QR]: any; }) => (state?: { queries: QR; }) => { queries: QR; }' has no signatures for which the type argument list is applicable.
+
+
+==== instantiationExpressionErrorNoCrash.ts (2 errors) ====
+    const createCacheReducer = <N extends string, QR>(
+        queries: Cache<N, QR>["queries"],
+    ) => {
+        const queriesMap = {} as QR;
+    
+        const initialState = {
+            queries: queriesMap,
+        };
+    
+        return (state = initialState) => state;
+    };
+    
+    export type Cache<N extends string, QR> = {
+        queries: {
+            [QK in keyof QR]: ReturnType<typeof createCacheReducer<QR>>;
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'typeof createCacheReducer<QR>' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'typeof createCacheReducer<QR>' provides no match for the signature '(...args: any): any'.
+                                                                   ~~
+!!! error TS2635: Type '<N extends string, QR>(queries: { [QK in keyof QR]: any; }) => (state?: { queries: QR; }) => { queries: QR; }' has no signatures for which the type argument list is applicable.
+        };
+    };

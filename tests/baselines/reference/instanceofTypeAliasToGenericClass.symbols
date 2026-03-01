@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instanceofTypeAliasToGenericClass.ts ===
+//// [tests/cases/compiler/instanceofTypeAliasToGenericClass.ts] ////
+
+=== instanceofTypeAliasToGenericClass.ts ===
 declare class TableClass<S = any> {
 >TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
 >S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 0, 25))

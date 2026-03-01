@@ -1,23 +1,37 @@
-=== tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts ===
+//// [tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts] ////
+
+=== unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts ===
 function greeter(person: string, person2: string) {
 >greeter : (person: string, person2: string) => void
+>        : ^      ^^      ^^       ^^      ^^^^^^^^^
 >person : string
+>       : ^^^^^^
 >person2 : string
+>        : ^^^^^^
 
     var unused = 20;
 >unused : number
+>       : ^^^^^^
 >20 : 20
+>   : ^^
 
     function maker(child: string): void {
 >maker : (child: string) => void
+>      : ^     ^^      ^^^^^    
 >child : string
+>      : ^^^^^^
 
         var unused2 = 22;
 >unused2 : number
+>        : ^^^^^^
 >22 : 22
+>   : ^^
     }
     person2 = "dummy value";
 >person2 = "dummy value" : "dummy value"
+>                        : ^^^^^^^^^^^^^
 >person2 : string
+>        : ^^^^^^
 >"dummy value" : "dummy value"
+>              : ^^^^^^^^^^^^^
 }

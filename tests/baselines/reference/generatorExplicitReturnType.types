@@ -1,58 +1,84 @@
-=== tests/cases/conformance/generators/generatorExplicitReturnType.ts ===
+//// [tests/cases/conformance/generators/generatorExplicitReturnType.ts] ////
+
+=== generatorExplicitReturnType.ts ===
 function* g1(): Generator<number, boolean, string> {
 >g1 : () => Generator<number, boolean, string>
+>   : ^^^^^^                                  
 
     yield; // error
 >yield : string
+>      : ^^^^^^
 
     yield "a"; // error
 >yield "a" : string
+>          : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
     const x: number = yield 1; // error
 >x : number
+>  : ^^^^^^
 >yield 1 : string
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
     return 10; // error
 >10 : 10
+>   : ^^
 }
 
 function* g2(): Generator<number, boolean, string> {
 >g2 : () => Generator<number, boolean, string>
+>   : ^^^^^^                                  
 
     const x = yield 1;
 >x : string
+>  : ^^^^^^
 >yield 1 : string
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
     return true;
 >true : true
+>     : ^^^^
 }
 
 declare const generator: Generator<number, symbol, string>;
 >generator : Generator<number, symbol, string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function* g3(): Generator<number, boolean, string> {
 >g3 : () => Generator<number, boolean, string>
+>   : ^^^^^^                                  
 
     const x: number = yield* generator; // error
 >x : number
+>  : ^^^^^^
 >yield* generator : symbol
+>                 : ^^^^^^
 >generator : Generator<number, symbol, string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return true;
 >true : true
+>     : ^^^^
 }
 
 function* g4(): Generator<number, boolean, string> {
 >g4 : () => Generator<number, boolean, string>
+>   : ^^^^^^                                  
 
     const x = yield* generator;
 >x : symbol
+>  : ^^^^^^
 >yield* generator : symbol
+>                 : ^^^^^^
 >generator : Generator<number, symbol, string>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return true;
 >true : true
+>     : ^^^^
 }

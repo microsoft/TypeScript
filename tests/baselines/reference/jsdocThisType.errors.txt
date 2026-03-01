@@ -1,0 +1,58 @@
+/a.js(3,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(8,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(13,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(18,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(23,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+/a.js(28,10): error TS2339: Property 'test' does not exist on type 'Foo'.
+
+
+==== /types.d.ts (0 errors) ====
+    export interface Foo {
+        foo: () => void;
+    }
+    
+    export type M = (this: Foo) => void;
+    
+==== /a.js (6 errors) ====
+    /** @type {import('./types').M} */
+    export const f1 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {import('./types').M} */
+    export function f2() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {(this: import('./types').Foo) => void} */
+    export const f3 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {(this: import('./types').Foo) => void} */
+    export function f4() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {function(this: import('./types').Foo): void} */
+    export const f5 = function() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    
+    /** @type {function(this: import('./types').Foo): void} */
+    export function f6() {
+        this.test();
+             ~~~~
+!!! error TS2339: Property 'test' does not exist on type 'Foo'.
+    }
+    

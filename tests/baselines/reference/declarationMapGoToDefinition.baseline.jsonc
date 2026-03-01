@@ -1,0 +1,24 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/server/index.ts ===
+// export class Foo {
+//     member: string;
+//     [|methodName|](propName: SomeType): void {}
+//     otherMethod() {
+//         if (Math.random() > 0.5) {
+//             return {x: 42};
+// --- (line: 7) skipped ---
+
+// === /tests/cases/fourslash/server/mymodule.ts ===
+// import * as mod from "./indexdef";
+// const instance = new mod.Foo();
+// instance./*GOTO DEF*/[|methodName|]({member: 12});
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

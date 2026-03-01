@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleConstEnums.ts] ////
+
 //// [systemModuleConstEnums.ts]
 declare function use(a: any);
 const enum TopLevelConstEnum { X }
@@ -7,7 +9,7 @@ export function foo() {
     use(M.NonTopLevelConstEnum.X);
 }
 
-module M {
+namespace M {
     export const enum NonTopLevelConstEnum { X }
 }
 

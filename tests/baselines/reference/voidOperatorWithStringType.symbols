@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithStringType.ts] ////
+
+=== voidOperatorWithStringType.ts ===
 // void  operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(voidOperatorWithStringType.ts, 1, 3))
@@ -18,7 +20,7 @@ class A {
     static foo() { return ""; }
 >foo : Symbol(A.foo, Decl(voidOperatorWithStringType.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(voidOperatorWithStringType.ts, 9, 1))
 
     export var n: string;

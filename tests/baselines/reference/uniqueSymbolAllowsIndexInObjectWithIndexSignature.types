@@ -1,31 +1,50 @@
-=== tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts ===
+//// [tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts] ////
+
+=== uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21962
 export const SYM = Symbol('a unique symbol');
 >SYM : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol('a unique symbol') : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'a unique symbol' : "a unique symbol"
+>                  : ^^^^^^^^^^^^^^^^^
 
 export interface I {
   [SYM]: 'sym';
 >[SYM] : "sym"
+>      : ^^^^^
 >SYM : unique symbol
+>    : ^^^^^^^^^^^^^
 
   [x: string]: 'str';
 >x : string
+>  : ^^^^^^
 }
 
 let a: I = {[SYM]: 'sym'}; // Expect ok
 >a : I
+>  : ^
 >{[SYM]: 'sym'} : { [SYM]: "sym"; }
+>               : ^^^^^^^^^^^^^^^^^
 >[SYM] : "sym"
+>      : ^^^^^
 >SYM : unique symbol
+>    : ^^^^^^^^^^^^^
 >'sym' : "sym"
+>      : ^^^^^
 
 let b: I = {[SYM]: 'str'}; // Expect error
 >b : I
+>  : ^
 >{[SYM]: 'str'} : { [SYM]: "str"; }
+>               : ^^^^^^^^^^^^^^^^^
 >[SYM] : "str"
+>      : ^^^^^
 >SYM : unique symbol
+>    : ^^^^^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
 

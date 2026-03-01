@@ -4,9 +4,10 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/test.js",
+    "outFile": "bin/test.js",
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "mapRoot": "http://www.typescriptlang.org/"
+    "mapRoot": "http://www.typescriptlang.org/",
+    "strict": false
 }

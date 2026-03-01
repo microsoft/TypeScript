@@ -1,6 +1,9 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsSubclassWithExplicitNoArgumentConstructor.ts] ////
+
+=== index.js ===
 export class Super {
 >Super : Super
+>      : ^^^^^
 
     /**
      * @param {string} firstArg
@@ -8,18 +11,26 @@ export class Super {
      */
     constructor(firstArg, secondArg) { }
 >firstArg : string
+>         : ^^^^^^
 >secondArg : string
+>          : ^^^^^^
 }
 
 export class Sub extends Super {
 >Sub : Sub
+>    : ^^^
 >Super : Super
+>      : ^^^^^
 
     constructor() {
         super('first', 'second');
 >super('first', 'second') : void
+>                         : ^^^^
 >super : typeof Super
+>      : ^^^^^^^^^^^^
 >'first' : "first"
+>        : ^^^^^^^
 >'second' : "second"
+>         : ^^^^^^^^
     }
 }

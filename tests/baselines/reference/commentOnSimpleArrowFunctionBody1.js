@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnSimpleArrowFunctionBody1.ts] ////
+
 //// [commentOnSimpleArrowFunctionBody1.ts]
 function Foo(x: any)
 {
@@ -9,9 +11,9 @@ Foo(() =>
 
 
 //// [commentOnSimpleArrowFunctionBody1.js]
+"use strict";
 function Foo(x) {
 }
-Foo(function () {
-    // do something
-    return 127;
-});
+Foo(() => 
+// do something
+127);

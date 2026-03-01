@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints.ts] ////
+
 //// [mappedTypeConstraints.ts]
 function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {
     obj.b;
@@ -66,7 +68,7 @@ function f4(obj) {
     obj.a;
     obj.c;
 }
-var modifier = function (targetProps) {
-    var bar = targetProps.bar, rest = __rest(targetProps, ["bar"]);
+const modifier = (targetProps) => {
+    let { bar } = targetProps, rest = __rest(targetProps, ["bar"]);
     rest.foo;
 };

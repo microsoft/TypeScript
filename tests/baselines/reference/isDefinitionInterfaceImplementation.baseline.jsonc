@@ -1,393 +1,289 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/isDefinitionInterfaceImplementation.ts ===
 // interface I {
-//     /*FIND ALL REFS*/[|M|](): void;
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}M|](): void;|>
 // }
 // 
 // class C implements I {
-//     [|M|]() { }
+//     <|[|{| defId: 1, isWriteAccess: true |}M|]() { }|>
 // }
 // 
-// ({} as I).[|M|]();
-// ({} as C).[|M|]();
+// ({} as I).[|{| defId: 0 |}M|]();
+// ({} as C).[|{| defId: 1 |}M|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-      "kind": "method",
-      "name": "(method) I.M(): void",
-      "textSpan": {
-        "start": 18,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "M",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 10
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 80,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-      "kind": "method",
-      "name": "(method) C.M(): void",
-      "textSpan": {
-        "start": 59,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "M",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 59,
-        "length": 7
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "contextSpan": {
-          "start": 59,
-          "length": 7
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionInterfaceImplementation.ts ===
+  // interface I {
+  //     /*FIND ALL REFS*/<|[|{| defId: 0 |}M|](): void;|>
+  // }
+  // 
+  // class C implements I {
+  //     <|[|{| defId: 1 |}M|]() { }|>
+  // }
+  // 
+  // ({} as I).M();
+  // ({} as C).M();
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) I.M(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "M",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.M(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "M",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/isDefinitionInterfaceImplementation.ts ===
 // interface I {
-//     [|M|](): void;
+//     <|[|{| defId: 0 |}M|](): void;|>
 // }
 // 
 // class C implements I {
-//     /*FIND ALL REFS*/[|M|]() { }
+//     /*FIND ALL REFS*/<|[|{| defId: 1, isWriteAccess: true, isDefinition: true |}M|]() { }|>
 // }
 // 
-// ({} as I).[|M|]();
-// ({} as C).[|M|]();
+// ({} as I).[|{| defId: 0 |}M|]();
+// ({} as C).[|{| defId: 1 |}M|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-      "kind": "method",
-      "name": "(method) I.M(): void",
-      "textSpan": {
-        "start": 18,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "M",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 10
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 80,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionInterfaceImplementation.ts ===
+  // interface I {
+  //     <|[|{| defId: 0 |}M|](): void;|>
+  // }
+  // 
+  // class C implements I {
+  //     /*FIND ALL REFS*/<|[|{| defId: 1 |}M|]() { }|>
+  // }
+  // 
+  // ({} as I).M();
+  // ({} as C).M();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) I.M(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "M",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-      "kind": "method",
-      "name": "(method) C.M(): void",
-      "textSpan": {
-        "start": 59,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "M",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 59,
-        "length": 7
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 59,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "contextSpan": {
-          "start": 59,
-          "length": 7
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionInterfaceImplementation.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) C.M(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "M",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

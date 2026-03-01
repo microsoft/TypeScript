@@ -1,6 +1,7 @@
+// @strict: false
 //@noUnusedLocals:true
 //@noUnusedParameters:true
-//@target:ES5
+//@target:ES5, ES2015
 
 class Test1 {
     private initializeInternal() {
@@ -62,6 +63,5 @@ class Test6 {
     public test() {
         var x = new Test6();
         x.a++;
-        x.b++;
     }
 }

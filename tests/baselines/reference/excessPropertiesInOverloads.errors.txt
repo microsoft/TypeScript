@@ -1,0 +1,18 @@
+excessPropertiesInOverloads.ts(3,6): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(a: { x: string; }): void', gave the following error.
+    Object literal may only specify known properties, and 'z' does not exist in type '{ x: string; }'.
+  Overload 2 of 2, '(a: { y: string; }): void', gave the following error.
+    Object literal may only specify known properties, and 'z' does not exist in type '{ y: string; }'.
+
+
+==== excessPropertiesInOverloads.ts (1 errors) ====
+    declare function fn(a: { x: string }): void;
+    declare function fn(a: { y: string }): void;
+    fn({ z: 3, a: 3 });
+         ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(a: { x: string; }): void', gave the following error.
+!!! error TS2769:     Object literal may only specify known properties, and 'z' does not exist in type '{ x: string; }'.
+!!! error TS2769:   Overload 2 of 2, '(a: { y: string; }): void', gave the following error.
+!!! error TS2769:     Object literal may only specify known properties, and 'z' does not exist in type '{ y: string; }'.
+    

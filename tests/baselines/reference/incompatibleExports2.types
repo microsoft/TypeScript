@@ -1,13 +1,19 @@
-=== tests/cases/compiler/incompatibleExports2.ts ===
+//// [tests/cases/compiler/incompatibleExports2.ts] ////
+
+=== incompatibleExports2.ts ===
 declare module "foo" { 
 >"foo" : typeof import("foo")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     export interface x { a: string } 
 >a : string
+>  : ^^^^^^
 
     interface y { a: Date }
 >a : Date
+>  : ^^^^
 
     export = y;
 >y : y
+>  : ^
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/null/validNullAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/null/validNullAssignments.ts] ////
+
+=== validNullAssignments.ts ===
 var a: number = null;
 >a : Symbol(a, Decl(validNullAssignments.ts, 0, 3))
 
@@ -54,9 +56,9 @@ g = null; // ok
 
 I = null; // error
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 >M : Symbol(M, Decl(validNullAssignments.ts, 19, 9))
->x : Symbol(x, Decl(validNullAssignments.ts, 21, 21))
+>x : Symbol(x, Decl(validNullAssignments.ts, 21, 24))
 
 M = null; // error
 >M : Symbol(M, Decl(validNullAssignments.ts, 19, 9))

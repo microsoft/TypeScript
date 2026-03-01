@@ -1,86 +1,133 @@
-=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts ===
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts] ////
+
+=== staticIndexSignature3.ts ===
 class B {
 >B : B
+>  : ^
 
     static readonly [s: string]: number;
 >s : string
+>  : ^^^^^^
 
     static readonly [s: number]: 42 | 233
 >s : number
+>  : ^^^^^^
 }
 
 class D extends B {
 >D : D
+>  : ^
 >B : B
+>  : ^
 
     static readonly [s: string]: number
 >s : string
+>  : ^^^^^^
 }
 
 class ED extends D {
 >ED : ED
+>   : ^^
 >D : D
+>  : ^
 
     static readonly [s: string]: boolean
 >s : string
+>  : ^^^^^^
 
     static readonly [s: number]: 1 
 >s : number
+>  : ^^^^^^
 }
 
 class DD extends D {
 >DD : DD
+>   : ^^
 >D : D
+>  : ^
 
     static readonly [s: string]: 421
 >s : string
+>  : ^^^^^^
 }
 
 const a = B["f"];
 >a : number
+>  : ^^^^^^
 >B["f"] : number
+>       : ^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >"f" : "f"
+>    : ^^^
 
 const b =  B[42];
 >b : 42 | 233
+>  : ^^^^^^^^
 >B[42] : 42 | 233
+>      : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >42 : 42
+>   : ^^
 
 const c = D["f"]
 >c : number
+>  : ^^^^^^
 >D["f"] : number
+>       : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >"f" : "f"
+>    : ^^^
 
 const d = D[42]
 >d : number
+>  : ^^^^^^
 >D[42] : number
+>      : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >42 : 42
+>   : ^^
 
 const e = ED["f"]
 >e : boolean
+>  : ^^^^^^^
 >ED["f"] : boolean
+>        : ^^^^^^^
 >ED : typeof ED
+>   : ^^^^^^^^^
 >"f" : "f"
+>    : ^^^
 
 const f = ED[42]
 >f : 1
+>  : ^
 >ED[42] : 1
+>       : ^
 >ED : typeof ED
+>   : ^^^^^^^^^
 >42 : 42
+>   : ^^
 
 const g = DD["f"]
 >g : 421
+>  : ^^^
 >DD["f"] : 421
+>        : ^^^
 >DD : typeof DD
+>   : ^^^^^^^^^
 >"f" : "f"
+>    : ^^^
 
 const h = DD[42]
 >h : 421
+>  : ^^^
 >DD[42] : 421
+>       : ^^^
 >DD : typeof DD
+>   : ^^^^^^^^^
 >42 : 42
+>   : ^^
 

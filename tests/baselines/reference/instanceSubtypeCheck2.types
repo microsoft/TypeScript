@@ -1,15 +1,22 @@
-=== tests/cases/compiler/instanceSubtypeCheck2.ts ===
+//// [tests/cases/compiler/instanceSubtypeCheck2.ts] ////
+
+=== instanceSubtypeCheck2.ts ===
 class C1<T> {
 >C1 : C1<T>
+>   : ^^^^^
 
     x: C2<T>;
 >x : C2<T>
+>  : ^^^^^
 }
 
 class C2<T> extends C1<T> {
 >C2 : C2<T>
+>   : ^^^^^
 >C1 : C1<T>
+>   : ^^^^^
 
     x: string
 >x : string
+>  : ^^^^^^
 }

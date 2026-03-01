@@ -1,22 +1,19 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts(7,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+accessorsAreNotContextuallyTyped.ts(13,9): error TS2454: Variable 'c' is used before being assigned.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts (2 errors) ====
+==== accessorsAreNotContextuallyTyped.ts (1 errors) ====
     // accessors are not contextually typed
     
     class C {
         set x(v: (a: string) => string) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         }
     
         get x() {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return (x: string) => "";
         }
     }
     
     var c: C;
     var r = c.x(''); // string
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.

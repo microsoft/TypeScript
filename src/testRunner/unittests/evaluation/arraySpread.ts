@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator.js";
+
 describe("unittests:: evaluation:: arraySpread", () => {
     it("array spread preserves side-effects", async () => {
         const result = evaluator.evaluateTypeScript(`
@@ -33,7 +35,7 @@ describe("unittests:: evaluation:: arraySpread", () => {
             const o = f(3, ...k, 4);
             export const output = o;
         `);
-        assert.deepEqual(result.output, [3, 1, undefined, 2,4]);
+        assert.deepEqual(result.output, [3, 1, undefined, 2, 4]);
         assert.hasAllKeys(result.output, ["0", "1", "2", "3", "4"]);
     });
 });

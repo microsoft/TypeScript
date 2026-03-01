@@ -1,162 +1,225 @@
-=== tests/cases/compiler/instanceOfAssignability.ts ===
+//// [tests/cases/compiler/instanceOfAssignability.ts] ////
+
+=== instanceOfAssignability.ts ===
 interface Base {
 	foo: string|number;
 >foo : string | number
+>    : ^^^^^^^^^^^^^^^
 
 	optional?: number;
 >optional : number
+>         : ^^^^^^
 }
 
 // Derived1 is assignable to, but not a subtype of, Base
 class Derived1 implements Base {
 >Derived1 : Derived1
+>         : ^^^^^^^^
 
 	foo: string;
 >foo : string
+>    : ^^^^^^
 }
 // Derived2 is a subtype of Base that is not assignable to Derived1
 class Derived2 implements Base {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 
 	foo: number;
 >foo : number
+>    : ^^^^^^
 
 	optional: number;
 >optional : number
+>         : ^^^^^^
 }
 
 class Animal {
 >Animal : Animal
+>       : ^^^^^^
 
 	move;
 >move : any
 }
 class Mammal extends Animal { milk; }
 >Mammal : Mammal
+>       : ^^^^^^
 >Animal : Animal
+>       : ^^^^^^
 >milk : any
 
 class Giraffe extends Mammal { neck; }
 >Giraffe : Giraffe
+>        : ^^^^^^^
 >Mammal : Mammal
+>       : ^^^^^^
 >neck : any
 
 function fn1(x: Array<number>|Array<string>|boolean) {
 >fn1 : (x: Array<number> | Array<string> | boolean) => void
+>    : ^ ^^                                       ^^^^^^^^^
 >x : boolean | number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	if(x instanceof Array) {
 >x instanceof Array : boolean
+>                   : ^^^^^^^
 >x : boolean | number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 		// 1.5: y: Array<number>|Array<string>
 		// Want: y: Array<number>|Array<string>
 		let y = x;
 >y : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 	}
 }
 
 function fn2(x: Base) {
 >fn2 : (x: Base) => void
+>    : ^ ^^    ^^^^^^^^^
 >x : Base
+>  : ^^^^
 
 	if(x instanceof Derived1) {
 >x instanceof Derived1 : boolean
+>                      : ^^^^^^^
 >x : Base
+>  : ^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 
 		// 1.5: y: Base
 		// Want: y: Derived1
 		let y = x;
 >y : Derived1
+>  : ^^^^^^^^
 >x : Derived1
+>  : ^^^^^^^^
 	}
 }
 
 function fn3(x: Base|Derived1) {
 >fn3 : (x: Base | Derived1) => void
+>    : ^ ^^               ^^^^^^^^^
 >x : Base | Derived1
+>  : ^^^^^^^^^^^^^^^
 
 	if(x instanceof Derived2) {
 >x instanceof Derived2 : boolean
+>                      : ^^^^^^^
 >x : Base | Derived1
+>  : ^^^^^^^^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 		// 1.5: y: Derived2
 		// Want: Derived2
 		let y = x;
 >y : Derived2
+>  : ^^^^^^^^
 >x : Derived2
+>  : ^^^^^^^^
 	}
 }
 
 function fn4(x: Base|Derived2) {
 >fn4 : (x: Base | Derived2) => void
+>    : ^ ^^               ^^^^^^^^^
 >x : Base | Derived2
+>  : ^^^^^^^^^^^^^^^
 
 	if(x instanceof Derived1) {
 >x instanceof Derived1 : boolean
+>                      : ^^^^^^^
 >x : Base | Derived2
+>  : ^^^^^^^^^^^^^^^
 >Derived1 : typeof Derived1
+>         : ^^^^^^^^^^^^^^^
 
 		// 1.5: y: {}
 		// Want: Derived1
 		let y = x;
 >y : Derived1
+>  : ^^^^^^^^
 >x : Derived1
+>  : ^^^^^^^^
 	}
 }
 
 function fn5(x: Derived1) {
 >fn5 : (x: Derived1) => void
+>    : ^ ^^        ^^^^^^^^^
 >x : Derived1
+>  : ^^^^^^^^
 
 	if(x instanceof Derived2) {
 >x instanceof Derived2 : boolean
+>                      : ^^^^^^^
 >x : Derived1
+>  : ^^^^^^^^
 >Derived2 : typeof Derived2
+>         : ^^^^^^^^^^^^^^^
 
 		// 1.5: y: Derived1
 		// Want: ???
 		let y = x;
 >y : Derived1 & Derived2
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : Derived1 & Derived2
+>  : ^^^^^^^^^^^^^^^^^^^
 	}
 }
 
 function fn6(x: Animal|Mammal) {
 >fn6 : (x: Animal | Mammal) => void
+>    : ^ ^^               ^^^^^^^^^
 >x : Animal | Mammal
+>  : ^^^^^^^^^^^^^^^
 
 	if(x instanceof Giraffe) {
 >x instanceof Giraffe : boolean
+>                     : ^^^^^^^
 >x : Animal | Mammal
+>  : ^^^^^^^^^^^^^^^
 >Giraffe : typeof Giraffe
+>        : ^^^^^^^^^^^^^^
 
 		// 1.5: y: Derived1
 		// Want: ???
 		let y = x;
 >y : Giraffe
+>  : ^^^^^^^
 >x : Giraffe
+>  : ^^^^^^^
 	}
 }
 
 function fn7(x: Array<number>|Array<string>) {
 >fn7 : (x: Array<number> | Array<string>) => void
+>    : ^ ^^                             ^^^^^^^^^
 >x : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 
 	if(x instanceof Array) {
 >x instanceof Array : boolean
+>                   : ^^^^^^^
 >x : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 		// 1.5: y: Array<number>|Array<string>
 		// Want: y: Array<number>|Array<string>
 		let y = x;
 >y : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 	}
 }
 
@@ -171,22 +234,30 @@ interface Gamma { c }
 
 class ABC { a; b; c; }
 >ABC : ABC
+>    : ^^^
 >a : any
 >b : any
 >c : any
 
 function fn8(x: Alpha|Beta|Gamma) {
 >fn8 : (x: Alpha | Beta | Gamma) => void
+>    : ^ ^^                    ^^^^^^^^^
 >x : Alpha | Beta | Gamma
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 	if(x instanceof ABC) {
 >x instanceof ABC : boolean
+>                 : ^^^^^^^
 >x : Alpha | Beta | Gamma
+>  : ^^^^^^^^^^^^^^^^^^^^
 >ABC : typeof ABC
+>    : ^^^^^^^^^^
 
 		let y = x;
 >y : ABC
+>  : ^^^
 >x : ABC
+>  : ^^^
 	}
 }
 

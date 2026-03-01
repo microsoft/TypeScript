@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts ===
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts] ////
+
+=== FunctionDeclaration8_es6.ts ===
 var v = { [yield]: foo }
 >v : Symbol(v, Decl(FunctionDeclaration8_es6.ts, 0, 3))
 >[yield] : Symbol([yield], Decl(FunctionDeclaration8_es6.ts, 0, 9))

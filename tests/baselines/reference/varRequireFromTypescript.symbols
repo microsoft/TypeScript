@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/varRequireFromTypescript.ts] ////
+
+=== use.js ===
 var ex = require('./ex')
 >ex : Symbol(ex, Decl(use.js, 0, 3))
 >require : Symbol(require)
@@ -38,7 +40,7 @@ function f(greatest, wrap) {
 >n : Symbol(ex.Crunch.n, Decl(ex.d.ts, 1, 21))
 }
 
-=== tests/cases/conformance/salsa/ex.d.ts ===
+=== ex.d.ts ===
 export type Greatest = { day: 1 }
 >Greatest : Symbol(Greatest, Decl(ex.d.ts, 0, 0))
 >day : Symbol(day, Decl(ex.d.ts, 0, 24))

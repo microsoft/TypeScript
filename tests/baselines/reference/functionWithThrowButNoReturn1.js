@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionWithThrowButNoReturn1.ts] ////
+
 //// [functionWithThrowButNoReturn1.ts]
 function fn(): number {
   throw new Error('NYI');
@@ -6,6 +8,7 @@ function fn(): number {
 
 
 //// [functionWithThrowButNoReturn1.js]
+"use strict";
 function fn() {
     throw new Error('NYI');
     var t;

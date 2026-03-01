@@ -1,8 +1,12 @@
-=== tests/cases/compiler/initial.ts ===
+//// [tests/cases/compiler/noSymbolForMergeCrash.ts] ////
+
+=== initial.ts ===
+
 interface A { }
-No type information for this code.namespace A {}
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/final.ts ===
+namespace A {}
+
+=== final.ts ===
 type A = {}
 >A : {}
+>  : ^^
 

@@ -1,35 +1,49 @@
-=== tests/cases/compiler/spreadExpressionContextualType.ts ===
+//// [tests/cases/compiler/spreadExpressionContextualType.ts] ////
+
+=== spreadExpressionContextualType.ts ===
 // Repro from #43966
 
 interface Orange {
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 interface Apple {
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 function test<T extends Apple | Orange>(item: T): T {
->test : <T extends Orange | Apple>(item: T) => T
+>test : <T extends Apple | Orange>(item: T) => T
+>     : ^ ^^^^^^^^^              ^^    ^^ ^^^^^ 
 >item : T
+>     : ^
 
     return { ...item };
 >{ ...item } : T
+>            : ^
 >item : T
+>     : ^
 }
 
 function test2<T extends Apple | Orange>(item: T): T {
->test2 : <T extends Orange | Apple>(item: T) => T
+>test2 : <T extends Apple | Orange>(item: T) => T
+>      : ^ ^^^^^^^^^              ^^    ^^ ^^^^^ 
 >item : T
+>     : ^
 
     const x = { ...item };
 >x : T
+>  : ^
 >{ ...item } : T
+>            : ^
 >item : T
+>     : ^
 
     return x;
 >x : T
+>  : ^
 }
 

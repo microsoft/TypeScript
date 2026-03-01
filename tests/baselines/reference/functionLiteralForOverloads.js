@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads.ts] ////
+
 //// [functionLiteralForOverloads.ts]
 // basic uses of function literals with overloads
 
@@ -22,8 +24,9 @@ var f4: {
 } = (x) => x;
 
 //// [functionLiteralForOverloads.js]
+"use strict";
 // basic uses of function literals with overloads
-var f = function (x) { return x; };
-var f2 = function (x) { return x; };
-var f3 = function (x) { return x; };
-var f4 = function (x) { return x; };
+var f = (x) => x;
+var f2 = (x) => x;
+var f3 = (x) => x;
+var f4 = (x) => x;

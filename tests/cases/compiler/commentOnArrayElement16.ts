@@ -1,4 +1,5 @@
-﻿const array = [
+﻿// @target: es2015
+const array = [
     // comment start
     1,
     2,

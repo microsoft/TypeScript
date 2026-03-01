@@ -1,36 +1,52 @@
-=== tests/cases/compiler/arrayLiteralComments.ts ===
+//// [tests/cases/compiler/arrayLiteralComments.ts] ////
+
+=== arrayLiteralComments.ts ===
 var testArrayWithFunc = [
 >testArrayWithFunc : (string | number | (() => void) | number[] | { a: number; })[]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    // Function comment    function() {        let x = 1;    },    // String comment    '1',    // Numeric comment    2,    // Object comment    { a: 1 },    // Array comment    [1, 2, 3]] : (string | number | (() => void) | number[] | { a: number; })[]
+>                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Function comment
     function() {
 >function() {        let x = 1;    } : () => void
+>                                    : ^^^^^^^^^^
 
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     },
     // String comment
     '1',
 >'1' : "1"
+>    : ^^^
 
     // Numeric comment
     2,
 >2 : 2
+>  : ^
 
     // Object comment
     { a: 1 },
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     // Array comment
     [1, 2, 3]
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 ]

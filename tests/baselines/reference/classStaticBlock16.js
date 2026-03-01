@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts] ////
+
 //// [classStaticBlock16.ts]
 let getX: (c: C) => number;
 class C {
@@ -25,6 +27,7 @@ class D {
 }
 
 //// [classStaticBlock16.js]
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");

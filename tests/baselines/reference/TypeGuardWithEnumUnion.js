@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts] ////
+
 //// [TypeGuardWithEnumUnion.ts]
 enum Color { R, G, B }
 
@@ -37,6 +39,7 @@ function f2(x: Color | string | string[]) {
 
 
 //// [TypeGuardWithEnumUnion.js]
+"use strict";
 var Color;
 (function (Color) {
     Color[Color["R"] = 0] = "R";

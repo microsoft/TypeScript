@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restTypeRetainsMappyness.ts ===
+//// [tests/cases/compiler/restTypeRetainsMappyness.ts] ////
+
+=== restTypeRetainsMappyness.ts ===
 type Foo<T extends any[]> = {
 >Foo : Symbol(Foo, Decl(restTypeRetainsMappyness.ts, 0, 0))
 >T : Symbol(T, Decl(restTypeRetainsMappyness.ts, 0, 9))

@@ -1,11 +1,17 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList3.ts] ////
+
+=== parserErrorRecovery_ArgumentList3.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
    bar(a,
 >bar(a, : any
+>       : ^^^
 >bar : any
+>    : ^^^
 >a : any
+>  : ^^^
 
    return;
 }

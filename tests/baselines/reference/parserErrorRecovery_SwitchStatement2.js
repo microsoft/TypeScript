@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts] ////
+
 //// [parserErrorRecovery_SwitchStatement2.ts]
 class C {
   constructor() {
@@ -7,15 +9,12 @@ class D {
 }
 
 //// [parserErrorRecovery_SwitchStatement2.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         switch (e) {
         }
-        var D = /** @class */ (function () {
-            function D() {
-            }
-            return D;
-        }());
+        class D {
+        }
     }
-    return C;
-}());
+}

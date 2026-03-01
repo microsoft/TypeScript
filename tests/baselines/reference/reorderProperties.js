@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reorderProperties.ts] ////
+
 //// [reorderProperties.ts]
 interface A<T> {
     x: T
@@ -20,5 +22,6 @@ var d: D<{ n: number; s: string }> = c
 
 
 //// [reorderProperties.js]
+"use strict";
 var c;
 var d = c;

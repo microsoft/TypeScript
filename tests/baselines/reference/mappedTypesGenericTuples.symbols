@@ -1,0 +1,151 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesGenericTuples.ts] ////
+
+=== mappedTypesGenericTuples.ts ===
+// Property keys are `number` following the fixed part of a tuple
+
+type K<T> = { [P in keyof T]: P };
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 2, 7))
+>P : Symbol(P, Decl(mappedTypesGenericTuples.ts, 2, 15))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 2, 7))
+>P : Symbol(P, Decl(mappedTypesGenericTuples.ts, 2, 15))
+
+type M<T> = { [P in keyof T]: T[P] };
+>M : Symbol(M, Decl(mappedTypesGenericTuples.ts, 2, 34))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 3, 7))
+>P : Symbol(P, Decl(mappedTypesGenericTuples.ts, 3, 15))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 3, 7))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 3, 7))
+>P : Symbol(P, Decl(mappedTypesGenericTuples.ts, 3, 15))
+
+type KA = K<[string, string, boolean]>;  // ["0", "1", "2"]
+>KA : Symbol(KA, Decl(mappedTypesGenericTuples.ts, 3, 37))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+
+type KB = K<[string, string, ...string[], string]>;  // ["0", "1", ...number[], number]
+>KB : Symbol(KB, Decl(mappedTypesGenericTuples.ts, 5, 39))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+
+type KC = K<[...string[]]>;  // number[]
+>KC : Symbol(KC, Decl(mappedTypesGenericTuples.ts, 6, 51))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+
+type KD = K<string[]>;  // number[]
+>KD : Symbol(KD, Decl(mappedTypesGenericTuples.ts, 7, 27))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+
+type A = { a: string };
+>A : Symbol(A, Decl(mappedTypesGenericTuples.ts, 8, 22))
+>a : Symbol(a, Decl(mappedTypesGenericTuples.ts, 10, 10))
+
+type B = { b: string };
+>B : Symbol(B, Decl(mappedTypesGenericTuples.ts, 10, 23))
+>b : Symbol(b, Decl(mappedTypesGenericTuples.ts, 11, 10))
+
+type C = { c: string };
+>C : Symbol(C, Decl(mappedTypesGenericTuples.ts, 11, 23))
+>c : Symbol(c, Decl(mappedTypesGenericTuples.ts, 12, 10))
+
+type D = { d: string };
+>D : Symbol(D, Decl(mappedTypesGenericTuples.ts, 12, 23))
+>d : Symbol(d, Decl(mappedTypesGenericTuples.ts, 13, 10))
+
+type V0<T extends unknown[]> = [A, B?, ...T, ...C[]]
+>V0 : Symbol(V0, Decl(mappedTypesGenericTuples.ts, 13, 23))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 15, 8))
+>A : Symbol(A, Decl(mappedTypesGenericTuples.ts, 8, 22))
+>B : Symbol(B, Decl(mappedTypesGenericTuples.ts, 10, 23))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 15, 8))
+>C : Symbol(C, Decl(mappedTypesGenericTuples.ts, 11, 23))
+
+type V1<T extends unknown[]> = [A, ...T, B, ...C[], D]
+>V1 : Symbol(V1, Decl(mappedTypesGenericTuples.ts, 15, 52))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 16, 8))
+>A : Symbol(A, Decl(mappedTypesGenericTuples.ts, 8, 22))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 16, 8))
+>B : Symbol(B, Decl(mappedTypesGenericTuples.ts, 10, 23))
+>C : Symbol(C, Decl(mappedTypesGenericTuples.ts, 11, 23))
+>D : Symbol(D, Decl(mappedTypesGenericTuples.ts, 12, 23))
+
+type K0<T extends unknown[]> = K<V0<T>>;  // ["0", "1"?, ...K<T>, ...number[]]
+>K0 : Symbol(K0, Decl(mappedTypesGenericTuples.ts, 16, 54))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 18, 8))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+>V0 : Symbol(V0, Decl(mappedTypesGenericTuples.ts, 13, 23))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 18, 8))
+
+type K1<T extends unknown[]> = K<V1<T>>;  // ["0", ...K<T>, number, ...number[], number]
+>K1 : Symbol(K1, Decl(mappedTypesGenericTuples.ts, 18, 40))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 19, 8))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 0, 0))
+>V1 : Symbol(V1, Decl(mappedTypesGenericTuples.ts, 15, 52))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 19, 8))
+
+type M0<T extends unknown[]> = M<V0<T>>;  // [A, B?, ...M<T>, ...C[]]
+>M0 : Symbol(M0, Decl(mappedTypesGenericTuples.ts, 19, 40))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 21, 8))
+>M : Symbol(M, Decl(mappedTypesGenericTuples.ts, 2, 34))
+>V0 : Symbol(V0, Decl(mappedTypesGenericTuples.ts, 13, 23))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 21, 8))
+
+type M1<T extends unknown[]> = M<V1<T>>;  // [A, ...M<T>, B, ...C[], D]
+>M1 : Symbol(M1, Decl(mappedTypesGenericTuples.ts, 21, 40))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 22, 8))
+>M : Symbol(M, Decl(mappedTypesGenericTuples.ts, 2, 34))
+>V1 : Symbol(V1, Decl(mappedTypesGenericTuples.ts, 15, 52))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 22, 8))
+
+// Repro from #48856
+
+type Keys<O extends unknown[]> = { [K in keyof O]: K };
+>Keys : Symbol(Keys, Decl(mappedTypesGenericTuples.ts, 22, 40))
+>O : Symbol(O, Decl(mappedTypesGenericTuples.ts, 26, 10))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 26, 36))
+>O : Symbol(O, Decl(mappedTypesGenericTuples.ts, 26, 10))
+>K : Symbol(K, Decl(mappedTypesGenericTuples.ts, 26, 36))
+
+type Keys1 = Keys<[string, ...string[]]>;
+>Keys1 : Symbol(Keys1, Decl(mappedTypesGenericTuples.ts, 26, 55))
+>Keys : Symbol(Keys, Decl(mappedTypesGenericTuples.ts, 22, 40))
+
+type Keys2 = Keys<[string, ...string[], number]>;
+>Keys2 : Symbol(Keys2, Decl(mappedTypesGenericTuples.ts, 28, 41))
+>Keys : Symbol(Keys, Decl(mappedTypesGenericTuples.ts, 22, 40))
+
+// Repro from #56888
+
+type T1 = ['a', 'b', 'c'] extends readonly [infer H, ...unknown[]] ? H : never;  // "a"
+>T1 : Symbol(T1, Decl(mappedTypesGenericTuples.ts, 29, 49))
+>H : Symbol(H, Decl(mappedTypesGenericTuples.ts, 33, 49))
+>H : Symbol(H, Decl(mappedTypesGenericTuples.ts, 33, 49))
+
+type T2 = ['a', 'b', 'c'] extends Readonly<[infer H, ...unknown[]]> ? H : never;  // "a"
+>T2 : Symbol(T2, Decl(mappedTypesGenericTuples.ts, 33, 79))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>H : Symbol(H, Decl(mappedTypesGenericTuples.ts, 34, 49))
+>H : Symbol(H, Decl(mappedTypesGenericTuples.ts, 34, 49))
+
+type T3 = ['a', 'b', 'c'] extends readonly [...unknown[], infer L] ? L : never;  // "c"
+>T3 : Symbol(T3, Decl(mappedTypesGenericTuples.ts, 34, 80))
+>L : Symbol(L, Decl(mappedTypesGenericTuples.ts, 35, 63))
+>L : Symbol(L, Decl(mappedTypesGenericTuples.ts, 35, 63))
+
+type T4 = ['a', 'b', 'c'] extends Readonly<[...unknown[], infer L]> ? L : never;  // "c"
+>T4 : Symbol(T4, Decl(mappedTypesGenericTuples.ts, 35, 79))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>L : Symbol(L, Decl(mappedTypesGenericTuples.ts, 36, 63))
+>L : Symbol(L, Decl(mappedTypesGenericTuples.ts, 36, 63))
+
+// Repro from #56888
+
+type R1<T> = readonly [...unknown[], T];  // readonly [...unknown[], T]
+>R1 : Symbol(R1, Decl(mappedTypesGenericTuples.ts, 36, 80))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 40, 8))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 40, 8))
+
+type R2<T> = Readonly<[...unknown[], T]>;  // readonly [...unknown[], T]
+>R2 : Symbol(R2, Decl(mappedTypesGenericTuples.ts, 40, 40))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 41, 8))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypesGenericTuples.ts, 41, 8))
+

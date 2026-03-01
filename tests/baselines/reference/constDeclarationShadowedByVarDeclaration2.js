@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarationShadowedByVarDeclaration2.ts] ////
+
 //// [constDeclarationShadowedByVarDeclaration2.ts]
 // No errors, const declaration is not shadowed
 function outer() {
@@ -8,6 +10,7 @@ function outer() {
 }
 
 //// [constDeclarationShadowedByVarDeclaration2.js]
+"use strict";
 // No errors, const declaration is not shadowed
 function outer() {
     const x = 0;

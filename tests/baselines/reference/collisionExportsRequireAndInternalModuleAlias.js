@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts] ////
+
 //// [collisionExportsRequireAndInternalModuleAlias.ts]
-export module m {
+export namespace m {
     export class c {
     }
 }
@@ -8,14 +10,14 @@ import require = m.c;
 new exports();
 new require();
 
-module m1 {
+namespace m1 {
     import exports = m.c;
     import require = m.c;
     new exports();
     new require();
 }
 
-module m2 {
+namespace m2 {
     export import exports = m.c;
     export import require = m.c;
     new exports();
@@ -25,17 +27,14 @@ module m2 {
 //// [collisionExportsRequireAndInternalModuleAlias.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.m = void 0;
     var m;
     (function (m) {
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         m.c = c;
-    })(m = exports.m || (exports.m = {}));
+    })(m || (exports.m = m = {}));
     var exports = m.c;
     var require = m.c;
     new exports();

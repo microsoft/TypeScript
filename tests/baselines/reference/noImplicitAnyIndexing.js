@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyIndexing.ts] ////
+
 //// [noImplicitAnyIndexing.ts]
 enum MyEmusEnum {
     emu
@@ -49,6 +51,7 @@ var mResult3 = m[hi];
 
 
 //// [noImplicitAnyIndexing.js]
+"use strict";
 var MyEmusEnum;
 (function (MyEmusEnum) {
     MyEmusEnum[MyEmusEnum["emu"] = 0] = "emu";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts] ////
+
 //// [noImplicitAnyDestructuringInPrivateMethod.ts]
 type Arg = {
     a: number;
@@ -12,19 +14,11 @@ export declare class Bar2 {
 }
 
 //// [noImplicitAnyDestructuringInPrivateMethod.js]
-"use strict";
-exports.__esModule = true;
-exports.Bar = void 0;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    Bar.prototype.bar = function (_a) {
-        var a = _a.a;
+export class Bar {
+    bar({ a, }) {
         return a;
-    };
-    return Bar;
-}());
-exports.Bar = Bar;
+    }
+}
 
 
 //// [noImplicitAnyDestructuringInPrivateMethod.d.ts]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namedFunctionExpressionAssignedToClassProperty.ts] ////
+
 //// [namedFunctionExpressionAssignedToClassProperty.ts]
 class Foo{
 
@@ -15,10 +17,10 @@ class Foo{
 
 
 //// [namedFunctionExpressionAssignedToClassProperty.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.a = function bar() {
         }; // this shouldn't crash the compiler...
     }
-    return Foo;
-}());
+}

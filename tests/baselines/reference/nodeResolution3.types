@@ -1,8 +1,12 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/nodeResolution3.ts] ////
+
+=== a.ts ===
 import y = require("b");
 >y : typeof y
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/node_modules/b/index.d.ts ===
+=== node_modules/b/index.d.ts ===
 export var x: number;
 >x : number
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumIndexer.ts] ////
+
 //// [enumIndexer.ts]
 enum MyEnumType {
     foo, bar
@@ -8,6 +10,7 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 
 
 //// [enumIndexer.js]
+"use strict";
 var MyEnumType;
 (function (MyEnumType) {
     MyEnumType[MyEnumType["foo"] = 0] = "foo";
@@ -15,4 +18,4 @@ var MyEnumType;
 })(MyEnumType || (MyEnumType = {}));
 var _arr = [{ key: 'foo' }, { key: 'bar' }];
 var enumValue = MyEnumType.foo;
-var x = _arr.map(function (o) { return MyEnumType[o.key] === enumValue; }); // these are not same type
+var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type

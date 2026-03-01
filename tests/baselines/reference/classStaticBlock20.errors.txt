@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock20.ts(2,5): error TS1184: Modifiers cannot appear here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock20.ts(6,5): error TS1184: Modifiers cannot appear here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock20.ts(10,5): error TS1184: Modifiers cannot appear here.
+classStaticBlock20.ts(2,5): error TS1184: Modifiers cannot appear here.
+classStaticBlock20.ts(6,5): error TS1184: Modifiers cannot appear here.
+classStaticBlock20.ts(10,5): error TS1184: Modifiers cannot appear here.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock20.ts (3 errors) ====
+==== classStaticBlock20.ts (3 errors) ====
     class C {
         async static {
         ~~~~~

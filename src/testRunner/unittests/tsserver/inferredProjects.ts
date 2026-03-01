@@ -1,454 +1,348 @@
-namespace ts.projectSystem {
-    describe("unittests:: tsserver:: Inferred projects", () => {
-        it("create inferred project", () => {
-            const appFile: File = {
-                path: `${tscWatch.projectRoot}/app.ts`,
-                content: `
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import {
+    baselineTsserverLogs,
+    closeFilesForSession,
+    openFilesForSession,
+    setCompilerOptionsForInferredProjectsRequestForSession,
+    TestSession,
+} from "../helpers/tsserver.js";
+import {
+    File,
+    libFile,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
+
+describe("unittests:: tsserver:: inferredProjects::", () => {
+    it("create inferred project", () => {
+        const appFile: File = {
+            path: `/user/username/projects/myproject/app.ts`,
+            content: `
                 import {f} from "./module"
                 console.log(f)
-                `
-            };
+                `,
+        };
 
-            const moduleFile: File = {
-                path: `${tscWatch.projectRoot}/module.d.ts`,
-                content: `export let x: number`
-            };
-            const host = createServerHost([appFile, moduleFile, libFile]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
-            projectService.openClientFile(appFile.path);
-            baselineTsserverLogs("inferredProjects", "create inferred project", projectService);
-        });
+        const moduleFile: File = {
+            path: `/user/username/projects/myproject/module.d.ts`,
+            content: `export let x: number`,
+        };
+        const host = TestServerHost.createServerHost([appFile, moduleFile]);
+        const session = new TestSession(host);
+        openFilesForSession([appFile], session);
+        baselineTsserverLogs("inferredProjects", "create inferred project", session);
+    });
 
-        it("should use only one inferred project if 'useOneInferredProject' is set", () => {
-            const file1 = {
-                path: `${tscWatch.projectRoot}/a/b/main.ts`,
-                content: "let x =1;"
-            };
-            const configFile: File = {
-                path: `${tscWatch.projectRoot}/a/b/tsconfig.json`,
-                content: `{
+    it("should use only one inferred project if 'useOneInferredProject' is set", () => {
+        const file1 = {
+            path: `/user/username/projects/myproject/a/b/main.ts`,
+            content: "let x =1;",
+        };
+        const configFile: File = {
+            path: `/user/username/projects/myproject/a/b/tsconfig.json`,
+            content: `{
                     "compilerOptions": {
                         "target": "es6"
                     },
                     "files": [ "main.ts" ]
-                }`
-            };
-            const file2 = {
-                path: `${tscWatch.projectRoot}/a/c/main.ts`,
-                content: "let x =1;"
-            };
+                }`,
+        };
+        const file2 = {
+            path: `/user/username/projects/myproject/a/c/main.ts`,
+            content: "let x =1;",
+        };
 
-            const file3 = {
-                path: `${tscWatch.projectRoot}/a/d/main.ts`,
-                content: "let x =1;"
-            };
+        const file3 = {
+            path: `/user/username/projects/myproject/a/d/main.ts`,
+            content: "let x =1;",
+        };
 
-            const host = createServerHost([file1, file2, file3, libFile]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true });
-            projectService.openClientFile(file1.path);
-            projectService.openClientFile(file2.path);
-            projectService.openClientFile(file3.path);
+        const host = TestServerHost.createServerHost([file1, file2, file3]);
+        const session = new TestSession({ host, useSingleInferredProject: true });
+        openFilesForSession([file1, file2, file3], session);
 
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 1);
-            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
+        host.writeFile(configFile.path, configFile.content);
+        host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
+        baselineTsserverLogs("inferredProjects", "should use only one inferred project if useOneInferredProject is set", session);
+    });
 
+    it("disable inferred project", () => {
+        const file1 = {
+            path: "/user/username/projects/project/f1.ts",
+            content: "let x =1;",
+        };
 
-            host.writeFile(configFile.path, configFile.content);
-            host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
-            checkNumberOfConfiguredProjects(projectService, 1);
-            checkNumberOfInferredProjects(projectService, 1);
-            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
+        const host = TestServerHost.createServerHost([file1]);
+        const session = new TestSession({ host, useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
+
+        openFilesForSession([file1], session);
+
+        session.logger.log(`LanguageServiceEnabled:: ${session.getProjectService().inferredProjects[0].languageServiceEnabled}`);
+        baselineTsserverLogs("inferredProjects", "disable inferred project", session);
+    });
+
+    it("project settings for inferred projects", () => {
+        const file1 = {
+            path: "/user/username/projects/project/b/app.ts",
+            content: `import {x} from "mod"`,
+        };
+        const modFile = {
+            path: "/user/username/projects/project/mod.ts",
+            content: "export let x: number",
+        };
+        const host = TestServerHost.createServerHost([file1, modFile]);
+        const session = new TestSession(host);
+
+        openFilesForSession([file1, modFile], session);
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            moduleResolution: ts.server.protocol.ModuleResolutionKind.Classic,
+        }, session);
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("inferredProjects", "project settings for inferred projects", session);
+    });
+
+    it("should support files without extensions", () => {
+        const f = {
+            path: "/user/username/projects/project/compile",
+            content: "let x = 1",
+        };
+        const host = TestServerHost.createServerHost([f]);
+        const session = new TestSession(host);
+        setCompilerOptionsForInferredProjectsRequestForSession({ allowJs: true }, session);
+        openFilesForSession([{ file: f.path, content: f.content, scriptKindName: "JS" }], session);
+        baselineTsserverLogs("inferredProjects", "should support files without extensions", session);
+    });
+
+    it("inferred projects per project root", () => {
+        const file1 = { path: "/user/username/projects/project/a/file1.ts", content: "let x = 1;", projectRootPath: "/user/username/projects/project/a" };
+        const file2 = { path: "/user/username/projects/project/a/file2.ts", content: "let y = 2;", projectRootPath: "/user/username/projects/project/a" };
+        const file3 = { path: "/user/username/projects/project/b/file2.ts", content: "let x = 3;", projectRootPath: "/user/username/projects/project/b" };
+        const file4 = { path: "/user/username/projects/project/c/file3.ts", content: "let z = 4;" };
+        const host = TestServerHost.createServerHost([file1, file2, file3, file4]);
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            useInferredProjectPerProjectRoot: true,
         });
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            target: ts.server.protocol.ScriptTarget.ESNext,
+        }, session);
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            options: {
+                allowJs: true,
+                target: ts.server.protocol.ScriptTarget.ES2015,
+            },
+            projectRootPath: "/user/username/projects/project/b",
+        }, session);
+        openFilesForSession([{
+            file: file1.path,
+            content: file1.content,
+            scriptKindName: "JS",
+            projectRootPath: file1.projectRootPath,
+        }], session);
+        openFilesForSession([{
+            file: file2.path,
+            content: file2.content,
+            scriptKindName: "JS",
+            projectRootPath: file2.projectRootPath,
+        }], session);
+        openFilesForSession([{
+            file: file3.path,
+            content: file3.content,
+            scriptKindName: "JS",
+            projectRootPath: file3.projectRootPath,
+        }], session);
+        openFilesForSession([{
+            file: file4.path,
+            content: file4.content,
+            scriptKindName: "JS",
+        }], session);
 
-        it("disable inferred project", () => {
-            const file1 = {
-                path: "/a/b/f1.ts",
-                content: "let x =1;"
-            };
+        const projectService = session.getProjectService();
+        assert.equal(projectService.inferredProjects[0].getCompilationSettings().target, ts.ScriptTarget.ESNext);
+        assert.equal(projectService.inferredProjects[1].getCompilationSettings().target, ts.ScriptTarget.ESNext);
+        assert.equal(projectService.inferredProjects[2].getCompilationSettings().target, ts.ScriptTarget.ES2015);
+        baselineTsserverLogs("inferredProjects", "inferred projects per project root", session);
+    });
 
-            const host = createServerHost([file1]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
-
-            projectService.openClientFile(file1.path, file1.content);
-
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            const proj = projectService.inferredProjects[0];
-            assert.isDefined(proj);
-
-            assert.isFalse(proj.languageServiceEnabled);
-        });
-
-        it("project settings for inferred projects", () => {
-            const file1 = {
-                path: "/a/b/app.ts",
-                content: `import {x} from "mod"`
-            };
-            const modFile = {
-                path: "/a/mod.ts",
-                content: "export let x: number"
-            };
-            const host = createServerHost([file1, modFile]);
-            const projectService = createProjectService(host);
-
-            projectService.openClientFile(file1.path);
-            projectService.openClientFile(modFile.path);
-
-            checkNumberOfProjects(projectService, { inferredProjects: 2 });
-            const inferredProjects = projectService.inferredProjects.slice();
-            checkProjectActualFiles(inferredProjects[0], [file1.path]);
-            checkProjectActualFiles(inferredProjects[1], [modFile.path]);
-
-            projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
-            host.checkTimeoutQueueLengthAndRun(3);
-            checkNumberOfProjects(projectService, { inferredProjects: 2 });
-            assert.strictEqual(projectService.inferredProjects[0], inferredProjects[0]);
-            assert.strictEqual(projectService.inferredProjects[1], inferredProjects[1]);
-            checkProjectActualFiles(inferredProjects[0], [file1.path, modFile.path]);
-            assert.isTrue(inferredProjects[1].isOrphan());
-        });
-
-        it("should support files without extensions", () => {
-            const f = {
-                path: "/a/compile",
-                content: "let x = 1"
-            };
-            const host = createServerHost([f]);
-            const session = createSession(host);
-            session.executeCommand({
-                seq: 1,
-                type: "request",
-                command: "compilerOptionsForInferredProjects",
-                arguments: {
-                    options: {
-                        allowJs: true
-                    }
-                }
-            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
-            session.executeCommand({
-                seq: 2,
-                type: "request",
-                command: "open",
-                arguments: {
-                    file: f.path,
-                    fileContent: f.content,
-                    scriptKindName: "JS"
-                }
-            } as server.protocol.OpenRequest);
-            const projectService = session.getProjectService();
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [f.path]);
-        });
-
-        it("inferred projects per project root", () => {
-            const file1 = { path: "/a/file1.ts", content: "let x = 1;", projectRootPath: "/a" };
-            const file2 = { path: "/a/file2.ts", content: "let y = 2;", projectRootPath: "/a" };
-            const file3 = { path: "/b/file2.ts", content: "let x = 3;", projectRootPath: "/b" };
-            const file4 = { path: "/c/file3.ts", content: "let z = 4;" };
-            const host = createServerHost([file1, file2, file3, file4]);
-            const session = createSession(host, {
-                useSingleInferredProject: true,
-                useInferredProjectPerProjectRoot: true
-            });
-            session.executeCommand({
-                seq: 1,
-                type: "request",
-                command: CommandNames.CompilerOptionsForInferredProjects,
-                arguments: {
-                    options: {
-                        allowJs: true,
-                        target: ScriptTarget.ESNext
-                    }
-                }
-            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
-            session.executeCommand({
-                seq: 2,
-                type: "request",
-                command: CommandNames.CompilerOptionsForInferredProjects,
-                arguments: {
-                    options: {
-                        allowJs: true,
-                        target: ScriptTarget.ES2015
-                    },
-                    projectRootPath: "/b"
-                }
-            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
-            session.executeCommand({
-                seq: 3,
-                type: "request",
-                command: CommandNames.Open,
-                arguments: {
-                    file: file1.path,
-                    fileContent: file1.content,
-                    scriptKindName: "JS",
-                    projectRootPath: file1.projectRootPath
-                }
-            } as server.protocol.OpenRequest);
-            session.executeCommand({
-                seq: 4,
-                type: "request",
-                command: CommandNames.Open,
-                arguments: {
-                    file: file2.path,
-                    fileContent: file2.content,
-                    scriptKindName: "JS",
-                    projectRootPath: file2.projectRootPath
-                }
-            } as server.protocol.OpenRequest);
-            session.executeCommand({
-                seq: 5,
-                type: "request",
-                command: CommandNames.Open,
-                arguments: {
-                    file: file3.path,
-                    fileContent: file3.content,
-                    scriptKindName: "JS",
-                    projectRootPath: file3.projectRootPath
-                }
-            } as server.protocol.OpenRequest);
-            session.executeCommand({
-                seq: 6,
-                type: "request",
-                command: CommandNames.Open,
-                arguments: {
-                    file: file4.path,
-                    fileContent: file4.content,
-                    scriptKindName: "JS"
-                }
-            } as server.protocol.OpenRequest);
-
-            const projectService = session.getProjectService();
-            checkNumberOfProjects(projectService, { inferredProjects: 3 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [file4.path]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [file1.path, file2.path]);
-            checkProjectActualFiles(projectService.inferredProjects[2], [file3.path]);
-            assert.equal(projectService.inferredProjects[0].getCompilationSettings().target, ScriptTarget.ESNext);
-            assert.equal(projectService.inferredProjects[1].getCompilationSettings().target, ScriptTarget.ESNext);
-            assert.equal(projectService.inferredProjects[2].getCompilationSettings().target, ScriptTarget.ES2015);
-        });
-
-        function checkInferredProject(inferredProject: server.InferredProject, actualFiles: File[], target: ScriptTarget) {
-            checkProjectActualFiles(inferredProject, actualFiles.map(f => f.path));
-            assert.equal(inferredProject.getCompilationSettings().target, target);
-        }
-
-        function verifyProjectRootWithCaseSensitivity(useCaseSensitiveFileNames: boolean) {
+    function verifyProjectRootWithCaseSensitivity(subScenario: string, useCaseSensitiveFileNames: boolean) {
+        it(subScenario, () => {
             const files: [File, File, File, File] = [
-                { path: "/a/file1.ts", content: "let x = 1;" },
-                { path: "/A/file2.ts", content: "let y = 2;" },
-                { path: "/b/file2.ts", content: "let x = 3;" },
-                { path: "/c/file3.ts", content: "let z = 4;" }
+                { path: "/user/username/projects/project/a/file1.ts", content: "let x = 1;" },
+                { path: "/user/username/projects/project/A/file2.ts", content: "let y = 2;" },
+                { path: "/user/username/projects/project/b/file2.ts", content: "let x = 3;" },
+                { path: "/user/username/projects/project/c/file3.ts", content: "let z = 4;" },
             ];
-            const host = createServerHost(files, { useCaseSensitiveFileNames });
-            const projectService = createProjectService(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
-            projectService.setCompilerOptionsForInferredProjects({
+            const host = TestServerHost.createServerHost(files, { useCaseSensitiveFileNames });
+            const session = new TestSession({ host, useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
+            setCompilerOptionsForInferredProjectsRequestForSession({
                 allowJs: true,
-                target: ScriptTarget.ESNext
-            });
-            projectService.setCompilerOptionsForInferredProjects({
-                allowJs: true,
-                target: ScriptTarget.ES2015
-            }, "/a");
+                target: ts.server.protocol.ScriptTarget.ESNext,
+            }, session);
+            setCompilerOptionsForInferredProjectsRequestForSession({
+                options: {
+                    allowJs: true,
+                    target: ts.server.protocol.ScriptTarget.ES2015,
+                },
+                projectRootPath: "/user/username/projects/project/a",
+            }, session);
 
-            openClientFiles(["/a", "/a", "/b", undefined]);
-            verifyInferredProjectsState([
-                [[files[3]], ScriptTarget.ESNext],
-                [[files[0], files[1]], ScriptTarget.ES2015],
-                [[files[2]], ScriptTarget.ESNext]
-            ]);
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/a", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
 
-            openClientFiles(["/a", "/A", "/b", undefined]);
-            if (useCaseSensitiveFileNames) {
-                verifyInferredProjectsState([
-                    [[files[3]], ScriptTarget.ESNext],
-                    [[files[0]], ScriptTarget.ES2015],
-                    [[files[1]], ScriptTarget.ESNext],
-                    [[files[2]], ScriptTarget.ESNext]
-                ]);
-            }
-            else {
-                verifyInferredProjectsState([
-                    [[files[3]], ScriptTarget.ESNext],
-                    [[files[0], files[1]], ScriptTarget.ES2015],
-                    [[files[2]], ScriptTarget.ESNext]
-                ]);
-            }
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/A", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
 
-            projectService.setCompilerOptionsForInferredProjects({
-                allowJs: true,
-                target: ScriptTarget.ES2017
-            }, "/A");
+            setCompilerOptionsForInferredProjectsRequestForSession({
+                options: {
+                    allowJs: true,
+                    target: ts.server.protocol.ScriptTarget.ES2017,
+                },
+                projectRootPath: "/user/username/projects/project/A",
+            }, session);
 
-            openClientFiles(["/a", "/a", "/b", undefined]);
-            verifyInferredProjectsState([
-                [[files[3]], ScriptTarget.ESNext],
-                [[files[0], files[1]], useCaseSensitiveFileNames ? ScriptTarget.ES2015 : ScriptTarget.ES2017],
-                [[files[2]], ScriptTarget.ESNext]
-            ]);
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/a", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
 
-            openClientFiles(["/a", "/A", "/b", undefined]);
-            if (useCaseSensitiveFileNames) {
-                verifyInferredProjectsState([
-                    [[files[3]], ScriptTarget.ESNext],
-                    [[files[0]], ScriptTarget.ES2015],
-                    [[files[1]], ScriptTarget.ES2017],
-                    [[files[2]], ScriptTarget.ESNext]
-                ]);
-            }
-            else {
-                verifyInferredProjectsState([
-                    [[files[3]], ScriptTarget.ESNext],
-                    [[files[0], files[1]], ScriptTarget.ES2017],
-                    [[files[2]], ScriptTarget.ESNext]
-                ]);
-            }
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/A", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
+            baselineTsserverLogs("inferredProjects", subScenario, session);
 
             function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
-                files.forEach((file, index) => {
-                    projectService.openClientFile(file.path, file.content, ScriptKind.JS, projectRoots[index]);
-                });
+                files.forEach((file, index) => openFilesForSession([{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }], session));
             }
 
             function closeClientFiles() {
-                files.forEach(file => projectService.closeClientFile(file.path));
-            }
-
-            function verifyInferredProjectsState(expected: [File[], ScriptTarget][]) {
-                checkNumberOfProjects(projectService, { inferredProjects: expected.length });
-                projectService.inferredProjects.forEach((p, index) => {
-                    const [actualFiles, target] = expected[index];
-                    checkInferredProject(p, actualFiles, target);
-                });
-            }
-        }
-
-        it("inferred projects per project root with case sensitive system", () => {
-            verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ true);
-        });
-
-        it("inferred projects per project root with case insensitive system", () => {
-            verifyProjectRootWithCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
-        });
-
-        it("should still retain configured project created while opening the file", () => {
-            const appFile: File = {
-                path: `${tscWatch.projectRoot}/app.ts`,
-                content: `const app = 20;`
-            };
-            const config: File = {
-                path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: "{}"
-            };
-            const jsFile1: File = {
-                path: `${tscWatch.projectRoot}/jsFile1.js`,
-                content: `const jsFile1 = 10;`
-            };
-            const jsFile2: File = {
-                path: `${tscWatch.projectRoot}/jsFile2.js`,
-                content: `const jsFile2 = 10;`
-            };
-            const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
-            const projectService = createProjectService(host);
-            const originalSet = projectService.configuredProjects.set;
-            const originalDelete = projectService.configuredProjects.delete;
-            const configuredCreated = new Map<string, true>();
-            const configuredRemoved = new Map<string, true>();
-            projectService.configuredProjects.set = (key, value) => {
-                assert.isFalse(configuredCreated.has(key));
-                configuredCreated.set(key, true);
-                return originalSet.call(projectService.configuredProjects, key, value);
-            };
-            projectService.configuredProjects.delete = key => {
-                assert.isFalse(configuredRemoved.has(key));
-                configuredRemoved.set(key, true);
-                return originalDelete.call(projectService.configuredProjects, key);
-            };
-
-            // Do not remove config project when opening jsFile that is not present as part of config project
-            projectService.openClientFile(jsFile1.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile1.path, libFile.path]);
-            const project = projectService.configuredProjects.get(config.path)!;
-            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
-            checkConfiguredProjectCreatedAndNotDeleted();
-
-            // Do not remove config project when opening jsFile that is not present as part of config project
-            projectService.closeClientFile(jsFile1.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
-            projectService.openClientFile(jsFile2.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
-            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
-            checkConfiguredProjectNotCreatedAndNotDeleted();
-
-            // Do not remove config project when opening jsFile that is not present as part of config project
-            projectService.openClientFile(jsFile1.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 2, configuredProjects: 1 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
-            checkProjectActualFiles(project, [appFile.path, config.path, libFile.path]);
-            checkConfiguredProjectNotCreatedAndNotDeleted();
-
-            // When opening file that doesnt fall back to the config file, we remove the config project
-            projectService.openClientFile(libFile.path);
-            checkNumberOfProjects(projectService, { inferredProjects: 2 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [jsFile2.path, libFile.path]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [jsFile1.path, libFile.path]);
-            checkConfiguredProjectNotCreatedButDeleted();
-
-            function checkConfiguredProjectCreatedAndNotDeleted() {
-                assert.equal(configuredCreated.size, 1);
-                assert.isTrue(configuredCreated.has(config.path));
-                assert.equal(configuredRemoved.size, 0);
-                configuredCreated.clear();
-            }
-
-            function checkConfiguredProjectNotCreatedAndNotDeleted() {
-                assert.equal(configuredCreated.size, 0);
-                assert.equal(configuredRemoved.size, 0);
-            }
-
-            function checkConfiguredProjectNotCreatedButDeleted() {
-                assert.equal(configuredCreated.size, 0);
-                assert.equal(configuredRemoved.size, 1);
-                assert.isTrue(configuredRemoved.has(config.path));
-                configuredRemoved.clear();
+                closeFilesForSession(files, session);
             }
         });
+    }
 
-        it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
-            const file1 = { path: "/a/file1.js", content: "" };
-            const host = createServerHost([file1]);
+    verifyProjectRootWithCaseSensitivity("inferred projects per project root with case sensitive system", /*useCaseSensitiveFileNames*/ true);
+    verifyProjectRootWithCaseSensitivity("inferred projects per project root with case insensitive system", /*useCaseSensitiveFileNames*/ false);
 
-            const projectService = createProjectService(host);
+    it("should still retain configured project created while opening the file", () => {
+        const appFile: File = {
+            path: `/user/username/projects/myproject/app.ts`,
+            content: `const app = 20;`,
+        };
+        const config: File = {
+            path: `/user/username/projects/myproject/tsconfig.json`,
+            content: "{}",
+        };
+        const jsFile1: File = {
+            path: `/user/username/projects/myproject/jsFile1.js`,
+            content: `const jsFile1 = 10;`,
+        };
+        const jsFile2: File = {
+            path: `/user/username/projects/myproject/jsFile2.js`,
+            content: `const jsFile2 = 10;`,
+        };
+        const host = TestServerHost.createServerHost([appFile, config, jsFile1, jsFile2]);
+        const session = new TestSession(host);
 
-            projectService.openClientFile(file1.path);
+        // Do not remove config project when opening jsFile that is not present as part of config project
+        openFilesForSession([jsFile1], session);
 
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            const inferredProject = projectService.inferredProjects[0];
-            checkProjectActualFiles(inferredProject, [file1.path]);
-            inferredProject.setTypeAcquisition(undefined);
+        // Do not remove config project when opening jsFile that is not present as part of config project
+        closeFilesForSession([jsFile1], session);
+        openFilesForSession([jsFile2], session);
 
-            const expected = {
-                enable: true,
-                include: [],
-                exclude: []
-            };
-            assert.deepEqual(inferredProject.getTypeAcquisition(), expected, "typeAcquisition should be inferred for inferred projects");
-        });
+        // Do not remove config project when opening jsFile that is not present as part of config project
+        openFilesForSession([jsFile1], session);
 
-        it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {
-            const host = createServerHost([commonFile1, libFile]);
-            const projectService = createProjectService(host);
-            projectService.setCompilerOptionsForInferredProjects({
-                allowJs: true,
-                target: ScriptTarget.ES2015
-            });
-            host.checkTimeoutQueueLength(0);
-        });
+        // When opening file that doesnt fall back to the config file, we remove the config project
+        openFilesForSession([libFile], session);
+        baselineTsserverLogs("inferredProjects", "should still retain configured project created while opening the file", session);
     });
-}
+
+    it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
+        const file1 = { path: "/user/username/projects/project/a/file1.js", content: "" };
+        const host = TestServerHost.createServerHost([file1]);
+
+        const session = new TestSession(host);
+
+        openFilesForSession([file1], session);
+
+        const inferredProject = session.getProjectService().inferredProjects[0];
+        session.logger.log(`typeAcquisition : setting to undefined`);
+        inferredProject.setTypeAcquisition(undefined);
+        session.logger.log(`typeAcquisition should be inferred for inferred projects: ${jsonToReadableText(inferredProject.getTypeAcquisition())}`);
+        baselineTsserverLogs("inferredProjects", "regression test - should infer typeAcquisition for inferred projects when set undefined", session);
+    });
+
+    it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const host = TestServerHost.createServerHost([commonFile1]);
+        const session = new TestSession(host);
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            allowJs: true,
+            target: ts.server.protocol.ScriptTarget.ES2015,
+        }, session);
+        baselineTsserverLogs("inferredProjects", "Setting compiler options for inferred projects when there are no open files should not schedule any refresh", session);
+    });
+
+    it("when existing inferred project has no root files", () => {
+        const host = TestServerHost.createServerHost({
+            "/user/username/projects/myproject/app.ts": dedent`
+                import {x} from "./module";
+            `,
+            // Removing resolutions of this happens after program gets created and we are removing not needed files
+            "/user/username/projects/myproject/module.d.ts": dedent`
+                import {y} from "./module2";
+                import {a} from "module3";
+                export const x = y;
+                export const b = a;
+            `,
+            "/user/username/projects/myproject/module2.d.ts": dedent`
+                export const y = 10;
+            `,
+            "/user/username/projects/myproject/node_modules/module3/package.json": jsonToReadableText({
+                name: "module3",
+                version: "1.0.0",
+            }),
+            "/user/username/projects/myproject/node_modules/module3/index.d.ts": dedent`
+                export const a = 10;
+            `,
+        });
+        const session = new TestSession(host);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/app.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        closeFilesForSession(["/user/username/projects/myproject/app.ts"], session);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/module.d.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        baselineTsserverLogs("inferredProjects", "when existing inferred project has no root files", session);
+    });
+
+    it("closing file with shared resolutions", () => {
+        const host = TestServerHost.createServerHost({
+            "/user/username/projects/myproject/unrelated.ts": dedent`
+                export {};
+            `,
+            "/user/username/projects/myproject/app.ts": dedent`
+                import type { y } from "pkg" assert { "resolution-mode": "require" };
+                import type { x } from "pkg" assert { "resolution-mode": "import" };
+            `,
+        });
+        const session = new TestSession(host);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/unrelated.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        openFilesForSession([{
+            file: "/user/username/projects/myproject/app.ts",
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+        closeFilesForSession(["/user/username/projects/myproject/app.ts"], session);
+        baselineTsserverLogs("inferredProjects", "closing file with shared resolutions", session);
+    });
+});

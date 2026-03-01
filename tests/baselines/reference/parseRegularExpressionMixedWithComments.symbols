@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts] ////
+
+=== parseRegularExpressionMixedWithComments.ts ===
 var regex1 = / asdf /;
 >regex1 : Symbol(regex1, Decl(parseRegularExpressionMixedWithComments.ts, 0, 3))
 

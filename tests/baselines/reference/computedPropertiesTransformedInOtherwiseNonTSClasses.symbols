@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedPropertiesTransformedInOtherwiseNonTSClasses.ts ===
+//// [tests/cases/compiler/computedPropertiesTransformedInOtherwiseNonTSClasses.ts] ////
+
+=== computedPropertiesTransformedInOtherwiseNonTSClasses.ts ===
 namespace NS { 
 >NS : Symbol(NS, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 0, 0))
 

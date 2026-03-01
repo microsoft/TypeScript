@@ -1,23 +1,32 @@
-=== tests/cases/compiler/inheritanceStaticFuncOverridingMethod.ts ===
+//// [tests/cases/compiler/inheritanceStaticFuncOverridingMethod.ts] ////
+
+=== inheritanceStaticFuncOverridingMethod.ts ===
 class a {
 >a : a
+>  : ^
 
     static x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "10";
 >"10" : "10"
+>     : ^^^^
     }
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 
     static x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "20";
 >"20" : "20"
+>     : ^^^^
     }
 }

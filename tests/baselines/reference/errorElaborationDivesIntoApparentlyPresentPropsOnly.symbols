@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts ===
+//// [tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts] ////
+
+=== errorElaborationDivesIntoApparentlyPresentPropsOnly.ts ===
 function foo<T extends { a: string }>(x: T) {
 >foo : Symbol(foo, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 0))
 >T : Symbol(T, Decl(errorElaborationDivesIntoApparentlyPresentPropsOnly.ts, 0, 13))

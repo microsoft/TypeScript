@@ -1,8 +1,8 @@
-tests/cases/compiler/ExportAssignment7.ts(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-tests/cases/compiler/ExportAssignment7.ts(4,10): error TS2304: Cannot find name 'B'.
+ExportAssignment7.ts(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+ExportAssignment7.ts(4,10): error TS2304: Cannot find name 'B'.
 
 
-==== tests/cases/compiler/ExportAssignment7.ts (2 errors) ====
+==== ExportAssignment7.ts (2 errors) ====
     export class C {
     }
     

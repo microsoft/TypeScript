@@ -1,48 +1,81 @@
-=== tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts ===
+//// [tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts] ////
+
+=== readonlyFloat32ArrayAssignableWithFloat32Array.ts ===
 function update(b: Readonly<Float32Array>) {
 >update : (b: Readonly<Float32Array>) => void
->b : Readonly<Float32Array>
+>       : ^ ^^                      ^^^^^^^^^
+>b : Readonly<Float32Array<ArrayBuffer>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const c = copy(b);
->c : Float32Array
->copy(b) : Float32Array
->copy : (a: Float32Array) => Float32Array
->b : Readonly<Float32Array>
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>copy(b) : Float32Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>copy : (a: Float32Array) => Float32Array<ArrayBuffer>
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : Readonly<Float32Array<ArrayBuffer>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     add(c, c);
 >add(c, c) : void
+>          : ^^^^
 >add : (a: Float32Array, b: Float32Array, c?: Float32Array) => void
->c : Float32Array
->c : Float32Array
+>    : ^ ^^            ^^ ^^            ^^ ^^^            ^^^^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function add(a: Float32Array, b: Float32Array, c: Float32Array = a) {
 >add : (a: Float32Array, b: Float32Array, c?: Float32Array) => void
->a : Float32Array
->b : Float32Array
->c : Float32Array
->a : Float32Array
+>    : ^ ^^            ^^ ^^            ^^ ^^^            ^^^^^^^^^
+>a : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     c[0] = a[0] + b[0];
 >c[0] = a[0] + b[0] : number
+>                   : ^^^^^^
 >c[0] : number
->c : Float32Array
+>     : ^^^^^^
+>c : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >a[0] + b[0] : number
+>            : ^^^^^^
 >a[0] : number
->a : Float32Array
+>     : ^^^^^^
+>a : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >b[0] : number
->b : Float32Array
+>     : ^^^^^^
+>b : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 function copy(a: Float32Array) {
->copy : (a: Float32Array) => Float32Array
->a : Float32Array
+>copy : (a: Float32Array) => Float32Array<ArrayBuffer>
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Float32Array(a);
->new Float32Array(a) : Float32Array
+>new Float32Array(a) : Float32Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
->a : Float32Array
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>a : Float32Array<ArrayBuffer>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }

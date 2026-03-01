@@ -1,15 +1,25 @@
-=== tests/cases/compiler/typeOfOperator1.ts ===
+//// [tests/cases/compiler/typeOfOperator1.ts] ////
+
+=== typeOfOperator1.ts ===
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var y: string = typeof x;
 >y : string
+>  : ^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var z: number = typeof x;
 >z : number
+>  : ^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts] ////
+
 //// [accessorsOverrideProperty.ts]
 class A {
     p = 'yep'
@@ -16,6 +18,7 @@ class D extends C {
 
 
 //// [accessorsOverrideProperty.js]
+"use strict";
 class A {
     p = 'yep';
 }

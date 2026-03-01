@@ -1,12 +1,12 @@
-tests/cases/compiler/nestedGlobalNamespaceInClass.ts(3,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/nestedGlobalNamespaceInClass.ts(3,5): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
-tests/cases/compiler/nestedGlobalNamespaceInClass.ts(3,5): error TS2670: Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.
-tests/cases/compiler/nestedGlobalNamespaceInClass.ts(3,12): error TS1005: ';' expected.
-tests/cases/compiler/nestedGlobalNamespaceInClass.ts(3,12): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/nestedGlobalNamespaceInClass.ts(4,1): error TS1128: Declaration or statement expected.
+nestedGlobalNamespaceInClass.ts(3,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+nestedGlobalNamespaceInClass.ts(3,5): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+nestedGlobalNamespaceInClass.ts(3,5): error TS2670: Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.
+nestedGlobalNamespaceInClass.ts(3,12): error TS1005: ';' expected.
+nestedGlobalNamespaceInClass.ts(3,12): error TS2304: Cannot find name 'x'.
+nestedGlobalNamespaceInClass.ts(4,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/nestedGlobalNamespaceInClass.ts (6 errors) ====
+==== nestedGlobalNamespaceInClass.ts (6 errors) ====
     // should not crash - from #35717
     class C {
         global x

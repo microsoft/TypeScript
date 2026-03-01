@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedConstructor.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedConstructor.ts] ////
+
+=== propertyNamedConstructor.ts ===
 class X1 {
 >X1 : Symbol(X1, Decl(propertyNamedConstructor.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts] ////
+
 //// [exhaustiveSwitchImplicitReturn.ts]
 function foo1(bar: "a"): number {
     switch(bar) {
@@ -56,6 +58,7 @@ function foo6(bar: "a", a: boolean, b: boolean): number {
 
 
 //// [exhaustiveSwitchImplicitReturn.js]
+"use strict";
 function foo1(bar) {
     switch (bar) {
         case "a":
@@ -67,7 +70,7 @@ function foo2(bar) {
         case "a":
             return 1;
     }
-    var unusedVariable;
+    let unusedVariable;
 }
 function foo3(bar) {
     switch (bar) {

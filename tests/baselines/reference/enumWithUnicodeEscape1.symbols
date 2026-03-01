@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithUnicodeEscape1.ts ===
+//// [tests/cases/compiler/enumWithUnicodeEscape1.ts] ////
+
+=== enumWithUnicodeEscape1.ts ===
 enum E {
 >E : Symbol(E, Decl(enumWithUnicodeEscape1.ts, 0, 0))
 

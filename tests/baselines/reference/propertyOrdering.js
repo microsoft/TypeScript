@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyOrdering.ts] ////
+
 //// [propertyOrdering.ts]
 class Foo {
     constructor(store: string) { }
@@ -24,22 +26,21 @@ class Bar {
 
 
 //// [propertyOrdering.js]
-var Foo = /** @class */ (function () {
-    function Foo(store) {
+"use strict";
+class Foo {
+    constructor(store) {
         this._store = store; // no repro if this is first line in class body
     }
-    Foo.prototype.foo = function () {
+    foo() {
         return this._store.length; // shouldn't be an error
-    };
-    Foo.prototype.bar = function () { return this.store; }; // should be an error
-    return Foo;
-}());
-var Bar = /** @class */ (function () {
-    function Bar(store) {
+    }
+    bar() { return this.store; } // should be an error
+}
+class Bar {
+    foo() {
+        return this._store.length; // shouldn't be an error
+    }
+    constructor(store) {
         this._store = store;
     }
-    Bar.prototype.foo = function () {
-        return this._store.length; // shouldn't be an error
-    };
-    return Bar;
-}());
+}

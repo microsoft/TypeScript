@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloadsOnGenericArity1.ts] ////
+
 //// [functionOverloadsOnGenericArity1.ts]
 // overloading on arity not allowed
 interface C {
@@ -13,3 +15,4 @@ interface C {
 
 
 //// [functionOverloadsOnGenericArity1.js]
+"use strict";

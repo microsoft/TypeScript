@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint

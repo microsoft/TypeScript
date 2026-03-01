@@ -1,25 +1,40 @@
-=== tests/cases/compiler/destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts ===
+//// [tests/cases/compiler/destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts] ////
+
+=== destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts ===
 // test for #10668
 function qux(bar: { value: number }) {
->qux : (bar: {    value: number;}) => void
+>qux : (bar: { value: number; }) => void
+>    : ^   ^^                  ^^^^^^^^^
 >bar : { value: number; }
+>    : ^^^^^^^^^      ^^^
 >value : number
+>      : ^^^^^^
 
     let foo: number;
 >foo : number
+>    : ^^^^^^
 
     ({ value: foo } = bar);
 >({ value: foo } = bar) : { value: number; }
+>                       : ^^^^^^^^^      ^^^
 >{ value: foo } = bar : { value: number; }
+>                     : ^^^^^^^^^      ^^^
 >{ value: foo } : { value: number; }
+>               : ^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >foo : number
+>    : ^^^^^^
 >bar : { value: number; }
+>    : ^^^^^^^^^      ^^^
 
     let x = () => bar;
 >x : () => { value: number; }
+>  : ^^^^^^^^^^^^^^^      ^^^
 >() => bar : () => { value: number; }
+>          : ^^^^^^^^^^^^^^^      ^^^
 >bar : { value: number; }
+>    : ^^^^^^^^^      ^^^
 }
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyReferencingDeclaredInterface.ts] ////
+
 //// [noImplicitAnyReferencingDeclaredInterface.ts]
 interface Entry {
     // Should return error for implicit any.
@@ -7,3 +9,4 @@ interface Entry {
 declare var x: Entry;
 
 //// [noImplicitAnyReferencingDeclaredInterface.js]
+"use strict";

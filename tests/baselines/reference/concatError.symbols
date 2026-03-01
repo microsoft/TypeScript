@@ -1,4 +1,6 @@
-=== tests/cases/compiler/concatError.ts ===
+//// [tests/cases/compiler/concatError.ts] ////
+
+=== concatError.ts ===
 var n1: number[];
 >n1 : Symbol(n1, Decl(concatError.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName2.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName2.ts] ////
+
+=== privateNameComputedPropertyName2.ts ===
 let getX: (a: A) => number;
 >getX : Symbol(getX, Decl(privateNameComputedPropertyName2.ts, 0, 3))
 >a : Symbol(a, Decl(privateNameComputedPropertyName2.ts, 0, 11))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionsAndConditionalInference.ts ===
+//// [tests/cases/compiler/genericFunctionsAndConditionalInference.ts] ////
+
+=== genericFunctionsAndConditionalInference.ts ===
 type Boxified<T> = { [P in keyof T]: { value: T[P]} };
 >Boxified : Symbol(Boxified, Decl(genericFunctionsAndConditionalInference.ts, 0, 0))
 >T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 0, 14))

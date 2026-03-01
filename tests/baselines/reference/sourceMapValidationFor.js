@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationFor.ts] ////
+
 //// [sourceMapValidationFor.ts]
 for (var i = 0; i < 10; i++) {
     WScript.Echo("i: " + i);
@@ -34,6 +36,7 @@ for (i = 0, j = 20; j < 20, i < 20; j++) {
 }
 
 //// [sourceMapValidationFor.js]
+"use strict";
 for (var i = 0; i < 10; i++) {
     WScript.Echo("i: " + i);
 }

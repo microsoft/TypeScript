@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @allowJS: true
 // @checkJS: true
 // @noEmit: true
@@ -56,6 +58,13 @@ function good7(x, {a, b}, y) {}
  * @param {string} obj.b
  */
 function good8({a, b}) {}
+
+/**
+ * @param {{ a: string }} argument
+ */
+function good9({ a }) {
+    console.log(arguments, a);
+}
 
 /**
  * @param {object} obj - this type gets ignored

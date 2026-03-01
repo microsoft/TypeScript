@@ -1,71 +1,103 @@
-=== tests/cases/compiler/stringLiteralsErrors.ts ===
+//// [tests/cases/compiler/stringLiteralsErrors.ts] ////
+
+=== stringLiteralsErrors.ts ===
 // Srtings missing line terminator
 var es1 = "line 1
 >es1 : string
+>    : ^^^^^^
 >"line 1 : "line 1"
+>        : ^^^^^^^^
 
 ";
 >"; : ";"
+>   : ^^^
 
 var es2 = 'line 1
 >es2 : string
+>    : ^^^^^^
 >'line 1 : "line 1"
+>        : ^^^^^^^^
 
 ';
 >'; : ";"
+>   : ^^^
 
 // Space after backslash
 var es3 = 'line 1\ 
 >es3 : string
+>    : ^^^^^^
 >'line 1\  : "line 1 "
+>          : ^^^^^^^^^
 
 ';
 >'; : ";"
+>   : ^^^
 
 var es4 = 'line 1\ 
 >es4 : string
+>    : ^^^^^^
 >'line 1\  : "line 1 "
+>          : ^^^^^^^^^
 
 ';
 >'; : ";"
+>   : ^^^
 
 // Unterminated strings
 var es5 = "unterminated
 >es5 : string
+>    : ^^^^^^
 >"unterminated : "unterminated"
+>              : ^^^^^^^^^^^^^^
 
 var es6 = 'unterminated
 >es6 : string
+>    : ^^^^^^
 >'unterminated : "unterminated"
+>              : ^^^^^^^^^^^^^^
 
 // wrong terminator
 var es7 = "unterminated '
 >es7 : string
+>    : ^^^^^^
 >"unterminated ' : "unterminated '"
+>                : ^^^^^^^^^^^^^^^^
 
 var es8 = 'unterminated "
 >es8 : string
+>    : ^^^^^^
 >'unterminated " : "unterminated \""
+>                : ^^^^^^^^^^^^^^^^^
 
 // wrong unicode sequences
 var es9 = "\u00";
 >es9 : string
->"\u00" : ""
+>    : ^^^^^^
+>"\u00" : "\\u00"
+>       : ^^^^^^^
 
 var es10 = "\u00GG";
 >es10 : string
->"\u00GG" : "GG"
+>     : ^^^^^^
+>"\u00GG" : "\\u00GG"
+>         : ^^^^^^^^^
 
 var es11 = "\x0";
 >es11 : string
->"\x0" : ""
+>     : ^^^^^^
+>"\x0" : "\\x0"
+>      : ^^^^^^
 
 var es12 = "\xmm";
 >es12 : string
->"\xmm" : "mm"
+>     : ^^^^^^
+>"\xmm" : "\\xmm"
+>       : ^^^^^^^
 
 // End of file
 var es13 = " 
 >es13 : string
+>     : ^^^^^^
 >"  : " "
+>   : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnVar.ts] ////
+
 //// [decoratorOnVar.ts]
 declare function dec<T>(target: T): T;
 
@@ -5,4 +7,5 @@ declare function dec<T>(target: T): T;
 var x: number;
 
 //// [decoratorOnVar.js]
+"use strict";
 var x;

@@ -1,7 +1,11 @@
-=== tests/cases/compiler/functionReturningItself.ts ===
+//// [tests/cases/compiler/functionReturningItself.ts] ////
+
+=== functionReturningItself.ts ===
 function somefn() {
 >somefn : () => typeof somefn
+>       : ^^^^^^^^^^^^^^^^^^^
 
     return somefn;
 >somefn : () => typeof somefn
+>       : ^^^^^^^^^^^^^^^^^^^
 }

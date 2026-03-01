@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedNamespaceInModule.ts(2,15): error TS6133: 'B' is declared but its value is never read.
+unusedNamespaceInModule.ts(2,15): error TS6133: 'B' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedNamespaceInModule.ts (1 errors) ====
-    module A {
+==== unusedNamespaceInModule.ts (1 errors) ====
+    namespace A {
         namespace B { }
                   ~
 !!! error TS6133: 'B' is declared but its value is never read.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement3.ts] ////
+
 //// [parserVariableStatement3.ts]
 var
   a,
@@ -5,4 +7,5 @@ var
   c
 
 //// [parserVariableStatement3.js]
+"use strict";
 var a, b, c;

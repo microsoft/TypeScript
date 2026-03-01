@@ -1,34 +1,57 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment27.ts] ////
+
+=== a.js ===
 // mixed prototype-assignment+function declaration
 function C() { this.p = 1; }
 >C : typeof C
+>  : ^^^^^^^^
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 C.prototype = { q: 2 };
 >C.prototype = { q: 2 } : { q: number; }
+>                       : ^^^^^^^^^^^^^^
 >C.prototype : { q: number; }
+>            : ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : { q: number; }
+>          : ^^^^^^^^^^^^^^
 >{ q: 2 } : { q: number; }
+>         : ^^^^^^^^^^^^^^
 >q : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 const c = new C()
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 c.p
 >c.p : number
+>    : ^^^^^^
 >c : C
+>  : ^
 >p : number
+>  : ^^^^^^
 
 c.q
 >c.q : number
+>    : ^^^^^^
 >c : C
+>  : ^
 >q : number
+>  : ^^^^^^
 

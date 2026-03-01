@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts] ////
+
 //// [numericStringNamedPropertyEquivalence.ts]
 // Each of these types has an error in it. 
 // String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
@@ -24,13 +26,11 @@ var b = {
 }
 
 //// [numericStringNamedPropertyEquivalence.js]
+"use strict";
 // Each of these types has an error in it. 
 // String named and numeric named properties conflict if they would be equivalent after ToNumber on the property name.
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 var b = {
     "0": '',

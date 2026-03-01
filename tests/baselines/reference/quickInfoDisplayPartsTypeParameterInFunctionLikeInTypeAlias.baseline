@@ -1,3 +1,20 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts ===
+// type MixinCtor<A> = new () => A & { constructor: MixinCtor<A> };
+//                               ^
+// | ----------------------------------------------------------------------
+// | (type parameter) A in type MixinCtor<A>
+// | ----------------------------------------------------------------------
+//                                                            ^
+// | ----------------------------------------------------------------------
+// | (type parameter) A in type MixinCtor<A>
+// | ----------------------------------------------------------------------
+// type MixinCtor<A> = new () => A & { constructor: { constructor: MixinCtor<A> } };
+//                                                                           ^
+// | ----------------------------------------------------------------------
+// | (type parameter) A in type MixinCtor<A>
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +22,7 @@
       "position": 30,
       "name": "0"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -79,7 +96,7 @@
       "position": 59,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -153,7 +170,7 @@
       "position": 139,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type parameter",
       "kindModifiers": "",
       "textSpan": {

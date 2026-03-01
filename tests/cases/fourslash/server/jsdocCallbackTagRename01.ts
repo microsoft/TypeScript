@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @allowNonTsExtensions: true
 // @Filename: jsDocCallback.js
 ////
@@ -12,4 +13,4 @@
 //// var t;
 
 const [rDef, ...ranges] = test.ranges();
-verify.renameLocations(ranges[0], { findInStrings: false, findInComments: true, ranges });
+verify.baselineRename(ranges[0], { findInStrings: false, findInComments: true });

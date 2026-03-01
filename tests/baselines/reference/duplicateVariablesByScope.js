@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/duplicateVariablesByScope.ts] ////
+
 //// [duplicateVariablesByScope.ts]
 // duplicate local variables are only reported at global scope
 
-module M {
+namespace M {
     for (var j = 0; j < 10; j++) {
     }
 
@@ -32,6 +34,7 @@ class C {
 }
 
 //// [duplicateVariablesByScope.js]
+"use strict";
 // duplicate local variables are only reported at global scope
 var M;
 (function (M) {
@@ -50,16 +53,13 @@ function foo() {
         var result = 2;
     }
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+class C {
+    foo() {
         try {
             var x = 1;
         }
         catch (e) {
             var x = 2;
         }
-    };
-    return C;
-}());
+    }
+}

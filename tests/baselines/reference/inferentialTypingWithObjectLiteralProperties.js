@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts] ////
+
 //// [inferentialTypingWithObjectLiteralProperties.ts]
 function f<T>(x: T, y: T): T {
 return x;
@@ -7,6 +9,7 @@ f({ x: [1] }, { x: [null] }).x[0] = "" // was error TS2011: Cannot convert 'stri
 
 
 //// [inferentialTypingWithObjectLiteralProperties.js]
+"use strict";
 function f(x, y) {
     return x;
 }

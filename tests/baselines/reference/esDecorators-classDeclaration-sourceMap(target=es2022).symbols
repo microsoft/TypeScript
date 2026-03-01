@@ -1,0 +1,108 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.ts] ////
+
+=== esDecorators-classDeclaration-sourceMap.ts ===
+declare var dec: any;
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+@dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+@dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+class C {
+>C : Symbol(C, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 21))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    method() {}
+>method : Symbol(C.method, Decl(esDecorators-classDeclaration-sourceMap.ts, 4, 9))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    get x() { return 1; }
+>x : Symbol(C.x, Decl(esDecorators-classDeclaration-sourceMap.ts, 7, 15), Decl(esDecorators-classDeclaration-sourceMap.ts, 11, 25))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    set x(value: number) { }
+>x : Symbol(C.x, Decl(esDecorators-classDeclaration-sourceMap.ts, 7, 15), Decl(esDecorators-classDeclaration-sourceMap.ts, 11, 25))
+>value : Symbol(value, Decl(esDecorators-classDeclaration-sourceMap.ts, 15, 10))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    y = 1;
+>y : Symbol(C.y, Decl(esDecorators-classDeclaration-sourceMap.ts, 15, 28))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    accessor z = 1;
+>z : Symbol(C.z, Decl(esDecorators-classDeclaration-sourceMap.ts, 19, 10))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    static #method() {}
+>#method : Symbol(C.#method, Decl(esDecorators-classDeclaration-sourceMap.ts, 23, 19))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    static get #x() { return 1; }
+>#x : Symbol(C.#x, Decl(esDecorators-classDeclaration-sourceMap.ts, 27, 23), Decl(esDecorators-classDeclaration-sourceMap.ts, 31, 33))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    static set #x(value: number) { }
+>#x : Symbol(C.#x, Decl(esDecorators-classDeclaration-sourceMap.ts, 27, 23), Decl(esDecorators-classDeclaration-sourceMap.ts, 31, 33))
+>value : Symbol(value, Decl(esDecorators-classDeclaration-sourceMap.ts, 35, 18))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    static #y = 1;
+>#y : Symbol(C.#y, Decl(esDecorators-classDeclaration-sourceMap.ts, 35, 36))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    @dec
+>dec : Symbol(dec, Decl(esDecorators-classDeclaration-sourceMap.ts, 0, 11))
+
+    static accessor #z = 1;
+>#z : Symbol(C.#z, Decl(esDecorators-classDeclaration-sourceMap.ts, 39, 18))
+}
+

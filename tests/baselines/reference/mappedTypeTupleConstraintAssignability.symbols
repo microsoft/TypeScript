@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/mappedTypeTupleConstraintAssignability.ts] ////
+
+=== mappedTypeTupleConstraintAssignability.ts ===
+// https://github.com/microsoft/TypeScript/issues/53359#issuecomment-1475390594
+
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+>Writeable : Symbol(Writeable, Decl(mappedTypeTupleConstraintAssignability.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 15))
+>P : Symbol(P, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 33))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 15))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 15))
+>P : Symbol(P, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 33))
+
+type EnumValues = [string, ...string[]];
+>EnumValues : Symbol(EnumValues, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 55))
+
+type Values<T extends EnumValues> = { [k in T[number]]: k; };
+>Values : Symbol(Values, Decl(mappedTypeTupleConstraintAssignability.ts, 3, 40))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 4, 12))
+>EnumValues : Symbol(EnumValues, Decl(mappedTypeTupleConstraintAssignability.ts, 2, 55))
+>k : Symbol(k, Decl(mappedTypeTupleConstraintAssignability.ts, 4, 39))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 4, 12))
+>k : Symbol(k, Decl(mappedTypeTupleConstraintAssignability.ts, 4, 39))
+
+declare class ZodEnum<T extends [string, ...string[]]> {
+>ZodEnum : Symbol(ZodEnum, Decl(mappedTypeTupleConstraintAssignability.ts, 4, 61))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 22))
+
+  get enum(): Values<T>
+>enum : Symbol(ZodEnum.enum, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 56))
+>Values : Symbol(Values, Decl(mappedTypeTupleConstraintAssignability.ts, 3, 40))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 6, 22))
+}
+
+declare function createZodEnum<U extends string, T extends Readonly<[U, ...U[]]>>(values: T): ZodEnum<Writeable<T>>;
+>createZodEnum : Symbol(createZodEnum, Decl(mappedTypeTupleConstraintAssignability.ts, 8, 1))
+>U : Symbol(U, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 31))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 48))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 31))
+>U : Symbol(U, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 31))
+>values : Symbol(values, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 82))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 48))
+>ZodEnum : Symbol(ZodEnum, Decl(mappedTypeTupleConstraintAssignability.ts, 4, 61))
+>Writeable : Symbol(Writeable, Decl(mappedTypeTupleConstraintAssignability.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 48))
+
+// https://github.com/microsoft/TypeScript/issues/53359#issuecomment-1475390607
+
+type Maybe<T> = T | null | undefined;
+>Maybe : Symbol(Maybe, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 116))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 14, 11))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 14, 11))
+
+type AnyTuple = [unknown, ...unknown[]];
+>AnyTuple : Symbol(AnyTuple, Decl(mappedTypeTupleConstraintAssignability.ts, 14, 37))
+
+type AnyObject = { [k: string]: any };
+>AnyObject : Symbol(AnyObject, Decl(mappedTypeTupleConstraintAssignability.ts, 15, 40))
+>k : Symbol(k, Decl(mappedTypeTupleConstraintAssignability.ts, 16, 20))
+
+type Flags = "s" | "d" | "";
+>Flags : Symbol(Flags, Decl(mappedTypeTupleConstraintAssignability.ts, 16, 38))
+
+interface ISchema<T, C = any, F extends Flags = any, D = any> {
+>ISchema : Symbol(ISchema, Decl(mappedTypeTupleConstraintAssignability.ts, 17, 28))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 18))
+>C : Symbol(C, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 20))
+>F : Symbol(F, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 29))
+>Flags : Symbol(Flags, Decl(mappedTypeTupleConstraintAssignability.ts, 16, 38))
+>D : Symbol(D, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 52))
+
+  __flags: F;
+>__flags : Symbol(ISchema.__flags, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 63))
+>F : Symbol(F, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 29))
+
+  __context: C;
+>__context : Symbol(ISchema.__context, Decl(mappedTypeTupleConstraintAssignability.ts, 20, 13))
+>C : Symbol(C, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 20))
+
+  __outputType: T;
+>__outputType : Symbol(ISchema.__outputType, Decl(mappedTypeTupleConstraintAssignability.ts, 21, 15))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 18))
+
+  __default: D;
+>__default : Symbol(ISchema.__default, Decl(mappedTypeTupleConstraintAssignability.ts, 22, 18))
+>D : Symbol(D, Decl(mappedTypeTupleConstraintAssignability.ts, 19, 52))
+}
+
+declare class TupleSchema<
+>TupleSchema : Symbol(TupleSchema, Decl(mappedTypeTupleConstraintAssignability.ts, 24, 1))
+
+  TType extends Maybe<AnyTuple> = AnyTuple | undefined,
+>TType : Symbol(TType, Decl(mappedTypeTupleConstraintAssignability.ts, 26, 26))
+>Maybe : Symbol(Maybe, Decl(mappedTypeTupleConstraintAssignability.ts, 10, 116))
+>AnyTuple : Symbol(AnyTuple, Decl(mappedTypeTupleConstraintAssignability.ts, 14, 37))
+>AnyTuple : Symbol(AnyTuple, Decl(mappedTypeTupleConstraintAssignability.ts, 14, 37))
+
+  TContext = AnyObject,
+>TContext : Symbol(TContext, Decl(mappedTypeTupleConstraintAssignability.ts, 27, 55))
+>AnyObject : Symbol(AnyObject, Decl(mappedTypeTupleConstraintAssignability.ts, 15, 40))
+
+  TDefault = undefined,
+>TDefault : Symbol(TDefault, Decl(mappedTypeTupleConstraintAssignability.ts, 28, 23))
+
+  TFlags extends Flags = ""
+>TFlags : Symbol(TFlags, Decl(mappedTypeTupleConstraintAssignability.ts, 29, 23))
+>Flags : Symbol(Flags, Decl(mappedTypeTupleConstraintAssignability.ts, 16, 38))
+
+> {
+  constructor(schemas: [ISchema<any>, ...ISchema<any>[]]);
+>schemas : Symbol(schemas, Decl(mappedTypeTupleConstraintAssignability.ts, 32, 14))
+>ISchema : Symbol(ISchema, Decl(mappedTypeTupleConstraintAssignability.ts, 17, 28))
+>ISchema : Symbol(ISchema, Decl(mappedTypeTupleConstraintAssignability.ts, 17, 28))
+}
+
+export function create<T extends AnyTuple>(schemas: {
+>create : Symbol(create, Decl(mappedTypeTupleConstraintAssignability.ts, 33, 1))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 35, 23))
+>AnyTuple : Symbol(AnyTuple, Decl(mappedTypeTupleConstraintAssignability.ts, 14, 37))
+>schemas : Symbol(schemas, Decl(mappedTypeTupleConstraintAssignability.ts, 35, 43))
+
+  [K in keyof T]: ISchema<T[K]>;
+>K : Symbol(K, Decl(mappedTypeTupleConstraintAssignability.ts, 36, 3))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 35, 23))
+>ISchema : Symbol(ISchema, Decl(mappedTypeTupleConstraintAssignability.ts, 17, 28))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 35, 23))
+>K : Symbol(K, Decl(mappedTypeTupleConstraintAssignability.ts, 36, 3))
+
+}) {
+  return new TupleSchema<T | undefined>(schemas);
+>TupleSchema : Symbol(TupleSchema, Decl(mappedTypeTupleConstraintAssignability.ts, 24, 1))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintAssignability.ts, 35, 23))
+>schemas : Symbol(schemas, Decl(mappedTypeTupleConstraintAssignability.ts, 35, 43))
+}
+

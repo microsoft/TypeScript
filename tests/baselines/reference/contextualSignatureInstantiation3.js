@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInstantiation3.ts] ////
+
 //// [contextualSignatureInstantiation3.ts]
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
     return items.map(f);
@@ -24,6 +26,7 @@ var v2 = map(xs, singleton);    // Error if not number[][]
 
 
 //// [contextualSignatureInstantiation3.js]
+"use strict";
 function map(items, f) {
     return items.map(f);
 }

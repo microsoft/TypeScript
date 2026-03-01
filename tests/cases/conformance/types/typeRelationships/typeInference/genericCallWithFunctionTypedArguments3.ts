@@ -1,3 +1,4 @@
+// @target: es2015
 // No inference is made from function typed arguments which have multiple call signatures
 
 var a: {

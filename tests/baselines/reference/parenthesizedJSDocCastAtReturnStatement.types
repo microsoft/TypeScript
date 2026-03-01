@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/parenthesizedJSDocCastAtReturnStatement.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== index.js ===
+/** @type {Map<string, string | Set<string>>} */
+const cache = new Map()
+>cache : Map<string, string | Set<string>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+
+/**
+ * @param {string} key
+ * @returns {() => string}
+ */
+const getStringGetter = (key) => {
+>getStringGetter : (key: string) => () => string
+>                : ^   ^^      ^^^^^            
+>(key) => {  return () => {    return /** @type {string} */ (cache.get(key))  }} : (key: string) => () => string
+>                                                                                : ^   ^^      ^^^^^            
+>key : string
+>    : ^^^^^^
+
+  return () => {
+>() => {    return /** @type {string} */ (cache.get(key))  } : () => string
+>                                                            : ^^^^^^      
+
+    return /** @type {string} */ (cache.get(key))
+>(cache.get(key)) : string
+>                 : ^^^^^^
+>cache.get(key) : string | Set<string> | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cache.get : (key: string) => string | Set<string> | undefined
+>          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cache : Map<string, string | Set<string>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>get : (key: string) => string | Set<string> | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+  }
+}
+

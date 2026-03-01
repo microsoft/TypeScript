@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts] ////
+
 //// [stringLiteralTypesOverloads05.ts]
 interface Animal { animal: {} };
 interface Dog extends Animal { dog: {} }
@@ -12,6 +14,7 @@ function doThing(x: string, y?: string): Moose {
 }
 
 //// [stringLiteralTypesOverloads05.js]
+"use strict";
 ;
 function doThing(x, y) {
     return undefined;

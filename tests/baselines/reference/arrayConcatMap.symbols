@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayConcatMap.ts ===
+//// [tests/cases/compiler/arrayConcatMap.ts] ////
+
+=== arrayConcatMap.ts ===
 var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >x : Symbol(x, Decl(arrayConcatMap.ts, 0, 3))
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

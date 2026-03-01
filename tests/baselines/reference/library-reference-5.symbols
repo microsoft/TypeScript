@@ -1,20 +1,25 @@
-=== /src/root.ts ===
-/// <reference types="foo" />
-No type information for this code./// <reference types="bar" />
-No type information for this code.
-No type information for this code.=== /node_modules/foo/index.d.ts ===
-// Secondary references may not be duplicated if they disagree in content
+//// [tests/cases/conformance/references/library-reference-5.ts] ////
 
+=== /src/root.ts ===
+
+/// <reference types="foo" />
+/// <reference types="bar" />
+
+=== /node_modules/foo/index.d.ts ===
 /// <reference types="alpha" />
 declare var foo: any;
->foo : Symbol(foo, Decl(index.d.ts, 3, 11))
+>foo : Symbol(foo, Decl(index.d.ts, 1, 11))
 
 === /node_modules/foo/node_modules/alpha/index.d.ts ===
 declare var alpha: any;
->alpha : Symbol(alpha, Decl(index.d.ts, 0, 11))
+>alpha : Symbol(alpha, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 11))
 
 === /node_modules/bar/index.d.ts ===
 /// <reference types="alpha" />
 declare var bar: any;
 >bar : Symbol(bar, Decl(index.d.ts, 1, 11))
+
+=== /node_modules/bar/node_modules/alpha/index.d.ts ===
+declare var alpha: {};
+>alpha : Symbol(alpha, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 11))
 

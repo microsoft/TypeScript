@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration13_es6.ts ===
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration13_es6.ts] ////
+
+=== FunctionDeclaration13_es6.ts ===
 function * foo() {
 >foo : Symbol(foo, Decl(FunctionDeclaration13_es6.ts, 0, 0))
 

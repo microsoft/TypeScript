@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInLambda.ts] ////
+
 //// [collisionThisExpressionAndLocalVarInLambda.ts]
 declare function alert(message?: any): void;
 
@@ -10,11 +12,11 @@ var x = {
 alert(x.doStuff(x => alert(x)));
 
 //// [collisionThisExpressionAndLocalVarInLambda.js]
-var _this_1 = this;
+"use strict";
 var x = {
-    doStuff: function (callback) { return function () {
+    doStuff: (callback) => () => {
         var _this = 2;
-        return callback(_this_1);
-    }; }
+        return callback(this);
+    }
 };
-alert(x.doStuff(function (x) { return alert(x); }));
+alert(x.doStuff(x => alert(x)));

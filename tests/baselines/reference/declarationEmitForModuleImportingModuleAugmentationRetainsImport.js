@@ -22,24 +22,20 @@ child1(ParentThing.prototype);
 
 //// [parent.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParentThing = void 0;
-var child1_1 = require("./child1"); // this import should still exist in some form in the output, since it augments this module
-var ParentThing = /** @class */ (function () {
-    function ParentThing() {
-    }
-    return ParentThing;
-}());
+const child1_1 = require("./child1"); // this import should still exist in some form in the output, since it augments this module
+class ParentThing {
+}
 exports.ParentThing = ParentThing;
 (0, child1_1.child1)(ParentThing.prototype);
 //// [child1.js]
 "use strict";
-exports.__esModule = true;
-exports.child1 = void 0;
-function child1(prototype) {
-    prototype.add = function (a, b) { return a + b; };
-}
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.child1 = child1;
+function child1(prototype) {
+    prototype.add = (a, b) => a + b;
+}
 
 
 //// [parent.d.ts]

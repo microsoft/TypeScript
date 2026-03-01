@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts] ////
+
 //// [resolveModuleNameWithSameLetDeclarationName2.ts]
 declare module "punycode" {
     interface ucs2 {
@@ -9,3 +11,4 @@ declare module "punycode" {
 }
 
 //// [resolveModuleNameWithSameLetDeclarationName2.js]
+"use strict";

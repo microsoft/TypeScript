@@ -1,5 +1,11 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/jsFileCompilationWithMapFileAsJsWithOutDir.ts] ////
+
+=== a.ts ===
 class c {
 >c : Symbol(c, Decl(a.ts, 0, 0))
 }
 
+=== b.js ===
+function bar() {
+>bar : Symbol(bar, Decl(b.js, 0, 0))
+}

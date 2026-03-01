@@ -18,4 +18,4 @@
 ////      x.h/*function_call*/ello();
 //// }
 
-verify.allRangesAppearInImplementationList("function_call");
+verify.baselineGoToImplementation("function_call");

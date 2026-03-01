@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts ===
+//// [tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts] ////
+
+=== conditionalEqualityOnLiteralObjects.ts ===
 const a = { a: 1 }
 >a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 5))
 >a : Symbol(a, Decl(conditionalEqualityOnLiteralObjects.ts, 0, 11))

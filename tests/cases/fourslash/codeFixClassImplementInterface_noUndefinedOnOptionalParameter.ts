@@ -16,7 +16,7 @@ verify.codeFix({
 }
 
 class Foo implements IFoo {
-    bar(x?: string | number): void {
+    bar(x?: number | string): void {
         throw new Error("Method not implemented.");
     }
 }`,

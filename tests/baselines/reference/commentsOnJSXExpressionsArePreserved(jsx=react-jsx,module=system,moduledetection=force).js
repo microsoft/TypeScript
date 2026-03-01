@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx] ////
+
 //// [commentsOnJSXExpressionsArePreserved.tsx]
 // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
 namespace JSX {}
@@ -32,14 +34,11 @@ System.register(["react/jsx-runtime"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            Component = /** @class */ (function () {
-                function Component() {
-                }
-                Component.prototype.render = function () {
+            Component = class Component {
+                render() {
                     return _jsx("div", { children: null /* preserved */ });
-                };
-                return Component;
-            }());
+                }
+            };
         }
     };
 });

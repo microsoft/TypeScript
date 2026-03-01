@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts] ////
+
 //// [multipleExportAssignmentsInAmbientDeclaration.ts]
 declare module "m1" {
     var a: number
@@ -7,3 +9,4 @@ declare module "m1" {
 }
 
 //// [multipleExportAssignmentsInAmbientDeclaration.js]
+"use strict";

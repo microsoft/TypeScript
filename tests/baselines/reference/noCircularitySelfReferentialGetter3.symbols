@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/noCircularitySelfReferentialGetter3.ts] ////
+
+=== noCircularitySelfReferentialGetter3.ts ===
+const a = {
+>a : Symbol(a, Decl(noCircularitySelfReferentialGetter3.ts, 0, 5))
+
+  prop: 42,
+>prop : Symbol(prop, Decl(noCircularitySelfReferentialGetter3.ts, 0, 11))
+
+  get self() {
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter3.ts, 1, 11))
+
+    return a;
+>a : Symbol(a, Decl(noCircularitySelfReferentialGetter3.ts, 0, 5))
+
+  },
+} satisfies { prop: number; self: any };
+>prop : Symbol(prop, Decl(noCircularitySelfReferentialGetter3.ts, 5, 13))
+>self : Symbol(self, Decl(noCircularitySelfReferentialGetter3.ts, 5, 27))
+

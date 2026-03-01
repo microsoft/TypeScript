@@ -1,63 +1,107 @@
-=== tests/cases/conformance/expressions/asOperator/asOperator3.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperator3.ts] ////
+
+=== asOperator3.ts ===
 declare function tag(...x: any[]): any;
 >tag : (...x: any[]) => any
+>    : ^^^^ ^^     ^^^^^   
 >x : any[]
+>  : ^^^^^
 
 var a = `${123 + 456 as number}`;
 >a : string
+>  : ^^^^^^
 >`${123 + 456 as number}` : string
+>                         : ^^^^^^
 >123 + 456 as number : number
+>                    : ^^^^^^
 >123 + 456 : number
+>          : ^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 
 var b = `leading ${123 + 456 as number}`;
 >b : string
+>  : ^^^^^^
 >`leading ${123 + 456 as number}` : string
+>                                 : ^^^^^^
 >123 + 456 as number : number
+>                    : ^^^^^^
 >123 + 456 : number
+>          : ^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 
 var c = `${123 + 456 as number} trailing`;
 >c : string
+>  : ^^^^^^
 >`${123 + 456 as number} trailing` : string
+>                                  : ^^^^^^
 >123 + 456 as number : number
+>                    : ^^^^^^
 >123 + 456 : number
+>          : ^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 
 var d = `Hello ${123} World` as string;
 >d : string
+>  : ^^^^^^
 >`Hello ${123} World` as string : string
->`Hello ${123} World` : string
+>                               : ^^^^^^
+>`Hello ${123} World` : "Hello 123 World"
+>                     : ^^^^^^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 var e = `Hello` as string;
 >e : string
+>  : ^^^^^^
 >`Hello` as string : string
+>                  : ^^^^^^
 >`Hello` : "Hello"
+>        : ^^^^^^^
 
 var f = 1 + `${1} end of string` as string;
 >f : string
+>  : ^^^^^^
 >1 + `${1} end of string` as string : string
+>                                   : ^^^^^^
 >1 + `${1} end of string` : string
+>                         : ^^^^^^
 >1 : 1
->`${1} end of string` : string
+>  : ^
+>`${1} end of string` : "1 end of string"
+>                     : ^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 var g = tag `Hello ${123} World` as string;
 >g : string
+>  : ^^^^^^
 >tag `Hello ${123} World` as string : string
+>                                   : ^^^^^^
 >tag `Hello ${123} World` : any
 >tag : (...x: any[]) => any
+>    : ^^^^ ^^     ^^^^^   
 >`Hello ${123} World` : string
+>                     : ^^^^^^
 >123 : 123
+>    : ^^^
 
 var h = tag `Hello` as string;
 >h : string
+>  : ^^^^^^
 >tag `Hello` as string : string
+>                      : ^^^^^^
 >tag `Hello` : any
 >tag : (...x: any[]) => any
+>    : ^^^^ ^^     ^^^^^   
 >`Hello` : "Hello"
+>        : ^^^^^^^
 

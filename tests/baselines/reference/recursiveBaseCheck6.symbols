@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveBaseCheck6.ts ===
+//// [tests/cases/compiler/recursiveBaseCheck6.ts] ////
+
+=== recursiveBaseCheck6.ts ===
 class S18<A> extends S18<{ S19: A; }>{ }
 >S18 : Symbol(S18, Decl(recursiveBaseCheck6.ts, 0, 0))
 >A : Symbol(A, Decl(recursiveBaseCheck6.ts, 0, 10))

@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @allowJs: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /ns.ts
 ////file content not read
 
@@ -25,9 +25,9 @@ verify.completions(
     {
         marker: "2",
         exact: [
-            { name: "lib", kind: "script", kindModifiers: ".d.ts" },
             { name: "ns", kind: "script", kindModifiers: ".ts" },
             { name: "user", kind: "script", kindModifiers: ".js" },
+            { name: "home", kind: "directory" },
             { name: "node_modules", kind: "directory" },
         ],
         isNewIdentifierLocation: true

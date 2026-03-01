@@ -1,8 +1,7 @@
 "use strict";
-exports.__esModule = true;
-exports.point = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.point = point;
 ;
 function point(x, y) {
     return { x: x, y: y };
 }
-exports.point = point;

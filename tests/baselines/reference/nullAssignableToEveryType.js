@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignableToEveryType.ts] ////
+
 //// [nullAssignableToEveryType.ts]
 class C {
     foo: string;
@@ -44,11 +46,9 @@ function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 //}
 
 //// [nullAssignableToEveryType.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var ac;
 var ai;
 var E;

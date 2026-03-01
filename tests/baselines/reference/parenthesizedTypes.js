@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/parenthesizedTypes.ts] ////
+
 //// [parenthesizedTypes.ts]
 var a: string;
 var a: (string);
@@ -29,6 +31,7 @@ var g: [(string), (((typeof a)))];
 
 
 //// [parenthesizedTypes.js]
+"use strict";
 var a;
 var a;
 var a;

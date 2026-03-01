@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2017/useSharedArrayBuffer4.ts ===
+//// [tests/cases/conformance/es2017/useSharedArrayBuffer4.ts] ////
+
+=== useSharedArrayBuffer4.ts ===
 var foge = new SharedArrayBuffer(1024);
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))
@@ -9,23 +11,23 @@ var bar = foge.slice(1, 10);
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >slice : Symbol(SharedArrayBuffer.slice, Decl(lib.es2017.sharedmemory.d.ts, --, --))
 
-var species = foge[Symbol.species];
->species : Symbol(species, Decl(useSharedArrayBuffer4.ts, 2, 3))
->foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
->Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-
 var stringTag = foge[Symbol.toStringTag];
->stringTag : Symbol(stringTag, Decl(useSharedArrayBuffer4.ts, 3, 3))
+>stringTag : Symbol(stringTag, Decl(useSharedArrayBuffer4.ts, 2, 3))
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var len = foge.byteLength;
->len : Symbol(len, Decl(useSharedArrayBuffer4.ts, 4, 3))
+>len : Symbol(len, Decl(useSharedArrayBuffer4.ts, 3, 3))
 >foge.byteLength : Symbol(SharedArrayBuffer.byteLength, Decl(lib.es2017.sharedmemory.d.ts, --, --))
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >byteLength : Symbol(SharedArrayBuffer.byteLength, Decl(lib.es2017.sharedmemory.d.ts, --, --))
+
+var species = SharedArrayBuffer[Symbol.species];
+>species : Symbol(species, Decl(useSharedArrayBuffer4.ts, 4, 3))
+>SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))
+>Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

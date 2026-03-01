@@ -1,7 +1,0 @@
-=== tests/cases/compiler/es5ExportEquals.ts ===
-export function f() { }
->f : Symbol(f, Decl(es5ExportEquals.ts, 0, 0))
-
-export = f;
->f : Symbol(f, Decl(es5ExportEquals.ts, 0, 0))
-

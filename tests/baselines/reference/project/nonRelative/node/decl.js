@@ -1,7 +1,6 @@
 "use strict";
-exports.__esModule = true;
-exports.call = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.call = call;
 function call() {
     return "success";
 }
-exports.call = call;

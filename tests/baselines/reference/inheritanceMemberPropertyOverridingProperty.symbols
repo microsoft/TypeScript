@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts ===
+//// [tests/cases/compiler/inheritanceMemberPropertyOverridingProperty.ts] ////
+
+=== inheritanceMemberPropertyOverridingProperty.ts ===
 class a {
 >a : Symbol(a, Decl(inheritanceMemberPropertyOverridingProperty.ts, 0, 0))
 

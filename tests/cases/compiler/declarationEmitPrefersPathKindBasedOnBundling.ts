@@ -1,8 +1,9 @@
+// @module: commonjs
+// @target: es5, es2015
 // @declaration: true
-// @target: es5
-// @baseUrl: /.src/tests/cases/compiler
+// @baseUrl: .
 // @outDir: ./dist
-// @rootDir: ./tests/cases/compiler/src
+// @rootDir: ./src
 // @filename: src/lib/operators/scalar.ts
 export interface Scalar {
 	(): string;

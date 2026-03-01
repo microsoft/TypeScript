@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorSupression1.ts ===
+//// [tests/cases/compiler/errorSupression1.ts] ////
+
+=== errorSupression1.ts ===
 class Foo { static bar() { return "x"; } }
 >Foo : Symbol(Foo, Decl(errorSupression1.ts, 0, 0))
 >bar : Symbol(Foo.bar, Decl(errorSupression1.ts, 0, 11))

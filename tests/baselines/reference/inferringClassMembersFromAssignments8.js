@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments8.ts] ////
+
 //// [inferringClassMembersFromAssignments8.ts]
 // no inference in TS files, even for `this` aliases:
 
@@ -10,6 +12,7 @@ a
 
 
 //// [inferringClassMembersFromAssignments8.js]
+"use strict";
 // no inference in TS files, even for `this` aliases:
 var app = function () {
     var _this = this;

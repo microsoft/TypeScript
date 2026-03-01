@@ -1,90 +1,123 @@
-=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts] ////
+
+=== stringIndexerConstrainsPropertyDeclarations2.ts ===
 // String indexer providing a constraint of a user defined type
 
 class A {
 >A : A
+>  : ^
 
     foo(): string { return ''; }
 >foo : () => string
+>    : ^^^^^^      
 >'' : ""
+>   : ^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     bar(): string { return ''; }
 >bar : () => string
+>    : ^^^^^^      
 >'' : ""
+>   : ^^
 }
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     [x: string]: A;
 >x : string
+>  : ^^^^^^
 
     a: A; // ok
 >a : A
+>  : ^
 
     b: B; // ok
 >b : B
+>  : ^
 
     c: number; // error
 >c : number
+>  : ^^^^^^
 
     d: string; // error
 >d : string
+>  : ^^^^^^
 }
 
 interface Foo2 {
     [x: string]: A;
 >x : string
+>  : ^^^^^^
 
     a: A; // ok
 >a : A
+>  : ^
 
     b: B; // ok
 >b : B
+>  : ^
 
     c: number; // error
 >c : number
+>  : ^^^^^^
 
     d: string; // error
 >d : string
+>  : ^^^^^^
 }
 
 var a: {
 >a : { [x: string]: A; a: A; b: B; c: number; d: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^      ^^^^^      ^^^
 
     [x: string]: A;
 >x : string
+>  : ^^^^^^
 
     a: A; // ok
 >a : A
+>  : ^
 
     b: B; // ok
 >b : B
+>  : ^
 
     c: number; // error
 >c : number
+>  : ^^^^^^
 
     d: string; // error
 >d : string
+>  : ^^^^^^
 
 };
 
 // error
 var b: { [x: string]: A } = {
 >b : { [x: string]: A; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >{    a: A,    b: B} : { a: typeof A; b: typeof B; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: A,
 >a : typeof A
+>  : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
     b: B
 >b : typeof B
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 }

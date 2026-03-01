@@ -1,21 +1,29 @@
-=== tests/cases/compiler/unusedTypeParametersWithUnderscore.ts ===
+//// [tests/cases/compiler/unusedTypeParametersWithUnderscore.ts] ////
+
+=== unusedTypeParametersWithUnderscore.ts ===
 function f<_T, U>() { }
 >f : <_T, U>() => void
+>  : ^  ^^ ^^^^^^^^^^^
 
 type T<_T, U> = { };
 >T : T<_T, U>
+>  : ^^^^^^^^
 
 interface I<_T, U> { };
 
 class C<_T, U> {
 >C : C<_T, U>
+>  : ^^^^^^^^
 
     public m<_V, W>() { }
 >m : <_V, W>() => void
+>  : ^  ^^ ^^^^^^^^^^^
 
 };
 
 let l = <_T, U>() => { };
 >l : <_T, U>() => void
+>  : ^  ^^ ^^^^^^^^^^^
 ><_T, U>() => { } : <_T, U>() => void
+>                 : ^  ^^ ^^^^^^^^^^^
 

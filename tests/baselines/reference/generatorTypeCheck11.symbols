@@ -1,5 +1,7 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck11.ts ===
-function* g(): IterableIterator<number> {
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck11.ts] ////
+
+=== generatorTypeCheck11.ts ===
+function* g(): IterableIterator<number, number> {
 >g : Symbol(g, Decl(generatorTypeCheck11.ts, 0, 0))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 

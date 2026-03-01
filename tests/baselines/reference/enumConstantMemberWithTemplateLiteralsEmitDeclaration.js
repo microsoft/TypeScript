@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts] ////
+
 //// [enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts]
 enum T1 {
     a = `1`
@@ -41,6 +43,7 @@ declare enum T7 {
 
 
 //// [enumConstantMemberWithTemplateLiteralsEmitDeclaration.js]
+"use strict";
 var T1;
 (function (T1) {
     T1["a"] = "1";
@@ -73,7 +76,7 @@ var T5;
 var T6;
 (function (T6) {
     T6[T6["a"] = 1] = "a";
-    T6[T6["b"] = "12".length] = "b";
+    T6[T6["b"] = `12`.length] = "b";
 })(T6 || (T6 = {}));
 
 

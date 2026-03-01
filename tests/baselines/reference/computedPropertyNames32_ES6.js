@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames32_ES6.ts] ////
+
 //// [computedPropertyNames32_ES6.ts]
 function foo<T>() { return '' }
 class C<T> {
@@ -8,6 +10,7 @@ class C<T> {
 }
 
 //// [computedPropertyNames32_ES6.js]
+"use strict";
 function foo() { return ''; }
 class C {
     bar() {

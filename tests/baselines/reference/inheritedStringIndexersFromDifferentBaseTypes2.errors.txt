@@ -1,7 +1,7 @@
-tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts(18,11): error TS2413: 'number' index type '{}' is not assignable to 'string' index type '{ a: any; }'.
+inheritedStringIndexersFromDifferentBaseTypes2.ts(18,11): error TS2413: 'number' index type '{}' is not assignable to 'string' index type '{ a: any; }'.
 
 
-==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts (1 errors) ====
+==== inheritedStringIndexersFromDifferentBaseTypes2.ts (1 errors) ====
     // indexer in B is a subtype of indexer in A
     interface A {
         [s: string]: {

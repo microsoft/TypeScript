@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty47.ts] ////
+
 //// [symbolProperty47.ts]
 class C {
     get [Symbol.hasInstance]() {
@@ -12,6 +14,7 @@ class C {
 (new C)[Symbol.hasInstance] = "";
 
 //// [symbolProperty47.js]
+"use strict";
 class C {
     get [Symbol.hasInstance]() {
         return "";

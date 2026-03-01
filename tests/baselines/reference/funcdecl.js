@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funcdecl.ts] ////
+
 //// [funcdecl.ts]
 function simpleFunc() {
     return "this is my simple func";
@@ -49,7 +51,7 @@ var withOverloadSignature = overload1;
 
 function f(n: () => void) { }
 
-module m2 {
+namespace m2 {
     export function foo(n: () => void ) {
     }
 
@@ -72,6 +74,7 @@ var f2 = () => {
 }
 
 //// [funcdecl.js]
+"use strict";
 function simpleFunc() {
     return "this is my simple func";
 }
@@ -94,20 +97,13 @@ var withMultiParamsVar = withMultiParams;
 function withOptionalParams(a) {
 }
 var withOptionalParamsVar = withOptionalParams;
-function withInitializedParams(a, b0, b, c) {
-    if (b === void 0) { b = 30; }
-    if (c === void 0) { c = "string value"; }
+function withInitializedParams(a, b0, b = 30, c = "string value") {
 }
 var withInitializedParamsVar = withInitializedParams;
-function withOptionalInitializedParams(a, c) {
-    if (c === void 0) { c = "hello string"; }
+function withOptionalInitializedParams(a, c = "hello string") {
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
-function withRestParams(a) {
-    var myRestParameter = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        myRestParameter[_i - 1] = arguments[_i];
-    }
+function withRestParams(a, ...myRestParameter) {
     return myRestParameter;
 }
 var withRestParamsVar = withRestParams;
@@ -122,11 +118,11 @@ var m2;
     }
     m2.foo = foo;
 })(m2 || (m2 = {}));
-m2.foo(function () {
+m2.foo(() => {
     var b = 30;
     return b;
 });
-var f2 = function () {
+var f2 = () => {
     return "string";
 };
 
@@ -154,7 +150,7 @@ declare function overload1(n: number): string;
 declare function overload1(s: string): string;
 declare var withOverloadSignature: typeof overload1;
 declare function f(n: () => void): void;
-declare module m2 {
+declare namespace m2 {
     function foo(n: () => void): void;
 }
 declare function fooAmbient(n: number): string;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts] ////
+
 //// [stringLiteralTypesInUnionTypes02.ts]
 type T = string | "foo" | "bar" | "baz";
 
@@ -20,18 +22,19 @@ x = y;
 y = x;
 
 //// [stringLiteralTypesInUnionTypes02.js]
+"use strict";
 var x = undefined;
 var y = undefined;
 if (x === "foo") {
-    var a = x;
+    let a = x;
 }
 else if (x !== "bar") {
-    var b = x || y;
+    let b = x || y;
 }
 else {
-    var c = x;
-    var d = y;
-    var e = c || d;
+    let c = x;
+    let d = y;
+    let e = c || d;
 }
 x = y;
 y = x;

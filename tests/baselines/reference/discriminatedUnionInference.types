@@ -1,55 +1,89 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/discriminatedUnionInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/discriminatedUnionInference.ts] ////
+
+=== discriminatedUnionInference.ts ===
 // Repro from #28862
 
 type Foo<A> = { type: "foo", (): A[] };
 >Foo : Foo<A>
+>    : ^^^^^^
 >type : "foo"
+>     : ^^^^^
 
 type Bar<A> = { type: "bar", (): A };
 >Bar : Bar<A>
+>    : ^^^^^^
 >type : "bar"
+>     : ^^^^^
 
 type FooBar<A> = Foo<A> | Bar<A>;
 >FooBar : FooBar<A>
+>       : ^^^^^^^^^
 
 type InferA<T> = T extends FooBar<infer A> ? A : never;
 >InferA : InferA<T>
+>       : ^^^^^^^^^
 
 type FooA = InferA<Foo<number>>;  // number
 >FooA : number
+>     : ^^^^^^
 
 // Repro from #28862
 
 type Item<T> = { kind: 'a', data: T } | { kind: 'b', data: T[] };
 >Item : Item<T>
+>     : ^^^^^^^
 >kind : "a"
+>     : ^^^
 >data : T
+>     : ^
 >kind : "b"
+>     : ^^^
 >data : T[]
+>     : ^^^
 
 declare function foo<T>(item: Item<T>): T;
 >foo : <T>(item: Item<T>) => T
+>    : ^ ^^    ^^       ^^^^^ 
 >item : Item<T>
+>     : ^^^^^^^
 
 let x1 = foo({ kind: 'a', data: 42 });  // number
 >x1 : number
+>   : ^^^^^^
 >foo({ kind: 'a', data: 42 }) : number
+>                             : ^^^^^^
 >foo : <T>(item: Item<T>) => T
+>    : ^ ^^    ^^       ^^^^^ 
 >{ kind: 'a', data: 42 } : { kind: "a"; data: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "a"
+>     : ^^^
 >'a' : "a"
+>    : ^^^
 >data : number
+>     : ^^^^^^
 >42 : 42
+>   : ^^
 
 let x2 = foo({ kind: 'b', data: [1, 2] });  // number
 >x2 : number
+>   : ^^^^^^
 >foo({ kind: 'b', data: [1, 2] }) : number
+>                                 : ^^^^^^
 >foo : <T>(item: Item<T>) => T
+>    : ^ ^^    ^^       ^^^^^ 
 >{ kind: 'b', data: [1, 2] } : { kind: "b"; data: number[]; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "b"
+>     : ^^^
 >'b' : "b"
+>    : ^^^
 >data : number[]
+>     : ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts ===
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts] ////
+
+=== substitutionTypeForIndexedAccessType2.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 0))
 
@@ -22,9 +24,6 @@ type Bar<T> =
     ? T['foo'] extends string
 >T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 6, 9))
 
-      // Type 'T["foo"]' does not satisfy the constraint 'string'.
-      //  Type 'string | undefined' is not assignable to type 'string'.
-      //   Type 'undefined' is not assignable to type 'string'.(2344)
       ? Str<T['foo']>
 >Str : Symbol(Str, Decl(substitutionTypeForIndexedAccessType2.ts, 2, 1))
 >T : Symbol(T, Decl(substitutionTypeForIndexedAccessType2.ts, 6, 9))

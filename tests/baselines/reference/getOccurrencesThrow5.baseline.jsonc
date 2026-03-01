@@ -1,0 +1,12 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow5.ts ===
+// --- (line: 32) skipped ---
+// 
+//     throw 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 4 })
+// 
+//     return;
+//     return true;
+//     throw false;
+// }

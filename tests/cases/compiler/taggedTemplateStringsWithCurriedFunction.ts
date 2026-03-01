@@ -1,4 +1,5 @@
-//@target: es3
+// @strict: false
+//@target: es5, es2015
 
 // Originated from #38558
 

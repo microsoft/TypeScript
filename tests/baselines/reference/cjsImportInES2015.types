@@ -1,16 +1,24 @@
+//// [tests/cases/conformance/externalModules/typeOnly/cjsImportInES2015.ts] ////
+
 === /project/index.ts ===
 import type SpecialError = require("cjs-dep");
 >SpecialError : typeof SpecialError
+>             : ^^^^^^^^^^^^^^^^^^^
 
 function handleError(err: SpecialError) {}
 >handleError : (err: SpecialError) => void
+>            : ^   ^^            ^^^^^^^^^
 >err : SpecialError
+>    : ^^^^^^^^^^^^
 
 === /project/node_modules/cjs-dep/index.d.ts ===
 declare class SpecialError extends Error {}
 >SpecialError : SpecialError
+>             : ^^^^^^^^^^^^
 >Error : Error
+>      : ^^^^^
 
 export = SpecialError;
 >SpecialError : SpecialError
+>             : ^^^^^^^^^^^^
 

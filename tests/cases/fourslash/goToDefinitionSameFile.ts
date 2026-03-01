@@ -13,4 +13,4 @@
 ////class fooCls implements /*localInterfaceReference*/localInterface { }
 ////var fooVar = /*localModuleReference*/localModule.foo;
 
-verify.goToDefinitionForMarkers("localVariable", "localFunction", "localClass", "localInterface", "localModule");
+verify.baselineGetDefinitionAtPosition("localVariableReference", "localFunctionReference", "localClassReference", "localInterfaceReference", "localModuleReference");

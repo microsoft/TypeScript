@@ -1,0 +1,113 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-privateFieldAccess.ts] ////
+
+=== esDecorators-privateFieldAccess.ts ===
+declare let dec: any;
+>dec : any
+>    : ^^^
+
+@dec(x => x.#foo) // error
+>dec(x => x.#foo) : any
+>                 : ^^^
+>dec : any
+>    : ^^^
+>x => x.#foo : (x: any) => any
+>            : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>x.#foo : any
+>       : ^^^
+>x : any
+>  : ^^^
+
+class A {
+>A : A
+>  : ^
+
+    #foo = 3;
+>#foo : number
+>     : ^^^^^^
+>3 : 3
+>  : ^
+
+    @dec(this, (x: A) => x.#foo) // ok
+>dec(this, (x: A) => x.#foo) : any
+>                            : ^^^
+>dec : any
+>    : ^^^
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+>(x: A) => x.#foo : (x: A) => number
+>                 : ^ ^^ ^^^^^^^^^^^
+>x : A
+>  : ^
+>x.#foo : number
+>       : ^^^^^^
+>x : A
+>  : ^
+
+    m() {}
+>m : () => void
+>  : ^^^^^^^^^^
+}
+
+@dec((x: B) => x.#foo) // error
+>dec((x: B) => x.#foo) : any
+>                      : ^^^
+>dec : any
+>    : ^^^
+>(x: B) => x.#foo : (x: B) => any
+>                 : ^ ^^ ^^^^^^^^
+>x : B
+>  : ^
+>x.#foo : any
+>       : ^^^
+>x : B
+>  : ^
+
+class B {
+>B : B
+>  : ^
+
+    #foo = 3;
+>#foo : number
+>     : ^^^^^^
+>3 : 3
+>  : ^
+}
+
+class C {
+>C : C
+>  : ^
+
+    #foo = 2;
+>#foo : number
+>     : ^^^^^^
+>2 : 2
+>  : ^
+
+    m() {
+>m : () => typeof D
+>  : ^^^^^^^^^^^^^^
+
+        @dec(() => this.#foo) // ok
+>dec(() => this.#foo) : any
+>                     : ^^^
+>dec : any
+>    : ^^^
+>() => this.#foo : () => number
+>                : ^^^^^^^^^^^^
+>this.#foo : number
+>          : ^^^^^^
+>this : this
+>     : ^^^^
+
+        class D {}
+>D : D
+>  : ^
+
+        return D;
+>D : typeof D
+>  : ^^^^^^^^
+    }
+}
+

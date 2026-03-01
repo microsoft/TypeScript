@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/asOperator/asOperatorAmbiguity.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperatorAmbiguity.ts] ////
+
+=== asOperatorAmbiguity.ts ===
 interface A<T> { x: T; }
 >A : Symbol(A, Decl(asOperatorAmbiguity.ts, 0, 0))
 >T : Symbol(T, Decl(asOperatorAmbiguity.ts, 0, 12))

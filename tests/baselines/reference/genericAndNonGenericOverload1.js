@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericAndNonGenericOverload1.ts] ////
+
 //// [genericAndNonGenericOverload1.ts]
 interface callable2<T> {
     (a: T): T;
@@ -7,5 +9,6 @@ var c2: callable2<number>;
 c2<string>(1);
 
 //// [genericAndNonGenericOverload1.js]
+"use strict";
 var c2;
 c2(1);

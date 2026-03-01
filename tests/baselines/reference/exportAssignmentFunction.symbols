@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentFunction_B.ts ===
+//// [tests/cases/compiler/exportAssignmentFunction.ts] ////
+
+=== exportAssignmentFunction_B.ts ===
 import fooFunc = require("exportAssignmentFunction_A");
 >fooFunc : Symbol(fooFunc, Decl(exportAssignmentFunction_B.ts, 0, 0))
 
@@ -6,7 +8,7 @@ var n: number = fooFunc();
 >n : Symbol(n, Decl(exportAssignmentFunction_B.ts, 2, 3))
 >fooFunc : Symbol(fooFunc, Decl(exportAssignmentFunction_B.ts, 0, 0))
 
-=== tests/cases/compiler/exportAssignmentFunction_A.ts ===
+=== exportAssignmentFunction_A.ts ===
 function foo() { return 0; }
 >foo : Symbol(foo, Decl(exportAssignmentFunction_A.ts, 0, 0))
 

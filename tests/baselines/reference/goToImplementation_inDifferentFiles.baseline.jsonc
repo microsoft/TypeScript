@@ -1,0 +1,30 @@
+// === goToImplementation ===
+// === /home/src/workspaces/project/bar.ts ===
+// import {Foo} from './foo'
+// 
+// class [|{| defId: 0 |}A|] implements Foo {
+//     func() {}
+// }
+// 
+// class [|{| defId: 1 |}B|] implements Foo {
+//     func() {}
+// }
+
+// === /home/src/workspaces/project/foo.ts ===
+// export interface /*GOTO IMPL*/Foo {
+//     func();
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "",
+    "displayParts": []
+   },
+   {
+    "defId": 1,
+    "kind": "",
+    "displayParts": []
+   }
+  ]

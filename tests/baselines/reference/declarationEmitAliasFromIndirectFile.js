@@ -29,15 +29,15 @@ export default fp.l10ns;
 
 //// [app.js]
 "use strict";
-exports.__esModule = true;
-var fp = { l10ns: {} };
-exports["default"] = fp.l10ns;
+Object.defineProperty(exports, "__esModule", { value: true });
+const fp = { l10ns: {} };
+exports.default = fp.l10ns;
 
 
 //// [app.d.ts]
 declare const _default: {
-    ar?: import("./locale").CustomLocale;
-    bg?: import("./locale").CustomLocale;
+    ar?: import("./locale").CustomLocale | undefined;
+    bg?: import("./locale").CustomLocale | undefined;
 } & {
     default: import("./locale").Locale;
 };

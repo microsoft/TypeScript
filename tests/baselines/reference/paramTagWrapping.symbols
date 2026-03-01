@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/good.js ===
+//// [tests/cases/conformance/jsdoc/paramTagWrapping.ts] ////
+
+=== good.js ===
 /**
  * @param
  * {number} x Arg x.
@@ -18,7 +20,7 @@ good(1, 2, 3)
 >good : Symbol(good, Decl(good.js, 0, 0))
 
 
-=== tests/cases/conformance/jsdoc/bad.js ===
+=== bad.js ===
 /**
  * @param *
  * {number} x Arg x.

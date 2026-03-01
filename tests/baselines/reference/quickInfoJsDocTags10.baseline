@@ -1,3 +1,19 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags10.js ===
+// /**
+//  * @param {T1} a
+//  * @param {T2} a
+//  * @template T1,T2 Comment Text
+//  */
+// const foo = (a, b) => {};
+//       ^^^
+// | ----------------------------------------------------------------------
+// | const foo: <T1, T2>(a: T1, b: any) => void
+// | @param a
+// | @param a
+// | @template T1, T2 Comment Text
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +21,7 @@
       "position": 80,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {

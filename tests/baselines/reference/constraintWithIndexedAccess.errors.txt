@@ -1,0 +1,96 @@
+constraintWithIndexedAccess.ts(23,90): error TS2344: Type 'TypeHardcodedAsParameterWithoutReturnType<T, F>' does not satisfy the constraint '(...args: any) => any'.
+  Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+    Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.
+      Type 'DataFetchFns[T][string]' is not assignable to type '(...args: any) => any'.
+constraintWithIndexedAccess.ts(24,102): error TS2344: Type 'DataFetchFns[T][F]' does not satisfy the constraint '(...args: any) => any'.
+  Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+    Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.
+      Type 'DataFetchFns[T][string]' is not assignable to type '(...args: any) => any'.
+constraintWithIndexedAccess.ts(26,103): error TS2344: Type 'VehicleSelector<T>[F]' does not satisfy the constraint '(...args: any) => any'.
+  Type 'VehicleSelector<T>[keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+    Type 'VehicleSelector<T>[string] | VehicleSelector<T>[number] | VehicleSelector<T>[symbol]' is not assignable to type '(...args: any) => any'.
+      Type 'VehicleSelector<T>[string]' is not assignable to type '(...args: any) => any'.
+constraintWithIndexedAccess.ts(27,102): error TS2344: Type 'DataFetchFns[T][F]' does not satisfy the constraint '(...args: any) => any'.
+  Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+    Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.
+      Type 'DataFetchFns[T][string]' is not assignable to type '(...args: any) => any'.
+constraintWithIndexedAccess.ts(28,102): error TS2344: Type 'DataFetchFns[T][T]' does not satisfy the constraint '(...args: any) => any'.
+  Type 'DataFetchFns[T]["Boat"] | DataFetchFns[T]["Plane"]' is not assignable to type '(...args: any) => any'.
+    Type 'DataFetchFns[T]["Boat"]' is not assignable to type '(...args: any) => any'.
+constraintWithIndexedAccess.ts(28,102): error TS2536: Type 'T' cannot be used to index type 'DataFetchFns[T]'.
+constraintWithIndexedAccess.ts(29,102): error TS2536: Type 'F' cannot be used to index type 'DataFetchFns'.
+constraintWithIndexedAccess.ts(29,102): error TS2344: Type 'DataFetchFns[F][F]' does not satisfy the constraint '(...args: any) => any'.
+  Type 'DataFetchFns[F][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+    Type 'DataFetchFns[F][string] | DataFetchFns[F][number] | DataFetchFns[F][symbol]' is not assignable to type '(...args: any) => any'.
+      Type 'DataFetchFns[F][string]' is not assignable to type '(...args: any) => any'.
+        Type 'DataFetchFns[keyof DataFetchFns[T]][string]' is not assignable to type '(...args: any) => any'.
+constraintWithIndexedAccess.ts(29,102): error TS2536: Type 'F' cannot be used to index type 'DataFetchFns[F]'.
+
+
+==== constraintWithIndexedAccess.ts (9 errors) ====
+    // #52399
+    type DataFetchFns = {
+        Boat: {
+            requiresLicense: (id: string) => boolean;
+            maxGroundSpeed: (id: string) => number;
+            description: (id: string) => string;
+            displacement: (id: string) => number;
+            name: (id: string) => string;
+        };
+        Plane: {
+            requiresLicense: (id: string) => boolean;
+            maxGroundSpeed: (id: string) => number;
+            maxTakeoffWeight: (id: string) => number;
+            maxCruisingAltitude: (id: string) => number;
+            name: (id: string) => string;
+        }
+    }
+    export type NoTypeParamBoatRequired<F extends keyof DataFetchFns['Boat']> = ReturnType<DataFetchFns['Boat'][F]>;
+    type TypeHardcodedAsParameterWithoutReturnType<T extends 'Boat', F extends keyof DataFetchFns[T]> = DataFetchFns[T][F];
+    export type allAreFunctionsAsExpected = TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>;
+    export type returnTypeOfFunctions = ReturnType<allAreFunctionsAsExpected>; //string | number | boolean as expected
+    export type SucceedingCombo = ReturnType<TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>>;
+    export type FailingCombo<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<TypeHardcodedAsParameterWithoutReturnType<T,F>>;
+                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'TypeHardcodedAsParameterWithoutReturnType<T, F>' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:     Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:       Type 'DataFetchFns[T][string]' is not assignable to type '(...args: any) => any'.
+    export type TypeHardcodedAsParameter<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'DataFetchFns[T][F]' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:     Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:       Type 'DataFetchFns[T][string]' is not assignable to type '(...args: any) => any'.
+    type VehicleSelector<T extends keyof DataFetchFns> = DataFetchFns[T];
+    export type TypeHardcodedAsParameter2<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<VehicleSelector<T>[F]>;
+                                                                                                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'VehicleSelector<T>[F]' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'VehicleSelector<T>[keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:     Type 'VehicleSelector<T>[string] | VehicleSelector<T>[number] | VehicleSelector<T>[symbol]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:       Type 'VehicleSelector<T>[string]' is not assignable to type '(...args: any) => any'.
+    export type TypeGeneric1<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'DataFetchFns[T][F]' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:     Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:       Type 'DataFetchFns[T][string]' is not assignable to type '(...args: any) => any'.
+    export type TypeGeneric2<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'DataFetchFns[T][T]' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'DataFetchFns[T]["Boat"] | DataFetchFns[T]["Plane"]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:     Type 'DataFetchFns[T]["Boat"]' is not assignable to type '(...args: any) => any'.
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'T' cannot be used to index type 'DataFetchFns[T]'.
+    export type TypeGeneric3<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error
+                                                                                                         ~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'F' cannot be used to index type 'DataFetchFns'.
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'DataFetchFns[F][F]' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'DataFetchFns[F][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:     Type 'DataFetchFns[F][string] | DataFetchFns[F][number] | DataFetchFns[F][symbol]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:       Type 'DataFetchFns[F][string]' is not assignable to type '(...args: any) => any'.
+!!! error TS2344:         Type 'DataFetchFns[keyof DataFetchFns[T]][string]' is not assignable to type '(...args: any) => any'.
+                                                                                                         ~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'F' cannot be used to index type 'DataFetchFns[F]'.
+    

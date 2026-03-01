@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_optionalMemberConformance.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_optionalMemberConformance.ts] ////
+
+=== typeSatisfaction_optionalMemberConformance.ts ===
 type Point2d = { x: number, y: number };
 >Point2d : Symbol(Point2d, Decl(typeSatisfaction_optionalMemberConformance.ts, 0, 0))
 >x : Symbol(x, Decl(typeSatisfaction_optionalMemberConformance.ts, 0, 16))

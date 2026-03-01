@@ -1,0 +1,176 @@
+//// [tests/cases/compiler/argumentsSpreadRestIterables.tsx] ////
+
+=== argumentsSpreadRestIterables.tsx ===
+declare const itNum: Iterable<number>
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+;(function(...rest) {})(...itNum)
+>(function(...rest) {})(...itNum) : void
+>                                 : ^^^^
+>(function(...rest) {}) : (...rest: number[]) => void
+>                       : ^^^^    ^^^^^^^^^^^^^^^^^^^
+>function(...rest) {} : (...rest: number[]) => void
+>                     : ^^^^    ^^^^^^^^^^^^^^^^^^^
+>rest : number[]
+>     : ^^^^^^^^
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+;(function(a, ...rest) {})('', ...itNum)
+>(function(a, ...rest) {})('', ...itNum) : void
+>                                        : ^^^^
+>(function(a, ...rest) {}) : (a: string, ...rest: number[]) => void
+>                          : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
+>function(a, ...rest) {} : (a: string, ...rest: number[]) => void
+>                        : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : number[]
+>     : ^^^^^^^^
+>'' : ""
+>   : ^^
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+;(function(a, ...rest) {})('', true, ...itNum)
+>(function(a, ...rest) {})('', true, ...itNum) : void
+>                                              : ^^^^
+>(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest: number[]) => void
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest: number[]) => void
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>rest : [boolean, ...number[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+>true : true
+>     : ^^^^
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+declare function fn1<const T extends readonly unknown[]>(...args: T): T;
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>args : T
+>     : ^
+
+const res1 = fn1(..."hello");
+>res1 : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
+>fn1(..."hello") : readonly string[]
+>                : ^^^^^^^^^^^^^^^^^
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>..."hello" : string
+>           : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const res2 = fn1(...itNum);
+>res2 : readonly number[]
+>     : ^^^^^^^^^^^^^^^^^
+>fn1(...itNum) : readonly number[]
+>              : ^^^^^^^^^^^^^^^^^
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+const res3 = fn1(true, ..."hello");
+>res3 : readonly [true, ...string[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1(true, ..."hello") : readonly [true, ...string[]]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>..."hello" : string
+>           : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const res4 = fn1(true, ...itNum);
+>res4 : readonly [true, ...number[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1(true, ...itNum) : readonly [true, ...number[]]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <const T extends readonly unknown[]>(...args: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+// repro from #52781
+declare function foo<T extends unknown[]>(...args: T): T;
+>foo : <T extends unknown[]>(...args: T) => T
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>args : T
+>     : ^
+
+const p1 = foo(..."hello");
+>p1 : string[]
+>   : ^^^^^^^^
+>foo(..."hello") : string[]
+>                : ^^^^^^^^
+>foo : <T extends unknown[]>(...args: T) => T
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>..."hello" : string
+>           : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const p2 = foo(...itNum);
+>p2 : number[]
+>   : ^^^^^^^^
+>foo(...itNum) : number[]
+>              : ^^^^^^^^
+>foo : <T extends unknown[]>(...args: T) => T
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+
+const p3 = foo(true, ..."hello");
+>p3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+>foo(true, ..."hello") : [boolean, ...string[]]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends unknown[]>(...args: T) => T
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>..."hello" : string
+>           : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const p4 = foo(true, ...itNum);
+>p4 : [boolean, ...number[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
+>foo(true, ...itNum) : [boolean, ...number[]]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T extends unknown[]>(...args: T) => T
+>    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
+>true : true
+>     : ^^^^
+>...itNum : number
+>         : ^^^^^^
+>itNum : Iterable<number>
+>      : ^^^^^^^^^^^^^^^^
+

@@ -1,37 +1,54 @@
-=== tests/cases/compiler/overloadCallTest.ts ===
+//// [tests/cases/compiler/overloadCallTest.ts] ////
+
+=== overloadCallTest.ts ===
 class foo {
 >foo : foo
+>    : ^^^
 
     constructor() {
         function bar(): string;
 >bar : { (): string; (s: string): any; }
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 
         function bar(s:string);
 >bar : { (): string; (s: string): any; }
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
         function bar(foo?: string) { return "foo" };
 >bar : { (): string; (s: string): any; }
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
         var test = bar("test");
 >test : any
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 
         var goo = bar();
 >goo : string
+>    : ^^^^^^
 >bar() : string
+>      : ^^^^^^
 >bar : { (): string; (s: string): any; }
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 
         goo = bar("test");
 >goo = bar("test") : any
 >goo : string
+>    : ^^^^^^
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 >"test" : "test"
+>       : ^^^^^^
     }
  
 }

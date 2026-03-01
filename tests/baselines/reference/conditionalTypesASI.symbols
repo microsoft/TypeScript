@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypesASI.ts ===
+//// [tests/cases/compiler/conditionalTypesASI.ts] ////
+
+=== conditionalTypesASI.ts ===
 // Repro from #21637
 
 interface JSONSchema4 {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserUnicode1.ts] ////
+
 //// [parserUnicode1.ts]
 try {
   var \u0078x = 6;
@@ -13,6 +15,7 @@ catch (e) {
 }
 
 //// [parserUnicode1.js]
+"use strict";
 try {
     var \u0078x = 6;
     if (xx !== 6) {

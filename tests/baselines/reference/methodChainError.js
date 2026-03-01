@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/methodChainError.ts] ////
+
 //// [methodChainError.ts]
 class Builder {
     notMethod: string
@@ -18,14 +20,12 @@ new Builder()
     .method("a");
 
 //// [methodChainError.js]
-var Builder = /** @class */ (function () {
-    function Builder() {
-    }
-    Builder.prototype.method = function (param) {
+"use strict";
+class Builder {
+    method(param) {
         return this;
-    };
-    return Builder;
-}());
+    }
+}
 new Builder()
     .method("a")
     .method()

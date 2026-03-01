@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts ===
+//// [tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts] ////
+
+=== anyAsGenericFunctionCall.ts ===
 // any is considered an untyped function call
 // can be called except with type arguments which is an error
 

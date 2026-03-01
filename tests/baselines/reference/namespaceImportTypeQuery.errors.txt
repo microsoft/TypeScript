@@ -1,5 +1,4 @@
-/b.ts(8,3): error TS2322: Type '{ A: any; B: any; }' is not assignable to type 'typeof import("/a")'.
-  Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
+/b.ts(8,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
 
 
 ==== /a.ts (0 errors) ====
@@ -16,9 +15,8 @@
       // error: while you can ask for `typeof types.A`,
       // `typeof types` does not include `A`
       A: undefined as any,
-      ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ A: any; B: any; }' is not assignable to type 'typeof import("/a")'.
-!!! error TS2322:   Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
+      ~
+!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
       B: undefined as any,
     }
     

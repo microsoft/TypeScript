@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericParameterAssignability1.ts ===
+//// [tests/cases/compiler/genericParameterAssignability1.ts] ////
+
+=== genericParameterAssignability1.ts ===
 function f<T>(x: T): T { return null; }
 >f : Symbol(f, Decl(genericParameterAssignability1.ts, 0, 0))
 >T : Symbol(T, Decl(genericParameterAssignability1.ts, 0, 11))

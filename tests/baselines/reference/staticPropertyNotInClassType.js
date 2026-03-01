@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
+
 //// [staticPropertyNotInClassType.ts]
-module NonGeneric {
+namespace NonGeneric {
     class C {
         fn() { return this; }
         static get x() { return 1; }
@@ -8,7 +10,7 @@ module NonGeneric {
         static foo: string; // not reflected in class type
     }
 
-    module C {
+    namespace C {
         export var bar = ''; // not reflected in class type
     }
 
@@ -19,7 +21,7 @@ module NonGeneric {
     var r6 = c.x; // error
 }
 
-module Generic {
+namespace Generic {
     class C<T, U> {
         fn() { return this; }
         static get x() { return 1; }
@@ -28,7 +30,7 @@ module Generic {
         static foo: T; // not reflected in class type
     }
 
-    module C {
+    namespace C {
         export var bar = ''; // not reflected in class type
     }
 
@@ -40,22 +42,18 @@ module Generic {
 }
 
 //// [staticPropertyNotInClassType.js]
+"use strict";
 var NonGeneric;
 (function (NonGeneric) {
-    var C = /** @class */ (function () {
-        function C(a, b) {
+    class C {
+        fn() { return this; }
+        static get x() { return 1; }
+        static set x(v) { }
+        constructor(a, b) {
             this.a = a;
             this.b = b;
         }
-        C.prototype.fn = function () { return this; };
-        Object.defineProperty(C, "x", {
-            get: function () { return 1; },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
+    }
     (function (C) {
         C.bar = ''; // not reflected in class type
     })(C || (C = {}));
@@ -67,20 +65,15 @@ var NonGeneric;
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
-    var C = /** @class */ (function () {
-        function C(a, b) {
+    class C {
+        fn() { return this; }
+        static get x() { return 1; }
+        static set x(v) { }
+        constructor(a, b) {
             this.a = a;
             this.b = b;
         }
-        C.prototype.fn = function () { return this; };
-        Object.defineProperty(C, "x", {
-            get: function () { return 1; },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
+    }
     (function (C) {
         C.bar = ''; // not reflected in class type
     })(C || (C = {}));

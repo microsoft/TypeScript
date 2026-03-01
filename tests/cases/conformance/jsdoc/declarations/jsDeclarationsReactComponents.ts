@@ -1,6 +1,7 @@
+// @module: commonjs
+// @target: es5, es2015
 // @allowJs: true
 // @checkJs: true
-// @target: es5
 // @jsx: react
 // @esModuleInterop: true
 // @outDir: ./out
@@ -8,7 +9,7 @@
 // @noImplicitAny: false
 // @declaration: true
 // @filename: jsDeclarationsReactComponents1.jsx
-/// <reference path="/.lib/react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" preserve="true" />
 import React from "react";
 import PropTypes from "prop-types"
 

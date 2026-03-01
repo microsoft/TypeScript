@@ -1,47 +1,48 @@
-namespace ts {
-    describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
-        let projFs: vfs.FileSystem;
-        before(() => {
-            projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
-        });
-        after(() => {
-            projFs = undefined!; // Release the contents
-        });
+import { jsonToReadableText } from "../helpers.js";
+import { getSysForTransitiveReferences } from "../helpers/transitiveReferences.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-        function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
-            fs.writeFileSync("/src/b.ts", `import {A} from 'a';
-export const b = new A();`);
-            fs.writeFileSync("/src/tsconfig.b.json", JSON.stringify({
+describe("unittests:: tsbuild:: transitiveReferences:: when project reference is referenced transitively", () => {
+    function modifyFsBTsToNonRelativeImport(sys: TestServerHost, moduleResolution: "node" | "classic") {
+        sys.writeFile(
+            "b.ts",
+            `import {A} from 'a';
+export const b = new A();`,
+        );
+        sys.writeFile(
+            "tsconfig.b.json",
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
-                    moduleResolution
+                    moduleResolution,
                 },
                 files: ["b.ts"],
-                references: [{ path: "tsconfig.a.json" }]
-            }));
-        }
+                references: [{ path: "tsconfig.a.json" }],
+            }),
+        );
+    }
 
-        verifyTsc({
-            scenario: "transitiveReferences",
-            subScenario: "builds correctly",
-            fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
-        });
-
-        verifyTsc({
-            scenario: "transitiveReferences",
-            subScenario: "builds correctly when the referenced project uses different module resolution",
-            fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
-            modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "classic"),
-        });
-
-        verifyTsc({
-            scenario: "transitiveReferences",
-            subScenario: "reports error about module not found with node resolution with external module name",
-            fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
-            modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "node"),
-        });
+    verifyTsc({
+        scenario: "transitiveReferences",
+        subScenario: "builds correctly",
+        sys: getSysForTransitiveReferences,
+        commandLineArgs: ["--b", "tsconfig.c.json", "--listFiles"],
     });
-}
+
+    verifyTsc({
+        scenario: "transitiveReferences",
+        subScenario: "builds correctly when the referenced project uses different module resolution",
+        sys: getSysForTransitiveReferences,
+        commandLineArgs: ["--b", "tsconfig.c.json", "--listFiles"],
+        modifySystem: sys => modifyFsBTsToNonRelativeImport(sys, "classic"),
+    });
+
+    verifyTsc({
+        scenario: "transitiveReferences",
+        subScenario: "reports error about module not found with node resolution with external module name",
+        sys: getSysForTransitiveReferences,
+        commandLineArgs: ["--b", "tsconfig.c.json", "--listFiles"],
+        modifySystem: sys => modifyFsBTsToNonRelativeImport(sys, "node"),
+    });
+});

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts] ////
+
 //// [narrowingGenericTypeFromInstanceof01.ts]
 class A<T> {
     constructor(private a: string) { }
@@ -28,17 +30,14 @@ function test<T>(x: A<T> | B<T>) {
 }
 
 //// [narrowingGenericTypeFromInstanceof01.js]
-var A = /** @class */ (function () {
-    function A(a) {
+"use strict";
+class A {
+    constructor(a) {
         this.a = a;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+}
+class B {
+}
 function acceptA(a) { }
 function acceptB(b) { }
 function test(x) {

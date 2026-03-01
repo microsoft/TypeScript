@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndNameResolution.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndNameResolution.ts] ////
+
+=== collisionThisExpressionAndNameResolution.ts ===
 var console : {
 >console : Symbol(console, Decl(collisionThisExpressionAndNameResolution.ts, 0, 3))
 

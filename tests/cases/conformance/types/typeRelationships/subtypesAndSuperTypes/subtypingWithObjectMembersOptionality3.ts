@@ -1,3 +1,4 @@
+// @target: es2015
 // Base property is optional and derived type has no property of that name
 
 interface Base { foo: string; }

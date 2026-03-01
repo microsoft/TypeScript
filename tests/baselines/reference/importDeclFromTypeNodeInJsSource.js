@@ -77,7 +77,7 @@ export class Foo3 extends d {
 }
 export class Foo4 extends c {
 }
-import { EventEmitter } from "events";
-import { n3 } from "nestNamespaceModule";
-import { d } from "nestNamespaceModule";
-import { c } from "renameModule";
+import { EventEmitter } from 'events';
+import { n3 } from 'nestNamespaceModule';
+import { d } from 'nestNamespaceModule';
+import { c } from 'renameModule';

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks8.ts] ////
+
 //// [reachabilityChecks8.ts]
 try {
     for (
@@ -9,6 +11,7 @@ try {
 
 
 //// [reachabilityChecks8.js]
+"use strict";
 try {
     for ((function () { throw "1"; })(); (function () { throw "2"; })(); (function () { throw "3"; })()) { }
 }

@@ -1,0 +1,28 @@
+typeNamedUndefined2.ts(4,21): error TS2457: Type alias name cannot be 'undefined'.
+typeNamedUndefined2.ts(17,17): error TS2457: Type alias name cannot be 'undefined'.
+
+
+==== typeNamedUndefined2.ts (2 errors) ====
+    export namespace ns {
+        export namespace undefined {
+            export const s = Symbol();
+            export type undefined = typeof s;
+                        ~~~~~~~~~
+!!! error TS2457: Type alias name cannot be 'undefined'.
+        };
+        export function x(p: undefined): undefined {
+            return p;
+        }
+    }
+    
+    export function x(p: ns.undefined.undefined) {
+        return p;
+    }
+    
+    export namespace undefined {
+        export const s = Symbol();
+        export type undefined = typeof s;
+                    ~~~~~~~~~
+!!! error TS2457: Type alias name cannot be 'undefined'.
+    };
+    

@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.js(4,15): error TS18030: An optional chain cannot contain private identifiers.
-tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.js(5,15): error TS18030: An optional chain cannot contain private identifiers.
+privateNameUncheckedJsOptionalChain.js(4,15): error TS18030: An optional chain cannot contain private identifiers.
+privateNameUncheckedJsOptionalChain.js(5,15): error TS18030: An optional chain cannot contain private identifiers.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.js (2 errors) ====
+==== privateNameUncheckedJsOptionalChain.js (2 errors) ====
     class C {
         #bar;
         constructor () {

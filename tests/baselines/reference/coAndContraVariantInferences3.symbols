@@ -1,0 +1,543 @@
+//// [tests/cases/compiler/coAndContraVariantInferences3.ts] ////
+
+=== coAndContraVariantInferences3.ts ===
+interface DeprecationOptions {
+>DeprecationOptions : Symbol(DeprecationOptions, Decl(coAndContraVariantInferences3.ts, 0, 0))
+
+    message?: string;
+>message : Symbol(DeprecationOptions.message, Decl(coAndContraVariantInferences3.ts, 0, 30))
+
+    error?: boolean;
+>error : Symbol(DeprecationOptions.error, Decl(coAndContraVariantInferences3.ts, 1, 21))
+
+    name?: string;
+>name : Symbol(DeprecationOptions.name, Decl(coAndContraVariantInferences3.ts, 2, 20))
+}
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(coAndContraVariantInferences3.ts, 4, 1))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 6, 25))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 6, 25))
+>k : Symbol(k, Decl(coAndContraVariantInferences3.ts, 6, 48))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 6, 25))
+>k : Symbol(k, Decl(coAndContraVariantInferences3.ts, 6, 81))
+>I : Symbol(I, Decl(coAndContraVariantInferences3.ts, 6, 89))
+>I : Symbol(I, Decl(coAndContraVariantInferences3.ts, 6, 89))
+
+type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>P : Symbol(P, Decl(coAndContraVariantInferences3.ts, 8, 39))
+>args : Symbol(args, Decl(coAndContraVariantInferences3.ts, 8, 54))
+
+type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T>) => OverloadKeys<T> | undefined;
+>OverloadBinder : Symbol(OverloadBinder, Decl(coAndContraVariantInferences3.ts, 8, 80))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 10, 20))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>args : Symbol(args, Decl(coAndContraVariantInferences3.ts, 10, 54))
+>OverloadParameters : Symbol(OverloadParameters, Decl(coAndContraVariantInferences3.ts, 12, 76))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 10, 20))
+>OverloadKeys : Symbol(OverloadKeys, Decl(coAndContraVariantInferences3.ts, 10, 114))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 10, 20))
+
+type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
+>OverloadKeys : Symbol(OverloadKeys, Decl(coAndContraVariantInferences3.ts, 10, 114))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 12, 18))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 12, 18))
+
+type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
+>OverloadParameters : Symbol(OverloadParameters, Decl(coAndContraVariantInferences3.ts, 12, 76))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 14, 24))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(coAndContraVariantInferences3.ts, 14, 71))
+>OverloadKeys : Symbol(OverloadKeys, Decl(coAndContraVariantInferences3.ts, 10, 114))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 14, 24))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 14, 24))
+>P : Symbol(P, Decl(coAndContraVariantInferences3.ts, 14, 71))
+>OverloadKeys : Symbol(OverloadKeys, Decl(coAndContraVariantInferences3.ts, 10, 114))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 14, 24))
+
+type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[keyof T]>;
+>OverloadFunction : Symbol(OverloadFunction, Decl(coAndContraVariantInferences3.ts, 14, 120))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 16, 22))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(coAndContraVariantInferences3.ts, 4, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 16, 22))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 16, 22))
+
+type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
+>OverloadBinders : Symbol(OverloadBinders, Decl(coAndContraVariantInferences3.ts, 16, 87))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 18, 21))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>P : Symbol(P, Decl(coAndContraVariantInferences3.ts, 18, 57))
+>OverloadKeys : Symbol(OverloadKeys, Decl(coAndContraVariantInferences3.ts, 10, 114))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 18, 21))
+>args : Symbol(args, Decl(coAndContraVariantInferences3.ts, 18, 81))
+>OverloadParameters : Symbol(OverloadParameters, Decl(coAndContraVariantInferences3.ts, 12, 76))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 18, 21))
+
+type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
+>OverloadDeprecations : Symbol(OverloadDeprecations, Decl(coAndContraVariantInferences3.ts, 18, 136))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 20, 26))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>P : Symbol(P, Decl(coAndContraVariantInferences3.ts, 20, 62))
+>OverloadKeys : Symbol(OverloadKeys, Decl(coAndContraVariantInferences3.ts, 10, 114))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 20, 26))
+>DeprecationOptions : Symbol(DeprecationOptions, Decl(coAndContraVariantInferences3.ts, 0, 0))
+
+declare function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>): UnionToIntersection<T[keyof T]>;
+>createOverload : Symbol(createOverload, Decl(coAndContraVariantInferences3.ts, 20, 108))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 22, 32))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>name : Symbol(name, Decl(coAndContraVariantInferences3.ts, 22, 63))
+>overloads : Symbol(overloads, Decl(coAndContraVariantInferences3.ts, 22, 76))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 22, 32))
+>binder : Symbol(binder, Decl(coAndContraVariantInferences3.ts, 22, 90))
+>OverloadBinders : Symbol(OverloadBinders, Decl(coAndContraVariantInferences3.ts, 16, 87))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 22, 32))
+>deprecations : Symbol(deprecations, Decl(coAndContraVariantInferences3.ts, 22, 118))
+>OverloadDeprecations : Symbol(OverloadDeprecations, Decl(coAndContraVariantInferences3.ts, 18, 136))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 22, 32))
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(coAndContraVariantInferences3.ts, 4, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 22, 32))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 22, 32))
+
+declare function createBinder<T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>): OverloadBinder<T>;
+>createBinder : Symbol(createBinder, Decl(coAndContraVariantInferences3.ts, 22, 192))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 24, 30))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>overloads : Symbol(overloads, Decl(coAndContraVariantInferences3.ts, 24, 61))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 24, 30))
+>binder : Symbol(binder, Decl(coAndContraVariantInferences3.ts, 24, 74))
+>OverloadBinders : Symbol(OverloadBinders, Decl(coAndContraVariantInferences3.ts, 16, 87))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 24, 30))
+>OverloadBinder : Symbol(OverloadBinder, Decl(coAndContraVariantInferences3.ts, 8, 80))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 24, 30))
+
+interface OverloadBuilder {
+>OverloadBuilder : Symbol(OverloadBuilder, Decl(coAndContraVariantInferences3.ts, 24, 122))
+
+    overload<T extends OverloadDefinitions>(overloads: T): BindableOverloadBuilder<T>;
+>overload : Symbol(OverloadBuilder.overload, Decl(coAndContraVariantInferences3.ts, 26, 27))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 27, 13))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>overloads : Symbol(overloads, Decl(coAndContraVariantInferences3.ts, 27, 44))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 27, 13))
+>BindableOverloadBuilder : Symbol(BindableOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 28, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 27, 13))
+}
+
+interface BindableOverloadBuilder<T extends OverloadDefinitions> {
+>BindableOverloadBuilder : Symbol(BindableOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 28, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 30, 34))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+
+    bind(binder: OverloadBinders<T>): BoundOverloadBuilder<T>;
+>bind : Symbol(BindableOverloadBuilder.bind, Decl(coAndContraVariantInferences3.ts, 30, 66))
+>binder : Symbol(binder, Decl(coAndContraVariantInferences3.ts, 31, 9))
+>OverloadBinders : Symbol(OverloadBinders, Decl(coAndContraVariantInferences3.ts, 16, 87))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 30, 34))
+>BoundOverloadBuilder : Symbol(BoundOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 36, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 30, 34))
+}
+
+interface FinishableOverloadBuilder<T extends OverloadDefinitions> {
+>FinishableOverloadBuilder : Symbol(FinishableOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 32, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 34, 36))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+
+    finish(): OverloadFunction<T>;
+>finish : Symbol(FinishableOverloadBuilder.finish, Decl(coAndContraVariantInferences3.ts, 34, 68))
+>OverloadFunction : Symbol(OverloadFunction, Decl(coAndContraVariantInferences3.ts, 14, 120))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 34, 36))
+}
+
+interface BoundOverloadBuilder<T extends OverloadDefinitions> extends FinishableOverloadBuilder<T> {
+>BoundOverloadBuilder : Symbol(BoundOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 36, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 38, 31))
+>OverloadDefinitions : Symbol(OverloadDefinitions, Decl(coAndContraVariantInferences3.ts, 6, 114))
+>FinishableOverloadBuilder : Symbol(FinishableOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 32, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 38, 31))
+
+    deprecate(deprecations: OverloadDeprecations<T>): FinishableOverloadBuilder<T>;
+>deprecate : Symbol(BoundOverloadBuilder.deprecate, Decl(coAndContraVariantInferences3.ts, 38, 100))
+>deprecations : Symbol(deprecations, Decl(coAndContraVariantInferences3.ts, 39, 14))
+>OverloadDeprecations : Symbol(OverloadDeprecations, Decl(coAndContraVariantInferences3.ts, 18, 136))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 38, 31))
+>FinishableOverloadBuilder : Symbol(FinishableOverloadBuilder, Decl(coAndContraVariantInferences3.ts, 32, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 38, 31))
+}
+
+declare function buildOverload(name: string): OverloadBuilder;
+>buildOverload : Symbol(buildOverload, Decl(coAndContraVariantInferences3.ts, 40, 1))
+>name : Symbol(name, Decl(coAndContraVariantInferences3.ts, 42, 31))
+>OverloadBuilder : Symbol(OverloadBuilder, Decl(coAndContraVariantInferences3.ts, 24, 122))
+
+const enum SyntaxKind {
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+
+    ImportDeclaration,
+>ImportDeclaration : Symbol(SyntaxKind.ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 44, 23))
+
+    Modifier,
+>Modifier : Symbol(SyntaxKind.Modifier, Decl(coAndContraVariantInferences3.ts, 45, 22))
+
+    ImportClause,
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(coAndContraVariantInferences3.ts, 46, 13))
+
+    AssertClause,
+>AssertClause : Symbol(SyntaxKind.AssertClause, Decl(coAndContraVariantInferences3.ts, 47, 17))
+
+    Decorator
+>Decorator : Symbol(SyntaxKind.Decorator, Decl(coAndContraVariantInferences3.ts, 48, 17))
+}
+
+interface Node {
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+
+    kind: SyntaxKind;
+>kind : Symbol(Node.kind, Decl(coAndContraVariantInferences3.ts, 52, 16))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+}
+
+interface Declaration extends Node { _declarationBrand: any }
+>Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences3.ts, 54, 1))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>_declarationBrand : Symbol(Declaration._declarationBrand, Decl(coAndContraVariantInferences3.ts, 56, 36))
+
+interface Statement extends Node { _statementBrand: any };
+>Statement : Symbol(Statement, Decl(coAndContraVariantInferences3.ts, 56, 61))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>_statementBrand : Symbol(Statement._statementBrand, Decl(coAndContraVariantInferences3.ts, 57, 34))
+
+interface Expression extends Node { _expressionBrand: any; }
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences3.ts, 57, 58))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>_expressionBrand : Symbol(Expression._expressionBrand, Decl(coAndContraVariantInferences3.ts, 58, 35))
+
+interface ImportDeclaration extends Statement { kind: SyntaxKind.ImportDeclaration; }
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+>Statement : Symbol(Statement, Decl(coAndContraVariantInferences3.ts, 56, 61))
+>kind : Symbol(ImportDeclaration.kind, Decl(coAndContraVariantInferences3.ts, 60, 47))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+>ImportDeclaration : Symbol(SyntaxKind.ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 44, 23))
+
+interface Modifier extends Node { kind: SyntaxKind.Modifier; }
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>kind : Symbol(Modifier.kind, Decl(coAndContraVariantInferences3.ts, 61, 33))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+>Modifier : Symbol(SyntaxKind.Modifier, Decl(coAndContraVariantInferences3.ts, 45, 22))
+
+interface Decorator extends Node { kind: SyntaxKind.Decorator; }
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences3.ts, 61, 62))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>kind : Symbol(Decorator.kind, Decl(coAndContraVariantInferences3.ts, 62, 34))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+>Decorator : Symbol(SyntaxKind.Decorator, Decl(coAndContraVariantInferences3.ts, 48, 17))
+
+interface ImportClause extends Declaration { kind: SyntaxKind.ImportClause; }
+>ImportClause : Symbol(ImportClause, Decl(coAndContraVariantInferences3.ts, 62, 64))
+>Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences3.ts, 54, 1))
+>kind : Symbol(ImportClause.kind, Decl(coAndContraVariantInferences3.ts, 63, 44))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(coAndContraVariantInferences3.ts, 46, 13))
+
+interface AssertClause extends Node { kind: SyntaxKind.AssertClause; }
+>AssertClause : Symbol(AssertClause, Decl(coAndContraVariantInferences3.ts, 63, 77))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>kind : Symbol(AssertClause.kind, Decl(coAndContraVariantInferences3.ts, 64, 37))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences3.ts, 42, 62))
+>AssertClause : Symbol(SyntaxKind.AssertClause, Decl(coAndContraVariantInferences3.ts, 47, 17))
+
+declare function isExpression(node: Node): node is Expression;
+>isExpression : Symbol(isExpression, Decl(coAndContraVariantInferences3.ts, 64, 70))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 66, 30))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 66, 30))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences3.ts, 57, 58))
+
+declare function isAssertClause(node: Node): node is AssertClause;
+>isAssertClause : Symbol(isAssertClause, Decl(coAndContraVariantInferences3.ts, 66, 62))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 67, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 67, 32))
+>AssertClause : Symbol(AssertClause, Decl(coAndContraVariantInferences3.ts, 63, 77))
+
+declare function isImportClause(node: Node): node is ImportClause;
+>isImportClause : Symbol(isImportClause, Decl(coAndContraVariantInferences3.ts, 67, 66))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 68, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 68, 32))
+>ImportClause : Symbol(ImportClause, Decl(coAndContraVariantInferences3.ts, 62, 64))
+
+declare function isModifier(node: Node): node is Modifier;
+>isModifier : Symbol(isModifier, Decl(coAndContraVariantInferences3.ts, 68, 66))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 69, 28))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 69, 28))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+
+declare function isDecorator(node: Node): node is Decorator;
+>isDecorator : Symbol(isDecorator, Decl(coAndContraVariantInferences3.ts, 69, 58))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 70, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences3.ts, 50, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 70, 29))
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences3.ts, 61, 62))
+
+declare const updateImportDeclaration: {
+>updateImportDeclaration : Symbol(updateImportDeclaration, Decl(coAndContraVariantInferences3.ts, 72, 13))
+
+    (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 73, 5))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 73, 29))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 73, 73))
+>ImportClause : Symbol(ImportClause, Decl(coAndContraVariantInferences3.ts, 62, 64))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 73, 113))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences3.ts, 57, 58))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 73, 142))
+>AssertClause : Symbol(AssertClause, Decl(coAndContraVariantInferences3.ts, 63, 77))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+
+    (node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 74, 5))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+>decorators : Symbol(decorators, Decl(coAndContraVariantInferences3.ts, 74, 29))
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences3.ts, 61, 62))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 74, 75))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 74, 119))
+>ImportClause : Symbol(ImportClause, Decl(coAndContraVariantInferences3.ts, 62, 64))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 74, 159))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences3.ts, 57, 58))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 74, 188))
+>AssertClause : Symbol(AssertClause, Decl(coAndContraVariantInferences3.ts, 63, 77))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+}
+
+declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 77, 23))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 77, 25))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 77, 23))
+>array : Symbol(array, Decl(coAndContraVariantInferences3.ts, 77, 39))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 77, 23))
+>callback : Symbol(callback, Decl(coAndContraVariantInferences3.ts, 77, 59))
+>element : Symbol(element, Decl(coAndContraVariantInferences3.ts, 77, 71))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 77, 23))
+>index : Symbol(index, Decl(coAndContraVariantInferences3.ts, 77, 82))
+>element : Symbol(element, Decl(coAndContraVariantInferences3.ts, 77, 71))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 77, 25))
+>array : Symbol(array, Decl(coAndContraVariantInferences3.ts, 77, 39))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 77, 25))
+
+declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 78, 23))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 78, 25))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 78, 23))
+>array : Symbol(array, Decl(coAndContraVariantInferences3.ts, 78, 39))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 78, 23))
+>callback : Symbol(callback, Decl(coAndContraVariantInferences3.ts, 78, 71))
+>element : Symbol(element, Decl(coAndContraVariantInferences3.ts, 78, 83))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 78, 23))
+>index : Symbol(index, Decl(coAndContraVariantInferences3.ts, 78, 94))
+>element : Symbol(element, Decl(coAndContraVariantInferences3.ts, 78, 83))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 78, 25))
+>array : Symbol(array, Decl(coAndContraVariantInferences3.ts, 78, 39))
+>U : Symbol(U, Decl(coAndContraVariantInferences3.ts, 78, 25))
+
+declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 79, 23))
+>array : Symbol(array, Decl(coAndContraVariantInferences3.ts, 79, 26))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 79, 23))
+>callback : Symbol(callback, Decl(coAndContraVariantInferences3.ts, 79, 58))
+>element : Symbol(element, Decl(coAndContraVariantInferences3.ts, 79, 70))
+>T : Symbol(T, Decl(coAndContraVariantInferences3.ts, 79, 23))
+>index : Symbol(index, Decl(coAndContraVariantInferences3.ts, 79, 81))
+
+declare function isArray(value: any): value is readonly unknown[];
+>isArray : Symbol(isArray, Decl(coAndContraVariantInferences3.ts, 79, 118))
+>value : Symbol(value, Decl(coAndContraVariantInferences3.ts, 81, 25))
+>value : Symbol(value, Decl(coAndContraVariantInferences3.ts, 81, 25))
+
+declare const DISALLOW_DECORATORS: DeprecationOptions;
+>DISALLOW_DECORATORS : Symbol(DISALLOW_DECORATORS, Decl(coAndContraVariantInferences3.ts, 83, 13))
+>DeprecationOptions : Symbol(DeprecationOptions, Decl(coAndContraVariantInferences3.ts, 0, 0))
+
+buildOverload("updateImportDeclaration")
+>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    })    .finish : Symbol(FinishableOverloadBuilder.finish, Decl(coAndContraVariantInferences3.ts, 34, 68))
+>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate : Symbol(BoundOverloadBuilder.deprecate, Decl(coAndContraVariantInferences3.ts, 38, 100))
+>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind : Symbol(BindableOverloadBuilder.bind, Decl(coAndContraVariantInferences3.ts, 30, 66))
+>buildOverload("updateImportDeclaration")    .overload : Symbol(OverloadBuilder.overload, Decl(coAndContraVariantInferences3.ts, 26, 27))
+>buildOverload : Symbol(buildOverload, Decl(coAndContraVariantInferences3.ts, 40, 1))
+
+    .overload({
+>overload : Symbol(OverloadBuilder.overload, Decl(coAndContraVariantInferences3.ts, 26, 27))
+
+        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {
+>0 : Symbol(0, Decl(coAndContraVariantInferences3.ts, 86, 15))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 87, 10))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 87, 34))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 87, 78))
+>ImportClause : Symbol(ImportClause, Decl(coAndContraVariantInferences3.ts, 62, 64))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 87, 118))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences3.ts, 57, 58))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 87, 147))
+>AssertClause : Symbol(AssertClause, Decl(coAndContraVariantInferences3.ts, 63, 77))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+
+            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);
+>updateImportDeclaration : Symbol(updateImportDeclaration, Decl(coAndContraVariantInferences3.ts, 72, 13))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 87, 10))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 87, 34))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 87, 78))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 87, 118))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 87, 147))
+
+        },
+
+        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {
+>1 : Symbol(1, Decl(coAndContraVariantInferences3.ts, 89, 10))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 91, 10))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+>_decorators : Symbol(_decorators, Decl(coAndContraVariantInferences3.ts, 91, 34))
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences3.ts, 61, 62))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 91, 81))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 91, 125))
+>ImportClause : Symbol(ImportClause, Decl(coAndContraVariantInferences3.ts, 62, 64))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 91, 165))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences3.ts, 57, 58))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 91, 194))
+>AssertClause : Symbol(AssertClause, Decl(coAndContraVariantInferences3.ts, 63, 77))
+>ImportDeclaration : Symbol(ImportDeclaration, Decl(coAndContraVariantInferences3.ts, 58, 60))
+
+            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);
+>updateImportDeclaration : Symbol(updateImportDeclaration, Decl(coAndContraVariantInferences3.ts, 72, 13))
+>node : Symbol(node, Decl(coAndContraVariantInferences3.ts, 91, 10))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 91, 81))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 91, 125))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 91, 165))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 91, 194))
+
+        },
+    })
+    .bind({
+>bind : Symbol(BindableOverloadBuilder.bind, Decl(coAndContraVariantInferences3.ts, 30, 66))
+
+        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>
+>0 : Symbol(0, Decl(coAndContraVariantInferences3.ts, 95, 11))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 96, 14))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 96, 25))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 96, 39))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 96, 56))
+>other : Symbol(other, Decl(coAndContraVariantInferences3.ts, 96, 70))
+
+            (other === undefined) &&
+>other : Symbol(other, Decl(coAndContraVariantInferences3.ts, 96, 70))
+>undefined : Symbol(undefined)
+
+            (modifiers === undefined || every(modifiers, isModifier)) &&
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 96, 14))
+>undefined : Symbol(undefined)
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 96, 14))
+>isModifier : Symbol(isModifier, Decl(coAndContraVariantInferences3.ts, 68, 66))
+
+            (importClause === undefined || !isArray(importClause)) &&
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 96, 25))
+>undefined : Symbol(undefined)
+>isArray : Symbol(isArray, Decl(coAndContraVariantInferences3.ts, 79, 118))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 96, 25))
+
+            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 96, 39))
+>undefined : Symbol(undefined)
+>isExpression : Symbol(isExpression, Decl(coAndContraVariantInferences3.ts, 64, 70))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 96, 39))
+
+            (assertClause === undefined || isAssertClause(assertClause)),
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 96, 56))
+>undefined : Symbol(undefined)
+>isAssertClause : Symbol(isAssertClause, Decl(coAndContraVariantInferences3.ts, 66, 62))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 96, 56))
+
+        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
+>1 : Symbol(1, Decl(coAndContraVariantInferences3.ts, 101, 73))
+>decorators : Symbol(decorators, Decl(coAndContraVariantInferences3.ts, 103, 14))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 103, 26))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 103, 37))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 103, 51))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 103, 68))
+
+            (decorators === undefined || every(decorators, isDecorator)) &&
+>decorators : Symbol(decorators, Decl(coAndContraVariantInferences3.ts, 103, 14))
+>undefined : Symbol(undefined)
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>decorators : Symbol(decorators, Decl(coAndContraVariantInferences3.ts, 103, 14))
+>isDecorator : Symbol(isDecorator, Decl(coAndContraVariantInferences3.ts, 69, 58))
+
+            (modifiers === undefined || isArray(modifiers)) &&
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 103, 26))
+>undefined : Symbol(undefined)
+>isArray : Symbol(isArray, Decl(coAndContraVariantInferences3.ts, 79, 118))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 103, 26))
+
+            (importClause === undefined || isImportClause(importClause)) &&
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 103, 37))
+>undefined : Symbol(undefined)
+>isImportClause : Symbol(isImportClause, Decl(coAndContraVariantInferences3.ts, 67, 66))
+>importClause : Symbol(importClause, Decl(coAndContraVariantInferences3.ts, 103, 37))
+
+            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 103, 51))
+>undefined : Symbol(undefined)
+>isExpression : Symbol(isExpression, Decl(coAndContraVariantInferences3.ts, 64, 70))
+>moduleSpecifier : Symbol(moduleSpecifier, Decl(coAndContraVariantInferences3.ts, 103, 51))
+
+            (assertClause === undefined || isAssertClause(assertClause)),
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 103, 68))
+>undefined : Symbol(undefined)
+>isAssertClause : Symbol(isAssertClause, Decl(coAndContraVariantInferences3.ts, 66, 62))
+>assertClause : Symbol(assertClause, Decl(coAndContraVariantInferences3.ts, 103, 68))
+
+    })
+    .deprecate({
+>deprecate : Symbol(BoundOverloadBuilder.deprecate, Decl(coAndContraVariantInferences3.ts, 38, 100))
+
+        1: DISALLOW_DECORATORS
+>1 : Symbol(1, Decl(coAndContraVariantInferences3.ts, 110, 16))
+>DISALLOW_DECORATORS : Symbol(DISALLOW_DECORATORS, Decl(coAndContraVariantInferences3.ts, 83, 13))
+
+    })
+    .finish();
+>finish : Symbol(FinishableOverloadBuilder.finish, Decl(coAndContraVariantInferences3.ts, 34, 68))
+
+
+declare const modifiers: readonly Modifier[] | readonly Decorator[];
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 116, 13))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences3.ts, 60, 85))
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences3.ts, 61, 62))
+
+function foo() {
+>foo : Symbol(foo, Decl(coAndContraVariantInferences3.ts, 116, 68))
+
+    every(modifiers, isModifier);
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 116, 13))
+>isModifier : Symbol(isModifier, Decl(coAndContraVariantInferences3.ts, 68, 66))
+
+    every(modifiers, isDecorator);
+>every : Symbol(every, Decl(coAndContraVariantInferences3.ts, 75, 1), Decl(coAndContraVariantInferences3.ts, 77, 138), Decl(coAndContraVariantInferences3.ts, 78, 162))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences3.ts, 116, 13))
+>isDecorator : Symbol(isDecorator, Decl(coAndContraVariantInferences3.ts, 69, 58))
+}
+

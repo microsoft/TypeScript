@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentToObject.ts ===
+//// [tests/cases/compiler/assignmentToObject.ts] ////
+
+=== assignmentToObject.ts ===
 var a = { toString: 5 };
 >a : Symbol(a, Decl(assignmentToObject.ts, 0, 3))
 >toString : Symbol(toString, Decl(assignmentToObject.ts, 0, 9))

@@ -1,39 +1,63 @@
-=== tests/cases/compiler/controlFlowOuterVariable.ts ===
+//// [tests/cases/compiler/controlFlowOuterVariable.ts] ////
+
+=== controlFlowOuterVariable.ts ===
 // Repros from #10641
 
 const CONFIG = {
 >CONFIG : { foo: string; setFoo: (foo: string) => void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >{    foo: '',    setFoo: function(foo: string) {        CONFIG.foo = foo;    }} : { foo: string; setFoo: (foo: string) => void; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 
     foo: '',
 >foo : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
     setFoo: function(foo: string) {
 >setFoo : (foo: string) => void
+>       : ^   ^^      ^^^^^^^^^
 >function(foo: string) {        CONFIG.foo = foo;    } : (foo: string) => void
+>                                                      : ^   ^^      ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
         CONFIG.foo = foo;
 >CONFIG.foo = foo : string
+>                 : ^^^^^^
 >CONFIG.foo : string
+>           : ^^^^^^
 >CONFIG : { foo: string; setFoo: (foo: string) => void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >foo : string
+>    : ^^^^^^
     }
 };
 
 const helper = function<T>(t: T[]) {
 >helper : <T>(t: T[]) => void
+>       : ^ ^^ ^^   ^^^^^^^^^
 >function<T>(t: T[]) {    helper(t.slice(1));} : <T>(t: T[]) => void
+>                                              : ^ ^^ ^^   ^^^^^^^^^
 >t : T[]
+>  : ^^^
 
     helper(t.slice(1));
 >helper(t.slice(1)) : void
+>                   : ^^^^
 >helper : <T>(t: T[]) => void
+>       : ^ ^^ ^^   ^^^^^^^^^
 >t.slice(1) : T[]
->t.slice : (start?: number | undefined, end?: number | undefined) => T[]
+>           : ^^^
+>t.slice : (start?: number, end?: number) => T[]
+>        : ^     ^^^      ^^   ^^^      ^^^^^^^^
 >t : T[]
->slice : (start?: number | undefined, end?: number | undefined) => T[]
+>  : ^^^
+>slice : (start?: number, end?: number) => T[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^
 >1 : 1
+>  : ^
 }

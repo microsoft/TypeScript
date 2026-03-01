@@ -1,10 +1,11 @@
+//// [tests/cases/compiler/sourceMapValidationLambdaSpanningMultipleLines.ts] ////
+
 //// [sourceMapValidationLambdaSpanningMultipleLines.ts]
 ((item: string) =>
     item
 )
 
 //// [sourceMapValidationLambdaSpanningMultipleLines.js]
-(function (item) {
-    return item;
-});
+"use strict";
+((item) => item);
 //# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

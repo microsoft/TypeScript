@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag1.ts] ////
+
 //// [0.js]
 // @ts-check
 /** @type {String} */
@@ -42,6 +44,7 @@ var props = {};
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 /** @type {String} */
 var S = "hello world";
@@ -54,16 +57,16 @@ anyT = "hello";
 var anyT1 = 2;
 anyT1 = "hi";
 /** @type {Function} */
-var x = function (a) { return a + 1; };
+const x = (a) => a + 1;
 x(1);
 /** @type {function} */
-var y = function (a) { return a + 1; };
+const y = (a) => a + 1;
 y(1);
 /** @type {function (number)} */
-var x1 = function (a) { return a + 1; };
+const x1 = (a) => a + 1;
 x1(0);
 /** @type {function (number): number} */
-var x2 = function (a) { return a + 1; };
+const x2 = (a) => a + 1;
 x2(0);
 /**
  * @type {object}

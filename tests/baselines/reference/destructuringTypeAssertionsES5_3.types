@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_3.ts ===
-var { x } = <any>(foo());
->x : any
-><any>(foo()) : any
->(foo()) : any
->foo() : any
->foo : any
-

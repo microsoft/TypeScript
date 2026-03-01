@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of41.ts] ////
+
 //// [for-of41.ts]
 var array = [{x: [0], y: {p: ""}}]
 for (var {x: [a], y: {p}} of array) {
@@ -6,6 +8,7 @@ for (var {x: [a], y: {p}} of array) {
 }
 
 //// [for-of41.js]
+"use strict";
 var array = [{ x: [0], y: { p: "" } }];
 for (var { x: [a], y: { p } } of array) {
     a;

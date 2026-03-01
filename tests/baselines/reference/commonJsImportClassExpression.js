@@ -13,13 +13,12 @@ c.chunk;
 
 //// [mod1.js]
 "use strict";
-module.exports = /** @class */ (function () {
-    function class_1() {
+module.exports = class {
+    constructor() {
         this.chunk = 1;
     }
-    return class_1;
-}());
+};
 //// [use.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 c.chunk;

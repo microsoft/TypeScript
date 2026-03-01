@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName2.ts] ////
+
 //// [privateNameComputedPropertyName2.ts]
 let getX: (a: A) => number;
 
@@ -10,6 +12,7 @@ console.log(getX(new A));
 
 
 //// [privateNameComputedPropertyName2.js]
+"use strict";
 let getX;
 class A {
     #x = 100;

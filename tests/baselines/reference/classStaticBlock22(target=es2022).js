@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts] ////
+
 //// [classStaticBlock22.ts]
 let await: "any";
 class C {
@@ -72,6 +74,7 @@ class C {
 
 
 //// [classStaticBlock22.js]
+"use strict";
 let await;
 class C {
     static {

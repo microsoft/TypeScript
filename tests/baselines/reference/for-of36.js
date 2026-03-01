@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of36.ts] ////
+
 //// [for-of36.ts]
 var tuple: [string, boolean] = ["", true];
 for (var v of tuple) {
@@ -5,6 +7,7 @@ for (var v of tuple) {
 }
 
 //// [for-of36.js]
+"use strict";
 var tuple = ["", true];
 for (var v of tuple) {
     v;

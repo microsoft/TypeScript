@@ -1,13 +1,13 @@
-tests/cases/compiler/varianceAnnotationValidation.ts(5,22): error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
+varianceAnnotationValidation.ts(5,22): error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
   Types of property 'run' are incompatible.
     Type '(animal: sub-T) => void' is not assignable to type '(animal: super-T) => void'.
       Types of parameters 'animal' and 'animal' are incompatible.
         Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/compiler/varianceAnnotationValidation.ts(27,1): error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
+varianceAnnotationValidation.ts(27,1): error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
   Property 'bark' is missing in type 'Animal' but required in type 'Dog'.
 
 
-==== tests/cases/compiler/varianceAnnotationValidation.ts (2 errors) ====
+==== varianceAnnotationValidation.ts (2 errors) ====
     // Repro from #49607
     
     // Variance annotation error expected
@@ -44,5 +44,5 @@ tests/cases/compiler/varianceAnnotationValidation.ts(27,1): error TS2322: Type '
     ~~
 !!! error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
 !!! error TS2322:   Property 'bark' is missing in type 'Animal' but required in type 'Dog'.
-!!! related TS2728 tests/cases/compiler/varianceAnnotationValidation.ts:16:2: 'bark' is declared here.
+!!! related TS2728 varianceAnnotationValidation.ts:16:2: 'bark' is declared here.
     

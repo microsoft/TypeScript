@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/verbatim-declarations-parameters.ts] ////
+
+=== verbatim-declarations-parameters.ts ===
+type Map = {} & { [P in string]: any }
+>Map : { [x: string]: any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^
+
+type MapOrUndefined = Map | undefined | "dummy"
+>MapOrUndefined : MapOrUndefined
+>               : ^^^^^^^^^^^^^^
+
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+  constructor(
+    // Type node is accurate, preserve
+    public reuseTypeNode?: Map | undefined,
+>reuseTypeNode : { [x: string]: any; } | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    public reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">,
+>reuseTypeNode2 : { [x: string]: any; } | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    // Resolve type node, requires adding | undefined
+    public resolveType?: Map,
+>resolveType : { [x: string]: any; } | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ) { }
+}
+
+export function foo1(
+>foo1 : (reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: Map | undefined, requiredParam: number) => void
+>     : ^             ^^               ^^              ^^                                ^^           ^^   ^^^^^^^^^^^^^^             ^^      ^^^^^^^^^
+
+    // Type node is accurate, preserve
+    reuseTypeNode: Map | undefined = {},
+>reuseTypeNode : { [x: string]: any; } | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+    reuseTypeNode2: Exclude<MapOrUndefined, "dummy">  = {},
+>reuseTypeNode2 : { [x: string]: any; } | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+    // Resolve type node, requires adding | undefined
+    resolveType: Map = {}, 
+>resolveType : { [x: string]: any; }
+>            : ^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+    requiredParam: number) {
+>requiredParam : number
+>              : ^^^^^^
+
+}
+

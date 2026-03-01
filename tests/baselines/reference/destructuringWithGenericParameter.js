@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringWithGenericParameter.ts] ////
+
 //// [destructuringWithGenericParameter.ts]
 class GenericClass<T> {
     payload: T;
@@ -15,16 +17,13 @@ genericFunction(genericObject, ({greeting}) => {
 
 
 //// [destructuringWithGenericParameter.js]
-var GenericClass = /** @class */ (function () {
-    function GenericClass() {
-    }
-    return GenericClass;
-}());
+"use strict";
+class GenericClass {
+}
 var genericObject = new GenericClass();
 function genericFunction(object, callback) {
     callback(object.payload);
 }
-genericFunction(genericObject, function (_a) {
-    var greeting = _a.greeting;
+genericFunction(genericObject, ({ greeting }) => {
     var s = greeting.toLocaleLowerCase(); // Greeting should be of type string
 });

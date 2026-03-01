@@ -1,10 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity15.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity15.ts] ////
+
+=== parserGreaterThanTokenAmbiguity15.ts ===
 1 
 >1 // before>>= // after2 : number
+>                         : ^^^^^^
 >1 : 1
+>  : ^
 
 // before
 >>= // after
 2;
 >2 : 2
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithCommentsInArrowFunction.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithCommentsInArrowFunction.ts] ////
+
+=== templateStringWithCommentsInArrowFunction.ts ===
 const a = 1;
 >a : Symbol(a, Decl(templateStringWithCommentsInArrowFunction.ts, 0, 5))
 

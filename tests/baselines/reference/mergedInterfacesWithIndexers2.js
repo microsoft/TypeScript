@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts] ////
+
 //// [mergedInterfacesWithIndexers2.ts]
 // indexers should behave like other members when merging interface declarations
 
@@ -23,4 +25,5 @@ interface A2 {
 
 
 //// [mergedInterfacesWithIndexers2.js]
+"use strict";
 // indexers should behave like other members when merging interface declarations

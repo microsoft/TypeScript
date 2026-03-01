@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/bug27142.js(1,12): error TS2456: Type alias 'E' circularly references itself.
+bug27142.js(1,12): error TS2456: Type alias 'E' circularly references itself.
 
 
-==== tests/cases/conformance/jsdoc/bug27142.js (1 errors) ====
+==== bug27142.js (1 errors) ====
     /** @enum {E} */
                ~
 !!! error TS2456: Type alias 'E' circularly references itself.

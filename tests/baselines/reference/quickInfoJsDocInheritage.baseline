@@ -1,3 +1,238 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocInheritage.ts ===
+// interface A {
+//     /**
+//      * @description A.foo1
+//      */
+//     foo1: number;
+//     /**
+//      * @description A.foo2
+//      */
+//     foo2: (para1: string) => number;
+// }
+// 
+// interface B {
+//     /**
+//      * @description B.foo1
+//      */
+//     foo1: number;
+//     /**
+//      * @description B.foo2
+//      */
+//     foo2: (para2: string) => number;
+// }
+// 
+// // implement multi interfaces with duplicate name
+// // method for function signature
+// class C implements A, B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) C.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+//     foo2(q: string) { return 1 }
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (method) C.foo2(q: string): number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// }
+// 
+// // implement multi interfaces with duplicate name
+// // property for function signature
+// class D implements A, B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (q: string) => { return 1 }
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo2: (q: string) => number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// }
+// 
+// new C().foo1;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (property) C.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+// new C().foo2;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (method) C.foo2(q: string): number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// new D().foo1;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo1: number
+// | @description A.foo1
+// | ----------------------------------------------------------------------
+// new D().foo2;
+//         ^^^^
+// | ----------------------------------------------------------------------
+// | (property) D.foo2: (q: string) => number
+// | @description A.foo2
+// | ----------------------------------------------------------------------
+// 
+// class Base1 {
+//     /**
+//      * @description Base1.foo1 
+//      */
+//     foo1: number = 1;
+// 
+//     /**
+//      * 
+//      * @param q Base1.foo2 parameter
+//      * @returns Base1.foo2 return
+//      */
+//      foo2(q: string) { return 1 }
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // property override method
+// class Drived1 extends Base1 implements A {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived1.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+//     foo2(para1: string) { return 1 };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived1.foo2(para1: string): number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // method override method
+// class Drived2 extends Base1 implements B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (para1: string) => { return 1; };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo2: (para1: string) => number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// class Base2 {
+//     /**
+//      * @description Base2.foo1 
+//      */
+//     foo1: number = 1;
+//     /**
+//      * 
+//      * @param q Base2.foo2 parameter
+//      * @returns Base2.foo2 return
+//      */
+//     foo2(q: string) { return 1 }
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // property override method
+// class Drived3 extends Base2 implements A {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived3.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+//     foo2(para1: string) { return 1 };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived3.foo2(para1: string): number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// // extends class and implement interfaces with duplicate name
+// // method override method
+// class Drived4 extends Base2 implements B {
+//     foo1: number = 1;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+//     foo2 = (para1: string) => { return 1; };
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo2: (para1: string) => number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+// }
+// 
+// new Drived1().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived1.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+// new Drived1().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived1.foo2(para1: string): number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived2().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo1: number
+// | @description Base1.foo1
+// | ----------------------------------------------------------------------
+// new Drived2().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived2.foo2: (para1: string) => number
+// | @param q Base1.foo2 parameter
+// | @returns Base1.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived3().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived3.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+// new Drived3().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (method) Drived3.foo2(para1: string): number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+// new Drived4().foo1;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo1: number
+// | @description Base2.foo1
+// | ----------------------------------------------------------------------
+// new Drived4().foo2;
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | (property) Drived4.foo2: (para1: string) => number
+// | @param q Base2.foo2 parameter
+// | @returns Base2.foo2 return
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +240,7 @@
       "position": 429,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -74,7 +309,7 @@
       "position": 451,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -167,7 +402,7 @@
       "position": 598,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -236,7 +471,7 @@
       "position": 620,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -341,7 +576,7 @@
       "position": 666,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -410,7 +645,7 @@
       "position": 680,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -503,7 +738,7 @@
       "position": 694,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -572,7 +807,7 @@
       "position": 708,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -677,7 +912,7 @@
       "position": 1069,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -746,7 +981,7 @@
       "position": 1091,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -856,7 +1091,7 @@
       "position": 1263,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -925,7 +1160,7 @@
       "position": 1285,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1047,7 +1282,7 @@
       "position": 1681,
       "name": "13"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1116,7 +1351,7 @@
       "position": 1703,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -1226,7 +1461,7 @@
       "position": 1875,
       "name": "15"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1295,7 +1530,7 @@
       "position": 1897,
       "name": "16"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1417,7 +1652,7 @@
       "position": 1955,
       "name": "17"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1486,7 +1721,7 @@
       "position": 1975,
       "name": "18"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -1596,7 +1831,7 @@
       "position": 1995,
       "name": "19"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1665,7 +1900,7 @@
       "position": 2015,
       "name": "20"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1787,7 +2022,7 @@
       "position": 2035,
       "name": "21"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -1856,7 +2091,7 @@
       "position": 2055,
       "name": "22"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -1966,7 +2201,7 @@
       "position": 2075,
       "name": "23"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -2035,7 +2270,7 @@
       "position": 2095,
       "name": "24"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {

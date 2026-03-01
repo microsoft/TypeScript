@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts] ////
+
 //// [classStaticBlock3.ts]
 const a = 1;
 
@@ -19,6 +21,7 @@ class C {
 
 
 //// [classStaticBlock3.js]
+"use strict";
 const a = 1;
 class C {
     static f1 = 1;

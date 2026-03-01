@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {

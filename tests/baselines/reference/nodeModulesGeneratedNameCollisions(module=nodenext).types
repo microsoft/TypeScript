@@ -1,42 +1,62 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesGeneratedNameCollisions.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 function require() {}
 >require : () => void
+>        : ^^^^^^^^^^
 
 const exports = {};
 >exports : {}
+>        : ^^
 >{} : {}
+>   : ^^
 
 class Object {}
 >Object : Object
+>       : ^^^^^^
 
 export const __esModule = false;
 >__esModule : false
+>           : ^^^^^
 >false : false
+>      : ^^^^^
 
 export {require, exports, Object};
 >require : () => void
+>        : ^^^^^^^^^^
 >exports : {}
+>        : ^^
 >Object : typeof Object
+>       : ^^^^^^^^^^^^^
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 function require() {}
 >require : () => void
+>        : ^^^^^^^^^^
 
 const exports = {};
 >exports : {}
+>        : ^^
 >{} : {}
+>   : ^^
 
 class Object {}
 >Object : Object
+>       : ^^^^^^
 
 export const __esModule = false;
 >__esModule : false
+>           : ^^^^^
 >false : false
+>      : ^^^^^
 
 export {require, exports, Object};
 >require : () => void
+>        : ^^^^^^^^^^
 >exports : {}
+>        : ^^
 >Object : typeof Object
+>       : ^^^^^^^^^^^^^
 

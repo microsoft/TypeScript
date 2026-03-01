@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowConditionalExpression.ts] ////
+
 //// [controlFlowConditionalExpression.ts]
 let x: string | number | boolean;
 let cond: boolean;
@@ -7,7 +9,8 @@ x; // string | number
 
 
 //// [controlFlowConditionalExpression.js]
-var x;
-var cond;
+"use strict";
+let x;
+let cond;
 cond ? x = "" : x = 3;
 x; // string | number

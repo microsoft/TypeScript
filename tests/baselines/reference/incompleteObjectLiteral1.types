@@ -1,10 +1,17 @@
-=== tests/cases/compiler/incompleteObjectLiteral1.ts ===
+//// [tests/cases/compiler/incompleteObjectLiteral1.ts] ////
+
+=== incompleteObjectLiteral1.ts ===
 var tt = { aa; }
 >tt : { aa: any; }
+>   : ^^^^^^^^^^^^
 >{ aa; } : { aa: any; }
+>        : ^^^^^^^^^^^^
 >aa : any
+>   : ^^^
 
 var x = tt;
 >x : { aa: any; }
+>  : ^^^^^^^^^^^^
 >tt : { aa: any; }
+>   : ^^^^^^^^^^^^
 

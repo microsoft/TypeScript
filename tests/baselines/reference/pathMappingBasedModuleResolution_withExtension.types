@@ -1,15 +1,21 @@
-=== /a.ts ===
-import { foo } from "foo";
->foo : () => void
-
-import { bar } from "bar";
->bar : () => void
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_withExtension.ts] ////
 
 === /foo/foo.ts ===
 export function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 
 === /bar/bar.js ===
 export function bar() {}
 >bar : () => void
+>    : ^^^^^^^^^^
+
+=== /a.ts ===
+import { foo } from "foo";
+>foo : () => void
+>    : ^^^^^^^^^^
+
+import { bar } from "bar";
+>bar : () => void
+>    : ^^^^^^^^^^
 

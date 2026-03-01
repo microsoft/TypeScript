@@ -1,35 +1,45 @@
-=== tests/cases/compiler/x.ts ===
-// ESM output
-No type information for this code.
-No type information for this code.export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/y.tsx ===
+//// [tests/cases/compiler/moduleResolutionNoTsESM.ts] ////
+
+=== x.ts ===
+
 export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/z.d.ts ===
+
+=== y.tsx ===
+
+export default 0;
+
+=== z.d.ts ===
 declare const x: number;
 >x : number
+>  : ^^^^^^
 
 export default x;
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import x from "./x.ts";
->x : any
+>x : 0
+>  : ^
 
 import y from "./y.tsx";
->y : any
+>y : 0
+>  : ^
 
 import z from "./z.d.ts";
->z : any
+>z : number
+>  : ^^^^^^
 
 // Making sure the suggested fixes are valid:
 import x2 from "./x";
 >x2 : 0
+>   : ^
 
 import y2 from "./y";
 >y2 : 0
+>   : ^
 
 import z2 from "./z";
 >z2 : number
+>   : ^^^^^^
 

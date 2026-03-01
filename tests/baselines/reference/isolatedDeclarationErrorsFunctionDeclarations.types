@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsFunctionDeclarations.ts] ////
+
+=== isolatedDeclarationErrorsFunctionDeclarations.ts ===
+export function noReturn() {}
+>noReturn : () => void
+>         : ^^^^^^^^^^
+
+export function noParamAnnotation(p): void {}
+>noParamAnnotation : (p: any) => void
+>                  : ^ ^^^^^^^^^^    
+>p : any
+>  : ^^^
+
+export function noParamAnnotationDefault(p = 1): void {}
+>noParamAnnotationDefault : (p?: number) => void
+>                         : ^ ^^^^^^^^^^^^^^    
+>p : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+export function noParamAnnotationBadDefault(p = 1 + 1, p2 = { a: 1 + 1 }, p3 = [1 + 1] as const): void {}
+>noParamAnnotationBadDefault : (p?: number, p2?: { a: number; }, p3?: readonly [number]) => void
+>                            : ^ ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>p : number
+>  : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>p2 : { a: number; }
+>   : ^^^^^^^^^^^^^^
+>{ a: 1 + 1 } : { a: number; }
+>             : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>p3 : readonly [number]
+>   : ^^^^^^^^^^^^^^^^^
+>[1 + 1] as const : readonly [number]
+>                 : ^^^^^^^^^^^^^^^^^
+>[1 + 1] : readonly [number]
+>        : ^^^^^^^^^^^^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export function noParamAnnotationBadDefault2(p = { a: 1 + 1 }): void {}
+>noParamAnnotationBadDefault2 : (p?: { a: number; }) => void
+>                             : ^ ^^^^^^^^^^^^^^^^^^^^^^    
+>p : { a: number; }
+>  : ^^^^^^^^^^^^^^
+>{ a: 1 + 1 } : { a: number; }
+>             : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 + 1 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+

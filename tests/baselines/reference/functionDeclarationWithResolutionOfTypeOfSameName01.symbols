@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionDeclarationWithResolutionOfTypeOfSameName01.ts ===
+//// [tests/cases/compiler/functionDeclarationWithResolutionOfTypeOfSameName01.ts] ////
+
+=== functionDeclarationWithResolutionOfTypeOfSameName01.ts ===
 interface f {
 >f : Symbol(f, Decl(functionDeclarationWithResolutionOfTypeOfSameName01.ts, 1, 1), Decl(functionDeclarationWithResolutionOfTypeOfSameName01.ts, 0, 0))
 }

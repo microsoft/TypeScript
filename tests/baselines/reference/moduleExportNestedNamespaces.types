@@ -1,92 +1,151 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/moduleExportNestedNamespaces.ts] ////
+
+=== mod.js ===
 module.exports.n = {};
 >module.exports.n = {} : typeof n
+>                      : ^^^^^^^^
 >module.exports.n : typeof n
+>                 : ^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >n : typeof n
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : typeof C
+>                                                     : ^^^^^^^^
 >module.exports.n.K : typeof C
+>                   : ^^^^^^^^
 >module.exports.n : typeof n
+>                 : ^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >n : typeof n
+>  : ^^^^^^^^
 >K : typeof C
+>  : ^^^^^^^^
 >function C() {    this.x = 10;} : typeof C
+>                                : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     this.x = 10;
 >this.x = 10 : 10
+>            : ^^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >10 : 10
+>   : ^^
 }
 module.exports.Classic = class {
 >module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
+>                                                                            : ^^^^^^^^^^^^^^
 >module.exports.Classic : typeof Classic
+>                       : ^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >Classic : typeof Classic
+>        : ^^^^^^^^^^^^^^
 >class {    constructor() {        this.p = 1    }} : typeof Classic
+>                                                   : ^^^^^^^^^^^^^^
 
     constructor() {
         this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import * as s from './mod'
 >s : typeof s
+>  : ^^^^^^^^
 
 var k = new s.n.K()
 >k : C
+>  : ^
 >new s.n.K() : C
+>            : ^
 >s.n.K : typeof C
+>      : ^^^^^^^^
 >s.n : typeof s.n
+>    : ^^^^^^^^^^
 >s : typeof s
+>  : ^^^^^^^^
 >n : typeof s.n
+>  : ^^^^^^^^^^
 >K : typeof C
+>  : ^^^^^^^^
 
 k.x
 >k.x : number
+>    : ^^^^^^
 >k : C
+>  : ^
 >x : number
+>  : ^^^^^^
 
 var classic = new s.Classic()
 >classic : s.Classic
+>        : ^^^^^^^^^
 >new s.Classic() : s.Classic
+>                : ^^^^^^^^^
 >s.Classic : typeof s.Classic
+>          : ^^^^^^^^^^^^^^^^
 >s : typeof s
+>  : ^^^^^^^^
 >Classic : typeof s.Classic
+>        : ^^^^^^^^^^^^^^^^
 
 
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
 >f : (c: C, classic: s.Classic) => void
+>  : ^ ^^^^^       ^^         ^^^^^^^^^
 >c : C
+>  : ^
 >classic : s.Classic
+>        : ^^^^^^^^^
 
     c.x
 >c.x : number
+>    : ^^^^^^
 >c : C
+>  : ^
 >x : number
+>  : ^^^^^^
 
     classic.p
 >classic.p : number
+>          : ^^^^^^
 >classic : s.Classic
+>        : ^^^^^^^^^
 >p : number
+>  : ^^^^^^
 }
 

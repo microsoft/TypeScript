@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName1.ts] ////
+
 //// [privateNameComputedPropertyName1.ts]
 class A {
     #a = 'a';
@@ -38,6 +40,7 @@ new A().test();
 
 
 //// [privateNameComputedPropertyName1.js]
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");

@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag7.ts] ////
+
+=== /a.js ===
+/** @typedef {"a" | "b" | "c" | "d"} Keys */
+
+const p = /** @satisfies {Record<Keys, unknown>} */ ({
+>p : Symbol(p, Decl(a.js, 2, 5))
+
+    a: 0,
+>a : Symbol(a, Decl(a.js, 2, 54))
+
+    b: "hello",
+>b : Symbol(b, Decl(a.js, 3, 9))
+
+    x: 8 // Should error, 'x' isn't in 'Keys'
+>x : Symbol(x, Decl(a.js, 4, 15))
+
+})
+
+// Should be OK -- retain info that a is number and b is string
+let a = p.a.toFixed();
+>a : Symbol(a, Decl(a.js, 9, 3))
+>p.a.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>p.a : Symbol(a, Decl(a.js, 2, 54))
+>p : Symbol(p, Decl(a.js, 2, 5))
+>a : Symbol(a, Decl(a.js, 2, 54))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+let b = p.b.substring(1);
+>b : Symbol(b, Decl(a.js, 10, 3))
+>p.b.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>p.b : Symbol(b, Decl(a.js, 3, 9))
+>p : Symbol(p, Decl(a.js, 2, 5))
+>b : Symbol(b, Decl(a.js, 3, 9))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+
+// Should error even though 'd' is in 'Keys'
+let d = p.d;
+>d : Symbol(d, Decl(a.js, 13, 3))
+>p : Symbol(p, Decl(a.js, 2, 5))
+

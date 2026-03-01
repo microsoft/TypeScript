@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredDefaultExportType2.ts] ////
+
 //// [declarationEmitInferredDefaultExportType2.ts]
 // test.ts
 export = {
@@ -17,8 +19,8 @@ module.exports = {
 
 //// [declarationEmitInferredDefaultExportType2.d.ts]
 declare const _default: {
-    foo: any[];
-    bar: any;
-    baz: any;
+    foo: never[];
+    bar: undefined;
+    baz: null;
 };
 export = _default;

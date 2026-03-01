@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationWithComments.ts] ////
+
 //// [sourceMapValidationWithComments.ts]
 class DebugClass {
 
@@ -22,10 +24,9 @@ class DebugClass {
 }
 
 //// [sourceMapValidationWithComments.js]
-var DebugClass = /** @class */ (function () {
-    function DebugClass() {
-    }
-    DebugClass.debugFunc = function () {
+"use strict";
+class DebugClass {
+    static debugFunc() {
         // Start Debugger Test Code
         var i = 0;
         i++;
@@ -39,7 +40,6 @@ var DebugClass = /** @class */ (function () {
         i++;
         // End Debugger Test Code
         return true;
-    };
-    return DebugClass;
-}());
+    }
+}
 //# sourceMappingURL=sourceMapValidationWithComments.js.map

@@ -1,19 +1,20 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2,17): error TS1187: A parameter property may not be declared using a binding pattern.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(9,17): error TS1187: A parameter property may not be declared using a binding pattern.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(16,17): error TS1187: A parameter property may not be declared using a binding pattern.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,26): error TS2339: Property 'x' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,52): error TS2339: Property 'z' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(25,30): error TS2339: Property 'x' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(25,36): error TS2339: Property 'y' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(25,42): error TS2339: Property 'z' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(29,30): error TS2339: Property 'x' does not exist on type 'C3'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(29,36): error TS2339: Property 'y' does not exist on type 'C3'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(29,42): error TS2339: Property 'z' does not exist on type 'C3'.
+destructuringParameterProperties1.ts(2,17): error TS1187: A parameter property may not be declared using a binding pattern.
+destructuringParameterProperties1.ts(9,17): error TS1187: A parameter property may not be declared using a binding pattern.
+destructuringParameterProperties1.ts(16,17): error TS1187: A parameter property may not be declared using a binding pattern.
+destructuringParameterProperties1.ts(22,26): error TS2339: Property 'x' does not exist on type 'C1'.
+destructuringParameterProperties1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
+destructuringParameterProperties1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
+destructuringParameterProperties1.ts(22,52): error TS2339: Property 'z' does not exist on type 'C1'.
+destructuringParameterProperties1.ts(24,30): error TS2872: This kind of expression is always truthy.
+destructuringParameterProperties1.ts(25,30): error TS2339: Property 'x' does not exist on type 'C2'.
+destructuringParameterProperties1.ts(25,36): error TS2339: Property 'y' does not exist on type 'C2'.
+destructuringParameterProperties1.ts(25,42): error TS2339: Property 'z' does not exist on type 'C2'.
+destructuringParameterProperties1.ts(29,30): error TS2339: Property 'x' does not exist on type 'C3'.
+destructuringParameterProperties1.ts(29,36): error TS2339: Property 'y' does not exist on type 'C3'.
+destructuringParameterProperties1.ts(29,42): error TS2339: Property 'z' does not exist on type 'C3'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts (13 errors) ====
+==== destructuringParameterProperties1.ts (14 errors) ====
     class C1 {
         constructor(public [x, y, z]: string[]) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,6 +53,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2
 !!! error TS2339: Property 'z' does not exist on type 'C1'.
     
     var c2 = new C2(["10", 10, !!10]);
+                                 ~~
+!!! error TS2872: This kind of expression is always truthy.
     var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
                                  ~
 !!! error TS2339: Property 'x' does not exist on type 'C2'.

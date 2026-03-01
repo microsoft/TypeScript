@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/for-ofStatements/for-of30.ts(16,15): error TS2767: The 'return' property of an iterator must be a method.
+for-of30.ts(16,15): error TS2767: The 'return' property of an iterator must be a method.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of30.ts (1 errors) ====
-    class StringIterator {
+==== for-of30.ts (1 errors) ====
+    class MyStringIterator {
         next() {
             return {
                 done: false,
@@ -17,6 +17,6 @@ tests/cases/conformance/es6/for-ofStatements/for-of30.ts(16,15): error TS2767: T
         }
     }
     
-    for (var v of new StringIterator) { }
-                  ~~~~~~~~~~~~~~~~~~
+    for (var v of new MyStringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2767: The 'return' property of an iterator must be a method.

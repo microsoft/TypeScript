@@ -1,11 +1,14 @@
-=== tests/cases/compiler/noTypeArgumentOnReturnType1.ts ===
+//// [tests/cases/compiler/noTypeArgumentOnReturnType1.ts] ////
+
+=== noTypeArgumentOnReturnType1.ts ===
 class A<T>{
 >A : A<T>
+>  : ^^^^
  
  foo(): A{
->foo : () => any
+>foo : () => A
+>    : ^^^^^^ 
 
   return null;
->null : null
  }
 }

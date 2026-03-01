@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarations.ts] ////
+
 //// [uniqueSymbolsDeclarations.ts]
 // declarations with call initializer
 const constCall = Symbol();
@@ -239,6 +241,7 @@ const o4: Context = {
 };
 
 //// [uniqueSymbolsDeclarations.js]
+"use strict";
 // declarations with call initializer
 const constCall = Symbol();
 let letCall = Symbol();

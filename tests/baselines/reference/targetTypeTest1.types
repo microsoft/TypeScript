@@ -1,24 +1,35 @@
-=== tests/cases/compiler/targetTypeTest1.ts ===
+//// [tests/cases/compiler/targetTypeTest1.ts] ////
+
+=== targetTypeTest1.ts ===
 declare class Point
 >Point : Point
+>      : ^^^^^
 {
       constructor(x: number, y: number);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
       public x: number;
 >x : number
+>  : ^^^^^^
 
       public y: number;
 >y : number
+>  : ^^^^^^
 
       public add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
       static origin: Point;
 >origin : Point
+>       : ^^^^^
 
 }
 
@@ -27,216 +38,352 @@ declare class Point
 // to be Point and return type is inferred to be void
 function Point(x, y) {
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     this.x = x;
 >this.x = x : any
+>           : ^^^
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     this.y = y;
 >this.y = y : any
+>           : ^^^
 >this.y : any
+>       : ^^^
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 declare function EF1(a:number, b:number):number;
 >EF1 : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 function EF1(a,b) { return a+b; }
 >EF1 : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >a+b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 var x = EF1(1,2);
 >x : number
+>  : ^^^^^^
 >EF1(1,2) : number
+>         : ^^^^^^
 >EF1 : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
 >Point.origin = new Point(0, 0) : Point
+>                               : ^^^^^
 >Point.origin : Point
+>             : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >origin : Point
+>       : ^^^^^
 >new Point(0, 0) : Point
+>                : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 // Point.prototype declared as type Point
 // this inferred as Point because of obj.prop assignment
 // dx, dy, and return type inferred using target typing
 Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
+>                                                                                         : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >Point.prototype.add : (dx: number, dy: number) => Point
+>                    : ^  ^^      ^^  ^^      ^^^^^     
 >Point.prototype : Point
+>                : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >prototype : Point
+>          : ^^^^^
 >add : (dx: number, dy: number) => Point
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
+>                                                                   : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
     return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : Point
+>                                    : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >this.x + dx : any
+>            : ^^^
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >dx : number
+>   : ^^^^^^
 >this.y + dy : any
+>            : ^^^
 >this.y : any
+>       : ^^^
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
 >dy : number
+>   : ^^^^^^
 
 };
 
 var f : number = 5;
 >f : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
 // Object literal type inferred using target typing
 // this in function add inferred to be type of object literal (i.e. Point)
 // dx, dy, and return type of add inferred using target typing
 Point.prototype = {
 >Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 >Point.prototype : Point
+>                : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >prototype : Point
+>          : ^^^^^
 >{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 
     x: 0,
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     y: 0,
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     add: function(dx, dy) {
 >add : (dx: number, dy: number) => Point
+>    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
+>                                                                           : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
 
         return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : Point
+>                                    : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >this.x + dx : any
+>            : ^^^
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >dx : number
+>   : ^^^^^^
 >this.y + dy : any
+>            : ^^^
 >this.y : any
+>       : ^^^
 >this : any
+>     : ^^^
 >y : any
+>  : ^^^
 >dy : number
+>   : ^^^^^^
     }
 };
 
 declare var z;
 >z : any
+>  : ^^^
 
 z = function(a: number) {
 >z = function(a: number) {    a} : (a: number) => void
+>                                : ^ ^^      ^^^^^^^^^
 >z : any
+>  : ^^^
 >function(a: number) {    a} : (a: number) => void
+>                            : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     a
 >a : number
+>  : ^^^^^^
 }
 
 declare class C {
 >C : C
+>  : ^
 
     constructor(a:number, b:number);
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 	public a : number;
 >a : number
+>  : ^^^^^^
 
 	public b: number;    
 >b : number
+>  : ^^^^^^
 
 	C1M1(c:number,d:number):number;
 >C1M1 : (c: number, d: number) => number
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 } 
 
 function C(a,b) {
 >C : typeof C
+>  : ^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 	this.a=a;
 >this.a=a : any
+>         : ^^^
 >this.a : any
+>       : ^^^
 >this : any
+>     : ^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 	this.b=b;
 >this.b=b : any
+>         : ^^^
 >this.b : any
+>       : ^^^
 >this : any
+>     : ^^^
 >b : any
+>  : ^^^
 >b : any
+>  : ^^^
 }
 
 C.prototype = 
 >C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >C.prototype : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C
+>          : ^
 
 	{	a:0,
 >{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 		b:0, 
 >b : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 		C1M1: function(c,d) {     
 >C1M1 : (c: number, d: number) => any
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: number, d: number) => any
+>                                                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 
 				return (this.a + c) + (this.b + d);
 >(this.a + c) + (this.b + d) : any
+>                            : ^^^
 >(this.a + c) : any
+>             : ^^^
 >this.a + c : any
+>           : ^^^
 >this.a : any
+>       : ^^^
 >this : any
+>     : ^^^
 >a : any
+>  : ^^^
 >c : number
+>  : ^^^^^^
 >(this.b + d) : any
+>             : ^^^
 >this.b + d : any
+>           : ^^^
 >this.b : any
+>       : ^^^
 >this : any
+>     : ^^^
 >b : any
+>  : ^^^
 >d : number
+>  : ^^^^^^
 			}
 	};
 

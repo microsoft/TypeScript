@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts] ////
+
 //// [conditionallyDuplicateOverloadsCausedByOverloadResolution.ts]
 declare function foo(func: (x: string, y: string) => any): boolean;
 declare function foo(func: (x: string, y: number) => any): string;
@@ -21,11 +23,12 @@ var out2 = foo2((x, y) => {
 });
 
 //// [conditionallyDuplicateOverloadsCausedByOverloadResolution.js]
-var out = foo(function (x, y) {
+"use strict";
+var out = foo((x, y) => {
     function bar() { }
     return bar;
 });
-var out2 = foo2(function (x, y) {
+var out2 = foo2((x, y) => {
     var bar;
     return bar;
 });

@@ -1,3 +1,4 @@
+// @target: es2015
 type T1 = { x: string }
 
 // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.

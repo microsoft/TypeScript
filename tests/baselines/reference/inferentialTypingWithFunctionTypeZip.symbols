@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferentialTypingWithFunctionTypeZip.ts ===
+//// [tests/cases/compiler/inferentialTypingWithFunctionTypeZip.ts] ////
+
+=== inferentialTypingWithFunctionTypeZip.ts ===
 var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
 >pair : Symbol(pair, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 3))
 >T : Symbol(T, Decl(inferentialTypingWithFunctionTypeZip.ts, 0, 11))

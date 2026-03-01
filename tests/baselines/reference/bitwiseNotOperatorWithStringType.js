@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithStringType.ts] ////
+
 //// [bitwiseNotOperatorWithStringType.ts]
 // ~ operator on string type
 var STRING: string;
@@ -9,7 +11,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -44,16 +46,14 @@ var ResultIsNumber14 = ~~~(STRING + STRING);
 ~objA.a,M.n;
 
 //// [bitwiseNotOperatorWithStringType.js]
+"use strict";
 // ~ operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -64,7 +64,7 @@ var ResultIsNumber2 = ~STRING1;
 // string type literal
 var ResultIsNumber3 = ~"";
 var ResultIsNumber4 = ~{ x: "", y: "" };
-var ResultIsNumber5 = ~{ x: "", y: function (s) { return s; } };
+var ResultIsNumber5 = ~{ x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsNumber6 = ~objA.a;
 var ResultIsNumber7 = ~M.n;

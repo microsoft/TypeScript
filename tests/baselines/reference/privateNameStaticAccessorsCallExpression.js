@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsCallExpression.ts] ////
+
 //// [privateNameStaticAccessorsCallExpression.ts]
 class A {
     static get #fieldFunc() {  return function() { A.#x = 10; } }
@@ -19,6 +21,7 @@ class A {
 }
 
 //// [privateNameStaticAccessorsCallExpression.js]
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -44,7 +47,7 @@ class A {
         const str = __classPrivateFieldGet(this, _a, "a", _A_fieldFunc2_get).bind(this) `head${1}middle${2}tail`;
         __classPrivateFieldGet((_b = this.getClass()), _a, "a", _A_fieldFunc2_get).bind(_b) `test${1}and${2}`;
     }
-    static getClass() { return A; }
+    static getClass() { return _a; }
 }
-_a = A, _A_fieldFunc_get = function _A_fieldFunc_get() { return function () { __classPrivateFieldSet(A, _a, 10, "f", _A_x); }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };
+_a = A, _A_fieldFunc_get = function _A_fieldFunc_get() { return function () { __classPrivateFieldSet(_a, _a, 10, "f", _A_x); }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };
 _A_x = { value: 1 };

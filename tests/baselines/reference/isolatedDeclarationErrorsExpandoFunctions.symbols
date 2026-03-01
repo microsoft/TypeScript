@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsExpandoFunctions.ts] ////
+
+=== isolatedDeclarationErrorsExpandoFunctions.ts ===
+export function foo() {}
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+
+foo.apply = () => {}
+>foo.apply : Symbol(foo.apply, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>apply : Symbol(foo.apply, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24))
+
+foo.call = ()=> {}
+>foo.call : Symbol(foo.call, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>call : Symbol(foo.call, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20))
+
+foo.bind = ()=> {}
+>foo.bind : Symbol(foo.bind, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>bind : Symbol(foo.bind, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18))
+
+foo.caller = ()=> {}
+>foo.caller : Symbol(foo.caller, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>caller : Symbol(foo.caller, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18))
+
+foo.toString = ()=> {}
+>foo.toString : Symbol(foo.toString, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 5, 20))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>toString : Symbol(foo.toString, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 5, 20))
+
+foo.length = 10
+>foo.length : Symbol(foo.length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>length : Symbol(foo.length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+
+foo.length = 10
+>foo.length : Symbol(foo.length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+>foo : Symbol(foo, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 0), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 0, 24), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 2, 20), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 3, 18), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 4, 18) ... and 3 more)
+>length : Symbol(foo.length, Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 6, 22), Decl(isolatedDeclarationErrorsExpandoFunctions.ts, 7, 15))
+

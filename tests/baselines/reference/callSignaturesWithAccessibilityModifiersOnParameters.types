@@ -1,144 +1,230 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts] ////
+
+=== callSignaturesWithAccessibilityModifiersOnParameters.ts ===
 // Call signature parameters do not allow accessibility modifiers
 
 function foo(public x, private y) { }
 >foo : (x: any, y: any) => void
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 var f = function foo(public x, private y) { }
 >f : (x: any, y: any) => void
+>  : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >function foo(public x, private y) { } : (x: any, y: any) => void
+>                                      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >foo : (x: any, y: any) => void
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 var f2 = function (public x, private y) { }
 >f2 : (x: any, y: any) => void
+>   : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >function (public x, private y) { } : (x: any, y: any) => void
+>                                   : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 var f3 = (x, private y) => { }
 >f3 : (x: any, y: any) => void
+>   : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >(x, private y) => { } : (x: any, y: any) => void
+>                      : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 var f4 = <T>(public x: T, y: T) => { }
 >f4 : <T>(x: T, y: T) => void
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><T>(public x: T, y: T) => { } : <T>(x: T, y: T) => void
+>                              : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 function foo2(private x: string, public y: number) { }
 >foo2 : (x: string, y: number) => void
+>     : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var f5 = function foo(private x: string, public y: number) { }
 >f5 : (x: string, y: number) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >function foo(private x: string, public y: number) { } : (x: string, y: number) => void
+>                                                      : ^ ^^      ^^ ^^      ^^^^^^^^^
 >foo : (x: string, y: number) => void
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var f6 = function (private x: string, public y: number) { }
 >f6 : (x: string, y: number) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >function (private x: string, public y: number) { } : (x: string, y: number) => void
+>                                                   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var f7 = (private x: string, public y: number) => { }
 >f7 : (x: string, y: number) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(private x: string, public y: number) => { } : (x: string, y: number) => void
+>                                             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var f8 = <T>(private x: T, public y: T) => { }
 >f8 : <T>(x: T, y: T) => void
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><T>(private x: T, public y: T) => { } : <T>(x: T, y: T) => void
+>                                      : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     foo(public x, private y) { }
 >foo : (x: any, y: any) => void
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     foo2(public x: number, private y: string) { }
 >foo2 : (x: number, y: string) => void
+>     : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     foo3<T>(public x: T, private y: T) { }
 >foo3 : <T>(x: T, y: T) => void
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 }
 
 interface I {
     (private x, public y);
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     (private x: string, public y: number);
 >x : string
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     foo(private x, public y);
 >foo : { (x: any, y: any): any; (x: number, y: string): any; }
+>    : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     foo(public x: number, y: string);
 >foo : { (x: any, y: any): any; (x: number, y: string): any; }
+>    : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     foo3<T>(x: T, private y: T);
 >foo3 : <T>(x: T, y: T) => any
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 }
 
 var a: {
 >a : { foo(x: any, y: any): any; foo2(x: number, y: string): any; }
+>  : ^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 
     foo(public x, private y);
 >foo : (x: any, y: any) => any
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     foo2(private x: number, public y: string);
 >foo2 : (x: number, y: string) => any
+>     : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 };
 
 var b = {
 >b : { foo(x: any, y: any): void; a: (x: number, y: string) => void; b: <T>(x: T, y: T) => void; }
+>  : ^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >{    foo(public x, y) { },    a: function foo(x: number, private y: string) { },    b: <T>(public x: T, private y: T) => { }} : { foo(x: any, y: any): void; a: (x: number, y: string) => void; b: <T>(x: T, y: T) => void; }
+>                                                                                                                              : ^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
     foo(public x, y) { },
 >foo : (x: any, y: any) => void
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     a: function foo(x: number, private y: string) { },
 >a : (x: number, y: string) => void
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >function foo(x: number, private y: string) { } : (x: number, y: string) => void
+>                                               : ^ ^^      ^^ ^^      ^^^^^^^^^
 >foo : (x: number, y: string) => void
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     b: <T>(public x: T, private y: T) => { }
 >b : <T>(x: T, y: T) => void
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><T>(public x: T, private y: T) => { } : <T>(x: T, y: T) => void
+>                                      : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 }

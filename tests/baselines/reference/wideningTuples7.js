@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/wideningTuples7.ts] ////
+
 //// [wideningTuples7.ts]
 var foo = function bar() {
     let intermediate: [string];
@@ -5,7 +7,8 @@ var foo = function bar() {
 };
 
 //// [wideningTuples7.js]
+"use strict";
 var foo = function bar() {
-    var intermediate;
+    let intermediate;
     return intermediate = [undefined];
 };

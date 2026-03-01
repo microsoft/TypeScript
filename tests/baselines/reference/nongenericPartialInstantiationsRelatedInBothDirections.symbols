@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts ===
+//// [tests/cases/compiler/nongenericPartialInstantiationsRelatedInBothDirections.ts] ////
+
+=== nongenericPartialInstantiationsRelatedInBothDirections.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 0, 0))
 

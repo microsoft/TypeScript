@@ -1,4 +1,6 @@
-=== tests/cases/compiler/breakNotInIterationOrSwitchStatement2.ts ===
+//// [tests/cases/compiler/breakNotInIterationOrSwitchStatement2.ts] ////
+
+=== breakNotInIterationOrSwitchStatement2.ts ===
 while (true) {
   function f() {
 >f : Symbol(f, Decl(breakNotInIterationOrSwitchStatement2.ts, 0, 14))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts] ////
+
 //// [noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts]
 const cat = 12;
 class Foo {}
@@ -8,10 +10,7 @@ declare namespace Foo {
 
 //// [noCircularDefinitionOnExportOfPrivateInMergedNamespace.js]
 "use strict";
-var cat = 12;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+const cat = 12;
+class Foo {
+}
 module.exports = Foo;

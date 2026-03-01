@@ -1,8 +1,8 @@
-tests/cases/compiler/moduleWithValuesAsType.ts(5,8): error TS2709: Cannot use namespace 'A' as a type.
+moduleWithValuesAsType.ts(5,8): error TS2709: Cannot use namespace 'A' as a type.
 
 
-==== tests/cases/compiler/moduleWithValuesAsType.ts (1 errors) ====
-    module A {
+==== moduleWithValuesAsType.ts (1 errors) ====
+    namespace A {
         var b = 1;
     }
     

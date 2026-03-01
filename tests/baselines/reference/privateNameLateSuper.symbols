@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameLateSuper.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameLateSuper.ts] ////
+
+=== privateNameLateSuper.ts ===
 class B {}
 >B : Symbol(B, Decl(privateNameLateSuper.ts, 0, 0))
 

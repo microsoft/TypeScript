@@ -1,14 +1,22 @@
-=== tests/cases/compiler/destructuringWithNewExpression.ts ===
+//// [tests/cases/compiler/destructuringWithNewExpression.ts] ////
+
+=== destructuringWithNewExpression.ts ===
 class C {
 >C : C
+>  : ^
 
     x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 var { x } = new C;
 >x : number
+>  : ^^^^^^
 >new C : C
+>      : ^
 >C : typeof C
+>  : ^^^^^^^^
 

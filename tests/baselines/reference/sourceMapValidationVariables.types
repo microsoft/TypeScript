@@ -1,19 +1,27 @@
-=== tests/cases/compiler/sourceMapValidationVariables.ts ===
+//// [tests/cases/compiler/sourceMapValidationVariables.ts] ////
+
+=== sourceMapValidationVariables.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var b;
 >b : any
 
 var c = 10, d, e;
 >c : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >d : any
 >e : any
 
 var c2, d2 = 10;
 >c2 : any
 >d2 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 

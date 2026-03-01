@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectCreationOfElementAccessExpression.ts ===
+//// [tests/cases/compiler/objectCreationOfElementAccessExpression.ts] ////
+
+=== objectCreationOfElementAccessExpression.ts ===
 class Food {
 >Food : Symbol(Food, Decl(objectCreationOfElementAccessExpression.ts, 0, 0))
 

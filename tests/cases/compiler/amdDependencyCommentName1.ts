@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 ///<amd-dependency path='bar' name='b'/>
 

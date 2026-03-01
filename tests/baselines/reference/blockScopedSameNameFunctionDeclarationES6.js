@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts] ////
+
 //// [blockScopedSameNameFunctionDeclarationES6.ts]
 function foo(a: number) {
     if (a === 10) {
@@ -17,6 +19,7 @@ foo(10);
 foo(); // not ok - needs number
 
 //// [blockScopedSameNameFunctionDeclarationES6.js]
+"use strict";
 function foo(a) {
     if (a === 10) {
         function foo() { } // duplicate

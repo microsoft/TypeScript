@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts] ////
+
 //// [lambdaParameterWithTupleArgsHasCorrectAssignability.ts]
 type MyTupleItem = {};
 type MyTuple = [MyTupleItem, ...MyTupleItem[]];
@@ -23,16 +25,13 @@ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
 
 //// [lambdaParameterWithTupleArgsHasCorrectAssignability.js]
 "use strict";
-var GenericClass = /** @class */ (function () {
-    function GenericClass() {
-    }
-    return GenericClass;
-}());
+class GenericClass {
+}
 function createClass(f) {
     return new GenericClass( /* ... use f */);
 }
 function consumeClass(c) { }
 // should work
-consumeClass(createClass(function (str) { return console.log(str.length); }));
+consumeClass(createClass(str => console.log(str.length)));
 // should work
-consumeClass(createClass(function (str, _unused_num) { return console.log(str.length); }));
+consumeClass(createClass((str, _unused_num) => console.log(str.length)));

@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/unknownLikeUnionObjectFlagsNotPropagated.ts] ////
+
+=== unknownLikeUnionObjectFlagsNotPropagated.ts ===
+// repro from #52475#issuecomment-1411215277
+
+type MyType = {} | null | undefined;
+>MyType : Symbol(MyType, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 0, 0))
+
+const myVar: MyType = null as MyType;
+>myVar : Symbol(myVar, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 4, 5))
+>MyType : Symbol(MyType, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 0, 0))
+>MyType : Symbol(MyType, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 0, 0))
+
+myVar?.toLocaleString;
+>myVar?.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>myVar : Symbol(myVar, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 4, 5))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+
+myVar;
+>myVar : Symbol(myVar, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 4, 5))
+
+async function myUnusedFunction() {
+>myUnusedFunction : Symbol(myUnusedFunction, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 7, 6))
+
+    const fetch1 = Promise.resolve(['hello', 'world']);
+>fetch1 : Symbol(fetch1, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 10, 9))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    const [data1] = await Promise.all([fetch1]);
+>data1 : Symbol(data1, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 11, 11))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>fetch1 : Symbol(fetch1, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 10, 9))
+
+    data1.length;
+>data1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>data1 : Symbol(data1, Decl(unknownLikeUnionObjectFlagsNotPropagated.ts, 11, 11))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+

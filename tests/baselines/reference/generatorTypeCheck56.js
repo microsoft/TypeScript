@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck56.ts] ////
+
 //// [generatorTypeCheck56.ts]
 function* g() {
     var x = class C {
@@ -8,6 +10,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck56.js]
+"use strict";
 function* g() {
     var x = class C {
         *[yield 0]() {

@@ -1,0 +1,40 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty1.ts ===
+// interface One {
+//     <|[|{| defId: 0 |}commonProperty|]: number;|>
+//     commonFunction(): number;
+// }
+// 
+// interface Two {
+//     <|[|{| defId: 1 |}commonProperty|]: string|>
+//     commonFunction(): number;
+// }
+// 
+// var x : One | Two;
+// 
+// x./*GOTO DEF*/commonProperty;
+// x.commonFunction;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "property",
+    "name": "commonProperty",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "property",
+    "name": "commonProperty",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

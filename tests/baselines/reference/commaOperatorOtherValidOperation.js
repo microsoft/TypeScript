@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorOtherValidOperation.ts] ////
+
 //// [commaOperatorOtherValidOperation.ts]
 //Comma operator in for loop
 for (var i = 0, j = 10; i < j; i++, j--)
@@ -22,6 +24,7 @@ function foo1<T1, T2>()
 
 
 //// [commaOperatorOtherValidOperation.js]
+"use strict";
 //Comma operator in for loop
 for (var i = 0, j = 10; i < j; i++, j--) {
 }

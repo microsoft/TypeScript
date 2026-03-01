@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeErrors2.ts] ////
+
 //// [mappedTypeErrors2.ts]
 // Repros from #17238
 
@@ -21,6 +23,7 @@ type T7<S extends 'a'|'b', L extends 'a'> = {[key in AB[S]]: true}[L];
 
 
 //// [mappedTypeErrors2.js]
+"use strict";
 // Repros from #17238
 
 

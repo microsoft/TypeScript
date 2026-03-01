@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit1_ES6.ts] ////
+
 //// [computedPropertyNamesDeclarationEmit1_ES6.ts]
 class C {
     ["" + ""]() { }
@@ -6,6 +8,7 @@ class C {
 }
 
 //// [computedPropertyNamesDeclarationEmit1_ES6.js]
+"use strict";
 class C {
     ["" + ""]() { }
     get ["" + ""]() { return 0; }

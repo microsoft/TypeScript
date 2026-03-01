@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/indexIntoEnum.ts] ////
+
 //// [indexIntoEnum.ts]
-module M {
+namespace M {
 
     enum E { }
 
@@ -7,9 +9,10 @@ module M {
 }
 
 //// [indexIntoEnum.js]
+"use strict";
 var M;
 (function (M) {
-    var E;
+    let E;
     (function (E) {
     })(E || (E = {}));
     var x = E[0];

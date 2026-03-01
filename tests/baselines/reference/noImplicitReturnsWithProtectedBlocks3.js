@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsWithProtectedBlocks3.ts] ////
+
 //// [noImplicitReturnsWithProtectedBlocks3.ts]
 declare function log(s: string): void;
 declare function get(): number;
@@ -12,6 +14,7 @@ function main1() : number {
 }
 
 //// [noImplicitReturnsWithProtectedBlocks3.js]
+"use strict";
 function main1() {
     try {
         return get();

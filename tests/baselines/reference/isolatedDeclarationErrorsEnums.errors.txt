@@ -1,0 +1,70 @@
+isolatedDeclarationErrorsEnums.ts(12,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+isolatedDeclarationErrorsEnums.ts(13,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+isolatedDeclarationErrorsEnums.ts(29,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+isolatedDeclarationErrorsEnums.ts(30,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+isolatedDeclarationErrorsEnums.ts(31,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+isolatedDeclarationErrorsEnums.ts(44,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+isolatedDeclarationErrorsEnums.ts(45,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+
+
+==== isolatedDeclarationErrorsEnums.ts (7 errors) ====
+    declare function computed(x: number): number;
+    
+    enum E {
+        A = computed(0),
+        B = computed(1),
+        C = computed(2),
+        D = computed(3),
+    }
+    
+    
+    enum F {
+        A = E.A,
+        ~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+        B = A,
+        ~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+    }
+    
+    
+    enum Flag {
+        A = 1 >> 1,
+        B = 2 >> 2,
+        C = 3 >> 2,
+        AB = A | B,
+        ABC = Flag.AB | C,
+        AC = Flag["A"] | C,
+    }
+    
+    const EV = 1;
+    enum ExtFlags {
+        D = 4 >> 1,
+        E = EV,
+        ~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+        ABCD = Flag.ABC | D,
+        ~~~~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+        AC = Flag["A"] | D,
+        ~~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+    }
+    
+    
+    enum Str {
+        A = "A",
+        B = "B",
+        AB = A + B
+    }
+    
+    
+    enum StrExt {
+        D = "D",
+        ABD = Str.AB + D,
+        ~~~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+        AD = Str["A"] + D,
+        ~~
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+    }

@@ -1,20 +1,29 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughTypeInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughTypeInference.ts] ////
+
+=== infiniteExpansionThroughTypeInference.ts ===
 interface G<T> {
     x: G<G<T>> // infinitely expanding type reference
 >x : G<G<T>>
+>  : ^^^^^^^
 
     y: T
 >y : T
+>  : ^
 }
 
 function ff<T>(g: G<T>): void {
 >ff : <T>(g: G<T>) => void
+>   : ^ ^^ ^^    ^^^^^    
 >g : G<T>
+>  : ^^^^
 
     ff(g) // when infering T here we need to make sure to not descend into the structure of G<T> infinitely
 >ff(g) : void
+>      : ^^^^
 >ff : <T>(g: G<T>) => void
+>   : ^ ^^ ^^    ^^^^^    
 >g : G<T>
+>  : ^^^^
 }
 
 

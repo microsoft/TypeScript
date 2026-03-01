@@ -1,0 +1,17 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/foo/lib/main.js ===
+// export const [|a|] = "a";
+
+// === /home/src/workspaces/project/index.ts ===
+// import { a } from "foo";
+// a/*GOTO SOURCE DEF*/
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

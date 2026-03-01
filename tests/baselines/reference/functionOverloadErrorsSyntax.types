@@ -1,29 +1,45 @@
-=== tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts ===
+//// [tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts] ////
+
+=== functionOverloadErrorsSyntax.ts ===
 //Function overload signature with optional parameter followed by non-optional parameter
 function fn4a(x?: number, y: string);
 >fn4a : (x?: number, y: string) => any
+>     : ^ ^^^      ^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 function fn4a() { }
 >fn4a : (x?: number, y: string) => any
+>     : ^ ^^^      ^^ ^^      ^^^^^^^^
 
 function fn4b(n: string, x?: number, y: string);
 >fn4b : (n: string, x?: number, y: string) => any
+>     : ^ ^^      ^^ ^^^      ^^ ^^      ^^^^^^^^
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 function fn4b() { }
 >fn4b : (n: string, x?: number, y: string) => any
+>     : ^ ^^      ^^ ^^^      ^^ ^^      ^^^^^^^^
 
 //Function overload signature with rest param followed by non-optional parameter
 function fn5(x: string, ...y: any[], z: string);
 >fn5 : (x: string, ...y: any[], z: string) => any
+>    : ^ ^^      ^^^^^ ^^     ^^ ^^      ^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : any[]
+>  : ^^^^^
 >z : string
+>  : ^^^^^^
 
 function fn5() { }
 >fn5 : (x: string, ...y: any[], z: string) => any
+>    : ^ ^^      ^^^^^ ^^     ^^ ^^      ^^^^^^^^
 

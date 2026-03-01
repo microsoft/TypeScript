@@ -1,7 +1,11 @@
-=== tests/cases/conformance/es6/destructuring/destructuringVoidStrictNullChecks.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringVoidStrictNullChecks.ts] ////
+
+=== destructuringVoidStrictNullChecks.ts ===
 declare const v: void;
 >v : void
+>  : ^^^^
 
 const {} = v;
 >v : void
+>  : ^^^^
 

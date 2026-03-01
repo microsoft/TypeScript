@@ -1,6 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList11.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList11.ts] ////
+
+=== parserParameterList11.ts ===
 (...arg?) => 102;
->(...arg?) => 102 : (...arg?: any[]) => number
->arg : any[]
+>(...arg?) => 102 : (...arg?: any[] | undefined) => number
+>                 : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : any[] | undefined
+>    : ^^^^^^^^^^^^^^^^^
 >102 : 102
+>    : ^^^
 

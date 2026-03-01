@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts ===
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts] ////
+
+=== contextuallyTypedBindingInitializer.ts ===
 interface Show {
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
 

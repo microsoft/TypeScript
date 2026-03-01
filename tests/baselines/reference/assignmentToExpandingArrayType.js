@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentToExpandingArrayType.ts] ////
+
 //// [assignmentToExpandingArrayType.ts]
 // Fixes exponential time/space in #14628
 let x = []
@@ -28,8 +30,9 @@ x[0] = { foo: 'hi' }
 
 
 //// [assignmentToExpandingArrayType.js]
+"use strict";
 // Fixes exponential time/space in #14628
-var x = [];
+let x = [];
 x[0] = { foo: 'hi' };
 x[0] = { foo: 'hi' };
 x[0] = { foo: 'hi' };

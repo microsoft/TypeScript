@@ -1,175 +1,146 @@
-undefined
-
+// === findAllReferences ===
 // === /a.js ===
 // /**
 //  * @typedef I {Object}
-//  * @prop /*FIND ALL REFS*/[|p|] {number}
+//  * /*FIND ALL REFS*/@prop p {number}
 //  */
+// 
+// /** @type {I} */
+// let x;
+// x.p;
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * @typedef I {Object}
+//  * <|@prop /*FIND ALL REFS*/[|{| isDefinition: true |}p|] {number}
+//  |>*/
 // 
 // /** @type {I} */
 // let x;
 // x.[|p|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "property",
-      "name": "(property) p: number",
-      "textSpan": {
-        "start": 36,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "p",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 30,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 30,
-          "length": 18
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @typedef I {Object}
+  //  * <|@prop /*FIND ALL REFS*/[|p|] {number}
+  //  |>*/
+  // 
+  // /** @type {I} */
+  // let x;
+  // x.p;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) p: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "p",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.js ===
 // /**
 //  * @typedef I {Object}
-//  * @prop [|p|] {number}
-//  */
+//  * <|@prop [|p|] {number}
+//  |>*/
 // 
 // /** @type {I} */
 // let x;
 // x./*FIND ALL REFS*/[|p|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "property",
-      "name": "(property) p: number",
-      "textSpan": {
-        "start": 36,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "p",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 30,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 30,
-          "length": 18
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * @typedef I {Object}
+  //  * <|@prop [|p|] {number}
+  //  |>*/
+  // 
+  // /** @type {I} */
+  // let x;
+  // x./*FIND ALL REFS*/p;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) p: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "p",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

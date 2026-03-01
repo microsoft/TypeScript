@@ -1,9 +1,11 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/EnumAndModuleWithSameNameAndCommonRoot.ts] ////
+
 //// [EnumAndModuleWithSameNameAndCommonRoot.ts]
 enum enumdule {
     Red, Blue
 }
 
-module enumdule {
+namespace enumdule {
 
     export class Point {
         constructor(public x: number, public y: number) { }
@@ -17,19 +19,19 @@ var y: { x: number; y: number };
 var y = new enumdule.Point(0, 0);
 
 //// [EnumAndModuleWithSameNameAndCommonRoot.js]
+"use strict";
 var enumdule;
 (function (enumdule) {
     enumdule[enumdule["Red"] = 0] = "Red";
     enumdule[enumdule["Blue"] = 1] = "Blue";
 })(enumdule || (enumdule = {}));
 (function (enumdule) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     enumdule.Point = Point;
 })(enumdule || (enumdule = {}));
 var x;

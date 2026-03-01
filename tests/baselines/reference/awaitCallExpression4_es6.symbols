@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/awaitCallExpression/awaitCallExpression4_es6.ts ===
+//// [tests/cases/conformance/async/es6/awaitCallExpression/awaitCallExpression4_es6.ts] ////
+
+=== awaitCallExpression4_es6.ts ===
 declare var a: boolean;
 >a : Symbol(a, Decl(awaitCallExpression4_es6.ts, 0, 11))
 

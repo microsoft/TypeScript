@@ -1,15 +1,23 @@
-=== tests/cases/compiler/enumWithExport.ts ===
+//// [tests/cases/compiler/enumWithExport.ts] ////
+
+=== enumWithExport.ts ===
 namespace x {
 >x : typeof x
+>  : ^^^^^^^^
 
   export let y = 123
 >y : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 }
 enum x {
 >x : x
+>  : ^
 
   z = y
 >z : x.z
+>  : ^^^
 >y : any
+>  : ^^^
 }

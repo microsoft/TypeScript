@@ -35,6 +35,6 @@ export default function foo() {}
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    function foo() { }
     exports.default = foo;
+    function foo() { }
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug5.ts] ////
+
 //// [assignmentCompatBug5.ts]
 function foo1(x: { a: number; }) { }
 foo1({ b: 5 });
@@ -12,11 +14,12 @@ foo3((n) => { return; });
 
 
 //// [assignmentCompatBug5.js]
+"use strict";
 function foo1(x) { }
 foo1({ b: 5 });
 function foo2(x) { }
 foo2(["s", "t"]);
 function foo3(x) { }
 ;
-foo3(function (s) { });
-foo3(function (n) { return; });
+foo3((s) => { });
+foo3((n) => { return; });

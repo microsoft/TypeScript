@@ -1,44 +1,71 @@
-=== tests/cases/compiler/destructuringWithGenericParameter.ts ===
+//// [tests/cases/compiler/destructuringWithGenericParameter.ts] ////
+
+=== destructuringWithGenericParameter.ts ===
 class GenericClass<T> {
 >GenericClass : GenericClass<T>
+>             : ^^^^^^^^^^^^^^^
 
     payload: T;
 >payload : T
+>        : ^
 }
 
 var genericObject = new GenericClass<{ greeting: string }>();
 >genericObject : GenericClass<{ greeting: string; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >new GenericClass<{ greeting: string }>() : GenericClass<{ greeting: string; }>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >GenericClass : typeof GenericClass
+>             : ^^^^^^^^^^^^^^^^^^^
 >greeting : string
+>         : ^^^^^^
 
 function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
 >genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
+>                : ^ ^^      ^^               ^^        ^^                    ^^^^^^^^^
 >object : GenericClass<T>
+>       : ^^^^^^^^^^^^^^^
 >callback : (payload: T) => void
+>         : ^       ^^ ^^^^^    
 >payload : T
+>        : ^
 
     callback(object.payload);
 >callback(object.payload) : void
+>                         : ^^^^
 >callback : (payload: T) => void
+>         : ^       ^^ ^^^^^    
 >object.payload : T
+>               : ^
 >object : GenericClass<T>
+>       : ^^^^^^^^^^^^^^^
 >payload : T
+>        : ^
 }
 
 genericFunction(genericObject, ({greeting}) => {
 >genericFunction(genericObject, ({greeting}) => {    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string}) : void
+>                                                                                                                                  : ^^^^
 >genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
+>                : ^ ^^      ^^               ^^        ^^                    ^^^^^^^^^
 >genericObject : GenericClass<{ greeting: string; }>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >({greeting}) => {    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string} : ({ greeting }: { greeting: string; }) => void
+>                                                                                                  : ^            ^^^^^^^^^^^^^^      ^^^^^^^^^^^^
 >greeting : string
+>         : ^^^^^^
 
     var s = greeting.toLocaleLowerCase();  // Greeting should be of type string
 >s : string
+>  : ^^^^^^
 >greeting.toLocaleLowerCase() : string
+>                             : ^^^^^^
 >greeting.toLocaleLowerCase : (locales?: string | string[]) => string
+>                           : ^       ^^^                 ^^^^^      
 >greeting : string
+>         : ^^^^^^
 >toLocaleLowerCase : (locales?: string | string[]) => string
+>                  : ^       ^^^                 ^^^^^      
 
 });
 

@@ -1,8 +1,7 @@
-tests/cases/compiler/genericReturnTypeFromGetter1.ts(5,18): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-tests/cases/compiler/genericReturnTypeFromGetter1.ts(6,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+genericReturnTypeFromGetter1.ts(5,18): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericReturnTypeFromGetter1.ts (2 errors) ====
+==== genericReturnTypeFromGetter1.ts (1 errors) ====
     export interface A<T> {
        new (dbSet: DbSet<T>): T;
     }
@@ -11,7 +10,5 @@ tests/cases/compiler/genericReturnTypeFromGetter1.ts(6,7): error TS1056: Accesso
                      ~
 !!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
       get entityType() { return this._entityType; }  // used to ICE without return type annotation
-          ~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     

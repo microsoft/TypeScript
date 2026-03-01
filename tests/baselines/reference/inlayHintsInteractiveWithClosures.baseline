@@ -1,0 +1,88 @@
+// === Inlay Hints ===
+foo1(1)(2);
+     ^
+{
+  "text": "",
+  "position": 89,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveWithClosures.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo1(1)(2);
+        ^
+{
+  "text": "",
+  "position": 92,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 39,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveWithClosures.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    return a(1) + 2
+             ^
+{
+  "text": "",
+  "position": 151,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 114,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveWithClosures.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo2((c: number) => c + 1);
+     ^
+{
+  "text": "",
+  "position": 165,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 110,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveWithClosures.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

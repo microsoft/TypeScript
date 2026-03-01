@@ -9,10 +9,10 @@ interface A {
 }
 
 //// [app.js]
+"use strict";
 
 
 //// [app.d.ts]
-/// <reference types="lib" />
 interface A {
     x: $;
 }

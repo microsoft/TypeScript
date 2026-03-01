@@ -4,7 +4,7 @@
 ////    [|super|];
 ////}
 ////
-////module M {
+////namespace M {
 ////    [|super|];
 ////    function f(x = [|super|]) {
 ////    [|super|];
@@ -20,4 +20,4 @@
 ////    }
 ////}
 
-goTo.eachRange(() => verify.occurrencesAtPositionCount(0));
+verify.baselineDocumentHighlights();

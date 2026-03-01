@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509618.ts(2,20): error TS1036: Statements are not allowed in ambient contexts.
+parser509618.ts(2,20): error TS1036: Statements are not allowed in ambient contexts.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509618.ts (1 errors) ====
-    declare module ambiModule {
+==== parser509618.ts (1 errors) ====
+    declare namespace ambiModule {
        interface i1 { };
                        ~
 !!! error TS1036: Statements are not allowed in ambient contexts.

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/typeOfThisInAccessor.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/typeOfThisInAccessor.ts] ////
+
+=== typeOfThisInAccessor.ts ===
 class C {
 >C : Symbol(C, Decl(typeOfThisInAccessor.ts, 0, 0))
 
@@ -60,6 +62,7 @@ var x = {
 
         var r3 = this; // any
 >r3 : Symbol(r3, Decl(typeOfThisInAccessor.ts, 27, 11))
+>this : Symbol(x, Decl(typeOfThisInAccessor.ts, 25, 7))
 
         return 1;
     }

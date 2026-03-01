@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts ===
+//// [tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts] ////
+
+=== unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts ===
 var greeter = function (person: string, person2: string) {
 >greeter : Symbol(greeter, Decl(unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts, 0, 3))
 >person : Symbol(person, Decl(unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts, 0, 24))

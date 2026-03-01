@@ -1,0 +1,204 @@
+//// [tests/cases/compiler/typePredicatesInUnion3.ts] ////
+
+=== typePredicatesInUnion3.ts ===
+// A union of function types is considered a type predicate if at least one constituent is a type
+// predicate and the other constituents are matching type predicates or functions returning `false`.
+
+type P1 = (x: unknown) => x is string;
+>P1 : P1
+>   : ^^
+>x : unknown
+>  : ^^^^^^^
+
+type P2 = (x: unknown) => x is number;
+>P2 : P2
+>   : ^^
+>x : unknown
+>  : ^^^^^^^
+
+type F1 = (x: unknown) => false;
+>F1 : F1
+>   : ^^
+>x : unknown
+>  : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+type F2 = (x: unknown) => boolean;
+>F2 : F2
+>   : ^^
+>x : unknown
+>  : ^^^^^^^
+
+type F3 = (x: unknown) => string;
+>F3 : F3
+>   : ^^
+>x : unknown
+>  : ^^^^^^^
+
+function f1(x: unknown, p: P1 | P2) {
+>f1 : (x: unknown, p: P1 | P2) => void
+>   : ^ ^^       ^^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>p : P1 | P2
+>  : ^^^^^^^
+
+    if (p(x)) {
+>p(x) : boolean
+>     : ^^^^^^^
+>p : P1 | P2
+>  : ^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+        x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+}
+
+function f2(x: unknown, p: P1 | P2 | F1) {
+>f2 : (x: unknown, p: P1 | P2 | F1) => void
+>   : ^ ^^       ^^ ^^            ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>p : P1 | P2 | F1
+>  : ^^^^^^^^^^^^
+
+    if (p(x)) {
+>p(x) : boolean
+>     : ^^^^^^^
+>p : P1 | P2 | F1
+>  : ^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+        x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+}
+
+function f3(x: unknown, p: P1 | P2 | F2) {
+>f3 : (x: unknown, p: P1 | P2 | F2) => void
+>   : ^ ^^       ^^ ^^            ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>p : P1 | P2 | F2
+>  : ^^^^^^^^^^^^
+
+    if (p(x)) {
+>p(x) : boolean
+>     : ^^^^^^^
+>p : P1 | P2 | F2
+>  : ^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+        x;  // unknown
+>x : unknown
+>  : ^^^^^^^
+    }
+}
+
+function f4(x: unknown, p: P1 | P2 | F3) {
+>f4 : (x: unknown, p: P1 | P2 | F3) => void
+>   : ^ ^^       ^^ ^^            ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>p : P1 | P2 | F3
+>  : ^^^^^^^^^^^^
+
+    if (p(x)) {
+>p(x) : string | boolean
+>     : ^^^^^^^^^^^^^^^^
+>p : P1 | P2 | F3
+>  : ^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+        x;  // unknown
+>x : unknown
+>  : ^^^^^^^
+    }
+}
+
+// Repro from #54143
+
+type HasAttribute<T> = T & { attribute: number };
+>HasAttribute : HasAttribute<T>
+>             : ^^^^^^^^^^^^^^^
+>attribute : number
+>          : ^^^^^^
+
+class Type1 {
+>Type1 : Type1
+>      : ^^^^^
+
+    attribute: number | null = null;
+>attribute : number | null
+>          : ^^^^^^^^^^^^^
+
+    predicate(): this is HasAttribute<Type1> {
+>predicate : () => this is HasAttribute<Type1>
+>          : ^^^^^^                           
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+}
+
+class Type2 {
+>Type2 : Type2
+>      : ^^^^^
+
+    attribute: number | null = null;
+>attribute : number | null
+>          : ^^^^^^^^^^^^^
+
+    predicate(): boolean {
+>predicate : () => boolean
+>          : ^^^^^^       
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+}
+
+function assertType<T>(_val: T) {
+>assertType : <T>(_val: T) => void
+>           : ^ ^^    ^^ ^^^^^^^^^
+>_val : T
+>     : ^
+}
+
+declare const val: Type1 | Type2;
+>val : Type1 | Type2
+>    : ^^^^^^^^^^^^^
+
+if (val.predicate()) {
+>val.predicate() : boolean
+>                : ^^^^^^^
+>val.predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
+>              : ^^^^^^^                           ^^^^^^^^^^^       ^
+>val : Type1 | Type2
+>    : ^^^^^^^^^^^^^
+>predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
+>          : ^^^^^^^                           ^^^^^^^^^^^       ^
+
+    assertType<number>(val.attribute);  // Error
+>assertType<number>(val.attribute) : void
+>                                  : ^^^^
+>assertType : <T>(_val: T) => void
+>           : ^ ^^    ^^ ^^^^^^^^^
+>val.attribute : number | null
+>              : ^^^^^^^^^^^^^
+>val : Type1 | Type2
+>    : ^^^^^^^^^^^^^
+>attribute : number | null
+>          : ^^^^^^^^^^^^^
+}
+

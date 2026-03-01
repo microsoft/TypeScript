@@ -1,0 +1,159 @@
+//// [tests/cases/compiler/narrowingNoInfer1.ts] ////
+
+=== narrowingNoInfer1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58266
+
+type TaggedA = { _tag: "a" };
+>TaggedA : TaggedA
+>        : ^^^^^^^
+>_tag : "a"
+>     : ^^^
+
+type TaggedB = { _tag: "b" };
+>TaggedB : TaggedB
+>        : ^^^^^^^
+>_tag : "b"
+>     : ^^^
+
+type TaggedUnion = TaggedA | TaggedB;
+>TaggedUnion : TaggedUnion
+>            : ^^^^^^^^^^^
+
+const m: { result: NoInfer<TaggedUnion> }[] = [];
+>m : { result: NoInfer<TaggedUnion>; }[]
+>  : ^^^^^^^^^^                    ^^^^^
+>result : NoInfer<TaggedUnion>
+>       : ^^^^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
+>map : <A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) => B[]
+>    : ^ ^^ ^^     ^^            ^^ ^^                    ^^^^^^^^
+>items : readonly A[]
+>      : ^^^^^^^^^^^^
+>f : (a: NoInfer<A>) => B
+>  : ^ ^^          ^^^^^ 
+>a : NoInfer<A>
+>  : ^^^^^^^^^^
+
+  return items.map(f);
+>items.map(f) : B[]
+>             : ^^^
+>items.map : <U>(callbackfn: (value: A, index: number, array: readonly A[]) => U, thisArg?: any) => U[]
+>          : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>items : readonly A[]
+>      : ^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: A, index: number, array: readonly A[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>f : (a: NoInfer<A>) => B
+>  : ^ ^^          ^^^^^ 
+}
+
+const something = map(m, (_) =>
+>something : ({ result: TaggedA; } | null)[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map(m, (_) =>  _.result._tag === "a" ? { ..._, result: _.result } : null,) : ({ result: TaggedA; } | null)[]
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) => B[]
+>    : ^ ^^ ^^     ^^            ^^ ^^                    ^^^^^^^^
+>m : { result: NoInfer<TaggedUnion>; }[]
+>  : ^^^^^^^^^^                    ^^^^^
+>(_) =>  _.result._tag === "a" ? { ..._, result: _.result } : null : (_: NoInfer<{ result: NoInfer<TaggedUnion>; }>) => { result: TaggedA; } | null
+>                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_ : NoInfer<{ result: NoInfer<TaggedUnion>; }>
+>  : ^^^^^^^^^^^^^^^^^^                    ^^^^
+
+  _.result._tag === "a" ? { ..._, result: _.result } : null,
+>_.result._tag === "a" ? { ..._, result: _.result } : null : { result: TaggedA; } | null
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.result._tag === "a" : boolean
+>                      : ^^^^^^^
+>_.result._tag : "a" | "b"
+>              : ^^^^^^^^^
+>_.result : TaggedUnion
+>         : ^^^^^^^^^^^
+>_ : { result: NoInfer<TaggedUnion>; }
+>  : ^^^^^^^^^^                    ^^^
+>result : TaggedUnion
+>       : ^^^^^^^^^^^
+>_tag : "a" | "b"
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>{ ..._, result: _.result } : { result: TaggedA; }
+>                           : ^^^^^^^^^^^^^^^^^^^^
+>_ : { result: NoInfer<TaggedUnion>; }
+>  : ^^^^^^^^^^                    ^^^
+>result : TaggedA
+>       : ^^^^^^^
+>_.result : TaggedA
+>         : ^^^^^^^
+>_ : { result: NoInfer<TaggedUnion>; }
+>  : ^^^^^^^^^^                    ^^^
+>result : TaggedA
+>       : ^^^^^^^
+
+);
+
+declare function test2<T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void): void;
+>test2 : <T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void) => void
+>      : ^  ^^  ^^ ^^  ^^ ^^  ^^  ^^                                          ^^^^^    
+>a : T1
+>  : ^^
+>b : T2
+>  : ^^
+>cb : (thing: NoInfer<T1> | NoInfer<T2>) => void
+>   : ^     ^^                         ^^^^^    
+>thing : NoInfer<T1> | NoInfer<T2>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test2({ type: 'a' as const }, { type: 'b' as const }, (thing) => {
+>test2({ type: 'a' as const }, { type: 'b' as const }, (thing) => {  if (thing.type === "a") {    thing;  } else {    thing;  }}) : void
+>                                                                                                                                 : ^^^^
+>test2 : <T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void) => void
+>      : ^  ^^  ^^ ^^  ^^ ^^  ^^  ^^                                          ^^^^^    
+>{ type: 'a' as const } : { type: "a"; }
+>                       : ^^^^^^^^^^^^^^
+>type : "a"
+>     : ^^^
+>'a' as const : "a"
+>             : ^^^
+>'a' : "a"
+>    : ^^^
+>{ type: 'b' as const } : { type: "b"; }
+>                       : ^^^^^^^^^^^^^^
+>type : "b"
+>     : ^^^
+>'b' as const : "b"
+>             : ^^^
+>'b' : "b"
+>    : ^^^
+>(thing) => {  if (thing.type === "a") {    thing;  } else {    thing;  }} : (thing: NoInfer<{ type: "a"; }> | NoInfer<{ type: "b"; }>) => void
+>                                                                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thing : NoInfer<{ type: "a"; }> | NoInfer<{ type: "b"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  if (thing.type === "a") {
+>thing.type === "a" : boolean
+>                   : ^^^^^^^
+>thing.type : "a" | "b"
+>           : ^^^^^^^^^
+>thing : NoInfer<{ type: "a"; }> | NoInfer<{ type: "b"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "a" | "b"
+>     : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    thing;
+>thing : NoInfer<{ type: "a"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  } else {
+    thing;
+>thing : NoInfer<{ type: "b"; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
+  }
+});
+

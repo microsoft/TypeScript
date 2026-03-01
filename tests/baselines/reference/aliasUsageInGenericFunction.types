@@ -1,59 +1,89 @@
-=== tests/cases/compiler/aliasUsageInGenericFunction_main.ts ===
+//// [tests/cases/compiler/aliasUsageInGenericFunction.ts] ////
+
+=== aliasUsageInGenericFunction_main.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 import moduleA = require("./aliasUsageInGenericFunction_moduleA");
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone.Model : typeof Backbone.Model
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 }
 function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
+>    : ^ ^^^^^^^^^                              ^^ ^^ ^^^^^^
 >a : IHasVisualizationModel
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 var r = foo({ a: moduleA });
 >r : { a: typeof moduleA; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo({ a: moduleA }) : { a: typeof moduleA; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
+>    : ^ ^^^^^^^^^                              ^^ ^^ ^^^^^^
 >{ a: moduleA } : { a: typeof moduleA; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >a : typeof moduleA
+>  : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
 var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : { a: IHasVisualizationModel; }
+>   : ^^^^^                      ^^^
 >foo({ a: <IHasVisualizationModel>null }) : { a: IHasVisualizationModel; }
+>                                         : ^^^^^                      ^^^
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
+>    : ^ ^^^^^^^^^                              ^^ ^^ ^^^^^^
 >{ a: <IHasVisualizationModel>null } : { a: IHasVisualizationModel; }
+>                                    : ^^^^^                      ^^^
 >a : IHasVisualizationModel
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 ><IHasVisualizationModel>null : IHasVisualizationModel
->null : null
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/aliasUsageInGenericFunction_backbone.ts ===
+=== aliasUsageInGenericFunction_backbone.ts ===
 export class Model {
 >Model : Model
+>      : ^^^^^
 
     public someData: string;
 >someData : string
+>         : ^^^^^^
 }
 
-=== tests/cases/compiler/aliasUsageInGenericFunction_moduleA.ts ===
+=== aliasUsageInGenericFunction_moduleA.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>                   : ^^^^^^^^^^^^^^^^^^
 >Backbone.Model : Backbone.Model
+>               : ^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     // interesting stuff here
 }

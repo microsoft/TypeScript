@@ -1,251 +1,349 @@
-=== tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts] ////
+
+=== controlFlowOptionalChain2.ts ===
 type A = {
->A : { type: 'A'; name: string; }
+>A : A
+>  : ^
 
   type: 'A';
 >type : "A"
+>     : ^^^
 
   name: string;
 >name : string
+>     : ^^^^^^
 }
 
 type B = {
->B : { type: 'B'; }
+>B : B
+>  : ^
 
   type: 'B';
 >type : "B"
+>     : ^^^
 }
 
 function funcTwo(arg: A | B | undefined) {
 >funcTwo : (arg: A | B | undefined) => void
+>        : ^   ^^                 ^^^^^^^^^
 >arg : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
 
   if (arg?.type === 'B') {
 >arg?.type === 'B' : boolean
+>                  : ^^^^^^^
 >arg?.type : "A" | "B" | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^
 >arg : A | B | undefined
+>    : ^^^^^^^^^^^^^^^^^
 >type : "A" | "B" | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
     arg; // `B`
 >arg : B
+>    : ^
 
     return;
   }
 
   arg;
 >arg : A | undefined
+>    : ^^^^^^^^^^^^^
 
   arg?.name;
 >arg?.name : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >arg : A | undefined
+>    : ^^^^^^^^^^^^^
 >name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 }
 
 function funcThree(arg: A | B | null) {
 >funcThree : (arg: A | B | null) => void
+>          : ^   ^^            ^^^^^^^^^
 >arg : A | B | null
->null : null
+>    : ^^^^^^^^^^^^
 
   if (arg?.type === 'B') {
 >arg?.type === 'B' : boolean
+>                  : ^^^^^^^
 >arg?.type : "A" | "B" | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^
 >arg : A | B | null
+>    : ^^^^^^^^^^^^
 >type : "A" | "B" | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >'B' : "B"
+>    : ^^^
 
     arg; // `B`
 >arg : B
+>    : ^
 
     return;
   }
 
   arg;
 >arg : A | null
+>    : ^^^^^^^^
 
   arg?.name;
 >arg?.name : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >arg : A | null
+>    : ^^^^^^^^
 >name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 }
 
 type U = { kind: undefined, u: 'u' }
->U : { kind: undefined; u: 'u'; }
+>U : U
+>  : ^
 >kind : undefined
+>     : ^^^^^^^^^
 >u : "u"
+>  : ^^^
 
 type N = { kind: null, n: 'n' }
->N : { kind: null; n: 'n'; }
+>N : N
+>  : ^
 >kind : null
->null : null
+>     : ^^^^
 >n : "n"
+>  : ^^^
 
 type X = { kind: 'X', x: 'x' }
->X : { kind: 'X'; x: 'x'; }
+>X : X
+>  : ^
 >kind : "X"
+>     : ^^^
 >x : "x"
+>  : ^^^
 
 function f1(x: X | U | undefined) {
 >f1 : (x: X | U | undefined) => void
+>   : ^ ^^                 ^^^^^^^^^
 >x : U | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 
     if (x?.kind === undefined) {
 >x?.kind === undefined : boolean
+>                      : ^^^^^^^
 >x?.kind : "X" | undefined
+>        : ^^^^^^^^^^^^^^^
 >x : U | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >kind : "X" | undefined
+>     : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x; // U | undefined
 >x : U | undefined
+>  : ^^^^^^^^^^^^^
     }
     else {
         x; // X
 >x : X
+>  : ^
     }
 }
 
 function f2(x: X | N | undefined) {
 >f2 : (x: X | N | undefined) => void
+>   : ^ ^^                 ^^^^^^^^^
 >x : N | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 
     if (x?.kind === undefined) {
 >x?.kind === undefined : boolean
+>                      : ^^^^^^^
 >x?.kind : "X" | null | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >x : N | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >kind : "X" | null | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x; // undefined
 >x : undefined
+>  : ^^^^^^^^^
     }
     else {
         x; // X | N
 >x : N | X
+>  : ^^^^^
     }
 }
 
 function f3(x: X | U | null) {
 >f3 : (x: X | U | null) => void
+>   : ^ ^^            ^^^^^^^^^
 >x : U | X | null
->null : null
+>  : ^^^^^^^^^^^^
 
     if (x?.kind === undefined) {
 >x?.kind === undefined : boolean
+>                      : ^^^^^^^
 >x?.kind : "X" | undefined
+>        : ^^^^^^^^^^^^^^^
 >x : U | X | null
+>  : ^^^^^^^^^^^^
 >kind : "X" | undefined
+>     : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x; // U | null
 >x : U | null
+>  : ^^^^^^^^
     }
     else {
         x; // X
 >x : X
+>  : ^
     }
 }
 
 function f4(x: X | N | null) {
 >f4 : (x: X | N | null) => void
+>   : ^ ^^            ^^^^^^^^^
 >x : N | X | null
->null : null
+>  : ^^^^^^^^^^^^
 
     if (x?.kind === undefined) {
 >x?.kind === undefined : boolean
+>                      : ^^^^^^^
 >x?.kind : "X" | null | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >x : N | X | null
+>  : ^^^^^^^^^^^^
 >kind : "X" | null | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         x; // null
 >x : null
+>  : ^^^^
     }
     else {
         x; // X | N
 >x : N | X
+>  : ^^^^^
     }
 }
 
 function f5(x: X | U | undefined) {
 >f5 : (x: X | U | undefined) => void
+>   : ^ ^^                 ^^^^^^^^^
 >x : U | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 
     if (x?.kind === null) {
 >x?.kind === null : boolean
+>                 : ^^^^^^^
 >x?.kind : "X" | undefined
+>        : ^^^^^^^^^^^^^^^
 >x : U | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >kind : "X" | undefined
->null : null
+>     : ^^^^^^^^^^^^^^^
 
         x; // never
 >x : never
+>  : ^^^^^
     }
     else {
         x; // X | U | undefined
 >x : U | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
     }
 }
 
 function f6(x: X | N | undefined) {
 >f6 : (x: X | N | undefined) => void
+>   : ^ ^^                 ^^^^^^^^^
 >x : N | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 
     if (x?.kind === null) {
 >x?.kind === null : boolean
+>                 : ^^^^^^^
 >x?.kind : "X" | null | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >x : N | X | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >kind : "X" | null | undefined
->null : null
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
         x; // N
 >x : N
+>  : ^
     }
     else {
         x; // X | undefined
 >x : X | undefined
+>  : ^^^^^^^^^^^^^
     }
 }
 
 function f7(x: X | U | null) {
 >f7 : (x: X | U | null) => void
+>   : ^ ^^            ^^^^^^^^^
 >x : U | X | null
->null : null
+>  : ^^^^^^^^^^^^
 
     if (x?.kind === null) {
 >x?.kind === null : boolean
+>                 : ^^^^^^^
 >x?.kind : "X" | undefined
+>        : ^^^^^^^^^^^^^^^
 >x : U | X | null
+>  : ^^^^^^^^^^^^
 >kind : "X" | undefined
->null : null
+>     : ^^^^^^^^^^^^^^^
 
         x; // never
 >x : never
+>  : ^^^^^
     }
     else {
         x; // X | U | null
 >x : U | X | null
+>  : ^^^^^^^^^^^^
     }
 }
 
 function f8(x: X | N | null) {
 >f8 : (x: X | N | null) => void
+>   : ^ ^^            ^^^^^^^^^
 >x : N | X | null
->null : null
+>  : ^^^^^^^^^^^^
 
     if (x?.kind === null) {
 >x?.kind === null : boolean
+>                 : ^^^^^^^
 >x?.kind : "X" | null | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >x : N | X | null
+>  : ^^^^^^^^^^^^
 >kind : "X" | null | undefined
->null : null
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
         x; // N
 >x : N
+>  : ^
     }
     else {
         x; // X | null
 >x : X | null
+>  : ^^^^^^^^
     }
 }
 

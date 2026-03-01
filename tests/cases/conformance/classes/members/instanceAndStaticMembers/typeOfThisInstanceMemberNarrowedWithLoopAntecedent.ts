@@ -1,3 +1,4 @@
+// @target: es2015
 // #31995
 type State = {
     type: "numberVariant";

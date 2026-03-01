@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/regExpWithOpenBracketInCharClass.ts] ////
+
+=== regExpWithOpenBracketInCharClass.ts ===
+const regexes: RegExp[] = [
+>regexes : RegExp[]
+>        : ^^^^^^^^
+>[  /[[]/,  // Valid  /[[]/u, // Valid  /[[]/v, // Well-terminated regex with an incomplete character class] : RegExp[]
+>                                                                                                            : ^^^^^^^^
+
+  /[[]/,  // Valid
+>/[[]/ : RegExp
+>      : ^^^^^^
+
+  /[[]/u, // Valid
+>/[[]/u : RegExp
+>       : ^^^^^^
+
+  /[[]/v, // Well-terminated regex with an incomplete character class
+>/[[]/v : RegExp
+>       : ^^^^^^
+
+];
+

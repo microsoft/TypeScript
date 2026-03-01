@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts] ////
+
 //// [circularTypeofWithVarOrFunc.ts]
 type typeAlias1 = typeof varOfAliasedType1;
 var varOfAliasedType1: typeAlias1;
@@ -28,6 +30,7 @@ function f(): R2 { return 0; }
 
 
 //// [circularTypeofWithVarOrFunc.js]
+"use strict";
 var varOfAliasedType1;
 var varOfAliasedType2;
 function func() { return null; }

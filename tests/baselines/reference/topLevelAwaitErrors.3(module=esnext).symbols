@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts] ////
+
+=== topLevelAwaitErrors.3.ts ===
 export {};
 
 // reparse binding pattern as await should fail

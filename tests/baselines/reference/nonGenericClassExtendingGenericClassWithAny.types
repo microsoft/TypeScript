@@ -1,12 +1,18 @@
-=== tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts ===
+//// [tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts] ////
+
+=== nonGenericClassExtendingGenericClassWithAny.ts ===
 class Foo<T> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     t: T;
 >t : T
+>  : ^
 }
 
 class Bar extends Foo<any> { } // Valid
 >Bar : Bar
+>    : ^^^
 >Foo : Foo<any>
+>    : ^^^^^^^^
 

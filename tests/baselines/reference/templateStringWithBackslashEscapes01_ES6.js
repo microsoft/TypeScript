@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01_ES6.ts] ////
+
 //// [templateStringWithBackslashEscapes01_ES6.ts]
 var a = `hello\world`;
 var b = `hello\\world`;
@@ -5,6 +7,7 @@ var c = `hello\\\world`;
 var d = `hello\\\\world`;
 
 //// [templateStringWithBackslashEscapes01_ES6.js]
+"use strict";
 var a = `hello\world`;
 var b = `hello\\world`;
 var c = `hello\\\world`;

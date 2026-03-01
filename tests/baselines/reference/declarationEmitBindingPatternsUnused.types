@@ -1,0 +1,600 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternsUnused.ts] ////
+
+=== declarationEmitBindingPatternsUnused.ts ===
+type Named = { name: string }
+>Named : Named
+>      : ^^^^^
+>name : string
+>     : ^^^^^^
+
+// Resons we can't remove aliases that are not used in the function signature: 
+
+// 1.Causes duplicate identifier if we remove alias
+function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }
+>duplicateIndetifiers : ({ name: alias, name: alias2 }: Named) => void
+>                     : ^                             ^^     ^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>name : any
+>     : ^^^
+>alias2 : string
+>       : ^^^^^^
+
+function duplicateIndetifiers2(name: string, { name: alias }: Named) { }
+>duplicateIndetifiers2 : (name: string, { name: alias }: Named) => void
+>                      : ^    ^^      ^^               ^^     ^^^^^^^^^
+>name : string
+>     : ^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named) { }
+>duplicateIndetifiers3 : ({ name: alias }: Named, { name: alias2 }: Named) => void
+>                      : ^               ^^     ^^                ^^     ^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>name : any
+>     : ^^^
+>alias2 : string
+>       : ^^^^^^
+
+let value = "";
+>value : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+
+// 2.Can change in meaning for typeof value if we remove alias
+function shadowedVariable({ value: alias }: { value: string }): typeof value { return value }
+>shadowedVariable : ({ value: alias }: { value: string; }) => typeof value
+>                 : ^                ^^                  ^^^^^            
+>value : any
+>      : ^^^
+>alias : string
+>      : ^^^^^^
+>value : string
+>      : ^^^^^^
+>value : string
+>      : ^^^^^^
+>value : string
+>      : ^^^^^^
+
+function notReferenced({ name: alias }: Named) {
+>notReferenced : ({ name: alias }: Named) => void
+>              : ^               ^^     ^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+}
+function notReferencedNestedAlias({ p: { name: alias } }: { p: Named }) {
+>notReferencedNestedAlias : ({ p: { name: alias } }: { p: Named; }) => void
+>                         : ^                      ^^             ^^^^^^^^^
+>p : any
+>  : ^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : Named
+>  : ^^^^^
+}
+function notReferencedArrayAlias([a, b, { name: alias }]: Named[]) {
+>notReferencedArrayAlias : ([a, b, { name: alias }]: Named[]) => void
+>                        : ^                       ^^       ^^^^^^^^^
+>a : Named
+>  : ^^^^^
+>b : Named
+>  : ^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+}
+
+function referencedInCode({ name: alias }: Named) {
+>referencedInCode : ({ name: alias }: Named) => string
+>                 : ^               ^^     ^^^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+    return alias;
+>alias : string
+>      : ^^^^^^
+}
+
+function referencedInSignarture({ name: alias }: Named): typeof alias {
+>referencedInSignarture : ({ name: alias }: Named) => typeof alias
+>                       : ^               ^^     ^^^^^            
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+    return alias;
+>alias : string
+>      : ^^^^^^
+}
+
+function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+>referencedInSignartureKeyword : ({ function: alias }: { function: string; }) => typeof alias
+>                              : ^                   ^^                     ^^^^^            
+>function : any
+>         : ^^^
+>alias : string
+>      : ^^^^^^
+>function : string
+>         : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+    return null!;
+>null! : null
+>      : ^^^^
+}
+
+function referencedInInferredType({ name: alias }: Named) {
+>referencedInInferredType : ({ name: alias }: Named) => { name: typeof alias; }
+>                         : ^               ^^     ^^^^^^^^^^^^^            ^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+    type Named2 = { name: typeof alias }
+>Named2 : { name: typeof alias; }
+>       : ^^^^^^^^            ^^^
+>name : string
+>     : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+    return null! as Named2
+>null! as Named2 : { name: typeof alias; }
+>                : ^^^^^^^^            ^^^
+>null! : null
+>      : ^^^^
+}
+
+function referencedInNestedFunction({ name: alias }: Named) {
+>referencedInNestedFunction : ({ name: alias }: Named) => (p: typeof alias) => void
+>                           : ^               ^^     ^^^^^^               ^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+    return function(p: typeof alias) {
+>function(p: typeof alias) {    } : (p: typeof alias) => void
+>                                 : ^ ^^            ^^^^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+    }
+}
+
+function referencedNestedAlias({ p: { name: alias } }: { p: Named }): typeof alias {
+>referencedNestedAlias : ({ p: { name: alias } }: { p: Named; }) => typeof alias
+>                      : ^                      ^^             ^^^^^            
+>p : any
+>  : ^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : Named
+>  : ^^^^^
+>alias : string
+>      : ^^^^^^
+
+	return alias;
+>alias : string
+>      : ^^^^^^
+}
+
+function referencedArrayAlias([a, b, { name: alias }]: Named[]): typeof alias {
+>referencedArrayAlias : ([a, b, { name: alias }]: Named[]) => typeof alias
+>                     : ^                       ^^       ^^^^^            
+>a : Named
+>  : ^^^^^
+>b : Named
+>  : ^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+	return alias;
+>alias : string
+>      : ^^^^^^
+}
+
+
+class NotReferencedClass {
+>NotReferencedClass : NotReferencedClass
+>                   : ^^^^^^^^^^^^^^^^^^
+
+	constructor({ name: alias }: Named) {
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+	}
+	set x({ name: alias }: Named) {
+>x : Named
+>  : ^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+        console.log(alias);
+>console.log(alias) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>alias : string
+>      : ^^^^^^
+    }
+	m({ name: alias }: Named) {
+>m : ({ name: alias }: Named) => void
+>  : ^               ^^     ^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+        console.log(alias);
+>console.log(alias) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>alias : string
+>      : ^^^^^^
+    }
+}
+
+class ReferencedInCodeClas {
+>ReferencedInCodeClas : ReferencedInCodeClas
+>                     : ^^^^^^^^^^^^^^^^^^^^
+
+	constructor({ name: alias }: Named) {
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+		console.log(alias);
+>console.log(alias) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>alias : string
+>      : ^^^^^^
+	}
+	set x({ name: alias }: Named) {
+>x : Named
+>  : ^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+        console.log(alias);
+>console.log(alias) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>alias : string
+>      : ^^^^^^
+    }
+	m({ name: alias }: Named) {
+>m : ({ name: alias }: Named) => void
+>  : ^               ^^     ^^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+        console.log(alias);
+>console.log(alias) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>alias : string
+>      : ^^^^^^
+    }
+}
+
+class ReferencedInSignartureClass {
+>ReferencedInSignartureClass : ReferencedInSignartureClass
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	constructor({ name: alias }: Named, p: typeof alias) {
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+		console.log(alias);
+>console.log(alias) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>alias : string
+>      : ^^^^^^
+	}
+	set x({ name: alias }: Named & { o: typeof alias }) {
+>x : Named & { o: typeof alias; }
+>  : ^^^^^^^^^^^^^            ^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>o : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+        
+    }
+	mReturnType({ name: alias }: Named): typeof alias {
+>mReturnType : ({ name: alias }: Named) => typeof alias
+>            : ^               ^^     ^^^^^            
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+        return null!
+>null! : null
+>      : ^^^^
+    }
+	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
+>mRerturnTypeNested : ({ name: alias }: Named) => NonNullable<typeof alias>
+>                   : ^               ^^     ^^^^^                         
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+        return null!
+>null! : null
+>      : ^^^^
+    }
+    mParameter({ name: alias }: Named, p: typeof alias) {
+>mParameter : ({ name: alias }: Named, p: typeof alias) => any
+>           : ^               ^^     ^^ ^^            ^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+        return null!
+>null! : null
+>      : ^^^^
+    }
+}
+
+let notReferencedFnType: ({ name: alias }: Named) => void;
+>notReferencedFnType : ({ name: alias }: Named) => void
+>                    : ^               ^^     ^^^^^    
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+let referencedInSignartureReturnTypeFnType: ({ name: alias }: Named) => typeof alias;
+>referencedInSignartureReturnTypeFnType : ({ name: alias }: Named) => typeof alias
+>                                       : ^               ^^     ^^^^^            
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+let referencedInSignartureParamTypeFnType: ({ name: alias }: Named, p: typeof alias) => void;
+>referencedInSignartureParamTypeFnType : ({ name: alias }: Named, p: typeof alias) => void
+>                                      : ^               ^^     ^^ ^^            ^^^^^    
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+let notReferencedCtorType: new ({ name: alias }: Named) => void;
+>notReferencedCtorType : new ({ name: alias }: Named) => void
+>                      : ^^^^^               ^^     ^^^^^    
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+let referencedInSignartureReturnTypeCtorType: new ({ name: alias }: Named) => typeof alias;
+>referencedInSignartureReturnTypeCtorType : new ({ name: alias }: Named) => typeof alias
+>                                         : ^^^^^               ^^     ^^^^^            
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+let referencedInSignartureParamTypeCtorType: new  ({ name: alias }: Named, p: typeof alias) => void;
+>referencedInSignartureParamTypeCtorType : new ({ name: alias }: Named, p: typeof alias) => void
+>                                        : ^^^^^               ^^     ^^ ^^            ^^^^^    
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+
+interface NotReferencedInterface {
+	({ name: alias }: Named): void
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+	new ({ name: alias }: Named): void
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+	set x({ name: alias }: Named);
+>x : Named
+>  : ^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+
+	m({ name: alias }: Named);
+>m : ({ name: alias }: Named) => any
+>  : ^               ^^     ^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+}
+
+interface ReferencedInSignartureInterface {
+	({ name: alias }: Named, p: typeof alias): void
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+	({ name: alias }: Named): typeof alias
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+	
+	new ({ name: alias }: Named, p: typeof alias): void
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+	new ({ name: alias }: Named): typeof alias
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+	set x({ name: alias }: Named & { o: typeof alias })
+>x : Named & { o: typeof alias; }
+>  : ^^^^^^^^^^^^^            ^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>o : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+	mReturnType({ name: alias }: Named): typeof alias;
+>mReturnType : ({ name: alias }: Named) => typeof alias
+>            : ^               ^^     ^^^^^            
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
+>mRerturnTypeNested : ({ name: alias }: Named) => NonNullable<typeof alias>
+>                   : ^               ^^     ^^^^^                         
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>alias : string
+>      : ^^^^^^
+
+    mParameter({ name: alias }: Named, p: typeof alias);
+>mParameter : ({ name: alias }: Named, p: typeof alias) => any
+>           : ^               ^^     ^^ ^^            ^^^^^^^^
+>name : any
+>     : ^^^
+>alias : string
+>      : ^^^^^^
+>p : string
+>  : ^^^^^^
+>alias : string
+>      : ^^^^^^
+}

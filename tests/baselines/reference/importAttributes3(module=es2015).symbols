@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/importAttributes/importAttributes3.ts] ////
+
+=== 0.ts ===
+export interface I { }
+>I : Symbol(I, Decl(0.ts, 0, 0))
+
+=== 1.ts ===
+export type {} from './0' with { type: "json" }
+export type { I } from './0' with { type: "json" }
+>I : Symbol(I, Decl(1.ts, 1, 13))
+
+=== 2.ts ===
+import type { I } from './0'  with { type: "json" }
+>I : Symbol(I, Decl(2.ts, 0, 13))
+
+import type * as foo from './0' with { type: "json" }
+>foo : Symbol(foo, Decl(2.ts, 1, 11))
+

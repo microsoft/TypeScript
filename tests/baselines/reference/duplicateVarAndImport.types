@@ -1,11 +1,14 @@
-=== tests/cases/compiler/duplicateVarAndImport.ts ===
+//// [tests/cases/compiler/duplicateVarAndImport.ts] ////
+
+=== duplicateVarAndImport.ts ===
 // no error since module is not instantiated
 
 var a;
 >a : any
 
-module M { }
+namespace M { }
 import a = M;
 >a : any
+>  : ^^^
 >M : error
 

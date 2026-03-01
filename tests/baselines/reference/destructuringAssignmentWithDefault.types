@@ -1,164 +1,281 @@
-=== tests/cases/compiler/destructuringAssignmentWithDefault.ts ===
+//// [tests/cases/compiler/destructuringAssignmentWithDefault.ts] ////
+
+=== destructuringAssignmentWithDefault.ts ===
 const a: { x?: number } = { };
->a : { x?: number | undefined; }
+>a : { x?: number; }
+>  : ^^^^^^      ^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >{ } : {}
+>    : ^^
 
 let x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 ({x = 1} = a);
->({x = 1} = a) : { x?: number | undefined; }
->{x = 1} = a : { x?: number | undefined; }
+>({x = 1} = a) : { x?: number; }
+>              : ^^^^^^      ^^^
+>{x = 1} = a : { x?: number; }
+>            : ^^^^^^      ^^^
 >{x = 1} : { x?: number; }
+>        : ^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
->a : { x?: number | undefined; }
+>  : ^
+>a : { x?: number; }
+>  : ^^^^^^      ^^^
 
 // Repro from #26235
 
 function f1(options?: { color?: string, width?: number }) {
->f1 : (options?: { color?: string | undefined; width?: number | undefined; } | undefined) => void
->options : { color?: string | undefined; width?: number | undefined; } | undefined
+>f1 : (options?: { color?: string; width?: number; }) => void
+>   : ^       ^^^                                   ^^^^^^^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     let { color, width } = options || {};
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
->options || {} : { color?: string | undefined; width?: number | undefined; }
->options : { color?: string | undefined; width?: number | undefined; } | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     ({ color, width } = options || {});
->({ color, width } = options || {}) : { color?: string | undefined; width?: number | undefined; }
->{ color, width } = options || {} : { color?: string | undefined; width?: number | undefined; }
+>({ color, width } = options || {}) : { color?: string; width?: number; }
+>                                   : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>{ color, width } = options || {} : { color?: string; width?: number; }
+>                                 : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >{ color, width } : { color: string | undefined; width: number | undefined; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
->options || {} : { color?: string | undefined; width?: number | undefined; }
->options : { color?: string | undefined; width?: number | undefined; } | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     let x1 = (options || {}).color;
 >x1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >(options || {}).color : string | undefined
->(options || {}) : { color?: string | undefined; width?: number | undefined; }
->options || {} : { color?: string | undefined; width?: number | undefined; }
->options : { color?: string | undefined; width?: number | undefined; } | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
+>(options || {}) : { color?: string; width?: number; }
+>                : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     let x2 = (options || {})["color"];
 >x2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >(options || {})["color"] : string | undefined
->(options || {}) : { color?: string | undefined; width?: number | undefined; }
->options || {} : { color?: string | undefined; width?: number | undefined; }
->options : { color?: string | undefined; width?: number | undefined; } | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>(options || {}) : { color?: string; width?: number; }
+>                : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >"color" : "color"
+>        : ^^^^^^^
 }
 
 function f2(options?: [string?, number?]) {
 >f2 : (options?: [string?, number?]) => void
+>   : ^       ^^^                  ^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let [str, num] = options || [];
 >str : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >num : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >options || [] : [(string | undefined)?, (number | undefined)?]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
     [str, num] = options || [];
 >[str, num] = options || [] : [(string | undefined)?, (number | undefined)?]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[str, num] : [string | undefined, number | undefined]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >str : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >num : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >options || [] : [(string | undefined)?, (number | undefined)?]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
     let x1 = (options || {})[0];
 >x1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >(options || {})[0] : string | undefined
+>                   : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : [(string | undefined)?, (number | undefined)?] | {}
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options || {} : [(string | undefined)?, (number | undefined)?] | {}
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >0 : 0
+>  : ^
 }
 
 function f3(options?: { color: string, width: number }) {
->f3 : (options?: { color: string; width: number; } | undefined) => void
+>f3 : (options?: { color: string; width: number; }) => void
+>   : ^       ^^^                                 ^^^^^^^^^
 >options : { color: string; width: number; } | undefined
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >color : string
+>      : ^^^^^^
 >width : number
+>      : ^^^^^^
 
     let { color, width } = options || {};
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     ({ color, width } = options || {});
 >({ color, width } = options || {}) : { color: string; width: number; } | {}
+>                                   : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >{ color, width } = options || {} : { color: string; width: number; } | {}
+>                                 : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >{ color, width } : { color: string | undefined; width: number | undefined; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
     let x1 = (options || {}).color;
 >x1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >(options || {}).color : string | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : { color: string; width: number; } | {}
+>                : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >color : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     let x2 = (options || {})["color"];
 >x2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >(options || {})["color"] : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : { color: string; width: number; } | {}
+>                : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >"color" : "color"
+>        : ^^^^^^^
 }
 
 function f4(options?: [string, number]) {
 >f4 : (options?: [string, number]) => void
+>   : ^       ^^^                ^^^^^^^^^
 >options : [string, number] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let [str, num] = options || [];
 >str : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >num : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >options || [] : [] | [string, number]
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
     [str, num] = options || [];
 >[str, num] = options || [] : [] | [string, number]
+>                           : ^^^^^^^^^^^^^^^^^^^^^
 >[str, num] : [string | undefined, number | undefined]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >str : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >num : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >options || [] : [] | [string, number]
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
+>   : ^^
 
     let x1 = (options || {})[0];
 >x1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >(options || {})[0] : string | undefined
+>                   : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : [string, number] | {}
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >options || {} : [string, number] | {}
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >0 : 0
+>  : ^
 }
 

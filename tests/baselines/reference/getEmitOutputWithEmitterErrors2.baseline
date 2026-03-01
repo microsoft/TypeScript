@@ -1,3 +1,4 @@
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile.js
@@ -5,21 +6,18 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.M = void 0;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     var M;
     (function (M) {
         M.foo = new C();
-    })(M = exports.M || (exports.M = {}));
+    })(M || (exports.M = M = {}));
 });
 
 FileName : /tests/cases/fourslash/inputFile.d.ts
 declare class C {
 }
-export declare module M {
+export declare namespace M {
     var foo: C;
 }
 export {};

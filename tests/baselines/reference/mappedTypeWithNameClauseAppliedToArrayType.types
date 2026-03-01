@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/mappedTypeWithNameClauseAppliedToArrayType.ts] ////
+
+=== mappedTypeWithNameClauseAppliedToArrayType.ts ===
+type Mappy<T extends unknown[]> = { [K in keyof T as K]: T[K] };
+>Mappy : Mappy<T>
+>      : ^^^^^^^^
+
+type NotArray = Mappy<number[]>;
+>NotArray : Mappy<number[]>
+>         : ^^^^^^^^^^^^^^^
+
+declare function doArrayStuff(x: unknown[]): void;
+>doArrayStuff : (x: unknown[]) => void
+>             : ^ ^^         ^^^^^    
+>x : unknown[]
+>  : ^^^^^^^^^
+
+declare const x: NotArray;
+>x : Mappy<number[]>
+>  : ^^^^^^^^^^^^^^^
+
+doArrayStuff(x);
+>doArrayStuff(x) : void
+>                : ^^^^
+>doArrayStuff : (x: unknown[]) => void
+>             : ^ ^^         ^^^^^    
+>x : Mappy<number[]>
+>  : ^^^^^^^^^^^^^^^
+

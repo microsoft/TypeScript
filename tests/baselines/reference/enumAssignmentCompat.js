@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/enumAssignmentCompat.ts] ////
+
 //// [enumAssignmentCompat.ts]
-module W {
+namespace W {
     export class D { }
 }
 
@@ -39,13 +41,11 @@ W.D;
 var p: W.D;
 
 //// [enumAssignmentCompat.js]
+"use strict";
 var W;
 (function (W) {
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
     W.D = D;
 })(W || (W = {}));
 (function (W) {

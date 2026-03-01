@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctions0.ts ===
+//// [tests/cases/compiler/genericFunctions0.ts] ////
+
+=== genericFunctions0.ts ===
 function foo<T > (x: T) { return x; }
 >foo : Symbol(foo, Decl(genericFunctions0.ts, 0, 0))
 >T : Symbol(T, Decl(genericFunctions0.ts, 0, 13))

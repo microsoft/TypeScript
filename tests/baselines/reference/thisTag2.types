@@ -1,9 +1,13 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/thisTag2.ts] ////
+
+=== a.js ===
 /** @this {string} */
 export function f1() {}
 >f1 : (this: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 /** @this */
 export function f2() {}
 >f2 : (this: any) => void
+>   : ^^^^^^^^^^^^^^^^^^^
 

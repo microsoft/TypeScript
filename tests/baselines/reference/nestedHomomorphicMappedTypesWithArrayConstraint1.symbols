@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/nestedHomomorphicMappedTypesWithArrayConstraint1.ts] ////
+
+=== nestedHomomorphicMappedTypesWithArrayConstraint1.ts ===
+// Based on @types/sinon v10
+
+type MatchArguments<T> = {
+>MatchArguments : Symbol(MatchArguments, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+>T : Symbol(T, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 2, 20))
+
+    [K in keyof T]: T[K];
+>K : Symbol(K, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 3, 5))
+>T : Symbol(T, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 2, 20))
+>T : Symbol(T, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 2, 20))
+>K : Symbol(K, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 3, 5))
+
+};
+
+interface SinonSpyCallApi<TArgs extends any[] = any[]> {
+>SinonSpyCallApi : Symbol(SinonSpyCallApi, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 4, 2))
+>TArgs : Symbol(TArgs, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 26))
+
+    calledWith(...args: Partial<MatchArguments<TArgs>>): boolean;
+>calledWith : Symbol(SinonSpyCallApi.calledWith, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 56))
+>args : Symbol(args, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 7, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MatchArguments : Symbol(MatchArguments, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+>TArgs : Symbol(TArgs, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 26))
+}

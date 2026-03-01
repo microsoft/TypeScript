@@ -1,57 +1,84 @@
-=== tests/cases/compiler/discriminatedUnionJsxElement.tsx ===
+//// [tests/cases/compiler/discriminatedUnionJsxElement.tsx] ////
+
+=== discriminatedUnionJsxElement.tsx ===
 // Repro from #46021
 
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
 >ListItemVariant : any
+>                : ^^^
 
     menuItemsVariant?: MenuItemVariant;
 >menuItemsVariant : MenuItemVariant | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
 >Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => any
+>     : ^               ^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                      ^^^^^^^^
 >ListItemVariant : any
+>                : ^^^
 >data : IData<MenuItemVariant>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
     const listItemVariant = data.menuItemsVariant ?? ListItemVariant.OneLine;
 >listItemVariant : ListItemVariant.OneLine | MenuItemVariant
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data.menuItemsVariant ?? ListItemVariant.OneLine : ListItemVariant.OneLine | MenuItemVariant
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data.menuItemsVariant : MenuItemVariant | undefined
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : IData<MenuItemVariant>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >menuItemsVariant : MenuItemVariant | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ListItemVariant.OneLine : ListItemVariant.OneLine
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >ListItemVariant : typeof ListItemVariant
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >OneLine : ListItemVariant.OneLine
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return <ListItem variant={listItemVariant} />;
 ><ListItem variant={listItemVariant} /> : error
 >ListItem : (_data: IListItemData) => null
+>         : ^     ^^             ^^^^^^^^^
 >variant : ListItemVariant
+>        : ^^^^^^^^^^^^^^^
 >listItemVariant : ListItemVariant
+>                : ^^^^^^^^^^^^^^^
 }
 
 type IListItemData = { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; };
->IListItemData : { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; }
+>IListItemData : IListItemData
+>              : ^^^^^^^^^^^^^
 >variant : ListItemVariant.Avatar
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >ListItemVariant : any
+>                : ^^^
 >variant : ListItemVariant.OneLine
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >ListItemVariant : any
+>                : ^^^
 
 enum ListItemVariant {
 >ListItemVariant : ListItemVariant
+>                : ^^^^^^^^^^^^^^^
 
     OneLine,
 >OneLine : ListItemVariant.OneLine
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     Avatar,
 >Avatar : ListItemVariant.Avatar
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function ListItem(_data: IListItemData) {
 >ListItem : (_data: IListItemData) => null
+>         : ^     ^^             ^^^^^^^^^
 >_data : IListItemData
+>      : ^^^^^^^^^^^^^
 
     return null; 
->null : null
 }
 

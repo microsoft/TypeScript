@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringFromUnionSpread.ts ===
+//// [tests/cases/compiler/destructuringFromUnionSpread.ts] ////
+
+=== destructuringFromUnionSpread.ts ===
 interface A { a: string }
 >A : Symbol(A, Decl(destructuringFromUnionSpread.ts, 0, 0))
 >a : Symbol(A.a, Decl(destructuringFromUnionSpread.ts, 0, 13))

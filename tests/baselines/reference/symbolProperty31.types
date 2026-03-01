@@ -1,24 +1,38 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty31.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty31.ts] ////
+
+=== symbolProperty31.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : () => { x: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 
         return { x: "" };
 >{ x: "" } : { x: string; }
+>          : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
     }
 }
 class C2 extends C1 {
 >C2 : C2
+>   : ^^
 >C1 : C1
+>   : ^^
 
     [s: symbol]: () => { x: string };
 >s : symbol
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 }

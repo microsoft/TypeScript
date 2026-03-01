@@ -1,9 +1,15 @@
-=== tests/cases/conformance/externalModules/vs/foo_0.ts ===
+//// [tests/cases/conformance/externalModules/importNonStringLiteral.ts] ////
+
+=== vs/foo_0.ts ===
 var x = "filename";
 >x : string
+>  : ^^^^^^
 >"filename" : "filename"
+>           : ^^^^^^^^^^
 
 import foo = require(x); // invalid
 >foo : any
+>    : ^^^
 >x : any
+>  : ^^^
 

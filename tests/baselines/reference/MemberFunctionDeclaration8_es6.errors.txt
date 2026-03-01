@@ -1,11 +1,11 @@
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts(4,9): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts(4,12): error TS1127: Invalid character.
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts(4,14): error TS1109: Expression expected.
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts(4,16): error TS2304: Cannot find name 'bar'.
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts(5,12): error TS2304: Cannot find name 'bar'.
+MemberFunctionDeclaration8_es6.ts(4,9): error TS2304: Cannot find name 'a'.
+MemberFunctionDeclaration8_es6.ts(4,12): error TS1127: Invalid character.
+MemberFunctionDeclaration8_es6.ts(4,14): error TS1109: Expression expected.
+MemberFunctionDeclaration8_es6.ts(4,16): error TS2304: Cannot find name 'bar'.
+MemberFunctionDeclaration8_es6.ts(5,12): error TS2304: Cannot find name 'bar'.
 
 
-==== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts (5 errors) ====
+==== MemberFunctionDeclaration8_es6.ts (5 errors) ====
     class C {
       foo() {
         // Make sure we don't think of *bar as the start of a generator method.

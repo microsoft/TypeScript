@@ -1,0 +1,11 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportAndExport.ts ===
+// <|import /*RENAME*/[|aRENAME|] from "module";|>
+// <|export { [|aRENAME|] as a/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportAndExport.ts ===
+// import a from "module";
+// <|export { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] };|>

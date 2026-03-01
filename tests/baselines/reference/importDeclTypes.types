@@ -1,11 +1,15 @@
+//// [tests/cases/compiler/importDeclTypes.ts] ////
+
 === /node_modules/@types/foo-bar/index.d.ts ===
 export interface Foo {
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 // This should error
 === /a.ts ===
 import { Foo } from "@types/foo-bar";
 >Foo : any
+>    : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/ts-expect-error-nocheck.ts] ////
+
 //// [ts-expect-error-nocheck.ts]
 // @ts-nocheck
 
@@ -8,7 +10,8 @@ const a = 1;
 
 
 //// [ts-expect-error-nocheck.js]
+"use strict";
 // @ts-nocheck
 // there should not be a "Unused @ts-expect-error" error due to the // @ts-nocheck
 // @ts-expect-error
-var a = 1;
+const a = 1;

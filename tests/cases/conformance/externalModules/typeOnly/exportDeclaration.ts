@@ -1,3 +1,7 @@
+// @target: es2015
+// @module: commonjs
+// @isolatedModules: false, true
+
 // @Filename: /a.ts
 class A {}
 export type { A };
@@ -6,3 +10,11 @@ export type { A };
 import { A } from './a';
 declare const a: A;
 new A();
+
+// @Filename: /c.ts
+import type { A } from './a';
+export = A;
+
+// @Filename: /d.ts
+import { A } from './a';
+export = A;

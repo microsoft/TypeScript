@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases2.ts] ////
+
 //// [mergedInterfacesWithMultipleBases2.ts]
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
@@ -40,7 +42,7 @@ var a: A;
 var r = a.a;
 
 // generic interfaces in a module
-module M {
+namespace M {
     class C<T> {
         a: T;
     }
@@ -76,61 +78,32 @@ module M {
 }
 
 //// [mergedInterfacesWithMultipleBases2.js]
+"use strict";
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-var C4 = /** @class */ (function () {
-    function C4() {
-    }
-    return C4;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class C2 {
+}
+class C3 {
+}
+class C4 {
+}
+class D {
+}
 var a;
 var r = a.a;
 // generic interfaces in a module
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var C2 = /** @class */ (function () {
-        function C2() {
-        }
-        return C2;
-    }());
-    var C3 = /** @class */ (function () {
-        function C3() {
-        }
-        return C3;
-    }());
-    var C4 = /** @class */ (function () {
-        function C4() {
-        }
-        return C4;
-    }());
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class C {
+    }
+    class C2 {
+    }
+    class C3 {
+    }
+    class C4 {
+    }
+    class D {
+    }
 })(M || (M = {}));

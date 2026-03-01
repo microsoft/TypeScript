@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofUndefined.ts ===
+//// [tests/cases/compiler/typeofUndefined.ts] ////
+
+=== typeofUndefined.ts ===
 var x: typeof undefined;
 >x : Symbol(x, Decl(typeofUndefined.ts, 0, 3), Decl(typeofUndefined.ts, 1, 3))
 >undefined : Symbol(undefined)

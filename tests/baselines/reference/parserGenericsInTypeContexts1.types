@@ -1,36 +1,50 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts] ////
+
+=== parserGenericsInTypeContexts1.ts ===
 class C extends A<T> implements B<T> {
 >C : C
+>  : ^
 >A : any
+>  : ^^^
 }
 
 var v1: C<T>;
 >v1 : any
+>   : ^^^
 
 var v2: D<T> = null;
 >v2 : D<T>
->null : null
+>   : ^^^^
 
 var v3: E.F<T>;
 >v3 : E.F<T>
+>   : ^^^^^^
 >E : any
+>  : ^^^
 
 var v3: G.H.I<T>;
 >v3 : E.F<T>
+>   : ^^^^^^
 >G : any
+>  : ^^^
 >H : any
+>  : ^^^
 
 var v6: K<T>[];
 >v6 : K<T>[]
+>   : ^^^^^^
 
 
 function f1(a: E<T>) {
 >f1 : (a: E<T>) => void
+>   : ^ ^^    ^^^^^^^^^
 >a : E<T>
+>  : ^^^^
 }
 
 function f2(): F<T> {
 >f2 : () => F<T>
+>   : ^^^^^^    
 }
 
 

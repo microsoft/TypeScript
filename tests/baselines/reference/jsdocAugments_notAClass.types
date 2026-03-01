@@ -1,8 +1,12 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_notAClass.ts] ////
+
 === /b.js ===
 class A {}
 >A : A
+>  : ^
 
 /** @augments A */
 function b() {}
 >b : () => void
+>  : ^^^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts] ////
+
+=== objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts ===
 var id: number = 10000;
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts, 0, 3))
 

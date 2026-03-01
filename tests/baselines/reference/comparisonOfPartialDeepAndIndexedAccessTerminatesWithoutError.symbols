@@ -1,4 +1,6 @@
-=== tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts ===
+//// [tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts] ////
+
+=== comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts ===
 type PartialDeep<T> = {[K in keyof T]?: PartialDeep<T[K]>};
 >PartialDeep : Symbol(PartialDeep, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 0))
 >T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 0, 17))

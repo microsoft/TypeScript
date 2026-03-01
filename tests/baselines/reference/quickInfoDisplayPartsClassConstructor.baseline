@@ -1,3 +1,136 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts ===
+// class c {
+//     constructor() {
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor c(): c
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c();
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cInstance: c
+// | ----------------------------------------------------------------------
+//                     ^
+// | ----------------------------------------------------------------------
+// | constructor c(): c
+// | ----------------------------------------------------------------------
+// var cVal = c;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var cVal: typeof c
+// | ----------------------------------------------------------------------
+//            ^
+// | ----------------------------------------------------------------------
+// | class c
+// | ----------------------------------------------------------------------
+// class cWithOverloads {
+//     constructor(x: string);
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithOverloads(x: string): cWithOverloads (+1 overload)
+// | ----------------------------------------------------------------------
+//     constructor(x: number);
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithOverloads(x: number): cWithOverloads (+1 overload)
+// | ----------------------------------------------------------------------
+//     constructor(x: any) {
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithOverloads(x: string): cWithOverloads (+1 overload)
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cWithOverloadsInstance = new cWithOverloads("hello");
+//     ^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithOverloadsInstance: cWithOverloads
+// | ----------------------------------------------------------------------
+//                                  ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithOverloads(x: string): cWithOverloads (+1 overload)
+// | ----------------------------------------------------------------------
+// var cWithOverloadsInstance2 = new cWithOverloads(10);
+//     ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithOverloadsInstance2: cWithOverloads
+// | ----------------------------------------------------------------------
+//                                   ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithOverloads(x: number): cWithOverloads (+1 overload)
+// | ----------------------------------------------------------------------
+// var cWithOverloadsVal = cWithOverloads;
+//     ^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithOverloadsVal: typeof cWithOverloads
+// | ----------------------------------------------------------------------
+//                         ^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | class cWithOverloads
+// | ----------------------------------------------------------------------
+// class cWithMultipleOverloads {
+//     constructor(x: string);
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: string): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+//     constructor(x: number);
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: number): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+//     constructor(x: boolean);
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+//     constructor(x: any) {
+//     ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: string): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cWithMultipleOverloadsInstance = new cWithMultipleOverloads("hello");
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithMultipleOverloadsInstance: cWithMultipleOverloads
+// | ----------------------------------------------------------------------
+//                                          ^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: string): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+// var cWithMultipleOverloadsInstance2 = new cWithMultipleOverloads(10);
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithMultipleOverloadsInstance2: cWithMultipleOverloads
+// | ----------------------------------------------------------------------
+//                                           ^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: number): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+// var cWithMultipleOverloadsInstance3 = new cWithMultipleOverloads(true);
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithMultipleOverloadsInstance3: cWithMultipleOverloads
+// | ----------------------------------------------------------------------
+//                                           ^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | constructor cWithMultipleOverloads(x: boolean): cWithMultipleOverloads (+2 overloads)
+// | ----------------------------------------------------------------------
+// var cWithMultipleOverloadsVal = cWithMultipleOverloads;
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cWithMultipleOverloadsVal: typeof cWithMultipleOverloads
+// | ----------------------------------------------------------------------
+//                                 ^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | class cWithMultipleOverloads
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +138,7 @@
       "position": 14,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -55,7 +188,7 @@
       "position": 42,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -97,7 +230,7 @@
       "position": 58,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -147,7 +280,7 @@
       "position": 67,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -197,7 +330,7 @@
       "position": 74,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -227,7 +360,7 @@
       "position": 104,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -321,7 +454,7 @@
       "position": 132,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -415,7 +548,7 @@
       "position": 160,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -509,7 +642,7 @@
       "position": 194,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -551,7 +684,7 @@
       "position": 223,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -645,7 +778,7 @@
       "position": 252,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -687,7 +820,7 @@
       "position": 282,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -781,7 +914,7 @@
       "position": 306,
       "name": "13"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -831,7 +964,7 @@
       "position": 326,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -861,7 +994,7 @@
       "position": 377,
       "name": "15"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -955,7 +1088,7 @@
       "position": 405,
       "name": "16"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1049,7 +1182,7 @@
       "position": 433,
       "name": "17"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1143,7 +1276,7 @@
       "position": 462,
       "name": "18"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1237,7 +1370,7 @@
       "position": 496,
       "name": "19"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1279,7 +1412,7 @@
       "position": 533,
       "name": "20"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1373,7 +1506,7 @@
       "position": 570,
       "name": "21"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1415,7 +1548,7 @@
       "position": 608,
       "name": "22"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1509,7 +1642,7 @@
       "position": 640,
       "name": "23"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1551,7 +1684,7 @@
       "position": 678,
       "name": "24"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -1645,7 +1778,7 @@
       "position": 712,
       "name": "25"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -1695,7 +1828,7 @@
       "position": 740,
       "name": "26"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {

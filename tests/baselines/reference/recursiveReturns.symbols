@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveReturns.ts ===
+//// [tests/cases/compiler/recursiveReturns.ts] ////
+
+=== recursiveReturns.ts ===
 function R1() {
 >R1 : Symbol(R1, Decl(recursiveReturns.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parenthesizedArrowExpressionASI.ts] ////
+
 //// [parenthesizedArrowExpressionASI.ts]
 const x = (a: any[]) => (
     // comment
@@ -6,6 +8,7 @@ const x = (a: any[]) => (
 
 
 //// [parenthesizedArrowExpressionASI.js]
-var x = function (a) { return (
+"use strict";
+const x = (a) => 
 // comment
-undefined); };
+undefined;

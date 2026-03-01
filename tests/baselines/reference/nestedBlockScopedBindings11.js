@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedBlockScopedBindings11.ts] ////
+
 //// [nestedBlockScopedBindings11.ts]
 var x;
 {
@@ -14,15 +16,16 @@ switch (1) {
 }
 
 //// [nestedBlockScopedBindings11.js]
+"use strict";
 var x;
 {
-    var x_1;
-    (function () { return x_1; });
+    let x;
+    () => x;
 }
 var y;
 switch (1) {
     case 1:
-        var y_1;
-        (function () { return y_1; });
+        let y;
+        () => y;
         break;
 }

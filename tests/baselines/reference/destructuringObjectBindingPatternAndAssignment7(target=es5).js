@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment7.ts] ////
+
 //// [destructuringObjectBindingPatternAndAssignment7.ts]
 enum K {
     a = "a",
@@ -10,6 +12,7 @@ console.log(aVal, bVal);
 
 
 //// [destructuringObjectBindingPatternAndAssignment7.js]
+"use strict";
 var K;
 (function (K) {
     K["a"] = "a";

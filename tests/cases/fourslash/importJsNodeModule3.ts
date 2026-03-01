@@ -34,7 +34,7 @@ verify.completions({ includes: { name: "toUpperCase", kind: "method", kindModifi
 edit.backspace(2);
 edit.insert('z(');
 verify.signatureHelp({
-    text: "z(a: number | boolean, b: string[]): string",
+    text: "z(a: (number | boolean), b: Array<string>): string",
     parameterDocComment: "The first param",
     tags: [
         { name: "param", text: [{ kind: "parameterName", text: "a" }, { kind: "space", text: " " }, { kind: "text", text: "The first param" }] },

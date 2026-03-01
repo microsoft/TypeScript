@@ -1,23 +1,23 @@
-tests/cases/compiler/stringLiteralsErrors.ts(2,18): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(3,3): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(4,18): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(5,3): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(8,20): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(9,3): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(10,20): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(11,3): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(14,24): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(15,24): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(18,26): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(19,26): error TS1002: Unterminated string literal.
-tests/cases/compiler/stringLiteralsErrors.ts(22,16): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/stringLiteralsErrors.ts(23,17): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/stringLiteralsErrors.ts(24,16): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/stringLiteralsErrors.ts(25,15): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/stringLiteralsErrors.ts(28,14): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(2,18): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(3,3): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(4,18): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(5,3): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(8,20): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(9,3): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(10,20): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(11,3): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(14,24): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(15,24): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(18,26): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(19,26): error TS1002: Unterminated string literal.
+stringLiteralsErrors.ts(22,16): error TS1125: Hexadecimal digit expected.
+stringLiteralsErrors.ts(23,17): error TS1125: Hexadecimal digit expected.
+stringLiteralsErrors.ts(24,16): error TS1125: Hexadecimal digit expected.
+stringLiteralsErrors.ts(25,15): error TS1125: Hexadecimal digit expected.
+stringLiteralsErrors.ts(28,14): error TS1002: Unterminated string literal.
 
 
-==== tests/cases/compiler/stringLiteralsErrors.ts (17 errors) ====
+==== stringLiteralsErrors.ts (17 errors) ====
     // Srtings missing line terminator
     var es1 = "line 1
                      

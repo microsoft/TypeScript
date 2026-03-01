@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts] ////
+
 //// [inferTypeArgumentsInSignatureWithRestParameters.ts]
 function f<T>(array: T[], ...args) { }
 function g(array: number[], ...args) { }
@@ -12,24 +14,10 @@ i(a); // OK
 
 
 //// [inferTypeArgumentsInSignatureWithRestParameters.js]
-function f(array) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-}
-function g(array) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-}
-function h(nonarray) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
-}
+"use strict";
+function f(array, ...args) { }
+function g(array, ...args) { }
+function h(nonarray, ...args) { }
 function i(array, opt) { }
 var a = [1, 2, 3, 4, 5];
 f(a); // OK

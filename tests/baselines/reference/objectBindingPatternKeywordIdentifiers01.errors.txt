@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers01.ts(1,13): error TS1005: ':' expected.
+objectBindingPatternKeywordIdentifiers01.ts(1,13): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers01.ts (1 errors) ====
+==== objectBindingPatternKeywordIdentifiers01.ts (1 errors) ====
     var { while } = { while: 1 }
                 ~
 !!! error TS1005: ':' expected.

@@ -1,23 +1,25 @@
 {
     "compilerOptions": {
-        "pretty": true,
-        "lib": ["es2015.iterable", "es2015.generator", "es5"],
-        "target": "es5",
-        "moduleResolution": "node",
         "rootDir": ".",
+        "outDir": "../built/local",
+
+        "pretty": true,
+        "lib": ["es2020"],
+        "target": "es2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
 
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
         "composite": true,
-        "noEmitOnError": true,
+        "emitDeclarationOnly": true,
+        "isolatedDeclarations": true,
 
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "noImplicitThis": true,
-        "strictPropertyInitialization": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
+        "strict": true,
+        "strictBindCallApply": false,
+        "useUnknownInCatchVariables": false,
+        "noImplicitOverride": true,
 
         "skipLibCheck": true,
 

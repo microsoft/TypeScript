@@ -1,15 +1,17 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/declarationEmitReadonly.ts] ////
+
 //// [declarationEmitReadonly.ts]
 class C {
     constructor(readonly x: number) {}
 }
 
 //// [declarationEmitReadonly.js]
-var C = /** @class */ (function () {
-    function C(x) {
+"use strict";
+class C {
+    constructor(x) {
         this.x = x;
     }
-    return C;
-}());
+}
 
 
 //// [declarationEmitReadonly.d.ts]

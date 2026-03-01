@@ -1,70 +1,105 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexersErrors.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexersErrors.ts] ////
+
+=== genericCallWithObjectTypeArgsAndIndexersErrors.ts ===
 // Type inference infers from indexers in target type, error cases
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 function other<T>(arg: T) {
 >other : <T>(arg: T) => void
+>      : ^ ^^   ^^ ^^^^^^^^^
 >arg : T
+>    : ^
 
     var b: {
 >b : { [x: string]: Object; [x: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
         [x: number]: T; // ok, T is a subtype of Object because its apparent type is {}
 >x : number
+>  : ^^^^^^
 
     };
     var r2 = foo(b); // T
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->foo : <T>(x: T) => T
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function other3<T extends U, U extends Date>(arg: T) {
 >other3 : <T extends U, U extends Date>(arg: T) => void
+>       : ^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
+>    : ^
 
     var b: {
 >b : { [x: string]: Object; [x: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
         [x: number]: T;
 >x : number
+>  : ^^^^^^
 
     };
     var r2 = foo(b);
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->foo : <T>(x: T) => T
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var d = r2[1];
 >d : T
+>  : ^
 >r2[1] : T
+>      : ^
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     var e = r2['1'];
 >e : T
+>  : ^
 >r2['1'] : T
+>        : ^
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 
     var u: U = r2[1]; // ok
 >u : U
+>  : ^
 >r2[1] : T
+>      : ^
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }

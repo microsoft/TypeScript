@@ -1,44 +1,73 @@
-=== tests/cases/conformance/types/primitives/boolean/extendBooleanInterface.ts ===
+//// [tests/cases/conformance/types/primitives/boolean/extendBooleanInterface.ts] ////
+
+=== extendBooleanInterface.ts ===
 interface Boolean {
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 
     doOtherStuff<T>(x: T): T;
 >doOtherStuff : <T>(x: T) => T
+>             : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 }
 
 var x = true;
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 var a: string = x.doStuff();
 >a : string
+>  : ^^^^^^
 >x.doStuff() : string
+>            : ^^^^^^
 >x.doStuff : () => string
+>          : ^^^^^^      
 >x : true
+>  : ^^^^
 >doStuff : () => string
+>        : ^^^^^^      
 
 var b: string = x.doOtherStuff('hm');
 >b : string
+>  : ^^^^^^
 >x.doOtherStuff('hm') : "hm"
+>                     : ^^^^
 >x.doOtherStuff : <T>(x: T) => T
+>               : ^ ^^ ^^ ^^^^^ 
 >x : true
+>  : ^^^^
 >doOtherStuff : <T>(x: T) => T
+>             : ^ ^^ ^^ ^^^^^ 
 >'hm' : "hm"
+>     : ^^^^
 
 var c: string = x['doStuff']();
 >c : string
+>  : ^^^^^^
 >x['doStuff']() : string
+>               : ^^^^^^
 >x['doStuff'] : () => string
+>             : ^^^^^^      
 >x : true
+>  : ^^^^
 >'doStuff' : "doStuff"
+>          : ^^^^^^^^^
 
 var d: string = x['doOtherStuff']('hm');
 >d : string
+>  : ^^^^^^
 >x['doOtherStuff']('hm') : "hm"
+>                        : ^^^^
 >x['doOtherStuff'] : <T>(x: T) => T
+>                  : ^ ^^ ^^ ^^^^^ 
 >x : true
+>  : ^^^^
 >'doOtherStuff' : "doOtherStuff"
+>               : ^^^^^^^^^^^^^^
 >'hm' : "hm"
+>     : ^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/withStatementErrors.ts ===
+//// [tests/cases/compiler/withStatementErrors.ts] ////
+
+=== withStatementErrors.ts ===
 declare var ooo:any;
 >ooo : Symbol(ooo, Decl(withStatementErrors.ts, 0, 11))
 
@@ -16,7 +18,7 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
     
     interface I {} // error
     
-    module M {} // error
+    namespace M {} // error
         
 }
 

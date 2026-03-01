@@ -1,33 +1,52 @@
-=== tests/cases/compiler/unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts ===
+//// [tests/cases/compiler/unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts] ////
+
+=== unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts ===
 interface IStringDictionary<V> {
 	[name: string]: V;
 >name : string
+>     : ^^^^^^
 }
 interface INumberDictionary<V> {
 	[idx: number]: V;
 >idx : number
+>    : ^^^^^^
 }
 
 declare function forEach<T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any);
->forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: {    key: any;    value: T;}, remove: () => void) => any) => any
+>forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
+>        : ^ ^^    ^^                                           ^^        ^^                                                           ^^^^^^^^
 >from : IStringDictionary<T> | INumberDictionary<T>
->callback : (entry: {    key: any;    value: T;}, remove: () => void) => any
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>callback : (entry: { key: any; value: T; }, remove: () => void) => any
+>         : ^     ^^                       ^^      ^^          ^^^^^   
 >entry : { key: any; value: T; }
+>      : ^^^^^^^   ^^^^^^^^^ ^^^
 >key : any
 >value : T
+>      : ^
 >remove : () => void
+>       : ^^^^^^    
 
 let count = 0;
 >count : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
 forEach({ toString: 123 }, () => count++);
 >forEach({ toString: 123 }, () => count++) : any
 >forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
+>        : ^ ^^    ^^                                           ^^        ^^                                                           ^^^^^^^^
 >{ toString: 123 } : { toString: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^
 >toString : number
+>         : ^^^^^^
 >123 : 123
+>    : ^^^
 >() => count++ : () => number
+>              : ^^^^^^^^^^^^
 >count++ : number
+>        : ^^^^^^
 >count : number
+>      : ^^^^^^
 

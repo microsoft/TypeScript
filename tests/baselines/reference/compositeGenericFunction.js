@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/compositeGenericFunction.ts] ////
+
 //// [compositeGenericFunction.ts]
 function f<T>(value: T) { return value; };
 
@@ -7,6 +9,7 @@ var z: number = h<number>(f);
 var z: number = h(f);
 
 //// [compositeGenericFunction.js]
+"use strict";
 function f(value) { return value; }
 ;
 function h(func) { return null; }

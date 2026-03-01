@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamReferencingOtherParams3.ts ===
+//// [tests/cases/compiler/optionalParamReferencingOtherParams3.ts] ////
+
+=== optionalParamReferencingOtherParams3.ts ===
 function right(a = b, b = a) {
 >right : Symbol(right, Decl(optionalParamReferencingOtherParams3.ts, 0, 0))
 >a : Symbol(a, Decl(optionalParamReferencingOtherParams3.ts, 0, 15))

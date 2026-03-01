@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
-module M { }
+//// [tests/cases/compiler/jsFileCompilationModuleSyntax.ts] ////
+
+=== a.js ===
+namespace M { }
 >M : Symbol(M, Decl(a.js, 0, 0))
 

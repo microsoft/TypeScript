@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitedTypeJQuery.ts ===
+//// [tests/cases/compiler/awaitedTypeJQuery.ts] ////
+
+=== awaitedTypeJQuery.ts ===
 /// <reference lib="dom" />
 
 interface Thenable<T> extends PromiseLike<T> { }

@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/classFieldSuperAccessibleJs1.ts] ////
+
+=== index.js ===
+class C {
+>C : C
+>  : ^
+
+  static blah1 = 123;
+>blah1 : number
+>      : ^^^^^^
+>123 : 123
+>    : ^^^
+}
+C.blah2 = 456;
+>C.blah2 = 456 : 456
+>              : ^^^
+>C.blah2 : number
+>        : ^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+>blah2 : number
+>      : ^^^^^^
+>456 : 456
+>    : ^^^
+
+class D extends C {
+>D : D
+>  : ^
+>C : C
+>  : ^
+
+  static {
+    console.log(super.blah1);
+>console.log(super.blah1) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>super.blah1 : number
+>            : ^^^^^^
+>super : typeof C
+>      : ^^^^^^^^
+>blah1 : number
+>      : ^^^^^^
+
+    console.log(super.blah2);
+>console.log(super.blah2) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>super.blah2 : number
+>            : ^^^^^^
+>super : typeof C
+>      : ^^^^^^^^
+>blah2 : number
+>      : ^^^^^^
+  }
+}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts] ////
+
 //// [privateNameES5Ban.ts]
 class A {
     constructor() {}
@@ -14,6 +16,7 @@ class A {
 
 
 //// [privateNameES5Ban.js]
+"use strict";
 var A = /** @class */ (function () {
     function A() {
         _A_instances.add(this);

@@ -1,9 +1,11 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/doNotEmitTripleSlashCommentsInEmptyFile.ts] ////
+
+=== file2.ts ===
+
 /// <reference path="file0.ts" />
-No type information for this code./// <reference path="file1.ts" />
-No type information for this code./// <amd-dependency path="/js/libs/hgn.js!app/templates/home" name="compiler"/>
-No type information for this code.=== tests/cases/compiler/file0.ts ===
+/// <reference path="file1.ts" />
+/// <amd-dependency path="/js/libs/hgn.js!app/templates/home" name="compiler"/>
+=== file0.ts ===
 
-No type information for this code.=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 
-No type information for this code.

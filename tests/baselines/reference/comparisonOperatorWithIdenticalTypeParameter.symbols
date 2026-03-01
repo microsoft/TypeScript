@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalTypeParameter.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalTypeParameter.ts] ////
+
+=== comparisonOperatorWithIdenticalTypeParameter.ts ===
 function foo<T>(t: T) {
 >foo : Symbol(foo, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 13))

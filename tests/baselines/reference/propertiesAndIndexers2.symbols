@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertiesAndIndexers2.ts ===
+//// [tests/cases/compiler/propertiesAndIndexers2.ts] ////
+
+=== propertiesAndIndexers2.ts ===
 interface A {
 >A : Symbol(A, Decl(propertiesAndIndexers2.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterFixingWithConstraints.ts ===
+//// [tests/cases/compiler/typeParameterFixingWithConstraints.ts] ////
+
+=== typeParameterFixingWithConstraints.ts ===
 interface IBar {
 >IBar : Symbol(IBar, Decl(typeParameterFixingWithConstraints.ts, 0, 0))
 

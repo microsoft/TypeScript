@@ -1,22 +1,32 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts] ////
+
+=== checkSuperCallBeforeThisAccessing8.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(...arg) {
 >arg : any[]
+>    : ^^^^^
     }
 }
 class Super extends Base {
 >Super : Super
+>      : ^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor() {
         var that = this;
 >that : this
+>     : ^^^^
 >this : this
+>     : ^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }

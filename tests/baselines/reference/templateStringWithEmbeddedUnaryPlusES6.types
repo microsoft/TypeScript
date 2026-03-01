@@ -1,7 +1,13 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedUnaryPlusES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedUnaryPlusES6.ts] ////
+
+=== templateStringWithEmbeddedUnaryPlusES6.ts ===
 var x = `abc${ +Infinity }def`;
 >x : string
->`abc${ +Infinity }def` : string
+>  : ^^^^^^
+>`abc${ +Infinity }def` : "abcInfinitydef"
+>                       : ^^^^^^^^^^^^^^^^
 >+Infinity : number
+>          : ^^^^^^
 >Infinity : number
+>         : ^^^^^^
 

@@ -1,141 +1,224 @@
-=== tests/cases/compiler/controlFlowForCatchAndFinally.ts ===
+//// [tests/cases/compiler/controlFlowForCatchAndFinally.ts] ////
+
+=== controlFlowForCatchAndFinally.ts ===
 type Page = {close(): Promise<void>; content(): Promise<string>};
->Page : { close(): Promise<void>; content(): Promise<string>; }
+>Page : Page
+>     : ^^^^
 >close : () => Promise<void>
+>      : ^^^^^^             
 >content : () => Promise<string>
+>        : ^^^^^^               
 
 type Browser = {close(): Promise<void>};
->Browser : { close(): Promise<void>; }
+>Browser : Browser
+>        : ^^^^^^^
 >close : () => Promise<void>
+>      : ^^^^^^             
 
 declare function test1(): Promise<Browser>;
 >test1 : () => Promise<Browser>
+>      : ^^^^^^                
 
 declare function test2(obj: Browser): Promise<Page>;
 >test2 : (obj: Browser) => Promise<Page>
+>      : ^   ^^       ^^^^^             
 >obj : Browser
+>    : ^^^^^^^
 
 async function test(): Promise<string> {
 >test : () => Promise<string>
+>     : ^^^^^^               
 
     let browser: Browser | undefined = undefined;
 >browser : Browser | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     let page: Page | undefined = undefined;
 >page : Page | undefined
+>     : ^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     try {
         browser = await test1();
 >browser = await test1() : Browser
+>                        : ^^^^^^^
 >browser : Browser | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >await test1() : Browser
+>              : ^^^^^^^
 >test1() : Promise<Browser>
+>        : ^^^^^^^^^^^^^^^^
 >test1 : () => Promise<Browser>
+>      : ^^^^^^                
 
         page = await test2(browser);
 >page = await test2(browser) : Page
+>                            : ^^^^
 >page : Page | undefined
+>     : ^^^^^^^^^^^^^^^^
 >await test2(browser) : Page
+>                     : ^^^^
 >test2(browser) : Promise<Page>
+>               : ^^^^^^^^^^^^^
 >test2 : (obj: Browser) => Promise<Page>
+>      : ^   ^^       ^^^^^             
 >browser : Browser
+>        : ^^^^^^^
 
         return await page.content();;
 >await page.content() : string
+>                     : ^^^^^^
 >page.content() : Promise<string>
+>               : ^^^^^^^^^^^^^^^
 >page.content : () => Promise<string>
+>             : ^^^^^^               
 >page : Page
+>     : ^^^^
 >content : () => Promise<string>
+>        : ^^^^^^               
 
     } finally {
         if (page) {
 >page : Page | undefined
+>     : ^^^^^^^^^^^^^^^^
 
             await page.close(); // ok
 >await page.close() : void
+>                   : ^^^^
 >page.close() : Promise<void>
+>             : ^^^^^^^^^^^^^
 >page.close : () => Promise<void>
+>           : ^^^^^^             
 >page : Page
+>     : ^^^^
 >close : () => Promise<void>
+>      : ^^^^^^             
         }
 
         if (browser) {
 >browser : Browser | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 
             await browser.close(); // ok
 >await browser.close() : void
+>                      : ^^^^
 >browser.close() : Promise<void>
+>                : ^^^^^^^^^^^^^
 >browser.close : () => Promise<void>
+>              : ^^^^^^             
 >browser : Browser
+>        : ^^^^^^^
 >close : () => Promise<void>
+>      : ^^^^^^             
         }
     }
 }
 
 declare class Aborter { abort(): void };
 >Aborter : Aborter
+>        : ^^^^^^^
 >abort : () => void
+>      : ^^^^^^    
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     abortController: Aborter | undefined = undefined;
 >abortController : Aborter | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     async operation() {
 >operation : () => Promise<void>
+>          : ^^^^^^^^^^^^^^^^^^^
 
         if (this.abortController !== undefined) {
 >this.abortController !== undefined : boolean
+>                                   : ^^^^^^^
 >this.abortController : Aborter | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >abortController : Aborter | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             this.abortController.abort();
 >this.abortController.abort() : void
+>                             : ^^^^
 >this.abortController.abort : () => void
+>                           : ^^^^^^    
 >this.abortController : Aborter
+>                     : ^^^^^^^
 >this : this
+>     : ^^^^
 >abortController : Aborter
+>                : ^^^^^^^
 >abort : () => void
+>      : ^^^^^^    
 
             this.abortController = undefined;
 >this.abortController = undefined : undefined
+>                                 : ^^^^^^^^^
 >this.abortController : Aborter | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >abortController : Aborter | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
         }
         try {
             this.abortController = new Aborter();
 >this.abortController = new Aborter() : Aborter
+>                                     : ^^^^^^^
 >this.abortController : Aborter | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >abortController : Aborter | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 >new Aborter() : Aborter
+>              : ^^^^^^^
 >Aborter : typeof Aborter
+>        : ^^^^^^^^^^^^^^
 
         } catch (error) {
 >error : unknown
+>      : ^^^^^^^
 
             if (this.abortController !== undefined) {
 >this.abortController !== undefined : boolean
+>                                   : ^^^^^^^
 >this.abortController : Aborter | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >abortController : Aborter | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                 this.abortController.abort(); // ok
 >this.abortController.abort() : void
+>                             : ^^^^
 >this.abortController.abort : () => void
+>                           : ^^^^^^    
 >this.abortController : Aborter
+>                     : ^^^^^^^
 >this : this
+>     : ^^^^
 >abortController : Aborter
+>                : ^^^^^^^
 >abort : () => void
+>      : ^^^^^^    
             }
         }
     }

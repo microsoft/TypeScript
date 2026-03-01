@@ -1,66 +1,100 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardIntersectionTypes.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardIntersectionTypes.ts] ////
+
+=== typeGuardIntersectionTypes.ts ===
 interface X {
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 interface Y {
     y: string;
 >y : string
+>  : ^^^^^^
 }
 
 interface Z {
     z: string;
 >z : string
+>  : ^^^^^^
 }
 
 declare function isX(obj: any): obj is X;
 >isX : (obj: any) => obj is X
+>    : ^   ^^   ^^^^^        
 >obj : any
 
 declare function isY(obj: any): obj is Y;
 >isY : (obj: any) => obj is Y
+>    : ^   ^^   ^^^^^        
 >obj : any
 
 declare function isZ(obj: any): obj is Z;
 >isZ : (obj: any) => obj is Z
+>    : ^   ^^   ^^^^^        
 >obj : any
 
 function f1(obj: Object) {
 >f1 : (obj: Object) => void
+>   : ^   ^^      ^^^^^^^^^
 >obj : Object
+>    : ^^^^^^
 
     if (isX(obj) || isY(obj) || isZ(obj)) {
 >isX(obj) || isY(obj) || isZ(obj) : boolean
+>                                 : ^^^^^^^
 >isX(obj) || isY(obj) : boolean
+>                     : ^^^^^^^
 >isX(obj) : boolean
+>         : ^^^^^^^
 >isX : (obj: any) => obj is X
+>    : ^   ^^   ^^^^^        
 >obj : Object
+>    : ^^^^^^
 >isY(obj) : boolean
+>         : ^^^^^^^
 >isY : (obj: any) => obj is Y
+>    : ^   ^^   ^^^^^        
 >obj : Object
+>    : ^^^^^^
 >isZ(obj) : boolean
+>         : ^^^^^^^
 >isZ : (obj: any) => obj is Z
+>    : ^   ^^   ^^^^^        
 >obj : Object
+>    : ^^^^^^
 
         obj;
 >obj : X | Y | Z
+>    : ^^^^^^^^^
     }
     if (isX(obj) && isY(obj) && isZ(obj)) {
 >isX(obj) && isY(obj) && isZ(obj) : boolean
+>                                 : ^^^^^^^
 >isX(obj) && isY(obj) : boolean
+>                     : ^^^^^^^
 >isX(obj) : boolean
+>         : ^^^^^^^
 >isX : (obj: any) => obj is X
+>    : ^   ^^   ^^^^^        
 >obj : Object
+>    : ^^^^^^
 >isY(obj) : boolean
+>         : ^^^^^^^
 >isY : (obj: any) => obj is Y
+>    : ^   ^^   ^^^^^        
 >obj : X
+>    : ^
 >isZ(obj) : boolean
+>         : ^^^^^^^
 >isZ : (obj: any) => obj is Z
+>    : ^   ^^   ^^^^^        
 >obj : X & Y
+>    : ^^^^^
 
         obj;
 >obj : X & Y & Z
+>    : ^^^^^^^^^
     }
 }
 
@@ -70,16 +104,19 @@ function f1(obj: Object) {
 interface A {
   a: string;
 >a : string
+>  : ^^^^^^
 }
 
 interface B {
   b: string;
 >b : string
+>  : ^^^^^^
 }
 
 // a type guard for B
 function isB(toTest: any): toTest is B {
 >isB : (toTest: any) => toTest is B
+>    : ^      ^^   ^^^^^           
 >toTest : any
 
   return toTest && toTest.b;
@@ -87,26 +124,32 @@ function isB(toTest: any): toTest is B {
 >toTest : any
 >toTest.b : any
 >toTest : any
+>       : ^^^
 >b : any
+>  : ^^^
 }
 
 // a function that turns an A into an A & B
 function union(a: A): A & B | null {
 >union : (a: A) => (A & B) | null
+>      : ^ ^^ ^^^^^^     ^       
 >a : A
->null : null
+>  : ^
 
   if (isB(a)) {
 >isB(a) : boolean
+>       : ^^^^^^^
 >isB : (toTest: any) => toTest is B
+>    : ^      ^^   ^^^^^           
 >a : A
+>  : ^
 
     return a;
 >a : A & B
+>  : ^^^^^
 
   } else {
     return null;
->null : null
   }
 }
 
@@ -114,92 +157,147 @@ function union(a: A): A & B | null {
 
 declare function log(s: string): void;
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
 // Supported beast features
 interface Beast     { wings?: boolean; legs?: number }
 >wings : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 >legs : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
 interface Legged    { legs: number; }
 >legs : number
+>     : ^^^^^^
 
 interface Winged    { wings: boolean; }
 >wings : boolean
+>      : ^^^^^^^
 
 // Beast feature detection via user-defined type guards
 function hasLegs(x: Beast): x is Legged { return x && typeof x.legs === 'number'; }
 >hasLegs : (x: Beast) => x is Legged
+>        : ^ ^^     ^^^^^           
 >x : Beast
+>  : ^^^^^
 >x && typeof x.legs === 'number' : boolean
+>                                : ^^^^^^^
 >x : Beast
+>  : ^^^^^
 >typeof x.legs === 'number' : boolean
+>                           : ^^^^^^^
 >typeof x.legs : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.legs : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >x : Beast
+>  : ^^^^^
 >legs : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >'number' : "number"
+>         : ^^^^^^^^
 
 function hasWings(x: Beast): x is Winged { return x && !!x.wings; }
 >hasWings : (x: Beast) => x is Winged
+>         : ^ ^^     ^^^^^           
 >x : Beast
+>  : ^^^^^
 >x && !!x.wings : boolean
+>               : ^^^^^^^
 >x : Beast
+>  : ^^^^^
 >!!x.wings : boolean
+>          : ^^^^^^^
 >!x.wings : boolean
+>         : ^^^^^^^
 >x.wings : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >x : Beast
+>  : ^^^^^
 >wings : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
 
 // Function to identify a given beast by detecting its features
 function identifyBeast(beast: Beast) {
 >identifyBeast : (beast: Beast) => void
+>              : ^     ^^     ^^^^^^^^^
 >beast : Beast
+>      : ^^^^^
 
     // All beasts with legs
     if (hasLegs(beast)) {
 >hasLegs(beast) : boolean
+>               : ^^^^^^^
 >hasLegs : (x: Beast) => x is Legged
+>        : ^ ^^     ^^^^^           
 >beast : Beast
+>      : ^^^^^
 
         // All winged beasts with legs
         if (hasWings(beast)) {
 >hasWings(beast) : boolean
+>                : ^^^^^^^
 >hasWings : (x: Beast) => x is Winged
+>         : ^ ^^     ^^^^^           
 >beast : Legged
+>      : ^^^^^^
 
             if (beast.legs === 4) {
 >beast.legs === 4 : boolean
+>                 : ^^^^^^^
 >beast.legs : number
+>           : ^^^^^^
 >beast : Legged & Winged
+>      : ^^^^^^^^^^^^^^^
 >legs : number
+>     : ^^^^^^
 >4 : 4
+>  : ^
 
                 log(`pegasus - 4 legs, wings`);
 >log(`pegasus - 4 legs, wings`) : void
+>                               : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >`pegasus - 4 legs, wings` : "pegasus - 4 legs, wings"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             else if (beast.legs === 2) {
 >beast.legs === 2 : boolean
+>                 : ^^^^^^^
 >beast.legs : number
+>           : ^^^^^^
 >beast : Legged & Winged
+>      : ^^^^^^^^^^^^^^^
 >legs : number
+>     : ^^^^^^
 >2 : 2
+>  : ^
 
                 log(`bird - 2 legs, wings`);
 >log(`bird - 2 legs, wings`) : void
+>                            : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >`bird - 2 legs, wings` : "bird - 2 legs, wings"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
             }
             else {
                 log(`unknown - ${beast.legs} legs, wings`);
 >log(`unknown - ${beast.legs} legs, wings`) : void
+>                                           : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >`unknown - ${beast.legs} legs, wings` : string
+>                                      : ^^^^^^
 >beast.legs : number
+>           : ^^^^^^
 >beast : Legged & Winged
+>      : ^^^^^^^^^^^^^^^
 >legs : number
+>     : ^^^^^^
             }
         }
 
@@ -207,11 +305,17 @@ function identifyBeast(beast: Beast) {
         else {
             log(`manbearpig - ${beast.legs} legs, no wings`);
 >log(`manbearpig - ${beast.legs} legs, no wings`) : void
+>                                                 : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >`manbearpig - ${beast.legs} legs, no wings` : string
+>                                            : ^^^^^^
 >beast.legs : number
+>           : ^^^^^^
 >beast : Legged
+>      : ^^^^^^
 >legs : number
+>     : ^^^^^^
         }
     }
 
@@ -219,54 +323,82 @@ function identifyBeast(beast: Beast) {
     else {
         if (hasWings(beast)) {
 >hasWings(beast) : boolean
+>                : ^^^^^^^
 >hasWings : (x: Beast) => x is Winged
+>         : ^ ^^     ^^^^^           
 >beast : Beast
+>      : ^^^^^
 
             log(`quetzalcoatl - no legs, wings`)
 >log(`quetzalcoatl - no legs, wings`) : void
+>                                     : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >`quetzalcoatl - no legs, wings` : "quetzalcoatl - no legs, wings"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         else {
             log(`snake - no legs, no wings`)
 >log(`snake - no legs, no wings`) : void
+>                                 : ^^^^
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >`snake - no legs, no wings` : "snake - no legs, no wings"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     }
 }
 
 function beastFoo(beast: Object) {
 >beastFoo : (beast: Object) => void
+>         : ^     ^^      ^^^^^^^^^
 >beast : Object
+>      : ^^^^^^
 
     if (hasWings(beast) && hasLegs(beast)) {
 >hasWings(beast) && hasLegs(beast) : boolean
+>                                  : ^^^^^^^
 >hasWings(beast) : boolean
+>                : ^^^^^^^
 >hasWings : (x: Beast) => x is Winged
+>         : ^ ^^     ^^^^^           
 >beast : Object
+>      : ^^^^^^
 >hasLegs(beast) : boolean
+>               : ^^^^^^^
 >hasLegs : (x: Beast) => x is Legged
+>        : ^ ^^     ^^^^^           
 >beast : Winged
+>      : ^^^^^^
 
         beast;  // Winged & Legged
 >beast : Winged & Legged
+>      : ^^^^^^^^^^^^^^^
     }
     else {
         beast;
 >beast : Object
+>      : ^^^^^^
     }
 
     if (hasLegs(beast) && hasWings(beast)) {
 >hasLegs(beast) && hasWings(beast) : boolean
+>                                  : ^^^^^^^
 >hasLegs(beast) : boolean
+>               : ^^^^^^^
 >hasLegs : (x: Beast) => x is Legged
+>        : ^ ^^     ^^^^^           
 >beast : Object
+>      : ^^^^^^
 >hasWings(beast) : boolean
+>                : ^^^^^^^
 >hasWings : (x: Beast) => x is Winged
+>         : ^ ^^     ^^^^^           
 >beast : Legged
+>      : ^^^^^^
 
         beast;  // Legged & Winged
 >beast : Legged & Winged
+>      : ^^^^^^^^^^^^^^^
     }
 }

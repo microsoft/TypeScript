@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckTypeArgument.ts] ////
+
 //// [typeCheckTypeArgument.ts]
 var f: <T extends UNKNOWN>() => void;
 
@@ -14,17 +16,12 @@ class Foo2 {
 (<T extends UNKNOWN>(a) => { });
 
 //// [typeCheckTypeArgument.js]
+"use strict";
 var f;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 function bar() { }
-var Foo2 = /** @class */ (function () {
-    function Foo2() {
-    }
-    Foo2.prototype.method = function () { };
-    return Foo2;
-}());
-(function (a) { });
+class Foo2 {
+    method() { }
+}
+((a) => { });

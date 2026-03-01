@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectFreezeLiteralsDontWiden.ts ===
+//// [tests/cases/compiler/objectFreezeLiteralsDontWiden.ts] ////
+
+=== objectFreezeLiteralsDontWiden.ts ===
 const PUPPETEER_REVISIONS = Object.freeze({
 >PUPPETEER_REVISIONS : Symbol(PUPPETEER_REVISIONS, Decl(objectFreezeLiteralsDontWiden.ts, 0, 5))
 >Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

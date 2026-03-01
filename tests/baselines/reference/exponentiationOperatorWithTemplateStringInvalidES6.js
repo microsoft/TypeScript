@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTemplateStringInvalidES6.ts] ////
+
 //// [exponentiationOperatorWithTemplateStringInvalidES6.ts]
 var a = 1 ** `${ 3 }`;
 var b = 1 ** `2${ 3 }`;
@@ -15,6 +17,7 @@ k **= `2${ 3 }4`;
 kj **= `2${ 3 }4`;
 
 //// [exponentiationOperatorWithTemplateStringInvalidES6.js]
+"use strict";
 var a = Math.pow(1, `${3}`);
 var b = Math.pow(1, `2${3}`);
 var c = Math.pow(1, `${3}4`);

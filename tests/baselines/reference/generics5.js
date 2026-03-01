@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics5.ts] ////
+
 //// [generics5.ts]
 interface A { a: string; }
 interface B extends A { b: string; }
@@ -13,4 +15,5 @@ var v3: G<A, A>;               // Error, A not valid argument for U
 
 
 //// [generics5.js]
+"use strict";
 var v3; // Error, A not valid argument for U

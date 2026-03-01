@@ -1,187 +1,343 @@
-=== tests/cases/compiler/lambdaParamTypes.ts ===
+//// [tests/cases/compiler/lambdaParamTypes.ts] ////
+
+=== lambdaParamTypes.ts ===
 interface MyArrayWrapper<T> {
     constructor(initialItems?: T[]);
 >constructor : (initialItems?: T[]) => any
+>            : ^            ^^^   ^^^^^^^^
 >initialItems : T[]
+>             : ^^^
 
     doSomething(predicate: (x: T, y: T) => string): void;
 >doSomething : (predicate: (x: T, y: T) => string) => void
+>            : ^         ^^                      ^^^^^    
 >predicate : (x: T, y: T) => string
+>          : ^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : T
+>  : ^
 }
 
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
+>       : ^ ^^             ^^^   ^^^^^                 
 >initialValues : T[]
+>              : ^^^
 
 var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]) : MyArrayWrapper<{ name: string; id: number; }>
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
+>       : ^ ^^             ^^^   ^^^^^                 
 >[{ name: "bob", id: 24 }, { name: "doug", id: 32 }] : { name: string; id: number; }[]
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "bob", id: 24 } : { name: string; id: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"bob" : "bob"
+>      : ^^^^^
 >id : number
+>   : ^^^^^^
 >24 : 24
+>   : ^^
 >{ name: "doug", id: 32 } : { name: string; id: number; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"doug" : "doug"
+>       : ^^^^^^
 >id : number
+>   : ^^^^^^
 >32 : 32
+>   : ^^
 
 // Below should all be OK
 thing.doSomething((x, y) => x.name.charAt(0));      // x.name should be string, so should be OK
 >thing.doSomething((x, y) => x.name.charAt(0)) : void
+>                                              : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => x.name.charAt(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => string
+>                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.name.charAt(0) : string
+>                 : ^^^^^^
 >x.name.charAt : (pos: number) => string
+>              : ^   ^^      ^^^^^      
 >x.name : string
+>       : ^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 thing.doSomething((x, y) => x.id.toExponential(0)); // x.id should be string, so should be OK
 >thing.doSomething((x, y) => x.id.toExponential(0)) : void
+>                                                   : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => x.id.toExponential(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => string
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.id.toExponential(0) : string
+>                      : ^^^^^^
 >x.id.toExponential : (fractionDigits?: number) => string
+>                   : ^              ^^^      ^^^^^      
 >x.id : number
+>     : ^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 thing.doSomething((x, y) => y.name.charAt(0));      // x.name should be string, so should be OK
 >thing.doSomething((x, y) => y.name.charAt(0)) : void
+>                                              : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => y.name.charAt(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => string
+>                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.name.charAt(0) : string
+>                 : ^^^^^^
 >y.name.charAt : (pos: number) => string
+>              : ^   ^^      ^^^^^      
 >y.name : string
+>       : ^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 
 thing.doSomething((x, y) => y.id.toExponential(0)); // x.id should be string, so should be OK
 >thing.doSomething((x, y) => y.id.toExponential(0)) : void
+>                                                   : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => y.id.toExponential(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => string
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.id.toExponential(0) : string
+>                      : ^^^^^^
 >y.id.toExponential : (fractionDigits?: number) => string
+>                   : ^              ^^^      ^^^^^      
 >y.id : number
+>     : ^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >0 : 0
+>  : ^
 
 // Below should all be in error
 thing.doSomething((x, y) => x.foo); // no such property on x
 >thing.doSomething((x, y) => x.foo) : void
+>                                   : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => x.foo : (x: { name: string; id: number; }, y: { name: string; id: number; }) => any
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.foo : any
+>      : ^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 
 thing.doSomething((x, y) => y.foo); // no such property on y
 >thing.doSomething((x, y) => y.foo) : void
+>                                   : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => y.foo : (x: { name: string; id: number; }, y: { name: string; id: number; }) => any
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.foo : any
+>      : ^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 
 thing.doSomething((x, y) => x.id.charAt(0));      // x.id should be number, no charAt member
 >thing.doSomething((x, y) => x.id.charAt(0)) : void
+>                                            : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => x.id.charAt(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => any
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.id.charAt(0) : any
+>               : ^^^
 >x.id.charAt : any
+>            : ^^^
 >x.id : number
+>     : ^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >charAt : any
+>       : ^^^
 >0 : 0
+>  : ^
 
 thing.doSomething((x, y) => x.name.toExponential(0)); // x.name should be string, no toExponential member
 >thing.doSomething((x, y) => x.name.toExponential(0)) : void
+>                                                     : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => x.name.toExponential(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => any
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.name.toExponential(0) : any
+>                        : ^^^
 >x.name.toExponential : any
+>                     : ^^^
 >x.name : string
+>       : ^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >toExponential : any
+>              : ^^^
 >0 : 0
+>  : ^
 
 thing.doSomething((x, y) => y.id.charAt(0));
 >thing.doSomething((x, y) => y.id.charAt(0)) : void
+>                                            : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => y.id.charAt(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => any
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.id.charAt(0) : any
+>               : ^^^
 >y.id.charAt : any
+>            : ^^^
 >y.id : number
+>     : ^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >charAt : any
+>       : ^^^
 >0 : 0
+>  : ^
 
 thing.doSomething((x, y) => y.name.toExponential(0));
 >thing.doSomething((x, y) => y.name.toExponential(0)) : void
+>                                                     : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => string) => void
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    
 >(x, y) => y.name.toExponential(0) : (x: { name: string; id: number; }, y: { name: string; id: number; }) => any
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.name.toExponential(0) : any
+>                        : ^^^
 >y.name.toExponential : any
+>                     : ^^^
 >y.name : string
+>       : ^^^^^^
 >y : { name: string; id: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >toExponential : any
+>              : ^^^
 >0 : 0
+>  : ^
 

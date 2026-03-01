@@ -15,16 +15,15 @@ interface Bar {
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo(a) {
+class Foo {
+    constructor(a) {
         this.a = a;
     }
-    return Foo;
-}());
+}
 module.exports = Foo;
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.d.ts]

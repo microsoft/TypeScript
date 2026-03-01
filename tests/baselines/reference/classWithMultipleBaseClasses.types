@@ -1,37 +1,48 @@
-=== tests/cases/compiler/classWithMultipleBaseClasses.ts ===
+//// [tests/cases/compiler/classWithMultipleBaseClasses.ts] ////
+
+=== classWithMultipleBaseClasses.ts ===
 class A {
 >A : A
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 }
 
 interface I {
     baz();
 >baz : () => any
+>    : ^^^^^^^^^
 }
 
 interface J {
     bat();
 >bat : () => any
+>    : ^^^^^^^^^
 }
 
 
 class D implements I, J {
 >D : D
+>  : ^
 
     baz() { }
 >baz : () => void
+>    : ^^^^^^^^^^
 
     bat() { }
 >bat : () => void
+>    : ^^^^^^^^^^
 }
 
 interface I extends A, B {

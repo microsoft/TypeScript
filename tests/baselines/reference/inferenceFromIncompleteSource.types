@@ -1,30 +1,47 @@
-=== tests/cases/compiler/inferenceFromIncompleteSource.ts ===
+//// [tests/cases/compiler/inferenceFromIncompleteSource.ts] ////
+
+=== inferenceFromIncompleteSource.ts ===
 // Repro from #42030
 
 interface ListProps<T, K extends keyof T> {
   items: T[];
 >items : T[]
+>      : ^^^
 
   itemKey: K;
 >itemKey : K
+>        : ^
 
   prop: number;
 >prop : number
+>     : ^^^^^^
 }
 
 declare const Component: <T, K extends keyof T>(x: ListProps<T, K>) => void;
 >Component : <T, K extends keyof T>(x: ListProps<T, K>) => void
+>          : ^ ^^ ^^^^^^^^^       ^^ ^^               ^^^^^    
 >x : ListProps<T, K>
+>  : ^^^^^^^^^^^^^^^
 
 Component({items: [{name:' string'}], itemKey: 'name' });
 >Component({items: [{name:' string'}], itemKey: 'name' }) : void
+>                                                         : ^^^^
 >Component : <T, K extends keyof T>(x: ListProps<T, K>) => void
+>          : ^ ^^ ^^^^^^^^^       ^^ ^^               ^^^^^    
 >{items: [{name:' string'}], itemKey: 'name' } : { items: { name: string; }[]; itemKey: "name"; }
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >items : { name: string; }[]
+>      : ^^^^^^^^^^^^^^^^^^^
 >[{name:' string'}] : { name: string; }[]
+>                   : ^^^^^^^^^^^^^^^^^^^
 >{name:' string'} : { name: string; }
+>                 : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >' string' : " string"
+>          : ^^^^^^^^^
 >itemKey : "name"
+>        : ^^^^^^
 >'name' : "name"
+>       : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedCommentsES6.ts] ////
+
 //// [templateStringWithEmbeddedCommentsES6.ts]
 `head${ // single line comment
 10
@@ -13,6 +15,7 @@ middle${
 tail`;
 
 //// [templateStringWithEmbeddedCommentsES6.js]
+"use strict";
 `head${ // single line comment
 10}
 middle${

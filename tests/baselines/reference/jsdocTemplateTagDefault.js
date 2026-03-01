@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagDefault.ts] ////
+
 //// [file.js]
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
@@ -67,18 +69,19 @@ function f3(a, b) {}
 
 
 //// [file.js]
+"use strict";
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A
  */
 /** @type {A} */ // ok, default for `T` in `A` is `string`
-var aDefault1 = [""];
+const aDefault1 = [""];
 /** @type {A} */ // error: `number` is not assignable to string`
-var aDefault2 = [0];
+const aDefault2 = [0];
 /** @type {A<string>} */ // ok, `T` is provided for `A`
-var aString = [""];
+const aString = [""];
 /** @type {A<number>} */ // ok, `T` is provided for `A`
-var aNumber = [0];
+const aNumber = [0];
 /**
  * @template T
  * @template [U=T] - ok: default can reference earlier type parameter
@@ -174,8 +177,8 @@ declare function f3<T = U, U = T>(a: T, b: U): void;
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A
  */
-/** @type {A} */ declare const aDefault1: A<string>;
-/** @type {A} */ declare const aDefault2: A<string>;
+/** @type {A} */ declare const aDefault1: A;
+/** @type {A} */ declare const aDefault2: A;
 /** @type {A<string>} */ declare const aString: A<string>;
 /** @type {A<number>} */ declare const aNumber: A<number>;
 type B<T, U = T> = [T, U];

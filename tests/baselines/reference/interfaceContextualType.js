@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceContextualType.ts] ////
+
 //// [interfaceContextualType.ts]
 export interface IOptions {
     italic?: boolean;
@@ -23,18 +25,15 @@ class Bug {
 
 //// [interfaceContextualType.js]
 "use strict";
-exports.__esModule = true;
-var Bug = /** @class */ (function () {
-    function Bug() {
-    }
-    Bug.prototype.ok = function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+class Bug {
+    ok() {
         this.values = {};
         this.values['comments'] = { italic: true };
-    };
-    Bug.prototype.shouldBeOK = function () {
+    }
+    shouldBeOK() {
         this.values = {
             comments: { italic: true }
         };
-    };
-    return Bug;
-}());
+    }
+}

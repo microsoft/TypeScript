@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedStaticNotAccessibleInClodule.ts] ////
+
 //// [protectedStaticNotAccessibleInClodule.ts]
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 
@@ -6,18 +8,16 @@ class C {
     protected static bar: string;
 }
 
-module C {
+namespace C {
     export var f = C.foo; // OK
     export var b = C.bar; // error
 }
 
 //// [protectedStaticNotAccessibleInClodule.js]
+"use strict";
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 (function (C) {
     C.f = C.foo; // OK
     C.b = C.bar; // error

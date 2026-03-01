@@ -1,4 +1,6 @@
-/// <reference path="fourslash.ts"/>
+/// <reference path="../fourslash.ts"/>
+
+// @lib: es5
 
 /////*3*/function listAPIFiles (path : string): string[] {
 ////    /*1*/

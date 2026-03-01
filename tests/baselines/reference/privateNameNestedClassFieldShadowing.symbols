@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassFieldShadowing.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassFieldShadowing.ts] ////
+
+=== privateNameNestedClassFieldShadowing.ts ===
 class Base {
 >Base : Symbol(Base, Decl(privateNameNestedClassFieldShadowing.ts, 0, 0))
 

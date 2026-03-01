@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts] ////
+
+=== objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts ===
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
@@ -28,7 +30,7 @@ interface I<T> {
     new(x: T): Date;
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 13, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 12, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 interface I2 {
@@ -38,7 +40,7 @@ interface I2 {
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 17, 8))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 17, 11))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 17, 8))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 var a: { new<T>(x: T): T }

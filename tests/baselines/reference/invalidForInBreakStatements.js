@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts] ////
+
 //// [invalidForInBreakStatements.ts]
 // All errors
 
@@ -39,6 +41,7 @@ for (var x in {}) {
 }
 
 //// [invalidForInBreakStatements.js]
+"use strict";
 // All errors
 // naked break not allowed
 break;
@@ -47,7 +50,7 @@ ONE: for (var x in {})
     break TWO;
 // break from inside function
 TWO: for (var x in {}) {
-    var fn = function () {
+    var fn = () => {
         break TWO;
     };
 }

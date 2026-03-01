@@ -1,70 +1,117 @@
-=== tests/cases/compiler/enumBasics2.ts ===
+//// [tests/cases/compiler/enumBasics2.ts] ////
+
+=== enumBasics2.ts ===
 enum Foo {
 >Foo : Foo
+>    : ^^^
 
   a = 2,
->a : Foo
+>a : Foo.a
+>  : ^^^^^
 >2 : 2
+>  : ^
 
   b = 3,
->b : Foo
+>b : Foo.b
+>  : ^^^^^
 >3 : 3
+>  : ^
 
   x = a.b,       // should error
->x : Foo
+>x : Foo.x
+>  : ^^^^^
 >a.b : any
->a : Foo
+>    : ^^^
+>a : Foo.a
+>  : ^^^^^
 >b : any
+>  : ^^^
 
   y = b.a,       // should error
->y : Foo
+>y : Foo.y
+>  : ^^^^^
 >b.a : any
->b : Foo
+>    : ^^^
+>b : Foo.b
+>  : ^^^^^
 >a : any
+>  : ^^^
 
   z = y.x * a.x, // should error
->z : Foo
+>z : Foo.z
+>  : ^^^^^
 >y.x * a.x : number
+>          : ^^^^^^
 >y.x : any
->y : Foo
+>    : ^^^
+>y : Foo.y
+>  : ^^^^^
 >x : any
+>  : ^^^
 >a.x : any
->a : Foo
+>    : ^^^
+>a : Foo.a
+>  : ^^^^^
 >x : any
+>  : ^^^
 }
 
 enum Bar {
 >Bar : Bar
+>    : ^^^
 
   a = (1).valueOf(),   // ok
->a : Bar
+>a : Bar.a
+>  : ^^^^^
 >(1).valueOf() : number
+>              : ^^^^^^
 >(1).valueOf : () => number
+>            : ^^^^^^      
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 >valueOf : () => number
+>        : ^^^^^^      
 
   b = Foo.a,           // ok
->b : Bar
->Foo.a : Foo
+>b : Bar.b
+>  : ^^^^^
+>Foo.a : Foo.a
+>      : ^^^^^
 >Foo : typeof Foo
->a : Foo
+>    : ^^^^^^^^^^
+>a : Foo.a
+>  : ^^^^^
 
   c = Foo.a.valueOf(), // ok
->c : Bar
+>c : Bar.c
+>  : ^^^^^
 >Foo.a.valueOf() : number
+>                : ^^^^^^
 >Foo.a.valueOf : () => number
->Foo.a : Foo
+>              : ^^^^^^      
+>Foo.a : Foo.a
+>      : ^^^^^
 >Foo : typeof Foo
->a : Foo
+>    : ^^^^^^^^^^
+>a : Foo.a
+>  : ^^^^^
 >valueOf : () => number
+>        : ^^^^^^      
 
   d = Foo.a.a,         // should error
->d : Bar
+>d : Bar.d
+>  : ^^^^^
 >Foo.a.a : any
->Foo.a : Foo
+>        : ^^^
+>Foo.a : Foo.a
+>      : ^^^^^
 >Foo : typeof Foo
->a : Foo
+>    : ^^^^^^^^^^
+>a : Foo.a
+>  : ^^^^^
 >a : any
+>  : ^^^
 }
 

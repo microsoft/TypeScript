@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultClassInNamespace.ts ===
+//// [tests/cases/compiler/exportDefaultClassInNamespace.ts] ////
+
+=== exportDefaultClassInNamespace.ts ===
 namespace ns_class {
 >ns_class : Symbol(ns_class, Decl(exportDefaultClassInNamespace.ts, 0, 0))
 

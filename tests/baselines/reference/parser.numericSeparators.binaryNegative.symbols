@@ -1,19 +1,26 @@
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.binaryNegative.ts] ////
+
+=== 1.ts ===
+
 0b00_
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
+
+=== 2.ts ===
+
 0b_110
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
+
+=== 3.ts ===
+
 0_B0101
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
+
+=== 4.ts ===
+
 0b01__11
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
+
+=== 5.ts ===
+
 0B0110_0110__
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
+
+=== 6.ts ===
+
 0b___0111010_0101_1
-No type information for this code.
-No type information for this code.
+

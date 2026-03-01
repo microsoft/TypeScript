@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts] ////
+
 //// [genericAndNonGenericInheritedSignature2.ts]
 interface Foo {
     f(x: any): any;
@@ -10,3 +12,4 @@ interface Hello extends Bar, Foo {
 
 
 //// [genericAndNonGenericInheritedSignature2.js]
+"use strict";

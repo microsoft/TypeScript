@@ -1,13 +1,23 @@
-=== tests/cases/compiler/letInNonStrictMode.ts ===
+//// [tests/cases/compiler/letInNonStrictMode.ts] ////
+
+=== letInNonStrictMode.ts ===
 let [x] = [1];
 >x : number
+>  : ^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 let {a: y} = {a: 1};
 >a : any
+>  : ^^^
 >y : number
+>  : ^^^^^^
 >{a: 1} : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

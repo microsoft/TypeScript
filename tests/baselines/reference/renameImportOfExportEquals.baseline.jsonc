@@ -1,861 +1,698 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace /*FIND ALL REFS*/[|N|] {
+// <|declare namespace /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}N|] {
 //     export var x: number;
-// }
+// }|>
 // declare module "mod" {
-//     export = [|N|];
+//     <|export = [|{| defId: 0 |}N|];|>
 // }
 // declare module "a" {
-//     import * as [|N|] from "mod";
-//     export { [|N|] }; // Renaming N here would rename
+//     <|import * as [|{| defId: 1, isWriteAccess: true |}N|] from "mod";|>
+//     <|export { [|{| defId: 1, isWriteAccess: true |}N|] };|> // Renaming N here would rename
 // }
 // declare module "b" {
-//     import { [|N|] } from "a";
-//     export const y: typeof [|N|].x;
+//     <|import { [|{| defId: 2, isWriteAccess: true |}N|] } from "a";|>
+//     export const y: typeof [|{| defId: 2 |}N|].x;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "module",
-      "name": "namespace N",
-      "textSpan": {
-        "start": 18,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N\nimport N",
-      "textSpan": {
-        "start": 128,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 116,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 128,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 116,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 155,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 146,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N\nimport N",
-      "textSpan": {
-        "start": 228,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 219,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 228,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 219,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 269,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+  // <|declare namespace /*FIND ALL REFS*/[|{| defId: 0 |}N|] {
+  //     export var x: number;
+  // }|>
+  // declare module "mod" {
+  //     export = N;
+  // }
+  // declare module "a" {
+  //     <|import * as [|{| defId: 1 |}N|] from "mod";|>
+  //     export { N }; // Renaming N here would rename
+  // }
+  // declare module "b" {
+  //     <|import { [|{| defId: 2 |}N|] } from "a";|>
+  //     export const y: typeof N.x;
+  // }
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace N",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N\nimport N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N\nimport N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace [|N|] {
+// <|declare namespace [|{| defId: 1, isWriteAccess: true |}N|] {
 //     export var x: number;
-// }
+// }|>
 // declare module "mod" {
-//     export = [|N|];
+//     <|export = [|{| defId: 1 |}N|];|>
 // }
 // declare module "a" {
-//     import * as /*FIND ALL REFS*/[|N|] from "mod";
-//     export { [|N|] }; // Renaming N here would rename
+//     <|import * as /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}N|] from "mod";|>
+//     <|export { [|{| defId: 0, isWriteAccess: true |}N|] };|> // Renaming N here would rename
 // }
 // declare module "b" {
-//     import { [|N|] } from "a";
-//     export const y: typeof [|N|].x;
+//     <|import { [|{| defId: 2, isWriteAccess: true |}N|] } from "a";|>
+//     export const y: typeof [|{| defId: 2 |}N|].x;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N\nimport N",
-      "textSpan": {
-        "start": 128,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 116,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 128,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 116,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 155,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 146,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "module",
-      "name": "namespace N",
-      "textSpan": {
-        "start": 18,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N\nimport N",
-      "textSpan": {
-        "start": 228,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 219,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 228,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 219,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 269,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+  // <|declare namespace [|{| defId: 1 |}N|] {
+  //     export var x: number;
+  // }|>
+  // declare module "mod" {
+  //     export = N;
+  // }
+  // declare module "a" {
+  //     <|import * as /*FIND ALL REFS*/[|{| defId: 0 |}N|] from "mod";|>
+  //     export { N }; // Renaming N here would rename
+  // }
+  // declare module "b" {
+  //     <|import { [|{| defId: 2 |}N|] } from "a";|>
+  //     export const y: typeof N.x;
+  // }
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N\nimport N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace N",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N\nimport N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
-// declare namespace [|N|] {
+// <|declare namespace [|{| defId: 2, isWriteAccess: true |}N|] {
 //     export var x: number;
-// }
+// }|>
 // declare module "mod" {
-//     export = [|N|];
+//     <|export = [|{| defId: 2 |}N|];|>
 // }
 // declare module "a" {
-//     import * as [|N|] from "mod";
-//     export { [|N|] }; // Renaming N here would rename
+//     <|import * as [|{| defId: 1, isWriteAccess: true |}N|] from "mod";|>
+//     <|export { [|{| defId: 1, isWriteAccess: true |}N|] };|> // Renaming N here would rename
 // }
 // declare module "b" {
-//     import { /*FIND ALL REFS*/[|N|] } from "a";
-//     export const y: typeof [|N|].x;
+//     <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}N|] } from "a";|>
+//     export const y: typeof [|{| defId: 0 |}N|].x;
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N\nimport N",
-      "textSpan": {
-        "start": 228,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 219,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 228,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 219,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 269,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N\nimport N",
-      "textSpan": {
-        "start": 128,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 116,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 128,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 116,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 155,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 146,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "module",
-      "name": "namespace N",
-      "textSpan": {
-        "start": 18,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 77,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+  // <|declare namespace [|{| defId: 2 |}N|] {
+  //     export var x: number;
+  // }|>
+  // declare module "mod" {
+  //     export = N;
+  // }
+  // declare module "a" {
+  //     <|import * as [|{| defId: 1 |}N|] from "mod";|>
+  //     export { N }; // Renaming N here would rename
+  // }
+  // declare module "b" {
+  //     <|import { /*FIND ALL REFS*/[|{| defId: 0 |}N|] } from "a";|>
+  //     export const y: typeof N.x;
+  // }
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N\nimport N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N\nimport N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace N",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
 // declare namespace N {
-//     export var /*FIND ALL REFS*/[|x|]: number;
+//     <|export var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|]: number;|>
 // }
 // declare module "mod" {
 //     export = N;
-// }
-// declare module "a" {
-//     import * as N from "mod";
-//     export { N }; // Renaming N here would rename
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
 // }
 // declare module "b" {
 //     import { N } from "a";
 //     export const y: typeof N.[|x|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-      "kind": "var",
-      "name": "var N.x: number",
-      "textSpan": {
-        "start": 37,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 26,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 37,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "contextSpan": {
-          "start": 26,
-          "length": 21
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 271,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/renameImportOfExportEquals.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+  // declare namespace N {
+  //     <|export var /*FIND ALL REFS*/[|x|]: number;|>
+  // }
+  // declare module "mod" {
+  //     export = N;
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var N.x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// <|declare namespace /*RENAME*/[|NRENAME|] {
+//     export var x: number;
+// }|>
+// declare module "mod" {
+//     <|export = [|NRENAME|];|>
+// }
+// declare module "a" {
+//     <|import * as [|NRENAME|] from "mod";|>
+//     <|export { [|NRENAME|] as N/*END SUFFIX*/ };|> // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// <|declare namespace [|NRENAME|] {
+//     export var x: number;
+// }|>
+// declare module "mod" {
+//     <|export = /*RENAME*/[|NRENAME|];|>
+// }
+// declare module "a" {
+//     <|import * as [|NRENAME|] from "mod";|>
+//     <|export { [|NRENAME|] as N/*END SUFFIX*/ };|> // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// --- (line: 4) skipped ---
+//     export = N;
+// }
+// declare module "a" {
+//     <|import * as /*RENAME*/[|NRENAME|] from "mod";|>
+//     <|export { [|NRENAME|] as N/*END SUFFIX*/ };|> // Renaming N here would rename
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// --- (line: 5) skipped ---
+// }
+// declare module "a" {
+//     import * as N from "mod";
+//     <|export { /*START PREFIX*/N as /*RENAME*/[|NRENAME|] };|> // Renaming N here would rename
+// }
+// declare module "b" {
+//     <|import { [|NRENAME|] } from "a";|>
+//     export const y: typeof [|NRENAME|].x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// --- (line: 8) skipped ---
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     <|import { /*START PREFIX*/N as /*RENAME*/[|NRENAME|] } from "a";|>
+//     export const y: typeof [|NRENAME|].x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// --- (line: 8) skipped ---
+//     export { N }; // Renaming N here would rename
+// }
+// declare module "b" {
+//     <|import { /*START PREFIX*/N as [|NRENAME|] } from "a";|>
+//     export const y: typeof /*RENAME*/[|NRENAME|].x;
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// declare namespace N {
+//     <|export var /*RENAME*/[|xRENAME|]: number;|>
+// }
+// declare module "mod" {
+//     export = N;
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N.[|xRENAME|];
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportOfExportEquals.ts ===
+// declare namespace N {
+//     <|export var [|xRENAME|]: number;|>
+// }
+// declare module "mod" {
+//     export = N;
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
+// }
+// declare module "b" {
+//     import { N } from "a";
+//     export const y: typeof N./*RENAME*/[|xRENAME|];
+// }

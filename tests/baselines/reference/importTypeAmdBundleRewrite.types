@@ -1,25 +1,38 @@
-=== tests/cases/conformance/types/import/a/b/c.ts ===
+//// [tests/cases/conformance/types/import/importTypeAmdBundleRewrite.ts] ////
+
+=== a/b/c.ts ===
 export interface Foo {
     x: 12;
 >x : 12
+>  : ^^
 }
-=== tests/cases/conformance/types/import/a/inner.ts ===
+=== a/inner.ts ===
 const c: import("./b/c").Foo = {x: 12};
->c : import("tests/cases/conformance/types/import/a/b/c").Foo
+>c : import("a/b/c").Foo
+>  : ^^^^^^^^^^^^^^^^^^^
 >{x: 12} : { x: 12; }
+>        : ^^^^^^^^^^
 >x : 12
+>  : ^^
 >12 : 12
+>   : ^^
 
 export {c};
->c : import("tests/cases/conformance/types/import/a/b/c").Foo
+>c : import("a/b/c").Foo
+>  : ^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/types/import/index.ts ===
+=== index.ts ===
 const d: typeof import("./a/inner")["c"] = {x: 12};
->d : import("tests/cases/conformance/types/import/a/b/c").Foo
+>d : import("a/b/c").Foo
+>  : ^^^^^^^^^^^^^^^^^^^
 >{x: 12} : { x: 12; }
+>        : ^^^^^^^^^^
 >x : 12
+>  : ^^
 >12 : 12
+>   : ^^
 
 export {d};
->d : import("tests/cases/conformance/types/import/a/b/c").Foo
+>d : import("a/b/c").Foo
+>  : ^^^^^^^^^^^^^^^^^^^
 

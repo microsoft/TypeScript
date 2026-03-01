@@ -1,7 +1,9 @@
-=== tests/cases/compiler/assignmentToReferenceTypes.ts ===
+//// [tests/cases/compiler/assignmentToReferenceTypes.ts] ////
+
+=== assignmentToReferenceTypes.ts ===
 // Should all be allowed
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(assignmentToReferenceTypes.ts, 0, 0))
 }
 M = null;

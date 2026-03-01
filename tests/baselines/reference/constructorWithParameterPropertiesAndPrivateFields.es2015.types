@@ -1,92 +1,147 @@
-=== tests/cases/compiler/constructorWithParameterPropertiesAndPrivateFields.es2015.ts ===
+//// [tests/cases/compiler/constructorWithParameterPropertiesAndPrivateFields.es2015.ts] ////
+
+=== constructorWithParameterPropertiesAndPrivateFields.es2015.ts ===
 // https://github.com/microsoft/TypeScript/issues/48771
 
 class A {
 >A : A
+>  : ^
 
   readonly #privateField: string;
 >#privateField : string
+>              : ^^^^^^
 
   constructor(arg: { key: string }, public exposedField: number) {
 >arg : { key: string; }
+>    : ^^^^^^^      ^^^
 >key : string
+>    : ^^^^^^
 >exposedField : number
+>             : ^^^^^^
 
     ({ key: this.#privateField } = arg);
 >({ key: this.#privateField } = arg) : { key: string; }
+>                                    : ^^^^^^^      ^^^
 >{ key: this.#privateField } = arg : { key: string; }
+>                                  : ^^^^^^^      ^^^
 >{ key: this.#privateField } : { key: string; }
+>                            : ^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >this.#privateField : string
+>                   : ^^^^^^
 >this : this
+>     : ^^^^
 >arg : { key: string; }
+>    : ^^^^^^^      ^^^
   }
 
   log() {
 >log : () => void
+>    : ^^^^^^^^^^
 
     console.log(this.#privateField);
 >console.log(this.#privateField) : void
+>                                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#privateField : string
+>                   : ^^^^^^
 >this : this
+>     : ^^^^
 
     console.log(this.exposedField);
 >console.log(this.exposedField) : void
+>                               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.exposedField : number
+>                  : ^^^^^^
 >this : this
+>     : ^^^^
 >exposedField : number
+>             : ^^^^^^
   }
 }
 
 class B {
 >B : B
+>  : ^
 
   readonly #privateField: string;
 >#privateField : string
+>              : ^^^^^^
 
   constructor(arg: { key: string }, public exposedField: number) {
 >arg : { key: string; }
+>    : ^^^^^^^      ^^^
 >key : string
+>    : ^^^^^^
 >exposedField : number
+>             : ^^^^^^
 
     "prologue";
 >"prologue" : "prologue"
+>           : ^^^^^^^^^^
 
     ({ key: this.#privateField } = arg);
 >({ key: this.#privateField } = arg) : { key: string; }
+>                                    : ^^^^^^^      ^^^
 >{ key: this.#privateField } = arg : { key: string; }
+>                                  : ^^^^^^^      ^^^
 >{ key: this.#privateField } : { key: string; }
+>                            : ^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >this.#privateField : string
+>                   : ^^^^^^
 >this : this
+>     : ^^^^
 >arg : { key: string; }
+>    : ^^^^^^^      ^^^
   }
 
   log() {
 >log : () => void
+>    : ^^^^^^^^^^
 
     console.log(this.#privateField);
 >console.log(this.#privateField) : void
+>                                : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#privateField : string
+>                   : ^^^^^^
 >this : this
+>     : ^^^^
 
     console.log(this.exposedField);
 >console.log(this.exposedField) : void
+>                               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.exposedField : number
+>                  : ^^^^^^
 >this : this
+>     : ^^^^
 >exposedField : number
+>             : ^^^^^^
   }
 }
 

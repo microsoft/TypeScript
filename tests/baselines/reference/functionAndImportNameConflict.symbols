@@ -1,9 +1,11 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/functionAndImportNameConflict.ts] ////
+
+=== f1.ts ===
 export function f() {
 >f : Symbol(f, Decl(f1.ts, 0, 0))
 }
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 import {f} from './f1';
 >f : Symbol(f, Decl(f2.ts, 0, 23), Decl(f2.ts, 0, 8))
 

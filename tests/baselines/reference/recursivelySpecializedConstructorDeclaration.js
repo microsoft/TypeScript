@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts] ////
+
 //// [recursivelySpecializedConstructorDeclaration.ts]
-module MsPortal.Controls.Base.ItemList {
+namespace MsPortal.Controls.Base.ItemList {
 
     export interface Interface<TValue> {
         // Removing this line fixes the constructor of ItemValue
@@ -17,7 +19,7 @@ module MsPortal.Controls.Base.ItemList {
 
 // Generates:
 /*
-declare module MsPortal.Controls.Base.ItemList {
+declare namespace MsPortal.Controls.Base.ItemList {
     interface Interface<TValue> {
         options: ViewModel<TValue>;
     }
@@ -30,21 +32,7 @@ declare module MsPortal.Controls.Base.ItemList {
 */
 
 //// [recursivelySpecializedConstructorDeclaration.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+"use strict";
 var MsPortal;
 (function (MsPortal) {
     var Controls;
@@ -53,19 +41,13 @@ var MsPortal;
         (function (Base) {
             var ItemList;
             (function (ItemList) {
-                var ItemValue = /** @class */ (function () {
-                    function ItemValue(value) {
+                class ItemValue {
+                    constructor(value) {
                     }
-                    return ItemValue;
-                }());
+                }
                 ItemList.ItemValue = ItemValue;
-                var ViewModel = /** @class */ (function (_super) {
-                    __extends(ViewModel, _super);
-                    function ViewModel() {
-                        return _super !== null && _super.apply(this, arguments) || this;
-                    }
-                    return ViewModel;
-                }(ItemValue));
+                class ViewModel extends ItemValue {
+                }
                 ItemList.ViewModel = ViewModel;
             })(ItemList = Base.ItemList || (Base.ItemList = {}));
         })(Base = Controls.Base || (Controls.Base = {}));
@@ -73,7 +55,7 @@ var MsPortal;
 })(MsPortal || (MsPortal = {}));
 // Generates:
 /*
-declare module MsPortal.Controls.Base.ItemList {
+declare namespace MsPortal.Controls.Base.ItemList {
     interface Interface<TValue> {
         options: ViewModel<TValue>;
     }

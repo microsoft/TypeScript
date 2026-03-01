@@ -1,10 +1,8 @@
-tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(28,9): error TS2553: Computed values are not permitted in an enum with string valued members.
-tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(29,9): error TS2553: Computed values are not permitted in an enum with string valued members.
-tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(30,9): error TS2553: Computed values are not permitted in an enum with string valued members.
-tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(31,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+enumConstantMemberWithTemplateLiterals.ts(28,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+enumConstantMemberWithTemplateLiterals.ts(28,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts (4 errors) ====
+==== enumConstantMemberWithTemplateLiterals.ts (2 errors) ====
     enum T1 {
         a = `1`
     }
@@ -33,17 +31,13 @@ tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(31,9): e
         c = `1` + `2` + `3`,
         d = 1,
         e = `1` - `1`,
-            ~~~~~~~~~
-!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+            ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                  ~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         f = `1` + 1,
-            ~~~~~~~
-!!! error TS2553: Computed values are not permitted in an enum with string valued members.
         g = `1${"2"}3`,
-            ~~~~~~~~~~
-!!! error TS2553: Computed values are not permitted in an enum with string valued members.
         h = `1`.length
-            ~~~~~~~~~~
-!!! error TS2553: Computed values are not permitted in an enum with string valued members.
     }
     
     enum T6 {

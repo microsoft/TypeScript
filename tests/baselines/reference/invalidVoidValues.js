@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/void/invalidVoidValues.ts] ////
+
 //// [invalidVoidValues.ts]
 var x: void;
 x = 1;
@@ -8,17 +10,17 @@ enum E { A }
 x = E;
 x = E.A;
 
-class C { foo: string }
-var a: C;
+class C { foo!: string }
+declare var a: C;
 x = a;
 
 interface I { foo: string }
-var b: I;
+declare var b: I;
 x = b;
 
 x = { f() {} }
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 function f<T>(a: T) {
@@ -27,6 +29,7 @@ function f<T>(a: T) {
 x = f;
 
 //// [invalidVoidValues.js]
+"use strict";
 var x;
 x = 1;
 x = '';
@@ -37,16 +40,11 @@ var E;
 })(E || (E = {}));
 x = E;
 x = E.A;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var a;
+class C {
+}
 x = a;
-var b;
 x = b;
-x = { f: function () { } };
+x = { f() { } };
 var M;
 (function (M) {
     M.x = 1;

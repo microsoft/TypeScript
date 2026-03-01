@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/narrowingTypeofDiscriminant.ts] ////
+
+=== narrowingTypeofDiscriminant.ts ===
+function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
+>f1 : Symbol(f1, Decl(narrowingTypeofDiscriminant.ts, 0, 0))
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 0, 12))
+>kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 0, 18))
+>data : Symbol(data, Decl(narrowingTypeofDiscriminant.ts, 0, 29))
+>kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 0, 48))
+>data : Symbol(data, Decl(narrowingTypeofDiscriminant.ts, 0, 57))
+
+    if (typeof obj.kind === "string") {
+>obj.kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 0, 18), Decl(narrowingTypeofDiscriminant.ts, 0, 48))
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 0, 12))
+>kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 0, 18), Decl(narrowingTypeofDiscriminant.ts, 0, 48))
+
+        obj;  // { kind: 'a', data: string }
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 0, 12))
+    }
+    else {
+        obj;  // { kind: 1, data: number }
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 0, 12))
+    }
+}
+
+function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undefined) {
+>f2 : Symbol(f2, Decl(narrowingTypeofDiscriminant.ts, 7, 1))
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 9, 12))
+>kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 9, 18))
+>data : Symbol(data, Decl(narrowingTypeofDiscriminant.ts, 9, 29))
+>kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 9, 48))
+>data : Symbol(data, Decl(narrowingTypeofDiscriminant.ts, 9, 57))
+
+    if (typeof obj?.kind === "string") {
+>obj?.kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 9, 18), Decl(narrowingTypeofDiscriminant.ts, 9, 48))
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 9, 12))
+>kind : Symbol(kind, Decl(narrowingTypeofDiscriminant.ts, 9, 18), Decl(narrowingTypeofDiscriminant.ts, 9, 48))
+
+        obj;  // { kind: 'a', data: string }
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 9, 12))
+    }
+    else {
+        obj;  // { kind: 1, data: number } | undefined
+>obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 9, 12))
+    }
+}
+
+// Repro from #51700
+
+type WrappedStringOr<T> = { value?: string } | { value?: T };
+>WrappedStringOr : Symbol(WrappedStringOr, Decl(narrowingTypeofDiscriminant.ts, 16, 1))
+>T : Symbol(T, Decl(narrowingTypeofDiscriminant.ts, 20, 21))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>T : Symbol(T, Decl(narrowingTypeofDiscriminant.ts, 20, 21))
+
+function numberOk(wrapped: WrappedStringOr<number> | null) {
+>numberOk : Symbol(numberOk, Decl(narrowingTypeofDiscriminant.ts, 20, 61))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 22, 18))
+>WrappedStringOr : Symbol(WrappedStringOr, Decl(narrowingTypeofDiscriminant.ts, 16, 1))
+
+    if (typeof wrapped?.value !== 'string') {
+>wrapped?.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 22, 18))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+
+        return null;
+    }
+    return wrapped.value;
+>wrapped.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 22, 18))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+}
+
+function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
+>booleanBad : Symbol(booleanBad, Decl(narrowingTypeofDiscriminant.ts, 27, 1))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 29, 20))
+>WrappedStringOr : Symbol(WrappedStringOr, Decl(narrowingTypeofDiscriminant.ts, 16, 1))
+
+    if (typeof wrapped?.value !== 'string') {
+>wrapped?.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 29, 20))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+
+        return null;
+    }
+    return wrapped.value;
+>wrapped.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 29, 20))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
+}
+
+function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
+>booleanFixed : Symbol(booleanFixed, Decl(narrowingTypeofDiscriminant.ts, 34, 1))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 36, 22))
+>WrappedStringOr : Symbol(WrappedStringOr, Decl(narrowingTypeofDiscriminant.ts, 16, 1))
+
+    if (typeof (wrapped?.value) !== 'string') {
+>wrapped?.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 36, 22))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27), Decl(narrowingTypeofDiscriminant.ts, 20, 48))
+
+        return null;
+    }
+    return wrapped.value;
+>wrapped.value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
+>wrapped : Symbol(wrapped, Decl(narrowingTypeofDiscriminant.ts, 36, 22))
+>value : Symbol(value, Decl(narrowingTypeofDiscriminant.ts, 20, 27))
+}
+

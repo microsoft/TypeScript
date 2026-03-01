@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedWords.ts] ////
+
 //// [reservedWords.ts]
 var obj = {
     if: 0,
@@ -18,17 +20,18 @@ var obj2 = {
 
 
 //// [reservedWords.js]
+"use strict";
 var obj = {
-    "if": 0,
-    "debugger": 2,
-    "break": 3,
-    "function": 4
+    if: 0,
+    debugger: 2,
+    break: 3,
+    function: 4
 };
 //This compiles.
 var obj2 = {
-    "if": 0,
-    "while": 1,
-    "debugger": 2,
-    "break": 3,
-    "function": 4
+    if: 0,
+    while: 1,
+    debugger: 2,
+    break: 3,
+    function: 4
 };

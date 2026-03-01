@@ -1,54 +1,78 @@
-=== tests/cases/compiler/deferredLookupTypeResolution.ts ===
+//// [tests/cases/compiler/deferredLookupTypeResolution.ts] ////
+
+=== deferredLookupTypeResolution.ts ===
 // Repro from #17456
 
 type StringContains<S extends string, L extends string> = (
 >StringContains : StringContains<S, L>
+>               : ^^^^^^^^^^^^^^^^^^^^
 
     { [K in S]:      'true' } &
     { [key: string]: 'false' }
 >key : string
+>    : ^^^^^^
 
   )[L]
 
 type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
 >ObjectHasKey : ObjectHasKey<O, L>
+>             : ^^^^^^^^^^^^^^^^^^
 
 type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
 >First : First<T>
+>      : ^^^^^^^^
 
 type T1 = ObjectHasKey<{ a: string }, 'a'>;  // 'true'
 >T1 : "true"
+>   : ^^^^^^
 >a : string
+>  : ^^^^^^
 
 type T2 = ObjectHasKey<{ a: string }, 'b'>;  // 'false'
 >T2 : "false"
+>   : ^^^^^^^
 >a : string
+>  : ^^^^^^
 
 // Verify that mapped type isn't eagerly resolved in type-to-string operation
 
 declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A | B]: any };
 >f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
+>   : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^                      
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 function f2<A extends string>(a: A) {
 >f2 : <A extends string>(a: A) => { [P in A | "x"]: any; }
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 
     return f1(a, 'x');
 >f1(a, 'x') : { [P in A | "x"]: any; }
->f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
+>           : ^^^ ^^^^^^^^^^^^^^^^^^^^
+>f1 : <A_1 extends string, B extends string>(a: A_1, b: B) => { [P in A_1 | B]: any; }
+>   : ^^^^^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^ ^^^^^                        
 >a : A
+>  : ^
 >'x' : "x"
+>    : ^^^
 }
 
 function f3(x: 'a' | 'b') {
->f3 : (x: 'a' | 'b') => { a: any; b: any; x: any; }
+>f3 : (x: "a" | "b") => { a: any; b: any; x: any; }
+>   : ^ ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "a" | "b"
+>  : ^^^^^^^^^
 
     return f2(x);
 >f2(x) : { a: any; b: any; x: any; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <A extends string>(a: A) => { [P in A | "x"]: any; }
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : "a" | "b"
+>  : ^^^^^^^^^
 }
 

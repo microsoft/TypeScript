@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty15.ts] ////
+
 //// [symbolProperty15.ts]
 class C { }
 interface I {
@@ -15,6 +17,7 @@ var i: I;
 bar(i);
 
 //// [symbolProperty15.js]
+"use strict";
 class C {
 }
 foo(new C);

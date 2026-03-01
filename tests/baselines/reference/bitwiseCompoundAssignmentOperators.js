@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts] ////
+
 //// [bitwiseCompoundAssignmentOperators.ts]
 var a = true;
 var b = 1;
@@ -33,6 +35,7 @@ f |= f;
 
 
 //// [bitwiseCompoundAssignmentOperators.js]
+"use strict";
 var a = true;
 var b = 1;
 a ^= a;

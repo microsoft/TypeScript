@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/chainedAssignment2.ts] ////
+
 //// [chainedAssignment2.ts]
 var a: string;
 var b: number;
@@ -10,6 +12,7 @@ a = b = c = d = e = null;
 
 
 //// [chainedAssignment2.js]
+"use strict";
 var a;
 var b;
 var c;

@@ -1,26 +1,47 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts] ////
+
+=== constructorDefaultValuesReferencingThis.ts ===
 class C {
 >C : Symbol(C, Decl(constructorDefaultValuesReferencingThis.ts, 0, 0))
 
+    public baseProp = 1;
+>baseProp : Symbol(C.baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
+
     constructor(x = this) { }
->x : Symbol(x, Decl(constructorDefaultValuesReferencingThis.ts, 1, 16))
+>x : Symbol(x, Decl(constructorDefaultValuesReferencingThis.ts, 2, 16))
 >this : Symbol(C, Decl(constructorDefaultValuesReferencingThis.ts, 0, 0))
 }
 
 class D<T> {
->D : Symbol(D, Decl(constructorDefaultValuesReferencingThis.ts, 2, 1))
->T : Symbol(T, Decl(constructorDefaultValuesReferencingThis.ts, 4, 8))
+>D : Symbol(D, Decl(constructorDefaultValuesReferencingThis.ts, 3, 1))
+>T : Symbol(T, Decl(constructorDefaultValuesReferencingThis.ts, 5, 8))
 
     constructor(x = this) { }
->x : Symbol(x, Decl(constructorDefaultValuesReferencingThis.ts, 5, 16))
->this : Symbol(D, Decl(constructorDefaultValuesReferencingThis.ts, 2, 1))
+>x : Symbol(x, Decl(constructorDefaultValuesReferencingThis.ts, 6, 16))
+>this : Symbol(D, Decl(constructorDefaultValuesReferencingThis.ts, 3, 1))
 }
 
 class E<T> {
->E : Symbol(E, Decl(constructorDefaultValuesReferencingThis.ts, 6, 1))
->T : Symbol(T, Decl(constructorDefaultValuesReferencingThis.ts, 8, 8))
+>E : Symbol(E, Decl(constructorDefaultValuesReferencingThis.ts, 7, 1))
+>T : Symbol(T, Decl(constructorDefaultValuesReferencingThis.ts, 9, 8))
 
     constructor(public x = this) { }
->x : Symbol(E.x, Decl(constructorDefaultValuesReferencingThis.ts, 9, 16))
->this : Symbol(E, Decl(constructorDefaultValuesReferencingThis.ts, 6, 1))
+>x : Symbol(E.x, Decl(constructorDefaultValuesReferencingThis.ts, 10, 16))
+>this : Symbol(E, Decl(constructorDefaultValuesReferencingThis.ts, 7, 1))
 }
+
+class F extends C {
+>F : Symbol(F, Decl(constructorDefaultValuesReferencingThis.ts, 11, 1))
+>C : Symbol(C, Decl(constructorDefaultValuesReferencingThis.ts, 0, 0))
+
+    constructor(y = this.baseProp) {
+>y : Symbol(y, Decl(constructorDefaultValuesReferencingThis.ts, 14, 16))
+>this.baseProp : Symbol(C.baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
+>this : Symbol(F, Decl(constructorDefaultValuesReferencingThis.ts, 11, 1))
+>baseProp : Symbol(C.baseProp, Decl(constructorDefaultValuesReferencingThis.ts, 0, 9))
+
+        super();
+>super : Symbol(C, Decl(constructorDefaultValuesReferencingThis.ts, 0, 0))
+    }
+}
+

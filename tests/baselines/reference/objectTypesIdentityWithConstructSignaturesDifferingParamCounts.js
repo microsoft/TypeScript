@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts] ////
+
 //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts]
 // object types are identical structurally
 
@@ -77,21 +79,16 @@ function foo15(x: C<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js]
+"use strict";
 // object types are identical structurally
-var B = /** @class */ (function () {
-    function B(x, y) {
-        return null;
-    }
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C(x, y) {
-        return null;
-    }
-    return C;
-}());
+class B {
+    constructor(x, y) { return null; }
+}
+class C {
+    constructor(x, y) { return null; }
+}
 var a;
-var b = { "new": function (x) { return ''; } }; // not a construct signature, function called new
+var b = { new(x) { return ''; } }; // not a construct signature, function called new
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

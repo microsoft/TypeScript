@@ -1,14 +1,22 @@
-=== tests/cases/compiler/node_modules/pkg/entrypoint.d.ts ===
+//// [tests/cases/compiler/moduleResolutionWithModule.ts] ////
+
+=== node_modules/pkg/entrypoint.d.ts ===
 export declare function thing(): void;
 >thing : () => void
+>      : ^^^^^^    
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as p from "pkg";
 >p : typeof p
+>  : ^^^^^^^^
 
 p.thing();
 >p.thing() : void
+>          : ^^^^
 >p.thing : () => void
+>        : ^^^^^^    
 >p : typeof p
+>  : ^^^^^^^^
 >thing : () => void
+>      : ^^^^^^    
 

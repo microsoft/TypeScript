@@ -1,9 +1,0 @@
-/*====== /tests/cases/fourslash/a.ts ======*/
-
-const name = {};
-export { name as [|RENAME|] };
-
-/*====== /tests/cases/fourslash/b.ts ======*/
-
-import { RENAME } from './a';
-const x = RENAME.toString();

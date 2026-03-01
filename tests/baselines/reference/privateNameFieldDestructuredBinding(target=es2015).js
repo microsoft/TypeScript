@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts] ////
+
 //// [privateNameFieldDestructuredBinding.ts]
 class A {
     #field = 1;
@@ -25,6 +27,7 @@ class A {
 
 
 //// [privateNameFieldDestructuredBinding.js]
+"use strict";
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -33,6 +36,12 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 };
 var _A_field;
 class A {
+    testObject() {
+        return { x: 10, y: 6 };
+    }
+    testArray() {
+        return [10, 11];
+    }
     constructor() {
         var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         _A_field.set(this, 1);
@@ -45,12 +54,6 @@ class A {
         (_h = this, _j = this, { a: ({ set value(_m) { __classPrivateFieldSet(_h, _A_field, _m, "f"); } }).value = 1, b: [({ set value(_m) { __classPrivateFieldSet(_j, _A_field, _m, "f"); } }).value = 1] } = { b: [] });
         _k = this, [({ set value(_m) { __classPrivateFieldSet(_k, _A_field, _m, "f"); } }).value = 2] = [];
         _l = this.otherObject, [({ set value(_m) { __classPrivateFieldSet(_l, _A_field, _m, "f"); } }).value = 2] = [];
-    }
-    testObject() {
-        return { x: 10, y: 6 };
-    }
-    testArray() {
-        return [10, 11];
     }
     static test(_a) {
         [({ set value(_b) { __classPrivateFieldSet(_a, _A_field, _b, "f"); } }).value] = [2];

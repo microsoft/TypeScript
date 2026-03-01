@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
-tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.d.ts(1,14): error TS1183: An implementation cannot be declared in ambient contexts.
+parserFunctionDeclaration2.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+parserFunctionDeclaration2.d.ts(1,14): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.d.ts (2 errors) ====
+==== parserFunctionDeclaration2.d.ts (2 errors) ====
     function F() {
     ~~~~~~~~
 !!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.

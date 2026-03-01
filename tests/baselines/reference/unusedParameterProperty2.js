@@ -1,18 +1,18 @@
+//// [tests/cases/compiler/unusedParameterProperty2.ts] ////
+
 //// [unusedParameterProperty2.ts]
 class A {
     constructor(private used) {
         let foge = used;
-        foge += "";
     }
 }
 
 
 //// [unusedParameterProperty2.js]
-var A = /** @class */ (function () {
-    function A(used) {
+"use strict";
+class A {
+    constructor(used) {
         this.used = used;
-        var foge = used;
-        foge += "";
+        let foge = used;
     }
-    return A;
-}());
+}

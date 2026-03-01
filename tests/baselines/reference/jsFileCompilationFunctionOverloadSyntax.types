@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/jsFileCompilationFunctionOverloadSyntax.ts] ////
+
+=== a.js ===
+function foo();
+>foo : () => any
+>    : ^^^^^^^^^
+

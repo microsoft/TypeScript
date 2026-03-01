@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace8.ts] ////
+
+=== /a.ts ===
+export class A {}
+>A : A
+>  : ^
+
+export class B {}
+>B : B
+>  : ^
+
+=== /b.ts ===
+export class B {}
+>B : B
+>  : ^
+
+export class C {}
+>C : C
+>  : ^
+
+=== /c.ts ===
+
+export type * from "./a";
+export * from "./b"; // Collision error
+
+=== /d.ts ===
+import { A, B, C } from "./c";
+>A : typeof A
+>  : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+
+let _: A = new A();   // Error
+>_ : A
+>  : ^
+>new A() : A
+>        : ^
+>A : typeof A
+>  : ^^^^^^^^
+
+let __: B = new B();  // Ok
+>__ : B
+>   : ^
+>new B() : B
+>        : ^
+>B : typeof B
+>  : ^^^^^^^^
+
+let ___: C = new C(); // Ok
+>___ : C
+>    : ^
+>new C() : C
+>        : ^
+>C : typeof C
+>  : ^^^^^^^^
+

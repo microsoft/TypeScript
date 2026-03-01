@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocParameterParsingInvalidName.ts] ////
+
 //// [jsdocParameterParsingInvalidName.ts]
 class c {
     /**
@@ -8,13 +10,11 @@ class c {
 }
 
 //// [jsdocParameterParsingInvalidName.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
+"use strict";
+class c {
     /**
      * @param {string} [`foo]
      */
-    c.prototype.method = function (foo) {
-    };
-    return c;
-}());
+    method(foo) {
+    }
+}

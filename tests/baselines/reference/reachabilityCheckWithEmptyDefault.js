@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts] ////
+
 //// [reachabilityCheckWithEmptyDefault.ts]
 declare function print(s: string): void;
 function foo(x: any) {
@@ -9,6 +11,7 @@ function foo(x: any) {
 }
 
 //// [reachabilityCheckWithEmptyDefault.js]
+"use strict";
 function foo(x) {
     switch (x) {
         case 1: return;

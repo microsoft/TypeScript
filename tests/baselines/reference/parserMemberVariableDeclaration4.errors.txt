@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration4.ts(2,3): error TS1031: 'export' modifier cannot appear on class elements of this kind.
+parserMemberVariableDeclaration4.ts(2,3): error TS1031: 'export' modifier cannot appear on class elements of this kind.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration4.ts (1 errors) ====
+==== parserMemberVariableDeclaration4.ts (1 errors) ====
     class C {
       export Foo;
       ~~~~~~

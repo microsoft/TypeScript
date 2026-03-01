@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorArgs.ts ===
+//// [tests/cases/compiler/constructorArgs.ts] ////
+
+=== constructorArgs.ts ===
 interface Options {
 >Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
 

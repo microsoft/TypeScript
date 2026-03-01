@@ -1,7 +1,7 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveAsProperty.ts(7,28): error TS2322: Type 'string' is not assignable to type 'object'.
+nonPrimitiveAsProperty.ts(7,28): error TS2322: Type 'string' is not assignable to type 'object'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAsProperty.ts (1 errors) ====
+==== nonPrimitiveAsProperty.ts (1 errors) ====
     interface WithNonPrimitive {
         foo: object
     }
@@ -11,5 +11,5 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAsProperty.ts(7,28): erro
     var b: WithNonPrimitive = {foo: "bar"}; // expect error
                                ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'object'.
-!!! related TS6500 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAsProperty.ts:2:5: The expected type comes from property 'foo' which is declared here on type 'WithNonPrimitive'
+!!! related TS6500 nonPrimitiveAsProperty.ts:2:5: The expected type comes from property 'foo' which is declared here on type 'WithNonPrimitive'
     

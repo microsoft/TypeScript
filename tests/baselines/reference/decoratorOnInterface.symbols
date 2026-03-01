@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts ===
+//// [tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts] ////
+
+=== decoratorOnInterface.ts ===
 declare function dec<T>(target: T): T;
 >dec : Symbol(dec, Decl(decoratorOnInterface.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorOnInterface.ts, 0, 21))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elidedEmbeddedStatementsReplacedWithSemicolon.ts] ////
+
 //// [elidedEmbeddedStatementsReplacedWithSemicolon.ts]
 if (1)
     const enum A {}
@@ -25,6 +27,7 @@ with (window)
     const enum H {}
 
 //// [elidedEmbeddedStatementsReplacedWithSemicolon.js]
+"use strict";
 if (1)
     ;
 else
@@ -36,12 +39,10 @@ while (0)
     ;
 for (; 0;)
     ;
-for (var _ in [])
+for (let _ in [])
     ;
-for (var _i = 0, _a = []; _i < _a.length; _i++) {
-    var _ = _a[_i];
+for (let _ of [])
     ;
-}
 // @ts-ignore suppress `with` statement error
 with (window)
     ;

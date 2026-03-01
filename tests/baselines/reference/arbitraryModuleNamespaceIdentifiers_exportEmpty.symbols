@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_exportEmpty.ts] ////
+
+=== arbitraryModuleNamespaceIdentifiers_exportEmpty.ts ===
+// This should result in a type error. In particular, the empty string is a now
+// a valid module export name, and should be treated as such here.
+const empty = "empty";
+>empty : Symbol(empty, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 2, 5))
+
+export { empty as "" };
+>empty : Symbol(empty, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 2, 5))
+>"" : Symbol("", Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 3, 8))
+
+import { "" as foo } from "./arbitraryModuleNamespaceIdentifiers_exportEmpty";
+>foo : Symbol(foo, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 4, 8))
+
+const bar: "type error expected here" = foo;
+>bar : Symbol(bar, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 5, 5))
+>foo : Symbol(foo, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 4, 8))
+

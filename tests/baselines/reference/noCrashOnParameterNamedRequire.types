@@ -1,25 +1,36 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/noCrashOnParameterNamedRequire.ts] ////
+
+=== index.js ===
 (function(require, module, exports){
 >(function(require, module, exports){    const mod = require("./mod");    mod.foo;})(null, null, null) : void
+>                                                                                                      : ^^^^
 >(function(require, module, exports){    const mod = require("./mod");    mod.foo;}) : (require: any, module: any, exports: any) => void
+>                                                                                    : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^
 >function(require, module, exports){    const mod = require("./mod");    mod.foo;} : (require: any, module: any, exports: any) => void
+>                                                                                  : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^
 >require : any
+>        : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 
     const mod = require("./mod");
 >mod : any
+>    : ^^^
 >require("./mod") : any
+>                 : ^^^
 >require : any
+>        : ^^^
 >"./mod" : "./mod"
+>        : ^^^^^^^
 
     mod.foo;
 >mod.foo : any
+>        : ^^^
 >mod : any
+>    : ^^^
 >foo : any
+>    : ^^^
 
 })(null, null, null);
->null : null
->null : null
->null : null
-

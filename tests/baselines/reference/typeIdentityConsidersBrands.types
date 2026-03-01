@@ -1,77 +1,115 @@
-=== tests/cases/compiler/typeIdentityConsidersBrands.ts ===
+//// [tests/cases/compiler/typeIdentityConsidersBrands.ts] ////
+
+=== typeIdentityConsidersBrands.ts ===
 class X{
 >X : X
+>  : ^
 
       name: string;
 >name : string
+>     : ^^^^^^
 }
 
 class Y{
 >Y : Y
+>  : ^
 
       name: string;
 >name : string
+>     : ^^^^^^
 }
 
 class X_1 {
 >X_1 : X_1
+>    : ^^^
 
     private name: string;
 >name : string
+>     : ^^^^^^
 }
 
 class Y_1 {
 >Y_1 : Y_1
+>    : ^^^
 
     private name: string;
 >name : string
+>     : ^^^^^^
 }
 
 function foo(arg: X){}
 >foo : (arg: X) => void
+>    : ^   ^^ ^^^^^^^^^
 >arg : X
+>    : ^
  
 var a = new Y();
 >a : Y
+>  : ^
 >new Y() : Y
+>        : ^
 >Y : typeof Y
+>  : ^^^^^^^^
 
 var b = new X();
 >b : X
+>  : ^
 >new X() : X
+>        : ^
 >X : typeof X
+>  : ^^^^^^^^
  
 a = b; // ok
 >a = b : X
+>      : ^
 >a : Y
+>  : ^
 >b : X
+>  : ^
 
 foo(a); // ok
 >foo(a) : void
+>       : ^^^^
 >foo : (arg: X) => void
+>    : ^   ^^ ^^^^^^^^^
 >a : Y
+>  : ^
 
 var a2 = new Y_1();
 >a2 : Y_1
+>   : ^^^
 >new Y_1() : Y_1
+>          : ^^^
 >Y_1 : typeof Y_1
+>    : ^^^^^^^^^^
 
 var b2 = new X_1();
 >b2 : X_1
+>   : ^^^
 >new X_1() : X_1
+>          : ^^^
 >X_1 : typeof X_1
+>    : ^^^^^^^^^^
 
 function foo2(arg: X_1) { }
 >foo2 : (arg: X_1) => void
+>     : ^   ^^   ^^^^^^^^^
 >arg : X_1
+>    : ^^^
 
 a2 = b2; // should error
 >a2 = b2 : X_1
+>        : ^^^
 >a2 : Y_1
+>   : ^^^
 >b2 : X_1
+>   : ^^^
 
 foo2(a2); // should error
 >foo2(a2) : void
+>         : ^^^^
 >foo2 : (arg: X_1) => void
+>     : ^   ^^   ^^^^^^^^^
 >a2 : Y_1
+>   : ^^^
 

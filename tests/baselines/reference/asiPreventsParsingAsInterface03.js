@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface03.ts] ////
+
 //// [asiPreventsParsingAsInterface03.ts]
 var interface: number, I: string;
 
@@ -8,6 +10,7 @@ namespace n {
 }
 
 //// [asiPreventsParsingAsInterface03.js]
+"use strict";
 var interface, I;
 var n;
 (function (n) {

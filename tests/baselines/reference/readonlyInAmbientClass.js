@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInAmbientClass.ts] ////
+
 //// [readonlyInAmbientClass.ts]
 declare class C{
 	constructor(readonly x: number);
@@ -5,3 +7,4 @@ declare class C{
 }
 
 //// [readonlyInAmbientClass.js]
+"use strict";

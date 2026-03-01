@@ -1,0 +1,23 @@
+// === Completions ===
+=== /a.ts ===
+// import * as foo from "";
+//                       ^
+// | ----------------------------------------------------------------------
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.ts",
+      "position": 22,
+      "name": ""
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": true,
+      "entries": [],
+      "defaultCommitCharacters": []
+    }
+  }
+]

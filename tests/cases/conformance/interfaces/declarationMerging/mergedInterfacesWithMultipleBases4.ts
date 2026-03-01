@@ -1,3 +1,4 @@
+// @target: es2015
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 
 class C<T> {

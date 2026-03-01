@@ -1,0 +1,660 @@
+//// [tests/cases/compiler/divergentAccessorsTypes8.ts] ////
+
+=== divergentAccessorsTypes8.ts ===
+export {}
+
+interface Serializer {
+  set value(v: string | number | boolean);
+>value : string
+>      : ^^^^^^
+>v : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  get value(): string;
+>value : string
+>      : ^^^^^^
+}
+declare let box: Serializer;
+>box : Serializer
+>    : ^^^^^^^^^^
+
+const v = box['value']
+>v : string
+>  : ^^^^^^
+>box['value'] : string
+>             : ^^^^^^
+>box : Serializer
+>    : ^^^^^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+
+box['value'] = true;
+>box['value'] = true : true
+>                    : ^^^^
+>box['value'] : string | number | boolean
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>box : Serializer
+>    : ^^^^^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+>true : true
+>     : ^^^^
+
+box['value'] = 42;
+>box['value'] = 42 : 42
+>                  : ^^
+>box['value'] : string | number | boolean
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>box : Serializer
+>    : ^^^^^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+box['value'] = "hello";
+>box['value'] = "hello" : "hello"
+>                       : ^^^^^^^
+>box['value'] : string | number | boolean
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>box : Serializer
+>    : ^^^^^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+interface Element {
+    get style(): CSSStyleDeclaration;
+>style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
+
+    set style(cssText: string);
+>style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
+>cssText : string
+>        : ^^^^^^
+}
+
+declare const element: Element;
+>element : Element
+>        : ^^^^^^^
+
+element['style'] = "color: red";
+>element['style'] = "color: red" : "color: red"
+>                                : ^^^^^^^^^^^^
+>element['style'] : string
+>                 : ^^^^^^
+>element : Element
+>        : ^^^^^^^
+>'style' : "style"
+>        : ^^^^^^^
+>"color: red" : "color: red"
+>             : ^^^^^^^^^^^^
+
+element['style'] = element.style;
+>element['style'] = element.style : CSSStyleDeclaration
+>                                 : ^^^^^^^^^^^^^^^^^^^
+>element['style'] : string
+>                 : ^^^^^^
+>element : Element
+>        : ^^^^^^^
+>'style' : "style"
+>        : ^^^^^^^
+>element.style : CSSStyleDeclaration
+>              : ^^^^^^^^^^^^^^^^^^^
+>element : Element
+>        : ^^^^^^^
+>style : CSSStyleDeclaration
+>      : ^^^^^^^^^^^^^^^^^^^
+
+class One {
+>One : One
+>    : ^^^
+
+  get prop1(): string {
+>prop1 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop1(s: string | number) {}
+>prop1 : string
+>      : ^^^^^^
+>s : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  get prop2(): string {
+>prop2 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop2(s: string | number) {}
+>prop2 : string
+>      : ^^^^^^
+>s : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  prop3: number = 42;
+>prop3 : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+
+  get prop4(): string {
+>prop4 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop4(s: string | number) {}
+>prop4 : string
+>      : ^^^^^^
+>s : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+class Two {
+>Two : Two
+>    : ^^^
+
+  get prop1(): string {
+>prop1 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop1(s: string | number) {}
+>prop1 : string
+>      : ^^^^^^
+>s : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  get prop2(): string {
+>prop2 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop2(s: string) {}
+>prop2 : string
+>      : ^^^^^^
+>s : string
+>  : ^^^^^^
+
+  get prop3(): string {
+>prop3 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop3(s: string | boolean) {}
+>prop3 : string
+>      : ^^^^^^
+>s : string | boolean
+>  : ^^^^^^^^^^^^^^^^
+
+  get prop4(): string {
+>prop4 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop4(s: string | boolean) {}
+>prop4 : string
+>      : ^^^^^^
+>s : string | boolean
+>  : ^^^^^^^^^^^^^^^^
+}
+
+declare const u1: One | Two;
+>u1 : One | Two
+>   : ^^^^^^^^^
+
+u1['prop1'] = 42;
+>u1['prop1'] = 42 : 42
+>                 : ^^
+>u1['prop1'] : string | number
+>            : ^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+u1['prop1'] = "hello";
+>u1['prop1'] = "hello" : "hello"
+>                      : ^^^^^^^
+>u1['prop1'] : string | number
+>            : ^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+u1['prop2'] = 42;
+>u1['prop2'] = 42 : 42
+>                 : ^^
+>u1['prop2'] : string | number
+>            : ^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+u1['prop2'] = "hello";
+>u1['prop2'] = "hello" : "hello"
+>                      : ^^^^^^^
+>u1['prop2'] : string | number
+>            : ^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+u1['prop3'] = 42;
+>u1['prop3'] = 42 : 42
+>                 : ^^
+>u1['prop3'] : string | number | boolean
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop3' : "prop3"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+u1['prop3'] = "hello";
+>u1['prop3'] = "hello" : "hello"
+>                      : ^^^^^^^
+>u1['prop3'] : string | number | boolean
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop3' : "prop3"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+u1['prop3'] = true;
+>u1['prop3'] = true : true
+>                   : ^^^^
+>u1['prop3'] : string | number | boolean
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop3' : "prop3"
+>        : ^^^^^^^
+>true : true
+>     : ^^^^
+
+u1['prop4'] = 42;
+>u1['prop4'] = 42 : 42
+>                 : ^^
+>u1['prop4'] : string | number | boolean
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop4' : "prop4"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+u1['prop4'] = "hello";
+>u1['prop4'] = "hello" : "hello"
+>                      : ^^^^^^^
+>u1['prop4'] : string | number | boolean
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop4' : "prop4"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+u1['prop4'] = true;
+>u1['prop4'] = true : true
+>                   : ^^^^
+>u1['prop4'] : string | number | boolean
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>u1 : One | Two
+>   : ^^^^^^^^^
+>'prop4' : "prop4"
+>        : ^^^^^^^
+>true : true
+>     : ^^^^
+
+declare const i: One & Two;
+>i : One & Two
+>  : ^^^^^^^^^
+
+const iv1 = i['prop1'];
+>iv1 : string
+>    : ^^^^^^
+>i['prop1'] : string
+>           : ^^^^^^
+>i : One & Two
+>  : ^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+
+i['prop1'] = 42;
+>i['prop1'] = 42 : 42
+>                : ^^
+>i['prop1'] : string | number
+>           : ^^^^^^^^^^^^^^^
+>i : One & Two
+>  : ^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+i['prop1'] = "hello";
+>i['prop1'] = "hello" : "hello"
+>                     : ^^^^^^^
+>i['prop1'] : string | number
+>           : ^^^^^^^^^^^^^^^
+>i : One & Two
+>  : ^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const iv2 = i['prop2'];
+>iv2 : string
+>    : ^^^^^^
+>i['prop2'] : string
+>           : ^^^^^^
+>i : One & Two
+>  : ^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+
+i['prop2'] = 42;
+>i['prop2'] = 42 : 42
+>                : ^^
+>i['prop2'] : string
+>           : ^^^^^^
+>i : One & Two
+>  : ^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+i['prop2'] = "hello";
+>i['prop2'] = "hello" : "hello"
+>                     : ^^^^^^^
+>i['prop2'] : string
+>           : ^^^^^^
+>i : One & Two
+>  : ^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+class Three {
+>Three : Three
+>      : ^^^^^
+
+  get prop1(): string {
+>prop1 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop1(s: string | number) {}
+>prop1 : string
+>      : ^^^^^^
+>s : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  prop2: number = 42;
+>prop2 : number
+>      : ^^^^^^
+>42 : 42
+>   : ^^
+}
+
+class Four {
+>Four : Four
+>     : ^^^^
+
+  get prop1(): "hello" {
+>prop1 : "hello"
+>      : ^^^^^^^
+
+    return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+  }
+  set prop1(s: "hello" | number) {}
+>prop1 : "hello"
+>      : ^^^^^^^
+>s : number | "hello"
+>  : ^^^^^^^^^^^^^^^^
+
+  get prop2(): string {
+>prop2 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop2(s: string | 42) {}
+>prop2 : string
+>      : ^^^^^^
+>s : string | 42
+>  : ^^^^^^^^^^^
+}
+
+class Five {
+>Five : Five
+>     : ^^^^
+
+  get prop1(): "hello" {
+>prop1 : "hello"
+>      : ^^^^^^^
+
+    return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+  }
+  set prop1(s: "hello" | boolean) {}
+>prop1 : "hello"
+>      : ^^^^^^^
+>s : boolean | "hello"
+>  : ^^^^^^^^^^^^^^^^^
+
+  get prop2(): string {
+>prop2 : string
+>      : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+  }
+  set prop2(s: string | number | boolean) {}
+>prop2 : string
+>      : ^^^^^^
+>s : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare const i2: Three & Four & Five;
+>i2 : Three & Four & Five
+>   : ^^^^^^^^^^^^^^^^^^^
+
+i2['prop1'] = 42;
+>i2['prop1'] = 42 : 42
+>                 : ^^
+>i2['prop1'] : "hello"
+>            : ^^^^^^^
+>i2 : Three & Four & Five
+>   : ^^^^^^^^^^^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+i2['prop1'] = "hello";
+>i2['prop1'] = "hello" : "hello"
+>                      : ^^^^^^^
+>i2['prop1'] : "hello"
+>            : ^^^^^^^
+>i2 : Three & Four & Five
+>   : ^^^^^^^^^^^^^^^^^^^
+>'prop1' : "prop1"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+i2['prop2'] = 42;
+>i2['prop2'] = 42 : 42
+>                 : ^^
+>i2['prop2'] : 42
+>            : ^^
+>i2 : Three & Four & Five
+>   : ^^^^^^^^^^^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
+
+i2['prop2'] = "hello";
+>i2['prop2'] = "hello" : "hello"
+>                      : ^^^^^^^
+>i2['prop2'] : 42
+>            : ^^
+>i2 : Three & Four & Five
+>   : ^^^^^^^^^^^^^^^^^^^
+>'prop2' : "prop2"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+class Six {
+>Six : Six
+>    : ^^^
+
+  get prop1(): boolean | number {
+>prop1 : number | boolean
+>      : ^^^^^^^^^^^^^^^^
+
+    return 42;
+>42 : 42
+>   : ^^
+  }
+  set prop1(s: boolean | string) {}
+>prop1 : number | boolean
+>      : ^^^^^^^^^^^^^^^^
+>s : string | boolean
+>  : ^^^^^^^^^^^^^^^^
+
+  get prop2(): bigint | number {
+>prop2 : number | bigint
+>      : ^^^^^^^^^^^^^^^
+
+    return 10;
+>10 : 10
+>   : ^^
+  }
+  set prop2(s: boolean | null) {}
+>prop2 : number | bigint
+>      : ^^^^^^^^^^^^^^^
+>s : boolean | null
+>  : ^^^^^^^^^^^^^^
+}
+
+declare const s1: Six
+>s1 : Six
+>   : ^^^
+
+declare const k1: 'prop1' | 'prop2'
+>k1 : "prop1" | "prop2"
+>   : ^^^^^^^^^^^^^^^^^
+
+const sv1 = s1[k1]
+>sv1 : number | bigint | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>s1[k1] : number | bigint | boolean
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>s1 : Six
+>   : ^^^
+>k1 : "prop1" | "prop2"
+>   : ^^^^^^^^^^^^^^^^^
+
+s1[k1] = 42
+>s1[k1] = 42 : 42
+>            : ^^
+>s1[k1] : boolean
+>       : ^^^^^^^
+>s1 : Six
+>   : ^^^
+>k1 : "prop1" | "prop2"
+>   : ^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+s1[k1] = true
+>s1[k1] = true : true
+>              : ^^^^
+>s1[k1] : boolean
+>       : ^^^^^^^
+>s1 : Six
+>   : ^^^
+>k1 : "prop1" | "prop2"
+>   : ^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+s1[k1] = ''
+>s1[k1] = '' : ""
+>            : ^^
+>s1[k1] : boolean
+>       : ^^^^^^^
+>s1 : Six
+>   : ^^^
+>k1 : "prop1" | "prop2"
+>   : ^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+s1[k1] = null
+>s1[k1] = null : null
+>              : ^^^^
+>s1[k1] : boolean
+>       : ^^^^^^^
+>s1 : Six
+>   : ^^^
+>k1 : "prop1" | "prop2"
+>   : ^^^^^^^^^^^^^^^^^
+

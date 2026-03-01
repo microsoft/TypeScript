@@ -1,3 +1,4 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
 // class ClassStaticBocks {
 //     static x;
@@ -8,38 +9,36 @@
 //     static {}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-      "kind": "keyword",
-      "name": "static",
-      "textSpan": {
-        "start": 43,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "static",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 43,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
+  // class ClassStaticBocks {
+  //     static x;
+  //     /*FIND ALL REFS*/[|static|] {}
+  //     static y;
+  //     static {}
+  //     static y;
+  //     static {}
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "static",
+    "displayParts": [
+     {
+      "text": "static",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
 // class ClassStaticBocks {
 //     static x;
@@ -50,76 +49,65 @@
 //     static {}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-      "kind": "keyword",
-      "name": "static",
-      "textSpan": {
-        "start": 71,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "static",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 71,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
+  // class ClassStaticBocks {
+  //     static x;
+  //     static {}
+  //     static y;
+  //     /*FIND ALL REFS*/[|static|] {}
+  //     static y;
+  //     static {}
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "static",
+    "displayParts": [
+     {
+      "text": "static",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
-// class ClassStaticBocks {
-//     static x;
-//     static {}
+// --- (line: 3) skipped ---
 //     static y;
 //     static {}
 //     static y;
 //     /*FIND ALL REFS*/[|static|] {}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-      "kind": "keyword",
-      "name": "static",
-      "textSpan": {
-        "start": 99,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "static",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 99,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsClassStaticBlocks.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsClassStaticBlocks.ts ===
+  // --- (line: 3) skipped ---
+  //     static y;
+  //     static {}
+  //     static y;
+  //     /*FIND ALL REFS*/[|static|] {}
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "static",
+    "displayParts": [
+     {
+      "text": "static",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

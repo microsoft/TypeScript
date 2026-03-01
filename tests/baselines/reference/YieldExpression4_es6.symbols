@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression4_es6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression4_es6.ts] ////
+
+=== YieldExpression4_es6.ts ===
 function* foo() {
 >foo : Symbol(foo, Decl(YieldExpression4_es6.ts, 0, 0))
 

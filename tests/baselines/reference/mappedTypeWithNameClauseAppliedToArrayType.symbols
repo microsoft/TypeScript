@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/mappedTypeWithNameClauseAppliedToArrayType.ts] ////
+
+=== mappedTypeWithNameClauseAppliedToArrayType.ts ===
+type Mappy<T extends unknown[]> = { [K in keyof T as K]: T[K] };
+>Mappy : Symbol(Mappy, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 11))
+>K : Symbol(K, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 37))
+>T : Symbol(T, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 11))
+>K : Symbol(K, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 37))
+>T : Symbol(T, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 11))
+>K : Symbol(K, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 37))
+
+type NotArray = Mappy<number[]>;
+>NotArray : Symbol(NotArray, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 64))
+>Mappy : Symbol(Mappy, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 0))
+
+declare function doArrayStuff(x: unknown[]): void;
+>doArrayStuff : Symbol(doArrayStuff, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 1, 32))
+>x : Symbol(x, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 3, 30))
+
+declare const x: NotArray;
+>x : Symbol(x, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 4, 13))
+>NotArray : Symbol(NotArray, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 0, 64))
+
+doArrayStuff(x);
+>doArrayStuff : Symbol(doArrayStuff, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 1, 32))
+>x : Symbol(x, Decl(mappedTypeWithNameClauseAppliedToArrayType.ts, 4, 13))
+

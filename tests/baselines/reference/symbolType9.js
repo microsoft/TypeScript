@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType9.ts] ////
+
 //// [symbolType9.ts]
 var s = Symbol.for("equal");
 s == s;
@@ -10,6 +12,7 @@ s !== s;
 false !== s;
 
 //// [symbolType9.js]
+"use strict";
 var s = Symbol.for("equal");
 s == s;
 s == true;

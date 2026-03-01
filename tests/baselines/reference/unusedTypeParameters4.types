@@ -1,7 +1,11 @@
-=== tests/cases/compiler/unusedTypeParameters4.ts ===
+//// [tests/cases/compiler/unusedTypeParameters4.ts] ////
+
+=== unusedTypeParameters4.ts ===
 var x: {
 >x : new <T, U>(a: T) => void
+>  : ^^^^^ ^^ ^^ ^^ ^^^^^    
 
     new <T, U>(a: T): void;
 >a : T
+>  : ^
 }

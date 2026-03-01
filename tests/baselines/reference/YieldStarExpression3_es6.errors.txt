@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/YieldStarExpression3_es6.ts(2,12): error TS1109: Expression expected.
+YieldStarExpression3_es6.ts(2,12): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/YieldStarExpression3_es6.ts (1 errors) ====
+==== YieldStarExpression3_es6.ts (1 errors) ====
     function *g() {
         yield *;
                ~

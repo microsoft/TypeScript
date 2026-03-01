@@ -1,12 +1,12 @@
-tests/cases/compiler/mergedDeclarationExports.ts(13,11): error TS2395: Individual declarations in merged declaration 'c' must be all exported or all local.
-tests/cases/compiler/mergedDeclarationExports.ts(14,18): error TS2395: Individual declarations in merged declaration 'c' must be all exported or all local.
-tests/cases/compiler/mergedDeclarationExports.ts(17,11): error TS2395: Individual declarations in merged declaration 'd' must be all exported or all local.
-tests/cases/compiler/mergedDeclarationExports.ts(18,14): error TS2395: Individual declarations in merged declaration 'd' must be all exported or all local.
-tests/cases/compiler/mergedDeclarationExports.ts(21,11): error TS2395: Individual declarations in merged declaration 'N' must be all exported or all local.
-tests/cases/compiler/mergedDeclarationExports.ts(22,18): error TS2395: Individual declarations in merged declaration 'N' must be all exported or all local.
+mergedDeclarationExports.ts(13,11): error TS2395: Individual declarations in merged declaration 'c' must be all exported or all local.
+mergedDeclarationExports.ts(14,18): error TS2395: Individual declarations in merged declaration 'c' must be all exported or all local.
+mergedDeclarationExports.ts(17,11): error TS2395: Individual declarations in merged declaration 'd' must be all exported or all local.
+mergedDeclarationExports.ts(18,14): error TS2395: Individual declarations in merged declaration 'd' must be all exported or all local.
+mergedDeclarationExports.ts(21,11): error TS2395: Individual declarations in merged declaration 'N' must be all exported or all local.
+mergedDeclarationExports.ts(22,18): error TS2395: Individual declarations in merged declaration 'N' must be all exported or all local.
 
 
-==== tests/cases/compiler/mergedDeclarationExports.ts (6 errors) ====
+==== mergedDeclarationExports.ts (6 errors) ====
     // OK -- one is type, one is value
     interface b {}
     export const b = 1;

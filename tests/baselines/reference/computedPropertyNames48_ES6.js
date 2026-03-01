@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES6.ts] ////
+
 //// [computedPropertyNames48_ES6.ts]
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
 
@@ -18,6 +20,7 @@ extractIndexer({
 }); // Should return any (widened form of undefined)
 
 //// [computedPropertyNames48_ES6.js]
+"use strict";
 var E;
 (function (E) {
     E[E["x"] = 0] = "x";

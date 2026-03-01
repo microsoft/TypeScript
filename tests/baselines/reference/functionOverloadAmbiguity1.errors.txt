@@ -1,7 +1,7 @@
-tests/cases/compiler/functionOverloadAmbiguity1.ts(4,18): error TS2339: Property 'length' does not exist on type 'number'.
+functionOverloadAmbiguity1.ts(4,18): error TS2339: Property 'length' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/functionOverloadAmbiguity1.ts (1 errors) ====
+==== functionOverloadAmbiguity1.ts (1 errors) ====
     function callb(lam: (l: number) => void );
     function callb(lam: (n: string) => void );
     function callb(a) { }

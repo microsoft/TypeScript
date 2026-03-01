@@ -3,8 +3,8 @@
 //// var x: [|?number|] = 12;
 
 verify.codeFix({
-    description: "Change '?number' to 'number | null'",
-    errorCode: 8020,
+    description: "Change '?number' to 'number | null | undefined'",
+    errorCode: 17020,
     index: 0,
-    newRangeContent: "number | null",
+    newRangeContent: "number | null | undefined",
 });

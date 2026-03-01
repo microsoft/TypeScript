@@ -1,78 +1,114 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty8.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty8.ts] ////
+
+=== accessorsOverrideProperty8.ts ===
 type Types = 'boolean' | 'unknown' | 'string';
->Types : "string" | "boolean" | "unknown"
+>Types : Types
+>      : ^^^^^
 
 type Properties<T extends { [key: string]: Types }> = {
 >Properties : Properties<T>
+>           : ^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
     readonly [key in keyof T]: T[key] extends 'boolean' ? boolean : T[key] extends 'string' ? string : unknown
 }
 
 type AnyCtor<P extends object> = new (...a: any[]) => P
 >AnyCtor : AnyCtor<P>
+>        : ^^^^^^^^^^
 >a : any[]
+>  : ^^^^^
 
 declare function classWithProperties<T extends { [key: string]: Types }, P extends object>(properties: T, klass: AnyCtor<P>): {
->classWithProperties : <T extends { [key: string]: Types; }, P extends object>(properties: T, klass: AnyCtor<P>) => {    new (): P & Properties<T>;    prototype: P & Properties<T>;}
+>classWithProperties : <T extends { [key: string]: Types; }, P extends object>(properties: T, klass: AnyCtor<P>) => { new (): P & Properties<T>; prototype: P & Properties<T>; }
+>                    : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^      ^^          ^^ ^^     ^^          ^^^^^                                                            
 >key : string
+>    : ^^^^^^
 >properties : T
+>           : ^
 >klass : AnyCtor<P>
+>      : ^^^^^^^^^^
 
     new(): P & Properties<T>;
     prototype: P & Properties<T>
 >prototype : P & Properties<T>
+>          : ^^^^^^^^^^^^^^^^^
 
 };
 
 const Base = classWithProperties({
 >Base : { new (): Base & Properties<{ readonly x: "boolean"; y: "string"; }>; prototype: Base & Properties<{ readonly x: "boolean"; y: "string"; }>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >classWithProperties({    get x() { return 'boolean' as const },    y: 'string',}, class Base {}) : { new (): Base & Properties<{ readonly x: "boolean"; y: "string"; }>; prototype: Base & Properties<{ readonly x: "boolean"; y: "string"; }>; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >classWithProperties : <T extends { [key: string]: Types; }, P extends object>(properties: T, klass: AnyCtor<P>) => { new (): P & Properties<T>; prototype: P & Properties<T>; }
+>                    : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^      ^^          ^^ ^^     ^^          ^^^^^                                                            
 >{    get x() { return 'boolean' as const },    y: 'string',} : { readonly x: "boolean"; y: "string"; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get x() { return 'boolean' as const },
 >x : "boolean"
+>  : ^^^^^^^^^
 >'boolean' as const : "boolean"
+>                   : ^^^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
     y: 'string',
 >y : "string"
+>  : ^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 }, class Base {
 >class Base {} : typeof Base
+>              : ^^^^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
 });
 
 class MyClass extends Base {
 >MyClass : MyClass
+>        : ^^^^^^^
 >Base : Base & Properties<{ readonly x: "boolean"; y: "string"; }>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get x() {
 >x : boolean
+>  : ^^^^^^^
 
         return false;
 >false : false
+>      : ^^^^^
     }
     get y() {
 >y : string
+>  : ^^^^^^
 
         return 'hi'
 >'hi' : "hi"
+>     : ^^^^
     }
 }
 
 const mine = new MyClass();
 >mine : MyClass
+>     : ^^^^^^^
 >new MyClass() : MyClass
+>              : ^^^^^^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
 const value = mine.x;
 >value : boolean
+>      : ^^^^^^^
 >mine.x : boolean
+>       : ^^^^^^^
 >mine : MyClass
+>     : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
 

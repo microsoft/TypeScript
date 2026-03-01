@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/innerBoundLambdaEmit.ts] ////
+
 //// [innerBoundLambdaEmit.ts]
-module M {
+namespace M {
     export class Foo {
     }
     var bar = () => { };
@@ -10,13 +12,11 @@ interface Array<T> {
 
 
 //// [innerBoundLambdaEmit.js]
+"use strict";
 var M;
 (function (M) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+    }
     M.Foo = Foo;
-    var bar = function () { };
+    var bar = () => { };
 })(M || (M = {}));

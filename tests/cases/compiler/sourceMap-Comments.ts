@@ -1,6 +1,6 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @sourcemap: true
-module sas.tools {
+namespace sas.tools {
     export class Test {
         public doX(): void {
             let f: number = 2;

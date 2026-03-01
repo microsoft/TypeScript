@@ -1,0 +1,165 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_05.ts ===
+// <|namespace [|Foo|].Baz {
+//     export function hello() {}
+// }|>
+// 
+// module Bar.Baz {
+//     export function sure() {}
+// }
+// 
+// let x = Fo/*GOTO IMPL*/o;
+// let y = Bar;
+// let x1 = Foo.Baz;
+// let y1 = Bar.Baz;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_05.ts ===
+// namespace Foo.Baz {
+//     export function hello() {}
+// }
+// 
+// <|module [|Bar|].Baz {
+//     export function sure() {}
+// }|>
+// 
+// let x = Foo;
+// let y = Ba/*GOTO IMPL*/r;
+// let x1 = Foo.Baz;
+// let y1 = Bar.Baz;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_05.ts ===
+// namespace Foo.<|[|Baz|] {
+//     export function hello() {}
+// }|>
+// 
+// module Bar.Baz {
+//     export function sure() {}
+// }
+// 
+// let x = Foo;
+// let y = Bar;
+// let x1 = Foo.B/*GOTO IMPL*/az;
+// let y1 = Bar.Baz;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Baz",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_05.ts ===
+// namespace Foo.Baz {
+//     export function hello() {}
+// }
+// 
+// module Bar.<|[|Baz|] {
+//     export function sure() {}
+// }|>
+// 
+// let x = Foo;
+// let y = Bar;
+// let x1 = Foo.Baz;
+// let y1 = Bar.B/*GOTO IMPL*/az;
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Baz",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   }
+  ]

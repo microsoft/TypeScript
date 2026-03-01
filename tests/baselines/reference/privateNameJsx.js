@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateNameJsx.tsx] ////
+
 //// [privateNameJsx.tsx]
 class Test {
     #prop = () => <div />;
@@ -9,14 +11,14 @@ class Test {
 
 
 //// [privateNameJsx.jsx]
+"use strict";
 var _Test_prop;
-var Test = /** @class */ (function () {
-    function Test() {
-        _Test_prop.set(this, function () { return <div />; });
+class Test {
+    constructor() {
+        _Test_prop.set(this, () => <div />);
     }
-    Test.prototype.render = function () {
+    render() {
         return <this. />;
-    };
-    return Test;
-}());
+    }
+}
 _Test_prop = new WeakMap();

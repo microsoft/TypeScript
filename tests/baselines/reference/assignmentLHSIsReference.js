@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsReference.ts] ////
+
 //// [assignmentLHSIsReference.ts]
 var value: any;
 
@@ -25,6 +27,7 @@ function fn2(x4: number) {
 (x3['a']) = value;
 
 //// [assignmentLHSIsReference.js]
+"use strict";
 var value;
 // identifiers: variable and parameter
 var x1;

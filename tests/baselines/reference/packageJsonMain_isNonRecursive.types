@@ -1,4 +1,7 @@
+//// [tests/cases/conformance/moduleResolution/packageJsonMain_isNonRecursive.ts] ////
+
 === /a.ts ===
 import foo = require("foo");
 >foo : any
+>    : ^^^
 

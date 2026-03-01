@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/externSyntax.ts] ////
+
 //// [externSyntax.ts]
 declare var v;
-declare module M {
+declare namespace M {
     export class D {
         public p;
     }
@@ -15,3 +17,4 @@ declare module M {
 
 
 //// [externSyntax.js]
+"use strict";

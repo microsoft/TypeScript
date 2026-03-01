@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethod.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethod.ts] ////
+
+=== privateNameStaticMethod.ts ===
 class A1 {
 >A1 : Symbol(A1, Decl(privateNameStaticMethod.ts, 0, 0))
 

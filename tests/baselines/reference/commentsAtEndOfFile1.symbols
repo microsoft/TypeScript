@@ -1,6 +1,8 @@
-=== tests/cases/compiler/commentsAtEndOfFile1.ts ===
+//// [tests/cases/compiler/commentsAtEndOfFile1.ts] ////
+
+=== commentsAtEndOfFile1.ts ===
+
 Input:
-No type information for this code.;
-No type information for this code.//Testing two
-No type information for this code.
-No type information for this code.
+;
+//Testing two
+

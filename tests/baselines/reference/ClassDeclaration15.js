@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclaration15.ts] ////
+
 //// [ClassDeclaration15.ts]
 class C {
    foo();
@@ -5,8 +7,7 @@ class C {
 }
 
 //// [ClassDeclaration15.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+    constructor() { }
+}

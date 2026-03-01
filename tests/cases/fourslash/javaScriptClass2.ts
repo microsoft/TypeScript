@@ -14,4 +14,4 @@
 //// var x = new Foo();
 //// x.[|union|];
 
-verify.rangesWithSameTextAreRenameLocations("union");
+verify.baselineRenameAtRangesWithText("union");

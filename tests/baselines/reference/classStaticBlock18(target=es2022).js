@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock18.ts] ////
+
 //// [classStaticBlock18.ts]
 function foo () {
   return class {
@@ -15,6 +17,7 @@ function foo () {
 
 
 //// [classStaticBlock18.js]
+"use strict";
 function foo() {
     return class {
         static foo = 1;

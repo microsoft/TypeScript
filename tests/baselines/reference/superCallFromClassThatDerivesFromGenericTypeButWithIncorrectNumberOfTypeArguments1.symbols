@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts ===
+//// [tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts] ////
+
+=== superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts ===
 class A<T1, T2> {
 >A : Symbol(A, Decl(superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts, 0, 0))
 >T1 : Symbol(T1, Decl(superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts, 0, 8))
@@ -19,6 +21,6 @@ class B extends A<number> {
 
     constructor() { super(value => String(value)); }
 >value : Symbol(value, Decl(superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts, 7, 26))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >value : Symbol(value, Decl(superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.ts, 7, 26))
 }

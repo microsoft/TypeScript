@@ -1,9 +1,12 @@
+//// [tests/cases/compiler/preserveConstEnums.ts] ////
+
 //// [preserveConstEnums.ts]
 const enum E {
     Value = 1, Value2 = Value
 }
 
 //// [preserveConstEnums.js]
+"use strict";
 var E;
 (function (E) {
     E[E["Value"] = 1] = "Value";

@@ -1,0 +1,20 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/yargs/index.js ===
+// export function command(cmd, cb) { cb({ [|positional|]: "This is obviously not even close to realistic" }); }
+
+// === /home/src/workspaces/project/index.ts ===
+// import { command } from "yargs";
+// command("foo", yargs => {
+//     yargs./*GOTO SOURCE DEF*/positional();
+// });
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]

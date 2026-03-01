@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesMethod.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesMethod.ts] ////
+
+=== propertyOverridesMethod.ts ===
 class A {
 >A : Symbol(A, Decl(propertyOverridesMethod.ts, 0, 0))
 

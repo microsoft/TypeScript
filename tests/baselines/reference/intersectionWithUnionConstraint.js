@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts] ////
+
 //// [intersectionWithUnionConstraint.ts]
 function f1<T extends string | number, U extends string | number>(x: T & U) {
     // Combined constraint of 'T & U' is 'string | number'
@@ -44,22 +46,22 @@ type b<T> = { [K in a<T> & keyof T ]: 42 };
 "use strict";
 function f1(x) {
     // Combined constraint of 'T & U' is 'string | number'
-    var y = x;
+    let y = x;
 }
 function f2(x) {
-    var y1 = x; // Error
-    var y2 = x; // Error
-    var y3 = x;
-    var y4 = x; // Error
-    var y5 = x; // Error
-    var y6 = x; // Error
+    let y1 = x; // Error
+    let y2 = x; // Error
+    let y3 = x;
+    let y4 = x; // Error
+    let y5 = x; // Error
+    let y6 = x; // Error
 }
 function f3(x) {
-    var y = x;
+    const y = x;
 }
 function f4(x) {
-    var y = x;
+    const y = x;
 }
 function f5(x) {
-    var y = x;
+    let y = x;
 }

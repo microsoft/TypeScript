@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitInClassInAsyncFunction.ts] ////
+
 //// [awaitInClassInAsyncFunction.ts]
 // https://github.com/microsoft/TypeScript/issues/34887
 
@@ -13,6 +15,7 @@ async function foo() {
 
 
 //// [awaitInClassInAsyncFunction.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/34887
 async function bar() {
     return 2;

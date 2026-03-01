@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts(14,9): error TS2352: Conversion of type 'I1' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+typeAssertionsWithUnionTypes01.ts(14,9): error TS2352: Conversion of type 'I1' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
-==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts (1 errors) ====
+==== typeAssertionsWithUnionTypes01.ts (1 errors) ====
     interface I1 {
         p1: number
     }

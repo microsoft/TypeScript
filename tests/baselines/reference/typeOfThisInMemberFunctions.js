@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts] ////
+
 //// [typeOfThisInMemberFunctions.ts]
 class C {
     foo() {
@@ -32,36 +34,28 @@ class E<T extends Date> {
 }
 
 //// [typeOfThisInMemberFunctions.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+"use strict";
+class C {
+    foo() {
         var r = this;
-    };
-    C.bar = function () {
-        var r2 = this;
-    };
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
     }
-    D.prototype.foo = function () {
-        var r = this;
-    };
-    D.bar = function () {
+    static bar() {
         var r2 = this;
-    };
-    return D;
-}());
-var E = /** @class */ (function () {
-    function E() {
     }
-    E.prototype.foo = function () {
+}
+class D {
+    foo() {
         var r = this;
-    };
-    E.bar = function () {
+    }
+    static bar() {
         var r2 = this;
-    };
-    return E;
-}());
+    }
+}
+class E {
+    foo() {
+        var r = this;
+    }
+    static bar() {
+        var r2 = this;
+    }
+}

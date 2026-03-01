@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts] ////
+
 //// [incrementOperatorWithEnumTypeInvalidOperations.ts]
 // ++ operator on enum type
 
@@ -23,6 +25,7 @@ ENUM++;
 ENUM1++;
 
 //// [incrementOperatorWithEnumTypeInvalidOperations.js]
+"use strict";
 // ++ operator on enum type
 var ENUM;
 (function (ENUM) {

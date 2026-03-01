@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/optionalProperty.ts] ////
+
 //// [optionalProperty.ts]
 class C {
     prop?;
@@ -5,6 +7,7 @@ class C {
 
 
 //// [optionalProperty.js]
+"use strict";
 class C {
     prop;
 }

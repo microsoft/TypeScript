@@ -1,23 +1,39 @@
-=== tests/cases/compiler/useBeforeDeclaration_destructuring.ts ===
+//// [tests/cases/compiler/useBeforeDeclaration_destructuring.ts] ////
+
+=== useBeforeDeclaration_destructuring.ts ===
 a;
->a : any
+>a : string
+>  : ^^^^^^
 
 let {a, b = a} = {a: '', b: 1};
->a : any
->b : any
->a : any
->{a: '', b: 1} : { a: string; b?: number; }
 >a : string
+>  : ^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>{a: '', b: 1} : { a: string; b?: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 b;
->b : any
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
 
 function test({c, d = c}: Record<string, number>) {}
 >test : ({ c, d }: Record<string, number>) => void
+>     : ^        ^^                      ^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >d : number
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 

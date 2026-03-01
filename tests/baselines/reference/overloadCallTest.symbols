@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadCallTest.ts ===
+//// [tests/cases/compiler/overloadCallTest.ts] ////
+
+=== overloadCallTest.ts ===
 class foo {
 >foo : Symbol(foo, Decl(overloadCallTest.ts, 0, 0))
 

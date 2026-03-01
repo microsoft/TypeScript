@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override19.ts] ////
+
 //// [override19.ts]
 type Foo = abstract new(...args: any) => any;
 declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {
@@ -19,6 +21,7 @@ class C extends CreateMixin(Context, A) {
 
 
 //// [override19.js]
+"use strict";
 class Context {
 }
 class A {

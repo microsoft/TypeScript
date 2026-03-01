@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationIfElse.ts] ////
+
 //// [sourceMapValidationIfElse.ts]
 var i = 10;
 if (i == 10) {
@@ -18,6 +20,7 @@ else if (i == 20) {
 }
 
 //// [sourceMapValidationIfElse.js]
+"use strict";
 var i = 10;
 if (i == 10) {
     i++;

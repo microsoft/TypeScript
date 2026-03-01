@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts] ////
+
 //// [mappedTypeWithCombinedTypeMappers.ts]
 // Repro from #13351
 
@@ -20,5 +22,6 @@ const shouldFail: { important: boolean } = output.x.children;
 
 
 //// [mappedTypeWithCombinedTypeMappers.js]
+"use strict";
 // Repro from #13351
-var shouldFail = output.x.children;
+const shouldFail = output.x.children;

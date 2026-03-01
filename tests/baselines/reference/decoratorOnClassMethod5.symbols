@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod5.ts ===
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod5.ts] ////
+
+=== decoratorOnClassMethod5.ts ===
 declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
 >dec : Symbol(dec, Decl(decoratorOnClassMethod5.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))

@@ -1,23 +1,31 @@
-=== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer.ts ===
+//// [tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer.ts] ////
+
+=== privateIndexer.ts ===
 // private indexers not allowed
 
 class C {
 >C : C
+>  : ^
 
     private [x: string]: string;
 >x : string
+>  : ^^^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     private [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 class E<T> {
 >E : E<T>
+>  : ^^^^
 
     private [x: string]: T;
 >x : string
+>  : ^^^^^^
 }

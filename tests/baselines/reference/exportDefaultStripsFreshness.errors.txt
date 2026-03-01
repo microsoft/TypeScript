@@ -1,10 +1,10 @@
-tests/cases/compiler/index.ts(10,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
+index.ts(10,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
   Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
-tests/cases/compiler/index.ts(12,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
+index.ts(12,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
   Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
 
 
-==== tests/cases/compiler/items.ts (0 errors) ====
+==== items.ts (0 errors) ====
     export default {
         foob: "a"
     }
@@ -12,7 +12,7 @@ tests/cases/compiler/index.ts(12,6): error TS2345: Argument of type '{ foob: str
     export const q = {
         foob: "b"
     }
-==== tests/cases/compiler/index.ts (2 errors) ====
+==== index.ts (2 errors) ====
     import B, {q} from "./items";
     
     interface IFoo {
@@ -26,11 +26,11 @@ tests/cases/compiler/index.ts(12,6): error TS2345: Argument of type '{ foob: str
          ~
 !!! error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
 !!! error TS2345:   Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
-!!! related TS2728 tests/cases/compiler/index.ts:4:5: 'foo' is declared here.
+!!! related TS2728 index.ts:4:5: 'foo' is declared here.
     
     nFoo(B);
          ~
 !!! error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
 !!! error TS2345:   Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
-!!! related TS2728 tests/cases/compiler/index.ts:4:5: 'foo' is declared here.
+!!! related TS2728 index.ts:4:5: 'foo' is declared here.
     

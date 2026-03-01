@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingRestGenericCall.ts ===
+//// [tests/cases/compiler/narrowingRestGenericCall.ts] ////
+
+=== narrowingRestGenericCall.ts ===
 interface Slugs {
 >Slugs : Symbol(Slugs, Decl(narrowingRestGenericCall.ts, 0, 0))
 

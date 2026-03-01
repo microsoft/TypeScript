@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofExternalModules_core.ts ===
+//// [tests/cases/compiler/typeofExternalModules.ts] ////
+
+=== typeofExternalModules_core.ts ===
 import ext = require('./typeofExternalModules_external');
 >ext : Symbol(ext, Decl(typeofExternalModules_core.ts, 0, 0))
 
@@ -23,11 +25,11 @@ y2 = ext;
 >y2 : Symbol(y2, Decl(typeofExternalModules_core.ts, 5, 3))
 >ext : Symbol(ext, Decl(typeofExternalModules_core.ts, 0, 0))
 
-=== tests/cases/compiler/typeofExternalModules_external.ts ===
+=== typeofExternalModules_external.ts ===
 export class C { }
 >C : Symbol(C, Decl(typeofExternalModules_external.ts, 0, 0))
 
-=== tests/cases/compiler/typeofExternalModules_exportAssign.ts ===
+=== typeofExternalModules_exportAssign.ts ===
 class D { }
 >D : Symbol(D, Decl(typeofExternalModules_exportAssign.ts, 0, 0))
 

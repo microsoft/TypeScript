@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts] ////
+
+=== classWithStaticMembers.ts ===
 class C {
 >C : Symbol(C, Decl(classWithStaticMembers.ts, 0, 0))
 

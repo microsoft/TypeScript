@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// class C {
+//   constructor(y) {
+//     <|this./*RENAME*/[|xRENAME|] = y;|>
+//   }
+// }
+// var t = new C(12);
+// <|t.[|xRENAME|] = 11;|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// class C {
+//   constructor(y) {
+//     <|this.[|xRENAME|] = y;|>
+//   }
+// }
+// var t = new C(12);
+// <|t./*RENAME*/[|xRENAME|] = 11;|>

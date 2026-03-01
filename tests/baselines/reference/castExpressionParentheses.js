@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/castExpressionParentheses.ts] ////
+
 //// [castExpressionParentheses.ts]
 declare var a;
 
@@ -51,6 +53,7 @@ new (<any>A());
 
 
 //// [castExpressionParentheses.js]
+"use strict";
 // parentheses should be omitted
 // literals
 ({ a: 0 });
@@ -85,7 +88,7 @@ a().x;
 (typeof A).x;
 (-A).x;
 new (A());
-(function () { })();
+(() => { })();
 (function foo() { })();
 (-A).x;
 // nested cast, should keep one pair of parenthese

@@ -1,8 +1,8 @@
-tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts(33,1): error TS2741: Property 'a' is missing in type 'Gen2<ABC.B>' but required in type 'Gen2<ABC.A>'.
-tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts(34,1): error TS2741: Property 'b' is missing in type 'Gen2<ABC.A>' but required in type 'Gen2<ABC.B>'.
+mappedTypeNotMistakenlyHomomorphic.ts(33,1): error TS2741: Property 'a' is missing in type 'Gen2<ABC.B>' but required in type 'Gen2<ABC.A>'.
+mappedTypeNotMistakenlyHomomorphic.ts(34,1): error TS2741: Property 'b' is missing in type 'Gen2<ABC.A>' but required in type 'Gen2<ABC.B>'.
 
 
-==== tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts (2 errors) ====
+==== mappedTypeNotMistakenlyHomomorphic.ts (2 errors) ====
     enum ABC { A, B }
     
     type Gen<T extends ABC> = { v: T; } & (
@@ -38,9 +38,9 @@ tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts(34,1): error TS2741: 
     a = b;
     ~
 !!! error TS2741: Property 'a' is missing in type 'Gen2<ABC.B>' but required in type 'Gen2<ABC.A>'.
-!!! related TS2728 tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts:6:5: 'a' is declared here.
+!!! related TS2728 mappedTypeNotMistakenlyHomomorphic.ts:6:5: 'a' is declared here.
     b = a;
     ~
 !!! error TS2741: Property 'b' is missing in type 'Gen2<ABC.A>' but required in type 'Gen2<ABC.B>'.
-!!! related TS2728 tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts:9:5: 'b' is declared here.
+!!! related TS2728 mappedTypeNotMistakenlyHomomorphic.ts:9:5: 'b' is declared here.
     

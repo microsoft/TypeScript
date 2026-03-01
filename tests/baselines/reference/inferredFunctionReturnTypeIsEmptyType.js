@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts] ////
+
 //// [inferredFunctionReturnTypeIsEmptyType.ts]
 function foo() {
     if (true) {
@@ -10,6 +12,7 @@ function foo() {
 
 
 //// [inferredFunctionReturnTypeIsEmptyType.js]
+"use strict";
 function foo() {
     if (true) {
         return 42;

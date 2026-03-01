@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode12.ts ===
-"use strict";
-var v = { set foo(eval) { } }
->v : Symbol(v, Decl(parserStrictMode12.ts, 1, 3))
->foo : Symbol(foo, Decl(parserStrictMode12.ts, 1, 9))
->eval : Symbol(eval, Decl(parserStrictMode12.ts, 1, 18))
-

@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+
 // @Filename: f.ts
 ////export { foo as foo }
 ////function /*start*/foo(a: number, b: number) { }

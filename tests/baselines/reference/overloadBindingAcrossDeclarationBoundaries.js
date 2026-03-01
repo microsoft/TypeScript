@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries.ts] ////
+
 //// [overloadBindingAcrossDeclarationBoundaries.ts]
 interface Opt1 {
     p?: any;
@@ -35,6 +37,7 @@ var a1 = a({});
 var a1 = new a({});
 
 //// [overloadBindingAcrossDeclarationBoundaries.js]
+"use strict";
 var a;
 // These should all be Opt3
 var a1 = a.a({});

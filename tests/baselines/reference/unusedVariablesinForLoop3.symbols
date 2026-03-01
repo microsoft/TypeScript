@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedVariablesinForLoop3.ts ===
+//// [tests/cases/compiler/unusedVariablesinForLoop3.ts] ////
+
+=== unusedVariablesinForLoop3.ts ===
 function f1 () {
 >f1 : Symbol(f1, Decl(unusedVariablesinForLoop3.ts, 0, 0))
 

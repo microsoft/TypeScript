@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypedefInParamTag1.ts] ////
+
 //// [0.js]
 // @ts-check
 /**
@@ -44,6 +46,7 @@ foo2({x: 'abc'});
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 /**
  * @typedef {Object} Opts

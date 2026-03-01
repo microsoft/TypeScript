@@ -1,21 +1,33 @@
-=== tests/cases/compiler/jsxMultilineAttributeStringValues.tsx ===
+//// [tests/cases/compiler/jsxMultilineAttributeStringValues.tsx] ////
+
+=== jsxMultilineAttributeStringValues.tsx ===
 const a = <input value="
->a : error
-><input value="  foo: 23"></input> : error
+>a : any
+>  : ^^^
+><input value="  foo: 23"></input> : any
+>                                  : ^^^
 >input : any
+>      : ^^^
 >value : string
+>      : ^^^^^^
 
   foo: 23
 "></input>;
 >input : any
+>      : ^^^
 
 const b = <input value='
->b : error
-><input value='foo: 23'></input> : error
+>b : any
+>  : ^^^
+><input value='foo: 23'></input> : any
+>                                : ^^^
 >input : any
+>      : ^^^
 >value : string
+>      : ^^^^^^
 
 foo: 23
 '></input>;
 >input : any
+>      : ^^^
 

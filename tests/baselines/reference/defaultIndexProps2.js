@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultIndexProps2.ts] ////
+
 //// [defaultIndexProps2.ts]
 class Foo {
 	public v = "Yo";
@@ -16,12 +18,12 @@ var q = "s"[0];
 
 
 //// [defaultIndexProps2.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.v = "Yo";
     }
-    return Foo;
-}());
+}
 var f = new Foo();
 // WScript.Echo(f[0]);
 var o = { v: "Yo2" };

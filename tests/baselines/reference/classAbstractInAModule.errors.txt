@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts(6,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractInAModule.ts(6,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts (1 errors) ====
-    module M {
+==== classAbstractInAModule.ts (1 errors) ====
+    namespace M {
         export abstract class A {}
         export class B extends A {}
     }

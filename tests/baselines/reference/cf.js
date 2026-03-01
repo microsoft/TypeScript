@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cf.ts] ////
+
 //// [cf.ts]
 function f() {
     var z;
@@ -58,6 +60,7 @@ function f() {
 
 
 //// [cf.js]
+"use strict";
 function f() {
     var z;
     var x = 10;

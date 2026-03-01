@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts] ////
+
 //// [templateStringsArrayTypeRedefinedInES6Mode.ts]
 class TemplateStringsArray {
 }
@@ -10,6 +12,7 @@ f({}, 10, 10);
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 
 //// [templateStringsArrayTypeRedefinedInES6Mode.js]
+"use strict";
 class TemplateStringsArray {
 }
 function f(x, y, z) {

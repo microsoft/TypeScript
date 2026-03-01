@@ -1,26 +1,40 @@
-=== tests/cases/compiler/sourceMapValidationDo.ts ===
+//// [tests/cases/compiler/sourceMapValidationDo.ts] ////
+
+=== sourceMapValidationDo.ts ===
 var i = 0;
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 do
 {
     i++;
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
 } while (i < 10);
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 do {
     i++;
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
 } while (i < 20);
 >i < 20 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 

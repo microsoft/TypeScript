@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithArrayLiteralArgs.ts] ////
+
 //// [genericCallWithArrayLiteralArgs.ts]
 function foo<T>(t: T) {
     return t;
@@ -14,6 +16,7 @@ var r6 = foo<Object[]>([1, '']); // Object[]
 
 
 //// [genericCallWithArrayLiteralArgs.js]
+"use strict";
 function foo(t) {
     return t;
 }

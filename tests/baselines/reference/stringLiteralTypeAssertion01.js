@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts] ////
+
 //// [stringLiteralTypeAssertion01.ts]
 type S = "a" | "b";
 type T = S[] | S;
@@ -32,6 +34,7 @@ str = t as string;
 
 
 //// [stringLiteralTypeAssertion01.js]
+"use strict";
 var s;
 var t;
 var str;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersMethodES6.ts] ////
+
 //// [emitDefaultParametersMethodES6.ts]
 class C {
     constructor(t: boolean, z: string, x: number, y = "hello") { }
@@ -17,6 +19,7 @@ class E {
 }
 
 //// [emitDefaultParametersMethodES6.js]
+"use strict";
 class C {
     constructor(t, z, x, y = "hello") { }
     foo(x, t = false) { }

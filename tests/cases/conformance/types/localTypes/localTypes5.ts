@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<A>() {
     class X {
         m<B, C>() {

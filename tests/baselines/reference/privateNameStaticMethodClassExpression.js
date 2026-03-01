@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts] ////
+
 //// [privateNameStaticMethodClassExpression.ts]
 const C = class D {
     static #field = D.#method();
@@ -13,6 +15,7 @@ C.getClass().#field; // Error
 
 
 //// [privateNameStaticMethodClassExpression.js]
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -20,7 +23,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _a, _D_field, _D_method;
 const C = (_a = class D {
-        static getClass() { return D; }
+        static getClass() { return _a; }
         static getField() { return __classPrivateFieldGet(C, _a, "f", _D_field); }
         ;
     },

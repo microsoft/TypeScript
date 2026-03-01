@@ -1,8 +1,10 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit3.ts] ////
+
+=== 0.ts ===
 export function foo() { return "foo"; }
 >foo : Symbol(foo, Decl(0.ts, 0, 0))
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 declare function getPath(): string;
 >getPath : Symbol(getPath, Decl(1.ts, 0, 0))
 

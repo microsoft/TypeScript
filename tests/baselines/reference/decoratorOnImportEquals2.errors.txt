@@ -1,13 +1,13 @@
-tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_1.ts(1,1): error TS1206: Decorators are not valid here.
+decoratorOnImportEquals2_1.ts(1,1): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_1.ts (1 errors) ====
+==== decoratorOnImportEquals2_1.ts (1 errors) ====
     @dec
     ~
 !!! error TS1206: Decorators are not valid here.
     import lib = require('./decoratorOnImportEquals2_0');
     
     declare function dec<T>(target: T): T;
-==== tests/cases/conformance/decorators/invalid/decoratorOnImportEquals2_0.ts (0 errors) ====
+==== decoratorOnImportEquals2_0.ts (0 errors) ====
     export var X;
     

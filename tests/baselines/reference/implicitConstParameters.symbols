@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitConstParameters.ts ===
+//// [tests/cases/compiler/implicitConstParameters.ts] ////
+
+=== implicitConstParameters.ts ===
 function doSomething(cb: () => void) {
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
 >cb : Symbol(cb, Decl(implicitConstParameters.ts, 0, 21))
@@ -84,7 +86,7 @@ function f4(x: string | undefined) {
 >f4 : Symbol(f4, Decl(implicitConstParameters.ts, 32, 1))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 34, 12))
 
-    x = "abc";  // causes x to be considered non-const
+    x = "abc";
 >x : Symbol(x, Decl(implicitConstParameters.ts, 34, 12))
 
     if (x) {

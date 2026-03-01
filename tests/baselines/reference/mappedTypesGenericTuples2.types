@@ -1,0 +1,71 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesGenericTuples2.ts] ////
+
+=== mappedTypesGenericTuples2.ts ===
+// https://github.com/microsoft/TypeScript/issues/57389
+
+declare function getT<T>(): T;
+>getT : <T>() => T
+>     : ^ ^^^^^^^ 
+
+Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
+>Promise.all([getT<string>(), ...getT<any>()]).then((result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok}) : Promise<void>
+>                                                                                                                                                                              : ^^^^^^^^^^^^^
+>Promise.all([getT<string>(), ...getT<any>()]).then : <TResult1 = [string, ...any[]], TResult2 = never>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>                                                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all([getT<string>(), ...getT<any>()]) : Promise<[string, ...any[]]>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
+>[getT<string>(), ...getT<any>()] : [string, ...any[]]
+>                                 : ^^^^^^^^^^^^^^^^^^
+>getT<string>() : string
+>               : ^^^^^^
+>getT : <T>() => T
+>     : ^ ^^^^^^^ 
+>...getT<any>() : any
+>getT<any>() : any
+>getT : <T>() => T
+>     : ^ ^^^^^^^ 
+>then : <TResult1 = [string, ...any[]], TResult2 = never>(onfulfilled?: ((value: [string, ...any[]]) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok} : (result: [string, ...any[]]) => void
+>                                                                                                                          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result : [string, ...any[]]
+>       : ^^^^^^^^^^^^^^^^^^
+
+  const head = result[0]; // string
+>head : string
+>     : ^^^^^^
+>result[0] : string
+>          : ^^^^^^
+>result : [string, ...any[]]
+>       : ^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+  const tail = result.slice(1); // any[]
+>tail : any[]
+>     : ^^^^^
+>result.slice(1) : any[]
+>                : ^^^^^
+>result.slice : (start?: number, end?: number) => any[]
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
+>result : [string, ...any[]]
+>       : ^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => any[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
+>1 : 1
+>  : ^
+
+  tail satisfies string[]; // ok
+>tail satisfies string[] : any[]
+>                        : ^^^^^
+>tail : any[]
+>     : ^^^^^
+
+});
+

@@ -1,8 +1,8 @@
-tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts(5,14): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts(5,19): error TS2300: Duplicate identifier 'Foo'.
+exportInterfaceClassAndValueWithDuplicatesInImportList.ts(5,14): error TS2300: Duplicate identifier 'Foo'.
+exportInterfaceClassAndValueWithDuplicatesInImportList.ts(5,19): error TS2300: Duplicate identifier 'Foo'.
 
 
-==== tests/cases/compiler/exportInterfaceClassAndValueWithDuplicatesInImportList.ts (2 errors) ====
+==== exportInterfaceClassAndValueWithDuplicatesInImportList.ts (2 errors) ====
     const foo = 1
     class Foo {}
     interface Foo {}

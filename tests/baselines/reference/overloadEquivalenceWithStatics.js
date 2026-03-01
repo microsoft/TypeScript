@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadEquivalenceWithStatics.ts] ////
+
 //// [overloadEquivalenceWithStatics.ts]
 class A1<T> {
 static B<S>(v: A1<S>): A1<S>; // 1 
@@ -9,11 +11,9 @@ return null;
 
 
 //// [overloadEquivalenceWithStatics.js]
-var A1 = /** @class */ (function () {
-    function A1() {
-    }
-    A1.B = function (v) {
+"use strict";
+class A1 {
+    static B(v) {
         return null;
-    };
-    return A1;
-}());
+    }
+}

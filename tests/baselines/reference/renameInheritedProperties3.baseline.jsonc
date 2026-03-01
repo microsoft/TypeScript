@@ -1,0 +1,19 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties3.ts ===
+// interface interface1 extends interface1 {
+//    /*RENAME*/<|[|propNameRENAME|]: string;|>
+// }
+// 
+// var v: interface1;
+// v.[|propNameRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties3.ts ===
+// interface interface1 extends interface1 {
+//    <|[|propNameRENAME|]: string;|>
+// }
+// 
+// var v: interface1;
+// v./*RENAME*/[|propNameRENAME|];

@@ -1,6 +1,8 @@
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : out.js
+"use strict";
 /// <reference path='my.d.ts' />
 var foo;
 (function (foo) {

@@ -1,5 +1,6 @@
+// @target: es2015
 // @incremental: true
-// @out: output.js
+// @outFile: output.js
 
 const x = 10;
 

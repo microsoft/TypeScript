@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts] ////
+
 //// [negateOperatorWithAnyOtherType.ts]
 // - operator on any type
 
@@ -12,13 +14,13 @@ function foo(): any {
     return a;
 }
 class A {
-    public a: any;
+    public a!: any;
     static foo(): any {
         var a;
         return a;
     }
 }
-module M {
+namespace M {
     export var n: any;
 }
 var objA = new A();
@@ -54,25 +56,23 @@ var ResultIsNumber15 = -(ANY - ANY1);
 -M.n;
 
 //// [negateOperatorWithAnyOtherType.js]
+"use strict";
 // - operator on any type
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
 var obj;
-var obj1 = { x: "", y: function () { } };
+var obj1 = { x: "", y: () => { } };
 function foo() {
     var a;
     return a;
 }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () {
+class A {
+    static foo() {
         var a;
         return a;
-    };
-    return A;
-}());
+    }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

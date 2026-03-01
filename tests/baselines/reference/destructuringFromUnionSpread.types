@@ -1,15 +1,23 @@
-=== tests/cases/compiler/destructuringFromUnionSpread.ts ===
+//// [tests/cases/compiler/destructuringFromUnionSpread.ts] ////
+
+=== destructuringFromUnionSpread.ts ===
 interface A { a: string }
 >a : string
+>  : ^^^^^^
 
 interface B { b: number }
 >b : number
+>  : ^^^^^^
 
 declare const x: A | B;
 >x : A | B
+>  : ^^^^^
 
 const { a } = { ...x } // error
 >a : any
->{ ...x } : { a: any; } | { a: any; b: number; }
+>  : ^^^
+>{ ...x } : { a: string; } | { b: number; }
+>         : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : A | B
+>  : ^^^^^
 

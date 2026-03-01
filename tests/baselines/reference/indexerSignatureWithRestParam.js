@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerSignatureWithRestParam.ts] ////
+
 //// [indexerSignatureWithRestParam.ts]
 interface I {
     [...x]: string;
@@ -8,8 +10,6 @@ class C {
 }
 
 //// [indexerSignatureWithRestParam.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dontShowCompilerGeneratedMembers.ts] ////
+
 //// [dontShowCompilerGeneratedMembers.ts]
 var f: {
     x: number;
@@ -5,6 +7,7 @@ var f: {
 };
 
 //// [dontShowCompilerGeneratedMembers.js]
+"use strict";
 var f;
 -;
 ;

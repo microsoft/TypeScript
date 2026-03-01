@@ -1,0 +1,93 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping3.ts] ////
+
+=== typeSatisfaction_contextualTyping3.ts ===
+// see https://github.com/microsoft/TypeScript/issues/53920#issuecomment-1516616255
+
+const obj = {
+>obj : { foo: (param?: any) => any; }
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>{   foo: (param = "default") => param,} satisfies {   [key: string]: (...params: any) => any;} : { foo: (param?: any) => any; }
+>                                                                                               : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>{   foo: (param = "default") => param,} : { foo: (param?: any) => any; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^^^^
+
+   foo: (param = "default") => param,
+>foo : (param?: any) => any
+>    : ^     ^^^^^^^^^^^^^^
+>(param = "default") => param : (param?: any) => any
+>                             : ^     ^^^^^^^^^^^^^^
+>param : any
+>"default" : "default"
+>          : ^^^^^^^^^
+>param : any
+
+} satisfies {
+   [key: string]: (...params: any) => any;
+>key : string
+>    : ^^^^^^
+>params : any
+
+};
+
+const obj2 = {
+>obj2 : { foo: (param?: string) => string; }
+>     : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>{   foo: (param = "default") => param,} satisfies {   [key: string]: Function;} : { foo: (param?: string) => string; }
+>                                                                                : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>{   foo: (param = "default") => param,} : { foo: (param?: string) => string; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+
+   foo: (param = "default") => param,
+>foo : (param?: string) => string
+>    : ^     ^^^^^^^^^^^^^^^^^^^^
+>(param = "default") => param : (param?: string) => string
+>                             : ^     ^^^^^^^^^^^^^^^^^^^^
+>param : string
+>      : ^^^^^^
+>"default" : "default"
+>          : ^^^^^^^^^
+>param : string
+>      : ^^^^^^
+
+} satisfies {
+   [key: string]: Function;
+>key : string
+>    : ^^^^^^
+
+};
+
+type StringOrNumberFunc = (x: string | number) => any;
+>StringOrNumberFunc : StringOrNumberFunc
+>                   : ^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+const fn = ((x = "ok") => null) satisfies StringOrNumberFunc;
+>fn : (x?: string | number) => null
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>((x = "ok") => null) satisfies StringOrNumberFunc : (x?: string | number) => null
+>                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>((x = "ok") => null) : (x?: string | number) => null
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x = "ok") => null : (x?: string | number) => null
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"ok" : "ok"
+>     : ^^^^
+
+fn();
+>fn() : null
+>     : ^^^^
+>fn : (x?: string | number) => null
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+fn(32);
+>fn(32) : null
+>       : ^^^^
+>fn : (x?: string | number) => null
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>32 : 32
+>   : ^^
+
+

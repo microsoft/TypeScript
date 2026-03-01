@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/assignmentToReferenceTypes.ts] ////
+
 //// [assignmentToReferenceTypes.ts]
 // Should all be allowed
 
-module M {
+namespace M {
 }
 M = null;
 
@@ -24,13 +26,11 @@ function g(x) {
 }
 
 //// [assignmentToReferenceTypes.js]
+"use strict";
 // Should all be allowed
 M = null;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 C = null;
 var E;
 (function (E) {

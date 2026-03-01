@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeywordES6.ts] ////
+
 //// [templateStringWithEmbeddedYieldKeywordES6.ts]
 function* gen() {
     // Once this is supported, yield *must* be parenthesized.
@@ -6,6 +8,7 @@ function* gen() {
 
 
 //// [templateStringWithEmbeddedYieldKeywordES6.js]
+"use strict";
 function* gen() {
     // Once this is supported, yield *must* be parenthesized.
     var x = `abc${yield 10}def`;

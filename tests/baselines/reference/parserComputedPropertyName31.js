@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName31.ts] ////
+
 //// [parserComputedPropertyName31.ts]
 class C {
     // yes ASI
@@ -6,5 +8,6 @@ class C {
 }
 
 //// [parserComputedPropertyName31.js]
+"use strict";
 class C {
 }

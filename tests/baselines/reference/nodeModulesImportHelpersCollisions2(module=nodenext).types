@@ -1,21 +1,27 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions2.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 export * from "fs";
 export * as fs from "fs";
 >fs : any
+>   : ^^^
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 export * from "fs";
 export * as fs from "fs";
 >fs : any
+>   : ^^^
 
-=== tests/cases/conformance/node/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : any
+>     : ^^^
 
 declare module "tslib" {
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     export {};
     // intentionally missing all helpers

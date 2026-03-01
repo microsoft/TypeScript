@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts(5,9): error TS2611: 'p' is defined as a property in class 'A', but is overridden here in 'B' as an accessor.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts(12,9): error TS2611: 'p' is defined as a property in class 'C', but is overridden here in 'D' as an accessor.
+accessorsOverrideProperty.ts(5,9): error TS2611: 'p' is defined as a property in class 'A', but is overridden here in 'B' as an accessor.
+accessorsOverrideProperty.ts(12,9): error TS2611: 'p' is defined as a property in class 'C', but is overridden here in 'D' as an accessor.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts (2 errors) ====
+==== accessorsOverrideProperty.ts (2 errors) ====
     class A {
         p = 'yep'
     }

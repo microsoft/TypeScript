@@ -1,12 +1,17 @@
-=== tests/cases/compiler/unusedClassesinModule1.ts ===
-module A {
+//// [tests/cases/compiler/unusedClassesinModule1.ts] ////
+
+=== unusedClassesinModule1.ts ===
+namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     class Calculator {
 >Calculator : Calculator
+>           : ^^^^^^^^^^
 
         public handelChar() {
 >handelChar : () => void
+>           : ^^^^^^^^^^
         }
     }
 }

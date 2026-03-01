@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts] ////
+
 === /a.ts ===
 import * as _ from "./a";
 >_ : Symbol(_, Decl(a.ts, 0, 6))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldExpressionInnerCommentEmit.ts] ////
+
 //// [yieldExpressionInnerCommentEmit.ts]
 function * foo2() {
     /*comment1*/ yield 1;
@@ -9,6 +11,7 @@ function * foo2() {
 
 
 //// [yieldExpressionInnerCommentEmit.js]
+"use strict";
 function* foo2() {
     /*comment1*/ yield 1;
     yield /*comment2*/ 2;

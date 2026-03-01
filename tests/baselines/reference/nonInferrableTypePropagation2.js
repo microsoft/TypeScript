@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonInferrableTypePropagation2.ts] ////
+
 //// [nonInferrableTypePropagation2.ts]
 export interface Predicate<A> {
     (a: A): boolean
@@ -33,6 +35,5 @@ const x = pipe(es, filter(exists((n) => n > 0)))
 
 
 //// [nonInferrableTypePropagation2.js]
-"use strict";
-exports.__esModule = true;
-var x = pipe(es, filter(exists(function (n) { return n > 0; })));
+const x = pipe(es, filter(exists((n) => n > 0)));
+export {};

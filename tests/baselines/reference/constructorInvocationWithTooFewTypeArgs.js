@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts] ////
+
 //// [constructorInvocationWithTooFewTypeArgs.ts]
 class D<T, U> {
 
@@ -11,9 +13,7 @@ var d = new D<number>();
 
 
 //// [constructorInvocationWithTooFewTypeArgs.js]
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+"use strict";
+class D {
+}
 var d = new D();

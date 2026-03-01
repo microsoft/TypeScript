@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: importUsedInExtendsList1_require.ts
 export class Super { foo: string; }

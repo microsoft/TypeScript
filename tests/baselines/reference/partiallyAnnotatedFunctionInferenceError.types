@@ -1,47 +1,76 @@
-=== tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionInferenceError.ts ===
+//// [tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionInferenceError.ts] ////
+
+=== partiallyAnnotatedFunctionInferenceError.ts ===
 class C {
 >C : C
+>  : ^
 
   test: string
 >test : string
+>     : ^^^^^^
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
   test2: string
 >test2 : string
+>      : ^^^^^^
 }
 
 declare function testError<T extends C>(a: (t: T, t1: T) => void): T
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
+>          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >a : (t: T, t1: T) => void
+>  : ^ ^^ ^^  ^^ ^^^^^    
 >t : T
+>  : ^
 >t1 : T
+>   : ^
 
 // more args
 testError((t1: D, t2, t3) => {})
 >testError((t1: D, t2, t3) => {}) : C
+>                                 : ^
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
+>          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >(t1: D, t2, t3) => {} : (t1: D, t2: any, t3: any) => void
+>                      : ^  ^^ ^^  ^^^^^^^  ^^^^^^^^^^^^^^
 >t1 : D
+>   : ^
 >t2 : any
+>   : ^^^
 >t3 : any
+>   : ^^^
 
 testError((t1, t2: D, t3) => {})
 >testError((t1, t2: D, t3) => {}) : C
+>                                 : ^
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
+>          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >(t1, t2: D, t3) => {} : (t1: any, t2: D, t3: any) => void
+>                      : ^  ^^^^^^^  ^^ ^^  ^^^^^^^^^^^^^^
 >t1 : any
+>   : ^^^
 >t2 : D
+>   : ^
 >t3 : any
+>   : ^^^
 
 testError((t1, t2, t3: D) => {})
 >testError((t1, t2, t3: D) => {}) : C
+>                                 : ^
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
+>          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >(t1, t2, t3: D) => {} : (t1: any, t2: any, t3: D) => void
+>                      : ^  ^^^^^^^  ^^^^^^^  ^^ ^^^^^^^^^
 >t1 : any
+>   : ^^^
 >t2 : any
+>   : ^^^
 >t3 : D
+>   : ^
 

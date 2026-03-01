@@ -1,8 +1,9 @@
-module m {
+// @target: es2015
+namespace m {
 }
 
 // In second instance of same module, exported interface is not visible
-module m {
+namespace m {
     interface f {}
     export class n { 
         private n: f;

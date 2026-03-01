@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts] ////
+
 //// [thisTypeAndConstraints.ts]
 class A {
     self() {
@@ -23,28 +25,23 @@ class B<T extends A> {
 
 
 //// [thisTypeAndConstraints.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.self = function () {
+"use strict";
+class A {
+    self() {
         return this;
-    };
-    return A;
-}());
+    }
+}
 function f(x) {
     function g(x) {
         x = x.self();
     }
     x = x.self();
 }
-var B = /** @class */ (function () {
-    function B() {
+class B {
+    foo(x) {
+        x = x.self();
     }
-    B.prototype.foo = function (x) {
+    bar(x) {
         x = x.self();
-    };
-    B.prototype.bar = function (x) {
-        x = x.self();
-    };
-    return B;
-}());
+    }
+}

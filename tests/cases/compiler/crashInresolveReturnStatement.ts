@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class WorkItemToolbar {
     public onToolbarItemClick() {
         WITDialogs.createCopyOfWorkItem();

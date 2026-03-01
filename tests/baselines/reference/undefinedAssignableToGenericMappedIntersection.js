@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts] ////
+
 //// [undefinedAssignableToGenericMappedIntersection.ts]
 type Errors<T> = { [P in keyof T]: string | undefined } & {all: string | undefined};
 function foo<T>() {
@@ -10,7 +12,7 @@ function foo<T>() {
 //// [undefinedAssignableToGenericMappedIntersection.js]
 "use strict";
 function foo() {
-    var obj;
-    var x;
+    let obj;
+    let x;
     obj[x] = undefined;
 }

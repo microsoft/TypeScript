@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noTypeArgumentOnReturnType1.ts] ////
+
 //// [noTypeArgumentOnReturnType1.ts]
 class A<T>{
  
@@ -7,11 +9,9 @@ class A<T>{
 }
 
 //// [noTypeArgumentOnReturnType1.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () {
+"use strict";
+class A {
+    foo() {
         return null;
-    };
-    return A;
-}());
+    }
+}

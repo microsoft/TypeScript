@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern3.ts] ////
+
 //// [iterableArrayPattern3.ts]
 class Bar { x }
 class Foo extends Bar { y }
@@ -18,6 +20,7 @@ var a: Bar, b: Bar;
 [a, b] = new FooIterator;
 
 //// [iterableArrayPattern3.js]
+"use strict";
 class Bar {
 }
 class Foo extends Bar {

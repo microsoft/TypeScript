@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseInferenceInContextualInstantiation.ts ===
+//// [tests/cases/compiler/reverseInferenceInContextualInstantiation.ts] ////
+
+=== reverseInferenceInContextualInstantiation.ts ===
 function compare<T>(a: T, b: T): number { return 0; }
 >compare : Symbol(compare, Decl(reverseInferenceInContextualInstantiation.ts, 0, 0))
 >T : Symbol(T, Decl(reverseInferenceInContextualInstantiation.ts, 0, 17))

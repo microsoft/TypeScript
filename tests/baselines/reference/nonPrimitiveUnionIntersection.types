@@ -1,36 +1,59 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts] ////
+
+=== nonPrimitiveUnionIntersection.ts ===
 var a: object & string = ""; // error
 >a : never
+>  : ^^^^^
 >"" : ""
+>   : ^^
 
 var b: object | string = ""; // ok
 >b : string | object
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 var c: object & {} = 123; // error
 >c : object
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 
 a = b; // error
 >a = b : string
+>      : ^^^^^^
 >a : never
+>  : ^^^^^
 >b : string
+>  : ^^^^^^
 
 b = a; // ok
 >b = a : never
+>      : ^^^^^
 >b : string | object
+>  : ^^^^^^^^^^^^^^^
 >a : never
+>  : ^^^^^
 
 const foo: object & {} = {bar: 'bar'}; // ok
 >foo : object
+>    : ^^^^^^
 >{bar: 'bar'} : { bar: string; }
+>             : ^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 
 const bar: object & {err: string} = {bar: 'bar'}; // error
 >bar : object & { err: string; }
+>    : ^^^^^^^^^^^^^^^^      ^^^
 >err : string
+>    : ^^^^^^
 >{bar: 'bar'} : { bar: string; }
+>             : ^^^^^^^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 >'bar' : "bar"
+>      : ^^^^^
 

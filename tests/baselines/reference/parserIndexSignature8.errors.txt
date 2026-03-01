@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(1,13): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(2,14): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+parserIndexSignature8.ts(1,13): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+parserIndexSignature8.ts(2,14): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 
 
-==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts (2 errors) ====
+==== parserIndexSignature8.ts (2 errors) ====
     var foo: { [index: any]; }; // expect an error here
                 ~~~~~
 !!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contravariantTypeAliasInference.ts] ////
+
 //// [contravariantTypeAliasInference.ts]
 type Func1<T> = (x: T) => void;
 type Func2<T> = ((x: T) => void) | undefined;

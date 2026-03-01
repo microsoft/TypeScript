@@ -1,0 +1,22 @@
+// === goToType ===
+// === /a.js ===
+// /**
+//  * [|@typedef {object} I
+//  * @property {number} x
+//  |]*/
+// 
+// /** @type {I} */
+// const /*GOTO TYPE*/i = { x: 0 };
+
+  // === Details ===
+  [
+   {
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

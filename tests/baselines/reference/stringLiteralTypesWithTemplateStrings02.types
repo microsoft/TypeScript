@@ -1,11 +1,18 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings02.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings02.ts] ////
+
+=== stringLiteralTypesWithTemplateStrings02.ts ===
 let abc: "AB\r\nC" = `AB
 >abc : "AB\r\nC"
+>    : ^^^^^^^^^
 >`ABC` : "AB\nC"
+>      : ^^^^^^^
 
 C`;
 let de_NEWLINE_f: "DE\nF" = `DE${"\n"}F`;
 >de_NEWLINE_f : "DE\nF"
+>             : ^^^^^^^
 >`DE${"\n"}F` : "DE\nF"
+>             : ^^^^^^^
 >"\n" : "\n"
+>     : ^^^^
 

@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 // @Filename: a.ts
 ////function [|foo|] () {
 ////	return 1;
@@ -14,4 +16,4 @@
 goTo.file("a.ts");
 goTo.file("b.ts");
 
-verify.rangesAreDocumentHighlights();
+verify.baselineDocumentHighlights(test.ranges(), { filesToSearch: ["a.ts", "b.ts"] });

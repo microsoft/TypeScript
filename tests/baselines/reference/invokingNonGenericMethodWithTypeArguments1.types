@@ -1,13 +1,20 @@
-=== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts ===
+//// [tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts] ////
+
+=== invokingNonGenericMethodWithTypeArguments1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         this.foo<string>();
 >this.foo<string>() : any
+>                   : ^^^
 >this.foo : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
     }
 }
 

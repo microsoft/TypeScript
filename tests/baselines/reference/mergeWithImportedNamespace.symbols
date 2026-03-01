@@ -1,9 +1,11 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/mergeWithImportedNamespace.ts] ////
+
+=== f1.ts ===
 export namespace N { export var x = 1; }
 >N : Symbol(N, Decl(f1.ts, 0, 0))
 >x : Symbol(x, Decl(f1.ts, 0, 31))
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 import {N} from "./f1";
 >N : Symbol(N, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))
 

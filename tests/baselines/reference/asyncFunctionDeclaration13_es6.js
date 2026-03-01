@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration13_es6.ts] ////
+
 //// [asyncFunctionDeclaration13_es6.ts]
 async function foo(): Promise<void> {
    // Legal to use 'await' in a type context.
@@ -6,6 +8,7 @@ async function foo(): Promise<void> {
 
 
 //// [asyncFunctionDeclaration13_es6.js]
+"use strict";
 function foo() {
     return __awaiter(this, void 0, void 0, function* () {
         // Legal to use 'await' in a type context.

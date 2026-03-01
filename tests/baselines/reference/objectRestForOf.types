@@ -1,60 +1,101 @@
-=== tests/cases/conformance/types/rest/objectRestForOf.ts ===
+//// [tests/cases/conformance/types/rest/objectRestForOf.ts] ////
+
+=== objectRestForOf.ts ===
 let array: { x: number, y: string }[];
 >array : { x: number; y: string; }[]
+>      : ^^^^^      ^^^^^      ^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 for (let { x, ...restOf } of array) {
 >x : number
+>  : ^^^^^^
 >restOf : { y: string; }
+>       : ^^^^^      ^^^
 >array : { x: number; y: string; }[]
+>      : ^^^^^      ^^^^^      ^^^^^
 
     [x, restOf];
 >[x, restOf] : (number | { y: string; })[]
+>            : ^^^^^^^^^^^^^^^      ^^^^^^
 >x : number
+>  : ^^^^^^
 >restOf : { y: string; }
+>       : ^^^^^      ^^^
 }
 let xx: number;
 >xx : number
+>   : ^^^^^^
 
 let rrestOff: { y: string };
 >rrestOff : { y: string; }
+>         : ^^^^^      ^^^
 >y : string
+>  : ^^^^^^
 
 for ({ x: xx, ...rrestOff } of array ) {
 >{ x: xx, ...rrestOff } : { y: string; x: number; }
+>                       : ^^^^^      ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >xx : number
+>   : ^^^^^^
 >rrestOff : { y: string; }
+>         : ^^^^^      ^^^
 >array : { x: number; y: string; }[]
+>      : ^^^^^      ^^^^^      ^^^^^
 
     [xx, rrestOff];
 >[xx, rrestOff] : (number | { y: string; })[]
+>               : ^^^^^^^^^^^^^^^      ^^^^^^
 >xx : number
+>   : ^^^^^^
 >rrestOff : { y: string; }
+>         : ^^^^^      ^^^
 }
 for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
 >norest : { x: string; y: string; }
+>       : ^^^^^^^^^^^^^^^^      ^^^
 >array.map(a => ({ ...a, x: 'a string' })) : { x: string; y: string; }[]
+>                                          : ^^^^^^^^^^^^^^^^      ^^^^^
 >array.map : <U>(callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any) => U[]
+>          : ^ ^^          ^^^     ^^^^^^^      ^^^^^      ^^^^^     ^^      ^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >array : { x: number; y: string; }[]
+>      : ^^^^^      ^^^^^      ^^^^^
 >map : <U>(callbackfn: (value: { x: number; y: string; }, index: number, array: { x: number; y: string; }[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^      ^^^^^      ^^^^^     ^^      ^^     ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >a => ({ ...a, x: 'a string' }) : (a: { x: number; y: string; }) => { x: string; y: string; }
+>                               : ^ ^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >a : { x: number; y: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >({ ...a, x: 'a string' }) : { x: string; y: string; }
+>                          : ^^^^^^^^^^^^^^^^      ^^^
 >{ ...a, x: 'a string' } : { x: string; y: string; }
+>                        : ^^^^^^^^^^^^^^^^      ^^^
 >a : { x: number; y: string; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
     [norest.x, norest.y];
 >[norest.x, norest.y] : string[]
+>                     : ^^^^^^^^
 >norest.x : string
+>         : ^^^^^^
 >norest : { x: string; y: string; }
+>       : ^^^^^^^^^^^^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 >norest.y : string
+>         : ^^^^^^
 >norest : { x: string; y: string; }
+>       : ^^^^^^^^^^^^^^^^      ^^^
 >y : string
+>  : ^^^^^^
 
     // x is now a string. who knows why.
 }

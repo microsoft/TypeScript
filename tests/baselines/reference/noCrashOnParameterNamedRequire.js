@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashOnParameterNamedRequire.ts] ////
+
 //// [index.js]
 (function(require, module, exports){
     const mod = require("./mod");
@@ -5,7 +7,8 @@
 })(null, null, null);
 
 //// [index.js]
+"use strict";
 (function (require, module, exports) {
-    var mod = require("./mod");
+    const mod = require("./mod");
     mod.foo;
 })(null, null, null);

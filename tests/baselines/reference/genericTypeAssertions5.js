@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions5.ts] ////
+
 //// [genericTypeAssertions5.ts]
 interface A {
     foo(): string;
@@ -26,6 +28,7 @@ function foo2<T extends A>(x: T) {
 }
 
 //// [genericTypeAssertions5.js]
+"use strict";
 var a;
 var b;
 var c;

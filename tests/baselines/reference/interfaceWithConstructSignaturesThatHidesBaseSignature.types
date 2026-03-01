@@ -1,20 +1,29 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature.ts] ////
+
+=== interfaceWithConstructSignaturesThatHidesBaseSignature.ts ===
 interface Foo {
     new (): { a: number };
 >a : number
+>  : ^^^^^^
 }
 
 interface Derived extends Foo {
     new (): { a: number; b: number };
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 }
 
 var d: Derived;
 >d : Derived
+>  : ^^^^^^^
 
 var r = new d();
 >r : { a: number; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >new d() : { a: number; b: number; }
+>        : ^^^^^      ^^^^^      ^^^
 >d : Derived
+>  : ^^^^^^^
 

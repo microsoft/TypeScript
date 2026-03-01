@@ -13,6 +13,7 @@
     "File '/tslib.ts' does not exist.",
     "File '/tslib.tsx' does not exist.",
     "File '/tslib.d.ts' does not exist.",
+    "Searching all ancestor node_modules directories for preferred extensions: Declaration.",
     "Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/node_modules' does not exist, skipping all lookups in it.",

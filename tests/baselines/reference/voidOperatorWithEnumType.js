@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithEnumType.ts] ////
+
 //// [voidOperatorWithEnumType.ts]
 // void  operator on enum type
 
@@ -23,6 +25,7 @@ void ENUM1["B"];
 void ENUM, ENUM1;
 
 //// [voidOperatorWithEnumType.js]
+"use strict";
 // void  operator on enum type
 var ENUM;
 (function (ENUM) {

@@ -1,76 +1,125 @@
-=== tests/cases/conformance/types/literal/literalTypesAndDestructuring.ts ===
+//// [tests/cases/conformance/types/literal/literalTypesAndDestructuring.ts] ////
+
+=== literalTypesAndDestructuring.ts ===
 declare let x: { a: 0 | 1 | undefined };
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 >a : 0 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
 
 let { a: a1 } = x;
 >a : any
+>  : ^^^
 >a1 : 0 | 1 | undefined
+>   : ^^^^^^^^^^^^^^^^^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 
 let { a: a2 = 0 } = x;
 >a : any
+>  : ^^^
 >a2 : 0 | 1
+>   : ^^^^^
 >0 : 0
+>  : ^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 
 let { a: a3 = 2 } = x;
 >a : any
+>  : ^^^
 >a3 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 
 let { a: a4 = 2 as const } = x;
 >a : any
+>  : ^^^
 >a4 : 0 | 1 | 2
+>   : ^^^^^^^^^
 >2 as const : 2
+>           : ^
 >2 : 2
+>  : ^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 
 let b1 = x.a;
 >b1 : 0 | 1 | undefined
+>   : ^^^^^^^^^^^^^^^^^
 >x.a : 0 | 1 | undefined
+>    : ^^^^^^^^^^^^^^^^^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 >a : 0 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
 
 let b2 = x.a ?? 0;
 >b2 : 0 | 1
+>   : ^^^^^
 >x.a ?? 0 : 0 | 1
+>         : ^^^^^
 >x.a : 0 | 1 | undefined
+>    : ^^^^^^^^^^^^^^^^^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 >a : 0 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 let b3 = x.a ?? 2;
 >b3 : number
+>   : ^^^^^^
 >x.a ?? 2 : 0 | 1 | 2
+>         : ^^^^^^^^^
 >x.a : 0 | 1 | undefined
+>    : ^^^^^^^^^^^^^^^^^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 >a : 0 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 let b4 = x.a ?? 2 as const;
 >b4 : 0 | 1 | 2
+>   : ^^^^^^^^^
 >x.a ?? 2 as const : 0 | 1 | 2
+>                  : ^^^^^^^^^
 >x.a : 0 | 1 | undefined
+>    : ^^^^^^^^^^^^^^^^^
 >x : { a: 0 | 1 | undefined; }
+>  : ^^^^^                 ^^^
 >a : 0 | 1 | undefined
+>  : ^^^^^^^^^^^^^^^^^
 >2 as const : 2
+>           : ^
 >2 : 2
+>  : ^
 
 // Repro from #35693
 
 interface Foo {
   bar: 'yo' | 'ha' | undefined;
 >bar : "yo" | "ha" | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 let { bar = 'yo' } = {} as Foo;
 >bar : "yo" | "ha"
+>    : ^^^^^^^^^^^
 >'yo' : "yo"
+>     : ^^^^
 >{} as Foo : Foo
+>          : ^^^
 >{} : {}
+>   : ^^
 
 bar;  // "yo" | "ha"
 >bar : "yo" | "ha"
+>    : ^^^^^^^^^^^
 

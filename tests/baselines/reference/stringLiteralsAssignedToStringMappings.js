@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsAssignedToStringMappings.ts] ////
+
 //// [stringLiteralsAssignedToStringMappings.ts]
 declare var x: Uppercase<Lowercase<string>>;
 
@@ -17,6 +19,7 @@ y = "a";
 y = "A";
 
 //// [stringLiteralsAssignedToStringMappings.js]
+"use strict";
 // good
 x = "A";
 // bad

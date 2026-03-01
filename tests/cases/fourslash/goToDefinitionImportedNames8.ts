@@ -11,4 +11,4 @@
 ////}
 //// export { Class };
 
-verify.goToDefinition("classAliasDefinition", "classDefinition");
+verify.baselineGoToDefinition("classAliasDefinition");

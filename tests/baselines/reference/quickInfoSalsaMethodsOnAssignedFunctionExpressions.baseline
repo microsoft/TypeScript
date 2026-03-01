@@ -1,3 +1,20 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/something.js ===
+// var C = function () { }
+// /**
+//  * The prototype method.
+//  * @param {string} a Parameter definition.
+//  */
+// function f(a) {}
+// C.prototype.m = f;
+// 
+// var x = new C();
+// x.m();
+// ^
+// | ----------------------------------------------------------------------
+// | var x: C
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +22,7 @@
       "position": 155,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {

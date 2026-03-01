@@ -1,4 +1,8 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments2.tsx] ////
+
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
@@ -33,21 +37,22 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // Error
     function Bar(arg) {
-        var a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
+        let a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
     }
     // Error
     function Baz(arg) {
-        var a0 = <ComponentSpecific1 {...arg}/>;
+        let a0 = <ComponentSpecific1 {...arg}/>;
     }
     // Error
     function createLink(func) {
-        var o = <Link func={func}/>;
+        let o = <Link func={func}/>;
     }
     // Error
-    var i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={function (val) { }}/>;
+    let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }}/>;
 });

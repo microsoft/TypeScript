@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementExportDeclarationNoCrash1.ts] ////
+
+=== labeledStatementExportDeclarationNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59372
+
+export const box: string
+>box : Symbol(box, Decl(labeledStatementExportDeclarationNoCrash1.ts, 2, 12))
+
+subTitle:
+export const title: string
+>title : Symbol(title, Decl(labeledStatementExportDeclarationNoCrash1.ts, 4, 12))
+

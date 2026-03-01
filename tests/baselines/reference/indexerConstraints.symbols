@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerConstraints.ts ===
+//// [tests/cases/compiler/indexerConstraints.ts] ////
+
+=== indexerConstraints.ts ===
 interface A { a: number; }
 >A : Symbol(A, Decl(indexerConstraints.ts, 0, 0))
 >a : Symbol(A.a, Decl(indexerConstraints.ts, 0, 13))

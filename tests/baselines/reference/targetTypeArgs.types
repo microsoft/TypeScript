@@ -1,92 +1,165 @@
-=== tests/cases/compiler/targetTypeArgs.ts ===
+//// [tests/cases/compiler/targetTypeArgs.ts] ////
+
+=== targetTypeArgs.ts ===
 function foo(callback: (x: string) => void) {
 >foo : (callback: (x: string) => void) => void
+>    : ^        ^^                   ^^^^^^^^^
 >callback : (x: string) => void
+>         : ^ ^^      ^^^^^    
 >x : string
+>  : ^^^^^^
 
     callback("hello");   
 >callback("hello") : void
+>                  : ^^^^
 >callback : (x: string) => void
+>         : ^ ^^      ^^^^^    
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 foo(function(x) { x });
 >foo(function(x) { x }) : void
+>                       : ^^^^
 >foo : (callback: (x: string) => void) => void
+>    : ^        ^^                   ^^^^^^^^^
 >function(x) { x } : (x: string) => void
+>                  : ^ ^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 [1].forEach(function(v,i,a) { v });
 >[1].forEach(function(v,i,a) { v }) : void
+>                                   : ^^^^
 >[1].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>            : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function(v,i,a) { v } : (v: number, i: number, a: number[]) => void
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >v : number
+>  : ^^^^^^
 
 ["hello"].every(function(v,i,a) {return true;});
 >["hello"].every(function(v,i,a) {return true;}) : boolean
+>                                                : ^^^^^^^
 >["hello"].every : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }
+>                : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >["hello"] : string[]
+>          : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >every : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => true
+>                               : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >true : true
+>     : ^^^^
 
 [1].every(function(v,i,a) {return true;});
 >[1].every(function(v,i,a) {return true;}) : boolean
+>                                          : ^^^^^^^
 >[1].every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>          : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => true
+>                               : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >true : true
+>     : ^^^^
 
 [1].every(function(v,i,a) {return true;});
 >[1].every(function(v,i,a) {return true;}) : boolean
+>                                          : ^^^^^^^
 >[1].every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>          : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => true
+>                               : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >true : true
+>     : ^^^^
 
 ["s"].every(function(v,i,a) {return true;});
 >["s"].every(function(v,i,a) {return true;}) : boolean
+>                                            : ^^^^^^^
 >["s"].every : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }
+>            : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >["s"] : string[]
+>      : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >every : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => true
+>                               : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >true : true
+>     : ^^^^
 
 ["s"].forEach(function(v,i,a) { v });
 >["s"].forEach(function(v,i,a) { v }) : void
+>                                     : ^^^^
 >["s"].forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>              : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >["s"] : string[]
+>      : ^^^^^^^^
 >"s" : "s"
+>    : ^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function(v,i,a) { v } : (v: string, i: number, a: string[]) => void
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : string
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : string[]
+>  : ^^^^^^^^
 >v : string
+>  : ^^^^^^
 
 

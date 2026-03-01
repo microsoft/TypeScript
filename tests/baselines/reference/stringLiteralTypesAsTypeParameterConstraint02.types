@@ -1,29 +1,50 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint02.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint02.ts] ////
+
+=== stringLiteralTypesAsTypeParameterConstraint02.ts ===
 function foo<T extends "foo">(f: (x: T) => T) {
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     return f;
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 }
 
 let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 >f : (x: "foo") => "foo"
+>  : ^ ^^^^^^^^^^^^^^^^^
 >foo((y: "foo" | "bar") => y === "foo" ? y : "foo") : (x: "foo") => "foo"
+>                                                   : ^ ^^^^^^^^^^^^^^^^^
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(y: "foo" | "bar") => y === "foo" ? y : "foo" : (y: "foo" | "bar") => "foo"
+>                                              : ^ ^^             ^^^^^^^^^^
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >y === "foo" ? y : "foo" : "foo"
+>                        : ^^^^^
 >y === "foo" : boolean
+>            : ^^^^^^^
 >y : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >y : "foo"
+>  : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 let fResult = f("foo");
 >fResult : "foo"
+>        : ^^^^^
 >f("foo") : "foo"
+>         : ^^^^^
 >f : (x: "foo") => "foo"
+>  : ^ ^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts] ////
+
 //// [anyAsReturnTypeForNewOnCall.ts]
 function Point(x, y) {
 
@@ -15,6 +17,7 @@ var xx = o.x;
 
 
 //// [anyAsReturnTypeForNewOnCall.js]
+"use strict";
 function Point(x, y) {
     this.x = x;
     this.y = y;

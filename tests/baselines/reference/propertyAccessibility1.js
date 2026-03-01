@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccessibility1.ts] ////
+
 //// [propertyAccessibility1.ts]
 class Foo {
   private privProp = 0;
@@ -7,11 +9,11 @@ f.privProp;
 
 
 //// [propertyAccessibility1.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.privProp = 0;
     }
-    return Foo;
-}());
+}
 var f = new Foo();
 f.privProp;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsGeneratedNameCollisions.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 function require() {}
 >require : Symbol(require, Decl(index.js, 0, 0))
@@ -17,7 +19,7 @@ export {require, exports, Object};
 >exports : Symbol(exports, Decl(index.js, 5, 16))
 >Object : Symbol(Object, Decl(index.js, 5, 25))
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 function require() {}
 >require : Symbol(require, Decl(index.js, 0, 0))

@@ -1,44 +1,12 @@
-// === /project/b.ts ===
+// === getFileReferences ===
+// fileName: /home/src/workspaces/project/a.ts
+
+// === /home/src/workspaces/project/b.ts ===
 // import "[|./a|]";
 
-// === /project/c.ts ===
+// === /home/src/workspaces/project/c.ts ===
 // import {} from "[|./a|]";
 
-// === /project/d.ts ===
-// import { a } from "[|/project/a|]";
+// === /home/src/workspaces/project/d.ts ===
+// import { a } from "/project/a";
 // type T = typeof import("[|./a|]").a;
-
-[
-  {
-    "fileName": "/project/b.ts",
-    "textSpan": {
-      "start": 8,
-      "length": 3
-    },
-    "isWriteAccess": false
-  },
-  {
-    "fileName": "/project/c.ts",
-    "textSpan": {
-      "start": 16,
-      "length": 3
-    },
-    "isWriteAccess": false
-  },
-  {
-    "fileName": "/project/d.ts",
-    "textSpan": {
-      "start": 19,
-      "length": 10
-    },
-    "isWriteAccess": false
-  },
-  {
-    "fileName": "/project/d.ts",
-    "textSpan": {
-      "start": 56,
-      "length": 3
-    },
-    "isWriteAccess": false
-  }
-]

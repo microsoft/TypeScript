@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstInCallback1.ts ===
+//// [tests/cases/compiler/overloadOnConstInCallback1.ts] ////
+
+=== overloadOnConstInCallback1.ts ===
 class C {
 >C : Symbol(C, Decl(overloadOnConstInCallback1.ts, 0, 0))
 

@@ -1,20 +1,25 @@
-=== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts] ////
+
+=== classAndInterfaceMerge.d.ts ===
 interface C { }
 
 declare class C { }
 >C : C
+>  : ^
 
 interface C { }
 
 interface C { }
 
-declare module M {
+declare namespace M {
 >M : typeof M
+>  : ^^^^^^^^
 
     interface C1 { }
 
     class C1 { }
 >C1 : C1
+>   : ^^
 
     interface C1 { }
 
@@ -22,8 +27,9 @@ declare module M {
 
     export class C2 { }
 >C2 : C2
+>   : ^^
 }
 
-declare module M {
+declare namespace M {
     export interface C2 { }
 }

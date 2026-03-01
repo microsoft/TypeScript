@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typecheckIfCondition.ts] ////
+
 //// [typecheckIfCondition.ts]
 // both uses of module should be an undefined symbol
 function myWrapper()
@@ -8,6 +10,7 @@ function myWrapper()
 
 
 //// [typecheckIfCondition.js]
+"use strict";
 // both uses of module should be an undefined symbol
 function myWrapper() {
     if (!module.exports)

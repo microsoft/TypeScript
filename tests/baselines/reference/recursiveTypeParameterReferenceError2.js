@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeParameterReferenceError2.ts] ////
+
 //// [recursiveTypeParameterReferenceError2.ts]
 interface List<T> {
     data: T;
@@ -13,3 +15,4 @@ interface List2<T> {
 
 
 //// [recursiveTypeParameterReferenceError2.js]
+"use strict";

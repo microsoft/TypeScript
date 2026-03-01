@@ -1,14 +1,16 @@
+//// [tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts] ////
+
 //// [privacyCheckAnonymousFunctionParameter2.ts]
 export var x = 1;  // Makes this an external module 
 interface Iterator<T> { x: T }
 
-module Q {
+namespace Q {
     export function foo<T>(x: (a: Iterator<T>) => number) {
         return x;
     }
 }
 
-module Q {
+namespace Q {
     function bar() {
         foo(null);
     }
@@ -17,7 +19,7 @@ module Q {
 //// [privacyCheckAnonymousFunctionParameter2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x = 1; // Makes this an external module 
     var Q;

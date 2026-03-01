@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerAssignability.ts ===
+//// [tests/cases/compiler/indexerAssignability.ts] ////
+
+=== indexerAssignability.ts ===
 var a: { [s: string]: string; };
 >a : Symbol(a, Decl(indexerAssignability.ts, 0, 3))
 >s : Symbol(s, Decl(indexerAssignability.ts, 0, 10))

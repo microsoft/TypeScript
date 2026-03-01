@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts] ////
+
 //// [constructorOverloadsWithDefaultValues.ts]
 class C {
     foo: string;
@@ -14,13 +16,12 @@ class D<T> {
 }
 
 //// [constructorOverloadsWithDefaultValues.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    constructor() {
     }
-    return D;
-}());
+}

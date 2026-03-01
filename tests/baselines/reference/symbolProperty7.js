@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty7.ts] ////
+
 //// [symbolProperty7.ts]
 class C {
     [Symbol()] = 0;
@@ -9,6 +11,7 @@ class C {
 }
 
 //// [symbolProperty7.js]
+"use strict";
 var _a;
 class C {
     constructor() {

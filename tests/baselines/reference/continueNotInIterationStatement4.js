@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueNotInIterationStatement4.ts] ////
+
 //// [continueNotInIterationStatement4.ts]
 TWO:
 while (true){
@@ -8,8 +10,9 @@ while (true){
 
 
 //// [continueNotInIterationStatement4.js]
+"use strict";
 TWO: while (true) {
-    var x = function () {
+    var x = () => {
         continue TWO;
     };
 }

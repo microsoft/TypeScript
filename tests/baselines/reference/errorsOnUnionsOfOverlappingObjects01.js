@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts] ////
+
 //// [errorsOnUnionsOfOverlappingObjects01.ts]
 interface Foo {
     a: string;
@@ -48,19 +50,16 @@ addToZoo({ man: "Manny", beer: "Coffee" });
 addToZoo(manBeer);
 
 //// [errorsOnUnionsOfOverlappingObjects01.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
 ;
-exports.x = { a: '', b: '' };
-f(exports.x);
+export let x = { a: '', b: '' };
+f(x);
 f({ a: '', b: '' });
-g(exports.x);
+g(x);
 g({ a: '', b: '' });
-h(exports.x);
+h(x);
 h({ a: '', b: '' });
 addToZoo({ dog: "Barky McBarkface" });
 addToZoo({ man: "Manny", bear: "Coffee" });
-var manBeer = { man: "Manny", beer: "Coffee" };
+const manBeer = { man: "Manny", beer: "Coffee" };
 addToZoo({ man: "Manny", beer: "Coffee" });
 addToZoo(manBeer);

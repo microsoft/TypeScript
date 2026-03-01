@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDefaultExport4.ts] ////
+
 //// [declarationEmitDefaultExport4.ts]
 export default function () {
     return 1;

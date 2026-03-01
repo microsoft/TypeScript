@@ -1,84 +1,123 @@
-=== tests/cases/compiler/declFileTypeofFunction.ts ===
+//// [tests/cases/compiler/declFileTypeofFunction.ts] ////
+
+=== declFileTypeofFunction.ts ===
 function f(n: typeof f): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : { (n: typeof f): string; (n: typeof g): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>n : { (n: typeof f): string; (n: typeof g): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>f : { (n: typeof f): string; (n: typeof g): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function f(n: typeof g): string;
 >f : { (n: typeof f): string; (n: typeof g): string; }
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>n : { (n: typeof g): number; (n: typeof f): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>g : { (n: typeof g): number; (n: typeof f): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function f() { return undefined; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : { (n: typeof f): string; (n: typeof g): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 function g(n: typeof g): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : { (n: typeof g): number; (n: typeof f): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>n : { (n: typeof g): number; (n: typeof f): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>g : { (n: typeof g): number; (n: typeof f): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function g(n: typeof f): number;
 >g : { (n: typeof g): number; (n: typeof f): number; }
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>n : { (n: typeof f): string; (n: typeof g): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
+>f : { (n: typeof f): string; (n: typeof g): string; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function g() { return undefined; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : { (n: typeof g): number; (n: typeof f): number; }
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var b: () => typeof b;
 >b : () => typeof b
+>  : ^^^^^^        
 >b : () => typeof b
+>  : ^^^^^^        
 
 function b1() {
 >b1 : () => typeof b1
+>   : ^^^^^^^^^^^^^^^
 
     return b1;
 >b1 : () => typeof b1
+>   : ^^^^^^^^^^^^^^^
 }
 
 function foo(): typeof foo {
 >foo : () => typeof foo
+>    : ^^^^^^          
 >foo : () => typeof foo
+>    : ^^^^^^          
 
     return null;
->null : null
 }
 var foo1: typeof foo;
 >foo1 : () => typeof foo
+>     : ^^^^^^          
 >foo : () => typeof foo
+>    : ^^^^^^          
 
 var foo2 = foo;
 >foo2 : () => typeof foo
+>     : ^^^^^^          
 >foo : () => typeof foo
+>    : ^^^^^^          
 
 var foo3 = function () {
 >foo3 : () => any
+>     : ^^^^^^^^^
 >function () {    return foo3;} : () => any
+>                               : ^^^^^^^^^
 
     return foo3;
 >foo3 : () => any
+>     : ^^^^^^^^^
 }
 var x = () => {
 >x : () => any
+>  : ^^^^^^^^^
 >() => {    return x;} : () => any
+>                      : ^^^^^^^^^
 
     return x;
 >x : () => any
+>  : ^^^^^^^^^
 }
 
 function foo5(x: number) {
 >foo5 : (x: number) => (x: number) => number
+>     : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     function bar(x: number) {
 >bar : (x: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         return x;
 >x : number
+>  : ^^^^^^
     }
     return bar;
 >bar : (x: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 }

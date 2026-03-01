@@ -1,6 +1,9 @@
-=== tests/cases/compiler/declaredExternalModule.ts ===
+//// [tests/cases/compiler/declaredExternalModule.ts] ////
+
+=== declaredExternalModule.ts ===
 declare module 'connect' {
 >'connect' : typeof import("connect")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface connectModule {
 
@@ -15,24 +18,31 @@ declare module 'connect' {
 
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
+>    : ^   ^^             ^^^^^             
 >mod : connectModule
+>    : ^^^^^^^^^^^^^
 
         listen: (port: number) => void;
 >listen : (port: number) => void
+>       : ^    ^^      ^^^^^    
 >port : number
+>     : ^^^^^^
 
     }
 
     var server: {
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
+>       : ^^^^^^             ^^^^^^^^^             ^^^^^^^^^^^             ^^^
 
         (): connectExport;
 
         test1: connectModule;   // No error
 >test1 : connectModule
+>      : ^^^^^^^^^^^^^
 
         test2(): connectModule; // ERROR: Return type of method from exported interface has or is using private type ''connect'.connectModule'.
 >test2 : () => connectModule
+>      : ^^^^^^             
 
     };
 }

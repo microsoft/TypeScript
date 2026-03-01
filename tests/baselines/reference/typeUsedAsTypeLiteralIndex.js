@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts] ////
+
 //// [typeUsedAsTypeLiteralIndex.ts]
 type K = number | string;
 type T = {
@@ -27,4 +29,5 @@ type T4 = {
 
 
 //// [typeUsedAsTypeLiteralIndex.js]
+"use strict";
 const K1 = Symbol();

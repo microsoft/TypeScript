@@ -1,199 +1,349 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldUnaryMutation.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldUnaryMutation.ts] ////
+
+=== privateNameStaticFieldUnaryMutation.ts ===
 class C {
 >C : C
+>  : ^
 
     static #test: number = 24;
 >#test : number
+>      : ^^^^^^
 >24 : 24
+>   : ^^
 
     constructor() {
         C.#test++;
 >C.#test++ : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         C.#test--;
 >C.#test-- : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         ++C.#test;
 >++C.#test : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         --C.#test;
 >--C.#test : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         const a = C.#test++;
 >a : number
+>  : ^^^^^^
 >C.#test++ : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         const b = C.#test--;
 >b : number
+>  : ^^^^^^
 >C.#test-- : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         const c = ++C.#test;
 >c : number
+>  : ^^^^^^
 >++C.#test : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         const d = --C.#test;
 >d : number
+>  : ^^^^^^
 >--C.#test : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         for (C.#test = 0; C.#test < 10; ++C.#test) {}
 >C.#test = 0 : 0
+>            : ^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >C.#test < 10 : boolean
+>             : ^^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >10 : 10
+>   : ^^
 >++C.#test : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
         for (C.#test = 0; C.#test < 10; C.#test++) {}
 >C.#test = 0 : 0
+>            : ^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >0 : 0
+>  : ^
 >C.#test < 10 : boolean
+>             : ^^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >10 : 10
+>   : ^^
 >C.#test++ : number
+>          : ^^^^^^
 >C.#test : number
+>        : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
     }
     test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         this.getClass().#test++;
 >this.getClass().#test++ : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         this.getClass().#test--;
 >this.getClass().#test-- : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         ++this.getClass().#test;
 >++this.getClass().#test : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         --this.getClass().#test;
 >--this.getClass().#test : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         const a = this.getClass().#test++;
 >a : number
+>  : ^^^^^^
 >this.getClass().#test++ : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         const b = this.getClass().#test--;
 >b : number
+>  : ^^^^^^
 >this.getClass().#test-- : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         const c = ++this.getClass().#test;
 >c : number
+>  : ^^^^^^
 >++this.getClass().#test : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         const d = --this.getClass().#test;
 >d : number
+>  : ^^^^^^
 >--this.getClass().#test : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         for (this.getClass().#test = 0; this.getClass().#test < 10; ++this.getClass().#test) {}
 >this.getClass().#test = 0 : 0
+>                          : ^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >this.getClass().#test < 10 : boolean
+>                           : ^^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >++this.getClass().#test : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 
         for (this.getClass().#test = 0; this.getClass().#test < 10; this.getClass().#test++) {}
 >this.getClass().#test = 0 : 0
+>                          : ^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >this.getClass().#test < 10 : boolean
+>                           : ^^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >this.getClass().#test++ : number
+>                        : ^^^^^^
 >this.getClass().#test : number
+>                      : ^^^^^^
 >this.getClass() : typeof C
+>                : ^^^^^^^^
 >this.getClass : () => typeof C
+>              : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
     }
     getClass() { return C; }
 >getClass : () => typeof C
+>         : ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 }
 

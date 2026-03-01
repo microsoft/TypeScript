@@ -1,30 +1,41 @@
-=== /index.ts ===
-import type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
->RequireInterface : RequireInterface
+//// [tests/cases/conformance/node/nodeModulesImportModeDeclarationEmit2.ts] ////
 
-import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+=== /index.ts ===
+import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : RequireInterface
+>                 : ^^^^^^^^^^^^^^^^
+
+import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 >ImportInterface : ImportInterface
+>                : ^^^^^^^^^^^^^^^
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
 
-import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
+import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
 >RequireInterface : any
+>                 : ^^^
 >Req : any
+>    : ^^^
 
-import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
+import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
 >ImportInterface : any
+>                : ^^^
 >Imp : any
+>    : ^^^
 
 export interface Loc extends Req, Imp {}
 
-export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
+export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
 >RequireInterface : RequireInterface
+>                 : ^^^^^^^^^^^^^^^^
 
-export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 >ImportInterface : ImportInterface
+>                : ^^^^^^^^^^^^^^^
 
 === /node_modules/pkg/import.d.ts ===
+
 export interface ImportInterface {}
-No type information for this code.=== /node_modules/pkg/require.d.ts ===
+=== /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
-No type information for this code.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedIfStatement.ts] ////
+
 //// [nestedIfStatement.ts]
 if (0) {
 } else if (1) {
@@ -7,6 +9,7 @@ if (0) {
 }
 
 //// [nestedIfStatement.js]
+"use strict";
 if (0) {
 }
 else if (1) {

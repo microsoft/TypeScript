@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveSpecializationOfExtendedTypeWithError.ts] ////
+
 //// [recursiveSpecializationOfExtendedTypeWithError.ts]
 interface HTMLSelectElement {
     options: HTMLSelectElement;
@@ -7,3 +9,4 @@ interface HTMLSelectElement {
 
 
 //// [recursiveSpecializationOfExtendedTypeWithError.js]
+"use strict";

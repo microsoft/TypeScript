@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInfer1.ts] ////
+
 //// [typeInfer1.ts]
 interface ITextWriter2 {
     Write(s:string):void;
@@ -14,6 +16,7 @@ var yyyyyyyy: ITextWriter2 = {
 }
 
 //// [typeInfer1.js]
+"use strict";
 var x = {
     Write: function (s) { },
     WriteLine: function (s) { }

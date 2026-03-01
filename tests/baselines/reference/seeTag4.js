@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/seeTag4.ts] ////
+
 //// [seeTag4.js]
 /**
  * @typedef {any} A
@@ -12,6 +14,7 @@ let foo;
 
 
 //// [seeTag4.js]
+"use strict";
 /**
  * @typedef {any} A
  */
@@ -20,4 +23,4 @@ let foo;
  * @see {@linkcode A}
  * @see {@linkplain A}
  */
-var foo;
+let foo;

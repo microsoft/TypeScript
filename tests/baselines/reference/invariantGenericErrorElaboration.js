@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invariantGenericErrorElaboration.ts] ////
+
 //// [invariantGenericErrorElaboration.ts]
 // Repro from #19746
 
@@ -26,5 +28,5 @@ interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
 //// [invariantGenericErrorElaboration.js]
 "use strict";
 // Repro from #19746
-var wat = Num;
-var Foo = Obj({ foo: Num });
+const wat = Num;
+const Foo = Obj({ foo: Num });

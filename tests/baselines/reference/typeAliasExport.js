@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasExport.ts] ////
+
 //// [typeAliasExport.ts]
 declare module "a" {
   export default undefined
@@ -6,3 +8,4 @@ declare module "a" {
 }
 
 //// [typeAliasExport.js]
+"use strict";

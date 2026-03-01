@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateNameWeakMapCollision.ts] ////
+
 //// [privateNameWeakMapCollision.ts]
 function test() {
     let WeakMap;
@@ -9,6 +11,7 @@ function test() {
 
 
 //// [privateNameWeakMapCollision.js]
+"use strict";
 function test() {
     var _C_x;
     let WeakMap;

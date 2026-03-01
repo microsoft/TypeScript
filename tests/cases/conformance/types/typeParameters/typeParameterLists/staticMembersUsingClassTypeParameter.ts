@@ -1,3 +1,4 @@
+// @target: es2015
 // BUG 745747
 class C<T> {
     static x: T;

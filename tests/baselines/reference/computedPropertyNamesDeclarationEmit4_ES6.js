@@ -1,9 +1,12 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit4_ES6.ts] ////
+
 //// [computedPropertyNamesDeclarationEmit4_ES6.ts]
 var v: {
     ["" + ""](): void;
 }
 
 //// [computedPropertyNamesDeclarationEmit4_ES6.js]
+"use strict";
 var v;
 
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSignatureInstantiation1.ts ===
+//// [tests/cases/compiler/contextualSignatureInstantiation1.ts] ////
+
+=== contextualSignatureInstantiation1.ts ===
 declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
 >map : Symbol(map, Decl(contextualSignatureInstantiation1.ts, 0, 0))
 >S : Symbol(S, Decl(contextualSignatureInstantiation1.ts, 0, 21))

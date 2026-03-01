@@ -1,8 +1,8 @@
-tests/cases/compiler/genericNewInterface.ts(2,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/genericNewInterface.ts(10,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+genericNewInterface.ts(2,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+genericNewInterface.ts(10,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/compiler/genericNewInterface.ts (2 errors) ====
+==== genericNewInterface.ts (2 errors) ====
     function createInstance<T>(ctor: new (s: string) => T): T {
         return new ctor(42); //should be an error
                         ~~

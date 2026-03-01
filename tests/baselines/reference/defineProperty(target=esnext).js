@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts] ////
+
 //// [defineProperty.ts]
 var x: "p" = "p"
 class A {
@@ -25,6 +27,7 @@ class C extends B {
 
 
 //// [defineProperty.js]
+"use strict";
 var x = "p";
 class A {
     y;

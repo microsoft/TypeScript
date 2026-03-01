@@ -1,19 +1,27 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement1.ts] ////
+
+=== parserErrorRecoveryIfStatement1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     if (
   }
 > : any
+> : ^^^
 > : any
+> : ^^^
 
   f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
   }
   f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
   }
 }

@@ -1,41 +1,63 @@
-=== tests/cases/conformance/classes/classDeclarations/classExtendingBuiltinType.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingBuiltinType.ts] ////
+
+=== classExtendingBuiltinType.ts ===
 class C1 extends Object { }
 >C1 : C1
+>   : ^^
 >Object : Object
+>       : ^^^^^^
 
 class C2 extends Function { }
 >C2 : C2
+>   : ^^
 >Function : Function
+>         : ^^^^^^^^
 
 class C3 extends String { }
 >C3 : C3
+>   : ^^
 >String : String
+>       : ^^^^^^
 
 class C4 extends Boolean { }
 >C4 : C4
+>   : ^^
 >Boolean : Boolean
+>        : ^^^^^^^
 
 class C5 extends Number { }
 >C5 : C5
+>   : ^^
 >Number : Number
+>       : ^^^^^^
 
 class C6 extends Date { }
 >C6 : C6
+>   : ^^
 >Date : Date
+>     : ^^^^
 
 class C7 extends RegExp { }
 >C7 : C7
+>   : ^^
 >RegExp : RegExp
+>       : ^^^^^^
 
 class C8 extends Error { }
 >C8 : C8
+>   : ^^
 >Error : Error
+>      : ^^^^^
 
 class C9 extends Array { }
 >C9 : C9
+>   : ^^
 >Array : any[]
+>      : ^^^^^
 
 class C10 extends Array<number> { }
 >C10 : C10
+>    : ^^^
 >Array : number[]
+>      : ^^^^^^^^
 

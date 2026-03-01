@@ -1,16 +1,29 @@
-=== tests/cases/compiler/declarationEmitSpreadStringlyKeyedEnum.ts ===
+//// [tests/cases/compiler/declarationEmitSpreadStringlyKeyedEnum.ts] ////
+
+=== declarationEmitSpreadStringlyKeyedEnum.ts ===
 enum AgeGroups { "0-17" , "18-22" , "23-27" , "28-34" , "35-44" , "45-59" , "60-150" }
 >AgeGroups : AgeGroups
+>          : ^^^^^^^^^
 >"0-17" : (typeof AgeGroups)["0-17"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"18-22" : (typeof AgeGroups)["18-22"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"23-27" : (typeof AgeGroups)["23-27"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"28-34" : (typeof AgeGroups)["28-34"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"35-44" : (typeof AgeGroups)["35-44"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"45-59" : (typeof AgeGroups)["45-59"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"60-150" : (typeof AgeGroups)["60-150"]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const SpotifyAgeGroupEnum = { ...AgeGroups };
 >SpotifyAgeGroupEnum : { [x: number]: string; "0-17": (typeof AgeGroups)["0-17"]; "18-22": (typeof AgeGroups)["18-22"]; "23-27": (typeof AgeGroups)["23-27"]; "28-34": (typeof AgeGroups)["28-34"]; "35-44": (typeof AgeGroups)["35-44"]; "45-59": (typeof AgeGroups)["45-59"]; "60-150": (typeof AgeGroups)["60-150"]; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...AgeGroups } : { [x: number]: string; "0-17": (typeof AgeGroups)["0-17"]; "18-22": (typeof AgeGroups)["18-22"]; "23-27": (typeof AgeGroups)["23-27"]; "28-34": (typeof AgeGroups)["28-34"]; "35-44": (typeof AgeGroups)["35-44"]; "45-59": (typeof AgeGroups)["45-59"]; "60-150": (typeof AgeGroups)["60-150"]; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AgeGroups : typeof AgeGroups
+>          : ^^^^^^^^^^^^^^^^
 

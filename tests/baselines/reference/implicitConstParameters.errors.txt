@@ -1,8 +1,7 @@
-tests/cases/compiler/implicitConstParameters.ts(38,27): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is possibly 'undefined'.
+implicitConstParameters.ts(44,27): error TS18048: 'x' is possibly 'undefined'.
 
 
-==== tests/cases/compiler/implicitConstParameters.ts (2 errors) ====
+==== implicitConstParameters.ts (1 errors) ====
     function doSomething(cb: () => void) {
         cb();
     }
@@ -38,11 +37,9 @@ tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is 
     }
     
     function f4(x: string | undefined) {
-        x = "abc";  // causes x to be considered non-const
+        x = "abc";
         if (x) {
             doSomething(() => x.length);
-                              ~
-!!! error TS2532: Object is possibly 'undefined'.
         }
     }
     
@@ -50,7 +47,7 @@ tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is 
         if (x) {
             doSomething(() => x.length);
                               ~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'x' is possibly 'undefined'.
         }
         x = "abc";  // causes x to be considered non-const
     }

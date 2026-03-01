@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorTypeWithTypeParameters.ts ===
+//// [tests/cases/compiler/constructorTypeWithTypeParameters.ts] ////
+
+=== constructorTypeWithTypeParameters.ts ===
 declare var X: {
 >X : Symbol(X, Decl(constructorTypeWithTypeParameters.ts, 0, 11))
 

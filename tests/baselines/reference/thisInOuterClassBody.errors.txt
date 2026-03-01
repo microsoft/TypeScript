@@ -1,8 +1,8 @@
-tests/cases/compiler/thisInOuterClassBody.ts(12,22): error TS2576: Property 'y' does not exist on type 'Foo'. Did you mean to access the static member 'Foo.y' instead?
-tests/cases/compiler/thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type 'typeof Foo'.
+thisInOuterClassBody.ts(12,22): error TS2576: Property 'y' does not exist on type 'Foo'. Did you mean to access the static member 'Foo.y' instead?
+thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type 'typeof Foo'.
 
 
-==== tests/cases/compiler/thisInOuterClassBody.ts (2 errors) ====
+==== thisInOuterClassBody.ts (2 errors) ====
     class Foo {
     
         x = this;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMap-SkippedNode.ts] ////
+
 //// [sourceMap-SkippedNode.ts]
 try {
 // ...
@@ -6,6 +8,7 @@ try {
 }
 
 //// [sourceMap-SkippedNode.js]
+"use strict";
 try {
     // ...
 }

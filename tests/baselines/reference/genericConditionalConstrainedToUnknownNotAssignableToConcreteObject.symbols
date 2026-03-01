@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts ===
+//// [tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts] ////
+
+=== genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts ===
 interface A { x: number }
 >A : Symbol(A, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 0))
 >x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))

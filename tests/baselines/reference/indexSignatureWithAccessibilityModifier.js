@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts] ////
+
 //// [indexSignatureWithAccessibilityModifier.ts]
 interface I {
     [public x: string]: string;
@@ -8,8 +10,6 @@ class C {
 }
 
 //// [indexSignatureWithAccessibilityModifier.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}

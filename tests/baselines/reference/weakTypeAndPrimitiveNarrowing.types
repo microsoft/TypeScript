@@ -1,71 +1,101 @@
-=== tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts ===
+//// [tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts] ////
+
+=== weakTypeAndPrimitiveNarrowing.ts ===
 type LiteralsAndWeakTypes = 
->LiteralsAndWeakTypes : { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; } | "A" | "B"
+>LiteralsAndWeakTypes : LiteralsAndWeakTypes
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
   | 'A'
   | 'B'
   | { optional?: true }
 >optional : true | undefined
+>         : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
   | { toLowerCase?(): string }
 >toLowerCase : (() => string) | undefined
+>            : ^^^^^^^      ^^^^^^^^^^^^^
 
   | { toUpperCase?(): string, otherOptionalProp?: number };
 >toUpperCase : (() => string) | undefined
+>            : ^^^^^^^      ^^^^^^^^^^^^^
 >otherOptionalProp : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
 
 const g = (arg: LiteralsAndWeakTypes) => {
 >g : (arg: LiteralsAndWeakTypes) => void
+>  : ^   ^^                    ^^^^^^^^^
 >(arg: LiteralsAndWeakTypes) => {    if (arg === 'A') {      arg;    } else {      arg;    }} : (arg: LiteralsAndWeakTypes) => void
+>                                                                                             : ^   ^^                    ^^^^^^^^^
 >arg : LiteralsAndWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     if (arg === 'A') {
 >arg === 'A' : boolean
+>            : ^^^^^^^
 >arg : LiteralsAndWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
       arg;
->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; } | "A"
+>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "A"
+>    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
 
     } else {
       arg;
->arg : { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; } | "B"
+>arg : { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; } | "B"
+>    : ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
     }
 }
 
 type PrimitivesAndWeakTypes =
->PrimitivesAndWeakTypes : string | number | { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
+>PrimitivesAndWeakTypes : PrimitivesAndWeakTypes
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
   | string
   | number
   | { optional?: true }
 >optional : true | undefined
+>         : ^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
   | { toLowerCase?(): string }
 >toLowerCase : (() => string) | undefined
+>            : ^^^^^^^      ^^^^^^^^^^^^^
 
   | { toUpperCase?(): string, otherOptionalProp?: number };
 >toUpperCase : (() => string) | undefined
+>            : ^^^^^^^      ^^^^^^^^^^^^^
 >otherOptionalProp : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
 
 const h = (arg: PrimitivesAndWeakTypes) => {
 >h : (arg: PrimitivesAndWeakTypes) => void
+>  : ^   ^^                      ^^^^^^^^^
 >(arg: PrimitivesAndWeakTypes) => {    if (arg === 'A') {      arg;    } else {      arg;    }} : (arg: PrimitivesAndWeakTypes) => void
+>                                                                                               : ^   ^^                      ^^^^^^^^^
 >arg : PrimitivesAndWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
     if (arg === 'A') {
 >arg === 'A' : boolean
+>            : ^^^^^^^
 >arg : PrimitivesAndWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >'A' : "A"
+>    : ^^^
 
       arg;
->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
+>arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     } else {
       arg;
 >arg : PrimitivesAndWeakTypes
+>    : ^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

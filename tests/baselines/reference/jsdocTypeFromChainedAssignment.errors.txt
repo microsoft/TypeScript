@@ -1,12 +1,12 @@
-tests/cases/conformance/jsdoc/a.js(12,21): error TS2339: Property 'x' does not exist on type 'typeof A'.
-tests/cases/conformance/jsdoc/a.js(15,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(16,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(17,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(19,1): error TS2322: Type '10' is not assignable to type '1'.
+a.js(12,21): error TS2339: Property 'x' does not exist on type 'typeof A'.
+a.js(15,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+a.js(16,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+a.js(17,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+a.js(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+a.js(19,1): error TS2322: Type '10' is not assignable to type '1'.
 
 
-==== tests/cases/conformance/jsdoc/a.js (6 errors) ====
+==== a.js (6 errors) ====
     function A () {
         this.x = 1
         /** @type {1} */

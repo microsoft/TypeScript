@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment23.ts] ////
+
+=== a.js ===
 class B {
 >B : Symbol(B, Decl(a.js, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts] ////
+
 //// [globalThisUnknownNoImplicitAny.ts]
 declare let win: Window & typeof globalThis;
 
@@ -12,6 +14,7 @@ globalThis['hi']
 
 
 //// [globalThisUnknownNoImplicitAny.js]
+"use strict";
 // all accesses should be errors
 win.hi;
 this.hi;

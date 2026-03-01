@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional.ts] ////
+
 //// [uncalledFunctionChecksInConditional.ts]
 declare function isFoo(): boolean;
 declare function isBar(): boolean;
@@ -56,6 +58,7 @@ if (x && z) {
 }
 
 //// [uncalledFunctionChecksInConditional.js]
+"use strict";
 if (isFoo) {
     // error on isFoo
 }

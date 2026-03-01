@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts] ////
+
 //// [jsdocDisallowedInTypescript.ts]
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];
@@ -39,7 +41,7 @@ function hof2(f) {
 }
 var whatevs = 1001;
 var ques = 'what';
-var g = function (n, m) { return n + m; };
+var g = (n, m) => n + m;
 var most = 'definite';
 var postfixdef = 101;
 var postfixopt = undefined;

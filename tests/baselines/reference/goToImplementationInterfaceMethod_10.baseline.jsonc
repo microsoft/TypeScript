@@ -1,0 +1,399 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_10.ts ===
+// --- (line: 11) skipped ---
+// }
+// 
+// class FooImpl implements Foo {
+//  	 <|[|{| defId: 0 |}hello|]() {/**FooImpl*/}|>
+//  	 aloha() {}
+// }
+// 
+// class BaseFooImpl implements BaseFoo {
+//  	 hello() {/**BaseFooImpl*/}    // Should not show up
+// }
+// 
+// class BarImpl implements Bar {
+// 	 <|[|{| defId: 1 |}hello|]() {/**BarImpl*/}|>
+// 	 goodbye() {}
+// }
+// 
+// class FooAndBarImpl implements Foo, Bar {
+// 	 <|[|{| defId: 2 |}hello|]() {/**FooAndBarImpl*/}|>
+// 	 aloha() {}
+// 	 goodbye() {}
+// }
+// 
+// function someFunction(x: Foo | Bar) {
+// 	 x.he/*GOTO IMPL*/llo();
+// }
+// 
+// function anotherFunction(x: Foo & Bar) {
+// 	 x.hello();
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FooImpl",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "BarImpl",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   },
+   {
+    "defId": 2,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FooAndBarImpl",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_10.ts ===
+// --- (line: 11) skipped ---
+// }
+// 
+// class FooImpl implements Foo {
+//  	 <|[|{| defId: 0 |}hello|]() {/**FooImpl*/}|>
+//  	 aloha() {}
+// }
+// 
+// class BaseFooImpl implements BaseFoo {
+//  	 hello() {/**BaseFooImpl*/}    // Should not show up
+// }
+// 
+// class BarImpl implements Bar {
+// 	 <|[|{| defId: 1 |}hello|]() {/**BarImpl*/}|>
+// 	 goodbye() {}
+// }
+// 
+// class FooAndBarImpl implements Foo, Bar {
+// 	 <|[|{| defId: 2 |}hello|]() {/**FooAndBarImpl*/}|>
+// 	 aloha() {}
+// 	 goodbye() {}
+// }
+// 
+// function someFunction(x: Foo | Bar) {
+// 	 x.hello();
+// }
+// 
+// function anotherFunction(x: Foo & Bar) {
+// 	 x.he/*GOTO IMPL*/llo();
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FooImpl",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "BarImpl",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   },
+   {
+    "defId": 2,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "FooAndBarImpl",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]

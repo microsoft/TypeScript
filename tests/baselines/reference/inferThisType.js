@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/inferThisType.ts] ////
+
 //// [inferThisType.ts]
 declare function f<T>(g: (this: T) => void): T
 declare function h(this: number): void;
@@ -12,4 +14,5 @@ type r2 = This<(this: number) => void>; // should be number
 
 
 //// [inferThisType.js]
+"use strict";
 f(h);

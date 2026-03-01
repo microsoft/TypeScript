@@ -1,6 +1,11 @@
-=== tests/cases/compiler/objectLiteralMemberWithoutBlock1.ts ===
+//// [tests/cases/compiler/objectLiteralMemberWithoutBlock1.ts] ////
+
+=== objectLiteralMemberWithoutBlock1.ts ===
 var v = { foo(); }
 >v : { foo(): any; }
+>  : ^^^^^^^^^^^^^^^
 >{ foo(); } : { foo(): any; }
+>           : ^^^^^^^^^^^^^^^
 >foo : () => any
+>    : ^^^^^^^^^
 

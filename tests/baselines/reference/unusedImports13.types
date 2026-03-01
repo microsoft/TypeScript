@@ -1,29 +1,39 @@
-=== tests/cases/compiler/foo.tsx ===
+//// [tests/cases/compiler/unusedImports13.ts] ////
+
+=== foo.tsx ===
 import React = require("react");
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 export const FooComponent = <div></div>
 >FooComponent : error
 ><div></div> : error
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
-=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+=== node_modules/@types/react/index.d.ts ===
 export = React;
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 export as namespace React;
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare namespace React {
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
     function createClass<P, S>(spec);
 >createClass : <P, S>(spec: any) => any
+>            : ^ ^^ ^^    ^^^^^^^^^^^^^
 >spec : any
 }
 declare global {
 >global : any
+>       : ^^^
 
     namespace JSX {
     }

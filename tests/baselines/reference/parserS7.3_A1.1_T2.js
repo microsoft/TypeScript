@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserS7.3_A1.1_T2.ts] ////
+
 //// [parserS7.3_A1.1_T2.ts]
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
@@ -21,6 +23,7 @@ if (x !== 1) {
 
 
 //// [parserS7.3_A1.1_T2.js]
+"use strict";
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
 /**

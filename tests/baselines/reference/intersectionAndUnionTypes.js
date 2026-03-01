@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts] ////
+
 //// [intersectionAndUnionTypes.ts]
 interface A { a: string }
 interface B { b: string }
@@ -40,6 +42,7 @@ cod = y;  // Ok
 
 
 //// [intersectionAndUnionTypes.js]
+"use strict";
 var a;
 var b;
 var c;

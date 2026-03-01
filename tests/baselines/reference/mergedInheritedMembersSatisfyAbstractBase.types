@@ -1,35 +1,49 @@
-=== tests/cases/conformance/interfaces/declarationMerging/mergedInheritedMembersSatisfyAbstractBase.ts ===
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInheritedMembersSatisfyAbstractBase.ts] ////
+
+=== mergedInheritedMembersSatisfyAbstractBase.ts ===
 abstract class BaseClass {
 >BaseClass : BaseClass
+>          : ^^^^^^^^^
 
   abstract bar: number;
 >bar : number
+>    : ^^^^^^
 }
 
 class Broken extends BaseClass {}
 >Broken : Broken
+>       : ^^^^^^
 >BaseClass : BaseClass
+>          : ^^^^^^^^^
 
 // declaration merging should satisfy abstract bar
 interface IGetters {
   bar: number;
 >bar : number
+>    : ^^^^^^
 }
 interface Broken extends IGetters {}
 
 new Broken().bar
 >new Broken().bar : number
+>                 : ^^^^^^
 >new Broken() : Broken
+>             : ^^^^^^
 >Broken : typeof Broken
+>       : ^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 
 class IncorrectlyExtends extends BaseClass {}
 >IncorrectlyExtends : IncorrectlyExtends
+>                   : ^^^^^^^^^^^^^^^^^^
 >BaseClass : BaseClass
+>          : ^^^^^^^^^
 
 interface IncorrectGetters {
   bar: string;
 >bar : string
+>    : ^^^^^^
 }
 interface IncorrectlyExtends extends IncorrectGetters {}
 

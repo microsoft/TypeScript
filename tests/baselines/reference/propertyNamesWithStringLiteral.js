@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyNamesWithStringLiteral.ts] ////
+
 //// [propertyNamesWithStringLiteral.ts]
 class _Color {
     a: number; r: number; g: number; b: number;
@@ -8,7 +10,7 @@ interface NamedColors {
     "blue": _Color;
     "pale blue": _Color;
 }
-module Color {
+namespace Color {
     export var namedColors: NamedColors;
 }
 var a = Color.namedColors["azure"];
@@ -17,11 +19,9 @@ var a = Color.namedColors["pale blue"]; // should not error
 
 
 //// [propertyNamesWithStringLiteral.js]
-var _Color = /** @class */ (function () {
-    function _Color() {
-    }
-    return _Color;
-}());
+"use strict";
+class _Color {
+}
 var Color;
 (function (Color) {
 })(Color || (Color = {}));

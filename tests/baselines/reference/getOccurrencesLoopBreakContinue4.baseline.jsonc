@@ -1,0 +1,301 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: /*HIGHLIGHTS*/[|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     /*HIGHLIGHTS*/[|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     /*HIGHLIGHTS*/[|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     /*HIGHLIGHTS*/[|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             /*HIGHLIGHTS*/[|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } [|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue4.ts ===
+// --- (line: 26) skipped ---
+//                 break label2;
+//                 continue label2;
+// 
+//                 label4: [|{| kind: "none" |}do|] {
+//                     [|{| kind: "none" |}break|];
+//                     [|{| kind: "none" |}continue|];
+//                     [|{| kind: "none" |}break|] label4;
+//                     [|{| kind: "none" |}continue|] label4;
+// 
+//                     break label3;
+//                     continue label3;
+// 
+//                     switch (10) {
+//                         case 1:
+//                         case 2:
+//                             break;
+//                             [|{| kind: "none" |}break|] label4;
+//                         default:
+//                             [|{| kind: "none" |}continue|];
+//                     }
+// 
+//                     // these cross function boundaries
+//                     break label1;
+//                     continue label1;
+//                     break label2;
+//                     continue label2;
+//                     () => { break; }
+//                 } /*HIGHLIGHTS*/[|{| kind: "none" |}while|] (true)
+//             }
+//         }
+//     }
+// --- (line: 58) skipped ---

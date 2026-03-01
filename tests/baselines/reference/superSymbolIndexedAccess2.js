@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess2.ts] ////
+
 //// [superSymbolIndexedAccess2.ts]
 class Foo {
     [Symbol.isConcatSpreadable]() {
@@ -12,6 +14,7 @@ class Bar extends Foo {
 }
 
 //// [superSymbolIndexedAccess2.js]
+"use strict";
 class Foo {
     [Symbol.isConcatSpreadable]() {
         return 0;

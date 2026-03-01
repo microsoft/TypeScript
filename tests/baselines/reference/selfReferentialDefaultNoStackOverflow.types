@@ -1,17 +1,26 @@
-=== tests/cases/compiler/QSpinner.js ===
+//// [tests/cases/compiler/selfReferentialDefaultNoStackOverflow.ts] ////
+
+=== QSpinner.js ===
 import DefaultSpinner from './QSpinner'
 >DefaultSpinner : any
+>               : ^^^
 
 export default {
 >{  mixins: [DefaultSpinner],  name: 'QSpinner'} : { mixins: any[]; name: string; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   mixins: [DefaultSpinner],
 >mixins : any[]
+>       : ^^^^^
 >[DefaultSpinner] : any[]
+>                 : ^^^^^
 >DefaultSpinner : any
+>               : ^^^
 
   name: 'QSpinner'
 >name : string
+>     : ^^^^^^
 >'QSpinner' : "QSpinner"
+>           : ^^^^^^^^^^
 }
 

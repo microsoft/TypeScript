@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts] ////
+
 //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts]
 class Bar {
     x!: string;
@@ -29,11 +31,9 @@ foo({
 
 
 //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js]
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+"use strict";
+class Bar {
+}
 foo({
     x: Bar,
     y: Date

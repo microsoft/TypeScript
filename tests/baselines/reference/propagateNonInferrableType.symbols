@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propagateNonInferrableType.ts ===
+//// [tests/cases/compiler/propagateNonInferrableType.ts] ////
+
+=== propagateNonInferrableType.ts ===
 declare function resolver<T>(): () => void;
 >resolver : Symbol(resolver, Decl(propagateNonInferrableType.ts, 0, 0))
 >T : Symbol(T, Decl(propagateNonInferrableType.ts, 0, 26))

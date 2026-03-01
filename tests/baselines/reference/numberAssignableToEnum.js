@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts] ////
+
 //// [numberAssignableToEnum.ts]
 enum E { A }
 var n: number;
@@ -6,6 +8,7 @@ e = n;
 n = e;
 
 //// [numberAssignableToEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

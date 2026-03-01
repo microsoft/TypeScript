@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads9.ts] ////
+
 //// [functionOverloads9.ts]
 function foo(foo:string);
 function foo(foo?:string){ return '' };
@@ -5,6 +7,7 @@ var x = foo('foo');
 
 
 //// [functionOverloads9.js]
+"use strict";
 function foo(foo) { return ''; }
 ;
 var x = foo('foo');

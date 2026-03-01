@@ -1,11 +1,11 @@
-tests/cases/conformance/salsa/test.js(4,5): error TS2339: Property 'config' does not exist on type 'typeof Vue'.
+test.js(4,5): error TS2339: Property 'config' does not exist on type 'typeof Vue'.
 
 
-==== tests/cases/conformance/salsa/vue.js (0 errors) ====
+==== vue.js (0 errors) ====
     export class Vue {}
     export const config = { x: 0 };
     
-==== tests/cases/conformance/salsa/test.js (1 errors) ====
+==== test.js (1 errors) ====
     import { Vue, config } from "./vue";
     
     // Expando declarations aren't allowed on aliases.

@@ -1,1 +1,0 @@
-import jsonschema = require("jsonschema");

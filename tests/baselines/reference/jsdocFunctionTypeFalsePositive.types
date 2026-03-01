@@ -1,6 +1,10 @@
+//// [tests/cases/compiler/jsdocFunctionTypeFalsePositive.ts] ////
+
 === /a.js ===
 /** @param {<} x */
 function f(x) {}
->f : (x: any) => void
->x : any
+>f : (x: () => any) => void
+>  : ^ ^^         ^^^^^^^^^
+>x : () => any
+>  : ^^^^^^^^^
 

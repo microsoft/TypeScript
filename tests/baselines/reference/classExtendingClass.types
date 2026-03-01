@@ -1,105 +1,163 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingClass.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingClass.ts] ////
+
+=== classExtendingClass.ts ===
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     thing() { }
 >thing : () => void
+>      : ^^^^^^^^^^
 
     static other() { }
 >other : () => void
+>      : ^^^^^^^^^^
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 var d: D;
 >d : D
+>  : ^
 
 var r = d.foo;
 >r : string
+>  : ^^^^^^
 >d.foo : string
+>      : ^^^^^^
 >d : D
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var r2 = d.bar;
 >r2 : string
+>   : ^^^^^^
 >d.bar : string
+>      : ^^^^^^
 >d : D
+>  : ^
 >bar : string
+>    : ^^^^^^
 
 var r3 = d.thing();
 >r3 : void
+>   : ^^^^
 >d.thing() : void
+>          : ^^^^
 >d.thing : () => void
+>        : ^^^^^^^^^^
 >d : D
+>  : ^
 >thing : () => void
+>      : ^^^^^^^^^^
 
 var r4 = D.other();
 >r4 : void
+>   : ^^^^
 >D.other() : void
+>          : ^^^^
 >D.other : () => void
+>        : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >other : () => void
+>      : ^^^^^^^^^^
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     foo: T;
 >foo : T
+>    : ^
 
     thing(x: T) { }
 >thing : (x: T) => void
+>      : ^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     static other<T>(x: T) { }
 >other : <T>(x: T) => void
+>      : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 }
 
 class D2<T> extends C2<T> {
 >D2 : D2<T>
+>   : ^^^^^
 >C2 : C2<T>
+>   : ^^^^^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 var d2: D2<string>;
 >d2 : D2<string>
+>   : ^^^^^^^^^^
 
 var r5 = d2.foo;
 >r5 : string
+>   : ^^^^^^
 >d2.foo : string
+>       : ^^^^^^
 >d2 : D2<string>
+>   : ^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 var r6 = d2.bar;
 >r6 : string
+>   : ^^^^^^
 >d2.bar : string
+>       : ^^^^^^
 >d2 : D2<string>
+>   : ^^^^^^^^^^
 >bar : string
+>    : ^^^^^^
 
 var r7 = d2.thing('');
 >r7 : void
+>   : ^^^^
 >d2.thing('') : void
+>             : ^^^^
 >d2.thing : (x: string) => void
+>         : ^ ^^^^^^^^^^^^^^^^^
 >d2 : D2<string>
+>   : ^^^^^^^^^^
 >thing : (x: string) => void
+>      : ^ ^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r8 = D2.other(1);
 >r8 : void
+>   : ^^^^
 >D2.other(1) : void
+>            : ^^^^
 >D2.other : <T>(x: T) => void
+>         : ^ ^^ ^^ ^^^^^^^^^
 >D2 : typeof D2
+>   : ^^^^^^^^^
 >other : <T>(x: T) => void
+>      : ^ ^^ ^^ ^^^^^^^^^
 >1 : 1
+>  : ^
 

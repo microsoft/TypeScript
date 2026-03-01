@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts] ////
+
+=== relatedViaDiscriminatedTypeNoError2.ts ===
+type AObjOrBObj = { name: "A" } | { name: "B" };
+>AObjOrBObj : Symbol(AObjOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 0))
+>name : Symbol(name, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 19))
+>name : Symbol(name, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 35))
+
+type AOrBObj = { name: "A" | "B" };
+>AOrBObj : Symbol(AOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 48))
+>name : Symbol(name, Decl(relatedViaDiscriminatedTypeNoError2.ts, 1, 16))
+
+type Generic<T extends AObjOrBObj> = T;
+>Generic : Symbol(Generic, Decl(relatedViaDiscriminatedTypeNoError2.ts, 1, 35))
+>T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError2.ts, 2, 13))
+>AObjOrBObj : Symbol(AObjOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 0))
+>T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError2.ts, 2, 13))
+
+type T = Generic<AOrBObj>;
+>T : Symbol(T, Decl(relatedViaDiscriminatedTypeNoError2.ts, 2, 39))
+>Generic : Symbol(Generic, Decl(relatedViaDiscriminatedTypeNoError2.ts, 1, 35))
+>AOrBObj : Symbol(AOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 48))
+
+declare let x: AObjOrBObj;
+>x : Symbol(x, Decl(relatedViaDiscriminatedTypeNoError2.ts, 6, 11))
+>AObjOrBObj : Symbol(AObjOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 0))
+
+declare let y: AOrBObj;
+>y : Symbol(y, Decl(relatedViaDiscriminatedTypeNoError2.ts, 7, 11))
+>AOrBObj : Symbol(AOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 48))
+
+x = y;
+>x : Symbol(x, Decl(relatedViaDiscriminatedTypeNoError2.ts, 6, 11))
+>y : Symbol(y, Decl(relatedViaDiscriminatedTypeNoError2.ts, 7, 11))
+
+y = x;
+>y : Symbol(y, Decl(relatedViaDiscriminatedTypeNoError2.ts, 7, 11))
+>x : Symbol(x, Decl(relatedViaDiscriminatedTypeNoError2.ts, 6, 11))
+

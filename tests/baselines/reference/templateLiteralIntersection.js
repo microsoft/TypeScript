@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralIntersection.ts] ////
+
 //// [templateLiteralIntersection.ts]
 // https://github.com/microsoft/TypeScript/issues/48034
 const a = 'a'
@@ -29,5 +31,6 @@ type OriginE = `${MixE}`
 type OriginF = `${A}foo${A}`;
 
 //// [templateLiteralIntersection.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/48034
-var a = 'a';
+const a = 'a';

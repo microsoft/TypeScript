@@ -1,7 +1,7 @@
-tests/cases/compiler/errorSupression1.ts(3,15): error TS2339: Property 'b' does not exist on type 'typeof Foo'.
+errorSupression1.ts(3,15): error TS2339: Property 'b' does not exist on type 'typeof Foo'.
 
 
-==== tests/cases/compiler/errorSupression1.ts (1 errors) ====
+==== errorSupression1.ts (1 errors) ====
     class Foo { static bar() { return "x"; } }
     
     var baz = Foo.b;

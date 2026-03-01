@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferentialTypingWithFunctionType2.ts] ////
+
 //// [inferentialTypingWithFunctionType2.ts]
 function identity<A>(a: A): A {
     return a;
@@ -5,6 +7,7 @@ function identity<A>(a: A): A {
 var x = [1, 2, 3].map(identity)[0];
 
 //// [inferentialTypingWithFunctionType2.js]
+"use strict";
 function identity(a) {
     return a;
 }

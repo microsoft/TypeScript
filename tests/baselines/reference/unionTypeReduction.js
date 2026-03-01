@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeReduction.ts] ////
+
 //// [unionTypeReduction.ts]
 interface I2 {
     (): number;
@@ -18,6 +20,7 @@ var r2 = e2();
 
 
 //// [unionTypeReduction.js]
+"use strict";
 var i2, i3;
 var e1;
 var e2 = i2 || i3; // Type of e2 immediately reduced to I3

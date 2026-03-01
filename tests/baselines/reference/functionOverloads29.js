@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads29.ts] ////
+
 //// [functionOverloads29.ts]
 function foo(bar:string):string;
 function foo(bar:number):number;
@@ -6,5 +8,6 @@ var x = foo();
 
 
 //// [functionOverloads29.js]
+"use strict";
 function foo(bar) { return bar; }
 var x = foo();

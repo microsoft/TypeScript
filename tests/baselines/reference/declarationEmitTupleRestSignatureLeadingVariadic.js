@@ -1,13 +1,11 @@
+//// [tests/cases/compiler/declarationEmitTupleRestSignatureLeadingVariadic.ts] ////
+
 //// [declarationEmitTupleRestSignatureLeadingVariadic.ts]
 const f = <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]): void => {};
 
 //// [declarationEmitTupleRestSignatureLeadingVariadic.js]
-var f = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-};
+"use strict";
+const f = (...args) => { };
 
 
 //// [declarationEmitTupleRestSignatureLeadingVariadic.d.ts]

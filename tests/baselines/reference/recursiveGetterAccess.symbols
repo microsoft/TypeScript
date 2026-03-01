@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveGetterAccess.ts ===
+//// [tests/cases/compiler/recursiveGetterAccess.ts] ////
+
+=== recursiveGetterAccess.ts ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(recursiveGetterAccess.ts, 0, 0))
 

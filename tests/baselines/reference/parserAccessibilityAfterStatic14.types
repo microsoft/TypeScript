@@ -1,8 +1,12 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic14.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic14.ts] ////
+
+=== parserAccessibilityAfterStatic14.ts ===
 class Outer
 >Outer : Outer
+>      : ^^^^^
 {
 static public<T>() {}
 >public : <T>() => void
+>       : ^ ^^^^^^^^^^^
 }
 

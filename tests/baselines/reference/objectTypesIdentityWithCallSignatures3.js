@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts] ////
+
 //// [objectTypesIdentityWithCallSignatures3.ts]
 // object types are identical structurally
 
@@ -40,6 +42,7 @@ function foo15(x: I2<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithCallSignatures3.js]
+"use strict";
 // object types are identical structurally
 var a;
 function foo2(x) { }

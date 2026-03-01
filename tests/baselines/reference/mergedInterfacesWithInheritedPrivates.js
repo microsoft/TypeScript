@@ -1,6 +1,8 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts] ////
+
 //// [mergedInterfacesWithInheritedPrivates.ts]
 class C {
-    private x: number;
+    private x!: number;
 }
 
 interface A extends C {
@@ -12,35 +14,26 @@ interface A {
 }
 
 class D implements A { // error
-    private x: number;
-    y: string;
-    z: string;
+    private x!: number;
+    y!: string;
+    z!: string;
 }
 
 class E implements A { // error
-    x: number;
-    y: string;
-    z: string;
+    x!: number;
+    y!: string;
+    z!: string;
 }
 
-var a: A;
+declare var a: A;
 var r = a.x; // error
 
 //// [mergedInterfacesWithInheritedPrivates.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var E = /** @class */ (function () {
-    function E() {
-    }
-    return E;
-}());
-var a;
+"use strict";
+class C {
+}
+class D {
+}
+class E {
+}
 var r = a.x; // error

@@ -1,10 +1,14 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importNonExportedMember3.ts] ////
+
+=== a.ts ===
+
 export {}
-No type information for this code.interface Foo {}
-No type information for this code.interface Foo {}
-No type information for this code.namespace Foo {}
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/b.ts ===
+interface Foo {}
+interface Foo {}
+namespace Foo {}
+
+=== b.ts ===
 import { Foo } from './a';
 >Foo : any
+>    : ^^^
 

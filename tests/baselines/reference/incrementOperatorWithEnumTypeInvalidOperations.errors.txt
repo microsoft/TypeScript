@@ -1,16 +1,16 @@
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2628: Cannot assign to 'ENUM' because it is an enum.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts(22,1): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(11,23): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(14,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithEnumTypeInvalidOperations.ts(15,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithEnumTypeInvalidOperations.ts(18,3): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(19,3): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(21,1): error TS2628: Cannot assign to 'ENUM' because it is an enum.
+incrementOperatorWithEnumTypeInvalidOperations.ts(22,1): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts (10 errors) ====
+==== incrementOperatorWithEnumTypeInvalidOperations.ts (10 errors) ====
     // ++ operator on enum type
     
     enum ENUM { };

@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/circularModuleImports.ts] ////
+
 //// [circularModuleImports.ts]
-module M
+namespace M
  
 {
  
@@ -11,3 +13,4 @@ module M
 
 
 //// [circularModuleImports.js]
+"use strict";

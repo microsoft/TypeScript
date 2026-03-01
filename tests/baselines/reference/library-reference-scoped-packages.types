@@ -1,8 +1,13 @@
+//// [tests/cases/conformance/references/library-reference-scoped-packages.ts] ////
+
 === /a.ts ===
+
 /// <reference types="@beep/boop" />
-No type information for this code.
-No type information for this code.=== /node_modules/@types/beep__boop/index.d.ts ===
+
+=== /node_modules/@types/beep__boop/index.d.ts ===
 export const y = 0;
 >y : 0
+>  : ^
 >0 : 0
+>  : ^
 

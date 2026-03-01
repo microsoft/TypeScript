@@ -1,11 +1,15 @@
-=== tests/cases/compiler/commentOnClassMethod1.ts ===
+//// [tests/cases/compiler/commentOnClassMethod1.ts] ////
+
+=== commentOnClassMethod1.ts ===
 class WebControls {
 >WebControls : WebControls
+>            : ^^^^^^^^^^^
 
     /**
      * Render a control
      */
     createControl(): any {
 >createControl : () => any
+>              : ^^^^^^   
     }
 }

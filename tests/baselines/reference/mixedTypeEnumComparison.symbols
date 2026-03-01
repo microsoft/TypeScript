@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/mixedTypeEnumComparison.ts] ////
+
+=== mixedTypeEnumComparison.ts ===
+const enum E {
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+
+    S1 = "foo",
+>S1 : Symbol(E.S1, Decl(mixedTypeEnumComparison.ts, 0, 14))
+
+    S2 = "bar",
+>S2 : Symbol(E.S2, Decl(mixedTypeEnumComparison.ts, 1, 15))
+
+    N1 = 1000,
+>N1 : Symbol(E.N1, Decl(mixedTypeEnumComparison.ts, 2, 15))
+
+    N2 = 25,
+>N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+}
+
+declare var someNumber: number
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+
+if (someNumber > E.N2) {
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+>E.N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+
+    someNumber = E.N2;
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+>E.N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+}
+
+declare const unionOfEnum: E.N1 | E.N2;
+>unionOfEnum : Symbol(unionOfEnum, Decl(mixedTypeEnumComparison.ts, 14, 13))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>N1 : Symbol(E.N1, Decl(mixedTypeEnumComparison.ts, 2, 15))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+
+if (someNumber > unionOfEnum) {
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+>unionOfEnum : Symbol(unionOfEnum, Decl(mixedTypeEnumComparison.ts, 14, 13))
+
+    someNumber = E.N2;
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+>E.N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>N2 : Symbol(E.N2, Decl(mixedTypeEnumComparison.ts, 4, 14))
+}
+
+declare var someString: string
+>someString : Symbol(someString, Decl(mixedTypeEnumComparison.ts, 20, 11))
+
+if (someString > E.S1) {
+>someString : Symbol(someString, Decl(mixedTypeEnumComparison.ts, 20, 11))
+>E.S1 : Symbol(E.S1, Decl(mixedTypeEnumComparison.ts, 0, 14))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>S1 : Symbol(E.S1, Decl(mixedTypeEnumComparison.ts, 0, 14))
+
+    someString = E.S2;
+>someString : Symbol(someString, Decl(mixedTypeEnumComparison.ts, 20, 11))
+>E.S2 : Symbol(E.S2, Decl(mixedTypeEnumComparison.ts, 1, 15))
+>E : Symbol(E, Decl(mixedTypeEnumComparison.ts, 0, 0))
+>S2 : Symbol(E.S2, Decl(mixedTypeEnumComparison.ts, 1, 15))
+}
+
+
+declare function someValue(): number;
+>someValue : Symbol(someValue, Decl(mixedTypeEnumComparison.ts, 24, 1))
+
+enum E2 {
+>E2 : Symbol(E2, Decl(mixedTypeEnumComparison.ts, 27, 37))
+
+    S1 = "foo",
+>S1 : Symbol(E2.S1, Decl(mixedTypeEnumComparison.ts, 29, 9))
+
+    N1 = 1000,
+>N1 : Symbol(E2.N1, Decl(mixedTypeEnumComparison.ts, 30, 15))
+
+    C1 = someValue(),
+>C1 : Symbol(E2.C1, Decl(mixedTypeEnumComparison.ts, 31, 14))
+>someValue : Symbol(someValue, Decl(mixedTypeEnumComparison.ts, 24, 1))
+}
+
+someString > E2.S1;
+>someString : Symbol(someString, Decl(mixedTypeEnumComparison.ts, 20, 11))
+>E2.S1 : Symbol(E2.S1, Decl(mixedTypeEnumComparison.ts, 29, 9))
+>E2 : Symbol(E2, Decl(mixedTypeEnumComparison.ts, 27, 37))
+>S1 : Symbol(E2.S1, Decl(mixedTypeEnumComparison.ts, 29, 9))
+
+someNumber > E2.N1;
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+>E2.N1 : Symbol(E2.N1, Decl(mixedTypeEnumComparison.ts, 30, 15))
+>E2 : Symbol(E2, Decl(mixedTypeEnumComparison.ts, 27, 37))
+>N1 : Symbol(E2.N1, Decl(mixedTypeEnumComparison.ts, 30, 15))
+
+someNumber > E2.C1;
+>someNumber : Symbol(someNumber, Decl(mixedTypeEnumComparison.ts, 8, 11))
+>E2.C1 : Symbol(E2.C1, Decl(mixedTypeEnumComparison.ts, 31, 14))
+>E2 : Symbol(E2, Decl(mixedTypeEnumComparison.ts, 27, 37))
+>C1 : Symbol(E2.C1, Decl(mixedTypeEnumComparison.ts, 31, 14))
+

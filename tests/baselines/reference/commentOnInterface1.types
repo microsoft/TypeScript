@@ -1,19 +1,22 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnInterface1.ts] ////
+
+=== b.ts ===
+
 ///<reference path='a.ts'/>
-No type information for this code.interface I3 {
-No type information for this code.}
-No type information for this code.=== tests/cases/compiler/a.ts ===
+interface I3 {
+}
+=== a.ts ===
+
 /*!=================
-No type information for this code.    Keep this pinned
-No type information for this code.   =================
-No type information for this code.*/
-No type information for this code.
-No type information for this code./*! Don't keep this pinned comment */
-No type information for this code.interface I {
-No type information for this code.}
-No type information for this code.
-No type information for this code.// Don't keep this comment.
-No type information for this code.interface I2 {
-No type information for this code.}
-No type information for this code.
-No type information for this code.
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
+interface I {
+}
+
+// Don't keep this comment.
+interface I2 {
+}
+

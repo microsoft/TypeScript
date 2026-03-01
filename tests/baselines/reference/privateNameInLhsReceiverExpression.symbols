@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInLhsReceiverExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInLhsReceiverExpression.ts] ////
+
+=== privateNameInLhsReceiverExpression.ts ===
 class Test {
 >Test : Symbol(Test, Decl(privateNameInLhsReceiverExpression.ts, 0, 0))
 

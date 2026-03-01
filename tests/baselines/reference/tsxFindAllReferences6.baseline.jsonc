@@ -1,75 +1,59 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface OptionPropBag {
-//     propx: number
-//     propString: string
+// --- (line: 9) skipped ---
 //     optional?: boolean
 // }
 // declare function Opt(attributes: OptionPropBag): JSX.Element;
-// let opt = <Opt /*FIND ALL REFS*/[|wrong|] />;
+// let opt = <Opt /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}wrong|] />;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "property",
-      "name": "(property) wrong: true",
-      "textSpan": {
-        "start": 309,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "wrong",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "true",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 309,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 9) skipped ---
+  //     optional?: boolean
+  // }
+  // declare function Opt(attributes: OptionPropBag): JSX.Element;
+  // let opt = <Opt /*FIND ALL REFS*/[|wrong|] />;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) wrong: true",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "wrong",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "true",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

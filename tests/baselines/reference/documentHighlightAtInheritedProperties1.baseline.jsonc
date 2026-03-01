@@ -1,0 +1,15 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface interface1 extends interface1 {
+//    /*HIGHLIGHTS*/<|[|{| kind: "reference" |}doStuff|](): void;|>
+//    propName: string;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// interface interface1 extends interface1 {
+//    doStuff(): void;
+//    /*HIGHLIGHTS*/<|[|{| kind: "reference" |}propName|]: string;|>
+// }

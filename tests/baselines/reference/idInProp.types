@@ -1,9 +1,13 @@
-=== tests/cases/compiler/idInProp.ts ===
+//// [tests/cases/compiler/idInProp.ts] ////
+
+=== idInProp.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
 var t: { (f: any) : any; };
 >t : (f: any) => any
+>  : ^ ^^   ^^^^^   
 >f : any
 
 }

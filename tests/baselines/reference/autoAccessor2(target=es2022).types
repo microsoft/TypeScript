@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor2.ts] ////
+
+=== autoAccessor2.ts ===
+class C1 {
+>C1 : C1
+>   : ^^
+
+    accessor #a: any;
+>#a : any
+
+    accessor #b = 1;
+>#b : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+
+    static accessor #c: any;
+>#c : any
+
+    static accessor #d = 2;
+>#d : number
+>   : ^^^^^^
+>2 : 2
+>  : ^
+
+    constructor() {
+        this.#a = 3;
+>this.#a = 3 : 3
+>            : ^
+>this.#a : any
+>this : this
+>     : ^^^^
+>3 : 3
+>  : ^
+
+        this.#b = 4;
+>this.#b = 4 : 4
+>            : ^
+>this.#b : number
+>        : ^^^^^^
+>this : this
+>     : ^^^^
+>4 : 4
+>  : ^
+    }
+
+    static {
+        this.#c = 5;
+>this.#c = 5 : 5
+>            : ^
+>this.#c : any
+>this : typeof C1
+>     : ^^^^^^^^^
+>5 : 5
+>  : ^
+
+        this.#d = 6;
+>this.#d = 6 : 6
+>            : ^
+>this.#d : number
+>        : ^^^^^^
+>this : typeof C1
+>     : ^^^^^^^^^
+>6 : 6
+>  : ^
+    }
+}
+

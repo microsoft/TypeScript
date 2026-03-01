@@ -1,0 +1,87 @@
+//// [tests/cases/conformance/types/tuple/named/partiallyNamedTuples2.ts] ////
+
+=== partiallyNamedTuples2.ts ===
+// https://github.com/microsoft/TypeScript/issues/55693
+interface MultiKeyMap<Keys extends readonly unknown[], Value> {
+>MultiKeyMap : Symbol(MultiKeyMap, Decl(partiallyNamedTuples2.ts, 0, 0))
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 1, 22))
+>Value : Symbol(Value, Decl(partiallyNamedTuples2.ts, 1, 54))
+
+  get<Key extends GetKeys<Keys>>(...key: Key): GetResult<Keys, Key, Value>;
+>get : Symbol(MultiKeyMap.get, Decl(partiallyNamedTuples2.ts, 1, 63))
+>Key : Symbol(Key, Decl(partiallyNamedTuples2.ts, 2, 6))
+>GetKeys : Symbol(GetKeys, Decl(partiallyNamedTuples2.ts, 3, 1))
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 1, 22))
+>key : Symbol(key, Decl(partiallyNamedTuples2.ts, 2, 33))
+>Key : Symbol(Key, Decl(partiallyNamedTuples2.ts, 2, 6))
+>GetResult : Symbol(GetResult, Decl(partiallyNamedTuples2.ts, 9, 9))
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 1, 22))
+>Key : Symbol(Key, Decl(partiallyNamedTuples2.ts, 2, 6))
+>Value : Symbol(Value, Decl(partiallyNamedTuples2.ts, 1, 54))
+}
+type GetKeys<Keys extends readonly unknown[]> = Keys extends [
+>GetKeys : Symbol(GetKeys, Decl(partiallyNamedTuples2.ts, 3, 1))
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 4, 13))
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 4, 13))
+
+  ...infer Remain,
+>Remain : Symbol(Remain, Decl(partiallyNamedTuples2.ts, 5, 10))
+
+  infer _,
+>_ : Symbol(_, Decl(partiallyNamedTuples2.ts, 6, 7))
+
+]
+  ? Keys | GetKeys<Remain>
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 4, 13))
+>GetKeys : Symbol(GetKeys, Decl(partiallyNamedTuples2.ts, 3, 1))
+>Remain : Symbol(Remain, Decl(partiallyNamedTuples2.ts, 5, 10))
+
+  : Keys;
+>Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 4, 13))
+
+type GetResult<
+>GetResult : Symbol(GetResult, Decl(partiallyNamedTuples2.ts, 9, 9))
+
+  Id extends readonly unknown[],
+>Id : Symbol(Id, Decl(partiallyNamedTuples2.ts, 10, 15))
+
+  Args extends GetKeys<Id>,
+>Args : Symbol(Args, Decl(partiallyNamedTuples2.ts, 11, 32))
+>GetKeys : Symbol(GetKeys, Decl(partiallyNamedTuples2.ts, 3, 1))
+>Id : Symbol(Id, Decl(partiallyNamedTuples2.ts, 10, 15))
+
+  Value,
+>Value : Symbol(Value, Decl(partiallyNamedTuples2.ts, 12, 27))
+
+> = Args extends Id
+>Args : Symbol(Args, Decl(partiallyNamedTuples2.ts, 11, 32))
+>Id : Symbol(Id, Decl(partiallyNamedTuples2.ts, 10, 15))
+
+  ? Value | undefined
+>Value : Symbol(Value, Decl(partiallyNamedTuples2.ts, 12, 27))
+
+  : Id extends [...Args, ...infer Rest]
+>Id : Symbol(Id, Decl(partiallyNamedTuples2.ts, 10, 15))
+>Args : Symbol(Args, Decl(partiallyNamedTuples2.ts, 11, 32))
+>Rest : Symbol(Rest, Decl(partiallyNamedTuples2.ts, 16, 33))
+
+  ? Iterable<[...Rest, Value]>
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Rest : Symbol(Rest, Decl(partiallyNamedTuples2.ts, 16, 33))
+>Value : Symbol(Value, Decl(partiallyNamedTuples2.ts, 12, 27))
+
+  : never;
+const x: MultiKeyMap<[id1: string, id2: string], object> = null!;
+>x : Symbol(x, Decl(partiallyNamedTuples2.ts, 19, 5))
+>MultiKeyMap : Symbol(MultiKeyMap, Decl(partiallyNamedTuples2.ts, 0, 0))
+
+const id1 = "abc" as string;
+>id1 : Symbol(id1, Decl(partiallyNamedTuples2.ts, 20, 5))
+
+const matches = x.get(id1);
+>matches : Symbol(matches, Decl(partiallyNamedTuples2.ts, 21, 5))
+>x.get : Symbol(MultiKeyMap.get, Decl(partiallyNamedTuples2.ts, 1, 63))
+>x : Symbol(x, Decl(partiallyNamedTuples2.ts, 19, 5))
+>get : Symbol(MultiKeyMap.get, Decl(partiallyNamedTuples2.ts, 1, 63))
+>id1 : Symbol(id1, Decl(partiallyNamedTuples2.ts, 20, 5))
+

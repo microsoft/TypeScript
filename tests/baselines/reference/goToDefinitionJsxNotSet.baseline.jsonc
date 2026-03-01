@@ -1,0 +1,22 @@
+// === goToDefinition ===
+// === /foo.jsx ===
+// const [|{| contextId: 0 |}Foo|] = <|() => (
+//     <div>foo</div>
+// )|>;
+// export default Foo;
+
+// === /bar.jsx ===
+// import Foo from './foo';
+// const a = </*GOTO DEF*/[|Foo|] />
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

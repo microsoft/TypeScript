@@ -1,8 +1,12 @@
-=== tests/cases/compiler/generatorReturnExpressionIsChecked.ts ===
+//// [tests/cases/compiler/generatorReturnExpressionIsChecked.ts] ////
+
+=== generatorReturnExpressionIsChecked.ts ===
 function* f(): Iterator<number> {
 >f : () => Iterator<number>
+>  : ^^^^^^                
 
     return invalid;
 >invalid : any
+>        : ^^^
 }
 

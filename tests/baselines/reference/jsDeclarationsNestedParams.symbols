@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNestedParams.ts] ////
+
+=== file.js ===
 class X {
 >X : Symbol(X, Decl(file.js, 0, 0))
 

@@ -1,28 +1,41 @@
-=== tests/cases/compiler/contextualTypeAppliedToVarArgs.ts ===
+//// [tests/cases/compiler/contextualTypeAppliedToVarArgs.ts] ////
+
+=== contextualTypeAppliedToVarArgs.ts ===
 function delegate(instance: any, method: (...args: any[]) => any, data?: any): (...args: any[]) => any {
 >delegate : (instance: any, method: (...args: any[]) => any, data?: any) => (...args: any[]) => any
+>         : ^        ^^   ^^      ^^                       ^^    ^^^   ^^^^^                       
 >instance : any
 >method : (...args: any[]) => any
+>       : ^^^^    ^^     ^^^^^   
 >args : any[]
+>     : ^^^^^
 >data : any
 >args : any[]
+>     : ^^^^^
 
     return function () { };
 >function () { } : () => void
+>                : ^^^^^^^^^^
 }
 
 class Foo{
 >Foo : Foo
+>    : ^^^
 
 
     Bar() {
 >Bar : () => void
+>    : ^^^^^^^^^^
 
         delegate(this, function (source, args2)
 >delegate(this, function (source, args2)        {            var a = source.node;            var b = args2.node;        } ) : (...args: any[]) => any
+>                                                                                                                           : ^^^^    ^^     ^^^^^   
 >delegate : (instance: any, method: (...args: any[]) => any, data?: any) => (...args: any[]) => any
+>         : ^        ^^   ^^      ^^                       ^^    ^^^   ^^^^^                       
 >this : this
+>     : ^^^^
 >function (source, args2)        {            var a = source.node;            var b = args2.node;        } : (source: any, args2: any) => void
+>                                                                                                          : ^      ^^^^^^^     ^^^^^^^^^^^^^^
 >source : any
 >args2 : any
         {
@@ -30,13 +43,17 @@ class Foo{
 >a : any
 >source.node : any
 >source : any
+>       : ^^^
 >node : any
+>     : ^^^
 
             var b = args2.node;
 >b : any
 >args2.node : any
 >args2 : any
+>      : ^^^
 >node : any
+>     : ^^^
 
         } );
     }

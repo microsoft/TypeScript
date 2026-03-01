@@ -1,7 +1,12 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts(14,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+typeOfThisInInstanceMember2.ts(18,5): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
+typeOfThisInInstanceMember2.ts(23,9): error TS2454: Variable 'c' is used before being assigned.
+typeOfThisInInstanceMember2.ts(24,10): error TS2454: Variable 'c' is used before being assigned.
+typeOfThisInInstanceMember2.ts(25,10): error TS2454: Variable 'c' is used before being assigned.
+typeOfThisInInstanceMember2.ts(26,10): error TS2454: Variable 'c' is used before being assigned.
+typeOfThisInInstanceMember2.ts(27,10): error TS2454: Variable 'c' is used before being assigned.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts (1 errors) ====
+==== typeOfThisInInstanceMember2.ts (6 errors) ====
     class C<T> {
         x = this;
         foo() {
@@ -16,21 +21,31 @@ tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInIns
         }
     
         get y() {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this;
         }
     
         z: T;
+        ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
     }
     
     var c: C<string>;
     // all ok
     var r = c.x;
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.
     var ra = c.x.x.x;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
     var r2 = c.y;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
     var r3 = c.foo();
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
     var r4 = c.z;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
     var rs = [r, r2, r3];
     
     rs.forEach(x => {

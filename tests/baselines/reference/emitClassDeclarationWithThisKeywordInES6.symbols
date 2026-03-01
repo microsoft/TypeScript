@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithThisKeywordInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithThisKeywordInES6.ts] ////
+
+=== emitClassDeclarationWithThisKeywordInES6.ts ===
 class B {
 >B : Symbol(B, Decl(emitClassDeclarationWithThisKeywordInES6.ts, 0, 0))
 

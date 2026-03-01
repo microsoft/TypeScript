@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer2.ts] ////
+
 //// [interfaceWithStringIndexerHidingBaseTypeIndexer2.ts]
 interface Base {
     [x: number]: { a: number; b: number }
@@ -21,3 +23,4 @@ interface Derived extends Base {
 }
 
 //// [interfaceWithStringIndexerHidingBaseTypeIndexer2.js]
+"use strict";

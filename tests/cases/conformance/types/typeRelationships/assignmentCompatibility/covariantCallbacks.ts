@@ -71,3 +71,40 @@ function f14(a: AList4, b: BList4) {
     a = b;
     b = a;  // Error
 }
+
+// Repro from #51620
+
+type Bivar<T> = { set(value: T): void }
+
+declare let bu: Bivar<unknown>;
+declare let bs: Bivar<string>;
+bu = bs;
+bs = bu;
+
+declare let bfu: Bivar<(x: unknown) => void>;
+declare let bfs: Bivar<(x: string) => void>;
+bfu = bfs;
+bfs = bfu;
+
+type Bivar1<T> = { set(value: T): void }
+type Bivar2<T> = { set(value: T): void }
+
+declare let b1fu: Bivar1<(x: unknown) => void>;
+declare let b2fs: Bivar2<(x: string) => void>;
+b1fu = b2fs;
+b2fs = b1fu;
+
+type SetLike<T> = { set(value: T): void, get(): T }
+
+declare let sx: SetLike1<(x: unknown) => void>;
+declare let sy: SetLike1<(x: string) => void>;
+sx = sy;  // Error
+sy = sx;
+
+type SetLike1<T> = { set(value: T): void, get(): T }
+type SetLike2<T> = { set(value: T): void, get(): T }
+
+declare let s1: SetLike1<(x: unknown) => void>;
+declare let s2: SetLike2<(x: string) => void>;
+s1 = s2;  // Error
+s2 = s1;

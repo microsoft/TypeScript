@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedTypeDeepDeclarationEmit.ts] ////
+
 //// [reverseMappedTypeDeepDeclarationEmit.ts]
 export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>
 
@@ -32,13 +34,13 @@ export const outputExample = validatorFunc({
 
 //// [reverseMappedTypeDeepDeclarationEmit.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.outputExample = exports.validatorFunc = exports.test = void 0;
 exports.test = {
     Test: {
         Test1: {
             Test2: exports.SimpleStringValidator
-        }
+        },
     }
 };
 exports.validatorFunc = (0, exports.ObjValidator)(exports.test);
@@ -46,7 +48,7 @@ exports.outputExample = (0, exports.validatorFunc)({
     Test: {
         Test1: {
             Test2: "hi"
-        }
+        },
     }
 });
 

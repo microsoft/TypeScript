@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {

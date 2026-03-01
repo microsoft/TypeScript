@@ -1,11 +1,15 @@
-=== tests/cases/compiler/declareClassInterfaceImplementation.ts ===
+//// [tests/cases/compiler/declareClassInterfaceImplementation.ts] ////
+
+=== declareClassInterfaceImplementation.ts ===
 interface IBuffer {
     [index: number]: number;
 >index : number
+>      : ^^^^^^
 }
 
 declare class Buffer implements IBuffer {
 >Buffer : Buffer
+>       : ^^^^^^
 
 }
 

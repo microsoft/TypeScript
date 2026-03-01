@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/isolatedDeclarationErrors.ts] ////
+
+=== isolatedDeclarationErrors.ts ===
+function errorOnAssignmentBelowDecl(): void {}
+>errorOnAssignmentBelowDecl : typeof errorOnAssignmentBelowDecl
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+errorOnAssignmentBelowDecl.a = "";
+>errorOnAssignmentBelowDecl.a = "" : ""
+>                                  : ^^
+>errorOnAssignmentBelowDecl.a : string
+>                             : ^^^^^^
+>errorOnAssignmentBelowDecl : typeof errorOnAssignmentBelowDecl
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+const errorOnAssignmentBelow = (): void => {}
+>errorOnAssignmentBelow : { (): void; a: string; }
+>                       : ^^^^^^    ^^^^^^^^^^^^^^
+>(): void => {} : { (): void; a: string; }
+>               : ^^^^^^    ^^^^^^^^^^^^^^
+
+errorOnAssignmentBelow.a = "";
+>errorOnAssignmentBelow.a = "" : ""
+>                              : ^^
+>errorOnAssignmentBelow.a : string
+>                         : ^^^^^^
+>errorOnAssignmentBelow : { (): void; a: string; }
+>                       : ^^^^^^    ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+const errorOnMissingReturn = () => {}
+>errorOnMissingReturn : { (): void; a: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; a: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+errorOnMissingReturn.a = "";
+>errorOnMissingReturn.a = "" : ""
+>                            : ^^
+>errorOnMissingReturn.a : string
+>                       : ^^^^^^
+>errorOnMissingReturn : { (): void; a: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+

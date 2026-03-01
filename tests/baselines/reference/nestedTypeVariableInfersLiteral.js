@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedTypeVariableInfersLiteral.ts] ////
+
 //// [nestedTypeVariableInfersLiteral.ts]
 // https://github.com/Microsoft/TypeScript/issues/19632
 declare function direct<A extends string>(a: A | A[]): Record<A, string>
@@ -20,11 +22,12 @@ hasZField(nestedUnionArray) // ok
 
 
 //// [nestedTypeVariableInfersLiteral.js]
-var directUnionSingle = direct("z");
-var directUnionArray = direct(["z", "y"]);
-var nestedSingle = nested({ fields: "z" });
-var nestedUnionSingle = nestedUnion({ fields: "z" });
-var nestedUnionArray = nestedUnion({ fields: ["z", "y"] });
+"use strict";
+const directUnionSingle = direct("z");
+const directUnionArray = direct(["z", "y"]);
+const nestedSingle = nested({ fields: "z" });
+const nestedUnionSingle = nestedUnion({ fields: "z" });
+const nestedUnionArray = nestedUnion({ fields: ["z", "y"] });
 hasZField(directUnionSingle); // ok
 hasZField(directUnionArray); // ok
 hasZField(nestedSingle); // ok

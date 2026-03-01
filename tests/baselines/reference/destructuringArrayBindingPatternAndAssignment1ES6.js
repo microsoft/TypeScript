@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts] ////
+
 //// [destructuringArrayBindingPatternAndAssignment1ES6.ts]
 /* AssignmentPattern:
  *      ObjectAssignmentPattern
@@ -52,6 +54,7 @@ var [c11, c12, ...c13] = [1, 2, "string"];
 var [c14, c15, c16] = [1, 2, "string"];
 
 //// [destructuringArrayBindingPatternAndAssignment1ES6.js]
+"use strict";
 /* AssignmentPattern:
  *      ObjectAssignmentPattern
  *      ArrayAssignmentPattern

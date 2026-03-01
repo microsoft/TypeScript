@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tooFewArgumentsInGenericFunctionTypedArgument.ts ===
+//// [tests/cases/compiler/tooFewArgumentsInGenericFunctionTypedArgument.ts] ////
+
+=== tooFewArgumentsInGenericFunctionTypedArgument.ts ===
 interface Collection<T, U> {
 >Collection : Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
 >T : Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumDeclarations.ts] ////
+
 //// [constEnumDeclarations.ts]
 const enum E {
     A = 1,
@@ -12,6 +14,7 @@ const enum E2 {
 }
 
 //// [constEnumDeclarations.js]
+"use strict";
 
 
 //// [constEnumDeclarations.d.ts]

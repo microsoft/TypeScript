@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @noImplicitOverride: true
 ////abstract class A {
 ////    abstract x: number;
 ////    abstract y: this;
@@ -18,8 +19,8 @@ verify.codeFix({
 }
 
 class C extends A {
-    x: number;
-    y: this;
-    z: A;
+    override x: number;
+    override y: this;
+    override z: A;
 }`
 });

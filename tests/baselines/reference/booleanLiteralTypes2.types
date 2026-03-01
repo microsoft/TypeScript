@@ -1,307 +1,480 @@
-=== tests/cases/conformance/types/literal/booleanLiteralTypes2.ts ===
+//// [tests/cases/conformance/types/literal/booleanLiteralTypes2.ts] ////
+
+=== booleanLiteralTypes2.ts ===
 type A1 = true | false;
->A1 : boolean
+>A1 : A1
+>   : ^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type A2 = false | true;
->A2 : boolean
+>A2 : A2
+>   : ^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     var a: A1;
 >a : A1
+>  : ^^
 
     var a: A2;
 >a : A1
+>  : ^^
 
     var a: true | false;
 >a : A1
+>  : ^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     var a: false | true;
 >a : A1
+>  : ^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 }
 
 function f2(a: true | false, b: boolean) {
 >f2 : (a: true | false, b: boolean) => void
+>   : ^ ^^            ^^ ^^       ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     a = b;
 >a = b : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     b = a;
 >b = a : boolean
+>      : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 }
 
 function f3(a: true | false, b: true | false) {
 >f3 : (a: true | false, b: true | false) => void
+>   : ^ ^^            ^^ ^^            ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     var x = a || b;
 >x : boolean
+>  : ^^^^^^^
 >a || b : boolean
+>       : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     var x = a && b;
 >x : boolean
+>  : ^^^^^^^
 >a && b : boolean
+>       : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     var x = !a;
 >x : boolean
+>  : ^^^^^^^
 >!a : boolean
+>   : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 }
 
 function f4(t: true, f: false) {
 >f4 : (t: true, f: false) => void
+>   : ^ ^^    ^^ ^^     ^^^^^^^^^
 >t : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >f : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
     var x1 = t && f;
 >x1 : false
+>   : ^^^^^
 >t && f : false
+>       : ^^^^^
 >t : true
+>  : ^^^^
 >f : false
+>  : ^^^^^
 
     var x2 = f && t;
 >x2 : false
+>   : ^^^^^
 >f && t : false
+>       : ^^^^^
 >f : false
+>  : ^^^^^
 >t : true
+>  : ^^^^
 
     var x3 = t || f;
 >x3 : true
+>   : ^^^^
 >t || f : true
+>       : ^^^^
 >t : true
+>  : ^^^^
 >f : false
+>  : ^^^^^
 
     var x4 = f || t;
 >x4 : true
+>   : ^^^^
 >f || t : true
+>       : ^^^^
 >f : false
+>  : ^^^^^
 >t : true
+>  : ^^^^
 
     var x5 = !t;
 >x5 : boolean
+>   : ^^^^^^^
 >!t : false
+>   : ^^^^^
 >t : true
+>  : ^^^^
 
     var x6 = !f;
 >x6 : boolean
+>   : ^^^^^^^
 >!f : true
+>   : ^^^^
 >f : false
+>  : ^^^^^
 }
 
 declare function g(x: true): string;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >x : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 declare function g(x: false): boolean;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >x : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 declare function g(x: boolean): number;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >x : boolean
+>  : ^^^^^^^
 
 function f5(b: boolean) {
 >f5 : (b: boolean) => void
+>   : ^ ^^       ^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
     var z1 = g(true);
 >z1 : string
+>   : ^^^^^^
 >g(true) : string
+>        : ^^^^^^
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >true : true
+>     : ^^^^
 
     var z2 = g(false);
 >z2 : boolean
+>   : ^^^^^^^
 >g(false) : boolean
+>         : ^^^^^^^
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >false : false
+>      : ^^^^^
 
     var z3 = g(b);
 >z3 : number
+>   : ^^^^^^
 >g(b) : number
+>     : ^^^^^^
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >b : boolean
+>  : ^^^^^^^
 }
 
 function assertNever(x: never): never {
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 
     throw new Error("Unexpected value");
 >new Error("Unexpected value") : Error
+>                              : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"Unexpected value" : "Unexpected value"
+>                   : ^^^^^^^^^^^^^^^^^^
 }
 
 function f10(x: true | false) {
 >f10 : (x: true | false) => "true" | "false"
+>    : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     switch (x) {
 >x : boolean
+>  : ^^^^^^^
 
         case true: return "true";
 >true : true
+>     : ^^^^
 >"true" : "true"
+>       : ^^^^^^
 
         case false: return "false";
 >false : false
+>      : ^^^^^
 >"false" : "false"
+>        : ^^^^^^^
     }
 }
 
 function f11(x: true | false) {
 >f11 : (x: true | false) => "true" | "false"
+>    : ^ ^^            ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     switch (x) {
 >x : boolean
+>  : ^^^^^^^
 
         case true: return "true";
 >true : true
+>     : ^^^^
 >"true" : "true"
+>       : ^^^^^^
 
         case false: return "false";
 >false : false
+>      : ^^^^^
 >"false" : "false"
+>        : ^^^^^^^
     }
     return assertNever(x);
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 }
 
 function f12(x: true | false) {
 >f12 : (x: true | false) => void
+>    : ^ ^^            ^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     if (x) {
 >x : boolean
+>  : ^^^^^^^
 
         x;
 >x : true
+>  : ^^^^
     }
     else {
         x;
 >x : false
+>  : ^^^^^
     }
 }
 
 function f13(x: true | false) {
 >f13 : (x: true | false) => void
+>    : ^ ^^            ^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     if (x === true) {
 >x === true : boolean
+>           : ^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
         x;
 >x : true
+>  : ^^^^
     }
     else {
         x;
 >x : false
+>  : ^^^^^
     }
 }
 
 type Item =
->Item : { kind: true; a: string; } | { kind: false; b: string; }
+>Item : Item
+>     : ^^^^
 
     { kind: true, a: string } |
 >kind : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 
     { kind: false, b: string };
 >kind : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 >b : string
+>  : ^^^^^^
 
 function f20(x: Item) {
 >f20 : (x: Item) => string
+>    : ^ ^^    ^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     switch (x.kind) {
 >x.kind : boolean
+>       : ^^^^^^^
 >x : Item
+>  : ^^^^
 >kind : boolean
+>     : ^^^^^^^
 
         case true: return x.a;
 >true : true
+>     : ^^^^
 >x.a : string
+>    : ^^^^^^
 >x : { kind: true; a: string; }
+>  : ^^^^^^^^    ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
         case false: return x.b;
 >false : false
+>      : ^^^^^
 >x.b : string
+>    : ^^^^^^
 >x : { kind: false; b: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
     }
 }
 
 function f21(x: Item) {
 >f21 : (x: Item) => string
+>    : ^ ^^    ^^^^^^^^^^^
 >x : Item
+>  : ^^^^
 
     switch (x.kind) {
 >x.kind : boolean
+>       : ^^^^^^^
 >x : Item
+>  : ^^^^
 >kind : boolean
+>     : ^^^^^^^
 
         case true: return x.a;
 >true : true
+>     : ^^^^
 >x.a : string
+>    : ^^^^^^
 >x : { kind: true; a: string; }
+>  : ^^^^^^^^    ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
         case false: return x.b;
 >false : false
+>      : ^^^^^
 >x.b : string
+>    : ^^^^^^
 >x : { kind: false; b: string; }
+>  : ^^^^^^^^     ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
     }
     return assertNever(x);
 >assertNever(x) : never
+>               : ^^^^^
 >assertNever : (x: never) => never
+>            : ^ ^^     ^^^^^     
 >x : never
+>  : ^^^^^
 }

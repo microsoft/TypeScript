@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticsInAFunction.ts ===
+//// [tests/cases/compiler/staticsInAFunction.ts] ////
+
+=== staticsInAFunction.ts ===
 function boo{
 >boo : Symbol(boo, Decl(staticsInAFunction.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts] ////
+
 //// [logicalAssignment5.ts]
 function foo1 (f?: (a: number) => void) {
     f ??= (a => a)

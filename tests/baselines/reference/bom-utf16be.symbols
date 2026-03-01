@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bom-utf16be.ts ===
+//// [tests/cases/compiler/bom-utf16be.ts] ////
+
+=== bom-utf16be.ts ===
 var x=10;
 >x : Symbol(x, Decl(bom-utf16be.ts, 0, 3))
 

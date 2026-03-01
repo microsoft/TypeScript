@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts ===
+//// [tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts] ////
+
+=== literalTypesWidenInParameterPosition.ts ===
 class D {
 >D : Symbol(D, Decl(literalTypesWidenInParameterPosition.ts, 0, 0))
 

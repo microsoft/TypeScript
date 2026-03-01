@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression4.ts(1,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+parserUnaryExpression4.ts(1,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression4.ts (1 errors) ====
+==== parserUnaryExpression4.ts (1 errors) ====
     ++{};
       ~~
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.

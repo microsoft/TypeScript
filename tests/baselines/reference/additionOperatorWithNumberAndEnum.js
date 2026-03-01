@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNumberAndEnum.ts] ////
+
 //// [additionOperatorWithNumberAndEnum.ts]
 enum E { a, b }
 enum F { c, d }
@@ -25,6 +27,7 @@ var r14 = c + c;
 
 
 //// [additionOperatorWithNumberAndEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

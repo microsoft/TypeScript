@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-1.ts] ////
+
 //// [privateNameInObjectLiteral-1.ts]
 const obj = {
     #foo: 1
@@ -5,6 +7,7 @@ const obj = {
 
 
 //// [privateNameInObjectLiteral-1.js]
-var obj = {
+"use strict";
+const obj = {
     : 1
 };

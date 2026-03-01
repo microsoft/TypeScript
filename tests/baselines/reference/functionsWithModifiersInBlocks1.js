@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionsWithModifiersInBlocks1.ts] ////
+
 //// [functionsWithModifiersInBlocks1.ts]
 {
    declare function f() { }
@@ -6,6 +8,7 @@
 }
 
 //// [functionsWithModifiersInBlocks1.js]
+"use strict";
 {
     export function f() { }
 }

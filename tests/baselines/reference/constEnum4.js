@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/constEnums/constEnum4.ts] ////
+
 //// [constEnum4.ts]
 if (1)
     const enum A { }
@@ -8,6 +10,7 @@ else
 
 
 //// [constEnum4.js]
+"use strict";
 if (1)
     ;
 else if (2)

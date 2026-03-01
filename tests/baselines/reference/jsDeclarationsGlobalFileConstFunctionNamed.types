@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/jsDeclarationsGlobalFileConstFunctionNamed.ts] ////
+
+=== file.js ===
+const SomeConstructor = function Named() {
+>SomeConstructor : typeof Named
+>                : ^^^^^^^^^^^^
+>function Named() {	this.x = 1;} : typeof Named
+>                                : ^^^^^^^^^^^^
+>Named : typeof Named
+>      : ^^^^^^^^^^^^
+
+	this.x = 1;
+>this.x = 1 : 1
+>           : ^
+>this.x : any
+>this : this
+>     : ^^^^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+
+};
+
+const SomeConstructor2 = function Named() {
+>SomeConstructor2 : { (): void; staticMember: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function Named() {} : { (): void; staticMember: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Named : { (): void; staticMember: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+SomeConstructor2.staticMember = "str";
+>SomeConstructor2.staticMember = "str" : "str"
+>                                      : ^^^^^
+>SomeConstructor2.staticMember : string
+>                              : ^^^^^^
+>SomeConstructor2 : { (): void; staticMember: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>staticMember : string
+>             : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
+
+const SomeConstructor3 = function Named() {
+>SomeConstructor3 : typeof Named
+>                 : ^^^^^^^^^^^^
+>function Named() {	this.x = 1;} : typeof Named
+>                                : ^^^^^^^^^^^^
+>Named : typeof Named
+>      : ^^^^^^^^^^^^
+
+	this.x = 1;
+>this.x = 1 : 1
+>           : ^
+>this.x : any
+>this : this
+>     : ^^^^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+
+};
+SomeConstructor3.staticMember = "str";
+>SomeConstructor3.staticMember = "str" : "str"
+>                                      : ^^^^^
+>SomeConstructor3.staticMember : string
+>                              : ^^^^^^
+>SomeConstructor3 : typeof Named
+>                 : ^^^^^^^^^^^^
+>staticMember : string
+>             : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
+
+const SelfReference = function Named() {
+>SelfReference : typeof Named
+>              : ^^^^^^^^^^^^
+>function Named() {    if (!(this instanceof Named)) return new Named();    this.x = 1;} : typeof Named
+>                                                                                        : ^^^^^^^^^^^^
+>Named : typeof Named
+>      : ^^^^^^^^^^^^
+
+    if (!(this instanceof Named)) return new Named();
+>!(this instanceof Named) : boolean
+>                         : ^^^^^^^
+>(this instanceof Named) : boolean
+>                        : ^^^^^^^
+>this instanceof Named : boolean
+>                      : ^^^^^^^
+>this : this
+>     : ^^^^
+>Named : typeof Named
+>      : ^^^^^^^^^^^^
+>new Named() : Named
+>            : ^^^^^
+>Named : typeof Named
+>      : ^^^^^^^^^^^^
+
+    this.x = 1;
+>this.x = 1 : 1
+>           : ^
+>this.x : any
+>this : this
+>     : ^^^^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+}
+SelfReference.staticMember = "str";
+>SelfReference.staticMember = "str" : "str"
+>                                   : ^^^^^
+>SelfReference.staticMember : string
+>                           : ^^^^^^
+>SelfReference : typeof Named
+>              : ^^^^^^^^^^^^
+>staticMember : string
+>             : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
+

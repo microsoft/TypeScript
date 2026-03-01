@@ -1,0 +1,12 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/foo.js ===
+// --- (line: 6) skipped ---
+//  * @param {string} x
+//  * @returns {string} 
+//  *
+//  * @param {unknown} [|xRENAME|]
+//  * @returns {unknown} 
+//  */
+// function foo([|xRENAME|]/*RENAME*/) {
+//   return [|xRENAME|];
+// }

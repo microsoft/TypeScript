@@ -1,94 +1,148 @@
-=== tests/cases/compiler/declarationNoDanglingGenerics.ts ===
+//// [tests/cases/compiler/declarationNoDanglingGenerics.ts] ////
+
+=== declarationNoDanglingGenerics.ts ===
 const kindCache: { [kind: string]: boolean } = {};
 >kindCache : { [kind: string]: boolean; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : string
+>     : ^^^^^^
 >{} : {}
+>   : ^^
 
 function register(kind: string): void | never {
 >register : (kind: string) => void | never
+>         : ^    ^^      ^^^^^            
 >kind : string
+>     : ^^^^^^
 
   if (kindCache[kind]) {
 >kindCache[kind] : boolean
+>                : ^^^^^^^
 >kindCache : { [kind: string]: boolean; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : string
+>     : ^^^^^^
 
     throw new Error(`Class with kind "${kind}" is already registered.`);
 >new Error(`Class with kind "${kind}" is already registered.`) : Error
+>                                                              : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >`Class with kind "${kind}" is already registered.` : string
+>                                                   : ^^^^^^
 >kind : string
+>     : ^^^^^^
   }
   kindCache[kind] = true;
 >kindCache[kind] = true : true
+>                       : ^^^^
 >kindCache[kind] : boolean
+>                : ^^^^^^^
 >kindCache : { [kind: string]: boolean; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : string
+>     : ^^^^^^
 >true : true
+>     : ^^^^
 }
 
 function ClassFactory<TKind extends string>(kind: TKind) {
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : TKind
+>     : ^^^^^
 
   register(kind);
 >register(kind) : void
->register : (kind: string) => void
+>               : ^^^^
+>register : (kind: string) => void | never
+>         : ^    ^^      ^^^^^            
 >kind : TKind
+>     : ^^^^^
 
   return class {
 >class {    static readonly THE_KIND: TKind = kind;    readonly kind: TKind = kind;  } : typeof (Anonymous class)
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     static readonly THE_KIND: TKind = kind;
 >THE_KIND : TKind
+>         : ^^^^^
 >kind : TKind
+>     : ^^^^^
 
     readonly kind: TKind = kind;
 >kind : TKind
+>     : ^^^^^
 >kind : TKind
+>     : ^^^^^
 
   };
 }
 
 class Kinds {
 >Kinds : Kinds
+>      : ^^^^^
 
   static readonly A = "A";
 >A : "A"
+>  : ^^^
 >"A" : "A"
+>    : ^^^
 
   static readonly B = "B";
 >B : "B"
+>  : ^^^
 >"B" : "B"
+>    : ^^^
 
   static readonly C = "C";
 >C : "C"
+>  : ^^^
 >"C" : "C"
+>    : ^^^
 }
 
 export class AKind extends ClassFactory(Kinds.A) {
 >AKind : AKind
+>      : ^^^^^
 >ClassFactory(Kinds.A) : ClassFactory<"A">.(Anonymous class)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.A : "A"
+>        : ^^^
 >Kinds : typeof Kinds
+>      : ^^^^^^^^^^^^
 >A : "A"
+>  : ^^^
 }
 
 export class BKind extends ClassFactory(Kinds.B) {
 >BKind : BKind
+>      : ^^^^^
 >ClassFactory(Kinds.B) : ClassFactory<"B">.(Anonymous class)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.B : "B"
+>        : ^^^
 >Kinds : typeof Kinds
+>      : ^^^^^^^^^^^^
 >B : "B"
+>  : ^^^
 }
 
 export class CKind extends ClassFactory(Kinds.C) {
 >CKind : CKind
+>      : ^^^^^
 >ClassFactory(Kinds.C) : ClassFactory<"C">.(Anonymous class)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.C : "C"
+>        : ^^^
 >Kinds : typeof Kinds
+>      : ^^^^^^^^^^^^
 >C : "C"
+>  : ^^^
 }

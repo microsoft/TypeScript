@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctionsInFunctions.ts] ////
+
 //// [fatarrowfunctionsInFunctions.ts]
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 
@@ -14,6 +16,7 @@ messenger.start();
 
 
 //// [fatarrowfunctionsInFunctions.js]
+"use strict";
 var messenger = {
     message: "Hello World",
     start: function () {

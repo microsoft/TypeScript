@@ -1,67 +1,105 @@
-=== tests/cases/conformance/salsa/def.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment4.ts] ////
+
+=== def.js ===
 var Outer = {};
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 Outer.Inner = class {
 >Outer.Inner = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
+>                                                                                               : ^^^^^^^^^^^^
 >Outer.Inner : typeof Inner
+>            : ^^^^^^^^^^^^
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 >class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
+>                                                                                 : ^^^^^^^^^^^^
 
     constructor() {
         /** @type {number} */
         this.y = 12
 >this.y = 12 : 12
+>            : ^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
     }
 }
 
 /** @type {Outer.Inner} */
 var local
 >local : Inner
+>      : ^^^^^
 
 local.y
 >local.y : number
+>        : ^^^^^^
 >local : Inner
+>      : ^^^^^
 >y : number
+>  : ^^^^^^
 
 var inner = new Outer.Inner()
 >inner : Inner
+>      : ^^^^^
 >new Outer.Inner() : Inner
+>                  : ^^^^^
 >Outer.Inner : typeof Inner
+>            : ^^^^^^^^^^^^
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
 inner.y
 >inner.y : number
+>        : ^^^^^^
 >inner : Inner
+>      : ^^^^^
 >y : number
+>  : ^^^^^^
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 /** @type {Outer.Inner} */
 var x
 >x : Inner
+>  : ^^^^^
 
 x.y
 >x.y : number
+>    : ^^^^^^
 >x : Inner
+>  : ^^^^^
 >y : number
+>  : ^^^^^^
 
 var z = new Outer.Inner()
 >z : Inner
+>  : ^^^^^
 >new Outer.Inner() : Inner
+>                  : ^^^^^
 >Outer.Inner : typeof Inner
+>            : ^^^^^^^^^^^^
 >Outer : typeof Outer
+>      : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
 z.y
 >z.y : number
+>    : ^^^^^^
 >z : Inner
+>  : ^^^^^
 >y : number
+>  : ^^^^^^
 

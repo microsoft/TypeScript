@@ -1,4 +1,6 @@
-=== tests/cases/compiler/twiceNestedKeyofIndexInference.ts ===
+//// [tests/cases/compiler/twiceNestedKeyofIndexInference.ts] ////
+
+=== twiceNestedKeyofIndexInference.ts ===
 type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
 >Set1 : Symbol(Set1, Decl(twiceNestedKeyofIndexInference.ts, 0, 0))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))

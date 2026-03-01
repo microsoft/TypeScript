@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constantEnumAssert.ts ===
+//// [tests/cases/compiler/constantEnumAssert.ts] ////
+
+=== constantEnumAssert.ts ===
 enum E1 {
 >E1 : Symbol(E1, Decl(constantEnumAssert.ts, 0, 0))
 

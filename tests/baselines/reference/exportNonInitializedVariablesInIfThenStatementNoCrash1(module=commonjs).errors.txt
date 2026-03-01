@@ -1,0 +1,18 @@
+exportNonInitializedVariablesInIfThenStatementNoCrash1.ts(4,1): error TS1184: Modifiers cannot appear here.
+exportNonInitializedVariablesInIfThenStatementNoCrash1.ts(4,14): error TS1155: 'const' declarations must be initialized.
+exportNonInitializedVariablesInIfThenStatementNoCrash1.ts(4,26): error TS2304: Cannot find name 'CssExports'.
+
+
+==== exportNonInitializedVariablesInIfThenStatementNoCrash1.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59373
+    
+    if (true)
+    export const cssExports: CssExports;
+    ~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+                 ~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+                             ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CssExports'.
+    export default cssExports;
+    

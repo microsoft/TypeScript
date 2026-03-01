@@ -1,24 +1,36 @@
-=== tests/cases/compiler/noCollisionThisExpressionAndLocalVarInFunction.ts ===
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInFunction.ts] ////
+
+=== noCollisionThisExpressionAndLocalVarInFunction.ts ===
 var console: {
 >console : { log(val: any): any; }
+>        : ^^^^^^   ^^   ^^^^^^^^^
 
     log(val: any);
 >log : (val: any) => any
+>    : ^   ^^   ^^^^^^^^
 >val : any
 }
 function x() {
 >x : () => void
+>  : ^^^^^^^^^^
 
     var _this = 5;
 >_this : number
+>      : ^^^^^^
 >5 : 5
+>  : ^
 
     x => { console.log(_this); };
 >x => { console.log(_this); } : (x: any) => void
+>                             : ^ ^^^^^^^^^^^^^^
 >x : any
 >console.log(_this) : any
 >console.log : (val: any) => any
+>            : ^   ^^   ^^^^^^^^
 >console : { log(val: any): any; }
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (val: any) => any
+>    : ^   ^^   ^^^^^^^^
 >_this : number
+>      : ^^^^^^
 }

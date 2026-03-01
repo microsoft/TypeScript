@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/missingTypeArguments3.ts] ////
+
 //// [missingTypeArguments3.ts]
-declare module linq {
+declare namespace linq {
 
     interface Enumerable<T> {
         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
@@ -42,3 +44,4 @@ declare module linq {
 
 
 //// [missingTypeArguments3.js]
+"use strict";

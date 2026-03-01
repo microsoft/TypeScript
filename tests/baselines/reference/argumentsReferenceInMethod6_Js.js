@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod6_Js.ts] ////
+
 //// [a.js]
 class A {
 	m() {
@@ -17,5 +19,5 @@ declare class A {
     /**
      * @type object
      */
-    foo: object;
+    foo: object | undefined;
 }

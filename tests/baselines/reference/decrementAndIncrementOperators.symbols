@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decrementAndIncrementOperators.ts ===
+//// [tests/cases/compiler/decrementAndIncrementOperators.ts] ////
+
+=== decrementAndIncrementOperators.ts ===
 var x = 0;
 >x : Symbol(x, Decl(decrementAndIncrementOperators.ts, 0, 3))
 

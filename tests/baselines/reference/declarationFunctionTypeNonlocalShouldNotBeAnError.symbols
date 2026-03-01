@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationFunctionTypeNonlocalShouldNotBeAnError.ts ===
+//// [tests/cases/compiler/declarationFunctionTypeNonlocalShouldNotBeAnError.ts] ////
+
+=== declarationFunctionTypeNonlocalShouldNotBeAnError.ts ===
 namespace foo {
 >foo : Symbol(foo, Decl(declarationFunctionTypeNonlocalShouldNotBeAnError.ts, 0, 0))
 

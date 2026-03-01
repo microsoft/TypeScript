@@ -1,477 +1,337 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
-// class /*FIND ALL REFS*/[|A|] {
+// <|class /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}A|] {
 //     constructor() { }
-// }
-// module.exports = [|A|];
+// }|>
+// <|module.exports = [|{| defId: 0 |}A|];|>
 
 // === /tests/cases/fourslash/b.js ===
-// const [|A|] = require("./a");
-// new [|A|];
+// <|const [|{| defId: 1, isWriteAccess: true |}A|] = require("./a");|>
+// new [|{| defId: 1 |}A|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.js",
-      "kind": "class",
-      "name": "class A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 33
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 33
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 51,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 34,
-          "length": 19
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.js",
-      "kind": "alias",
-      "name": "(alias) class A\nimport A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.js ===
+  // <|class /*FIND ALL REFS*/[|{| defId: 0 |}A|] {
+  //     constructor() { }
+  // }|>
+  // module.exports = A;
 
+  // === /tests/cases/fourslash/b.js ===
+  // <|const [|{| defId: 1 |}A|] = require("./a");|>
+  // new A;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class A",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
 // class A {
-//     /*FIND ALL REFS*/[|constructor|]() { }
+//     /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}constructor|]() { }|>
 // }
 // module.exports = A;
 
 // === /tests/cases/fourslash/b.js ===
 // const A = require("./a");
+// new [|{| defId: 1 |}A|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.js ===
+  // <|class [|{| defId: 0 |}A|] {
+  //     /*FIND ALL REFS*/constructor() { }
+  // }|>
+  // module.exports = A;
+
+  // === /tests/cases/fourslash/b.js ===
+  // <|const [|{| defId: 1 |}A|] = require("./a");|>
+  // new A;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class A",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "className"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/b.js ===
+// <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}A|] = require("./a");|>
 // new [|A|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.js",
-      "kind": "class",
-      "name": "class A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 33
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/a.js",
-        "contextSpan": {
-          "start": 14,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.js",
-      "kind": "alias",
-      "name": "(alias) class A\nimport A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/b.js ===
+  // <|const /*FIND ALL REFS*/[|A|] = require("./a");|>
+  // new A;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/b.js ===
-// const /*FIND ALL REFS*/[|A|] = require("./a");
-// new [|A|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.js",
-      "kind": "alias",
-      "name": "(alias) class A\nimport A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
-// === /tests/cases/fourslash/b.js ===
-// const [|A|] = require("./a");
+// <|const [|{| isWriteAccess: true |}A|] = require("./a");|>
 // new /*FIND ALL REFS*/[|A|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.js",
-      "kind": "alias",
-      "name": "(alias) class A\nimport A",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/b.js ===
+  // <|const [|A|] = require("./a");|>
+  // new /*FIND ALL REFS*/A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class A\nimport A",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]

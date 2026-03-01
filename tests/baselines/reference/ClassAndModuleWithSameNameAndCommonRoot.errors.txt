@@ -1,8 +1,9 @@
-tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+module.ts(2,22): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+simple.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/class.ts (0 errors) ====
-    module X.Y {
+==== class.ts (0 errors) ====
+    namespace X.Y {
         export class Point {
             constructor(x: number, y: number) {
                 this.x = x;
@@ -13,27 +14,29 @@ tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): erro
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
-    module X.Y {
-        export module Point {
-                      ~~~~~
+==== module.ts (1 errors) ====
+    namespace X.Y {
+        export namespace Point {
+                         ~~~~~
 !!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
             export var Origin = new Point(0, 0);
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/test.ts (0 errors) ====
+==== test.ts (0 errors) ====
     //var cl: { x: number; y: number; }
     var cl = new X.Y.Point(1,1);
     var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
     
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (0 errors) ====
+==== simple.ts (1 errors) ====
     class A {
         id: string;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
-    module A {
+    namespace A {
         export var Instance = new A();
     }
     

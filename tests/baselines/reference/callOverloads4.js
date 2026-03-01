@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloads4.ts] ////
+
 //// [callOverloads4.ts]
 function Foo():Foo; // error
 function Foo(s:string):Foo; // error
@@ -18,13 +20,13 @@ Foo("s");
 
 
 //// [callOverloads4.js]
-var Foo = /** @class */ (function () {
-    function Foo(x) {
+"use strict";
+class Foo {
+    bar1() { }
+    constructor(x) {
         // WScript.Echo("Constructor function has executed");
     }
-    Foo.prototype.bar1 = function () { };
-    return Foo;
-}());
+}
 var f1 = new Foo("hey");
 f1.bar1();
 Foo();

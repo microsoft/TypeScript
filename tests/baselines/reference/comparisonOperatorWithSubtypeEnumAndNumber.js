@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeEnumAndNumber.ts] ////
+
 //// [comparisonOperatorWithSubtypeEnumAndNumber.ts]
 enum E { a, b, c }
 
@@ -69,6 +71,7 @@ var rh5 = E.a !== 0;
 var rh6 = 0 !== E.a;
 
 //// [comparisonOperatorWithSubtypeEnumAndNumber.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

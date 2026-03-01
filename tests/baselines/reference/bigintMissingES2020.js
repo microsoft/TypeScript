@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/bigintMissingES2020.ts] ////
+
 //// [bigintMissingES2020.ts]
 declare function test<A, B extends A>(): void;
 
@@ -8,6 +10,7 @@ test<{t?: string}, bigint>();
 
 
 //// [bigintMissingES2020.js]
+"use strict";
 test();
 test();
 // no error when bigint is used even when ES2020 lib is not present

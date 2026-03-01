@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxElementClassTooManyParams.tsx ===
+//// [tests/cases/compiler/jsxElementClassTooManyParams.tsx] ////
+
+=== jsxElementClassTooManyParams.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(jsxElementClassTooManyParams.tsx, 0, 0))
 

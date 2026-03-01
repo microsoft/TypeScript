@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalPropertiesSyntax.ts] ////
+
 //// [optionalPropertiesSyntax.ts]
 interface fnSigs {
     //functions signatures can be optional
@@ -36,3 +38,4 @@ interface indexSig {
 }
 
 //// [optionalPropertiesSyntax.js]
+"use strict";

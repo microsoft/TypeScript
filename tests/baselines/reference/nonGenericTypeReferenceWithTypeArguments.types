@@ -1,54 +1,72 @@
-=== tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts] ////
+
+=== nonGenericTypeReferenceWithTypeArguments.ts ===
 // Check that errors are reported for non-generic types with type arguments
 
 class C { }
 >C : C
+>  : ^
 
 interface I { }
 enum E { }
 >E : E
+>  : ^
 
 type T = { };
->T : {}
+>T : T
+>  : ^
 
 var v1: C<string>;
 >v1 : any
+>   : ^^^
 
 var v2: I<string>;
 >v2 : any
+>   : ^^^
 
 var v3: E<string>;
 >v3 : any
+>   : ^^^
 
 var v4: T<string>;
 >v4 : any
+>   : ^^^
 
 function f<U>() {
 >f : <U>() => void
+>  : ^ ^^^^^^^^^^^
 
     class C { }
 >C : C
+>  : ^
 
     interface I { }
     enum E { }
 >E : E
+>  : ^
 
     type T = {};
 >T : {}
+>  : ^^
 
     var v1: C<string>;
 >v1 : any
+>   : ^^^
 
     var v2: I<string>;
 >v2 : any
+>   : ^^^
 
     var v3: E<string>;
 >v3 : any
+>   : ^^^
 
     var v4: T<string>;
 >v4 : any
+>   : ^^^
 
     var v5: U<string>;
 >v5 : any
+>   : ^^^
 }
 

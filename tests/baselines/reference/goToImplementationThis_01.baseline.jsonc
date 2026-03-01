@@ -1,0 +1,28 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationThis_01.ts ===
+// <|class [|Bar|] extends Foo {
+//     hello(): th/*GOTO IMPL*/is {
+//         return this;
+//     }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

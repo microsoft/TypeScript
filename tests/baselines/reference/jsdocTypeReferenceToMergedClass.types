@@ -1,38 +1,59 @@
-=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.js ===
-// https://github.com/microsoft/TypeScript/issues/34685
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.ts] ////
 
+=== jsdocTypeReferenceToMergedClass.js ===
 var Workspace = {}
 >Workspace : typeof Workspace
+>          : ^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @type {Workspace.Project} */
 var p;
 >p : wp
+>  : ^^
 
 p.isServiceProject()
 >p.isServiceProject() : void
+>                     : ^^^^
 >p.isServiceProject : () => void
+>                   : ^^^^^^^^^^
 >p : wp
+>  : ^^
 >isServiceProject : () => void
+>                 : ^^^^^^^^^^
 
 Workspace.Project = function wp() { }
 >Workspace.Project = function wp() { } : typeof wp
+>                                      : ^^^^^^^^^
 >Workspace.Project : typeof wp
+>                  : ^^^^^^^^^
 >Workspace : typeof Workspace
+>          : ^^^^^^^^^^^^^^^^
 >Project : typeof wp
+>        : ^^^^^^^^^
 >function wp() { } : typeof wp
+>                  : ^^^^^^^^^
 >wp : typeof wp
+>   : ^^^^^^^^^
 
 Workspace.Project.prototype = {
 >Workspace.Project.prototype = {  isServiceProject() {}} : { isServiceProject(): void; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Workspace.Project.prototype : { isServiceProject(): void; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Workspace.Project : typeof wp
+>                  : ^^^^^^^^^
 >Workspace : typeof Workspace
+>          : ^^^^^^^^^^^^^^^^
 >Project : typeof wp
+>        : ^^^^^^^^^
 >prototype : { isServiceProject(): void; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  isServiceProject() {}} : { isServiceProject(): void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   isServiceProject() {}
 >isServiceProject : () => void
+>                 : ^^^^^^^^^^
 }
 

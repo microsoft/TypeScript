@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts ===
+//// [tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts] ////
+
+=== indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts ===
 type AnyFunction = (...args: any[]) => any;
 >AnyFunction : Symbol(AnyFunction, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 0))
 >args : Symbol(args, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 20))

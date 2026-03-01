@@ -1,10 +1,15 @@
-=== tests/cases/compiler/unusedVariablesinForLoop.ts ===
+//// [tests/cases/compiler/unusedVariablesinForLoop.ts] ////
+
+=== unusedVariablesinForLoop.ts ===
 function f1 () {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     for(var i = 0; ;) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientNameRestrictions.ts] ////
+
 //// [ambientNameRestrictions.ts]
 export declare namespace Foo {
   export var static: any;
@@ -5,5 +7,4 @@ export declare namespace Foo {
 
 
 //// [ambientNameRestrictions.js]
-"use strict";
-exports.__esModule = true;
+export {};

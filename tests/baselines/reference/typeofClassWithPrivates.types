@@ -1,28 +1,40 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassWithPrivates.ts] ////
+
+=== typeofClassWithPrivates.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     private a: number;
 >a : number
+>  : ^^^^^^
 
     private static b: number;
 >b : number
+>  : ^^^^^^
 
     x: T;
 >x : T
+>  : ^
 
     static y: T;
 >y : T
+>  : ^
 }
 
 var c: C<string>;
 >c : C<string>
+>  : ^^^^^^^^^
 
 var r: typeof C;
 >r : typeof C
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r2: typeof c;
 >r2 : C<string>
+>   : ^^^^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 

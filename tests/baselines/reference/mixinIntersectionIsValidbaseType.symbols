@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mixinIntersectionIsValidbaseType.ts ===
+//// [tests/cases/compiler/mixinIntersectionIsValidbaseType.ts] ////
+
+=== mixinIntersectionIsValidbaseType.ts ===
 export type Constructor<T extends object = object> = new (...args: any[]) => T;
 >Constructor : Symbol(Constructor, Decl(mixinIntersectionIsValidbaseType.ts, 0, 0))
 >T : Symbol(T, Decl(mixinIntersectionIsValidbaseType.ts, 0, 24))

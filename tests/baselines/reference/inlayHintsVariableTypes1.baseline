@@ -1,0 +1,9 @@
+// === Inlay Hints ===
+ const m = () => 123;
+        ^
+{
+  "text": ": () => number",
+  "position": 331,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

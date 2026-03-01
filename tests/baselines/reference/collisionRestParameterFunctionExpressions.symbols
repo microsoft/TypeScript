@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterFunctionExpressions.ts ===
+//// [tests/cases/compiler/collisionRestParameterFunctionExpressions.ts] ////
+
+=== collisionRestParameterFunctionExpressions.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(collisionRestParameterFunctionExpressions.ts, 0, 0))
 

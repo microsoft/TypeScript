@@ -2,7 +2,7 @@
 
 // @BaselineFile: bpSpan_moduleEmpty.baseline
 // @Filename: bpSpan_moduleEmpty.ts
-////module Bar {
+////namespace Bar {
 ////}
 
 

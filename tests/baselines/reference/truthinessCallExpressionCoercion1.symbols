@@ -1,4 +1,6 @@
-=== tests/cases/compiler/truthinessCallExpressionCoercion1.ts ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion1.ts] ////
+
+=== truthinessCallExpressionCoercion1.ts ===
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 >onlyErrorsWhenTestingNonNullableFunctionType : Symbol(onlyErrorsWhenTestingNonNullableFunctionType, Decl(truthinessCallExpressionCoercion1.ts, 0, 0))
 >required : Symbol(required, Decl(truthinessCallExpressionCoercion1.ts, 0, 54))
@@ -43,7 +45,7 @@ function onlyErrorsWhenUnusedInBody() {
     function test() { return Math.random() > 0.5; }
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion1.ts, 14, 39))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
     // error

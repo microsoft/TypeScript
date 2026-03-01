@@ -1,4 +1,5 @@
-﻿declare module foo {
+﻿// @target: es2015
+declare namespace foo {
 
     interface Bar {
 

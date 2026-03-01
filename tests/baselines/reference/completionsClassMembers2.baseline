@@ -1,0 +1,261 @@
+// === Completions ===
+=== /tests/cases/fourslash/completionsClassMembers2.ts ===
+// interface I {
+//     method(): void;
+// }
+// 
+// export class C implements I {
+//     property = "foo"
+//     
+//     ^
+// | ----------------------------------------------------------------------
+// | (method) I.method(): void
+// | abstract
+// | accessor
+// | async
+// | constructor
+// | declare
+// | get
+// | override
+// | private
+// | protected
+// | public
+// | readonly
+// | set
+// | static
+// | ----------------------------------------------------------------------
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionsClassMembers2.ts",
+      "position": 92,
+      "name": ""
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "method",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "method(): void {\n}",
+          "filterText": "method",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "I",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "accessor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "accessor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "async",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "constructor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "declare",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "declare",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "get",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "get",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "override",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "private",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "protected",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "public",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "readonly",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "set",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "set",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  }
+]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName3.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName3.ts] ////
+
+=== privateNameComputedPropertyName3.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(privateNameComputedPropertyName3.ts, 0, 0))
 

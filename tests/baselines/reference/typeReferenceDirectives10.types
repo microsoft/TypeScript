@@ -1,11 +1,15 @@
+//// [tests/cases/compiler/typeReferenceDirectives10.ts] ////
+
 === /app.ts ===
 /// <reference types="lib"/>
 import {$} from "./ref";
 >$ : any
+>  : ^^^
 
 export interface A {
     x: $
 >x : $
+>  : ^
 }
 
 === /ref.d.ts ===
@@ -15,5 +19,7 @@ export interface $ { x }
 === /types/lib/index.d.ts ===
 declare let $: { x: number }
 >$ : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 

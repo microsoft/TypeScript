@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionShouldNotGetParen.ts] ////
+
+=== importCallExpressionShouldNotGetParen.ts ===
 const localeName = "zh-CN";
 >localeName : Symbol(localeName, Decl(importCallExpressionShouldNotGetParen.ts, 0, 5))
 

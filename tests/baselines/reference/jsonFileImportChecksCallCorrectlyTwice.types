@@ -1,47 +1,71 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/jsonFileImportChecksCallCorrectlyTwice.ts] ////
+
+=== index.ts ===
 import data from "./data.json";
 >data : { foo: { bool: boolean; str: string; }[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface Foo {
   str: string;
 >str : string
+>    : ^^^^^^
 }
 
 fn(data.foo);
 >fn(data.foo) : void
+>             : ^^^^
 >fn : (arg: Foo[]) => void
+>   : ^   ^^     ^^^^^^^^^
 >data.foo : { bool: boolean; str: string; }[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : { foo: { bool: boolean; str: string; }[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bool: boolean; str: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 fn(data.foo); // <-- shouldn't error!
 >fn(data.foo) : void
+>             : ^^^^
 >fn : (arg: Foo[]) => void
+>   : ^   ^^     ^^^^^^^^^
 >data.foo : { bool: boolean; str: string; }[]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : { foo: { bool: boolean; str: string; }[]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { bool: boolean; str: string; }[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function fn(arg: Foo[]) { }
 >fn : (arg: Foo[]) => void
+>   : ^   ^^     ^^^^^^^^^
 >arg : Foo[]
+>    : ^^^^^
 
-=== tests/cases/compiler/data.json ===
+=== data.json ===
 {
 >{    "foo": [      {        "bool": true,        "str": "123"      }    ]} : { foo: { bool: boolean; str: string; }[]; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "foo": [
 >"foo" : { bool: boolean; str: string; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[      {        "bool": true,        "str": "123"      }    ] : { bool: boolean; str: string; }[]
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       {
 >{        "bool": true,        "str": "123"      } : { bool: boolean; str: string; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         "bool": true,
 >"bool" : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
         "str": "123"
 >"str" : string
+>      : ^^^^^^
 >"123" : "123"
+>      : ^^^^^
       }
     ]
 }

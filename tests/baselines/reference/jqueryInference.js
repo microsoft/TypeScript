@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jqueryInference.ts] ////
+
 //// [jqueryInference.ts]
 // #22362
 interface MyPromise<T, U> {
@@ -15,5 +17,6 @@ var p2: MyPromise<boolean, any>;
 
 
 //// [jqueryInference.js]
+"use strict";
 var p2 = shouldBeIdentity(p1);
 var p2;

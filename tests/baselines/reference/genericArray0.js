@@ -1,5 +1,6 @@
-//// [genericArray0.ts]
+//// [tests/cases/compiler/genericArray0.ts] ////
 
+//// [genericArray0.ts]
 var x:number[];
 
 
@@ -11,6 +12,7 @@ function map<U>() {
 
 
 //// [genericArray0.js]
+"use strict";
 var x;
 var y = x;
 function map() {

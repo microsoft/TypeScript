@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/asyncMethodWithSuperConflict_es6.ts] ////
+
 //// [asyncMethodWithSuperConflict_es6.ts]
 class A {
     x() {
@@ -60,6 +62,7 @@ class B extends A {
 
 
 //// [asyncMethodWithSuperConflict_es6.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

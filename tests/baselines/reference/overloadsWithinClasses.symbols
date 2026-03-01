@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadsWithinClasses.ts ===
+//// [tests/cases/compiler/overloadsWithinClasses.ts] ////
+
+=== overloadsWithinClasses.ts ===
 class foo {
 >foo : Symbol(foo, Decl(overloadsWithinClasses.ts, 0, 0))
  

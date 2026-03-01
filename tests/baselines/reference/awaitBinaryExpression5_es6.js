@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/awaitBinaryExpression/awaitBinaryExpression5_es6.ts] ////
+
 //// [awaitBinaryExpression5_es6.ts]
 declare var a: boolean;
 declare var p: Promise<boolean>;
@@ -11,6 +13,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitBinaryExpression5_es6.js]
+"use strict";
 function func() {
     return __awaiter(this, void 0, void 0, function* () {
         before();

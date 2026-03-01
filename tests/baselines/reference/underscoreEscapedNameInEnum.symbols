@@ -1,4 +1,6 @@
-=== tests/cases/compiler/underscoreEscapedNameInEnum.ts ===
+//// [tests/cases/compiler/underscoreEscapedNameInEnum.ts] ////
+
+=== underscoreEscapedNameInEnum.ts ===
 enum E {
 >E : Symbol(E, Decl(underscoreEscapedNameInEnum.ts, 0, 0))
 

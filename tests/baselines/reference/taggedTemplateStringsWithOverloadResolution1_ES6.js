@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts] ////
+
 //// [taggedTemplateStringsWithOverloadResolution1_ES6.ts]
 function foo(strs: TemplateStringsArray): number;
 function foo(strs: TemplateStringsArray, x: number): string;
@@ -23,6 +25,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 
 
 //// [taggedTemplateStringsWithOverloadResolution1_ES6.js]
+"use strict";
 function foo(...stuff) {
     return undefined;
 }

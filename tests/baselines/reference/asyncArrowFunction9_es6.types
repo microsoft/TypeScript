@@ -1,14 +1,27 @@
-=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts] ////
+
+=== asyncArrowFunction9_es6.ts ===
 var foo = async (a = await => await): Promise<void> => {
 >foo : any
+>    : ^^^
 >async (a = await => await) : any
+>                           : ^^^
 >async : any
+>      : ^^^
 >a = await => await : (await: any) => any
+>                   : ^     ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >await => await : (await: any) => any
+>               : ^     ^^^^^^^^^^^^^
 >await : any
+>      : ^^^
 >await : any
+>      : ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 ><void> : void
+>       : ^^^^
 > : any
+> : ^^^
 }

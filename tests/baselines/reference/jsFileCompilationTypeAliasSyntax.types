@@ -1,4 +1,7 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationTypeAliasSyntax.ts] ////
+
+=== a.js ===
 type a = b;
 >a : b
+>  : ^
 

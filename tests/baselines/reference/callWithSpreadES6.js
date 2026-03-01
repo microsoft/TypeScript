@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpreadES6.ts] ////
+
 //// [callWithSpreadES6.ts]
 interface X {
     foo(x: number, y: number, ...z: string[]);
@@ -51,6 +53,7 @@ class D extends C {
 
 
 //// [callWithSpreadES6.js]
+"use strict";
 function foo(x, y, ...z) {
 }
 var a;

@@ -1,0 +1,21 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameObjectBindingElementPropertyName01.ts ===
+// interface I {
+//     /*RENAME*/<|[|property1RENAME|]: number;|>
+//     property2: string;
+// }
+// 
+// var foo: I;
+// <|var { [|property1RENAME|]: prop1 } = foo;|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameObjectBindingElementPropertyName01.ts ===
+// interface I {
+//     <|[|property1RENAME|]: number;|>
+//     property2: string;
+// }
+// 
+// var foo: I;
+// <|var { /*RENAME*/[|property1RENAME|]: prop1 } = foo;|>

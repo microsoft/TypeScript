@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts] ////
+
+=== parserMemberAccessOffOfGenericType1.ts ===
 var v = List<number>.makeChild();
 >v : Symbol(v, Decl(parserMemberAccessOffOfGenericType1.ts, 0, 3))
 

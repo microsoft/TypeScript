@@ -1,7 +1,10 @@
+//// [tests/cases/compiler/newAbstractInstance2.ts] ////
+
 === /a.ts ===
+
 export default abstract class {}
-No type information for this code.
-No type information for this code.=== /b.ts ===
+
+=== /b.ts ===
 import A from "./a";
 >A : Symbol(A, Decl(b.ts, 0, 6))
 

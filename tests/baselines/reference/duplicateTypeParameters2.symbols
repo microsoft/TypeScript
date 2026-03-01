@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateTypeParameters2.ts ===
+//// [tests/cases/compiler/duplicateTypeParameters2.ts] ////
+
+=== duplicateTypeParameters2.ts ===
 class A { public foo() { } }
 >A : Symbol(A, Decl(duplicateTypeParameters2.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(duplicateTypeParameters2.ts, 0, 9))

@@ -1,95 +1,138 @@
-=== tests/cases/conformance/types/mapped/mappedTypeProperties.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeProperties.ts] ////
+
+=== mappedTypeProperties.ts ===
 export type PlaceType = 'openSky' | 'roofed' | 'garage'
->PlaceType : "openSky" | "roofed" | "garage"
+>PlaceType : PlaceType
+>          : ^^^^^^^^^
 
 type Before = {
->Before : { model: 'hour' | 'day'; }
+>Before : Before
+>       : ^^^^^^
 
     model: 'hour' | 'day';
 >model : "hour" | "day"
+>      : ^^^^^^^^^^^^^^
 
     [placeType in PlaceType]: void;
 >[placeType in PlaceType] : void
+>                         : ^^^^
 >placeType in PlaceType : boolean
+>                       : ^^^^^^^
 >placeType : any
+>          : ^^^
 >PlaceType : any
+>          : ^^^
 }
 
 type After = {
->After : { openSky: void; roofed: void; garage: void; }
+>After : After
+>      : ^^^^^
 
     [placeType in PlaceType]: void;
     model: 'hour' | 'day'
 >model : "hour" | "day"
+>      : ^^^^^^^^^^^^^^
 }
 
 type AfterQuestion = {
->AfterQuestion : { openSky?: void; roofed?: void; garage?: void; }
+>AfterQuestion : AfterQuestion
+>              : ^^^^^^^^^^^^^
 
     [placeType in PlaceType]?: void;
     model: 'hour' | 'day';
 >model : "hour" | "day"
+>      : ^^^^^^^^^^^^^^
 }
 type AfterMethod = {
->AfterMethod : { openSky?: void; roofed?: void; garage?: void; }
+>AfterMethod : AfterMethod
+>            : ^^^^^^^^^^^
 
     [placeType in PlaceType]?: void;
     model(duration: number): 'hour' | 'day';
->model : (duration: number) => 'hour' | 'day'
+>model : (duration: number) => "hour" | "day"
+>      : ^        ^^      ^^^^^              
 >duration : number
+>         : ^^^^^^
 }
 
 type AfterImplicit = {
->AfterImplicit : { openSky: any; roofed: any; garage: any; }
+>AfterImplicit : AfterImplicit
+>              : ^^^^^^^^^^^^^
 
     [placeType in PlaceType]
     model: 'hour' | 'day';
 >model : "hour" | "day"
+>      : ^^^^^^^^^^^^^^
 }
 type AfterImplicitQ = {
->AfterImplicitQ : { openSky?: any; roofed?: any; garage?: any; }
+>AfterImplicitQ : AfterImplicitQ
+>               : ^^^^^^^^^^^^^^
 
     [placeType in PlaceType]?
     model: 'hour' | 'day'
 >model : "hour" | "day"
+>      : ^^^^^^^^^^^^^^
 }
 
 interface I {
     [P in PlaceType]: any
 >[P in PlaceType] : any
+>                 : ^^^
 >P in PlaceType : boolean
+>               : ^^^^^^^
 >P : any
+>  : ^^^
 >PlaceType : any
+>          : ^^^
 }
 class C {
 >C : C
+>  : ^
 
     [P in PlaceType]: any
 >[P in PlaceType] : any
+>                 : ^^^
 >P in PlaceType : boolean
+>               : ^^^^^^^
 >P : any
+>  : ^^^
 >PlaceType : any
+>          : ^^^
 }
 const D = class {
 >D : typeof D
+>  : ^^^^^^^^
 >class {    [P in PlaceType]: any} : typeof D
+>                                  : ^^^^^^^^
 
     [P in PlaceType]: any
 >[P in PlaceType] : any
+>                 : ^^^
 >P in PlaceType : boolean
+>               : ^^^^^^^
 >P : any
+>  : ^^^
 >PlaceType : any
+>          : ^^^
 }
 const E = class {
 >E : typeof E
+>  : ^^^^^^^^
 >class {    [P in 'a' | 'b']: any} : typeof E
+>                                  : ^^^^^^^^
 
     [P in 'a' | 'b']: any
 >[P in 'a' | 'b'] : any
+>                 : ^^^
 >P in 'a' | 'b' : number
+>               : ^^^^^^
 >P in 'a' : boolean
+>         : ^^^^^^^
 >P : any
+>  : ^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 }
 

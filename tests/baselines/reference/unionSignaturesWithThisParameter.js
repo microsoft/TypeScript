@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionSignaturesWithThisParameter.ts] ////
+
 //// [unionSignaturesWithThisParameter.ts]
 // Repro from #20802
 

@@ -11,7 +11,7 @@ export interface I1 {
 	age: number;
 }
 
-export module M1 {
+export namespace M1 {
 	export interface I2 {
 		foo: string;
 	}
@@ -34,27 +34,26 @@ var e: number = <foo.E1>0;
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.E1 = exports.C1 = void 0;
-    var C1 = /** @class */ (function () {
-        function C1() {
+    class C1 {
+        constructor() {
             this.m1 = 42;
         }
-        C1.s1 = true;
-        return C1;
-    }());
+    }
     exports.C1 = C1;
+    C1.s1 = true;
     var E1;
     (function (E1) {
         E1[E1["A"] = 0] = "A";
         E1[E1["B"] = 1] = "B";
         E1[E1["C"] = 2] = "C";
-    })(E1 = exports.E1 || (exports.E1 = {}));
+    })(E1 || (exports.E1 = E1 = {}));
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var i;
     var x = {};
     var y = false;

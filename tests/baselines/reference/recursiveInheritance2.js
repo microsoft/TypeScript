@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveInheritance2.ts] ////
+
 //// [recursiveInheritance2.ts]
 interface A { (): B; };
 declare var a: A;
@@ -15,6 +17,7 @@ x = y;
 
 
 //// [recursiveInheritance2.js]
+"use strict";
 ;
 var x = a();
 ;

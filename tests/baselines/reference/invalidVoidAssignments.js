@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts] ////
+
 //// [invalidVoidAssignments.ts]
 var x: void;
 
@@ -15,7 +17,7 @@ var f: I = x;
 var g: { baz: string } = 1;
 var g2: { 0: number } = 1;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = x;
 
 function i<T>(a: T) {
@@ -30,16 +32,14 @@ x = E.A;
 x = { f() { } }
 
 //// [invalidVoidAssignments.js]
+"use strict";
 var x;
 var a = x;
 var b = x;
 var c = x;
 var d = x;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var e = x;
 var f = x;
 var g = 1;
@@ -59,4 +59,4 @@ var E;
 })(E || (E = {}));
 x = E;
 x = E.A;
-x = { f: function () { } };
+x = { f() { } };

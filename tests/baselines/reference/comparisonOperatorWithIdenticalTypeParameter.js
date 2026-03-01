@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalTypeParameter.ts] ////
+
 //// [comparisonOperatorWithIdenticalTypeParameter.ts]
 function foo<T>(t: T) {
     var r1 = t < t;
@@ -11,6 +13,7 @@ function foo<T>(t: T) {
 }
 
 //// [comparisonOperatorWithIdenticalTypeParameter.js]
+"use strict";
 function foo(t) {
     var r1 = t < t;
     var r2 = t > t;

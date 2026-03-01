@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayFind.ts] ////
+
 //// [arrayFind.ts]
 // test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x: any): x is number {
@@ -12,11 +14,12 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 
 
 //// [arrayFind.js]
+"use strict";
 // test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x) {
     return typeof x === "number";
 }
-var arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
-var foundNumber = arrayOfStringsNumbersAndBooleans.find(isNumber);
-var readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans;
-var readonlyFoundNumber = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
+const foundNumber = arrayOfStringsNumbersAndBooleans.find(isNumber);
+const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans;
+const readonlyFoundNumber = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);

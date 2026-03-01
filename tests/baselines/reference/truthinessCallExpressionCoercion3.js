@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion3.ts] ////
+
 //// [truthinessCallExpressionCoercion3.ts]
 // from #41640, based on an example in ant-design
 interface I {
@@ -17,6 +19,7 @@ function g(result: unknown) {
 
 
 //// [truthinessCallExpressionCoercion3.js]
+"use strict";
 function f(result) {
     if (result.always) {
         return result;

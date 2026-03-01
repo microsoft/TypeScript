@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts] ////
+
 //// [emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts]
 // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
 // Begin types from Lodash.
@@ -44,16 +46,12 @@ export function fooToBar(
 
 
 //// [emptyObjectNotSubtypeOfIndexSignatureContainingObject1.js]
-"use strict";
-exports.__esModule = true;
-exports.fooToBar = void 0;
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues(obj, callback) {
     return null;
 }
-function fooToBar(foos) {
-    var result = foos == null ? {} : mapValues(foos, function (f) { return f.foo; });
+export function fooToBar(foos) {
+    const result = foos == null ? {} : mapValues(foos, f => f.foo);
     // This line _should_ fail, because `result` is not the right type.
     return result;
 }
-exports.fooToBar = fooToBar;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceInheritance2.ts] ////
+
 //// [interfaceInheritance2.ts]
 interface I6 {
  ():void;
@@ -10,5 +12,6 @@ v1();
 
 
 //// [interfaceInheritance2.js]
+"use strict";
 var v1;
 v1();

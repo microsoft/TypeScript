@@ -1,85 +1,126 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts] ////
+
+=== iterableArrayPattern16.ts ===
 function fun(...[a, b]: [Bar, Bar][]) { }
 >fun : (...[a, b]: [Bar, Bar][]) => void
+>    : ^^^^      ^^            ^^^^^^^^^
 >a : [Bar, Bar]
+>  : ^^^^^^^^^^
 >b : [Bar, Bar]
+>  : ^^^^^^^^^^
 
 fun(...new FooIteratorIterator);
 >fun(...new FooIteratorIterator) : void
+>                                : ^^^^
 >fun : (...[a, b]: [Bar, Bar][]) => void
+>    : ^^^^      ^^            ^^^^^^^^^
 >...new FooIteratorIterator : FooIterator
+>                           : ^^^^^^^^^^^
 >new FooIteratorIterator : FooIteratorIterator
+>                        : ^^^^^^^^^^^^^^^^^^^
 >FooIteratorIterator : typeof FooIteratorIterator
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class Bar { x }
 >Bar : Bar
+>    : ^^^
 >x : any
+>  : ^^^
 
 class Foo extends Bar { y }
 >Foo : Foo
+>    : ^^^
 >Bar : Bar
+>    : ^^^
 >y : any
+>  : ^^^
 
 class FooIterator {
 >FooIterator : FooIterator
+>            : ^^^^^^^^^^^
 
     next() {
 >next : () => { value: Foo; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: new Foo,
 >value : Foo
+>      : ^^^
 >new Foo : Foo
+>        : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 class FooIteratorIterator {
 >FooIteratorIterator : FooIteratorIterator
+>                    : ^^^^^^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: FooIterator; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: new FooIterator,            done: false        } : { value: FooIterator; done: boolean; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: new FooIterator,
 >value : FooIterator
+>      : ^^^^^^^^^^^
 >new FooIterator : FooIterator
+>                : ^^^^^^^^^^^
 >FooIterator : typeof FooIterator
+>            : ^^^^^^^^^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }

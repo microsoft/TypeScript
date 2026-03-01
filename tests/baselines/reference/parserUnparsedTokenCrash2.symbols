@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parserUnparsedTokenCrash2.ts ===
+//// [tests/cases/compiler/parserUnparsedTokenCrash2.ts] ////
+
+=== parserUnparsedTokenCrash2.ts ===
+
 export = } x = ( y = z ==== 'function') {
-No type information for this code.
-No type information for this code.
+

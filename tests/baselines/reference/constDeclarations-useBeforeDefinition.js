@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-useBeforeDefinition.ts] ////
+
 //// [constDeclarations-useBeforeDefinition.ts]
 {
     c1;
@@ -12,6 +14,7 @@ var v1;
 
 
 //// [constDeclarations-useBeforeDefinition.js]
+"use strict";
 {
     c1;
     const c1 = 0;

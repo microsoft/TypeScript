@@ -1,189 +1,149 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForRest.ts ===
 // interface Gen {
 //     x: number
-//     /*FIND ALL REFS*/[|parent|]: Gen;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}parent|]: Gen;|>
 //     millenial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;
 // rest.[|parent|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-      "kind": "property",
-      "name": "(property) Gen.parent: Gen",
-      "textSpan": {
-        "start": 34,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Gen",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parent",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Gen",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 34,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 12
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 113,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForRest.ts ===
+  // interface Gen {
+  //     x: number
+  //     /*FIND ALL REFS*/<|[|parent|]: Gen;|>
+  //     millenial: string;
+  // }
+  // let t: Gen;
+  // var { x, ...rest } = t;
+  // rest.parent;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Gen.parent: Gen",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Gen",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parent",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Gen",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForRest.ts ===
 // interface Gen {
 //     x: number
-//     [|parent|]: Gen;
+//     <|[|parent|]: Gen;|>
 //     millenial: string;
 // }
 // let t: Gen;
 // var { x, ...rest } = t;
 // rest./*FIND ALL REFS*/[|parent|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-      "kind": "property",
-      "name": "(property) Gen.parent: Gen",
-      "textSpan": {
-        "start": 34,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Gen",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parent",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Gen",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 34,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 12
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 113,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForRest.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForRest.ts ===
+  // interface Gen {
+  //     x: number
+  //     <|[|parent|]: Gen;|>
+  //     millenial: string;
+  // }
+  // let t: Gen;
+  // var { x, ...rest } = t;
+  // rest./*FIND ALL REFS*/parent;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Gen.parent: Gen",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Gen",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parent",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Gen",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/any/assignAnyToEveryType.ts ===
+//// [tests/cases/conformance/types/any/assignAnyToEveryType.ts] ////
+
+=== assignAnyToEveryType.ts ===
 // all of these are valid
 
 var x: any;
@@ -92,7 +94,7 @@ var j2: { <T>(x: T): string } = x;
 >T : Symbol(T, Decl(assignAnyToEveryType.ts, 34, 11))
 >x : Symbol(x, Decl(assignAnyToEveryType.ts, 2, 3))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(assignAnyToEveryType.ts, 34, 34))
 
     export var foo = 1;

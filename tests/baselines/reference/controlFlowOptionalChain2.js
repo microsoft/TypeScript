@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts] ////
+
 //// [controlFlowOptionalChain2.ts]
 type A = {
   type: 'A';
@@ -106,6 +108,7 @@ function f8(x: X | N | null) {
 
 
 //// [controlFlowOptionalChain2.js]
+"use strict";
 function funcTwo(arg) {
     if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
         arg; // `B`

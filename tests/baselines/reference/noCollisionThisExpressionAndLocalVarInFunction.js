@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInFunction.ts] ////
+
 //// [noCollisionThisExpressionAndLocalVarInFunction.ts]
 var console: {
     log(val: any);
@@ -8,8 +10,9 @@ function x() {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInFunction.js]
+"use strict";
 var console;
 function x() {
     var _this = 5;
-    (function (x) { console.log(_this); });
+    x => { console.log(_this); };
 }

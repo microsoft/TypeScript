@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Protected/Protected5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Protected/Protected5.ts] ////
+
+=== Protected5.ts ===
 class C {
 >C : Symbol(C, Decl(Protected5.ts, 0, 0))
 

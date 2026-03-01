@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complicatedIndexesOfIntersectionsAreInferencable.ts] ////
+
 //// [complicatedIndexesOfIntersectionsAreInferencable.ts]
 interface FormikConfig<Values> {
     initialValues: Values;
@@ -27,7 +29,7 @@ Func({
     initialValues: {
         foo: ""
     },
-    validate: function (props) {
+    validate: props => {
         props.foo;
     }
 });

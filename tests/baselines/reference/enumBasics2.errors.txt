@@ -1,25 +1,25 @@
-tests/cases/compiler/enumBasics2.ts(4,9): error TS2339: Property 'b' does not exist on type 'Foo'.
-tests/cases/compiler/enumBasics2.ts(5,9): error TS2339: Property 'a' does not exist on type 'Foo'.
-tests/cases/compiler/enumBasics2.ts(6,9): error TS2339: Property 'x' does not exist on type 'Foo'.
-tests/cases/compiler/enumBasics2.ts(6,15): error TS2339: Property 'x' does not exist on type 'Foo'.
-tests/cases/compiler/enumBasics2.ts(13,13): error TS2339: Property 'a' does not exist on type 'Foo'.
+enumBasics2.ts(4,9): error TS2339: Property 'b' does not exist on type 'Foo.a'.
+enumBasics2.ts(5,9): error TS2339: Property 'a' does not exist on type 'Foo.b'.
+enumBasics2.ts(6,9): error TS2339: Property 'x' does not exist on type 'Foo.y'.
+enumBasics2.ts(6,15): error TS2339: Property 'x' does not exist on type 'Foo.a'.
+enumBasics2.ts(13,13): error TS2339: Property 'a' does not exist on type 'Foo.a'.
 
 
-==== tests/cases/compiler/enumBasics2.ts (5 errors) ====
+==== enumBasics2.ts (5 errors) ====
     enum Foo {
       a = 2,
       b = 3,
       x = a.b,       // should error
             ~
-!!! error TS2339: Property 'b' does not exist on type 'Foo'.
+!!! error TS2339: Property 'b' does not exist on type 'Foo.a'.
       y = b.a,       // should error
             ~
-!!! error TS2339: Property 'a' does not exist on type 'Foo'.
+!!! error TS2339: Property 'a' does not exist on type 'Foo.b'.
       z = y.x * a.x, // should error
             ~
-!!! error TS2339: Property 'x' does not exist on type 'Foo'.
+!!! error TS2339: Property 'x' does not exist on type 'Foo.y'.
                   ~
-!!! error TS2339: Property 'x' does not exist on type 'Foo'.
+!!! error TS2339: Property 'x' does not exist on type 'Foo.a'.
     }
     
     enum Bar {
@@ -28,6 +28,6 @@ tests/cases/compiler/enumBasics2.ts(13,13): error TS2339: Property 'a' does not 
       c = Foo.a.valueOf(), // ok
       d = Foo.a.a,         // should error
                 ~
-!!! error TS2339: Property 'a' does not exist on type 'Foo'.
+!!! error TS2339: Property 'a' does not exist on type 'Foo.a'.
     }
     

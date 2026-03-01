@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/declarationEmitNestedBindingPattern.ts] ////
+
+=== declarationEmitNestedBindingPattern.ts ===
+// Nested array binding pattern
+export class C1 {
+>C1 : C1
+>   : ^^
+
+    constructor(public [[x]]: any[]) {}
+>x : any
+>  : ^^^
+}
+
+// Nested object binding pattern
+export class C2 {
+>C2 : C2
+>   : ^^
+
+    constructor(public [{y}]: any[]) {}
+>y : any
+>  : ^^^
+}
+
+// Multiple levels of array nesting
+export class C3 {
+>C3 : C3
+>   : ^^
+
+    constructor(public [[[z]]]: any[]) {}
+>z : any
+>  : ^^^
+}
+
+// Mixed array and object nesting
+export class C4 {
+>C4 : C4
+>   : ^^
+
+    constructor(public [{a: [b]}]: any[]) {}
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+}
+
+// Object with nested array
+export class C5 {
+>C5 : C5
+>   : ^^
+
+    constructor(public {prop: [c]}: any) {}
+>prop : any
+>     : ^^^
+>c : any
+>  : ^^^
+}
+
+// Object with multiple nested levels
+export class C6 {
+>C6 : C6
+>   : ^^
+
+    constructor(public {prop: {nested: [d]}}: any) {}
+>prop : any
+>     : ^^^
+>nested : any
+>       : ^^^
+>d : any
+>  : ^^^
+}
+
+// Multiple parameters with nested patterns
+export class C7 {
+>C7 : C7
+>   : ^^
+
+    constructor(
+        public [[e]]: any[],
+>e : any
+>  : ^^^
+
+        public [{f}]: any[]
+>f : any
+>  : ^^^
+
+    ) {}
+}
+
+// Nested pattern with rest element
+export class C8 {
+>C8 : C8
+>   : ^^
+
+    constructor(public [[g, ...rest]]: any[]) {}
+>g : any
+>  : ^^^
+>rest : any
+>     : ^^^
+}
+
+// Complex nested pattern
+export class C9 {
+>C9 : C9
+>   : ^^
+
+    constructor(public [[h, i], {j, k: [l]}]: any) {}
+>h : any
+>  : ^^^
+>i : any
+>  : ^^^
+>j : any
+>  : ^^^
+>k : any
+>  : ^^^
+>l : any
+>  : ^^^
+}
+

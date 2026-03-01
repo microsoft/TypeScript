@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodsDerivedClasses.ts] ////
+
 //// [privateNameMethodsDerivedClasses.ts]
 class Base {
     #prop(): number{ return  123; }
@@ -13,6 +15,7 @@ class Derived extends Base {
 
 
 //// [privateNameMethodsDerivedClasses.js]
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -30,6 +33,6 @@ class Base {
 _Base_instances = new WeakSet(), _Base_prop = function _Base_prop() { return 123; };
 class Derived extends Base {
     static method(x) {
-        console.log(x..call(x));
+        console.log(x.());
     }
 }

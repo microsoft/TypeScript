@@ -1,10 +1,10 @@
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(25,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(34,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts(43,5): error TS2322: Type 'number' is not assignable to type 'A'.
+numericIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
+numericIndexerConstrainsPropertyDeclarations2.ts(25,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
+numericIndexerConstrainsPropertyDeclarations2.ts(34,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
+numericIndexerConstrainsPropertyDeclarations2.ts(43,5): error TS2322: Type 'number' is not assignable to type 'A'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts (4 errors) ====
+==== numericIndexerConstrainsPropertyDeclarations2.ts (4 errors) ====
     // String indexer providing a constraint of a user defined type
     
     class A {
@@ -56,6 +56,6 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         3.0: 1,
         ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'A'.
-!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts:39:10: The expected type comes from this index signature.
+!!! related TS6501 numericIndexerConstrainsPropertyDeclarations2.ts:39:10: The expected type comes from this index signature.
         "4.0": ''
     }

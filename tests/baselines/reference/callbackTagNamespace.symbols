@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/namespaced.js ===
+//// [tests/cases/conformance/jsdoc/callbackTagNamespace.ts] ////
+
+=== namespaced.js ===
 /**
  * @callback NS.Nested.Inner
  * @param {Object} space - spaaaaaaaaace

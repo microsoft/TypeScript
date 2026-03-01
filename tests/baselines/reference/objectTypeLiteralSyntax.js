@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax.ts] ////
+
 //// [objectTypeLiteralSyntax.ts]
 var x: {
     foo: string;
@@ -10,5 +12,6 @@ var y: {
 }
 
 //// [objectTypeLiteralSyntax.js]
+"use strict";
 var x;
 var y;

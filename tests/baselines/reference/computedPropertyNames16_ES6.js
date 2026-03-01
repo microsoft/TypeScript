@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames16_ES6.ts] ////
+
 //// [computedPropertyNames16_ES6.ts]
 var s: string;
 var n: number;
@@ -17,6 +19,7 @@ class C {
 }
 
 //// [computedPropertyNames16_ES6.js]
+"use strict";
 var s;
 var n;
 var a;

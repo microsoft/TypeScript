@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @allowNonTsExtensions: true
 // @Filename: jsDocTypedef_form1.js
 ////
@@ -12,4 +13,4 @@
 //// var numberLike;
 
 const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations({ findInComments: true, ranges });
+verify.baselineRename(ranges, { findInComments: true });

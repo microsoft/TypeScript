@@ -1,59 +1,98 @@
-=== tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts] ////
+
+=== trailingCommasInBindingPatterns.ts ===
 const [...a,] = [];
 >a : any[]
+>  : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const {...b,} = {};
 >b : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 let c, d;
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 ([...c,] = []);
 >([...c,] = []) : undefined[]
+>               : ^^^^^^^^^^^
 >[...c,] = [] : undefined[]
+>             : ^^^^^^^^^^^
 >[...c,] : any[]
+>        : ^^^^^
 >...c : any
+>     : ^^^
 >c : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 ({...d,} = {});
 >({...d,} = {}) : {}
+>               : ^^
 >{...d,} = {} : {}
+>             : ^^
 >{...d,} : any
+>        : ^^^
 >d : any
+>  : ^^^
 >{} : {}
+>   : ^^
 
 // Allowed for non-rest elements
 const [e,] = <any>[];
 >e : any
+>  : ^^^
 ><any>[] : any
+>        : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 const {f,} = <any>{};
 >f : any
+>  : ^^^
 ><any>{} : any
+>        : ^^^
 >{} : {}
+>   : ^^
 
 let g, h;
 >g : any
+>  : ^^^
 >h : any
+>  : ^^^
 
 ([g,] = <any>[]);
 >([g,] = <any>[]) : any
+>                 : ^^^
 >[g,] = <any>[] : any
+>               : ^^^
 >[g,] : [any]
+>     : ^^^^^
 >g : any
+>  : ^^^
 ><any>[] : any
+>        : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 ({h,} = <any>{});
 >({h,} = <any>{}) : any
+>                 : ^^^
 >{h,} = <any>{} : any
+>               : ^^^
 >{h,} : { h: any; }
+>     : ^^^^^^^^^^^
 >h : any
+>  : ^^^
 ><any>{} : any
+>        : ^^^
 >{} : {}
+>   : ^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypeAssignability.ts] ////
+
 //// [infinitelyExpandingTypeAssignability.ts]
 interface A<T> {
    x : T
@@ -12,5 +14,6 @@ var y : C<string> = x
 
 
 //// [infinitelyExpandingTypeAssignability.js]
+"use strict";
 var x;
 var y = x;

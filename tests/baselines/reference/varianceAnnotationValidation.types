@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varianceAnnotationValidation.ts ===
+//// [tests/cases/compiler/varianceAnnotationValidation.ts] ////
+
+=== varianceAnnotationValidation.ts ===
 // Repro from #49607
 
 // Variance annotation error expected
@@ -6,46 +8,62 @@
 interface Controller<out T> {
 	createAnimal: () => T;
 >createAnimal : () => T
+>             : ^^^^^^ 
 
 	run: (animal: T) => void;
 >run : (animal: T) => void
+>    : ^      ^^ ^^^^^    
 >animal : T
+>       : ^
 }
 
 interface Animal {
 	run(): void;
 >run : () => void
+>    : ^^^^^^    
 
 };
 
 class Dog implements Animal {
 >Dog : Dog
+>    : ^^^
 
 	run() {};
 >run : () => void
+>    : ^^^^^^^^^^
 
 	bark() {};
 >bark : () => void
+>     : ^^^^^^^^^^
 }
 
 interface AnimalContainer<T> {
 	controller: Controller<T>;
 >controller : Controller<T>
+>           : ^^^^^^^^^^^^^
 }
 
 declare let ca: AnimalContainer<Animal>;
 >ca : AnimalContainer<Animal>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let cd: AnimalContainer<Dog>;
 >cd : AnimalContainer<Dog>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 ca = cd;  // Ok
 >ca = cd : AnimalContainer<Dog>
+>        : ^^^^^^^^^^^^^^^^^^^^
 >ca : AnimalContainer<Animal>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >cd : AnimalContainer<Dog>
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 cd = ca;  // Error
 >cd = ca : AnimalContainer<Animal>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >cd : AnimalContainer<Dog>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >ca : AnimalContainer<Animal>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 

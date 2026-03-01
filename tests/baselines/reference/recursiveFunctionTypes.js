@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveFunctionTypes.ts] ////
+
 //// [recursiveFunctionTypes.ts]
 function fn(): typeof fn { return 1; }
 
@@ -45,6 +47,7 @@ f7(""); // ok (function takes an any param)
 f7(); // ok
 
 //// [recursiveFunctionTypes.js]
+"use strict";
 function fn() { return 1; }
 var x = fn; // error
 var y = fn; // ok
@@ -55,12 +58,9 @@ function f2() { }
 function g2() { }
 function f3() { return f3; }
 var a = f3; // error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.g = function (t) { };
-    return C;
-}());
+class C {
+    static g(t) { }
+}
 C.g(3); // error
 var f4;
 f4 = 3; // error

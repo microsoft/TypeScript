@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints2.ts] ////
+
 //// [subtypesOfTypeParameterWithConstraints2.ts]
 // checking whether other types are subtypes of type parameters with constraints
 
@@ -40,11 +42,11 @@ class C1 { foo: number; }
 class C2<T> { foo: T; }
 enum E { A }
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 
@@ -158,6 +160,7 @@ function f21<T extends Number>(x: T) {
 }
 
 //// [subtypesOfTypeParameterWithConstraints2.js]
+"use strict";
 // checking whether other types are subtypes of type parameters with constraints
 function f1(x, y) {
     var r = true ? x : y;
@@ -185,16 +188,10 @@ function f3(x, y) {
     var r3 = true ? y : new Date();
     var r3 = true ? new Date() : y;
 }
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C1 {
+}
+class C2 {
+}
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -203,11 +200,8 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
@@ -243,12 +237,12 @@ function f10(x) {
     var r6 = true ? x : { foo: 1 }; // ok
 }
 function f11(x) {
-    var r7 = true ? function () { } : x; // ok
-    var r7 = true ? x : function () { }; // ok
+    var r7 = true ? () => { } : x; // ok
+    var r7 = true ? x : () => { }; // ok
 }
 function f12(x) {
-    var r8 = true ? function (x) { return x; } : x; // ok
-    var r8b = true ? x : function (x) { return x; }; // ok, type parameters not identical across declarations
+    var r8 = true ? (x) => { return x; } : x; // ok
+    var r8b = true ? x : (x) => { return x; }; // ok, type parameters not identical across declarations
 }
 function f13(x) {
     var i1;

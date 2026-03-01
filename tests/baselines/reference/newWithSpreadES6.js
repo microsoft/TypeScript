@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/newWithSpreadES6.ts] ////
+
 //// [newWithSpreadES6.ts]
 function f(x: number, y: number, ...z: string[]) {
 }
@@ -97,6 +99,7 @@ new i["a-b"][1](1, 2, ...a);
 new i["a-b"][1](1, 2, ...a, "string");
 
 //// [newWithSpreadES6.js]
+"use strict";
 function f(x, y, ...z) {
 }
 function f2(...x) {

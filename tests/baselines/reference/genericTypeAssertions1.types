@@ -1,22 +1,37 @@
-=== tests/cases/compiler/genericTypeAssertions1.ts ===
+//// [tests/cases/compiler/genericTypeAssertions1.ts] ////
+
+=== genericTypeAssertions1.ts ===
 class A<T> { foo(x: T) { }}
 >A : A<T>
+>  : ^^^^
 >foo : (x: T) => void
+>    : ^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
 var foo = new A<number>();
 >foo : A<number>
+>    : ^^^^^^^^^
 >new A<number>() : A<number>
+>                : ^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var r: A<string> = <A<number>>new A(); // error
 >r : A<string>
+>  : ^^^^^^^^^
 ><A<number>>new A() : A<number>
+>                   : ^^^^^^^^^
 >new A() : A<number>
+>        : ^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 var r2: A<number> = <A<A<number>>>foo; // error
 >r2 : A<number>
+>   : ^^^^^^^^^
 ><A<A<number>>>foo : A<A<number>>
+>                  : ^^^^^^^^^^^^
 >foo : A<number>
+>    : ^^^^^^^^^
 

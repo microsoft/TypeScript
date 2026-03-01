@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classWithOverloadImplementationOfWrongName2.ts] ////
+
 //// [classWithOverloadImplementationOfWrongName2.ts]
 class C {
     foo(): string;
@@ -6,9 +8,7 @@ class C {
 }
 
 //// [classWithOverloadImplementationOfWrongName2.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar = function (x) { };
-    return C;
-}());
+"use strict";
+class C {
+    bar(x) { }
+}

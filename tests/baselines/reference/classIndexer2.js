@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classIndexer2.ts] ////
+
 //// [classIndexer2.ts]
 class C123 {
     [s: string]: number;
@@ -8,8 +10,8 @@ class C123 {
 }
 
 //// [classIndexer2.js]
-var C123 = /** @class */ (function () {
-    function C123() {
+"use strict";
+class C123 {
+    constructor() {
     }
-    return C123;
-}());
+}

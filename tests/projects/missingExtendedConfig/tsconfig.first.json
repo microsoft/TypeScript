@@ -1,6 +1,0 @@
-{
-	"extends": "./foobar.json",
-	"compilerOptions": {
-		"composite": true
-	}
-}

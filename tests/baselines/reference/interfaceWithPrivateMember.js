@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts] ////
+
 //// [interfaceWithPrivateMember.ts]
 // interfaces do not permit private members, these are errors
 
@@ -14,5 +16,6 @@ var x: {
 }
 
 //// [interfaceWithPrivateMember.js]
+"use strict";
 // interfaces do not permit private members, these are errors
 var x;

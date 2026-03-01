@@ -1,3 +1,4 @@
+// @target: es2015
 class C extends E { foo: string; } // error
 
 class D extends C { bar: string; }

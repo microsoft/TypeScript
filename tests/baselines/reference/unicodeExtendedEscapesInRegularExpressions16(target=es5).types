@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions16.ts] ////
+
+=== unicodeExtendedEscapesInRegularExpressions16.ts ===
+var x = /\u{ABCD}\u{EF12}\u{3456}\u{7890}/gu;
+>x : RegExp
+>  : ^^^^^^
+>/\u{ABCD}\u{EF12}\u{3456}\u{7890}/gu : RegExp
+>                                     : ^^^^^^
+

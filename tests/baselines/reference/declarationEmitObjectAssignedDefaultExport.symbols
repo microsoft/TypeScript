@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
+//// [tests/cases/compiler/declarationEmitObjectAssignedDefaultExport.ts] ////
+
+=== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
 interface Statics {
 >Statics : Symbol(Statics, Decl(index.d.ts, 0, 0))
 
@@ -21,7 +23,7 @@ declare namespace hoistNonReactStatics {
 export = hoistNonReactStatics;
 >hoistNonReactStatics : Symbol(hoistNonReactStatics, Decl(index.d.ts, 2, 1))
 
-=== tests/cases/compiler/node_modules/styled-components/index.d.ts ===
+=== node_modules/styled-components/index.d.ts ===
 import * as hoistNonReactStatics from "hoist-non-react-statics";
 >hoistNonReactStatics : Symbol(hoistNonReactStatics, Decl(index.d.ts, 0, 6))
 
@@ -90,7 +92,7 @@ declare const styled: StyledInterface;
 export default styled;
 >styled : Symbol(styled, Decl(index.d.ts, 16, 13))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import styled from "styled-components";
 >styled : Symbol(styled, Decl(index.ts, 0, 6))
 

@@ -1,59 +1,88 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexers.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexers.ts] ////
+
+=== genericCallWithObjectTypeArgsAndIndexers.ts ===
 // Type inference infers from indexers in target type, no errors expected
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 var a: {
 >a : { [x: string]: Object; [x: number]: Date; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
     [x: number]: Date;
 >x : number
+>  : ^^^^^^
 
 };
 var r = foo(a);
 >r : { [x: string]: Object; [x: number]: Date; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(a) : { [x: string]: Object; [x: number]: Date; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >a : { [x: string]: Object; [x: number]: Date; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function other<T extends Date>(arg: T) {
 >other : <T extends Date>(arg: T) => void
+>      : ^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
+>    : ^
 
     var b: {
 >b : { [x: string]: Object; [x: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
         [x: number]: T
 >x : number
+>  : ^^^^^^
 
     };
     var r2 = foo(b);
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->foo : <T>(x: T) => T
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var d = r2[1]; 
 >d : T
+>  : ^
 >r2[1] : T
+>      : ^
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     var e = r2['1']; 
 >e : T
+>  : ^
 >r2['1'] : T
+>        : ^
 >r2 : { [x: string]: Object; [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 }

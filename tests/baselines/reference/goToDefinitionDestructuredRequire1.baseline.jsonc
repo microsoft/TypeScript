@@ -1,0 +1,20 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/util.js ===
+// <|class [|Util|] {}|>
+// module.exports = { Util };
+
+// === /tests/cases/fourslash/index.js ===
+// const { Util } = require('./util');
+// new [|Util|]/*GOTO DEF*/()
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Util",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

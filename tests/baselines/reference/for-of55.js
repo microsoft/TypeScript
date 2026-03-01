@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of55.ts] ////
+
 //// [for-of55.ts]
 let v = [1];
 for (let v of v) {
@@ -5,6 +7,7 @@ for (let v of v) {
 }
 
 //// [for-of55.js]
+"use strict";
 let v = [1];
 for (let v of v) {
     v;

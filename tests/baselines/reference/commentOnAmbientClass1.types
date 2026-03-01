@@ -1,10 +1,14 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnAmbientClass1.ts] ////
+
+=== b.ts ===
 ///<reference path="a.ts"/>
 declare class E extends C {
 >E : E
+>  : ^
 >C : C
+>  : ^
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=========
     Keep this pinned comment
    =========
@@ -13,10 +17,12 @@ declare class E extends C {
 /*! Don't keep this pinned comment */
 declare class C {
 >C : C
+>  : ^
 }
 
 // Don't keep this comment.
 declare class D {
 >D : D
+>  : ^
 }
 

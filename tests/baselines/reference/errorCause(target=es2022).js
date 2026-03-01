@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorCause.ts] ////
+
 //// [errorCause.ts]
 declare const a: unknown;
 
@@ -17,6 +19,7 @@ new AggregateError([], "foo", { cause: new Error("bar") });
 
 
 //// [errorCause.js]
+"use strict";
 let err = new Error("foo", { cause: new Error("bar") });
 err.cause;
 let anotherErr = new Error("foo", { cause: a });

@@ -1,6 +1,9 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts] ////
+
+=== propertyNamesOfReservedWords.ts ===
 class C {
 >C : C
+>  : ^
 
     abstract;
 >abstract : any
@@ -193,18 +196,23 @@ class C {
 }
 var c: C;
 >c : C
+>  : ^
 
 var r1 = c.abstract;
 >r1 : any
 >c.abstract : any
 >c : C
+>  : ^
 >abstract : any
+>         : ^^^
 
 var r2 = c.as;
 >r2 : any
 >c.as : any
 >c : C
+>  : ^
 >as : any
+>   : ^^^
 
 interface I {
     abstract;
@@ -399,21 +407,27 @@ interface I {
 
 var i: I;
 >i : I
+>  : ^
 
 var r3 = i.abstract;
 >r3 : any
 >i.abstract : any
 >i : I
+>  : ^
 >abstract : any
+>         : ^^^
 
 var r4 = i.as;
 >r4 : any
 >i.as : any
 >i : I
+>  : ^
 >as : any
+>   : ^^^
 
 var a: {
 >a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     abstract;
 >abstract : any
@@ -609,216 +623,292 @@ var r5 = a.abstract;
 >r5 : any
 >a.abstract : any
 >a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >abstract : any
+>         : ^^^
 
 var r6 = a.as;
 >r6 : any
 >a.as : any
 >a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >as : any
+>   : ^^^
 
 enum E {
 >E : E
+>  : ^
 
     abstract,
 >abstract : E.abstract
+>         : ^^^^^^^^^^
 
     as,
 >as : E.as
+>   : ^^^^
 
     boolean,
 >boolean : E.boolean
+>        : ^^^^^^^^^
 
     break,
 >break : E.break
+>      : ^^^^^^^
 
     byte,
 >byte : E.byte
+>     : ^^^^^^
 
     case,
 >case : E.case
+>     : ^^^^^^
 
     catch,
 >catch : E.catch
+>      : ^^^^^^^
 
     char,
 >char : E.char
+>     : ^^^^^^
 
     class,
 >class : E.class
+>      : ^^^^^^^
 
     continue,
 >continue : E.continue
+>         : ^^^^^^^^^^
 
     const,
 >const : E.const
+>      : ^^^^^^^
 
     debugger,
 >debugger : E.debugger
+>         : ^^^^^^^^^^
 
     default,
 >default : E.default
+>        : ^^^^^^^^^
 
     delete,
 >delete : E.delete
+>       : ^^^^^^^^
 
     do,
 >do : E.do
+>   : ^^^^
 
     double,
 >double : E.double
+>       : ^^^^^^^^
 
     else,
 >else : E.else
+>     : ^^^^^^
 
     enum,
 >enum : E.enum
+>     : ^^^^^^
 
     export,
 >export : E.export
+>       : ^^^^^^^^
 
     extends,
 >extends : E.extends
+>        : ^^^^^^^^^
 
     false,
 >false : E.false
+>      : ^^^^^^^
 
     final,
 >final : E.final
+>      : ^^^^^^^
 
     finally,
 >finally : E.finally
+>        : ^^^^^^^^^
 
     float,
 >float : E.float
+>      : ^^^^^^^
 
     for,
 >for : E.for
+>    : ^^^^^
 
     function,
 >function : E.function
+>         : ^^^^^^^^^^
 
     goto,
 >goto : E.goto
+>     : ^^^^^^
 
     if,
 >if : E.if
+>   : ^^^^
 
     implements,
 >implements : E.implements
+>           : ^^^^^^^^^^^^
 
     import,
 >import : E.import
+>       : ^^^^^^^^
 
     in,
 >in : E.in
+>   : ^^^^
 
     instanceof,
 >instanceof : E.instanceof
+>           : ^^^^^^^^^^^^
 
     int,
 >int : E.int
+>    : ^^^^^
 
     interface,
 >interface : E.interface
+>          : ^^^^^^^^^^^
 
     is,
 >is : E.is
+>   : ^^^^
 
     long,
 >long : E.long
+>     : ^^^^^^
 
     namespace,
 >namespace : E.namespace
+>          : ^^^^^^^^^^^
 
     native,
 >native : E.native
+>       : ^^^^^^^^
 
     new,
 >new : E.new
+>    : ^^^^^
 
     null,
 >null : E.null
+>     : ^^^^^^
 
     package,
 >package : E.package
+>        : ^^^^^^^^^
 
     private,
 >private : E.private
+>        : ^^^^^^^^^
 
     protected,
 >protected : E.protected
+>          : ^^^^^^^^^^^
 
     public,
 >public : E.public
+>       : ^^^^^^^^
 
     return,
 >return : E.return
+>       : ^^^^^^^^
 
     short,
 >short : E.short
+>      : ^^^^^^^
 
     static,
 >static : E.static
+>       : ^^^^^^^^
 
     super,
 >super : E.super
+>      : ^^^^^^^
 
     switch,
 >switch : E.switch
+>       : ^^^^^^^^
 
     synchronized,
 >synchronized : E.synchronized
+>             : ^^^^^^^^^^^^^^
 
     this,
 >this : E.this
+>     : ^^^^^^
 
     throw,
 >throw : E.throw
+>      : ^^^^^^^
 
     throws,
 >throws : E.throws
+>       : ^^^^^^^^
 
     transient,
 >transient : E.transient
+>          : ^^^^^^^^^^^
 
     true,
 >true : E.true
+>     : ^^^^^^
 
     try,
 >try : E.try
+>    : ^^^^^
 
     typeof,
 >typeof : E.typeof
+>       : ^^^^^^^^
 
     use,
 >use : E.use
+>    : ^^^^^
 
     var,
 >var : E.var
+>    : ^^^^^
 
     void,
 >void : E.void
+>     : ^^^^^^
 
     volatile,
 >volatile : E.volatile
+>         : ^^^^^^^^^^
 
     while,
 >while : E.while
+>      : ^^^^^^^
 
     with,
 >with : E.with
+>     : ^^^^^^
 }
 
 var r7 = E.abstract;
 >r7 : E
+>   : ^
 >E.abstract : E.abstract
+>           : ^^^^^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >abstract : E.abstract
+>         : ^^^^^^^^^^
 
 var r8 = E.as;
 >r8 : E
+>   : ^
 >E.as : E.as
+>     : ^^^^
 >E : typeof E
+>  : ^^^^^^^^
 >as : E.as
+>   : ^^^^
 

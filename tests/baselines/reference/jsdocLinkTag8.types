@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag8.ts] ////
+
+=== /a.js ===
+/** {@link Map.delete} */
+const remove = (map, key) => {}
+>remove : (map: any, key: any) => void
+>       : ^   ^^^^^^^   ^^^^^^^^^^^^^^
+>(map, key) => {} : (map: any, key: any) => void
+>                 : ^   ^^^^^^^   ^^^^^^^^^^^^^^
+>map : any
+>key : any
+

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofInterface.ts ===
+//// [tests/cases/compiler/typeofInterface.ts] ////
+
+=== typeofInterface.ts ===
 var I: { a: string};
 >I : Symbol(I, Decl(typeofInterface.ts, 0, 3), Decl(typeofInterface.ts, 0, 20))
 >a : Symbol(a, Decl(typeofInterface.ts, 0, 8))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks6.ts] ////
+
 //// [reachabilityChecks6.ts]
 function f0(x) {
     while (true);
@@ -129,6 +131,7 @@ function f11(x) {
 }
 
 //// [reachabilityChecks6.js]
+"use strict";
 function f0(x) {
     while (true)
         ;

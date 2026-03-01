@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/contextualThisType.ts] ////
+
 //// [contextualThisType.ts]
 interface X {
     a: (p: this) => this;
@@ -16,8 +18,9 @@ var y = x.a(x);
 
 
 //// [contextualThisType.js]
+"use strict";
 var x = {
-    a: function (p) {
+    a(p) {
         return p;
     }
 };

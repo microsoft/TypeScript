@@ -1,4 +1,6 @@
-=== tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts ===
+//// [tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts] ////
+
+=== publicMemberImplementedAsPrivateInDerivedClass.ts ===
 interface Qux {
 >Qux : Symbol(Qux, Decl(publicMemberImplementedAsPrivateInDerivedClass.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments4.ts] ////
+
+=== a.js ===
 class Base {
 >Base : Symbol(Base, Decl(a.js, 0, 0))
 
@@ -20,7 +22,7 @@ class Derived extends Base {
 
         // should be OK, and p should have type number | undefined from its base
         this.p = 1
->this.p : Symbol(Derived.p, Decl(a.js, 6, 9))
+>this.p : Symbol(Base.p, Decl(a.js, 1, 9))
 >this : Symbol(Derived, Decl(a.js, 4, 1))
 >p : Symbol(Derived.p, Decl(a.js, 6, 9))
     }

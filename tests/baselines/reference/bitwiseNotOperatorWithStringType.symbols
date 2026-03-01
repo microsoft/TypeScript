@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithStringType.ts] ////
+
+=== bitwiseNotOperatorWithStringType.ts ===
 // ~ operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(bitwiseNotOperatorWithStringType.ts, 1, 3))
@@ -18,7 +20,7 @@ class A {
     static foo() { return ""; }
 >foo : Symbol(A.foo, Decl(bitwiseNotOperatorWithStringType.ts, 7, 21))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(bitwiseNotOperatorWithStringType.ts, 9, 1))
 
     export var n: string;

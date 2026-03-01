@@ -1,4 +1,6 @@
-=== tests/cases/compiler/omitTypeTestErrors01.ts ===
+//// [tests/cases/compiler/omitTypeTestErrors01.ts] ////
+
+=== omitTypeTestErrors01.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(omitTypeTestErrors01.ts, 0, 0))
 

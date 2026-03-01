@@ -1,29 +1,43 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/importHelpersNoHelpersForPrivateFields.ts] ////
+
+=== main.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     #field = true;
 >#field : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
     f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         this.#field = this.#field;
 >this.#field = this.#field : boolean
+>                          : ^^^^^^^
 >this.#field : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 >this.#field : boolean
+>            : ^^^^^^^
 >this : this
+>     : ^^^^
 
         #field in this;
 >#field in this : boolean
+>               : ^^^^^^^
 >#field : any
+>       : ^^^
 >this : this
+>     : ^^^^
     }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

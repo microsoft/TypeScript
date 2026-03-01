@@ -1,49 +1,73 @@
-=== tests/cases/compiler/thisInLambda.ts ===
+//// [tests/cases/compiler/thisInLambda.ts] ////
+
+=== thisInLambda.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x = "hello";
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         this.x; // 'this' is type 'Foo'
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
 
         var f = () => this.x; // 'this' should be type 'Foo' as well
 >f : () => string
+>  : ^^^^^^^^^^^^
 >() => this.x : () => string
+>             : ^^^^^^^^^^^^
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 function myFn(a:any) { }
 >myFn : (a: any) => void
+>     : ^ ^^   ^^^^^^^^^
 >a : any
 
 class myCls {
 >myCls : myCls
+>      : ^^^^^
 
     constructor () {
         myFn(() => {
 >myFn(() => {            myFn(() => {                var x = this;            });        }) : void
+>                                                                                           : ^^^^
 >myFn : (a: any) => void
+>     : ^ ^^   ^^^^^^^^^
 >() => {            myFn(() => {                var x = this;            });        } : () => void
+>                                                                                     : ^^^^^^^^^^
 
             myFn(() => {
 >myFn(() => {                var x = this;            }) : void
+>                                                        : ^^^^
 >myFn : (a: any) => void
+>     : ^ ^^   ^^^^^^^^^
 >() => {                var x = this;            } : () => void
+>                                                  : ^^^^^^^^^^
 
                 var x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
             });
         });

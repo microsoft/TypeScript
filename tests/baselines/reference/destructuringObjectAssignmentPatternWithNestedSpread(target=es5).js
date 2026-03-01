@@ -1,9 +1,12 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectAssignmentPatternWithNestedSpread.ts] ////
+
 //// [destructuringObjectAssignmentPatternWithNestedSpread.ts]
 let a: any, b: any, c: any = {x: {a: 1, y: 2}}, d: any;
 ({x: {a, ...b} = d} = c);
 
 
 //// [destructuringObjectAssignmentPatternWithNestedSpread.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)

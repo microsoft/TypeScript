@@ -1,112 +1,159 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_class.ts] ////
+
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
     /** @return {number} */
     method() { throw new Error(); }
 >method : () => number
+>       : ^^^^^^      
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 }
 /** @implements {A} */
 class B  {
 >B : B
+>  : ^
 
     method() { return 0 }
 >method : () => number
+>       : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 /** @implements A */
 class B2  {
 >B2 : B2
+>   : ^^
 
     /** @return {string} */
     method() { return "" }
 >method : () => string
+>       : ^^^^^^      
 >"" : ""
+>   : ^^
 }
 
 /** @implements {A} */
 class B3  {
 >B3 : B3
+>   : ^^
 }
 
 
 var Ns = {};
 >Ns : typeof Ns
+>   : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @implements {A} */
 Ns.C1 = class {
 >Ns.C1 = class {    method() { return 11; }} : typeof C1
+>                                            : ^^^^^^^^^
 >Ns.C1 : typeof C1
+>      : ^^^^^^^^^
 >Ns : typeof Ns
+>   : ^^^^^^^^^
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >class {    method() { return 11; }} : typeof C1
+>                                    : ^^^^^^^^^
 
     method() { return 11; }
 >method : () => number
+>       : ^^^^^^^^^^^^
 >11 : 11
+>   : ^^
 }
 /** @implements {A} */
 var C2 = class {
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >class {    method() { return 12; }} : typeof C2
+>                                    : ^^^^^^^^^
 
     method() { return 12; }
 >method : () => number
+>       : ^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 }
 var o = {
 >o : { C3: typeof C3; }
+>  : ^^^^^^^^^^^^^^^^^^
 >{    /** @implements {A} */    C3: class {        method() { return 13; }    }} : { C3: typeof C3; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^
 
     /** @implements {A} */
     C3: class {
 >C3 : typeof C3
+>   : ^^^^^^^^^
 >class {        method() { return 13; }    } : typeof C3
+>                                            : ^^^^^^^^^
 
         method() { return 13; }
 >method : () => number
+>       : ^^^^^^^^^^^^
 >13 : 13
+>   : ^^
     }
 }
 class CC {
 >CC : CC
+>   : ^^
 
     /** @implements {A} */
     C4 = class {
 >C4 : typeof (Anonymous class)
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class {        method() {            return 14;        }    } : typeof (Anonymous class)
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         method() {
 >method : () => number
+>       : ^^^^^^^^^^^^
 
             return 14;
 >14 : 14
+>   : ^^
         }
     }
 }
 
 var C5;
 >C5 : any
+>   : ^^^
 
 /** @implements {A} */
 Ns.C5 = C5 || class {
 >Ns.C5 = C5 || class {    method() {        return 15;    }} : typeof C5
+>                                                            : ^^^^^^^^^
 >Ns.C5 : typeof C5
+>      : ^^^^^^^^^
 >Ns : typeof Ns
+>   : ^^^^^^^^^
 >C5 : typeof C5
+>   : ^^^^^^^^^
 >C5 || class {    method() {        return 15;    }} : typeof C5
+>                                                    : ^^^^^^^^^
 >C5 : undefined
+>   : ^^^^^^^^^
 >class {    method() {        return 15;    }} : typeof C5
+>                                              : ^^^^^^^^^
 
     method() {
 >method : () => number
+>       : ^^^^^^^^^^^^
 
         return 15;
 >15 : 15
+>   : ^^
     }
 }
 

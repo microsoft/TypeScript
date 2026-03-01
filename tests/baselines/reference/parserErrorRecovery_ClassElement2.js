@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement2.ts] ////
+
 //// [parserErrorRecovery_ClassElement2.ts]
-module M {
+namespace M {
   class C {
 
   enum E {
@@ -7,14 +9,12 @@ module M {
 }
 
 //// [parserErrorRecovery_ClassElement2.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var E;
+    class C {
+    }
+    let E;
     (function (E) {
     })(E || (E = {}));
 })(M || (M = {}));

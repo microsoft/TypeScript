@@ -1,17 +1,26 @@
-=== tests/cases/compiler/cloduleWithRecursiveReference.ts ===
-module M
+//// [tests/cases/compiler/cloduleWithRecursiveReference.ts] ////
+
+=== cloduleWithRecursiveReference.ts ===
+namespace M
 >M : typeof M
+>  : ^^^^^^^^
 {
   export class C {  }
 >C : C
+>  : ^
 
-  export module C {
+  export namespace C {
 >C : typeof M.C
+>  : ^^^^^^^^^^
 
     export var C = M.C
 >C : typeof M.C
+>  : ^^^^^^^^^^
 >M.C : typeof M.C
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >C : typeof M.C
+>  : ^^^^^^^^^^
   }
 }

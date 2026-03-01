@@ -1,109 +1,176 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts] ////
+
+=== privateNamesInGenericClasses.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     #foo: T;
 >#foo : T
+>     : ^
 
     #method(): T { return this.#foo; }
 >#method : () => T
+>        : ^^^^^^ 
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
 
     get #prop(): T { return this.#foo; }
 >#prop : T
+>      : ^
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
 
     set #prop(value : T) { this.#foo = value; }
 >#prop : T
+>      : ^
 >value : T
+>      : ^
 >this.#foo = value : T
+>                  : ^
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
 >value : T
+>      : ^
     
     bar(x: C<T>) { return x.#foo; }          // OK
 >bar : (x: C<T>) => T
+>    : ^ ^^    ^^^^^^
 >x : C<T>
+>  : ^^^^
 >x.#foo : T
+>       : ^
 >x : C<T>
+>  : ^^^^
 
     bar2(x: C<T>) { return x.#method(); }    // OK
 >bar2 : (x: C<T>) => T
+>     : ^ ^^    ^^^^^^
 >x : C<T>
+>  : ^^^^
 >x.#method() : T
+>            : ^
 >x.#method : () => T
+>          : ^^^^^^ 
 >x : C<T>
+>  : ^^^^
 
     bar3(x: C<T>) { return x.#prop; }        // OK
 >bar3 : (x: C<T>) => T
+>     : ^ ^^    ^^^^^^
 >x : C<T>
+>  : ^^^^
 >x.#prop : T
+>        : ^
 >x : C<T>
+>  : ^^^^
 
     baz(x: C<number>) { return x.#foo; }     // OK
 >baz : (x: C<number>) => number
+>    : ^ ^^         ^^^^^^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 >x.#foo : number
+>       : ^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
     baz2(x: C<number>) { return x.#method; } // OK
 >baz2 : (x: C<number>) => () => number
+>     : ^ ^^         ^^^^^^^^^^^^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 >x.#method : () => number
+>          : ^^^^^^^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
     baz3(x: C<number>) { return x.#prop; }   // OK
 >baz3 : (x: C<number>) => number
+>     : ^ ^^         ^^^^^^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 >x.#prop : number
+>        : ^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
     quux(x: C<string>) { return x.#foo; }    // OK
 >quux : (x: C<string>) => string
+>     : ^ ^^         ^^^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >x.#foo : string
+>       : ^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
     quux2(x: C<string>) { return x.#method; }// OK
 >quux2 : (x: C<string>) => () => string
+>      : ^ ^^         ^^^^^^^^^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >x.#method : () => string
+>          : ^^^^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
     quux3(x: C<string>) { return x.#prop; }  // OK
 >quux3 : (x: C<string>) => string
+>      : ^ ^^         ^^^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 >x.#prop : string
+>        : ^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 }
 
 declare let a: C<number>;
 >a : C<number>
+>  : ^^^^^^^^^
 
 declare let b: C<string>;
 >b : C<string>
+>  : ^^^^^^^^^
 
 a.#foo;                                   // Error
 >a.#foo : any
+>       : ^^^
 >a : C<number>
+>  : ^^^^^^^^^
 
 a.#method;                                // Error
 >a.#method : any
+>          : ^^^
 >a : C<number>
+>  : ^^^^^^^^^
 
 a.#prop;                                  // Error
 >a.#prop : any
+>        : ^^^
 >a : C<number>
+>  : ^^^^^^^^^
 
 a = b;                                    // Error
 >a = b : C<string>
+>      : ^^^^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 >b : C<string>
+>  : ^^^^^^^^^
 
 b = a;                                    // Error
 >b = a : C<number>
+>      : ^^^^^^^^^
 >b : C<string>
+>  : ^^^^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 

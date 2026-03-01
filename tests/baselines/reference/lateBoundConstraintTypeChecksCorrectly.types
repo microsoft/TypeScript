@@ -1,50 +1,77 @@
-=== tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts ===
+//// [tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts] ////
+
+=== lateBoundConstraintTypeChecksCorrectly.ts ===
 declare const fooProp: unique symbol;
 >fooProp : unique symbol
+>        : ^^^^^^^^^^^^^
 
 declare const barProp: unique symbol;
 >barProp : unique symbol
+>        : ^^^^^^^^^^^^^
 
 type BothProps = typeof fooProp | typeof barProp;
->BothProps : unique symbol | unique symbol
+>BothProps : BothProps
+>          : ^^^^^^^^^
 >fooProp : unique symbol
+>        : ^^^^^^^^^^^^^
 >barProp : unique symbol
+>        : ^^^^^^^^^^^^^
 
 export interface Foo<T> {
   [fooProp]: T;
 >[fooProp] : T
+>          : ^
 >fooProp : unique symbol
+>        : ^^^^^^^^^^^^^
 
   [barProp]: string;
 >[barProp] : string
+>          : ^^^^^^
 >barProp : unique symbol
+>        : ^^^^^^^^^^^^^
 }
 
 function f<T extends Foo<number>>(x: T) {
 >f : <T extends Foo<number>>(x: T) => void
+>  : ^ ^^^^^^^^^           ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     const abc = x[fooProp]; // expected: 'T[typeof fooProp]'
 >abc : number
+>    : ^^^^^^
 >x[fooProp] : number
+>           : ^^^^^^
 >x : T
+>  : ^
 >fooProp : unique symbol
+>        : ^^^^^^^^^^^^^
 
     /**
      * Expected: no error
      */
     const def: T[typeof fooProp] = x[fooProp];
 >def : T[unique symbol]
+>    : ^^^^^^^^^^^^^^^^
 >fooProp : unique symbol
+>        : ^^^^^^^^^^^^^
 >x[fooProp] : number
+>           : ^^^^^^
 >x : T
+>  : ^
 >fooProp : unique symbol
+>        : ^^^^^^^^^^^^^
 
     const def2: T[typeof barProp] = x[barProp];
 >def2 : T[unique symbol]
+>     : ^^^^^^^^^^^^^^^^
 >barProp : unique symbol
+>        : ^^^^^^^^^^^^^
 >x[barProp] : string
+>           : ^^^^^^
 >x : T
+>  : ^
 >barProp : unique symbol
+>        : ^^^^^^^^^^^^^
 }
 

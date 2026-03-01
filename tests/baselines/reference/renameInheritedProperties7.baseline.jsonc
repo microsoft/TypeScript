@@ -1,0 +1,27 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties7.ts ===
+// class C extends D {
+//     /*RENAME*/<|[|prop1RENAME|]: string;|>
+// }
+// 
+// class D extends C {
+//     prop1: string;
+// }
+// 
+// var c: C;
+// c.[|prop1RENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties7.ts ===
+// class C extends D {
+//     <|[|prop1RENAME|]: string;|>
+// }
+// 
+// class D extends C {
+//     prop1: string;
+// }
+// 
+// var c: C;
+// c./*RENAME*/[|prop1RENAME|];

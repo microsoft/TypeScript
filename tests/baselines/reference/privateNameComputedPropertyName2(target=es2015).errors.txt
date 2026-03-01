@@ -1,0 +1,15 @@
+privateNameComputedPropertyName2.ts(8,13): error TS2454: Variable 'getX' is used before being assigned.
+
+
+==== privateNameComputedPropertyName2.ts (1 errors) ====
+    let getX: (a: A) => number;
+    
+    class A {
+        #x = 100;
+        [(getX = (a: A) => a.#x, "_")]() {}
+    }
+    
+    console.log(getX(new A));
+                ~~~~
+!!! error TS2454: Variable 'getX' is used before being assigned.
+    

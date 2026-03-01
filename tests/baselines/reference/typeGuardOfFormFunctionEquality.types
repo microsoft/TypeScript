@@ -1,48 +1,79 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormFunctionEquality.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormFunctionEquality.ts] ////
+
+=== typeGuardOfFormFunctionEquality.ts ===
 declare function isString1(a: number, b: Object): b is string;
 >isString1 : (a: number, b: Object) => b is string
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >a : number
+>  : ^^^^^^
 >b : Object
+>  : ^^^^^^
 
 declare function isString2(a: Object): a is string;
 >isString2 : (a: Object) => a is string
+>          : ^ ^^      ^^^^^           
 >a : Object
+>  : ^^^^^^
 
 switch (isString1(0, "")) {
 >isString1(0, "") : boolean
+>                 : ^^^^^^^
 >isString1 : (a: number, b: Object) => b is string
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >0 : 0
+>  : ^
 >"" : ""
+>   : ^^
 
     case isString2(""):
 >isString2("") : boolean
+>              : ^^^^^^^
 >isString2 : (a: Object) => a is string
+>          : ^ ^^      ^^^^^           
 >"" : ""
+>   : ^^
 
     default:
 }
 
 var x = isString1(0, "") === isString2("");
 >x : boolean
+>  : ^^^^^^^
 >isString1(0, "") === isString2("") : boolean
+>                                   : ^^^^^^^
 >isString1(0, "") : boolean
+>                 : ^^^^^^^
 >isString1 : (a: number, b: Object) => b is string
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >0 : 0
+>  : ^
 >"" : ""
+>   : ^^
 >isString2("") : boolean
+>              : ^^^^^^^
 >isString2 : (a: Object) => a is string
+>          : ^ ^^      ^^^^^           
 >"" : ""
+>   : ^^
 
 function isString3(a: number, b: number, c: Object): c is string {
 >isString3 : (a: number, b: number, c: Object) => c is string
+>          : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^           
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : Object
+>  : ^^^^^^
 
     return isString1(0, c);
 >isString1(0, c) : boolean
+>                : ^^^^^^^
 >isString1 : (a: number, b: Object) => b is string
+>          : ^ ^^      ^^ ^^      ^^^^^           
 >0 : 0
+>  : ^
 >c : Object
+>  : ^^^^^^
 }
 

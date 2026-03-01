@@ -3,7 +3,7 @@
 // @jsx: preserve
 
 //@Filename: file.tsx
-////declare module JSX {
+////declare namespace JSX {
 ////    interface Element {}
 ////    interface IntrinsicElements {
 ////        div: {};
@@ -17,4 +17,4 @@
 ////[|<[|{| "contextRangeIndex": 7 |}div|]> </[|{| "contextRangeIndex": 7 |}div|]>|]
 
 verify.noErrors();
-verify.rangesWithSameTextAreRenameLocations("MyClass", "div");
+verify.baselineRenameAtRangesWithText("MyClass", "div");

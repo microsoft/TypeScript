@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts] ////
+
 //// [interfaceExtendingClass2.ts]
 class Foo {
     x: string;
@@ -16,18 +18,12 @@ interface I2 extends Foo { // error
     }
 
 //// [interfaceExtendingClass2.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    y() { }
+    get Z() {
+        return 1;
     }
-    Foo.prototype.y = function () { };
-    Object.defineProperty(Foo.prototype, "Z", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Foo;
-}());
+}
 return 1;
 ;

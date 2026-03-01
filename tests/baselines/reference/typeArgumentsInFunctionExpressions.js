@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentsInFunctionExpressions.ts] ////
+
 //// [typeArgumentsInFunctionExpressions.ts]
 var obj = function f<T>(a: T) { // should not error
     var x: T;
@@ -12,6 +14,7 @@ var obj2 = function f<T>(a: T): T { // should not error
 
 
 //// [typeArgumentsInFunctionExpressions.js]
+"use strict";
 var obj = function f(a) {
     var x;
     return a;

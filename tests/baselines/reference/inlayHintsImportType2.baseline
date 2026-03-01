@@ -1,0 +1,18 @@
+// === Inlay Hints ===
+function bar () { return require('./a').a; }
+               ^
+{
+  "text": ": 1",
+  "position": 58,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const d = bar()
+       ^
+{
+  "text": ": 1",
+  "position": 111,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

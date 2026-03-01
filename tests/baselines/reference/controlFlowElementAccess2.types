@@ -1,63 +1,108 @@
-=== tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts] ////
+
+=== controlFlowElementAccess2.ts ===
 declare const config: {
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 
     [key: string]: boolean | { prop: string };
 >key : string
+>    : ^^^^^^
 >prop : string
+>     : ^^^^^^
 
 };
 
 if (typeof config['works'] !== 'boolean') {
 >typeof config['works'] !== 'boolean' : boolean
+>                                     : ^^^^^^^
 >typeof config['works'] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >config['works'] : boolean | { prop: string; }
+>                : ^^^^^^^^^^^^^^^^^^      ^^^
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >'works' : "works"
+>        : ^^^^^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
     config.works.prop = 'test'; // ok
 >config.works.prop = 'test' : "test"
+>                           : ^^^^^^
 >config.works.prop : string
+>                  : ^^^^^^
 >config.works : { prop: string; }
+>             : ^^^^^^^^      ^^^
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >works : { prop: string; }
+>      : ^^^^^^^^      ^^^
 >prop : string
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
 >config['works'].prop = 'test' : "test"
+>                              : ^^^^^^
 >config['works'].prop : string
+>                     : ^^^^^^
 >config['works'] : { prop: string; }
+>                : ^^^^^^^^      ^^^
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >'works' : "works"
+>        : ^^^^^^^
 >prop : string
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 }
 if (typeof config.works !== 'boolean') {
 >typeof config.works !== 'boolean' : boolean
+>                                  : ^^^^^^^
 >typeof config.works : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >config.works : boolean | { prop: string; }
+>             : ^^^^^^^^^^^^^^^^^^      ^^^
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >works : boolean | { prop: string; }
+>      : ^^^^^^^^^^^^^^^^^^      ^^^
 >'boolean' : "boolean"
+>          : ^^^^^^^^^
 
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
 >config['works'].prop = 'test' : "test"
+>                              : ^^^^^^
 >config['works'].prop : string
+>                     : ^^^^^^
 >config['works'] : { prop: string; }
+>                : ^^^^^^^^      ^^^
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >'works' : "works"
+>        : ^^^^^^^
 >prop : string
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
     config.works.prop = 'test'; // ok
 >config.works.prop = 'test' : "test"
+>                           : ^^^^^^
 >config.works.prop : string
+>                  : ^^^^^^
 >config.works : { prop: string; }
+>             : ^^^^^^^^      ^^^
 >config : { [key: string]: boolean | { prop: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 >works : { prop: string; }
+>      : ^^^^^^^^      ^^^
 >prop : string
+>     : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 }
 

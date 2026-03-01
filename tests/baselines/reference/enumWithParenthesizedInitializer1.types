@@ -1,10 +1,17 @@
-=== tests/cases/compiler/enumWithParenthesizedInitializer1.ts ===
+//// [tests/cases/compiler/enumWithParenthesizedInitializer1.ts] ////
+
+=== enumWithParenthesizedInitializer1.ts ===
 enum E {
 >E : E
+>  : ^
 
  e = -(3
->e : E
+>e : E.e
+>  : ^^^
 >-(3 : number
+>    : ^^^^^^
 >(3 : 3
+>   : ^
 >3 : 3
+>  : ^
 }

@@ -1,23 +1,23 @@
-tests/cases/compiler/optionalPropertiesSyntax.ts(4,5): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/optionalPropertiesSyntax.ts(11,7): error TS1005: ';' expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(11,8): error TS1131: Property or signature expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(12,5): error TS1131: Property or signature expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(18,11): error TS1005: ';' expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(18,12): error TS1131: Property or signature expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2300: Duplicate identifier 'prop'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(24,5): error TS2687: All declarations of 'prop' must have identical modifiers.
-tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2300: Duplicate identifier 'prop'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(25,5): error TS2687: All declarations of 'prop' must have identical modifiers.
-tests/cases/compiler/optionalPropertiesSyntax.ts(31,5): error TS2374: Duplicate index signature for type 'number'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(32,5): error TS2374: Duplicate index signature for type 'number'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(32,18): error TS1005: ';' expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(32,19): error TS1131: Property or signature expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(33,5): error TS1131: Property or signature expected.
-tests/cases/compiler/optionalPropertiesSyntax.ts(33,7): error TS2374: Duplicate index signature for type 'number'.
-tests/cases/compiler/optionalPropertiesSyntax.ts(34,5): error TS2374: Duplicate index signature for type 'number'.
+optionalPropertiesSyntax.ts(4,5): error TS2386: Overload signatures must all be optional or required.
+optionalPropertiesSyntax.ts(11,7): error TS1005: ';' expected.
+optionalPropertiesSyntax.ts(11,8): error TS1131: Property or signature expected.
+optionalPropertiesSyntax.ts(12,5): error TS1131: Property or signature expected.
+optionalPropertiesSyntax.ts(18,11): error TS1005: ';' expected.
+optionalPropertiesSyntax.ts(18,12): error TS1131: Property or signature expected.
+optionalPropertiesSyntax.ts(24,5): error TS2300: Duplicate identifier 'prop'.
+optionalPropertiesSyntax.ts(24,5): error TS2687: All declarations of 'prop' must have identical modifiers.
+optionalPropertiesSyntax.ts(25,5): error TS2300: Duplicate identifier 'prop'.
+optionalPropertiesSyntax.ts(25,5): error TS2687: All declarations of 'prop' must have identical modifiers.
+optionalPropertiesSyntax.ts(31,5): error TS2374: Duplicate index signature for type 'number'.
+optionalPropertiesSyntax.ts(32,5): error TS2374: Duplicate index signature for type 'number'.
+optionalPropertiesSyntax.ts(32,18): error TS1005: ';' expected.
+optionalPropertiesSyntax.ts(32,19): error TS1131: Property or signature expected.
+optionalPropertiesSyntax.ts(33,5): error TS1131: Property or signature expected.
+optionalPropertiesSyntax.ts(33,7): error TS2374: Duplicate index signature for type 'number'.
+optionalPropertiesSyntax.ts(34,5): error TS2374: Duplicate index signature for type 'number'.
 
 
-==== tests/cases/compiler/optionalPropertiesSyntax.ts (17 errors) ====
+==== optionalPropertiesSyntax.ts (17 errors) ====
     interface fnSigs {
         //functions signatures can be optional
         fn(): void;

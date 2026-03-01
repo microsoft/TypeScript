@@ -1,8 +1,8 @@
-tests/cases/compiler/noImplicitReturnsInAsync2.ts(2,16): error TS7030: Not all code paths return a value.
-tests/cases/compiler/noImplicitReturnsInAsync2.ts(24,48): error TS7030: Not all code paths return a value.
+noImplicitReturnsInAsync2.ts(2,16): error TS7030: Not all code paths return a value.
+noImplicitReturnsInAsync2.ts(24,48): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/noImplicitReturnsInAsync2.ts (2 errors) ====
+==== noImplicitReturnsInAsync2.ts (2 errors) ====
     // Should be an error, Promise<number>, currently retorted correctly 
     async function test3(isError: boolean = true) {
                    ~~~~~

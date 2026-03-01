@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts] ////
+
 //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.ts]
 interface ObjA {
   y?:string,
@@ -23,8 +25,9 @@ fn<MyObjA>({
 
 
 //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.js]
-var fn = function (opts) { return 'Z'; };
+"use strict";
+const fn = (opts) => 'Z';
 fn({
     a: { x: 'X', y: 'Y' },
-    b: {}
+    b: {},
 });

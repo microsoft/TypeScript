@@ -1,30 +1,49 @@
-=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts ===
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts] ////
+
+=== renamingDestructuredPropertyInFunctionType3.ts ===
 const sym = Symbol();
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 type O = Record<symbol, unknown>
->O : { [x: symbol]: unknown; }
+>O : O
+>  : ^
 
 type F14 = ({ [sym]: string }: O) => void; // Error
->F14 : ({ [sym]: string }: O) => void
+>F14 : F14
+>    : ^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >string : unknown
+>       : ^^^^^^^
 
 type G14 = new ({ [sym]: string }: O) => void; // Error
->G14 : new ({ [sym]: string }: O) => void
+>G14 : G14
+>    : ^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >string : unknown
+>       : ^^^^^^^
 
 const f13 =  ({ [sym]: string }: O) => { };
 >f13 : ({ [sym]: string }: O) => void
+>    : ^                 ^^ ^^^^^^^^^
 >({ [sym]: string }: O) => { } : ({ [sym]: string }: O) => void
+>                              : ^                 ^^ ^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >string : unknown
+>       : ^^^^^^^
 
 function f14 ({ [sym]: string }: O) { };
 >f14 : ({ [sym]: string }: O) => void
+>    : ^                 ^^ ^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >string : unknown
+>       : ^^^^^^^
 

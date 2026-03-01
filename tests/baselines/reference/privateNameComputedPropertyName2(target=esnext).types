@@ -1,35 +1,60 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName2.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName2.ts] ////
+
+=== privateNameComputedPropertyName2.ts ===
 let getX: (a: A) => number;
 >getX : (a: A) => number
+>     : ^ ^^ ^^^^^      
 >a : A
+>  : ^
 
 class A {
 >A : A
+>  : ^
 
     #x = 100;
 >#x : number
+>   : ^^^^^^
 >100 : 100
+>    : ^^^
 
     [(getX = (a: A) => a.#x, "_")]() {}
 >[(getX = (a: A) => a.#x, "_")] : () => void
+>                               : ^^^^^^^^^^
 >(getX = (a: A) => a.#x, "_") : "_"
+>                             : ^^^
 >getX = (a: A) => a.#x, "_" : "_"
+>                           : ^^^
 >getX = (a: A) => a.#x : (a: A) => number
+>                      : ^ ^^ ^^^^^^^^^^^
 >getX : (a: A) => number
+>     : ^ ^^ ^^^^^      
 >(a: A) => a.#x : (a: A) => number
+>               : ^ ^^ ^^^^^^^^^^^
 >a : A
+>  : ^
 >a.#x : number
+>     : ^^^^^^
 >a : A
+>  : ^
 >"_" : "_"
+>    : ^^^
 }
 
 console.log(getX(new A));
 >console.log(getX(new A)) : void
+>                         : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >getX(new A) : number
+>            : ^^^^^^
 >getX : (a: A) => number
+>     : ^ ^^ ^^^^^      
 >new A : A
+>      : ^
 >A : typeof A
+>  : ^^^^^^^^
 

@@ -1,97 +1,162 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/tsxInferenceShouldNotYieldAnyOnUnions.tsx] ////
+
+=== index.tsx ===
 namespace JSX {
     export interface Element {}
 }
 
 type Props<T> = PropsBase<string> | PropsWithConvert<T>;
 >Props : Props<T>
+>      : ^^^^^^^^
 
 interface PropsBase<T> {
     data: T;
 >data : T
+>     : ^
 }
 
 interface PropsWithConvert<T> extends PropsBase<T> {
     convert: (t: T) => string;
 >convert : (t: T) => string
+>        : ^ ^^ ^^^^^      
 >t : T
+>  : ^
 }
 
 function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >props : Props<T>
+>      : ^^^^^^^^
 >JSX : any
+>    : ^^^
 
     return <div />;
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 }
 
 // Sanity check: function call equivalent versions work fine
 ShouldInferFromData({ data: "1" });
 >ShouldInferFromData({ data: "1" }) : JSX.Element
+>                                   : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >{ data: "1" } : { data: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >data : string
+>     : ^^^^^^
 >"1" : "1"
+>    : ^^^
 
 ShouldInferFromData({ data: "1", convert: n => "" + n });
 >ShouldInferFromData({ data: "1", convert: n => "" + n }) : JSX.Element
+>                                                         : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >{ data: "1", convert: n => "" + n } : { data: string; convert: (n: string) => string; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >data : string
+>     : ^^^^^^
 >"1" : "1"
+>    : ^^^
 >convert : (n: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: string) => string
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >"" + n : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >n : string
+>  : ^^^^^^
 
 ShouldInferFromData({ data: 2, convert: n => "" + n });
 >ShouldInferFromData({ data: 2, convert: n => "" + n }) : JSX.Element
+>                                                       : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >{ data: 2, convert: n => "" + n } : { data: number; convert: (n: number) => string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 >2 : 2
+>  : ^
 >convert : (n: number) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: number) => string
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >"" + n : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >n : number
+>  : ^^^^^^
 
 
 const f1 = <ShouldInferFromData data={"1"} />;
 >f1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><ShouldInferFromData data={"1"} /> : JSX.Element
+>                                   : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >data : string
+>     : ^^^^^^
 >"1" : "1"
+>    : ^^^
 
 const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 >f2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><ShouldInferFromData data={"1"} convert={n => "" + n} /> : JSX.Element
+>                                                         : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >data : string
+>     : ^^^^^^
 >"1" : "1"
+>    : ^^^
 >convert : (n: string) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: string) => string
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
+>  : ^^^^^^
 >"" + n : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >n : string
+>  : ^^^^^^
 
 const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 >f3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><ShouldInferFromData data={2} convert={n => "" + n} /> : JSX.Element
+>                                                       : ^^^^^^^^^^^
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
+>                    : ^ ^^     ^^        ^^^^^           
 >data : number
+>     : ^^^^^^
 >2 : 2
+>  : ^
 >convert : (n: number) => string
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: number) => string
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >"" + n : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >n : number
+>  : ^^^^^^
 

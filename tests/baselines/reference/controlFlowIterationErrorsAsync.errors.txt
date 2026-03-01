@@ -1,0 +1,177 @@
+controlFlowIterationErrorsAsync.ts(11,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+controlFlowIterationErrorsAsync.ts(22,23): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+controlFlowIterationErrorsAsync.ts(34,23): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+      Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'number'.
+      Type 'string' is not assignable to type 'number'.
+controlFlowIterationErrorsAsync.ts(45,23): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'string'.
+      Type 'number' is not assignable to type 'string'.
+  Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
+    Argument of type 'string | number' is not assignable to parameter of type 'number'.
+      Type 'string' is not assignable to type 'number'.
+
+
+==== controlFlowIterationErrorsAsync.ts (4 errors) ====
+    let cond: boolean;
+    
+    async function len(s: string) {
+        return s.length;
+    }
+    
+    async function f1() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x = await len(x);
+                          ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+            x;
+        }
+        x;
+    }
+    
+    async function f2() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x;
+            x = await len(x);
+                          ~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
+        }
+        x;
+    }
+    
+    declare function foo(x: string): Promise<number>;
+    declare function foo(x: number): Promise<string>;
+    
+    async function g1() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x = await foo(x);
+                          ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2769:       Type 'string' is not assignable to type 'number'.
+            x;
+        }
+        x;
+    }
+    
+    async function g2() {
+        let x: string | number | boolean;
+        x = "";
+        while (cond) {
+            x;
+            x = await foo(x);
+                          ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(x: string): Promise<number>', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'string'.
+!!! error TS2769:       Type 'number' is not assignable to type 'string'.
+!!! error TS2769:   Overload 2 of 2, '(x: number): Promise<string>', gave the following error.
+!!! error TS2769:     Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2769:       Type 'string' is not assignable to type 'number'.
+        }
+        x;
+    }
+    
+    async function asNumber(x: string | number): Promise<number> {
+        return +x;
+    }
+    
+    async function h1() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x = +x + 1;
+            x;
+        }
+    }
+    
+    async function h2() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x = await asNumber(x) + 1;
+            x;
+        }
+    }
+    
+    async function h3() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            let y = await asNumber(x);
+            x = y + 1;
+            x;
+        }
+    }
+    
+    async function h4() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x;
+            let y = await asNumber(x);
+            x = y + 1;
+            x;
+        }
+    }
+    
+    // repro #51115
+    
+    async function get_things(_: number | undefined) {
+        return [0];
+    }
+    
+    async function foobar() {
+        let before: number | undefined = undefined;
+        for (let i = 0; i < 2; i++) {
+            const results = await get_things(before);
+            before = results[0];
+        }
+    }
+    
+    // repro #43047#issuecomment-821453073
+    
+    declare function foox(x: string | undefined): Promise<string>
+    
+    async () => {
+      let bar: string | undefined = undefined;
+      do {
+        const baz = await foox(bar);
+        bar = baz
+      } while (bar)
+    }
+    
+    // repro #43047#issuecomment-874221939
+    
+    declare function myQuery(input: { lastId: number | undefined }): Promise<{ entities: number[] }>;
+    
+    async function myFunc(): Promise<void> {
+      let lastId: number | undefined = undefined;
+    
+      while (true) {
+        const { entities } = await myQuery({
+            lastId,
+        });
+    
+        lastId = entities[entities.length - 1];
+      } 
+    }
+    

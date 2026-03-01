@@ -1,4 +1,6 @@
-=== tests/cases/compiler/underscoreThisInDerivedClass02.ts ===
+//// [tests/cases/compiler/underscoreThisInDerivedClass02.ts] ////
+
+=== underscoreThisInDerivedClass02.ts ===
 // @target es5
 
 // Original test intent:
@@ -7,24 +9,32 @@
 
 class C {
 >C : C
+>  : ^
 
     constructor() {
         return {};
 >{} : {}
+>   : ^^
     }
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 
         var _this = "uh-oh?";
 >_this : string
+>      : ^^^^^^
 >"uh-oh?" : "uh-oh?"
+>         : ^^^^^^^^
     }
 }

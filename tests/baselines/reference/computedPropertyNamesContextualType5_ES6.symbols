@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType5_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType5_ES6.ts] ////
+
+=== computedPropertyNamesContextualType5_ES6.ts ===
 interface I {
 >I : Symbol(I, Decl(computedPropertyNamesContextualType5_ES6.ts, 0, 0))
 

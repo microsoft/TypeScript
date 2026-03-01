@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit4.ts] ////
+
 //// [symbolDeclarationEmit4.ts]
 class C {
     get [Symbol.toPrimitive]() { return ""; }
@@ -5,6 +7,7 @@ class C {
 }
 
 //// [symbolDeclarationEmit4.js]
+"use strict";
 class C {
     get [Symbol.toPrimitive]() { return ""; }
     set [Symbol.toPrimitive](x) { }

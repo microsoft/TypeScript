@@ -1,49 +1,70 @@
-=== tests/cases/compiler/classUpdateTests.ts ===
+//// [tests/cases/compiler/classUpdateTests.ts] ////
+
+=== classUpdateTests.ts ===
 //
 // test codegen for instance properties
 //
 class A {
 >A : A
+>  : ^
 
 	public p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 	private p2 = 0;
 >p2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 	p3;
 >p3 : any
+>   : ^^^
 }
 
 class B {
 >B : B
+>  : ^
 
 	public p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 	private p2 = 0;
 >p2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 	p3;
 >p3 : any
+>   : ^^^
 
 	constructor() {}
 }
 
 class C {
 >C : C
+>  : ^
 
 	constructor(public p1=0, private p2=0, p3=0) {}
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >p2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 >p3 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 //
@@ -51,112 +72,156 @@ class C {
 //
 class D { // NO ERROR
 >D : D
+>  : ^
 	
 }
 
 class E extends D { // NO ERROR
 >E : E
+>  : ^
 >D : D
+>  : ^
 
 	public p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 class F extends E {
 >F : F
+>  : ^
 >E : E
+>  : ^
 
 	constructor() {} // ERROR - super call required
 }
 
 class G extends D {
 >G : G
+>  : ^
 >D : D
+>  : ^
 
 	public p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 	constructor() { super(); } // NO ERROR
 >super() : void
+>        : ^^^^
 >super : typeof D
+>      : ^^^^^^^^
 }
 
 class H {
 >H : H
+>  : ^
 
 	constructor() { super(); } // ERROR - no super call allowed
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
 }
 
 class I extends Object {
 >I : I
+>  : ^
 >Object : Object
+>       : ^^^^^^
 
 	constructor() { super(); } // ERROR - no super call allowed
 >super() : void
+>        : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 }
 
 class J extends G {
 >J : J
+>  : ^
 >G : G
+>  : ^
 
 	constructor(public p1:number) {
 >p1 : number
+>   : ^^^^^^
 
 		super(); // NO ERROR
 >super() : void
+>        : ^^^^
 >super : typeof G
+>      : ^^^^^^^^
 	}
 }
 
 class K extends G {
 >K : K
+>  : ^
 >G : G
+>  : ^
 
 	constructor(public p1:number) { // ERROR
 >p1 : number
+>   : ^^^^^^
 
 		var i = 0;
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 		super();
 >super() : void
+>        : ^^^^
 >super : typeof G
+>      : ^^^^^^^^
 	}
 }
 
 class L extends G {
 >L : L
+>  : ^
 >G : G
+>  : ^
 
 	constructor(private p1:number) {
 >p1 : number
+>   : ^^^^^^
 
 		super(); // NO ERROR
 >super() : void
+>        : ^^^^
 >super : typeof G
+>      : ^^^^^^^^
 	}
 }
 
 class M extends G {
 >M : M
+>  : ^
 >G : G
+>  : ^
 
 	constructor(private p1:number) { // ERROR
 >p1 : number
+>   : ^^^^^^
 
 		var i = 0;
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 		super();
 >super() : void
+>        : ^^^^
 >super : typeof G
+>      : ^^^^^^^^
 	}
 }
 
@@ -165,24 +230,36 @@ class M extends G {
 //
 class N {
 >N : N
+>  : ^
 
 	public p1 = 0;
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 	public p2 = this.p1;
 >p2 : number
+>   : ^^^^^^
 >this.p1 : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >p1 : number
+>   : ^^^^^^
 
 	constructor() {
 		this.p2 = 0;
 >this.p2 = 0 : 0
+>            : ^
 >this.p2 : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >p2 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 	}
 }
 
@@ -191,42 +268,56 @@ class N {
 //
 class O {
 >O : O
+>  : ^
 
 	constructor() {
 		public p1 = 0; // ERROR
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 	}
 }
 
 class P {
 >P : P
+>  : ^
 
 	constructor() {
 		private p1 = 0; // ERROR
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 	}
 }
 
 class Q {
 >Q : Q
+>  : ^
 
 	constructor() {
 		public this.p1 = 0; // ERROR
 >this : any
+>     : ^^^
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 	}
 }
 
 class R {
 >R : R
+>  : ^
 
 	constructor() {
 		private this.p1 = 0; // ERROR
 >this : any
+>     : ^^^
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 	}
 }

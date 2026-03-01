@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors2.ts] ////
+
 //// [propertyOverridesAccessors2.ts]
 class Base {
   get x() { return 2; }
@@ -13,6 +15,7 @@ console.log(obj.x); // 2
 
 
 //// [propertyOverridesAccessors2.js]
+"use strict";
 class Base {
     get x() { return 2; }
     set x(value) { console.log(`x was set to ${value}`); }

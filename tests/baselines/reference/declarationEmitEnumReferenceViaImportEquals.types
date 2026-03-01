@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/declarationEmitEnumReferenceViaImportEquals.ts] ////
+
+=== translation.ts ===
+export interface Translation {
+  translationKey: Translation.TranslationKeyEnum;
+>translationKey : Translation.TranslationKeyEnum
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Translation : any
+>            : ^^^
+}
+
+export namespace Translation {
+>Translation : typeof Translation
+>            : ^^^^^^^^^^^^^^^^^^
+
+  export type TranslationKeyEnum = 'translation1' | 'translation2';
+>TranslationKeyEnum : TranslationKeyEnum
+>                   : ^^^^^^^^^^^^^^^^^^
+
+  export const TranslationKeyEnum = {
+>TranslationKeyEnum : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
+>                   : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^                  ^^^
+>{    Translation1: 'translation1' as TranslationKeyEnum,    Translation2: 'translation2' as TranslationKeyEnum,  } : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
+>                                                                                                                   : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^                  ^^^
+
+    Translation1: 'translation1' as TranslationKeyEnum,
+>Translation1 : TranslationKeyEnum
+>             : ^^^^^^^^^^^^^^^^^^
+>'translation1' as TranslationKeyEnum : TranslationKeyEnum
+>                                     : ^^^^^^^^^^^^^^^^^^
+>'translation1' : "translation1"
+>               : ^^^^^^^^^^^^^^
+
+    Translation2: 'translation2' as TranslationKeyEnum,
+>Translation2 : TranslationKeyEnum
+>             : ^^^^^^^^^^^^^^^^^^
+>'translation2' as TranslationKeyEnum : TranslationKeyEnum
+>                                     : ^^^^^^^^^^^^^^^^^^
+>'translation2' : "translation2"
+>               : ^^^^^^^^^^^^^^
+  }
+}
+
+
+=== test.ts ===
+import { Translation } from "./translation";
+>Translation : typeof Translation
+>            : ^^^^^^^^^^^^^^^^^^
+
+import TranslationKeyEnum = Translation.TranslationKeyEnum;
+>TranslationKeyEnum : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
+>                   : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^                  ^^^
+>Translation : Translation
+>            : ^^^^^^^^^^^
+>TranslationKeyEnum : Translation.TranslationKeyEnum
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export class Test {
+>Test : Test
+>     : ^^^^
+
+  TranslationKeyEnum = TranslationKeyEnum;
+>TranslationKeyEnum : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
+>                   : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^                  ^^^
+>TranslationKeyEnum : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
+>                   : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^                  ^^^
+
+  print() {
+>print : () => void
+>      : ^^^^^^^^^^
+
+    console.log(TranslationKeyEnum.Translation1);
+>console.log(TranslationKeyEnum.Translation1) : void
+>                                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>TranslationKeyEnum.Translation1 : Translation.TranslationKeyEnum
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TranslationKeyEnum : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
+>                   : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^                  ^^^
+>Translation1 : Translation.TranslationKeyEnum
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  }
+}
+
+=== index.ts ===
+import { Test } from "./test";
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+new Test().print();
+>new Test().print() : void
+>                   : ^^^^
+>new Test().print : () => void
+>                 : ^^^^^^^^^^
+>new Test() : Test
+>           : ^^^^
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+>print : () => void
+>      : ^^^^^^^^^^
+

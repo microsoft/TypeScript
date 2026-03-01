@@ -1,0 +1,1249 @@
+===================================================================
+JsFile: identifierVariableWithEscape1.js
+mapUrl: identifierVariableWithEscape1.js.map
+sourceRoot: 
+sources: identifierVariableWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithEscape1.js
+sourceFile:identifierVariableWithEscape1.ts
+-------------------------------------------------------------------
+>>>export let \u0078 = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^
+6 >                 ^^^
+7 >                    ^^
+8 >                      ^
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           \u0078
+6 >                  = 
+7 >                    10
+8 >                      ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+7 >Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+8 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+---
+>>>x++;
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >x
+3 > ++
+4 >   ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+3 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+4 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithEscape1.js.map===================================================================
+JsFile: identifierVariableWithEscape2.js
+mapUrl: identifierVariableWithEscape2.js.map
+sourceRoot: 
+sources: identifierVariableWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithEscape2.js
+sourceFile:identifierVariableWithEscape2.ts
+-------------------------------------------------------------------
+>>>export let x\u0078 = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           x\u0078
+6 >                   = 
+7 >                     10
+8 >                       ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+7 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 25) Source(1, 25) + SourceIndex(0)
+---
+>>>xx++;
+1 >
+2 >^^
+3 >  ^^
+4 >    ^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >xx
+3 >  ++
+4 >    ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 3) Source(2, 3) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithEscape2.js.map===================================================================
+JsFile: identifierVariableWithExtendedEscape1.js
+mapUrl: identifierVariableWithExtendedEscape1.js.map
+sourceRoot: 
+sources: identifierVariableWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithExtendedEscape1.js
+sourceFile:identifierVariableWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>export let \u{78} = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^
+6 >                 ^^^
+7 >                    ^^
+8 >                      ^
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           \u{78}
+6 >                  = 
+7 >                    10
+8 >                      ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+7 >Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+8 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+---
+>>>x++;
+1 >
+2 >^
+3 > ^^
+4 >   ^
+5 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >x
+3 > ++
+4 >   ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+3 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+4 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map===================================================================
+JsFile: identifierVariableWithExtendedEscape2.js
+mapUrl: identifierVariableWithExtendedEscape2.js.map
+sourceRoot: 
+sources: identifierVariableWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:identifierVariableWithExtendedEscape2.js
+sourceFile:identifierVariableWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>export let x\u{78} = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           x\u{78}
+6 >                   = 
+7 >                     10
+8 >                       ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+7 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 25) Source(1, 25) + SourceIndex(0)
+---
+>>>xx++;
+1 >
+2 >^^
+3 >  ^^
+4 >    ^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >xx
+3 >  ++
+4 >    ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 3) Source(2, 3) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map===================================================================
+JsFile: IdentifierNameWithEscape1.js
+mapUrl: IdentifierNameWithEscape1.js.map
+sourceRoot: 
+sources: IdentifierNameWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithEscape1.js
+sourceFile:IdentifierNameWithEscape1.ts
+-------------------------------------------------------------------
+>>>export class IdentifierNameWithEscape1 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             IdentifierNameWithEscape1
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 39) Source(1, 39) + SourceIndex(0)
+---
+>>>    \u0078;
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^^^^->
+1 > {
+  >    
+2 >    \u0078
+3 >          : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
+3 >Emitted(2, 12) Source(2, 20) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.\u0078 = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^
+5 >                   ^^^
+6 >                      ^
+7 >                       ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             \u0078
+5 >                    = 
+6 >                      0
+7 >                       ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 20) Source(5, 20) + SourceIndex(0)
+5 >Emitted(4, 23) Source(5, 23) + SourceIndex(0)
+6 >Emitted(4, 24) Source(5, 24) + SourceIndex(0)
+7 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.x = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             x
+5 >               = 
+6 >                 42
+7 >                   ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 15) Source(9, 15) + SourceIndex(0)
+5 >Emitted(7, 18) Source(9, 18) + SourceIndex(0)
+6 >Emitted(7, 20) Source(9, 20) + SourceIndex(0)
+7 >Emitted(7, 21) Source(9, 21) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithEscape1.js.map===================================================================
+JsFile: IdentifierNameWithEscape2.js
+mapUrl: IdentifierNameWithEscape2.js.map
+sourceRoot: 
+sources: IdentifierNameWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithEscape2.js
+sourceFile:IdentifierNameWithEscape2.ts
+-------------------------------------------------------------------
+>>>export class IdentifierNameWithEscape2 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             IdentifierNameWithEscape2
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 39) Source(1, 39) + SourceIndex(0)
+---
+>>>    x\u0078;
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^->
+1 > {
+  >    
+2 >    x\u0078
+3 >           : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.x\u0078 = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^
+5 >                    ^^^
+6 >                       ^
+7 >                        ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             x\u0078
+5 >                     = 
+6 >                       0
+7 >                        ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 21) Source(5, 21) + SourceIndex(0)
+5 >Emitted(4, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+7 >Emitted(4, 26) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.xx = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^^
+7 >                    ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             xx
+5 >                = 
+6 >                  42
+7 >                    ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 16) Source(9, 16) + SourceIndex(0)
+5 >Emitted(7, 19) Source(9, 19) + SourceIndex(0)
+6 >Emitted(7, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(7, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithEscape2.js.map===================================================================
+JsFile: IdentifierNameWithExtendedEscape1.js
+mapUrl: IdentifierNameWithExtendedEscape1.js.map
+sourceRoot: 
+sources: IdentifierNameWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithExtendedEscape1.js
+sourceFile:IdentifierNameWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>export class IdentifierNameWithExtendedEscape1 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             IdentifierNameWithExtendedEscape1
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 47) Source(1, 47) + SourceIndex(0)
+---
+>>>    \u{78};
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^^^^^^^^->
+1 > {
+  >    
+2 >    \u{78}
+3 >          : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
+3 >Emitted(2, 12) Source(2, 20) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.\u{78} = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^
+5 >                   ^^^
+6 >                      ^
+7 >                       ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             \u{78}
+5 >                    = 
+6 >                      0
+7 >                       ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 20) Source(5, 20) + SourceIndex(0)
+5 >Emitted(4, 23) Source(5, 23) + SourceIndex(0)
+6 >Emitted(4, 24) Source(5, 24) + SourceIndex(0)
+7 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.x = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             x
+5 >               = 
+6 >                 42
+7 >                   ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 15) Source(9, 15) + SourceIndex(0)
+5 >Emitted(7, 18) Source(9, 18) + SourceIndex(0)
+6 >Emitted(7, 20) Source(9, 20) + SourceIndex(0)
+7 >Emitted(7, 21) Source(9, 21) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithExtendedEscape1.js.map===================================================================
+JsFile: IdentifierNameWithExtendedEscape2.js
+mapUrl: IdentifierNameWithExtendedEscape2.js.map
+sourceRoot: 
+sources: IdentifierNameWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:IdentifierNameWithExtendedEscape2.js
+sourceFile:IdentifierNameWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>export class IdentifierNameWithExtendedEscape2 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             IdentifierNameWithExtendedEscape2
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 47) Source(1, 47) + SourceIndex(0)
+---
+>>>    x\u{78};
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^->
+1 > {
+  >    
+2 >    x\u{78}
+3 >           : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.x\u{78} = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^
+5 >                    ^^^
+6 >                       ^
+7 >                        ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             x\u{78}
+5 >                     = 
+6 >                       0
+7 >                        ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 21) Source(5, 21) + SourceIndex(0)
+5 >Emitted(4, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+7 >Emitted(4, 26) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.xx = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^^
+7 >                    ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             xx
+5 >                = 
+6 >                  42
+7 >                    ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 16) Source(9, 16) + SourceIndex(0)
+5 >Emitted(7, 19) Source(9, 19) + SourceIndex(0)
+6 >Emitted(7, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(7, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map===================================================================
+JsFile: PrivateIdentifierNameWithEscape1.js
+mapUrl: PrivateIdentifierNameWithEscape1.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithEscape1.js
+sourceFile:PrivateIdentifierNameWithEscape1.ts
+-------------------------------------------------------------------
+>>>export class PrivateIdentifierWithEscape1 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             PrivateIdentifierWithEscape1
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 42) Source(1, 42) + SourceIndex(0)
+---
+>>>    #\u0078;
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^->
+1 > {
+  >    
+2 >    #\u0078
+3 >           : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.#\u0078 = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^
+5 >                    ^^^
+6 >                       ^
+7 >                        ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             #\u0078
+5 >                     = 
+6 >                       0
+7 >                        ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 21) Source(5, 21) + SourceIndex(0)
+5 >Emitted(4, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+7 >Emitted(4, 26) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.#x = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^^
+7 >                    ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             #x
+5 >                = 
+6 >                  42
+7 >                    ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 16) Source(9, 16) + SourceIndex(0)
+5 >Emitted(7, 19) Source(9, 19) + SourceIndex(0)
+6 >Emitted(7, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(7, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=PrivateIdentifierNameWithEscape1.js.map===================================================================
+JsFile: PrivateIdentifierNameWithEscape2.js
+mapUrl: PrivateIdentifierNameWithEscape2.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithEscape2.js
+sourceFile:PrivateIdentifierNameWithEscape2.ts
+-------------------------------------------------------------------
+>>>export class PrivateIdentifierWithEscape2 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             PrivateIdentifierWithEscape2
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 42) Source(1, 42) + SourceIndex(0)
+---
+>>>    #x\u0078;
+1 >^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^->
+1 > {
+  >    
+2 >    #x\u0078
+3 >            : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+3 >Emitted(2, 14) Source(2, 22) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.#x\u0078 = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^^
+5 >                     ^^^
+6 >                        ^
+7 >                         ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             #x\u0078
+5 >                      = 
+6 >                        0
+7 >                         ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 22) Source(5, 22) + SourceIndex(0)
+5 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+6 >Emitted(4, 26) Source(5, 26) + SourceIndex(0)
+7 >Emitted(4, 27) Source(5, 27) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.#xx = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^^
+6 >                   ^^
+7 >                     ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             #xx
+5 >                 = 
+6 >                   42
+7 >                     ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 17) Source(9, 17) + SourceIndex(0)
+5 >Emitted(7, 20) Source(9, 20) + SourceIndex(0)
+6 >Emitted(7, 22) Source(9, 22) + SourceIndex(0)
+7 >Emitted(7, 23) Source(9, 23) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map===================================================================
+JsFile: PrivateIdentifierNameWithExtendedEscape1.js
+mapUrl: PrivateIdentifierNameWithExtendedEscape1.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithExtendedEscape1.js
+sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>export class PrivateIdentifierWithExtendedEscape1 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             PrivateIdentifierWithExtendedEscape1
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 50) Source(1, 50) + SourceIndex(0)
+---
+>>>    #\u{78};
+1 >^^^^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^^^^^^^^->
+1 > {
+  >    
+2 >    #\u{78}
+3 >           : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.#\u{78} = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^
+5 >                    ^^^
+6 >                       ^
+7 >                        ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             #\u{78}
+5 >                     = 
+6 >                       0
+7 >                        ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 21) Source(5, 21) + SourceIndex(0)
+5 >Emitted(4, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+7 >Emitted(4, 26) Source(5, 26) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.#x = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^
+5 >               ^^^
+6 >                  ^^
+7 >                    ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             #x
+5 >                = 
+6 >                  42
+7 >                    ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 16) Source(9, 16) + SourceIndex(0)
+5 >Emitted(7, 19) Source(9, 19) + SourceIndex(0)
+6 >Emitted(7, 21) Source(9, 21) + SourceIndex(0)
+7 >Emitted(7, 22) Source(9, 22) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape1.js.map===================================================================
+JsFile: PrivateIdentifierNameWithExtendedEscape2.js
+mapUrl: PrivateIdentifierNameWithExtendedEscape2.js.map
+sourceRoot: 
+sources: PrivateIdentifierNameWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:PrivateIdentifierNameWithExtendedEscape2.js
+sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>export class PrivateIdentifierWithExtendedEscape2 {
+1 >
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >export
+3 >       class 
+4 >             PrivateIdentifierWithExtendedEscape2
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+4 >Emitted(1, 50) Source(1, 50) + SourceIndex(0)
+---
+>>>    #x\u{78};
+1 >^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^^^^^^^->
+1 > {
+  >    
+2 >    #x\u{78}
+3 >            : number;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+3 >Emitted(2, 14) Source(2, 22) + SourceIndex(0)
+---
+>>>    constructor() {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >    
+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+---
+>>>        this.#x\u{78} = 0;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^^^^^^
+5 >                     ^^^
+6 >                        ^
+7 >                         ^
+1->constructor() {
+  >        
+2 >        this
+3 >            .
+4 >             #x\u{78}
+5 >                      = 
+6 >                        0
+7 >                         ;
+1->Emitted(4, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(4, 13) Source(5, 13) + SourceIndex(0)
+3 >Emitted(4, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(4, 22) Source(5, 22) + SourceIndex(0)
+5 >Emitted(4, 25) Source(5, 25) + SourceIndex(0)
+6 >Emitted(4, 26) Source(5, 26) + SourceIndex(0)
+7 >Emitted(4, 27) Source(5, 27) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
+---
+>>>    doThing() {
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^^^^->
+1->
+  >
+  >    
+2 >    doThing
+1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
+---
+>>>        this.#xx = 42;
+1->^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^^
+6 >                   ^^
+7 >                     ^
+1->() {
+  >        
+2 >        this
+3 >            .
+4 >             #xx
+5 >                 = 
+6 >                   42
+7 >                     ;
+1->Emitted(7, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(7, 13) Source(9, 13) + SourceIndex(0)
+3 >Emitted(7, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(7, 17) Source(9, 17) + SourceIndex(0)
+5 >Emitted(7, 20) Source(9, 20) + SourceIndex(0)
+6 >Emitted(7, 22) Source(9, 22) + SourceIndex(0)
+7 >Emitted(7, 23) Source(9, 23) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+1 >
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(11, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map

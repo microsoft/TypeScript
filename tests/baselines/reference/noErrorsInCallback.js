@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noErrorsInCallback.ts] ////
+
 //// [noErrorsInCallback.ts]
 class Bar {
     constructor(public foo: string) { }
@@ -9,13 +11,13 @@ var one = new Bar({}); // Error
  
 
 //// [noErrorsInCallback.js]
-var Bar = /** @class */ (function () {
-    function Bar(foo) {
+"use strict";
+class Bar {
+    constructor(foo) {
         this.foo = foo;
     }
-    return Bar;
-}());
+}
 var one = new Bar({}); // Error
-[].forEach(function () {
+[].forEach(() => {
     var two = new Bar({}); // No error?
 });

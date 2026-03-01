@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty37.ts] ////
+
 //// [symbolProperty37.ts]
 interface I {
     [Symbol.isConcatSpreadable]: string;
@@ -5,3 +7,4 @@ interface I {
 }
 
 //// [symbolProperty37.js]
+"use strict";

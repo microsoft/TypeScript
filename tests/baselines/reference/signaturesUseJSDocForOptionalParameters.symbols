@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsDocOptionality.js ===
+//// [tests/cases/compiler/signaturesUseJSDocForOptionalParameters.ts] ////
+
+=== jsDocOptionality.js ===
 function MyClass() {
 >MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
 

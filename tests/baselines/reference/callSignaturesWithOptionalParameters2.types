@@ -1,225 +1,341 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithOptionalParameters2.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithOptionalParameters2.ts] ////
+
+=== callSignaturesWithOptionalParameters2.ts ===
 // Optional parameters should be valid in all the below casts
 
 function foo(x?: number);
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function foo(x?: number) { }
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 foo(1);
 >foo(1) : any
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 foo();
 >foo() : any
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 
 function foo2(x: number);
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function foo2(x: number, y?: number);
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 function foo2(x: number, y?: number) { }
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 foo2(1);
 >foo2(1) : any
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 foo2(1, 2);
 >foo2(1, 2) : any
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     foo(x?: number);
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     foo(x?: number) { }
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     foo2(x: number);
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     foo2(x: number, y?: number);
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     foo2(x: number, y?: number) { }
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 c.foo();
 >c.foo() : any
 >c.foo : (x?: number) => any
+>      : ^ ^^^      ^^^^^^^^
 >c : C
+>  : ^
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 
 c.foo(1);
 >c.foo(1) : any
 >c.foo : (x?: number) => any
+>      : ^ ^^^      ^^^^^^^^
 >c : C
+>  : ^
 >foo : (x?: number) => any
+>    : ^ ^^^      ^^^^^^^^
 >1 : 1
+>  : ^
 
 c.foo2(1);
 >c.foo2(1) : any
 >c.foo2 : { (x: number): any; (x: number, y?: number): any; }
+>       : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >c : C
+>  : ^
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 c.foo2(1, 2);
 >c.foo2(1, 2) : any
 >c.foo2 : { (x: number): any; (x: number, y?: number): any; }
+>       : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >c : C
+>  : ^
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 interface I {
     (x?: number);
 >x : number
+>  : ^^^^^^
 
     (x?: number, y?: number);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     foo(x: number, y?: number);
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     foo(x: number, y?: number, z?: number);
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 }
 
 var i: I;
 >i : I
+>  : ^
 
 i();
 >i() : any
 >i : I
+>  : ^
 
 i(1);
 >i(1) : any
 >i : I
+>  : ^
 >1 : 1
+>  : ^
 
 i(1, 2);
 >i(1, 2) : any
 >i : I
+>  : ^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 i.foo(1);
 >i.foo(1) : any
 >i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>      : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >i : I
+>  : ^
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 i.foo(1, 2);
 >i.foo(1, 2) : any
 >i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>      : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >i : I
+>  : ^
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 i.foo(1, 2, 3);
 >i.foo(1, 2, 3) : any
 >i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>      : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >i : I
+>  : ^
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 var a: {
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 
     (x?: number);
 >x : number
+>  : ^^^^^^
 
     (x?: number, y?: number);
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     foo(x: number, y?: number);
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     foo(x: number, y?: number, z?: number);
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 }
 
 a();
 >a() : any
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 
 a(1);
 >a(1) : any
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 a(1, 2);
 >a(1, 2) : any
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 a.foo(1);
 >a.foo(1) : any
 >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>      : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 a.foo(1, 2);
 >a.foo(1, 2) : any
 >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>      : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 a.foo(1, 2, 3);
 >a.foo(1, 2, 3) : any
 >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>      : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
+>  : ^^^ ^^^      ^^^^^^^^^ ^^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>    : ^^^ ^^      ^^ ^^^      ^^^^^^^^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

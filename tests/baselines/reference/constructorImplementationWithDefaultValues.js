@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues.ts] ////
+
 //// [constructorImplementationWithDefaultValues.ts]
 class C {
     constructor(x);
@@ -21,24 +23,19 @@ class E<T extends Date> {
 }
 
 //// [constructorImplementationWithDefaultValues.js]
-var C = /** @class */ (function () {
-    function C(x) {
-        if (x === void 0) { x = 1; }
+"use strict";
+class C {
+    constructor(x = 1) {
         var y = x;
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D(x) {
-        if (x === void 0) { x = null; }
+}
+class D {
+    constructor(x = null) {
         var y = x;
     }
-    return D;
-}());
-var E = /** @class */ (function () {
-    function E(x) {
-        if (x === void 0) { x = null; }
+}
+class E {
+    constructor(x = null) {
         var y = x;
     }
-    return E;
-}());
+}

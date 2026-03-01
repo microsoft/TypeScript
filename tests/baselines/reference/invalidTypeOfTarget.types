@@ -1,40 +1,65 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts] ////
+
+=== invalidTypeOfTarget.ts ===
 var x1: typeof {};
 >x1 : any
+>   : ^^^
 > : any
+> : ^^^
 
 var x2: typeof (): void;
 >x2 : any
+>   : ^^^
 > : any
+> : ^^^
 >(): void : () => void
+>         : ^^^^^^    
 > : any
+> : ^^^
 
 var x3: typeof 1;
 >x3 : any
+>   : ^^^
 > : any
+> : ^^^
 >1 : 1
+>  : ^
 
 var x4: typeof '';
 >x4 : any
+>   : ^^^
 > : any
+> : ^^^
 >'' : ""
+>   : ^^
 
 var x5: typeof [];
 >x5 : any[]
+>   : ^^^^^
 > : any
+> : ^^^
 
 var x6: typeof null;
 >x6 : any
+>   : ^^^
 >null : any
+>     : ^^^
 
 var x7: typeof function f() { };
 >x7 : any
+>   : ^^^
 >function : any
+>         : ^^^
 >f : any
+>  : ^^^
 >() { } : () => void
+>       : ^^^^^^^^^^
 
 var x8: typeof /123/;
 >x8 : any
+>   : ^^^
 > : any
+> : ^^^
 >/123/ : RegExp
+>      : ^^^^^^
 

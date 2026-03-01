@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias02.ts] ////
+
 //// [asiPreventsParsingAsTypeAlias02.ts]
 var type;
 var string;
@@ -9,6 +11,7 @@ namespace container {
 }
 
 //// [asiPreventsParsingAsTypeAlias02.js]
+"use strict";
 var type;
 var string;
 var Foo;

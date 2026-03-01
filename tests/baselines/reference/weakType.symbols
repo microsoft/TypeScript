@@ -1,4 +1,6 @@
-=== tests/cases/compiler/weakType.ts ===
+//// [tests/cases/compiler/weakType.ts] ////
+
+=== weakType.ts ===
 interface Settings {
 >Settings : Symbol(Settings, Decl(weakType.ts, 0, 0))
 
@@ -88,7 +90,7 @@ function del(options: ConfigurableStartEnd = {},
 >error : Symbol(error, Decl(weakType.ts, 32, 48))
 >error : Symbol(error, Decl(weakType.ts, 33, 21))
 
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
 >changes : Symbol(changes, Decl(weakType.ts, 34, 7))
 >ChangeOptions : Symbol(ChangeOptions, Decl(weakType.ts, 29, 1))
 

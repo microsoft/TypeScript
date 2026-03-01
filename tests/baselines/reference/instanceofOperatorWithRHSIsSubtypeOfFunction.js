@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts] ////
+
 //// [instanceofOperatorWithRHSIsSubtypeOfFunction.ts]
 interface I extends Function { }
 
@@ -15,6 +17,7 @@ var r5 = x instanceof null;
 var r6 = x instanceof undefined;
 
 //// [instanceofOperatorWithRHSIsSubtypeOfFunction.js]
+"use strict";
 var x;
 var f1;
 var f2;

@@ -1,0 +1,118 @@
+// === QuickInfo ===
+=== /a.tsx ===
+// <a:b a="accepted" b="rejected" />;
+//  ^^^
+// | ----------------------------------------------------------------------
+// | (property) JSX.IntrinsicElements['a:b']: {
+// |     a: string;
+// | }
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/a.tsx",
+      "position": 1,
+      "name": ""
+    },
+    "item": {
+      "kind": "property",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 1,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "JSX",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "IntrinsicElements",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "'a:b'",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

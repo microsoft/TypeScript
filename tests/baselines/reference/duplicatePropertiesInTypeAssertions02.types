@@ -1,8 +1,15 @@
-=== tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions02.ts ===
+//// [tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions02.ts] ////
+
+=== duplicatePropertiesInTypeAssertions02.ts ===
 let x = {} as {a: number; a: number};
 >x : { a: number; }
+>  : ^^^^^      ^^^
 >{} as {a: number; a: number} : { a: number; }
+>                             : ^^^^^      ^^^
 >{} : {}
+>   : ^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 

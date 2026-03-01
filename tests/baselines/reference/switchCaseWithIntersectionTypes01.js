@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts] ////
+
 //// [switchCaseWithIntersectionTypes01.ts]
 var strAndNum: string & number;
 var numAndBool: number & boolean;
@@ -25,6 +27,7 @@ switch (strAndNum) {
 }
 
 //// [switchCaseWithIntersectionTypes01.js]
+"use strict";
 var strAndNum;
 var numAndBool;
 var str;

@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/cloduleWithPriorUninstantiatedModule.ts] ////
+
 //// [cloduleWithPriorUninstantiatedModule.ts]
 // Non-ambient & uninstantiated module.
-module Moclodule {
+namespace Moclodule {
     export interface Someinterface {
         foo(): void;
     }
@@ -10,23 +12,18 @@ class Moclodule {
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
     export class Manager {
     }
 }
 
 //// [cloduleWithPriorUninstantiatedModule.js]
-var Moclodule = /** @class */ (function () {
-    function Moclodule() {
-    }
-    return Moclodule;
-}());
+"use strict";
+class Moclodule {
+}
 // Instantiated module.
 (function (Moclodule) {
-    var Manager = /** @class */ (function () {
-        function Manager() {
-        }
-        return Manager;
-    }());
+    class Manager {
+    }
     Moclodule.Manager = Manager;
 })(Moclodule || (Moclodule = {}));

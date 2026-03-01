@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts ===
+//// [tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts] ////
+
+=== recursivelyExpandingUnionNoStackoverflow.ts ===
 type N<T, K extends string> = T | { [P in K]: N<T, K> }[K];
 >N : Symbol(N, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 0))
 >T : Symbol(T, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 7))

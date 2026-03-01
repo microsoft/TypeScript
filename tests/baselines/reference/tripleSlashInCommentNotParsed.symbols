@@ -1,6 +1,8 @@
-=== tests/cases/compiler/tripleSlashInCommentNotParsed.ts ===
+//// [tests/cases/compiler/tripleSlashInCommentNotParsed.ts] ////
+
+=== tripleSlashInCommentNotParsed.ts ===
+
 /*
-No type information for this code./// <reference path="non-existing-file.d.ts" />
-No type information for this code.*/
-No type information for this code.void 0;
-No type information for this code.
+/// <reference path="non-existing-file.d.ts" />
+*/
+void 0;

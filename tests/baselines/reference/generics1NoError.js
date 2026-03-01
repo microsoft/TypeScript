@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics1NoError.ts] ////
+
 //// [generics1NoError.ts]
 interface A { a: string; }
 interface B extends A { b: string; }
@@ -11,6 +13,7 @@ var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
 var v4: G<G<A, B>, C>;         // Ok
 
 //// [generics1NoError.js]
+"use strict";
 var v1; // Ok
 var v2; // Ok, equivalent to G<A, C>
 var v4; // Ok

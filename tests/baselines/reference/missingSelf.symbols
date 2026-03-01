@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingSelf.ts ===
+//// [tests/cases/compiler/missingSelf.ts] ////
+
+=== missingSelf.ts ===
 class CalcButton
 >CalcButton : Symbol(CalcButton, Decl(missingSelf.ts, 0, 0))
 {

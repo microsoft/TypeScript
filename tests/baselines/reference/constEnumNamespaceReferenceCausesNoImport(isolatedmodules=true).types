@@ -1,38 +1,55 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/constEnumNamespaceReferenceCausesNoImport.ts] ////
+
+=== foo.ts ===
 export const enum ConstFooEnum {
 >ConstFooEnum : ConstFooEnum
+>             : ^^^^^^^^^^^^
 
     Some,
 >Some : ConstFooEnum.Some
+>     : ^^^^^^^^^^^^^^^^^
 
     Values,
 >Values : ConstFooEnum.Values
+>       : ^^^^^^^^^^^^^^^^^^^
 
     Here
 >Here : ConstFooEnum.Here
+>     : ^^^^^^^^^^^^^^^^^
 
 };
 export function fooFunc(): void { /* removed */ }
 >fooFunc : () => void
+>        : ^^^^^^    
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as Foo from "./foo";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 function check(x: Foo.ConstFooEnum): void {
 >check : (x: Foo.ConstFooEnum) => void
+>      : ^ ^^                ^^^^^    
 >x : Foo.ConstFooEnum
+>  : ^^^^^^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 
   switch (x) {
 >x : Foo.ConstFooEnum
+>  : ^^^^^^^^^^^^^^^^
 
     case Foo.ConstFooEnum.Some:
 >Foo.ConstFooEnum.Some : Foo.ConstFooEnum.Some
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Foo.ConstFooEnum : typeof Foo.ConstFooEnum
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >ConstFooEnum : typeof Foo.ConstFooEnum
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >Some : Foo.ConstFooEnum.Some
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
       break;
   }

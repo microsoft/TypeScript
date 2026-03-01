@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern26.ts(2,21): error TS2345: Argument of type 'Map<string, number>' is not assignable to parameter of type '[string, number]'.
+iterableArrayPattern26.ts(2,21): error TS2345: Argument of type 'Map<string, number>' is not assignable to parameter of type '[string, number]'.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern26.ts (1 errors) ====
+==== iterableArrayPattern26.ts (1 errors) ====
     function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
     takeFirstTwoEntries(new Map([["", 0], ["hello", 1]]));
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

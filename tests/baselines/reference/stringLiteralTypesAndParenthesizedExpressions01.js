@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts] ////
+
 //// [stringLiteralTypesAndParenthesizedExpressions01.ts]
 declare function myRandBool(): boolean;
 
@@ -8,10 +10,11 @@ let d: "foo" | "bar" = (myRandBool ? "foo" : ("bar"));
 
 
 //// [stringLiteralTypesAndParenthesizedExpressions01.js]
-var a = ("foo");
-var b = ("foo");
-var c = (myRandBool ? "foo" : ("foo"));
-var d = (myRandBool ? "foo" : ("bar"));
+"use strict";
+let a = ("foo");
+let b = ("foo");
+let c = (myRandBool ? "foo" : ("foo"));
+let d = (myRandBool ? "foo" : ("bar"));
 
 
 //// [stringLiteralTypesAndParenthesizedExpressions01.d.ts]

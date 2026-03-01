@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/nameWithFileExtension.ts] ////
+
+=== foo_1.ts ===
 import foo = require('./foo_0.js');
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 
@@ -8,7 +10,7 @@ var x = foo.foo + 42;
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 >foo : Symbol(foo.foo, Decl(foo_0.ts, 0, 10))
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export var foo = 42;
 >foo : Symbol(foo, Decl(foo_0.ts, 0, 10))
 

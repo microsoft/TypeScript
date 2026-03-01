@@ -1,67 +1,117 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3.ts] ////
+
+=== usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport3.js");
 >x : typeof x
+>  : ^^^^^^^^
 >require("./lateBoundAssignmentDeclarationSupport3.js") : typeof x
+>                                                       : ^^^^^^^^
 >require : any
+>        : ^^^
 >"./lateBoundAssignmentDeclarationSupport3.js" : "./lateBoundAssignmentDeclarationSupport3.js"
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const y = x["my-fake-sym"];
 >y : any
+>  : ^^^
 >x["my-fake-sym"] : any
+>                 : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >"my-fake-sym" : "my-fake-sym"
+>              : ^^^^^^^^^^^^^
 
 const z = x[x.S];
 >z : any
+>  : ^^^
 >x[x.S] : any
+>       : ^^^
 >x : typeof x
+>  : ^^^^^^^^
 >x.S : unique symbol
+>    : ^^^^^^^^^^^^^
 >x : typeof x
+>  : ^^^^^^^^
 >S : unique symbol
+>  : ^^^^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3.js ===
+=== lateBoundAssignmentDeclarationSupport3.js ===
 // currently unsupported
 const _sym = Symbol();
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const _str = "my-fake-sym";
 >_str : "my-fake-sym"
+>     : ^^^^^^^^^^^^^
 >"my-fake-sym" : "my-fake-sym"
+>              : ^^^^^^^^^^^^^
 
 Object.defineProperty(module.exports, _sym, { value: "ok" });
 >Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof module.exports
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 >{ value: "ok" } : { value: string; }
+>                : ^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 
 Object.defineProperty(module.exports, _str, { value: "ok" });
 >Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof module.exports
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >_str : "my-fake-sym"
+>     : ^^^^^^^^^^^^^
 >{ value: "ok" } : { value: string; }
+>                : ^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
+>                        : ^^^^^^^^^^^^^
 >module.exports.S : unique symbol
+>                 : ^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >S : unique symbol
+>  : ^^^^^^^^^^^^^
 >_sym : unique symbol
+>     : ^^^^^^^^^^^^^
 

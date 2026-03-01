@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionWithObjectLiteralBody4.ts ===
+//// [tests/cases/compiler/arrowFunctionWithObjectLiteralBody4.ts] ////
+
+=== arrowFunctionWithObjectLiteralBody4.ts ===
 var v = a => <any><any>{}
 >v : Symbol(v, Decl(arrowFunctionWithObjectLiteralBody4.ts, 0, 3))
 >a : Symbol(a, Decl(arrowFunctionWithObjectLiteralBody4.ts, 0, 7))

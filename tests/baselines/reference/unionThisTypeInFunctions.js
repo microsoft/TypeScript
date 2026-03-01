@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts] ////
+
 //// [unionThisTypeInFunctions.ts]
 interface Real {
     method(this: this, n: number): void;
@@ -13,6 +15,7 @@ function test(r: Real | Fake) {
 
 
 //// [unionThisTypeInFunctions.js]
+"use strict";
 function test(r) {
     r.method(12); // error
 }

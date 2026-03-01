@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts] ////
+
 //// [ambientExternalModuleWithRelativeModuleName.ts]
 declare module "./relativeModule" {
     var x: string;
@@ -8,3 +10,4 @@ declare module ".\\relativeModule" {
 }
 
 //// [ambientExternalModuleWithRelativeModuleName.js]
+"use strict";

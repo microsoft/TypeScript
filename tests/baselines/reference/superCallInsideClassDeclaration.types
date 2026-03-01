@@ -1,26 +1,36 @@
-=== tests/cases/compiler/superCallInsideClassDeclaration.ts ===
+//// [tests/cases/compiler/superCallInsideClassDeclaration.ts] ////
+
+=== superCallInsideClassDeclaration.ts ===
 class A {
 >A : A
+>  : ^
 }
 
 class C {
 >C : C
+>  : ^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor() {
 
         class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
             constructor() {
                 super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
             }
         }
     }

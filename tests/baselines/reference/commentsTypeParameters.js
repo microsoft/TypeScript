@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsTypeParameters.ts] ////
+
 //// [commentsTypeParameters.ts]
 class C</**docComment for type parameter*/ T> {
     method</**docComment of method type parameter */ U extends T>(a: U) {
@@ -16,19 +18,17 @@ function compare</**type*/T>(a: T, b: T) {
 }
 
 //// [commentsTypeParameters.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    method(a) {
     }
-    C.prototype.method = function (a) {
-    };
-    C.staticmethod = function (a) {
-    };
-    C.prototype.privatemethod = function (a) {
-    };
-    C.privatestaticmethod = function (a) {
-    };
-    return C;
-}());
+    static staticmethod(a) {
+    }
+    privatemethod(a) {
+    }
+    static privatestaticmethod(a) {
+    }
+}
 function compare(a, b) {
     return a === b;
 }

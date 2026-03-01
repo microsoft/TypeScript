@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags03.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags03.ts] ////
+
+=== stringLiteralTypesAsTags03.ts ===
 type Kind = "A" | "B"
 >Kind : Symbol(Kind, Decl(stringLiteralTypesAsTags03.ts, 0, 0))
 

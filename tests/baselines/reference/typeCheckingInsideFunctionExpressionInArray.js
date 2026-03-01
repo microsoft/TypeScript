@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts] ////
+
 //// [typeCheckingInsideFunctionExpressionInArray.ts]
 var functions = [function () {
   var k: string = 10;
@@ -8,6 +10,7 @@ var functions = [function () {
 
 
 //// [typeCheckingInsideFunctionExpressionInArray.js]
+"use strict";
 var functions = [function () {
         var k = 10;
         k = new Object();

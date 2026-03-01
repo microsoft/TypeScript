@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts] ////
+
 //// [parseClassDeclarationInStrictModeByDefaultInES6.ts]
 class C {
     interface = 10;
@@ -9,6 +11,7 @@ class C {
 }
 
 //// [parseClassDeclarationInStrictModeByDefaultInES6.js]
+"use strict";
 class C {
     constructor() {
         this.interface = 10;

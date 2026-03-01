@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldStringLiteral.ts] ////
+
 //// [yieldStringLiteral.ts]
 function yieldString() {
     yield 'literal';
@@ -5,6 +7,7 @@ function yieldString() {
 
 
 //// [yieldStringLiteral.js]
+"use strict";
 function yieldString() {
     yield 'literal';
 }

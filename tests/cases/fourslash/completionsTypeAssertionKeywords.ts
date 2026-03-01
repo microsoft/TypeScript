@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////const a = {
 ////  b: 42 as /*0*/
 ////};

@@ -1,26 +1,44 @@
-=== tests/cases/compiler/library_RegExpExecArraySlice.ts ===
+//// [tests/cases/compiler/library_RegExpExecArraySlice.ts] ////
+
+=== library_RegExpExecArraySlice.ts ===
 // RegExpExecArray.slice can have zero, one, or two arguments
 var regExpExecArrayValue: RegExpExecArray;
 >regExpExecArrayValue : RegExpExecArray
+>                     : ^^^^^^^^^^^^^^^
 
 regExpExecArrayValue.slice();
 >regExpExecArrayValue.slice() : string[]
+>                             : ^^^^^^^^
 >regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
+>                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >regExpExecArrayValue : RegExpExecArray
+>                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 
 regExpExecArrayValue.slice(0);
 >regExpExecArrayValue.slice(0) : string[]
+>                              : ^^^^^^^^
 >regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
+>                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >regExpExecArrayValue : RegExpExecArray
+>                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 regExpExecArrayValue.slice(0,1);
 >regExpExecArrayValue.slice(0,1) : string[]
+>                                : ^^^^^^^^
 >regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
+>                           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >regExpExecArrayValue : RegExpExecArray
+>                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >1 : 1
+>  : ^
 

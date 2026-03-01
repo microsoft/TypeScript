@@ -1,32 +1,35 @@
-=== tests/cases/compiler/emitMemberAccessExpression_file3.ts ===
+//// [tests/cases/compiler/emitMemberAccessExpression.ts] ////
+
+=== emitMemberAccessExpression_file3.ts ===
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
 >OData : Symbol(OData, Decl(emitMemberAccessExpression_file3.ts, 2, 11))
 
-module Microsoft.PeopleAtWork.Model {
+namespace Microsoft.PeopleAtWork.Model {
 >Microsoft : Symbol(Microsoft, Decl(emitMemberAccessExpression_file2.ts, 1, 13), Decl(emitMemberAccessExpression_file3.ts, 2, 23))
->PeopleAtWork : Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 17), Decl(emitMemberAccessExpression_file3.ts, 3, 17))
->Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
+>PeopleAtWork : Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 20), Decl(emitMemberAccessExpression_file3.ts, 3, 20))
+>Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 33), Decl(emitMemberAccessExpression_file3.ts, 3, 33))
 
     export class KnockoutExtentions {
->KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
+>KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 40))
     }
 }
-=== tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
-/// <reference path="emitMemberAccessExpression_file3.ts" />
-No type information for this code."use strict";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/emitMemberAccessExpression_file2.ts ===
+=== emitMemberAccessExpression_file1.ts ===
+
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
-module Microsoft.PeopleAtWork.Model {
+
+=== emitMemberAccessExpression_file2.ts ===
+/// <reference path="emitMemberAccessExpression_file3.ts" />
+"use strict";
+namespace Microsoft.PeopleAtWork.Model {
 >Microsoft : Symbol(Microsoft, Decl(emitMemberAccessExpression_file2.ts, 1, 13), Decl(emitMemberAccessExpression_file3.ts, 2, 23))
->PeopleAtWork : Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 17), Decl(emitMemberAccessExpression_file3.ts, 3, 17))
->Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
+>PeopleAtWork : Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 20), Decl(emitMemberAccessExpression_file3.ts, 3, 20))
+>Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 33), Decl(emitMemberAccessExpression_file3.ts, 3, 33))
 
     export class _Person {
->_Person : Symbol(_Person, Decl(emitMemberAccessExpression_file2.ts, 2, 37))
+>_Person : Symbol(_Person, Decl(emitMemberAccessExpression_file2.ts, 2, 40))
 
         public populate(raw: any) {
 >populate : Symbol(_Person.populate, Decl(emitMemberAccessExpression_file2.ts, 3, 26))
@@ -34,9 +37,9 @@ module Microsoft.PeopleAtWork.Model {
 
             var res = Model.KnockoutExtentions;
 >res : Symbol(res, Decl(emitMemberAccessExpression_file2.ts, 5, 15))
->Model.KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
->Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
->KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
+>Model.KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 40))
+>Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 33), Decl(emitMemberAccessExpression_file3.ts, 3, 33))
+>KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 40))
         }
     }
 }

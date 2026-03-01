@@ -34,31 +34,28 @@ export class Api<SecurityDataType = unknown> {
 
 //// [http-client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.HttpClient = void 0;
-var HttpClient = /** @class */ (function () {
-    function HttpClient() {
-        this.request = function () {
+class HttpClient {
+    constructor() {
+        this.request = () => {
             return '';
         };
     }
-    return HttpClient;
-}());
+}
 exports.HttpClient = HttpClient;
 //// [Api.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
-var Api = /** @class */ (function () {
-    function Api(http) {
-        var _this = this;
+class Api {
+    constructor(http) {
         this.http = http;
-        this.abc1 = function () { return _this.http.request(); };
-        this.abc2 = function () { return _this.http.request(); };
-        this.abc3 = function () { return _this.http.request(); };
+        this.abc1 = () => this.http.request();
+        this.abc2 = () => this.http.request();
+        this.abc3 = () => this.http.request();
     }
-    return Api;
-}());
+}
 exports.Api = Api;
 
 
@@ -72,6 +69,6 @@ export interface HttpResponse<D extends unknown, E extends unknown = unknown> ex
     error: E;
 }
 export declare class HttpClient<SecurityDataType = unknown> {
-    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>, any>;
+    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>>;
 }
 export {};

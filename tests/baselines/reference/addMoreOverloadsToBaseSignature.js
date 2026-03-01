@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/addMoreOverloadsToBaseSignature.ts] ////
+
 //// [addMoreOverloadsToBaseSignature.ts]
 interface Foo {
     f(): string;
@@ -9,3 +11,4 @@ interface Bar extends Foo {
 
 
 //// [addMoreOverloadsToBaseSignature.js]
+"use strict";

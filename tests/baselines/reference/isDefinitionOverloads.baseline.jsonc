@@ -1,494 +1,321 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/isDefinitionOverloads.ts ===
-// function /*FIND ALL REFS*/[|f|](x: number): void;
-// function [|f|](x: string): void;
-// function [|f|](x: number | string) { }
+// <|function /*FIND ALL REFS*/[|{| isDefinition: true |}f|](x: number): void;|>
+// <|function [|{| isDefinition: true |}f|](x: string): void;|>
+// <|function [|{| isWriteAccess: true, isDefinition: true |}f|](x: number | string) { }|>
 // 
 // [|f|](1);
 // [|f|]("a");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-      "kind": "function",
-      "name": "function f(x: number): void (+1 overload)",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "+",
-          "kind": "operator"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "overload",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 29,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 58,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 100,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionOverloads.ts ===
+  // <|function /*FIND ALL REFS*/[|f|](x: number): void;|>
+  // function f(x: string): void;
+  // function f(x: number | string) { }
+  // 
+  // f(1);
+  // f("a");
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(x: number): void (+1 overload)",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "+",
+      "kind": "operator"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "overload",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/isDefinitionOverloads.ts ===
-// function [|f|](x: number): void;
-// function /*FIND ALL REFS*/[|f|](x: string): void;
-// function [|f|](x: number | string) { }
+// <|function [|{| isDefinition: true |}f|](x: number): void;|>
+// <|function /*FIND ALL REFS*/[|{| isDefinition: true |}f|](x: string): void;|>
+// <|function [|{| isWriteAccess: true, isDefinition: true |}f|](x: number | string) { }|>
 // 
 // [|f|](1);
 // [|f|]("a");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-      "kind": "function",
-      "name": "function f(x: number): void (+1 overload)",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "+",
-          "kind": "operator"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "overload",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 29,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 58,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 100,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionOverloads.ts ===
+  // <|function [|f|](x: number): void;|>
+  // function /*FIND ALL REFS*/f(x: string): void;
+  // function f(x: number | string) { }
+  // 
+  // f(1);
+  // f("a");
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(x: number): void (+1 overload)",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "+",
+      "kind": "operator"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "overload",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/isDefinitionOverloads.ts ===
-// function [|f|](x: number): void;
-// function [|f|](x: string): void;
-// function /*FIND ALL REFS*/[|f|](x: number | string) { }
+// <|function [|{| isDefinition: true |}f|](x: number): void;|>
+// <|function [|{| isDefinition: true |}f|](x: string): void;|>
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|](x: number | string) { }|>
 // 
 // [|f|](1);
 // [|f|]("a");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-      "kind": "function",
-      "name": "function f(x: number): void (+1 overload)",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "+",
-          "kind": "operator"
-        },
-        {
-          "text": "1",
-          "kind": "numericLiteral"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "overload",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 29,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "contextSpan": {
-          "start": 58,
-          "length": 34
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 100,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/isDefinitionOverloads.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionOverloads.ts ===
+  // <|function [|f|](x: number): void;|>
+  // function f(x: string): void;
+  // function /*FIND ALL REFS*/f(x: number | string) { }
+  // 
+  // f(1);
+  // f("a");
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(x: number): void (+1 overload)",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "+",
+      "kind": "operator"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "overload",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

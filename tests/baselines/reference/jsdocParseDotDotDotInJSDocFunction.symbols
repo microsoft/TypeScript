@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParseDotDotDotInJSDocFunction.ts] ////
+
+=== a.js ===
 // from bcryptjs
 /** @param {function(...[*])} callback */
 function g(callback) {
@@ -16,6 +18,6 @@ function g(callback) {
 var stringFromCharCode = String.fromCharCode;
 >stringFromCharCode : Symbol(stringFromCharCode, Decl(a.js, 10, 3))
 >String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
 

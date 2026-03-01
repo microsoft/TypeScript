@@ -1,4 +1,6 @@
-=== tests/cases/compiler/helloworld.ts ===
+//// [tests/cases/compiler/declFileEmitDeclarationOnly.ts] ////
+
+=== helloworld.ts ===
 const Log = {
 >Log : Symbol(Log, Decl(helloworld.ts, 0, 5))
 

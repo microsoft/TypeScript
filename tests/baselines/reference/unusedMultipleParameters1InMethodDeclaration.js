@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameters1InMethodDeclaration.ts] ////
+
 //// [unusedMultipleParameters1InMethodDeclaration.ts]
 class Dummy {
     public greeter(person: string, person2: string) {
@@ -7,12 +9,10 @@ class Dummy {
 }
 
 //// [unusedMultipleParameters1InMethodDeclaration.js]
-var Dummy = /** @class */ (function () {
-    function Dummy() {
-    }
-    Dummy.prototype.greeter = function (person, person2) {
+"use strict";
+class Dummy {
+    greeter(person, person2) {
         var unused = 20;
         person2 = "dummy value";
-    };
-    return Dummy;
-}());
+    }
+}

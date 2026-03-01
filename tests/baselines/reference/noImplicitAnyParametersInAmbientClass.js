@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientClass.ts] ////
+
 //// [noImplicitAnyParametersInAmbientClass.ts]
 declare class D_C {
     // No implicit-'any' errors.
@@ -92,3 +94,4 @@ declare class D_C {
 }
 
 //// [noImplicitAnyParametersInAmbientClass.js]
+"use strict";

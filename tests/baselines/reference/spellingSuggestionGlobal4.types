@@ -1,11 +1,18 @@
-=== tests/cases/compiler/spellingSuggestionGlobal4.ts ===
+//// [tests/cases/compiler/spellingSuggestionGlobal4.ts] ////
+
+=== spellingSuggestionGlobal4.ts ===
 export {}
 declare global { var x: any }
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 global.x // should not suggest `global` (GH#42209)
 >global.x : any
+>         : ^^^
 >global : any
+>       : ^^^
 >x : any
+>  : ^^^
 

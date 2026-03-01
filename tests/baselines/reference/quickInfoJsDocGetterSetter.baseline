@@ -1,3 +1,113 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocGetterSetter.ts ===
+// class A {
+//     /**
+//      * getter A
+//      * @returns return A
+//      */
+//     get x(): string {
+//         ^
+// | ----------------------------------------------------------------------
+// | (getter) A.x: string
+// | getter A
+// | @returns return A
+// | ----------------------------------------------------------------------
+//         return "";
+//     }
+//     /**
+//      * setter A
+//      * @param value foo A
+//      * @todo empty jsdoc
+//      */
+//     set x(value) { }
+//         ^
+// | ----------------------------------------------------------------------
+// | (setter) A.x: string
+// | setter A
+// | @param value foo A
+// | @todo empty jsdoc
+// | ----------------------------------------------------------------------
+// }
+// // override both getter and setter
+// class B extends A {
+//     /**
+//      * getter B
+//      * @returns return B
+//      */
+//     get x(): string {
+//         ^
+// | ----------------------------------------------------------------------
+// | (getter) B.x: string
+// | getter B
+// | @returns return B
+// | ----------------------------------------------------------------------
+//         return "";
+//     }
+//     /**
+//      * setter B
+//      * @param value foo B
+//      */
+//     set x(vale) { }
+//         ^
+// | ----------------------------------------------------------------------
+// | (setter) B.x: string
+// | setter B
+// | @param value foo B
+// | ----------------------------------------------------------------------
+// }
+// // not override
+// class C extends A { }
+// // only override setter
+// class D extends A {
+//     /**
+//      * setter D
+//      * @param value foo D
+//      */
+//     set x(val: string) { }
+//         ^
+// | ----------------------------------------------------------------------
+// | (setter) D.x: string
+// | setter D
+// | @param value foo D
+// | ----------------------------------------------------------------------
+// }
+// new A().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | (property) A.x: string
+// | getter A
+// | setter A
+// | @returns return A
+// | @param value foo A
+// | @todo empty jsdoc
+// | ----------------------------------------------------------------------
+// new B().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | (property) B.x: string
+// | getter B
+// | setter B
+// | @returns return B
+// | @param value foo B
+// | ----------------------------------------------------------------------
+// new C().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | (property) A.x: string
+// | getter A
+// | setter A
+// | @returns return A
+// | @param value foo A
+// | @todo empty jsdoc
+// | ----------------------------------------------------------------------
+// new D().x = "1";
+//         ^
+// | ----------------------------------------------------------------------
+// | (property) D.x: string
+// | setter D
+// | @param value foo D
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +115,7 @@
       "position": 75,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "getter",
       "kindModifiers": "",
       "textSpan": {
@@ -79,7 +189,7 @@
       "position": 205,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "setter",
       "kindModifiers": "",
       "textSpan": {
@@ -170,7 +280,7 @@
       "position": 340,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "getter",
       "kindModifiers": "",
       "textSpan": {
@@ -244,7 +354,7 @@
       "position": 445,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "setter",
       "kindModifiers": "",
       "textSpan": {
@@ -326,7 +436,7 @@
       "position": 607,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "setter",
       "kindModifiers": "",
       "textSpan": {
@@ -408,7 +518,7 @@
       "position": 636,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -516,7 +626,7 @@
       "position": 653,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -615,7 +725,7 @@
       "position": 670,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -723,7 +833,7 @@
       "position": 687,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {

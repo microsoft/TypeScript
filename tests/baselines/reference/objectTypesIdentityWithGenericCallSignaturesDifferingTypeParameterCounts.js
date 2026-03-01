@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts] ////
+
 //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts]
 // object types are identical structurally
 
@@ -101,27 +103,19 @@ function foo15(x: C<number, B<string, string>, B<number, string>>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.js]
+"use strict";
 // object types are identical structurally
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function (x) { return null; };
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    B.prototype.foo = function (x) { return null; };
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x) { return null; };
-    return C;
-}());
+class A {
+    foo(x) { return null; }
+}
+class B {
+    foo(x) { return null; }
+}
+class C {
+    foo(x) { return null; }
+}
 var a;
-var b = { foo: function (x) { return x; } };
+var b = { foo(x) { return x; } };
 function foo1(x) { }
 function foo1b(x) { }
 function foo1c(x) { }

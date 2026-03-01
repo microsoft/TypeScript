@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superAccessCastedCall.ts ===
+//// [tests/cases/compiler/superAccessCastedCall.ts] ////
+
+=== superAccessCastedCall.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(superAccessCastedCall.ts, 0, 0))
 

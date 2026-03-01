@@ -1,0 +1,283 @@
+templateLiteralEscapeSequence.ts(3,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(4,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(5,6): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(6,7): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(8,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(9,5): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(10,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(11,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(13,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(14,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(15,10): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(16,11): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(18,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(19,9): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(20,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(21,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(23,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(24,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(25,6): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(26,7): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(28,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(29,5): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(30,4): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(31,5): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(33,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(34,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(35,10): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(36,11): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(38,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(39,9): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+templateLiteralEscapeSequence.ts(40,8): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(41,9): error TS1125: Hexadecimal digit expected.
+templateLiteralEscapeSequence.ts(85,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(86,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(89,8): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+templateLiteralEscapeSequence.ts(90,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(91,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+
+
+==== templateLiteralEscapeSequence.ts (42 errors) ====
+    declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
+    
+    `\u`;
+       
+!!! error TS1125: Hexadecimal digit expected.
+    `\u0`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\u00`;
+         
+!!! error TS1125: Hexadecimal digit expected.
+    `\u000`;
+          
+!!! error TS1125: Hexadecimal digit expected.
+    `\u0000`;
+    `\u{}`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\u{ffffff}`;
+        ~~~~~~
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+    `\x`;
+       
+!!! error TS1125: Hexadecimal digit expected.
+    `\x0`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\x00`;
+    `${0}\u`;
+           
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u0`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u00`;
+             
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u000`;
+              
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u0000`;
+    `${0}\u{}`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u{ffffff}`;
+            ~~~~~~
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+    `${0}\x`;
+           
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\x0`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\x00`;
+    `\u${0}`;
+       
+!!! error TS1125: Hexadecimal digit expected.
+    `\u0${0}`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\u00${0}`;
+         
+!!! error TS1125: Hexadecimal digit expected.
+    `\u000${0}`;
+          
+!!! error TS1125: Hexadecimal digit expected.
+    `\u0000${0}`;
+    `\u{}${0}`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\u{ffffff}${0}`;
+        ~~~~~~
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+    `\x${0}`;
+       
+!!! error TS1125: Hexadecimal digit expected.
+    `\x0${0}`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\x00${0}`;
+    `${0}\u${0}`;
+           
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u0${0}`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u00${0}`;
+             
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u000${0}`;
+              
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u0000${0}`;
+    `${0}\u{}${0}`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u{ffffff}${0}`;
+            ~~~~~~
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+    `${0}\x${0}`;
+           
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\x0${0}`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\x00${0}`;
+    
+    tag`\u`;
+    tag`\u0`;
+    tag`\u00`;
+    tag`\u000`;
+    tag`\u0000`;
+    tag`\u{}`;
+    tag`\u{ffffff}`;
+    tag`\x`;
+    tag`\x0`;
+    tag`\x00`;
+    tag`${0}\u`;
+    tag`${0}\u0`;
+    tag`${0}\u00`;
+    tag`${0}\u000`;
+    tag`${0}\u0000`;
+    tag`${0}\u{}`;
+    tag`${0}\u{ffffff}`;
+    tag`${0}\x`;
+    tag`${0}\x0`;
+    tag`${0}\x00`;
+    tag`\u${0}`;
+    tag`\u0${0}`;
+    tag`\u00${0}`;
+    tag`\u000${0}`;
+    tag`\u0000${0}`;
+    tag`\u{}${0}`;
+    tag`\u{ffffff}${0}`;
+    tag`\x${0}`;
+    tag`\x0${0}`;
+    tag`\x00${0}`;
+    tag`${0}\u${0}`;
+    tag`${0}\u0${0}`;
+    tag`${0}\u00${0}`;
+    tag`${0}\u000${0}`;
+    tag`${0}\u0000${0}`;
+    tag`${0}\u{}${0}`;
+    tag`${0}\u{ffffff}${0}`;
+    tag`${0}\x${0}`;
+    tag`${0}\x0${0}`;
+    tag`${0}\x00${0}`;
+    
+    tag`0${00}`;
+           ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+    tag`0${05}`;
+           ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+    tag`0${000}`;
+           ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+    tag`0${005}`;
+           ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+    tag`0${055}`;
+           ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+    tag`${00}0`;
+          ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+    tag`${05}0`;
+          ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+    tag`${000}0`;
+          ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+    tag`${005}0`;
+          ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+    tag`${055}0`;
+          ~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+    tag`\0`;
+    tag`\5`;
+    tag`\00`;
+    tag`\05`;
+    tag`\55`;
+    tag`\000`;
+    tag`\005`;
+    tag`\055`;
+    tag`${0}\0`;
+    tag`${0}\5`;
+    tag`${0}\00`;
+    tag`${0}\05`;
+    tag`${0}\55`;
+    tag`${0}\000`;
+    tag`${0}\005`;
+    tag`${0}\055`;
+    tag`\0${0}`;
+    tag`\5${0}`;
+    tag`\00${0}`;
+    tag`\05${0}`;
+    tag`\55${0}`;
+    tag`\000${0}`;
+    tag`\005${0}`;
+    tag`\055${0}`;
+    tag`${0}\0${0}`;
+    tag`${0}\5${0}`;
+    tag`${0}\00${0}`;
+    tag`${0}\05${0}`;
+    tag`${0}\55${0}`;
+    tag`${0}\000${0}`;
+    tag`${0}\005${0}`;
+    tag`${0}\055${0}`;
+    
+    tag`\1`;
+    tag`\01`;
+    tag`\001`;
+    tag`\17`;
+    tag`\017`;
+    tag`\0017`;
+    tag`\177`;
+    tag`\18`;
+    tag`\018`;
+    tag`\0018`;
+    tag`\4`;
+    tag`\47`;
+    tag`\047`;
+    tag`\0047`;
+    tag`\477`;
+    tag`\48`;
+    tag`\048`;
+    tag`\0048`;
+    tag`\8`;
+    tag`\87`;
+    tag`\087`;
+    tag`\0087`;
+    tag`\877`;
+    tag`\88`;
+    tag`\088`;
+    tag`\0088`;
+    

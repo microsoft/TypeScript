@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern25.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern25.ts] ////
+
+=== iterableArrayPattern25.ts ===
 function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]) { }
 >takeFirstTwoEntries : Symbol(takeFirstTwoEntries, Decl(iterableArrayPattern25.ts, 0, 0))
 >k1 : Symbol(k1, Decl(iterableArrayPattern25.ts, 0, 34))

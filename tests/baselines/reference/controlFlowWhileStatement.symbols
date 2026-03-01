@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts] ////
+
+=== controlFlowWhileStatement.ts ===
 let cond: boolean;
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 
@@ -115,8 +117,8 @@ function f() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     x = "";
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
@@ -151,8 +153,8 @@ function g() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     x = "";
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))

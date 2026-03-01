@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeArrayReturnType.ts] ////
+
 //// [contextualTypeArrayReturnType.ts]
 interface IBookStyle {
     initialLeftPageTransforms?: (width: number) => NamedTransform[];
@@ -21,8 +23,9 @@ var style: IBookStyle = {
 
 
 //// [contextualTypeArrayReturnType.js]
+"use strict";
 var style = {
-    initialLeftPageTransforms: function (width) {
+    initialLeftPageTransforms: (width) => {
         return [
             { 'ry': null }
         ];

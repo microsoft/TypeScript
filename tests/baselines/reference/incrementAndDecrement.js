@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/operators/incrementAndDecrement.ts] ////
+
 //// [incrementAndDecrement.ts]
 enum E { A, B, C };
 var x = 4;
@@ -62,6 +64,7 @@ w--; // Error
 
 
 //// [incrementAndDecrement.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

@@ -1,35 +1,103 @@
-=== tests/cases/conformance/es2018/es2018IntlAPIs.ts ===
+//// [tests/cases/conformance/es2018/es2018IntlAPIs.ts] ////
+
+=== es2018IntlAPIs.ts ===
 // Sample from
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf
 const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
 >locales : string[]
+>        : ^^^^^^^^
 >['ban', 'id-u-co-pinyin', 'de-ID'] : string[]
+>                                   : ^^^^^^^^
 >'ban' : "ban"
+>      : ^^^^^
 >'id-u-co-pinyin' : "id-u-co-pinyin"
+>                 : ^^^^^^^^^^^^^^^^
 >'de-ID' : "de-ID"
+>        : ^^^^^^^
 
 const options = { localeMatcher: 'lookup' } as const;
 >options : { readonly localeMatcher: "lookup"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ localeMatcher: 'lookup' } as const : { readonly localeMatcher: "lookup"; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ localeMatcher: 'lookup' } : { readonly localeMatcher: "lookup"; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >localeMatcher : "lookup"
+>              : ^^^^^^^^
 >'lookup' : "lookup"
+>         : ^^^^^^^^
 
 console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
 >console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', ')) : void
+>                                                                              : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >Intl.PluralRules.supportedLocalesOf(locales, options).join(', ') : string
+>                                                                 : ^^^^^^
 >Intl.PluralRules.supportedLocalesOf(locales, options).join : (separator?: string) => string
+>                                                           : ^         ^^^      ^^^^^      
 >Intl.PluralRules.supportedLocalesOf(locales, options) : string[]
->Intl.PluralRules.supportedLocalesOf : (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
->Intl.PluralRules : { (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; new (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                                                      : ^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
+>                                    : ^       ^^                          ^^       ^^^                                          ^^^^^        
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
->PluralRules : { (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; new (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->supportedLocalesOf : (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
+>     : ^^^^^^^^^^^
+>PluralRules : Intl.PluralRulesConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
+>                   : ^       ^^                          ^^       ^^^                                          ^^^^^        
 >locales : string[]
+>        : ^^^^^^^^
 >options : { readonly localeMatcher: "lookup"; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
 >', ' : ", "
+>     : ^^^^
+
+const [ part ] = new Intl.NumberFormat().formatToParts();
+>part : Intl.NumberFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat().formatToParts() : Intl.NumberFormatPart[]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat().formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>                                      : ^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>new Intl.NumberFormat() : Intl.NumberFormat
+>                        : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>              : ^      ^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^  
+
+console.log(part.type, part.value);
+>console.log(part.type, part.value) : void
+>                                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>part.type : keyof Intl.NumberFormatPartTypeRegistry
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part : Intl.NumberFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>type : keyof Intl.NumberFormatPartTypeRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part.value : string
+>           : ^^^^^^
+>part : Intl.NumberFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
 

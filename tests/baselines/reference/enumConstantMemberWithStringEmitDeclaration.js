@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithStringEmitDeclaration.ts] ////
+
 //// [enumConstantMemberWithStringEmitDeclaration.ts]
 enum T1 {
     a = "1",
@@ -30,6 +32,7 @@ declare enum T6 {
 
 
 //// [enumConstantMemberWithStringEmitDeclaration.js]
+"use strict";
 var T1;
 (function (T1) {
     T1["a"] = "1";

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //@Filename: file.tsx
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements { }
 ////     interface ElementAttributesProperty { props; }
@@ -15,8 +15,8 @@
 //// var y = <MyClass [|f/*p*/oo|]= 'hello' />;
 //// var z = <[|MyCl/*w*/ass|] wrong= 'hello' />;
 
-verify.goToDefinition({
-    c: "ct",
-    p: "pt",
-    w: "ct"
-});
+verify.baselineGoToDefinition(
+    "c",
+    "p",
+    "w",
+);

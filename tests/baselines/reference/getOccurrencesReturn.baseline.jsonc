@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 7) skipped ---
+
+// --- (line: 12) skipped ---
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { return 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
+// }

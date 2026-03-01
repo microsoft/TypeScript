@@ -1,12 +1,12 @@
-tests/cases/compiler/objectLiteralWithSemicolons3.ts(2,3): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
-tests/cases/compiler/objectLiteralWithSemicolons3.ts(2,4): error TS1005: ',' expected.
-tests/cases/compiler/objectLiteralWithSemicolons3.ts(3,3): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
-tests/cases/compiler/objectLiteralWithSemicolons3.ts(3,4): error TS1005: ',' expected.
-tests/cases/compiler/objectLiteralWithSemicolons3.ts(4,3): error TS18004: No value exists in scope for the shorthand property 'c'. Either declare one or provide an initializer.
-tests/cases/compiler/objectLiteralWithSemicolons3.ts(4,4): error TS1005: ',' expected.
+objectLiteralWithSemicolons3.ts(2,3): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
+objectLiteralWithSemicolons3.ts(2,4): error TS1005: ',' expected.
+objectLiteralWithSemicolons3.ts(3,3): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
+objectLiteralWithSemicolons3.ts(3,4): error TS1005: ',' expected.
+objectLiteralWithSemicolons3.ts(4,3): error TS18004: No value exists in scope for the shorthand property 'c'. Either declare one or provide an initializer.
+objectLiteralWithSemicolons3.ts(4,4): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/objectLiteralWithSemicolons3.ts (6 errors) ====
+==== objectLiteralWithSemicolons3.ts (6 errors) ====
     var v = {
       a;
       ~

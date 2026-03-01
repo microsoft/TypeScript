@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInProperty.ts] ////
+
 //// [noCollisionThisExpressionAndLocalVarInProperty.ts]
 class class1 {
     public prop1 = {
@@ -20,25 +22,24 @@ class class2 {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInProperty.js]
-var class1 = /** @class */ (function () {
-    function class1() {
+"use strict";
+class class1 {
+    constructor() {
         this.prop1 = {
-            doStuff: function (callback) { return function () {
+            doStuff: (callback) => () => {
                 var _this = 2;
                 return callback(_this);
-            }; }
+            }
         };
     }
-    return class1;
-}());
-var class2 = /** @class */ (function () {
-    function class2() {
+}
+class class2 {
+    constructor() {
         this.prop1 = {
-            doStuff: function (callback) { return function () {
+            doStuff: (callback) => () => {
                 return callback(10);
-            }; }
+            }
         };
         var _this = 2;
     }
-    return class2;
-}());
+}

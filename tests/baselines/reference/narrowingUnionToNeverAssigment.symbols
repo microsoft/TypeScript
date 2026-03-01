@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/narrowingUnionToNeverAssigment.ts] ////
+
+=== narrowingUnionToNeverAssigment.ts ===
+type Variants = "a" | "b" | "c" | "d";
+>Variants : Symbol(Variants, Decl(narrowingUnionToNeverAssigment.ts, 0, 0))
+
+
+function fx1(x: Variants) {
+>fx1 : Symbol(fx1, Decl(narrowingUnionToNeverAssigment.ts, 0, 38))
+>x : Symbol(x, Decl(narrowingUnionToNeverAssigment.ts, 3, 13))
+>Variants : Symbol(Variants, Decl(narrowingUnionToNeverAssigment.ts, 0, 0))
+
+    if (x === "a" || x === "b") {        
+>x : Symbol(x, Decl(narrowingUnionToNeverAssigment.ts, 3, 13))
+>x : Symbol(x, Decl(narrowingUnionToNeverAssigment.ts, 3, 13))
+    }
+    else {
+        const y: never = x;
+>y : Symbol(y, Decl(narrowingUnionToNeverAssigment.ts, 7, 13))
+>x : Symbol(x, Decl(narrowingUnionToNeverAssigment.ts, 3, 13))
+    }
+}
+

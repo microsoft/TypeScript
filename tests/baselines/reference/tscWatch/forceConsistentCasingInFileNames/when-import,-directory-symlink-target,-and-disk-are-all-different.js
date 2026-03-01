@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/XY/a.ts]
 
@@ -6,16 +7,25 @@ export const b = 2;
 
 
 //// [/user/username/projects/myproject/link] symlink(/user/username/projects/myproject/Xy)
+
 //// [/user/username/projects/myproject/b.ts]
 
-import { a } from "./yX/a";
+import { a } from "./xY/a";
 import { b } from "./link/a";
 
 a;b;
 
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "outFile": "out.js",
+    "module": "system"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -26,72 +36,53 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true,"outFile":"out.js","module":"system"}}
 
-
-/a/lib/tsc.js --w --p . --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
 Output::
->> Screen clear
-[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2792: [0mCannot find module './yX/a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
+  options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/xY/a.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m2[0m import { a } from "./yX/a";
-[7m [0m [91m                  ~~~~~~~~[0m
+[7m4[0m     "outFile": "out.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "system"
+[7m [0m [91m              ~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
+xY/a.ts
+  Imported via "./xY/a" from file 'b.ts'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-XY/a.ts
-  Matched by default include pattern '**/*'
-[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-
-Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/link/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/XY/a.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/yx:
-  {"fileName":"/user/username/projects/myproject/yX","pollingInterval":500}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/XY/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
-exitCode:: ExitStatus.undefined
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/out.js]
-System.register("link/a", [], function (exports_1, context_1) {
+System.register("xY/a", [], function (exports_1, context_1) {
     "use strict";
     var a, b;
     var __moduleName = context_1 && context_1.id;
@@ -103,10 +94,22 @@ System.register("link/a", [], function (exports_1, context_1) {
         }
     };
 });
-System.register("b", ["./yX/a", "link/a"], function (exports_2, context_2) {
+System.register("link/a", [], function (exports_2, context_2) {
+    "use strict";
+    var a, b;
+    var __moduleName = context_2 && context_2.id;
+    return {
+        setters: [],
+        execute: function () {
+            exports_2("a", a = 1);
+            exports_2("b", b = 2);
+        }
+    };
+});
+System.register("b", ["xY/a", "link/a"], function (exports_3, context_3) {
     "use strict";
     var a_1, a_2;
-    var __moduleName = context_2 && context_2.id;
+    var __moduleName = context_3 && context_3.id;
     return {
         setters: [
             function (a_1_1) {
@@ -122,20 +125,51 @@ System.register("b", ["./yX/a", "link/a"], function (exports_2, context_2) {
         }
     };
 });
-System.register("XY/a", [], function (exports_3, context_3) {
-    "use strict";
-    var a, b;
-    var __moduleName = context_3 && context_3.id;
-    return {
-        setters: [],
-        execute: function () {
-            exports_3("a", a = 1);
-            exports_3("b", b = 2);
-        }
-    };
-});
 
 
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/link/a.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/xY/a.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/XY/a.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "outFile": "/user/username/projects/myproject/out.js",
+  "module": 4,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/myproject/xY/a.ts
+/user/username/projects/myproject/link/a.ts
+/user/username/projects/myproject/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
 
 Change:: Prepend a line to moduleA
 
@@ -149,65 +183,55 @@ export const b = 2;
 
 
 Output::
->> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+FileWatcher:: Triggered with /user/username/projects/myproject/xY/a.ts 1:: WatchInfo: /user/username/projects/myproject/xY/a.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/xY/a.ts 1:: WatchInfo: /user/username/projects/myproject/xY/a.ts 250 undefined Source file
+FileWatcher:: Triggered with /user/username/projects/myproject/link/a.ts 1:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/link/a.ts 1:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2792: [0mCannot find module './yX/a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
-[7m2[0m import { a } from "./yX/a";
-[7m [0m [91m                  ~~~~~~~~[0m
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
 
-../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+Synchronizing program
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
+  options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "outFile": "out.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m5[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "module": "system"
+[7m [0m [91m              ~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
+xY/a.ts
+  Imported via "./xY/a" from file 'b.ts'
+  Matched by default include pattern '**/*'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-XY/a.ts
-  Matched by default include pattern '**/*'
-[[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/link/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/XY/a.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/yx:
-  {"fileName":"/user/username/projects/myproject/yX","pollingInterval":500}
-/user/username/projects/myproject/link/a.ts:
-  {"fileName":"/user/username/projects/myproject/link/a.ts","pollingInterval":250}
-/user/username/projects/myproject/xy/a.ts:
-  {"fileName":"/user/username/projects/myproject/XY/a.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/out.js]
-System.register("link/a", [], function (exports_1, context_1) {
+// some comment
+System.register("xY/a", [], function (exports_1, context_1) {
     "use strict";
     var a, b;
     var __moduleName = context_1 && context_1.id;
@@ -219,10 +243,23 @@ System.register("link/a", [], function (exports_1, context_1) {
         }
     };
 });
-System.register("b", ["./yX/a", "link/a"], function (exports_2, context_2) {
+// some comment
+System.register("link/a", [], function (exports_2, context_2) {
+    "use strict";
+    var a, b;
+    var __moduleName = context_2 && context_2.id;
+    return {
+        setters: [],
+        execute: function () {
+            exports_2("a", a = 1);
+            exports_2("b", b = 2);
+        }
+    };
+});
+System.register("b", ["xY/a", "link/a"], function (exports_3, context_3) {
     "use strict";
     var a_1, a_2;
-    var __moduleName = context_2 && context_2.id;
+    var __moduleName = context_3 && context_3.id;
     return {
         setters: [
             function (a_1_1) {
@@ -238,18 +275,33 @@ System.register("b", ["./yX/a", "link/a"], function (exports_2, context_2) {
         }
     };
 });
-// some comment
-System.register("XY/a", [], function (exports_3, context_3) {
-    "use strict";
-    var a, b;
-    var __moduleName = context_3 && context_3.id;
-    return {
-        setters: [],
-        execute: function () {// some comment
-            exports_3("a", a = 1);
-            exports_3("b", b = 2);
-        }
-    };
-});
 
 
+
+
+Program root files: [
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/XY/a.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "outFile": "/user/username/projects/myproject/out.js",
+  "module": 4,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/myproject/xY/a.ts
+/user/username/projects/myproject/link/a.ts
+/user/username/projects/myproject/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

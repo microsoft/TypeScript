@@ -1,33 +1,50 @@
+//// [tests/cases/conformance/salsa/importingExportingTypes.ts] ////
+
 === /node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")
+>     : ^^^^^^^^^^^^^^^^^^^
 
   export interface WriteFileOptions {}
   export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
 >writeFile : (path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void) => void
+>          : ^    ^^      ^^    ^^   ^^       ^^                ^^        ^^                    ^^^^^    
 >path : string
+>     : ^^^^^^
 >data : any
+>     : ^^^
 >options : WriteFileOptions
+>        : ^^^^^^^^^^^^^^^^
 >callback : (err: Error) => void
+>         : ^   ^^     ^^^^^    
 >err : Error
+>    : ^^^^^
 }
 
 === /index.js ===
 import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
 >writeFile : (path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void) => void
+>          : ^    ^^      ^^    ^^   ^^       ^^                ^^        ^^                    ^^^^^    
 >WriteFileOptions : any
+>                 : ^^^
 >WriteFileOptions : any
+>                 : ^^^
 >OtherName : any
+>          : ^^^
 
 /** @typedef {{ x: any }} JSDocType */
 
 export { JSDocType };
 >JSDocType : any
+>          : ^^^
 
 export { JSDocType as ThisIsFine };
 >JSDocType : any
+>          : ^^^
 >ThisIsFine : any
+>           : ^^^
 
 export { WriteFileOptions };
 >WriteFileOptions : any
+>                 : ^^^
 

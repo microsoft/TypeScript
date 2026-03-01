@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/pathsValidation5.ts] ////
+
 //// [main.ts]
 import 'someModule';
 
 //// [main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("someModule");

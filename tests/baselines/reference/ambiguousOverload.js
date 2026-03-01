@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambiguousOverload.ts] ////
+
 //// [ambiguousOverload.ts]
 function foof(bar: string, y): number;
 function foof(bar: string, x): string;
@@ -12,6 +14,7 @@ var x2: string = foof2("s", null);
 var y2: number = foof2("s", null);
 
 //// [ambiguousOverload.js]
+"use strict";
 function foof(bar) { return bar; }
 ;
 var x = foof("s", null);

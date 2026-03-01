@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementInterfaceAnyMemberWithVoid.ts] ////
+
 //// [implementInterfaceAnyMemberWithVoid.ts]
 interface I {
     foo(value: number);
@@ -10,10 +12,8 @@ class Bug implements I {
 
 
 //// [implementInterfaceAnyMemberWithVoid.js]
-var Bug = /** @class */ (function () {
-    function Bug() {
+"use strict";
+class Bug {
+    foo(value) {
     }
-    Bug.prototype.foo = function (value) {
-    };
-    return Bug;
-}());
+}

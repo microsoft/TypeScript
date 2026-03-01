@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers.ts] ////
+
 //// [mergedInterfacesWithIndexers.ts]
 // indexers should behave like other members when merging interface declarations
 
@@ -16,6 +18,7 @@ var r2 = a['1'];
 var r3 = a['hi'];
 
 //// [mergedInterfacesWithIndexers.js]
+"use strict";
 // indexers should behave like other members when merging interface declarations
 var a;
 var r = a[1];

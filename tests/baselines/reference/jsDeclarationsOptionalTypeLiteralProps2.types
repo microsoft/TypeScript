@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/foo.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsOptionalTypeLiteralProps2.ts] ////
+
+=== foo.js ===
 /**
  * foo
  *
@@ -11,21 +13,36 @@
  */
 function foo({ a, b, c }) {
 >foo : ({ a, b, c }: {    a: number;    b?: number | undefined;    c?: number | undefined;}) => number
+>    : ^           ^^      ^^      ^     ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      
 >a : number
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     return a + (b ?? 0) + (c ?? 0);
 >a + (b ?? 0) + (c ?? 0) : number
+>                        : ^^^^^^
 >a + (b ?? 0) : number
+>             : ^^^^^^
 >a : number
+>  : ^^^^^^
 >(b ?? 0) : number
+>         : ^^^^^^
 >b ?? 0 : number
+>       : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >(c ?? 0) : number
+>         : ^^^^^^
 >c ?? 0 : number
+>       : ^^^^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 

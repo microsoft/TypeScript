@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringWithConstraint.ts] ////
+
 //// [destructuringWithConstraint.ts]
 // Repro from #22823
 
@@ -15,6 +17,6 @@ function foo<P extends Props>(props: Readonly<P>) {
 "use strict";
 // Repro from #22823
 function foo(props) {
-    var _a = props.foo, foo = _a === void 0 ? false : _a;
+    let { foo = false } = props;
     if (foo === true) { }
 }

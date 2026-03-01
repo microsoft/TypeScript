@@ -1,0 +1,65 @@
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport02.ts ===
+// <|export default function /*RENAME*/[|DefaultExportedFunctionRENAME|]() {
+//     return [|DefaultExportedFunctionRENAME|]
+// }|>
+// /**
+//  *  Commenting [|DefaultExportedFunctionRENAME|]
+//  */
+// 
+// var x: typeof [|DefaultExportedFunctionRENAME|];
+// 
+// var y = [|DefaultExportedFunctionRENAME|]();
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport02.ts ===
+// <|export default function [|DefaultExportedFunctionRENAME|]() {
+//     return /*RENAME*/[|DefaultExportedFunctionRENAME|]
+// }|>
+// /**
+//  *  Commenting [|DefaultExportedFunctionRENAME|]
+//  */
+// 
+// var x: typeof [|DefaultExportedFunctionRENAME|];
+// 
+// var y = [|DefaultExportedFunctionRENAME|]();
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport02.ts ===
+// <|export default function [|DefaultExportedFunctionRENAME|]() {
+//     return [|DefaultExportedFunctionRENAME|]
+// }|>
+// /**
+//  *  Commenting [|DefaultExportedFunctionRENAME|]
+//  */
+// 
+// var x: typeof /*RENAME*/[|DefaultExportedFunctionRENAME|];
+// 
+// var y = [|DefaultExportedFunctionRENAME|]();
+
+
+
+// === findRenameLocations ===
+// @findInComments: true
+
+// === /tests/cases/fourslash/renameForDefaultExport02.ts ===
+// <|export default function [|DefaultExportedFunctionRENAME|]() {
+//     return [|DefaultExportedFunctionRENAME|]
+// }|>
+// /**
+//  *  Commenting [|DefaultExportedFunctionRENAME|]
+//  */
+// 
+// var x: typeof [|DefaultExportedFunctionRENAME|];
+// 
+// var y = /*RENAME*/[|DefaultExportedFunctionRENAME|]();

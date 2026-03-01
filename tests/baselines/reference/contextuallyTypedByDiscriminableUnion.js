@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts] ////
+
 //// [contextuallyTypedByDiscriminableUnion.ts]
 type ADT = {
     kind: "a",
@@ -24,8 +26,17 @@ invoke({
     }
 });
 
+const kind = "a"
+invoke({
+    kind,
+    method(a) {
+        return +a;
+    }
+})
+
 
 //// [contextuallyTypedByDiscriminableUnion.js]
+"use strict";
 function invoke(item) {
     if (item.kind === "a") {
         item.method("");
@@ -36,7 +47,14 @@ function invoke(item) {
 }
 invoke({
     kind: "a",
-    method: function (a) {
+    method(a) {
+        return +a;
+    }
+});
+const kind = "a";
+invoke({
+    kind,
+    method(a) {
         return +a;
     }
 });

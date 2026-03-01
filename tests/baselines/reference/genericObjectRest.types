@@ -1,110 +1,183 @@
-=== tests/cases/conformance/types/rest/genericObjectRest.ts ===
+//// [tests/cases/conformance/types/rest/genericObjectRest.ts] ////
+
+=== genericObjectRest.ts ===
 const a = 'a';
 >a : "a"
+>  : ^^^
 >'a' : "a"
+>    : ^^^
 
 function f1<T extends { a: string, b: number }>(obj: T) {
 >f1 : <T extends { a: string; b: number; }>(obj: T) => void
+>   : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >obj : T
+>    : ^
 
     let { ...r0 } = obj;
 >r0 : T
+>   : ^
 >obj : T
+>    : ^
 
     let { a: a1, ...r1 } = obj;
 >a : any
+>  : ^^^
 >a1 : string
+>   : ^^^^^^
 >r1 : Omit<T, "a">
+>   : ^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     let { a: a2, b: b2, ...r2 } = obj;
 >a : any
+>  : ^^^
 >a2 : string
+>   : ^^^^^^
 >b : any
+>  : ^^^
 >b2 : number
+>   : ^^^^^^
 >r2 : Omit<T, "a" | "b">
+>   : ^^^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     let { 'a': a3, ...r3 } = obj;
 >a3 : string
+>   : ^^^^^^
 >r3 : Omit<T, "a">
+>   : ^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     let { ['a']: a4, ...r4 } = obj;
 >'a' : "a"
+>    : ^^^
 >a4 : string
+>   : ^^^^^^
 >r4 : Omit<T, "a">
+>   : ^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     let { [a]: a5, ...r5 } = obj;
 >a : "a"
+>  : ^^^
 >a5 : string
+>   : ^^^^^^
 >r5 : Omit<T, "a">
+>   : ^^^^^^^^^^^^
 >obj : T
+>    : ^
 }
 
 const sa = Symbol();
 >sa : unique symbol
+>   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const sb = Symbol();
 >sb : unique symbol
+>   : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
 >f2 : <T extends { [sa]: string; [sb]: number; }>(obj: T) => void
+>   : ^ ^^^^^^^^^                               ^^   ^^ ^^^^^^^^^
 >[sa] : string
+>     : ^^^^^^
 >sa : unique symbol
+>   : ^^^^^^^^^^^^^
 >[sb] : number
+>     : ^^^^^^
 >sb : unique symbol
+>   : ^^^^^^^^^^^^^
 >obj : T
+>    : ^
 
     let { [sa]: a1, [sb]: b1, ...r1 } = obj;
 >sa : unique symbol
+>   : ^^^^^^^^^^^^^
 >a1 : string
+>   : ^^^^^^
 >sb : unique symbol
+>   : ^^^^^^^^^^^^^
 >b1 : number
+>   : ^^^^^^
 >r1 : Omit<T, unique symbol | unique symbol>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 }
 
 function f3<T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) {
 >f3 : <T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) => void
+>   : ^ ^^  ^^^^^^^^^       ^^  ^^^^^^^^^       ^^   ^^ ^^  ^^  ^^  ^^  ^^^^^^^^^
 >obj : T
+>    : ^
 >k1 : K1
+>   : ^^
 >k2 : K2
+>   : ^^
 
     let { [k1]: a1, [k2]: a2, ...r1 } = obj;
 >k1 : K1
+>   : ^^
 >a1 : T[K1]
+>   : ^^^^^
 >k2 : K2
+>   : ^^
 >a2 : T[K2]
+>   : ^^^^^
 >r1 : Omit<T, K1 | K2>
+>   : ^^^^^^^^^^^^^^^^
 >obj : T
+>    : ^
 }
 
 type Item = { a: string, b: number, c: boolean };
->Item : { a: string; b: number; c: boolean; }
+>Item : Item
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
 function f4<K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) {
 >f4 : <K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) => void
+>   : ^  ^^^^^^^^^          ^^  ^^^^^^^^^          ^^   ^^    ^^  ^^  ^^  ^^  ^^^^^^^^^
 >obj : Item
+>    : ^^^^
 >k1 : K1
+>   : ^^
 >k2 : K2
+>   : ^^
 
     let { [k1]: a1, [k2]: a2, ...r1 } = obj;
 >k1 : K1
+>   : ^^
 >a1 : Item[K1]
+>   : ^^^^^^^^
 >k2 : K2
+>   : ^^
 >a2 : Item[K2]
+>   : ^^^^^^^^
 >r1 : Omit<Item, K1 | K2>
+>   : ^^^^^^^^^^^^^^^^^^^
 >obj : Item
+>    : ^^^^
 }
 

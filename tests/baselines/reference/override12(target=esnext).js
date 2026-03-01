@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override12.ts] ////
+
 //// [override12.ts]
 class A {
     public m1(): number {
@@ -25,6 +27,7 @@ class B extends A {
 
 
 //// [override12.js]
+"use strict";
 class A {
     m1() {
         return 0;

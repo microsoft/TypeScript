@@ -1,17 +1,25 @@
-=== tests/cases/compiler/methodSignatureDeclarationEmit1.ts ===
+//// [tests/cases/compiler/methodSignatureDeclarationEmit1.ts] ////
+
+=== methodSignatureDeclarationEmit1.ts ===
 class C {
 >C : C
+>  : ^
 
   public foo(n: number): void;
 >foo : { (n: number): void; (s: string): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >n : number
+>  : ^^^^^^
 
   public foo(s: string): void;
 >foo : { (n: number): void; (s: string): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >s : string
+>  : ^^^^^^
 
   public foo(a: any): void {
 >foo : { (n: number): void; (s: string): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^      ^^^    ^^^
 >a : any
   }
 }

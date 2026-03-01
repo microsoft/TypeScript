@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThisWithImplicitThis.ts] ////
+
 //// [typeofThisWithImplicitThis.ts]
 function Test1() {
     let x: typeof this.no = 1
@@ -5,6 +7,7 @@ function Test1() {
 
 
 //// [typeofThisWithImplicitThis.js]
+"use strict";
 function Test1() {
-    var x = 1;
+    let x = 1;
 }

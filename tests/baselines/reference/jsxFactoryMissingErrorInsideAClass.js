@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryMissingErrorInsideAClass.ts] ////
+
 //// [test.tsx]
 export class C {
     factory() {

@@ -1,15 +1,22 @@
-=== tests/cases/compiler/functionWithNoBestCommonType1.ts ===
+//// [tests/cases/compiler/functionWithNoBestCommonType1.ts] ////
+
+=== functionWithNoBestCommonType1.ts ===
 function foo() {
 >foo : () => true | void
+>    : ^^^^^^^^^^^^^^^^^
 
     return true;
 >true : true
+>     : ^^^^
 
     return bar();
 >bar() : void
+>      : ^^^^
 >bar : () => void
+>    : ^^^^^^    
 }
 
 function bar(): void {
 >bar : () => void
+>    : ^^^^^^    
 }

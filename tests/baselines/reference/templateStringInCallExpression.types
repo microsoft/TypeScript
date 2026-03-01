@@ -1,11 +1,21 @@
-=== tests/cases/conformance/es6/templates/templateStringInCallExpression.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInCallExpression.ts] ////
+
+=== templateStringInCallExpression.ts ===
 `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
 >`abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`) : any
->`abc${0}abc` : string
+>                                                  : ^^^
+>`abc${0}abc` : "abc0abc"
+>             : ^^^^^^^^^
 >0 : 0
->`hello ${0} world` : string
+>  : ^
+>`hello ${0} world` : "hello 0 world"
+>                   : ^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >`   ` : "   "
->`1${2}3` : string
+>      : ^^^^^
+>`1${2}3` : "123"
+>         : ^^^^^
 >2 : 2
+>  : ^
 

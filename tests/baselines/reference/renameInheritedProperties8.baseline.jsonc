@@ -1,0 +1,42 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties8.ts ===
+// class C implements D {
+//     /*RENAME*/<|[|prop1RENAME|]: string;|>
+// }
+// 
+// interface D extends C {
+//     <|[|prop1RENAME|]: string;|>
+// }
+// 
+// var c: C;
+// c.[|prop1RENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties8.ts ===
+// class C implements D {
+//     <|[|prop1RENAME|]: string;|>
+// }
+// 
+// interface D extends C {
+//     /*RENAME*/<|[|prop1RENAME|]: string;|>
+// }
+// 
+// var c: C;
+// c.[|prop1RENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameInheritedProperties8.ts ===
+// class C implements D {
+//     <|[|prop1RENAME|]: string;|>
+// }
+// 
+// interface D extends C {
+//     <|[|prop1RENAME|]: string;|>
+// }
+// 
+// var c: C;
+// c./*RENAME*/[|prop1RENAME|];

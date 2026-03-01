@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts] ////
+
 //// [classAbstractAssignabilityConstructorFunction.ts]
 abstract class A { }
 
@@ -9,11 +11,9 @@ AAA = A; // error.
 AAA = "asdf";
 
 //// [classAbstractAssignabilityConstructorFunction.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}
 // var AA: typeof A;
 var AAA;
 // AA = A; // okay

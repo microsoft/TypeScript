@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorStaticParamName.ts] ////
+
 //// [constructorStaticParamName.ts]
 // static as constructor parameter name should only give error if 'use strict'
 
@@ -7,9 +9,8 @@ class test {
 
 
 //// [constructorStaticParamName.js]
+"use strict";
 // static as constructor parameter name should only give error if 'use strict'
-var test = /** @class */ (function () {
-    function test(static) {
-    }
-    return test;
-}());
+class test {
+    constructor(static) { }
+}

@@ -1,9 +1,9 @@
+// @target: es2015
 // @jsx: react
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
 
 // @Filename: my-component.tsx
+/// <reference path="/.lib/react.d.ts" />
 import * as React from 'react'
 
 interface MyProps {

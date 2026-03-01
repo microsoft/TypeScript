@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType1.ts] ////
+
 //// [substitutionTypeForIndexedAccessType1.ts]
 type AddPropToObject<Obj extends object, Prop extends string> = Prop extends keyof Obj
   ? Obj[Prop] extends unknown[]
@@ -6,3 +8,4 @@ type AddPropToObject<Obj extends object, Prop extends string> = Prop extends key
   : never
 
 //// [substitutionTypeForIndexedAccessType1.js]
+"use strict";

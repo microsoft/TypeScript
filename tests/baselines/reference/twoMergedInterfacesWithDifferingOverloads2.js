@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads2.ts] ////
+
 //// [twoMergedInterfacesWithDifferingOverloads2.ts]
 interface A {
     (): string;
@@ -13,7 +15,7 @@ var r = a();
 var r2 = a(1);
 var r3 = a(1, 2);
 
-module G {
+namespace G {
     interface A<T> {
         (): string;
         (x: T): T;
@@ -32,6 +34,7 @@ module G {
 }
 
 //// [twoMergedInterfacesWithDifferingOverloads2.js]
+"use strict";
 var a;
 var r = a();
 var r2 = a(1);

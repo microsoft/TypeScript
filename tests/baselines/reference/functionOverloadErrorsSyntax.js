@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts] ////
+
 //// [functionOverloadErrorsSyntax.ts]
 //Function overload signature with optional parameter followed by non-optional parameter
 function fn4a(x?: number, y: string);
@@ -12,6 +14,7 @@ function fn5() { }
 
 
 //// [functionOverloadErrorsSyntax.js]
+"use strict";
 function fn4a() { }
 function fn4b() { }
 function fn5() { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unreachableFlowAfterFinally.ts] ////
+
 //// [unreachableFlowAfterFinally.ts]
 function f() {
     let x = 100;
@@ -13,8 +15,9 @@ function f() {
 }
 
 //// [unreachableFlowAfterFinally.js]
+"use strict";
 function f() {
-    var x = 100;
+    let x = 100;
     try {
         throw "WAT";
     }

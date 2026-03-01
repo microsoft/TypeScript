@@ -1,10 +1,10 @@
-tests/cases/conformance/types/localTypes/localTypes4.ts(10,19): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/types/localTypes/localTypes4.ts(10,23): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/types/localTypes/localTypes4.ts(18,16): error TS2300: Duplicate identifier 'T'.
-tests/cases/conformance/types/localTypes/localTypes4.ts(19,19): error TS2300: Duplicate identifier 'T'.
+localTypes4.ts(10,19): error TS2304: Cannot find name 'T'.
+localTypes4.ts(10,23): error TS2304: Cannot find name 'T'.
+localTypes4.ts(18,16): error TS2300: Duplicate identifier 'T'.
+localTypes4.ts(19,19): error TS2300: Duplicate identifier 'T'.
 
 
-==== tests/cases/conformance/types/localTypes/localTypes4.ts (4 errors) ====
+==== localTypes4.ts (4 errors) ====
     function f1() {
         // Type parameters are in scope in parameters and return types
         function f<T>(x: T): T {

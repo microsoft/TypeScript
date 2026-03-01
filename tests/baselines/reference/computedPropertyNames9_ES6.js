@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames9_ES6.ts] ////
+
 //// [computedPropertyNames9_ES6.ts]
 function f(s: string): string;
 function f(n: number): number;
@@ -11,6 +13,7 @@ var v = {
 }
 
 //// [computedPropertyNames9_ES6.js]
+"use strict";
 function f(x) { }
 var v = {
     [f("")]: 0,

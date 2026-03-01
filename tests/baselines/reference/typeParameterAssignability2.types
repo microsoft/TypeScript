@@ -1,255 +1,407 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts] ////
+
+=== typeParameterAssignability2.ts ===
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 
 function foo<T, U extends T>(t: T, u: U) {
 >foo : <T, U extends T>(t: T, u: U) => void
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t; // ok
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 }
 
 function foo2<T extends U, U>(t: T, u: U) {
 >foo2 : <T extends U, U>(t: T, u: U) => void
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t; // ok
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 }
 
 function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
 >foo3 : <T extends U, U extends V, V>(t: T, u: U, v: V) => void
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t;
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     t = v; // error
 >t = v : V
+>      : ^
 >t : T
+>  : ^
 >v : V
+>  : ^
 
     v = t; // ok
 >v = t : T
+>      : ^
 >v : V
+>  : ^
 >t : T
+>  : ^
 
     u = v; // error
 >u = v : V
+>      : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     v = u; // ok
 >v = u : U
+>      : ^
 >v : V
+>  : ^
 >u : U
+>  : ^
 }
 
 function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
 >foo4 : <T extends U, U extends V, V extends Date>(t: T, u: U, v: V) => void
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = v; // error
 >t = v : V
+>      : ^
 >t : T
+>  : ^
 >v : V
+>  : ^
 
     t = new Date(); // error
 >t = new Date() : Date
+>               : ^^^^
 >t : T
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     u = t;
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     u = v; // error
 >u = v : V
+>      : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     u = new Date(); // error
 >u = new Date() : Date
+>               : ^^^^
 >u : U
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     v = t;
 >v = t : T
+>      : ^
 >v : V
+>  : ^
 >t : T
+>  : ^
 
     v = u;
 >v = u : U
+>      : ^
 >v : V
+>  : ^
 >u : U
+>  : ^
 
     v = new Date(); // ok
 >v = new Date() : Date
+>               : ^^^^
 >v : V
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     var d: Date;
 >d : Date
+>  : ^^^^
 
     d = t; // ok
 >d = t : T
+>      : ^
 >d : Date
+>  : ^^^^
 >t : T
+>  : ^
 
     d = u; // ok
 >d = u : U
+>      : ^
 >d : Date
+>  : ^^^^
 >u : U
+>  : ^
 
     d = v; // ok
 >d = v : V
+>      : ^
 >d : Date
+>  : ^^^^
 >v : V
+>  : ^
 }
 
 // same as foo4 with different type parameter ordering
 function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
 >foo5 : <V extends Date, U extends V, T extends U>(t: T, u: U, v: V) => void
+>     : ^ ^^^^^^^^^    ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = v; // error
 >t = v : V
+>      : ^
 >t : T
+>  : ^
 >v : V
+>  : ^
 
     t = new Date(); // error
 >t = new Date() : Date
+>               : ^^^^
 >t : T
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     u = t;
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     u = v; // error
 >u = v : V
+>      : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     u = new Date(); // error
 >u = new Date() : Date
+>               : ^^^^
 >u : U
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     v = t;
 >v = t : T
+>      : ^
 >v : V
+>  : ^
 >t : T
+>  : ^
 
     v = u;
 >v = u : U
+>      : ^
 >v : V
+>  : ^
 >u : U
+>  : ^
 
     v = new Date(); // ok
 >v = new Date() : Date
+>               : ^^^^
 >v : V
+>  : ^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
     var d: Date;
 >d : Date
+>  : ^^^^
 
     d = t; // ok
 >d = t : T
+>      : ^
 >d : Date
+>  : ^^^^
 >t : T
+>  : ^
 
     d = u; // ok
 >d = u : U
+>      : ^
 >d : Date
+>  : ^^^^
 >u : U
+>  : ^
 
     d = v; // ok
 >d = v : V
+>      : ^
 >d : Date
+>  : ^^^^
 >v : V
+>  : ^
 }
 
 function foo6<T extends U, U, V>(t: T, u: U, v: V) {
 >foo6 : <T extends U, U, V>(t: T, u: U, v: V) => void
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = v; // error
 >t = v : V
+>      : ^
 >t : T
+>  : ^
 >v : V
+>  : ^
 
     u = t; // ok
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     u = v; // error
 >u = v : V
+>      : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     v = t; // error
 >v = t : T
+>      : ^
 >v : V
+>  : ^
 >t : T
+>  : ^
 
     v = u; // error
 >v = u : U
+>      : ^
 >v : V
+>  : ^
 >u : U
+>  : ^
 }

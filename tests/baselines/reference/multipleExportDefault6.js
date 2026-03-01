@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault6.ts] ////
+
 //// [multipleExportDefault6.ts]
 export default {
     lol: 1
@@ -9,10 +11,10 @@ export default {
 
 //// [multipleExportDefault6.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     lol: 1
 };
-exports["default"] = {
+exports.default = {
     lol: 2
 };

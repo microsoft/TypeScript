@@ -1,4 +1,5 @@
-﻿module EmptyTypes {
+﻿// @target: es2015
+namespace EmptyTypes {
     interface iface { }
     class base implements iface { }
     class base2 implements iface { }
@@ -51,7 +52,7 @@
     }
 }
 
-module NonEmptyTypes {
+namespace NonEmptyTypes {
     interface iface { x: string; }
     class base implements iface { x: string; y: string; }
     class base2 implements iface { x: string; z: string; }

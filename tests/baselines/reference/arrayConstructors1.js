@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayConstructors1.ts] ////
+
 //// [arrayConstructors1.ts]
 var x: string[];
 x = new Array(1);
@@ -10,6 +12,7 @@ y = new Array(1,2);
 y = new Array<number>(1, 2);
 
 //// [arrayConstructors1.js]
+"use strict";
 var x;
 x = new Array(1);
 x = new Array('hi', 'bye');

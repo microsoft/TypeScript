@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileForInterfaceWithRestParams.ts] ////
+
 //// [declFileForInterfaceWithRestParams.ts]
 interface I {
     foo(...x): typeof x;
@@ -6,6 +8,7 @@ interface I {
 }
 
 //// [declFileForInterfaceWithRestParams.js]
+"use strict";
 
 
 //// [declFileForInterfaceWithRestParams.d.ts]

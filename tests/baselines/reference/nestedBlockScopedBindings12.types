@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedBlockScopedBindings12.ts ===
+//// [tests/cases/compiler/nestedBlockScopedBindings12.ts] ////
+
+=== nestedBlockScopedBindings12.ts ===
 var x;
 >x : any
 {
@@ -7,8 +9,10 @@ var x;
 
     x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
 }
 
 var y;
@@ -16,17 +20,21 @@ var y;
 
 switch (1) {
 >1 : 1
+>  : ^
 
     case 1:
 >1 : 1
+>  : ^
 
         let y;
 >y : any
 
         y = 1;
 >y = 1 : 1
+>      : ^
 >y : any
 >1 : 1
+>  : ^
 
         break;
 }

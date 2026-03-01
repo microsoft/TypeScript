@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern20.ts] ////
+
 //// [iterableArrayPattern20.ts]
 class Bar { x }
 class Foo extends Bar { y }
@@ -18,6 +20,7 @@ function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
 fun(...new FooArrayIterator);
 
 //// [iterableArrayPattern20.js]
+"use strict";
 class Bar {
 }
 class Foo extends Bar {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveBaseConstructorCreation2.ts] ////
+
 //// [recursiveBaseConstructorCreation2.ts]
 declare class base
 {
@@ -15,4 +17,5 @@ var bar = new xyz(); // Error: Invalid 'new' expression.
 
 
 //// [recursiveBaseConstructorCreation2.js]
+"use strict";
 var bar = new xyz(); // Error: Invalid 'new' expression.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/concatError.ts] ////
+
 //// [concatError.ts]
 var n1: number[];
 /*
@@ -32,6 +34,7 @@ c = c.m(cc);
 */
 
 //// [concatError.js]
+"use strict";
 var n1;
 /*
 interface Array<T> {

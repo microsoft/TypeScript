@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumBasics.ts] ////
+
 //// [enumBasics.ts]
 // Enum without initializers have first member = 0 and successive members = N + 1
 enum E1 {
@@ -81,6 +83,7 @@ var doPropagate = [
 
 
 //// [enumBasics.js]
+"use strict";
 // Enum without initializers have first member = 0 and successive members = N + 1
 var E1;
 (function (E1) {

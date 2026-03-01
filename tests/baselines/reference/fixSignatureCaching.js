@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/fixSignatureCaching.ts] ////
+
 //// [fixSignatureCaching.ts]
 // Repro from #10697
 
@@ -990,6 +992,7 @@ define(function () {
 
 
 //// [fixSignatureCaching.js]
+"use strict";
 // Repro from #10697
 (function (define, undefined) {
     define(function () {

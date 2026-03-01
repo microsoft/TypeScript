@@ -1,7 +1,0 @@
-{
-    "compilerOptions": {
-        "strict": true,
-        "types": [],
-        "lib": ["es6"]
-    }
-}

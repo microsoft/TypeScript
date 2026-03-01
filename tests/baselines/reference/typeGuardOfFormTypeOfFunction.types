@@ -1,13 +1,19 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts] ////
+
+=== typeGuardOfFormTypeOfFunction.ts ===
 function f1(x: any) {
 >f1 : (x: any) => void
+>   : ^ ^^   ^^^^^^^^^
 >x : any
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // any
 >x : any
@@ -16,137 +22,200 @@ function f1(x: any) {
 
 function f2(x: unknown) {
 >f2 : (x: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
+>  : ^^^^^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // Function
 >x : Function
+>  : ^^^^^^^^
     }
 }
 
 function f3(x: {}) {
 >f3 : (x: {}) => void
+>   : ^ ^^  ^^^^^^^^^
 >x : {}
+>  : ^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : {}
+>  : ^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // Function
 >x : Function
+>  : ^^^^^^^^
     }
 }
 
 function f4<T>(x: T) {
 >f4 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // T & Function
 >x : T & Function
+>  : ^^^^^^^^^^^^
     }
 }
 
 function f5(x: { s: string }) {
->f5 : (x: {    s: string;}) => void
+>f5 : (x: { s: string; }) => void
+>   : ^ ^^              ^^^^^^^^^
 >x : { s: string; }
+>  : ^^^^^      ^^^
 >s : string
+>  : ^^^^^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; }
+>  : ^^^^^      ^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // never
 >x : never
+>  : ^^^^^
     }
 }
 
 function f6(x: () => string) {
 >f6 : (x: () => string) => void
+>   : ^ ^^            ^^^^^^^^^
 >x : () => string
+>  : ^^^^^^      
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : () => string
+>  : ^^^^^^      
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // () => string
 >x : () => string
+>  : ^^^^^^      
     }
 }
 
 function f10(x: string | (() => string)) {
 >f10 : (x: string | (() => string)) => void
+>    : ^ ^^                       ^^^^^^^^^
 >x : string | (() => string)
+>  : ^^^^^^^^^^^^^^^^      ^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | (() => string)
+>  : ^^^^^^^^^^^^^^^^      ^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // () => string
 >x : () => string
+>  : ^^^^^^      
     }
     else {
         x;  // string
 >x : string
+>  : ^^^^^^
     }
 }
 
 function f11(x: { s: string } | (() => string)) {
->f11 : (x: {    s: string;} | (() => string)) => void
+>f11 : (x: { s: string; } | (() => string)) => void
+>    : ^ ^^                               ^^^^^^^^^
 >x : { s: string; } | (() => string)
+>  : ^^^^^      ^^^^^^^^^^^^^      ^
 >s : string
+>  : ^^^^^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; } | (() => string)
+>  : ^^^^^      ^^^^^^^^^^^^^      ^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // () => string
 >x : () => string
+>  : ^^^^^^      
     }
     else {
         x;  // { s: string }
 >x : { s: string; }
+>  : ^^^^^      ^^^
     }
 }
 
 function f12(x: { s: string } | { n: number }) {
->f12 : (x: {    s: string;} | {    n: number;}) => void
+>f12 : (x: { s: string; } | { n: number; }) => void
+>    : ^ ^^                               ^^^^^^^^^
 >x : { s: string; } | { n: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
+>                        : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { s: string; } | { n: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 
         x;  // never
 >x : never
+>  : ^^^^^
     }
     else {
         x;  // { s: string } | { n: number }
 >x : { s: string; } | { n: number; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
     }
 }
 
@@ -154,31 +223,48 @@ function f12(x: { s: string } | { n: number }) {
 
 function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 >f100 : <T, K extends keyof T>(obj: T, keys: K[]) => void
+>     : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^   ^^^^^    
 >obj : T
+>    : ^
 >keys : K[]
+>     : ^^^
 
     for (const k of keys) {
 >k : K
+>  : ^
 >keys : K[]
+>     : ^^^
 
         const item = obj[k];
 >item : T[K]
+>     : ^^^^
 >obj[k] : T[K]
+>       : ^^^^
 >obj : T
+>    : ^
 >k : K
+>  : ^
 
         if (typeof item == 'function')
 >typeof item == 'function' : boolean
+>                          : ^^^^^^^
 >typeof item : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : T[K]
+>     : ^^^^
 >'function' : "function"
+>           : ^^^^^^^^^^
 
             item.call(obj);
 >item.call(obj) : any
 >item.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >item : T[K] & Function
+>     : ^^^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 >obj : T
+>    : ^
     }
 }
 
@@ -186,36 +272,54 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 
 function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
 >configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
+>               : ^ ^^^^^^^^^      ^^       ^^                                          ^^^^^^^^^
 >reducer : Record<keyof S, () => void> | (() => void)
+>        : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 
     let rootReducer: () => void;
 >rootReducer : () => void
+>            : ^^^^^^    
 
     if (typeof reducer === 'function') {
 >typeof reducer === 'function' : boolean
+>                              : ^^^^^^^
 >typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >reducer : Record<keyof S, () => void> | (() => void)
+>        : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 >'function' : "function"
+>           : ^^^^^^^^^^
 
         rootReducer = reducer;
 >rootReducer = reducer : () => void
+>                      : ^^^^^^    
 >rootReducer : () => void
+>            : ^^^^^^    
 >reducer : () => void
+>        : ^^^^^^    
     }
 }
 
 function f101(x: string | Record<string, any>) {
 >f101 : (x: string | Record<string, any>) => any
+>     : ^ ^^                            ^^^^^^^^
 >x : string | Record<string, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return typeof x === "object" && x.anything;
 >typeof x === "object" && x.anything : any
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | Record<string, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"object" : "object"
+>         : ^^^^^^^^
 >x.anything : any
 >x : Record<string, any>
+>  : ^^^^^^^^^^^^^^^^^^^
 >anything : any
+>         : ^^^
 }
 

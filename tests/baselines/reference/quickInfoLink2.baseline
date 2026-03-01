@@ -1,3 +1,19 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink2.js ===
+// /**
+//  * @typedef AdditionalWallabyConfig Additional valid Wallaby config properties
+//             ^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | type AdditionalWallabyConfig = {
+// |     autoDetect: boolean;
+// | }
+// | Additional valid Wallaby config properties
+// | that aren't defined in {@link IWallabyConfig }.
+// | ----------------------------------------------------------------------
+//  * that aren't defined in {@link IWallabyConfig}.
+//  * @property {boolean} autoDetect
+//  */
+
 [
   {
     "marker": {
@@ -5,7 +21,7 @@
       "position": 39,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {

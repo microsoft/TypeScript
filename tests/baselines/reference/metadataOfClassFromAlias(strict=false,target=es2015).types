@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/metadataOfClassFromAlias.ts] ////
+
+=== auxiliary.ts ===
+export class SomeClass {
+>SomeClass : SomeClass
+>          : ^^^^^^^^^
+
+    field: string;
+>field : string
+>      : ^^^^^^
+}
+
+=== testA.ts ===
+import { SomeClass } from './auxiliary';
+>SomeClass : typeof SomeClass
+>          : ^^^^^^^^^^^^^^^^
+
+function annotation(): PropertyDecorator {
+>annotation : () => PropertyDecorator
+>           : ^^^^^^                 
+
+    return (target: any): void => { };
+>(target: any): void => { } : (target: any) => void
+>                           : ^      ^^   ^^^^^    
+>target : any
+}
+export class ClassA {
+>ClassA : ClassA
+>       : ^^^^^^
+
+    @annotation() aaa: SomeClass;
+>annotation() : PropertyDecorator
+>             : ^^^^^^^^^^^^^^^^^
+>annotation : () => PropertyDecorator
+>           : ^^^^^^                 
+>aaa : SomeClass
+>    : ^^^^^^^^^
+}
+
+=== testB.ts ===
+import { SomeClass } from './auxiliary';
+>SomeClass : typeof SomeClass
+>          : ^^^^^^^^^^^^^^^^
+
+function annotation(): PropertyDecorator {
+>annotation : () => PropertyDecorator
+>           : ^^^^^^                 
+
+    return (target: any): void => { };
+>(target: any): void => { } : (target: any) => void
+>                           : ^      ^^   ^^^^^    
+>target : any
+}
+export class ClassB {
+>ClassB : ClassB
+>       : ^^^^^^
+
+    @annotation() bbb: SomeClass | null;
+>annotation() : PropertyDecorator
+>             : ^^^^^^^^^^^^^^^^^
+>annotation : () => PropertyDecorator
+>           : ^^^^^^                 
+>bbb : SomeClass
+>    : ^^^^^^^^^
+}

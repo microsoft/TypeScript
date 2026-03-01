@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypes3.ts] ////
+
 //// [literalTypes3.ts]
 function f1(s: string) {
     if (s === "foo") {
@@ -65,6 +67,7 @@ function f8(x: number | "foo" | "bar") {
 }
 
 //// [literalTypes3.js]
+"use strict";
 function f1(s) {
     if (s === "foo") {
         s; // "foo"

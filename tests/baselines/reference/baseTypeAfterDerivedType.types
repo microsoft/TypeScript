@@ -1,27 +1,38 @@
-=== tests/cases/compiler/baseTypeAfterDerivedType.ts ===
+//// [tests/cases/compiler/baseTypeAfterDerivedType.ts] ////
+
+=== baseTypeAfterDerivedType.ts ===
 interface Derived extends Base {
     method(...args: any[]): void;
 >method : (...args: any[]) => void
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
+>     : ^^^^^
 }
 
 interface Base {
     method(...args: any[]): void;
 >method : (...args: any[]) => void
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
+>     : ^^^^^
 }
 
 class Derived2 implements Base2 {
 >Derived2 : Derived2
+>         : ^^^^^^^^
 
     method(...args: any[]): void { }
 >method : (...args: any[]) => void
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
+>     : ^^^^^
 }
 
 interface Base2 {
     method(...args: any[]): void;
 >method : (...args: any[]) => void
+>       : ^^^^    ^^     ^^^^^    
 >args : any[]
+>     : ^^^^^
 }
 

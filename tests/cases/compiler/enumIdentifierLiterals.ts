@@ -1,3 +1,4 @@
+// @target: es2015
 enum Nums {
     1.0,
     11e-1,

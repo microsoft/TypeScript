@@ -1,7 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' does not exist on type 'RegExp'.
+parserRegularExpressionDivideAmbiguity3.ts(1,16): error TS1499: Unknown regular expression flag.
+parserRegularExpressionDivideAmbiguity3.ts(1,18): error TS2339: Property 'foo' does not exist on type 'RegExp'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity3.ts (1 errors) ====
+==== parserRegularExpressionDivideAmbiguity3.ts (2 errors) ====
     if (1) /regexp/a.foo();
+                   ~
+!!! error TS1499: Unknown regular expression flag.
                      ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'RegExp'.

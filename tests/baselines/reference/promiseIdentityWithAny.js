@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseIdentityWithAny.ts] ////
+
 //// [promiseIdentityWithAny.ts]
 export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
@@ -11,8 +13,7 @@ var x: IPromise<string, number>;
 var x: Promise<string, boolean>;
 
 //// [promiseIdentityWithAny.js]
-"use strict";
-exports.__esModule = true;
 // Should be ok because signature type parameters get erased to any
 var x;
 var x;
+export {};

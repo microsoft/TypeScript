@@ -1,0 +1,258 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// <|interface [|IFoo|] { method1(): number; }|>
+// 
+// class Foo implements IFoo {
+//     public method1(): number { return 0; }
+// }
+// 
+// enum Enum { value1, value2 };
+// 
+// class Bar {
+//     public _interface: IFo/*GOTO DEF*/o = new Foo();
+//     public _class: Foo = new Foo();
+//     public _list: IFoo[]=[];
+//     public _enum: Enum = Enum.value1;
+// --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "IFoo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// <|interface [|IFoo|] { method1(): number; }|>
+// 
+// class Foo implements IFoo {
+//     public method1(): number { return 0; }
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+// class Bar {
+//     public _interface: IFoo = new Foo();
+//     public _class: Foo = new Foo();
+//     public _list: IF/*GOTO DEF*/oo[]=[];
+//     public _enum: Enum = Enum.value1;
+//     public _self: Bar;
+// 
+// --- (line: 16) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "IFoo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// <|interface [|IFoo|] { method1(): number; }|>
+// 
+// class Foo implements IFoo {
+//     public method1(): number { return 0; }
+// --- (line: 5) skipped ---
+
+// --- (line: 12) skipped ---
+//     public _enum: Enum = Enum.value1;
+//     public _self: Bar;
+// 
+//     constructor(public _inConstructor: IFo/*GOTO DEF*/o) {
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "IFoo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// interface IFoo { method1(): number; }
+// 
+// <|class [|Foo|] implements IFoo {
+//     public method1(): number { return 0; }
+// }|>
+// 
+// enum Enum { value1, value2 };
+// 
+// class Bar {
+//     public _interface: IFoo = new Foo();
+//     public _class: Fo/*GOTO DEF*/o = new Foo();
+//     public _list: IFoo[]=[];
+//     public _enum: Enum = Enum.value1;
+//     public _self: Bar;
+// --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// interface IFoo { method1(): number; }
+// 
+// <|class [|Foo|] implements IFoo {
+//     public method1(): number { return 0; }
+// }|>
+// 
+// enum Enum { value1, value2 };
+// 
+// class Bar {
+//     public _interface: IFoo = new Fo/*GOTO DEF*/o();
+//     public _class: Foo = new Foo();
+//     public _list: IFoo[]=[];
+//     public _enum: Enum = Enum.value1;
+// --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// --- (line: 3) skipped ---
+//     public method1(): number { return 0; }
+// }
+// 
+// <|enum [|Enum|] { value1, value2 }|>;
+// 
+// class Bar {
+//     public _interface: IFoo = new Foo();
+//     public _class: Foo = new Foo();
+//     public _list: IFoo[]=[];
+//     public _enum: E/*GOTO DEF*/num = Enum.value1;
+//     public _self: Bar;
+// 
+//     constructor(public _inConstructor: IFoo) {
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "enum",
+    "name": "Enum",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// --- (line: 3) skipped ---
+//     public method1(): number { return 0; }
+// }
+// 
+// <|enum [|Enum|] { value1, value2 }|>;
+// 
+// class Bar {
+//     public _interface: IFoo = new Foo();
+//     public _class: Foo = new Foo();
+//     public _list: IFoo[]=[];
+//     public _enum: Enum = En/*GOTO DEF*/um.value1;
+//     public _self: Bar;
+// 
+//     constructor(public _inConstructor: IFoo) {
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "enum",
+    "name": "Enum",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
+// --- (line: 5) skipped ---
+// 
+// enum Enum { value1, value2 };
+// 
+// <|class [|Bar|] {
+//     public _interface: IFoo = new Foo();
+//     public _class: Foo = new Foo();
+//     public _list: IFoo[]=[];
+//     public _enum: Enum = Enum.value1;
+//     public _self: Ba/*GOTO DEF*/r;
+// 
+//     constructor(public _inConstructor: IFoo) {
+//     }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Bar",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

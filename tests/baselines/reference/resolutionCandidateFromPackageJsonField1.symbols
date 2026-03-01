@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField1.ts] ////
+
+=== @angular/core/index.ts ===
+
+export {};
+
+=== @angular/core/testing/test.ts ===
+
+import "@angular/core";
+

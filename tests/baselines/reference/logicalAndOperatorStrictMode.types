@@ -1,422 +1,699 @@
-=== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts] ////
+
+=== logicalAndOperatorStrictMode.ts ===
 const a = [0];
 >a : number[]
+>  : ^^^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 
 const s = "";
 >s : ""
+>  : ^^
 >"" : ""
+>   : ^^
 
 const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
 const b = false;
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 const v: void = undefined;
 >v : void
+>  : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 const u = undefined;
 >u : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 const n = null;
 >n : null
->null : null
+>  : ^^^^
 
 const z = s || x || u;
 >z : undefined
+>  : ^^^^^^^^^
 >s || x || u : undefined
+>            : ^^^^^^^^^
 >s || x : 0
+>       : ^
 >s : ""
+>  : ^^
 >x : 0
+>  : ^
 >u : undefined
+>  : ^^^^^^^^^
 
 const a1 = a && a;
 >a1 : number[]
+>   : ^^^^^^^^
 >a && a : number[]
+>       : ^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 const a2 = a && s;
 >a2 : ""
+>   : ^^
 >a && s : ""
+>       : ^^
 >a : number[]
+>  : ^^^^^^^^
 >s : ""
+>  : ^^
 
 const a3 = a && x;
 >a3 : 0
+>   : ^
 >a && x : 0
+>       : ^
 >a : number[]
+>  : ^^^^^^^^
 >x : 0
+>  : ^
 
 const a4 = a && b;
 >a4 : false
+>   : ^^^^^
 >a && b : false
+>       : ^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >b : false
+>  : ^^^^^
 
 const a5 = a && v;
 >a5 : void
+>   : ^^^^
 >a && v : void
+>       : ^^^^
 >a : number[]
+>  : ^^^^^^^^
 >v : void
+>  : ^^^^
 
 const a6 = a && u;
 >a6 : undefined
+>   : ^^^^^^^^^
 >a && u : undefined
+>       : ^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 
 const a7 = a && n;
 >a7 : null
+>   : ^^^^
 >a && n : null
+>       : ^^^^
 >a : number[]
+>  : ^^^^^^^^
 >n : null
+>  : ^^^^
 
 const a8 = a && z;
 >a8 : undefined
+>   : ^^^^^^^^^
 >a && z : undefined
+>       : ^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 
 const s1 = s && a;
 >s1 : ""
+>   : ^^
 >s && a : ""
+>       : ^^
 >s : ""
+>  : ^^
 >a : number[]
+>  : ^^^^^^^^
 
 const s2 = s && s;
 >s2 : ""
+>   : ^^
 >s && s : ""
+>       : ^^
 >s : ""
+>  : ^^
 >s : never
+>  : ^^^^^
 
 const s3 = s && x;
 >s3 : ""
+>   : ^^
 >s && x : ""
+>       : ^^
 >s : ""
+>  : ^^
 >x : 0
+>  : ^
 
 const s4 = s && b;
 >s4 : ""
+>   : ^^
 >s && b : ""
+>       : ^^
 >s : ""
+>  : ^^
 >b : false
+>  : ^^^^^
 
 const s5 = s && v;
 >s5 : ""
+>   : ^^
 >s && v : ""
+>       : ^^
 >s : ""
+>  : ^^
 >v : void
+>  : ^^^^
 
 const s6 = s && u;
 >s6 : ""
+>   : ^^
 >s && u : ""
+>       : ^^
 >s : ""
+>  : ^^
 >u : undefined
+>  : ^^^^^^^^^
 
 const s7 = s && n;
 >s7 : ""
+>   : ^^
 >s && n : ""
+>       : ^^
 >s : ""
+>  : ^^
 >n : null
+>  : ^^^^
 
 const s8 = s && z;
 >s8 : ""
+>   : ^^
 >s && z : ""
+>       : ^^
 >s : ""
+>  : ^^
 >z : undefined
+>  : ^^^^^^^^^
 
 const x1 = x && a;
 >x1 : 0
+>   : ^
 >x && a : 0
+>       : ^
 >x : 0
+>  : ^
 >a : number[]
+>  : ^^^^^^^^
 
 const x2 = x && s;
 >x2 : 0
+>   : ^
 >x && s : 0
+>       : ^
 >x : 0
+>  : ^
 >s : ""
+>  : ^^
 
 const x3 = x && x;
 >x3 : 0
+>   : ^
 >x && x : 0
+>       : ^
 >x : 0
+>  : ^
 >x : never
+>  : ^^^^^
 
 const x4 = x && b;
 >x4 : 0
+>   : ^
 >x && b : 0
+>       : ^
 >x : 0
+>  : ^
 >b : false
+>  : ^^^^^
 
 const x5 = x && v;
 >x5 : 0
+>   : ^
 >x && v : 0
+>       : ^
 >x : 0
+>  : ^
 >v : void
+>  : ^^^^
 
 const x6 = x && u;
 >x6 : 0
+>   : ^
 >x && u : 0
+>       : ^
 >x : 0
+>  : ^
 >u : undefined
+>  : ^^^^^^^^^
 
 const x7 = x && n;
 >x7 : 0
+>   : ^
 >x && n : 0
+>       : ^
 >x : 0
+>  : ^
 >n : null
+>  : ^^^^
 
 const x8 = x && z;
 >x8 : 0
+>   : ^
 >x && z : 0
+>       : ^
 >x : 0
+>  : ^
 >z : undefined
+>  : ^^^^^^^^^
 
 const b1 = b && a;
 >b1 : false
+>   : ^^^^^
 >b && a : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 const b2 = b && s;
 >b2 : false
+>   : ^^^^^
 >b && s : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >s : ""
+>  : ^^
 
 const b3 = b && x;
 >b3 : false
+>   : ^^^^^
 >b && x : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >x : 0
+>  : ^
 
 const b4 = b && b;
 >b4 : false
+>   : ^^^^^
 >b && b : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >b : never
+>  : ^^^^^
 
 const b5 = b && v;
 >b5 : false
+>   : ^^^^^
 >b && v : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >v : void
+>  : ^^^^
 
 const b6 = b && u;
 >b6 : false
+>   : ^^^^^
 >b && u : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 
 const b7 = b && n;
 >b7 : false
+>   : ^^^^^
 >b && n : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >n : null
+>  : ^^^^
 
 const b8 = b && z;
 >b8 : false
+>   : ^^^^^
 >b && z : false
+>       : ^^^^^
 >b : false
+>  : ^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 
 const v1 = v && a;
 >v1 : void
+>   : ^^^^
 >v && a : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 const v2 = v && s;
 >v2 : void
+>   : ^^^^
 >v && s : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >s : ""
+>  : ^^
 
 const v3 = v && x;
 >v3 : void
+>   : ^^^^
 >v && x : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >x : 0
+>  : ^
 
 const v4 = v && b;
 >v4 : void
+>   : ^^^^
 >v && b : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >b : false
+>  : ^^^^^
 
 const v5 = v && v;
 >v5 : void
+>   : ^^^^
 >v && v : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >v : never
+>  : ^^^^^
 
 const v6 = v && u;
 >v6 : void
+>   : ^^^^
 >v && u : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >u : undefined
+>  : ^^^^^^^^^
 
 const v7 = v && n;
 >v7 : void
+>   : ^^^^
 >v && n : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >n : null
+>  : ^^^^
 
 const v8 = v && z;
 >v8 : void
+>   : ^^^^
 >v && z : void
+>       : ^^^^
 >v : void
+>  : ^^^^
 >z : undefined
+>  : ^^^^^^^^^
 
 const u1 = u && a;
 >u1 : undefined
+>   : ^^^^^^^^^
 >u && a : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 const u2 = u && s;
 >u2 : undefined
+>   : ^^^^^^^^^
 >u && s : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >s : ""
+>  : ^^
 
 const u3 = u && x;
 >u3 : undefined
+>   : ^^^^^^^^^
 >u && x : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >x : 0
+>  : ^
 
 const u4 = u && b;
 >u4 : undefined
+>   : ^^^^^^^^^
 >u && b : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >b : false
+>  : ^^^^^
 
 const u5 = u && v;
 >u5 : undefined
+>   : ^^^^^^^^^
 >u && v : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >v : void
+>  : ^^^^
 
 const u6 = u && u;
 >u6 : undefined
+>   : ^^^^^^^^^
 >u && u : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >u : never
+>  : ^^^^^
 
 const u7 = u && n;
 >u7 : undefined
+>   : ^^^^^^^^^
 >u && n : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >n : null
+>  : ^^^^
 
 const u8 = u && z;
 >u8 : undefined
+>   : ^^^^^^^^^
 >u && z : undefined
+>       : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 
 const n1 = n && a;
 >n1 : null
+>   : ^^^^
 >n && a : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 const n2 = n && s;
 >n2 : null
+>   : ^^^^
 >n && s : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >s : ""
+>  : ^^
 
 const n3 = n && x;
 >n3 : null
+>   : ^^^^
 >n && x : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >x : 0
+>  : ^
 
 const n4 = n && b;
 >n4 : null
+>   : ^^^^
 >n && b : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >b : false
+>  : ^^^^^
 
 const n5 = n && v;
 >n5 : null
+>   : ^^^^
 >n && v : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >v : void
+>  : ^^^^
 
 const n6 = n && u;
 >n6 : null
+>   : ^^^^
 >n && u : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >u : undefined
+>  : ^^^^^^^^^
 
 const n7 = n && n;
 >n7 : null
+>   : ^^^^
 >n && n : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >n : never
+>  : ^^^^^
 
 const n8 = n && z;
 >n8 : null
+>   : ^^^^
 >n && z : null
+>       : ^^^^
 >n : null
+>  : ^^^^
 >z : undefined
+>  : ^^^^^^^^^
 
 const z1 = z && a;
 >z1 : undefined
+>   : ^^^^^^^^^
 >z && a : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 const z2 = z && s;
 >z2 : undefined
+>   : ^^^^^^^^^
 >z && s : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >s : ""
+>  : ^^
 
 const z3 = z && x;
 >z3 : undefined
+>   : ^^^^^^^^^
 >z && x : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >x : 0
+>  : ^
 
 const z4 = z && b;
 >z4 : undefined
+>   : ^^^^^^^^^
 >z && b : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >b : false
+>  : ^^^^^
 
 const z5 = z && v;
 >z5 : undefined
+>   : ^^^^^^^^^
 >z && v : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >v : void
+>  : ^^^^
 
 const z6 = z && u;
 >z6 : undefined
+>   : ^^^^^^^^^
 >z && u : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >u : undefined
+>  : ^^^^^^^^^
 
 const z7 = z && n;
 >z7 : undefined
+>   : ^^^^^^^^^
 >z && n : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >n : null
+>  : ^^^^
 
 const z8 = z && z;
 >z8 : undefined
+>   : ^^^^^^^^^
 >z && z : undefined
+>       : ^^^^^^^^^
 >z : undefined
+>  : ^^^^^^^^^
 >z : never
+>  : ^^^^^
 

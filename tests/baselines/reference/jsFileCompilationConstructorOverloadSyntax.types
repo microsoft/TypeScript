@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsFileCompilationConstructorOverloadSyntax.ts] ////
+
+=== a.js ===
+class A {
+>A : A
+>  : ^
+
+  constructor();
+}
+

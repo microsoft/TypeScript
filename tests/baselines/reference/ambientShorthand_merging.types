@@ -1,11 +1,15 @@
-=== tests/cases/conformance/ambient/user.ts ===
+//// [tests/cases/conformance/ambient/ambientShorthand_merging.ts] ////
+
+=== user.ts ===
 ///<reference path="declarations1.d.ts" />
 ///<reference path="declarations1.d.ts" />
 import foo, {bar} from "foo";
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 
-=== tests/cases/conformance/ambient/declarations1.d.ts ===
+=== declarations1.d.ts ===
 declare module "foo";
 >"foo" : any
 

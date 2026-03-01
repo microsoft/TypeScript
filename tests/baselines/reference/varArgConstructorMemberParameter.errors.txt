@@ -1,7 +1,7 @@
-tests/cases/compiler/varArgConstructorMemberParameter.ts(10,18): error TS1317: A parameter property cannot be declared using a rest parameter.
+varArgConstructorMemberParameter.ts(10,18): error TS1317: A parameter property cannot be declared using a rest parameter.
 
 
-==== tests/cases/compiler/varArgConstructorMemberParameter.ts (1 errors) ====
+==== varArgConstructorMemberParameter.ts (1 errors) ====
     class Foo1 {
         constructor (...args: string[]) { }
     }

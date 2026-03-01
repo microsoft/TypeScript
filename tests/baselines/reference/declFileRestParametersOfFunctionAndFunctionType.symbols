@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
+//// [tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts] ////
+
+=== declFileRestParametersOfFunctionAndFunctionType.ts ===
 function f1(...args) { }
 >f1 : Symbol(f1, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 0, 0))
 >args : Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 0, 12))

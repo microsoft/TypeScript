@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumNegativeLiteral1.ts] ////
+
 //// [enumNegativeLiteral1.ts]
 enum E {
     a = -5, b, c
@@ -5,6 +7,7 @@ enum E {
 
 
 //// [enumNegativeLiteral1.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = -5] = "a";

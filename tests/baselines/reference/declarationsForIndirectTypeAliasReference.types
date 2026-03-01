@@ -1,62 +1,86 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/declarationsForIndirectTypeAliasReference.ts] ////
+
+=== b.ts ===
 export {
     Hash,
 >Hash : any
+>     : ^^^
 
     StringHash, StringHash2
 >StringHash : any
+>           : ^^^
 >StringHash2 : any
+>            : ^^^
 
 };
 
 interface Hash<T> {
     [key: string]: T;
 >key : string
+>    : ^^^^^^
 }
 
 type StringHash = Hash<string>;
->StringHash : Hash<string>
+>StringHash : StringHash
+>           : ^^^^^^^^^^
 
 interface StringHash2 extends Hash<string> {}
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import {StringHash, StringHash2} from "./b";
 >StringHash : any
+>           : ^^^
 >StringHash2 : any
+>            : ^^^
 
 export {
     doSome
 >doSome : (arg1: string, arg2?: StringHash, arg3?: StringHash2) => void
+>       : ^    ^^      ^^    ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 const MAP: StringHash = {
 >MAP : StringHash
+>    : ^^^^^^^^^^
 >{    a: "a"} : { a: string; }
+>             : ^^^^^^^^^^^^^^
 
     a: "a"
 >a : string
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
 };
 
 const MAP2: StringHash2 = {
 >MAP2 : StringHash2
+>     : ^^^^^^^^^^^
 >{    a: "a"} : { a: string; }
+>             : ^^^^^^^^^^^^^^
 
     a: "a"
 >a : string
+>  : ^^^^^^
 >"a" : "a"
+>    : ^^^
 
 };
 
 function doSome(arg1: string,
 >doSome : (arg1: string, arg2?: StringHash, arg3?: StringHash2) => void
+>       : ^    ^^      ^^    ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string
+>     : ^^^^^^
 
                 arg2 = MAP,
 >arg2 : StringHash
+>     : ^^^^^^^^^^
 >MAP : StringHash
+>    : ^^^^^^^^^^
 
                 arg3 = MAP2) {
 >arg3 : StringHash2
+>     : ^^^^^^^^^^^
 >MAP2 : StringHash2
+>     : ^^^^^^^^^^^
 }

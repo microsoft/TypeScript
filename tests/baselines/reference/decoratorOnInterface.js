@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts] ////
+
 //// [decoratorOnInterface.ts]
 declare function dec<T>(target: T): T;
 
@@ -6,3 +8,4 @@ interface I {
 }
 
 //// [decoratorOnInterface.js]
+"use strict";

@@ -1,17 +1,27 @@
-=== tests/cases/compiler/nestedBlockScopedBindings5.ts ===
+//// [tests/cases/compiler/nestedBlockScopedBindings5.ts] ////
+
+=== nestedBlockScopedBindings5.ts ===
 function a0() {
 >a0 : () => void
+>   : ^^^^^^^^^^
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x = x + 1;
 >x = x + 1 : string
+>          : ^^^^^^
 >x : string
+>  : ^^^^^^
 >x + 1 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     for (let x;;) {
 >x : any
@@ -22,26 +32,37 @@ function a0() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
     }
 }
 
 function a1() {
 >a1 : () => void
+>   : ^^^^^^^^^^
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x = x + 1;
 >x = x + 1 : string
+>          : ^^^^^^
 >x : string
+>  : ^^^^^^
 >x + 1 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => string
+>        : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     for (let x;;) {
 >x : any
@@ -52,22 +73,31 @@ function a1() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
     }
 }
 
 function a2() {
 >a2 : () => void
+>   : ^^^^^^^^^^
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x = x + 1;
 >x = x + 1 : string
+>          : ^^^^^^
 >x : string
+>  : ^^^^^^
 >x + 1 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     for (let x;;) {
 >x : any
@@ -78,9 +108,11 @@ function a2() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
 }
@@ -88,25 +120,36 @@ function a2() {
 
 function a3() {
 >a3 : () => void
+>   : ^^^^^^^^^^
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x = x + 1;
 >x = x + 1 : string
+>          : ^^^^^^
 >x : string
+>  : ^^^^^^
 >x + 1 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         () => x;
 >() => x : () => string
+>        : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
     }
     for (let x;false;) {
 >x : any
 >false : false
+>      : ^^^^^
 
         x = x + 2;
 >x = x + 2 : any
@@ -114,22 +157,27 @@ function a3() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
@@ -139,21 +187,30 @@ function a3() {
 
 function a4() {
 >a4 : () => void
+>   : ^^^^^^^^^^
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x = x + 1;
 >x = x + 1 : string
+>          : ^^^^^^
 >x : string
+>  : ^^^^^^
 >x + 1 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     for (let x;false;) {
 >x : any
 >false : false
+>      : ^^^^^
 
         x = x + 2;
 >x = x + 2 : any
@@ -161,18 +218,22 @@ function a4() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
 
             () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
 
             break;
@@ -182,24 +243,33 @@ function a4() {
 
 function a5() {
 >a5 : () => void
+>   : ^^^^^^^^^^
 
     let y;
 >y : any
 
     for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         x = x + 1;
 >x = x + 1 : string
+>          : ^^^^^^
 >x : string
+>  : ^^^^^^
 >x + 1 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     for (let x;false;) {
 >x : any
 >false : false
+>      : ^^^^^
 
         x = x + 2;
 >x = x + 2 : any
@@ -207,16 +277,20 @@ function a5() {
 >x + 2 : any
 >x : any
 >2 : 2
+>  : ^
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any

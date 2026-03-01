@@ -16,7 +16,7 @@ export interface A {
 
 //// [app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [app.d.ts]

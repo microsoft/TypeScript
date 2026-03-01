@@ -1,111 +1,161 @@
-=== tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts] ////
+
+=== objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts ===
 // object types with call signatures can override members of Function
 // no errors expected below 
 
 interface Function {
     data: number;
 >data : number
+>     : ^^^^^^
 
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 }
 
 interface I {
     (): void;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void
+>      : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
 >b : any
 
     call(thisArg: number, ...argArray: number[]): any;
 >call : (thisArg: number, ...argArray: number[]) => any
+>     : ^       ^^      ^^^^^        ^^        ^^^^^   
 >thisArg : number
+>        : ^^^^^^
 >argArray : number[]
+>         : ^^^^^^^^
 }
 
 var i: I;
 >i : I
+>  : ^
 
 var r1: (a: any, b?: any) => void = i.apply;
 >r1 : (a: any, b?: any) => void
+>   : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
 >b : any
 >i.apply : (a: any, b?: any) => void
+>        : ^ ^^   ^^ ^^^   ^^^^^    
 >i : I
+>  : ^
 >apply : (a: any, b?: any) => void
+>      : ^ ^^   ^^ ^^^   ^^^^^    
 
 var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
 >r1b : (thisArg: number, ...argArray: number[]) => void
+>    : ^       ^^      ^^^^^        ^^        ^^^^^    
 >thisArg : number
+>        : ^^^^^^
 >argArray : number[]
+>         : ^^^^^^^^
 >i.call : (thisArg: number, ...argArray: number[]) => any
+>       : ^       ^^      ^^^^^        ^^        ^^^^^   
 >i : I
+>  : ^
 >call : (thisArg: number, ...argArray: number[]) => any
+>     : ^       ^^      ^^^^^        ^^        ^^^^^   
 
 var r1c = i.arguments;
 >r1c : any
 >i.arguments : any
 >i : I
+>  : ^
 >arguments : any
+>          : ^^^
 
 var r1d = i.data;
 >r1d : number
+>    : ^^^^^^
 >i.data : number
+>       : ^^^^^^
 >i : I
+>  : ^
 >data : number
+>     : ^^^^^^
 
 var r1e = i['hm']; // should be Object
 >r1e : error
 >i['hm'] : error
 >i : I
+>  : ^
 >'hm' : "hm"
+>     : ^^^^
 
 var x: {
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 
     (): void;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void
+>      : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
 >b : any
 
     call(thisArg: number, ...argArray: number[]): any;
 >call : (thisArg: number, ...argArray: number[]) => any
+>     : ^       ^^      ^^^^^        ^^        ^^^^^   
 >thisArg : number
+>        : ^^^^^^
 >argArray : number[]
+>         : ^^^^^^^^
 }
 
 var r2: (a: any, b?: any) => void = x.apply;
 >r2 : (a: any, b?: any) => void
+>   : ^ ^^   ^^ ^^^   ^^^^^    
 >a : any
 >b : any
 >x.apply : (a: any, b?: any) => void
+>        : ^ ^^   ^^ ^^^   ^^^^^    
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 >apply : (a: any, b?: any) => void
+>      : ^ ^^   ^^ ^^^   ^^^^^    
 
 var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 >r2b : (thisArg: number, ...argArray: number[]) => void
+>    : ^       ^^      ^^^^^        ^^        ^^^^^    
 >thisArg : number
+>        : ^^^^^^
 >argArray : number[]
+>         : ^^^^^^^^
 >x.call : (thisArg: number, ...argArray: number[]) => any
+>       : ^       ^^      ^^^^^        ^^        ^^^^^   
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 >call : (thisArg: number, ...argArray: number[]) => any
+>     : ^       ^^      ^^^^^        ^^        ^^^^^   
 
 var r2c = x.arguments;
 >r2c : any
 >x.arguments : any
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 >arguments : any
+>          : ^^^
 
 var r2d = x.data;
 >r2d : number
+>    : ^^^^^^
 >x.data : number
+>       : ^^^^^^
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 >data : number
+>     : ^^^^^^
 
 var r2e = x['hm']; // should be Object
 >r2e : error
 >x['hm'] : error
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>  : ^^^^^^    ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
 >'hm' : "hm"
+>     : ^^^^
 

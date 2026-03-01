@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementArrayInterface.ts] ////
+
 //// [implementArrayInterface.ts]
 declare class MyArray<T> implements Array<T> {
     toString(): string;
@@ -34,3 +36,4 @@ declare class MyArray<T> implements Array<T> {
 
 
 //// [implementArrayInterface.js]
+"use strict";

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts] ////
+
 //// [invalidTryStatements.ts]
 function fn() {
     catch(x) { } // error missing try
@@ -21,6 +23,7 @@ function fn2() {
 }
 
 //// [invalidTryStatements.js]
+"use strict";
 function fn() {
     try {
     }

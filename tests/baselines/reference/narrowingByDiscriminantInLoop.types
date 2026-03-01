@@ -1,137 +1,211 @@
-=== tests/cases/compiler/narrowingByDiscriminantInLoop.ts ===
+//// [tests/cases/compiler/narrowingByDiscriminantInLoop.ts] ////
+
+=== narrowingByDiscriminantInLoop.ts ===
 // Repro from #9977
 
 type IDLMemberTypes = OperationMemberType | ConstantMemberType;
->IDLMemberTypes : OperationMemberType | ConstantMemberType
+>IDLMemberTypes : IDLMemberTypes
+>               : ^^^^^^^^^^^^^^
 
 interface IDLTypeDescription {
     origin: string;
 >origin : string
+>       : ^^^^^^
 }
 
 interface InterfaceType {
     members: IDLMemberTypes[];
 >members : IDLMemberTypes[]
+>        : ^^^^^^^^^^^^^^^^
 }
 
 interface OperationMemberType {
     type: "operation";
 >type : "operation"
+>     : ^^^^^^^^^^^
 
     idlType: IDLTypeDescription;
 >idlType : IDLTypeDescription
+>        : ^^^^^^^^^^^^^^^^^^
 }
 
 interface ConstantMemberType {
     type: "const";
 >type : "const"
+>     : ^^^^^^^
 
     idlType: string;
 >idlType : string
+>        : ^^^^^^
 }
 
 function insertInterface(callbackType: InterfaceType) {
 >insertInterface : (callbackType: InterfaceType) => void
+>                : ^            ^^             ^^^^^^^^^
 >callbackType : InterfaceType
+>             : ^^^^^^^^^^^^^
 
     for (const memberType of callbackType.members) {
 >memberType : IDLMemberTypes
+>           : ^^^^^^^^^^^^^^
 >callbackType.members : IDLMemberTypes[]
+>                     : ^^^^^^^^^^^^^^^^
 >callbackType : InterfaceType
+>             : ^^^^^^^^^^^^^
 >members : IDLMemberTypes[]
+>        : ^^^^^^^^^^^^^^^^
 
         if (memberType.type === "const") {
 >memberType.type === "const" : boolean
+>                            : ^^^^^^^
 >memberType.type : "operation" | "const"
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >memberType : IDLMemberTypes
+>           : ^^^^^^^^^^^^^^
 >type : "operation" | "const"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"const" : "const"
+>        : ^^^^^^^
 
             memberType.idlType;  // string
 >memberType.idlType : string
+>                   : ^^^^^^
 >memberType : ConstantMemberType
+>           : ^^^^^^^^^^^^^^^^^^
 >idlType : string
+>        : ^^^^^^
         }
         else if (memberType.type === "operation") {
 >memberType.type === "operation" : boolean
+>                                : ^^^^^^^
 >memberType.type : "operation"
+>                : ^^^^^^^^^^^
 >memberType : OperationMemberType
+>           : ^^^^^^^^^^^^^^^^^^^
 >type : "operation"
+>     : ^^^^^^^^^^^
 >"operation" : "operation"
+>            : ^^^^^^^^^^^
 
             memberType.idlType.origin;  // string
 >memberType.idlType.origin : string
+>                          : ^^^^^^
 >memberType.idlType : IDLTypeDescription
+>                   : ^^^^^^^^^^^^^^^^^^
 >memberType : OperationMemberType
+>           : ^^^^^^^^^^^^^^^^^^^
 >idlType : IDLTypeDescription
+>        : ^^^^^^^^^^^^^^^^^^
 >origin : string
+>       : ^^^^^^
 
             (memberType.idlType as IDLTypeDescription);
 >(memberType.idlType as IDLTypeDescription) : IDLTypeDescription
+>                                           : ^^^^^^^^^^^^^^^^^^
 >memberType.idlType as IDLTypeDescription : IDLTypeDescription
+>                                         : ^^^^^^^^^^^^^^^^^^
 >memberType.idlType : IDLTypeDescription
+>                   : ^^^^^^^^^^^^^^^^^^
 >memberType : OperationMemberType
+>           : ^^^^^^^^^^^^^^^^^^^
 >idlType : IDLTypeDescription
+>        : ^^^^^^^^^^^^^^^^^^
         }
     }
 }
 
 function insertInterface2(callbackType: InterfaceType) {
 >insertInterface2 : (callbackType: InterfaceType) => void
+>                 : ^            ^^             ^^^^^^^^^
 >callbackType : InterfaceType
+>             : ^^^^^^^^^^^^^
 
     for (const memberType of callbackType.members) {
 >memberType : IDLMemberTypes
+>           : ^^^^^^^^^^^^^^
 >callbackType.members : IDLMemberTypes[]
+>                     : ^^^^^^^^^^^^^^^^
 >callbackType : InterfaceType
+>             : ^^^^^^^^^^^^^
 >members : IDLMemberTypes[]
+>        : ^^^^^^^^^^^^^^^^
 
         if (memberType.type === "operation") {
 >memberType.type === "operation" : boolean
+>                                : ^^^^^^^
 >memberType.type : "operation" | "const"
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >memberType : IDLMemberTypes
+>           : ^^^^^^^^^^^^^^
 >type : "operation" | "const"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"operation" : "operation"
+>            : ^^^^^^^^^^^
 
             memberType.idlType.origin;  // string
 >memberType.idlType.origin : string
+>                          : ^^^^^^
 >memberType.idlType : IDLTypeDescription
+>                   : ^^^^^^^^^^^^^^^^^^
 >memberType : OperationMemberType
+>           : ^^^^^^^^^^^^^^^^^^^
 >idlType : IDLTypeDescription
+>        : ^^^^^^^^^^^^^^^^^^
 >origin : string
+>       : ^^^^^^
         }
     }
 }
 
 function foo(memberType: IDLMemberTypes) {
 >foo : (memberType: IDLMemberTypes) => void
+>    : ^          ^^              ^^^^^^^^^
 >memberType : IDLMemberTypes
+>           : ^^^^^^^^^^^^^^
 
     if (memberType.type === "const") {
 >memberType.type === "const" : boolean
+>                            : ^^^^^^^
 >memberType.type : "operation" | "const"
+>                : ^^^^^^^^^^^^^^^^^^^^^
 >memberType : IDLMemberTypes
+>           : ^^^^^^^^^^^^^^
 >type : "operation" | "const"
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >"const" : "const"
+>        : ^^^^^^^
 
         memberType.idlType;  // string
 >memberType.idlType : string
+>                   : ^^^^^^
 >memberType : ConstantMemberType
+>           : ^^^^^^^^^^^^^^^^^^
 >idlType : string
+>        : ^^^^^^
     }
     else if (memberType.type === "operation") {
 >memberType.type === "operation" : boolean
+>                                : ^^^^^^^
 >memberType.type : "operation"
+>                : ^^^^^^^^^^^
 >memberType : OperationMemberType
+>           : ^^^^^^^^^^^^^^^^^^^
 >type : "operation"
+>     : ^^^^^^^^^^^
 >"operation" : "operation"
+>            : ^^^^^^^^^^^
 
         memberType.idlType.origin;  // string
 >memberType.idlType.origin : string
+>                          : ^^^^^^
 >memberType.idlType : IDLTypeDescription
+>                   : ^^^^^^^^^^^^^^^^^^
 >memberType : OperationMemberType
+>           : ^^^^^^^^^^^^^^^^^^^
 >idlType : IDLTypeDescription
+>        : ^^^^^^^^^^^^^^^^^^
 >origin : string
+>       : ^^^^^^
     }
 }
 
@@ -140,97 +214,151 @@ function foo(memberType: IDLMemberTypes) {
 interface A {
     kind: true;
 >kind : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
     prop: { a: string; };
 >prop : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 }
 
 interface B {
     kind: false;
 >kind : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 
     prop: { b: string; }
 >prop : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 }
 
 function f1(x: A | B) {
 >f1 : (x: A | B) => void
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         x.prop;
 >x.prop : { a: string; } | { b: string; }
+>       : ^^^^^      ^^^^^^^^^^^      ^^^
 >x : A | B
+>  : ^^^^^
 >prop : { a: string; } | { b: string; }
+>     : ^^^^^      ^^^^^^^^^^^      ^^^
 
         if (x.kind === true) {
 >x.kind === true : boolean
+>                : ^^^^^^^
 >x.kind : boolean
+>       : ^^^^^^^
 >x : A | B
+>  : ^^^^^
 >kind : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
             x.prop.a;
 >x.prop.a : string
+>         : ^^^^^^
 >x.prop : { a: string; }
+>       : ^^^^^      ^^^
 >x : A
+>  : ^
 >prop : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
         }
         if (x.kind === false) {
 >x.kind === false : boolean
+>                 : ^^^^^^^
 >x.kind : boolean
+>       : ^^^^^^^
 >x : A | B
+>  : ^^^^^
 >kind : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
             x.prop.b;
 >x.prop.b : string
+>         : ^^^^^^
 >x.prop : { b: string; }
+>       : ^^^^^      ^^^
 >x : B
+>  : ^
 >prop : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
         }
     }
 }
 
 function f2(x: A | B) {
 >f2 : (x: A | B) => void
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
+>  : ^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         if (x.kind) {
 >x.kind : boolean
+>       : ^^^^^^^
 >x : A | B
+>  : ^^^^^
 >kind : boolean
+>     : ^^^^^^^
 
             x.prop.a;
 >x.prop.a : string
+>         : ^^^^^^
 >x.prop : { a: string; }
+>       : ^^^^^      ^^^
 >x : A
+>  : ^
 >prop : { a: string; }
+>     : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
         }
         if (!x.kind) {
 >!x.kind : boolean
+>        : ^^^^^^^
 >x.kind : boolean
+>       : ^^^^^^^
 >x : A | B
+>  : ^^^^^
 >kind : boolean
+>     : ^^^^^^^
 
             x.prop.b;
 >x.prop.b : string
+>         : ^^^^^^
 >x.prop : { b: string; }
+>       : ^^^^^      ^^^
 >x : B
+>  : ^
 >prop : { b: string; }
+>     : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
         }
     }
 }

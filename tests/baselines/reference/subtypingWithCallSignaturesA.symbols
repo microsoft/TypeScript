@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesA.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesA.ts] ////
+
+=== subtypingWithCallSignaturesA.ts ===
 declare function foo3(cb: (x: number) => number): typeof cb;
 >foo3 : Symbol(foo3, Decl(subtypingWithCallSignaturesA.ts, 0, 0))
 >cb : Symbol(cb, Decl(subtypingWithCallSignaturesA.ts, 0, 22))

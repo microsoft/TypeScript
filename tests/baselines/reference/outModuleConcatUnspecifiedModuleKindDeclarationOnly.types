@@ -1,9 +1,0 @@
-=== tests/cases/compiler/a.ts ===
-export class A { } // module
->A : A
-
-=== tests/cases/compiler/b.ts ===
-var x = 0; // global
->x : number
->0 : 0
-

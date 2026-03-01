@@ -1,6 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement4.ts] ////
+
+=== parserReturnStatement4.ts ===
 var v = { get foo() { return } };
 >v : { readonly foo: void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ get foo() { return } } : { readonly foo: void; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : void
+>    : ^^^^
 

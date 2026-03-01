@@ -1,6 +1,9 @@
-=== tests/cases/compiler/es6-amd.ts ===
+//// [tests/cases/compiler/es6-amd.ts] ////
+
+=== es6-amd.ts ===
 class A
 >A : A
+>  : ^
 {
     constructor ()
     {
@@ -9,8 +12,10 @@ class A
 
     public B()
 >B : () => number
+>  : ^^^^^^^^^^^^
     {
         return 42;
 >42 : 42
+>   : ^^
     }
 }

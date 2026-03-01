@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/invalidForContinueStatements.ts] ////
+
 //// [invalidForContinueStatements.ts]
 // All errors
 
@@ -38,6 +40,7 @@ for(;;) {
 }
 
 //// [invalidForContinueStatements.js]
+"use strict";
 // All errors
 // naked continue not allowed
 continue;
@@ -46,7 +49,7 @@ ONE: for (;;)
     continue TWO;
 // continue from inside function
 TWO: for (;;) {
-    var x = function () {
+    var x = () => {
         continue TWO;
     };
 }

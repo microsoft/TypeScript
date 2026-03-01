@@ -7,7 +7,7 @@
 ////var y = [|globalName|];
 
 // @Filename: tsconfig.json
-////{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"] }
+////{ "files": ["referencesForGlobals_1.ts", "referencesForGlobals_2.ts"], "compilerOptions": { "lib": ["es5"] } }
 
 const [rDef, ...ranges] = test.ranges();
-verify.rangesAreRenameLocations({ findInStrings: true, findInComments: true, ranges });
+verify.baselineRename(ranges, { findInStrings: true, findInComments: true });

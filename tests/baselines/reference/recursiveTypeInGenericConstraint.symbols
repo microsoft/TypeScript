@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeInGenericConstraint.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeInGenericConstraint.ts] ////
+
+=== recursiveTypeInGenericConstraint.ts ===
 class G<T> {
 >G : Symbol(G, Decl(recursiveTypeInGenericConstraint.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveTypeInGenericConstraint.ts, 0, 8))

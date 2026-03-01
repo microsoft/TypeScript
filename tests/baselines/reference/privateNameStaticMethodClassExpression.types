@@ -1,54 +1,91 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts] ////
+
+=== privateNameStaticMethodClassExpression.ts ===
 const C = class D {
 >C : typeof D
+>  : ^^^^^^^^
 >class D {    static #field = D.#method();    static #method() { return 42; }    static getClass() { return D; }    static getField() { return C.#field };} : typeof D
+>                                                                                                                                                           : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
     static #field = D.#method();
 >#field : number
+>       : ^^^^^^
 >D.#method() : number
+>            : ^^^^^^
 >D.#method : () => number
+>          : ^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
     static #method() { return 42; }
 >#method : () => number
+>        : ^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     static getClass() { return D; }
 >getClass : () => typeof D
+>         : ^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
     static getField() { return C.#field };
 >getField : () => number
+>         : ^^^^^^^^^^^^
 >C.#field : number
+>         : ^^^^^^
 >C : typeof D
+>  : ^^^^^^^^
 }
 
 console.log(C.getClass().getField());
 >console.log(C.getClass().getField()) : void
+>                                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >C.getClass().getField() : number
+>                        : ^^^^^^
 >C.getClass().getField : () => number
+>                      : ^^^^^^^^^^^^
 >C.getClass() : typeof D
+>             : ^^^^^^^^
 >C.getClass : () => typeof D
+>           : ^^^^^^^^^^^^^^
 >C : typeof D
+>  : ^^^^^^^^
 >getClass : () => typeof D
+>         : ^^^^^^^^^^^^^^
 >getField : () => number
+>         : ^^^^^^^^^^^^
 
 C.getClass().#method; // Error
 >C.getClass().#method : any
+>                     : ^^^
 >C.getClass() : typeof D
+>             : ^^^^^^^^
 >C.getClass : () => typeof D
+>           : ^^^^^^^^^^^^^^
 >C : typeof D
+>  : ^^^^^^^^
 >getClass : () => typeof D
+>         : ^^^^^^^^^^^^^^
 
 C.getClass().#field; // Error
 >C.getClass().#field : any
+>                    : ^^^
 >C.getClass() : typeof D
+>             : ^^^^^^^^
 >C.getClass : () => typeof D
+>           : ^^^^^^^^^^^^^^
 >C : typeof D
+>  : ^^^^^^^^
 >getClass : () => typeof D
+>         : ^^^^^^^^^^^^^^
 
 

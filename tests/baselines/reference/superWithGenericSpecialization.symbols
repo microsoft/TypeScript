@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superWithGenericSpecialization.ts ===
+//// [tests/cases/compiler/superWithGenericSpecialization.ts] ////
+
+=== superWithGenericSpecialization.ts ===
 class C<T> {
 >C : Symbol(C, Decl(superWithGenericSpecialization.ts, 0, 0))
 >T : Symbol(T, Decl(superWithGenericSpecialization.ts, 0, 8))

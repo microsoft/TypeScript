@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInStrings21.ts(1,15): error TS1199: Unterminated Unicode escape sequence.
+
+
+==== unicodeExtendedEscapesInStrings21.ts (1 errors) ====
+    var x = "\u{67";
+                  
+!!! error TS1199: Unterminated Unicode escape sequence.
+    

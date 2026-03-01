@@ -1,40 +1,69 @@
-=== tests/cases/compiler/contextualTypeIterableUnions.ts ===
+//// [tests/cases/compiler/contextualTypeIterableUnions.ts] ////
+
+=== contextualTypeIterableUnions.ts ===
 declare class DMap<K, V>  {
 >DMap : DMap<K, V>
+>     : ^^^^^^^^^^
 
   constructor(iterable: Iterable<[K, V]> | undefined);
 >iterable : Iterable<[K, V]> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 new DMap([["1", 2]]);
 >new DMap([["1", 2]]) : DMap<string, number>
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >DMap : typeof DMap
+>     : ^^^^^^^^^^^
 >[["1", 2]] : [string, number][]
+>           : ^^^^^^^^^^^^^^^^^^
 >["1", 2] : [string, number]
+>         : ^^^^^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 >2 : 2
+>  : ^
 
 const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
 >i1 : Iterable<{ a: true; }> | undefined
+>   : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >[{ a: true }] : { a: true; }[]
+>              : ^^^^^^^^^^^^^^
 >{ a: true } : { a: true; }
+>            : ^^^^^^^^^^^^
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 const i2: Iterable<{ a: true }> | Iterable<{ b: false }> = [{ b: false }];
 >i2 : Iterable<{ a: true; }> | Iterable<{ b: false; }>
+>   : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^     ^^^^
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >[{ b: false }] : { b: false; }[]
+>               : ^^^^^^^^^^^^^^^
 >{ b: false } : { b: false; }
+>             : ^^^^^^^^^^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 const i3: Iterable<number> | 1[] = [2];
 >i3 : Iterable<number> | 1[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 >[2] : 2[]
+>    : ^^^
 >2 : 2
+>  : ^
 

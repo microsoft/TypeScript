@@ -1,0 +1,18 @@
+awaitUsingDeclarations.14.ts(3,9): error TS18054: 'await using' statements cannot be used inside a class static block.
+awaitUsingDeclarations.14.ts(5,13): error TS18054: 'await using' statements cannot be used inside a class static block.
+
+
+==== awaitUsingDeclarations.14.ts (2 errors) ====
+    class C {
+        static {
+            await using x = null;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS18054: 'await using' statements cannot be used inside a class static block.
+            {
+                await using y = null;
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS18054: 'await using' statements cannot be used inside a class static block.
+            }
+        }
+    }
+    

@@ -1,24 +1,37 @@
+//// [tests/cases/compiler/checkJsxNotSetError.ts] ////
+
 === /foo.jsx ===
 const Foo = () => (
 >Foo : () => any
+>    : ^^^^^^^^^
 >() => (    <div>foo</div>) : () => any
+>                           : ^^^^^^^^^
 >(    <div>foo</div>) : any
+>                     : ^^^
 
     <div>foo</div>
 ><div>foo</div> : any
+>               : ^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 );
 export default Foo;
 >Foo : () => any
+>    : ^^^^^^^^^
 
 === /bar.jsx ===
 import Foo from '/foo';
 >Foo : () => any
+>    : ^^^^^^^^^
 
 const a = <Foo />
 >a : any
+>  : ^^^
 ><Foo /> : any
+>        : ^^^
 >Foo : () => any
+>    : ^^^^^^^^^
 

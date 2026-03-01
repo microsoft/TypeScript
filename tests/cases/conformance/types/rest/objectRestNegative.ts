@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 let o = { a: 1, b: 'no' };
 var { ...mustBeLast, a } = o;
@@ -14,5 +15,5 @@ function generic<T extends { x, y }>(t: T) {
     return rest;
 }
 
-let rest: { b: string }
+let rest: { b: string } = { b: "" };
 ({a, ...rest.b + rest.b} = o);

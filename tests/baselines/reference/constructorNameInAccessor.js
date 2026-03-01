@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorNameInAccessor.ts] ////
+
 //// [constructorNameInAccessor.ts]
 class C1 {
     get constructor() { return }
@@ -6,6 +8,7 @@ class C1 {
 
 
 //// [constructorNameInAccessor.js]
+"use strict";
 class C1 {
     get constructor() { return; }
     set constructor(value) { }

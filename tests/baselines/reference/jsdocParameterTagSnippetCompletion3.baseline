@@ -1,0 +1,7313 @@
+// === Completions ===
+=== /tests/cases/fourslash/a.js ===
+// /**
+//  * @p
+//      ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | access
+// | alias
+// | argument
+// | async
+// | augments
+// | author
+// | borrows
+// | callback
+// | class
+// | classdesc
+// | constant
+// | constructor
+// | constructs
+// | copyright
+// | default
+// | deprecated
+// | description
+// | emits
+// | enum
+// | event
+// | example
+// | exports
+// | extends
+// | external
+// | field
+// | file
+// | fileoverview
+// | fires
+// | function
+// | generator
+// | global
+// | hideconstructor
+// | host
+// | ignore
+// | implements
+// | import
+// | inheritdoc
+// | inner
+// | instance
+// | interface
+// | kind
+// | lends
+// | license
+// | link
+// | linkcode
+// | linkplain
+// | listens
+// | member
+// | memberof
+// | method
+// | mixes
+// | module
+// | name
+// | namespace
+// | overload
+// | override
+// | package
+// | param
+// | private
+// | prop
+// | property
+// | protected
+// | public
+// | readonly
+// | requires
+// | returns
+// | satisfies
+// | see
+// | since
+// | static
+// | summary
+// | template
+// | this
+// | throws
+// | todo
+// | tutorial
+// | type
+// | typedef
+// | var
+// | variation
+// | version
+// | virtual
+// | yields
+// | param {number} [a=3] 
+// | ----------------------------------------------------------------------
+//  */
+// function zz(a = 3) {}
+// /**
+//  * @p
+//      ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | access
+// | alias
+// | argument
+// | async
+// | augments
+// | author
+// | borrows
+// | callback
+// | class
+// | classdesc
+// | constant
+// | constructor
+// | constructs
+// | copyright
+// | default
+// | deprecated
+// | description
+// | emits
+// | enum
+// | event
+// | example
+// | exports
+// | extends
+// | external
+// | field
+// | file
+// | fileoverview
+// | fires
+// | function
+// | generator
+// | global
+// | hideconstructor
+// | host
+// | ignore
+// | implements
+// | import
+// | inheritdoc
+// | inner
+// | instance
+// | interface
+// | kind
+// | lends
+// | license
+// | link
+// | linkcode
+// | linkplain
+// | listens
+// | member
+// | memberof
+// | method
+// | mixes
+// | module
+// | name
+// | namespace
+// | overload
+// | override
+// | package
+// | param
+// | private
+// | prop
+// | property
+// | protected
+// | public
+// | readonly
+// | requires
+// | returns
+// | satisfies
+// | see
+// | since
+// | static
+// | summary
+// | template
+// | this
+// | throws
+// | todo
+// | tutorial
+// | type
+// | typedef
+// | var
+// | variation
+// | version
+// | virtual
+// | yields
+// | param {Object} param0 
+// | * @param {number} [param0.a=3] 
+// | ----------------------------------------------------------------------
+//  */
+// function yy({ a = 3 }) {}
+// /**
+//  * @p
+//      ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | access
+// | alias
+// | argument
+// | async
+// | augments
+// | author
+// | borrows
+// | callback
+// | class
+// | classdesc
+// | constant
+// | constructor
+// | constructs
+// | copyright
+// | default
+// | deprecated
+// | description
+// | emits
+// | enum
+// | event
+// | example
+// | exports
+// | extends
+// | external
+// | field
+// | file
+// | fileoverview
+// | fires
+// | function
+// | generator
+// | global
+// | hideconstructor
+// | host
+// | ignore
+// | implements
+// | import
+// | inheritdoc
+// | inner
+// | instance
+// | interface
+// | kind
+// | lends
+// | license
+// | link
+// | linkcode
+// | linkplain
+// | listens
+// | member
+// | memberof
+// | method
+// | mixes
+// | module
+// | name
+// | namespace
+// | overload
+// | override
+// | package
+// | param
+// | private
+// | prop
+// | property
+// | protected
+// | public
+// | readonly
+// | requires
+// | returns
+// | satisfies
+// | see
+// | since
+// | static
+// | summary
+// | template
+// | this
+// | throws
+// | todo
+// | tutorial
+// | type
+// | typedef
+// | var
+// | variation
+// | version
+// | virtual
+// | yields
+// | param {Object} param0 
+// | * @param {*} param0.a 
+// | * @param {Object} param0.o 
+// | * @param {*} param0.o.b 
+// | * @param {*} param0.o.c 
+// | ----------------------------------------------------------------------
+//  */
+// function xx({ a, o: { b, c: [d, e = 1] }}) {}
+// /**
+//  * @p
+//      ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | access
+// | alias
+// | argument
+// | async
+// | augments
+// | author
+// | borrows
+// | callback
+// | class
+// | classdesc
+// | constant
+// | constructor
+// | constructs
+// | copyright
+// | default
+// | deprecated
+// | description
+// | emits
+// | enum
+// | event
+// | example
+// | exports
+// | extends
+// | external
+// | field
+// | file
+// | fileoverview
+// | fires
+// | function
+// | generator
+// | global
+// | hideconstructor
+// | host
+// | ignore
+// | implements
+// | import
+// | inheritdoc
+// | inner
+// | instance
+// | interface
+// | kind
+// | lends
+// | license
+// | link
+// | linkcode
+// | linkplain
+// | listens
+// | member
+// | memberof
+// | method
+// | mixes
+// | module
+// | name
+// | namespace
+// | overload
+// | override
+// | package
+// | param
+// | private
+// | prop
+// | property
+// | protected
+// | public
+// | readonly
+// | requires
+// | returns
+// | satisfies
+// | see
+// | since
+// | static
+// | summary
+// | template
+// | this
+// | throws
+// | todo
+// | tutorial
+// | type
+// | typedef
+// | var
+// | variation
+// | version
+// | virtual
+// | yields
+// | param {Object} param0 
+// | * @param {*} param0.a 
+// | * @param {Object} param0.o 
+// | * @param {*} param0.o.b 
+// | * @param {[number, boolean]} [param0.o.c=[1, true]] 
+// | ----------------------------------------------------------------------
+//  */
+// function ww({ a, o: { b, c: [d, e] = [1, true] }}) {}
+// /**
+//  * @p
+//      ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | access
+// | alias
+// | argument
+// | async
+// | augments
+// | author
+// | borrows
+// | callback
+// | class
+// | classdesc
+// | constant
+// | constructor
+// | constructs
+// | copyright
+// | default
+// | deprecated
+// | description
+// | emits
+// | enum
+// | event
+// | example
+// | exports
+// | extends
+// | external
+// | field
+// | file
+// | fileoverview
+// | fires
+// | function
+// | generator
+// | global
+// | hideconstructor
+// | host
+// | ignore
+// | implements
+// | import
+// | inheritdoc
+// | inner
+// | instance
+// | interface
+// | kind
+// | lends
+// | license
+// | link
+// | linkcode
+// | linkplain
+// | listens
+// | member
+// | memberof
+// | method
+// | mixes
+// | module
+// | name
+// | namespace
+// | overload
+// | override
+// | package
+// | param
+// | private
+// | prop
+// | property
+// | protected
+// | public
+// | readonly
+// | requires
+// | returns
+// | satisfies
+// | see
+// | since
+// | static
+// | summary
+// | template
+// | this
+// | throws
+// | todo
+// | tutorial
+// | type
+// | typedef
+// | var
+// | variation
+// | version
+// | virtual
+// | yields
+// | param {Object} param0 
+// | * @param {(number | boolean)[]} [param0.a=[1, true]] 
+// | ----------------------------------------------------------------------
+//  */
+// function vv({ a = [1, true] }) {}
+// function random(a) { return a }
+// /**
+//  * @p
+//      ^
+// | ----------------------------------------------------------------------
+// | abstract
+// | access
+// | alias
+// | argument
+// | async
+// | augments
+// | author
+// | borrows
+// | callback
+// | class
+// | classdesc
+// | constant
+// | constructor
+// | constructs
+// | copyright
+// | default
+// | deprecated
+// | description
+// | emits
+// | enum
+// | event
+// | example
+// | exports
+// | extends
+// | external
+// | field
+// | file
+// | fileoverview
+// | fires
+// | function
+// | generator
+// | global
+// | hideconstructor
+// | host
+// | ignore
+// | implements
+// | import
+// | inheritdoc
+// | inner
+// | instance
+// | interface
+// | kind
+// | lends
+// | license
+// | link
+// | linkcode
+// | linkplain
+// | listens
+// | member
+// | memberof
+// | method
+// | mixes
+// | module
+// | name
+// | namespace
+// | overload
+// | override
+// | package
+// | param
+// | private
+// | prop
+// | property
+// | protected
+// | public
+// | readonly
+// | requires
+// | returns
+// | satisfies
+// | see
+// | since
+// | static
+// | summary
+// | template
+// | this
+// | throws
+// | todo
+// | tutorial
+// | type
+// | typedef
+// | var
+// | variation
+// | version
+// | virtual
+// | yields
+// | param {Object} param0 
+// | * @param {*} [param0.a=random()] 
+// | ----------------------------------------------------------------------
+//  */
+// function uu({ a = random() }) {}
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 9,
+      "name": "z"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "access",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "access",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alias",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "alias",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "argument",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "argument",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "async",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "augments",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "augments",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "author",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "author",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "borrows",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "borrows",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "callback",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "callback",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "class",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "classdesc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "classdesc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constant",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constant",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructs",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructs",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "copyright",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "copyright",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "default",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "deprecated",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "description",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emits",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "emits",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "enum",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "event",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "event",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "example",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "example",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "exports",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "exports",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "extends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "external",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "external",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "field",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "field",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "file",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "file",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fileoverview",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fileoverview",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "function",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "generator",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "generator",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "global",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "global",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hideconstructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "hideconstructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "host",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "host",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ignore",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "ignore",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "implements",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inheritdoc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inheritdoc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inner",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inner",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instance",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "instance",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "interface",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "kind",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "kind",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "lends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "lends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "license",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "license",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "link",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "link",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkcode",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkcode",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkplain",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkplain",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "listens",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "listens",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "member",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "member",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "memberof",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "memberof",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "method",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "method",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mixes",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mixes",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "module",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "name",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "name",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "overload",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "overload",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "override",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "package",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "param",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "private",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "prop",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "prop",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "property",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "property",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "protected",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "public",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "readonly",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "requires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "requires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "returns",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "returns",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "satisfies",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "see",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "see",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "since",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "static",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "summary",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "summary",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "template",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "template",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "throws",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "throws",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "todo",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "todo",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "tutorial",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "tutorial",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typedef",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "typedef",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "var",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "variation",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "variation",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "version",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "version",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "virtual",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "virtual",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "yields",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "yields",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param {number} [a=3] ",
+          "kind": "",
+          "sortText": "11",
+          "kindModifiers": "",
+          "displayParts": [
+            {
+              "text": "param {number} [a=3] ",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 45,
+      "name": "y"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "access",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "access",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alias",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "alias",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "argument",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "argument",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "async",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "augments",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "augments",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "author",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "author",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "borrows",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "borrows",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "callback",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "callback",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "class",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "classdesc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "classdesc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constant",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constant",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructs",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructs",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "copyright",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "copyright",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "default",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "deprecated",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "description",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emits",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "emits",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "enum",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "event",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "event",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "example",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "example",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "exports",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "exports",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "extends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "external",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "external",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "field",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "field",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "file",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "file",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fileoverview",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fileoverview",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "function",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "generator",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "generator",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "global",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "global",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hideconstructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "hideconstructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "host",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "host",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ignore",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "ignore",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "implements",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inheritdoc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inheritdoc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inner",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inner",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instance",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "instance",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "interface",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "kind",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "kind",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "lends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "lends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "license",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "license",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "link",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "link",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkcode",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkcode",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkplain",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkplain",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "listens",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "listens",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "member",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "member",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "memberof",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "memberof",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "method",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "method",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mixes",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mixes",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "module",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "name",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "name",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "overload",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "overload",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "override",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "package",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "param",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "private",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "prop",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "prop",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "property",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "property",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "protected",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "public",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "readonly",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "requires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "requires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "returns",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "returns",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "satisfies",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "see",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "see",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "since",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "static",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "summary",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "summary",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "template",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "template",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "throws",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "throws",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "todo",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "todo",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "tutorial",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "tutorial",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typedef",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "typedef",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "var",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "variation",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "variation",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "version",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "version",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "virtual",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "virtual",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "yields",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "yields",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param {Object} param0 \r\n* @param {number} [param0.a=3] ",
+          "kind": "",
+          "sortText": "11",
+          "kindModifiers": "",
+          "displayParts": [
+            {
+              "text": "param {Object} param0 \r\n* @param {number} [param0.a=3] ",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 85,
+      "name": "x"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "access",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "access",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alias",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "alias",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "argument",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "argument",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "async",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "augments",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "augments",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "author",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "author",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "borrows",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "borrows",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "callback",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "callback",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "class",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "classdesc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "classdesc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constant",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constant",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructs",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructs",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "copyright",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "copyright",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "default",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "deprecated",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "description",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emits",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "emits",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "enum",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "event",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "event",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "example",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "example",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "exports",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "exports",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "extends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "external",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "external",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "field",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "field",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "file",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "file",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fileoverview",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fileoverview",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "function",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "generator",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "generator",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "global",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "global",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hideconstructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "hideconstructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "host",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "host",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ignore",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "ignore",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "implements",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inheritdoc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inheritdoc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inner",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inner",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instance",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "instance",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "interface",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "kind",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "kind",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "lends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "lends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "license",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "license",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "link",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "link",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkcode",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkcode",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkplain",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkplain",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "listens",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "listens",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "member",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "member",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "memberof",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "memberof",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "method",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "method",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mixes",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mixes",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "module",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "name",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "name",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "overload",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "overload",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "override",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "package",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "param",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "private",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "prop",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "prop",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "property",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "property",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "protected",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "public",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "readonly",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "requires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "requires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "returns",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "returns",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "satisfies",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "see",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "see",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "since",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "static",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "summary",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "summary",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "template",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "template",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "throws",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "throws",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "todo",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "todo",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "tutorial",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "tutorial",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typedef",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "typedef",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "var",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "variation",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "variation",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "version",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "version",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "virtual",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "virtual",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "yields",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "yields",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param {Object} param0 \r\n* @param {*} param0.a \r\n* @param {Object} param0.o \r\n* @param {*} param0.o.b \r\n* @param {*} param0.o.c ",
+          "kind": "",
+          "sortText": "11",
+          "kindModifiers": "",
+          "displayParts": [
+            {
+              "text": "param {Object} param0 \r\n* @param {*} param0.a \r\n* @param {Object} param0.o \r\n* @param {*} param0.o.b \r\n* @param {*} param0.o.c ",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 145,
+      "name": "w"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "access",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "access",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alias",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "alias",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "argument",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "argument",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "async",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "augments",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "augments",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "author",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "author",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "borrows",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "borrows",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "callback",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "callback",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "class",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "classdesc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "classdesc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constant",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constant",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructs",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructs",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "copyright",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "copyright",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "default",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "deprecated",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "description",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emits",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "emits",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "enum",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "event",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "event",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "example",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "example",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "exports",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "exports",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "extends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "external",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "external",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "field",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "field",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "file",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "file",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fileoverview",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fileoverview",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "function",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "generator",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "generator",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "global",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "global",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hideconstructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "hideconstructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "host",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "host",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ignore",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "ignore",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "implements",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inheritdoc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inheritdoc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inner",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inner",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instance",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "instance",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "interface",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "kind",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "kind",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "lends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "lends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "license",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "license",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "link",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "link",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkcode",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkcode",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkplain",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkplain",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "listens",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "listens",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "member",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "member",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "memberof",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "memberof",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "method",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "method",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mixes",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mixes",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "module",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "name",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "name",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "overload",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "overload",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "override",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "package",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "param",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "private",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "prop",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "prop",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "property",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "property",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "protected",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "public",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "readonly",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "requires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "requires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "returns",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "returns",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "satisfies",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "see",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "see",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "since",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "static",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "summary",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "summary",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "template",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "template",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "throws",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "throws",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "todo",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "todo",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "tutorial",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "tutorial",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typedef",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "typedef",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "var",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "variation",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "variation",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "version",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "version",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "virtual",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "virtual",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "yields",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "yields",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param {Object} param0 \r\n* @param {*} param0.a \r\n* @param {Object} param0.o \r\n* @param {*} param0.o.b \r\n* @param {[number, boolean]} [param0.o.c=[1, true]] ",
+          "kind": "",
+          "sortText": "11",
+          "kindModifiers": "",
+          "displayParts": [
+            {
+              "text": "param {Object} param0 \r\n* @param {*} param0.a \r\n* @param {Object} param0.o \r\n* @param {*} param0.o.b \r\n* @param {[number, boolean]} [param0.o.c=[1, true]] ",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 213,
+      "name": "v"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "access",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "access",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alias",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "alias",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "argument",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "argument",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "async",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "augments",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "augments",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "author",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "author",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "borrows",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "borrows",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "callback",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "callback",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "class",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "classdesc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "classdesc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constant",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constant",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructs",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructs",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "copyright",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "copyright",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "default",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "deprecated",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "description",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emits",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "emits",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "enum",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "event",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "event",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "example",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "example",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "exports",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "exports",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "extends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "external",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "external",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "field",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "field",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "file",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "file",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fileoverview",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fileoverview",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "function",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "generator",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "generator",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "global",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "global",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hideconstructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "hideconstructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "host",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "host",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ignore",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "ignore",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "implements",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inheritdoc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inheritdoc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inner",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inner",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instance",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "instance",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "interface",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "kind",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "kind",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "lends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "lends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "license",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "license",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "link",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "link",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkcode",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkcode",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkplain",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkplain",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "listens",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "listens",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "member",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "member",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "memberof",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "memberof",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "method",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "method",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mixes",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mixes",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "module",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "name",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "name",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "overload",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "overload",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "override",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "package",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "param",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "private",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "prop",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "prop",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "property",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "property",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "protected",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "public",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "readonly",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "requires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "requires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "returns",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "returns",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "satisfies",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "see",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "see",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "since",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "static",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "summary",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "summary",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "template",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "template",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "throws",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "throws",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "todo",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "todo",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "tutorial",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "tutorial",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typedef",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "typedef",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "var",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "variation",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "variation",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "version",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "version",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "virtual",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "virtual",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "yields",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "yields",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param {Object} param0 \r\n* @param {(number | boolean)[]} [param0.a=[1, true]] ",
+          "kind": "",
+          "sortText": "11",
+          "kindModifiers": "",
+          "displayParts": [
+            {
+              "text": "param {Object} param0 \r\n* @param {(number | boolean)[]} [param0.a=[1, true]] ",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 293,
+      "name": "u"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "access",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "access",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alias",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "alias",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "argument",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "argument",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "async",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "augments",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "augments",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "author",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "author",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "borrows",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "borrows",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "callback",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "callback",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "class",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "classdesc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "classdesc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constant",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constant",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "constructs",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "constructs",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "copyright",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "copyright",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "default",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "deprecated",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "deprecated",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "description",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "emits",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "emits",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "enum",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "event",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "event",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "example",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "example",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "exports",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "exports",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "extends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "external",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "external",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "field",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "field",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "file",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "file",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fileoverview",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fileoverview",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "fires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "fires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "function",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "generator",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "generator",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "global",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "global",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "hideconstructor",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "hideconstructor",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "host",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "host",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "ignore",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "ignore",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "implements",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inheritdoc",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inheritdoc",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "inner",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "inner",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instance",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "instance",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "interface",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "kind",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "kind",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "lends",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "lends",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "license",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "license",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "link",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "link",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkcode",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkcode",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "linkplain",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "linkplain",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "listens",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "listens",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "member",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "member",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "memberof",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "memberof",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "method",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "method",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "mixes",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mixes",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "module",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "name",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "name",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "overload",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "overload",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "override",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "package",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "param",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "private",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "prop",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "prop",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "property",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "property",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "protected",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "public",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "readonly",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "requires",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "requires",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "returns",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "returns",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "satisfies",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "see",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "see",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "since",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "since",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "static",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "summary",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "summary",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "template",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "template",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "throws",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "throws",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "todo",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "todo",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "tutorial",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "tutorial",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typedef",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "typedef",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "var",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "variation",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "variation",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "version",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "version",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "virtual",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "virtual",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "yields",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "yields",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "param {Object} param0 \r\n* @param {*} [param0.a=random()] ",
+          "kind": "",
+          "sortText": "11",
+          "kindModifiers": "",
+          "displayParts": [
+            {
+              "text": "param {Object} param0 \r\n* @param {*} [param0.a=random()] ",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

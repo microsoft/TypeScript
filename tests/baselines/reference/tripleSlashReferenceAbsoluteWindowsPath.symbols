@@ -1,10 +1,12 @@
-=== C:/a/b/d.ts ===
+//// [tests/cases/compiler/tripleSlashReferenceAbsoluteWindowsPath.ts] ////
+
+=== C:\a\b\d.ts ===
 /// <reference path="C:\a\b\c.ts" />
 const y = x + 3;
 >y : Symbol(y, Decl(d.ts, 1, 5))
 >x : Symbol(x, Decl(c.ts, 0, 5))
 
-=== C:/a/b/c.ts ===
+=== C:\a\b\c.ts ===
 const x = 5;
 >x : Symbol(x, Decl(c.ts, 0, 5))
 

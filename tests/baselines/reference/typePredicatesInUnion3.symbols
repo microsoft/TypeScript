@@ -1,0 +1,155 @@
+//// [tests/cases/compiler/typePredicatesInUnion3.ts] ////
+
+=== typePredicatesInUnion3.ts ===
+// A union of function types is considered a type predicate if at least one constituent is a type
+// predicate and the other constituents are matching type predicates or functions returning `false`.
+
+type P1 = (x: unknown) => x is string;
+>P1 : Symbol(P1, Decl(typePredicatesInUnion3.ts, 0, 0))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 3, 11))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 3, 11))
+
+type P2 = (x: unknown) => x is number;
+>P2 : Symbol(P2, Decl(typePredicatesInUnion3.ts, 3, 38))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 4, 11))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 4, 11))
+
+type F1 = (x: unknown) => false;
+>F1 : Symbol(F1, Decl(typePredicatesInUnion3.ts, 4, 38))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 6, 11))
+
+type F2 = (x: unknown) => boolean;
+>F2 : Symbol(F2, Decl(typePredicatesInUnion3.ts, 6, 32))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 7, 11))
+
+type F3 = (x: unknown) => string;
+>F3 : Symbol(F3, Decl(typePredicatesInUnion3.ts, 7, 34))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 8, 11))
+
+function f1(x: unknown, p: P1 | P2) {
+>f1 : Symbol(f1, Decl(typePredicatesInUnion3.ts, 8, 33))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 10, 12))
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 10, 23))
+>P1 : Symbol(P1, Decl(typePredicatesInUnion3.ts, 0, 0))
+>P2 : Symbol(P2, Decl(typePredicatesInUnion3.ts, 3, 38))
+
+    if (p(x)) {
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 10, 23))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 10, 12))
+
+        x;  // string | number
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 10, 12))
+    }
+}
+
+function f2(x: unknown, p: P1 | P2 | F1) {
+>f2 : Symbol(f2, Decl(typePredicatesInUnion3.ts, 14, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 16, 12))
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 16, 23))
+>P1 : Symbol(P1, Decl(typePredicatesInUnion3.ts, 0, 0))
+>P2 : Symbol(P2, Decl(typePredicatesInUnion3.ts, 3, 38))
+>F1 : Symbol(F1, Decl(typePredicatesInUnion3.ts, 4, 38))
+
+    if (p(x)) {
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 16, 23))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 16, 12))
+
+        x;  // string | number
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 16, 12))
+    }
+}
+
+function f3(x: unknown, p: P1 | P2 | F2) {
+>f3 : Symbol(f3, Decl(typePredicatesInUnion3.ts, 20, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 22, 12))
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 22, 23))
+>P1 : Symbol(P1, Decl(typePredicatesInUnion3.ts, 0, 0))
+>P2 : Symbol(P2, Decl(typePredicatesInUnion3.ts, 3, 38))
+>F2 : Symbol(F2, Decl(typePredicatesInUnion3.ts, 6, 32))
+
+    if (p(x)) {
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 22, 23))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 22, 12))
+
+        x;  // unknown
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 22, 12))
+    }
+}
+
+function f4(x: unknown, p: P1 | P2 | F3) {
+>f4 : Symbol(f4, Decl(typePredicatesInUnion3.ts, 26, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 12))
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 28, 23))
+>P1 : Symbol(P1, Decl(typePredicatesInUnion3.ts, 0, 0))
+>P2 : Symbol(P2, Decl(typePredicatesInUnion3.ts, 3, 38))
+>F3 : Symbol(F3, Decl(typePredicatesInUnion3.ts, 7, 34))
+
+    if (p(x)) {
+>p : Symbol(p, Decl(typePredicatesInUnion3.ts, 28, 23))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 12))
+
+        x;  // unknown
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 12))
+    }
+}
+
+// Repro from #54143
+
+type HasAttribute<T> = T & { attribute: number };
+>HasAttribute : Symbol(HasAttribute, Decl(typePredicatesInUnion3.ts, 32, 1))
+>T : Symbol(T, Decl(typePredicatesInUnion3.ts, 36, 18))
+>T : Symbol(T, Decl(typePredicatesInUnion3.ts, 36, 18))
+>attribute : Symbol(attribute, Decl(typePredicatesInUnion3.ts, 36, 28))
+
+class Type1 {
+>Type1 : Symbol(Type1, Decl(typePredicatesInUnion3.ts, 36, 49))
+
+    attribute: number | null = null;
+>attribute : Symbol(Type1.attribute, Decl(typePredicatesInUnion3.ts, 38, 13))
+
+    predicate(): this is HasAttribute<Type1> {
+>predicate : Symbol(Type1.predicate, Decl(typePredicatesInUnion3.ts, 39, 36))
+>HasAttribute : Symbol(HasAttribute, Decl(typePredicatesInUnion3.ts, 32, 1))
+>Type1 : Symbol(Type1, Decl(typePredicatesInUnion3.ts, 36, 49))
+
+        return true;
+    }
+}
+
+class Type2 {
+>Type2 : Symbol(Type2, Decl(typePredicatesInUnion3.ts, 43, 1))
+
+    attribute: number | null = null;
+>attribute : Symbol(Type2.attribute, Decl(typePredicatesInUnion3.ts, 45, 13))
+
+    predicate(): boolean {
+>predicate : Symbol(Type2.predicate, Decl(typePredicatesInUnion3.ts, 46, 36))
+
+        return true;
+    }
+}
+
+function assertType<T>(_val: T) {
+>assertType : Symbol(assertType, Decl(typePredicatesInUnion3.ts, 50, 1))
+>T : Symbol(T, Decl(typePredicatesInUnion3.ts, 52, 20))
+>_val : Symbol(_val, Decl(typePredicatesInUnion3.ts, 52, 23))
+>T : Symbol(T, Decl(typePredicatesInUnion3.ts, 52, 20))
+}
+
+declare const val: Type1 | Type2;
+>val : Symbol(val, Decl(typePredicatesInUnion3.ts, 55, 13))
+>Type1 : Symbol(Type1, Decl(typePredicatesInUnion3.ts, 36, 49))
+>Type2 : Symbol(Type2, Decl(typePredicatesInUnion3.ts, 43, 1))
+
+if (val.predicate()) {
+>val.predicate : Symbol(predicate, Decl(typePredicatesInUnion3.ts, 39, 36), Decl(typePredicatesInUnion3.ts, 46, 36))
+>val : Symbol(val, Decl(typePredicatesInUnion3.ts, 55, 13))
+>predicate : Symbol(predicate, Decl(typePredicatesInUnion3.ts, 39, 36), Decl(typePredicatesInUnion3.ts, 46, 36))
+
+    assertType<number>(val.attribute);  // Error
+>assertType : Symbol(assertType, Decl(typePredicatesInUnion3.ts, 50, 1))
+>val.attribute : Symbol(attribute, Decl(typePredicatesInUnion3.ts, 38, 13), Decl(typePredicatesInUnion3.ts, 45, 13))
+>val : Symbol(val, Decl(typePredicatesInUnion3.ts, 55, 13))
+>attribute : Symbol(attribute, Decl(typePredicatesInUnion3.ts, 38, 13), Decl(typePredicatesInUnion3.ts, 45, 13))
+}
+

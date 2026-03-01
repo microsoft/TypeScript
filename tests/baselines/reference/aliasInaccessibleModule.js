@@ -1,19 +1,22 @@
+//// [tests/cases/compiler/aliasInaccessibleModule.ts] ////
+
 //// [aliasInaccessibleModule.ts]
-module M {
-    module N {
+namespace M {
+    namespace N {
     }
     export import X = N;
 }
 
 //// [aliasInaccessibleModule.js]
+"use strict";
 var M;
 (function (M) {
 })(M || (M = {}));
 
 
 //// [aliasInaccessibleModule.d.ts]
-declare module M {
-    module N {
+declare namespace M {
+    namespace N {
     }
     export import X = N;
     export {};

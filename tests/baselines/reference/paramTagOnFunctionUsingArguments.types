@@ -1,41 +1,65 @@
-=== tests/cases/conformance/jsdoc/decls.d.ts ===
+//// [tests/cases/conformance/jsdoc/paramTagOnFunctionUsingArguments.ts] ////
+
+=== decls.d.ts ===
 declare function factory(type: string): {};
 >factory : (type: string) => {}
+>        : ^    ^^      ^^^^^  
 >type : string
+>     : ^^^^^^
 
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /**
  * @param {string} first
  */
 function concat(/* first, second, ... */) {
 >concat : (...args: any[]) => string
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   var s = ''
 >s : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
   for (var i = 0, l = arguments.length; i < l; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >l : number
+>  : ^^^^^^
 >arguments.length : number
+>                 : ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >i < l : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >l : number
+>  : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     s += arguments[i]
 >s += arguments[i] : string
+>                  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >arguments[i] : any
+>             : ^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >i : number
+>  : ^^^^^^
   }
   return s
 >s : string
+>  : ^^^^^^
 }
 
 /**
@@ -43,15 +67,22 @@ function concat(/* first, second, ... */) {
  */
 function correct() {
 >correct : (...args: string[]) => void
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arguments
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 correct(1,2,3) // oh no
 >correct(1,2,3) : void
+>               : ^^^^
 >correct : (...args: string[]) => void
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

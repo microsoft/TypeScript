@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts] ////
+
+=== derivedClassFunctionOverridesBaseClassAccessor.ts ===
 class Base {
 >Base : Symbol(Base, Decl(derivedClassFunctionOverridesBaseClassAccessor.ts, 0, 0))
 

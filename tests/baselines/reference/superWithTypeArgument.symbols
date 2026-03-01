@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superWithTypeArgument.ts ===
+//// [tests/cases/compiler/superWithTypeArgument.ts] ////
+
+=== superWithTypeArgument.ts ===
 class C {
 >C : Symbol(C, Decl(superWithTypeArgument.ts, 0, 0))
     

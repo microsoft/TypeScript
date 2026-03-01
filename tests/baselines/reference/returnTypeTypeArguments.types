@@ -1,190 +1,232 @@
-=== tests/cases/compiler/returnTypeTypeArguments.ts ===
+//// [tests/cases/compiler/returnTypeTypeArguments.ts] ////
+
+=== returnTypeTypeArguments.ts ===
 class One<T>{
 >One : One<T>
+>    : ^^^^^^
 
     value: T;
 >value : T
+>      : ^
 }
 class Two<T, U>{
 >Two : Two<T, U>
+>    : ^^^^^^^^^
 
     value: T;
 >value : T
+>      : ^
 
     id: U;
 >id : U
+>   : ^
 }
 class Three<T, U, V>{
 >Three : Three<T, U, V>
+>      : ^^^^^^^^^^^^^^
 
     value: T;
 >value : T
+>      : ^
 
     id: U;
 >id : U
+>   : ^
 
     name: V;
 >name : V
+>     : ^
 }
 
 function A1(): One { return null; }
->A1 : () => any
->null : null
+>A1 : () => One
+>   : ^^^^^^   
 
 function A2(): Two { return null; }
->A2 : () => any
->null : null
+>A2 : () => Two
+>   : ^^^^^^   
 
 function A3(): Three { return null; }
->A3 : () => any
->null : null
+>A3 : () => Three
+>   : ^^^^^^     
 
 function B1(): Two<number> { return null; }
->B1 : () => any
->null : null
+>B1 : () => Two<number>
+>   : ^^^^^^           
 
 function B2(): Three<string> { return null; }
->B2 : () => any
->null : null
+>B2 : () => Three<string>
+>   : ^^^^^^             
 
 function B3(): Three<string, number> { return null; }
->B3 : () => any
->null : null
+>B3 : () => Three<string, number>
+>   : ^^^^^^                     
 
 class C {
 >C : C
+>  : ^
 
     A1(): One { return null; }
->A1 : () => any
->null : null
+>A1 : () => One
+>   : ^^^^^^   
 
     A2(): Two { return null; }
->A2 : () => any
->null : null
+>A2 : () => Two
+>   : ^^^^^^   
 
     A3(): Three { return null; }
->A3 : () => any
->null : null
+>A3 : () => Three
+>   : ^^^^^^     
 
     B1(): Two<number> { return null; }
->B1 : () => any
->null : null
+>B1 : () => Two<number>
+>   : ^^^^^^           
 
     B2(): Three<string> { return null; }
->B2 : () => any
->null : null
+>B2 : () => Three<string>
+>   : ^^^^^^             
 
     B3(): Three<string, number> { return null; }
->B3 : () => any
->null : null
+>B3 : () => Three<string, number>
+>   : ^^^^^^                     
 }
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     A2(): Two<T> { return null; }
->A2 : () => any
->null : null
+>A2 : () => Two<T>
+>   : ^^^^^^      
 
     A3(): Three<T> { return null; }
->A3 : () => any
->null : null
+>A3 : () => Three<T>
+>   : ^^^^^^        
 
     B1(): Two<T> { return null; }
->B1 : () => any
->null : null
+>B1 : () => Two<T>
+>   : ^^^^^^      
 
     B2(): Three<T> { return null; }
->B2 : () => any
->null : null
+>B2 : () => Three<T>
+>   : ^^^^^^        
 
     B3(): Three<string, T> { return null; }
->B3 : () => any
->null : null
+>B3 : () => Three<string, T>
+>   : ^^^^^^                
 }
 
 interface I<T> {
     value: T;
 >value : T
+>      : ^
 }
 
 class Y<T>
 >Y : Y<T>
+>  : ^^^^
 {
     value: T;
 >value : T
+>      : ^
 }
 
 class X<T>
 >X : X<T>
+>  : ^^^^
 {
     p1: () => X;
->p1 : () => any
+>p1 : () => X
+>   : ^^^^^^ 
 
     p2: { [idx: number]: X }
 >p2 : { [idx: number]: any; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >idx : number
+>    : ^^^^^^
 
     p3: X[]
 >p3 : any[]
+>   : ^^^^^
 
     p4: I<X>
 >p4 : I<any>
+>   : ^^^^^^
 
     p5: X
 >p5 : any
+>   : ^^^
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => Y
+>   : ^^^^^^ 
 
     p7: { [idx: number]: Y }
 >p7 : { [idx: number]: any; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >idx : number
+>    : ^^^^^^
 
     p8: Y[]
 >p8 : any[]
+>   : ^^^^^
 
     p9: I<Y>
 >p9 : I<any>
+>   : ^^^^^^
 
     pa: Y
 >pa : any
+>   : ^^^
 }
 
 declare var a: {
->a : { p1: () => X; p2: { [idx: number]: any; }; p3: X[]; p4: I<X>; p5: any; p6: () => Y; p7: { [idx: number]: any; }; p8: Y[]; p9: I<Y>; pa: any; }
+>a : { p1: () => X; p2: { [idx: number]: X; }; p3: X[]; p4: I<X>; p5: X; p6: () => Y; p7: { [idx: number]: Y; }; p8: Y[]; p9: I<Y>; pa: Y; }
+>  : ^^^^^^       ^^^^^^                     ^^^^^^   ^^^^^^    ^^^^^^ ^^^^^^       ^^^^^^                     ^^^^^^   ^^^^^^    ^^^^^^ ^^^
 
     p1: () => X;
->p1 : () => any
+>p1 : () => X
+>   : ^^^^^^ 
 
     p2: { [idx: number]: X }
 >p2 : { [idx: number]: any; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >idx : number
+>    : ^^^^^^
 
     p3: X[]
 >p3 : any[]
+>   : ^^^^^
 
     p4: I<X>
 >p4 : I<any>
+>   : ^^^^^^
 
     p5: X
 >p5 : any
+>   : ^^^
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => Y
+>   : ^^^^^^ 
 
     p7: { [idx: number]: Y }
 >p7 : { [idx: number]: any; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >idx : number
+>    : ^^^^^^
 
     p8: Y[]
 >p8 : any[]
+>   : ^^^^^
 
     p9: I<Y>
 >p9 : I<any>
+>   : ^^^^^^
 
     pa: Y
 >pa : any
+>   : ^^^
 
 };
 

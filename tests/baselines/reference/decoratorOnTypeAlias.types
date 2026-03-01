@@ -1,11 +1,17 @@
-=== tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts ===
+//// [tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts] ////
+
+=== decoratorOnTypeAlias.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
+>    : ^ ^^      ^^ ^^^^^ 
 >target : T
+>       : ^
 
 @dec
 >dec : <T>(target: T) => T
+>    : ^ ^^      ^^ ^^^^^ 
 
 type T = number;
 >T : number
+>  : ^^^^^^
 

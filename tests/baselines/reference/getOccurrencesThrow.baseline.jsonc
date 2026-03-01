@@ -1,0 +1,317 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
+//     [|{| kind: "none" |}throw|] false;
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow.ts ===
+// --- (line: 5) skipped ---
+//             throw 10;
+//         }
+//         catch (x) {
+//             [|{| kind: "none" |}return|] 100;
+//         }
+//         finally {
+//             throw 10;
+//         }
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] "Something";
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] "Also something";
+//     }
+//     if (a > 0) {
+//         [|{| kind: "none" |}return|] (function () {
+//             return;
+//             return;
+//             return;
+// --- (line: 26) skipped ---
+
+// --- (line: 30) skipped ---
+//         })() || true;
+//     }
+// 
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     var unusued = [1, 2, 3, 4].map(x => { throw 4 })
+// 
+//     [|{| kind: "none" |}return|];
+//     [|{| kind: "none" |}return|] true;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] false;
+// }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileEnums.ts] ////
+
 //// [declFileEnums.ts]
 enum e1 {
     a,
@@ -36,6 +38,7 @@ enum e5 {
 
 
 //// [declFileEnums.js]
+"use strict";
 var e1;
 (function (e1) {
     e1[e1["a"] = 0] = "a";

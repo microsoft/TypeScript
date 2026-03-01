@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts] ////
+
+=== excessPropertyCheckWithEmptyObject.ts ===
 // Repro from #14910
 
 // Excess property error expected here

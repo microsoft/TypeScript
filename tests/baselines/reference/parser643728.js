@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser643728.ts] ////
+
 //// [parser643728.ts]
 interface C {
     foo;
@@ -6,3 +8,4 @@ interface C {
 
 
 //// [parser643728.js]
+"use strict";

@@ -1,3 +1,4 @@
+// @target: es2015
 interface D { a: number; }
 interface E { a: string; }
 interface F extends E, D { } // error

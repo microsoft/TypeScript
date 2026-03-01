@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/jsFileMethodOverloads2.ts] ////
+
+=== jsFileMethodOverloads2.js ===
+// Also works if all @overload tags are combined in one comment.
+/**
+ * @template T
+ */
+ class Example {
+>Example : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+
+  /**
+   * @param {T} value 
+   */
+  constructor(value) {
+>value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 14))
+
+    this.value = value;
+>this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>value : Symbol(value, Decl(jsFileMethodOverloads2.js, 8, 14))
+  }
+
+  /**
+   * @overload
+   * @param {Example<number>} this
+   * @returns {'number'}
+   *
+   * @overload
+   * @param {Example<string>} this
+   * @returns {'string'}
+   *
+   * @returns {string}
+   */
+  getTypeName() {
+>getTypeName : Symbol(Example.getTypeName, Decl(jsFileMethodOverloads2.js, 10, 3))
+
+    return typeof this.value;
+>this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+  }
+
+  /**
+   * @template U
+   * @overload
+   * @param {(y: T) => U} fn
+   * @returns {U}
+   *
+   * @overload
+   * @returns {T}
+   *
+   * @param {(y: T) => unknown} [fn]
+   * @returns {unknown}
+   */
+  transform(fn) {
+>transform : Symbol(Example.transform, Decl(jsFileMethodOverloads2.js, 25, 3))
+>fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+
+    return fn ? fn(this.value) : this.value;
+>fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+>fn : Symbol(fn, Decl(jsFileMethodOverloads2.js, 39, 12))
+>this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>this.value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+>this : Symbol(Example, Decl(jsFileMethodOverloads2.js, 0, 0))
+>value : Symbol(Example.value, Decl(jsFileMethodOverloads2.js, 8, 22))
+  }
+}
+

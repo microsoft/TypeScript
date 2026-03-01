@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeAssertions2.ts ===
+//// [tests/cases/compiler/genericTypeAssertions2.ts] ////
+
+=== genericTypeAssertions2.ts ===
 class A<T> { foo(x: T) { } }
 >A : Symbol(A, Decl(genericTypeAssertions2.ts, 0, 0))
 >T : Symbol(T, Decl(genericTypeAssertions2.ts, 0, 8))

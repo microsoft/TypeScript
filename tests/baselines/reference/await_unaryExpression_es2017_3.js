@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts] ////
+
 //// [await_unaryExpression_es2017_3.ts]
 async function bar1() {
     ++await 42; // Error
@@ -18,6 +20,7 @@ async function bar4() {
 }
 
 //// [await_unaryExpression_es2017_3.js]
+"use strict";
 async function bar1() {
     ++;
     await 42; // Error

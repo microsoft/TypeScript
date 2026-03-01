@@ -1,15 +1,12 @@
-tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts(1,8): error TS2304: Cannot find name 'z'.
-tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts(1,8): error TS4025: Exported variable 'y' has or is using private name 'z'.
-tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts(1,10): error TS1005: ',' expected.
-tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts(1,13): error TS1005: ',' expected.
+typePredicateOnVariableDeclaration02.ts(1,8): error TS2304: Cannot find name 'z'.
+typePredicateOnVariableDeclaration02.ts(1,10): error TS1005: ',' expected.
+typePredicateOnVariableDeclaration02.ts(1,13): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts (4 errors) ====
+==== typePredicateOnVariableDeclaration02.ts (3 errors) ====
     var y: z is number;
            ~
 !!! error TS2304: Cannot find name 'z'.
-           ~
-!!! error TS4025: Exported variable 'y' has or is using private name 'z'.
              ~~
 !!! error TS1005: ',' expected.
                 ~~~~~~

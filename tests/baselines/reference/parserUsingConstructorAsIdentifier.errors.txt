@@ -1,13 +1,13 @@
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(3,13): error TS2304: Cannot find name 'PluginUtilities'.
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(5,17): error TS2304: Cannot find name 'initializeProperties'.
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(8,17): error TS2304: Cannot find name 'initializeProperties'.
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(18,17): error TS2304: Cannot find name 'PluginUtilities'.
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(21,21): error TS2304: Cannot find name 'initializeProperties'.
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(24,21): error TS2304: Cannot find name 'initializeProperties'.
-tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts(36,17): error TS2304: Cannot find name 'initializeProperties'.
+parserUsingConstructorAsIdentifier.ts(3,13): error TS2304: Cannot find name 'PluginUtilities'.
+parserUsingConstructorAsIdentifier.ts(5,17): error TS2304: Cannot find name 'initializeProperties'.
+parserUsingConstructorAsIdentifier.ts(8,17): error TS2304: Cannot find name 'initializeProperties'.
+parserUsingConstructorAsIdentifier.ts(18,17): error TS2304: Cannot find name 'PluginUtilities'.
+parserUsingConstructorAsIdentifier.ts(21,21): error TS2304: Cannot find name 'initializeProperties'.
+parserUsingConstructorAsIdentifier.ts(24,21): error TS2304: Cannot find name 'initializeProperties'.
+parserUsingConstructorAsIdentifier.ts(36,17): error TS2304: Cannot find name 'initializeProperties'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts (7 errors) ====
+==== parserUsingConstructorAsIdentifier.ts (7 errors) ====
             function define(constructor, instanceMembers, staticMembers) {
                 constructor = constructor || function () { };
                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);

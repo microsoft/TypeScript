@@ -1,556 +1,387 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
 // class Foo2 {
-//     /*FIND ALL REFS*/get "[|42|]"() { return 0; }
-//     set [|42|](n) { }
+//     /*FIND ALL REFS*/<|get "[|{| isWriteAccess: true, isDefinition: true |}42|]"() { return 0; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}42|](n) { }|>
 // }
 // 
 // var y: Foo2;
 // y[[|42|]];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-      "kind": "property",
-      "name": "(property) Foo2[\"42\"]: number",
-      "textSpan": {
-        "start": 22,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo2",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 17,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
+  // class Foo2 {
+  //     /*FIND ALL REFS*/<|get "[|42|]"() { return 0; }|>
+  //     set 42(n) { }
+  // }
+  // 
+  // var y: Foo2;
+  // y[42];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo2[\"42\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo2",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
 // class Foo2 {
-//     get "/*FIND ALL REFS*/[|42|]"() { return 0; }
-//     set [|42|](n) { }
+//     <|get "/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}42|]"() { return 0; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}42|](n) { }|>
 // }
 // 
 // var y: Foo2;
 // y[[|42|]];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-      "kind": "property",
-      "name": "(property) Foo2[\"42\"]: number",
-      "textSpan": {
-        "start": 22,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo2",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 17,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
+  // class Foo2 {
+  //     <|get "/*FIND ALL REFS*/[|42|]"() { return 0; }|>
+  //     set 42(n) { }
+  // }
+  // 
+  // var y: Foo2;
+  // y[42];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo2[\"42\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo2",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
 // class Foo2 {
-//     get "[|42|]"() { return 0; }
-//     /*FIND ALL REFS*/set [|42|](n) { }
+//     <|get "[|{| isWriteAccess: true, isDefinition: true |}42|]"() { return 0; }|>
+//     /*FIND ALL REFS*/<|set [|{| isWriteAccess: true, isDefinition: true |}42|](n) { }|>
 // }
 // 
 // var y: Foo2;
 // y[[|42|]];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-      "kind": "property",
-      "name": "(property) Foo2[\"42\"]: number",
-      "textSpan": {
-        "start": 22,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo2",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 17,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
+  // class Foo2 {
+  //     <|get "[|42|]"() { return 0; }|>
+  //     /*FIND ALL REFS*/set 42(n) { }
+  // }
+  // 
+  // var y: Foo2;
+  // y[42];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo2[\"42\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo2",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
 // class Foo2 {
-//     get "[|42|]"() { return 0; }
-//     set /*FIND ALL REFS*/[|42|](n) { }
+//     <|get "[|{| isWriteAccess: true, isDefinition: true |}42|]"() { return 0; }|>
+//     <|set /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}42|](n) { }|>
 // }
 // 
 // var y: Foo2;
 // y[[|42|]];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-      "kind": "property",
-      "name": "(property) Foo2[\"42\"]: number",
-      "textSpan": {
-        "start": 22,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo2",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 17,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
+  // class Foo2 {
+  //     <|get "[|42|]"() { return 0; }|>
+  //     set /*FIND ALL REFS*/42(n) { }
+  // }
+  // 
+  // var y: Foo2;
+  // y[42];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo2[\"42\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo2",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
 // class Foo2 {
-//     get "[|42|]"() { return 0; }
-//     set [|42|](n) { }
+//     <|get "[|{| isWriteAccess: true |}42|]"() { return 0; }|>
+//     <|set [|{| isWriteAccess: true |}42|](n) { }|>
 // }
 // 
 // var y: Foo2;
 // y[/*FIND ALL REFS*/[|42|]];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-      "kind": "property",
-      "name": "(property) Foo2[\"42\"]: number",
-      "textSpan": {
-        "start": 22,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo2",
-          "kind": "className"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"42\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 17,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 24
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 13
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 78,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames3.ts ===
+  // class Foo2 {
+  //     <|get "[|42|]"() { return 0; }|>
+  //     set 42(n) { }
+  // }
+  // 
+  // var y: Foo2;
+  // y[/*FIND ALL REFS*/42];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo2[\"42\"]: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo2",
+      "kind": "className"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

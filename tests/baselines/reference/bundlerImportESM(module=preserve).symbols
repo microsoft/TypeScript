@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportESM.ts] ////
+
+=== /esm.mts ===
+export const esm = 0;
+>esm : Symbol(esm, Decl(esm.mts, 0, 12))
+
+=== /not-actually-cjs.cts ===
+import { esm } from "./esm.mjs";
+>esm : Symbol(esm, Decl(not-actually-cjs.cts, 0, 8))
+
+=== /still-not-cjs.ts ===
+import { esm } from "./esm.mjs";
+>esm : Symbol(esm, Decl(still-not-cjs.ts, 0, 8))
+

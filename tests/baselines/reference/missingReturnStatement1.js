@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingReturnStatement1.ts] ////
+
 //// [missingReturnStatement1.ts]
 class Foo {
     foo(): number {
@@ -7,11 +9,9 @@ class Foo {
 
 
 //// [missingReturnStatement1.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.foo = function () {
+"use strict";
+class Foo {
+    foo() {
         //return 4;
-    };
-    return Foo;
-}());
+    }
+}

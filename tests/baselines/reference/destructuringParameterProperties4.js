@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts] ////
+
 //// [destructuringParameterProperties4.ts]
 class C1<T, U, V> {
     constructor(private k: T, protected [a, b, c]: [T,U,V]) {
@@ -27,6 +29,7 @@ class C2 extends C1<number, string, boolean> {
 
 
 //// [destructuringParameterProperties4.js]
+"use strict";
 class C1 {
     constructor(k, [a, b, c]) {
         this.k = k;

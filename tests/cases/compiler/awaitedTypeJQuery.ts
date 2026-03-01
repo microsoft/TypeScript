@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 /// <reference lib="dom" />
 
 interface Thenable<T> extends PromiseLike<T> { }

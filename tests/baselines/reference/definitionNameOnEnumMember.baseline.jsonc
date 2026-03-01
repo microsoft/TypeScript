@@ -1,0 +1,21 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/definitionNameOnEnumMember.ts ===
+// enum e {
+//     firstMember,
+//     secondMember,
+//     [|thirdMember|]
+// }
+// var enumMember = e./*GOTO DEF POS*/thirdMember;
+
+  // === Details ===
+  [
+   {
+    "kind": "enum member",
+    "name": "thirdMember",
+    "containerName": "e",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

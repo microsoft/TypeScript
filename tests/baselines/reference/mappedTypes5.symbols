@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypes5.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes5.ts] ////
+
+=== mappedTypes5.ts ===
 function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
 >f : Symbol(f, Decl(mappedTypes5.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))

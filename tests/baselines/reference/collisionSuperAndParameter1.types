@@ -1,19 +1,28 @@
-=== tests/cases/compiler/collisionSuperAndParameter1.ts ===
+//// [tests/cases/compiler/collisionSuperAndParameter1.ts] ////
+
+=== collisionSuperAndParameter1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 }
 
 class Foo2 extends Foo {
 >Foo2 : Foo2
+>     : ^^^^
 >Foo : Foo
+>    : ^^^
 
     x() {
 >x : () => void
+>  : ^^^^^^^^^^
 
         var lambda = (_super: number) => { // Error 
 >lambda : (_super: number) => void
+>       : ^      ^^      ^^^^^^^^^
 >(_super: number) => { // Error         } : (_super: number) => void
+>                                         : ^      ^^      ^^^^^^^^^
 >_super : number
+>       : ^^^^^^
         }
     }
 }

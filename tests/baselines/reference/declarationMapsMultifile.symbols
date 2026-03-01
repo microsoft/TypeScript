@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/declarationMapsMultifile.ts] ////
+
+=== a.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
@@ -20,7 +22,7 @@ export class Foo {
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
     }
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {Foo} from "./a";
 >Foo : Symbol(Foo, Decl(index.ts, 0, 8))
 

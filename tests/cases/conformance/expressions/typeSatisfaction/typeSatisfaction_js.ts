@@ -1,5 +1,6 @@
+// @target: es2015
 // @allowJs: true
 // @filename: /src/a.js
-// @out: /lib/a.js
+// @outFile: /lib/a.js
 
 var v = undefined satisfies 1;

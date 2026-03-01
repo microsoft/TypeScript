@@ -1,10 +1,16 @@
-=== tests/cases/compiler/filename.cts ===
-const a = 2;
->a : 2
->2 : 2
+//// [tests/cases/compiler/moduleDetectionIsolatedModulesCjsFileScope.ts] ////
 
-=== tests/cases/compiler/filename.mts ===
+=== filename.cts ===
 const a = 2;
 >a : 2
+>  : ^
 >2 : 2
+>  : ^
+
+=== filename.mts ===
+const a = 2;
+>a : 2
+>  : ^
+>2 : 2
+>  : ^
 

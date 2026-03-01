@@ -1,8 +1,0 @@
-=== /a.ts ===
-import b from "./b";
->b : Symbol(b, Decl(a.ts, 0, 6))
-
-=== /b/index.ts ===
-export default 0;
-No type information for this code.
-No type information for this code.

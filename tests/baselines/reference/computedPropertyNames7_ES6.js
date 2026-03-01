@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES6.ts] ////
+
 //// [computedPropertyNames7_ES6.ts]
 enum E {
     member
@@ -7,6 +9,7 @@ var v = {
 }
 
 //// [computedPropertyNames7_ES6.js]
+"use strict";
 var E;
 (function (E) {
     E[E["member"] = 0] = "member";

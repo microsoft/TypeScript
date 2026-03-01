@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsOptionalTypeLiteralProps1.ts] ////
+
 //// [foo.js]
 /**
  * foo
@@ -15,6 +17,7 @@ function foo({ a, b, c }) {
 
 
 //// [foo.js]
+"use strict";
 /**
  * foo
  *
@@ -43,6 +46,6 @@ function foo({ a, b, c }) {
  */
 declare function foo({ a, b, c }: {
     a: number;
-    b?: number;
-    c?: number;
+    b?: number | undefined;
+    c?: number | undefined;
 }): number;

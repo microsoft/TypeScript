@@ -21,8 +21,6 @@ export namespace ns {
 }
 
 //// [working.js]
-"use strict";
-exports.__esModule = true;
+export {};
 //// [regression.js]
-"use strict";
-exports.__esModule = true;
+export {};

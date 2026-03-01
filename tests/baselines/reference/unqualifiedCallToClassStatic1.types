@@ -1,14 +1,21 @@
-=== tests/cases/compiler/unqualifiedCallToClassStatic1.ts ===
+//// [tests/cases/compiler/unqualifiedCallToClassStatic1.ts] ////
+
+=== unqualifiedCallToClassStatic1.ts ===
 class Vector {
 >Vector : Vector
+>       : ^^^^^^
 
  static foo = () => {
 >foo : () => void
+>    : ^^^^^^^^^^
 >() => {  // 'foo' cannot be called in an unqualified manner.  foo(); } : () => void
+>                                                                       : ^^^^^^^^^^
 
   // 'foo' cannot be called in an unqualified manner.
   foo();
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
  }
 }

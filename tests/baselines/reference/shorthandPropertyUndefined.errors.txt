@@ -1,7 +1,7 @@
-tests/cases/compiler/shorthandPropertyUndefined.ts(1,11): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
+shorthandPropertyUndefined.ts(1,11): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
 
 
-==== tests/cases/compiler/shorthandPropertyUndefined.ts (1 errors) ====
+==== shorthandPropertyUndefined.ts (1 errors) ====
     var a = { b };
               ~
 !!! error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.

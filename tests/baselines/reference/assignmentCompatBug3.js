@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug3.ts] ////
+
 //// [assignmentCompatBug3.ts]
 function makePoint(x: number, y: number) {
     return {
@@ -26,10 +28,11 @@ foo(x);
 foo(x + y);
 
 //// [assignmentCompatBug3.js]
+"use strict";
 function makePoint(x, y) {
     return {
-        get x() { return x; },
-        get y() { return y; },
+        get x() { return x; }, // shouldn't be "void"
+        get y() { return y; }, // shouldn't be "void"
         //x: "yo",
         //y: "boo",
         dist: function () {
@@ -37,18 +40,11 @@ function makePoint(x, y) {
         }
     };
 }
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get x() {
+        return 0;
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return 0;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}
 function foo(test) { }
 var x;
 var y;

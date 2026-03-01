@@ -1,29 +1,46 @@
-=== tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx ===
+//// [tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx] ////
+
+=== tsxSpreadDoesNotReportExcessProps.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
 >MyComponent : MyComponent
+>            : ^^^^^^^^^^^
 >React.Component : React.Component<{ dataSource: number[]; onClick?: any; }, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 >dataSource : number[]
+>           : ^^^^^^^^
 >onClick : any
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return (<div {...this.props} className="ok"></div>);
 >(<div {...this.props} className="ok"></div>) : JSX.Element
+>                                             : ^^^^^^^^^^^
 ><div {...this.props} className="ok"></div> : JSX.Element
+>                                           : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^
 >this : this
+>     : ^^^^
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^
 >className : string
+>          : ^^^^^^
 >div : any
+>    : ^^^
     }
 }
 

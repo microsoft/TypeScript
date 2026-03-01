@@ -1,47 +1,68 @@
-=== tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts ===
+//// [tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts] ////
+
+=== collisionSuperAndLocalVarInConstructor.ts ===
 var _super = 10; // No Error
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         var _super = 10; // No error
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class b extends Foo {
 >b : b
+>  : ^
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Foo
+>      : ^^^^^^^^^^
 
         var _super = 10; // Should be error 
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 class c extends Foo {
 >c : c
+>  : ^
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Foo
+>      : ^^^^^^^^^^
 
         var x = () => {
 >x : () => void
+>  : ^^^^^^^^^^
 >() => {            var _super = 10; // Should be error        } : () => void
+>                                                                : ^^^^^^^^^^
 
             var _super = 10; // Should be error
 >_super : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
         }
     }
 }

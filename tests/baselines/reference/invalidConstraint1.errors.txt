@@ -1,9 +1,9 @@
-tests/cases/compiler/invalidConstraint1.ts(4,11): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
+invalidConstraint1.ts(4,11): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/invalidConstraint1.ts (1 errors) ====
+==== invalidConstraint1.ts (1 errors) ====
     function f<T, U extends { a: T }>() {
         return undefined;
     }

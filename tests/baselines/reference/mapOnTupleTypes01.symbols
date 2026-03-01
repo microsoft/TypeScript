@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mapOnTupleTypes01.ts ===
+//// [tests/cases/compiler/mapOnTupleTypes01.ts] ////
+
+=== mapOnTupleTypes01.ts ===
 export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 >mapOnLooseArrayLiteral : Symbol(mapOnLooseArrayLiteral, Decl(mapOnTupleTypes01.ts, 0, 10))
 >[1, 2, 3, 4].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

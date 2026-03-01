@@ -1,11 +1,19 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList15.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList15.ts] ////
+
+=== parserParameterList15.ts ===
 function foo(a = 4);
 >foo : (a?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
 function foo(a, b) {}
 >foo : (a?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty.ts] ////
+
 //// [interfaceThatHidesBaseProperty.ts]
 interface Base {
     x: { a: number };
@@ -10,3 +12,4 @@ interface Derived extends Base {
 }
 
 //// [interfaceThatHidesBaseProperty.js]
+"use strict";

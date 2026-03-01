@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod5_Js.ts] ////
+
 //// [a.js]
 const bar = {
 	arguments: {}
@@ -25,7 +27,7 @@ class A {
 
 //// [a.d.ts]
 declare namespace bar {
-    const arguments: {};
+    let arguments: {};
 }
 declare class A {
     /**
@@ -35,9 +37,9 @@ declare class A {
     /**
      * @type object
      */
-    foo: object;
+    foo: object | undefined;
     /**
      * @type object
      */
-    bar: object;
+    bar: object | undefined;
 }

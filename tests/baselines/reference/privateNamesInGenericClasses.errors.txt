@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(22,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(23,3): error TS18013: Property '#method' is not accessible outside class 'C' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(24,3): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(25,1): error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.
+privateNamesInGenericClasses.ts(22,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
+privateNamesInGenericClasses.ts(23,3): error TS18013: Property '#method' is not accessible outside class 'C' because it has a private identifier.
+privateNamesInGenericClasses.ts(24,3): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
+privateNamesInGenericClasses.ts(25,1): error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(26,1): error TS2322: Type 'C<number>' is not assignable to type 'C<string>'.
+privateNamesInGenericClasses.ts(26,1): error TS2322: Type 'C<number>' is not assignable to type 'C<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts (5 errors) ====
+==== privateNamesInGenericClasses.ts (5 errors) ====
     class C<T> {
         #foo: T;
         #method(): T { return this.#foo; }

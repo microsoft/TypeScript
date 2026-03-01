@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloads.ts] ////
+
 //// [constructSignaturesWithOverloads.ts]
 // No errors expected for basic overloads of construct signatures
 
@@ -51,18 +53,15 @@ var b: {
 var r6 = new b(1, '');
 
 //// [constructSignaturesWithOverloads.js]
+"use strict";
 // No errors expected for basic overloads of construct signatures
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
+class C {
+    constructor(x) { }
+}
 var r1 = new C(1, '');
-var C2 = /** @class */ (function () {
-    function C2(x) {
-    }
-    return C2;
-}());
+class C2 {
+    constructor(x) { }
+}
 var r2 = new C2(1, '');
 var i;
 var r3 = new i(1, '');

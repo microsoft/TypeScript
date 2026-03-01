@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndEmptyObject.ts] ////
+
 //// [nonPrimitiveAndEmptyObject.ts]
 // Repro from #49480
 
@@ -16,11 +18,10 @@ fooProps.barProp;
 
 
 //// [nonPrimitiveAndEmptyObject.js]
-"use strict";
 // Repro from #49480
-exports.__esModule = true;
-var _a = foo.fooProps, fooProps = _a === void 0 ? {} : _a;
+const { fooProps = {} } = foo;
 fooProps.barProp;
+export {};
 
 
 //// [nonPrimitiveAndEmptyObject.d.ts]

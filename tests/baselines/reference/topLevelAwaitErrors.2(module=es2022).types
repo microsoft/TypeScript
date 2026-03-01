@@ -1,8 +1,12 @@
-=== tests/cases/conformance/externalModules/topLevelAwaitErrors.2.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.2.ts] ////
+
+=== topLevelAwaitErrors.2.ts ===
 export {};
 
 // reparse variable name as await should fail
 var await = 1;
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 

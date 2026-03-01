@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts] ////
+
+=== exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts ===
 // operator **
 var r1 = null ** null;
 >r1 : Symbol(r1, Decl(exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts, 1, 3))

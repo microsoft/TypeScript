@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignToEnum.ts] ////
+
 //// [assignToEnum.ts]
 enum A { foo, bar }
 A = undefined;  // invalid LHS
@@ -8,6 +10,7 @@ A.foo = A.bar;  // invalid LHS
 
 
 //// [assignToEnum.js]
+"use strict";
 var A;
 (function (A) {
     A[A["foo"] = 0] = "foo";

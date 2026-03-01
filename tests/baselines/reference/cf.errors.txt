@@ -1,10 +1,10 @@
-tests/cases/compiler/cf.ts(9,13): error TS7027: Unreachable code detected.
-tests/cases/compiler/cf.ts(21,17): error TS7027: Unreachable code detected.
-tests/cases/compiler/cf.ts(32,13): error TS7027: Unreachable code detected.
-tests/cases/compiler/cf.ts(36,13): error TS7027: Unreachable code detected.
+cf.ts(9,13): error TS7027: Unreachable code detected.
+cf.ts(21,17): error TS7027: Unreachable code detected.
+cf.ts(32,13): error TS7027: Unreachable code detected.
+cf.ts(36,13): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/cf.ts (4 errors) ====
+==== cf.ts (4 errors) ====
     function f() {
         var z;
         var x=10;

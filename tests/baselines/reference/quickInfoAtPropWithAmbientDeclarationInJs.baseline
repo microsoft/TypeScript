@@ -1,0 +1,39 @@
+// === QuickInfo ===
+=== /a.js ===
+// class C {
+//     constructor() {
+//         this.prop = "";
+//     }
+//     declare prop: string;
+//     method() {
+//         this.prop.foo
+//                   ^^^
+// | ----------------------------------------------------------------------
+// | any
+// | ----------------------------------------------------------------------
+//     }
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 122,
+      "name": ""
+    },
+    "item": {
+      "kind": "",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 119,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ]
+    }
+  }
+]

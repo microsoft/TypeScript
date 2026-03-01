@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedTypesKeyofNoIndexSignatureType.ts] ////
+
 //// [computedTypesKeyofNoIndexSignatureType.ts]
 type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
 
@@ -21,3 +23,4 @@ type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: stri
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
 
 //// [computedTypesKeyofNoIndexSignatureType.js]
+"use strict";

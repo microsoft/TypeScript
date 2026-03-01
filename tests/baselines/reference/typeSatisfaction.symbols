@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts] ////
+
+=== typeSatisfaction.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(typeSatisfaction.ts, 0, 0))
 

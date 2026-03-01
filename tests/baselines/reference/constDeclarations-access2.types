@@ -1,128 +1,201 @@
-=== tests/cases/compiler/constDeclarations-access2.ts ===
+//// [tests/cases/compiler/constDeclarations-access2.ts] ////
+
+=== constDeclarations-access2.ts ===
 const x = 0
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
 // Errors
 x = 1;
 >x = 1 : 1
+>      : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 x += 2;
 >x += 2 : any
+>       : ^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
 x -= 3;
 >x -= 3 : number
+>       : ^^^^^^
 >x : any
+>  : ^^^
 >3 : 3
+>  : ^
 
 x *= 4;
 >x *= 4 : number
+>       : ^^^^^^
 >x : any
+>  : ^^^
 >4 : 4
+>  : ^
 
 x /= 5;
 >x /= 5 : number
+>       : ^^^^^^
 >x : any
+>  : ^^^
 >5 : 5
+>  : ^
 
 x %= 6;
 >x %= 6 : number
+>       : ^^^^^^
 >x : any
+>  : ^^^
 >6 : 6
+>  : ^
 
 x <<= 7;
 >x <<= 7 : number
+>        : ^^^^^^
 >x : any
+>  : ^^^
 >7 : 7
+>  : ^
 
 x >>= 8;
 >x >>= 8 : number
+>        : ^^^^^^
 >x : any
+>  : ^^^
 >8 : 8
+>  : ^
 
 x >>>= 9;
 >x >>>= 9 : number
+>         : ^^^^^^
 >x : any
+>  : ^^^
 >9 : 9
+>  : ^
 
 x &= 10;
 >x &= 10 : number
+>        : ^^^^^^
 >x : any
+>  : ^^^
 >10 : 10
+>   : ^^
 
 x |= 11;
 >x |= 11 : number
+>        : ^^^^^^
 >x : any
+>  : ^^^
 >11 : 11
+>   : ^^
 
 x ^= 12;
 >x ^= 12 : number
+>        : ^^^^^^
 >x : any
+>  : ^^^
 >12 : 12
+>   : ^^
 
 x++;
 >x++ : number
+>    : ^^^^^^
 >x : any
+>  : ^^^
 
 x--;
 >x-- : number
+>    : ^^^^^^
 >x : any
+>  : ^^^
 
 ++x;
 >++x : number
+>    : ^^^^^^
 >x : any
+>  : ^^^
 
 --x;
 >--x : number
+>    : ^^^^^^
 >x : any
+>  : ^^^
 
 ++((x));
 >++((x)) : number
+>        : ^^^^^^
 >((x)) : any
+>      : ^^^
 >(x) : any
+>    : ^^^
 >x : any
+>  : ^^^
 
 // OK
 var a = x + 1;
 >a : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 function f(v: number) { }
 >f : (v: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >v : number
+>  : ^^^^^^
 
 f(x);
 >f(x) : void
+>     : ^^^^
 >f : (v: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 if (x) { }
 >x : number
+>  : ^^^^^^
 
 x;
 >x : number
+>  : ^^^^^^
 
 (x);
 >(x) : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 -x;
 >-x : number
+>   : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 +x;
 >+x : number
+>   : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 x.toString();
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 

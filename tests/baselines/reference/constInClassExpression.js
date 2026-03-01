@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constInClassExpression.ts] ////
+
 //// [constInClassExpression.ts]
 let C = class {
     const a = 4;
@@ -5,9 +7,9 @@ let C = class {
 
 
 //// [constInClassExpression.js]
-var C = /** @class */ (function () {
-    function class_1() {
+"use strict";
+let C = class {
+    constructor() {
         this.a = 4;
     }
-    return class_1;
-}());
+};

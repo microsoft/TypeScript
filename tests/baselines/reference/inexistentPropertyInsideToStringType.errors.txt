@@ -1,0 +1,10 @@
+index.js(2,10): error TS2339: Property 'yadda' does not exist on type 'toString'.
+
+
+==== index.js (1 errors) ====
+    function toString() {
+        this.yadda
+             ~~~~~
+!!! error TS2339: Property 'yadda' does not exist on type 'toString'.
+        this.someValue = "";
+    }

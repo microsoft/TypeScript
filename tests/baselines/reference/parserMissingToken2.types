@@ -1,4 +1,7 @@
-=== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts] ////
+
+=== parserMissingToken2.ts ===
 / b;
->/ b; : RegExp
+>/ b : RegExp
+>    : ^^^^^^
 

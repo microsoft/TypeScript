@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts] ////
+
 //// [inDoesNotOperateOnPrimitiveTypes.ts]
 const validHasKey = <T extends object>(
   thing: T,
@@ -67,10 +69,11 @@ function intersection2<T>(thing: T & (0 | 1 | 2)) {
 
 
 //// [inDoesNotOperateOnPrimitiveTypes.js]
-var validHasKey = function (thing, key) {
+"use strict";
+const validHasKey = (thing, key) => {
     return key in thing; // Ok
 };
-var alsoValidHasKey = function (thing, key) {
+const alsoValidHasKey = (thing, key) => {
     return key in thing; // Ok (as T may be instantiated with a valid type)
 };
 function invalidHasKey(thing, key) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithString.ts] ////
+
 //// [enumConstantMemberWithString.ts]
 enum T1 {
     a = "1",
@@ -34,13 +36,14 @@ declare enum T6 {
 
 
 //// [enumConstantMemberWithString.js]
+"use strict";
 var T1;
 (function (T1) {
     T1["a"] = "1";
     T1["b"] = "12";
     T1["c"] = "123";
-    T1[T1["d"] = 0] = "d";
-    T1[T1["e"] = 0] = "e";
+    T1[T1["d"] = "a" - "a"] = "d";
+    T1["e"] = "a1";
 })(T1 || (T1 = {}));
 var T2;
 (function (T2) {
@@ -52,7 +55,7 @@ var T3;
     T3["a"] = "1";
     T3["b"] = "12";
     T3[T3["c"] = 1] = "c";
-    T3[T3["d"] = 0] = "d";
+    T3[T3["d"] = 3] = "d";
 })(T3 || (T3 = {}));
 var T4;
 (function (T4) {

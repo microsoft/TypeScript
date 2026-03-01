@@ -1,24 +1,36 @@
-=== tests/cases/compiler/superInConstructorParam1.ts ===
+//// [tests/cases/compiler/superInConstructorParam1.ts] ////
+
+=== superInConstructorParam1.ts ===
 class B {
 >B : B
+>  : ^
 
   public foo(): number {
 >foo : () => number
+>    : ^^^^^^      
 
     return 0;
 >0 : 0
+>  : ^
   }
 }
 
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
   constructor(a = super.foo()) {
 >a : any
+>  : ^^^
 >super.foo() : any
+>            : ^^^
 >super.foo : any
+>          : ^^^
 >super : any
+>      : ^^^
 >foo : any
+>    : ^^^
   }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts ===
+//// [tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts] ////
+
+=== invalidForInBreakStatements.ts ===
 // All errors
 
 // naked break not allowed

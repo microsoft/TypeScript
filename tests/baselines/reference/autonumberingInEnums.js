@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/autonumberingInEnums.ts] ////
+
 //// [autonumberingInEnums.ts]
 enum Foo {
     a = 1
@@ -8,6 +10,7 @@ enum Foo {
 }
 
 //// [autonumberingInEnums.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["a"] = 1] = "a";

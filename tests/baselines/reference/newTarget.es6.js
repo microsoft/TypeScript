@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/newTarget/newTarget.es6.ts] ////
+
 //// [newTarget.es6.ts]
 class A {
     constructor() {
@@ -33,6 +35,7 @@ const O = {
 
 
 //// [newTarget.es6.js]
+"use strict";
 class A {
     constructor() {
         this.d = function () { return new.target; };

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringLiteralsAssignedToStringMappings.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsAssignedToStringMappings.ts] ////
+
+=== stringLiteralsAssignedToStringMappings.ts ===
 declare var x: Uppercase<Lowercase<string>>;
 >x : Symbol(x, Decl(stringLiteralsAssignedToStringMappings.ts, 0, 11))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))

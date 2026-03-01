@@ -1,3 +1,21 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritDoc4.ts ===
+// var A: any;
+// 
+// class B extends A {
+//     /**
+//      * @inheritdoc
+//      */
+//     static value() {
+//            ^^^^^
+// | ----------------------------------------------------------------------
+// | (method) B.value(): undefined
+// | @inheritdoc 
+// | ----------------------------------------------------------------------
+//         return undefined;
+//     }
+// }
+
 [
   {
     "marker": {
@@ -5,7 +23,7 @@
       "position": 79,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
@@ -58,7 +76,7 @@
           "kind": "space"
         },
         {
-          "text": "any",
+          "text": "undefined",
           "kind": "keyword"
         }
       ],

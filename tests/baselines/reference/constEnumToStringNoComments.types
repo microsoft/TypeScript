@@ -1,140 +1,242 @@
-=== tests/cases/compiler/constEnumToStringNoComments.ts ===
+//// [tests/cases/compiler/constEnumToStringNoComments.ts] ////
+
+=== constEnumToStringNoComments.ts ===
 const enum Foo {
 >Foo : Foo
+>    : ^^^
 
     X = 100,
 >X : Foo.X
+>  : ^^^^^
 >100 : 100
+>    : ^^^
 
     Y = 0.5,
 >Y : Foo.Y
+>  : ^^^^^
 >0.5 : 0.5
+>    : ^^^
 
     Z = 2.,
 >Z : Foo.Z
+>  : ^^^^^
 >2. : 2
+>   : ^
 
     A = -1,
 >A : Foo.A
+>  : ^^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
     B = -1.5,
 >B : Foo.B
+>  : ^^^^^
 >-1.5 : -1.5
+>     : ^^^^
 >1.5 : 1.5
+>    : ^^^
 
     C = -1.
 >C : Foo.A
+>  : ^^^^^
 >-1. : -1
+>    : ^^
 >1. : 1
+>   : ^
 }
 
 let x0 = Foo.X.toString();
 >x0 : string
+>   : ^^^^^^
 >Foo.X.toString() : string
+>                 : ^^^^^^
 >Foo.X.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >Foo.X : Foo.X
+>      : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >X : Foo.X
+>  : ^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let x1 = Foo["X"].toString();
 >x1 : string
+>   : ^^^^^^
 >Foo["X"].toString() : string
+>                    : ^^^^^^
 >Foo["X"].toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >Foo["X"] : Foo.X
+>         : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"X" : "X"
+>    : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let y0 = Foo.Y.toString();
 >y0 : string
+>   : ^^^^^^
 >Foo.Y.toString() : string
+>                 : ^^^^^^
 >Foo.Y.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >Foo.Y : Foo.Y
+>      : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Y : Foo.Y
+>  : ^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let y1 = Foo["Y"].toString();
 >y1 : string
+>   : ^^^^^^
 >Foo["Y"].toString() : string
+>                    : ^^^^^^
 >Foo["Y"].toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >Foo["Y"] : Foo.Y
+>         : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"Y" : "Y"
+>    : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let z0 = Foo.Z.toString();
 >z0 : string
+>   : ^^^^^^
 >Foo.Z.toString() : string
+>                 : ^^^^^^
 >Foo.Z.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >Foo.Z : Foo.Z
+>      : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Z : Foo.Z
+>  : ^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let z1 = Foo["Z"].toString();
 >z1 : string
+>   : ^^^^^^
 >Foo["Z"].toString() : string
+>                    : ^^^^^^
 >Foo["Z"].toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >Foo["Z"] : Foo.Z
+>         : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"Z" : "Z"
+>    : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let a0 = Foo.A.toString();
 >a0 : string
+>   : ^^^^^^
 >Foo.A.toString() : string
+>                 : ^^^^^^
 >Foo.A.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >Foo.A : Foo.A
+>      : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >A : Foo.A
+>  : ^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let a1 = Foo["A"].toString();
 >a1 : string
+>   : ^^^^^^
 >Foo["A"].toString() : string
+>                    : ^^^^^^
 >Foo["A"].toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >Foo["A"] : Foo.A
+>         : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let b0 = Foo.B.toString();
 >b0 : string
+>   : ^^^^^^
 >Foo.B.toString() : string
+>                 : ^^^^^^
 >Foo.B.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >Foo.B : Foo.B
+>      : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >B : Foo.B
+>  : ^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let b1 = Foo["B"].toString();
 >b1 : string
+>   : ^^^^^^
 >Foo["B"].toString() : string
+>                    : ^^^^^^
 >Foo["B"].toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >Foo["B"] : Foo.B
+>         : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let c0 = Foo.C.toString();
 >c0 : string
+>   : ^^^^^^
 >Foo.C.toString() : string
+>                 : ^^^^^^
 >Foo.C.toString : (radix?: number) => string
+>               : ^     ^^^      ^^^^^      
 >Foo.C : Foo.A
+>      : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >C : Foo.A
+>  : ^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 let c1 = Foo["C"].toString();
 >c1 : string
+>   : ^^^^^^
 >Foo["C"].toString() : string
+>                    : ^^^^^^
 >Foo["C"].toString : (radix?: number) => string
+>                  : ^     ^^^      ^^^^^      
 >Foo["C"] : Foo.A
+>         : ^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"C" : "C"
+>    : ^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 

@@ -1,32 +1,103 @@
-=== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts ===
+//// [tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts] ////
+
+=== unresolvableSelfReferencingAwaitedUnion.ts ===
 // repro #49646
 
 type EnvFunction = <T>() => T;
->EnvFunction : <T>() => T
+>EnvFunction : EnvFunction
+>            : ^^^^^^^^^^^
 
 type SimpleType = string | Promise<SimpleType>;
->SimpleType : string | Promise<SimpleType>
+>SimpleType : SimpleType
+>           : ^^^^^^^^^^
 
 declare const simple: SimpleType;
 >simple : SimpleType
+>       : ^^^^^^^^^^
 
 const env: EnvFunction = () => simple;
 >env : EnvFunction
+>    : ^^^^^^^^^^^
 >() => simple : () => SimpleType
+>             : ^^^^^^^^^^^^^^^^
 >simple : SimpleType
+>       : ^^^^^^^^^^
 
 // repro #49723
 
 type T1 = 1 | Promise<T1> | T1[];
->T1 : 1 | Promise<T1> | T1[]
+>T1 : T1
+>   : ^^
 
 export async function myFunction(param: T1) {
 >myFunction : (param: T1) => Promise<void>
+>           : ^     ^^  ^^^^^^^^^^^^^^^^^^
 >param : T1
+>      : ^^
 
   const awaited = await param
 >awaited : 1 | T1[]
+>        : ^^^^^^^^
 >await param : 1 | T1[]
+>            : ^^^^^^^^
 >param : T1
+>      : ^^
+}
+
+// repro #42948
+
+type EffectResult =
+>EffectResult : EffectResult
+>             : ^^^^^^^^^^^^
+
+  | (() => EffectResult)
+  | Promise<EffectResult>;
+
+export async function handleEffectResult(result: EffectResult) {
+>handleEffectResult : (result: EffectResult) => Promise<void>
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
+>result : EffectResult
+>       : ^^^^^^^^^^^^
+
+  if (result instanceof Function) {
+>result instanceof Function : boolean
+>                           : ^^^^^^^
+>result : EffectResult
+>       : ^^^^^^^^^^^^
+>Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+
+    await handleEffectResult(result());
+>await handleEffectResult(result()) : void
+>                                   : ^^^^
+>handleEffectResult(result()) : Promise<void>
+>                             : ^^^^^^^^^^^^^
+>handleEffectResult : (result: EffectResult) => Promise<void>
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
+>result() : EffectResult
+>         : ^^^^^^^^^^^^
+>result : () => EffectResult
+>       : ^^^^^^            
+
+  } else if (result instanceof Promise) {
+>result instanceof Promise : boolean
+>                          : ^^^^^^^
+>result : Promise<EffectResult>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+    await handleEffectResult(await result);
+>await handleEffectResult(await result) : void
+>                                       : ^^^^
+>handleEffectResult(await result) : Promise<void>
+>                                 : ^^^^^^^^^^^^^
+>handleEffectResult : (result: EffectResult) => Promise<void>
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
+>await result : () => EffectResult
+>             : ^^^^^^            
+>result : Promise<EffectResult>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+  }
 }
 

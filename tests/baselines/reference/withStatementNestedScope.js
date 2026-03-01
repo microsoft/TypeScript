@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withStatementNestedScope.ts] ////
+
 //// [withStatementNestedScope.ts]
 var x = 1;
 with (x) {
@@ -9,6 +11,7 @@ with (x) {
 }
 
 //// [withStatementNestedScope.js]
+"use strict";
 var x = 1;
 with (x) {
     function f(a) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiCallOverloads.ts] ////
+
 //// [multiCallOverloads.ts]
 interface ICallback {
     (x?: string):void;
@@ -14,6 +16,7 @@ load(function(z?) {}) // this shouldn't be an error
 
 
 //// [multiCallOverloads.js]
+"use strict";
 function load(f) { }
 var f1 = function (z) { };
 var f2 = function (z) { };

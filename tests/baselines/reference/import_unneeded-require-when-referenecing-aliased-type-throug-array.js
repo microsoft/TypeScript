@@ -16,10 +16,11 @@ var p = testData[0].name;
  
 
 //// [b.js]
+"use strict";
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var testData;
     var p = testData[0].name;
 });

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/reExportGlobalDeclaration2.ts] ////
+
+=== file1.d.ts ===
 declare interface I1 {
 >I1 : Symbol(I1, Decl(file1.d.ts, 0, 0))
 
@@ -13,7 +15,7 @@ declare interface I2 {
 >x : Symbol(I2.x, Decl(file1.d.ts, 4, 22))
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export {I1, I1 as II1};
 >I1 : Symbol(I1, Decl(file2.ts, 0, 8))
 >I1 : Symbol(I1, Decl(file1.d.ts, 0, 0))

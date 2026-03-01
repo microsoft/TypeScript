@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/definiteAssignmentOfDestructuredVariable.ts] ////
+
 //// [definiteAssignmentOfDestructuredVariable.ts]
 // https://github.com/Microsoft/TypeScript/issues/20994
 interface Options {
@@ -16,13 +18,11 @@ class C<T extends Options> {
 }
 
 //// [definiteAssignmentOfDestructuredVariable.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function () {
-        var _a = this.foo, a = _a.a, b = _a.b;
+"use strict";
+class C {
+    method() {
+        let { a, b } = this.foo;
         !(a && b);
         a;
-    };
-    return C;
-}());
+    }
+}

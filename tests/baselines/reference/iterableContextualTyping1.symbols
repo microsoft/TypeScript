@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/iterableContextualTyping1.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/iterableContextualTyping1.ts] ////
+
+=== iterableContextualTyping1.ts ===
 var iter: Iterable<(x: string) => number> = [s => s.length];
 >iter : Symbol(iter, Decl(iterableContextualTyping1.ts, 0, 3))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))

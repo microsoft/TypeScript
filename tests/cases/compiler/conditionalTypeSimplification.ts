@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #30794
 
 interface AbstractSchema<S, V> {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts] ////
+
 //// [generatorTypeCheck25.ts]
 class Foo { x: number }
 class Bar extends Foo { y: string }
@@ -11,6 +13,7 @@ var g3: () => Iterable<Foo> = function* () {
 }
 
 //// [generatorTypeCheck25.js]
+"use strict";
 class Foo {
 }
 class Bar extends Foo {

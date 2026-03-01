@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/parameterPropertyInConstructor4.ts] ////
+
+=== parameterPropertyInConstructor4.ts ===
+export class C {
+>C : C
+>  : ^
+
+    constructor(public a: number[] = [], b: number) {
+>a : number[]
+>  : ^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+>b : number
+>  : ^^^^^^
+    }
+}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadsAndTypeArgumentArityErrors.ts] ////
+
 //// [overloadsAndTypeArgumentArityErrors.ts]
 declare function Callbacks(flags?: string): void;
 declare function Callbacks<T>(flags?: string): void;
@@ -11,6 +13,7 @@ f<number>(); // wrong number of arguments (#25683)
 
 
 //// [overloadsAndTypeArgumentArityErrors.js]
+"use strict";
 Callbacks('s'); // wrong number of type arguments
 new Callbacks('s'); // wrong number of type arguments
 f(); // wrong number of arguments (#25683)

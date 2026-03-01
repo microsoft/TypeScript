@@ -4,7 +4,7 @@
 class Foo {
     x: Foo.Bar;
 }
-module Foo {
+namespace Foo {
     export interface Bar {
     }
 }
@@ -20,15 +20,12 @@ zz.x;
 
 //// [exportAssignClassAndModule_0.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 module.exports = Foo;
 //// [exportAssignClassAndModule_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var z;
 var zz;
 zz.x;

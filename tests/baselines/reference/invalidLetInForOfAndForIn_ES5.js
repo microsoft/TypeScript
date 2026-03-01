@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidLetInForOfAndForIn_ES5.ts] ////
+
 //// [invalidLetInForOfAndForIn_ES5.ts]
 // This should be an error
 // More details: http://www.ecma-international.org/ecma-262/6.0/#sec-iteration-statements
@@ -11,6 +13,7 @@ for (let in [1,2,3]) {}
 
 
 //// [invalidLetInForOfAndForIn_ES5.js]
+"use strict";
 // This should be an error
 // More details: http://www.ecma-international.org/ecma-262/6.0/#sec-iteration-statements
 var let = 10;

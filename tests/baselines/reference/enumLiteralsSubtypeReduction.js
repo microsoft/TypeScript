@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumLiteralsSubtypeReduction.ts] ////
+
 //// [enumLiteralsSubtypeReduction.ts]
 enum E {
     E0,
@@ -2056,6 +2058,7 @@ function run(a: number) {
 
 
 //// [enumLiteralsSubtypeReduction.js]
+"use strict";
 var E;
 (function (E) {
     E[E["E0"] = 0] = "E0";

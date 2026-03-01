@@ -1,13 +1,13 @@
-tests/cases/conformance/scanner/ecmascript5/file1.ts(3,5): error TS1260: Keywords cannot contain escape characters.
-tests/cases/conformance/scanner/ecmascript5/file1.ts(8,5): error TS1260: Keywords cannot contain escape characters.
-tests/cases/conformance/scanner/ecmascript5/file1.ts(13,1): error TS1260: Keywords cannot contain escape characters.
-tests/cases/conformance/scanner/ecmascript5/file2.ts(1,1): error TS1260: Keywords cannot contain escape characters.
-tests/cases/conformance/scanner/ecmascript5/file2.ts(5,5): error TS1260: Keywords cannot contain escape characters.
-tests/cases/conformance/scanner/ecmascript5/file2.ts(10,5): error TS1260: Keywords cannot contain escape characters.
-tests/cases/conformance/scanner/ecmascript5/file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
+file1.ts(3,5): error TS1260: Keywords cannot contain escape characters.
+file1.ts(8,5): error TS1260: Keywords cannot contain escape characters.
+file1.ts(13,1): error TS1260: Keywords cannot contain escape characters.
+file2.ts(1,1): error TS1260: Keywords cannot contain escape characters.
+file2.ts(5,5): error TS1260: Keywords cannot contain escape characters.
+file2.ts(10,5): error TS1260: Keywords cannot contain escape characters.
+file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
 
 
-==== tests/cases/conformance/scanner/ecmascript5/file1.ts (3 errors) ====
+==== file1.ts (3 errors) ====
     var \u0061wait = 12; // ok
     async function main() {
         \u0061wait 12; // not ok
@@ -29,7 +29,7 @@ tests/cases/conformance/scanner/ecmascript5/file2.ts(15,1): error TS1260: Keywor
 !!! error TS1260: Keywords cannot contain escape characters.
     
     export {};
-==== tests/cases/conformance/scanner/ecmascript5/file2.ts (4 errors) ====
+==== file2.ts (4 errors) ====
     \u{0076}ar x = "hello"; // not ok
     ~~~~~~~~~~
 !!! error TS1260: Keywords cannot contain escape characters.

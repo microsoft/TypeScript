@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_WatchWithOwnWatchHost.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_WatchWithOwnWatchHost.ts]
@@ -68,19 +69,19 @@ watchMain();
  * Note: This test is a public API sample. This sample verifies creating abstract builder to watch list of root files
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
-var ts = require("typescript");
+Object.defineProperty(exports, "__esModule", { value: true });
+const ts = require("typescript");
 function watchMain() {
     // get list of files and compiler options somehow
-    var files = [];
-    var options = {};
-    var host = {
+    const files = [];
+    const options = {};
+    const host = {
         rootFiles: files,
-        options: options,
-        useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
-        getNewLine: function () { return ts.sys.newLine; },
+        options,
+        useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+        getNewLine: () => ts.sys.newLine,
         getCurrentDirectory: ts.sys.getCurrentDirectory,
-        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); },
+        getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
         directoryExists: ts.sys.directoryExists,
@@ -93,13 +94,13 @@ function watchMain() {
     };
     // You can technically override any given hook on the host, though you probably don't need to.
     // Note that we're assuming `origCreateProgram` and `origPostProgramCreate` doesn't use `this` at all.
-    var origCreateProgram = host.createProgram;
-    host.createProgram = function (rootNames, options, host, oldProgram) {
+    const origCreateProgram = host.createProgram;
+    host.createProgram = (rootNames, options, host, oldProgram) => {
         console.log("** We're about to create the program! **");
         return origCreateProgram(rootNames, options, host, oldProgram);
     };
-    var origPostProgramCreate = host.afterProgramCreate;
-    host.afterProgramCreate = function (program) {
+    const origPostProgramCreate = host.afterProgramCreate;
+    host.afterProgramCreate = program => {
         console.log("** We finished making the program! **");
         origPostProgramCreate(program);
     };

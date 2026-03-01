@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression14_es6.ts] ////
+
 //// [YieldExpression14_es6.ts]
 class C {
   foo() {
@@ -6,6 +8,7 @@ class C {
 }
 
 //// [YieldExpression14_es6.js]
+"use strict";
 class C {
     foo() {
         yield foo;

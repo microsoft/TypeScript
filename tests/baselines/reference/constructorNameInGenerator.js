@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorNameInGenerator.ts] ////
+
 //// [constructorNameInGenerator.ts]
 class C2 {
     *constructor() {}
@@ -5,6 +7,7 @@ class C2 {
 
 
 //// [constructorNameInGenerator.js]
+"use strict";
 class C2 {
     *constructor() { }
 }

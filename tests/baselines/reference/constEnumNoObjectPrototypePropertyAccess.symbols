@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/constEnums/constEnumNoObjectPrototypePropertyAccess.ts] ////
+
+=== constEnumNoObjectPrototypePropertyAccess.ts ===
+// https://github.com/microsoft/TypeScript/issues/55421
+
+const enum Bebra {}
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.constructor)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.hasOwnProperty)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.isPrototypeOf)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.propertyIsEnumerable)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.toLocaleString)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.toString)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+
+console.log(Bebra.valueOf)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Bebra : Symbol(Bebra, Decl(constEnumNoObjectPrototypePropertyAccess.ts, 0, 0))
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum1.ts] ////
+
 //// [parserInterfaceKeywordInEnum1.ts]
 "use strict";
 

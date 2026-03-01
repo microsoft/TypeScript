@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisUnknown.ts] ////
+
 //// [globalThisUnknown.ts]
 declare let win: Window & typeof globalThis;
 
@@ -15,6 +17,7 @@ globalThis['hi']
 
 
 //// [globalThisUnknown.js]
+"use strict";
 // this access should be an error
 win.hi;
 // these two should be fine, with type any

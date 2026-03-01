@@ -1,11 +1,16 @@
-=== tests/cases/compiler/switchAssignmentCompat.ts ===
+//// [tests/cases/compiler/switchAssignmentCompat.ts] ////
+
+=== switchAssignmentCompat.ts ===
 class Foo { }
 >Foo : Foo
+>    : ^^^
 
 switch (0) {
 >0 : 0
+>  : ^
 
     case Foo: break; // Error expected
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 }
 

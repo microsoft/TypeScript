@@ -1,16 +1,18 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts] ////
+
 //// [logicalNotOperatorWithStringType.ts]
 // ! operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
 
 class A {
-    public a: string;
+    public a!: string;
     static foo() { return ""; }
 }
-module M {
-    export var n: string;
+namespace M {
+    export declare var n: string;
 }
 
 var objA = new A();
@@ -45,16 +47,12 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 !objA.a,M.n;
 
 //// [logicalNotOperatorWithStringType.js]
-// ! operator on string type
-var STRING;
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -65,7 +63,7 @@ var ResultIsBoolean2 = !STRING1;
 // string type literal
 var ResultIsBoolean3 = !"";
 var ResultIsBoolean4 = !{ x: "", y: "" };
-var ResultIsBoolean5 = !{ x: "", y: function (s) { return s; } };
+var ResultIsBoolean5 = !{ x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsBoolean6 = !objA.a;
 var ResultIsBoolean7 = !M.n;

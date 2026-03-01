@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorConstructorSubtypes.ts ===
+//// [tests/cases/compiler/errorConstructorSubtypes.ts] ////
+
+=== errorConstructorSubtypes.ts ===
 // In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
 interface ErrorConstructor {
 >ErrorConstructor : Symbol(ErrorConstructor, Decl(lib.es5.d.ts, --, --), Decl(errorConstructorSubtypes.ts, 0, 0))
@@ -8,7 +10,7 @@ interface ErrorConstructor {
 >targetObject : Symbol(targetObject, Decl(errorConstructorSubtypes.ts, 2, 20))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >constructorOpt : Symbol(constructorOpt, Decl(errorConstructorSubtypes.ts, 2, 41))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 declare var x: ErrorConstructor

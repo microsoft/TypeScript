@@ -1,31 +1,47 @@
-=== tests/cases/compiler/forOfStringConstituents.ts ===
+//// [tests/cases/compiler/forOfStringConstituents.ts] ////
+
+=== forOfStringConstituents.ts ===
 interface A { x: 0; y: C[]; }
 >x : 0
+>  : ^
 >y : C[]
+>  : ^^^
 
 interface B { x: 1; y: CD[]; }
 >x : 1
+>  : ^
 >y : CD[]
+>  : ^^^^
 
 interface C { x: 2; }
 >x : 2
+>  : ^
 
 interface D { x: 3; }
 >x : 3
+>  : ^
 
 type AB = A | B;
->AB : A | B
+>AB : AB
+>   : ^^
 
 type CD = C | D;
->CD : C | D
+>CD : CD
+>   : ^^
 
 declare let x: AB, y: CD;
 >x : AB
+>  : ^^
 >y : CD
+>  : ^^
 
 for (y of x.y);
 >y : CD
+>  : ^^
 >x.y : C[] | CD[]
+>    : ^^^^^^^^^^
 >x : AB
+>  : ^^
 >y : C[] | CD[]
+>  : ^^^^^^^^^^
 

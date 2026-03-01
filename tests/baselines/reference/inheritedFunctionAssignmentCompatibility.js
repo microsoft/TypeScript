@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts] ////
+
 //// [inheritedFunctionAssignmentCompatibility.ts]
 interface IResultCallback extends Function { }
 
@@ -9,6 +11,7 @@ fn(function (a, b) { return true; })
 
 
 //// [inheritedFunctionAssignmentCompatibility.js]
+"use strict";
 function fn(cb) { }
-fn(function (a, b) { return true; });
+fn((a, b) => true);
 fn(function (a, b) { return true; });

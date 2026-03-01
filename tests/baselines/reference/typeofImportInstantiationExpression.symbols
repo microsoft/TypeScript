@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/typeofImportInstantiationExpression.ts] ////
+
+=== input.ts ===
+interface Arg<T = any, Params extends Record<string, any> = Record<string, any>> {
+>Arg : Symbol(Arg, Decl(input.ts, 0, 0))
+>T : Symbol(T, Decl(input.ts, 0, 14))
+>Params : Symbol(Params, Decl(input.ts, 0, 22))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    "__is_argument__"?: true;
+>"__is_argument__" : Symbol(Arg["__is_argument__"], Decl(input.ts, 0, 82))
+
+    meta?: T;
+>meta : Symbol(Arg.meta, Decl(input.ts, 1, 29))
+>T : Symbol(T, Decl(input.ts, 0, 14))
+
+    params?: Params;
+>params : Symbol(Arg.params, Decl(input.ts, 2, 13))
+>Params : Symbol(Params, Decl(input.ts, 0, 22))
+}
+
+export function myFunction<T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) { return (arg.params || {}) as U }
+>myFunction : Symbol(myFunction, Decl(input.ts, 4, 1))
+>T : Symbol(T, Decl(input.ts, 6, 27))
+>U : Symbol(U, Decl(input.ts, 6, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(input.ts, 6, 89))
+>Arg : Symbol(Arg, Decl(input.ts, 0, 0))
+>T : Symbol(T, Decl(input.ts, 6, 27))
+>U : Symbol(U, Decl(input.ts, 6, 35))
+>arg.params : Symbol(Arg.params, Decl(input.ts, 2, 13))
+>arg : Symbol(arg, Decl(input.ts, 6, 89))
+>params : Symbol(Arg.params, Decl(input.ts, 2, 13))
+>U : Symbol(U, Decl(input.ts, 6, 35))
+
+=== main.ts ===
+type T1 = typeof import('./input.js').myFunction;
+>T1 : Symbol(T1, Decl(main.ts, 0, 0))
+>myFunction : Symbol(myFunction, Decl(input.ts, 4, 1))
+
+type T2 = typeof import('./input.js').myFunction<any, { slug: 'hello' }>;
+>T2 : Symbol(T2, Decl(main.ts, 0, 49))
+>myFunction : Symbol(myFunction, Decl(input.ts, 4, 1))
+>slug : Symbol(slug, Decl(main.ts, 1, 55))
+

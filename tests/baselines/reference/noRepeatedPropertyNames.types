@@ -1,31 +1,50 @@
-=== tests/cases/compiler/noRepeatedPropertyNames.ts ===
+//// [tests/cases/compiler/noRepeatedPropertyNames.ts] ////
+
+=== noRepeatedPropertyNames.ts ===
 // https://github.com/microsoft/TypeScript/issues/46815
 const first = { a: 1, a: 2 };
 >first : { a: number; }
+>      : ^^^^^^^^^^^^^^
 >{ a: 1, a: 2 } : { a: number; }
+>               : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     m() {
 >m : () => number
+>  : ^^^^^^^^^^^^
 
         const second = { a: 1, a: 2 };
 >second : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >{ a: 1, a: 2 } : { a: number; }
+>               : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         return second.a;
 >second.a : number
+>         : ^^^^^^
 >second : { a: number; }
+>       : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
     }
 }
 

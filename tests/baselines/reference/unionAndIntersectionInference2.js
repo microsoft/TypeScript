@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference2.ts] ////
+
 //// [unionAndIntersectionInference2.ts]
 declare function f1<T>(x: T | string): T;
 
@@ -25,6 +27,7 @@ f2(d2); // never
 
 
 //// [unionAndIntersectionInference2.js]
+"use strict";
 var a1;
 var b1;
 var c1;

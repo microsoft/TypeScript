@@ -9,61 +9,430 @@ on:
     branches:
       - main
       - release-*
+  merge_group:
+    branches:
+      - main
+      # - release-*
+
+permissions:
+  contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
     strategy:
+      fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
-        # Test the latest version of Node.js plus the last two LTS versions.
-        node-version:
-          - "*"
-          - lts/*
-          - lts/-1
+        config:
+          # PRs only check the newest and oldest Node versions.
+          # macOS only ever checks the neest and oldest Node versions, but never in PR runs.
+          - os: ubuntu-latest
+            node-version: '24'
+            bundle: true
+          - os: windows-latest
+            node-version: '24'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - os: macos-latest
+            node-version: '24'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '22'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '22'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '20'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '20'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '18'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '18'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '16'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '16'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+          - os: macos-latest
+            node-version: '16'
+            bundle: true
+            skip: ${{ github.event_name == 'pull_request' || github.event_name == 'merge_group' }}
+
+          - os: ubuntu-latest
+            node-version: '14'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+          - os: windows-latest
+            node-version: '14'
+            bundle: true
+            skip: ${{ github.event_name == 'merge_group' }}
+            # Node 14 does not support macOS ARM.
+
+          # --no-bundle build
+          - os: ubuntu-latest
+            node-version: 'lts/*'
+            bundle: false
+            skip: ${{ github.event_name == 'merge_group' }}
+
+        exclude:
+          - config:
+              skip: true
+
+    runs-on: ${{ matrix.config.os }}
+    name: Test Node ${{ matrix.config.node-version }} on ${{ matrix.config.os }}${{ (!matrix.config.bundle && ' with --no-bundle') || '' }}
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use node version ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Use node version ${{ matrix.config.node-version }}
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: ${{ matrix.config.node-version }}
+          check-latest: true
+      - run: npm ci
 
-    - name: Tests
-      run:  npm test -- --no-lint
+      - name: Tests
+        id: test
+        # run tests, but lint separately
+        env:
+          BUNDLE: ${{ matrix.config.bundle }}
+        run: npm run test -- --no-lint --bundle="$BUNDLE"
+
+      - name: Print baseline diff on failure
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        run: |
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+          git diff --staged --exit-code
+
+  coverage:
+    if: ${{ github.event_name != 'merge_group' }}
+
+    runs-on:
+      - 'self-hosted'
+      - '1ES.Pool=TypeScript-1ES-GitHub-Large'
+      - '1ES.ImageOverride=azure-linux-3'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Run tests with coverage
+        run: npm test -- --no-lint --coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: coverage
+          path: coverage
+
+      - uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          use_oidc: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork) }}
+          disable_search: true
+          files: ./coverage/codecov.json
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
 
-    - name: Linter
-      run:  npm run lint:ci
+      - name: Linter
+        run: npm run lint
 
-  browser-integration:
+  knip:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
 
-    - name: Adding playwright
-      run: npm install --no-save --no-package-lock playwright
+      - name: Unused exports
+        run: npm run knip
 
-    - name: Build local
-      run: gulp local
+  format:
+    runs-on: ubuntu-latest
 
-    - name: Validate the browser can import TypeScript
-      run: gulp test-browser-integration
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: ~/.cache/dprint
+          key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
+          restore-keys: |
+            ${{ runner.os }}-dprint-
+
+      - name: Check formatting
+        run: npx dprint check
+
+  browser-integration:
+    if: ${{ github.event_name != 'merge_group' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Installing browsers
+        run: npx playwright install --with-deps
+
+      - name: Validate the browser can import TypeScript
+        run: npx hereby test-browser-integration
+
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Build src
+        run: npx hereby build-src
+
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+
+      - run: npm ci
+
+      - run: npx hereby lkg
+      - run: |
+          node ./scripts/addPackageJsonGitHead.mjs package.json
+          npm pack
+          mv typescript*.tgz typescript.tgz
+          echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
+        id: pack
+
+      - name: Smoke test
+        env:
+          PACKAGE: ${{ steps.pack.outputs.package }}
+        run: |
+          cd "$(mktemp -d)"
+          npm init --yes
+          npm install "$PACKAGE"
+
+          echo "Testing tsc..."
+          npx tsc --version
+
+          echo "Testing tsserver..."
+          echo '{"seq": 1, "command": "status"}' | npx tsserver
+
+          node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
+          node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
+
+  package-size:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: pr
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: base
+          ref: ${{ github.base_ref }}
+
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: |
+          npm --version
+          # corepack enable npm
+
+      - run: |
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+        working-directory: ./pr
+
+      - run: npm ci
+        working-directory: ./pr
+
+      - run: npm ci
+        id: base-npm-ci
+        continue-on-error: true
+        working-directory: ./base
+
+      - run: npx hereby lkg
+        working-directory: ./pr
+
+      - run: npx hereby lkg
+        id: base-lkg
+        continue-on-error: true
+        if: ${{ steps.base-npm-ci.outcome == 'success' }}
+        working-directory: ./base
+
+      - run: |
+          echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
+          node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
+        if: ${{ steps.base-lkg.outcome == 'success' }}
+
+  misc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Build scripts
+        run: npx hereby scripts
+
+      - name: ESLint tests
+        run: npx hereby run-eslint-rules-tests
+
+  self-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Build tsc
+        run: npx hereby tsc
+
+      - name: Clean
+        run: npx hereby clean-src
+
+      - name: Self build
+        run: npx hereby build-src --built
+
+  baselines:
+    if: ${{ github.event_name != 'merge_group' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Remove all baselines
+        run: rm -rf tests/baselines/reference
+
+      - name: Run tests
+        run: npm test &> /dev/null || exit 0
+
+      - name: Accept baselines
+        run: |
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+
+      - name: Check baselines
+        id: check-baselines
+        run: |
+          function print_diff() {
+            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
+              echo "$2:"
+              git diff --staged --name-only --diff-filter=$1
+            fi
+          }
+
+          if ! git diff --staged --exit-code --quiet; then
+            print_diff ACR "Missing baselines"
+            print_diff MTUXB "Modified baselines"
+            print_diff D "Unused baselines"
+            git diff --staged > fix_baselines.patch
+            exit 1
+          fi
+
+      - name: Upload baseline diff artifact
+        if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: fix_baselines.patch
+          path: fix_baselines.patch
+
+  required:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - test
+      - coverage
+      - lint
+      - knip
+      - format
+      - browser-integration
+      - typecheck
+      - smoke
+      - package-size
+      - misc
+      - self-check
+      - baselines
+
+    steps:
+      - name: Check required jobs
+        env:
+          NEEDS: ${{ toJson(needs) }}
+        run: |
+          ! echo $NEEDS | jq -e 'to_entries[] | { job: .key, result: .value.result } | select((.result == "success" or .result == "skipped") | not)'

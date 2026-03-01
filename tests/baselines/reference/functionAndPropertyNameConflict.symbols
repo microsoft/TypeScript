@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionAndPropertyNameConflict.ts ===
+//// [tests/cases/compiler/functionAndPropertyNameConflict.ts] ////
+
+=== functionAndPropertyNameConflict.ts ===
 class C65 {
 >C65 : Symbol(C65, Decl(functionAndPropertyNameConflict.ts, 0, 0))
 

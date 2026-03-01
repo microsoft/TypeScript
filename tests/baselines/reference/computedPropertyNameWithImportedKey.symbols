@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/computedPropertyNameWithImportedKey.ts] ////
+
+=== /a.ts ===
+export const a = Symbol();
+>a : Symbol(a, Decl(a.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+=== /b.ts ===
+import { a } from "./a";
+>a : Symbol(a, Decl(b.ts, 0, 8))
+
+export function fn({ [a]: value }: any): string {
+>fn : Symbol(fn, Decl(b.ts, 0, 24))
+>a : Symbol(a, Decl(b.ts, 0, 8))
+>value : Symbol(value, Decl(b.ts, 1, 20))
+
+    return value;
+>value : Symbol(value, Decl(b.ts, 1, 20))
+}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagNameResolution.ts] ////
+
 //// [file.js]
 /**
  * @template T
@@ -11,19 +13,20 @@ const x = { a: 1 };
 const y = "a";
 
 //// [file.js]
+"use strict";
 /**
  * @template T
  * @template {keyof T} K
  * @typedef {T[K]} Foo
  */
-var x = { a: 1 };
+const x = { a: 1 };
 /** @type {Foo<typeof x, "a">} */
-var y = "a";
+const y = "a";
 
 
 //// [file.d.ts]
 declare namespace x {
-    const a: number;
+    let a: number;
 }
 /** @type {Foo<typeof x, "a">} */
 declare const y: Foo<typeof x, "a">;

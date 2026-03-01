@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/impliedNodeFormatInterop1.ts] ////
+
+=== /node_modules/highlight.js/index.d.ts ===
+declare module "highlight.js" {
+>"highlight.js" : typeof import("highlight.js")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  export interface HighlightAPI {
+    highlight(code: string): string;
+>highlight : (code: string) => string
+>          : ^    ^^      ^^^^^      
+>code : string
+>     : ^^^^^^
+  }
+  const hljs: HighlightAPI;
+>hljs : HighlightAPI
+>     : ^^^^^^^^^^^^
+
+  export default hljs;
+>hljs : HighlightAPI
+>     : ^^^^^^^^^^^^
+}
+
+=== /node_modules/highlight.js/lib/core.d.ts ===
+import hljs from "highlight.js";
+>hljs : import("highlight.js").HighlightAPI
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export default hljs;
+>hljs : import("highlight.js").HighlightAPI
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== /index.ts ===
+import hljs from "highlight.js/lib/core";
+>hljs : import("highlight.js").HighlightAPI
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+hljs.highlight("code");
+>hljs.highlight("code") : string
+>                       : ^^^^^^
+>hljs.highlight : (code: string) => string
+>               : ^    ^^      ^^^^^      
+>hljs : import("highlight.js").HighlightAPI
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>highlight : (code: string) => string
+>          : ^    ^^      ^^^^^      
+>"code" : "code"
+>       : ^^^^^^
+

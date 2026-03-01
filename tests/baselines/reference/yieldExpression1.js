@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldExpression1.ts] ////
+
 //// [yieldExpression1.ts]
 function* a() {
     yield;
@@ -11,6 +13,7 @@ function* b(): IterableIterator<number> {
 
 
 //// [yieldExpression1.js]
+"use strict";
 function* a() {
     yield;
     yield 0;

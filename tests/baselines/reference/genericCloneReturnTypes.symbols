@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCloneReturnTypes.ts ===
+//// [tests/cases/compiler/genericCloneReturnTypes.ts] ////
+
+=== genericCloneReturnTypes.ts ===
 class Bar<T> {
 >Bar : Symbol(Bar, Decl(genericCloneReturnTypes.ts, 0, 0))
 >T : Symbol(T, Decl(genericCloneReturnTypes.ts, 0, 10))

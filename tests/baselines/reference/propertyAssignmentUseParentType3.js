@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType3.ts] ////
+
 //// [propertyAssignmentUseParentType3.ts]
 // don't use the parent type if it's a function declaration (#33741)
 
@@ -23,6 +25,7 @@ foo4.x = "456";
 
 
 //// [propertyAssignmentUseParentType3.js]
+"use strict";
 // don't use the parent type if it's a function declaration (#33741)
 function foo1() {
     return 123;

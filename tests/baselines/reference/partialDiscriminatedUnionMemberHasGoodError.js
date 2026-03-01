@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts] ////
+
 //// [partialDiscriminatedUnionMemberHasGoodError.ts]
 interface TypeA {
     type: "A";
@@ -24,7 +26,8 @@ foo.push({
 });
 
 //// [partialDiscriminatedUnionMemberHasGoodError.js]
-var foo = [];
+"use strict";
+const foo = [];
 foo.push({
     types: [{
             type: "A"

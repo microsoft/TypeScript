@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression1.ts ===
-return /(#?-?\d*\.\d\w*%?)|(@?#?[\w-?]+%?)/g;
-No type information for this code.
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression1.ts] ////
+
+=== parserRegularExpression1.ts ===
+
+/(#?-?\d*\.\d\w*%?)|(@?#?[\w-?]+%?)/g;

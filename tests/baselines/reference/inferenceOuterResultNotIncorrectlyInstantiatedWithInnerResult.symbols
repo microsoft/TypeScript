@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts] ////
+
+=== inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts ===
+// simple example
+export class Test<A, B> {
+>Test : Symbol(Test, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 0, 0))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 1, 18))
+>B : Symbol(B, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 1, 20))
+
+    constructor(public a: A, public b: B) { }
+>a : Symbol(Test.a, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 2, 16))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 1, 18))
+>b : Symbol(Test.b, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 2, 28))
+>B : Symbol(B, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 1, 20))
+
+    test<C>(c: C): Test<B, C> {
+>test : Symbol(Test.test, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 2, 45))
+>C : Symbol(C, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 4, 9))
+>c : Symbol(c, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 4, 12))
+>C : Symbol(C, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 4, 9))
+>Test : Symbol(Test, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 0, 0))
+>B : Symbol(B, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 1, 20))
+>C : Symbol(C, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 4, 9))
+
+        return new Test(this.b, c);
+>Test : Symbol(Test, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 0, 0))
+>this.b : Symbol(Test.b, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 2, 28))
+>this : Symbol(Test, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 0, 0))
+>b : Symbol(Test.b, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 2, 28))
+>c : Symbol(c, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 4, 12))
+    }
+}
+
+// complicated one
+interface Supervisor<out T> {
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 10, 21))
+
+    zip<A>(right: Supervisor<A>): Supervisor<[T, A]>;
+>zip : Symbol(Supervisor.zip, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 10, 29))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 11, 8))
+>right : Symbol(right, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 11, 11))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 11, 8))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 10, 21))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 11, 8))
+}
+
+export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
+>Zip : Symbol(Zip, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 12, 1))
+>T0 : Symbol(T0, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 17))
+>T1 : Symbol(T1, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 24))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>T0 : Symbol(T0, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 17))
+>T1 : Symbol(T1, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 24))
+
+    constructor(
+        readonly left: Supervisor<T0>,
+>left : Symbol(Zip.left, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 15, 16))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>T0 : Symbol(T0, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 17))
+
+        readonly right: Supervisor<T1>,
+>right : Symbol(Zip.right, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 16, 38))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>T1 : Symbol(T1, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 24))
+
+    ) { }
+
+    zip<A>(right: Supervisor<A>): Supervisor<[[T0, T1], A]> {
+>zip : Symbol(Zip.zip, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 18, 9))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 8))
+>right : Symbol(right, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 11))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 8))
+>Supervisor : Symbol(Supervisor, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 7, 1))
+>T0 : Symbol(T0, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 17))
+>T1 : Symbol(T1, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 14, 24))
+>A : Symbol(A, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 8))
+
+        return new Zip(this, right);
+>Zip : Symbol(Zip, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 12, 1))
+>this : Symbol(Zip, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 12, 1))
+>right : Symbol(right, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 20, 11))
+    }
+}
+
+// indirect
+type Assign<T, U> = Omit<T, keyof U> & U;
+>Assign : Symbol(Assign, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 23, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 12))
+>U : Symbol(U, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 14))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 12))
+>U : Symbol(U, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 14))
+>U : Symbol(U, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 14))
+
+class Base<T> {
+>Base : Symbol(Base, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 41))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 28, 11))
+
+    constructor(public t: T) { }
+>t : Symbol(Base.t, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 29, 16))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 28, 11))
+}
+
+export class Foo<T> extends Base<T> {
+>Foo : Symbol(Foo, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 30, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 32, 17))
+>Base : Symbol(Base, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 26, 41))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 32, 17))
+
+    update(): Foo<Assign<T, { x: number }>> {
+>update : Symbol(Foo.update, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 32, 37))
+>Foo : Symbol(Foo, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 30, 1))
+>Assign : Symbol(Assign, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 23, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 32, 17))
+>x : Symbol(x, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 33, 29))
+
+        const v: Assign<T, { x: number }> = Object.assign(this.t, { x: 1 });
+>v : Symbol(v, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 34, 13))
+>Assign : Symbol(Assign, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 23, 1))
+>T : Symbol(T, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 32, 17))
+>x : Symbol(x, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 34, 28))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>this.t : Symbol(Base.t, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 29, 16))
+>this : Symbol(Foo, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 30, 1))
+>t : Symbol(Base.t, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 29, 16))
+>x : Symbol(x, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 34, 67))
+
+        return new Foo(v);
+>Foo : Symbol(Foo, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 30, 1))
+>v : Symbol(v, Decl(inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.ts, 34, 13))
+    }
+}

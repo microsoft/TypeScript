@@ -1,0 +1,16 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_05.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     (a: number): void
+// }
+// 
+// let bar2 = <Foo> [|function(a) {}|];
+// 
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "displayParts": []
+   }
+  ]

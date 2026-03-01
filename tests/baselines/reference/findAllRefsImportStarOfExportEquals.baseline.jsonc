@@ -1,2825 +1,2188 @@
+// === findAllReferences ===
+// === /node_modules/a/index.d.ts ===
+// <|declare function /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|](): void;|>
+// <|declare namespace [|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|] {
+//     export const x: number;
+// }|>
+// <|export = [|{| defId: 0 |}a|];|>
+
 // === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
+// <|import [|{| defId: 1, isWriteAccess: true |}b|] from "a";|>
+// [|{| defId: 1 |}b|]();
+// [|{| defId: 1 |}b|].x;
 
 // === /c.ts ===
-// import [|a|] from "a";
-// [|a|]();
-// [|a|].x;
+// <|import [|{| defId: 2, isWriteAccess: true |}a|] from "a";|>
+// [|{| defId: 2 |}a|]();
+// [|{| defId: 2 |}a|].x;
 
+  // === Definitions ===
+  // === /node_modules/a/index.d.ts ===
+  // <|declare function /*FIND ALL REFS*/[|{| defId: 0 |}a|](): void;|>
+  // declare namespace a {
+  //     export const x: number;
+  // }
+  // export = a;
+
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}b|] from "a";|>
+  // b();
+  // b.x;
+
+  // === /c.ts ===
+  // <|import [|{| defId: 2 |}a|] from "a";|>
+  // a();
+  // a.x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace a\nfunction a(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /node_modules/a/index.d.ts ===
-// declare function /*FIND ALL REFS*/[|a|](): void;
-// declare namespace [|a|] {
+// <|declare function [|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|](): void;|>
+// <|declare namespace /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|] {
 //     export const x: number;
-// }
-// export = [|a|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "function",
-      "name": "namespace a\nfunction a(): void",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 51
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 80,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "alias",
-      "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// }|>
+// <|export = [|{| defId: 0 |}a|];|>
 
 // === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
+// <|import [|{| defId: 1, isWriteAccess: true |}b|] from "a";|>
+// [|{| defId: 1 |}b|]();
+// [|{| defId: 1 |}b|].x;
 
 // === /c.ts ===
-// import [|a|] from "a";
-// [|a|]();
-// [|a|].x;
+// <|import [|{| defId: 2, isWriteAccess: true |}a|] from "a";|>
+// [|{| defId: 2 |}a|]();
+// [|{| defId: 2 |}a|].x;
 
+  // === Definitions ===
+  // === /node_modules/a/index.d.ts ===
+  // <|declare function [|{| defId: 0 |}a|](): void;|>
+  // declare namespace /*FIND ALL REFS*/a {
+  //     export const x: number;
+  // }
+  // export = a;
+
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}b|] from "a";|>
+  // b();
+  // b.x;
+
+  // === /c.ts ===
+  // <|import [|{| defId: 2 |}a|] from "a";|>
+  // a();
+  // a.x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace a\nfunction a(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /node_modules/a/index.d.ts ===
-// declare function [|a|](): void;
-// declare namespace /*FIND ALL REFS*/[|a|] {
+// <|declare function [|{| defId: 0, isWriteAccess: true |}a|](): void;|>
+// <|declare namespace [|{| defId: 0, isWriteAccess: true |}a|] {
 //     export const x: number;
-// }
-// export = [|a|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "function",
-      "name": "namespace a\nfunction a(): void",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 51
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 80,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "alias",
-      "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// }|>
+// <|export = /*FIND ALL REFS*/[|{| defId: 0 |}a|];|>
 
 // === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
+// <|import [|{| defId: 1, isWriteAccess: true |}b|] from "a";|>
+// [|{| defId: 1 |}b|]();
+// [|{| defId: 1 |}b|].x;
 
 // === /c.ts ===
-// import [|a|] from "a";
-// [|a|]();
-// [|a|].x;
+// <|import [|{| defId: 2, isWriteAccess: true |}a|] from "a";|>
+// [|{| defId: 2 |}a|]();
+// [|{| defId: 2 |}a|].x;
 
-// === /node_modules/a/index.d.ts ===
-// declare function [|a|](): void;
-// declare namespace [|a|] {
-//     export const x: number;
-// }
-// export = /*FIND ALL REFS*/[|a|];
+  // === Definitions ===
+  // === /node_modules/a/index.d.ts ===
+  // <|declare function [|{| defId: 0 |}a|](): void;|>
+  // declare namespace a {
+  //     export const x: number;
+  // }
+  // export = /*FIND ALL REFS*/a;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "function",
-      "name": "namespace a\nfunction a(): void",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 51
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 80,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "alias",
-      "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}b|] from "a";|>
+  // b();
+  // b.x;
 
+  // === /c.ts ===
+  // <|import [|{| defId: 2 |}a|] from "a";|>
+  // a();
+  // a.x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace a\nfunction a(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.ts ===
-// import /*FIND ALL REFS*/[|b|] from "a";
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}b|] from "a";|>
 // [|b|]();
 // [|b|].x;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import /*FIND ALL REFS*/[|b|] from "a";|>
+  // b();
+  // b.x;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.ts ===
-// import [|b|] from "a";
+// <|import [|{| isWriteAccess: true |}b|] from "a";|>
 // /*FIND ALL REFS*/[|b|]();
 // [|b|].x;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import [|b|] from "a";|>
+  // /*FIND ALL REFS*/b();
+  // b.x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /c.ts ===
-// import /*FIND ALL REFS*/[|a|] from "a";
-// [|a|]();
-// [|a|].x;
-
-// === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
+// <|import /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|] from "a";|>
+// [|{| defId: 0 |}a|]();
+// [|{| defId: 0 |}a|].x;
 
 // === /node_modules/a/index.d.ts ===
-// declare function [|a|](): void;
-// declare namespace [|a|] {
+// <|declare function [|{| defId: 1, isWriteAccess: true |}a|](): void;|>
+// <|declare namespace [|{| defId: 1, isWriteAccess: true |}a|] {
 //     export const x: number;
-// }
-// export = [|a|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "alias",
-      "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "function",
-      "name": "namespace a\nfunction a(): void",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 51
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 80,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
-// === /c.ts ===
-// import [|a|] from "a";
-// /*FIND ALL REFS*/[|a|]();
-// [|a|].x;
+// }|>
+// <|export = [|{| defId: 1 |}a|];|>
 
 // === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
+// <|import [|{| defId: 2, isWriteAccess: true |}b|] from "a";|>
+// [|{| defId: 2 |}b|]();
+// [|{| defId: 2 |}b|].x;
+
+  // === Definitions ===
+  // === /c.ts ===
+  // <|import /*FIND ALL REFS*/[|{| defId: 0 |}a|] from "a";|>
+  // a();
+  // a.x;
+
+  // === /node_modules/a/index.d.ts ===
+  // <|declare function [|{| defId: 1 |}a|](): void;|>
+  // declare namespace a {
+  //     export const x: number;
+  // }
+  // export = a;
+
+  // === /b.ts ===
+  // <|import [|{| defId: 2 |}b|] from "a";|>
+  // b();
+  // b.x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace a\nfunction a(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// <|import [|{| defId: 0, isWriteAccess: true |}a|] from "a";|>
+// /*FIND ALL REFS*/[|{| defId: 0 |}a|]();
+// [|{| defId: 0 |}a|].x;
 
 // === /node_modules/a/index.d.ts ===
-// declare function [|a|](): void;
-// declare namespace [|a|] {
+// <|declare function [|{| defId: 1, isWriteAccess: true |}a|](): void;|>
+// <|declare namespace [|{| defId: 1, isWriteAccess: true |}a|] {
 //     export const x: number;
-// }
-// export = [|a|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "alias",
-      "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "function",
-      "name": "namespace a\nfunction a(): void",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 51
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 80,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
-
-// === /c.ts ===
-// import [|a|] from "a";
-// [|a|]();
-// /*FIND ALL REFS*/[|a|].x;
+// }|>
+// <|export = [|{| defId: 1 |}a|];|>
 
 // === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
+// <|import [|{| defId: 2, isWriteAccess: true |}b|] from "a";|>
+// [|{| defId: 2 |}b|]();
+// [|{| defId: 2 |}b|].x;
+
+  // === Definitions ===
+  // === /c.ts ===
+  // <|import [|{| defId: 0 |}a|] from "a";|>
+  // /*FIND ALL REFS*/a();
+  // a.x;
+
+  // === /node_modules/a/index.d.ts ===
+  // <|declare function [|{| defId: 1 |}a|](): void;|>
+  // declare namespace a {
+  //     export const x: number;
+  // }
+  // export = a;
+
+  // === /b.ts ===
+  // <|import [|{| defId: 2 |}b|] from "a";|>
+  // b();
+  // b.x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace a\nfunction a(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /c.ts ===
+// <|import [|{| defId: 0, isWriteAccess: true |}a|] from "a";|>
+// [|{| defId: 0 |}a|]();
+// /*FIND ALL REFS*/[|{| defId: 0 |}a|].x;
 
 // === /node_modules/a/index.d.ts ===
-// declare function [|a|](): void;
-// declare namespace [|a|] {
+// <|declare function [|{| defId: 1, isWriteAccess: true |}a|](): void;|>
+// <|declare namespace [|{| defId: 1, isWriteAccess: true |}a|] {
 //     export const x: number;
-// }
-// export = [|a|];
+// }|>
+// <|export = [|{| defId: 1 |}a|];|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "alias",
-      "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/c.ts",
-        "isWriteAccess": false
-      }
+// === /b.ts ===
+// <|import [|{| defId: 2, isWriteAccess: true |}b|] from "a";|>
+// [|{| defId: 2 |}b|]();
+// [|{| defId: 2 |}b|].x;
+
+  // === Definitions ===
+  // === /c.ts ===
+  // <|import [|{| defId: 0 |}a|] from "a";|>
+  // a();
+  // /*FIND ALL REFS*/a.x;
+
+  // === /node_modules/a/index.d.ts ===
+  // <|declare function [|{| defId: 1 |}a|](): void;|>
+  // declare namespace a {
+  //     export const x: number;
+  // }
+  // export = a;
+
+  // === /b.ts ===
+  // <|import [|{| defId: 2 |}b|] from "a";|>
+  // b();
+  // b.x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function a(): void\n(alias) namespace a\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/node_modules/a/index.d.ts",
-      "kind": "function",
-      "name": "namespace a\nfunction a(): void",
-      "textSpan": {
-        "start": 17,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 51
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 1
-        },
-        "fileName": "/node_modules/a/index.d.ts",
-        "contextSpan": {
-          "start": 80,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace a\nfunction a(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "b",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 19,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) function b(): void\n(alias) namespace b\nimport b",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "b",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /node_modules/a/index.d.ts ===
+// <|declare function /*RENAME*/[|aRENAME|](): void;|>
+// <|declare namespace [|aRENAME|] {
+//     export const x: number;
+// }|>
+// <|export = [|aRENAME|];|>
+
+// === /c.ts ===
+// <|import [|aRENAME|] from "a";|>
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /node_modules/a/index.d.ts ===
+// <|declare function [|aRENAME|](): void;|>
+// <|declare namespace /*RENAME*/[|aRENAME|] {
+//     export const x: number;
+// }|>
+// <|export = [|aRENAME|];|>
+
+// === /c.ts ===
+// <|import [|aRENAME|] from "a";|>
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /node_modules/a/index.d.ts ===
+// <|declare function [|aRENAME|](): void;|>
+// <|declare namespace [|aRENAME|] {
+//     export const x: number;
+// }|>
+// <|export = /*RENAME*/[|aRENAME|];|>
+
+// === /c.ts ===
+// <|import [|aRENAME|] from "a";|>
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import /*RENAME*/[|bRENAME|] from "a";|>
+// [|bRENAME|]();
+// [|bRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import [|bRENAME|] from "a";|>
+// /*RENAME*/[|bRENAME|]();
+// [|bRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import [|bRENAME|] from "a";|>
+// [|bRENAME|]();
+// /*RENAME*/[|bRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// <|import /*RENAME*/[|aRENAME|] from "a";|>
+// [|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// <|import [|aRENAME|] from "a";|>
+// /*RENAME*/[|aRENAME|]();
+// [|aRENAME|].x;
+
+
+
+// === findRenameLocations ===
+// === /c.ts ===
+// <|import [|aRENAME|] from "a";|>
+// [|aRENAME|]();
+// /*RENAME*/[|aRENAME|].x;

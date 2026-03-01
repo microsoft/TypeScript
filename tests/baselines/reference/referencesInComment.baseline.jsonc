@@ -1,7 +1,33 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesInComment.ts ===
+// // References to /*FIND ALL REFS*/foo or bar
+// /* in comments should not find foo or bar */
+// class foo { }
+// var bar = 0;
 
-undefined
 
-undefined
 
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesInComment.ts ===
+// // References to foo or b/*FIND ALL REFS*/ar
+// /* in comments should not find foo or bar */
+// class foo { }
+// var bar = 0;
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesInComment.ts ===
+// // References to foo or bar
+// /* in comments should not find fo/*FIND ALL REFS*/o or bar */
+// class foo { }
+// var bar = 0;
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesInComment.ts ===
+// // References to foo or bar
+// /* in comments should not find foo or bar/*FIND ALL REFS*/ */
+// class foo { }
+// var bar = 0;

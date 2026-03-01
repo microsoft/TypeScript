@@ -1,17 +1,25 @@
-=== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts ===
-module Outer {
->Outer : typeof Outer
+//// [tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts] ////
 
-    module Inner {
+=== privacyCheckTypeOfInvisibleModuleError.ts ===
+namespace Outer {
+>Outer : typeof Outer
+>      : ^^^^^^^^^^^^
+
+    namespace Inner {
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 
         export var m: typeof Inner;
 >m : typeof Inner
+>  : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
     }
 
     export var f: typeof Inner;
 >f : typeof Inner
+>  : ^^^^^^^^^^^^
 >Inner : typeof Inner
+>      : ^^^^^^^^^^^^
 }
 

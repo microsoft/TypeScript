@@ -1,9 +1,15 @@
-=== tests/cases/compiler/collisionThisExpressionAndClassInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndClassInGlobal.ts] ////
+
+=== collisionThisExpressionAndClassInGlobal.ts ===
 class _this {
 >_this : _this
+>      : ^^^^^
 }
 var f = () => this;
 >f : () => typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 

@@ -1,190 +1,300 @@
-=== tests/cases/compiler/objectLiteralEnumPropertyNames.ts ===
+//// [tests/cases/compiler/objectLiteralEnumPropertyNames.ts] ////
+
+=== objectLiteralEnumPropertyNames.ts ===
 // Fixes #16887
 enum Strs {
 >Strs : Strs
+>     : ^^^^
 
     A = 'a',
 >A : Strs.A
+>  : ^^^^^^
 >'a' : "a"
+>    : ^^^
 
     B = 'b'
 >B : Strs.B
+>  : ^^^^^^
 >'b' : "b"
+>    : ^^^
 }
 type TestStrs = { [key in Strs]: string }
->TestStrs : { a: string; b: string; }
+>TestStrs : TestStrs
+>         : ^^^^^^^^
 
 const x: TestStrs = {
 >x : TestStrs
+>  : ^^^^^^^^
 >{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { a: string; b: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Strs.A]: 'xo',
 >[Strs.A] : string
+>         : ^^^^^^
 >Strs.A : Strs.A
+>       : ^^^^^^
 >Strs : typeof Strs
+>     : ^^^^^^^^^^^
 >A : Strs.A
+>  : ^^^^^^
 >'xo' : "xo"
+>     : ^^^^
 
     [Strs.B]: 'xe'
 >[Strs.B] : string
+>         : ^^^^^^
 >Strs.B : Strs.B
+>       : ^^^^^^
 >Strs : typeof Strs
+>     : ^^^^^^^^^^^
 >B : Strs.B
+>  : ^^^^^^
 >'xe' : "xe"
+>     : ^^^^
 }
 const ux = {
 >ux : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { a: string; b: string; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Strs.A]: 'xo',
 >[Strs.A] : string
+>         : ^^^^^^
 >Strs.A : Strs.A
+>       : ^^^^^^
 >Strs : typeof Strs
+>     : ^^^^^^^^^^^
 >A : Strs.A
+>  : ^^^^^^
 >'xo' : "xo"
+>     : ^^^^
 
     [Strs.B]: 'xe'
 >[Strs.B] : string
+>         : ^^^^^^
 >Strs.B : Strs.B
+>       : ^^^^^^
 >Strs : typeof Strs
+>     : ^^^^^^^^^^^
 >B : Strs.B
+>  : ^^^^^^
 >'xe' : "xe"
+>     : ^^^^
 }
 const y: TestStrs = {
 >y : TestStrs
+>  : ^^^^^^^^
 >{    ['a']: 'yo',    ['b']: 'ye'} : { a: string; b: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ['a']: 'yo',
 >['a'] : string
+>      : ^^^^^^
 >'a' : "a"
+>    : ^^^
 >'yo' : "yo"
+>     : ^^^^
 
     ['b']: 'ye'
 >['b'] : string
+>      : ^^^^^^
 >'b' : "b"
+>    : ^^^
 >'ye' : "ye"
+>     : ^^^^
 }
 const a = 'a';
 >a : "a"
+>  : ^^^
 >'a' : "a"
+>    : ^^^
 
 const b = 'b';
 >b : "b"
+>  : ^^^
 >'b' : "b"
+>    : ^^^
 
 const z: TestStrs = {
 >z : TestStrs
+>  : ^^^^^^^^
 >{    [a]: 'zo',    [b]: 'ze'} : { a: string; b: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [a]: 'zo',
 >[a] : string
+>    : ^^^^^^
 >a : "a"
+>  : ^^^
 >'zo' : "zo"
+>     : ^^^^
 
     [b]: 'ze'
 >[b] : string
+>    : ^^^^^^
 >b : "b"
+>  : ^^^
 >'ze' : "ze"
+>     : ^^^^
 }
 const uz = {
 >uz : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [a]: 'zo',    [b]: 'ze'} : { a: string; b: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [a]: 'zo',
 >[a] : string
+>    : ^^^^^^
 >a : "a"
+>  : ^^^
 >'zo' : "zo"
+>     : ^^^^
 
     [b]: 'ze'
 >[b] : string
+>    : ^^^^^^
 >b : "b"
+>  : ^^^
 >'ze' : "ze"
+>     : ^^^^
 }
 
 enum Nums {
 >Nums : Nums
+>     : ^^^^
 
     A,
 >A : Nums.A
+>  : ^^^^^^
 
     B
 >B : Nums.B
+>  : ^^^^^^
 }
 type TestNums = { 0: number, 1: number }
->TestNums : { 0: number; 1: number; }
+>TestNums : TestNums
+>         : ^^^^^^^^
 >0 : number
+>  : ^^^^^^
 >1 : number
+>  : ^^^^^^
 
 const n: TestNums = {
 >n : TestNums
+>  : ^^^^^^^^
 >{    [Nums.A]: 1,    [Nums.B]: 2} : { 0: number; 1: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Nums.A]: 1,
 >[Nums.A] : number
+>         : ^^^^^^
 >Nums.A : Nums.A
+>       : ^^^^^^
 >Nums : typeof Nums
+>     : ^^^^^^^^^^^
 >A : Nums.A
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     [Nums.B]: 2
 >[Nums.B] : number
+>         : ^^^^^^
 >Nums.B : Nums.B
+>       : ^^^^^^
 >Nums : typeof Nums
+>     : ^^^^^^^^^^^
 >B : Nums.B
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }
 const un = {
 >un : { 0: number; 1: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Nums.A]: 3,    [Nums.B]: 4} : { 0: number; 1: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Nums.A]: 3,
 >[Nums.A] : number
+>         : ^^^^^^
 >Nums.A : Nums.A
+>       : ^^^^^^
 >Nums : typeof Nums
+>     : ^^^^^^^^^^^
 >A : Nums.A
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
     [Nums.B]: 4
 >[Nums.B] : number
+>         : ^^^^^^
 >Nums.B : Nums.B
+>       : ^^^^^^
 >Nums : typeof Nums
+>     : ^^^^^^^^^^^
 >B : Nums.B
+>  : ^^^^^^
 >4 : 4
+>  : ^
 }
 const an = 0;
 >an : 0
+>   : ^
 >0 : 0
+>  : ^
 
 const bn = 1;
 >bn : 1
+>   : ^
 >1 : 1
+>  : ^
 
 const m: TestNums = {
 >m : TestNums
+>  : ^^^^^^^^
 >{    [an]: 5,    [bn]: 6} : { 0: number; 1: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [an]: 5,
 >[an] : number
+>     : ^^^^^^
 >an : 0
+>   : ^
 >5 : 5
+>  : ^
 
     [bn]: 6
 >[bn] : number
+>     : ^^^^^^
 >bn : 1
+>   : ^
 >6 : 6
+>  : ^
 }
 const um = {
 >um : { 0: number; 1: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [an]: 7,    [bn]: 8} : { 0: number; 1: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [an]: 7,
 >[an] : number
+>     : ^^^^^^
 >an : 0
+>   : ^
 >7 : 7
+>  : ^
 
     [bn]: 8
 >[bn] : number
+>     : ^^^^^^
 >bn : 1
+>   : ^
 >8 : 8
+>  : ^
 }
 

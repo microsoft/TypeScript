@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnBinaryOperator1.ts ===
+//// [tests/cases/compiler/commentOnBinaryOperator1.ts] ////
+
+=== commentOnBinaryOperator1.ts ===
 var a = 'some'
 >a : Symbol(a, Decl(commentOnBinaryOperator1.ts, 0, 3))
 

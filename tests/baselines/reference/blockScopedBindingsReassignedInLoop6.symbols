@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedBindingsReassignedInLoop6.ts ===
+//// [tests/cases/compiler/blockScopedBindingsReassignedInLoop6.ts] ////
+
+=== blockScopedBindingsReassignedInLoop6.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(blockScopedBindingsReassignedInLoop6.ts, 0, 0))
 

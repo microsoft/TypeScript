@@ -1,39 +1,58 @@
-=== tests/cases/conformance/salsa/lovefield-ts.d.ts ===
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeWithInterfaceMethod.ts] ////
+
+=== lovefield-ts.d.ts ===
 // bug #27352, crashes from github.com/google/lovefield
 declare namespace lf {
   export interface Transaction {
     attach(query: query.Builder): Promise<Array<Object>>
 >attach : (query: query.Builder) => Promise<Array<Object>>
+>       : ^     ^^             ^^^^^                      
 >query : query.Builder
+>      : ^^^^^^^^^^^^^
 >query : any
+>      : ^^^
 
     begin(scope: Array<schema.Table>): Promise<void>
 >begin : (scope: Array<schema.Table>) => Promise<void>
+>      : ^     ^^                   ^^^^^             
 >scope : schema.Table[]
+>      : ^^^^^^^^^^^^^^
 >schema : any
+>       : ^^^
 
     commit(): Promise<void>
 >commit : () => Promise<void>
+>       : ^^^^^^             
 
     exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
 >exec : (queries: Array<query.Builder>) => Promise<Array<Array<Object>>>
+>     : ^       ^^                    ^^^^^                             
 >queries : query.Builder[]
+>        : ^^^^^^^^^^^^^^^
 >query : any
+>      : ^^^
 
     rollback(): Promise<void>
 >rollback : () => Promise<void>
+>         : ^^^^^^             
 
     stats(): TransactionStats
 >stats : () => TransactionStats
+>      : ^^^^^^                
   }
 }
-=== tests/cases/conformance/salsa/lovefield.js ===
+=== lovefield.js ===
 lf.Transaction = function() {};
 >lf.Transaction = function() {} : typeof Transaction
+>                               : ^^^^^^^^^^^^^^^^^^
 >lf.Transaction : typeof Transaction
+>               : ^^^^^^^^^^^^^^^^^^
 >lf : typeof lf
+>   : ^^^^^^^^^
 >Transaction : typeof Transaction
+>            : ^^^^^^^^^^^^^^^^^^
 >function() {} : typeof Transaction
+>              : ^^^^^^^^^^^^^^^^^^
 
 /**
  * @param {!Array<!lf.schema.Table>} scope
@@ -41,13 +60,23 @@ lf.Transaction = function() {};
  */
 lf.Transaction.prototype.begin = function(scope) {};
 >lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
+>                                                    : ^     ^^                      ^^^^^         
 >lf.Transaction.prototype.begin : any
+>                               : ^^^
 >lf.Transaction.prototype : any
+>                         : ^^^
 >lf.Transaction : typeof Transaction
+>               : ^^^^^^^^^^^^^^^^^^
 >lf : typeof lf
+>   : ^^^^^^^^^
 >Transaction : typeof Transaction
+>            : ^^^^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >begin : any
+>      : ^^^
 >function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
+>                   : ^     ^^                      ^^^^^         
 >scope : lf.schema.Table[]
+>      : ^^^^^^^^^^^^^^^^^
 

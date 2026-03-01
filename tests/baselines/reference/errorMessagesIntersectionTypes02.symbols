@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorMessagesIntersectionTypes02.ts ===
+//// [tests/cases/compiler/errorMessagesIntersectionTypes02.ts] ////
+
+=== errorMessagesIntersectionTypes02.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(errorMessagesIntersectionTypes02.ts, 0, 0))
 

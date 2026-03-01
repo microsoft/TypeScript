@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getterSetterNonAccessor.ts] ////
+
 //// [getterSetterNonAccessor.ts]
 function getFunc():any{return 0;}
 function setFunc(v){}          
@@ -10,6 +12,7 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 
 
 //// [getterSetterNonAccessor.js]
+"use strict";
 function getFunc() { return 0; }
 function setFunc(v) { }
 Object.defineProperty({}, "0", ({

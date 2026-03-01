@@ -1,4 +1,6 @@
-=== tests/cases/compiler/input.js ===
+//// [tests/cases/compiler/expandoFunctionContextualTypesJs.ts] ////
+
+=== input.js ===
 /** @typedef {{ color: "red" | "blue" }} MyComponentProps */
 
 /**
@@ -10,41 +12,58 @@
   */
 const MyComponent = () => /* @type {any} */(null);
 >MyComponent : StatelessComponent<MyComponentProps>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => /* @type {any} */(null) : { (): any; defaultProps: Partial<MyComponentProps>; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(null) : null
->null : null
+>       : ^^^^
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
+>                                              : ^^^^^^^^^^^^^^^^^
 >MyComponent.defaultProps : Partial<MyComponentProps>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyComponent : StatelessComponent<MyComponentProps>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultProps : Partial<MyComponentProps>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    color: "red"} : { color: "red"; }
+>                   : ^^^^^^^^^^^^^^^^^
 
     color: "red"
 >color : "red"
+>      : ^^^^^
 >"red" : "red"
+>      : ^^^^^
 
 };
 
 const MyComponent2 = () => null;
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 >() => null : { (): any; defaultProps: MyComponentProps; }
->null : null
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 
 /**
  * @type {MyComponentProps}
  */
 MyComponent2.defaultProps = {
 >MyComponent2.defaultProps = {    color: "red"} : { color: "red"; }
+>                                               : ^^^^^^^^^^^^^^^^^
 >MyComponent2.defaultProps : MyComponentProps
+>                          : ^^^^^^^^^^^^^^^^
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 >defaultProps : MyComponentProps
+>             : ^^^^^^^^^^^^^^^^
 >{    color: "red"} : { color: "red"; }
+>                   : ^^^^^^^^^^^^^^^^^
 
     color: "red"
 >color : "red"
+>      : ^^^^^
 >"red" : "red"
+>      : ^^^^^
 }
 
 /**
@@ -52,35 +71,50 @@ MyComponent2.defaultProps = {
  */
 const check = MyComponent2;
 >check : StatelessComponent<MyComponentProps>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 
 /**
  * 
  * @param {{ props: MyComponentProps }} p 
  */
 function expectLiteral(p) {}
->expectLiteral : (p: {    props: MyComponentProps;}) => void
+>expectLiteral : (p: { props: MyComponentProps; }) => void
+>              : ^ ^^                            ^^^^^^^^^
 >p : { props: MyComponentProps; }
+>  : ^^^^^^^^^                ^^^
 
 function foo() {
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     /**
      * @type {MyComponentProps}
      */
     this.props = { color: "red" };
 >this.props = { color: "red" } : { color: "red"; }
+>                              : ^^^^^^^^^^^^^^^^^
 >this.props : MyComponentProps
+>           : ^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >props : MyComponentProps
+>      : ^^^^^^^^^^^^^^^^
 >{ color: "red" } : { color: "red"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >color : "red"
+>      : ^^^^^
 >"red" : "red"
+>      : ^^^^^
 
     expectLiteral(this);
 >expectLiteral(this) : void
+>                    : ^^^^
 >expectLiteral : (p: { props: MyComponentProps; }) => void
+>              : ^ ^^                            ^^^^^^^^^
 >this : this
+>     : ^^^^
 }
 
 /**
@@ -88,22 +122,36 @@ function foo() {
  */
 module.exports = {
 >module.exports = {    color: "red"} : MyComponentProps
+>                                    : ^^^^^^^^^^^^^^^^
 >module.exports : MyComponentProps
+>               : ^^^^^^^^^^^^^^^^
 >module : { exports: MyComponentProps; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : MyComponentProps
+>        : ^^^^^^^^^^^^^^^^
 >{    color: "red"} : { color: "red"; }
+>                   : ^^^^^^^^^^^^^^^^^
 
     color: "red"
 >color : "red"
+>      : ^^^^^
 >"red" : "red"
+>      : ^^^^^
 }
 
 expectLiteral({ props: module.exports });
 >expectLiteral({ props: module.exports }) : void
+>                                         : ^^^^
 >expectLiteral : (p: { props: MyComponentProps; }) => void
+>              : ^ ^^                            ^^^^^^^^^
 >{ props: module.exports } : { props: MyComponentProps; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : MyComponentProps
+>      : ^^^^^^^^^^^^^^^^
 >module.exports : MyComponentProps
+>               : ^^^^^^^^^^^^^^^^
 >module : { exports: MyComponentProps; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : MyComponentProps
+>        : ^^^^^^^^^^^^^^^^
 

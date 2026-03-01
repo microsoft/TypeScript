@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protoAssignment.ts] ////
+
 //// [protoAssignment.ts]
 interface Number extends Comparable<number> {
 
@@ -15,6 +17,7 @@ Number.prototype.compareTo = function (other: number) {
 
 
 //// [protoAssignment.js]
+"use strict";
 Number.prototype.compareTo = function (other) {
     return this.valueOf() == other;
 };

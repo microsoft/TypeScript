@@ -1,0 +1,11 @@
+awaitUsingDeclarations.8.ts(2,17): error TS1155: 'await using' declarations must be initialized.
+
+
+==== awaitUsingDeclarations.8.ts (1 errors) ====
+    {
+        await using a;
+                    ~
+!!! error TS1155: 'await using' declarations must be initialized.
+    }
+    
+    export {};

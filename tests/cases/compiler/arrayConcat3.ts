@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictFunctionTypes: true
 // TODO: remove lib hack when https://github.com/Microsoft/TypeScript/issues/20454 is fixed
 type Fn<T extends object> = <U extends T>(subj: U) => U

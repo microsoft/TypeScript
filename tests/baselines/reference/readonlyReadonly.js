@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyReadonly.ts] ////
+
 //// [readonlyReadonly.ts]
 class C {
     readonly readonly x: number;
@@ -5,9 +7,9 @@ class C {
 }
 
 //// [readonlyReadonly.js]
-var C = /** @class */ (function () {
-    function C(y) {
+"use strict";
+class C {
+    constructor(y) {
         this.y = y;
     }
-    return C;
-}());
+}

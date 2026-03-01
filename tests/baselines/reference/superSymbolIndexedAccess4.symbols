@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess4.ts ===
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess4.ts] ////
+
+=== superSymbolIndexedAccess4.ts ===
 var symbol = Symbol.for('myThing');
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess4.ts, 0, 3))
 >Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))

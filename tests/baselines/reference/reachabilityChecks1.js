@@ -1,34 +1,36 @@
+//// [tests/cases/compiler/reachabilityChecks1.ts] ////
+
 //// [reachabilityChecks1.ts]
 while (true);
 var x = 1;
 
-module A {
+namespace A {
     while (true);
     let x;
 }
 
-module A1 {
+namespace A1 {
     do {} while(true);
-    module A {
+    namespace A {
         interface F {}
     }
 }
 
-module A2 {
+namespace A2 {
     while (true);
-    module A {
+    namespace A {
         var x = 1;
     }
 }
 
-module A3 {
+namespace A3 {
     while (true);
     type T = string;
 }
 
-module A4 {
+namespace A4 {
     while (true);
-    module A {
+    namespace A {
         const enum E { X }
     }
 }
@@ -49,9 +51,9 @@ function f2() {
     }
 }
 
-module B {
+namespace B {
     for (; ;);
-    module C {
+    namespace C {
     }
 }
 
@@ -75,6 +77,7 @@ function f4() {
 
 
 //// [reachabilityChecks1.js]
+"use strict";
 while (true)
     ;
 var x = 1;
@@ -82,7 +85,7 @@ var A;
 (function (A) {
     while (true)
         ;
-    var x;
+    let x;
 })(A || (A = {}));
 var A1;
 (function (A1) {
@@ -92,7 +95,7 @@ var A2;
 (function (A2) {
     while (true)
         ;
-    var A;
+    let A;
     (function (A) {
         var x = 1;
     })(A || (A = {}));
@@ -106,9 +109,9 @@ var A4;
 (function (A4) {
     while (true)
         ;
-    var A;
+    let A;
     (function (A) {
-        var E;
+        let E;
         (function (E) {
             E[E["X"] = 0] = "X";
         })(E || (E = {}));
@@ -125,11 +128,8 @@ function f1(x) {
 }
 function f2() {
     return;
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
 }
 var B;
 (function (B) {
@@ -139,7 +139,7 @@ var B;
 function f3() {
     do {
     } while (true);
-    var E;
+    let E;
     (function (E) {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));
@@ -148,7 +148,7 @@ function f4() {
     if (true) {
         throw new Error();
     }
-    var E;
+    let E;
     (function (E) {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));

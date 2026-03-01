@@ -1,338 +1,535 @@
-=== tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts] ////
+
+=== objectSpreadRepeatedComplexity.ts ===
 function f(cnd: Record<number, boolean>){
 >f : (cnd: Record<number, boolean>) => { prop20a?: number | undefined; prop20b?: number | undefined; prop19a?: number | undefined; prop19b?: number | undefined; prop18a?: number | undefined; prop18b?: number | undefined; prop17a?: number | undefined; prop17b?: number | undefined; prop16a?: number | undefined; prop16b?: number | undefined; prop15a?: number | undefined; prop15b?: number | undefined; prop14a?: number | undefined; prop14b?: number | undefined; prop13a?: number | undefined; prop13b?: number | undefined; prop12a?: number | undefined; prop12b?: number | undefined; prop11a?: number | undefined; prop11b?: number | undefined; prop10a?: number | undefined; prop10b?: number | undefined; prop9a?: number | undefined; prop9b?: number | undefined; prop8a?: number | undefined; prop8b?: number | undefined; prop7a?: number | undefined; prop7b?: number | undefined; prop6a?: number | undefined; prop6b?: number | undefined; prop5a?: number | undefined; prop5b?: number | undefined; prop4a?: number | undefined; prop4b?: number | undefined; prop3a?: number | undefined; prop3b?: number | undefined; prop0?: number | undefined; }
+>  : ^   ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
     // Type is a union of 2^(n-1) members, where n is the number of spread objects
     return {
 >{        // Without this one, it collapses to {} ?        ...(cnd[1] &&            cnd[2] && {            prop0: 0,        }),        // With one prop each, it collapses to a single object (#34853?)        ...(cnd[3] && {            prop3a: 1,            prop3b: 1,        }),        ...(cnd[4] && {            prop4a: 1,            prop4b: 1,        }),        ...(cnd[5] && {            prop5a: 1,            prop5b: 1,        }),        ...(cnd[6] && {            prop6a: 1,            prop6b: 1,        }),        ...(cnd[7] && {            prop7a: 1,            prop7b: 1,        }),        ...(cnd[8] && {            prop8a: 1,            prop8b: 1,        }),        ...(cnd[9] && {            prop9a: 1,            prop9b: 1,        }),        ...(cnd[10] && {            prop10a: 1,            prop10b: 1,        }),        ...(cnd[11] && {            prop11a: 1,            prop11b: 1,        }),        ...(cnd[12] && {            prop12a: 1,            prop12b: 1,        }),        ...(cnd[13] && {            prop13a: 1,            prop13b: 1,        }),        ...(cnd[14] && {            prop14a: 1,            prop14b: 1,        }),        ...(cnd[15] && {            prop15a: 1,            prop15b: 1,        }),        ...(cnd[16] && {            prop16a: 1,            prop16b: 1,        }),        ...(cnd[17] && {            prop17a: 1,            prop17b: 1,        }),        ...(cnd[18] && {            prop18a: 1,            prop18b: 1,        }),        ...(cnd[19] && {            prop19a: 1,            prop19b: 1,        }),        ...(cnd[20] && {            prop20a: 1,            prop20b: 1,        }),    } : { prop20a?: number | undefined; prop20b?: number | undefined; prop19a?: number | undefined; prop19b?: number | undefined; prop18a?: number | undefined; prop18b?: number | undefined; prop17a?: number | undefined; prop17b?: number | undefined; prop16a?: number | undefined; prop16b?: number | undefined; prop15a?: number | undefined; prop15b?: number | undefined; prop14a?: number | undefined; prop14b?: number | undefined; prop13a?: number | undefined; prop13b?: number | undefined; prop12a?: number | undefined; prop12b?: number | undefined; prop11a?: number | undefined; prop11b?: number | undefined; prop10a?: number | undefined; prop10b?: number | undefined; prop9a?: number | undefined; prop9b?: number | undefined; prop8a?: number | undefined; prop8b?: number | undefined; prop7a?: number | undefined; prop7b?: number | undefined; prop6a?: number | undefined; prop6b?: number | undefined; prop5a?: number | undefined; prop5b?: number | undefined; prop4a?: number | undefined; prop4b?: number | undefined; prop3a?: number | undefined; prop3b?: number | undefined; prop0?: number | undefined; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         // Without this one, it collapses to {} ?
         ...(cnd[1] &&
 >(cnd[1] &&            cnd[2] && {            prop0: 0,        }) : false | { prop0: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[1] &&            cnd[2] && {            prop0: 0,        } : false | { prop0: number; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[1] &&            cnd[2] : boolean
+>                            : ^^^^^^^
 >cnd[1] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
             cnd[2] && {
 >cnd[2] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >{            prop0: 0,        } : { prop0: number; }
+>                                : ^^^^^^^^^^^^^^^^^^
 
             prop0: 0,
 >prop0 : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
         }),
 
         // With one prop each, it collapses to a single object (#34853?)
         ...(cnd[3] && {
 >(cnd[3] && {            prop3a: 1,            prop3b: 1,        }) : false | { prop3a: number; prop3b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[3] && {            prop3a: 1,            prop3b: 1,        } : false | { prop3a: number; prop3b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[3] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 >{            prop3a: 1,            prop3b: 1,        } : { prop3a: number; prop3b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop3a: 1,
 >prop3a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop3b: 1,
 >prop3b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[4] && {
 >(cnd[4] && {            prop4a: 1,            prop4b: 1,        }) : false | { prop4a: number; prop4b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[4] && {            prop4a: 1,            prop4b: 1,        } : false | { prop4a: number; prop4b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[4] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
 >{            prop4a: 1,            prop4b: 1,        } : { prop4a: number; prop4b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop4a: 1,
 >prop4a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop4b: 1,
 >prop4b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[5] && {
 >(cnd[5] && {            prop5a: 1,            prop5b: 1,        }) : false | { prop5a: number; prop5b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[5] && {            prop5a: 1,            prop5b: 1,        } : false | { prop5a: number; prop5b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[5] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >{            prop5a: 1,            prop5b: 1,        } : { prop5a: number; prop5b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop5a: 1,
 >prop5a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop5b: 1,
 >prop5b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[6] && {
 >(cnd[6] && {            prop6a: 1,            prop6b: 1,        }) : false | { prop6a: number; prop6b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[6] && {            prop6a: 1,            prop6b: 1,        } : false | { prop6a: number; prop6b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[6] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >6 : 6
+>  : ^
 >{            prop6a: 1,            prop6b: 1,        } : { prop6a: number; prop6b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop6a: 1,
 >prop6a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop6b: 1,
 >prop6b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[7] && {
 >(cnd[7] && {            prop7a: 1,            prop7b: 1,        }) : false | { prop7a: number; prop7b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[7] && {            prop7a: 1,            prop7b: 1,        } : false | { prop7a: number; prop7b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[7] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >7 : 7
+>  : ^
 >{            prop7a: 1,            prop7b: 1,        } : { prop7a: number; prop7b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop7a: 1,
 >prop7a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop7b: 1,
 >prop7b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[8] && {
 >(cnd[8] && {            prop8a: 1,            prop8b: 1,        }) : false | { prop8a: number; prop8b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[8] && {            prop8a: 1,            prop8b: 1,        } : false | { prop8a: number; prop8b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[8] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >8 : 8
+>  : ^
 >{            prop8a: 1,            prop8b: 1,        } : { prop8a: number; prop8b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop8a: 1,
 >prop8a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop8b: 1,
 >prop8b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[9] && {
 >(cnd[9] && {            prop9a: 1,            prop9b: 1,        }) : false | { prop9a: number; prop9b: number; }
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[9] && {            prop9a: 1,            prop9b: 1,        } : false | { prop9a: number; prop9b: number; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[9] : boolean
+>       : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >9 : 9
+>  : ^
 >{            prop9a: 1,            prop9b: 1,        } : { prop9a: number; prop9b: number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop9a: 1,
 >prop9a : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
             prop9b: 1,
 >prop9b : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[10] && {
 >(cnd[10] && {            prop10a: 1,            prop10b: 1,        }) : false | { prop10a: number; prop10b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[10] && {            prop10a: 1,            prop10b: 1,        } : false | { prop10a: number; prop10b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[10] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >{            prop10a: 1,            prop10b: 1,        } : { prop10a: number; prop10b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop10a: 1,
 >prop10a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop10b: 1,
 >prop10b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[11] && {
 >(cnd[11] && {            prop11a: 1,            prop11b: 1,        }) : false | { prop11a: number; prop11b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[11] && {            prop11a: 1,            prop11b: 1,        } : false | { prop11a: number; prop11b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[11] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >11 : 11
+>   : ^^
 >{            prop11a: 1,            prop11b: 1,        } : { prop11a: number; prop11b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop11a: 1,
 >prop11a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop11b: 1,
 >prop11b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[12] && {
 >(cnd[12] && {            prop12a: 1,            prop12b: 1,        }) : false | { prop12a: number; prop12b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[12] && {            prop12a: 1,            prop12b: 1,        } : false | { prop12a: number; prop12b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[12] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 >{            prop12a: 1,            prop12b: 1,        } : { prop12a: number; prop12b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop12a: 1,
 >prop12a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop12b: 1,
 >prop12b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[13] && {
 >(cnd[13] && {            prop13a: 1,            prop13b: 1,        }) : false | { prop13a: number; prop13b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[13] && {            prop13a: 1,            prop13b: 1,        } : false | { prop13a: number; prop13b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[13] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >13 : 13
+>   : ^^
 >{            prop13a: 1,            prop13b: 1,        } : { prop13a: number; prop13b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop13a: 1,
 >prop13a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop13b: 1,
 >prop13b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[14] && {
 >(cnd[14] && {            prop14a: 1,            prop14b: 1,        }) : false | { prop14a: number; prop14b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[14] && {            prop14a: 1,            prop14b: 1,        } : false | { prop14a: number; prop14b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[14] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >14 : 14
+>   : ^^
 >{            prop14a: 1,            prop14b: 1,        } : { prop14a: number; prop14b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop14a: 1,
 >prop14a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop14b: 1,
 >prop14b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[15] && {
 >(cnd[15] && {            prop15a: 1,            prop15b: 1,        }) : false | { prop15a: number; prop15b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[15] && {            prop15a: 1,            prop15b: 1,        } : false | { prop15a: number; prop15b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[15] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >15 : 15
+>   : ^^
 >{            prop15a: 1,            prop15b: 1,        } : { prop15a: number; prop15b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop15a: 1,
 >prop15a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop15b: 1,
 >prop15b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[16] && {
 >(cnd[16] && {            prop16a: 1,            prop16b: 1,        }) : false | { prop16a: number; prop16b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[16] && {            prop16a: 1,            prop16b: 1,        } : false | { prop16a: number; prop16b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[16] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >16 : 16
+>   : ^^
 >{            prop16a: 1,            prop16b: 1,        } : { prop16a: number; prop16b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop16a: 1,
 >prop16a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop16b: 1,
 >prop16b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[17] && {
 >(cnd[17] && {            prop17a: 1,            prop17b: 1,        }) : false | { prop17a: number; prop17b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[17] && {            prop17a: 1,            prop17b: 1,        } : false | { prop17a: number; prop17b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[17] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >17 : 17
+>   : ^^
 >{            prop17a: 1,            prop17b: 1,        } : { prop17a: number; prop17b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop17a: 1,
 >prop17a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop17b: 1,
 >prop17b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[18] && {
 >(cnd[18] && {            prop18a: 1,            prop18b: 1,        }) : false | { prop18a: number; prop18b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[18] && {            prop18a: 1,            prop18b: 1,        } : false | { prop18a: number; prop18b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[18] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >18 : 18
+>   : ^^
 >{            prop18a: 1,            prop18b: 1,        } : { prop18a: number; prop18b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop18a: 1,
 >prop18a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop18b: 1,
 >prop18b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[19] && {
 >(cnd[19] && {            prop19a: 1,            prop19b: 1,        }) : false | { prop19a: number; prop19b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[19] && {            prop19a: 1,            prop19b: 1,        } : false | { prop19a: number; prop19b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[19] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >19 : 19
+>   : ^^
 >{            prop19a: 1,            prop19b: 1,        } : { prop19a: number; prop19b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop19a: 1,
 >prop19a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop19b: 1,
 >prop19b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
         ...(cnd[20] && {
 >(cnd[20] && {            prop20a: 1,            prop20b: 1,        }) : false | { prop20a: number; prop20b: number; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[20] && {            prop20a: 1,            prop20b: 1,        } : false | { prop20a: number; prop20b: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cnd[20] : boolean
+>        : ^^^^^^^
 >cnd : Record<number, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 >20 : 20
+>   : ^^
 >{            prop20a: 1,            prop20b: 1,        } : { prop20a: number; prop20b: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             prop20a: 1,
 >prop20a : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
             prop20b: 1,
 >prop20b : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
         }),
     };

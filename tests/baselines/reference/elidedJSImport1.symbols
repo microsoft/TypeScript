@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/elidedJSImport1.ts] ////
+
+=== caller.js ===
+import * as fs from 'fs';
+>fs : Symbol(fs, Decl(caller.js, 0, 6))
+
+import TruffleContract from '@truffle/contract'; // Runtime err: this import is elided in transform
+>TruffleContract : Symbol(TruffleContract, Decl(caller.js, 1, 6))
+
+console.log(fs);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>fs : Symbol(fs, Decl(caller.js, 0, 6))
+
+console.log('TruffleContract is ', typeof TruffleContract, TruffleContract); // `TruffleContract` is considered 'unused'
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+
+=== node_modules/@truffle/contract/index.d.ts ===
+declare module "@truffle/contract" {
+>"@truffle/contract" : Symbol("@truffle/contract", Decl(index.d.ts, 0, 0))
+
+    interface ContractObject {
+>ContractObject : Symbol(ContractObject, Decl(index.d.ts, 0, 36))
+
+        foo: number;
+>foo : Symbol(ContractObject.foo, Decl(index.d.ts, 1, 30))
+    }
+    namespace TruffleContract {
+>TruffleContract : Symbol(TruffleContract, Decl(index.d.ts, 3, 5))
+
+        export type Contract = ContractObject;
+>Contract : Symbol(Contract, Decl(index.d.ts, 4, 31))
+>ContractObject : Symbol(ContractObject, Decl(index.d.ts, 0, 36))
+    }
+    export default TruffleContract;
+>TruffleContract : Symbol(TruffleContract, Decl(index.d.ts, 3, 5))
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/awaitCallExpression/awaitCallExpression8_es2017.ts] ////
+
 //// [awaitCallExpression8_es2017.ts]
 declare var a: boolean;
 declare var p: Promise<boolean>;
@@ -14,6 +16,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitCallExpression8_es2017.js]
+"use strict";
 async function func() {
     before();
     var b = (await po).fn(a, a, a);

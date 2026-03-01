@@ -1,12 +1,18 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts] ////
+
+=== objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts ===
 var x = {
 >x : any
+>  : ^^^
 >{    x, // OK    undefinedVariable // Error} : { x: any; undefinedVariable: any; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x, // OK
 >x : any
+>  : ^^^
 
     undefinedVariable // Error
 >undefinedVariable : any
+>                  : ^^^
 }
 

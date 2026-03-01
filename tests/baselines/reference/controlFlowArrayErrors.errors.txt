@@ -1,18 +1,18 @@
-tests/cases/compiler/controlFlowArrayErrors.ts(4,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
-tests/cases/compiler/controlFlowArrayErrors.ts(5,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
-tests/cases/compiler/controlFlowArrayErrors.ts(11,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
-tests/cases/compiler/controlFlowArrayErrors.ts(13,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
-tests/cases/compiler/controlFlowArrayErrors.ts(19,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
-tests/cases/compiler/controlFlowArrayErrors.ts(22,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
-tests/cases/compiler/controlFlowArrayErrors.ts(29,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
-tests/cases/compiler/controlFlowArrayErrors.ts(34,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
-tests/cases/compiler/controlFlowArrayErrors.ts(48,12): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
-tests/cases/compiler/controlFlowArrayErrors.ts(56,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/compiler/controlFlowArrayErrors.ts(60,11): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
-tests/cases/compiler/controlFlowArrayErrors.ts(63,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+controlFlowArrayErrors.ts(4,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+controlFlowArrayErrors.ts(5,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+controlFlowArrayErrors.ts(11,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+controlFlowArrayErrors.ts(13,13): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+controlFlowArrayErrors.ts(19,9): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+controlFlowArrayErrors.ts(22,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
+controlFlowArrayErrors.ts(29,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+controlFlowArrayErrors.ts(34,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
+controlFlowArrayErrors.ts(48,12): error TS2345: Argument of type '99' is not assignable to parameter of type 'never'.
+controlFlowArrayErrors.ts(56,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+controlFlowArrayErrors.ts(60,11): error TS7034: Variable 'x' implicitly has type 'any[]' in some locations where its type cannot be determined.
+controlFlowArrayErrors.ts(63,9): error TS7005: Variable 'x' implicitly has an 'any[]' type.
 
 
-==== tests/cases/compiler/controlFlowArrayErrors.ts (12 errors) ====
+==== controlFlowArrayErrors.ts (12 errors) ====
     declare function cond(): boolean;
     
     function f1() {
@@ -78,7 +78,7 @@ tests/cases/compiler/controlFlowArrayErrors.ts(63,9): error TS7005: Variable 'x'
         x;           // boolean[] | (string | number)[]
         x.push(99);  // Error
                ~~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '99' is not assignable to parameter of type 'never'.
     }
     
     function f7() {

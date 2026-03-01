@@ -1,147 +1,236 @@
-=== tests/cases/compiler/mappedTypeGenericIndexedAccess.ts ===
+//// [tests/cases/compiler/mappedTypeGenericIndexedAccess.ts] ////
+
+=== mappedTypeGenericIndexedAccess.ts ===
 // Repro from #49242
 
 type Types = {
->Types : { first: {    a1: true;}; second: {    a2: true;}; third: {    a3: true;}; }
+>Types : Types
+>      : ^^^^^
 
     first: { a1: true };
 >first : { a1: true; }
+>      : ^^^^^^    ^^^
 >a1 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
     second: { a2: true };
 >second : { a2: true; }
+>       : ^^^^^^    ^^^
 >a2 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
     third: { a3: true };
 >third : { a3: true; }
+>      : ^^^^^^    ^^^
 >a3 : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 }
 
 class Test {
 >Test : Test
+>     : ^^^^
 
     entries: { [T in keyof Types]?: Types[T][] };
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>        : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 
     constructor() {
         this.entries = {};
 >this.entries = {} : {}
+>                  : ^^
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>             : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>        : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
     }
 
     addEntry<T extends keyof Types>(name: T, entry: Types[T]) {
 >addEntry : <T extends keyof Types>(name: T, entry: Types[T]) => void
+>         : ^ ^^^^^^^^^           ^^    ^^ ^^     ^^        ^^^^^^^^^
 >name : T
+>     : ^
 >entry : Types[T]
+>      : ^^^^^^^^
 
         if (!this.entries[name]) {
 >!this.entries[name] : boolean
+>                    : ^^^^^^^
 >this.entries[name] : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }[T]
+>                   : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>             : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>        : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >name : T
+>     : ^
 
             this.entries[name] = [];
 >this.entries[name] = [] : never[]
+>                        : ^^^^^^^
 >this.entries[name] : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }[T]
+>                   : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>             : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>        : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >name : T
+>     : ^
 >[] : never[]
+>   : ^^^^^^^
         }
         this.entries[name]?.push(entry);
->this.entries[name]?.push(entry) : number | undefined
->this.entries[name]?.push : ((...items: Types[T][]) => number) | undefined
->this.entries[name] : Types[T][] | undefined
+>this.entries[name]?.push(entry) : number
+>                                : ^^^^^^
+>this.entries[name]?.push : (...items: Types[T][]) => number
+>                         : ^^^^     ^^^^^^^^^^^^^^^^^      
+>this.entries[name] : Types[T][]
+>                   : ^^^^^^^^^^
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>             : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
+>        : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >name : T
->push : ((...items: Types[T][]) => number) | undefined
+>     : ^
+>push : (...items: Types[T][]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >entry : Types[T]
+>      : ^^^^^^^^
     }
 }
 
 // Repro from #49338
 
 type TypesMap = {
->TypesMap : { 0: {    foo: 'bar';}; 1: {    a: 'b';}; }
+>TypesMap : TypesMap
+>         : ^^^^^^^^
 
     [0]: { foo: 'bar'; };
->[0] : { foo: 'bar'; }
+>[0] : { foo: "bar"; }
+>    : ^^^^^^^     ^^^
 >0 : 0
+>  : ^
 >foo : "bar"
+>    : ^^^^^
 
     [1]: { a: 'b'; };
->[1] : { a: 'b'; }
+>[1] : { a: "b"; }
+>    : ^^^^^   ^^^
 >1 : 1
+>  : ^
 >a : "b"
+>  : ^^^
 
 };
 
 type P<T extends keyof TypesMap> = { t: T; } & TypesMap[T];
 >P : P<T>
+>  : ^^^^
 >t : T
+>  : ^
 
 type TypeHandlers = {
->TypeHandlers : { 0?: ((p: P<0>) => void) | undefined; 1?: ((p: P<1>) => void) | undefined; }
+>TypeHandlers : TypeHandlers
+>             : ^^^^^^^^^^^^
 
     [T in keyof TypesMap]?: (p: P<T>) => void;
 >p : P<T>
+>  : ^^^^
 
 };
 
 const typeHandlers: TypeHandlers = {
 >typeHandlers : TypeHandlers
+>             : ^^^^^^^^^^^^
 >{    [0]: (p) => console.log(p.foo),    [1]: (p) => console.log(p.a),} : { 0: (p: P<0>) => void; 1: (p: P<1>) => void; }
+>                                                                       : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     [0]: (p) => console.log(p.foo),
 >[0] : (p: P<0>) => void
+>    : ^ ^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >(p) => console.log(p.foo) : (p: P<0>) => void
+>                          : ^ ^^^^^^^^^^^^^^^
 >p : P<0>
+>  : ^^^^
 >console.log(p.foo) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >p.foo : "bar"
+>      : ^^^^^
 >p : P<0>
+>  : ^^^^
 >foo : "bar"
+>    : ^^^^^
 
     [1]: (p) => console.log(p.a),
 >[1] : (p: P<1>) => void
+>    : ^ ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >(p) => console.log(p.a) : (p: P<1>) => void
+>                        : ^ ^^^^^^^^^^^^^^^
 >p : P<1>
+>  : ^^^^
 >console.log(p.a) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >p.a : "b"
+>    : ^^^
 >p : P<1>
+>  : ^^^^
 >a : "b"
+>  : ^^^
 
 };
 
 const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >onSomeEvent : <T extends keyof TypesMap>(p: P<T>) => void | undefined
+>            : ^ ^^^^^^^^^              ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 ><T extends keyof TypesMap>(p: P<T>) =>    typeHandlers[p.t]?.(p) : <T extends keyof TypesMap>(p: P<T>) => void | undefined
+>                                                                 : ^ ^^^^^^^^^              ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 >p : P<T>
+>  : ^^^^
 
     typeHandlers[p.t]?.(p);
 >typeHandlers[p.t]?.(p) : void | undefined
+>                       : ^^^^^^^^^^^^^^^^
 >typeHandlers[p.t] : ((p: P<T>) => void) | undefined
+>                  : ^^ ^^^^^^^^^^^    ^^^^^^^^^^^^^
 >typeHandlers : TypeHandlers
+>             : ^^^^^^^^^^^^
 >p.t : T
+>    : ^
 >p : { t: T; } & ({ foo: "bar"; } | { a: "b"; })
+>  : ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^   ^^^^
 >t : T
+>  : ^
 >p : P<T>
+>  : ^^^^
 

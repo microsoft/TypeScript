@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteExpressionMustBeOptional.ts] ////
+
 //// [deleteExpressionMustBeOptional.ts]
 interface Foo {
     a: number
@@ -42,6 +44,7 @@ delete b.b
 
 
 //// [deleteExpressionMustBeOptional.js]
+"use strict";
 delete f.a;
 delete f.b;
 delete f.c;

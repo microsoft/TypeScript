@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsPrimitiveIntersection.ts] ////
+
 //// [typeGuardNarrowsPrimitiveIntersection.ts]
 type Tag = {__tag: any};
 declare function isNonBlank(value: string) : value is (string & Tag);
@@ -23,7 +25,8 @@ if (isNonBlank2(value)) {
 
 
 //// [typeGuardNarrowsPrimitiveIntersection.js]
-var value;
+"use strict";
+let value;
 if (isNonBlank(value)) {
     doThis(value);
 }

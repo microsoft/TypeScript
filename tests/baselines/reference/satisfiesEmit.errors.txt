@@ -1,0 +1,13 @@
+satisfiesEmit.ts(2,20): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+satisfiesEmit.ts(3,23): error TS2304: Cannot find name 'bleh'.
+
+
+==== satisfiesEmit.ts (2 errors) ====
+    // This import should not be elided in the emitted JS
+    import a = require("foo");
+                       ~~~~~
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+    const p = a satisfies bleh;
+                          ~~~~
+!!! error TS2304: Cannot find name 'bleh'.
+    

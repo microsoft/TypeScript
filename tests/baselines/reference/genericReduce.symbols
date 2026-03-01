@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericReduce.ts ===
+//// [tests/cases/compiler/genericReduce.ts] ////
+
+=== genericReduce.ts ===
 var a = ["An", "array", "of", "strings"];
 >a : Symbol(a, Decl(genericReduce.ts, 0, 3))
 

@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/mappedTypeGenericWithKnownKeys.ts] ////
+
+=== mappedTypeGenericWithKnownKeys.ts ===
+// based on #50054
+
+function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Shape) {
+>test : Symbol(test, Decl(mappedTypeGenericWithKnownKeys.ts, 0, 0))
+>Shape : Symbol(Shape, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>shape : Symbol(shape, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 52))
+>Shape : Symbol(Shape, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 14))
+>key : Symbol(key, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 65))
+>Shape : Symbol(Shape, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 14))
+
+    const obj = {} as Record<keyof Shape | "knownLiteralKey", number>;
+>obj : Symbol(obj, Decl(mappedTypeGenericWithKnownKeys.ts, 3, 9))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Shape : Symbol(Shape, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 14))
+
+    obj.knownLiteralKey = 1;
+>obj.knownLiteralKey : Symbol(knownLiteralKey)
+>obj : Symbol(obj, Decl(mappedTypeGenericWithKnownKeys.ts, 3, 9))
+>knownLiteralKey : Symbol(knownLiteralKey)
+
+    obj[key] = 2;
+>obj : Symbol(obj, Decl(mappedTypeGenericWithKnownKeys.ts, 3, 9))
+>key : Symbol(key, Decl(mappedTypeGenericWithKnownKeys.ts, 2, 65))
+
+    obj.unknownLiteralKey = 3; // error
+>obj : Symbol(obj, Decl(mappedTypeGenericWithKnownKeys.ts, 3, 9))
+
+    obj['' as string] = 4; // error
+>obj : Symbol(obj, Decl(mappedTypeGenericWithKnownKeys.ts, 3, 9))
+}
+

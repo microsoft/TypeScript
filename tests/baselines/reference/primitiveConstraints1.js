@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primitiveConstraints1.ts] ////
+
 //// [primitiveConstraints1.ts]
 function foo1<T extends U, U>(t: T, u: U) { }
 foo1<string, number>('hm', 1); // no error
@@ -7,6 +9,7 @@ foo2<number, string>(1, 'hm'); // error
 
 
 //// [primitiveConstraints1.js]
+"use strict";
 function foo1(t, u) { }
 foo1('hm', 1); // no error
 function foo2(t, u) { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualsClassRedeclarationError.ts ===
+//// [tests/cases/compiler/exportEqualsClassRedeclarationError.ts] ////
+
+=== exportEqualsClassRedeclarationError.ts ===
 class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(exportEqualsClassRedeclarationError.ts, 0, 0))
 

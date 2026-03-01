@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes3.ts] ////
+
 //// [templateLiteralTypes3.ts]
 // Inference from template literal type to template literal type
 
@@ -190,22 +192,34 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
     spread(u1, u2);
 }
 
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+    let x: keyof T & string | `-${keyof T & string}`;
+    x = "id";
+    x = "-id";
+}
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
 // Inference from template literal type to template literal type
 function f1(s, n, b, t) {
-    var x1 = foo1('hello'); // Error
-    var x2 = foo1('*hello*');
-    var x3 = foo1('**hello**');
-    var x4 = foo1("*".concat(s, "*"));
-    var x5 = foo1("*".concat(n, "*"));
-    var x6 = foo1("*".concat(b, "*"));
-    var x7 = foo1("*".concat(t, "*"));
-    var x8 = foo1("**".concat(s, "**"));
+    let x1 = foo1('hello'); // Error
+    let x2 = foo1('*hello*');
+    let x3 = foo1('**hello**');
+    let x4 = foo1(`*${s}*`);
+    let x5 = foo1(`*${n}*`);
+    let x6 = foo1(`*${b}*`);
+    let x7 = foo1(`*${t}*`);
+    let x8 = foo1(`**${s}**`);
 }
 function f2() {
-    var x;
+    let x;
     x = '1.1.1';
     x = '1.1.1';
     x = '1.1.1';
@@ -216,31 +230,31 @@ function f2() {
     x = '1.1.1';
 }
 function f3(s, n, b, t) {
-    var x;
+    let x;
     x = 'hello'; // Error
     x = '*hello*';
     x = '**hello**';
-    x = "*".concat(s, "*");
-    x = "*".concat(n, "*");
-    x = "*".concat(b, "*");
-    x = "*".concat(t, "*");
-    x = "**".concat(s, "**");
+    x = `*${s}*`;
+    x = `*${n}*`;
+    x = `*${b}*`;
+    x = `*${t}*`;
+    x = `**${s}**`;
 }
 function f4(s, n, b, t) {
-    var x;
+    let x;
     x = '123'; // Error
     x = '*123*';
     x = '**123**'; // Error
-    x = "*".concat(s, "*"); // Error
-    x = "*".concat(n, "*");
-    x = "*".concat(b, "*"); // Error
-    x = "*".concat(t, "*");
+    x = `*${s}*`; // Error
+    x = `*${n}*`;
+    x = `*${b}*`; // Error
+    x = `*${t}*`;
 }
-var value1 = "abc";
-var templated1 = "".concat(value1, " abc");
+const value1 = "abc";
+const templated1 = `${value1} abc`;
 // Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
-var value2 = "abc";
-var templated2 = "".concat(value2, " abc");
+const value2 = "abc";
+const templated2 = `${value2} abc`;
 chain("a");
 // Repro from #46125
 function ff1(x, y, z) {
@@ -276,14 +290,20 @@ function reducer(action) {
         action.response;
     }
 }
-noSpread(["1.".concat('2', ".3"), "1.".concat('2', ".4")]);
-noSpread(["1.".concat('2', ".3"), "1.".concat('2', ".4")]);
-spread("1.".concat('2', ".3"), "1.".concat('2', ".4"));
-spread("1.".concat('2', ".3"), "1.".concat('2', ".4"));
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
 function ft1(t, u, u1, u2) {
-    spread("1.".concat(t, ".3"), "1.".concat(t, ".4"));
-    spread("1.".concat(u, ".3"), "1.".concat(u, ".4"));
+    spread(`1.${t}.3`, `1.${t}.4`);
+    spread(`1.${u}.3`, `1.${u}.4`);
     spread(u1, u2);
+}
+// Repro from #56582
+function a() {
+    let x;
+    x = "id";
+    x = "-id";
 }
 
 
@@ -356,3 +376,7 @@ type DotString = `${string}.${string}.${string}`;
 declare function noSpread<P extends DotString>(args: P[]): P;
 declare function spread<P extends DotString>(...args: P[]): P;
 declare function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>): void;
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+declare function a<T extends {
+    id: string;
+}>(): void;

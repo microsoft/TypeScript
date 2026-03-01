@@ -1,10 +1,10 @@
-tests/cases/conformance/override/override13.ts(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
-tests/cases/conformance/override/override13.ts(13,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
-tests/cases/conformance/override/override13.ts(19,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
-tests/cases/conformance/override/override13.ts(25,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
+override13.ts(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
+override13.ts(13,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Foo'.
+override13.ts(19,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
+override13.ts(25,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'Intermediate'.
 
 
-==== tests/cases/conformance/override/override13.ts (4 errors) ====
+==== override13.ts (4 errors) ====
     class Foo {
         property = 1
         static staticProperty = 2

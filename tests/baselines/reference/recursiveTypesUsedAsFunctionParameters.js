@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts] ////
+
 //// [recursiveTypesUsedAsFunctionParameters.ts]
 class List<T> {
     data: T;
@@ -44,16 +46,11 @@ function other<T extends List<U>, U>() {
 }
 
 //// [recursiveTypesUsedAsFunctionParameters.js]
-var List = /** @class */ (function () {
-    function List() {
-    }
-    return List;
-}());
-var MyList = /** @class */ (function () {
-    function MyList() {
-    }
-    return MyList;
-}());
+"use strict";
+class List {
+}
+class MyList {
+}
 function foo(x) {
 }
 function foo2(x) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessCanBeHighOrder.ts ===
+//// [tests/cases/compiler/indexedAccessCanBeHighOrder.ts] ////
+
+=== indexedAccessCanBeHighOrder.ts ===
 declare function get<U, Y extends keyof U>(x: U, y: Y): U[Y];
 >get : Symbol(get, Decl(indexedAccessCanBeHighOrder.ts, 0, 0))
 >U : Symbol(U, Decl(indexedAccessCanBeHighOrder.ts, 0, 21))

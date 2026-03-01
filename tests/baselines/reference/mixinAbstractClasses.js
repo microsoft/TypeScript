@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAbstractClasses.ts] ////
+
 //// [mixinAbstractClasses.ts]
 interface Mixin {
     mixinMethod(): void;
@@ -35,6 +37,7 @@ wasAbstract.abstractBaseMethod();
 wasAbstract.mixinMethod();
 
 //// [mixinAbstractClasses.js]
+"use strict";
 function Mixin(baseClass) {
     class MixinClass extends baseClass {
         mixinMethod() {

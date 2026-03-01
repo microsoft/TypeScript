@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noSelfOnVars.ts] ////
+
 //// [noSelfOnVars.ts]
 function foo() {
     function bar() { }
@@ -8,6 +10,7 @@ function foo() {
 
 
 //// [noSelfOnVars.js]
+"use strict";
 function foo() {
     function bar() { }
     var x = bar;

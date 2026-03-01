@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exhaustiveSwitchWithWideningLiteralTypes.ts] ////
+
 //// [exhaustiveSwitchWithWideningLiteralTypes.ts]
 // Repro from #12529
 
@@ -17,19 +19,18 @@ function f(value: A | B): number {
 }
 
 //// [exhaustiveSwitchWithWideningLiteralTypes.js]
+"use strict";
 // Repro from #12529
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.kind = "A"; // (property) A.kind: "A"
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
         this.kind = "B"; // (property) B.kind: "B"
     }
-    return B;
-}());
+}
 function f(value) {
     switch (value.kind) {
         case "A": return 0;

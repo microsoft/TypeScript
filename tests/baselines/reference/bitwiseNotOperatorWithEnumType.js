@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithEnumType.ts] ////
+
 //// [bitwiseNotOperatorWithEnumType.ts]
 // ~ operator on enum type
 
@@ -19,6 +21,7 @@ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 ~ENUM1.A, ~ENUM1["B"];
 
 //// [bitwiseNotOperatorWithEnumType.js]
+"use strict";
 // ~ operator on enum type
 var ENUM1;
 (function (ENUM1) {

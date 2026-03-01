@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts] ////
+
 //// [typeAnnotationBestCommonTypeInArrayLiteral.ts]
 interface IMenuItem {
     id: string;
@@ -23,6 +25,7 @@ var menuData: IMenuItem[] = [
 
 
 //// [typeAnnotationBestCommonTypeInArrayLiteral.js]
+"use strict";
 var menuData = [
     {
         "id": "ourLogo",

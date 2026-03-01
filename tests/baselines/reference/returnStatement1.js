@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnStatement1.ts] ////
+
 //// [returnStatement1.ts]
 function f() {
     return function (s) {
@@ -7,6 +9,7 @@ function f() {
 }
 
 //// [returnStatement1.js]
+"use strict";
 function f() {
     return function (s) {
         var x = s;

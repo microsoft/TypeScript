@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts] ////
+
+=== assignmentCompatWithGenericCallSignatures2.ts ===
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 
 interface A {
@@ -23,20 +25,20 @@ interface B {
 >S : Symbol(S, Decl(assignmentCompatWithGenericCallSignatures2.ts, 7, 5))
 }
 
-var a: A;
->a : Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 3))
+declare var a: A;
+>a : Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 11))
 >A : Symbol(A, Decl(assignmentCompatWithGenericCallSignatures2.ts, 0, 0))
 
-var b: B;
->b : Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 3))
+declare var b: B;
+>b : Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 11))
 >B : Symbol(B, Decl(assignmentCompatWithGenericCallSignatures2.ts, 4, 1))
 
 // Both errors
 a = b;
->a : Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 3))
->b : Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 3))
+>a : Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 11))
+>b : Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 11))
 
 b = a;
->b : Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 3))
->a : Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 3))
+>b : Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 11))
+>a : Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 11))
 

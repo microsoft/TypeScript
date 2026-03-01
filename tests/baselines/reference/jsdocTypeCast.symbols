@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsdocTypeCast.js ===
+//// [tests/cases/compiler/jsdocTypeCast.ts] ////
+
+=== jsdocTypeCast.js ===
 /**
  * @param {string} x
  */

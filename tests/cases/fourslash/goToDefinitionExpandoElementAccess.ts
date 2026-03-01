@@ -4,4 +4,4 @@
 ////f[/*0*/"x"] = 0;
 ////f[[|/*1*/"x"|]] = 1;
 
-verify.goToDefinition("1", ["0", "1"]);
+verify.baselineGoToDefinition("1");

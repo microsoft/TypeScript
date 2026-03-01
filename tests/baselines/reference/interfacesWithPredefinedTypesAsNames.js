@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts] ////
+
 //// [interfacesWithPredefinedTypesAsNames.ts]
 interface any { }
 interface number { }
@@ -8,5 +10,6 @@ interface unknown {}
 interface never {}
 
 //// [interfacesWithPredefinedTypesAsNames.js]
+"use strict";
 interface;
 void {};

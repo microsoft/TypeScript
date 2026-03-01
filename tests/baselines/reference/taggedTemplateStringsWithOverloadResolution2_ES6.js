@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2_ES6.ts] ////
+
 //// [taggedTemplateStringsWithOverloadResolution2_ES6.ts]
 function foo1(strs: TemplateStringsArray, x: number): string;
 function foo1(strs: string[], x: number): number;
@@ -18,6 +20,7 @@ var c = foo2 `${1}`;
 var d = foo2([], 1);
 
 //// [taggedTemplateStringsWithOverloadResolution2_ES6.js]
+"use strict";
 function foo1(...stuff) {
     return undefined;
 }

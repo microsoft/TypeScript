@@ -1,46 +1,78 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/checkJsObjectLiteralIndexSignatures.ts] ////
+
+=== file.js ===
 // @ts-check
 
 let n = Math.random();
 >n : number
+>  : ^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
 let s = `${n}`;
 >s : string
+>  : ^^^^^^
 >`${n}` : string
+>       : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 const numericIndex = { [n]: 1 };
->numericIndex : { [x: number]: number; }
->{ [n]: 1 } : { [x: number]: number; }
+>numericIndex : { [n]: number; }
+>             : ^^     ^^^^^^ ^^
+>{ [n]: 1 } : { [n]: number; }
+>           : ^^     ^^^^^^ ^^
 >[n] : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 numericIndex[n].toFixed();
 >numericIndex[n].toFixed() : string
+>                          : ^^^^^^
 >numericIndex[n].toFixed : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^      
 >numericIndex[n] : number
->numericIndex : { [x: number]: number; }
+>                : ^^^^^^
+>numericIndex : { [n]: number; }
+>             : ^^     ^^^^^^ ^^
 >n : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 const stringIndex = { [s]: 1 };
->stringIndex : { [x: string]: number; }
->{ [s]: 1 } : { [x: string]: number; }
+>stringIndex : { [s]: number; }
+>            : ^^     ^^^^^^ ^^
+>{ [s]: 1 } : { [s]: number; }
+>           : ^^     ^^^^^^ ^^
 >[s] : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 stringIndex[s].toFixed();
 >stringIndex[s].toFixed() : string
+>                         : ^^^^^^
 >stringIndex[s].toFixed : (fractionDigits?: number) => string
+>                       : ^              ^^^      ^^^^^      
 >stringIndex[s] : number
->stringIndex : { [x: string]: number; }
+>               : ^^^^^^
+>stringIndex : { [s]: number; }
+>            : ^^     ^^^^^^ ^^
 >s : string
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 

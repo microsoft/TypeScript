@@ -1,7 +1,9 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts] ////
+
 //// [nonPrimitiveAssignError.ts]
 var x = {};
 var y = {foo: "bar"};
-var a: object;
+var a: object = {};
 x = a;
 y = a; // expect error
 a = x;
@@ -29,9 +31,10 @@ a = strObj; // ok
 
 
 //// [nonPrimitiveAssignError.js]
+"use strict";
 var x = {};
 var y = { foo: "bar" };
-var a;
+var a = {};
 x = a;
 y = a; // expect error
 a = x;

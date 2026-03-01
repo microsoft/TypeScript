@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts] ////
+
+=== invalidEnumAssignments.ts ===
 enum E {
 >E : Symbol(E, Decl(invalidEnumAssignments.ts, 0, 0))
 

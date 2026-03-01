@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedFreshLiteral.ts] ////
+
 //// [nestedFreshLiteral.ts]
 interface CSSProps  {
   color?: string
@@ -14,6 +16,7 @@ let stylen: NestedCSSProps = {
 }
 
 //// [nestedFreshLiteral.js]
-var stylen = {
+"use strict";
+let stylen = {
     nested: { prop: { colour: 'red' } }
 };

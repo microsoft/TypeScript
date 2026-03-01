@@ -1,51 +1,77 @@
-=== tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts] ////
+
+=== mappedTypeInferenceErrors.ts ===
 // Repro from #19316
 
 type ComputedOf<T> = {
 >ComputedOf : ComputedOf<T>
+>           : ^^^^^^^^^^^^^
 
     [K in keyof T]: () => T[K];
 }
 
 declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & ThisType<P & C>): void;
->foo : <P, C>(options: {    props: P;    computed: ComputedOf<C>;} & ThisType<P & C>) => void
+>foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void
+>    : ^ ^^ ^^       ^^                                                        ^^^^^    
 >options : { props: P; computed: ComputedOf<C>; } & ThisType<P & C>
+>        : ^^^^^^^^^ ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^
 >props : P
+>      : ^
 >computed : ComputedOf<C>
+>         : ^^^^^^^^^^^^^
 
 foo({
 >foo({    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }}) : void
+>                                                                                                                                                           : ^^^^
 >foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void
+>    : ^ ^^ ^^       ^^                                                        ^^^^^    
 >{    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }} : { props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }
+>                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 
     props: { x: 10, y: 20 },
 >props : { x: number; y: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 10, y: 20 } : { x: number; y: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >y : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     computed: {
 >computed : { bar(): number; baz: number; }
+>         : ^^^^^^^^^      ^^^^^^^^^^^^^^^^
 >{        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    } : { bar(): number; baz: number; }
+>                                                                                                          : ^^^^^^^^^      ^^^^^^^^^^^^^^^^
 
         bar(): number {
 >bar : () => number
+>    : ^^^^^^      
 
             let z = this.bar;
 >z : unknown
+>  : ^^^^^^^
 >this.bar : unknown
+>         : ^^^^^^^
 >this : { x: number; y: number; } & { bar: unknown; baz: unknown; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : unknown
+>    : ^^^^^^^
 
             return 42;
 >42 : 42
+>   : ^^
 
         },
         baz: 42
 >baz : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
     }
 });
 

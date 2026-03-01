@@ -11,15 +11,12 @@ export interface Bar {
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [module.js]
 "use strict";
-exports.__esModule = true;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+Object.defineProperty(exports, "__esModule", { value: true });
+class Foo {
+}
 
 
 //// [index.d.ts]

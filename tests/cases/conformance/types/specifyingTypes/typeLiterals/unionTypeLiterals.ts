@@ -1,3 +1,4 @@
+// @target: es2015
 // basic valid forms of union literals
 
 var simpleUnion: string | number;

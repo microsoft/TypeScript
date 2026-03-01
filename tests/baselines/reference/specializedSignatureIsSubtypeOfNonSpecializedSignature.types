@@ -1,216 +1,302 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsSubtypeOfNonSpecializedSignature.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsSubtypeOfNonSpecializedSignature.ts] ////
+
+=== specializedSignatureIsSubtypeOfNonSpecializedSignature.ts ===
 // Specialized signatures must be a subtype of a non-specialized signature
 // All the below should not be errors
 
 function foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; }
+>foo : { (x: "a"): any; (x: string): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 function foo(x: any) { }
 >foo : { (x: "a"): any; (x: string): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 class C {
 >C : C
+>  : ^
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; }
+>foo : { (x: "a"): any; (x: string): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: any) { }
 >foo : { (x: "a"): any; (x: string): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 }
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: T);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     foo(x: any) { }
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 }
 
 class C3<T extends String> {
 >C3 : C3<T>
+>   : ^^^^^
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: T);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     foo(x: any) { }
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 }
 
 interface I {
     (x: 'a');
 >x : "a"
+>  : ^^^
 
     (x: number);
 >x : number
+>  : ^^^^^^
 
     (x: string);
 >x : string
+>  : ^^^^^^
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: number): any; }
+>foo : { (x: "a"): any; (x: string): any; (x: number): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; (x: number): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: number);
 >foo : { (x: "a"): any; (x: string): any; (x: number): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 interface I2<T> {
     (x: 'a');
 >x : "a"
+>  : ^^^
 
     (x: T);
 >x : T
+>  : ^
 
     (x: string);
 >x : string
+>  : ^^^^^^
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: T);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 }
 
 interface I3<T extends String> {
     (x: 'a');
 >x : "a"
+>  : ^^^
 
     (x: string);
 >x : string
+>  : ^^^^^^
 
     (x: T);
 >x : T
+>  : ^
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: string);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: T);
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
+>    : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 }
 
 var a: {
->a : { (x: string): any; (x: 'a'): any; (x: number): any; foo(x: string): any; foo(x: 'a'): any; foo(x: number): any; }
+>a : { (x: string): any; (x: "a"): any; (x: number): any; foo(x: string): any; foo(x: "a"): any; foo(x: number): any; }
+>  : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
     (x: string);
 >x : string
+>  : ^^^^^^
 
     (x: 'a');
 >x : "a"
+>  : ^^^
 
     (x: number);
 >x : number
+>  : ^^^^^^
 
     foo(x: string);
 >foo : { (x: string): any; (x: "a"): any; (x: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: 'a');
->foo : { (x: string): any; (x: 'a'): any; (x: number): any; }
+>foo : { (x: string): any; (x: "a"): any; (x: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo(x: number);
 >foo : { (x: string): any; (x: "a"): any; (x: number): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 var a2: {
->a2 : { (x: 'a'): any; (x: string): any; <T>(x: T): any; foo(x: string): any; foo(x: 'a'): any; foo<T>(x: T): any; }
+>a2 : { (x: "a"): any; (x: string): any; <T>(x: T): any; foo(x: string): any; foo(x: "a"): any; foo<T>(x: T): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 
     (x: 'a');
 >x : "a"
+>  : ^^^
 
     (x: string);
 >x : string
+>  : ^^^^^^
 
     <T>(x: T);
 >x : T
+>  : ^
 
     foo(x: string);
 >foo : { (x: string): any; (x: "a"): any; <T>(x: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: 'a');
->foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }
+>foo : { (x: string): any; (x: "a"): any; <T>(x: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo<T>(x: T);
 >foo : { (x: string): any; (x: "a"): any; <T>(x: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 }
 
 var a3: {
->a3 : { (x: 'a'): any; <T>(x: T): any; (x: string): any; foo(x: string): any; foo(x: 'a'): any; foo<T extends String>(x: T): any; }
+>a3 : { (x: "a"): any; <T>(x: T): any; (x: string): any; foo(x: string): any; foo(x: "a"): any; foo<T extends String>(x: T): any; }
+>   : ^^^ ^^   ^^^^^^^^^ ^^ ^^ ^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 
     (x: 'a');
 >x : "a"
+>  : ^^^
 
     <T>(x: T);
 >x : T
+>  : ^
 
     (x: string);
 >x : string
+>  : ^^^^^^
 
     foo(x: string);
 >foo : { (x: string): any; (x: "a"): any; <T extends String>(x: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     foo(x: 'a');
->foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }
+>foo : { (x: string): any; (x: "a"): any; <T extends String>(x: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
     foo<T extends String>(x: T);
 >foo : { (x: string): any; (x: "a"): any; <T extends String>(x: T): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 }
 

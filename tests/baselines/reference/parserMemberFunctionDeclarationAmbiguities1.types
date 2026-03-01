@@ -1,28 +1,39 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts] ////
+
+=== parserMemberFunctionDeclarationAmbiguities1.ts ===
 class C {
 >C : C
+>  : ^
 
   public() {}
 >public : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
   static() {}
 >static : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
   public public() {}
 >public : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
   public static() {}
 >static : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
   public static public() {}
 >public : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
   public static static() {}
 >static : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
   
   static public() {}
 >public : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
   static static() {}
 >static : { (): void; (): void; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 }

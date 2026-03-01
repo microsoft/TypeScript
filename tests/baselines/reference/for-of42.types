@@ -1,23 +1,39 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of42.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of42.ts] ////
+
+=== for-of42.ts ===
 var array = [{ x: "", y: 0 }]
 >array : { x: string; y: number; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ x: "", y: 0 }] : { x: string; y: number; }[]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: "", y: 0 } : { x: string; y: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 for (var {x: a, y: b} of array) {
 >x : any
+>  : ^^^
 >a : string
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >b : number
+>  : ^^^^^^
 >array : { x: string; y: number; }[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a;
 >a : string
+>  : ^^^^^^
 
     b;
 >b : number
+>  : ^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateWithThisParameter.ts] ////
+
 //// [typePredicateWithThisParameter.ts]
 // Repro from #15310
 
@@ -28,6 +30,7 @@ if (isFoo2(test)) {
 
 
 //// [typePredicateWithThisParameter.js]
+"use strict";
 // Repro from #15310
 function isFoo1(object) {
     return 'foo' in object;

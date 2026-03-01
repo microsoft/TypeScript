@@ -1,7 +1,7 @@
-tests/cases/compiler/invalidUseOfTypeAsNamespace.ts(4,16): error TS2702: 'OhNo' only refers to a type, but is being used as a namespace here.
+invalidUseOfTypeAsNamespace.ts(4,16): error TS2702: 'OhNo' only refers to a type, but is being used as a namespace here.
 
 
-==== tests/cases/compiler/invalidUseOfTypeAsNamespace.ts (1 errors) ====
+==== invalidUseOfTypeAsNamespace.ts (1 errors) ====
     interface OhNo {
     }
     

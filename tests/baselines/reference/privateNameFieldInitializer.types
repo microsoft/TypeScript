@@ -1,10 +1,15 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldInitializer.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldInitializer.ts] ////
+
+=== privateNameFieldInitializer.ts ===
 class A {
 >A : A
+>  : ^
 
     #field = 10;
 >#field : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 
     #uninitialized;
 >#uninitialized : any

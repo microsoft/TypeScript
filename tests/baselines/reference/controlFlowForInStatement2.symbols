@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowForInStatement2.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowForInStatement2.ts] ////
+
+=== controlFlowForInStatement2.ts ===
 const keywordA = 'a';
 >keywordA : Symbol(keywordA, Decl(controlFlowForInStatement2.ts, 0, 5))
 

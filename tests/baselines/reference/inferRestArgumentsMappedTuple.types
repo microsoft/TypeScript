@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/inferRestArgumentsMappedTuple.ts] ////
+
+=== inferRestArgumentsMappedTuple.ts ===
+type MyMappedType<Primitive extends any> = {
+>MyMappedType : MyMappedType<Primitive>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+
+	primitive: Primitive;
+>primitive : Primitive
+>          : ^^^^^^^^^
+
+};
+
+type TupleMapperOld<Tuple extends any[]> = {
+>TupleMapperOld : TupleMapperOld<Tuple>
+>               : ^^^^^^^^^^^^^^^^^^^^^
+
+	[Key in keyof Tuple]: Tuple[Key] extends Tuple[number] ? MyMappedType<Tuple[Key]> : never;
+};
+
+type MyMappedTupleOld = TupleMapperOld<[string, number]>; // [MyMappedType<string>, MyMappedType<number>]
+>MyMappedTupleOld : [MyMappedType<string>, MyMappedType<number>]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function extractPrimitivesOld<Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>): Tuple;
+>extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
+>                     : ^     ^^^^^^^^^     ^^^^^           ^^                     ^^^^^     
+>mappedTypes : TupleMapperOld<Tuple>
+>            : ^^^^^^^^^^^^^^^^^^^^^
+
+const myPrimitiveTupleOld: [string, number] = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
+>myPrimitiveTupleOld : [string, number]
+>                    : ^^^^^^^^^^^^^^^^
+>extractPrimitivesOld({ primitive: "" }, { primitive: 0 }) : [string, number]
+>                                                          : ^^^^^^^^^^^^^^^^
+>extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
+>                     : ^     ^^^^^^^^^     ^^^^^           ^^                     ^^^^^     
+>{ primitive: "" } : { primitive: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
+>primitive : string
+>          : ^^^^^^
+>"" : ""
+>   : ^^
+>{ primitive: 0 } : { primitive: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>primitive : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+type TupleMapperNew<Tuple extends any[]> = {
+>TupleMapperNew : TupleMapperNew<Tuple>
+>               : ^^^^^^^^^^^^^^^^^^^^^
+
+	[Key in keyof Tuple]: MyMappedType<Tuple[Key]>;
+};
+
+type MyMappedTupleNew = TupleMapperNew<[string, number]>;
+>MyMappedTupleNew : [MyMappedType<string>, MyMappedType<number>]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function extractPrimitivesNew<Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>): Tuple;
+>extractPrimitivesNew : <Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>) => Tuple
+>                     : ^     ^^^^^^^^^     ^^^^^           ^^                     ^^^^^     
+>mappedTypes : TupleMapperNew<Tuple>
+>            : ^^^^^^^^^^^^^^^^^^^^^
+
+const myPrimitiveTupleNew: [string, number] = extractPrimitivesNew({ primitive: "" }, { primitive: 0 });
+>myPrimitiveTupleNew : [string, number]
+>                    : ^^^^^^^^^^^^^^^^
+>extractPrimitivesNew({ primitive: "" }, { primitive: 0 }) : [string, number]
+>                                                          : ^^^^^^^^^^^^^^^^
+>extractPrimitivesNew : <Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>) => Tuple
+>                     : ^     ^^^^^^^^^     ^^^^^           ^^                     ^^^^^     
+>{ primitive: "" } : { primitive: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
+>primitive : string
+>          : ^^^^^^
+>"" : ""
+>   : ^^
+>{ primitive: 0 } : { primitive: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>primitive : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+

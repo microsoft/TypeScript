@@ -1,15 +1,15 @@
-tests/cases/compiler/baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
-tests/cases/compiler/baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
-tests/cases/compiler/baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/baseCheck.ts(18,62): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/baseCheck.ts(19,59): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/compiler/baseCheck.ts(19,68): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/baseCheck.ts(22,9): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/baseCheck.ts(23,7): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
+baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
+baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
+baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+baseCheck.ts(18,62): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+baseCheck.ts(19,59): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+baseCheck.ts(19,68): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+baseCheck.ts(22,9): error TS2304: Cannot find name 'x'.
+baseCheck.ts(23,7): error TS2304: Cannot find name 'x'.
+baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
 
 
-==== tests/cases/compiler/baseCheck.ts (9 errors) ====
+==== baseCheck.ts (9 errors) ====
     class C { constructor(x: number, y: number) { } }
     class ELoc extends C {
         constructor(x: number) {
@@ -21,7 +21,7 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
             super(0, loc);
                      ~~~
 !!! error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
-!!! related TS2728 /.ts/lib.dom.d.ts:9117:13: 'Lock' is declared here.
+!!! related TS2728 lib.dom.d.ts:--:--: 'Lock' is declared here.
         }
     
         m() {
@@ -30,9 +30,9 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
     }
     
     class D extends C { constructor(public z: number) { super(this.z) }  } // too few params
-                                                        ~~~~~~~~~~~~~
+                                                        ~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
-!!! related TS6210 tests/cases/compiler/baseCheck.ts:1:34: An argument for 'y' was not provided.
+!!! related TS6210 baseCheck.ts:1:34: An argument for 'y' was not provided.
                                                               ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     class E extends C { constructor(public z: number) { super(0, this.z) } }

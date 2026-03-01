@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidStaticToString.ts] ////
+
 //// [instanceofOperatorWithInvalidStaticToString.ts]
 declare class StaticToString {
     static toString(): void;
@@ -23,6 +25,7 @@ function baz(normal: NormalToString) {
 
 
 //// [instanceofOperatorWithInvalidStaticToString.js]
+"use strict";
 function foo(staticToString) {
     return staticToString instanceof StaticToString;
 }

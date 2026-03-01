@@ -1,102 +1,148 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates2.ts] ////
+
+=== objectTypesIdentityWithPrivates2.ts ===
 // object types are identical structurally
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     private foo: T;
 >foo : T
+>    : ^
 }
 
 class D<T> extends C<T> {
 >D : D<T>
+>  : ^^^^
 >C : C<T>
+>  : ^^^^
 }
 
 function foo1(x: C<string>);
 >foo1 : { (x: C<string>): any; (x: C<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
 function foo1(x: C<number>); // ok
 >foo1 : { (x: C<string>): any; (x: C<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
 function foo1(x: any) { }
 >foo1 : { (x: C<string>): any; (x: C<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : any
 
 function foo2(x: D<string>);
 >foo2 : { (x: D<string>): any; (x: D<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : D<string>
+>  : ^^^^^^^^^
 
 function foo2(x: D<number>); // ok
 >foo2 : { (x: D<string>): any; (x: D<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : D<number>
+>  : ^^^^^^^^^
 
 function foo2(x: any) { }
 >foo2 : { (x: D<string>): any; (x: D<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : any
 
 function foo3(x: C<string>);
 >foo3 : { (x: C<string>): any; (x: D<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : C<string>
+>  : ^^^^^^^^^
 
 function foo3(x: D<number>); // ok
 >foo3 : { (x: C<string>): any; (x: D<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : D<number>
+>  : ^^^^^^^^^
 
 function foo3(x: any) { }
 >foo3 : { (x: C<string>): any; (x: D<number>): any; }
+>     : ^^^ ^^         ^^^^^^^^^ ^^         ^^^^^^^^^
 >x : any
 
 function foo4(x: C<number>): number; 
 >foo4 : { (x: C<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
 function foo4(x: D<number>): string; // BUG 831926
 >foo4 : { (x: C<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : D<number>
+>  : ^^^^^^^^^
 
 function foo4(x: any): any { }
 >foo4 : { (x: C<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : any
 
 var r = foo4(new C<number>());
 >r : number
+>  : ^^^^^^
 >foo4(new C<number>()) : number
+>                      : ^^^^^^
 >foo4 : { (x: C<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >new C<number>() : C<number>
+>                : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r = foo4(new D<number>());
 >r : number
+>  : ^^^^^^
 >foo4(new D<number>()) : number
+>                      : ^^^^^^
 >foo4 : { (x: C<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >new D<number>() : D<number>
+>                : ^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 function foo5(x: C<number>): number;
 >foo5 : { (x: C<number>): number; (x: C<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
 function foo5(x: C<number>): string; // error
 >foo5 : { (x: C<number>): number; (x: C<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : C<number>
+>  : ^^^^^^^^^
 
 function foo5(x: any): any { }
 >foo5 : { (x: C<number>): number; (x: C<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : any
 
 function foo6(x: D<number>): number;
 >foo6 : { (x: D<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : D<number>
+>  : ^^^^^^^^^
 
 function foo6(x: D<number>): string; // error
 >foo6 : { (x: D<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : D<number>
+>  : ^^^^^^^^^
 
 function foo6(x: any): any { }
 >foo6 : { (x: D<number>): number; (x: D<number>): string; }
+>     : ^^^ ^^         ^^^      ^^^ ^^         ^^^      ^^^
 >x : any
 
 

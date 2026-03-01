@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop7.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop7.ts] ////
+
+=== capturedLetConstInLoop7.ts ===
 //===let
 l0:
 for (let x of []) {

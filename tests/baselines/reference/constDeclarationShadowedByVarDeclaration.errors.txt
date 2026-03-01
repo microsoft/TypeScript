@@ -1,9 +1,9 @@
-tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(6,9): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
-tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(14,13): error TS2481: Cannot initialize outer scoped variable 'y' in the same scope as block scoped declaration 'y'.
-tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts(21,7): error TS2481: Cannot initialize outer scoped variable 'z' in the same scope as block scoped declaration 'z'.
+constDeclarationShadowedByVarDeclaration.ts(6,9): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+constDeclarationShadowedByVarDeclaration.ts(14,13): error TS2481: Cannot initialize outer scoped variable 'y' in the same scope as block scoped declaration 'y'.
+constDeclarationShadowedByVarDeclaration.ts(21,7): error TS2481: Cannot initialize outer scoped variable 'z' in the same scope as block scoped declaration 'z'.
 
 
-==== tests/cases/compiler/constDeclarationShadowedByVarDeclaration.ts (3 errors) ====
+==== constDeclarationShadowedByVarDeclaration.ts (3 errors) ====
     // Error as declaration of var would cause a write to the const value
     var x = 0;
     {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: unreachable.ts
 // @allowUnreachableCode: false
 const unreachable = (x: unknown): number => {

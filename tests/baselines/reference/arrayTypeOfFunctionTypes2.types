@@ -1,60 +1,95 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes2.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes2.ts] ////
+
+=== arrayTypeOfFunctionTypes2.ts ===
 // valid uses of arrays of function types
 
 var x: new () => string[];
 >x : new () => string[]
+>  : ^^^^^^^^^^        
 
 var r = x[1];
 >r : any
+>  : ^^^
 >x[1] : any
+>     : ^^^
 >x : new () => string[]
+>  : ^^^^^^^^^^        
 >1 : 1
+>  : ^
 
 var r2 = new r();
 >r2 : any
+>   : ^^^
 >new r() : any
+>        : ^^^
 >r : any
+>  : ^^^
 
 var r2b = r();
 >r2b : any
+>    : ^^^
 >r() : any
+>    : ^^^
 >r : any
+>  : ^^^
 
 var x2: { new(): string }[];
 >x2 : (new () => string)[]
+>   : ^^^^^^^^^^^      ^^^
 
 var r3 = x[1];
 >r3 : any
+>   : ^^^
 >x[1] : any
+>     : ^^^
 >x : new () => string[]
+>  : ^^^^^^^^^^        
 >1 : 1
+>  : ^
 
 var r4 = new r3();
 >r4 : any
+>   : ^^^
 >new r3() : any
+>         : ^^^
 >r3 : any
+>   : ^^^
 
 var r4b = new r3();
 >r4b : any
+>    : ^^^
 >new r3() : any
+>         : ^^^
 >r3 : any
+>   : ^^^
 
 var x3: Array<new () => string>;
 >x3 : (new () => string)[]
+>   : ^^^^^^^^^^^      ^^^
 
 var r5 = x2[1];
 >r5 : new () => string
+>   : ^^^^^^^^^^      
 >x2[1] : new () => string
+>      : ^^^^^^^^^^      
 >x2 : (new () => string)[]
+>   : ^^^^^^^^^^^      ^^^
 >1 : 1
+>  : ^
 
 var r6 = new r5();
 >r6 : string
+>   : ^^^^^^
 >new r5() : string
+>         : ^^^^^^
 >r5 : new () => string
+>   : ^^^^^^^^^^      
 
 var r6b = r5();
 >r6b : any
+>    : ^^^
 >r5() : any
+>     : ^^^
 >r5 : new () => string
+>   : ^^^^^^^^^^      
 

@@ -29,39 +29,30 @@ y3 = ext3; // ok
 //// [externalModuleAssignToVar_core_require.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.C = void 0;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     exports.C = C;
 });
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     return C;
 });
 //// [externalModuleAssignToVar_ext.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
     return D;
 });
 //// [externalModuleAssignToVar_core.js]
 define(["require", "exports", "externalModuleAssignToVar_core_require", "externalModuleAssignToVar_core_require2", "externalModuleAssignToVar_ext"], function (require, exports, ext, ext2, ext3) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var y1 = ext;
     y1 = ext; // ok
     var y2 = ext2;

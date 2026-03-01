@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/escapedIdentifiers.ts] ////
+
 //// [escapedIdentifiers.ts]
 /*
     0 .. \u0030
@@ -20,10 +22,10 @@ b ++;
 \u0062 ++;
 
 // modules
-module moduleType1 { 
+namespace moduleType1 { 
     export var baz1: number;
 }
-module moduleType\u0032 { 
+declare module moduleType\u0032 { 
     export var baz2: number;
 }
 
@@ -120,6 +122,7 @@ l\u0061bel4:
     } 
 
 //// [escapedIdentifiers.js]
+"use strict";
 /*
     0 .. \u0030
     9 .. \u0039
@@ -141,24 +144,15 @@ b++;
 var moduleType1;
 (function (moduleType1) {
 })(moduleType1 || (moduleType1 = {}));
-var moduleType\u0032;
-(function (moduleType\u0032) {
-})(moduleType\u0032 || (moduleType\u0032 = {}));
 moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
 moduleType2.baz2 = 3;
 moduleType\u0032.baz2 = 3;
 // classes
-var classType1 = /** @class */ (function () {
-    function classType1() {
-    }
-    return classType1;
-}());
-var classType\u0032 = /** @class */ (function () {
-    function classType\u0032() {
-    }
-    return classType\u0032;
-}());
+class classType1 {
+}
+class classType\u0032 {
+}
 var classType1Object1 = new classType1();
 classType1Object1.foo1 = 2;
 var classType1Object2 = new classType\u0031();
@@ -176,27 +170,23 @@ interfaceType2Object1.bar2 = 2;
 var interfaceType2Object2 = { bar2: 0 };
 interfaceType2Object2.bar2 = 2;
 // arguments
-var testClass = /** @class */ (function () {
-    function testClass() {
-    }
-    testClass.prototype.func = function (arg1, arg\u0032, arg\u0033, arg4) {
+class testClass {
+    func(arg1, arg\u0032, arg\u0033, arg4) {
         arg\u0031 = 1;
         arg2 = 'string';
         arg\u0033 = true;
         arg4 = 2;
-    };
-    return testClass;
-}());
+    }
+}
 // constructors
-var constructorTestClass = /** @class */ (function () {
-    function constructorTestClass(arg1, arg\u0032, arg\u0033, arg4) {
+class constructorTestClass {
+    constructor(arg1, arg\u0032, arg\u0033, arg4) {
         this.arg1 = arg1;
         this.arg\u0032 = arg\u0032;
         this.arg\u0033 = arg\u0033;
         this.arg4 = arg4;
     }
-    return constructorTestClass;
-}());
+}
 var constructorTestObject = new constructorTestClass(1, 'string', true, 2);
 constructorTestObject.arg\u0031 = 1;
 constructorTestObject.arg2 = 'string';

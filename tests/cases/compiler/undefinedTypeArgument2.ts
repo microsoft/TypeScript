@@ -1,3 +1,4 @@
+// @target: es2015
 // once caused stack overflow
 interface Query<T> {
     selectMany<U>(selector: (item: T) => U[]): Query<U>;

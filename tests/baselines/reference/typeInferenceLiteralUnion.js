@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceLiteralUnion.ts] ////
+
 //// [typeInferenceLiteralUnion.ts]
 // Repro from #10901
 /**
@@ -37,25 +39,20 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 
 
 //// [typeInferenceLiteralUnion.js]
-"use strict";
-exports.__esModule = true;
-exports.extent = void 0;
 // Not very useful, but meets Numeric
-var NumCoercible = /** @class */ (function () {
-    function NumCoercible(a) {
+class NumCoercible {
+    constructor(a) {
         this.a = a;
     }
-    NumCoercible.prototype.valueOf = function () {
+    valueOf() {
         return this.a;
-    };
-    return NumCoercible;
-}());
+    }
+}
 /**
  * Return the min and max simultaneously.
  */
-function extent(array) {
+export function extent(array) {
     return [undefined, undefined];
 }
-exports.extent = extent;
-var extentMixed;
+let extentMixed;
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);

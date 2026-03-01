@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexer2A.ts] ////
+
 //// [indexer2A.ts]
 class IHeapObjectProperty { }
 class IDirectChildrenMap {
@@ -8,14 +10,9 @@ class IDirectChildrenMap {
 var directChildrenMap = <IDirectChildrenMap>{}; 
 
 //// [indexer2A.js]
-var IHeapObjectProperty = /** @class */ (function () {
-    function IHeapObjectProperty() {
-    }
-    return IHeapObjectProperty;
-}());
-var IDirectChildrenMap = /** @class */ (function () {
-    function IDirectChildrenMap() {
-    }
-    return IDirectChildrenMap;
-}());
+"use strict";
+class IHeapObjectProperty {
+}
+class IDirectChildrenMap {
+}
 var directChildrenMap = {};

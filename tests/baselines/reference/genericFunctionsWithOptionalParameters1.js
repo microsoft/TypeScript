@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctionsWithOptionalParameters1.ts] ////
+
 //// [genericFunctionsWithOptionalParameters1.ts]
 interface Utils {
    fold<T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
@@ -12,6 +14,7 @@ utils.fold(null, null, null); // no error
 
 
 //// [genericFunctionsWithOptionalParameters1.js]
+"use strict";
 var utils;
 utils.fold(); // no error
 utils.fold(null); // no error

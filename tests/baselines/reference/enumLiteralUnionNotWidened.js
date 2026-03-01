@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumLiteralUnionNotWidened.ts] ////
+
 //// [enumLiteralUnionNotWidened.ts]
 // repro from #22093
 enum A { one = "one", two = "two" };
@@ -21,6 +23,7 @@ function fn1(x: C): List<C> { return asList(x); }
 function fn2(x: D): List<D> { return asList(x); }
 
 //// [enumLiteralUnionNotWidened.js]
+"use strict";
 // repro from #22093
 var A;
 (function (A) {
@@ -34,12 +37,11 @@ var B;
     B["bar"] = "bar";
 })(B || (B = {}));
 ;
-var List = /** @class */ (function () {
-    function List() {
+class List {
+    constructor() {
         this.items = [];
     }
-    return List;
-}());
+}
 function asList(arg) { return new List(); }
 // TypeScript incorrectly infers the return type of "asList(x)" to be "List<A | B>"
 // The correct type is "List<A | B.foo>"

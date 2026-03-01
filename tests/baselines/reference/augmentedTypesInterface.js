@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesInterface.ts] ////
+
 //// [augmentedTypesInterface.ts]
 // interface then interface
 
@@ -34,15 +36,13 @@ interface i4 {
 //import i4 = require('');  // error
 
 //// [augmentedTypesInterface.js]
+"use strict";
 // interface then interface
-var i2 = /** @class */ (function () {
-    function i2() {
-    }
-    i2.prototype.bar = function () {
+class i2 {
+    bar() {
         return 1;
-    };
-    return i2;
-}());
+    }
+}
 var i3;
 (function (i3) {
     i3[i3["One"] = 0] = "One";

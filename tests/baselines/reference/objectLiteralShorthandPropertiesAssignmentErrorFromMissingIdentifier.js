@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts] ////
+
 //// [objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts]
 var id: number = 10000;
 var name: string = "my name";
@@ -10,10 +12,11 @@ var person2: { name: string, id: number } = bar("hello", 5);
 
 
 //// [objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.js]
+"use strict";
 var id = 10000;
 var name = "my name";
-var person = { name: name, id: id }; // error
-function bar(name, id) { return { name: name, id: id }; } // error
-function foo(name, id) { return { name: name, id: id }; } // error
+var person = { name, id }; // error
+function bar(name, id) { return { name, id }; } // error
+function foo(name, id) { return { name, id }; } // error
 var person1; // ok
 var person2 = bar("hello", 5);

@@ -1,6 +1,10 @@
-=== tests/cases/compiler/incrementalOut.ts ===
+//// [tests/cases/compiler/incrementalOut.ts] ////
+
+=== incrementalOut.ts ===
 const x = 10;
 >x : 10
+>  : ^^
 >10 : 10
+>   : ^^
 
 

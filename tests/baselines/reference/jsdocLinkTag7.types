@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag7.ts] ////
+
+=== /a.js ===
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+    /**
+     * {@linkcode this.a}
+     * {@linkcode this.#c}
+     *
+     * {@link this.a}
+     * {@link this.#c}
+     *
+     * {@linkplain this.a}
+     * {@linkplain this.#c}
+     */
+    a() { }
+>a : () => void
+>  : ^^^^^^^^^^
+
+    b() { }
+>b : () => void
+>  : ^^^^^^^^^^
+
+    #c() { }
+>#c : () => void
+>   : ^^^^^^^^^^
+}
+

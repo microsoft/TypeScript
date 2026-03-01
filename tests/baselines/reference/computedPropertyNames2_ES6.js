@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES6.ts] ////
+
 //// [computedPropertyNames2_ES6.ts]
 var methodName = "method";
 var accessorName = "accessor";
@@ -11,6 +13,7 @@ class C {
 }
 
 //// [computedPropertyNames2_ES6.js]
+"use strict";
 var methodName = "method";
 var accessorName = "accessor";
 class C {

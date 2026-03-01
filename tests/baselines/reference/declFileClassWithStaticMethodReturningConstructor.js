@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileClassWithStaticMethodReturningConstructor.ts] ////
+
 //// [declFileClassWithStaticMethodReturningConstructor.ts]
 export class Enhancement {
     public static getType() {
@@ -7,16 +9,13 @@ export class Enhancement {
 
 //// [declFileClassWithStaticMethodReturningConstructor.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Enhancement = void 0;
-var Enhancement = /** @class */ (function () {
-    function Enhancement() {
-    }
-    Enhancement.getType = function () {
+class Enhancement {
+    static getType() {
         return this;
-    };
-    return Enhancement;
-}());
+    }
+}
 exports.Enhancement = Enhancement;
 
 

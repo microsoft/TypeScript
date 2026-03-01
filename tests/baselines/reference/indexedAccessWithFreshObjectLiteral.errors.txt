@@ -1,7 +1,7 @@
-tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts(34,10): error TS2339: Property 'z' does not exist on type '{ a: number; b: string; c: boolean; }'.
+indexedAccessWithFreshObjectLiteral.ts(34,10): error TS2339: Property 'z' does not exist on type '{ a: number; b: string; c: boolean; }'.
 
 
-==== tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts (1 errors) ====
+==== indexedAccessWithFreshObjectLiteral.ts (1 errors) ====
     function foo (id: string) {
       return {
           a: 1,

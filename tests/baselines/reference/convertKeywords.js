@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/convertKeywords.ts] ////
+
 //// [convertKeywords.ts]
 var abstract;
 
@@ -5,4 +7,5 @@ var abstract;
 
 
 //// [convertKeywords.js]
+"use strict";
 var abstract;

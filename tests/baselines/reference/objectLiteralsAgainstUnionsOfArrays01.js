@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts] ////
+
 //// [objectLiteralsAgainstUnionsOfArrays01.ts]
 interface Foo {
   bar: Bar | Bar[];
@@ -13,6 +15,7 @@ let x: Foo[] = [
 
 
 //// [objectLiteralsAgainstUnionsOfArrays01.js]
-var x = [
+"use strict";
+let x = [
     { bar: { prop: 100 } }
 ];

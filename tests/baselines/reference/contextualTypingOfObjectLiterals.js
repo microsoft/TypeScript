@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingOfObjectLiterals.ts] ////
+
 //// [contextualTypingOfObjectLiterals.ts]
 var obj1: { [x: string]: string; };
 var obj2 = {x: ""};
@@ -11,6 +13,7 @@ f(obj1); // Ok
 f(obj2); // Error - indexer doesn't match
 
 //// [contextualTypingOfObjectLiterals.js]
+"use strict";
 var obj1;
 var obj2 = { x: "" };
 obj1 = {}; // Ok

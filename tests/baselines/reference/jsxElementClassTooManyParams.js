@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxElementClassTooManyParams.tsx] ////
+
 //// [jsxElementClassTooManyParams.tsx]
 namespace JSX {
     export interface Element {}
@@ -18,10 +20,9 @@ const elem = <ElemClass x={12} y={24} />
 
 //// [jsxElementClassTooManyParams.jsx]
 "use strict";
-var ElemClass = /** @class */ (function () {
-    function ElemClass(props) {
+class ElemClass {
+    constructor(props) {
         this.props = props;
     }
-    return ElemClass;
-}());
-var elem = <ElemClass x={12} y={24}/>;
+}
+const elem = <ElemClass x={12} y={24}/>;

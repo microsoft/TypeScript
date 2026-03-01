@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassMethod.ts] ////
+
 //// [jsDeclarationsClassMethod.js]
 function C1() {
     /**
@@ -65,6 +67,7 @@ C2.staticProp = function (x, y) {
 
 
 //// [jsDeclarationsClassMethod.js]
+"use strict";
 function C1() {
     /**
      * A comment prop

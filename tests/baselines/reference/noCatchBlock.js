@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCatchBlock.ts] ////
+
 //// [noCatchBlock.ts]
 try {
  // ...
@@ -6,6 +8,7 @@ try {
 }
 
 //// [noCatchBlock.js]
+"use strict";
 try {
     // ...
 }

@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/privacyGloImport.ts] ////
+
 //// [privacyGloImport.ts]
-module m1 {
-    export module m1_M1_public {
+namespace m1 {
+    export namespace m1_M1_public {
         export class c1 {
         }
         export function f1() {
@@ -10,7 +12,7 @@ module m1 {
         export var v2: c1;
     }
 
-    module m1_M2_private {
+    namespace m1_M2_private {
         export class c1 {
         }
         export function f1() {
@@ -83,7 +85,7 @@ module m1 {
     //export import m1_im4_public = require("m1_M4_private");
 }
 
-module glo_M1_public {
+namespace glo_M1_public {
     export class c1 {
     }
     export function f1() {
@@ -118,11 +120,11 @@ declare module "use_glo_M1_public" {
     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
 
-    module m2 {
+    namespace m2 {
         //import errorImport = require("glo_M2_public");
         import nonerrorImport = glo_M1_public;
 
-        module m5 {
+        namespace m5 {
             //import m5_errorImport = require("glo_M2_public");
             import m5_nonerrorImport = glo_M1_public;
         }
@@ -130,12 +132,12 @@ declare module "use_glo_M1_public" {
 }
 
 declare module "anotherParseError" {
-    module m2 {
+    namespace m2 {
         //declare module "abc" {
         //}
     }
 
-    module m2 {
+    namespace m2 {
         //module "abc2" {
         //}
     }
@@ -143,9 +145,9 @@ declare module "anotherParseError" {
     //}
 }
 
-module m2 {
+namespace m2 {
     //import m3 = require("use_glo_M1_public");
-    module m4 {
+    namespace m4 {
         var a = 10;
         //import m2 = require("use_glo_M1_public");
     }
@@ -153,15 +155,13 @@ module m2 {
 }
 
 //// [privacyGloImport.js]
+"use strict";
 var m1;
 (function (m1) {
-    var m1_M1_public;
+    let m1_M1_public;
     (function (m1_M1_public) {
-        var c1 = /** @class */ (function () {
-            function c1() {
-            }
-            return c1;
-        }());
+        class c1 {
+        }
         m1_M1_public.c1 = c1;
         function f1() {
             return new c1;
@@ -169,13 +169,10 @@ var m1;
         m1_M1_public.f1 = f1;
         m1_M1_public.v1 = c1;
     })(m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {}));
-    var m1_M2_private;
+    let m1_M2_private;
     (function (m1_M2_private) {
-        var c1 = /** @class */ (function () {
-            function c1() {
-            }
-            return c1;
-        }());
+        class c1 {
+        }
         m1_M2_private.c1 = c1;
         function f1() {
             return new c1;
@@ -240,11 +237,8 @@ var m1;
 })(m1 || (m1 = {}));
 var glo_M1_public;
 (function (glo_M1_public) {
-    var c1 = /** @class */ (function () {
-        function c1() {
-        }
-        return c1;
-    }());
+    class c1 {
+    }
     glo_M1_public.c1 = c1;
     function f1() {
         return new c1;
@@ -255,7 +249,7 @@ var glo_M1_public;
 var m2;
 (function (m2) {
     //import m3 = require("use_glo_M1_public");
-    var m4;
+    let m4;
     (function (m4) {
         var a = 10;
         //import m2 = require("use_glo_M1_public");
@@ -264,15 +258,15 @@ var m2;
 
 
 //// [privacyGloImport.d.ts]
-declare module m1 {
-    export module m1_M1_public {
+declare namespace m1 {
+    export namespace m1_M1_public {
         class c1 {
         }
         function f1(): c1;
         var v1: typeof c1;
         var v2: c1;
     }
-    module m1_M2_private {
+    namespace m1_M2_private {
         class c1 {
         }
         function f1(): c1;
@@ -293,7 +287,7 @@ declare module m1 {
     export import m1_im2_public = m1_M2_private;
     export {};
 }
-declare module glo_M1_public {
+declare namespace glo_M1_public {
     class c1 {
     }
     function f1(): c1;
@@ -332,16 +326,16 @@ declare module "use_glo_M1_public" {
     };
     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
-    module m2 {
-        module m5 {
+    namespace m2 {
+        namespace m5 {
         }
     }
 }
 declare module "anotherParseError" {
-    module m2 {
+    namespace m2 {
     }
-    module m2 {
+    namespace m2 {
     }
 }
-declare module m2 {
+declare namespace m2 {
 }

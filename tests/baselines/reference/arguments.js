@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arguments.ts] ////
+
 //// [arguments.ts]
 function f() {
     var x=arguments[12];
@@ -15,6 +17,7 @@ interface I {
 }
 
 //// [arguments.js]
+"use strict";
 function f() {
     var x = arguments[12];
     (() => arguments)();

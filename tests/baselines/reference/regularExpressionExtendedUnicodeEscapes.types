@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/regularExpressionExtendedUnicodeEscapes.ts] ////
+
+=== regularExpressionExtendedUnicodeEscapes.ts ===
+const regexes: RegExp[] = [
+>regexes : RegExp[]
+>        : ^^^^^^^^
+>[	/\u{10000}[\u{10000}]/,	/\u{10000}[\u{10000}]/u,	/\u{10000}[\u{10000}]/v,] : RegExp[]
+>                                                                             : ^^^^^^^^
+
+	/\u{10000}[\u{10000}]/,
+>/\u{10000}[\u{10000}]/ : RegExp
+>                       : ^^^^^^
+
+	/\u{10000}[\u{10000}]/u,
+>/\u{10000}[\u{10000}]/u : RegExp
+>                        : ^^^^^^
+
+	/\u{10000}[\u{10000}]/v,
+>/\u{10000}[\u{10000}]/v : RegExp
+>                        : ^^^^^^
+
+];
+

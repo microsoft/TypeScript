@@ -1,204 +1,317 @@
-=== tests/cases/conformance/classes/mixinClassesAnnotated.ts ===
+//// [tests/cases/conformance/classes/mixinClassesAnnotated.ts] ////
+
+=== mixinClassesAnnotated.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(public x: number, public y: number) {}
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor(x: number, y: number, public z: number) {
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
         super(x, y);
 >super(x, y) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
 }
 
 interface Printable {
     print(): void;
 >print : () => void
+>      : ^^^^^^    
 }
 
 const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
+>          : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^                                                 
 ><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
+>                                                                                                                                                                                                                                                 : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^                                                 
 >superClass : T
+>           : ^
 >message : string
+>        : ^^^^^^
 
     class extends superClass {
 >class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
+>                                                                                                                                            : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >superClass : Base
+>           : ^^^^
 
         static message = "hello";
 >message : string
+>        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
         print() {
 >print : () => void
+>      : ^^^^^^^^^^
 
             const output = this.x + "," + this.y;
 >output : string
+>       : ^^^^^^
 >this.x + "," + this.y : string
+>                      : ^^^^^^
 >this.x + "," : string
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >"," : ","
+>    : ^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
         }
     }
 
 interface Tagged {
     _tag: string;
 >_tag : string
+>     : ^^^^^^
 }
 
 function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^                       
 >superClass : T
+>           : ^
 
     class C extends superClass {
 >C : C
+>  : ^
 >superClass : {}
+>           : ^^
 
         _tag: string;
 >_tag : string
+>     : ^^^^^^
 
         constructor(...args: any[]) {
 >args : any[]
+>     : ^^^^^
 
             super(...args);
 >super(...args) : void
+>               : ^^^^
 >super : T
+>      : ^
 >...args : any
 >args : any[]
+>     : ^^^^^
 
             this._tag = "hello";
 >this._tag = "hello" : "hello"
+>                    : ^^^^^^^
 >this._tag : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >_tag : string
+>     : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
         }
     }
     return C;
 >C : { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
+>  : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 const Thing1 = Tagged(Derived);
 >Thing1 : Constructor<Tagged> & typeof Derived
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged(Derived) : Constructor<Tagged> & typeof Derived
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^                       
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 
 const Thing2 = Tagged(Printable(Derived));
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >Tagged(Printable(Derived)) : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
+>       : ^ ^^^^^^^^^               ^^          ^^ ^^^^^                       
 >Printable(Derived) : Constructor<Printable> & { message: string; } & typeof Derived
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
+>          : ^ ^^^^^^^^^                 ^^          ^^ ^^^^^                                                 
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 
 Thing2.message;
 >Thing2.message : string
+>               : ^^^^^^
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >message : string
+>        : ^^^^^^
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     const thing = new Thing1(1, 2, 3);
 >thing : Tagged & Derived
+>      : ^^^^^^^^^^^^^^^^
 >new Thing1(1, 2, 3) : Tagged & Derived
+>                    : ^^^^^^^^^^^^^^^^
 >Thing1 : Constructor<Tagged> & typeof Derived
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     thing.x;
 >thing.x : number
+>        : ^^^^^^
 >thing : Tagged & Derived
+>      : ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     thing._tag;
 >thing._tag : string
+>           : ^^^^^^
 >thing : Tagged & Derived
+>      : ^^^^^^^^^^^^^^^^
 >_tag : string
+>     : ^^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     const thing = new Thing2(1, 2, 3);
 >thing : Tagged & Printable & Derived
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Thing2(1, 2, 3) : Tagged & Printable & Derived
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
     thing.x;
 >thing.x : number
+>        : ^^^^^^
 >thing : Tagged & Printable & Derived
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     thing._tag;
 >thing._tag : string
+>           : ^^^^^^
 >thing : Tagged & Printable & Derived
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_tag : string
+>     : ^^^^^^
 
     thing.print();
 >thing.print() : void
+>              : ^^^^
 >thing.print : () => void
+>            : ^^^^^^    
 >thing : Tagged & Printable & Derived
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >print : () => void
+>      : ^^^^^^    
 }
 
 class Thing3 extends Thing2 {
 >Thing3 : Thing3
+>       : ^^^^^^
 >Thing2 : Tagged & Printable & Derived
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(tag: string) {
 >tag : string
+>    : ^^^^^^
 
         super(10, 20, 30);
 >super(10, 20, 30) : void
+>                  : ^^^^
 >super : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >20 : 20
+>   : ^^
 >30 : 30
+>   : ^^
 
         this._tag = tag;
 >this._tag = tag : string
+>                : ^^^^^^
 >this._tag : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >_tag : string
+>     : ^^^^^^
 >tag : string
+>    : ^^^^^^
     }
     test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         this.print();
 >this.print() : void
+>             : ^^^^
 >this.print : () => void
+>           : ^^^^^^    
 >this : this
+>     : ^^^^
 >print : () => void
+>      : ^^^^^^    
     }
 }
 

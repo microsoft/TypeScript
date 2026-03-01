@@ -1,17 +1,29 @@
-=== tests/cases/conformance/salsa/plainJSRedeclare.js ===
+//// [tests/cases/conformance/salsa/plainJSRedeclare.ts] ////
+
+=== plainJSRedeclare.js ===
 const orbitol = 1
 >orbitol : 1
+>        : ^
 >1 : 1
+>  : ^
 
 var orbitol = 1 + false
 >orbitol : any
+>        : ^^^
 >1 + false : any
+>          : ^^^
 >1 : 1
+>  : ^
 >false : false
+>      : ^^^^^
 
 orbitol.toExponential()
 >orbitol.toExponential() : string
+>                        : ^^^^^^
 >orbitol.toExponential : (fractionDigits?: number) => string
+>                      : ^              ^^^      ^^^^^      
 >orbitol : 1
+>        : ^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 

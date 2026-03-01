@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts ===
+//// [tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts] ////
+
+=== arrowFunctionMissingCurlyWithSemicolon.ts ===
 // Should error at semicolon.
 var f = () => ;
 >f : Symbol(f, Decl(arrowFunctionMissingCurlyWithSemicolon.ts, 1, 3))

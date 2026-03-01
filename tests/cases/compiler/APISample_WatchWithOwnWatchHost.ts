@@ -1,12 +1,14 @@
-﻿// @module: commonjs
+﻿// @target: es2015
+// @module: commonjs
 // @skipLibCheck: true
-// @includebuiltfile: typescriptServices.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
+// @noTypesAndSymbols: true
 
-// @filename: node_modules/typescript/index.d.ts
-declare module "typescript" {
-    export = ts;
+// @filename: node_modules/typescript/package.json
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 // @filename: APISample_WatchWithOwnWatchHost.ts

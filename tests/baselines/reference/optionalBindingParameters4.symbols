@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParameters4.ts] ////
+
+=== /a.js ===
+/** 
+* @param {{ cause?: string }} [options] 
+*/ 
+function foo({ cause } = {}) {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+>cause : Symbol(cause, Decl(a.js, 3, 14))
+
+    return cause;
+>cause : Symbol(cause, Decl(a.js, 3, 14))
+}
+

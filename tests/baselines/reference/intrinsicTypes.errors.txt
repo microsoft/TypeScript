@@ -1,16 +1,16 @@
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(6,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(13,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(20,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(27,25): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(35,38): error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(40,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<T>'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(42,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<U>'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(43,5): error TS2322: Type 'Uppercase<T>' is not assignable to type 'Uppercase<U>'.
+intrinsicTypes.ts(6,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+intrinsicTypes.ts(13,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+intrinsicTypes.ts(20,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+intrinsicTypes.ts(27,25): error TS2344: Type 'number' does not satisfy the constraint 'string'.
+intrinsicTypes.ts(35,38): error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+intrinsicTypes.ts(40,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<T>'.
+intrinsicTypes.ts(42,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<U>'.
+intrinsicTypes.ts(43,5): error TS2322: Type 'Uppercase<T>' is not assignable to type 'Uppercase<U>'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string'.
 
 
-==== tests/cases/conformance/types/typeAliases/intrinsicTypes.ts (8 errors) ====
+==== intrinsicTypes.ts (8 errors) ====
     type TU1 = Uppercase<'hello'>;  // "HELLO"
     type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
     type TU3 = Uppercase<string>;  // Uppercase<string>

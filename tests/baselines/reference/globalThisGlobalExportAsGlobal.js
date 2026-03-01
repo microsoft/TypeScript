@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisGlobalExportAsGlobal.ts] ////
+
 //// [globalThisGlobalExportAsGlobal.ts]
 // https://github.com/microsoft/TypeScript/issues/33754
 declare global {
@@ -6,3 +8,4 @@ declare global {
 
 
 //// [globalThisGlobalExportAsGlobal.js]
+"use strict";

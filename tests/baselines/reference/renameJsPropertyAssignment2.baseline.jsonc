@@ -1,0 +1,15 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// class Minimatch {
+// }
+// <|Minimatch./*RENAME*/[|staticPropertyRENAME|] = "string";|>
+// console.log(Minimatch.[|staticPropertyRENAME|]);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// class Minimatch {
+// }
+// <|Minimatch.[|staticPropertyRENAME|] = "string";|>
+// console.log(Minimatch./*RENAME*/[|staticPropertyRENAME|]);

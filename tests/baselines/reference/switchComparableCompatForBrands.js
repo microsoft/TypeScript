@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchComparableCompatForBrands.ts] ////
+
 //// [switchComparableCompatForBrands.ts]
 class MyBrand
 {
@@ -15,11 +17,9 @@ function test(strInput: string & MyBrand) {
 
 
 //// [switchComparableCompatForBrands.js]
-var MyBrand = /** @class */ (function () {
-    function MyBrand() {
-    }
-    return MyBrand;
-}());
+"use strict";
+class MyBrand {
+}
 function test(strInput) {
     switch (strInput) {
         case "a":

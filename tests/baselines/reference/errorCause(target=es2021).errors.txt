@@ -1,18 +1,18 @@
-tests/cases/compiler/errorCause.ts(3,28): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(4,5): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
-tests/cases/compiler/errorCause.ts(5,35): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(6,12): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
-tests/cases/compiler/errorCause.ts(8,22): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(9,22): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(10,23): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(11,27): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(12,24): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(13,22): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(14,21): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(15,31): error TS2554: Expected 1-2 arguments, but got 3.
+errorCause.ts(3,28): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(4,5): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+errorCause.ts(5,35): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(6,12): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+errorCause.ts(8,22): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(9,22): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(10,23): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(11,27): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(12,24): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(13,22): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(14,21): error TS2554: Expected 0-1 arguments, but got 2.
+errorCause.ts(15,31): error TS2554: Expected 1-2 arguments, but got 3.
 
 
-==== tests/cases/compiler/errorCause.ts (12 errors) ====
+==== errorCause.ts (12 errors) ====
     declare const a: unknown;
     
     let err = new Error("foo", { cause: new Error("bar") });

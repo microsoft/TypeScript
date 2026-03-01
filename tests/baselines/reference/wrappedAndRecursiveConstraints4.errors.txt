@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts(13,12): error TS2345: Argument of type '{ length: number; charAt: (x: number) => void; }' is not assignable to parameter of type 'string'.
+wrappedAndRecursiveConstraints4.ts(13,12): error TS2345: Argument of type '{ length: number; charAt: (x: number) => void; }' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts (1 errors) ====
+==== wrappedAndRecursiveConstraints4.ts (1 errors) ====
     class C<T extends { length: number }> {
         constructor(x: T) { }
         foo<U extends T>(x: U) {

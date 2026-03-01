@@ -1,3 +1,4 @@
+// @target: es2015
 // @sourcemap: true
 var i = 0;
 do

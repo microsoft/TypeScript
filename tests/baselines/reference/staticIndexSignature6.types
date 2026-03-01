@@ -1,61 +1,97 @@
-=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts ===
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts] ////
+
+=== staticIndexSignature6.ts ===
 function foo () {
 >foo : () => typeof (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return class<T> {
 >class<T> {        static [s: string]: number        static [s: number]: 42        foo(v: T) { return v }    } : typeof (Anonymous class)
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         static [s: string]: number
 >s : string
+>  : ^^^^^^
 
         static [s: number]: 42
 >s : number
+>  : ^^^^^^
 
         foo(v: T) { return v }
 >foo : (v: T) => T
+>    : ^ ^^ ^^^^^^
 >v : T
+>  : ^
 >v : T
+>  : ^
     }
 }
 
 const C = foo()
 >C : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >foo() : typeof (Anonymous class)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => typeof (Anonymous class)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 C.a;
 >C.a : number
+>    : ^^^^^^
 >C : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 C.a = 1;
 >C.a = 1 : 1
+>        : ^
 >C.a : number
+>    : ^^^^^^
 >C : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 C[2];
 >C[2] : 42
+>     : ^^
 >C : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 C[2] = 42;
 >C[2] = 42 : 42
+>          : ^^
 >C[2] : 42
+>     : ^^
 >C : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >42 : 42
+>   : ^^
 
 const c = new C<number>();
 >c : (Anonymous class)<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new C<number>() : (Anonymous class)<number>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof (Anonymous class)
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 c.foo(1);
 >c.foo(1) : number
+>         : ^^^^^^
 >c.foo : (v: number) => number
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >c : (Anonymous class)<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : (v: number) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 

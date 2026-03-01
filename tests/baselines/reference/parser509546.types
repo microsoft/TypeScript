@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509546.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509546.ts] ////
+
+=== parser509546.ts ===
 export class Logger { 
 >Logger : Logger
+>       : ^^^^^^
 
      public
 >public : any

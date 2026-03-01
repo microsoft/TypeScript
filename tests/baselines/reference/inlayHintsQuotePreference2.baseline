@@ -1,0 +1,34 @@
+// === Inlay Hints ===
+export function fn(a = a1, b = b1) {}
+                    ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "'\\''"
+    }
+  ],
+  "position": 64,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+export function fn(a = a1, b = b1) {}
+                            ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "'\\\\'"
+    }
+  ],
+  "position": 72,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

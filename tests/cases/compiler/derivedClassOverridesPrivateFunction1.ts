@@ -1,3 +1,4 @@
+// @target: es2015
 class BaseClass {
     constructor() {
         this._init();

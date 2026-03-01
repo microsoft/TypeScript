@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts] ////
+
+=== fileJs.js ===
+x ? y => ({ y }) : z => ({ z }) // Legal JS
+>y : Symbol(y, Decl(fileJs.js, 0, 3))
+>y : Symbol(y, Decl(fileJs.js, 0, 11))
+>z : Symbol(z, Decl(fileJs.js, 0, 18))
+>z : Symbol(z, Decl(fileJs.js, 0, 26))
+
+=== fileTs.ts ===
+x ? y => ({ y }) : z => ({ z })
+>y : Symbol(y, Decl(fileTs.ts, 0, 3))
+>y : Symbol(y, Decl(fileTs.ts, 0, 11))
+>z : Symbol(z, Decl(fileTs.ts, 0, 18))
+>z : Symbol(z, Decl(fileTs.ts, 0, 26))
+

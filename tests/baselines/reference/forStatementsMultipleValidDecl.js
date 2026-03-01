@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/forStatements/forStatementsMultipleValidDecl.ts] ////
+
 //// [forStatementsMultipleValidDecl.ts]
 // all expected to be valid
 
@@ -34,6 +36,7 @@ for (var a = new Array<string>(); ;) { }
 for (var a: typeof a; ;) { }
 
 //// [forStatementsMultipleValidDecl.js]
+"use strict";
 // all expected to be valid
 for (var x;;) { }
 for (var x = 2;;) { }
@@ -50,7 +53,7 @@ for (var p = { x: 1, y: 2 };;) { }
 for (var p = { x: 0, y: undefined };;) { }
 for (var p;;) { }
 for (var fn = function (s) { return 42; };;) { }
-for (var fn = function (s) { return 3; };;) { }
+for (var fn = (s) => 3;;) { }
 for (var fn;;) { }
 for (var fn;;) { }
 for (var fn = null;;) { }

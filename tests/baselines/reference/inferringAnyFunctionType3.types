@@ -1,19 +1,32 @@
-=== tests/cases/compiler/inferringAnyFunctionType3.ts ===
+//// [tests/cases/compiler/inferringAnyFunctionType3.ts] ////
+
+=== inferringAnyFunctionType3.ts ===
 function f<T extends ((p1: number) => number)[]>(p: T): T {
 >f : <T extends ((p1: number) => number)[]>(p: T) => T
+>  : ^ ^^^^^^^^^                          ^^ ^^ ^^^^^ 
 >p1 : number
+>   : ^^^^^^
 >p : T
+>  : ^
 
     return p;
 >p : T
+>  : ^
 }
 
 var v = f([x => x]);
 >v : ((x: number) => number)[]
+>  : ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >f([x => x]) : ((x: number) => number)[]
+>            : ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends ((p1: number) => number)[]>(p: T) => T
+>  : ^ ^^^^^^^^^                          ^^ ^^ ^^^^^ 
 >[x => x] : ((x: number) => number)[]
+>         : ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 

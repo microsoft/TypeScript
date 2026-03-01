@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping2.ts] ////
+
 //// [typeSatisfaction_contextualTyping2.ts]
 let obj: { f(s: string): void } & Record<string, unknown> = {
     f(s) { }, // "incorrect" implicit any on 's'
@@ -10,9 +12,9 @@ let obj: { f(s: string): void } & Record<string, unknown> = {
 
 //// [typeSatisfaction_contextualTyping2.js]
 "use strict";
-var obj = {
-    f: function (s) { },
-    g: function (s) { }
+let obj = {
+    f(s) { }, // "incorrect" implicit any on 's'
+    g(s) { }
 };
 // This needs to not crash (outer node is not expression)
-({ f: function (x) { } });
+({ f(x) { } });

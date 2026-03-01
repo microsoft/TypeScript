@@ -1,0 +1,7 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameReferenceFromLinkTag4.ts ===
+// enum E {
+//     /** {@link /*RENAME*/[|BRENAME|]} */
+//     A,
+//     [|BRENAME|]
+// }

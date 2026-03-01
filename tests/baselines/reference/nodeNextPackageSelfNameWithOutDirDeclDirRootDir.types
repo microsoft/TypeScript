@@ -1,13 +1,21 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirDeclDirRootDir.ts] ////
+
 === /pkg/src/index.ts ===
 import * as me from "@this/package";
 >me : typeof me
+>   : ^^^^^^^^^
 
 me.thing();
 >me.thing() : void
+>           : ^^^^
 >me.thing : () => void
+>         : ^^^^^^    
 >me : typeof me
+>   : ^^^^^^^^^
 >thing : () => void
+>      : ^^^^^^    
 
 export function thing(): void {}
 >thing : () => void
+>      : ^^^^^^    
 

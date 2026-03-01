@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionsCjs.ts] ////
+
 //// [index.js]
 module.exports.a = function a() {}
 
@@ -60,15 +62,13 @@ module.exports.j = function j() {}
 
 
 //// [index.js]
+"use strict";
 module.exports.a = function a() { };
 module.exports.b = function b() { };
 module.exports.b.cat = "cat";
 module.exports.c = function c() { };
-module.exports.c.Cls = /** @class */ (function () {
-    function Cls() {
-    }
-    return Cls;
-}());
+module.exports.c.Cls = class {
+};
 /**
  * @param {number} a
  * @param {number} b
@@ -117,7 +117,7 @@ module.exports.j = function j() { };
 export function a(): void;
 export function b(): void;
 export namespace b {
-    const cat: string;
+    let cat: string;
 }
 export function c(): void;
 export namespace c {
@@ -145,7 +145,7 @@ export function g(a: {
         (): void;
         cat: string;
     };
-}): void;
+}): void | "";
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -157,5 +157,5 @@ declare function hh(a: {
         (): void;
         cat: string;
     };
-}): void;
+}): void | "";
 export { hh as h, i as ii, j as jj };

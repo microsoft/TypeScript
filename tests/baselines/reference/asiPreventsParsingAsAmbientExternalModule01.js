@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule01.ts] ////
+
 //// [asiPreventsParsingAsAmbientExternalModule01.ts]
 var declare: number;
 var module: string;
@@ -8,6 +10,7 @@ module                 // this is the identifier 'module'
 { }                    // this is a block body
 
 //// [asiPreventsParsingAsAmbientExternalModule01.js]
+"use strict";
 var declare;
 var module;
 declare; // this is the identifier 'declare'

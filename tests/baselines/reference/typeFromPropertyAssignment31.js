@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts] ////
+
 //// [typeFromPropertyAssignment31.ts]
 function ExpandoMerge(n: number) {
     return n;
@@ -28,6 +30,7 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 
 
 //// [typeFromPropertyAssignment31.js]
+"use strict";
 function ExpandoMerge(n) {
     return n;
 }

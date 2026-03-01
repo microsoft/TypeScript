@@ -1,28 +1,30 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of26.ts ===
-class StringIterator {
->StringIterator : Symbol(StringIterator, Decl(for-of26.ts, 0, 0))
+//// [tests/cases/conformance/es6/for-ofStatements/for-of26.ts] ////
+
+=== for-of26.ts ===
+class MyStringIterator {
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of26.ts, 0, 0))
 
     next() {
->next : Symbol(StringIterator.next, Decl(for-of26.ts, 0, 22))
+>next : Symbol(MyStringIterator.next, Decl(for-of26.ts, 0, 24))
 
         return x;
 >x : Symbol(x, Decl(for-of26.ts, 9, 3))
     }
     [Symbol.iterator]() {
->[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(for-of26.ts, 3, 5))
+>[Symbol.iterator] : Symbol(MyStringIterator[Symbol.iterator], Decl(for-of26.ts, 3, 5))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         return this;
->this : Symbol(StringIterator, Decl(for-of26.ts, 0, 0))
+>this : Symbol(MyStringIterator, Decl(for-of26.ts, 0, 0))
     }
 }
 
 var x: any;
 >x : Symbol(x, Decl(for-of26.ts, 9, 3))
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 >v : Symbol(v, Decl(for-of26.ts, 10, 8))
->StringIterator : Symbol(StringIterator, Decl(for-of26.ts, 0, 0))
+>MyStringIterator : Symbol(MyStringIterator, Decl(for-of26.ts, 0, 0))
 

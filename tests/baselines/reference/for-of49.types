@@ -1,28 +1,47 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of49.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of49.ts] ////
+
+=== for-of49.ts ===
 var k: string, v: boolean;
 >k : string
+>  : ^^^^^^
 >v : boolean
+>  : ^^^^^^^
 
 var map = new Map([["", true]]);
 >map : Map<string, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^
 >new Map([["", true]]) : Map<string, boolean>
+>                      : ^^^^^^^^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 >[["", true]] : [string, true][]
+>             : ^^^^^^^^^^^^^^^^
 >["", true] : [string, true]
+>           : ^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >true : true
+>     : ^^^^
 
 for ([k, ...[v]] of map) {
 >[k, ...[v]] : [string, boolean]
+>            : ^^^^^^^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 >...[v] : boolean
+>       : ^^^^^^^
 >[v] : [boolean]
+>    : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >map : Map<string, boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     k;
 >k : string
+>  : ^^^^^^
 
     v;
 >v : boolean
+>  : ^^^^^^^
 }

@@ -34,6 +34,7 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 
 
 //// [ns.js]
+"use strict";
 var ExpandoMerge;
 (function (ExpandoMerge) {
     ExpandoMerge.p3 = 333;
@@ -48,6 +49,7 @@ var ExpandoMerge;
     ExpandoMerge.p2 = 222;
 })(ExpandoMerge || (ExpandoMerge = {}));
 //// [expando.js]
+"use strict";
 function ExpandoMerge(n) {
     return n;
 }

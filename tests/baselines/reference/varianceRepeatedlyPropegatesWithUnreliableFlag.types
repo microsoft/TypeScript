@@ -1,51 +1,71 @@
-=== tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
+//// [tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts] ////
+
+=== varianceRepeatedlyPropegatesWithUnreliableFlag.ts ===
 type A = { a: number };
->A : { a: number; }
+>A : A
+>  : ^
 >a : number
+>  : ^^^^^^
 
 type B = { b: number };
->B : { b: number; }
+>B : B
+>  : ^
 >b : number
+>  : ^^^^^^
 
 type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
 >X : X<T>
+>  : ^^^^
 
 type P1<T> = { data: X<T> };
 >P1 : P1<T>
+>   : ^^^^^
 >data : X<T>
+>     : ^^^^
 
 type P2<T> = { data: X<T> };
 >P2 : P2<T>
+>   : ^^^^^
 >data : X<T>
+>     : ^^^^
 
 interface I<T> {
     fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
 >fn : <K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>) => void
+>   : ^ ^^^^^^^^^       ^^  ^^              ^^  ^^              ^^^^^    
 >p1 : P1<Pick<T, K>>
+>   : ^^^^^^^^^^^^^^
 >p2 : P2<Pick<T, K>>
+>   : ^^^^^^^^^^^^^^
 }
 
 const i: I<A & B> = null as any;
 >i : I<A & B>
+>  : ^^^^^^^^
 >null as any : any
->null : null
 
 const p2: P2<A> = null as any;
 >p2 : P2<A>
+>   : ^^^^^
 >null as any : any
->null : null
 
 // Commenting out the below line will remove the error on the `const _i: I<A> = i;`
 i.fn(null as any, p2);
 >i.fn(null as any, p2) : void
+>                      : ^^^^
 >i.fn : <K extends "a" | "b">(p1: P1<Pick<A & B, K>>, p2: P2<Pick<A & B, K>>) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >i : I<A & B>
+>  : ^^^^^^^^
 >fn : <K extends "a" | "b">(p1: P1<Pick<A & B, K>>, p2: P2<Pick<A & B, K>>) => void
+>   : ^ ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >null as any : any
->null : null
 >p2 : P2<A>
+>   : ^^^^^
 
 const _i: I<A> = i;
 >_i : I<A>
+>   : ^^^^
 >i : I<A & B>
+>  : ^^^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/definiteAssignmentAssertionsWithObjectShortHand.ts] ////
+
 //// [definiteAssignmentAssertionsWithObjectShortHand.ts]
 const a: string | undefined = 'ff';
 const foo = { a! }
@@ -8,10 +10,10 @@ const bar = {
 
 //// [definiteAssignmentAssertionsWithObjectShortHand.js]
 "use strict";
-var a = 'ff';
-var foo = { a: a };
-var bar = {
-    a: function () { }
+const a = 'ff';
+const foo = { a };
+const bar = {
+    a() { }
 };
 
 

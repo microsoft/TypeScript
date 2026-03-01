@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts] ////
+
 //// [optionalPropertyAssignableToStringIndexSignature.ts]
 declare let optionalProperties: { k1?: string };
 declare let undefinedProperties: { k1: string | undefined };
@@ -24,8 +26,8 @@ function f<T>() {
 stringDictionary = optionalProperties; // ok
 stringDictionary = undefinedProperties; // error
 probablyArray = numberLiteralKeys; // error
-var dict = optionalUndefined; // error
+let dict = optionalUndefined; // error
 function f() {
-    var optional = undefined;
-    var dict = optional; // ok
+    let optional = undefined;
+    let dict = optional; // ok
 }

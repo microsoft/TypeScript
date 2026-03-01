@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts(3,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts(5,7): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+classExtendsItself.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+classExtendsItself.ts(3,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+classExtendsItself.ts(5,7): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts (3 errors) ====
+==== classExtendsItself.ts (3 errors) ====
     class C extends C { } // error
           ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads7.ts] ////
+
 //// [constructorOverloads7.ts]
 declare class Point
 {
@@ -26,6 +28,7 @@ function EF1(a,b) { return a+b; }
 
 
 //// [constructorOverloads7.js]
+"use strict";
 // Type provided by extern declaration
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void

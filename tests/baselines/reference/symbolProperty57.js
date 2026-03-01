@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty57.ts] ////
+
 //// [symbolProperty57.ts]
 var obj = {
     [Symbol.iterator]: 0
@@ -7,6 +9,7 @@ var obj = {
 obj[Symbol["nonsense"]];
 
 //// [symbolProperty57.js]
+"use strict";
 var obj = {
     [Symbol.iterator]: 0
 };

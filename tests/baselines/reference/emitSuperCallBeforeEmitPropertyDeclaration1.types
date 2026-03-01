@@ -1,30 +1,43 @@
-=== tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclaration1.ts ===
+//// [tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclaration1.ts] ////
+
+=== emitSuperCallBeforeEmitPropertyDeclaration1.ts ===
 class A {
 >A : A
+>  : ^
 
     blub = 6;
 >blub : number
+>     : ^^^^^^
 >6 : 6
+>  : ^
 }
 
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     blub = 12;
 >blub : number
+>     : ^^^^^^
 >12 : 12
+>   : ^^
 
     constructor() {
         "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
         'someStringForEgngInject';
 >'someStringForEgngInject' : "someStringForEgngInject"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         super()
 >super() : void
+>        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
     }
 }

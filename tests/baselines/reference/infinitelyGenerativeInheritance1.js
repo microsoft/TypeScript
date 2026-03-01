@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyGenerativeInheritance1.ts] ////
+
 //// [infinitelyGenerativeInheritance1.ts]
 interface Stack<T> {
       pop(): T
@@ -10,3 +12,4 @@ interface MyStack<T> extends Stack<T> {
 
 
 //// [infinitelyGenerativeInheritance1.js]
+"use strict";

@@ -1,3 +1,4 @@
+// @target: es2015
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
@@ -6,5 +7,4 @@ function f1 () {
     {
         let x = 11;
     }
-    x++;
 }

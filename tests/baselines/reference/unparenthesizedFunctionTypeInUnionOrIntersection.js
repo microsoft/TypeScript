@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts] ////
+
 //// [unparenthesizedFunctionTypeInUnionOrIntersection.ts]
 type U1 = string | () => void;
 type U2 = string | (foo: number) => void
@@ -29,3 +31,4 @@ type OK4 = string | (()=> string | number);
 
 
 //// [unparenthesizedFunctionTypeInUnionOrIntersection.js]
+"use strict";

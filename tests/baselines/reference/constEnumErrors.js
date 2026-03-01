@@ -1,9 +1,11 @@
+//// [tests/cases/compiler/constEnumErrors.ts] ////
+
 //// [constEnumErrors.ts]
 const enum E {
     A
 }
 
-module E {
+namespace E {
     var x = 1;
 }
 
@@ -45,6 +47,7 @@ const enum NaNOrInfinity {
 }
 
 //// [constEnumErrors.js]
+"use strict";
 var E;
 (function (E) {
     var x = 1;
@@ -52,7 +55,7 @@ var E;
 var y0 = E2[1];
 var name = "A";
 var y1 = E2[name];
-var y2 = E2["".concat(name)];
+var y2 = E2[`${name}`];
 var x = E2;
 var y = [E2];
 function foo(t) {

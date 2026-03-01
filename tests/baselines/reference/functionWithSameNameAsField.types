@@ -1,23 +1,35 @@
-=== tests/cases/compiler/functionWithSameNameAsField.ts ===
+//// [tests/cases/compiler/functionWithSameNameAsField.ts] ////
+
+=== functionWithSameNameAsField.ts ===
 class TestProgressBar {
 >TestProgressBar : TestProgressBar
+>                : ^^^^^^^^^^^^^^^
 
     public total: number;
 >total : number
+>      : ^^^^^^
 
     public total(total: number) {
 >total : (total: number) => this
+>      : ^     ^^      ^^^^^^^^^
 >total : number
+>      : ^^^^^^
 
         this.total = total;
 >this.total = total : number
+>                   : ^^^^^^
 >this.total : number
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >total : number
+>      : ^^^^^^
 >total : number
+>      : ^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 

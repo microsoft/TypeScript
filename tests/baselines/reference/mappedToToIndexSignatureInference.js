@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedToToIndexSignatureInference.ts] ////
+
 //// [mappedToToIndexSignatureInference.ts]
 declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
 declare const a: { [index: string]: number };
@@ -13,10 +15,11 @@ let x: E[] = enumValues(E);
 
 
 //// [mappedToToIndexSignatureInference.js]
+"use strict";
 fn(a);
 var E;
 (function (E) {
     E["A"] = "foo";
     E["B"] = "bar";
 })(E || (E = {}));
-var x = enumValues(E);
+let x = enumValues(E);

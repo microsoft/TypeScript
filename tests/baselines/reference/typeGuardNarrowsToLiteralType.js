@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralType.ts] ////
+
 //// [typeGuardNarrowsToLiteralType.ts]
 declare function isFoo(value: string) : value is "foo";
 declare function doThis(value: "foo"): void;
@@ -12,7 +14,8 @@ if (isFoo(value)) {
 
 
 //// [typeGuardNarrowsToLiteralType.js]
-var value;
+"use strict";
+let value;
 if (isFoo(value)) {
     doThis(value);
 }

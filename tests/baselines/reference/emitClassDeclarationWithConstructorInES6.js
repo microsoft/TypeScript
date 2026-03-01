@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithConstructorInES6.ts] ////
+
 //// [emitClassDeclarationWithConstructorInES6.ts]
 class A {
     y: number;
@@ -25,6 +27,7 @@ class B {
 
 
 //// [emitClassDeclarationWithConstructorInES6.js]
+"use strict";
 class A {
     constructor(x) {
     }

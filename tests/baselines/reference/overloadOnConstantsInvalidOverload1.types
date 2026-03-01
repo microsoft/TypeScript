@@ -1,37 +1,56 @@
-=== tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts ===
+//// [tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts] ////
+
+=== overloadOnConstantsInvalidOverload1.ts ===
 class Base { foo() { } }
 >Base : Base
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 class Derived1 extends Base { bar() { } }
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 class Derived2 extends Base { baz() { } }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >baz : () => void
+>    : ^^^^^^^^^^
 
 class Derived3 extends Base { biz() { } }
 >Derived3 : Derived3
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >biz : () => void
+>    : ^^^^^^^^^^
 
 function foo(name: "SPAN"): Derived1;
 >foo : (name: "SPAN") => Derived1
+>    : ^    ^^      ^^^^^        
 >name : "SPAN"
+>     : ^^^^^^
 
 function foo(name: "DIV"): Derived2 {
 >foo : (name: "SPAN") => Derived1
+>    : ^    ^^      ^^^^^        
 >name : "DIV"
+>     : ^^^^^
 
     return null;
->null : null
 }
 
 foo("HI");
 >foo("HI") : Derived1
+>          : ^^^^^^^^
 >foo : (name: "SPAN") => Derived1
+>    : ^    ^^      ^^^^^        
 >"HI" : "HI"
+>     : ^^^^
 

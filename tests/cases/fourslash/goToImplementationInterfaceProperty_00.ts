@@ -19,4 +19,4 @@
 ////     constructor(public f: Foo = { [|hello|]: 7 } ) {}
 //// }
 
-verify.allRangesAppearInImplementationList("reference");
+verify.baselineGoToImplementation("reference");

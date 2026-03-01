@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnFunctionDeclaration.ts] ////
+
 //// [decoratorOnFunctionDeclaration.ts]
 declare function dec<T>(target: T): T;
 
@@ -6,5 +8,6 @@ function F() {
 }
 
 //// [decoratorOnFunctionDeclaration.js]
+"use strict";
 function F() {
 }

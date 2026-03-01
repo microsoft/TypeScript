@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleConstEnumDeclaration.ts] ////
+
 //// [es6ModuleConstEnumDeclaration.ts]
 export const enum e1 {
     a,
@@ -11,7 +13,7 @@ const enum e2 {
 }
 var x = e1.a;
 var y = e2.x;
-export module m1 {
+export namespace m1 {
     export const enum e3 {
         a,
         b,
@@ -27,7 +29,7 @@ export module m1 {
     var x2 = e3.a;
     var y2 = e4.x;
 }
-module m2 {
+namespace m2 {
     export const enum e5 {
         a,
         b,

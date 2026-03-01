@@ -1,9 +1,15 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression15_es6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression15_es6.ts] ////
+
+=== YieldExpression15_es6.ts ===
 var v = () => {
 >v : () => void
+>  : ^^^^^^^^^^
 >() => {     yield foo  } : () => void
+>                         : ^^^^^^^^^^
 
      yield foo
 >yield foo : any
+>          : ^^^
 >foo : any
+>    : ^^^
   }

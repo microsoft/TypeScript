@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classExpressions/modifierOnClassExpressionMemberInFunction.ts] ////
+
 //// [modifierOnClassExpressionMemberInFunction.ts]
 function g() {
     var x = class C {
@@ -8,15 +10,15 @@ function g() {
 }
 
 //// [modifierOnClassExpressionMemberInFunction.js]
+"use strict";
 function g() {
     var _a;
-    var x = (_a = /** @class */ (function () {
-            function C() {
+    var x = (_a = class C {
+            constructor() {
                 this.prop1 = 1;
             }
-            C.prototype.foo = function () { };
-            return C;
-        }()),
+            foo() { }
+        },
         _a.prop2 = 43,
         _a);
 }

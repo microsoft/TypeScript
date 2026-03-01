@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts ===
+//// [tests/cases/compiler/overloadOnConstNoAnyImplementation.ts] ////
+
+=== overloadOnConstNoAnyImplementation.ts ===
 function x1(a: number, cb: (x: 'hi') => number);
 >x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
 >a : Symbol(a, Decl(overloadOnConstNoAnyImplementation.ts, 0, 12))

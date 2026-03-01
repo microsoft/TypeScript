@@ -1,35 +1,52 @@
-=== tests/cases/conformance/jsx/checkJsxIntersectionElementPropsType.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxIntersectionElementPropsType.tsx] ////
+
+=== checkJsxIntersectionElementPropsType.tsx ===
 declare namespace JSX {
     interface ElementAttributesProperty { props: {}; }
 >props : {}
+>      : ^^
 }
 
 declare class Component<P> {
 >Component : Component<P>
+>          : ^^^^^^^^^^^^
 
   constructor(props: Readonly<P>);
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 
   readonly props: Readonly<P>;
 >props : Readonly<P>
+>      : ^^^^^^^^^^^
 }
 
 class C<T> extends Component<{ x?: boolean; } & T> {}
 >C : C<T>
->Component : Component<{ x?: boolean | undefined; } & T>
+>  : ^^^^
+>Component : Component<{ x?: boolean; } & T>
+>          : ^^^^^^^^^^^^^^^^       ^^^^^^^^
 >x : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 const y = new C({foobar: "example"});
 >y : C<{ foobar: string; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >new C({foobar: "example"}) : C<{ foobar: string; }>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >{foobar: "example"} : { foobar: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^
 >foobar : string
+>       : ^^^^^^
 >"example" : "example"
+>          : ^^^^^^^^^
 
 const x = <C foobar="example" />
 >x : error
 ><C foobar="example" /> : error
 >C : typeof C
+>  : ^^^^^^^^
 >foobar : string
+>       : ^^^^^^
 

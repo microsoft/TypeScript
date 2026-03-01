@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithThisKeywordInES6.ts] ////
+
 //// [emitClassDeclarationWithThisKeywordInES6.ts]
 class B {
     x = 10;
@@ -19,6 +21,7 @@ class B {
 }
 
 //// [emitClassDeclarationWithThisKeywordInES6.js]
+"use strict";
 class B {
     constructor() {
         this.x = 10;

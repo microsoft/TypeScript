@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/type.js ===
+//// [tests/cases/conformance/jsdoc/enumTagImported.ts] ////
+
+=== type.js ===
 /** @typedef {import("./mod1").TestEnum} TE */
 /** @type {TE} */
 const test = 'add'
@@ -8,7 +10,7 @@ const test = 'add'
 const tost = 'remove'
 >tost : Symbol(tost, Decl(type.js, 4, 5))
 
-=== tests/cases/conformance/jsdoc/value.js ===
+=== value.js ===
 import { TestEnum } from "./mod1"
 >TestEnum : Symbol(TestEnum, Decl(value.js, 0, 8))
 
@@ -20,7 +22,7 @@ const tist = TestEnum.ADD
 >ADD : Symbol(ADD, Decl(mod1.js, 1, 25))
 
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 /** @enum {string} */
 export const TestEnum = {
 >TestEnum : Symbol(TestEnum, Decl(mod1.js, 1, 12), Decl(mod1.js, 0, 4))

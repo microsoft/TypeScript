@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfIsOrderIndependent.ts] ////
+
 //// [typeGuardOfFormTypeOfIsOrderIndependent.ts]
 var strOrNum: string | number;
 var strOrBool: string | boolean;
@@ -35,6 +37,7 @@ else {
 
 
 //// [typeGuardOfFormTypeOfIsOrderIndependent.js]
+"use strict";
 var strOrNum;
 var strOrBool;
 var strOrFunc;

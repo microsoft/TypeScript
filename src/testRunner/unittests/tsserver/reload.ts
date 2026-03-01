@@ -1,151 +1,123 @@
-namespace ts.projectSystem {
-    describe("unittests:: tsserver:: reload", () => {
-        it("should work with temp file", () => {
-            const f1 = {
-                path: "/a/b/app.ts",
-                content: "let x = 1"
-            };
-            const tmp = {
-                path: "/a/b/app.tmp",
-                content: "const y = 42"
-            };
-            const host = createServerHost([f1, tmp]);
-            const session = createSession(host);
+import * as ts from "../../_namespaces/ts.js";
+import {
+    baselineTsserverLogs,
+    closeFilesForSession,
+    openFilesForSession,
+    TestSession,
+} from "../helpers/tsserver.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-            // send open request
-            session.executeCommand({
-                type: "request",
-                command: "open",
-                seq: 1,
-                arguments: { file: f1.path }
-            } as server.protocol.OpenRequest);
+describe("unittests:: tsserver:: reload::", () => {
+    it("should work with temp file", () => {
+        const f1 = {
+            path: "/home/src/projects/project/app.ts",
+            content: "let x = 1",
+        };
+        const tmp = {
+            path: "/home/src/projects/project/app.tmp",
+            content: "const y = 42",
+        };
+        const host = TestServerHost.createServerHost([f1, tmp]);
+        const session = new TestSession(host);
 
-            // reload from tmp file
-            session.executeCommand({
-                type: "request",
-                command: "reload",
-                seq: 2,
-                arguments: { file: f1.path, tmpfile: tmp.path }
-            } as server.protocol.ReloadRequest);
+        // send open request
+        openFilesForSession([f1], session);
 
-            // verify content
-            const projectServiice = session.getProjectService();
-            const snap1 = projectServiice.getScriptInfo(f1.path)!.getSnapshot();
-            assert.equal(getSnapshotText(snap1), tmp.content, "content should be equal to the content of temp file");
-
-            // reload from original file file
-            session.executeCommand({
-                type: "request",
-                command: "reload",
-                seq: 2,
-                arguments: { file: f1.path }
-            } as server.protocol.ReloadRequest);
-
-            // verify content
-            const snap2 = projectServiice.getScriptInfo(f1.path)!.getSnapshot();
-            assert.equal(getSnapshotText(snap2), f1.content, "content should be equal to the content of original file");
-
+        // reload from tmp file
+        session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
+            command: ts.server.protocol.CommandTypes.Reload,
+            arguments: { file: f1.path, tmpfile: tmp.path },
         });
 
-        it("should work when script info doesnt have any project open", () => {
-            const f1 = {
-                path: "/a/b/app.ts",
-                content: "let x = 1"
-            };
-            const tmp = {
-                path: "/a/b/app.tmp",
-                content: "const y = 42"
-            };
-            const host = createServerHost([f1, tmp, libFile]);
-            const session = createSession(host);
-            const openContent = "let z = 1";
-            // send open request
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Open,
-                arguments: { file: f1.path, fileContent: openContent }
-            } as server.protocol.OpenRequest);
+        // verify content
+        const snap1 = session.getProjectService().getScriptInfo(f1.path)!.getSnapshot();
+        session.logger.log(`Content of ${f1.path}:: ${ts.getSnapshotText(snap1)}`);
 
-            const projectService = session.getProjectService();
-            checkNumberOfProjects(projectService, { inferredProjects: 1 });
-            const info = projectService.getScriptInfo(f1.path)!;
-            assert.isDefined(info);
-            checkScriptInfoContents(openContent, "contents set during open request");
-
-            // send close request
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Close,
-                arguments: { file: f1.path }
-            } as server.protocol.CloseRequest);
-            checkScriptInfoAndProjects(f1.content, "contents of closed file");
-            checkInferredProjectIsOrphan();
-
-            // Can reload contents of the file when its not open and has no project
-            // reload from temp file
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Reload,
-                arguments: { file: f1.path, tmpfile: tmp.path }
-            } as server.protocol.ReloadRequest);
-            checkScriptInfoAndProjects(tmp.content, "contents of temp file");
-            checkInferredProjectIsOrphan();
-
-            // reload from own file
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Reload,
-                arguments: { file: f1.path }
-            } as server.protocol.ReloadRequest);
-            checkScriptInfoAndProjects(f1.content, "contents of closed file");
-            checkInferredProjectIsOrphan();
-
-            // Open file again without setting its content
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Open,
-                arguments: { file: f1.path }
-            } as server.protocol.OpenRequest);
-            checkScriptInfoAndProjects(f1.content, "contents of file when opened without specifying contents");
-            const snap = info.getSnapshot();
-
-            // send close request
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Close,
-                arguments: { file: f1.path }
-            } as server.protocol.CloseRequest);
-            checkScriptInfoAndProjects(f1.content, "contents of closed file");
-            assert.strictEqual(info.getSnapshot(), snap);
-            checkInferredProjectIsOrphan();
-
-            // reload from temp file
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Reload,
-                arguments: { file: f1.path, tmpfile: tmp.path }
-            } as server.protocol.ReloadRequest);
-            checkScriptInfoAndProjects(tmp.content, "contents of temp file");
-            assert.notStrictEqual(info.getSnapshot(), snap);
-            checkInferredProjectIsOrphan();
-
-            // reload from own file
-            session.executeCommandSeq({
-                command: server.protocol.CommandTypes.Reload,
-                arguments: { file: f1.path }
-            } as server.protocol.ReloadRequest);
-            checkScriptInfoAndProjects(f1.content, "contents of closed file");
-            assert.notStrictEqual(info.getSnapshot(), snap);
-            checkInferredProjectIsOrphan();
-
-            function checkInferredProjectIsOrphan() {
-                assert.isTrue(projectService.inferredProjects[0].isOrphan());
-                assert.equal(info.containingProjects.length, 0);
-            }
-
-            function checkScriptInfoAndProjects(contentsOfInfo: string, captionForContents: string) {
-                checkNumberOfProjects(projectService, { inferredProjects: 1 });
-                assert.strictEqual(projectService.getScriptInfo(f1.path), info);
-                checkScriptInfoContents(contentsOfInfo, captionForContents);
-            }
-
-            function checkScriptInfoContents(contentsOfInfo: string, captionForContents: string) {
-                const snap = info.getSnapshot();
-                assert.equal(getSnapshotText(snap), contentsOfInfo, "content should be equal to " + captionForContents);
-            }
+        // reload from original file file
+        session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
+            command: ts.server.protocol.CommandTypes.Reload,
+            arguments: { file: f1.path, tmpfile: undefined! },
         });
+
+        // verify content
+        const snap2 = session.getProjectService().getScriptInfo(f1.path)!.getSnapshot();
+        session.logger.log(`Content of ${f1.path}:: ${ts.getSnapshotText(snap2)}`);
+        baselineTsserverLogs("reload", "should work with temp file", session);
     });
-}
+
+    it("should work when script info doesnt have any project open", () => {
+        const f1 = {
+            path: "/home/src/projects/project/app.ts",
+            content: "let x = 1",
+        };
+        const tmp = {
+            path: "/home/src/projects/project/app.tmp",
+            content: "const y = 42",
+        };
+        const host = TestServerHost.createServerHost([f1, tmp]);
+        const session = new TestSession(host);
+        const openContent = "let z = 1";
+        // send open request
+        openFilesForSession([{ file: f1.path, content: openContent }], session);
+
+        const info = session.getProjectService().getScriptInfo(f1.path)!;
+        assert.isDefined(info);
+        checkScriptInfoContents("contents set during open request");
+
+        // send close request
+        closeFilesForSession([f1], session);
+        checkScriptInfoAndProjects("contents of closed file");
+
+        // Can reload contents of the file when its not open and has no project
+        // reload from temp file
+        session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
+            command: ts.server.protocol.CommandTypes.Reload,
+            arguments: { file: f1.path, tmpfile: tmp.path },
+        });
+        checkScriptInfoAndProjects("contents of temp file");
+
+        // reload from own file
+        session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
+            command: ts.server.protocol.CommandTypes.Reload,
+            arguments: { file: f1.path, tmpfile: undefined! },
+        });
+        checkScriptInfoAndProjects("contents of closed file");
+
+        // Open file again without setting its content
+        openFilesForSession([f1], session);
+        checkScriptInfoAndProjects("contents of file when opened without specifying contents");
+        const snap = info.getSnapshot();
+
+        // send close request
+        closeFilesForSession([f1], session);
+        checkScriptInfoAndProjects("contents of closed file");
+        assert.strictEqual(info.getSnapshot(), snap);
+
+        // reload from temp file
+        session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
+            command: ts.server.protocol.CommandTypes.Reload,
+            arguments: { file: f1.path, tmpfile: tmp.path },
+        });
+        checkScriptInfoAndProjects("contents of temp file");
+        assert.notStrictEqual(info.getSnapshot(), snap);
+
+        // reload from own file
+        session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
+            command: ts.server.protocol.CommandTypes.Reload,
+            arguments: { file: f1.path, tmpfile: undefined! },
+        });
+        checkScriptInfoAndProjects("contents of closed file");
+        assert.notStrictEqual(info.getSnapshot(), snap);
+        baselineTsserverLogs("reload", "should work when script info doesnt have any project open", session);
+
+        function checkScriptInfoAndProjects(captionForContents: string) {
+            assert.strictEqual(session.getProjectService().getScriptInfo(f1.path), info);
+            checkScriptInfoContents(captionForContents);
+        }
+
+        function checkScriptInfoContents(captionForContents: string) {
+            const snap = info.getSnapshot();
+            session.logger.log(`${captionForContents}:: Content of ${info.fileName}:: ${ts.getSnapshotText(snap)}`);
+        }
+    });
+});

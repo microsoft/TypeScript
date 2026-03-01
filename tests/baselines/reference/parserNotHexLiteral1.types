@@ -1,29 +1,51 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts] ////
+
+=== parserNotHexLiteral1.ts ===
 var x = {e0: 'cat', x0: 'dog'};
 >x : { e0: string; x0: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{e0: 'cat', x0: 'dog'} : { e0: string; x0: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e0 : string
+>   : ^^^^^^
 >'cat' : "cat"
+>      : ^^^^^
 >x0 : string
+>   : ^^^^^^
 >'dog' : "dog"
+>      : ^^^^^
 
 console.info (x.x0);
 >console.info (x.x0) : void
+>                    : ^^^^
 >console.info : (...data: any[]) => void
+>             : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >info : (...data: any[]) => void
+>     : ^^^^    ^^     ^^^^^    
 >x.x0 : string
+>     : ^^^^^^
 >x : { e0: string; x0: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x0 : string
+>   : ^^^^^^
 
 // tsc dies on this next line with "bug.ts (5,16): Expected ')'"
 //   tsc seems to be parsing the e0 as a hex constant.
 console.info (x.e0);
 >console.info (x.e0) : void
+>                    : ^^^^
 >console.info : (...data: any[]) => void
+>             : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >info : (...data: any[]) => void
+>     : ^^^^    ^^     ^^^^^    
 >x.e0 : string
+>     : ^^^^^^
 >x : { e0: string; x0: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e0 : string
+>   : ^^^^^^
 

@@ -1,53 +1,82 @@
-=== tests/cases/compiler/identityRelationNeverTypes.ts ===
+//// [tests/cases/compiler/identityRelationNeverTypes.ts] ////
+
+=== identityRelationNeverTypes.ts ===
 // Repro from #47996
 
 type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
 >Equals : Equals<A, B>
+>       : ^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 declare class State<TContext> {
 >State : State<TContext>
+>      : ^^^^^^^^^^^^^^^
 
     _context: TContext;
 >_context : TContext
+>         : ^^^^^^^^
 
     _value: string;
 >_value : string
+>       : ^^^^^^
 
     matches<TSV extends string>(stateValue: TSV): this is State<TContext> & { value: TSV };
 >matches : <TSV extends string>(stateValue: TSV) => this is State<TContext> & { value: TSV; }
+>        : ^   ^^^^^^^^^      ^^          ^^   ^^^^^                                         
 >stateValue : TSV
+>           : ^^^
 >value : TSV
+>      : ^^^
 }
 
 function f1(state: State<{ foo: number }>) {
->f1 : (state: State<{    foo: number;}>) => void
+>f1 : (state: State<{ foo: number; }>) => void
+>   : ^     ^^                       ^^^^^^^^^
 >state : State<{ foo: number; }>
+>      : ^^^^^^^^^^^^^      ^^^^
 >foo : number
+>    : ^^^^^^
 
     if (state.matches('a') && state.matches('a.b')) {
 >state.matches('a') && state.matches('a.b') : boolean
+>                                           : ^^^^^^^
 >state.matches('a') : boolean
+>                   : ^^^^^^^
 >state.matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
+>              : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >state : State<{ foo: number; }>
+>      : ^^^^^^^^^^^^^      ^^^^
 >matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
+>        : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >'a' : "a"
+>    : ^^^
 >state.matches('a.b') : boolean
+>                     : ^^^^^^^
 >state.matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
+>              : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >state : State<{ foo: number; }> & { value: "a"; }
+>      : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >matches : <TSV extends string>(stateValue: TSV) => this is State<{ foo: number; }> & { value: TSV; }
+>        : ^   ^^^^^^^^^      ^^          ^^^^^^^^^^        ^^^^^^^^^^^^^      ^^^^            ^^^   
 >'a.b' : "a.b"
+>      : ^^^^^
 
         state;  // never
 >state : never
+>      : ^^^^^
 
         type T1 = Equals<typeof state, never>;  // true
 >T1 : true
+>   : ^^^^
 >state : never
+>      : ^^^^^
 
         type T2 = Equals<never, never>;  // true
 >T2 : true
+>   : ^^^^
     }
 }
 

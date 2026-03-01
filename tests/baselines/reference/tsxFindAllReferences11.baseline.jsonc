@@ -1,82 +1,59 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// interface ClickableProps {
-//     children?: string;
-//     className?: string;
-// }
-// interface ButtonProps extends ClickableProps {
-//     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
-// }
-// interface LinkProps extends ClickableProps {
-//     goTo: string;
-// }
+// --- (line: 16) skipped ---
 // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 // declare function MainButton(linkProps: LinkProps): JSX.Element;
 // declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
-// let opt = <MainButton /*FIND ALL REFS*/[|wrong|] />;
+// let opt = <MainButton /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}wrong|] />;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "property",
-      "name": "(property) wrong: true",
-      "textSpan": {
-        "start": 622,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "wrong",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "true",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 622,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 16) skipped ---
+  // declare function MainButton(buttonProps: ButtonProps): JSX.Element;
+  // declare function MainButton(linkProps: LinkProps): JSX.Element;
+  // declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
+  // let opt = <MainButton /*FIND ALL REFS*/[|wrong|] />;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) wrong: true",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "wrong",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "true",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

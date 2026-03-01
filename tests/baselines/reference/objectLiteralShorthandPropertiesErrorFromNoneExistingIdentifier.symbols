@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts] ////
+
+=== objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts ===
 var x = {
 >x : Symbol(x, Decl(objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts, 0, 3))
 

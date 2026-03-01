@@ -1,9 +1,10 @@
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(34,24): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(35,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
+negateOperatorWithAnyOtherType.ts(30,24): error TS2454: Variable 'obj' is used before being assigned.
+negateOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
+negateOperatorWithAnyOtherType.ts(35,23): error TS18050: The value 'null' cannot be used here.
+negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts (3 errors) ====
+==== negateOperatorWithAnyOtherType.ts (4 errors) ====
     // - operator on any type
     
     var ANY: any;
@@ -17,13 +18,13 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
         return a;
     }
     class A {
-        public a: any;
+        public a!: any;
         static foo(): any {
             var a;
             return a;
         }
     }
-    module M {
+    namespace M {
         export var n: any;
     }
     var objA = new A();
@@ -34,15 +35,17 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
     var ResultIsNumber3 = -A;
     var ResultIsNumber4 = -M;
     var ResultIsNumber5 = -obj;
+                           ~~~
+!!! error TS2454: Variable 'obj' is used before being assigned.
     var ResultIsNumber6 = -obj1;
     
     // any type literal
     var ResultIsNumber7 = -undefined;
                            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var ResultIsNumber = -null;
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     
     // any type expressions
     var ResultIsNumber8 = -ANY2[0];

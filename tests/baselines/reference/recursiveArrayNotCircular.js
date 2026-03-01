@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveArrayNotCircular.ts] ////
+
 //// [recursiveArrayNotCircular.ts]
 type Action<T, P> = P extends void ? { type : T } : { type: T, payload: P }
 
@@ -37,6 +39,7 @@ function reducer(action: ReducerAction): void {
 }
 
 //// [recursiveArrayNotCircular.js]
+"use strict";
 var ActionType;
 (function (ActionType) {
     ActionType[ActionType["Foo"] = 0] = "Foo";
@@ -50,13 +53,13 @@ function assertNever(a) {
 function reducer(action) {
     switch (action.type) {
         case ActionType.Bar:
-            var x = action.payload;
+            const x = action.payload;
             break;
         case ActionType.Baz:
-            var y = action.payload;
+            const y = action.payload;
             break;
         case ActionType.Foo:
-            var z = action.payload;
+            const z = action.payload;
             break;
         case ActionType.Batch:
             action.payload.map(reducer);

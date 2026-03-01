@@ -1,0 +1,85 @@
+// === Completions ===
+=== /home/src/workspaces/project/usage.ts ===
+// import { HtmlModuleThing } from "./";
+//                                    ^
+// | ----------------------------------------------------------------------
+// | mod.html
+// | node_modules
+// | ----------------------------------------------------------------------
+// import { PackageHtmlModuleThing } from "package/";
+//                                                 ^
+// | ----------------------------------------------------------------------
+// | mod.html
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/home/src/workspaces/project/usage.ts",
+      "position": 35,
+      "name": "1"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "mod.html",
+          "kind": "script",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mod.html",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        },
+        {
+          "name": "node_modules",
+          "kind": "directory",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "node_modules",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/home/src/workspaces/project/usage.ts",
+      "position": 86,
+      "name": "2"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "mod.html",
+          "kind": "script",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "mod.html",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  }
+]

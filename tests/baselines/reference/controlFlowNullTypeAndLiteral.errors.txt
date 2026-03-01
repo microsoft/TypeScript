@@ -1,9 +1,9 @@
-tests/cases/compiler/controlFlowNullTypeAndLiteral.ts(15,12): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
-tests/cases/compiler/controlFlowNullTypeAndLiteral.ts(17,12): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
-tests/cases/compiler/controlFlowNullTypeAndLiteral.ts(21,15): error TS2322: Type 'null' is not assignable to type 'string'.
+controlFlowNullTypeAndLiteral.ts(15,12): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
+controlFlowNullTypeAndLiteral.ts(17,12): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number'.
+controlFlowNullTypeAndLiteral.ts(21,15): error TS2322: Type 'null' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/controlFlowNullTypeAndLiteral.ts (3 errors) ====
+==== controlFlowNullTypeAndLiteral.ts (3 errors) ====
     // Repros from #23771
     
     const myNull: null = null;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferFromGenericFunctionReturnTypes1.ts ===
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes1.ts] ////
+
+=== inferFromGenericFunctionReturnTypes1.ts ===
 // Repro from #15680
 
 // This is a contrived class. We could do the same thing with Observables, etc.

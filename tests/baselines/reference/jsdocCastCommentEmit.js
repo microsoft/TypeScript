@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocCastCommentEmit.ts] ////
+
 //// [jsdocCastCommentEmit.ts]
 // allowJs: true
 // checkJs: true
@@ -8,6 +10,7 @@ function f() {
 }
 
 //// [jsdocCastCommentEmit.js]
+"use strict";
 // allowJs: true
 // checkJs: true
 // outDir: out/

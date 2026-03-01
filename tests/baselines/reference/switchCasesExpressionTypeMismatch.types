@@ -1,41 +1,89 @@
-=== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts ===
+//// [tests/cases/compiler/switchCasesExpressionTypeMismatch.ts] ////
+
+=== switchCasesExpressionTypeMismatch.ts ===
 class Foo { }
 >Foo : Foo
+>    : ^^^
 
 switch (0) {
 >0 : 0
+>  : ^
 
     case Foo: break;    // Error
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     case "sss": break;  // Error
 >"sss" : "sss"
+>      : ^^^^^
 
     case 123: break;    // Error
 >123 : 123
+>    : ^^^
 
     case true: break;   // Error
 >true : true
+>     : ^^^^
+}
+
+declare var q: string
+>q : string
+>  : ^^^^^^
+
+declare var r: number | "hello"
+>r : number | "hello"
+>  : ^^^^^^^^^^^^^^^^
+
+switch (r) {
+>r : number | "hello"
+>  : ^^^^^^^^^^^^^^^^
+
+    case q: break
+>q : string
+>  : ^^^^^^
+
+    case 42: break
+>42 : 42
+>   : ^^
+
+    case true: break // Error
+>true : true
+>     : ^^^^
+
+    case "hello": break
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    case "world": break // Error
+>"world" : "world"
+>        : ^^^^^^^
 }
 
 var s: any = 0;
 >s : any
+>  : ^^^
 >0 : 0
+>  : ^
 
 // No error for all
 switch (s) {
 >s : any
+>  : ^^^
 
     case Foo: break;
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     case "sss": break;
 >"sss" : "sss"
+>      : ^^^^^
 
     case 123: break;
 >123 : 123
+>    : ^^^
 
     case true: break;
 >true : true
+>     : ^^^^
 }
 

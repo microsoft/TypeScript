@@ -1,0 +1,16 @@
+r/entry.ts(2,14): error TS2883: The inferred type of 'special' cannot be named without a reference to 'MySpecialType' from 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+
+
+==== r/node_modules/foo/node_modules/nested/index.d.ts (0 errors) ====
+    export interface MySpecialType {
+        val: string;
+    }
+==== r/node_modules/foo/index.d.ts (0 errors) ====
+    import { MySpecialType } from "nested";
+    export function getSpecial(): MySpecialType;
+==== r/entry.ts (1 errors) ====
+    import { getSpecial } from "foo";
+    export const special = getSpecial();
+                 ~~~~~~~
+!!! error TS2883: The inferred type of 'special' cannot be named without a reference to 'MySpecialType' from 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+    

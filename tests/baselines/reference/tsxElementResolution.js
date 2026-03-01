@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution.tsx] ////
+
 //// [tsxElementResolution.tsx]
 declare namespace JSX {
 	interface IntrinsicElements {
@@ -10,7 +12,7 @@ declare namespace JSX {
 class foundFirst { }
 class Other {}
 
-module Dotted {
+namespace Dotted {
 	export class Name { }
 }
 
@@ -25,23 +27,15 @@ var e = <Dotted.Name />;
 
 
 //// [tsxElementResolution.jsx]
-var foundFirst = /** @class */ (function () {
-    function foundFirst() {
-    }
-    return foundFirst;
-}());
-var Other = /** @class */ (function () {
-    function Other() {
-    }
-    return Other;
-}());
+"use strict";
+class foundFirst {
+}
+class Other {
+}
 var Dotted;
 (function (Dotted) {
-    var Name = /** @class */ (function () {
-        function Name() {
-        }
-        return Name;
-    }());
+    class Name {
+    }
     Dotted.Name = Name;
 })(Dotted || (Dotted = {}));
 // Should find the intrinsic element, not the class element

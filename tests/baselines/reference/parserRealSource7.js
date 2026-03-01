@@ -1,10 +1,12 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts] ////
+
 //// [parserRealSource7.ts]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class Continuation {
         public exceptionBlock = -1;
         constructor (public normalBlock: number) { }
@@ -834,18 +836,18 @@ module TypeScript {
 }
 
 //// [parserRealSource7.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var Continuation = /** @class */ (function () {
-        function Continuation(normalBlock) {
+    class Continuation {
+        constructor(normalBlock) {
             this.normalBlock = normalBlock;
             this.exceptionBlock = -1;
         }
-        return Continuation;
-    }());
+    }
     TypeScript.Continuation = Continuation;
     function getBaseTypeLinks(bases, baseTypeLinks) {
         if (bases) {
@@ -919,7 +921,7 @@ var TypeScript;
             case NodeType.Name:
                 var name = alias.text;
                 var isDynamic = isQuoted(name);
-                var findSym = function (id) {
+                var findSym = (id) => {
                     if (context.members) {
                         return context.members.lookup(name);
                     }

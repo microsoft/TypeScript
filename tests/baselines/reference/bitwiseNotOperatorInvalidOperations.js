@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts] ////
+
 //// [bitwiseNotOperatorInvalidOperations.ts]
 // Unary operator ~
 var q;
@@ -12,6 +14,7 @@ var mul = ~[1, 2, "abc"], "";  //expect error
 var b =~;
 
 //// [bitwiseNotOperatorInvalidOperations.js]
+"use strict";
 // Unary operator ~
 var q;
 // operand before ~

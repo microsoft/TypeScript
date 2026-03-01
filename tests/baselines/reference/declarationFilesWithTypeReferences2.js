@@ -11,11 +11,11 @@ function foo(): Error2 {
 }
 
 //// [app.js]
+"use strict";
 function foo() {
     return undefined;
 }
 
 
 //// [app.d.ts]
-/// <reference types="node" />
 declare function foo(): Error2;

@@ -26,7 +26,7 @@
 format.document();
 
 goTo.marker("inClassDeclaration");
-verify.currentLineContentIs("class Foo<T1, T2>  {");
+verify.currentLineContentIs("class Foo<T1, T2> {");
 
 goTo.marker("inMethodDeclaration");
 verify.currentLineContentIs("    public method<T3, T4>(a: T1, b: Array<T4>): Map<T1, T2, Array<T3>> {");

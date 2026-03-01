@@ -1,0 +1,47 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInValues.ts ===
+// var u = /*GOTO DEF*/undefined;
+// var n = null;
+// var a = function() { return arguments; };
+// var t = true;
+// var f = false;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInValues.ts ===
+// var u = undefined;
+// var n = /*GOTO DEF*/null;
+// var a = function() { return arguments; };
+// var t = true;
+// var f = false;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInValues.ts ===
+// var u = undefined;
+// var n = null;
+// var a = function() { return /*GOTO DEF*/arguments; };
+// var t = true;
+// var f = false;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInValues.ts ===
+// var u = undefined;
+// var n = null;
+// var a = function() { return arguments; };
+// var t = /*GOTO DEF*/true;
+// var f = false;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionBuiltInValues.ts ===
+// var u = undefined;
+// var n = null;
+// var a = function() { return arguments; };
+// var t = true;
+// var f = /*GOTO DEF*/false;

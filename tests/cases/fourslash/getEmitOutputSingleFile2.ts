@@ -3,7 +3,7 @@
 // @BaselineFile: getEmitOutputSingleFile2.baseline
 // @module: CommonJS
 // @declaration: true
-// @out: declSingleFile.js
+// @outFile: declSingleFile.js
 // @outDir: /tests/cases/fourslash/
 
 // @Filename: inputFile1.ts

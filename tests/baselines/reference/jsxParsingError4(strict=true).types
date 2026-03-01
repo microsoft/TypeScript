@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/jsxParsingError4.tsx] ////
+
+=== a.tsx ===
 declare const React: any
 >React : any
 
@@ -6,6 +8,7 @@ declare namespace JSX {
     interface IntrinsicElements {
         [k: string]: any
 >k : string
+>  : ^^^^^^
     }
 }
 
@@ -16,7 +19,9 @@ const a = (
   <public-foo></public-foo>
 ><public-foo></public-foo> : error
 >public-foo : any
+>           : ^^^
 >public-foo : any
+>           : ^^^
 
 );
 
@@ -27,7 +32,9 @@ const b = (
   <public></public>
 ><public></public> : error
 >public : any
+>       : ^^^
 >public : any
+>       : ^^^
 
 );
 

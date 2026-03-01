@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/intrinsicTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/intrinsicTypes.ts] ////
+
+=== intrinsicTypes.ts ===
 type TU1 = Uppercase<'hello'>;  // "HELLO"
 >TU1 : Symbol(TU1, Decl(intrinsicTypes.ts, 0, 0))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))

@@ -1,97 +1,150 @@
-=== tests/cases/compiler/initializerWithThisPropertyAccess.ts ===
+//// [tests/cases/compiler/initializerWithThisPropertyAccess.ts] ////
+
+=== initializerWithThisPropertyAccess.ts ===
 class A {
 >A : A
+>  : ^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b = this.a;  // Error
 >b : number
+>  : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 
     c = () => this.a;
 >c : () => number
+>  : ^^^^^^^^^^^^
 >() => this.a : () => number
+>             : ^^^^^^^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 
     d = (new A()).a;
 >d : number
+>  : ^^^^^^
 >(new A()).a : number
+>            : ^^^^^^
 >(new A()) : A
+>          : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     constructor() {
         this.a = 1;
 >this.a = 1 : 1
+>           : ^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     x = this.a;
 >x : number
+>  : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     a!: number;
 >a : number
+>  : ^^^^^^
 
     b = this.a;
 >b : number
+>  : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 }
 
 // Repro from #37979
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     private bar: Bar;
 >bar : Bar
+>    : ^^^
 
     readonly barProp = this.bar.prop;
 >barProp : false
+>        : ^^^^^
 >this.bar.prop : false
+>              : ^^^^^
 >this.bar : Bar
+>         : ^^^
 >this : this
+>     : ^^^^
 >bar : Bar
+>    : ^^^
 >prop : false
+>     : ^^^^^
 
     constructor() {
         this.bar = new Bar();
 >this.bar = new Bar() : Bar
+>                     : ^^^
 >this.bar : Bar
+>         : ^^^
 >this : this
+>     : ^^^^
 >bar : Bar
+>    : ^^^
 >new Bar() : Bar
+>          : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
     }
 }
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
     readonly prop = false;
 >prop : false
+>     : ^^^^^
 >false : false
+>      : ^^^^^
 }
 

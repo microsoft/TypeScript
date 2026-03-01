@@ -1,4 +1,4 @@
-////module m {
+////namespace m {
 ////    export interface Foo {
 ////        [|abc|]
 ////    }
@@ -16,4 +16,4 @@
 ////
 ////(new C()).[|abc|];
 
-verify.rangesAreOccurrences();
+verify.baselineDocumentHighlights();

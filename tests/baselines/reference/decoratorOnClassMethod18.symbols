@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod18.ts ===
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod18.ts] ////
+
+=== decoratorOnClassMethod18.ts ===
 declare var decorator: any;
 >decorator : Symbol(decorator, Decl(decoratorOnClassMethod18.ts, 0, 11))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSwitchStatementIfCaseTypeIsString.ts] ////
+
 //// [checkSwitchStatementIfCaseTypeIsString.ts]
 declare function use(a: any): void;
 
@@ -12,16 +14,13 @@ class A {
 }
 
 //// [checkSwitchStatementIfCaseTypeIsString.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.doIt = function (x) {
-        var _this = this;
-        x.forEach(function (v) {
+"use strict";
+class A {
+    doIt(x) {
+        x.forEach((v) => {
             switch (v) {
-                case "test": use(_this);
+                case "test": use(this);
             }
         });
-    };
-    return A;
-}());
+    }
+}

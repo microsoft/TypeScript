@@ -1,32 +1,44 @@
-=== tests/cases/compiler/accessorBodyInTypeContext.ts ===
+//// [tests/cases/compiler/accessorBodyInTypeContext.ts] ////
+
+=== accessorBodyInTypeContext.ts ===
 type A = {
->A : { readonly foo: number; }
+>A : A
+>  : ^
 
     get foo() { return 0 }
 >foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 };
 
 type B = {
->B : { foo: any; }
+>B : B
+>  : ^
 
     set foo(v: any) { }
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 
 };
 
 interface X {
     get foo() { return 0 }
 >foo : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 interface Y {
     set foo(v: any) { }
 >foo : any
+>    : ^^^
 >v : any
+>  : ^^^
 }
 
 

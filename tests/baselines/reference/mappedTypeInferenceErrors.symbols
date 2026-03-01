@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts] ////
+
+=== mappedTypeInferenceErrors.ts ===
 // Repro from #19316
 
 type ComputedOf<T> = {

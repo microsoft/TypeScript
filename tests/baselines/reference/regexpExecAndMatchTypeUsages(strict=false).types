@@ -1,0 +1,192 @@
+//// [tests/cases/compiler/regexpExecAndMatchTypeUsages.ts] ////
+
+=== regexpExecAndMatchTypeUsages.ts ===
+export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
+>foo : (matchResult: RegExpMatchArray, execResult: RegExpExecArray) => void
+>    : ^           ^^                ^^          ^^               ^^^^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+
+    matchResult[0].length;
+>matchResult[0].length : number
+>                      : ^^^^^^
+>matchResult[0] : string
+>               : ^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>length : number
+>       : ^^^^^^
+
+    matchResult[999].length;
+>matchResult[999].length : number
+>                        : ^^^^^^
+>matchResult[999] : string
+>                 : ^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>999 : 999
+>    : ^^^
+>length : number
+>       : ^^^^^^
+
+    matchResult.index + 0;
+>matchResult.index + 0 : number
+>                      : ^^^^^^
+>matchResult.index : number
+>                  : ^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+    matchResult.input.length;
+>matchResult.input.length : number
+>                         : ^^^^^^
+>matchResult.input : string
+>                  : ^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>input : string
+>      : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+    matchResult.groups["someVariable"].length;
+>matchResult.groups["someVariable"].length : number
+>                                          : ^^^^^^
+>matchResult.groups["someVariable"] : string
+>                                   : ^^^^^^
+>matchResult.groups : { [key: string]: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"someVariable" : "someVariable"
+>               : ^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+
+    matchResult.groups = undefined;
+>matchResult.groups = undefined : undefined
+>                               : ^^^^^^^^^
+>matchResult.groups : { [key: string]: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    execResult[0].length;
+>execResult[0].length : number
+>                     : ^^^^^^
+>execResult[0] : string
+>              : ^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>length : number
+>       : ^^^^^^
+
+    execResult[999].length;
+>execResult[999].length : number
+>                       : ^^^^^^
+>execResult[999] : string
+>                : ^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>999 : 999
+>    : ^^^
+>length : number
+>       : ^^^^^^
+
+    execResult.index + 0;
+>execResult.index + 0 : number
+>                     : ^^^^^^
+>execResult.index : number
+>                 : ^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+    execResult.input.length;
+>execResult.input.length : number
+>                        : ^^^^^^
+>execResult.input : string
+>                 : ^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>input : string
+>      : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+    execResult.groups["someVariable"].length;
+>execResult.groups["someVariable"].length : number
+>                                         : ^^^^^^
+>execResult.groups["someVariable"] : string
+>                                  : ^^^^^^
+>execResult.groups : { [key: string]: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"someVariable" : "someVariable"
+>               : ^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+
+    execResult.groups = undefined;
+>execResult.groups = undefined : undefined
+>                              : ^^^^^^^^^
+>execResult.groups : { [key: string]: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+        matchResult = execResult;
+>matchResult = execResult : RegExpExecArray
+>                         : ^^^^^^^^^^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+    }
+    else {
+        execResult = matchResult
+>execResult = matchResult : RegExpMatchArray
+>                         : ^^^^^^^^^^^^^^^^
+>execResult : RegExpExecArray
+>           : ^^^^^^^^^^^^^^^
+>matchResult : RegExpMatchArray
+>            : ^^^^^^^^^^^^^^^^
+    }
+}
+

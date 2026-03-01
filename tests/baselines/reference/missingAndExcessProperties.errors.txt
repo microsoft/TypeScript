@@ -1,50 +1,34 @@
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(3,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(3,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(4,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(4,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(5,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(5,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(6,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(6,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'any', but here has type 'number'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(12,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(12,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(13,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(14,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(21,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(22,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,14): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,20): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(30,22): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
+missingAndExcessProperties.ts(3,11): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(3,14): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(4,18): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(5,11): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(12,8): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(12,11): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(13,18): error TS2339: Property 'y' does not exist on type '{}'.
+missingAndExcessProperties.ts(14,8): error TS2339: Property 'x' does not exist on type '{}'.
+missingAndExcessProperties.ts(21,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+missingAndExcessProperties.ts(22,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+missingAndExcessProperties.ts(29,14): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+missingAndExcessProperties.ts(29,20): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+missingAndExcessProperties.ts(30,22): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+missingAndExcessProperties.ts(31,16): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
 
 
-==== tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts (18 errors) ====
+==== missingAndExcessProperties.ts (14 errors) ====
     // Missing properties
     function f1() {
         var { x, y } = {};
               ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'x' does not exist on type '{}'.
                  ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'y' does not exist on type '{}'.
         var { x = 1, y } = {};
-              ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:11: 'x' was also declared here.
                      ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'y' does not exist on type '{}'.
         var { x, y = 1 } = {};
               ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-                 ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:14: 'y' was also declared here.
+!!! error TS2339: Property 'x' does not exist on type '{}'.
         var { x = 1, y = 1 } = {};
-              ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:11: 'x' was also declared here.
-                     ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'any', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts:3:14: 'y' was also declared here.
     }
     
     // Missing properties
@@ -52,15 +36,15 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): 
         var x: number, y: number;
         ({ x, y } = {});
            ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'x' does not exist on type '{}'.
               ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'y' does not exist on type '{}'.
         ({ x: x = 1, y } = {});
                      ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'y' does not exist on type '{}'.
         ({ x, y: y = 1 } = {});
            ~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+!!! error TS2339: Property 'x' does not exist on type '{}'.
         ({ x: x = 1, y: y = 1 } = {});
     }
     

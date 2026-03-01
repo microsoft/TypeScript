@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js ===
+//// [tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.ts] ////
+
+=== jsdocArrayObjectPromiseNoImplicitAny.js ===
 /** @type {Array} */
 var notAnyArray = [5];
 >notAnyArray : Symbol(notAnyArray, Decl(jsdocArrayObjectPromiseNoImplicitAny.js, 1, 3))

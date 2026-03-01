@@ -1,5 +1,7 @@
-=== tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName1.ts ===
-declare module foo {
+//// [tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName1.ts] ////
+
+=== resolveModuleNameWithSameLetDeclarationName1.ts ===
+declare namespace foo {
 
     interface Bar {
 
@@ -8,5 +10,7 @@ declare module foo {
 
 let foo: foo.Bar; 
 >foo : foo.Bar
+>    : ^^^^^^^
 >foo : any
+>    : ^^^
 

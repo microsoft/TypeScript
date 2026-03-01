@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName3.ts] ////
+
 //// [privateNameComputedPropertyName3.ts]
 class Foo {
     #name;
@@ -25,6 +27,7 @@ console.log(new Foo("NAME").getValue(100));
 
 
 //// [privateNameComputedPropertyName3.js]
+"use strict";
 class Foo {
     #name;
     constructor(name) {

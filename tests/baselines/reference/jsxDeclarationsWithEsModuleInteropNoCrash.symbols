@@ -1,5 +1,7 @@
-=== tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
-/// <reference path="react16.d.ts" />
+//// [tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.tsx] ////
+
+=== jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
+/// <reference path="react16.d.ts" preserve="true" />
 import PropTypes from 'prop-types';
 >PropTypes : Symbol(PropTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 1, 6))
 
@@ -30,9 +32,9 @@ function Foo({ bar }) {
 >bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 12, 14))
 
   return <div>{bar}</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 >bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 12, 14))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 }
 
 Foo.propTypes = propTypes;

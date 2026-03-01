@@ -1,4 +1,6 @@
-// @module: amd
+// @target: es2015
+// @strict: false
+// @module: commonjs
 
 // @filename: file1.ts
 class foo {}

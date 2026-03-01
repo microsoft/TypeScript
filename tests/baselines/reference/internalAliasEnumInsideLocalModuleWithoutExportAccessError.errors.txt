@@ -1,8 +1,8 @@
-tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS2339: Property 'b' does not exist on type 'typeof c'.
+internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
-==== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
-    export module a {
+==== internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+    export namespace a {
         export enum weekend {
             Friday,
             Saturday,
@@ -10,7 +10,7 @@ tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.
         }
     }
     
-    export module c {
+    export namespace c {
         import b = a.weekend;
         export var bVal: b = b.Sunday;
     }

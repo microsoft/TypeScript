@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithCallAndConstructSignature.ts] ////
+
 //// [interfaceWithCallAndConstructSignature.ts]
 interface Foo {
     (): number;
@@ -9,6 +11,7 @@ var r = f();
 var r2 = new f();
 
 //// [interfaceWithCallAndConstructSignature.js]
+"use strict";
 var f;
 var r = f();
 var r2 = new f();

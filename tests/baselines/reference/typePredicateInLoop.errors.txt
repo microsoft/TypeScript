@@ -1,7 +1,7 @@
-tests/cases/compiler/typePredicateInLoop.ts(17,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+typePredicateInLoop.ts(17,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
-==== tests/cases/compiler/typePredicateInLoop.ts (1 errors) ====
+==== typePredicateInLoop.ts (1 errors) ====
     // Repro from #12101
     
     interface Type {

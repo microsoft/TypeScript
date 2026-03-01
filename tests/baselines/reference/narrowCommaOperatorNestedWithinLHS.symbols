@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts ===
+//// [tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts] ////
+
+=== narrowCommaOperatorNestedWithinLHS.ts ===
 const otherValue = () => true;
 >otherValue : Symbol(otherValue, Decl(narrowCommaOperatorNestedWithinLHS.ts, 0, 5))
 

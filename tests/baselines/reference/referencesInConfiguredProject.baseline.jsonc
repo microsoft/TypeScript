@@ -1,63 +1,38 @@
-// === /referencesForGlobals_1.ts ===
-// class [|globalClass|] {
+// === findAllReferences ===
+// === /home/src/workspaces/project/referencesForGlobals_1.ts ===
+// <|class [|{| isWriteAccess: true |}globalClass|] {
 //     public f() { }
-// }
+// }|>
 
-// === /referencesForGlobals_2.ts ===
+// === /home/src/workspaces/project/referencesForGlobals_2.ts ===
 // var c = /*FIND ALL REFS*/[|globalClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/referencesForGlobals_1.ts",
-      "kind": "class",
-      "name": "class globalClass",
-      "textSpan": {
-        "start": 6,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "globalClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 40
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 11
-        },
-        "fileName": "/referencesForGlobals_1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 40
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 11
-        },
-        "fileName": "/referencesForGlobals_2.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /home/src/workspaces/project/referencesForGlobals_1.ts ===
+  // <|class [|globalClass|] {
+  //     public f() { }
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class globalClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

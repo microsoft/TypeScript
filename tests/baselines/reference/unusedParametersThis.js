@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersThis.ts] ////
+
 //// [unusedParametersThis.ts]
 class A {
     public a: number;
@@ -34,30 +36,26 @@ var f2 = function f2(this: A): number {
 };
 
 //// [unusedParametersThis.js]
-var A = /** @class */ (function () {
-    function A() {
+"use strict";
+class A {
+    method() {
+        return this.a;
     }
-    A.prototype.method = function () {
+    method2() {
         return this.a;
-    };
-    A.prototype.method2 = function () {
-        return this.a;
-    };
-    A.prototype.method3 = function () {
-        var _this = this;
-        var fn = function () { return _this.a; };
+    }
+    method3() {
+        var fn = () => this.a;
         return fn();
-    };
-    A.prototype.method4 = function () {
-        var _this = this;
-        var fn = function () { return _this.a; };
+    }
+    method4() {
+        var fn = () => this.a;
         return fn();
-    };
-    A.staticMethod = function () {
+    }
+    static staticMethod() {
         return this.a;
-    };
-    return A;
-}());
+    }
+}
 function f() {
     return this.a;
 }

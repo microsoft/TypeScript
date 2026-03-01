@@ -1,0 +1,15 @@
+/a.ts(1,23): error TS2688: Cannot find type definition file for 'JqUeRy'.
+
+
+==== /tsconfig.json (0 errors) ====
+    { "files": "a.ts" }
+    
+==== /a.ts (1 errors) ====
+    /// <reference types="JqUeRy" />
+                          ~~~~~~
+!!! error TS2688: Cannot find type definition file for 'JqUeRy'.
+    $.x;
+    
+==== /node_modules/@types/jquery/index.d.ts (0 errors) ====
+    declare var $: { x: any };
+    

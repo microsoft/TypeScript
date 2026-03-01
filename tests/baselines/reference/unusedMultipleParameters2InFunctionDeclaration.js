@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts] ////
+
 //// [unusedMultipleParameters2InFunctionDeclaration.ts]
 function greeter(person: string, person2: string, person3: string) {
     var unused = 20;
@@ -5,6 +7,7 @@ function greeter(person: string, person2: string, person3: string) {
 }
 
 //// [unusedMultipleParameters2InFunctionDeclaration.js]
+"use strict";
 function greeter(person, person2, person3) {
     var unused = 20;
     person2 = "dummy value";

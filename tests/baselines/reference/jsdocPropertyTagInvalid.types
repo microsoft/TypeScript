@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocPropertyTagInvalid.ts] ////
+
 === /a.js ===
 /**
  * @typedef MyType
@@ -7,16 +9,24 @@
 /** @param {MyType} p  */
 export function f(p) { }
 >f : (p: MyType) => void
+>  : ^ ^^      ^^^^^^^^^
 >p : MyType
+>  : ^^^^^^
 
 === /b.js ===
 import { f } from "./a.js"
->f : (p: import("/a").MyType) => void
+>f : (p: MyType) => void
+>  : ^ ^^      ^^^^^^^^^
 
 f({ x: 42 })
 >f({ x: 42 }) : void
->f : (p: import("/a").MyType) => void
+>             : ^^^^
+>f : (p: MyType) => void
+>  : ^ ^^      ^^^^^^^^^
 >{ x: 42 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyIndexer.ts] ////
+
 //// [emptyIndexer.ts]
 interface I1 {
 	m(): number;
@@ -13,5 +15,6 @@ var x: I2;
 var n = x[''].m(); // should not crash compiler
 
 //// [emptyIndexer.js]
+"use strict";
 var x;
 var n = x[''].m(); // should not crash compiler

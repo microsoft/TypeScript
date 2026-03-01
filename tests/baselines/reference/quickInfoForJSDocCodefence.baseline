@@ -1,3 +1,38 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForJSDocCodefence.ts ===
+// /**
+//  * @example
+//  * ```
+//  * 1 + 2
+//  * ```
+//  */
+// function foo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function foo(): string
+// | @example ```
+// | 1 + 2
+// | ```
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @example
+//  * ``
+//  * 1 + 2
+//  * `
+//  */
+// function boo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function boo(): string
+// | @example ``
+// | 1 + 2
+// | `
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+
 [
   {
     "marker": {
@@ -5,7 +40,7 @@
       "position": 54,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -66,7 +101,7 @@
       "position": 129,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

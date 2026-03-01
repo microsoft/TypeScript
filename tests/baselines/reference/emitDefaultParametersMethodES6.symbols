@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersMethodES6.ts ===
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersMethodES6.ts] ////
+
+=== emitDefaultParametersMethodES6.ts ===
 class C {
 >C : Symbol(C, Decl(emitDefaultParametersMethodES6.ts, 0, 0))
 

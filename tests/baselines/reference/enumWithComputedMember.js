@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithComputedMember.ts] ////
+
 //// [enumWithComputedMember.ts]
 enum A { 
     X = "".length, 
@@ -7,6 +9,7 @@ enum A {
 
 
 //// [enumWithComputedMember.js]
+"use strict";
 var A;
 (function (A) {
     A[A["X"] = "".length] = "X";

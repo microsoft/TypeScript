@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts ===
+//// [tests/cases/compiler/functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts] ////
+
+=== functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts ===
 function foo(args: { (x): number }[]) {
 >foo : Symbol(foo, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 0))
 >args : Symbol(args, Decl(functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts, 0, 13))

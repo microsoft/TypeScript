@@ -1,47 +1,75 @@
-=== tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts ===
+//// [tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts] ////
+
+=== contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts ===
 // must target esnext for `String.normalize` to exist
 type Validate = (text: string, pos: number, self: Rule) => number | boolean;
->Validate : (text: string, pos: number, self: Rule) => number | boolean
+>Validate : Validate
+>         : ^^^^^^^^
 >text : string
+>     : ^^^^^^
 >pos : number
+>    : ^^^^^^
 >self : Rule
+>     : ^^^^
 
 interface FullRule {
     validate: string | RegExp | Validate;
 >validate : string | RegExp | Validate
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     normalize?: (match: {x: string}) => void;
->normalize : ((match: {    x: string;}) => void) | undefined
+>normalize : ((match: { x: string; }) => void) | undefined
+>          : ^^     ^^              ^^^^^    ^^^^^^^^^^^^^
 >match : { x: string; }
+>      : ^^^^^      ^^^
 >x : string
+>  : ^^^^^^
 }
 
 type Rule = string | FullRule;
->Rule : string | FullRule
+>Rule : Rule
+>     : ^^^^
 
 const obj: {field: Rule} = {
 >obj : { field: Rule; }
+>    : ^^^^^^^^^    ^^^
 >field : Rule
+>      : ^^^^
 >{    field: {        validate: (_t, _p, _s) => false,        normalize: match => match.x,    }} : { field: { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }; }
+>                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^
 
     field: {
 >field : { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }
+>      : ^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 >{        validate: (_t, _p, _s) => false,        normalize: match => match.x,    } : { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }
+>                                                                                   : ^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 
         validate: (_t, _p, _s) => false,
 >validate : (_t: string, _p: number, _s: Rule) => false
+>         : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 >(_t, _p, _s) => false : (_t: string, _p: number, _s: Rule) => false
+>                      : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 >_t : string
+>   : ^^^^^^
 >_p : number
+>   : ^^^^^^
 >_s : Rule
+>   : ^^^^
 >false : false
+>      : ^^^^^
 
         normalize: match => match.x,
 >normalize : (match: any) => any
+>          : ^     ^^^^^^^^^^^^^
 >match => match.x : (match: any) => any
+>                 : ^     ^^^^^^^^^^^^^
 >match : any
+>      : ^^^
 >match.x : any
+>        : ^^^
 >match : any
+>      : ^^^
 >x : any
+>  : ^^^
     }
 };

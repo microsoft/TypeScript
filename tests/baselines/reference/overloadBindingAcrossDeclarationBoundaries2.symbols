@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries_file0.ts ===
+//// [tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries2.ts] ////
+
+=== overloadBindingAcrossDeclarationBoundaries_file0.ts ===
 interface Opt1 {
 >Opt1 : Symbol(Opt1, Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 0, 0))
 
@@ -60,7 +62,7 @@ interface A {
 >Opt2 : Symbol(Opt2, Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 2, 1))
 }
 
-=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries_file1.ts ===
+=== overloadBindingAcrossDeclarationBoundaries_file1.ts ===
 interface A {
 >A : Symbol(A, Decl(overloadBindingAcrossDeclarationBoundaries_file0.ts, 11, 1), Decl(overloadBindingAcrossDeclarationBoundaries_file1.ts, 0, 0))
 

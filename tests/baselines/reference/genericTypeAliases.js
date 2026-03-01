@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/genericTypeAliases.ts] ////
+
 //// [genericTypeAliases.ts]
 type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 
@@ -75,19 +77,20 @@ a = b;
 
 
 //// [genericTypeAliases.js]
+"use strict";
 var tree = {
     left: {
         left: 0,
         right: {
             left: 1,
             right: 2
-        }
+        },
     },
     right: 3
 };
 var ls;
 ls = "eager";
-ls = function () { return "lazy"; };
+ls = () => "lazy";
 // Deeply instantiated generics
 var x;
 var y;

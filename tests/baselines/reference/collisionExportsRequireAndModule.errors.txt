@@ -1,10 +1,14 @@
-tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts(1,15): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts(10,15): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+collisionExportsRequireAndModule_externalmodule.ts(1,18): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(8,5): error TS2322: Type 'null' is not assignable to type 'I'.
+collisionExportsRequireAndModule_externalmodule.ts(10,18): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+collisionExportsRequireAndModule_externalmodule.ts(17,5): error TS2322: Type 'null' is not assignable to type 'I'.
 
 
-==== tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts (2 errors) ====
-    export module require {
-                  ~~~~~~~
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== collisionExportsRequireAndModule_externalmodule.ts (4 errors) ====
+    export namespace require {
+                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
         export interface I {
         }
@@ -13,9 +17,11 @@ tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts(10,15): 
     }
     export function foo(): require.I {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
     }
-    export module exports {
-                  ~~~~~~~
+    export namespace exports {
+                     ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
         export interface I {
         }
@@ -24,29 +30,31 @@ tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts(10,15): 
     }
     export function foo2(): exports.I {
         return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
     }
-    module m1 {
-        module require {
+    namespace m1 {
+        namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        module exports {
+        namespace exports {
             export interface I {
             }
             export class C {
             }
         }
     }
-    module m2 {
-        export module require {
+    namespace m2 {
+        export namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        export module exports {
+        export namespace exports {
             export interface I {
             }
             export class C {
@@ -54,41 +62,41 @@ tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts(10,15): 
         }
     }
     
-==== tests/cases/compiler/collisionExportsRequireAndModule_globalFile.ts (0 errors) ====
-    module require {
+==== collisionExportsRequireAndModule_globalFile.ts (0 errors) ====
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
-    module m3 {
-        module require {
+    namespace m3 {
+        namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        module exports {
+        namespace exports {
             export interface I {
             }
             export class C {
             }
         }
     }
-    module m4 {
-        export module require {
+    namespace m4 {
+        export namespace require {
             export interface I {
             }
             export class C {
             }
         }
-        export module exports {
+        export namespace exports {
             export interface I {
             }
             export class C {

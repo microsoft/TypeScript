@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.binary.ts] ////
+
 //// [parser.numericSeparators.binary.ts]
 0b00_11;
 0B0_1;
@@ -6,6 +8,7 @@
 
 
 //// [parser.numericSeparators.binary.js]
+"use strict";
 3;
 1;
 195;

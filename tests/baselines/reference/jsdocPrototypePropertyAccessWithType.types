@@ -1,23 +1,40 @@
+//// [tests/cases/conformance/jsdoc/jsdocPrototypePropertyAccessWithType.ts] ////
+
 === /a.js ===
 function C() { this.x = false; };
 >C : typeof C
+>  : ^^^^^^^^
 >this.x = false : false
+>               : ^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >false : false
+>      : ^^^^^
 
 /** @type {number} */
 C.prototype.x;
 >C.prototype.x : any
+>              : ^^^
 >C.prototype : any
+>            : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >x : any
+>  : ^^^
 
 new C().x;
 >new C().x : number
+>          : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 

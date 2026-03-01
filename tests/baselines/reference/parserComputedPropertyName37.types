@@ -1,11 +1,18 @@
-=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName37.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName37.ts] ////
+
+=== parserComputedPropertyName37.ts ===
 var v = {
 >v : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [public]: 0} : { [x: number]: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [public]: 0
 >[public] : number
+>         : ^^^^^^
 >public : any
+>       : ^^^
 >0 : 0
+>  : ^
 
 };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop11_ES6.ts] ////
+
 //// [capturedLetConstInLoop11_ES6.ts]
 for (;;) {
     let x = 1;
@@ -14,6 +16,7 @@ function foo() {
 }
 
 //// [capturedLetConstInLoop11_ES6.js]
+"use strict";
 for (;;) {
     let x = 1;
     () => x;

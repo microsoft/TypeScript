@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTupleTypes2.ts] ////
+
 //// [recursiveTupleTypes2.ts]
 interface Tree1 {
     children: [Tree1, Tree2];
@@ -14,7 +16,8 @@ tree2 = tree1;
 
 
 //// [recursiveTupleTypes2.js]
-var tree1;
-var tree2;
+"use strict";
+let tree1;
+let tree2;
 tree1 = tree2;
 tree2 = tree1;

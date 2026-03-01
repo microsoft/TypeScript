@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/myFile02.js ===
+//// [tests/cases/conformance/salsa/malformedTags.ts] ////
+
+=== myFile02.js ===
 /**
  * Checks if `value` is classified as an `Array` object.
  *
@@ -6,7 +8,11 @@
  */
 var isArray = Array.isArray;
 >isArray : Function
+>        : ^^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 

@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/specialIntersectionsInMappedTypes.ts] ////
+
+=== specialIntersectionsInMappedTypes.ts ===
+// Repro from #50683
+
+type Alignment = (string & {}) | "left" | "center" | "right";
+>Alignment : Alignment
+>          : ^^^^^^^^^
+
+type Alignments = Record<Alignment, string>;
+>Alignments : Alignments
+>           : ^^^^^^^^^^
+
+const a: Alignments = {
+>a : Alignments
+>  : ^^^^^^^^^^
+>{    left: "align-left",    center: "align-center",    right: "align-right",    other: "align-other",} : { left: string; center: string; right: string; other: string; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    left: "align-left",
+>left : string
+>     : ^^^^^^
+>"align-left" : "align-left"
+>             : ^^^^^^^^^^^^
+
+    center: "align-center",
+>center : string
+>       : ^^^^^^
+>"align-center" : "align-center"
+>               : ^^^^^^^^^^^^^^
+
+    right: "align-right",
+>right : string
+>      : ^^^^^^
+>"align-right" : "align-right"
+>              : ^^^^^^^^^^^^^
+
+    other: "align-other",
+>other : string
+>      : ^^^^^^
+>"align-other" : "align-other"
+>              : ^^^^^^^^^^^^^
+
+};
+
+a.left.length;
+>a.left.length : number
+>              : ^^^^^^
+>a.left : string
+>       : ^^^^^^
+>a : Alignments
+>  : ^^^^^^^^^^
+>left : string
+>     : ^^^^^^
+>length : number
+>       : ^^^^^^
+
+a.other.length;  // Error expected here
+>a.other.length : number
+>               : ^^^^^^
+>a.other : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>a : Alignments
+>  : ^^^^^^^^^^
+>other : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+

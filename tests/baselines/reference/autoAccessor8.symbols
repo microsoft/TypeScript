@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor8.ts] ////
+
+=== autoAccessor8.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(autoAccessor8.ts, 0, 0))
+
+    accessor a: any;
+>a : Symbol(C1.a, Decl(autoAccessor8.ts, 0, 10))
+
+    static accessor b: any;
+>b : Symbol(C1.b, Decl(autoAccessor8.ts, 1, 20))
+}
+
+declare class C2 {
+>C2 : Symbol(C2, Decl(autoAccessor8.ts, 3, 1))
+
+    accessor a: any;
+>a : Symbol(C2.a, Decl(autoAccessor8.ts, 5, 18))
+
+    static accessor b: any;
+>b : Symbol(C2.b, Decl(autoAccessor8.ts, 6, 20))
+}
+
+function f() {
+>f : Symbol(f, Decl(autoAccessor8.ts, 8, 1))
+
+    class C3 {
+>C3 : Symbol(C3, Decl(autoAccessor8.ts, 10, 14))
+
+        accessor a: any;
+>a : Symbol(C3.a, Decl(autoAccessor8.ts, 11, 14))
+
+        static accessor b: any;
+>b : Symbol(C3.b, Decl(autoAccessor8.ts, 12, 24))
+    }
+    return C3;
+>C3 : Symbol(C3, Decl(autoAccessor8.ts, 10, 14))
+}
+

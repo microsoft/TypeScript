@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/illegalModifiersOnClassElements.ts] ////
+
 //// [illegalModifiersOnClassElements.ts]
 class C {
     declare foo = 1;
@@ -5,9 +7,9 @@ class C {
 }
 
 //// [illegalModifiersOnClassElements.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.bar = 1;
     }
-    return C;
-}());
+}

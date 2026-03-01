@@ -1,135 +1,77 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
 // class C {
-//     /*FIND ALL REFS*/[|constructor|](n: number);
-//     [|constructor|](){}
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|](n: number);|>
+//     <|[|{| isDefinition: true |}constructor|](){}|>
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 59
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
+  // <|class [|C|] {
+  //     /*FIND ALL REFS*/constructor(n: number);
+  //     constructor(){}
+  // }|>
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
 // class C {
-//     [|constructor|](n: number);
-//     /*FIND ALL REFS*/[|constructor|](){}
+//     <|[|{| isDefinition: true |}constructor|](n: number);|>
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|](){}|>
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 59
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesOfConstructor_badOverload.ts ===
+  // <|class [|C|] {
+  //     constructor(n: number);
+  //     /*FIND ALL REFS*/constructor(){}
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

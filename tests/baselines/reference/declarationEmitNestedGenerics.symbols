@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNestedGenerics.ts ===
+//// [tests/cases/compiler/declarationEmitNestedGenerics.ts] ////
+
+=== declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
 >f : Symbol(f, Decl(declarationEmitNestedGenerics.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 0, 11))

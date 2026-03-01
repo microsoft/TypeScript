@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloads2.ts] ////
+
 //// [callOverloads2.ts]
 class Foo { // error
     bar1() { /*WScript.Echo("bar1");*/ }
@@ -24,13 +26,13 @@ Foo();
 
 
 //// [callOverloads2.js]
-var Foo = /** @class */ (function () {
-    function Foo(x) {
+"use strict";
+class Foo {
+    bar1() { }
+    constructor(x) {
         // WScript.Echo("Constructor function has executed");
     }
-    Foo.prototype.bar1 = function () { };
-    return Foo;
-}());
+}
 function F1(s) { return s; } // error
 function F1(a) { return a; } // error
 var f1 = new Foo("hey");

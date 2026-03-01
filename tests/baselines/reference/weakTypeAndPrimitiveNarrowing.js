@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts] ////
+
 //// [weakTypeAndPrimitiveNarrowing.ts]
 type LiteralsAndWeakTypes = 
   | 'A'
@@ -32,7 +34,7 @@ const h = (arg: PrimitivesAndWeakTypes) => {
 
 //// [weakTypeAndPrimitiveNarrowing.js]
 "use strict";
-var g = function (arg) {
+const g = (arg) => {
     if (arg === 'A') {
         arg;
     }
@@ -40,7 +42,7 @@ var g = function (arg) {
         arg;
     }
 };
-var h = function (arg) {
+const h = (arg) => {
     if (arg === 'A') {
         arg;
     }

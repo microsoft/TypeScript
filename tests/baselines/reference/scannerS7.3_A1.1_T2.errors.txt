@@ -1,7 +1,7 @@
-tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts(17,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+scannerS7.3_A1.1_T2.ts(17,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 
 
-==== tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts (1 errors) ====
+==== scannerS7.3_A1.1_T2.ts (1 errors) ====
     // Copyright 2009 the Sputnik authors.  All rights reserved.
     // This code is governed by the BSD license found in the LICENSE file.
     
@@ -21,7 +21,7 @@ tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts(17,3): error 
       $ERROR('#1: var\\nx\\n=\\n1\\n; x === 1. Actual: ' + (x));
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'Error' is declared here.
     }
     
     

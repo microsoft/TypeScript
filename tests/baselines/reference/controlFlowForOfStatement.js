@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowForOfStatement.ts] ////
+
 //// [controlFlowForOfStatement.ts]
 let obj: number[];
 let x: string | number | boolean | RegExp;
@@ -12,12 +14,12 @@ function a() {
 
 
 //// [controlFlowForOfStatement.js]
-var obj;
-var x;
+"use strict";
+let obj;
+let x;
 function a() {
     x = true;
-    for (var _i = 0, obj_1 = obj; _i < obj_1.length; _i++) {
-        x = obj_1[_i];
+    for (x of obj) {
         x = x.toExponential();
     }
     x; // string | boolean

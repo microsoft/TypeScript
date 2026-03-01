@@ -1,9 +1,9 @@
-tests/cases/compiler/file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/compiler/file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/compiler/file1.ts(6,13): error TS2339: Property 'b' does not exist on type '{}'.
+file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{}'.
+file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{}'.
+file1.ts(6,13): error TS2339: Property 'b' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/file1.ts (3 errors) ====
+==== file1.ts (3 errors) ====
     import b1 = require('./b.json');
     let x = b1.a;
                ~
@@ -18,5 +18,5 @@ tests/cases/compiler/file1.ts(6,13): error TS2339: Property 'b' does not exist o
 !!! error TS2339: Property 'b' does not exist on type '{}'.
     }
     
-==== tests/cases/compiler/b.json (0 errors) ====
+==== b.json (0 errors) ====
     

@@ -1,18 +1,28 @@
-=== tests/cases/compiler/styleOptions.ts ===
+//// [tests/cases/compiler/styleOptions.ts] ////
+
+=== styleOptions.ts ===
 ///<style eqeqeq="on" strict="on" /> 
 
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var y = 1;
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var t = x == y;
 >t : boolean
+>  : ^^^^^^^
 >x == y : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 

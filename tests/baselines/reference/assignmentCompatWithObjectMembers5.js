@@ -1,26 +1,24 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts] ////
+
 //// [assignmentCompatWithObjectMembers5.ts]
 class C {
     foo: string;
 }
 
-var c: C;
+declare var c: C;
 
 interface I {
     fooo: string;
 }
 
-var i: I;
+declare var i: I;
 
 c = i; // error
 i = c; // error
 
 //// [assignmentCompatWithObjectMembers5.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var c;
-var i;
+"use strict";
+class C {
+}
 c = i; // error
 i = c; // error

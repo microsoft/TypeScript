@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationWithComments.ts ===
+//// [tests/cases/compiler/sourceMapValidationWithComments.ts] ////
+
+=== sourceMapValidationWithComments.ts ===
 class DebugClass {
 >DebugClass : Symbol(DebugClass, Decl(sourceMapValidationWithComments.ts, 0, 0))
 

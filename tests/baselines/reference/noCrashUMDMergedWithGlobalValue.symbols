@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashUMDMergedWithGlobalValue.ts] ////
+
 === /other.d.ts ===
 export as namespace SomeInterface;
 >SomeInterface : Symbol(SomeInterface, Decl(other.d.ts, 0, 0))

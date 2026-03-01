@@ -1,0 +1,152 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_09.ts ===
+// --- (line: 9) skipped ---
+//     hello() {}
+// 
+//     whatever() {
+//         super.he/*GOTO IMPL*/llo();
+//         super["hello"]();
+//     }
+// }
+// 
+// class SuperBar extends MegaBar {
+//     <|[|hello|]() {}|>
+// }
+// 
+// class MegaBar implements Foo {
+//     hello() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SuperBar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_09.ts ===
+// --- (line: 10) skipped ---
+// 
+//     whatever() {
+//         super.hello();
+//         super["hel/*GOTO IMPL*/lo"]();
+//     }
+// }
+// 
+// class SuperBar extends MegaBar {
+//     <|[|hello|]() {}|>
+// }
+// 
+// class MegaBar implements Foo {
+//     hello() {}
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SuperBar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]

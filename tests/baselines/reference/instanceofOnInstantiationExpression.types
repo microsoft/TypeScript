@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/instanceofOnInstantiationExpression.ts] ////
+
+=== instanceofOnInstantiationExpression.ts ===
+declare class Box<T> {
+>Box : Box<T>
+>    : ^^^^^^
+
+    value: T;
+>value : T
+>      : ^
+}
+
+
+declare const maybeBox: unknown;
+>maybeBox : unknown
+>         : ^^^^^^^
+
+maybeBox instanceof Box; // OK
+>maybeBox instanceof Box : boolean
+>                        : ^^^^^^^
+>maybeBox : unknown
+>         : ^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+
+maybeBox instanceof Box<number>; // error
+>maybeBox instanceof Box<number> : boolean
+>                                : ^^^^^^^
+>maybeBox : unknown
+>         : ^^^^^^^
+>Box<number> : { new (): Box<number>; prototype: Box<any>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+
+maybeBox instanceof (Box<number>); // error
+>maybeBox instanceof (Box<number>) : boolean
+>                                  : ^^^^^^^
+>maybeBox : unknown
+>         : ^^^^^^^
+>(Box<number>) : { new (): Box<number>; prototype: Box<any>; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box<number> : { new (): Box<number>; prototype: Box<any>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+
+maybeBox instanceof ((Box<number>)); // error
+>maybeBox instanceof ((Box<number>)) : boolean
+>                                    : ^^^^^^^
+>maybeBox : unknown
+>         : ^^^^^^^
+>((Box<number>)) : { new (): Box<number>; prototype: Box<any>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(Box<number>) : { new (): Box<number>; prototype: Box<any>; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box<number> : { new (): Box<number>; prototype: Box<any>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+
+Box<number> instanceof Object; // OK
+>Box<number> instanceof Object : boolean
+>                              : ^^^^^^^
+>Box<number> : { new (): Box<number>; prototype: Box<any>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+(Box<number>) instanceof Object; // OK
+>(Box<number>) instanceof Object : boolean
+>                                : ^^^^^^^
+>(Box<number>) : { new (): Box<number>; prototype: Box<any>; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box<number> : { new (): Box<number>; prototype: Box<any>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+((Box<number>)) instanceof Object; // OK
+>((Box<number>)) instanceof Object : boolean
+>                                  : ^^^^^^^
+>((Box<number>)) : { new (): Box<number>; prototype: Box<any>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(Box<number>) : { new (): Box<number>; prototype: Box<any>; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box<number> : { new (): Box<number>; prototype: Box<any>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Box : typeof Box
+>    : ^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+

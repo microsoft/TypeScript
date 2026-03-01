@@ -1,9 +1,14 @@
-=== tests/cases/compiler/parameterPropertyOutsideConstructor.ts ===
+//// [tests/cases/compiler/parameterPropertyOutsideConstructor.ts] ////
+
+=== parameterPropertyOutsideConstructor.ts ===
 class C {
 >C : C
+>  : ^
 
     foo(public x) {
 >foo : (x: any) => void
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
     }
 }

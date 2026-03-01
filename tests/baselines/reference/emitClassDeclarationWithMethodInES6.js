@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithMethodInES6.ts] ////
+
 //// [emitClassDeclarationWithMethodInES6.ts]
 class D {
     _bar: string;
@@ -23,6 +25,7 @@ class D {
 }
 
 //// [emitClassDeclarationWithMethodInES6.js]
+"use strict";
 class D {
     foo() { }
     ["computedName1"]() { }

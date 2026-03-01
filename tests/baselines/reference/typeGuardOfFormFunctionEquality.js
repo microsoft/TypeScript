@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormFunctionEquality.ts] ////
+
 //// [typeGuardOfFormFunctionEquality.ts]
 declare function isString1(a: number, b: Object): b is string;
 
@@ -16,6 +18,7 @@ function isString3(a: number, b: number, c: Object): c is string {
 
 
 //// [typeGuardOfFormFunctionEquality.js]
+"use strict";
 switch (isString1(0, "")) {
     case isString2(""):
     default:

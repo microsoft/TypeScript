@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferentiallyTypingAnEmptyArray.ts] ////
+
 //// [inferentiallyTypingAnEmptyArray.ts]
 // April 2014, Section 4.6:
 //      In the absence of a contextual type, the type of an array literal is C[], where C is the
@@ -18,4 +20,5 @@ declare function foo<T>(arr: T[]): T;
 foo([]).bar;
 
 //// [inferentiallyTypingAnEmptyArray.js]
+"use strict";
 foo([]).bar;

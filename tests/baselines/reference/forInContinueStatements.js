@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts] ////
+
 //// [forInContinueStatements.ts]
 for(var x in {}) {
     continue;
@@ -38,6 +40,7 @@ for (var x in {}){
 
 
 //// [forInContinueStatements.js]
+"use strict";
 for (var x in {}) {
     continue;
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts ===
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts] ////
+
+=== contextuallyTypedClassExpressionMethodDeclaration02.ts ===
 interface A {
 >A : Symbol(A, Decl(contextuallyTypedClassExpressionMethodDeclaration02.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments12_ES6.ts] ////
+
 //// [emitArrowFunctionWhenUsingArguments12_ES6.ts]
 class C {
     f(arguments) {
@@ -6,6 +8,7 @@ class C {
 }
 
 //// [emitArrowFunctionWhenUsingArguments12_ES6.js]
+"use strict";
 class C {
     f(arguments) {
         var a = () => arguments;

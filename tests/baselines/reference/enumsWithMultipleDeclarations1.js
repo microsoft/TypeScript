@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumsWithMultipleDeclarations1.ts] ////
+
 //// [enumsWithMultipleDeclarations1.ts]
 enum E {
   A
@@ -12,6 +14,7 @@ enum E {
 }
 
 //// [enumsWithMultipleDeclarations1.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

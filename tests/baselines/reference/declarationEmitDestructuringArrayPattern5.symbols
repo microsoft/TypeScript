@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringArrayPattern5.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern5.ts] ////
+
+=== declarationEmitDestructuringArrayPattern5.ts ===
 var [, , z] = [1, 2, 4];
 >z : Symbol(z, Decl(declarationEmitDestructuringArrayPattern5.ts, 0, 8))
 

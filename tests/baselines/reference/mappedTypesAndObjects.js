@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts] ////
+
 //// [mappedTypesAndObjects.ts]
 function f1<T>(x: Partial<T>, y: Readonly<T>) {
     let obj: {};
@@ -44,13 +46,14 @@ class Form<T> {
 
 
 //// [mappedTypesAndObjects.js]
+"use strict";
 function f1(x, y) {
-    var obj;
+    let obj;
     obj = x;
     obj = y;
 }
 function f2(x, y) {
-    var obj;
+    let obj;
     obj = x;
     obj = y;
 }
@@ -59,12 +62,11 @@ function f3(x) {
 }
 ;
 // Repro from #13747
-var Form = /** @class */ (function () {
-    function Form() {
+class Form {
+    constructor() {
         this.values = {};
     }
-    return Form;
-}());
+}
 
 
 //// [mappedTypesAndObjects.d.ts]

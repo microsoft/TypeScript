@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions14.ts] ////
+
+=== unicodeExtendedEscapesInRegularExpressions14.ts ===
+// Shouldn't work, negatives are not allowed.
+var x = /\u{-DDDD}/gu;
+>x : RegExp
+>  : ^^^^^^
+>/\u{-DDDD}/gu : RegExp
+>              : ^^^^^^
+

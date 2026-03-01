@@ -1,0 +1,38 @@
+fileJs.js(1,1): error TS2304: Cannot find name 'a'.
+fileJs.js(1,5): error TS2304: Cannot find name 'b'.
+fileJs.js(1,9): error TS2304: Cannot find name 'c'.
+fileJs.js(1,14): error TS2304: Cannot find name 'd'.
+fileJs.js(1,24): error TS2304: Cannot find name 'f'.
+fileTs.ts(1,1): error TS2304: Cannot find name 'a'.
+fileTs.ts(1,5): error TS2304: Cannot find name 'b'.
+fileTs.ts(1,9): error TS2304: Cannot find name 'c'.
+fileTs.ts(1,14): error TS2304: Cannot find name 'd'.
+fileTs.ts(1,24): error TS2304: Cannot find name 'f'.
+
+
+==== fileJs.js (5 errors) ====
+    a ? b ? c : (d) : e => f // Legal JS
+    ~
+!!! error TS2304: Cannot find name 'a'.
+        ~
+!!! error TS2304: Cannot find name 'b'.
+            ~
+!!! error TS2304: Cannot find name 'c'.
+                 ~
+!!! error TS2304: Cannot find name 'd'.
+                           ~
+!!! error TS2304: Cannot find name 'f'.
+    
+==== fileTs.ts (5 errors) ====
+    a ? b ? c : (d) : e => f
+    ~
+!!! error TS2304: Cannot find name 'a'.
+        ~
+!!! error TS2304: Cannot find name 'b'.
+            ~
+!!! error TS2304: Cannot find name 'c'.
+                 ~
+!!! error TS2304: Cannot find name 'd'.
+                           ~
+!!! error TS2304: Cannot find name 'f'.
+    

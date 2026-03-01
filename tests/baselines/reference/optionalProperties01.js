@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts] ////
+
 //// [optionalProperties01.ts]
 interface Foo {
   required1: string;
@@ -10,8 +12,9 @@ const foo2 = { required1: "hello", optional: "bar" } as Foo;
 
 
 //// [optionalProperties01.js]
-var foo1 = { required1: "hello" };
-var foo2 = { required1: "hello", optional: "bar" };
+"use strict";
+const foo1 = { required1: "hello" };
+const foo2 = { required1: "hello", optional: "bar" };
 
 
 //// [optionalProperties01.d.ts]

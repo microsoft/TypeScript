@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateInterfaceMembers1.ts ===
+//// [tests/cases/compiler/duplicateInterfaceMembers1.ts] ////
+
+=== duplicateInterfaceMembers1.ts ===
 interface Bar {
 >Bar : Symbol(Bar, Decl(duplicateInterfaceMembers1.ts, 0, 0))
 

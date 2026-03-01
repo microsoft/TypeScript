@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerConstraints.ts] ////
+
 //// [indexerConstraints.ts]
 interface A { a: number; }
 interface B extends A { b: number; }
@@ -44,3 +46,4 @@ interface K extends J {
 }
 
 //// [indexerConstraints.js]
+"use strict";

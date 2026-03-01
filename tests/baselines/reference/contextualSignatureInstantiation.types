@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/contextualSignatureInstantiation.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/contextualSignatureInstantiation.ts] ////
+
+=== contextualSignatureInstantiation.ts ===
 // TypeScript Spec, section 4.12.2:
 // If e is an expression of a function type that contains exactly one generic call signature and no other members,
 // and T is a function type with exactly one non - generic call signature and no other members, then any inferences
@@ -7,118 +9,199 @@
 
 declare function foo<T>(cb: (x: number, y: string) => T): T;
 >foo : <T>(cb: (x: number, y: string) => T) => T
+>    : ^ ^^  ^^                           ^^^^^ 
 >cb : (x: number, y: string) => T
+>   : ^ ^^      ^^ ^^      ^^^^^ 
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
 declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 >cb : (x: T, y: U) => V
+>   : ^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 declare function baz<T, U>(x: T, y: T, cb: (x: T, y: T) => U): U;
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >x : T
+>  : ^
 >y : T
+>  : ^
 >cb : (x: T, y: T) => U
+>   : ^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 declare function g<T>(x: T, y: T): T;
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : T
+>  : ^
 
 declare function h<T, U>(x: T, y: U): T[] | U[];
 >h : <T, U>(x: T, y: U) => T[] | U[]
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 >x : T
+>  : ^
 >y : U
+>  : ^
 
 var a: number;
 >a : number
+>  : ^^^^^^
 
 var a = bar(1, 1, g);      // Should be number
 >a : number
+>  : ^^^^^^
 >bar(1, 1, g) : number
+>             : ^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var a = baz(1, 1, g);      // Should be number
 >a : number
+>  : ^^^^^^
 >baz(1, 1, g) : number
+>             : ^^^^^^
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var b: number | string;
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 
 var b = foo(g);            // Error, number and string are disjoint types
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >foo(g) : unknown
+>       : ^^^^^^^
 >foo : <T>(cb: (x: number, y: string) => T) => T
+>    : ^ ^^  ^^                           ^^^^^ 
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var b = bar(1, "one", g);  // Error, number and string are disjoint types
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >bar(1, "one", g) : unknown
+>                 : ^^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >1 : 1
+>  : ^
 >"one" : "one"
+>      : ^^^^^
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var b = bar("one", 1, g);  // Error, number and string are disjoint types
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >bar("one", 1, g) : unknown
+>                 : ^^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >"one" : "one"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var b = baz(b, b, g);      // Should be number | string
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >baz(b, b, g) : string | number
+>             : ^^^^^^^^^^^^^^^
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 
 var d: number[] | string[];
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 
 var d = foo(h);            // Should be number[] | string[]
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >foo(h) : number[] | string[]
+>       : ^^^^^^^^^^^^^^^^^^^
 >foo : <T>(cb: (x: number, y: string) => T) => T
+>    : ^ ^^  ^^                           ^^^^^ 
 >h : <T, U>(x: T, y: U) => T[] | U[]
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 
 var d = bar(1, "one", h);  // Should be number[] | string[]
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >bar(1, "one", h) : number[] | string[]
+>                 : ^^^^^^^^^^^^^^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >1 : 1
+>  : ^
 >"one" : "one"
+>      : ^^^^^
 >h : <T, U>(x: T, y: U) => T[] | U[]
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >bar("one", 1, h) : number[] | string[]
+>                 : ^^^^^^^^^^^^^^^^^^^
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >"one" : "one"
+>      : ^^^^^
 >1 : 1
+>  : ^
 >h : <T, U>(x: T, y: U) => T[] | U[]
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^         
 
 var d = baz(d, d, g);      // Should be number[] | string[]
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >baz(d, d, g) : number[] | string[]
+>             : ^^^^^^^^^^^^^^^^^^^
 >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^  ^^                 ^^^^^ 
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >d : number[] | string[]
+>  : ^^^^^^^^^^^^^^^^^^^
 >g : <T>(x: T, y: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 

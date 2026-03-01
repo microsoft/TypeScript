@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts] ////
+
 //// [thisTypeInFunctionsNegative.ts]
 class C {
     n: number;
@@ -102,7 +104,7 @@ let reconstructed: {
 
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
-let explicitXProperty: (this: { x: number }, m: number) => number;
+declare let explicitXProperty: (this: { x: number }, m: number) => number;
 
 // from differing object types
 c.explicitC = function(this: D, m: number) { return this.x + m };
@@ -178,8 +180,15 @@ const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 const f3 = async (this: {n: number}, m: number) => m + this.n;
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 
+class Derived3 extends Base2 {
+    f(this: this) {
+        super.polymorphic();
+    }
+}
+
 
 //// [thisTypeInFunctionsNegative.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -219,7 +228,7 @@ let impl = {
     explicitVoid1() {
         return this.a; // error, no 'a' in 'void'
     },
-    explicitVoid2: () => this.a,
+    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object
     explicitStructural: () => 12,
     explicitInterface: () => 12,
     explicitThis() {
@@ -272,7 +281,6 @@ let reconstructed = {
 ;
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
-let explicitXProperty;
 // from differing object types
 c.explicitC = function (m) { return this.x + m; };
 c.explicitProperty = explicitXProperty;
@@ -330,5 +338,10 @@ number;
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (m) => m + this.n;
 const f2 = (m) => m + this.n;
-const f3 = (m) => __awaiter(this, void 0, void 0, function* () { return m + this.n; });
-const f4 = (m) => __awaiter(this, void 0, void 0, function* () { return m + this.n; });
+const f3 = (m) => __awaiter(void 0, void 0, void 0, function* () { return m + this.n; });
+const f4 = (m) => __awaiter(void 0, void 0, void 0, function* () { return m + this.n; });
+class Derived3 extends Base2 {
+    f() {
+        super.polymorphic();
+    }
+}

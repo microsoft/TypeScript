@@ -1,12 +1,12 @@
-tests/cases/compiler/recursiveTypeRelations.ts(8,5): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/recursiveTypeRelations.ts(27,38): error TS2552: Cannot find name 'ClassNameObject'. Did you mean 'ClassNameObjectMap'?
-tests/cases/compiler/recursiveTypeRelations.ts(27,55): error TS2345: Argument of type '(obj: ClassNameObject, key: keyof S) => ClassNameObject' is not assignable to parameter of type '(previousValue: ClassNameObject, currentValue: string, currentIndex: number, array: string[]) => ClassNameObject'.
+recursiveTypeRelations.ts(8,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+recursiveTypeRelations.ts(27,38): error TS2552: Cannot find name 'ClassNameObject'. Did you mean 'ClassNameObjectMap'?
+recursiveTypeRelations.ts(27,55): error TS2345: Argument of type '(obj: ClassNameObject, key: keyof S) => ClassNameObject' is not assignable to parameter of type '(previousValue: ClassNameObject, currentValue: string, currentIndex: number, array: string[]) => ClassNameObject'.
   Types of parameters 'key' and 'currentValue' are incompatible.
     Type 'string' is not assignable to type 'keyof S'.
-tests/cases/compiler/recursiveTypeRelations.ts(27,61): error TS2552: Cannot find name 'ClassNameObject'. Did you mean 'ClassNameObjectMap'?
+recursiveTypeRelations.ts(27,61): error TS2552: Cannot find name 'ClassNameObject'. Did you mean 'ClassNameObjectMap'?
 
 
-==== tests/cases/compiler/recursiveTypeRelations.ts (4 errors) ====
+==== recursiveTypeRelations.ts (4 errors) ====
     // Repro from #14896
     
     type Attributes<Keys extends keyof any> = {

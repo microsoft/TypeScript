@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts] ////
+
+=== stringLiteralTypesOverloads05.ts ===
 interface Animal { animal: {} };
 >Animal : Symbol(Animal, Decl(stringLiteralTypesOverloads05.ts, 0, 0))
 >animal : Symbol(Animal.animal, Decl(stringLiteralTypesOverloads05.ts, 0, 18))

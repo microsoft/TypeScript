@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType7_ES6.ts] ////
+
 //// [computedPropertyNamesContextualType7_ES6.ts]
 interface I<T> {
     [n: number]: T;
@@ -20,6 +22,7 @@ g({ p: "" });
 
 
 //// [computedPropertyNamesContextualType7_ES6.js]
+"use strict";
 foo({
     0: () => { },
     ["hi" + "bye"]: true,

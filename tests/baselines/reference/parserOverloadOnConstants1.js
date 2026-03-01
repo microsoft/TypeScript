@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserOverloadOnConstants1.ts] ////
+
 //// [parserOverloadOnConstants1.ts]
 interface Document {
     createElement(tagName: string): HTMLElement;
@@ -7,3 +9,4 @@ interface Document {
 }
 
 //// [parserOverloadOnConstants1.js]
+"use strict";

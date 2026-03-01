@@ -1,31 +1,46 @@
-=== tests/cases/compiler/recursiveReverseMappedType.ts ===
+//// [tests/cases/compiler/recursiveReverseMappedType.ts] ////
+
+=== recursiveReverseMappedType.ts ===
 // Repro from #38198
 
 type Recur<T> = (
 >Recur : Recur<T>
+>      : ^^^^^^^^
 
     T extends (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]> }
 ) | ['marker', ...Recur<T>[]];
 
 function join<T>(l: Recur<T>[]): Recur<T> {
 >join : <T>(l: Recur<T>[]) => Recur<T>
+>     : ^ ^^ ^^          ^^^^^        
 >l : Recur<T>[]
+>  : ^^^^^^^^^^
 
     return ['marker', ...l];
 >['marker', ...l] : ["marker", ...Recur<T>[]]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'marker' : "marker"
+>         : ^^^^^^^^
 >...l : Recur<T>
+>     : ^^^^^^^^
 >l : Recur<T>[]
+>  : ^^^^^^^^^^
 }
 
 function a<T>(l: Recur<T>[]): void {
 >a : <T>(l: Recur<T>[]) => void
+>  : ^ ^^ ^^          ^^^^^    
 >l : Recur<T>[]
+>  : ^^^^^^^^^^
 
     const x: Recur<T> | undefined = join(l);
 >x : Recur<T> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 >join(l) : Recur<T>
->join : <T>(l: Recur<T>[]) => Recur<T>
+>        : ^^^^^^^^
+>join : <T_1>(l: Recur<T_1>[]) => Recur<T_1>
+>     : ^^^^^^ ^^            ^^^^^          
 >l : Recur<T>[]
+>  : ^^^^^^^^^^
 }
 

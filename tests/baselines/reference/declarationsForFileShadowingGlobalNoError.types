@@ -1,33 +1,48 @@
-=== tests/cases/compiler/dom.ts ===
+//// [tests/cases/compiler/declarationsForFileShadowingGlobalNoError.ts] ////
+
+=== dom.ts ===
 export type DOMNode = Node;
 >DOMNode : Node
+>        : ^^^^
 
-=== tests/cases/compiler/custom.ts ===
+=== custom.ts ===
 export type Node = {};
->Node : {}
+>Node : Node
+>     : ^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { Node } from './custom'
 >Node : any
+>     : ^^^
 
 import { DOMNode } from './dom'
 >DOMNode : any
+>        : ^^^
 
 type Constructor = new (...args: any[]) => any
->Constructor : new (...args: any[]) => any
+>Constructor : Constructor
+>            : ^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 export const mixin = (Base: Constructor) => {
 >mixin : (Base: Constructor) => typeof (Anonymous class)
+>      : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(Base: Constructor) => {  return class extends Base {    get(domNode: DOMNode) {}  }} : (Base: Constructor) => typeof (Anonymous class)
+>                                                                                      : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Constructor
+>     : ^^^^^^^^^^^
 
   return class extends Base {
 >class extends Base {    get(domNode: DOMNode) {}  } : typeof (Anonymous class)
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Constructor
+>     : ^^^^^^^^^^^
 
     get(domNode: DOMNode) {}
 >get : (domNode: DOMNode) => void
+>    : ^       ^^       ^^^^^^^^^
 >domNode : globalThis.Node
+>        : ^^^^^^^^^^^^^^^
   }
 }

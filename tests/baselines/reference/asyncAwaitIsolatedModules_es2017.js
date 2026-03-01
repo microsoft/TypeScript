@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/asyncAwaitIsolatedModules_es2017.ts] ////
+
 //// [asyncAwaitIsolatedModules_es2017.ts]
 import { MyPromise } from "missing";
 
@@ -35,7 +37,7 @@ class C {
 	static async m6(): MyPromise<void> { }
 }
 
-module M {
+namespace M {
 	export async function f1() { }
 }
 

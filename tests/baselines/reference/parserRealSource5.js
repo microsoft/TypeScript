@@ -1,10 +1,12 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts] ////
+
 //// [parserRealSource5.ts]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     // TODO: refactor indent logic for use in emit
     export class PrintContext {
         public builder = "";
@@ -67,14 +69,15 @@ module TypeScript {
 }
 
 //// [parserRealSource5.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
     // TODO: refactor indent logic for use in emit
-    var PrintContext = /** @class */ (function () {
-        function PrintContext(outfile, parser) {
+    class PrintContext {
+        constructor(outfile, parser) {
             this.outfile = outfile;
             this.parser = parser;
             this.builder = "";
@@ -82,13 +85,13 @@ var TypeScript;
             this.indentStrings = [];
             this.indentAmt = 0;
         }
-        PrintContext.prototype.increaseIndent = function () {
+        increaseIndent() {
             this.indentAmt++;
-        };
-        PrintContext.prototype.decreaseIndent = function () {
+        }
+        decreaseIndent() {
             this.indentAmt--;
-        };
-        PrintContext.prototype.startLine = function () {
+        }
+        startLine() {
             if (this.builder.length > 0) {
                 CompilerDiagnostics.Alert(this.builder);
             }
@@ -101,17 +104,16 @@ var TypeScript;
                 this.indentStrings[this.indentAmt] = indentString;
             }
             this.builder += indentString;
-        };
-        PrintContext.prototype.write = function (s) {
+        }
+        write(s) {
             this.builder += s;
-        };
-        PrintContext.prototype.writeLine = function (s) {
+        }
+        writeLine(s) {
             this.builder += s;
             this.outfile.WriteLine(this.builder);
             this.builder = "";
-        };
-        return PrintContext;
-    }());
+        }
+    }
     TypeScript.PrintContext = PrintContext;
     function prePrintAST(ast, parent, walker) {
         var pc = walker.state;

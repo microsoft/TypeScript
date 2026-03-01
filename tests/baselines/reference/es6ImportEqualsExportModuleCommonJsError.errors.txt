@@ -1,11 +1,11 @@
-tests/cases/compiler/main.ts(1,20): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+main.ts(1,20): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     class a { }
     export = a;
     
-==== tests/cases/compiler/main.ts (1 errors) ====
+==== main.ts (1 errors) ====
     import * as a from "./a";
                        ~~~~~
 !!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.

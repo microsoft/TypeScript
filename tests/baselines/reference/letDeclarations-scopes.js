@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-scopes.ts] ////
+
 //// [letDeclarations-scopes.ts]
 // global
 let l = "string";
@@ -108,7 +110,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     let l = 0;
     n = l;
 
@@ -157,6 +159,7 @@ var o = {
 }
 
 //// [letDeclarations-scopes.js]
+"use strict";
 // global
 let l = "string";
 var n;

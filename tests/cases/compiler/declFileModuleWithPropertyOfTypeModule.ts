@@ -1,6 +1,7 @@
+// @target: es2015
 // @declaration: true
 
-module m {
+namespace m {
     export class c {
     }
 

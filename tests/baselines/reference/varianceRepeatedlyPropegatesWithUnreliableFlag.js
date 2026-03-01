@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts] ////
+
 //// [varianceRepeatedlyPropegatesWithUnreliableFlag.ts]
 type A = { a: number };
 type B = { b: number };
@@ -18,8 +20,9 @@ i.fn(null as any, p2);
 const _i: I<A> = i;
 
 //// [varianceRepeatedlyPropegatesWithUnreliableFlag.js]
-var i = null;
-var p2 = null;
+"use strict";
+const i = null;
+const p2 = null;
 // Commenting out the below line will remove the error on the `const _i: I<A> = i;`
 i.fn(null, p2);
-var _i = i;
+const _i = i;

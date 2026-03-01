@@ -1,17 +1,26 @@
-=== tests/cases/conformance/expressions/optionalChaining/callChain/thisMethodCall.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/thisMethodCall.ts] ////
+
+=== thisMethodCall.ts ===
 class C {
 >C : C
+>  : ^
 
     method?() {}
 >method : (() => void) | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     other() {
 >other : () => void
+>      : ^^^^^^^^^^
 
         this.method?.();
 >this.method?.() : void | undefined
+>                : ^^^^^^^^^^^^^^^^
 >this.method : (() => void) | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >method : (() => void) | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

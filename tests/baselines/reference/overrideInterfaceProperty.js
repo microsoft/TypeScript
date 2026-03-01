@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/overrideInterfaceProperty.ts] ////
+
 //// [overrideInterfaceProperty.ts]
 interface Mup<K, V> {
     readonly size: number;
@@ -19,6 +21,7 @@ class Kasizz extends Mup {
 
 
 //// [overrideInterfaceProperty.js]
+"use strict";
 class Sizz extends Mup {
     // ok, because Mup is an interface
     get size() { return 0; }

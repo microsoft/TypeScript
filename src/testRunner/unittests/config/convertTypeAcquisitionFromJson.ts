@@ -1,239 +1,81 @@
-namespace ts {
-    interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
-    describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
-        function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
-            assertTypeAcquisitionWithJson(json, configFileName, expectedResult);
-            assertTypeAcquisitionWithJsonNode(json, configFileName, expectedResult);
-        }
+import * as fakes from "../../_namespaces/fakes.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { baselineParseConfig } from "./helpers.js";
 
-        function verifyAcquisition(actualTypeAcquisition: TypeAcquisition | undefined, expectedResult: ExpectedResult) {
-            const parsedTypeAcquisition = JSON.stringify(actualTypeAcquisition);
-            const expectedTypeAcquisition = JSON.stringify(expectedResult.typeAcquisition);
-            assert.equal(parsedTypeAcquisition, expectedTypeAcquisition);
-        }
-
-        function verifyErrors(actualErrors: Diagnostic[], expectedResult: ExpectedResult, hasLocation?: boolean) {
-            const expectedErrors = expectedResult.errors;
-            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
-            for (let i = 0; i < actualErrors.length; i++) {
-                const actualError = actualErrors[i];
-                const expectedError = expectedErrors[i];
-                assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
-                assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
-                if (hasLocation) {
-                    assert(actualError.file);
-                    assert(actualError.start);
-                    assert(actualError.length);
-                }
-            }
-        }
-
-        function assertTypeAcquisitionWithJson(json: any, configFileName: string, expectedResult: ExpectedResult) {
-            const jsonOptions = json.typeAcquisition || json.typingOptions;
-            const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
-            verifyAcquisition(actualTypeAcquisition, expectedResult);
-            verifyErrors(actualErrors, expectedResult);
-        }
-
-        function assertTypeAcquisitionWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResult) {
-            const fileText = JSON.stringify(json);
-            const result = parseJsonText(configFileName, fileText);
-            assert(!result.parseDiagnostics.length);
-            assert(!!result.endOfFileToken);
-            const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
-            const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
-            verifyAcquisition(actualTypeAcquisition, expectedResult);
-
-            const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
-            verifyErrors(actualErrors, expectedResult, /*hasLocation*/ true);
-        }
-
-        // tsconfig.json
-        it("Convert deprecated typingOptions.enableAutoDiscovery format tsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typingOptions:
-                    {
-                        enableAutoDiscovery: true,
-                        include: ["0.d.ts", "1.d.ts"],
-                        exclude: ["0.js", "1.js"]
-                    }
-                },
-                "tsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: true,
-                        include: ["0.d.ts", "1.d.ts"],
-                        exclude: ["0.js", "1.js"]
-                    },
-                    errors: [] as Diagnostic[]
-                }
-            );
+describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
+    function baselineTypeAcquisition(subScenario: string, json: any, configFileName: string) {
+        baselineParseConfig({
+            scenario: "convertTypeAcquisitionFromJson",
+            subScenario,
+            input: () => {
+                const jsonText = jsonToReadableText(json);
+                return [{
+                    createHost: () =>
+                        new fakes.ParseConfigHost(
+                            new vfs.FileSystem(
+                                /*ignoreCase*/ false,
+                                {
+                                    cwd: "/apath/",
+                                    files: {
+                                        [`/apath/${configFileName}`]: jsonText,
+                                        "/apath/a.ts": "",
+                                        "/apath/b.js": "",
+                                    },
+                                },
+                            ),
+                        ),
+                    jsonText,
+                    configFileName,
+                    basePath: "/apath",
+                    baselineParsed: (baseline, parsed) => baseline.push("TypeAcquisition::", jsonToReadableText(parsed.typeAcquisition)),
+                }];
+            },
         });
+    }
 
-        it("Convert correctly format tsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typeAcquisition:
-                    {
-                        enable: true,
-                        include: ["0.d.ts", "1.d.ts"],
-                        exclude: ["0.js", "1.js"]
-                    }
-                },
-                "tsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: true,
-                        include: ["0.d.ts", "1.d.ts"],
-                        exclude: ["0.js", "1.js"]
-                    },
-                    errors: [] as Diagnostic[]
-                });
-        });
+    baselineTypeAcquisition("Convert correctly format tsconfig.json to typeAcquisition ", {
+        typeAcquisition: {
+            enable: true,
+            include: ["0.d.ts", "1.d.ts"],
+            exclude: ["0.js", "1.js"],
+        },
+    }, "tsconfig.json");
 
-        it("Convert incorrect format tsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typeAcquisition:
-                    {
-                        enableAutoDiscovy: true,
-                    }
-                }, "tsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: false,
-                        include: [],
-                        exclude: []
-                    },
-                    errors: [
-                        {
-                            category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                            code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
-                            file: undefined,
-                            start: 0,
-                            length: 0,
-                            messageText: undefined!, // TODO: GH#18217
-                        }
-                    ]
-                });
-        });
+    baselineTypeAcquisition("Convert incorrect format tsconfig.json to typeAcquisition ", {
+        typeAcquisition: {
+            enableAutoDiscovy: true,
+        },
+    }, "tsconfig.json");
 
-        it("Convert default tsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition({}, "tsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: false,
-                        include: [],
-                        exclude: []
-                    },
-                    errors: [] as Diagnostic[]
-                });
-        });
+    baselineTypeAcquisition("Convert default tsconfig.json to typeAcquisition ", {}, "tsconfig.json");
 
-        it("Convert tsconfig.json with only enable property to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typeAcquisition:
-                    {
-                        enable: true
-                    }
-                }, "tsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: true,
-                        include: [],
-                        exclude: []
-                    },
-                    errors: [] as Diagnostic[]
-                });
-        });
+    baselineTypeAcquisition("Convert tsconfig.json with only enable property to typeAcquisition ", {
+        typeAcquisition: {
+            enable: true,
+        },
+    }, "tsconfig.json");
 
-        // jsconfig.json
-        it("Convert jsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typeAcquisition:
-                    {
-                        enable: false,
-                        include: ["0.d.ts"],
-                        exclude: ["0.js"]
-                    }
-                }, "jsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: false,
-                        include: ["0.d.ts"],
-                        exclude: ["0.js"]
-                    },
-                    errors: [] as Diagnostic[]
-                });
-        });
+    // jsconfig.json
+    baselineTypeAcquisition("Convert jsconfig.json to typeAcquisition ", {
+        typeAcquisition: {
+            enable: false,
+            include: ["0.d.ts"],
+            exclude: ["0.js"],
+        },
+    }, "jsconfig.json");
 
-        it("Convert default jsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition({ }, "jsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: true,
-                        include: [],
-                        exclude: []
-                    },
-                    errors: [] as Diagnostic[]
-                });
-        });
+    baselineTypeAcquisition("Convert default jsconfig.json to typeAcquisition ", {}, "jsconfig.json");
 
-        it("Convert incorrect format jsconfig.json to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typeAcquisition:
-                    {
-                        enableAutoDiscovy: true,
-                    }
-                }, "jsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: true,
-                        include: [],
-                        exclude: []
-                    },
-                    errors: [
-                        {
-                            category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                            code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
-                            file: undefined,
-                            start: 0,
-                            length: 0,
-                            messageText: undefined!, // TODO: GH#18217
-                        }
-                    ]
-                });
-        });
+    baselineTypeAcquisition("Convert incorrect format jsconfig.json to typeAcquisition ", {
+        typeAcquisition: {
+            enableAutoDiscovy: true,
+        },
+    }, "jsconfig.json");
 
-        it("Convert jsconfig.json with only enable property to typeAcquisition ", () => {
-            assertTypeAcquisition(
-                {
-                    typeAcquisition:
-                    {
-                        enable: false
-                    }
-                }, "jsconfig.json",
-                {
-                    typeAcquisition:
-                    {
-                        enable: false,
-                        include: [],
-                        exclude: []
-                    },
-                    errors: [] as Diagnostic[]
-                });
-        });
-    });
-}
+    baselineTypeAcquisition("Convert jsconfig.json with only enable property to typeAcquisition ", {
+        typeAcquisition: {
+            enable: false,
+        },
+    }, "jsconfig.json");
+});

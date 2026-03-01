@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/giant.ts] ////
+
 //// [giant.ts]
 /*
     Prefixes
@@ -12,6 +14,7 @@
 
     MAX DEPTH 3 LEVELS
 */
+const p = "propName";
 var V;
 function F() { };
 class C {
@@ -75,7 +78,7 @@ interface I {
     p7(pa1, pa2): void;
     p7? (pa1, pa2): void;
 }
-module M {
+namespace M {
     var V;
     function F() { };
     class C {
@@ -139,21 +142,21 @@ module M {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
     export function eF() { };
@@ -218,21 +221,21 @@ module M {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    export module eM {
+    export namespace eM {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
     export declare function eaF() { };
@@ -257,17 +260,17 @@ module M {
         static tgF() { }
         static get tgF()
     }
-    export declare module eaM {
+    export declare namespace eaM {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export var eV;
@@ -333,7 +336,7 @@ export interface eI {
     p7(pa1, pa2): void;
     p7? (pa1, pa2): void;
 }
-export module eM {
+export namespace eM {
     var V;
     function F() { };
     class C {
@@ -397,21 +400,21 @@ export module eM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export var eV;
     export function eF() { };
@@ -476,21 +479,21 @@ export module eM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    export module eM {
+    export namespace eM {
         var V;
         function F() { };
         class C { };
         interface I { };
-        module M { };
+        namespace M { };
         export var eV;
         export function eF() { };
         export class eC { };
         export interface eI { };
-        export module eM { };
+        export namespace eM { };
         export declare var eaV;
         export declare function eaF() { };
         export declare class eaC { };
-        export declare module eaM { };
+        export declare namespace eaM { };
     }
     export declare var eaV;
     export declare function eaF() { };
@@ -515,17 +518,17 @@ export module eM {
         static tgF() { }
         static get tgF()
     }
-    export declare module eaM {
+    export declare namespace eaM {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 export declare var eaV;
@@ -551,7 +554,7 @@ export declare class eaC {
     static tgF() { }
     static get tgF()
 }
-export declare module eaM {
+export declare namespace eaM {
     var V;
     function F() { };
     class C {
@@ -601,21 +604,21 @@ export declare module eaM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    module M {
+    namespace M {
         var V;
         function F() { };
         class C { }
         interface I { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
         export declare var eaV
         export declare function eaF() { };
         export declare class eaC { }
-        export declare module eaM { }
+        export declare namespace eaM { }
     }
     export var eV;
     export function eF() { };
@@ -667,451 +670,271 @@ export declare module eaM {
         p7(pa1, pa2): void;
         p7? (pa1, pa2): void;
     }
-    export module eM {
+    export namespace eM {
         var V;
         function F() { };
         class C { }
-        module M { }
+        namespace M { }
         export var eV;
         export function eF() { };
         export class eC { }
         export interface eI { }
-        export module eM { }
+        export namespace eM { }
     }
 }
 
 //// [giant.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.eM = exports.eC = exports.eF = exports.eV = void 0;
-    /*
-        Prefixes
-        p -> public
-        r -> private
-        i -> import
-        e -> export
-        a -> ambient
-        t -> static
-        s -> set
-        g -> get
-    
-        MAX DEPTH 3 LEVELS
-    */
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.eM = exports.eC = exports.eV = void 0;
+exports.eF = eF;
+/*
+    Prefixes
+    p -> public
+    r -> private
+    i -> import
+    e -> export
+    a -> ambient
+    t -> static
+    s -> set
+    g -> get
+
+    MAX DEPTH 3 LEVELS
+*/
+const p = "propName";
+var V;
+function F() { }
+;
+class C {
+    constructor() { }
+    pF() { }
+    rF() { }
+    pgF() { }
+    get pgF() { }
+    psF(param) { }
+    set psF(param) { }
+    rgF() { }
+    get rgF() { }
+    rsF(param) { }
+    set rsF(param) { }
+    static tF() { }
+    static tsF(param) { }
+    static set tsF(param) { }
+    static tgF() { }
+    static get tgF() { }
+}
+var M;
+(function (M_1) {
     var V;
     function F() { }
     ;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.pF = function () { };
-        C.prototype.rF = function () { };
-        C.prototype.pgF = function () { };
-        Object.defineProperty(C.prototype, "pgF", {
-            get: function () { },
-            enumerable: false,
-            configurable: true
-        });
-        C.prototype.psF = function (param) { };
-        Object.defineProperty(C.prototype, "psF", {
-            set: function (param) { },
-            enumerable: false,
-            configurable: true
-        });
-        C.prototype.rgF = function () { };
-        Object.defineProperty(C.prototype, "rgF", {
-            get: function () { },
-            enumerable: false,
-            configurable: true
-        });
-        C.prototype.rsF = function (param) { };
-        Object.defineProperty(C.prototype, "rsF", {
-            set: function (param) { },
-            enumerable: false,
-            configurable: true
-        });
-        C.tF = function () { };
-        C.tsF = function (param) { };
-        Object.defineProperty(C, "tsF", {
-            set: function (param) { },
-            enumerable: false,
-            configurable: true
-        });
-        C.tgF = function () { };
-        Object.defineProperty(C, "tgF", {
-            get: function () { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
-    var M;
-    (function (M_1) {
+    class C {
+        constructor() { }
+        pF() { }
+        rF() { }
+        pgF() { }
+        get pgF() { }
+        psF(param) { }
+        set psF(param) { }
+        rgF() { }
+        get rgF() { }
+        rsF(param) { }
+        set rsF(param) { }
+        static tF() { }
+        static tsF(param) { }
+        static set tsF(param) { }
+        static tgF() { }
+        static get tgF() { }
+    }
+    let M;
+    (function (M) {
         var V;
         function F() { }
         ;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            C.prototype.pF = function () { };
-            C.prototype.rF = function () { };
-            C.prototype.pgF = function () { };
-            Object.defineProperty(C.prototype, "pgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            C.prototype.psF = function (param) { };
-            Object.defineProperty(C.prototype, "psF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            C.prototype.rgF = function () { };
-            Object.defineProperty(C.prototype, "rgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            C.prototype.rsF = function (param) { };
-            Object.defineProperty(C.prototype, "rsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            C.tF = function () { };
-            C.tsF = function (param) { };
-            Object.defineProperty(C, "tsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            C.tgF = function () { };
-            Object.defineProperty(C, "tgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            return C;
-        }());
-        var M;
-        (function (M) {
-            var V;
-            function F() { }
-            ;
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            ;
-            ;
-            ;
-            function eF() { }
-            M.eF = eF;
-            ;
-            var eC = /** @class */ (function () {
-                function eC() {
-                }
-                return eC;
-            }());
-            M.eC = eC;
-            ;
-            ;
-            ;
-            ;
-            ;
-            ;
-        })(M || (M = {}));
-        function eF() { }
-        M_1.eF = eF;
+        class C {
+        }
         ;
-        var eC = /** @class */ (function () {
-            function eC() {
-            }
-            eC.prototype.pF = function () { };
-            eC.prototype.rF = function () { };
-            eC.prototype.pgF = function () { };
-            Object.defineProperty(eC.prototype, "pgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.prototype.psF = function (param) { };
-            Object.defineProperty(eC.prototype, "psF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.prototype.rgF = function () { };
-            Object.defineProperty(eC.prototype, "rgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.prototype.rsF = function (param) { };
-            Object.defineProperty(eC.prototype, "rsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.tF = function () { };
-            eC.tsF = function (param) { };
-            Object.defineProperty(eC, "tsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.tgF = function () { };
-            Object.defineProperty(eC, "tgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            return eC;
-        }());
-        M_1.eC = eC;
-        var eM;
-        (function (eM) {
-            var V;
-            function F() { }
-            ;
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            ;
-            ;
-            ;
-            function eF() { }
-            eM.eF = eF;
-            ;
-            var eC = /** @class */ (function () {
-                function eC() {
-                }
-                return eC;
-            }());
-            eM.eC = eC;
-            ;
-            ;
-            ;
-            ;
-            ;
-            ;
-        })(eM = M_1.eM || (M_1.eM = {}));
+        ;
+        ;
+        function eF() { }
+        M.eF = eF;
+        ;
+        class eC {
+        }
+        M.eC = eC;
+        ;
+        ;
+        ;
+        ;
+        ;
         ;
     })(M || (M = {}));
     function eF() { }
-    exports.eF = eF;
+    M_1.eF = eF;
     ;
-    var eC = /** @class */ (function () {
-        function eC() {
-        }
-        eC.prototype.pF = function () { };
-        eC.prototype.rF = function () { };
-        eC.prototype.pgF = function () { };
-        Object.defineProperty(eC.prototype, "pgF", {
-            get: function () { },
-            enumerable: false,
-            configurable: true
-        });
-        eC.prototype.psF = function (param) { };
-        Object.defineProperty(eC.prototype, "psF", {
-            set: function (param) { },
-            enumerable: false,
-            configurable: true
-        });
-        eC.prototype.rgF = function () { };
-        Object.defineProperty(eC.prototype, "rgF", {
-            get: function () { },
-            enumerable: false,
-            configurable: true
-        });
-        eC.prototype.rsF = function (param) { };
-        Object.defineProperty(eC.prototype, "rsF", {
-            set: function (param) { },
-            enumerable: false,
-            configurable: true
-        });
-        eC.tF = function () { };
-        eC.tsF = function (param) { };
-        Object.defineProperty(eC, "tsF", {
-            set: function (param) { },
-            enumerable: false,
-            configurable: true
-        });
-        eC.tgF = function () { };
-        Object.defineProperty(eC, "tgF", {
-            get: function () { },
-            enumerable: false,
-            configurable: true
-        });
-        return eC;
-    }());
-    exports.eC = eC;
-    var eM;
-    (function (eM_1) {
+    class eC {
+        constructor() { }
+        pF() { }
+        rF() { }
+        pgF() { }
+        get pgF() { }
+        psF(param) { }
+        set psF(param) { }
+        rgF() { }
+        get rgF() { }
+        rsF(param) { }
+        set rsF(param) { }
+        static tF() { }
+        static tsF(param) { }
+        static set tsF(param) { }
+        static tgF() { }
+        static get tgF() { }
+    }
+    M_1.eC = eC;
+    let eM;
+    (function (eM) {
         var V;
         function F() { }
         ;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            C.prototype.pF = function () { };
-            C.prototype.rF = function () { };
-            C.prototype.pgF = function () { };
-            Object.defineProperty(C.prototype, "pgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            C.prototype.psF = function (param) { };
-            Object.defineProperty(C.prototype, "psF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            C.prototype.rgF = function () { };
-            Object.defineProperty(C.prototype, "rgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            C.prototype.rsF = function (param) { };
-            Object.defineProperty(C.prototype, "rsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            C.tF = function () { };
-            C.tsF = function (param) { };
-            Object.defineProperty(C, "tsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            C.tgF = function () { };
-            Object.defineProperty(C, "tgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            return C;
-        }());
-        var M;
-        (function (M) {
-            var V;
-            function F() { }
-            ;
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            ;
-            ;
-            ;
-            function eF() { }
-            M.eF = eF;
-            ;
-            var eC = /** @class */ (function () {
-                function eC() {
-                }
-                return eC;
-            }());
-            M.eC = eC;
-            ;
-            ;
-            ;
-            ;
-            ;
-            ;
-        })(M || (M = {}));
+        class C {
+        }
+        ;
+        ;
+        ;
         function eF() { }
-        eM_1.eF = eF;
+        eM.eF = eF;
         ;
-        var eC = /** @class */ (function () {
-            function eC() {
-            }
-            eC.prototype.pF = function () { };
-            eC.prototype.rF = function () { };
-            eC.prototype.pgF = function () { };
-            Object.defineProperty(eC.prototype, "pgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.prototype.psF = function (param) { };
-            Object.defineProperty(eC.prototype, "psF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.prototype.rgF = function () { };
-            Object.defineProperty(eC.prototype, "rgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.prototype.rsF = function (param) { };
-            Object.defineProperty(eC.prototype, "rsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.tF = function () { };
-            eC.tsF = function (param) { };
-            Object.defineProperty(eC, "tsF", {
-                set: function (param) { },
-                enumerable: false,
-                configurable: true
-            });
-            eC.tgF = function () { };
-            Object.defineProperty(eC, "tgF", {
-                get: function () { },
-                enumerable: false,
-                configurable: true
-            });
-            return eC;
-        }());
-        eM_1.eC = eC;
-        var eM;
-        (function (eM) {
-            var V;
-            function F() { }
-            ;
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            ;
-            ;
-            ;
-            function eF() { }
-            eM.eF = eF;
-            ;
-            var eC = /** @class */ (function () {
-                function eC() {
-                }
-                return eC;
-            }());
-            eM.eC = eC;
-            ;
-            ;
-            ;
-            ;
-            ;
-            ;
-        })(eM = eM_1.eM || (eM_1.eM = {}));
+        class eC {
+        }
+        eM.eC = eC;
         ;
-    })(eM = exports.eM || (exports.eM = {}));
+        ;
+        ;
+        ;
+        ;
+        ;
+    })(eM = M_1.eM || (M_1.eM = {}));
     ;
-});
+})(M || (M = {}));
+function eF() { }
+;
+class eC {
+    constructor() { }
+    pF() { }
+    rF() { }
+    pgF() { }
+    get pgF() { }
+    psF(param) { }
+    set psF(param) { }
+    rgF() { }
+    get rgF() { }
+    rsF(param) { }
+    set rsF(param) { }
+    static tF() { }
+    static tsF(param) { }
+    static set tsF(param) { }
+    static tgF() { }
+    static get tgF() { }
+}
+exports.eC = eC;
+var eM;
+(function (eM_1) {
+    var V;
+    function F() { }
+    ;
+    class C {
+        constructor() { }
+        pF() { }
+        rF() { }
+        pgF() { }
+        get pgF() { }
+        psF(param) { }
+        set psF(param) { }
+        rgF() { }
+        get rgF() { }
+        rsF(param) { }
+        set rsF(param) { }
+        static tF() { }
+        static tsF(param) { }
+        static set tsF(param) { }
+        static tgF() { }
+        static get tgF() { }
+    }
+    let M;
+    (function (M) {
+        var V;
+        function F() { }
+        ;
+        class C {
+        }
+        ;
+        ;
+        ;
+        function eF() { }
+        M.eF = eF;
+        ;
+        class eC {
+        }
+        M.eC = eC;
+        ;
+        ;
+        ;
+        ;
+        ;
+        ;
+    })(M || (M = {}));
+    function eF() { }
+    eM_1.eF = eF;
+    ;
+    class eC {
+        constructor() { }
+        pF() { }
+        rF() { }
+        pgF() { }
+        get pgF() { }
+        psF(param) { }
+        set psF(param) { }
+        rgF() { }
+        get rgF() { }
+        rsF(param) { }
+        set rsF(param) { }
+        static tF() { }
+        static tsF(param) { }
+        static set tsF(param) { }
+        static tgF() { }
+        static get tgF() { }
+    }
+    eM_1.eC = eC;
+    let eM;
+    (function (eM) {
+        var V;
+        function F() { }
+        ;
+        class C {
+        }
+        ;
+        ;
+        ;
+        function eF() { }
+        eM.eF = eF;
+        ;
+        class eC {
+        }
+        eM.eC = eC;
+        ;
+        ;
+        ;
+        ;
+        ;
+        ;
+    })(eM = eM_1.eM || (eM_1.eM = {}));
+    ;
+})(eM || (exports.eM = eM = {}));
+;
 
 
 //// [giant.d.ts]
+declare const p = "propName";
 export declare var eV: any;
 export declare function eF(): void;
 export declare class eC {
@@ -1151,6 +974,7 @@ export interface eI {
     new (...p3: any[]): any;
     new (p4: string, p5?: string): any;
     new (p6: string, ...p7: any[]): any;
+    [p]: any;
     [p1: string]: any;
     [p2: string, p3: number]: any;
     p: any;
@@ -1163,7 +987,7 @@ export interface eI {
     p7(pa1: any, pa2: any): void;
     p7?(pa1: any, pa2: any): void;
 }
-export declare module eM {
+export declare namespace eM {
     var eV: any;
     function eF(): void;
     class eC {
@@ -1203,6 +1027,7 @@ export declare module eM {
         new (...p3: any[]): any;
         new (p4: string, p5?: string): any;
         new (p6: string, ...p7: any[]): any;
+        [p]: any;
         [p1: string]: any;
         [p2: string, p3: number]: any;
         p: any;
@@ -1215,19 +1040,19 @@ export declare module eM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module eM {
+    namespace eM {
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {
         }
-        module eaM { }
+        namespace eaM { }
     }
     var eaV: any;
     function eaF(): void;
@@ -1252,21 +1077,21 @@ export declare module eM {
         static tgF(): void;
         static get tgF(): any;
     }
-    module eaM {
+    namespace eaM {
         var V: any;
         function F(): void;
         class C {
         }
         interface I {
         }
-        module M { }
+        namespace M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
     }
 }
 export declare var eaV: any;
@@ -1292,7 +1117,7 @@ export declare class eaC {
     static tgF(): void;
     static get tgF(): any;
 }
-export declare module eaM {
+export declare namespace eaM {
     var V: any;
     function F(): void;
     class C {
@@ -1318,6 +1143,7 @@ export declare module eaM {
         new (...p3: any[]): any;
         new (p4: string, p5?: string): any;
         new (p6: string, ...p7: any[]): any;
+        [p]: any;
         [p1: string]: any;
         [p2: string, p3: number]: any;
         p: any;
@@ -1330,26 +1156,26 @@ export declare module eaM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module M {
+    namespace M {
         var V: any;
         function F(): void;
         class C {
         }
         interface I {
         }
-        module M { }
+        namespace M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {
         }
-        module eaM { }
+        namespace eaM { }
     }
     var eV: any;
     function eF(): void;
@@ -1377,6 +1203,7 @@ export declare module eaM {
         new (...p3: any[]): any;
         new (p4: string, p5?: string): any;
         new (p6: string, ...p7: any[]): any;
+        [p]: any;
         [p1: string]: any;
         [p2: string, p3: number]: any;
         p: any;
@@ -1389,18 +1216,19 @@ export declare module eaM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module eM {
+    namespace eM {
         var V: any;
         function F(): void;
         class C {
         }
-        module M { }
+        namespace M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
     }
 }
+export {};

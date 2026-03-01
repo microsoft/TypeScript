@@ -1,4 +1,6 @@
-=== tests/cases/compiler/umdDependencyCommentName1.ts ===
+//// [tests/cases/compiler/umdDependencyCommentName1.ts] ////
+
+=== umdDependencyCommentName1.ts ===
 ///<amd-dependency path='bar' name='b'/>
 
 import m1 = require("m2")

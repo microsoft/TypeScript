@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfOnTypeArg.ts] ////
+
 //// [typeOfOnTypeArg.ts]
 var A = { '': 3 };
 
@@ -9,6 +11,7 @@ fill(32);
 
 
 //// [typeOfOnTypeArg.js]
+"use strict";
 var A = { '': 3 };
 function fill(f) {
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/packageJsonMain_isNonRecursive.ts] ////
+
 === /a.ts ===
 import foo = require("foo");
 >foo : Symbol(foo, Decl(a.ts, 0, 0))

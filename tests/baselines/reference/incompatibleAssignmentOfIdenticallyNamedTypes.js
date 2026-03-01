@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts] ////
+
 //// [incompatibleAssignmentOfIdenticallyNamedTypes.ts]
 interface T { }
 declare const a: T;
@@ -10,11 +12,9 @@ class Foo<T> {
 
 
 //// [incompatibleAssignmentOfIdenticallyNamedTypes.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.fn = function () {
+"use strict";
+class Foo {
+    fn() {
         this.x = a;
-    };
-    return Foo;
-}());
+    }
+}

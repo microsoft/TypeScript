@@ -1,10 +1,15 @@
-=== tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts ===
+//// [tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts] ////
+
+=== reachabilityCheckWithEmptyDefault.ts ===
 declare function print(s: string): void;
 >print : { (): void; (s: string): void; }
+>      : ^^^^^^    ^^^ ^^      ^^^    ^^^
 >s : string
+>  : ^^^^^^
 
 function foo(x: any) {
 >foo : (x: any) => void
+>    : ^ ^^   ^^^^^^^^^
 >x : any
 
 	switch(x) {
@@ -12,11 +17,15 @@ function foo(x: any) {
 
 		case 1: return;
 >1 : 1
+>  : ^
 
 		default:
 	}
 	print('1');
 >print('1') : void
+>           : ^^^^
 >print : { (): void; (s: string): void; }
+>      : ^^^^^^    ^^^ ^^      ^^^    ^^^
 >'1' : "1"
+>    : ^^^
 }

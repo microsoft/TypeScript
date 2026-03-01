@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedRedeclarationInES6AMD.ts] ////
+
 //// [nestedRedeclarationInES6AMD.ts]
 function a() {
     {
@@ -7,6 +9,7 @@ function a() {
 }
 
 //// [nestedRedeclarationInES6AMD.js]
+"use strict";
 function a() {
     {
         let status = 1;

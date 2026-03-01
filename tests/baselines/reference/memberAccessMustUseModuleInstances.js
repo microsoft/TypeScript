@@ -17,21 +17,18 @@ WinJS.Promise.timeout(10);
 //// [memberAccessMustUseModuleInstances_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.Promise = void 0;
-    var Promise = /** @class */ (function () {
-        function Promise() {
-        }
-        Promise.timeout = function (delay) {
+    class Promise {
+        static timeout(delay) {
             return null;
-        };
-        return Promise;
-    }());
+        }
+    }
     exports.Promise = Promise;
 });
 //// [memberAccessMustUseModuleInstances_1.js]
 define(["require", "exports", "memberAccessMustUseModuleInstances_0"], function (require, exports, WinJS) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     WinJS.Promise.timeout(10);
 });

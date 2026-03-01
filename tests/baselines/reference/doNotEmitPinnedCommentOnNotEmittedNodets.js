@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitPinnedCommentOnNotEmittedNodets.ts] ////
+
 //// [doNotEmitPinnedCommentOnNotEmittedNodets.ts]
 class C {
     /*! remove pinned comment anywhere else */
@@ -9,9 +11,7 @@ class C {
 declare var OData: any;
 
 //// [doNotEmitPinnedCommentOnNotEmittedNodets.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x, y) { };
-    return C;
-}());
+"use strict";
+class C {
+    foo(x, y) { }
+}

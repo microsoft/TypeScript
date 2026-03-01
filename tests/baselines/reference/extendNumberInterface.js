@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/number/extendNumberInterface.ts] ////
+
 //// [extendNumberInterface.ts]
 interface Number {
     doStuff(): string;
@@ -11,6 +13,7 @@ var c: string = x['doStuff']();
 var d: string = x['doOtherStuff']('hm');
 
 //// [extendNumberInterface.js]
+"use strict";
 var x = 1;
 var a = x.doStuff();
 var b = x.doOtherStuff('hm');

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getterThatThrowsShouldNotNeedReturn.ts] ////
+
 //// [getterThatThrowsShouldNotNeedReturn.ts]
 class Greeter {
  public get greet(): string {
@@ -10,18 +12,12 @@ class Greeter {
 
 
 //// [getterThatThrowsShouldNotNeedReturn.js]
-var Greeter = /** @class */ (function () {
-    function Greeter() {
-    }
-    Object.defineProperty(Greeter.prototype, "greet", {
-        get: function () {
-            throw ''; // should not raise an error
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Greeter.prototype.greeting = function () {
+"use strict";
+class Greeter {
+    get greet() {
         throw ''; // should not raise an error
-    };
-    return Greeter;
-}());
+    }
+    greeting() {
+        throw ''; // should not raise an error
+    }
+}

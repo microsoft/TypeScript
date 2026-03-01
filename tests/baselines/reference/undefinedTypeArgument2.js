@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedTypeArgument2.ts] ////
+
 //// [undefinedTypeArgument2.ts]
 // once caused stack overflow
 interface Query<T> {
@@ -6,3 +8,4 @@ interface Query<T> {
 }
 
 //// [undefinedTypeArgument2.js]
+"use strict";

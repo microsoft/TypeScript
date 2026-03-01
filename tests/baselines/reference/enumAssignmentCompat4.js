@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat4.ts] ////
+
 //// [enumAssignmentCompat4.ts]
 namespace M {
     export enum MyEnum {
@@ -24,9 +26,10 @@ let broken = [
 
 
 //// [enumAssignmentCompat4.js]
+"use strict";
 var M;
 (function (M) {
-    var MyEnum;
+    let MyEnum;
     (function (MyEnum) {
         MyEnum[MyEnum["BAR"] = 0] = "BAR";
     })(MyEnum = M.MyEnum || (M.MyEnum = {}));
@@ -36,7 +39,7 @@ var M;
 })(M || (M = {}));
 var N;
 (function (N) {
-    var MyEnum;
+    let MyEnum;
     (function (MyEnum) {
         MyEnum[MyEnum["FOO"] = 0] = "FOO";
     })(MyEnum = N.MyEnum || (N.MyEnum = {}));
@@ -45,7 +48,7 @@ var N;
         foo: MyEnum.FOO
     };
 })(N || (N = {}));
-var broken = [
+let broken = [
     N.object1,
     M.object2
 ];

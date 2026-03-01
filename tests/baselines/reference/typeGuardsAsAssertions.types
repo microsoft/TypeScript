@@ -1,377 +1,566 @@
-=== tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts ===
+//// [tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts] ////
+
+=== typeGuardsAsAssertions.ts ===
 // Repro from #8513
 
 let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 export type Optional<a> = Some<a> | None;
 >Optional : Optional<a>
+>         : ^^^^^^^^^^^
 
 export interface None { readonly none: string; }
 >none : string
+>     : ^^^^^^
 
 export interface Some<a> { readonly some: a; }
 >some : a
+>     : ^
 
 export const none : None = { none: '' };
 >none : None
+>     : ^^^^
 >{ none: '' } : { none: string; }
+>             : ^^^^^^^^^^^^^^^^^
 >none : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
 >isSome : <a>(value: Optional<a>) => value is Some<a>
+>       : ^ ^^     ^^           ^^^^^                
 >value : Optional<a>
+>      : ^^^^^^^^^^^
 
     return 'some' in value;
 >'some' in value : boolean
+>                : ^^^^^^^
 >'some' : "some"
+>       : ^^^^^^
 >value : Optional<a>
+>      : ^^^^^^^^^^^
 }
 
 function someFrom<a>(some: a) {
 >someFrom : <a>(some: a) => { some: a; }
+>         : ^ ^^    ^^ ^^^^^^^^^^^^^^^^^
 >some : a
+>     : ^
 
     return { some };
 >{ some } : { some: a; }
+>         : ^^^^^^^^^^^^
 >some : a
+>     : ^
 }
 
 export function fn<r>(makeSome: () => r): void {
 >fn : <r>(makeSome: () => r) => void
+>   : ^ ^^        ^^       ^^^^^    
 >makeSome : () => r
+>         : ^^^^^^ 
 
     let result: Optional<r> = none;
 >result : Optional<r>
+>       : ^^^^^^^^^^^
 >none : None
+>     : ^^^^
 
     result;  // None
 >result : None
+>       : ^^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         result;  // Some<r> | None
 >result : Optional<r>
+>       : ^^^^^^^^^^^
 
         result = someFrom(isSome(result) ? result.some : makeSome());
 >result = someFrom(isSome(result) ? result.some : makeSome()) : { some: r; }
+>                                                             : ^^^^^^^^^^^^
 >result : Optional<r>
+>       : ^^^^^^^^^^^
 >someFrom(isSome(result) ? result.some : makeSome()) : { some: r; }
+>                                                    : ^^^^^^^^^^^^
 >someFrom : <a>(some: a) => { some: a; }
+>         : ^ ^^    ^^ ^^^^^^^^^^^^^^^^^
 >isSome(result) ? result.some : makeSome() : r
+>                                          : ^
 >isSome(result) : boolean
+>               : ^^^^^^^
 >isSome : <a>(value: Optional<a>) => value is Some<a>
+>       : ^ ^^     ^^           ^^^^^                
 >result : Optional<r>
+>       : ^^^^^^^^^^^
 >result.some : r
+>            : ^
 >result : Some<r>
+>       : ^^^^^^^
 >some : r
+>     : ^
 >makeSome() : r
+>           : ^
 >makeSome : () => r
+>         : ^^^^^^ 
 
         result;  // Some<r>
 >result : Some<r>
+>       : ^^^^^^^
     }
 }
 
 function foo1() {
 >foo1 : () => void
+>     : ^^^^^^^^^^
 
     let x: string | number | boolean = 0;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     x;  // number
 >x : number
+>  : ^^^^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x;  // number, then string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         x = typeof x === "string" ? x.slice() : "abc";
 >x = typeof x === "string" ? x.slice() : "abc" : string
+>                                              : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof x === "string" ? x.slice() : "abc" : string
+>                                          : ^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >x.slice() : string
->x.slice : (start?: number | undefined, end?: number | undefined) => string
+>          : ^^^^^^
+>x.slice : (start?: number, end?: number) => string
+>        : ^     ^^^      ^^   ^^^      ^^^^^      
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >"abc" : "abc"
+>      : ^^^^^
 
         x;  // string
 >x : string
+>  : ^^^^^^
     }
     x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function foo2() {
 >foo2 : () => void
+>     : ^^^^^^^^^^
 
     let x: string | number | boolean = 0;
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     x;  // number
 >x : number
+>  : ^^^^^^
 
     while (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
         x;  // number, then string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
             x = x.slice();
 >x = x.slice() : string
+>              : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.slice() : string
->x.slice : (start?: number | undefined, end?: number | undefined) => string
+>          : ^^^^^^
+>x.slice : (start?: number, end?: number) => string
+>        : ^     ^^^      ^^   ^^^      ^^^^^      
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
         }
         else {
             x = "abc";
 >x = "abc" : "abc"
+>          : ^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"abc" : "abc"
+>      : ^^^^^
         }
         x;  // string
 >x : string
+>  : ^^^^^^
     }
     x;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 // Type guards as assertions
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x;  // undefined
 >x : undefined
+>  : ^^^^^^^^^
 
     if (x) {
 >x : undefined
+>  : ^^^^^^^^^
 
         x;  // string | number (guard as assertion)
 >x : never
+>  : ^^^^^
     }
     x;  // string | number | undefined
 >x : undefined
+>  : ^^^^^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x;  // undefined
 >x : undefined
+>  : ^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         x;  // string (guard as assertion)
 >x : never
+>  : ^^^^^
     }
     x;  // string | undefined
 >x : undefined
+>  : ^^^^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x;  // undefined
 >x : undefined
+>  : ^^^^^^^^^
 
     if (!x) {
 >!x : true
+>   : ^^^^
 >x : undefined
+>  : ^^^^^^^^^
 
         return;
     }
     x;  // string | number (guard as assertion)
 >x : never
+>  : ^^^^^
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x;  // undefined
 >x : undefined
+>  : ^^^^^^^^^
 
     if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
+>                       : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 
         x;  // nothing (boolean not in declared type)
 >x : never
+>  : ^^^^^
     }
     x;  // undefined
 >x : undefined
+>  : ^^^^^^^^^
 }
 
 function f5(x: string | number) {
 >f5 : (x: string | number) => void
+>   : ^ ^^               ^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string" && typeof x === "number") {
 >typeof x === "string" && typeof x === "number" : boolean
+>                                               : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
         x;  // number (guard as assertion)
 >x : never
+>  : ^^^^^
     }
     else {
         x;  // string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     x;  // string | number
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | undefined | null;
 >x : string | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : string | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = null;
 >x = null : null
+>         : ^^^^
 >x : string | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = <undefined | null>undefined;
 >x = <undefined | null>undefined : null | undefined
+>                                : ^^^^^^^^^^^^^^^^
 >x : string | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 ><undefined | null>undefined : null | undefined
->null : null
+>                            : ^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = <string | undefined>"";
 >x = <string | undefined>"" : string | undefined
+>                           : ^^^^^^^^^^^^^^^^^^
 >x : string | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 ><string | undefined>"" : string | undefined
+>                       : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = <string | null>"";
 >x = <string | null>"" : string | null
+>                      : ^^^^^^^^^^^^^
 >x : string | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 ><string | null>"" : string | null
->null : null
+>                  : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string | null
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^^^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 }
 
 function f7() {
 >f7 : () => void
+>   : ^^^^^^^^^^
 
     let x: string;
 >x : string
+>  : ^^^^^^
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>           : ^^^^^^
+>x!.slice : (start?: number, end?: number) => string
+>         : ^     ^^^      ^^   ^^^      ^^^^^      
 >x! : string
+>   : ^^^^^^
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>  : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 }
 

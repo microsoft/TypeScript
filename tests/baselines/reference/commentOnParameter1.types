@@ -1,6 +1,9 @@
-=== tests/cases/compiler/commentOnParameter1.ts ===
+//// [tests/cases/compiler/commentOnParameter1.ts] ////
+
+=== commentOnParameter1.ts ===
 function commentedParameters(
 >commentedParameters : (a: any, b: any) => void
+>                    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 
 /* Parameter a */
 a

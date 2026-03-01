@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportMeta.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 const x = import.meta.url;
 >x : Symbol(x, Decl(index.js, 1, 5))
@@ -10,7 +12,7 @@ const x = import.meta.url;
 export {x};
 >x : Symbol(x, Decl(index.js, 2, 8))
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 const x = import.meta.url;
 >x : Symbol(x, Decl(index.js, 1, 5))

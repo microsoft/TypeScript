@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts] ////
+
 //// [typeAssertionsWithIntersectionTypes01.ts]
 interface I1 {
     p1: number
@@ -22,6 +24,7 @@ var d = <I1>y;
 
 
 //// [typeAssertionsWithIntersectionTypes01.js]
+"use strict";
 var x = { p1: 10, p2: 20, p3: 30 };
 var y = x;
 var z = x;

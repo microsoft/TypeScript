@@ -1,67 +1,85 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(3,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(6,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(9,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(12,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(15,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-  Type 'string' is not assignable to type 'never'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(18,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(21,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(24,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(27,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(30,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+nonPrimitiveConstraintOfIndexAccessType.ts(3,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(6,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(9,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(12,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(15,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(18,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(21,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(24,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(27,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+nonPrimitiveConstraintOfIndexAccessType.ts(30,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts (10 errors) ====
+==== nonPrimitiveConstraintOfIndexAccessType.ts (10 errors) ====
     // test for #15371
     function f<T extends object, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function g<T extends null, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function h<T extends undefined, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function i<T extends void, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function j<T extends never, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'never'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function k<T extends number, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function o<T extends string, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function l<T extends {}, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function m<T extends { a: number }, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     function n<T extends { [s: string]: number }, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   'T[P]' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     }
     

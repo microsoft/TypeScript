@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: foo1.ts
 var x = 10;
 var y = 20;
@@ -11,7 +13,7 @@ export = x;
 export = y;
 
 // @Filename: foo3.ts
-module x {
+namespace x {
 	export var x = 10;
 }
 class y {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts] ////
+
+=== typeGuardEnums.ts ===
 enum E {}
 >E : Symbol(E, Decl(typeGuardEnums.ts, 0, 0))
 

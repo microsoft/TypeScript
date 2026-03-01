@@ -1,22 +1,41 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts] ////
+
+=== iterableArrayPattern28.ts ===
 function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [string, number][]) => void
+>                    : ^^^^                    ^^                  ^^^^^^^^^
 >k1 : string
+>   : ^^^^^^
 >v1 : number
+>   : ^^^^^^
 >k2 : string
+>   : ^^^^^^
 >v2 : number
+>   : ^^^^^^
 
 takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
 >takeFirstTwoEntries(...new Map([["", 0], ["hello", true]])) : void
+>                                                            : ^^^^
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [string, number][]) => void
+>                    : ^^^^                    ^^                  ^^^^^^^^^
 >...new Map([["", 0], ["hello", true]]) : [string, number]
+>                                       : ^^^^^^^^^^^^^^^^
 >new Map([["", 0], ["hello", true]]) : Map<string, number>
+>                                    : ^^^^^^^^^^^^^^^^^^^
 >Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
 >[["", 0], ["hello", true]] : ([string, number] | [string, boolean])[]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["", 0] : [string, number]
+>        : ^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 >["hello", true] : [string, boolean]
+>                : ^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 

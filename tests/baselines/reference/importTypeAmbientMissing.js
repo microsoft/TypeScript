@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/import/importTypeAmbientMissing.ts] ////
+
 //// [importTypeAmbientMissing.ts]
 declare module "foo" {
     interface Point {
@@ -11,7 +13,8 @@ const x: import("fo") = { x: 0, y: 0 }; // typo, error
 
 
 //// [importTypeAmbientMissing.js]
-var x = { x: 0, y: 0 }; // typo, error
+"use strict";
+const x = { x: 0, y: 0 }; // typo, error
 
 
 //// [importTypeAmbientMissing.d.ts]

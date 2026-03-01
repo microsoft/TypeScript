@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     a(): number { return 0; } // error: duplicate identifier
     a: number;

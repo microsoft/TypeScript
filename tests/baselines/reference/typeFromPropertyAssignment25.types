@@ -1,74 +1,120 @@
-=== tests/cases/conformance/salsa/bug24703.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment25.ts] ////
+
+=== bug24703.js ===
 var Common = {};
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 Common.I = class {
 >Common.I = class {    constructor() {        this.i = 1    }} : typeof I
+>                                                              : ^^^^^^^^
 >Common.I : typeof I
+>         : ^^^^^^^^
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >I : typeof I
+>  : ^^^^^^^^
 >class {    constructor() {        this.i = 1    }} : typeof I
+>                                                   : ^^^^^^^^
 
     constructor() {
         this.i = 1
 >this.i = 1 : 1
+>           : ^
 >this.i : any
 >this : this
+>     : ^^^^
 >i : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
 }
 Common.O = class extends Common.I {
 >Common.O = class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
+>                                                                                              : ^^^^^^^^
 >Common.O : typeof O
+>         : ^^^^^^^^
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >O : typeof O
+>  : ^^^^^^^^
 >class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
+>                                                                                   : ^^^^^^^^
 >Common.I : I
+>         : ^
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >I : typeof I
+>  : ^^^^^^^^
 
     constructor() {
         super()
 >super() : void
+>        : ^^^^
 >super : typeof I
+>      : ^^^^^^^^
 
         this.o = 2
 >this.o = 2 : 2
+>           : ^
 >this.o : any
 >this : this
+>     : ^^^^
 >o : any
+>  : ^^^
 >2 : 2
+>  : ^
     }
 }
 var o = new Common.O()
 >o : O
+>  : ^
 >new Common.O() : O
+>               : ^
 >Common.O : typeof O
+>         : ^^^^^^^^
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >O : typeof O
+>  : ^^^^^^^^
 
 var i = new Common.I()
 >i : I
+>  : ^
 >new Common.I() : I
+>               : ^
 >Common.I : typeof I
+>         : ^^^^^^^^
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >I : typeof I
+>  : ^^^^^^^^
 
 o.i
 >o.i : number
+>    : ^^^^^^
 >o : O
+>  : ^
 >i : number
+>  : ^^^^^^
 
 o.o
 >o.o : number
+>    : ^^^^^^
 >o : O
+>  : ^
 >o : number
+>  : ^^^^^^
 
 i.i
 >i.i : number
+>    : ^^^^^^
 >i : I
+>  : ^
 >i : number
+>  : ^^^^^^
 
 

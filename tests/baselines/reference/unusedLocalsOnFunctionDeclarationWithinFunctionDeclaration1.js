@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts] ////
+
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts]
 function greeter(person: string, person2: string) {
     var unused = 20;
@@ -8,6 +10,7 @@ function greeter(person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.js]
+"use strict";
 function greeter(person, person2) {
     var unused = 20;
     function maker(child) {

@@ -9,17 +9,17 @@ void def;
 
 //// [code.js]
 "use strict";
-exports.__esModule = true;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.x = 0;
-    return C;
-}());
+Object.defineProperty(exports, "__esModule", { value: true });
+class C {
+}
+C.x = 0;
 ;
-exports["default"] = C.x;
+exports.default = C.x;
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
-var code_1 = require("./code");
-void code_1["default"];
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const code_1 = __importDefault(require("./code"));
+void code_1.default;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/gettersAndSetters.ts] ////
+
 //// [gettersAndSetters.ts]
 // classes
 class C {
@@ -51,6 +53,7 @@ if (typeof x === "string") {
 
 
 //// [gettersAndSetters.js]
+"use strict";
 // classes
 class C {
     constructor() {

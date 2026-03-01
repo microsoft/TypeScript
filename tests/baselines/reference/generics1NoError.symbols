@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generics1NoError.ts ===
+//// [tests/cases/compiler/generics1NoError.ts] ////
+
+=== generics1NoError.ts ===
 interface A { a: string; }
 >A : Symbol(A, Decl(generics1NoError.ts, 0, 0))
 >a : Symbol(A.a, Decl(generics1NoError.ts, 0, 13))

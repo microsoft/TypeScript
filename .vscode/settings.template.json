@@ -1,9 +1,47 @@
 // Rename this file 'settings.json' or merge its
 // contents into your existing settings.
 {
-    // To use the last-known-good (LKG) compiler version:
-    // "typescript.tsdk": "lib"
-
     // To use the locally built compiler, after 'npm run build':
     // "typescript.tsdk": "built/local"
+
+    // Enables dprint formatting on all supported files. We explicitly list
+    // languages here to ensure that these are more specific than those in a
+    // user's settings.json so take precedence.
+    "[typescript][typescriptreact][javascript][javascriptreact][json][jsonc][yaml][github-actions-workflow]": {
+        "editor.defaultFormatter": "dprint.dprint",
+        "editor.formatOnSave": true
+    },
+
+    // To ignore commits listed in .git-blame-ignore-revs in GitLens:
+    "gitlens.advanced.blame.customArguments": [
+        "--ignore-revs-file",
+        ".git-blame-ignore-revs"
+    ],
+
+    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "typescript.preferences.importModuleSpecifierEnding": "js",
+
+    // Match dprint in organize/auto-imports.
+    "typescript.unstable": {
+        "organizeImportsCollation": "unicode",
+        "organizeImportsCaseFirst": "upper",
+        "organizeImportsIgnoreCase": false,
+        "organizeImportsNumericCollation": true,
+        "organizeImportsTypeOrder": "inline"
+    },
+    "javascript.unstable": {
+        "organizeImportsCollation": "unicode",
+        "organizeImportsCaseFirst": "upper",
+        "organizeImportsIgnoreCase": false,
+        "organizeImportsNumericCollation": true,
+        "organizeImportsTypeOrder": "inline"
+    },
+
+    // These options search the repo recursively and slow down
+    // the build task menu. We define our own in tasks.json.
+    "typescript.tsc.autoDetect": "off",
+    "npm.autoDetect": "off",
+    "grunt.autoDetect": "off",
+    "jake.autoDetect": "off",
+    "gulp.autoDetect": "off"
 }

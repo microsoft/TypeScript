@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralEnumPropertyNames.ts ===
+//// [tests/cases/compiler/objectLiteralEnumPropertyNames.ts] ////
+
+=== objectLiteralEnumPropertyNames.ts ===
 // Fixes #16887
 enum Strs {
 >Strs : Symbol(Strs, Decl(objectLiteralEnumPropertyNames.ts, 0, 0))

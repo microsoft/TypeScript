@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts] ////
+
 //// [strictNullChecksNoWidening.ts]
 var a1 = null;
 var a2 = undefined;
@@ -17,6 +19,7 @@ var c3 = f([]);
 
 
 //// [strictNullChecksNoWidening.js]
+"use strict";
 var a1 = null;
 var a2 = undefined;
 var a3 = void 0;

@@ -1,0 +1,69 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 [|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReturn2.ts ===
+// function f(a: number) {
+//     if (a > 0) {
+//         return (function () {
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+//             [|{| kind: "none" |}return|];
+// 
+//             while (false) {
+//                 /*HIGHLIGHTS*/[|{| kind: "none" |}return|] true;
+//             }
+//         })() || true;
+//     }
+// --- (line: 13) skipped ---

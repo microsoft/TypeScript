@@ -1,7 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery8.ts(1,15): error TS2304: Cannot find name 'A'.
+parserTypeQuery8.ts(1,15): error TS2304: Cannot find name 'A'.
+parserTypeQuery8.ts(1,17): error TS2304: Cannot find name 'B'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery8.ts (1 errors) ====
+==== parserTypeQuery8.ts (2 errors) ====
     var v: typeof A<B>
                   ~
 !!! error TS2304: Cannot find name 'A'.
+                    ~
+!!! error TS2304: Cannot find name 'B'.

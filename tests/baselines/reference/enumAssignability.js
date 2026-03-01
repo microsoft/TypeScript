@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts] ////
+
 //// [enumAssignability.ts]
 // enums assignable to number, any, Object, errors unless otherwise noted
 
@@ -14,7 +16,7 @@ f = 1; // ok
 var x: number = e; // ok
 x = f; // ok
 
-module Others {
+namespace Others {
     var a: any = e; // ok
 
     class C {
@@ -55,6 +57,7 @@ module Others {
 }
 
 //// [enumAssignability.js]
+"use strict";
 // enums assignable to number, any, Object, errors unless otherwise noted
 var E;
 (function (E) {
@@ -75,11 +78,8 @@ x = f; // ok
 var Others;
 (function (Others) {
     var a = e; // ok
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     var ac;
     var ai;
     var b = e; // ok

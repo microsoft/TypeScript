@@ -1,22 +1,31 @@
-=== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts ===
+//// [tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts] ////
+
+=== ambientExternalModuleInAnotherExternalModule.ts ===
 class D { }
 >D : D
+>  : ^
 
 export = D;
 >D : D
+>  : ^
 
 declare module "ext" {
 >"ext" : typeof import("ext")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     export class C { }
 >C : C
+>  : ^
 }
 
 // Cannot resolve this ext module reference
 import ext = require("ext");
 >ext : any
+>    : ^^^
 
 var x = ext;
 >x : any
+>  : ^^^
 >ext : any
+>    : ^^^
 

@@ -1,48 +1,71 @@
-=== tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts ===
+//// [tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts] ////
+
+=== externalModuleReferenceDoubleUnderscore1.ts ===
 declare module 'timezonecomplete' {
 >'timezonecomplete' : typeof import("timezonecomplete")
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     import basics = require("__timezonecomplete/basics");
 >basics : typeof basics
+>       : ^^^^^^^^^^^^^
 
     export import TimeUnit = basics.TimeUnit;
 >TimeUnit : typeof basics.TimeUnit
+>         : ^^^^^^^^^^^^^^^^^^^^^^
 >basics : typeof basics
+>       : ^^^^^^^^^^^^^
 >TimeUnit : basics.TimeUnit
+>         : ^^^^^^^^^^^^^^^
 }
 
 declare module '__timezonecomplete/basics' {
 >'__timezonecomplete/basics' : typeof import("__timezonecomplete/basics")
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export enum TimeUnit {
 >TimeUnit : TimeUnit
+>         : ^^^^^^^^
 
         Second = 0,
 >Second : TimeUnit.Second
+>       : ^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
         Minute = 1,
 >Minute : TimeUnit.Minute
+>       : ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         Hour = 2,
 >Hour : TimeUnit.Hour
+>     : ^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
         Day = 3,
 >Day : TimeUnit.Day
+>    : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
         Week = 4,
 >Week : TimeUnit.Week
+>     : ^^^^^^^^^^^^^
 >4 : 4
+>  : ^
 
         Month = 5,
 >Month : TimeUnit.Month
+>      : ^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
         Year = 6,
 >Year : TimeUnit.Year
+>     : ^^^^^^^^^^^^^
 >6 : 6
+>  : ^
     }
 }

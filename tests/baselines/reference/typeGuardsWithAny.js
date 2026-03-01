@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts] ////
+
 //// [typeGuardsWithAny.ts]
 var x: any = { p: 0 };
 
@@ -38,6 +40,7 @@ else {
 
 
 //// [typeGuardsWithAny.js]
+"use strict";
 var x = { p: 0 };
 if (x instanceof Object) {
     x.p; // No error, type any unaffected by instanceof type guard

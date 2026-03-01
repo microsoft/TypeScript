@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2023.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryES2023.ts ===
+export let array = [0, 2, 3, 4];
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+
+function somePredicate(x: any): boolean {
+>somePredicate : Symbol(somePredicate, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 32))
+>x : Symbol(x, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 2, 23))
+
+    return x === 4;
+>x : Symbol(x, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 2, 23))
+}
+
+export let lastIndex1 = array.findLastIndex(v => v === 4);
+>lastIndex1 : Symbol(lastIndex1, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 6, 10))
+>array.findLastIndex : Symbol(Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>findLastIndex : Symbol(Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
+>v : Symbol(v, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 6, 44))
+>v : Symbol(v, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 6, 44))
+
+export let lastIndex2 = array.findLastIndex(somePredicate);
+>lastIndex2 : Symbol(lastIndex2, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 7, 10))
+>array.findLastIndex : Symbol(Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>findLastIndex : Symbol(Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
+>somePredicate : Symbol(somePredicate, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 32))
+
+export let last1 = array.findLast(somePredicate);
+>last1 : Symbol(last1, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 9, 10))
+>array.findLast : Symbol(Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>findLast : Symbol(Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>somePredicate : Symbol(somePredicate, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 32))
+
+export let last2 = array.findLast(somePredicate);
+>last2 : Symbol(last2, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 10, 10))
+>array.findLast : Symbol(Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>findLast : Symbol(Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>somePredicate : Symbol(somePredicate, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 32))
+
+export let sorted = array.toSorted();
+>sorted : Symbol(sorted, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 12, 10))
+>array.toSorted : Symbol(Array.toSorted, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>toSorted : Symbol(Array.toSorted, Decl(lib.es2023.array.d.ts, --, --))
+
+export let spliced1 = array.toSpliced(2);
+>spliced1 : Symbol(spliced1, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 14, 10))
+>array.toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+
+export let spliced2 = array.toSpliced(2, 1);
+>spliced2 : Symbol(spliced2, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 15, 10))
+>array.toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+
+export let spliced3 = array.toSpliced(2, 1, 4, 5, 6, 7);
+>spliced3 : Symbol(spliced3, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 16, 10))
+>array.toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+
+export let spliced4 = array.toSpliced(2, undefined);
+>spliced4 : Symbol(spliced4, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 17, 10))
+>array.toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+export let spliced5 = array.toSpliced(2, undefined, 4, 5, 6, 7);
+>spliced5 : Symbol(spliced5, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 18, 10))
+>array.toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>toSpliced : Symbol(Array.toSpliced, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+export let startsWithOne = array.with(0, 1);
+>startsWithOne : Symbol(startsWithOne, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 20, 10))
+>array.with : Symbol(Array.with, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>with : Symbol(Array.with, Decl(lib.es2023.array.d.ts, --, --))
+
+export let inTheEnd = array.with(-1, 1);
+>inTheEnd : Symbol(inTheEnd, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 21, 10))
+>array.with : Symbol(Array.with, Decl(lib.es2023.array.d.ts, --, --))
+>array : Symbol(array, Decl(doYouNeedToChangeYourTargetLibraryES2023.ts, 0, 10))
+>with : Symbol(Array.with, Decl(lib.es2023.array.d.ts, --, --))
+

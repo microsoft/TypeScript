@@ -1,4 +1,6 @@
-=== tests/cases/compiler/idInProp.ts ===
+//// [tests/cases/compiler/idInProp.ts] ////
+
+=== idInProp.ts ===
 function f() {
 >f : Symbol(f, Decl(idInProp.ts, 0, 0))
 

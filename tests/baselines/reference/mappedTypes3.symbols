@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypes3.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes3.ts] ////
+
+=== mappedTypes3.ts ===
 class Box<P> {
 >Box : Symbol(Box, Decl(mappedTypes3.ts, 0, 0))
 >P : Symbol(P, Decl(mappedTypes3.ts, 0, 10))

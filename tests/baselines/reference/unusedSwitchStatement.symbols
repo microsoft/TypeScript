@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedSwitchStatement.ts ===
+//// [tests/cases/compiler/unusedSwitchStatement.ts] ////
+
+=== unusedSwitchStatement.ts ===
 switch (1) {
     case 0:
         let x;
@@ -22,6 +24,6 @@ switch (2) {
 >x : Symbol(x, Decl(unusedSwitchStatement.ts, 14, 11))
 
     case 1:
-        x++;
+        x=1;
 >x : Symbol(x, Decl(unusedSwitchStatement.ts, 14, 11))
 }

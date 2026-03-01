@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isArray.ts] ////
+
 //// [isArray.ts]
 var maybeArray: number | number[];
 
@@ -10,6 +12,7 @@ else {
 }
 
 //// [isArray.js]
+"use strict";
 var maybeArray;
 if (Array.isArray(maybeArray)) {
     maybeArray.length; // OK

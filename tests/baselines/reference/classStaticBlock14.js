@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts] ////
+
 //// [classStaticBlock14.ts]
 class C {
   static #_1 = 1;
@@ -14,6 +16,7 @@ class C {
 
 
 //// [classStaticBlock14.js]
+"use strict";
 var _a, _C__1, _C__3, _C__5;
 class C {
 }

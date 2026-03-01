@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts ===
+//// [tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts] ////
+
+=== contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts ===
 // must target esnext for `String.normalize` to exist
 type Validate = (text: string, pos: number, self: Rule) => number | boolean;
 >Validate : Symbol(Validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 0, 0))
@@ -12,7 +14,7 @@ interface FullRule {
 
     validate: string | RegExp | Validate;
 >validate : Symbol(FullRule.validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 2, 20))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 1 more)
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
 >Validate : Symbol(Validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 0, 0))
 
     normalize?: (match: {x: string}) => void;

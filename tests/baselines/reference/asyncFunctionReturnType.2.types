@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/asyncFunctionReturnType.2.ts] ////
+
+=== asyncFunctionReturnType.2.ts ===
+// https://github.com/microsoft/TypeScript/issues/47291
+class X {
+>X : X
+>  : ^
+
+    f = async (): Promise<this> => this;
+>f : () => Promise<this>
+>  : ^^^^^^             
+>async (): Promise<this> => this : () => Promise<this>
+>                                : ^^^^^^             
+>this : this
+>     : ^^^^
+}

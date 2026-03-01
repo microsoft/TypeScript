@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty4.ts] ////
+
 //// [accessorsOverrideProperty4.ts]
 declare class Animal {
     sound: string;
@@ -10,6 +12,7 @@ class Lion extends Animal {
 
 
 //// [accessorsOverrideProperty4.js]
+"use strict";
 class Lion extends Animal {
     _sound = 'roar';
     get sound() { return this._sound; }

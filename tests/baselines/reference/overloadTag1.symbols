@@ -1,0 +1,80 @@
+//// [tests/cases/conformance/jsdoc/overloadTag1.ts] ////
+
+=== overloadTag1.js ===
+/**
+ * @overload
+ * @param {number} a 
+ * @param {number} b
+ * @returns {number} 
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
+export function overloaded(a,b) {
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+>a : Symbol(a, Decl(overloadTag1.js, 15, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 15, 29))
+
+  if (typeof a === "string" && typeof b === "string") {
+>a : Symbol(a, Decl(overloadTag1.js, 15, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 15, 29))
+
+    return a + b;
+>a : Symbol(a, Decl(overloadTag1.js, 15, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 15, 29))
+
+  } else if (typeof a === "number" && typeof b === "number") {
+>a : Symbol(a, Decl(overloadTag1.js, 15, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 15, 29))
+
+    return a + b;
+>a : Symbol(a, Decl(overloadTag1.js, 15, 27))
+>b : Symbol(b, Decl(overloadTag1.js, 15, 29))
+  }
+  throw new Error("Invalid arguments");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+var o1 = overloaded(1,2)
+>o1 : Symbol(o1, Decl(overloadTag1.js, 23, 3))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+
+var o2 = overloaded("zero", "one")
+>o2 : Symbol(o2, Decl(overloadTag1.js, 24, 3))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+
+var o3 = overloaded("a",false)
+>o3 : Symbol(o3, Decl(overloadTag1.js, 25, 3))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
+export function uncheckedInternally(a, b) {
+>uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 25, 30))
+>a : Symbol(a, Decl(overloadTag1.js, 38, 36))
+>b : Symbol(b, Decl(overloadTag1.js, 38, 38))
+
+    return a + b;
+>a : Symbol(a, Decl(overloadTag1.js, 38, 36))
+>b : Symbol(b, Decl(overloadTag1.js, 38, 38))
+}
+uncheckedInternally(1,2)
+>uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 25, 30))
+
+uncheckedInternally("zero", "one")
+>uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 25, 30))
+

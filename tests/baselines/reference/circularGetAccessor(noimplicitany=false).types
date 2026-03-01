@@ -1,11 +1,18 @@
-=== tests/cases/compiler/circularGetAccessor.ts ===
+//// [tests/cases/compiler/circularGetAccessor.ts] ////
+
+=== circularGetAccessor.ts ===
 declare class C {
 >C : C
+>  : ^
 
     get foo(): typeof this.foo;
 >foo : any
+>    : ^^^
 >this.foo : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
 }
 

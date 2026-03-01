@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceMemberValidation.ts] ////
+
 //// [interfaceMemberValidation.ts]
 interface i1 { name: string; }
 interface i2 extends i1 { name: number; yo: string; }
@@ -12,3 +14,4 @@ interface foo {
 }
 
 //// [interfaceMemberValidation.js]
+"use strict";

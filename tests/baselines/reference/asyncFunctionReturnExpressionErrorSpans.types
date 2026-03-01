@@ -1,16 +1,22 @@
-=== tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts ===
+//// [tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts] ////
+
+=== asyncFunctionReturnExpressionErrorSpans.ts ===
 interface Foo {
     bar: {
->bar : { baz: {    inner: {        thing: string;    };}; }
+>bar : { baz: { inner: { thing: string; }; }; }
+>    : ^^^^^^^                              ^^^
 
         baz: {
->baz : { inner: {    thing: string;}; }
+>baz : { inner: { thing: string; }; }
+>    : ^^^^^^^^^                  ^^^
 
             inner: {
 >inner : { thing: string; }
+>      : ^^^^^^^^^      ^^^
 
                 thing: string
 >thing : string
+>      : ^^^^^^
             }
         }
     }
@@ -18,25 +24,35 @@ interface Foo {
 
 async function asyncFoo(): Promise<Foo> {
 >asyncFoo : () => Promise<Foo>
+>         : ^^^^^^            
 
     return {
 >{        bar: {            baz: {                inner: {                    thing: 1                }            }        }    } : { bar: { baz: { inner: { thing: number; }; }; }; }
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         bar: {
 >bar : { baz: { inner: { thing: number; }; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            baz: {                inner: {                    thing: 1                }            }        } : { baz: { inner: { thing: number; }; }; }
+>                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             baz: {
 >baz : { inner: { thing: number; }; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                inner: {                    thing: 1                }            } : { inner: { thing: number; }; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 inner: {
 >inner : { thing: number; }
+>      : ^^^^^^^^^^^^^^^^^^
 >{                    thing: 1                } : { thing: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^
 
                     thing: 1
 >thing : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
                 }
             }
         }

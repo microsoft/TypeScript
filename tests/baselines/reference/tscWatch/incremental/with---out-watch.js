@@ -1,6 +1,20 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/users/username/projects/project/file1.ts]
+const x = 10;
+
+//// [/users/username/projects/project/file2.ts]
+const y = 20;
+
+//// [/users/username/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,
+    "outFile": "out.js"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -11,31 +25,106 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/users/username/projects/project/file1.ts]
-const x = 10;
-
-//// [/users/username/projects/project/file2.ts]
-const y = 20;
-
-//// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"outFile":"out.js"}}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "outFile": "out.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"outFile":"/users/username/projects/project/out.js","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/users/username/projects/project/out.js]
+"use strict";
+const x = 10;
+const y = 20;
+
+
+//// [/users/username/projects/project/out.tsbuildinfo]
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+    "./file1.ts",
+    "./file2.ts"
+  ],
+  "fileInfos": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./file1.ts": "5029505981-const x = 10;",
+    "./file2.ts": "2026007743-const y = 20;"
+  },
+  "root": [
+    [
+      2,
+      "./file1.ts"
+    ],
+    [
+      3,
+      "./file2.ts"
+    ]
+  ],
+  "options": {
+    "outFile": "./out.js"
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file2.ts",
+      "not cached or not changed"
+    ]
+  ],
+  "version": "FakeTSVersion",
+  "size": 677
+}
+
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
+/users/username/projects/project/file1.ts: *new*
+  {}
+/users/username/projects/project/file2.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "outFile": "/users/username/projects/project/out.js",
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
@@ -43,64 +132,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/out.js]
-var x = 10;
-var y = 20;
-
-
-//// [/users/username/projects/project/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}],"hash":"-5596233073-var x = 10;\nvar y = 20;\n"}},"version":"FakeTSVersion"}
-
-//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file1.ts",
-      "./file2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 24,
-          "kind": "text"
-        }
-      ],
-      "hash": "-5596233073-var x = 10;\nvar y = 20;\n"
-    }
-  },
-  "version": "FakeTSVersion",
-  "size": 210
-}
-
-//// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /users/username/projects/project/out.js
-----------------------------------------------------------------------
-text: (0-24)
-var x = 10;
-var y = 20;
-
-======================================================================
-

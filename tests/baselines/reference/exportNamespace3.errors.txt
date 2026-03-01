@@ -1,18 +1,18 @@
-tests/cases/conformance/externalModules/typeOnly/d.ts(2,7): error TS2339: Property 'A' does not exist on type 'typeof import("tests/cases/conformance/externalModules/typeOnly/b")'.
+d.ts(2,7): error TS2339: Property 'A' does not exist on type 'typeof import("b")'.
 
 
-==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export class A {}
     
-==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export type { A } from './a';
     
-==== tests/cases/conformance/externalModules/typeOnly/c.ts (0 errors) ====
+==== c.ts (0 errors) ====
     export * as a from './b';
     
-==== tests/cases/conformance/externalModules/typeOnly/d.ts (1 errors) ====
+==== d.ts (1 errors) ====
     import { a } from './c';
     new a.A(); // Error
           ~
-!!! error TS2339: Property 'A' does not exist on type 'typeof import("tests/cases/conformance/externalModules/typeOnly/b")'.
+!!! error TS2339: Property 'A' does not exist on type 'typeof import("b")'.
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonContextuallyTypedLogicalOr.ts] ////
+
 //// [nonContextuallyTypedLogicalOr.ts]
 interface Contextual {
     dummy;
@@ -15,6 +17,7 @@ var e: Ellement;
 (c || e).dummy;
 
 //// [nonContextuallyTypedLogicalOr.js]
+"use strict";
 var c;
 var e;
 (c || e).dummy;

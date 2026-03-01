@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts] ////
+
+=== memberFunctionOverloadMixingStaticAndInstance.ts ===
 class C {
 >C : Symbol(C, Decl(memberFunctionOverloadMixingStaticAndInstance.ts, 0, 0))
 

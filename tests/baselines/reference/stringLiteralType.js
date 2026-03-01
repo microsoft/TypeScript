@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/stringLiteral/stringLiteralType.ts] ////
+
 //// [stringLiteralType.ts]
 var x: 'hi';
 
@@ -7,6 +9,7 @@ function f(x: any) {
 }
 
 //// [stringLiteralType.js]
+"use strict";
 var x;
 function f(x) {
 }

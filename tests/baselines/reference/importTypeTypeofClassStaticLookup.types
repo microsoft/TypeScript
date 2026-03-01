@@ -1,14 +1,21 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/importTypeTypeofClassStaticLookup.ts] ////
+
+=== a.d.ts ===
 export declare class A {
 >A : A
+>  : ^
 
     static foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 }
 
-=== tests/cases/compiler/index.d.ts ===
+=== index.d.ts ===
 export const foo: typeof import("./a").A.foo;
 >foo : () => void
+>    : ^^^^^^    
 >A : any
+>  : ^^^
 >foo : any
+>    : ^^^
 

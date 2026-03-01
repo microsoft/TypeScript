@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCapturingFunctionNarrowing.ts] ////
+
 //// [genericCapturingFunctionNarrowing.ts]
 function needsToNarrowTheType<First extends { foo: string }, Second extends { bar: string }, SubFirst extends First, SubFirstMore extends First & {other: string}>(thing: First | SubFirst | SubFirstMore | Second) {
     if (hasAFoo(thing)) {
@@ -14,6 +16,7 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 }
 
 //// [genericCapturingFunctionNarrowing.js]
+"use strict";
 function needsToNarrowTheType(thing) {
     if (hasAFoo(thing)) {
         console.log(thing.foo);

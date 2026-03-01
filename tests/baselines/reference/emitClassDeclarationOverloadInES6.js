@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationOverloadInES6.ts] ////
+
 //// [emitClassDeclarationOverloadInES6.ts]
 class C {
     constructor(y: any)
@@ -11,6 +13,7 @@ class D {
 }
 
 //// [emitClassDeclarationOverloadInES6.js]
+"use strict";
 class C {
     constructor(x) {
     }

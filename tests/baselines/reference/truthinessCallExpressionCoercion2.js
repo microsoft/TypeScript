@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion2.ts] ////
+
 //// [truthinessCallExpressionCoercion2.ts]
 declare class A {
     static from(): string;
@@ -46,6 +48,22 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // error
+    if (required1 || b) {
+    }
+
+    // error
+    if (required1 || required2) {
+    }
+
+    // error
+    if (required1 ?? b) {
+    }
+
+    // error
+    if (required1 ?? required2) {
+    }
+
+    // error
     if (((required1 && b))) {
     }
 
@@ -55,8 +73,43 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     }
 
     // ok
+    if (required1 || b) {
+        required1();
+    }
+
+    // ok
+    if (required1 ?? b) {
+        required1();
+    }
+
+    // ok
+    if (b ?? required1) {
+        required1();
+    }
+
+    // ok
     if (((required1 && b))) {
         required1();
+    }
+
+    // error, extra parens are on purpose here
+    if ((required1)) {
+    }
+
+    // error
+    if (b && (required1 || required2)) {
+    }
+
+    // error
+    if ((required1 || required2) && b) {
+    }
+
+    // error
+    if (b && (required1 ?? required2)) {
+    }
+
+    // error
+    if ((required1 ?? required2) && b) {
     }
 }
 
@@ -98,6 +151,26 @@ function checksPropertyAccess() {
 
     // error
     x1.a.b.c && x2.a.b.c();
+
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
+    }
+
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+    }
+
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+    }
+
+    // error
+    if (1 && (x1.a.b.c ?? x2.a.b.c)) {
+    }
+
+    // error
+    if ((x1.a.b.c ?? x2.a.b.c) && 1) {
+    }
 }
 
 class Foo {
@@ -125,6 +198,7 @@ class Foo {
 
 
 //// [truthinessCallExpressionCoercion2.js]
+"use strict";
 function test(required1, required2, b, optional) {
     // error
     required1 && console.log('required');
@@ -145,13 +219,25 @@ function test(required1, required2, b, optional) {
     // ok
     required1 && required2 && required1() && required2();
     // ok
-    [].forEach(function (f) { return f && f.apply(parent, []); });
+    [].forEach((f) => f && f.apply(parent, []));
     // error
     required1 && required2 && required1() && console.log('foo');
     // error
     if (required1 && b) {
     }
     // error
+    if (required1 || b) {
+    }
+    // error
+    if (required1 || required2) {
+    }
+    // error
+    if (required1 !== null && required1 !== void 0 ? required1 : b) {
+    }
+    // error
+    if (required1 !== null && required1 !== void 0 ? required1 : required2) {
+    }
+    // error
     if (((required1 && b))) {
     }
     // ok
@@ -159,8 +245,35 @@ function test(required1, required2, b, optional) {
         required1();
     }
     // ok
+    if (required1 || b) {
+        required1();
+    }
+    // ok
+    if (required1 !== null && required1 !== void 0 ? required1 : b) {
+        required1();
+    }
+    // ok
+    if (b !== null && b !== void 0 ? b : required1) {
+        required1();
+    }
+    // ok
     if (((required1 && b))) {
         required1();
+    }
+    // error, extra parens are on purpose here
+    if ((required1)) {
+    }
+    // error
+    if (b && (required1 || required2)) {
+    }
+    // error
+    if ((required1 || required2) && b) {
+    }
+    // error
+    if (b && (required1 !== null && required1 !== void 0 ? required1 : required2)) {
+    }
+    // error
+    if ((required1 !== null && required1 !== void 0 ? required1 : required2) && b) {
     }
 }
 function checksConsole() {
@@ -169,9 +282,10 @@ function checksConsole() {
         (window.console.firebug || (window.console.error && window.console.table));
 }
 function checksPropertyAccess() {
-    var x = {
+    var _a, _b;
+    const x = {
         foo: {
-            bar: function () { return true; }
+            bar() { return true; }
         }
     };
     // error
@@ -183,24 +297,37 @@ function checksPropertyAccess() {
     // ok
     x.foo.bar && 1 && x.foo.bar();
     // ok
-    var y = A.from && A.from !== B.from ? true : false;
+    const y = A.from && A.from !== B.from ? true : false;
     y;
-    var x1 = {
-        a: { b: { c: function () { } } }
+    const x1 = {
+        a: { b: { c: () => { } } }
     };
-    var x2 = {
-        a: { b: { c: function () { } } }
+    const x2 = {
+        a: { b: { c: () => { } } }
     };
     // error
     x1.a.b.c && x2.a.b.c();
-}
-var Foo = /** @class */ (function () {
-    function Foo() {
+    // error, extra parens are on purpose here
+    if ((x1.a.b.c)) {
     }
-    Foo.prototype.required = function () {
+    // error
+    if (1 && (x1.a.b.c || x2.a.b.c)) {
+    }
+    // error
+    if ((x1.a.b.c || x2.a.b.c) && 1) {
+    }
+    // error
+    if (1 && ((_a = x1.a.b.c) !== null && _a !== void 0 ? _a : x2.a.b.c)) {
+    }
+    // error
+    if (((_b = x1.a.b.c) !== null && _b !== void 0 ? _b : x2.a.b.c) && 1) {
+    }
+}
+class Foo {
+    required() {
         return true;
-    };
-    Foo.prototype.test = function () {
+    }
+    test() {
         // error
         this.required && console.log('required');
         // error
@@ -211,6 +338,5 @@ var Foo = /** @class */ (function () {
         this.required && 1 && this.required();
         // ok
         1 && this.optional && console.log('optional');
-    };
-    return Foo;
-}());
+    }
+}

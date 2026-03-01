@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts] ////
+
 //// [recursiveTypesWithTypeof.ts]
 // The following are errors because of circular references
 var c: typeof c;
@@ -53,6 +55,7 @@ var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
 var hy3: any;
 
 //// [recursiveTypesWithTypeof.js]
+"use strict";
 // The following are errors because of circular references
 var c;
 var c;

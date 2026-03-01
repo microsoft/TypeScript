@@ -1,8 +1,9 @@
-tests/cases/compiler/input.ts(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-tests/cases/compiler/input.ts(6,14): error TS2323: Cannot redeclare exported variable 'Sub'.
+input.ts(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+input.ts(6,14): error TS2300: Duplicate identifier 'Sub'.
+input.ts(12,14): error TS2300: Duplicate identifier 'Sub'.
 
 
-==== tests/cases/compiler/input.ts (2 errors) ====
+==== input.ts (3 errors) ====
     export = exports;
     ~~~~~~~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -12,11 +13,15 @@ tests/cases/compiler/input.ts(6,14): error TS2323: Cannot redeclare exported var
     }
     export class Sub {
                  ~~~
-!!! error TS2323: Cannot redeclare exported variable 'Sub'.
+!!! error TS2300: Duplicate identifier 'Sub'.
+!!! related TS6203 input.ts:12:14: 'Sub' was also declared here.
         instance!: {
             t: number;
         };
     }
     declare namespace exports {
         export { Sub };
+                 ~~~
+!!! error TS2300: Duplicate identifier 'Sub'.
+!!! related TS6203 input.ts:6:14: 'Sub' was also declared here.
     }

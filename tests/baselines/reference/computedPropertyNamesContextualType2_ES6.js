@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType2_ES6.ts] ////
+
 //// [computedPropertyNamesContextualType2_ES6.ts]
 interface I {
     [s: string]: (x: any) => number; // Doesn't get hit
@@ -10,6 +12,7 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType2_ES6.js]
+"use strict";
 var o = {
     [+"foo"](y) { return y.length; },
     [+"bar"]: y => y.length

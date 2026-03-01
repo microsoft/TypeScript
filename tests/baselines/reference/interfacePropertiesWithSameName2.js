@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfacePropertiesWithSameName2.ts] ////
+
 //// [interfacePropertiesWithSameName2.ts]
 interface Mover {
     move(): void;
@@ -13,7 +15,7 @@ interface MoverShaker extends Mover, Shaker {
 }
 
 // Inside a module
-declare module MoversAndShakers {
+declare namespace MoversAndShakers {
     export class Mover {
         move(): void;
         getStatus(): { speed: number; };
@@ -31,3 +33,4 @@ interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {
 }
 
 //// [interfacePropertiesWithSameName2.js]
+"use strict";

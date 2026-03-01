@@ -1,20 +1,17 @@
-tests/cases/compiler/setterBeforeGetter.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/setterBeforeGetter.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+setterBeforeGetter.ts(3,13): error TS2564: Property '_bar' has no initializer and is not definitely assigned in the constructor.
 
 
-==== tests/cases/compiler/setterBeforeGetter.ts (2 errors) ====
+==== setterBeforeGetter.ts (1 errors) ====
     class Foo {
     
         private _bar: { a: string; };
+                ~~~~
+!!! error TS2564: Property '_bar' has no initializer and is not definitely assigned in the constructor.
         // should not be an error to order them this way
         set bar(thing: { a: string; }) {
-            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             this._bar = thing;
         }
         get bar(): { a: string; } {
-            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this._bar;
         }
     }

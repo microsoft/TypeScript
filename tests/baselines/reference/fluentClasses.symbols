@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/fluentClasses.ts ===
+//// [tests/cases/conformance/types/thisType/fluentClasses.ts] ////
+
+=== fluentClasses.ts ===
 class A {
 >A : Symbol(A, Decl(fluentClasses.ts, 0, 0))
 

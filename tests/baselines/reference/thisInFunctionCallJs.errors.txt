@@ -1,0 +1,46 @@
+/a.js(9,26): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+/a.js(15,31): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== /a.js (2 errors) ====
+    class Test {
+        constructor() {
+            /** @type {number[]} */
+            this.data = [1, 2, 3];
+        }
+    
+        finderRaw() {
+            this.data.find(function (d) {
+                return d === this.data.length
+                             ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:8:24: An outer value of 'this' is shadowed by this container.
+            })
+        }
+    
+        forEacherRaw() {
+            this.data.forEach(function (d) {
+                console.log(d === this.data.length)
+                                  ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 /a.js:14:27: An outer value of 'this' is shadowed by this container.
+            })
+        }
+    
+        forEacher() {
+            this.data.forEach(
+            /** @this {Test} */
+            function (d) {
+                console.log(d === this.data.length)
+            }, this)
+        }
+    
+        finder() {
+            this.data.find(
+            /** @this {Test} */
+            function (d) {
+                return d === this.data.length
+            }, this)
+        }
+    }
+    

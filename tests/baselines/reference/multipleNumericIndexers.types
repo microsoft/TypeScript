@@ -1,65 +1,88 @@
-=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts] ////
+
+=== multipleNumericIndexers.ts ===
 // Multiple indexers of the same type are an error
 
 class C {
 >C : C
+>  : ^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 interface I {
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 var a: {
 >a : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 var b: {
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     [x: number]: string
 >x : number
+>  : ^^^^^^
 
 } = { 1: '', "2": '' }
 >{ 1: '', "2": '' } : { 1: string; "2": string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >"2" : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 
 interface I<T> {
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 }
 

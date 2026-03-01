@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithCallSignatureReturningSpecialization.ts] ////
+
 //// [genericWithCallSignatureReturningSpecialization.ts]
 interface B<T> {
     f(): B<number>;
@@ -8,5 +10,6 @@ x(true); // was error
 
 
 //// [genericWithCallSignatureReturningSpecialization.js]
+"use strict";
 var x;
 x(true); // was error

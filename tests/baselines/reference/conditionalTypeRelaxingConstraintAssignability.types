@@ -1,34 +1,46 @@
-=== tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts ===
+//// [tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts] ////
+
+=== conditionalTypeRelaxingConstraintAssignability.ts ===
 export type ElChildren =
->ElChildren : string | undefined
+>ElChildren : ElChildren
+>           : ^^^^^^^^^^
 
   | ElChildren.Void
 >ElChildren : any
+>           : ^^^
 
   | ElChildren.Text;
 >ElChildren : any
+>           : ^^^
 
 export namespace ElChildren {
   export type Void = undefined;
 >Void : undefined
+>     : ^^^^^^^^^
 
   export type Text = string;
 >Text : string
+>     : ^^^^^^
 }
 
 type Relax<C extends ElChildren> = C extends ElChildren.Text ? ElChildren.Text : C;
 >Relax : Relax<C>
+>      : ^^^^^^^^
 >ElChildren : any
+>           : ^^^
 >ElChildren : any
+>           : ^^^
 
 export class Elem<
 >Elem : Elem<C>
+>     : ^^^^^^^
 
   C extends ElChildren,
   > {
   constructor(
     private children_: Relax<C>,
 >children_ : Relax<C>
+>          : ^^^^^^^^
 
   ) {
   }
@@ -36,56 +48,88 @@ export class Elem<
 
 new Elem(undefined as ElChildren.Void);
 >new Elem(undefined as ElChildren.Void) : Elem<undefined>
+>                                       : ^^^^^^^^^^^^^^^
 >Elem : typeof Elem
+>     : ^^^^^^^^^^^
 >undefined as ElChildren.Void : undefined
+>                             : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >ElChildren : any
+>           : ^^^
 
 new Elem('' as ElChildren.Text);
 >new Elem('' as ElChildren.Text) : Elem<string>
+>                                : ^^^^^^^^^^^^
 >Elem : typeof Elem
+>     : ^^^^^^^^^^^
 >'' as ElChildren.Text : string
+>                      : ^^^^^^
 >'' : ""
+>   : ^^
 >ElChildren : any
+>           : ^^^
 
 new Elem('' as ElChildren.Void | ElChildren.Text); // error
 >new Elem('' as ElChildren.Void | ElChildren.Text) : Elem<string | undefined>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Elem : typeof Elem
+>     : ^^^^^^^^^^^
 >'' as ElChildren.Void | ElChildren.Text : string | undefined
+>                                        : ^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >ElChildren : any
+>           : ^^^
 >ElChildren : any
+>           : ^^^
 
 new Elem('' as ElChildren); // error
 >new Elem('' as ElChildren) : Elem<ElChildren>
+>                           : ^^^^^^^^^^^^^^^^
 >Elem : typeof Elem
+>     : ^^^^^^^^^^^
 >'' as ElChildren : ElChildren
+>                 : ^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 // Repro from #31766
 
 interface I { a: string }
 >a : string
+>  : ^^^^^^
 
 type DeepPartial<T> =
 >DeepPartial : DeepPartial<T>
+>            : ^^^^^^^^^^^^^^
 
     T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} : T;
 
 declare function f<T>(t: T, partial: DeepPartial<T>): T;
 >f : <T>(t: T, partial: DeepPartial<T>) => T
+>  : ^ ^^ ^^ ^^       ^^              ^^^^^ 
 >t : T
+>  : ^
 >partial : DeepPartial<T>
+>        : ^^^^^^^^^^^^^^
 
 function g(p1: I, p2: Partial<I>): I {
 >g : (p1: I, p2: Partial<I>) => I
+>  : ^  ^^ ^^  ^^          ^^^^^ 
 >p1 : I
+>   : ^
 >p2 : Partial<I>
+>   : ^^^^^^^^^^
 
   return f(p1, p2);
 >f(p1, p2) : I
+>          : ^
 >f : <T>(t: T, partial: DeepPartial<T>) => T
+>  : ^ ^^ ^^ ^^       ^^              ^^^^^ 
 >p1 : I
+>   : ^
 >p2 : Partial<I>
+>   : ^^^^^^^^^^
 }
 

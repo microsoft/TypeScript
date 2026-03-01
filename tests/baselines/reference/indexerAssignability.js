@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerAssignability.ts] ////
+
 //// [indexerAssignability.ts]
 var a: { [s: string]: string; };
 var b: { [n: number]: string; };
@@ -11,6 +13,7 @@ c = a;
 c = b;
 
 //// [indexerAssignability.js]
+"use strict";
 var a;
 var b;
 var c;

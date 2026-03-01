@@ -1,41 +1,61 @@
-=== tests/cases/compiler/types.d.ts ===
+//// [tests/cases/compiler/esModuleInteropImportTSLibHasImport.ts] ////
+
+=== types.d.ts ===
 declare module "tslib" { export const __exportStar: any; export const __importDefault: any; export const __importStar: any; }
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >__exportStar : any
 >__importDefault : any
 >__importStar : any
 
-=== tests/cases/compiler/utils/username.ts ===
+=== utils/username.ts ===
 export const username = () => 'username';
 >username : () => string
+>         : ^^^^^^^^^^^^
 >() => 'username' : () => string
+>                 : ^^^^^^^^^^^^
 >'username' : "username"
+>           : ^^^^^^^^^^
 
-=== tests/cases/compiler/utils/index.ts ===
+=== utils/index.ts ===
+
 export * from './username';
-No type information for this code.=== tests/cases/compiler/hello.ts ===
+=== hello.ts ===
 const sayHello = (name?: string) => void (`Hello, ${name}!`);
 >sayHello : (name?: string) => any
+>         : ^    ^^^      ^^^^^^^^
 >(name?: string) => void (`Hello, ${name}!`) : (name?: string) => any
+>                                            : ^    ^^^      ^^^^^^^^
 >name : string
+>     : ^^^^^^
 >void (`Hello, ${name}!`) : undefined
+>                         : ^^^^^^^^^
 >(`Hello, ${name}!`) : string
+>                    : ^^^^^^
 >`Hello, ${name}!` : string
+>                  : ^^^^^^
 >name : string
+>     : ^^^^^^
 
 export default sayHello;
 >sayHello : (name?: string) => any
+>         : ^    ^^^      ^^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import sayHello from "./hello";
 >sayHello : (name?: string) => any
+>         : ^    ^^^      ^^^^^^^^
 
 import { username } from './utils';
 >username : () => string
+>         : ^^^^^^^^^^^^
 
 sayHello(username());
 >sayHello(username()) : any
 >sayHello : (name?: string) => any
+>         : ^    ^^^      ^^^^^^^^
 >username() : string
+>           : ^^^^^^
 >username : () => string
+>         : ^^^^^^^^^^^^
 

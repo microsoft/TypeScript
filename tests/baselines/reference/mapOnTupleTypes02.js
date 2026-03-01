@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mapOnTupleTypes02.ts] ////
+
 //// [mapOnTupleTypes02.ts]
 export type Point = [number, number];
 
@@ -6,13 +8,9 @@ export function increment(point: Point) {
 }
 
 //// [mapOnTupleTypes02.js]
-"use strict";
-exports.__esModule = true;
-exports.increment = void 0;
-function increment(point) {
-    return point.map(function (d) { return d + 1; });
+export function increment(point) {
+    return point.map(d => d + 1);
 }
-exports.increment = increment;
 
 
 //// [mapOnTupleTypes02.d.ts]

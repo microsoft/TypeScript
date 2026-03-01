@@ -1,49 +1,71 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractDeclarations.d.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractDeclarations.d.ts] ////
+
+=== classAbstractDeclarations.d.ts ===
 declare abstract class A {
 >A : A
+>  : ^
 
     abstract constructor() {}
 }
 
 declare abstract class AA {
 >AA : AA
+>   : ^^
 
     abstract foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }
 
 declare abstract class BB extends AA {}
 >BB : BB
+>   : ^^
 >AA : AA
+>   : ^^
 
 declare class CC extends AA {}
 >CC : CC
+>   : ^^
 >AA : AA
+>   : ^^
 
 declare class DD extends BB {}
 >DD : DD
+>   : ^^
 >BB : BB
+>   : ^^
 
 declare abstract class EE extends BB {}
 >EE : EE
+>   : ^^
 >BB : BB
+>   : ^^
 
 declare class FF extends CC {}
 >FF : FF
+>   : ^^
 >CC : CC
+>   : ^^
 
 declare abstract class GG extends CC {}
 >GG : GG
+>   : ^^
 >CC : CC
+>   : ^^
 
 declare abstract class AAA {}
 >AAA : AAA
+>    : ^^^
 
 declare abstract class BBB extends AAA {}
 >BBB : BBB
+>    : ^^^
 >AAA : AAA
+>    : ^^^
 
 declare class CCC extends AAA {}
 >CCC : CCC
+>    : ^^^
 >AAA : AAA
+>    : ^^^
 

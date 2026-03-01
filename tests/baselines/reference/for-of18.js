@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of18.ts] ////
+
 //// [for-of18.ts]
-class StringIterator {
+class MyStringIterator {
     next() {
         return {
             value: "",
@@ -12,10 +14,11 @@ class StringIterator {
 }
 
 var v: string;
-for (v of new StringIterator) { } // Should succeed
+for (v of new MyStringIterator) { } // Should succeed
 
 //// [for-of18.js]
-class StringIterator {
+"use strict";
+class MyStringIterator {
     next() {
         return {
             value: "",
@@ -27,4 +30,4 @@ class StringIterator {
     }
 }
 var v;
-for (v of new StringIterator) { } // Should succeed
+for (v of new MyStringIterator) { } // Should succeed

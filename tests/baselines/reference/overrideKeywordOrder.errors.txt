@@ -1,11 +1,11 @@
-tests/cases/conformance/override/overrideKeywordOrder.ts(12,9): error TS1029: 'override' modifier must precede 'async' modifier.
-tests/cases/conformance/override/overrideKeywordOrder.ts(15,12): error TS1029: 'static' modifier must precede 'override' modifier.
-tests/cases/conformance/override/overrideKeywordOrder.ts(21,12): error TS1029: 'public' modifier must precede 'override' modifier.
-tests/cases/conformance/override/overrideKeywordOrder.ts(26,12): error TS1029: 'override' modifier must precede 'readonly' modifier.
-tests/cases/conformance/override/overrideKeywordOrder.ts(32,12): error TS1029: 'abstract' modifier must precede 'override' modifier.
+overrideKeywordOrder.ts(12,9): error TS1029: 'override' modifier must precede 'async' modifier.
+overrideKeywordOrder.ts(15,12): error TS1029: 'static' modifier must precede 'override' modifier.
+overrideKeywordOrder.ts(21,12): error TS1029: 'public' modifier must precede 'override' modifier.
+overrideKeywordOrder.ts(26,12): error TS1029: 'override' modifier must precede 'readonly' modifier.
+overrideKeywordOrder.ts(32,12): error TS1029: 'abstract' modifier must precede 'override' modifier.
 
 
-==== tests/cases/conformance/override/overrideKeywordOrder.ts (5 errors) ====
+==== overrideKeywordOrder.ts (5 errors) ====
     abstract class Base {
       static s1() {}
       static s2() {}

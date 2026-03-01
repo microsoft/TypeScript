@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterDestructuringObjectLiteral.ts] ////
+
 //// [parameterDestructuringObjectLiteral.ts]
 // Repro from #22644
 
@@ -9,12 +11,11 @@ fn2({ headers: { foo: 1 } });
 
 
 //// [parameterDestructuringObjectLiteral.js]
+"use strict";
 // Repro from #22644
-var fn1 = function (options) { };
+const fn1 = (options) => { };
 fn1({ headers: { foo: 1 } });
-var fn2 = function (_a) {
-    var _b = _a.headers, headers = _b === void 0 ? {} : _b;
-};
+const fn2 = ({ headers = {} }) => { };
 fn2({ headers: { foo: 1 } });
 
 
@@ -23,5 +24,5 @@ declare const fn1: (options: {
     headers?: {};
 }) => void;
 declare const fn2: ({ headers }: {
-    headers?: {};
+    headers?: {} | undefined;
 }) => void;

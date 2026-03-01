@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorOverloads8.ts ===
+//// [tests/cases/compiler/constructorOverloads8.ts] ////
+
+=== constructorOverloads8.ts ===
 class C {
 >C : Symbol(C, Decl(constructorOverloads8.ts, 0, 0))
 

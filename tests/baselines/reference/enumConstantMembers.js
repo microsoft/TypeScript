@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMembers.ts] ////
+
 //// [enumConstantMembers.ts]
 // Constant members allow negatives, but not decimals. Also hex literals are allowed
 enum E1 {
@@ -41,6 +43,7 @@ const enum E6 {
 
 
 //// [enumConstantMembers.js]
+"use strict";
 // Constant members allow negatives, but not decimals. Also hex literals are allowed
 var E1;
 (function (E1) {

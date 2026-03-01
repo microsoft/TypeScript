@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badExternalModuleReference.ts] ////
+
 //// [badExternalModuleReference.ts]
 import a1 = require("garbage");
 export declare var a: {
@@ -7,7 +9,5 @@ export declare var a: {
 
 
 //// [badExternalModuleReference.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

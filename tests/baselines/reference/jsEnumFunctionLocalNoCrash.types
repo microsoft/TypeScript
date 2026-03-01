@@ -1,59 +1,88 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/jsEnumFunctionLocalNoCrash.ts] ////
+
+=== index.js ===
 function defineCommonExtensionSymbols(apiPrivate) {
 >defineCommonExtensionSymbols : (apiPrivate: any) => void
+>                             : ^          ^^^^^^^^^^^^^^
 >apiPrivate : any
 
     /** @enum {string} */
     apiPrivate.Events = {
 >apiPrivate.Events = {      ButtonClicked: 'button-clicked-',      PanelObjectSelected: 'panel-objectSelected-',      NetworkRequestFinished: 'network-request-finished',      OpenResource: 'open-resource',      PanelSearch: 'panel-search-',      RecordingStarted: 'trace-recording-started-',      RecordingStopped: 'trace-recording-stopped-',      ResourceAdded: 'resource-added',      ResourceContentCommitted: 'resource-content-committed',      ViewShown: 'view-shown-',      ViewHidden: 'view-hidden-'    } : { ButtonClicked: string; PanelObjectSelected: string; NetworkRequestFinished: string; OpenResource: string; PanelSearch: string; RecordingStarted: string; RecordingStopped: string; ResourceAdded: string; ResourceContentCommitted: string; ViewShown: string; ViewHidden: string; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apiPrivate.Events : any
 >apiPrivate : any
+>           : ^^^
 >Events : any
+>       : ^^^
 >{      ButtonClicked: 'button-clicked-',      PanelObjectSelected: 'panel-objectSelected-',      NetworkRequestFinished: 'network-request-finished',      OpenResource: 'open-resource',      PanelSearch: 'panel-search-',      RecordingStarted: 'trace-recording-started-',      RecordingStopped: 'trace-recording-stopped-',      ResourceAdded: 'resource-added',      ResourceContentCommitted: 'resource-content-committed',      ViewShown: 'view-shown-',      ViewHidden: 'view-hidden-'    } : { ButtonClicked: string; PanelObjectSelected: string; NetworkRequestFinished: string; OpenResource: string; PanelSearch: string; RecordingStarted: string; RecordingStopped: string; ResourceAdded: string; ResourceContentCommitted: string; ViewShown: string; ViewHidden: string; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       ButtonClicked: 'button-clicked-',
 >ButtonClicked : string
+>              : ^^^^^^
 >'button-clicked-' : "button-clicked-"
+>                  : ^^^^^^^^^^^^^^^^^
 
       PanelObjectSelected: 'panel-objectSelected-',
 >PanelObjectSelected : string
+>                    : ^^^^^^
 >'panel-objectSelected-' : "panel-objectSelected-"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
       NetworkRequestFinished: 'network-request-finished',
 >NetworkRequestFinished : string
+>                       : ^^^^^^
 >'network-request-finished' : "network-request-finished"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       OpenResource: 'open-resource',
 >OpenResource : string
+>             : ^^^^^^
 >'open-resource' : "open-resource"
+>                : ^^^^^^^^^^^^^^^
 
       PanelSearch: 'panel-search-',
 >PanelSearch : string
+>            : ^^^^^^
 >'panel-search-' : "panel-search-"
+>                : ^^^^^^^^^^^^^^^
 
       RecordingStarted: 'trace-recording-started-',
 >RecordingStarted : string
+>                 : ^^^^^^
 >'trace-recording-started-' : "trace-recording-started-"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       RecordingStopped: 'trace-recording-stopped-',
 >RecordingStopped : string
+>                 : ^^^^^^
 >'trace-recording-stopped-' : "trace-recording-stopped-"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       ResourceAdded: 'resource-added',
 >ResourceAdded : string
+>              : ^^^^^^
 >'resource-added' : "resource-added"
+>                 : ^^^^^^^^^^^^^^^^
 
       ResourceContentCommitted: 'resource-content-committed',
 >ResourceContentCommitted : string
+>                         : ^^^^^^
 >'resource-content-committed' : "resource-content-committed"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       ViewShown: 'view-shown-',
 >ViewShown : string
+>          : ^^^^^^
 >'view-shown-' : "view-shown-"
+>              : ^^^^^^^^^^^^^
 
       ViewHidden: 'view-hidden-'
 >ViewHidden : string
+>           : ^^^^^^
 >'view-hidden-' : "view-hidden-"
+>               : ^^^^^^^^^^^^^^
 
     };
 }

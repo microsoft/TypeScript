@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowArrayErrors.ts ===
+//// [tests/cases/compiler/controlFlowArrayErrors.ts] ////
+
+=== controlFlowArrayErrors.ts ===
 declare function cond(): boolean;
 >cond : Symbol(cond, Decl(controlFlowArrayErrors.ts, 0, 0))
 

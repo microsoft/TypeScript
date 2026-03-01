@@ -1,25 +1,36 @@
-=== tests/cases/compiler/superCallInsideObjectLiteralExpression.ts ===
+//// [tests/cases/compiler/superCallInsideObjectLiteralExpression.ts] ////
+
+=== superCallInsideObjectLiteralExpression.ts ===
 class A {
 >A : A
+>  : ^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor() {
         var x = {
 >x : { x: void; }
+>  : ^^^^^^^^^^^^
 >{            x: super()        } : { x: void; }
+>                                 : ^^^^^^^^^^^^
 
             x: super()
 >x : void
+>  : ^^^^
 >super() : void
+>        : ^^^^
 >super : typeof A
+>      : ^^^^^^^^
         }
     }
 }

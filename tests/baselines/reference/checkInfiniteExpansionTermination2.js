@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkInfiniteExpansionTermination2.ts] ////
+
 //// [checkInfiniteExpansionTermination2.ts]
 // Regression test for #1002
 // Before fix this code would cause infinite loop
@@ -18,6 +20,7 @@ function fn<T>() {
 
 
 //// [checkInfiniteExpansionTermination2.js]
+"use strict";
 // Regression test for #1002
 // Before fix this code would cause infinite loop
 function fn() {

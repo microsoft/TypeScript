@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tooManyTypeParameters1.ts] ////
+
 //// [tooManyTypeParameters1.ts]
 function f<T>() { }
 f<string, string>();
@@ -12,14 +14,12 @@ interface I<T> {}
 var i: I<number,number>;
 
 //// [tooManyTypeParameters1.js]
+"use strict";
 function f() { }
 f();
-var x = function () { };
+var x = () => { };
 x();
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = new C();
 var i;

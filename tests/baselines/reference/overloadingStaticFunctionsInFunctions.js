@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts] ////
+
 //// [overloadingStaticFunctionsInFunctions.ts]
 function boo {
   static test()
@@ -6,6 +8,7 @@ function boo {
 }
 
 //// [overloadingStaticFunctionsInFunctions.js]
+"use strict";
 function boo() {
     test();
     test(name, string);

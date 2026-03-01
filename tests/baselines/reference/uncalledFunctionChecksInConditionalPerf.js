@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditionalPerf.ts] ////
+
 //// [uncalledFunctionChecksInConditionalPerf.ts]
 declare const b: boolean;
 
@@ -5,4 +7,5 @@ declare const b: boolean;
 
 
 //// [uncalledFunctionChecksInConditionalPerf.js]
+"use strict";
 ((((((((((((((((((((((((((b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b) && b);

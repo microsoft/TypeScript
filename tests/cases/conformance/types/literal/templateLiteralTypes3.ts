@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @declaration: true
 
@@ -190,4 +191,16 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
     spread(`1.${t}.3`, `1.${t}.4`);
     spread(`1.${u}.3`, `1.${u}.4`);
     spread(u1, u2);
+}
+
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+    let x: keyof T & string | `-${keyof T & string}`;
+    x = "id";
+    x = "-id";
 }

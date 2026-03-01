@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeObjectLiteral.ts] ////
+
 //// [targetTypeObjectLiteral.ts]
 var z: { x: number; y: (w:string)=>number;} = {
 
@@ -12,6 +14,7 @@ var z: { x: number; y: (w:string)=>number;} = {
 }
 
 //// [targetTypeObjectLiteral.js]
+"use strict";
 var z = {
     x: 12,
     y: function (w) {

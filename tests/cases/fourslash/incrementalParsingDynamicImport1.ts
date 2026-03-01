@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts"/>
 
 // @lib: es6
+// @module: commonjs
 
 // @Filename: ./foo.ts
 //// export function bar() { return 1; }

@@ -1,0 +1,43 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionAwait1.ts ===
+// <|async function [|foo|]() {
+//     /*GOTO DEF*/await Promise.resolve(0);
+// }|>
+// function notAsync() {
+//     await Promise.resolve(0);
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionAwait1.ts ===
+// async function foo() {
+//     await Promise.resolve(0);
+// }
+// <|function [|notAsync|]() {
+//     /*GOTO DEF*/await Promise.resolve(0);
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "notAsync",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

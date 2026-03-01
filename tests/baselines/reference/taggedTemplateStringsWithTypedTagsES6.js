@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTagsES6.ts] ////
+
 //// [taggedTemplateStringsWithTypedTagsES6.ts]
 interface I {
     (stringParts: TemplateStringsArray, ...rest: number[]): I;
@@ -32,6 +34,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 
 
 //// [taggedTemplateStringsWithTypedTagsES6.js]
+"use strict";
 var f;
 f `abc`;
 f `abc${1}def${2}ghi`;

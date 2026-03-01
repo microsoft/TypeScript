@@ -1,27 +1,27 @@
-tests/cases/conformance/node/index.ts(2,23): error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.
+index.ts(2,23): error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/node/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     // esm format file
     import { Thing } from "inner/other";
                           ~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.
     export const a = (await import("inner/index.js")).x();
-==== tests/cases/conformance/node/node_modules/inner/index.d.ts (0 errors) ====
+==== node_modules/inner/index.d.ts (0 errors) ====
     // esm format file
     export { x } from "./other.js";
-==== tests/cases/conformance/node/node_modules/inner/other.d.ts (0 errors) ====
+==== node_modules/inner/other.d.ts (0 errors) ====
     // esm format file
     export interface Thing {}
     export const x: () => Thing;
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module",
         "exports": "./index.js"
     }
-==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+==== node_modules/inner/package.json (0 errors) ====
     {
         "name": "inner",
         "private": true,

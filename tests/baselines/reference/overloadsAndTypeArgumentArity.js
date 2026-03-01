@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadsAndTypeArgumentArity.ts] ////
+
 //// [overloadsAndTypeArgumentArity.ts]
 declare function Callbacks(flags?: string): void;
 declare function Callbacks<T>(flags?: string): void;
@@ -8,5 +10,6 @@ Callbacks<number, string, boolean>('s'); // no error
 new Callbacks<number, string, boolean>('s'); // no error
 
 //// [overloadsAndTypeArgumentArity.js]
+"use strict";
 Callbacks('s'); // no error
 new Callbacks('s'); // no error

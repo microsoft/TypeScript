@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDeclaration_jsx.tsx] ////
+
 //// [useBeforeDeclaration_jsx.tsx]
 namespace JSX {
     export interface Element {}
@@ -16,6 +18,7 @@ class C {
 
 
 //// [useBeforeDeclaration_jsx.jsx]
+"use strict";
 class C {
 }
 C.a = <C.z></C.z>;

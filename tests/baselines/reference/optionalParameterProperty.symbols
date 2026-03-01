@@ -1,8 +1,10 @@
-=== tests/cases/compiler/optionalParameterProperty.ts ===
+//// [tests/cases/compiler/optionalParameterProperty.ts] ////
+
+=== optionalParameterProperty.ts ===
 class C {
 >C : Symbol(C, Decl(optionalParameterProperty.ts, 0, 0))
 
-    p: number;
+    p: number = 0;
 >p : Symbol(C.p, Decl(optionalParameterProperty.ts, 0, 9))
 }
 

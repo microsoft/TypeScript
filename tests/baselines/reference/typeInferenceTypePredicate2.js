@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceTypePredicate2.ts] ////
+
 //// [typeInferenceTypePredicate2.ts]
 [true, true, false, null]
     .filter((thing): thing is boolean => thing !== null)
@@ -5,6 +7,7 @@
 
 
 //// [typeInferenceTypePredicate2.js]
+"use strict";
 [true, true, false, null]
-    .filter(function (thing) { return thing !== null; })
-    .map(function (thing) { return thing.toString(); });
+    .filter((thing) => thing !== null)
+    .map(thing => thing.toString());

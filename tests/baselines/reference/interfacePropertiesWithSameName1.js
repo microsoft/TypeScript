@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfacePropertiesWithSameName1.ts] ////
+
 //// [interfacePropertiesWithSameName1.ts]
 interface Mover {
     move(): void;
@@ -14,3 +16,4 @@ interface MoverShaker extends Mover, Shaker {
 
 
 //// [interfacePropertiesWithSameName1.js]
+"use strict";

@@ -1,7 +1,8 @@
+// @target: es2015
 // @jsx: react
-// @libFiles: lib.d.ts,react.d.ts
 // @skipLibCheck: true
 // @allowSyntheticDefaultImports: true
+/// <reference path="/.lib/react.d.ts" />
 import React from "react";
 
 type InfoProps =

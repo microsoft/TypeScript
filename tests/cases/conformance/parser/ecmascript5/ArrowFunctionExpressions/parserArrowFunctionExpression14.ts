@@ -1,7 +1,7 @@
 // @allowjs: true
 // @checkjs: true
 // @outdir: out
-// @target: es3,es6
+// @target: es6
 
 // @filename: fileJs.js
 a() ? (b: number, c?: string): void => d() : e; // Not legal JS; "Unexpected token ':'" at first colon

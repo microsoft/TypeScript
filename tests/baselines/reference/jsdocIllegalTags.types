@@ -1,12 +1,16 @@
+//// [tests/cases/compiler/jsdocIllegalTags.ts] ////
+
 === /a.js ===
 class C {
 >C : C
+>  : ^
 
     /** @template T */
     constructor() { }
 }
 class D {
 >D : D
+>  : ^
 
     /** @return {number} */
     constructor() {}

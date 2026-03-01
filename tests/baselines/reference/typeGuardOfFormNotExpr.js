@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormNotExpr.ts] ////
+
 //// [typeGuardOfFormNotExpr.ts]
 var str: string;
 var bool: boolean;
@@ -54,6 +56,7 @@ else {
 }
 
 //// [typeGuardOfFormNotExpr.js]
+"use strict";
 var str;
 var bool;
 var num;

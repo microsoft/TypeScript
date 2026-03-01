@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts] ////
+
 //// [emitClassDeclarationWithPropertyAssignmentInES6.ts]
 class C {
     x: string = "Hello world";
@@ -25,6 +27,7 @@ class F extends D{
 }
 
 //// [emitClassDeclarationWithPropertyAssignmentInES6.js]
+"use strict";
 class C {
     constructor() {
         this.x = "Hello world";

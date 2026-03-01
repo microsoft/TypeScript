@@ -1,7 +1,7 @@
-tests/cases/compiler/ClassDeclaration21.ts(3,5): error TS2389: Function implementation name must be '0'.
+ClassDeclaration21.ts(3,5): error TS2389: Function implementation name must be '0'.
 
 
-==== tests/cases/compiler/ClassDeclaration21.ts (1 errors) ====
+==== ClassDeclaration21.ts (1 errors) ====
     class C {
         0();
         1() { }

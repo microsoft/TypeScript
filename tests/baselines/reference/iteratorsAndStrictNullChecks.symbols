@@ -1,4 +1,6 @@
-=== tests/cases/compiler/iteratorsAndStrictNullChecks.ts ===
+//// [tests/cases/compiler/iteratorsAndStrictNullChecks.ts] ////
+
+=== iteratorsAndStrictNullChecks.ts ===
 // for..of
 for (const x of ["a", "b"]) {
 >x : Symbol(x, Decl(iteratorsAndStrictNullChecks.ts, 1, 10))

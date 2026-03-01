@@ -1,6 +1,9 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+//// [tests/cases/conformance/jsdoc/jsdocOverrideTag1.ts] ////
+
+=== 0.js ===
 class A {
 >A : A
+>  : ^
 
     /**
      * @method
@@ -9,23 +12,32 @@ class A {
      */
     foo (a) {
 >foo : (a: string | number) => boolean
+>    : ^ ^^               ^^^^^       
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 
         return typeof a === 'string'
 >typeof a === 'string' : boolean
+>                      : ^^^^^^^
 >typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
     }
     bar () {
 >bar : () => void
+>    : ^^^^^^^^^^
 
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     /**
      * @override
@@ -35,24 +47,33 @@ class B extends A {
      */
     foo (a) {
 >foo : (a: string | number) => boolean
+>    : ^ ^^               ^^^^^       
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 
         return super.foo(a)
 >super.foo(a) : boolean
+>             : ^^^^^^^
 >super.foo : (a: string | number) => boolean
+>          : ^ ^^               ^^^^^       
 >super : A
+>      : ^
 >foo : (a: string | number) => boolean
+>    : ^ ^^               ^^^^^       
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
     }
 
     bar () {
 >bar : () => void
+>    : ^^^^^^^^^^
 
     }
 
     /** @override */
     baz () {
 >baz : () => void
+>    : ^^^^^^^^^^
 
     }
 }
@@ -60,10 +81,12 @@ class B extends A {
 
 class C {
 >C : C
+>  : ^
 
     /** @override */
     foo () {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     }
 }

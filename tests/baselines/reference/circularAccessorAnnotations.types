@@ -1,62 +1,91 @@
-=== tests/cases/compiler/circularAccessorAnnotations.ts ===
+//// [tests/cases/compiler/circularAccessorAnnotations.ts] ////
+
+=== circularAccessorAnnotations.ts ===
 declare const c1: {
->c1 : { readonly foo: any; }
+>c1 : { readonly foo: typeof c1.foo; }
+>   : ^^^^^^^^^^^^^^^^             ^^^
 
     get foo(): typeof c1.foo;
 >foo : any
+>    : ^^^
 >c1.foo : any
->c1 : { readonly foo: any; }
+>       : ^^^
+>c1 : { readonly foo: typeof c1.foo; }
+>   : ^^^^^^^^^^^^^^^^             ^^^
 >foo : any
+>    : ^^^
 }
 
 declare const c2: {
->c2 : { foo: any; }
+>c2 : { foo: typeof c2.foo; }
+>   : ^^^^^^^             ^^^
 
     set foo(value: typeof c2.foo);
 >foo : any
+>    : ^^^
 >value : any
+>      : ^^^
 >c2.foo : any
->c2 : { foo: any; }
+>       : ^^^
+>c2 : { foo: typeof c2.foo; }
+>   : ^^^^^^^             ^^^
 >foo : any
+>    : ^^^
 }
 
 declare const c3: {
 >c3 : { foo: string; }
+>   : ^^^^^^^      ^^^
 
     get foo(): string;
 >foo : string
+>    : ^^^^^^
 
     set foo(value: typeof c3.foo);
 >foo : string
+>    : ^^^^^^
 >value : string
+>      : ^^^^^^
 >c3.foo : string
+>       : ^^^^^^
 >c3 : { foo: string; }
+>   : ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 }
 
 type T1 = {
->T1 : { readonly foo: any; }
+>T1 : T1
+>   : ^^
 
     get foo(): T1["foo"];
 >foo : any
+>    : ^^^
 }
 
 type T2 = {
->T2 : { foo: any; }
+>T2 : T2
+>   : ^^
 
     set foo(value: T2["foo"]);
 >foo : any
+>    : ^^^
 >value : any
+>      : ^^^
 }
 
 type T3 = {
->T3 : { foo: string; }
+>T3 : T3
+>   : ^^
 
     get foo(): string;
 >foo : string
+>    : ^^^^^^
 
     set foo(value: T3["foo"]);
 >foo : string
+>    : ^^^^^^
 >value : string
+>      : ^^^^^^
 }
 

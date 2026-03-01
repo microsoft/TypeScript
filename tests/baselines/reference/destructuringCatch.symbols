@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringCatch.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringCatch.ts] ////
+
+=== destructuringCatch.ts ===
 try {
     throw [0, 1];
 }
@@ -31,7 +33,6 @@ try {
 >z : Symbol(z, Decl(destructuringCatch.ts, 15, 20))
 }
 catch ([{x: [y], z}]) {
->x : Symbol(x)
 >y : Symbol(y, Decl(destructuringCatch.ts, 17, 13))
 >z : Symbol(z, Decl(destructuringCatch.ts, 17, 16))
 

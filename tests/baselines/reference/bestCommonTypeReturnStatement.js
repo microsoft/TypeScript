@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bestCommonTypeReturnStatement.ts] ////
+
 //// [bestCommonTypeReturnStatement.ts]
 interface IPromise<T> {
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
@@ -13,6 +15,7 @@ function b(): IPromise<void> { return null; }
 function d(): IPromise<any> { return null; }
 
 //// [bestCommonTypeReturnStatement.js]
+"use strict";
 function f() {
     if (true)
         return b();

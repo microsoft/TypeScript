@@ -1,9 +1,18 @@
-tests/cases/conformance/declarationEmit/main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.
+main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.
 
 
-==== tests/cases/conformance/declarationEmit/tsconfig.json (0 errors) ====
+==== tsconfig.json (0 errors) ====
     {}
-==== tests/cases/conformance/declarationEmit/node_modules/ext/package.json (0 errors) ====
+==== main.ts (1 errors) ====
+    import { fa } from "ext";
+             ~~
+!!! error TS2305: Module '"ext"' has no exported member 'fa'.
+    import { fb } from "ext/other";
+    
+    export const va = fa();
+    export const vb = fb();
+    
+==== node_modules/ext/package.json (0 errors) ====
     {
         "name": "ext",
         "version": "1.0.0",
@@ -13,26 +22,17 @@ tests/cases/conformance/declarationEmit/main.ts(1,10): error TS2305: Module '"ex
         }
     }
     
-==== tests/cases/conformance/declarationEmit/node_modules/ext/index.d.ts (0 errors) ====
+==== node_modules/ext/index.d.ts (0 errors) ====
     export interface A {}
     export function fa(): A;
     
-==== tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts (0 errors) ====
+==== node_modules/ext/other.d.ts (0 errors) ====
     export interface B {}
     export function fb(): B;
     
-==== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts (0 errors) ====
+==== node_modules/ext/ts3.1/index.d.ts (0 errors) ====
     export * from "../";
     
-==== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts (0 errors) ====
+==== node_modules/ext/ts3.1/other.d.ts (0 errors) ====
     export * from "../other";
-    
-==== tests/cases/conformance/declarationEmit/main.ts (1 errors) ====
-    import { fa } from "ext";
-             ~~
-!!! error TS2305: Module '"ext"' has no exported member 'fa'.
-    import { fb } from "ext/other";
-    
-    export const va = fa();
-    export const vb = fb();
     

@@ -1,7 +1,7 @@
-tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
+exhaustiveSwitchImplicitReturn.ts(35,32): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 
 
-==== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts (1 errors) ====
+==== exhaustiveSwitchImplicitReturn.ts (1 errors) ====
     function foo1(bar: "a"): number {
         switch(bar) {
             case "a":
@@ -38,7 +38,7 @@ tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not
     
     function foo5(bar: "a" | "b"): number {
                                    ~~~~~~
-!!! error TS7030: Not all code paths return a value.
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
         switch(bar) {
             case "a":
                 return 1;

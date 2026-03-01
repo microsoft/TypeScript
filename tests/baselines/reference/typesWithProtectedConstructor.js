@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithProtectedConstructor.ts] ////
+
 //// [typesWithProtectedConstructor.ts]
 class C {
     protected constructor() { }
@@ -15,18 +17,15 @@ var c2 = new C2(); // error C2 is protected
 var r2: (x: number) => void = c2.constructor;
 
 //// [typesWithProtectedConstructor.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+    constructor() { }
+}
 var c = new C(); // error C is protected
 var r = c.constructor;
-var C2 = /** @class */ (function () {
-    function C2(x) {
-    }
-    return C2;
-}());
+class C2 {
+    constructor(x) { }
+}
 var c2 = new C2(); // error C2 is protected
 var r2 = c2.constructor;
 

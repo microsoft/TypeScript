@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts] ////
+
+=== classStaticBlock23.ts ===
 const nums = [1, 2, 3].map(n => Promise.resolve(n))
 >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
 >[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

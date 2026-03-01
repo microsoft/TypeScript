@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadCrash.ts] ////
+
 //// [overloadCrash.ts]
 interface I1 {a:number; b:number;};
 interface I2 {c:number; d:number;};
@@ -12,6 +14,7 @@ foo(i3, i3); // should not crash the compiler :)
 
 
 //// [overloadCrash.js]
+"use strict";
 ;
 ;
 ;

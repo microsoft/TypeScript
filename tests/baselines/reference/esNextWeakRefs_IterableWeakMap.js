@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
+
 //// [esNextWeakRefs_IterableWeakMap.ts]
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
@@ -46,6 +48,23 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     get(key: K): V | undefined {
         return this.#weakMap.get(key)?.value;
+    }
+
+    getOrInsert(key: K, defaultValue: V): V {
+        if (!this.has(key)) {
+            this.set(key, defaultValue);
+            return defaultValue;
+        }
+        return this.get(key)!;
+    }
+
+    getOrInsertComputed(key: K, callback: (key: K) => V): V {
+        if (!this.has(key)) {
+            const value = callback(key);
+            this.set(key, value);
+            return value;
+        }
+        return this.get(key)!;
     }
 
     delete(key: K): boolean {
@@ -141,6 +160,21 @@ export class IterableWeakMap {
     }
     get(key) {
         return this.#weakMap.get(key)?.value;
+    }
+    getOrInsert(key, defaultValue) {
+        if (!this.has(key)) {
+            this.set(key, defaultValue);
+            return defaultValue;
+        }
+        return this.get(key);
+    }
+    getOrInsertComputed(key, callback) {
+        if (!this.has(key)) {
+            const value = callback(key);
+            this.set(key, value);
+            return value;
+        }
+        return this.get(key);
     }
     delete(key) {
         const entry = this.#weakMap.get(key);

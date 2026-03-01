@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileOptionalInterfaceMethod.ts] ////
+
 //// [declFileOptionalInterfaceMethod.ts]
 interface X {
     f? <T>();
@@ -5,6 +7,7 @@ interface X {
 
 
 //// [declFileOptionalInterfaceMethod.js]
+"use strict";
 
 
 //// [declFileOptionalInterfaceMethod.d.ts]

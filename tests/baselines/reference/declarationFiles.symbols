@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/declarationFiles.ts ===
+//// [tests/cases/conformance/types/thisType/declarationFiles.ts] ////
+
+=== declarationFiles.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(declarationFiles.ts, 0, 0))
 
@@ -44,11 +46,11 @@ class C3 {
 
     c: this | Date;
 >c : Symbol(C3.c, Decl(declarationFiles.ts, 17, 20))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     d: this & Date;
 >d : Symbol(C3.d, Decl(declarationFiles.ts, 18, 19))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     e: (((this)));
 >e : Symbol(C3.e, Decl(declarationFiles.ts, 19, 19))

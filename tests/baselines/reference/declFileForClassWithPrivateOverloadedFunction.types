@@ -1,16 +1,24 @@
-=== tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.ts ===
+//// [tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.ts] ////
+
+=== declFileForClassWithPrivateOverloadedFunction.ts ===
 class C {
 >C : C
+>  : ^
 
     private foo(x: number);
 >foo : { (x: number): any; (x: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     private foo(x: string);
 >foo : { (x: number): any; (x: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     private foo(x: any) { }
 >foo : { (x: number): any; (x: string): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 }

@@ -1,28 +1,39 @@
-=== tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts ===
+//// [tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts] ////
+
+=== inheritanceStaticFuncOverridingAccessor.ts ===
 class a {
 >a : a
+>  : ^
 
     static get x() {
 >x : string
+>  : ^^^^^^
 
         return "20";
 >"20" : "20"
+>     : ^^^^
     }
     static set x(aValue: string) {
 >x : string
+>  : ^^^^^^
 >aValue : string
+>       : ^^^^^^
 
     }
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 
     static x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "20";
 >"20" : "20"
+>     : ^^^^
     }
 }

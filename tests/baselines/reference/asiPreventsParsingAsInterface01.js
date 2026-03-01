@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface01.ts] ////
+
 //// [asiPreventsParsingAsInterface01.ts]
 var interface: number, I: string;
 
@@ -6,6 +8,7 @@ I           // This should be the identifier 'I'
 {}          // This should be a block body
 
 //// [asiPreventsParsingAsInterface01.js]
+"use strict";
 var interface, I;
 interface; // This should be the identifier 'interface'
 I; // This should be the identifier 'I'

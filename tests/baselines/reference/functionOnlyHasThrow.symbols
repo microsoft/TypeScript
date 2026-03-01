@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOnlyHasThrow.ts ===
+//// [tests/cases/compiler/functionOnlyHasThrow.ts] ////
+
+=== functionOnlyHasThrow.ts ===
 function clone():number {
 >clone : Symbol(clone, Decl(functionOnlyHasThrow.ts, 0, 0))
 

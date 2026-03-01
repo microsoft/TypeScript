@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorHandlingInInstanceOf.ts] ////
+
 //// [errorHandlingInInstanceOf.ts]
 if (x instanceof String) {
 }
@@ -7,6 +9,7 @@ if (y instanceof UnknownType) {
 }
 
 //// [errorHandlingInInstanceOf.js]
+"use strict";
 if (x instanceof String) {
 }
 var y;

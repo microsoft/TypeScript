@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChain.ts] ////
+
+=== callChain.ts ===
 declare const o1: undefined | ((...args: any[]) => number);
 >o1 : Symbol(o1, Decl(callChain.ts, 0, 13))
 >args : Symbol(args, Decl(callChain.ts, 0, 32))

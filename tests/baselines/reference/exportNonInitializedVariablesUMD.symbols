@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/exportNonInitializedVariablesUMD.ts ===
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesUMD.ts] ////
+
+=== exportNonInitializedVariablesUMD.ts ===
 var;
 let;
 const;
@@ -40,7 +42,7 @@ namespace B {
 >z : Symbol(z, Decl(exportNonInitializedVariablesUMD.ts, 14, 20))
 }
 
-module C {
+namespace C {
 >C : Symbol(C, Decl(exportNonInitializedVariablesUMD.ts, 15, 1))
 
     export var a = 1, b, c = 2;

@@ -1,39 +1,65 @@
-=== tests/cases/conformance/es6/Symbols/symbolType7.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType7.ts] ////
+
+=== symbolType7.ts ===
 var s = Symbol.for("shift");
 >s : symbol
+>  : ^^^^^^
 >Symbol.for("shift") : symbol
+>                    : ^^^^^^
 >Symbol.for : (key: string) => symbol
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
+>    : ^   ^^      ^^^^^      
 >"shift" : "shift"
+>        : ^^^^^^^
 
 s << s;
 >s << s : number
+>       : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s << 0;
 >s << 0 : number
+>       : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 s >> s;
 >s >> s : number
+>       : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s >> 0;
 >s >> 0 : number
+>       : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 s >>> s;
 >s >>> s : number
+>        : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s >>> 0;
 >s >>> 0 : number
+>        : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

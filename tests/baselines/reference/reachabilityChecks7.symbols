@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityChecks7.ts ===
+//// [tests/cases/compiler/reachabilityChecks7.ts] ////
+
+=== reachabilityChecks7.ts ===
 // async function without return type annotation - error
 async function f1() {    
 >f1 : Symbol(f1, Decl(reachabilityChecks7.ts, 0, 0))

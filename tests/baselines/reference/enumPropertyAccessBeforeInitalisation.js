@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts] ////
+
 //// [enumPropertyAccessBeforeInitalisation.ts]
 enum E {
     A = A,
@@ -8,6 +10,7 @@ enum E {
 
 
 //// [enumPropertyAccessBeforeInitalisation.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = E.A] = "A";

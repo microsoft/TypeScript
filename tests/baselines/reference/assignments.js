@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/valuesAndReferences/assignments.ts] ////
+
 //// [assignments.ts]
 // In this file:
 //  Assign to a module
@@ -8,7 +10,7 @@
 //  Assign to a parameter
 //  Assign to an interface
 
-module M { }
+namespace M { }
 M = null; // Error
 
 class C { }
@@ -32,6 +34,7 @@ interface I { }
 I = null; // Error
 
 //// [assignments.js]
+"use strict";
 // In this file:
 //  Assign to a module
 //  Assign to a class
@@ -41,11 +44,8 @@ I = null; // Error
 //  Assign to a parameter
 //  Assign to an interface
 M = null; // Error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 C = null; // Error
 var E;
 (function (E) {

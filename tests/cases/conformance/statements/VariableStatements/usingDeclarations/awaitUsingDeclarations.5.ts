@@ -1,0 +1,13 @@
+// @strict: false
+// @target: esnext
+// @module: esnext
+// @lib: esnext
+// @noTypesAndSymbols: true
+
+{
+    await using a = null,
+                [b] = null,
+                c = null;
+}
+
+export {};

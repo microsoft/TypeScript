@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Protected/Protected1.ts(1,1): error TS1044: 'protected' modifier cannot appear on a module or namespace element.
+Protected1.ts(1,1): error TS1044: 'protected' modifier cannot appear on a module or namespace element.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Protected/Protected1.ts (1 errors) ====
+==== Protected1.ts (1 errors) ====
     protected class C {
     ~~~~~~~~~
 !!! error TS1044: 'protected' modifier cannot appear on a module or namespace element.

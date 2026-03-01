@@ -1,46 +1,78 @@
-=== tests/cases/compiler/unknownSymbolInGenericReturnType.ts ===
+//// [tests/cases/compiler/unknownSymbolInGenericReturnType.ts] ////
+
+=== unknownSymbolInGenericReturnType.ts ===
 class Linq {
 >Linq : Linq
+>     : ^^^^
 
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
 >select : <T, S>(values: T[], func: (v: T) => A) => any[]
+>       : ^ ^^ ^^      ^^   ^^    ^^           ^^^^^     
 >values : T[]
+>       : ^^^
 >func : (v: T) => A
+>     : ^ ^^ ^^^^^ 
 >v : T
+>  : ^
 
         var result = new Array(values.length);
 >result : any[]
+>       : ^^^^^
 >new Array(values.length) : any[]
+>                         : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >values.length : number
+>              : ^^^^^^
 >values : T[]
+>       : ^^^
 >length : number
+>       : ^^^^^^
  
         for (var i = 0; i < values.length; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < values.length : boolean
+>                  : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >values.length : number
+>              : ^^^^^^
 >values : T[]
+>       : ^^^
 >length : number
+>       : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
             result[i] = func(values[i]);
 >result[i] = func(values[i]) : A
+>                            : ^
 >result[i] : any
+>          : ^^^
 >result : any[]
+>       : ^^^^^
 >i : number
+>  : ^^^^^^
 >func(values[i]) : A
+>                : ^
 >func : (v: T) => A
+>     : ^ ^^ ^^^^^ 
 >values[i] : T
+>          : ^
 >values : T[]
+>       : ^^^
 >i : number
+>  : ^^^^^^
         }
  
         return result;
 >result : any[]
+>       : ^^^^^
     }
 }
 

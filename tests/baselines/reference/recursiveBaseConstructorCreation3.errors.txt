@@ -1,9 +1,9 @@
-tests/cases/compiler/recursiveBaseConstructorCreation3.ts(6,27): error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
-tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,15): error TS2351: This expression is not constructable.
+recursiveBaseConstructorCreation3.ts(6,27): error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
+recursiveBaseConstructorCreation3.ts(9,15): error TS2351: This expression is not constructable.
   Type 'typeof xyz' has no construct signatures.
 
 
-==== tests/cases/compiler/recursiveBaseConstructorCreation3.ts (2 errors) ====
+==== recursiveBaseConstructorCreation3.ts (2 errors) ====
     declare class base<T> {
     }
     declare class abc<T> extends base<T> {

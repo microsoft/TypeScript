@@ -1,10 +1,10 @@
-tests/cases/compiler/accessorBodyInTypeContext.ts(2,15): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorBodyInTypeContext.ts(6,21): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorBodyInTypeContext.ts(10,15): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorBodyInTypeContext.ts(14,21): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(2,15): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(6,21): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(10,15): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorBodyInTypeContext.ts(14,21): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/accessorBodyInTypeContext.ts (4 errors) ====
+==== accessorBodyInTypeContext.ts (4 errors) ====
     type A = {
         get foo() { return 0 }
                   ~~~~~~~~~~~~

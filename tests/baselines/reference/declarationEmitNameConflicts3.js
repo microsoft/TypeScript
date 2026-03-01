@@ -1,18 +1,20 @@
+//// [tests/cases/compiler/declarationEmitNameConflicts3.ts] ////
+
 //// [declarationEmitNameConflicts3.ts]
-module M {
+namespace M {
     export interface D { }
-    export module D {
+    export namespace D {
         export function f() { }
     }
-    export module C {
+    export namespace C {
         export function f() { }
     }
-    export module E {
+    export namespace E {
         export function f() { }
     }
 }
 
-module M.P {
+namespace M.P {
     export class C {
         static f() { }
     }
@@ -27,34 +29,20 @@ module M.P {
 }
 
 //// [declarationEmitNameConflicts3.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+"use strict";
 var M;
 (function (M) {
-    var D;
+    let D;
     (function (D) {
         function f() { }
         D.f = f;
     })(D = M.D || (M.D = {}));
-    var C;
+    let C;
     (function (C) {
         function f() { }
         C.f = f;
     })(C = M.C || (M.C = {}));
-    var E;
+    let E;
     (function (E) {
         function f() { }
         E.f = f;
@@ -63,22 +51,14 @@ var M;
 (function (M) {
     var P;
     (function (P) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            C.f = function () { };
-            return C;
-        }());
+        class C {
+            static f() { }
+        }
         P.C = C;
-        var E = /** @class */ (function (_super) {
-            __extends(E, _super);
-            function E() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            return E;
-        }(C));
+        class E extends C {
+        }
         P.E = E;
-        var D;
+        let D;
         (function (D) {
             D[D["f"] = 0] = "f";
         })(D = P.D || (P.D = {}));
@@ -90,20 +70,20 @@ var M;
 
 
 //// [declarationEmitNameConflicts3.d.ts]
-declare module M {
+declare namespace M {
     interface D {
     }
-    module D {
+    namespace D {
         function f(): void;
     }
-    module C {
+    namespace C {
         function f(): void;
     }
-    module E {
+    namespace E {
         function f(): void;
     }
 }
-declare module M.P {
+declare namespace M.P {
     class C {
         static f(): void;
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tryStatementInternalComments.ts] ////
+
 //// [tryStatementInternalComments.ts]
 /*1*/ try /*2*/ { /*3*/
     /*4*/ throw /*5*/ "no" /*6*/;
@@ -8,6 +10,7 @@
 /*18*/} /*19*/
 
 //// [tryStatementInternalComments.js]
+"use strict";
 /*1*/ try /*2*/ { /*3*/
     /*4*/ throw /*5*/ "no" /*6*/;
     /*7*/ } /*8*/

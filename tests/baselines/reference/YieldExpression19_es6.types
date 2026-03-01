@@ -1,17 +1,24 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts] ////
+
+=== YieldExpression19_es6.ts ===
 function*foo() {
 >foo : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
     function* quux() {
 >quux : () => Generator<() => Generator<never, void, unknown>, void, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       yield(foo);
 >yield(foo) : any
 >(foo) : () => Generator<never, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
   }
 }

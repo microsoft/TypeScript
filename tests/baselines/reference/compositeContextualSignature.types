@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/compositeContextualSignature.ts] ////
+
+=== compositeContextualSignature.ts ===
+// Repro from #55145
+
+function f<T extends any[]>(v: ReadonlyArray<T>) { }
+>f : <T extends any[]>(v: ReadonlyArray<T>) => void
+>  : ^ ^^^^^^^^^     ^^ ^^                ^^^^^^^^^
+>v : readonly T[]
+>  : ^^^^^^^^^^^^
+
+f([
+>f([    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],]) : void
+>                                                                                                                                   : ^^^^
+>f : <T extends any[]>(v: ReadonlyArray<T>) => void
+>  : ^ ^^^^^^^^^     ^^ ^^                ^^^^^^^^^
+>[    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],] : (((() => void) | undefined)[] | (number | (() => void))[])[]
+>                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [
+>[        undefined,        () => { },    ] : ((() => void) | undefined)[]
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        undefined,
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        () => { },
+>() => { } : () => void
+>          : ^^^^^^^^^^
+
+    ],
+    [
+>[        1,        () => {            console.log('Hello')        },    ] : (number | (() => void))[]
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        1,
+>1 : 1
+>  : ^
+
+        () => {
+>() => {            console.log('Hello')        } : () => void
+>                                                 : ^^^^^^^^^^
+
+            console.log('Hello')
+>console.log('Hello') : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>'Hello' : "Hello"
+>        : ^^^^^^^
+
+        },
+    ],
+]);
+

@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/mapGroupBy.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== mapGroupBy.ts ===
+const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
+>basic : Map<"small" | "large", number[]>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large') : Map<"small" | "large", number[]>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>            : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+>groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>        : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>[0, 2, 8] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>2 : 2
+>  : ^
+>8 : 8
+>  : ^
+>x => x < 5 ? 'small' : 'large' : (x: number) => "small" | "large"
+>                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x < 5 ? 'small' : 'large' : "small" | "large"
+>                          : ^^^^^^^^^^^^^^^^^
+>x < 5 : boolean
+>      : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>5 : 5
+>  : ^
+>'small' : "small"
+>        : ^^^^^^^
+>'large' : "large"
+>        : ^^^^^^^
+
+const chars = Map.groupBy('a string', c => c);
+>chars : Map<string, string[]>
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy('a string', c => c) : Map<string, string[]>
+>                                : ^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>            : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+>groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>        : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>'a string' : "a string"
+>           : ^^^^^^^^^^
+>c => c : (c: string) => string
+>       : ^ ^^^^^^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+
+type Employee = { name: string, role: 'ic' | 'manager' }
+>Employee : Employee
+>         : ^^^^^^^^
+>name : string
+>     : ^^^^^^
+>role : "ic" | "manager"
+>     : ^^^^^^^^^^^^^^^^
+
+const employees: Set<Employee> = new Set();
+>employees : Set<Employee>
+>          : ^^^^^^^^^^^^^
+>new Set() : Set<Employee>
+>          : ^^^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+
+const byRole = Map.groupBy(employees, x => x.role);
+>byRole : Map<"ic" | "manager", Employee[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy(employees, x => x.role) : Map<"ic" | "manager", Employee[]>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>            : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+>groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>        : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>employees : Set<Employee>
+>          : ^^^^^^^^^^^^^
+>x => x.role : (x: Employee) => "ic" | "manager"
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : Employee
+>  : ^^^^^^^^
+>x.role : "ic" | "manager"
+>       : ^^^^^^^^^^^^^^^^
+>x : Employee
+>  : ^^^^^^^^
+>role : "ic" | "manager"
+>     : ^^^^^^^^^^^^^^^^
+
+const byNonKey = Map.groupBy(employees, x => x);
+>byNonKey : Map<Employee, Employee[]>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy(employees, x => x) : Map<Employee, Employee[]>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Map.groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>            : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+>groupBy : <K, T>(items: Iterable<T>, keySelector: (item: T, index: number) => K) => Map<K, T[]>
+>        : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
+>employees : Set<Employee>
+>          : ^^^^^^^^^^^^^
+>x => x : (x: Employee) => Employee
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>x : Employee
+>  : ^^^^^^^^
+>x : Employee
+>  : ^^^^^^^^
+

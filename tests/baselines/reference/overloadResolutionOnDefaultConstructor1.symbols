@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts ===
+//// [tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts] ////
+
+=== overloadResolutionOnDefaultConstructor1.ts ===
 class Bar {
 >Bar : Symbol(Bar, Decl(overloadResolutionOnDefaultConstructor1.ts, 0, 0))
 

@@ -1,8 +1,11 @@
-=== tests/cases/compiler/tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx ===
+//// [tests/cases/compiler/tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx] ////
+
+=== tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx ===
 namespace JSX {
     export interface IntrinsicElements {
         span: {};
 >span : {}
+>     : ^^
     }
     export interface Element {
 		something?: any;
@@ -11,30 +14,48 @@ namespace JSX {
 }
 
 const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
->Foo : (props: {    foo: "A" | "B" | "C";}) => JSX.Element
->(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: {    foo: "A" | "B" | "C";}) => JSX.Element
+>Foo : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>    : ^     ^^                         ^^^^^^^^^^^^^^^^
+>(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>                                                              : ^     ^^                         ^^^^^^^^^^^^^^^^
 >props : { foo: "A" | "B" | "C"; }
+>      : ^^^^^^^               ^^^
 >foo : "A" | "B" | "C"
+>    : ^^^^^^^^^^^^^^^
 ><span>{props.foo}</span> : JSX.Element
+>                         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >props.foo : "A" | "B" | "C"
+>          : ^^^^^^^^^^^^^^^
 >props : { foo: "A" | "B" | "C"; }
+>      : ^^^^^^^               ^^^
 >foo : "A" | "B" | "C"
+>    : ^^^^^^^^^^^^^^^
 >span : any
+>     : ^^^
 
 Foo({
 >Foo({    foo: "B"}) : JSX.Element
+>                    : ^^^^^^^^^^^
 >Foo : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>    : ^     ^^                         ^^^^^^^^^^^^^^^^
 >{    foo: "B"} : { foo: "B"; }
+>               : ^^^^^^^^^^^^^
 
     foo: "B"
 >foo : "B"
+>    : ^^^
 >"B" : "B"
+>    : ^^^
 
 });
 
 <Foo foo="B" />
 ><Foo foo="B" /> : JSX.Element
+>                : ^^^^^^^^^^^
 >Foo : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
+>    : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "B"
+>    : ^^^
 

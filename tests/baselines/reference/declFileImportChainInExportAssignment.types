@@ -1,24 +1,35 @@
-=== tests/cases/compiler/declFileImportChainInExportAssignment.ts ===
-module m {
->m : typeof m
+//// [tests/cases/compiler/declFileImportChainInExportAssignment.ts] ////
 
-    export module c {
+=== declFileImportChainInExportAssignment.ts ===
+namespace m {
+>m : typeof m
+>  : ^^^^^^^^
+
+    export namespace c {
 >c : typeof m.c
+>  : ^^^^^^^^^^
 
         export class c {
 >c : c
+>  : ^
         }
     }
 }
 import a = m.c;
 >a : typeof a
+>  : ^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 >c : typeof a
+>  : ^^^^^^^^
 
 import b = a;
 >b : typeof a
+>  : ^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 
 export = b;
 >b : typeof a
+>  : ^^^^^^^^
 

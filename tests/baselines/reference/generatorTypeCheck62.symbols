@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts] ////
+
+=== generatorTypeCheck62.ts ===
 export interface StrategicState {
 >StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck62.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export interface StrategicState {
 >lastStrategyApplied : Symbol(StrategicState.lastStrategyApplied, Decl(generatorTypeCheck62.ts, 0, 33))
 }
 
-export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
 >strategy : Symbol(strategy, Decl(generatorTypeCheck62.ts, 2, 1))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
 >StrategicState : Symbol(StrategicState, Decl(generatorTypeCheck62.ts, 0, 0))
@@ -16,7 +18,7 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
->a : Symbol(a, Decl(generatorTypeCheck62.ts, 4, 120))
+>a : Symbol(a, Decl(generatorTypeCheck62.ts, 4, 126))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 4, 25))
@@ -48,7 +50,7 @@ export interface Strategy<T> {
 >Strategy : Symbol(Strategy, Decl(generatorTypeCheck62.ts, 13, 1))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
 
-    (a: T): IterableIterator<T | undefined>;
+    (a: T): IterableIterator<T | undefined, void>;
 >a : Symbol(a, Decl(generatorTypeCheck62.ts, 16, 5))
 >T : Symbol(T, Decl(generatorTypeCheck62.ts, 15, 26))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -71,7 +73,7 @@ export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: St
 >state : Symbol(state, Decl(generatorTypeCheck62.ts, 23, 71))
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 
-    return state;
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 >state : Symbol(state, Decl(generatorTypeCheck62.ts, 23, 71))
 
 });
@@ -98,7 +100,7 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 >State : Symbol(State, Decl(generatorTypeCheck62.ts, 17, 1))
 
     yield ;
-    return state;
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 >state : Symbol(state, Decl(generatorTypeCheck62.ts, 31, 72))
 
 });

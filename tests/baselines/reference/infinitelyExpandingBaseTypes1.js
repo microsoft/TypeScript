@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingBaseTypes1.ts] ////
+
 //// [infinitelyExpandingBaseTypes1.ts]
 interface A<T>
 {
@@ -15,3 +17,4 @@ interface C<T> extends A<T>, B<T> { }
 
 
 //// [infinitelyExpandingBaseTypes1.js]
+"use strict";

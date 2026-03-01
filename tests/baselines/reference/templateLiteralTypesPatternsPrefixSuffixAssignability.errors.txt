@@ -1,8 +1,8 @@
-tests/cases/conformance/types/literal/templateLiteralTypesPatternsPrefixSuffixAssignability.ts(1,7): error TS2322: Type '":"' is not assignable to type '`:${string}:`'.
-tests/cases/conformance/types/literal/templateLiteralTypesPatternsPrefixSuffixAssignability.ts(3,7): error TS2322: Type '"::"' is not assignable to type '`:${string}:${string}:`'.
+templateLiteralTypesPatternsPrefixSuffixAssignability.ts(1,7): error TS2322: Type '":"' is not assignable to type '`:${string}:`'.
+templateLiteralTypesPatternsPrefixSuffixAssignability.ts(3,7): error TS2322: Type '"::"' is not assignable to type '`:${string}:${string}:`'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypesPatternsPrefixSuffixAssignability.ts (2 errors) ====
+==== templateLiteralTypesPatternsPrefixSuffixAssignability.ts (2 errors) ====
     const s1: `:${string}:` = ":"; // should error
           ~~
 !!! error TS2322: Type '":"' is not assignable to type '`:${string}:`'.

@@ -1,11 +1,17 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts ===
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts] ////
+
+=== FunctionDeclaration7_es6.ts ===
 function*bar() {
 >bar : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // 'yield' here is an identifier, and not a yield expression.
   function*foo(a = yield) {
 >foo : (a?: any) => Generator<never, void, unknown>
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >yield : any
+>      : ^^^
   }
 }

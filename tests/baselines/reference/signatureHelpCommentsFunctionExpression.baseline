@@ -1,3 +1,52 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpCommentsFunctionExpression.ts ===
+// /** lambdaFoo var comment*/
+// var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+// var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+// lambdaFoo(10, 20);
+//           ^
+// | ----------------------------------------------------------------------
+// | lambdaFoo(**a: number**, b: number): number
+// | ----------------------------------------------------------------------
+//               ^
+// | ----------------------------------------------------------------------
+// | lambdaFoo(a: number, **b: number**): number
+// | this is lambda comment
+// | lambdaFoo var comment
+// | ----------------------------------------------------------------------
+// function anotherFunc(a: number) {
+//     /** documentation
+//         @param b {string} inner parameter */
+//     var lambdaVar = /** inner docs */(b: string) => {
+//         var localVar = "Hello ";
+//         return localVar + b;
+//     }
+//     return lambdaVar("World") + a;
+// }
+// /**
+//  * On variable
+//  * @param s the first parameter!
+//  * @returns the parameter's length
+//  */
+// var assigned = /**
+//                 * Summary on expression
+//                 * @param s param on expression
+//                 * @returns return on expression
+//                 */function(/** On parameter */s: string) {
+//   return s.length;
+// }
+// assigned("hey");
+//          ^
+// | ----------------------------------------------------------------------
+// | assigned(**s: string**): number
+// | Summary on expression
+// | On variable
+// | @param s param on expression
+// | @returns return on expression
+// | @param s the first parameter!
+// | @returns the parameter's length
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +54,7 @@
       "position": 259,
       "name": "5"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -139,7 +188,7 @@
       "position": 263,
       "name": "6"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -273,7 +322,7 @@
       "position": 862,
       "name": "18"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

@@ -1,18 +1,27 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameField.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameField.ts] ////
+
+=== privateNameField.ts ===
 class A {
 >A : A
+>  : ^
 
     #name: string;
 >#name : string
+>      : ^^^^^^
 
     constructor(name: string) {
 >name : string
+>     : ^^^^^^
 
         this.#name = name;
 >this.#name = name : string
+>                  : ^^^^^^
 >this.#name : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >name : string
+>     : ^^^^^^
     }
 }
 

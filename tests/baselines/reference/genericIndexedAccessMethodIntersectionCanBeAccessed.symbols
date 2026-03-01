@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
+//// [tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts] ////
+
+=== genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
 type ExtendedService<T> = {
 >ExtendedService : Symbol(ExtendedService, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 0))
 >T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 21))
@@ -45,9 +47,9 @@ export const createService = <T>(
 ) => {
     Object.keys(ServiceCtr).forEach(key => {
 >Object.keys(ServiceCtr).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >ServiceCtr : Symbol(ServiceCtr, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 11, 33))
 >forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 14, 36))

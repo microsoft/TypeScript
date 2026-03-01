@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueTarget3.ts] ////
+
 //// [continueTarget3.ts]
 target1:
 target2:
@@ -6,6 +8,7 @@ while (true) {
 }
 
 //// [continueTarget3.js]
+"use strict";
 target1: target2: while (true) {
     continue target1;
 }

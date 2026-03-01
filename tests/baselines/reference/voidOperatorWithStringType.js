@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithStringType.ts] ////
+
 //// [voidOperatorWithStringType.ts]
 // void  operator on string type
 var STRING: string;
@@ -9,7 +11,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -45,16 +47,14 @@ void foo();
 void objA.a,M.n;
 
 //// [voidOperatorWithStringType.js]
+"use strict";
 // void  operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -65,7 +65,7 @@ var ResultIsAny2 = void STRING1;
 // string type literal
 var ResultIsAny3 = void "";
 var ResultIsAny4 = void { x: "", y: "" };
-var ResultIsAny5 = void { x: "", y: function (s) { return s; } };
+var ResultIsAny5 = void { x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsAny6 = void objA.a;
 var ResultIsAny7 = void M.n;

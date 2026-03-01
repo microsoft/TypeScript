@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty50.ts] ////
+
 //// [symbolProperty50.ts]
-module M {
+namespace M {
     interface Symbol { }
 
     class C {
@@ -8,6 +10,7 @@ module M {
 }
 
 //// [symbolProperty50.js]
+"use strict";
 var M;
 (function (M) {
     class C {

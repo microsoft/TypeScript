@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterListWithTrailingComma1.ts ===
+//// [tests/cases/compiler/typeParameterListWithTrailingComma1.ts] ////
+
+=== typeParameterListWithTrailingComma1.ts ===
 class C<T,> {
 >C : Symbol(C, Decl(typeParameterListWithTrailingComma1.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterListWithTrailingComma1.ts, 0, 8))

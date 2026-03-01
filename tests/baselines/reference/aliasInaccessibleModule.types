@@ -1,10 +1,14 @@
-=== tests/cases/compiler/aliasInaccessibleModule.ts ===
-module M {
->M : typeof M
+//// [tests/cases/compiler/aliasInaccessibleModule.ts] ////
 
-    module N {
+=== aliasInaccessibleModule.ts ===
+namespace M {
+>M : typeof M
+>  : ^^^^^^^^
+
+    namespace N {
     }
     export import X = N;
 >X : any
+>  : ^^^
 >N : error
 }

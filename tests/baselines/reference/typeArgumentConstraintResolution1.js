@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentConstraintResolution1.ts] ////
+
 //// [typeArgumentConstraintResolution1.ts]
 function foo1<T extends Date>(test: T);
 function foo1<T extends Number>(test: string);
@@ -13,6 +15,7 @@ foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type p
 
 
 //// [typeArgumentConstraintResolution1.js]
+"use strict";
 function foo1(test) { }
 foo1(""); // should error
 function foo2(test) { return null; }

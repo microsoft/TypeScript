@@ -1,18 +1,14 @@
-tests/cases/compiler/second.d.ts(2,27): error TS2304: Cannot find name 'CompletelyMissing'.
-tests/cases/compiler/second.d.ts(2,27): error TS2503: Cannot find namespace 'CompletelyMissing'.
+second.d.ts(1,27): error TS2503: Cannot find namespace 'CompletelyMissing'.
 
 
-==== tests/cases/compiler/second.d.ts (2 errors) ====
-    // Fixes #15094
+==== second.d.ts (1 errors) ====
     export import Component = CompletelyMissing;
                               ~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'CompletelyMissing'.
-                              ~~~~~~~~~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'CompletelyMissing'.
-==== tests/cases/compiler/first.d.ts (0 errors) ====
+==== first.d.ts (0 errors) ====
     import * as Second from './second';
     export = Second;
-==== tests/cases/compiler/crash.ts (0 errors) ====
+==== crash.ts (0 errors) ====
     import { Component } from './first';
     class C extends Component { }
     

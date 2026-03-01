@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty9.ts] ////
+
 //// [accessorsOverrideProperty9.ts]
 // #41347, based on microsoft/rushstack
 

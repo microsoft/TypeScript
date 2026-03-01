@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationESNext.ts] ////
+
 //// [assignParameterPropertyToPropertyDeclarationESNext.ts]
 class C {
     qux = this.bar // should error
@@ -52,6 +54,7 @@ class H {
 
 
 //// [assignParameterPropertyToPropertyDeclarationESNext.js]
+"use strict";
 class C {
     foo;
     qux = this.bar; // should error

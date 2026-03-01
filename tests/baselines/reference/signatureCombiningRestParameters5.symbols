@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/signatureCombiningRestParameters5.ts] ////
+
+=== signatureCombiningRestParameters5.ts ===
+declare const test1:
+>test1 : Symbol(test1, Decl(signatureCombiningRestParameters5.ts, 0, 13))
+
+  | ((...args: [a: string | number, b: number | boolean]) => void)
+>args : Symbol(args, Decl(signatureCombiningRestParameters5.ts, 1, 6))
+
+  | ((...args: [c: number | boolean, d: string | boolean]) => void);
+>args : Symbol(args, Decl(signatureCombiningRestParameters5.ts, 2, 6))
+
+test1(42, true);
+>test1 : Symbol(test1, Decl(signatureCombiningRestParameters5.ts, 0, 13))
+
+test1(42, [true]); // error
+>test1 : Symbol(test1, Decl(signatureCombiningRestParameters5.ts, 0, 13))
+
+declare function test2<
+>test2 : Symbol(test2, Decl(signatureCombiningRestParameters5.ts, 5, 18))
+
+  A extends readonly unknown[],
+>A : Symbol(A, Decl(signatureCombiningRestParameters5.ts, 7, 23))
+
+  B extends readonly unknown[],
+>B : Symbol(B, Decl(signatureCombiningRestParameters5.ts, 8, 31))
+
+>(
+  c: (...args: A) => void,
+>c : Symbol(c, Decl(signatureCombiningRestParameters5.ts, 10, 2))
+>args : Symbol(args, Decl(signatureCombiningRestParameters5.ts, 11, 6))
+>A : Symbol(A, Decl(signatureCombiningRestParameters5.ts, 7, 23))
+
+  d: (...args: B) => void,
+>d : Symbol(d, Decl(signatureCombiningRestParameters5.ts, 11, 26))
+>args : Symbol(args, Decl(signatureCombiningRestParameters5.ts, 12, 6))
+>B : Symbol(B, Decl(signatureCombiningRestParameters5.ts, 8, 31))
+
+  e: (arg: typeof c | typeof d) => void,
+>e : Symbol(e, Decl(signatureCombiningRestParameters5.ts, 12, 26))
+>arg : Symbol(arg, Decl(signatureCombiningRestParameters5.ts, 13, 6))
+>c : Symbol(c, Decl(signatureCombiningRestParameters5.ts, 10, 2))
+>d : Symbol(d, Decl(signatureCombiningRestParameters5.ts, 11, 26))
+
+): void;
+
+test2(
+>test2 : Symbol(test2, Decl(signatureCombiningRestParameters5.ts, 5, 18))
+
+  (a: number | boolean, b: string | number) => {},
+>a : Symbol(a, Decl(signatureCombiningRestParameters5.ts, 17, 3))
+>b : Symbol(b, Decl(signatureCombiningRestParameters5.ts, 17, 23))
+
+  (c: string | boolean, d: number | boolean) => {},
+>c : Symbol(c, Decl(signatureCombiningRestParameters5.ts, 18, 3))
+>d : Symbol(d, Decl(signatureCombiningRestParameters5.ts, 18, 23))
+
+  (cb) => {
+>cb : Symbol(cb, Decl(signatureCombiningRestParameters5.ts, 19, 3))
+
+    cb(true, 42);
+>cb : Symbol(cb, Decl(signatureCombiningRestParameters5.ts, 19, 3))
+
+    cb(true, [42]); // error
+>cb : Symbol(cb, Decl(signatureCombiningRestParameters5.ts, 19, 3))
+
+  },
+);
+

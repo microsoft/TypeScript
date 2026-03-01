@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowForInStatement.ts] ////
+
 //// [controlFlowForInStatement.ts]
 let x: string | number | boolean | RegExp | Function;
 let obj: any;
@@ -19,11 +21,12 @@ x; // RegExp | string | number | boolean
 
 
 //// [controlFlowForInStatement.js]
-var x;
-var obj;
-var cond;
+"use strict";
+let x;
+let obj;
+let cond;
 x = /a/;
-for (var y in obj) {
+for (let y in obj) {
     x = y;
     if (cond) {
         x = 42;

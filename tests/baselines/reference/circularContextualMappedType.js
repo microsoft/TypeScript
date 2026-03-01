@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularContextualMappedType.ts] ////
+
 //// [circularContextualMappedType.ts]
 type Func<T> = () => T;
 
@@ -22,10 +24,10 @@ reproduce({
 //// [circularContextualMappedType.js]
 "use strict";
 reproduce({
-    name: function () { return 123; }
+    name: () => { return 123; }
 });
 reproduce({
-    name: function () { return 123; }
+    name() { return 123; }
 });
 reproduce({
     name: function () { return 123; }

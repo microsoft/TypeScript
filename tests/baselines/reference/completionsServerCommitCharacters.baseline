@@ -1,0 +1,66 @@
+// === Completions ===
+=== /home/src/workspaces/project/src/index.ts ===
+// const a: "aa" | "bb" = "";
+//                         ^
+// | ----------------------------------------------------------------------
+// | aa
+// | bb
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/home/src/workspaces/project/src/index.ts",
+      "position": 24,
+      "name": ""
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "aa",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 24,
+            "length": 0
+          },
+          "commitCharacters": [],
+          "displayParts": [
+            {
+              "text": "aa",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        },
+        {
+          "name": "bb",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 24,
+            "length": 0
+          },
+          "commitCharacters": [],
+          "displayParts": [
+            {
+              "text": "bb",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

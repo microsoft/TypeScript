@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericOverloadSignatures.ts ===
+//// [tests/cases/compiler/genericOverloadSignatures.ts] ////
+
+=== genericOverloadSignatures.ts ===
 interface A {
 >A : Symbol(A, Decl(genericOverloadSignatures.ts, 0, 0))
 

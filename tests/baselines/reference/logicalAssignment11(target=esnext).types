@@ -1,37 +1,61 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment11.ts ===
+//// [tests/cases/conformance/esnext/logicalAssignment/logicalAssignment11.ts] ////
+
+=== logicalAssignment11.ts ===
 let x: string | undefined;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 let d: string | undefined;
 >d : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 d ?? (d = x ?? "x")
 >d ?? (d = x ?? "x") : string
+>                    : ^^^^^^
 >d : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >(d = x ?? "x") : string
+>               : ^^^^^^
 >d = x ?? "x" : string
+>             : ^^^^^^
 >d : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >x ?? "x" : string
+>         : ^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 
 d.length;
 >d.length : number
+>         : ^^^^^^
 >d : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
 let e: string | undefined;
 >e : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 e ??= x ?? "x"
 >e ??= x ?? "x" : string
+>               : ^^^^^^
 >e : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >x ?? "x" : string
+>         : ^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 
 e.length
 >e.length : number
+>         : ^^^^^^
 >e : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 

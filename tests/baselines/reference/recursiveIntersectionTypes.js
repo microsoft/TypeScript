@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts] ////
+
 //// [recursiveIntersectionTypes.ts]
 type LinkedList<T> = T & { next: LinkedList<T> };
 
@@ -21,6 +23,7 @@ productList = entityList;  // Error
 
 
 //// [recursiveIntersectionTypes.js]
+"use strict";
 var entityList;
 var s = entityList.name;
 var s = entityList.next.name;

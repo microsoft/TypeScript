@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/forBreakStatements.ts] ////
+
 //// [forBreakStatements.ts]
 for (; ;) {
     break;
@@ -38,6 +40,7 @@ for (; ;) {
 
 
 //// [forBreakStatements.js]
+"use strict";
 for (;;) {
     break;
 }

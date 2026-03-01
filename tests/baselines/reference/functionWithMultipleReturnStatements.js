@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts] ////
+
 //// [functionWithMultipleReturnStatements.ts]
 // return type of a function with multiple returns is the BCT of each return statement
 // it is an error if there is no single BCT, these are error cases
@@ -64,6 +66,7 @@ function f8<T extends U, U extends V, V>(x: T, y: U) {
 
 
 //// [functionWithMultipleReturnStatements.js]
+"use strict";
 // return type of a function with multiple returns is the BCT of each return statement
 // it is an error if there is no single BCT, these are error cases
 function f1() {

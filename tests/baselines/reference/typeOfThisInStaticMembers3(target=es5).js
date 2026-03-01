@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers3.ts] ////
+
 //// [typeOfThisInStaticMembers3.ts]
 class C {
     static a = 1;
@@ -12,6 +14,7 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers3.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

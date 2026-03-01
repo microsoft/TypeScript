@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumBasics2.ts] ////
+
 //// [enumBasics2.ts]
 enum Foo {
   a = 2,
@@ -16,6 +18,7 @@ enum Bar {
 
 
 //// [enumBasics2.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["a"] = 2] = "a";

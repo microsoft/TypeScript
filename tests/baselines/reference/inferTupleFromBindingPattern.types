@@ -1,17 +1,31 @@
-=== tests/cases/compiler/inferTupleFromBindingPattern.ts ===
+//// [tests/cases/compiler/inferTupleFromBindingPattern.ts] ////
+
+=== inferTupleFromBindingPattern.ts ===
 declare function f<T>(cb: () => T): T;
 >f : <T>(cb: () => T) => T
+>  : ^ ^^  ^^       ^^^^^ 
 >cb : () => T
+>   : ^^^^^^ 
 
 const [e1, e2, e3] = f(() => [1, "hi", true]);
 >e1 : number
+>   : ^^^^^^
 >e2 : string
+>   : ^^^^^^
 >e3 : boolean
+>   : ^^^^^^^
 >f(() => [1, "hi", true]) : [number, string, boolean]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(cb: () => T) => T
+>  : ^ ^^  ^^       ^^^^^ 
 >() => [1, "hi", true] : () => [number, string, boolean]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, "hi", true] : [number, string, true]
+>                : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"hi" : "hi"
+>     : ^^^^
 >true : true
+>     : ^^^^
 

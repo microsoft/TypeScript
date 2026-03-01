@@ -1,11 +1,13 @@
+//// [tests/cases/compiler/internalAliasFunction.ts] ////
+
 //// [internalAliasFunction.ts]
-module a {
+namespace a {
     export function foo(x: number) {
         return x;
     }
 }
 
-module c {
+namespace c {
     import b = a.foo;
     export var bVal = b(10);
     export var bVal2 = b;
@@ -13,6 +15,7 @@ module c {
 
 
 //// [internalAliasFunction.js]
+"use strict";
 var a;
 (function (a) {
     function foo(x) {
@@ -29,10 +32,10 @@ var c;
 
 
 //// [internalAliasFunction.d.ts]
-declare module a {
+declare namespace a {
     function foo(x: number): number;
 }
-declare module c {
+declare namespace c {
     import b = a.foo;
     var bVal: number;
     var bVal2: typeof b;

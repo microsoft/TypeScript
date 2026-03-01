@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts(3,9): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts(4,3): error TS1005: ')' expected.
+parserErrorRecoveryIfStatement2.ts(3,9): error TS2304: Cannot find name 'a'.
+parserErrorRecoveryIfStatement2.ts(4,3): error TS1005: ')' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts (2 errors) ====
+==== parserErrorRecoveryIfStatement2.ts (2 errors) ====
     class Foo {
       f1() {
         if (a
@@ -11,7 +11,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErro
       }
       ~
 !!! error TS1005: ')' expected.
-!!! related TS1007 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts:3:8: The parser expected to find a ')' to match the '(' token here.
+!!! related TS1007 parserErrorRecoveryIfStatement2.ts:3:8: The parser expected to find a ')' to match the '(' token here.
       f2() {
       }
       f3() {

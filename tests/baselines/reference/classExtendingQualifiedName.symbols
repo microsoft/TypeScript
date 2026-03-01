@@ -1,9 +1,11 @@
-=== tests/cases/compiler/classExtendingQualifiedName.ts ===
-module M {
+//// [tests/cases/compiler/classExtendingQualifiedName.ts] ////
+
+=== classExtendingQualifiedName.ts ===
+namespace M {
 >M : Symbol(M, Decl(classExtendingQualifiedName.ts, 0, 0))
 
     class C {
->C : Symbol(C, Decl(classExtendingQualifiedName.ts, 0, 10))
+>C : Symbol(C, Decl(classExtendingQualifiedName.ts, 0, 13))
     }
 
     class D extends M.C {

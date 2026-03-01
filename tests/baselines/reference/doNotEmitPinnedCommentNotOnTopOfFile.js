@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitPinnedCommentNotOnTopOfFile.ts] ////
+
 //// [doNotEmitPinnedCommentNotOnTopOfFile.ts]
 var x = 10;
 
@@ -10,5 +12,6 @@ var x = 10;
 var x = 10;
 
 //// [doNotEmitPinnedCommentNotOnTopOfFile.js]
+"use strict";
 var x = 10;
 var x = 10;

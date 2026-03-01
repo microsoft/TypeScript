@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/expandoFunctionSymbolPropertyJs.ts] ////
+
+=== /types.ts ===
+export const symb = Symbol();
+>symb : Symbol(symb, Decl(types.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+export interface TestSymb {
+>TestSymb : Symbol(TestSymb, Decl(types.ts, 0, 29))
+
+  (): void;
+  readonly [symb]: boolean;
+>[symb] : Symbol(TestSymb[symb], Decl(types.ts, 3, 11))
+>symb : Symbol(symb, Decl(types.ts, 0, 12))
+}
+
+=== /a.js ===
+import { symb } from "./types";
+>symb : Symbol(symb, Decl(a.js, 0, 8))
+
+/**
+ * @returns {import("./types").TestSymb}
+ */
+export function test() {
+>test : Symbol(test, Decl(a.js, 0, 31))
+
+  function inner() {}
+>inner : Symbol(inner, Decl(a.js, 5, 24))
+
+  inner[symb] = true;
+>inner : Symbol(inner, Decl(a.js, 5, 24))
+>symb : Symbol(symb, Decl(a.js, 0, 8))
+
+  return inner;
+>inner : Symbol(inner, Decl(a.js, 5, 24))
+}

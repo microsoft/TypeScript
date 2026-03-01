@@ -1,535 +1,926 @@
-=== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts ===
+//// [tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts] ////
+
+=== restTuplesFromContextualTypes.ts ===
 declare const t1: [number, boolean, string];
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, c){})(...t1);
 >(function (a, b, c){})(...t1) : void
->(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
->function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
+>                              : ^^^^
+>(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c){} : (a: number, b: boolean, c: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >...t1 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (...x){})(...t1);
 >(function (...x){})(...t1) : void
+>                           : ^^^^
 >(function (...x){}) : (x_0: number, x_1: boolean, x_2: string) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (...x){} : (x_0: number, x_1: boolean, x_2: string) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, ...x){})(...t1);
 >(function (a, ...x){})(...t1) : void
+>                              : ^^^^
 >(function (a, ...x){}) : (a: number, x_0: boolean, x_1: string) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (a, ...x){} : (a: number, x_0: boolean, x_1: string) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [boolean, string]
+>  : ^^^^^^^^^^^^^^^^^
 >...t1 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, ...x){})(...t1);
 >(function (a, b, ...x){})(...t1) : void
->(function (a, b, ...x){}) : (a: number, b?: boolean, x_0: string) => void
->function (a, b, ...x){} : (a: number, b?: boolean, x_0: string) => void
+>                                 : ^^^^
+>(function (a, b, ...x){}) : (a: number, b: boolean, x_0: string) => void
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, b, ...x){} : (a: number, b: boolean, x_0: string) => void
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : [string]
+>  : ^^^^^^^^
 >...t1 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, c, ...x){})(...t1);
 >(function (a, b, c, ...x){})(...t1) : void
->(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string) => void
->function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string) => void
+>                                    : ^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >x : []
+>  : ^^
 >...t1 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f1(cb: (...args: typeof t1) => void): void;
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>f1 : (cb: (...args: typeof t1) => void) => void
+>   : ^  ^^                            ^^^^^    
 >cb : (args_0: number, args_1: boolean, args_2: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1((a, b, c) => {})
 >f1((a, b, c) => {}) : void
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>                    : ^^^^
+>f1 : (cb: (...args: typeof t1) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 f1((...x) => {})
 >f1((...x) => {}) : void
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>                 : ^^^^
+>f1 : (cb: (...args: typeof t1) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(...x) => {} : (x_0: number, x_1: boolean, x_2: string) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, string]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1((a, ...x) => {})
 >f1((a, ...x) => {}) : void
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>                    : ^^^^
+>f1 : (cb: (...args: typeof t1) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, ...x) => {} : (a: number, x_0: boolean, x_1: string) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [boolean, string]
+>  : ^^^^^^^^^^^^^^^^^
 
 f1((a, b, ...x) => {})
 >f1((a, b, ...x) => {}) : void
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>                       : ^^^^
+>f1 : (cb: (...args: typeof t1) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, b, ...x) => {} : (a: number, b: boolean, x_0: string) => void
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : [string]
+>  : ^^^^^^^^
 
 f1((a, b, c, ...x) => {})
 >f1((a, b, c, ...x) => {}) : void
->f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>                          : ^^^^
+>f1 : (cb: (...args: typeof t1) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string) => void
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >x : []
+>  : ^^
 
 declare const t2: [number, boolean, ...string[]];
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, c){})(...t2);
 >(function (a, b, c){})(...t2) : void
->(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
->function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
+>                              : ^^^^
+>(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c){} : (a: number, b: boolean, c: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >...t2 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (...x){})(...t2);
 >(function (...x){})(...t2) : void
->(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                           : ^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...t2 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, ...x){})(...t2);
 >(function (a, ...x){})(...t2) : void
->(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
->function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                              : ^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x: string[]) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, ...x: string[]) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >...t2 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, ...x){})(...t2);
 >(function (a, b, ...x){})(...t2) : void
->(function (a, b, ...x){}) : (a: number, b?: boolean, ...x: string[]) => void
->function (a, b, ...x){} : (a: number, b?: boolean, ...x: string[]) => void
+>                                 : ^^^^
+>(function (a, b, ...x){}) : (a: number, b: boolean, ...x: string[]) => void
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>function (a, b, ...x){} : (a: number, b: boolean, ...x: string[]) => void
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >...t2 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, c, ...x){})(...t2);
 >(function (a, b, c, ...x){})(...t2) : void
->(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string, ...x: string[]) => void
->function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string, ...x: string[]) => void
+>                                    : ^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >...t2 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f2(cb: (...args: typeof t2) => void): void;
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
->cb : (args_0: number, args_1: boolean, ...args_2: string[]) => void
+>f2 : (cb: (...args: typeof t2) => void) => void
+>   : ^  ^^                            ^^^^^    
+>cb : (args_0: number, args_1: boolean, ...args: string[]) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, ...string[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f2((a, b, c) => {})
 >f2((a, b, c) => {}) : void
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>                    : ^^^^
+>f2 : (cb: (...args: typeof t2) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 f2((...x) => {})
 >f2((...x) => {}) : void
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
->(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                 : ^^^^
+>f2 : (cb: (...args: typeof t2) => void) => void
+>   : ^  ^^                            ^^^^^    
+>(...x) => {} : (x_0: number, x_1: boolean, ...x: string[]) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f2((a, ...x) => {})
 >f2((a, ...x) => {}) : void
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
->(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                    : ^^^^
+>f2 : (cb: (...args: typeof t2) => void) => void
+>   : ^  ^^                            ^^^^^    
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x: string[]) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
 f2((a, b, ...x) => {})
 >f2((a, b, ...x) => {}) : void
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>                       : ^^^^
+>f2 : (cb: (...args: typeof t2) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, b, ...x) => {} : (a: number, b: boolean, ...x: string[]) => void
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
 f2((a, b, c, ...x) => {})
 >f2((a, b, c, ...x) => {}) : void
->f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>                          : ^^^^
+>f2 : (cb: (...args: typeof t2) => void) => void
+>   : ^  ^^                            ^^^^^    
 >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
 declare const t3: [boolean, ...string[]];
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, c){})(1, ...t3);
 >(function (a, b, c){})(1, ...t3) : void
->(function (a, b, c){}) : (a: number, b: boolean, c?: string) => void
->function (a, b, c){} : (a: number, b: boolean, c?: string) => void
+>                                 : ^^^^
+>(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c){} : (a: number, b: boolean, c: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >...t3 : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 (function (...x){})(1, ...t3);
 >(function (...x){})(1, ...t3) : void
->(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                              : ^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...t3 : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, ...x){})(1, ...t3);
 >(function (a, ...x){})(1, ...t3) : void
->(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
->function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                                 : ^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x: string[]) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, ...x: string[]) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >...t3 : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, ...x){})(1, ...t3);
 >(function (a, b, ...x){})(1, ...t3) : void
+>                                    : ^^^^
 >(function (a, b, ...x){}) : (a: number, b: boolean, ...x: string[]) => void
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >function (a, b, ...x){} : (a: number, b: boolean, ...x: string[]) => void
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >...t3 : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 (function (a, b, c, ...x){})(1, ...t3);
 >(function (a, b, c, ...x){})(1, ...t3) : void
->(function (a, b, c, ...x){}) : (a: number, b: boolean, c?: string, ...x: string[]) => void
->function (a, b, c, ...x){} : (a: number, b: boolean, c?: string, ...x: string[]) => void
+>                                       : ^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >...t3 : string | boolean
+>      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
->cb : (x: number, args_0: boolean, ...args_1: string[]) => void
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
+>   : ^  ^^                                       ^^^^^    
+>cb : (x: number, args_0: boolean, ...args: string[]) => void
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >x : number
+>  : ^^^^^^
 >args : [boolean, ...string[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^
 
 f3((a, b, c) => {})
 >f3((a, b, c) => {}) : void
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>                    : ^^^^
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
+>   : ^  ^^                                       ^^^^^    
 >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 f3((...x) => {})
 >f3((...x) => {}) : void
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
->(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->x : [number, boolean, ...string[]]
+>                 : ^^^^
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
+>   : ^  ^^                                       ^^^^^    
+>(...x) => {} : (x: number, x_1: boolean, ...x_2: string[]) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : [x: number, boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f3((a, ...x) => {})
 >f3((a, ...x) => {}) : void
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
->(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                    : ^^^^
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
+>   : ^  ^^                                       ^^^^^    
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x: string[]) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [boolean, ...string[]]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
 f3((a, b, ...x) => {})
 >f3((a, b, ...x) => {}) : void
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>                       : ^^^^
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
+>   : ^  ^^                                       ^^^^^    
 >(a, b, ...x) => {} : (a: number, b: boolean, ...x: string[]) => void
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
 f3((a, b, c, ...x) => {})
 >f3((a, b, c, ...x) => {}) : void
->f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>                          : ^^^^
+>f3 : (cb: (x: number, ...args: typeof t3) => void) => void
+>   : ^  ^^                                       ^^^^^    
 >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
 function f4<T extends any[]>(t: T) {
 >f4 : <T extends any[]>(t: T) => void
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 
     (function(...x){})(...t);
 >(function(...x){})(...t) : void
+>                         : ^^^^
 >(function(...x){}) : (...x: T) => void
+>                   : ^^^^ ^^^^^^^^^^^^
 >function(...x){} : (...x: T) => void
+>                 : ^^^^ ^^^^^^^^^^^^
 >x : T
+>  : ^
 >...t : any
+>     : ^^^
 >t : T
+>  : ^
 
     (function(a, ...x){})(1, ...t);
 >(function(a, ...x){})(1, ...t) : void
+>                               : ^^^^
 >(function(a, ...x){}) : (a: number, ...x: T) => void
+>                      : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^
 >function(a, ...x){} : (a: number, ...x: T) => void
+>                    : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : T
+>  : ^
 >1 : 1
+>  : ^
 >...t : any
+>     : ^^^
 >t : T
+>  : ^
 
     (function(a, ...x){})(1, 2, ...t);
 >(function(a, ...x){})(1, 2, ...t) : void
->(function(a, ...x){}) : (a: number, x_0: number, ...x_1: T) => void
->function(a, ...x){} : (a: number, x_0: number, ...x_1: T) => void
+>                                  : ^^^^
+>(function(a, ...x){}) : (a: number, x_0: number, ...x: T) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(a, ...x){} : (a: number, x_0: number, ...x: T) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : [number, ...T]
+>  : ^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >...t : any
+>     : ^^^
 >t : T
+>  : ^
 
     function f(cb: (x: number, ...args: T) => void) {}
 >f : (cb: (x: number, ...args: T) => void) => void
+>  : ^  ^^                               ^^^^^^^^^
 >cb : (x: number, ...args: T) => void
+>   : ^ ^^      ^^^^^    ^^ ^^^^^    
 >x : number
+>  : ^^^^^^
 >args : T
+>     : ^
 
     f((...x) => {});
 >f((...x) => {}) : void
+>                : ^^^^
 >f : (cb: (x: number, ...args: T) => void) => void
+>  : ^  ^^                               ^^^^^^^^^
 >(...x) => {} : (x: number, ...args: T) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [x: number, ...args: T]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     f((a, ...x) => {});
 >f((a, ...x) => {}) : void
+>                   : ^^^^
 >f : (cb: (x: number, ...args: T) => void) => void
+>  : ^  ^^                               ^^^^^^^^^
 >(a, ...x) => {} : (a: number, ...x: T) => void
+>                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : T
+>  : ^
 
     f((a, b, ...x) => {});
 >f((a, b, ...x) => {}) : void
+>                      : ^^^^
 >f : (cb: (x: number, ...args: T) => void) => void
+>  : ^  ^^                               ^^^^^^^^^
 >(a, b, ...x) => {} : (a: number, b: T[0], ...x: T[number][]) => void
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : T[0]
+>  : ^^^^
 >x : T[number][]
+>  : ^^^^^^^^^^^
 }
 
 declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >f : (...args: T) => U
+>  : ^^^^    ^^ ^^^^^ 
 >args : T
+>     : ^
 >args : T
+>     : ^
 
 let g0 = f5(() => "hello");
 >g0 : () => string
+>   : ^^^^^^^^^^^^
 >f5(() => "hello") : () => string
+>                  : ^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >() => "hello" : () => string
+>              : ^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 let g1 = f5((x, y) => 42);
 >g1 : (x: any, y: any) => number
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5((x, y) => 42) : (x: any, y: any) => number
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(x, y) => 42 : (x: any, y: any) => number
+>             : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >42 : 42
+>   : ^^
 
 let g2 = f5((x: number, y) => 42);
 >g2 : (x: number, y: any) => number
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5((x: number, y) => 42) : (x: number, y: any) => number
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(x: number, y) => 42 : (x: number, y: any) => number
+>                     : ^ ^^      ^^ ^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >42 : 42
+>   : ^^
 
 let g3 = f5((x: number, y: number) => x + y);
 >g3 : (x: number, y: number) => number
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5((x: number, y: number) => x + y) : (x: number, y: number) => number
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(x: number, y: number) => x + y : (x: number, y: number) => number
+>                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 let g4 = f5((...args) => true);
 >g4 : (...args: any[]) => boolean
+>   : ^^^^    ^^^^^^^^^^^^^^^^^^^
 >f5((...args) => true) : (...args: any[]) => boolean
+>                      : ^^^^    ^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >(...args) => true : (...args: any[]) => boolean
+>                  : ^^^^    ^^^^^^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 >true : true
+>     : ^^^^
 
 declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >f : (...args: A) => B
+>  : ^^^^    ^^ ^^^^^ 
 >args : A
+>     : ^
 >g : (x: B) => C
+>  : ^ ^^ ^^^^^ 
 >x : B
+>  : ^
 >args : A
+>     : ^
 
 let g5 = pipe(() => true, b => 42);
 >g5 : () => number
+>   : ^^^^^^^^^^^^
 >pipe(() => true, b => 42) : () => number
+>                          : ^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >() => true : () => boolean
+>           : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >b => 42 : (b: boolean) => number
+>        : ^ ^^^^^^^^^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >42 : 42
+>   : ^^
 
 let g6 = pipe(x => "hello", s => s.length);
 >g6 : (x: any) => number
+>   : ^^^^^^^^^^^^^^^^^^
 >pipe(x => "hello", s => s.length) : (x: any) => number
+>                                  : ^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >x => "hello" : (x: any) => string
+>             : ^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >s => s.length : (s: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
 let g7 = pipe((x, y) => 42, x => "" + x);
 >g7 : (x: any, y: any) => string
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe((x, y) => 42, x => "" + x) : (x: any, y: any) => string
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >(x, y) => 42 : (x: any, y: any) => number
+>             : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 >42 : 42
+>   : ^^
 >x => "" + x : (x: number) => string
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >"" + x : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 let g8 = pipe((x: number, y: string) => 42, x => "" + x);
 >g8 : (x: number, y: string) => string
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe((x: number, y: string) => 42, x => "" + x) : (x: number, y: string) => string
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
+>     : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^                 
 >(x: number, y: string) => 42 : (x: number, y: string) => number
+>                             : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 >x => "" + x : (x: number) => string
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >"" + x : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 // Repro from #25288
 
 declare var tuple: [number, string];
 >tuple : [number, string]
+>      : ^^^^^^^^^^^^^^^^
 
 (function foo(a, b){}(...tuple));
 >(function foo(a, b){}(...tuple)) : void
+>                                 : ^^^^
 >function foo(a, b){}(...tuple) : void
->function foo(a, b){} : (a: number, b?: string) => void
->foo : (a: number, b?: string) => void
+>                               : ^^^^
+>function foo(a, b){} : (a: number, b: string) => void
+>                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>foo : (a: number, b: string) => void
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >...tuple : string | number
+>         : ^^^^^^^^^^^^^^^
 >tuple : [number, string]
+>      : ^^^^^^^^^^^^^^^^
 
 // Repro from #25289
 
 declare function take(cb: (a: number, b: string) => void): void;
 >take : (cb: (a: number, b: string) => void) => void
+>     : ^  ^^                              ^^^^^    
 >cb : (a: number, b: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 (function foo(...rest){}(1, ''));
 >(function foo(...rest){}(1, '')) : void
+>                                 : ^^^^
 >function foo(...rest){}(1, '') : void
+>                               : ^^^^
 >function foo(...rest){} : (rest_0: number, rest_1: string) => void
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : (rest_0: number, rest_1: string) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : [number, string]
+>     : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 take(function(...rest){});
 >take(function(...rest){}) : void
+>                          : ^^^^
 >take : (cb: (a: number, b: string) => void) => void
+>     : ^  ^^                              ^^^^^    
 >function(...rest){} : (a: number, b: string) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : [a: number, b: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #29833
 
 type ArgsUnion = [number, string] | [number, Error];
->ArgsUnion : [number, string] | [number, Error]
+>ArgsUnion : ArgsUnion
+>          : ^^^^^^^^^
 
 type TupleUnionFunc = (...params: ArgsUnion) => number;
->TupleUnionFunc : (...params: ArgsUnion) => number
+>TupleUnionFunc : TupleUnionFunc
+>               : ^^^^^^^^^^^^^^
 >params : ArgsUnion
+>       : ^^^^^^^^^
 
 const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
 >funcUnionTupleNoRest : TupleUnionFunc
+>                     : ^^^^^^^^^^^^^^
 >(num, strOrErr) => {  return num;} : (num: number, strOrErr: string | Error) => number
+>                                   : ^   ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >strOrErr : string | Error
+>         : ^^^^^^^^^^^^^^
 
   return num;
 >num : number
+>    : ^^^^^^
 
 };
 
 const funcUnionTupleRest: TupleUnionFunc = (...params) => {
 >funcUnionTupleRest : TupleUnionFunc
+>                   : ^^^^^^^^^^^^^^
 >(...params) => {  const [num, strOrErr] = params;  return num;} : (...params: ArgsUnion) => number
+>                                                                : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >params : ArgsUnion
+>       : ^^^^^^^^^
 
   const [num, strOrErr] = params;
 >num : number
+>    : ^^^^^^
 >strOrErr : string | Error
+>         : ^^^^^^^^^^^^^^
 >params : ArgsUnion
+>       : ^^^^^^^^^
 
   return num;
 >num : number
+>    : ^^^^^^
 
 };
 

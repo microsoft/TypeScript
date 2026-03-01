@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolType5.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType5.ts] ////
+
+=== symbolType5.ts ===
 var s = Symbol.for("multiply");
 >s : Symbol(s, Decl(symbolType5.ts, 0, 3))
 >Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))

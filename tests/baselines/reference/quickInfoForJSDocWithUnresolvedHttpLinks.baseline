@@ -1,3 +1,21 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js ===
+// /** @see {@link https://hva} */
+// var see2 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var see2: boolean
+// | @see {@link https://hva}
+// | ----------------------------------------------------------------------
+// 
+// /** {@link https://hvaD} */
+// var see3 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var see3: boolean
+// | {@link https://hvaD}
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +23,7 @@
       "position": 36,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -70,7 +88,7 @@
       "position": 81,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {

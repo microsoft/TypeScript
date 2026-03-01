@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArraysCrossAssignability01.ts] ////
+
 //// [typedArraysCrossAssignability01.ts]
 function CheckAssignability() {
     let arr_Int8Array           = new Int8Array(1);
@@ -94,6 +96,7 @@ function CheckAssignability() {
 
 
 //// [typedArraysCrossAssignability01.js]
+"use strict";
 function CheckAssignability() {
     let arr_Int8Array = new Int8Array(1);
     let arr_Uint8Array = new Uint8Array(1);

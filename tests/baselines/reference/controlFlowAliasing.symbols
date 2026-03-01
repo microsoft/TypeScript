@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowAliasing.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowAliasing.ts] ////
+
+=== controlFlowAliasing.ts ===
 // Narrowing by aliased conditional expressions
 
 function f10(x: string | number) {
@@ -368,12 +370,16 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     if (isFoo) {
 >isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 131, 9))
 
-        obj.foo;  // Not narrowed because obj is mutable
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 129, 32))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 7))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 129, 32))
     }
     else {
-        obj.bar;  // Not narrowed because obj is mutable
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 129, 63))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 7))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 129, 63))
     }
 }
 
@@ -791,3 +797,50 @@ const a = obj.fn();
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 275, 5))
 >fn : Symbol(fn, Decl(controlFlowAliasing.ts, 275, 13))
 
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+>Utils : Symbol(Utils, Decl(controlFlowAliasing.ts, 281, 19))
+
+  static isDefined<T>(value: T): value is NonNullable<T> {
+>isDefined : Symbol(Utils.isDefined, Decl(controlFlowAliasing.ts, 284, 13))
+>T : Symbol(T, Decl(controlFlowAliasing.ts, 285, 19))
+>value : Symbol(value, Decl(controlFlowAliasing.ts, 285, 22))
+>T : Symbol(T, Decl(controlFlowAliasing.ts, 285, 19))
+>value : Symbol(value, Decl(controlFlowAliasing.ts, 285, 22))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(controlFlowAliasing.ts, 285, 19))
+
+    return value != null;
+>value : Symbol(value, Decl(controlFlowAliasing.ts, 285, 22))
+  }
+}
+
+class A53267 {
+>A53267 : Symbol(A53267, Decl(controlFlowAliasing.ts, 288, 1))
+
+  public readonly testNumber: number | undefined;
+>testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+
+  foo() {
+>foo : Symbol(A53267.foo, Decl(controlFlowAliasing.ts, 291, 49))
+
+    const isNumber = Utils.isDefined(this.testNumber);
+>isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 294, 9))
+>Utils.isDefined : Symbol(Utils.isDefined, Decl(controlFlowAliasing.ts, 284, 13))
+>Utils : Symbol(Utils, Decl(controlFlowAliasing.ts, 281, 19))
+>isDefined : Symbol(Utils.isDefined, Decl(controlFlowAliasing.ts, 284, 13))
+>this.testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+>this : Symbol(A53267, Decl(controlFlowAliasing.ts, 288, 1))
+>testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+
+    if (isNumber) {
+>isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 294, 9))
+
+      const x: number = this.testNumber;
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 297, 11))
+>this.testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+>this : Symbol(A53267, Decl(controlFlowAliasing.ts, 288, 1))
+>testNumber : Symbol(A53267.testNumber, Decl(controlFlowAliasing.ts, 290, 14))
+    }
+  }
+}

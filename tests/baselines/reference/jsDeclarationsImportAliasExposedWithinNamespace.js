@@ -67,10 +67,15 @@ export namespace myTypes {
         prop2: string;
     };
     type typeC = myTypes.typeB | Function;
-    const myTypes: {
-        [x: string]: any;
-    };
 }
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+export const myTypes: {
+    [x: string]: any;
+};
 //// [file2.d.ts]
 export namespace testFnTypes {
     type input = boolean | myTypes.typeC;
@@ -83,7 +88,7 @@ export namespace testFnTypes {
  * @returns {number|null} Result.
  */
 export function testFn(input: testFnTypes.input): number | null;
-import { myTypes } from "./file.js";
+import { myTypes } from './file.js';
 /**
  * @namespace testFnTypes
  * @global

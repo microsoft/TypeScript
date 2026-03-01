@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccessExpressionInnerComments.ts] ////
+
 //// [propertyAccessExpressionInnerComments.ts]
 /*1*/Array/*2*/./*3*/toString/*4*/
 
@@ -33,6 +35,7 @@
 
 
 //// [propertyAccessExpressionInnerComments.js]
+"use strict";
 /*1*/ Array /*2*/. /*3*/toString; /*4*/
 /*1*/ Array
     /*2*/ . /*3*/

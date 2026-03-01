@@ -1,128 +1,178 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryOnClass.ts] ////
+
+=== typeQueryOnClass.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     constructor(x: number);
 >x : number
+>  : ^^^^^^
 
     constructor(x: string);
 >x : string
+>  : ^^^^^^
 
     constructor(public x) { }
 >x : any
 
     static foo(x: number);
 >foo : { (x: number): any; (x: {}): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     static foo(x: {});
 >foo : { (x: number): any; (x: {}): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : {}
+>  : ^^
 
     static foo(x) { }
 >foo : { (x: number): any; (x: {}): any; }
+>    : ^^^ ^^      ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : any
 
     static bar(x) { }
 >bar : (x: any) => void
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 
     static sa = 1;
 >sa : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     static sb = () => 1;
 >sb : () => number
+>   : ^^^^^^^^^^^^
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     static get sc() {
 >sc : number
+>   : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     static set sc(x) {
 >sc : number
+>   : ^^^^^^
 >x : number
+>  : ^^^^^^
     }
 
     static get sd() {
 >sd : number
+>   : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 
     baz(x): string { return ''; }
 >baz : (x: any) => string
+>    : ^ ^^^^^^^^^^      
 >x : any
 >'' : ""
+>   : ^^
 
     ia = 1;
 >ia : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     ib = () => this.ia;
 >ib : () => number
+>   : ^^^^^^^^^^^^
 >() => this.ia : () => number
+>              : ^^^^^^^^^^^^
 >this.ia : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >ia : number
+>   : ^^^^^^
 
     get ic() {
 >ic : number
+>   : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     set ic(x) {
 >ic : number
+>   : ^^^^^^
 >x : number
+>  : ^^^^^^
     }
 
     get id() {
 >id : number
+>   : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 
 }
 
 var c: C<string>;
 >c : C<string>
+>  : ^^^^^^^^^
 
 // BUG 820454
 var r1: typeof C;
 >r1 : typeof C
+>   : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r2: typeof c;
 >r2 : C<string>
+>   : ^^^^^^^^^
 >c : C<string>
+>  : ^^^^^^^^^
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     constructor(public y?) { }
 >y : any
 
     x: T;
 >x : T
+>  : ^
 
     foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 var d: D<string>;
 >d : D<string>
+>  : ^^^^^^^^^
 
 var r3: typeof D;
 >r3 : typeof D
+>   : ^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var r4: typeof d;
 >r4 : D<string>
+>   : ^^^^^^^^^
 >d : D<string>
+>  : ^^^^^^^^^
 

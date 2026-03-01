@@ -1,4 +1,8 @@
+//// [tests/cases/conformance/jsx/tsxTypeArgumentsJsxPreserveOutput.tsx] ////
+
 //// [foo.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 type TypeProps = { foo?: boolean; };
@@ -37,8 +41,9 @@ function Foo<T>() {
 
 //// [foo.jsx]
 "use strict";
-exports.__esModule = true;
-var React = require("react");
+/// <reference path="/.lib/react.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
 function Foo() {
     return null;
 }

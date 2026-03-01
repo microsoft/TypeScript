@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisShadowingErrorSpans.ts] ////
+
 //// [thisShadowingErrorSpans.ts]
 class C {
     m() {
@@ -11,14 +13,11 @@ class C {
 
 //// [thisShadowingErrorSpans.js]
 "use strict";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function () {
+class C {
+    m() {
         this.m();
         function f() {
             this.m();
         }
-    };
-    return C;
-}());
+    }
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterPropertyInConstructor3.ts] ////
+
 //// [parameterPropertyInConstructor3.ts]
 class Foo {
   constructor(public constructor: string) {}
@@ -5,9 +7,9 @@ class Foo {
 
 
 //// [parameterPropertyInConstructor3.js]
-var Foo = /** @class */ (function () {
-    function Foo(constructor) {
+"use strict";
+class Foo {
+    constructor(constructor) {
         this.constructor = constructor;
     }
-    return Foo;
-}());
+}

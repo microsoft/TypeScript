@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLocalClassHasRequiredDeclare.ts] ////
+
 //// [declarationEmitLocalClassHasRequiredDeclare.ts]
 export declare namespace A {
     namespace X { }
@@ -17,25 +19,16 @@ export class Y { }
 
 //// [declarationEmitLocalClassHasRequiredDeclare.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Y = exports.A = void 0;
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.X = X;
-    return A;
-}());
+class X {
+}
+class A {
+}
 exports.A = A;
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    return Y;
-}());
+A.X = X;
+class Y {
+}
 exports.Y = Y;
 
 

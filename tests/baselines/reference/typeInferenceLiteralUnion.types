@@ -1,10 +1,13 @@
-=== tests/cases/compiler/typeInferenceLiteralUnion.ts ===
+//// [tests/cases/compiler/typeInferenceLiteralUnion.ts] ////
+
+=== typeInferenceLiteralUnion.ts ===
 // Repro from #10901
 /**
  * Administrivia: JavaScript primitive types and Date
  */
 export type Primitive = number | string | boolean | Date;
->Primitive : string | number | boolean | Date
+>Primitive : Primitive
+>          : ^^^^^^^^^
 
 /**
  * Administrivia: anything with a valueOf(): number method is comparable, so we allow it in numeric operations
@@ -12,32 +15,45 @@ export type Primitive = number | string | boolean | Date;
 interface Numeric {
     valueOf(): number;
 >valueOf : () => number
+>        : ^^^^^^      
 }
 
 // Not very useful, but meets Numeric
 class NumCoercible {
 >NumCoercible : NumCoercible
+>             : ^^^^^^^^^^^^
 
     public a: number;
 >a : number
+>  : ^^^^^^
 
     constructor(a: number) {
 >a : number
+>  : ^^^^^^
 
         this.a = a;
 >this.a = a : number
+>           : ^^^^^^
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
     }
     public valueOf() {
 >valueOf : () => number
+>        : ^^^^^^^^^^^^
 
         return this.a;
 >this.a : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : number
+>  : ^^^^^^
     }
 }
 
@@ -46,28 +62,45 @@ class NumCoercible {
  */
 export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
 >extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
+>       : ^ ^^^^^^^^^       ^^     ^^                    ^^^^^                                                       
 >array : (Primitive | T)[]
+>      : ^^^^^^^^^^^^^^^^^
 
     return [undefined, undefined];
 >[undefined, undefined] : [undefined, undefined]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 
 
 let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefined, undefined];
 >extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 >extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
->extent : <T extends Numeric>(array: (Primitive | T)[]) => [Primitive | T, Primitive | T] | [undefined, undefined]
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
+>       : ^ ^^^^^^^^^       ^^     ^^                    ^^^^^                                                       
 >[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new NumCoercible(10) : NumCoercible
+>                     : ^^^^^^^^^^^^
 >NumCoercible : typeof NumCoercible
+>             : ^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >13 : 13
+>   : ^^
 >'12' : "12"
+>     : ^^^^
 >true : true
+>     : ^^^^
 

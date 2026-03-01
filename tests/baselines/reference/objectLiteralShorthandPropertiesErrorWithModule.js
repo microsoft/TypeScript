@@ -1,11 +1,13 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts] ////
+
 //// [objectLiteralShorthandPropertiesErrorWithModule.ts]
 // module export
 var x = "Foo";
-module m {
+namespace m {
     export var x;
 }
 
-module n {
+namespace n {
     var z = 10000;
     export var y = {
         m.x  // error
@@ -16,6 +18,7 @@ m.y.x;
 
 
 //// [objectLiteralShorthandPropertiesErrorWithModule.js]
+"use strict";
 // module export
 var x = "Foo";
 var m;
@@ -25,8 +28,7 @@ var n;
 (function (n) {
     var z = 10000;
     n.y = {
-        m: m,
-        : .x // error
+        m, : .x // error
     };
 })(n || (n = {}));
 m.y.x;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_optionalMemberConformance.ts] ////
+
 //// [typeSatisfaction_optionalMemberConformance.ts]
 type Point2d = { x: number, y: number };
 // Undesirable behavior today with type annotation
@@ -9,9 +11,10 @@ let p = a.y;
 
 
 //// [typeSatisfaction_optionalMemberConformance.js]
+"use strict";
 // Undesirable behavior today with type annotation
-var a = { x: 10 };
+const a = { x: 10 };
 // Should OK
 console.log(a.x.toFixed());
 // Should error
-var p = a.y;
+let p = a.y;

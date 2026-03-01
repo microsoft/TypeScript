@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
 
 //// [file1.ts]
-export module elaborate.nested.mod.name {
+export namespace elaborate.nested.mod.name {
     export class ReferredTo {
         doSomething(): void {
         }
@@ -12,7 +12,7 @@ export module elaborate.nested.mod.name {
 import RT_ALIAS = require("file1");
 import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 
-export module ImportingModule {
+export namespace ImportingModule {
     class UsesReferredType {
         constructor(private referred: ReferredTo) { }
     }
@@ -21,7 +21,7 @@ export module ImportingModule {
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.elaborate = void 0;
     var elaborate;
     (function (elaborate) {
@@ -31,31 +31,27 @@ define(["require", "exports"], function (require, exports) {
             (function (mod) {
                 var name;
                 (function (name) {
-                    var ReferredTo = /** @class */ (function () {
-                        function ReferredTo() {
+                    class ReferredTo {
+                        doSomething() {
                         }
-                        ReferredTo.prototype.doSomething = function () {
-                        };
-                        return ReferredTo;
-                    }());
+                    }
                     name.ReferredTo = ReferredTo;
                 })(name = mod.name || (mod.name = {}));
             })(mod = nested.mod || (nested.mod = {}));
         })(nested = elaborate.nested || (elaborate.nested = {}));
-    })(elaborate = exports.elaborate || (exports.elaborate = {}));
+    })(elaborate || (exports.elaborate = elaborate = {}));
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ImportingModule = void 0;
     var ImportingModule;
     (function (ImportingModule) {
-        var UsesReferredType = /** @class */ (function () {
-            function UsesReferredType(referred) {
+        class UsesReferredType {
+            constructor(referred) {
                 this.referred = referred;
             }
-            return UsesReferredType;
-        }());
-    })(ImportingModule = exports.ImportingModule || (exports.ImportingModule = {}));
+        }
+    })(ImportingModule || (exports.ImportingModule = ImportingModule = {}));
 });

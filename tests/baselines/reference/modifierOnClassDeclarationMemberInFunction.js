@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/modifierOnClassDeclarationMemberInFunction.ts] ////
+
 //// [modifierOnClassDeclarationMemberInFunction.ts]
 function f() {
     class C {
@@ -8,15 +10,15 @@ function f() {
 }
 
 //// [modifierOnClassDeclarationMemberInFunction.js]
+"use strict";
 function f() {
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this.baz = 1;
         }
-        C.foo = function () { };
-        C.prototype.bar = function () { };
-        return C;
-    }());
+        static foo() { }
+        bar() { }
+    }
 }
 
 

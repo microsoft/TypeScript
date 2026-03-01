@@ -1,33 +1,48 @@
-=== tests/cases/compiler/flowAfterFinally1.ts ===
+//// [tests/cases/compiler/flowAfterFinally1.ts] ////
+
+=== flowAfterFinally1.ts ===
 declare function openFile(): void
 >openFile : () => void
+>         : ^^^^^^    
 
 declare function closeFile(): void
 >closeFile : () => void
+>          : ^^^^^^    
 
 declare function someOperation(): {}
 >someOperation : () => {}
+>              : ^^^^^^  
 
 var result: {}
 >result : {}
+>       : ^^
 
 openFile()
 >openFile() : void
+>           : ^^^^
 >openFile : () => void
+>         : ^^^^^^    
 
 try {
   result = someOperation()
 >result = someOperation() : {}
+>                         : ^^
 >result : {}
+>       : ^^
 >someOperation() : {}
+>                : ^^
 >someOperation : () => {}
+>              : ^^^^^^  
 
 } finally {
   closeFile()
 >closeFile() : void
+>            : ^^^^
 >closeFile : () => void
+>          : ^^^^^^    
 }
 
 result // should not error here
 >result : {}
+>       : ^^
 

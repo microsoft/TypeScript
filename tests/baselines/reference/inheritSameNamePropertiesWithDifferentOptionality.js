@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts] ////
+
 //// [inheritSameNamePropertiesWithDifferentOptionality.ts]
 interface C {
     x?: number;
@@ -12,3 +14,4 @@ interface A extends C, C2 { // error
 }
 
 //// [inheritSameNamePropertiesWithDifferentOptionality.js]
+"use strict";

@@ -1,9 +1,9 @@
-tests/cases/compiler/duplicateLocalVariable2.ts(27,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
-tests/cases/compiler/duplicateLocalVariable2.ts(27,29): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
-tests/cases/compiler/duplicateLocalVariable2.ts(27,37): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+duplicateLocalVariable2.ts(27,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+duplicateLocalVariable2.ts(27,29): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
+duplicateLocalVariable2.ts(27,37): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/compiler/duplicateLocalVariable2.ts (3 errors) ====
+==== duplicateLocalVariable2.ts (3 errors) ====
     export class TestCase {
         constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
         }
@@ -33,7 +33,7 @@ tests/cases/compiler/duplicateLocalVariable2.ts(27,37): error TS2356: An arithme
                 for (var i = 0; i < 14; i++) {
                          ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/duplicateLocalVariable2.ts:22:22: 'i' was also declared here.
+!!! related TS6203 duplicateLocalVariable2.ts:22:22: 'i' was also declared here.
                                 ~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
                                         ~

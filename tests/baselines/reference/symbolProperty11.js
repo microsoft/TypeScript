@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty11.ts] ////
+
 //// [symbolProperty11.ts]
 class C { }
 interface I {
@@ -9,6 +11,7 @@ i = new C;
 var c: C = i;
 
 //// [symbolProperty11.js]
+"use strict";
 class C {
 }
 var i;

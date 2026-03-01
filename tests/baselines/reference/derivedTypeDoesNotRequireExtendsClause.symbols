@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/derivedTypeDoesNotRequireExtendsClause.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/derivedTypeDoesNotRequireExtendsClause.ts] ////
+
+=== derivedTypeDoesNotRequireExtendsClause.ts ===
 class Base {
 >Base : Symbol(Base, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 0, 0))
 

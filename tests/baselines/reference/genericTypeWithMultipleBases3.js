@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeWithMultipleBases3.ts] ////
+
 //// [genericTypeWithMultipleBases3.ts]
 interface IA<T> {
 
@@ -21,6 +23,7 @@ var y = c.bar;
 
 
 //// [genericTypeWithMultipleBases3.js]
+"use strict";
 var c;
 var x = c.foo;
 var y = c.bar;

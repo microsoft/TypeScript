@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractExtends.ts(9,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+classAbstractExtends.ts(9,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractExtends.ts (1 errors) ====
+==== classAbstractExtends.ts (1 errors) ====
     class A {
         foo() {}
     }
@@ -12,7 +12,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     class C extends B { }
           ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
+!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
     
     abstract class D extends B {}
     

@@ -1,64 +1,111 @@
-=== tests/cases/compiler/instanceAndStaticDeclarations1.ts ===
+//// [tests/cases/compiler/instanceAndStaticDeclarations1.ts] ////
+
+=== instanceAndStaticDeclarations1.ts ===
 // from spec
 
 class Point {
 >Point : Point
+>      : ^^^^^
 
     constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     public distance(p: Point) {
 >distance : (p: Point) => number
+>         : ^ ^^     ^^^^^^^^^^^
 >p : Point
+>  : ^^^^^
 
         var dx = this.x - p.x;
 >dx : number
+>   : ^^^^^^
 >this.x - p.x : number
+>             : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >p.x : number
+>    : ^^^^^^
 >p : Point
+>  : ^^^^^
 >x : number
+>  : ^^^^^^
 
         var dy = this.y - p.y;
 >dy : number
+>   : ^^^^^^
 >this.y - p.y : number
+>             : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >p.y : number
+>    : ^^^^^^
 >p : Point
+>  : ^^^^^
 >y : number
+>  : ^^^^^^
 
         return Math.sqrt(dx * dx + dy * dy);
 >Math.sqrt(dx * dx + dy * dy) : number
+>                             : ^^^^^^
 >Math.sqrt : (x: number) => number
+>          : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >sqrt : (x: number) => number
+>     : ^ ^^      ^^^^^      
 >dx * dx + dy * dy : number
+>                  : ^^^^^^
 >dx * dx : number
+>        : ^^^^^^
 >dx : number
+>   : ^^^^^^
 >dx : number
+>   : ^^^^^^
 >dy * dy : number
+>        : ^^^^^^
 >dy : number
+>   : ^^^^^^
 >dy : number
+>   : ^^^^^^
     }
     static origin = new Point(0, 0);
 >origin : Point
+>       : ^^^^^
 >new Point(0, 0) : Point
+>                : ^^^^^
 >Point : typeof Point
+>      : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
     static distance(p1: Point, p2: Point) { return p1.distance(p2); }
 >distance : (p1: Point, p2: Point) => number
+>         : ^  ^^     ^^  ^^     ^^^^^^^^^^^
 >p1 : Point
+>   : ^^^^^
 >p2 : Point
+>   : ^^^^^
 >p1.distance(p2) : number
+>                : ^^^^^^
 >p1.distance : (p: Point) => number
+>            : ^ ^^     ^^^^^^^^^^^
 >p1 : Point
+>   : ^^^^^
 >distance : (p: Point) => number
+>         : ^ ^^     ^^^^^^^^^^^
 >p2 : Point
+>   : ^^^^^
 }

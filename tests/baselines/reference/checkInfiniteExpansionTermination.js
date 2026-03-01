@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkInfiniteExpansionTermination.ts] ////
+
 //// [checkInfiniteExpansionTermination.ts]
 // Regression test for #1002
 // Before fix this code would cause infinite loop
@@ -18,6 +20,7 @@ values = values2;
 
 
 //// [checkInfiniteExpansionTermination.js]
+"use strict";
 // Regression test for #1002
 // Before fix this code would cause infinite loop
 var values;

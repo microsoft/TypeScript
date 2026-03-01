@@ -1,9 +1,14 @@
-=== tests/cases/compiler/defaultKeywordWithoutExport1.ts ===
+//// [tests/cases/compiler/defaultKeywordWithoutExport1.ts] ////
+
+=== defaultKeywordWithoutExport1.ts ===
 declare function decorator(constructor: any): any;
 >decorator : (constructor: any) => any
+>          : ^           ^^   ^^^^^   
 >constructor : any
+>            : ^^^
 
 @decorator
 >decorator : (constructor: any) => any
+>          : ^           ^^   ^^^^^   
 
 default class {}

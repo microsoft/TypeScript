@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/reverseMappedIntersectionInference1.ts] ////
+
+=== reverseMappedIntersectionInference1.ts ===
+type Results<T> = {
+>Results : Results<T>
+>        : ^^^^^^^^^^
+
+  [K in keyof T]: {
+    data: T[K];
+>data : T[K]
+>     : ^^^^
+
+    onSuccess: (data: T[K]) => void;
+>onSuccess : (data: T[K]) => void
+>          : ^    ^^    ^^^^^    
+>data : T[K]
+>     : ^^^^
+
+  };
+};
+
+type Errors<E> = {
+>Errors : Errors<E>
+>       : ^^^^^^^^^
+
+  [K in keyof E]: {
+    error: E[K];
+>error : E[K]
+>      : ^^^^
+
+    onError: (data: E[K]) => void;
+>onError : (data: E[K]) => void
+>        : ^    ^^    ^^^^^    
+>data : E[K]
+>     : ^^^^
+
+  };
+};
+
+declare function withKeyedObj<T, E>(
+>withKeyedObj : <T, E>(arg: Results<T> & Errors<E>) => [T, E]
+>             : ^ ^^ ^^   ^^                      ^^^^^      
+
+  arg: Results<T> & Errors<E>
+>arg : Results<T> & Errors<E>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+): [T, E];
+
+const res = withKeyedObj({
+>res : [{ a: string; b: boolean; }, { a: number; b: number; }]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withKeyedObj({  a: {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  b: {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },}) : [{ a: string; b: boolean; }, { a: number; b: number; }]
+>                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withKeyedObj : <T, E>(arg: Results<T> & Errors<E>) => [T, E]
+>             : ^ ^^ ^^   ^^                      ^^^^^      
+>{  a: {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  b: {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },} : { a: { data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }; b: { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }; }
+>                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: {
+>a : { data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+>{    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  } : { data: string; onSuccess: (dataArg: string) => void; error: number; onError: (errorArg: number) => void; }
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+
+    data: "foo",
+>data : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: string) => void
+>          : ^       ^^^^^^^^^^^^^^^^^
+>(dataArg) => {      dataArg;    } : (dataArg: string) => void
+>                                  : ^       ^^^^^^^^^^^^^^^^^
+>dataArg : string
+>        : ^^^^^^
+
+      dataArg;
+>dataArg : string
+>        : ^^^^^^
+
+    },
+    error: 404,
+>error : number
+>      : ^^^^^^
+>404 : 404
+>    : ^^^
+
+    onError: (errorArg) => {
+>onError : (errorArg: number) => void
+>        : ^        ^^^^^^^^^^^^^^^^^
+>(errorArg) => {      errorArg;    } : (errorArg: number) => void
+>                                    : ^        ^^^^^^^^^^^^^^^^^
+>errorArg : number
+>         : ^^^^^^
+
+      errorArg;
+>errorArg : number
+>         : ^^^^^^
+
+    },
+  },
+  b: {
+>b : { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+>{    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  } : { data: true; onSuccess: (dataArg: boolean) => void; error: number; onError: (errorArg: number) => void; }
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+
+    data: true,
+>data : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: boolean) => void
+>          : ^       ^^^^^^^^^^^^^^^^^^
+>(dataArg) => {      dataArg;    } : (dataArg: boolean) => void
+>                                  : ^       ^^^^^^^^^^^^^^^^^^
+>dataArg : boolean
+>        : ^^^^^^^
+
+      dataArg;
+>dataArg : boolean
+>        : ^^^^^^^
+
+    },
+    error: 500,
+>error : number
+>      : ^^^^^^
+>500 : 500
+>    : ^^^
+
+    onError: (errorArg) => {
+>onError : (errorArg: number) => void
+>        : ^        ^^^^^^^^^^^^^^^^^
+>(errorArg) => {      errorArg;    } : (errorArg: number) => void
+>                                    : ^        ^^^^^^^^^^^^^^^^^
+>errorArg : number
+>         : ^^^^^^
+
+      errorArg;
+>errorArg : number
+>         : ^^^^^^
+
+    },
+  },
+});
+

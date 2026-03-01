@@ -1,32 +1,51 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES62.ts ===
+//// [tests/cases/compiler/classExpressionWithStaticPropertiesES62.ts] ////
+
+=== classExpressionWithStaticPropertiesES62.ts ===
 var v = class C {
 >v : typeof C
+>  : ^^^^^^^^
 >class C {    static a = 1;    static b    static c = {        x: "hi"    }    static d = C.c.x + " world"; } : typeof C
+>                                                                                                             : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     static a = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     static b
 >b : any
 
     static c = {
 >c : { x: string; }
+>  : ^^^^^^^^^^^^^^
 >{        x: "hi"    } : { x: string; }
+>                      : ^^^^^^^^^^^^^^
 
         x: "hi"
 >x : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
     }
     static d = C.c.x + " world";
 >d : string
+>  : ^^^^^^
 >C.c.x + " world" : string
+>                 : ^^^^^^
 >C.c.x : string
+>      : ^^^^^^
 >C.c : { x: string; }
+>    : ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >c : { x: string; }
+>  : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >" world" : " world"
+>         : ^^^^^^^^
 
  };

@@ -1,37 +1,61 @@
-=== tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts] ////
+
+=== controlFlowWithTemplateLiterals.ts ===
 declare const envVar: string | undefined;
 >envVar : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 
 if (typeof envVar === `string`) {
 >typeof envVar === `string` : boolean
+>                           : ^^^^^^^
 >typeof envVar : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >envVar : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >`string` : "string"
+>         : ^^^^^^^^
 
   envVar.slice(0)
 >envVar.slice(0) : string
->envVar.slice : (start?: number | undefined, end?: number | undefined) => string
+>                : ^^^^^^
+>envVar.slice : (start?: number, end?: number) => string
+>             : ^     ^^^      ^^   ^^^      ^^^^^      
 >envVar : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>       : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >0 : 0
+>  : ^
 }
 
 declare const obj: {test: string} | {}
 >obj : {} | { test: string; }
+>    : ^^^^^^^^^^^^^      ^^^
 >test : string
+>     : ^^^^^^
 
 if (`test` in obj) {
 >`test` in obj : boolean
+>              : ^^^^^^^
 >`test` : "test"
+>       : ^^^^^^
 >obj : {} | { test: string; }
+>    : ^^^^^^^^^^^^^      ^^^
 
   obj.test.slice(0)
 >obj.test.slice(0) : string
->obj.test.slice : (start?: number | undefined, end?: number | undefined) => string
+>                  : ^^^^^^
+>obj.test.slice : (start?: number, end?: number) => string
+>               : ^     ^^^      ^^   ^^^      ^^^^^      
 >obj.test : string
+>         : ^^^^^^
 >obj : { test: string; }
+>    : ^^^^^^^^      ^^^
 >test : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>     : ^^^^^^
+>slice : (start?: number, end?: number) => string
+>      : ^     ^^^      ^^   ^^^      ^^^^^      
 >0 : 0
+>  : ^
 }
 

@@ -7,4 +7,4 @@
 ////     }
 //// }
 
-verify.rangesWithSameTextAreRenameLocations("publicParam");
+verify.baselineRenameAtRangesWithText("publicParam");

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES6
 
 for (let x = 0; x < 1; ++x) {

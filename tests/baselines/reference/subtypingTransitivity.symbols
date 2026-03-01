@@ -1,4 +1,6 @@
-=== tests/cases/compiler/subtypingTransitivity.ts ===
+//// [tests/cases/compiler/subtypingTransitivity.ts] ////
+
+=== subtypingTransitivity.ts ===
 class B {
 >B : Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
 

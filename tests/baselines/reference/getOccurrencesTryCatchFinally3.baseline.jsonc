@@ -1,0 +1,45 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally3.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}t/*HIGHLIGHTS*/ry|] {
+//     }
+//     [|{| kind: "none" |}finally|] {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally3.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}tr/*HIGHLIGHTS*/y|] {
+//     }
+//     [|{| kind: "none" |}finally|] {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally3.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}try|] {
+//     }
+//     [|{| kind: "none" |}finall/*HIGHLIGHTS*/y|] {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---

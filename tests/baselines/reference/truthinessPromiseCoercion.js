@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessPromiseCoercion.ts] ////
+
 //// [truthinessPromiseCoercion.ts]
 declare const p: Promise<number>
 declare const p2: null | Promise<number>
@@ -49,6 +51,7 @@ async function i(): Promise<string> {
 
 
 //// [truthinessPromiseCoercion.js]
+"use strict";
 async function f() {
     if (p) { } // err
     if (!!p) { } // no err

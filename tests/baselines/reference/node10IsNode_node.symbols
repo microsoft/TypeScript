@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/moduleResolution/node10IsNode_node.ts] ////
+
+=== /node_modules/fancy-lib/index.d.ts ===
+export declare const fancy: "feast";
+>fancy : Symbol(fancy, Decl(index.d.ts, 0, 20))
+
+=== /node_modules/fancy-lib/definitely-not-index.d.ts ===
+export declare const fancy: "ketchup";
+>fancy : Symbol(fancy, Decl(definitely-not-index.d.ts, 0, 20))
+
+=== /main.ts ===
+import { fancy } from "fancy-lib";
+>fancy : Symbol(fancy, Decl(main.ts, 0, 8))
+
+fancy;
+>fancy : Symbol(fancy, Decl(main.ts, 0, 8))
+

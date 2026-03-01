@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// class A {
 ////     /*a*/public a?: string = "foo";/*b*/
 //// }

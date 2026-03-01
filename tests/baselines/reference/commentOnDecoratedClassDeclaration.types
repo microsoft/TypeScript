@@ -1,7 +1,11 @@
-=== tests/cases/compiler/commentOnDecoratedClassDeclaration.ts ===
+//// [tests/cases/compiler/commentOnDecoratedClassDeclaration.ts] ////
+
+=== commentOnDecoratedClassDeclaration.ts ===
 declare function decorator(x: string): any;
 >decorator : (x: string) => any
+>          : ^ ^^      ^^^^^   
 >x : string
+>  : ^^^^^^
 
 /**
  * Leading trivia
@@ -9,10 +13,13 @@ declare function decorator(x: string): any;
 @decorator("hello")
 >decorator("hello") : any
 >decorator : (x: string) => any
+>          : ^ ^^      ^^^^^   
 >"hello" : "hello"
+>        : ^^^^^^^
 
 class Remote { }
 >Remote : Remote
+>       : ^^^^^^
 
 /**
  * Floating Comment
@@ -21,10 +28,13 @@ class Remote { }
 @decorator("hi")
 >decorator("hi") : any
 >decorator : (x: string) => any
+>          : ^ ^^      ^^^^^   
 >"hi" : "hi"
+>     : ^^^^
 
 class AnotherRomote {
 >AnotherRomote : AnotherRomote
+>              : ^^^^^^^^^^^^^
 
     constructor() {}
 }

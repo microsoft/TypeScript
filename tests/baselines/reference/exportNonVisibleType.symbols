@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo1.ts ===
+//// [tests/cases/conformance/externalModules/exportNonVisibleType.ts] ////
+
+=== foo1.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(foo1.ts, 0, 0))
 
@@ -19,7 +21,7 @@ export = x; // Should fail, I1 not exported.
 >x : Symbol(x, Decl(foo1.ts, 5, 3))
 
 
-=== tests/cases/conformance/externalModules/foo2.ts ===
+=== foo2.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(foo2.ts, 0, 0))
 
@@ -41,7 +43,7 @@ class C1 {
 export = C1; // Should fail, type I1 of visible member C1.m1 not exported.
 >C1 : Symbol(C1, Decl(foo2.ts, 3, 1))
 
-=== tests/cases/conformance/externalModules/foo3.ts ===
+=== foo3.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(foo3.ts, 0, 0))
 

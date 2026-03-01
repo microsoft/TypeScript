@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfString.ts] ////
+
 //// [typeGuardOfFormTypeOfString.ts]
 class C { private p: string };
 
@@ -86,11 +88,9 @@ else {
 
 
 //// [typeGuardOfFormTypeOfString.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 ;
 var str;
 var bool;
@@ -132,10 +132,10 @@ else {
     c = strOrC; // C
 }
 if (typeof numOrBool === "string") {
-    var x1 = numOrBool; // {}
+    let x1 = numOrBool; // {}
 }
 else {
-    var x2 = numOrBool; // number | boolean
+    let x2 = numOrBool; // number | boolean
 }
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
@@ -165,8 +165,8 @@ else {
     str = strOrC; // string
 }
 if (typeof numOrBool !== "string") {
-    var x1 = numOrBool; // number | boolean
+    let x1 = numOrBool; // number | boolean
 }
 else {
-    var x2 = numOrBool; // {}
+    let x2 = numOrBool; // {}
 }

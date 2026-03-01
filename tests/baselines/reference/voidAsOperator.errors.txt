@@ -1,0 +1,18 @@
+voidAsOperator.ts(1,6): error TS2873: This kind of expression is always falsy.
+voidAsOperator.ts(6,6): error TS2873: This kind of expression is always falsy.
+
+
+==== voidAsOperator.ts (2 errors) ====
+    if (!void 0 !== true) {
+         ~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+     
+    }
+    
+    //CHECK#2
+    if (!null !== true) {
+         ~~~~
+!!! error TS2873: This kind of expression is always falsy.
+     
+    }
+    

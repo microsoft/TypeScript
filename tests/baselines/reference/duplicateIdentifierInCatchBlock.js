@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierInCatchBlock.ts] ////
+
 //// [duplicateIdentifierInCatchBlock.ts]
 var v;
 try { } catch (e) {
@@ -18,6 +20,7 @@ try { } catch (e) {
 }
 
 //// [duplicateIdentifierInCatchBlock.js]
+"use strict";
 var v;
 try { }
 catch (e) {

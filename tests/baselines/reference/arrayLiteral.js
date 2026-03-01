@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayLiteral.ts] ////
+
 //// [arrayLiteral.ts]
 // valid uses of array literals
 
@@ -16,6 +18,7 @@ var y2: number[] = [1, 2];
 var y2: number[] = new Array<number>();
 
 //// [arrayLiteral.js]
+"use strict";
 // valid uses of array literals
 var x = [];
 var x = new Array(1);

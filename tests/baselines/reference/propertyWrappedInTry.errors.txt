@@ -1,14 +1,14 @@
-tests/cases/compiler/propertyWrappedInTry.ts(3,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/propertyWrappedInTry.ts(5,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/propertyWrappedInTry.ts(5,16): error TS2304: Cannot find name 'bar'.
-tests/cases/compiler/propertyWrappedInTry.ts(5,22): error TS2304: Cannot find name 'someInitThatMightFail'.
-tests/cases/compiler/propertyWrappedInTry.ts(11,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/propertyWrappedInTry.ts(11,12): error TS2304: Cannot find name 'baz'.
-tests/cases/compiler/propertyWrappedInTry.ts(11,18): error TS1005: ';' expected.
-tests/cases/compiler/propertyWrappedInTry.ts(17,1): error TS1128: Declaration or statement expected.
+propertyWrappedInTry.ts(3,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+propertyWrappedInTry.ts(5,9): error TS1128: Declaration or statement expected.
+propertyWrappedInTry.ts(5,16): error TS2304: Cannot find name 'bar'.
+propertyWrappedInTry.ts(5,22): error TS2304: Cannot find name 'someInitThatMightFail'.
+propertyWrappedInTry.ts(11,5): error TS1128: Declaration or statement expected.
+propertyWrappedInTry.ts(11,12): error TS2304: Cannot find name 'baz'.
+propertyWrappedInTry.ts(11,18): error TS1005: ';' expected.
+propertyWrappedInTry.ts(17,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/propertyWrappedInTry.ts (8 errors) ====
+==== propertyWrappedInTry.ts (8 errors) ====
     class Foo {
     
         try {

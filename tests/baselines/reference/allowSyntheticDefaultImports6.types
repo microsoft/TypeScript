@@ -1,19 +1,28 @@
-=== tests/cases/compiler/b.d.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports6.ts] ////
+
+=== b.d.ts ===
 declare class Foo {
 >Foo : Foo
+>    : ^^^
 
 	member: string;
 >member : string
+>       : ^^^^^^
 }
 export = Foo;
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import Foo from "./b";
 >Foo : any
+>    : ^^^
 
 export var x = new Foo();
 >x : any
+>  : ^^^
 >new Foo() : any
+>          : ^^^
 >Foo : any
+>    : ^^^
 

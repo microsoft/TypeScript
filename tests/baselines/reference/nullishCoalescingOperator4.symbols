@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts] ////
+
+=== nullishCoalescingOperator4.ts ===
 declare const a1: 'literal' | undefined | null
 >a1 : Symbol(a1, Decl(nullishCoalescingOperator4.ts, 0, 13))
 

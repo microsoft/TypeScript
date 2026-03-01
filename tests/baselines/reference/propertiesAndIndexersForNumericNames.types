@@ -1,81 +1,119 @@
-=== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts ===
+//// [tests/cases/compiler/propertiesAndIndexersForNumericNames.ts] ////
+
+=== propertiesAndIndexersForNumericNames.ts ===
 class C {
 >C : C
+>  : ^
 
     [i: number]: number;
 >i : number
+>  : ^^^^^^
 
     // These all have numeric names; they should error
     // because their types are not compatible with the numeric indexer.
     public "1": string = "number"; // Error
 >"1" : string
+>    : ^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     public "-1": string = "negative number"; // Error
 >"-1" : string
+>     : ^^^^^^
 >"negative number" : "negative number"
+>                  : ^^^^^^^^^^^^^^^^^
 
     public "-2.5": string = "negative number"; // Error
 >"-2.5" : string
+>       : ^^^^^^
 >"negative number" : "negative number"
+>                  : ^^^^^^^^^^^^^^^^^
 
     public "3.141592": string = "pi-sitive number"; // Error
 >"3.141592" : string
+>           : ^^^^^^
 >"pi-sitive number" : "pi-sitive number"
+>                   : ^^^^^^^^^^^^^^^^^^
 
     public "1.2e-20": string = "really small number"; // Error
 >"1.2e-20" : string
+>          : ^^^^^^
 >"really small number" : "really small number"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
     public "Infinity": string = "A gillion"; // Error
 >"Infinity" : string
+>           : ^^^^^^
 >"A gillion" : "A gillion"
+>            : ^^^^^^^^^^^
 
     public "-Infinity": string = "Negative-a-gillion"; // Error
 >"-Infinity" : string
+>            : ^^^^^^
 >"Negative-a-gillion" : "Negative-a-gillion"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     public "NaN": string = "not a number"; // Error
 >"NaN" : string
+>      : ^^^^^^
 >"not a number" : "not a number"
+>               : ^^^^^^^^^^^^^^
     
     // These all have *partially* numeric names,
     // but should really be treated as plain string literals.
     public " 1": string = "leading space"; // No error
 >" 1" : string
+>     : ^^^^^^
 >"leading space" : "leading space"
+>                : ^^^^^^^^^^^^^^^
 
     public "1    ": string = "trailing space"; // No error
 >"1    " : string
+>        : ^^^^^^
 >"trailing space" : "trailing space"
+>                 : ^^^^^^^^^^^^^^^^
 
     public "": string = "no nothing"; // No error
 >"" : string
+>   : ^^^^^^
 >"no nothing" : "no nothing"
+>             : ^^^^^^^^^^^^
 
     public "    ": string = "just space"; // No error
 >"    " : string
+>       : ^^^^^^
 >"just space" : "just space"
+>             : ^^^^^^^^^^^^
 
     public "1 0 1": string = "several numbers and spaces"; // No error
 >"1 0 1" : string
+>        : ^^^^^^
 >"several numbers and spaces" : "several numbers and spaces"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     public "hunter2": string = "not a password"; // No error
 >"hunter2" : string
+>          : ^^^^^^
 >"not a password" : "not a password"
+>                 : ^^^^^^^^^^^^^^^^
 
     public "+Infinity": string = "A gillion"; // No error
 >"+Infinity" : string
+>            : ^^^^^^
 >"A gillion" : "A gillion"
+>            : ^^^^^^^^^^^
 
     public "+NaN": string = "not a positive number"; // No error
 >"+NaN" : string
+>       : ^^^^^^
 >"not a positive number" : "not a positive number"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     public "-NaN": string = "not a negative number"; // No error
 >"-NaN" : string
+>       : ^^^^^^
 >"not a negative number" : "not a negative number"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
     
 
     // These fall into the above category, however, they are "trickier";
@@ -83,42 +121,62 @@ class C {
     // "canonical" numeric representations.
     public "+1": string = "positive number (for the paranoid)"; // No error
 >"+1" : string
+>     : ^^^^^^
 >"positive number (for the paranoid)" : "positive number (for the paranoid)"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     public "1e0": string = "just one"; // No error
 >"1e0" : string
+>      : ^^^^^^
 >"just one" : "just one"
+>           : ^^^^^^^^^^
 
     public "-0": string = "just zero"; // No error
 >"-0" : string
+>     : ^^^^^^
 >"just zero" : "just zero"
+>            : ^^^^^^^^^^^
 
     public "-0e0": string = "just zero"; // No error
 >"-0e0" : string
+>       : ^^^^^^
 >"just zero" : "just zero"
+>            : ^^^^^^^^^^^
 
     public "0xF00D": string = "hex food"; // No error
 >"0xF00D" : string
+>         : ^^^^^^
 >"hex food" : "hex food"
+>           : ^^^^^^^^^^
 
     public "0xBEEF": string = "hex beef"; // No error
 >"0xBEEF" : string
+>         : ^^^^^^
 >"hex beef" : "hex beef"
+>           : ^^^^^^^^^^
 
     public "0123": string = "oct 83"; // No error
 >"0123" : string
+>       : ^^^^^^
 >"oct 83" : "oct 83"
+>         : ^^^^^^^^
 
     public "0o123": string = "explicit oct 83"; // No error
 >"0o123" : string
+>        : ^^^^^^
 >"explicit oct 83" : "explicit oct 83"
+>                  : ^^^^^^^^^^^^^^^^^
 
     public "0b101101001010": string = "explicit binary"; // No error
 >"0b101101001010" : string
+>                 : ^^^^^^
 >"explicit binary" : "explicit binary"
+>                  : ^^^^^^^^^^^^^^^^^
 
     public "0.000000000000000000012": string = "should've been in exponential form"; // No error
 >"0.000000000000000000012" : string
+>                          : ^^^^^^
 >"should've been in exponential form" : "should've been in exponential form"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

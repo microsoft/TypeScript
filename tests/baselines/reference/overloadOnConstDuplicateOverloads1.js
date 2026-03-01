@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts] ////
+
 //// [overloadOnConstDuplicateOverloads1.ts]
 function foo(a: 'hi', x: string);
 function foo(a: 'hi', x: string);
@@ -11,6 +13,7 @@ function foo2(a: any, x: any) {
 }
 
 //// [overloadOnConstDuplicateOverloads1.js]
+"use strict";
 function foo(a, x) {
 }
 function foo2(a, x) {

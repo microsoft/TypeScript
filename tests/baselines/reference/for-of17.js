@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of17.ts] ////
+
 //// [for-of17.ts]
 class NumberIterator {
     next() {
@@ -15,6 +17,7 @@ var v: string;
 for (v of new NumberIterator) { } // Should succeed
 
 //// [for-of17.js]
+"use strict";
 class NumberIterator {
     next() {
         return {

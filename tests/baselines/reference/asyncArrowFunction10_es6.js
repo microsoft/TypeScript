@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts] ////
+
 //// [asyncArrowFunction10_es6.ts]
 var foo = async (): Promise<void> => {
    // Legal to use 'await' in a type context.
@@ -6,7 +8,8 @@ var foo = async (): Promise<void> => {
 
 
 //// [asyncArrowFunction10_es6.js]
-var foo = () => __awaiter(this, void 0, void 0, function* () {
+"use strict";
+var foo = () => __awaiter(void 0, void 0, void 0, function* () {
     // Legal to use 'await' in a type context.
     var v;
 });

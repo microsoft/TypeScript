@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts] ////
+
 //// [genericIndexedAccessMethodIntersectionCanBeAccessed.ts]
 type ExtendedService<T> = {
     [K in keyof T]: T[K] & {
@@ -21,13 +23,9 @@ export const createService = <T>(
 
 
 //// [genericIndexedAccessMethodIntersectionCanBeAccessed.js]
-"use strict";
-exports.__esModule = true;
-exports.createService = void 0;
-var createService = function (ServiceCtr) {
-    Object.keys(ServiceCtr).forEach(function (key) {
-        var method = (ServiceCtr)[key];
-        var __$daemonMode = method.__$daemonMode, __$action = method.__$action, id = method.id;
+export const createService = (ServiceCtr) => {
+    Object.keys(ServiceCtr).forEach(key => {
+        const method = (ServiceCtr)[key];
+        const { __$daemonMode, __$action, id } = method;
     });
 };
-exports.createService = createService;

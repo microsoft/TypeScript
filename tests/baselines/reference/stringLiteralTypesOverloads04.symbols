@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts] ////
+
+=== stringLiteralTypesOverloads04.ts ===
 declare function f(x: (p: "foo" | "bar") => "foo");
 >f : Symbol(f, Decl(stringLiteralTypesOverloads04.ts, 0, 0))
 >x : Symbol(x, Decl(stringLiteralTypesOverloads04.ts, 0, 19))

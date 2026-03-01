@@ -1,0 +1,31 @@
+/index.ts(1,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+/index.ts(3,1): error TS2454: Variable 'y' is used before being assigned.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "extends": ["./tsconfig1.json", "./tsconfig2.json"]
+    }
+    
+==== /index.ts (2 errors) ====
+    function f(x) { } // noImplicitAny error
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    let y: string;
+    y.toLowerCase(); // strictNullChecks error
+    ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+==== /tsconfig1.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strictNullChecks": true
+        }
+    }
+    
+==== /tsconfig2.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "noImplicitAny": true
+        }
+    }
+    

@@ -1,50 +1,80 @@
-=== tests/cases/compiler/intersectionsAndReadonlyProperties.ts ===
+//// [tests/cases/compiler/intersectionsAndReadonlyProperties.ts] ////
+
+=== intersectionsAndReadonlyProperties.ts ===
 // readonly and non-readonly
 type Intersection1 = { readonly a: number } & { a: number };
->Intersection1 : { readonly a: number; } & { a: number; }
+>Intersection1 : Intersection1
+>              : ^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 declare let i1: Intersection1;
 >i1 : Intersection1
+>   : ^^^^^^^^^^^^^
 
 i1.a = 2;
 >i1.a = 2 : 2
+>         : ^
 >i1.a : number
+>     : ^^^^^^
 >i1 : Intersection1
+>   : ^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 // getter and setter
 type Intersection2 = { get a(): number } & { set a(v: number) };
->Intersection2 : { readonly a: number; } & { a: number; }
+>Intersection2 : Intersection2
+>              : ^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
 declare let i2: Intersection2;
 >i2 : Intersection2
+>   : ^^^^^^^^^^^^^
 
 i2.a = 2;
 >i2.a = 2 : 2
+>         : ^
 >i2.a : number
+>     : ^^^^^^
 >i2 : Intersection2
+>   : ^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 // assignment to an all read-only property should still be disallowed
 type IntersectionAllReadonly = { readonly a: number } & { get a(): number };
->IntersectionAllReadonly : { readonly a: number; } & { readonly a: number; }
+>IntersectionAllReadonly : IntersectionAllReadonly
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 
 declare let ia: IntersectionAllReadonly;
 >ia : IntersectionAllReadonly
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 ia.a = 2; // Error
 >ia.a = 2 : 2
+>         : ^
 >ia.a : any
+>     : ^^^
 >ia : IntersectionAllReadonly
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >2 : 2
+>  : ^
 

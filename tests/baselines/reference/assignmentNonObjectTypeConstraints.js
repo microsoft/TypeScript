@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentNonObjectTypeConstraints.ts] ////
+
 //// [assignmentNonObjectTypeConstraints.ts]
 const enum E { A, B, C }
 
@@ -20,21 +22,16 @@ bar(new B);
 
 
 //// [assignmentNonObjectTypeConstraints.js]
+"use strict";
 function foo(x) {
     var y = x; // Ok
 }
 foo(5);
 foo(0 /* E.A */);
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+}
+class B {
+}
 function bar(x) {
     var y = x; // Ok
 }

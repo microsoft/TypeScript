@@ -1,36 +1,61 @@
-=== tests/cases/compiler/nonNullParameterExtendingStringAssignableToString.ts ===
+//// [tests/cases/compiler/nonNullParameterExtendingStringAssignableToString.ts] ////
+
+=== nonNullParameterExtendingStringAssignableToString.ts ===
 declare function foo(p: string): void;
 >foo : (p: string) => void
+>    : ^ ^^      ^^^^^    
 >p : string
+>  : ^^^^^^
 
 function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >fn : <T extends string | undefined, U extends string>(one: T, two: U) => void
+>   : ^ ^^^^^^^^^                  ^^ ^^^^^^^^^      ^^   ^^ ^^   ^^ ^^^^^^^^^
 >one : T
+>    : ^
 >two : U
+>    : ^
 
     let three = Boolean() ? one : two;
 >three : T | U
+>      : ^^^^^
 >Boolean() ? one : two : T | U
+>                      : ^^^^^
 >Boolean() : boolean
+>          : ^^^^^^^
 >Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >one : T
+>    : ^
 >two : U
+>    : ^
 
     foo(one!);
 >foo(one!) : void
+>          : ^^^^
 >foo : (p: string) => void
+>    : ^ ^^      ^^^^^    
 >one! : string
+>     : ^^^^^^
 >one : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     foo(two!);
 >foo(two!) : void
+>          : ^^^^
 >foo : (p: string) => void
+>    : ^ ^^      ^^^^^    
 >two! : U
+>     : ^
 >two : U
+>    : ^
 
     foo(three!); // this line is the important one
 >foo(three!) : void
+>            : ^^^^
 >foo : (p: string) => void
+>    : ^ ^^      ^^^^^    
 >three! : string
+>       : ^^^^^^
 >three : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedBlockScopedBindings10.ts ===
+//// [tests/cases/compiler/nestedBlockScopedBindings10.ts] ////
+
+=== nestedBlockScopedBindings10.ts ===
 {
     let x;
 >x : Symbol(x, Decl(nestedBlockScopedBindings10.ts, 1, 7))

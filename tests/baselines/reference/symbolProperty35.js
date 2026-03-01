@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty35.ts] ////
+
 //// [symbolProperty35.ts]
 interface I1 {
     [Symbol.toStringTag](): { x: string }
@@ -9,3 +11,4 @@ interface I2 {
 interface I3 extends I1, I2 { }
 
 //// [symbolProperty35.js]
+"use strict";

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveConditionalCrash2.ts ===
+//// [tests/cases/compiler/recursiveConditionalCrash2.ts] ////
+
+=== recursiveConditionalCrash2.ts ===
 // Simplified #43529
 
 export type CanBeExpanded<T extends object> = {

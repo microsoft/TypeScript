@@ -1,318 +1,514 @@
-=== tests/cases/compiler/abstractPropertyInConstructor.ts ===
+//// [tests/cases/compiler/abstractPropertyInConstructor.ts] ////
+
+=== abstractPropertyInConstructor.ts ===
 abstract class AbstractClass {
 >AbstractClass : AbstractClass
+>              : ^^^^^^^^^^^^^
 
     constructor(str: string, other: AbstractClass) {
 >str : string
+>    : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 
         this.method(parseInt(str));
 >this.method(parseInt(str)) : void
+>                           : ^^^^
 >this.method : (num: number) => void
+>            : ^   ^^      ^^^^^    
 >this : this
+>     : ^^^^
 >method : (num: number) => void
+>       : ^   ^^      ^^^^^    
 >parseInt(str) : number
+>              : ^^^^^^
 >parseInt : (string: string, radix?: number) => number
+>         : ^      ^^      ^^     ^^^      ^^^^^      
 >str : string
+>    : ^^^^^^
 
         let val = this.prop.toLowerCase();
 >val : string
+>    : ^^^^^^
 >this.prop.toLowerCase() : string
+>                        : ^^^^^^
 >this.prop.toLowerCase : () => string
+>                      : ^^^^^^      
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
         if (!str) {
 >!str : boolean
+>     : ^^^^^^^
 >str : string
+>    : ^^^^^^
 
             this.prop = "Hello World";
 >this.prop = "Hello World" : "Hello World"
+>                          : ^^^^^^^^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
         }
         this.cb(str);
 >this.cb(str) : void
+>             : ^^^^
 >this.cb : (s: string) => void
+>        : ^ ^^      ^^^^^    
 >this : this
+>     : ^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^    
 >str : string
+>    : ^^^^^^
 
         // OK, reference is inside function
         const innerFunction = () => {
 >innerFunction : () => string
+>              : ^^^^^^^^^^^^
 >() => {            return this.prop;        } : () => string
+>                                              : ^^^^^^^^^^^^
 
             return this.prop;
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
         }
 
         // OK, references are to another instance
         other.cb(other.prop);
 >other.cb(other.prop) : void
+>                     : ^^^^
 >other.cb : (s: string) => void
+>         : ^ ^^      ^^^^^    
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^    
 >other.prop : string
+>           : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >prop : string
+>     : ^^^^^^
     }
 
     abstract prop: string;
 >prop : string
+>     : ^^^^^^
 
     abstract cb: (s: string) => void;
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
     abstract method(num: number): void;
 >method : (num: number) => void
+>       : ^   ^^      ^^^^^    
 >num : number
+>    : ^^^^^^
 
     other = this.prop;
 >other : string
+>      : ^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 
     fn = () => this.prop;
 >fn : () => string
+>   : ^^^^^^^^^^^^
 >() => this.prop : () => string
+>                : ^^^^^^^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 
     method2() {
 >method2 : () => void
+>        : ^^^^^^^^^^
 
         this.prop = this.prop + "!";
 >this.prop = this.prop + "!" : string
+>                            : ^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >this.prop + "!" : string
+>                : ^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >"!" : "!"
+>    : ^^^
     }
 }
 
 abstract class DerivedAbstractClass extends AbstractClass {
 >DerivedAbstractClass : DerivedAbstractClass
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >AbstractClass : AbstractClass
+>              : ^^^^^^^^^^^^^
 
     cb = (s: string) => {};
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >(s: string) => {} : (s: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
 >str : string
+>    : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >yetAnother : DerivedAbstractClass
+>           : ^^^^^^^^^^^^^^^^^^^^
 
         super(str, other);
 >super(str, other) : void
+>                  : ^^^^
 >super : typeof AbstractClass
+>      : ^^^^^^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 
         // there is no implementation of 'prop' in any base class
         this.cb(this.prop.toLowerCase());
 >this.cb(this.prop.toLowerCase()) : void
+>                                 : ^^^^
 >this.cb : (s: string) => void
+>        : ^ ^^      ^^^^^^^^^
 >this : this
+>     : ^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >this.prop.toLowerCase() : string
+>                        : ^^^^^^
 >this.prop.toLowerCase : () => string
+>                      : ^^^^^^      
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
         this.method(1);
 >this.method(1) : void
+>               : ^^^^
 >this.method : (num: number) => void
+>            : ^   ^^      ^^^^^    
 >this : this
+>     : ^^^^
 >method : (num: number) => void
+>       : ^   ^^      ^^^^^    
 >1 : 1
+>  : ^
 
         // OK, references are to another instance
         other.cb(other.prop);
 >other.cb(other.prop) : void
+>                     : ^^^^
 >other.cb : (s: string) => void
+>         : ^ ^^      ^^^^^    
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^    
 >other.prop : string
+>           : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >prop : string
+>     : ^^^^^^
 
         yetAnother.cb(yetAnother.prop);
 >yetAnother.cb(yetAnother.prop) : void
+>                               : ^^^^
 >yetAnother.cb : (s: string) => void
+>              : ^ ^^      ^^^^^^^^^
 >yetAnother : DerivedAbstractClass
+>           : ^^^^^^^^^^^^^^^^^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >yetAnother.prop : string
+>                : ^^^^^^
 >yetAnother : DerivedAbstractClass
+>           : ^^^^^^^^^^^^^^^^^^^^
 >prop : string
+>     : ^^^^^^
     }
 }
 
 class Implementation extends DerivedAbstractClass {
 >Implementation : Implementation
+>               : ^^^^^^^^^^^^^^
 >DerivedAbstractClass : DerivedAbstractClass
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     prop = "";
 >prop : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 
     cb = (s: string) => {};
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >(s: string) => {} : (s: string) => void
+>                  : ^ ^^      ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
 >str : string
+>    : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >yetAnother : DerivedAbstractClass
+>           : ^^^^^^^^^^^^^^^^^^^^
 
         super(str, other, yetAnother);
 >super(str, other, yetAnother) : void
+>                              : ^^^^
 >super : typeof DerivedAbstractClass
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 >other : AbstractClass
+>      : ^^^^^^^^^^^^^
 >yetAnother : DerivedAbstractClass
+>           : ^^^^^^^^^^^^^^^^^^^^
 
         this.cb(this.prop);
 >this.cb(this.prop) : void
+>                   : ^^^^
 >this.cb : (s: string) => void
+>        : ^ ^^      ^^^^^^^^^
 >this : this
+>     : ^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
     }
 
     method(n: number) {
 >method : (n: number) => void
+>       : ^ ^^      ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
         this.cb(this.prop + n);
 >this.cb(this.prop + n) : void
+>                       : ^^^^
 >this.cb : (s: string) => void
+>        : ^ ^^      ^^^^^^^^^
 >this : this
+>     : ^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^^^^^
 >this.prop + n : string
+>              : ^^^^^^
 >this.prop : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >prop : string
+>     : ^^^^^^
 >n : number
+>  : ^^^^^^
     }
 }
 
 class User {
 >User : User
+>     : ^^^^
 
     constructor(a: AbstractClass) {
 >a : AbstractClass
+>  : ^^^^^^^^^^^^^
 
         a.prop;
 >a.prop : string
+>       : ^^^^^^
 >a : AbstractClass
+>  : ^^^^^^^^^^^^^
 >prop : string
+>     : ^^^^^^
 
         a.cb("hi");
 >a.cb("hi") : void
+>           : ^^^^
 >a.cb : (s: string) => void
+>     : ^ ^^      ^^^^^    
 >a : AbstractClass
+>  : ^^^^^^^^^^^^^
 >cb : (s: string) => void
+>   : ^ ^^      ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
 
         a.method(12);
 >a.method(12) : void
+>             : ^^^^
 >a.method : (num: number) => void
+>         : ^   ^^      ^^^^^    
 >a : AbstractClass
+>  : ^^^^^^^^^^^^^
 >method : (num: number) => void
+>       : ^   ^^      ^^^^^    
 >12 : 12
+>   : ^^
 
         a.method2();
 >a.method2() : void
+>            : ^^^^
 >a.method2 : () => void
+>          : ^^^^^^^^^^
 >a : AbstractClass
+>  : ^^^^^^^^^^^^^
 >method2 : () => void
+>        : ^^^^^^^^^^
     }
 }
 
 abstract class C1 {
 >C1 : C1
+>   : ^^
 
     abstract x: string;
 >x : string
+>  : ^^^^^^
 
     abstract y: string;
 >y : string
+>  : ^^^^^^
 
     constructor() {
         let self = this;                // ok
 >self : this
+>     : ^^^^
 >this : this
+>     : ^^^^
 
         let { x, y: y1 } = this;        // error
 >x : string
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >y1 : string
+>   : ^^^^^^
 >this : this
+>     : ^^^^
 
         ({ x, y: y1, "y": y1 } = this); // error
 >({ x, y: y1, "y": y1 } = this) : this
+>                               : ^^^^
 >{ x, y: y1, "y": y1 } = this : this
+>                             : ^^^^
 >{ x, y: y1, "y": y1 } : { x: string; y: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >y1 : string
+>   : ^^^^^^
 >"y" : string
+>    : ^^^^^^
 >y1 : string
+>   : ^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 
     constructor() {
         let self = this;                // ok
 >self : this
+>     : ^^^^
 >this : this
+>     : ^^^^
 
         let { x, y: y1 } = this;        // ok
 >x : string
+>  : ^^^^^^
 >y : any
+>  : ^^^
 >y1 : string
+>   : ^^^^^^
 >this : this
+>     : ^^^^
 
         ({ x, y: y1, "y": y1 } = this); // ok
 >({ x, y: y1, "y": y1 } = this) : this
+>                               : ^^^^
 >{ x, y: y1, "y": y1 } = this : this
+>                             : ^^^^
 >{ x, y: y1, "y": y1 } : { x: string; y: string; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 >y1 : string
+>   : ^^^^^^
 >"y" : string
+>    : ^^^^^^
 >y1 : string
+>   : ^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 

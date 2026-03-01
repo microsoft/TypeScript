@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveNamedLambdaCall.ts] ////
+
 //// [recursiveNamedLambdaCall.ts]
 var promise = function( obj ) {
 	
@@ -20,6 +22,7 @@ var promise = function( obj ) {
 };
 
 //// [recursiveNamedLambdaCall.js]
+"use strict";
 var promise = function (obj) {
     if (top && top.doScroll) {
         (function doScrollCheck() {

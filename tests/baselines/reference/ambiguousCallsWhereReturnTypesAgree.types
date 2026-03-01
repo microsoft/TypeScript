@@ -1,78 +1,111 @@
-=== tests/cases/compiler/ambiguousCallsWhereReturnTypesAgree.ts ===
+//// [tests/cases/compiler/ambiguousCallsWhereReturnTypesAgree.ts] ////
+
+=== ambiguousCallsWhereReturnTypesAgree.ts ===
 class TestClass {
 >TestClass : TestClass
+>          : ^^^^^^^^^
 
     public bar(x: string): void;
 >bar : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : string
+>  : ^^^^^^
 
     public bar(x: string[]): void;
 >bar : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : string[]
+>  : ^^^^^^^^
 
     public bar(x: any): void {
 >bar : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : any
         
     }
  
     public foo(x: string): void;
 >foo : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : string
+>  : ^^^^^^
 
     public foo(x: string[]): void;
 >foo : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : string[]
+>  : ^^^^^^^^
 
     public foo(x: any): void {
 >foo : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : any
 
         this.bar(x); // should not error
 >this.bar(x) : void
+>            : ^^^^
 >this.bar : { (x: string): void; (x: string[]): void; }
+>         : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >this : this
+>     : ^^^^
 >bar : { (x: string): void; (x: string[]): void; }
+>    : ^^^ ^^      ^^^    ^^^ ^^        ^^^    ^^^
 >x : any
     }
 }
 
 class TestClass2 {
 >TestClass2 : TestClass2
+>           : ^^^^^^^^^^
 
     public bar(x: string): number;
 >bar : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : string
+>  : ^^^^^^
 
     public bar(x: string[]): number;
 >bar : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : string[]
+>  : ^^^^^^^^
 
     public bar(x: any): number {
 >bar : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : any
 
         return 0;
 >0 : 0
+>  : ^
     }
  
     public foo(x: string): number;
 >foo : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : string
+>  : ^^^^^^
 
     public foo(x: string[]): number;
 >foo : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : string[]
+>  : ^^^^^^^^
 
     public foo(x: any): number {
 >foo : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : any
 
         return this.bar(x); // should not error
 >this.bar(x) : number
+>            : ^^^^^^
 >this.bar : { (x: string): number; (x: string[]): number; }
+>         : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >this : this
+>     : ^^^^
 >bar : { (x: string): number; (x: string[]): number; }
+>    : ^^^ ^^      ^^^      ^^^ ^^        ^^^      ^^^
 >x : any
     }
 }

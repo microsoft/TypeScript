@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall8.ts] ////
+
 //// [iteratorSpreadInCall8.ts]
 class Foo<T> {
     constructor(...s: T[]) { }
@@ -32,6 +34,7 @@ class _StringIterator {
 new Foo(...new SymbolIterator, ...new _StringIterator);
 
 //// [iteratorSpreadInCall8.js]
+"use strict";
 class Foo {
     constructor(...s) { }
 }

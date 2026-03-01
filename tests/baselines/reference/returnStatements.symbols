@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/returnStatements/returnStatements.ts ===
+//// [tests/cases/conformance/statements/returnStatements/returnStatements.ts] ////
+
+=== returnStatements.ts ===
 // all the following should be valid
 function fn1(): number { return 1; }
 >fn1 : Symbol(fn1, Decl(returnStatements.ts, 0, 0))
@@ -18,8 +20,8 @@ function fn5(): boolean { return true; }
 
 function fn6(): Date { return new Date(12); }
 >fn6 : Symbol(fn6, Decl(returnStatements.ts, 5, 40))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 function fn7(): any { return null; }
 >fn7 : Symbol(fn7, Decl(returnStatements.ts, 6, 45))

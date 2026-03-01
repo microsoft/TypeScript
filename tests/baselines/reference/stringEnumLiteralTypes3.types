@@ -1,529 +1,865 @@
-=== tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts ===
+//// [tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts] ////
+
+=== stringEnumLiteralTypes3.ts ===
 const enum Choice { Unknown = "", Yes = "yes", No = "no" };
 >Choice : Choice
+>       : ^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >"yes" : "yes"
+>      : ^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >"no" : "no"
+>     : ^^^^
 
 type Yes = Choice.Yes;
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >Choice : any
+>       : ^^^
 
 type YesNo = Choice.Yes | Choice.No;
->YesNo : Choice.Yes | Choice.No
+>YesNo : YesNo
+>      : ^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : Choice.Yes | Choice.No
+>NoYes : NoYes
+>      : ^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
->UnknownYesNo : Choice
+>UnknownYesNo : UnknownYesNo
+>             : ^^^^^^^^^^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 >Choice : any
+>       : ^^^
 
 function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f1 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     a = a;
 >a = a : Choice.Yes
+>      : ^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     a = b;
 >a = b : YesNo
+>      : ^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     a = c;
 >a = c : UnknownYesNo
+>      : ^^^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     a = d;
 >a = d : Choice
+>      : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 }
 
 function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f2 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     b = a;
 >b = a : Choice.Yes
+>      : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     b = b;
 >b = b : Choice.Yes
+>      : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >b : Choice.Yes
+>  : ^^^^^^^^^^
 
     b = c;
 >b = c : UnknownYesNo
+>      : ^^^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     b = d;
 >b = d : Choice
+>      : ^^^^^^
 >b : YesNo
+>  : ^^^^^
 >d : Choice
+>  : ^^^^^^
 }
 
 function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f3 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     c = a;
 >c = a : Choice.Yes
+>      : ^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     c = b;
 >c = b : YesNo
+>      : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     c = c;
 >c = c : Choice.Yes | Choice.No
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >c : Choice.Yes | Choice.No
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
     c = d;
 >c = d : Choice
+>      : ^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 }
 
 function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f4 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     d = a;
 >d = a : Choice.Yes
+>      : ^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     d = b;
 >d = b : YesNo
+>      : ^^^^^
 >d : Choice
+>  : ^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     d = c;
 >d = c : UnknownYesNo
+>      : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     d = d;
 >d = d : Choice
+>      : ^^^^^^
 >d : Choice
+>  : ^^^^^^
 >d : Choice
+>  : ^^^^^^
 }
 
 function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f5 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     a = Choice.Unknown;
 >a = Choice.Unknown : Choice.Unknown
+>                   : ^^^^^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     a = Choice.Yes;
 >a = Choice.Yes : Choice.Yes
+>               : ^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     a = Choice.No;
 >a = Choice.No : Choice.No
+>              : ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     b = Choice.Unknown;
 >b = Choice.Unknown : Choice.Unknown
+>                   : ^^^^^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     b = Choice.Yes;
 >b = Choice.Yes : Choice.Yes
+>               : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     b = Choice.No;
 >b = Choice.No : Choice.No
+>              : ^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     c = Choice.Unknown;
 >c = Choice.Unknown : Choice.Unknown
+>                   : ^^^^^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     c = Choice.Yes;
 >c = Choice.Yes : Choice.Yes
+>               : ^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     c = Choice.No;
 >c = Choice.No : Choice.No
+>              : ^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     d = Choice.Unknown;
 >d = Choice.Unknown : Choice.Unknown
+>                   : ^^^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     d = Choice.Yes;
 >d = Choice.Yes : Choice.Yes
+>               : ^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     d = Choice.No;
 >d = Choice.No : Choice.No
+>              : ^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 }
 
 function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f6 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     a === Choice.Unknown;
 >a === Choice.Unknown : boolean
+>                     : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     a === Choice.Yes;
 >a === Choice.Yes : boolean
+>                 : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     a === Choice.No;
 >a === Choice.No : boolean
+>                : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     b === Choice.Unknown;
 >b === Choice.Unknown : boolean
+>                     : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     b === Choice.Yes;
 >b === Choice.Yes : boolean
+>                 : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     b === Choice.No;
 >b === Choice.No : boolean
+>                : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     c === Choice.Unknown;
 >c === Choice.Unknown : boolean
+>                     : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     c === Choice.Yes;
 >c === Choice.Yes : boolean
+>                 : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     c === Choice.No;
 >c === Choice.No : boolean
+>                : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 
     d === Choice.Unknown;
 >d === Choice.Unknown : boolean
+>                     : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 
     d === Choice.Yes;
 >d === Choice.Yes : boolean
+>                 : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 
     d === Choice.No;
 >d === Choice.No : boolean
+>                : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 }
 
 function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f7 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+>   : ^ ^^   ^^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     a === a;
 >a === a : boolean
+>        : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     a === b;
 >a === b : boolean
+>        : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     a === c;
 >a === c : boolean
+>        : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     a === d;
 >a === d : boolean
+>        : ^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     b === a;
 >b === a : boolean
+>        : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     b === b;
 >b === b : boolean
+>        : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >b : YesNo
+>  : ^^^^^
 
     b === c;
 >b === c : boolean
+>        : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     b === d;
 >b === d : boolean
+>        : ^^^^^^^
 >b : YesNo
+>  : ^^^^^
 >d : Choice
+>  : ^^^^^^
 
     c === a;
 >c === a : boolean
+>        : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     c === b;
 >c === b : boolean
+>        : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     c === c;
 >c === c : boolean
+>        : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     c === d;
 >c === d : boolean
+>        : ^^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 >d : Choice
+>  : ^^^^^^
 
     d === a;
 >d === a : boolean
+>        : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >a : Choice.Yes
+>  : ^^^^^^^^^^
 
     d === b;
 >d === b : boolean
+>        : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >b : YesNo
+>  : ^^^^^
 
     d === c;
 >d === c : boolean
+>        : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >c : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     d === d;
 >d === d : boolean
+>        : ^^^^^^^
 >d : Choice
+>  : ^^^^^^
 >d : Choice
+>  : ^^^^^^
 }
 
 function f10(x: Yes): Yes {
 >f10 : (x: Yes) => Yes
+>    : ^ ^^   ^^^^^   
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 
     switch (x) {
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 
         case Choice.Unknown: return x;
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         case Choice.Yes: return x;
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 
         case Choice.No: return x;
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >x : never
+>  : ^^^^^
     }
     return x;
 >x : never
+>  : ^^^^^
 }
 
 function f11(x: YesNo): YesNo {
 >f11 : (x: YesNo) => YesNo
+>    : ^ ^^     ^^^^^     
 >x : YesNo
+>  : ^^^^^
 
     switch (x) {
 >x : YesNo
+>  : ^^^^^
 
         case Choice.Unknown: return x;
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 >x : never
+>  : ^^^^^
 
         case Choice.Yes: return x;
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 
         case Choice.No: return x;
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >x : Choice.No
+>  : ^^^^^^^^^
     }
     return x;
 >x : never
+>  : ^^^^^
 }
 
 function f12(x: UnknownYesNo): UnknownYesNo {
 >f12 : (x: UnknownYesNo) => UnknownYesNo
+>    : ^ ^^            ^^^^^            
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
     switch (x) {
 >x : UnknownYesNo
+>  : ^^^^^^^^^^^^
 
         case Choice.Unknown: return x;
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 >x : Choice.Unknown
+>  : ^^^^^^^^^^^^^^
 
         case Choice.Yes: return x;
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 
         case Choice.No: return x;
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >x : Choice.No
+>  : ^^^^^^^^^
     }
     return x;
 >x : never
+>  : ^^^^^
 }
 
 function f13(x: Choice): Choice {
 >f13 : (x: Choice) => Choice
+>    : ^ ^^      ^^^^^      
 >x : Choice
+>  : ^^^^^^
 
     switch (x) {
 >x : Choice
+>  : ^^^^^^
 
         case Choice.Unknown: return x;
 >Choice.Unknown : Choice.Unknown
+>               : ^^^^^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Unknown : Choice.Unknown
+>        : ^^^^^^^^^^^^^^
 >x : Choice.Unknown
+>  : ^^^^^^^^^^^^^^
 
         case Choice.Yes: return x;
 >Choice.Yes : Choice.Yes
+>           : ^^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >Yes : Choice.Yes
+>    : ^^^^^^^^^^
 >x : Choice.Yes
+>  : ^^^^^^^^^^
 
         case Choice.No: return x;
 >Choice.No : Choice.No
+>          : ^^^^^^^^^
 >Choice : typeof Choice
+>       : ^^^^^^^^^^^^^
 >No : Choice.No
+>   : ^^^^^^^^^
 >x : Choice.No
+>  : ^^^^^^^^^
     }
     return x;
 >x : never
+>  : ^^^^^
 }

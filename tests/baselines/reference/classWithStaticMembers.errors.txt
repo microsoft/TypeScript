@@ -1,16 +1,11 @@
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts(4,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+classWithStaticMembers.ts(14,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 
 
-==== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts (2 errors) ====
+==== classWithStaticMembers.ts (1 errors) ====
     class C {
         static fn() { return this; }
         static get x() { return 1; }
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set x(v) { }
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         constructor(public a: number, private b: number) { }
         static foo: string; 
     }
@@ -21,6 +16,8 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStatic
     
     class D extends C {
         bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     }
     
     var r = D.fn();

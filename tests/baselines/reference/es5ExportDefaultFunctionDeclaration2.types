@@ -1,4 +1,0 @@
-=== tests/cases/compiler/es5ExportDefaultFunctionDeclaration2.ts ===
-export default function () { }
-No type information for this code.
-No type information for this code.

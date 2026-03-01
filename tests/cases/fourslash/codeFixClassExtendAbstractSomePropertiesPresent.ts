@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
+// @noImplicitOverride: true
 //// abstract class A {
 ////    abstract x: number;
 ////    abstract y: number;
@@ -12,5 +14,5 @@
 //// }
 
 verify.rangeAfterCodeFix(`
-z: number;
+override z: number;
 `);

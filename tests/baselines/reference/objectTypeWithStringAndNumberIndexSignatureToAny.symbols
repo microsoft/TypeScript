@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts] ////
+
+=== objectTypeWithStringAndNumberIndexSignatureToAny.ts ===
 // When checking compatibility between two types,
 // TypeScript should not require an index signature if
 // the target side index signature maps to `any` *and*

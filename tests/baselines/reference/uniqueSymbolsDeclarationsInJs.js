@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJs.ts] ////
+
 //// [uniqueSymbolsDeclarationsInJs.js]
 // classes
 class C {
@@ -29,6 +31,7 @@ const a = Symbol();
 
 
 //// [uniqueSymbolsDeclarationsInJs-out.js]
+"use strict";
 // classes
 class C {
     constructor() {

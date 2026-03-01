@@ -5,7 +5,7 @@ export class A {}
 
 //// [f2.ts]
 export class B {
-    n: number;
+    n!: number;
 }
 
 //// [f3.ts]
@@ -33,40 +33,33 @@ declare module "./f1" {
 import {A} from "./f1";
 import "./f3";
 
-let a: A;
+declare let a: A;
 let b = a.foo().n;
 
 //// [f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 exports.B = B;
 //// [f3.js]
 "use strict";
-exports.__esModule = true;
-var f1_1 = require("./f1");
+Object.defineProperty(exports, "__esModule", { value: true });
+const f1_1 = require("./f1");
 f1_1.A.prototype.foo = function () { return undefined; };
 //// [f4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./f3");
-var a;
-var b = a.foo().n;
+let b = a.foo().n;
 
 
 //// [f1.d.ts]

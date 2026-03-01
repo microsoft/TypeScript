@@ -13,7 +13,10 @@ export var x = new Foo();
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var b_1 = require("./b");
-exports.x = new b_1["default"]();
+const b_1 = __importDefault(require("./b"));
+exports.x = new b_1.default();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts] ////
+
 //// [varianceCallbacksAndIndexedAccesses.ts]
 type Source = {
     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -31,6 +33,7 @@ function f1(s: Source, t: Target) {
 }
 
 //// [varianceCallbacksAndIndexedAccesses.js]
+"use strict";
 function f1(s, t) {
     t = s;
 }

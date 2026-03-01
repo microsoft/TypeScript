@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceReturnTypeCallback.ts] ////
+
 //// [typeInferenceReturnTypeCallback.ts]
 interface IList<A> {
     map<B>(f: (t: A) => B): IList<B>;
@@ -22,24 +24,19 @@ class Cons<T> implements IList<T>{
 }
 
 //// [typeInferenceReturnTypeCallback.js]
-var Nil = /** @class */ (function () {
-    function Nil() {
-    }
-    Nil.prototype.map = function (f) {
+"use strict";
+class Nil {
+    map(f) {
         return null;
-    };
-    return Nil;
-}());
-var Cons = /** @class */ (function () {
-    function Cons() {
     }
-    Cons.prototype.map = function (f) {
-        return this.foldRight(new Nil(), function (t, acc) {
+}
+class Cons {
+    map(f) {
+        return this.foldRight(new Nil(), (t, acc) => {
             return new Cons();
         });
-    };
-    Cons.prototype.foldRight = function (z, f) {
+    }
+    foldRight(z, f) {
         return null;
-    };
-    return Cons;
-}());
+    }
+}

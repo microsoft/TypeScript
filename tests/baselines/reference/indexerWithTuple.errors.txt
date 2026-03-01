@@ -1,12 +1,12 @@
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(11,25): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(17,27): error TS2493: Tuple type '[number, [string, number]]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(18,25): error TS2514: A tuple type cannot be indexed with a negative value.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(22,30): error TS2493: Tuple type '[number, string | number]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(30,30): error TS2493: Tuple type '[boolean, string | number]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(38,28): error TS2514: A tuple type cannot be indexed with a negative value.
+indexerWithTuple.ts(11,25): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
+indexerWithTuple.ts(17,27): error TS2493: Tuple type '[number, [string, number]]' of length '2' has no element at index '2'.
+indexerWithTuple.ts(18,25): error TS2514: A tuple type cannot be indexed with a negative value.
+indexerWithTuple.ts(22,30): error TS2493: Tuple type '[number, string | number]' of length '2' has no element at index '2'.
+indexerWithTuple.ts(30,30): error TS2493: Tuple type '[boolean, string | number]' of length '2' has no element at index '2'.
+indexerWithTuple.ts(38,28): error TS2514: A tuple type cannot be indexed with a negative value.
 
 
-==== tests/cases/conformance/types/tuple/indexerWithTuple.ts (6 errors) ====
+==== indexerWithTuple.ts (6 errors) ====
     var strNumTuple: [string, number] = ["foo", 10];
     var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
     var unionTuple1: [number, string| number] = [10, "foo"];

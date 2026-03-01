@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts] ////
+
 //// [circularlyReferentialInterfaceAccessNoCrash.ts]
 type Mxs = Mx<'list', Mxs['p1']>;
 
@@ -12,3 +14,4 @@ type TupleElem = [['list', TupleElem[0][0]]];
 
 
 //// [circularlyReferentialInterfaceAccessNoCrash.js]
+"use strict";

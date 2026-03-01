@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParamTag2.ts] ////
+
+=== 0.js ===
 // Object literal syntax
 /**
  * @param {{a: string, b: string}} obj
@@ -94,24 +96,39 @@ function good8({a, b}) {}
 >b : Symbol(b, Decl(0.js, 52, 18))
 
 /**
+ * @param {{ a: string }} argument
+ */
+function good9({ a }) {
+>good9 : Symbol(good9, Decl(0.js, 52, 25))
+>a : Symbol(a, Decl(0.js, 57, 16))
+
+    console.log(arguments, a);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>arguments : Symbol(arguments)
+>a : Symbol(a, Decl(0.js, 57, 16))
+}
+
+/**
  * @param {object} obj - this type gets ignored
  * @param {string} obj.a
  * @param {string} obj.b - and x's type gets used for both parameters
  * @param {string} x
  */
 function bad1(x, {a, b}) {}
->bad1 : Symbol(bad1, Decl(0.js, 52, 25))
->x : Symbol(x, Decl(0.js, 60, 14))
->a : Symbol(a, Decl(0.js, 60, 18))
->b : Symbol(b, Decl(0.js, 60, 20))
+>bad1 : Symbol(bad1, Decl(0.js, 59, 1))
+>x : Symbol(x, Decl(0.js, 67, 14))
+>a : Symbol(a, Decl(0.js, 67, 18))
+>b : Symbol(b, Decl(0.js, 67, 20))
 
 /**
  * @param {string} y - here, y's type gets ignored but obj's is fine
  * @param {{a: string, b: string}} obj
  */
 function bad2(x, {a, b}) {}
->bad2 : Symbol(bad2, Decl(0.js, 60, 27))
->x : Symbol(x, Decl(0.js, 65, 14))
->a : Symbol(a, Decl(0.js, 65, 18))
->b : Symbol(b, Decl(0.js, 65, 20))
+>bad2 : Symbol(bad2, Decl(0.js, 67, 27))
+>x : Symbol(x, Decl(0.js, 72, 14))
+>a : Symbol(a, Decl(0.js, 72, 18))
+>b : Symbol(b, Decl(0.js, 72, 20))
 

@@ -1,13 +1,21 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of9.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of9.ts] ////
+
+=== for-of9.ts ===
 var v: string;
 >v : string
+>  : ^^^^^^
 
 for (v of ["hello"]) { }
 >v : string
+>  : ^^^^^^
 >["hello"] : string[]
+>          : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 for (v of "hello") { }
 >v : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

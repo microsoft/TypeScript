@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatForEnums.ts] ////
+
 //// [assignmentCompatForEnums.ts]
 enum TokenType { One, Two };
 
@@ -15,6 +17,7 @@ function foo() {
 
 
 //// [assignmentCompatForEnums.js]
+"use strict";
 var TokenType;
 (function (TokenType) {
     TokenType[TokenType["One"] = 0] = "One";

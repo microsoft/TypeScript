@@ -1,14 +1,14 @@
-tests/cases/compiler/restParameterWithBindingPattern3.ts(1,16): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(1,23): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(3,23): error TS1186: A rest element cannot have an initializer.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(5,30): error TS2493: Tuple type '[boolean, string, number]' of length '3' has no element at index '3'.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(7,23): error TS2493: Tuple type '[boolean, string, number]' of length '3' has no element at index '3'.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(9,19): error TS2322: Type 'number' is not assignable to type 'boolean'.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(9,29): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/compiler/restParameterWithBindingPattern3.ts(9,48): error TS2566: A rest element cannot have a property name.
+restParameterWithBindingPattern3.ts(1,16): error TS2322: Type 'number' is not assignable to type 'string'.
+restParameterWithBindingPattern3.ts(1,23): error TS2322: Type 'boolean' is not assignable to type 'string'.
+restParameterWithBindingPattern3.ts(3,23): error TS1186: A rest element cannot have an initializer.
+restParameterWithBindingPattern3.ts(5,30): error TS2493: Tuple type '[boolean, string, number]' of length '3' has no element at index '3'.
+restParameterWithBindingPattern3.ts(7,23): error TS2493: Tuple type '[boolean, string, number]' of length '3' has no element at index '3'.
+restParameterWithBindingPattern3.ts(9,19): error TS2322: Type 'number' is not assignable to type 'boolean'.
+restParameterWithBindingPattern3.ts(9,29): error TS2322: Type 'boolean' is not assignable to type 'string'.
+restParameterWithBindingPattern3.ts(9,48): error TS2566: A rest element cannot have a property name.
 
 
-==== tests/cases/compiler/restParameterWithBindingPattern3.ts (8 errors) ====
+==== restParameterWithBindingPattern3.ts (8 errors) ====
     function a(...[a = 1, b = true]: string[]) { }
                    ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts] ////
+
 //// [implicitAnyFunctionReturnNullOrUndefined.ts]
 // this should be an error
 function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
@@ -25,20 +27,18 @@ undefinedWidenFunction();
 
 
 //// [implicitAnyFunctionReturnNullOrUndefined.js]
+"use strict";
 // this should be an error
 function nullWidenFunction() { return null; } // error at "nullWidenFunction"
 function undefinedWidenFunction() { return undefined; } // error at "undefinedWidenFunction"
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.nullWidenFuncOfC = function () {
+class C {
+    nullWidenFuncOfC() {
         return null;
-    };
-    C.prototype.underfinedWidenFuncOfC = function () {
+    }
+    underfinedWidenFuncOfC() {
         return undefined;
-    };
-    return C;
-}());
+    }
+}
 // this should not be an error
 function foo1() { return null; }
 function bar1() { return undefined; }

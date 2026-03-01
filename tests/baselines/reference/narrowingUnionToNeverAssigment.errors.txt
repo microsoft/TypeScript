@@ -1,0 +1,19 @@
+narrowingUnionToNeverAssigment.ts(8,15): error TS2322: Type '"c" | "d"' is not assignable to type 'never'.
+  Type '"c"' is not assignable to type 'never'.
+
+
+==== narrowingUnionToNeverAssigment.ts (1 errors) ====
+    type Variants = "a" | "b" | "c" | "d";
+    
+    
+    function fx1(x: Variants) {
+        if (x === "a" || x === "b") {        
+        }
+        else {
+            const y: never = x;
+                  ~
+!!! error TS2322: Type '"c" | "d"' is not assignable to type 'never'.
+!!! error TS2322:   Type '"c"' is not assignable to type 'never'.
+        }
+    }
+    

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/bivariantInferences.ts] ////
+
 //// [bivariantInferences.ts]
 // Repro from #27337
 
@@ -14,4 +16,4 @@ let x = a.equalsShallow(b);
 //// [bivariantInferences.js]
 "use strict";
 // Repro from #27337
-var x = a.equalsShallow(b);
+let x = a.equalsShallow(b);

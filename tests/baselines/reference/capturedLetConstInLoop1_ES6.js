@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop1_ES6.ts] ////
+
 //// [capturedLetConstInLoop1_ES6.ts]
 //==== let
 for (let x in {}) {
@@ -114,6 +116,7 @@ for (const y = 0; y < 1;) {
 }
 
 //// [capturedLetConstInLoop1_ES6.js]
+"use strict";
 //==== let
 for (let x in {}) {
     (function () { return x; });

@@ -1,9 +1,13 @@
-=== tests/cases/compiler/classIndexer3.ts ===
+//// [tests/cases/compiler/classIndexer3.ts] ////
+
+=== classIndexer3.ts ===
 class C123 {
 >C123 : C123
+>     : ^^^^
 
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 
     constructor() {
     }
@@ -11,11 +15,15 @@ class C123 {
 
 class D123 extends C123 {
 >D123 : D123
+>     : ^^^^
 >C123 : C123
+>     : ^^^^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }

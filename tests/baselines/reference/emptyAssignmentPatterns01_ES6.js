@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns01_ES6.ts] ////
+
 //// [emptyAssignmentPatterns01_ES6.ts]
 var a: any;
 
@@ -5,6 +7,7 @@ var a: any;
 ([] = a);
 
 //// [emptyAssignmentPatterns01_ES6.js]
+"use strict";
 var a;
 ({} = a);
 ([] = a);

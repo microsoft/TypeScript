@@ -1,10 +1,10 @@
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts(13,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts(17,12): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts(22,12): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts(28,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+logicalAssignment5.ts(13,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+logicalAssignment5.ts(17,12): error TS18048: 'f' is possibly 'undefined'.
+logicalAssignment5.ts(22,12): error TS18048: 'f' is possibly 'undefined'.
+logicalAssignment5.ts(28,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 
 
-==== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts (4 errors) ====
+==== logicalAssignment5.ts (4 errors) ====
     function foo1 (f?: (a: number) => void) {
         f ??= (a => a)
         f(42)
@@ -25,14 +25,14 @@ tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts(28,5): er
     function bar1 (f?: (a: number) => void) {
         f ??= (f.toString(), (a => a))
                ~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'f' is possibly 'undefined'.
         f(42)
     }
     
     function bar2 (f?: (a: number) => void) {
         f ||= (f.toString(), (a => a))
                ~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'f' is possibly 'undefined'.
         f(42)
     }
     

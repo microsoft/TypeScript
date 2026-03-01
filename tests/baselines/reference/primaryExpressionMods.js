@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/primaryExpressionMods.ts] ////
+
 //// [primaryExpressionMods.ts]
-module M
+namespace M
 {
     export interface P { x: number; y: number; }
     export var a = 1;
@@ -13,6 +15,7 @@ var q: m.P;             // Error
 
 
 //// [primaryExpressionMods.js]
+"use strict";
 var M;
 (function (M) {
     M.a = 1;

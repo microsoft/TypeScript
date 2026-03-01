@@ -8,5 +8,4 @@ import { x } from "@see/saw";
 
 
 //// [a.js]
-"use strict";
-exports.__esModule = true;
+export {};

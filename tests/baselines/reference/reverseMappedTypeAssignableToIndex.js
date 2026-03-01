@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedTypeAssignableToIndex.ts] ////
+
 //// [reverseMappedTypeAssignableToIndex.ts]
 // Simple mapped type and inferrence
 type Mapped<T> = { [K in keyof T]: { name: T[K] } };
@@ -20,3 +22,4 @@ type Inferred = InferFromMapped<MappedLiteralType>;
 type Test1 = Inferred extends Record<any, string> ? true : false;
 
 //// [reverseMappedTypeAssignableToIndex.js]
+"use strict";

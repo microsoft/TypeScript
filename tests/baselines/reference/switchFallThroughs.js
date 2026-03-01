@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchFallThroughs.ts] ////
+
 //// [switchFallThroughs.ts]
 function R1(index: number) {
     switch (index) {
@@ -18,6 +20,7 @@ function R1(index: number) {
 
 
 //// [switchFallThroughs.js]
+"use strict";
 function R1(index) {
     switch (index) {
         case 0:

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts] ////
+
 //// [generatorReturnTypeInferenceNonStrict.ts]
 declare const iterableIterator: IterableIterator<number>;
 declare const generator: Generator<number, string, boolean>;
@@ -136,6 +138,7 @@ function* g311() { // Generator<any (implicit), void, string>
 
 
 //// [generatorReturnTypeInferenceNonStrict.js]
+"use strict";
 function* g000() {
 }
 // 'yield' iteration type inference

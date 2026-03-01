@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSignatureInheritance2.ts] ////
+
 //// [genericSignatureInheritance2.ts]
 interface I {
     <T>(x: T): string;
@@ -9,3 +11,4 @@ interface I2 extends I {
 
 
 //// [genericSignatureInheritance2.js]
+"use strict";

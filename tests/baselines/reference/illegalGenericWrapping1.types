@@ -1,25 +1,41 @@
-=== tests/cases/compiler/illegalGenericWrapping1.ts ===
+//// [tests/cases/compiler/illegalGenericWrapping1.ts] ////
+
+=== illegalGenericWrapping1.ts ===
 interface Sequence<T> {
     each(iterator: (value: T) => void ): void;
 >each : (iterator: (value: T) => void) => void
+>     : ^        ^^                  ^^^^^    
 >iterator : (value: T) => void
+>         : ^     ^^ ^^^^^    
 >value : T
+>      : ^
 
     map<U>(iterator: (value: T) => U): Sequence<U>;
 >map : <U>(iterator: (value: T) => U) => Sequence<U>
+>    : ^ ^^        ^^               ^^^^^           
 >iterator : (value: T) => U
+>         : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 
     filter(iterator: (value: T) => boolean): Sequence<T>;
 >filter : (iterator: (value: T) => boolean) => Sequence<T>
+>       : ^        ^^                     ^^^^^           
 >iterator : (value: T) => boolean
+>         : ^     ^^ ^^^^^       
 >value : T
+>      : ^
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: Sequence<T>; }>;
->groupBy : <K>(keySelector: (value: T) => K) => Sequence<{    key: K;    items: Sequence<T>;}>
+>groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: Sequence<T>; }>
+>        : ^ ^^           ^^               ^^^^^                                         
 >keySelector : (value: T) => K
+>            : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 >key : K
+>    : ^
 >items : Sequence<T>
+>      : ^^^^^^^^^^^
 }
 

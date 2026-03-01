@@ -1,60 +1,101 @@
-=== tests/cases/compiler/createArray.ts ===
+//// [tests/cases/compiler/createArray.ts] ////
+
+=== createArray.ts ===
 var na=new number[];
 >na : any
+>   : ^^^
 >new number[] : any
+>             : ^^^
 >number[] : any
+>         : ^^^
 >number : any
+>       : ^^^
 > : any
+> : ^^^
 
 class C {
 >C : C
+>  : ^
 }
 
 new C[];
 >new C[] : any
+>        : ^^^
 >C[] : any
+>    : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 > : any
+> : ^^^
 
 var ba=new boolean[];
 >ba : any
+>   : ^^^
 >new boolean[] : any
+>              : ^^^
 >boolean[] : any
+>          : ^^^
 >boolean : any
+>        : ^^^
 > : any
+> : ^^^
 
 var sa=new string[];
 >sa : any
+>   : ^^^
 >new string[] : any
+>             : ^^^
 >string[] : any
+>         : ^^^
 >string : any
+>       : ^^^
 > : any
+> : ^^^
 
 function f(s:string):number { return 0;
 >f : (s: string) => number
+>  : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 if (ba[14]) {
 >ba[14] : any
+>       : ^^^
 >ba : any
+>   : ^^^
 >14 : 14
+>   : ^^
 
     na[2]=f(sa[3]);
 >na[2]=f(sa[3]) : number
+>               : ^^^^^^
 >na[2] : any
+>      : ^^^
 >na : any
+>   : ^^^
 >2 : 2
+>  : ^
 >f(sa[3]) : number
+>         : ^^^^^^
 >f : (s: string) => number
+>  : ^ ^^      ^^^^^      
 >sa[3] : any
+>      : ^^^
 >sa : any
+>   : ^^^
 >3 : 3
+>  : ^
 }
 
 new C[1]; // not an error
 >new C[1] : any
+>         : ^^^
 >C[1] : any
+>     : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 

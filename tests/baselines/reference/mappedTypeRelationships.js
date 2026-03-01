@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeRelationships.ts] ////
+
 //// [mappedTypeRelationships.ts]
 function f1<T>(x: T, k: keyof T) {
     return x[k];
@@ -191,8 +193,26 @@ function f<T extends { x: {} }>(): Partial<T> {
     return undefined! as T;
 }
 
+// #32365
+interface SettingsTypes {
+  audio: {
+    volume: string;
+  };
+  video: {
+    resolution: string;
+  };
+}
+interface Settings<Params extends { [K in keyof Params]?: string }> {
+  config: Params;
+}
+type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
+type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
+type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;
 
 //// [mappedTypeRelationships.js]
+"use strict";
 function f1(x, k) {
     return x[k];
 }
@@ -264,11 +284,11 @@ function f41(x, y) {
     y = x; // Error
 }
 function f50(obj, key) {
-    var item = obj[key];
+    let item = obj[key];
     return obj[key].name;
 }
 function f51(obj, key) {
-    var item = obj[key];
+    let item = obj[key];
     return obj[key].name;
 }
 function f60(x, y) {
@@ -321,7 +341,7 @@ function f82(t, k1, k2) {
     return t[k1][k2];
 }
 function f90() {
-    var n = { x: 1 };
+    const n = { x: 1 };
 }
 function f() {
     return undefined;
@@ -418,3 +438,21 @@ declare function f90<T extends {
 declare function f<T extends {
     x: {};
 }>(): Partial<T>;
+interface SettingsTypes {
+    audio: {
+        volume: string;
+    };
+    video: {
+        resolution: string;
+    };
+}
+interface Settings<Params extends {
+    [K in keyof Params]?: string;
+}> {
+    config: Params;
+}
+type ConcreteSettingsResult1 = Settings<SettingsTypes["audio"]>;
+type ConcreteSettingsResult2 = Settings<SettingsTypes["audio" | "video"]>;
+type GenericSettingsAccess<T extends keyof SettingsTypes> = Settings<SettingsTypes[T]>;
+type GenericSettingsResult1 = GenericSettingsAccess<"audio">;
+type GenericSettingsResult2 = GenericSettingsAccess<"audio" | "video">;

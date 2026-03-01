@@ -1,40 +1,54 @@
-=== tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithClass.ts ===
+//// [tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithClass.ts] ////
+
+=== circularTypeAliasForUnionWithClass.ts ===
 var v0: T0;
 >v0 : T0
+>   : ^^
 
 type T0 = string | I0;
->T0 : string | I0
+>T0 : T0
+>   : ^^
 
 class I0 {
 >I0 : I0
+>   : ^^
 
     x: T0;
 >x : T0
+>  : ^^
 }
 
 var v3: T3;
 >v3 : T3
+>   : ^^
 
 type T3 = string | I3;
->T3 : string | I3
+>T3 : T3
+>   : ^^
 
 class I3 {
 >I3 : I3
+>   : ^^
 
     [x: number]: T3;
 >x : number
+>  : ^^^^^^
 }
 
 var v4: T4;
 >v4 : T4
+>   : ^^
 
 type T4 = string | I4;
->T4 : string | I4
+>T4 : T4
+>   : ^^
 
 class I4 {
 >I4 : I4
+>   : ^^
 
     [x: string]: T4;
 >x : string
+>  : ^^^^^^
 }
 

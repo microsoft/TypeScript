@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyFunctions.ts] ////
+
 //// [noImplicitAnyFunctions.ts]
 declare function f1();
 
@@ -21,6 +23,7 @@ function f6(x: string, y) {
 }
 
 //// [noImplicitAnyFunctions.js]
+"use strict";
 function f3(x) {
 }
 function f4(x) {

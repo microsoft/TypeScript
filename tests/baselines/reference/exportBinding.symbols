@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/exportConsts.ts ===
+//// [tests/cases/conformance/es6/modules/exportBinding.ts] ////
+
+=== exportConsts.ts ===
 export { x }
 >x : Symbol(x, Decl(exportConsts.ts, 0, 8))
 
@@ -19,7 +21,7 @@ export { Y as Z }
 class Y {}
 >Y : Symbol(Y, Decl(exportConsts.ts, 6, 17))
 
-=== tests/cases/conformance/es6/modules/exportVars.ts ===
+=== exportVars.ts ===
 export { y }
 >y : Symbol(y, Decl(exportVars.ts, 0, 8))
 

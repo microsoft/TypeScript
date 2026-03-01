@@ -1,45 +1,73 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts] ////
+
+=== genericCallWithObjectTypeArgsAndInitializers.ts ===
 // Generic typed parameters with initializers
 
 function foo<T>(x: T = null) { return x; } // ok
 >foo : <T>(x?: T) => T
+>    : ^ ^^ ^^^ ^^^^^^
 >x : T
->null : null
+>  : ^
 >x : T
+>  : ^
 
 function foo2<T>(x: T = undefined) { return x; } // ok
 >foo2 : <T>(x?: T) => T
+>     : ^ ^^ ^^^ ^^^^^^
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >x : T
+>  : ^
 
 function foo3<T extends Number>(x: T = 1) { } // error
 >foo3 : <T extends Number>(x?: T) => void
+>     : ^ ^^^^^^^^^      ^^ ^^^ ^^^^^^^^^
 >x : T
+>  : ^
 >1 : 1
+>  : ^
 
 function foo4<T, U extends T>(x: T, y: U = x) { } // error
 >foo4 : <T, U extends T>(x: T, y?: U) => void
+>     : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >x : T
+>  : ^
 
 function foo5<T, U extends T>(x: U, y: T = x) { } // ok
 >foo5 : <T, U extends T>(x: U, y?: T) => void
+>     : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
 >x : U
+>  : ^
 >y : T
+>  : ^
 >x : U
+>  : ^
 
 function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
 >foo6 : <T, U extends T, V extends U>(x: T, y: U, z?: V) => void
+>     : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 >y : U
+>  : ^
 
 function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
 >foo7 : <T, U extends T, V extends U>(x: V, y?: U) => void
+>     : ^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^
 >x : V
+>  : ^
 >y : U
+>  : ^
 >x : V
+>  : ^
 

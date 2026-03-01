@@ -1,1 +1,2 @@
-﻿declare function foo()
+﻿// @target: es2015
+declare function foo()

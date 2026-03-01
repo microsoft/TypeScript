@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionPropertyES6.ts] ////
+
 //// [emitDefaultParametersFunctionPropertyES6.ts]
 var obj2 = {
     func1(y = 10, ...rest) { },
@@ -7,6 +9,7 @@ var obj2 = {
 }
 
 //// [emitDefaultParametersFunctionPropertyES6.js]
+"use strict";
 var obj2 = {
     func1(y = 10, ...rest) { },
     func2(x = "hello") { },

@@ -1,13 +1,13 @@
-tests/cases/conformance/jsdoc/file.js(9,20): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/file.js(22,34): error TS1005: '=' expected.
-tests/cases/conformance/jsdoc/file.js(27,35): error TS1110: Type expected.
-tests/cases/conformance/jsdoc/file.js(33,14): error TS2706: Required type parameters may not follow optional type parameters.
-tests/cases/conformance/jsdoc/file.js(38,17): error TS2744: Type parameter defaults can only reference previously declared type parameters.
-tests/cases/conformance/jsdoc/file.js(53,14): error TS2706: Required type parameters may not follow optional type parameters.
-tests/cases/conformance/jsdoc/file.js(60,17): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+file.js(9,20): error TS2322: Type 'number' is not assignable to type 'string'.
+file.js(22,34): error TS1005: '=' expected.
+file.js(27,35): error TS1110: Type expected.
+file.js(33,14): error TS2706: Required type parameters may not follow optional type parameters.
+file.js(38,17): error TS2744: Type parameter defaults can only reference previously declared type parameters.
+file.js(53,14): error TS2706: Required type parameters may not follow optional type parameters.
+file.js(60,17): error TS2744: Type parameter defaults can only reference previously declared type parameters.
 
 
-==== tests/cases/conformance/jsdoc/file.js (7 errors) ====
+==== file.js (7 errors) ====
     /**
      * @template {string | number} [T=string] - ok: defaults are permitted
      * @typedef {[T]} A

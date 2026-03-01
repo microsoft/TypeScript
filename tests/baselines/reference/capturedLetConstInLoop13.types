@@ -1,44 +1,73 @@
-=== tests/cases/compiler/capturedLetConstInLoop13.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop13.ts] ////
+
+=== capturedLetConstInLoop13.ts ===
 class Main {
 >Main : Main
+>     : ^^^^
 
     constructor() {
         this.register("a", "b", "c");
 >this.register("a", "b", "c") : void
+>                             : ^^^^
 >this.register : (...names: string[]) => void
+>              : ^^^^     ^^        ^^^^^    
 >this : this
+>     : ^^^^
 >register : (...names: string[]) => void
+>         : ^^^^     ^^        ^^^^^    
 >"a" : "a"
+>    : ^^^
 >"b" : "b"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
     }
 
     private register(...names: string[]): void {
 >register : (...names: string[]) => void
+>         : ^^^^     ^^        ^^^^^    
 >names : string[]
+>      : ^^^^^^^^
 
         for (let name of names) {
 >name : string
+>     : ^^^^^^
 >names : string[]
+>      : ^^^^^^^^
 
             this.bar({
 >this.bar({                [name + ".a"]: () => { this.foo(name); },            }) : void
+>                                                                                  : ^^^^
 >this.bar : (a: any) => void
+>         : ^ ^^   ^^^^^    
 >this : this
+>     : ^^^^
 >bar : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >{                [name + ".a"]: () => { this.foo(name); },            } : { [x: string]: () => void; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 [name + ".a"]: () => { this.foo(name); },
 >[name + ".a"] : () => void
+>              : ^^^^^^^^^^
 >name + ".a" : string
+>            : ^^^^^^
 >name : string
+>     : ^^^^^^
 >".a" : ".a"
+>     : ^^^^
 >() => { this.foo(name); } : () => void
+>                          : ^^^^^^^^^^
 >this.foo(name) : void
+>               : ^^^^
 >this.foo : (name: string) => void
+>         : ^    ^^      ^^^^^    
 >this : this
+>     : ^^^^
 >foo : (name: string) => void
+>    : ^    ^^      ^^^^^    
 >name : string
+>     : ^^^^^^
 
             });
         }
@@ -46,15 +75,20 @@ class Main {
 
     private bar(a: any): void { }
 >bar : (a: any) => void
+>    : ^ ^^   ^^^^^    
 >a : any
 
     private foo(name: string): void { }
 >foo : (name: string) => void
+>    : ^    ^^      ^^^^^    
 >name : string
+>     : ^^^^^^
 
 }
 
 new Main();
 >new Main() : Main
+>           : ^^^^
 >Main : typeof Main
+>     : ^^^^^^^^^^^
 

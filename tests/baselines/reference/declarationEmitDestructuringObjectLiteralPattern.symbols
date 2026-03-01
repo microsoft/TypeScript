@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts] ////
+
+=== declarationEmitDestructuringObjectLiteralPattern.ts ===
 var { } = { x: 5, y: "hello" };
 >x : Symbol(x, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 0, 11))
 >y : Symbol(y, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 0, 17))
@@ -77,7 +79,7 @@ var { a4, b4, c4 } = f15();
 >c4 : Symbol(c4, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 16, 13))
 >f15 : Symbol(f15, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 8, 89))
 
-module m {
+namespace m {
 >m : Symbol(m, Decl(declarationEmitDestructuringObjectLiteralPattern.ts, 16, 27))
 
     export var { a4, b4, c4 } = f15();

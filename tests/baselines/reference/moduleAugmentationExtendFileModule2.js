@@ -35,22 +35,22 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 
 //// [observable.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Observable = void 0;
 var Observable;
 (function (Observable) {
-})(Observable = exports.Observable || (exports.Observable = {}));
+})(Observable || (exports.Observable = Observable = {}));
 //// [map.js]
 "use strict";
-exports.__esModule = true;
-var observable_1 = require("./observable");
+Object.defineProperty(exports, "__esModule", { value: true });
+const observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
-exports.__esModule = true;
-var observable_1 = require("./observable");
+Object.defineProperty(exports, "__esModule", { value: true });
+const observable_1 = require("./observable");
 require("./map");
-var x;
-var y = x.map(function (x) { return x + 1; });
-var z1 = observable_1.Observable.someValue.toFixed();
-var z2 = observable_1.Observable.someAnotherValue.toLowerCase();
+let x;
+let y = x.map(x => x + 1);
+let z1 = observable_1.Observable.someValue.toFixed();
+let z2 = observable_1.Observable.someAnotherValue.toLowerCase();

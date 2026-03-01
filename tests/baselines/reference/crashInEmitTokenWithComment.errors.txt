@@ -1,8 +1,8 @@
-tests/cases/compiler/crashInEmitTokenWithComment.ts(5,4): error TS2345: Argument of type '({ [foo.bar]: c }: {}) => any' is not assignable to parameter of type 'string'.
-tests/cases/compiler/crashInEmitTokenWithComment.ts(5,7): error TS2537: Type '{}' has no matching index signature for type 'string'.
+crashInEmitTokenWithComment.ts(5,4): error TS2345: Argument of type '({ [foo.bar]: c }: {}) => any' is not assignable to parameter of type 'string'.
+crashInEmitTokenWithComment.ts(5,7): error TS2537: Type '{}' has no matching index signature for type 'string'.
 
 
-==== tests/cases/compiler/crashInEmitTokenWithComment.ts (2 errors) ====
+==== crashInEmitTokenWithComment.ts (2 errors) ====
     // GH#32358
     const fn = (param: string) => undefined;
     

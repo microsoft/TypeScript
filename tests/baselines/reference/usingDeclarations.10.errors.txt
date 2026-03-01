@@ -1,0 +1,9 @@
+usingDeclarations.10.ts(2,8): error TS1156: 'using' declarations can only be declared inside a block.
+
+
+==== usingDeclarations.10.ts (1 errors) ====
+    declare var x: any;
+    if (x) using a = null;
+           ~~~~~~~~~~~~~~~
+!!! error TS1156: 'using' declarations can only be declared inside a block.
+    

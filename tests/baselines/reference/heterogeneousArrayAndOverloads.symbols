@@ -1,4 +1,6 @@
-=== tests/cases/compiler/heterogeneousArrayAndOverloads.ts ===
+//// [tests/cases/compiler/heterogeneousArrayAndOverloads.ts] ////
+
+=== heterogeneousArrayAndOverloads.ts ===
 class arrTest {
 >arrTest : Symbol(arrTest, Decl(heterogeneousArrayAndOverloads.ts, 0, 0))
 

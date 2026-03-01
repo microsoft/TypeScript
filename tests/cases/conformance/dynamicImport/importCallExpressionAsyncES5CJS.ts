@@ -1,5 +1,5 @@
 // @module: commonjs
-// @target: es5
+// @target: es5, es2015
 // @lib: es6
 // @filename: test.ts
 export async function fn() {

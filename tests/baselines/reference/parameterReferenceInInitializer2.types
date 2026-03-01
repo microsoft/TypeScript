@@ -1,8 +1,13 @@
-=== tests/cases/compiler/parameterReferenceInInitializer2.ts ===
+//// [tests/cases/compiler/parameterReferenceInInitializer2.ts] ////
+
+=== parameterReferenceInInitializer2.ts ===
 function Example(x = function(x: any) { return x; }) { // Error: parameter 'x' cannot be 
 >Example : (x?: (x: any) => any) => void
+>        : ^ ^^^^      ^^^^^^^^^^^^^^^^^
 >x : (x: any) => any
+>  : ^ ^^   ^^^^^^^^
 >function(x: any) { return x; } : (x: any) => any
+>                               : ^ ^^   ^^^^^^^^
 >x : any
 >x : any
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts] ////
+
 //// [controlFlowFinallyNoCatchAssignments.ts]
 let x: number;
 x = Math.random();
@@ -16,9 +18,9 @@ console.log(a); // <- error here
 
 //// [controlFlowFinallyNoCatchAssignments.js]
 "use strict";
-var x;
+let x;
 x = Math.random();
-var a;
+let a;
 try {
     if (x) {
         a = 1;

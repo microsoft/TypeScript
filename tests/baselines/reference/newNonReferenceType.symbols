@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newNonReferenceType.ts ===
+//// [tests/cases/compiler/newNonReferenceType.ts] ////
+
+=== newNonReferenceType.ts ===
 var a = new any();
 >a : Symbol(a, Decl(newNonReferenceType.ts, 0, 3))
 

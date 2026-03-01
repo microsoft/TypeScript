@@ -1,4 +1,6 @@
-=== tests/cases/compiler/scopeCheckInsideStaticMethod1.ts ===
+//// [tests/cases/compiler/scopeCheckInsideStaticMethod1.ts] ////
+
+=== scopeCheckInsideStaticMethod1.ts ===
 class C {
 >C : Symbol(C, Decl(scopeCheckInsideStaticMethod1.ts, 0, 0))
 

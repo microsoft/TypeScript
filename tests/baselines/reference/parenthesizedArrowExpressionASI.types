@@ -1,14 +1,22 @@
-=== tests/cases/compiler/parenthesizedArrowExpressionASI.ts ===
+//// [tests/cases/compiler/parenthesizedArrowExpressionASI.ts] ////
+
+=== parenthesizedArrowExpressionASI.ts ===
 const x = (a: any[]) => (
 >x : (a: any[]) => number
+>  : ^ ^^     ^^^^^      
 >(a: any[]) => (    // comment    undefined as number) : (a: any[]) => number
+>                                                      : ^ ^^     ^^^^^      
 >a : any[]
+>  : ^^^^^
 >(    // comment    undefined as number) : number
+>                                        : ^^^^^^
 
     // comment
     undefined as number
 >undefined as number : number
+>                    : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 );
 

@@ -1,0 +1,5 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/Foo.js ===
+// <|let [|aRENAME|];|>
+// <|module.exports = /*RENAME*/[|aRENAME|];|>
+// <|exports["foo"] = [|aRENAME|];|>

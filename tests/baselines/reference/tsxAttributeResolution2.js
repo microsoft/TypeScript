@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution2.tsx] ////
+
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: Attribs1;
@@ -19,8 +21,9 @@ interface Attribs1 {
 
 
 //// [file.jsx]
+"use strict";
 // OK
-<test1 c1={function (x) { return x.length; }}/>; // OK
-<test1 data-c1={function (x) { return x.leng; }}/>; // OK
+<test1 c1={(x) => x.length}/>; // OK
+<test1 data-c1={(x) => x.leng}/>; // OK
 // Errors
-<test1 c1={function (x) { return x.leng; }}/>; // Error, no leng on 'string'
+<test1 c1={(x) => x.leng}/>; // Error, no leng on 'string'

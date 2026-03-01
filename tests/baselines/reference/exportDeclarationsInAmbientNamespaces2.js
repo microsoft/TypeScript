@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDeclarationsInAmbientNamespaces2.ts] ////
+
 //// [exportDeclarationsInAmbientNamespaces2.ts]
 declare module "mod" {
     export var x: number;
@@ -10,3 +12,4 @@ declare namespace N {
 
 
 //// [exportDeclarationsInAmbientNamespaces2.js]
+"use strict";

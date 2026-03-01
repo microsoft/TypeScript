@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofFunction.ts] ////
+
 //// [declFileTypeofFunction.ts]
 function f(n: typeof f): string;
 function f(n: typeof g): string;
@@ -33,6 +35,7 @@ function foo5(x: number) {
 }
 
 //// [declFileTypeofFunction.js]
+"use strict";
 function f() { return undefined; }
 function g() { return undefined; }
 var b;
@@ -47,7 +50,7 @@ var foo2 = foo;
 var foo3 = function () {
     return foo3;
 };
-var x = function () {
+var x = () => {
     return x;
 };
 function foo5(x) {
@@ -68,6 +71,6 @@ declare function b1(): typeof b1;
 declare function foo(): typeof foo;
 declare var foo1: typeof foo;
 declare var foo2: typeof foo;
-declare var foo3: () => any;
-declare var x: () => any;
+declare var foo3: () => () => /*elided*/ any;
+declare var x: () => () => /*elided*/ any;
 declare function foo5(x: number): (x: number) => number;

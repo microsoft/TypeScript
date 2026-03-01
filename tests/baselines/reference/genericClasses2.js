@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClasses2.ts] ////
+
 //// [genericClasses2.ts]
 interface Foo<T> {
 	a: T;
@@ -16,11 +18,9 @@ var w = v1.y.a; // should be 'string'
 var z = v1.z.a; // should be 'number'
 
 //// [genericClasses2.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var v1;
 var y = v1.x; // should be 'string'
 var w = v1.y.a; // should be 'string'

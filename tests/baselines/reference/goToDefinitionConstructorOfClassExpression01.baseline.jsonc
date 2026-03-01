@@ -1,0 +1,288 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// var x = <|class [|{| defId: 0 |}C|] {
+//     [|{| defId: 1 |}constructor() {
+//         var other = new /*GOTO DEF*/C;
+//     }|]
+// }|>
+// 
+// var y = class C extends x {
+//     constructor() {
+// --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "local class",
+    "name": "C",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// --- (line: 3) skipped ---
+//     }
+// }
+// 
+// var y = <|class [|{| defId: 0 |}C|] extends x {
+//     [|{| defId: 1 |}constructor() {
+//         super();
+//         var other = new /*GOTO DEF*/C;
+//     }|]
+// }|>
+// var z = class C extends x {
+//     m() {
+//         return new C;
+// --- (line: 16) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "local class",
+    "name": "C",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// var x = class C {
+//     [|{| defId: 1 |}constructor() {
+//         var other = new C;
+//     }|]
+// }
+// 
+// var y = class C extends x {
+//     constructor() {
+//         super();
+//         var other = new C;
+//     }
+// }
+// var z = <|class [|{| defId: 0 |}C|] extends x {
+//     m() {
+//         return new /*GOTO DEF*/C;
+//     }
+// }|>
+// 
+// var x1 = new C();
+// var x2 = new x();
+// var y1 = new y();
+// var z1 = new z();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "local class",
+    "name": "C",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// --- (line: 15) skipped ---
+//     }
+// }
+// 
+// var x1 = new /*GOTO DEF*/C();
+// var x2 = new x();
+// var y1 = new y();
+// var z1 = new z();
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// <|var [|{| defId: 0 |}x|] = class C {
+//     [|{| defId: 1 |}constructor() {
+//         var other = new C;
+//     }|]
+// }|>
+// 
+// var y = class C extends x {
+//     constructor() {
+// --- (line: 9) skipped ---
+
+// --- (line: 16) skipped ---
+// }
+// 
+// var x1 = new C();
+// var x2 = new /*GOTO DEF*/x();
+// var y1 = new y();
+// var z1 = new z();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "var",
+    "name": "x",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// --- (line: 3) skipped ---
+//     }
+// }
+// 
+// <|var [|{| defId: 0 |}y|] = class C extends x {
+//     [|{| defId: 1 |}constructor() {
+//         super();
+//         var other = new C;
+//     }|]
+// }|>
+// var z = class C extends x {
+//     m() {
+//         return new C;
+//     }
+// }
+// 
+// var x1 = new C();
+// var x2 = new x();
+// var y1 = new /*GOTO DEF*/y();
+// var z1 = new z();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "var",
+    "name": "y",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// var x = class C {
+//     [|{| defId: 1 |}constructor() {
+//         var other = new C;
+//     }|]
+// }
+// 
+// var y = class C extends x {
+//     constructor() {
+//         super();
+//         var other = new C;
+//     }
+// }
+// <|var [|{| defId: 0 |}z|] = class C extends x {
+//     m() {
+//         return new C;
+//     }
+// }|>
+// 
+// var x1 = new C();
+// var x2 = new x();
+// var y1 = new y();
+// var z1 = new /*GOTO DEF*/z();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "var",
+    "name": "z",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

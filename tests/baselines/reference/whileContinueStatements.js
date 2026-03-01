@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts] ////
+
 //// [whileContinueStatements.ts]
 while(true) {
     continue;
@@ -54,6 +56,7 @@ while (true) {
 
 
 //// [whileContinueStatements.js]
+"use strict";
 while (true) {
     continue;
 }

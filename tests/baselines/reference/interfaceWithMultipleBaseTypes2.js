@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts] ////
+
 //// [interfaceWithMultipleBaseTypes2.ts]
 interface Base {
     x: {
@@ -26,3 +28,4 @@ interface Derived3 extends Base, Base2 {
 
 
 //// [interfaceWithMultipleBaseTypes2.js]
+"use strict";

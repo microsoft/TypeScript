@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/optionalProperties02.ts] ////
+
 //// [optionalProperties02.ts]
 interface Foo {
     a?: string;
@@ -7,6 +9,7 @@ interface Foo {
 <Foo>{ a: undefined };
 
 //// [optionalProperties02.js]
+"use strict";
 ({ a: undefined });
 
 

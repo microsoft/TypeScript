@@ -1,0 +1,43 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionInTypeArgument.ts ===
+// class Foo<T> { }
+// 
+// <|class [|Bar|] { }|>
+// 
+// var x = new Foo<Ba/*GOTO DEF POS*/r>();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Bar",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionInTypeArgument.ts ===
+// <|class [|Foo|]<T> { }|>
+// 
+// class Bar { }
+// 
+// var x = new Fo/*GOTO DEF POS*/o<Bar>();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

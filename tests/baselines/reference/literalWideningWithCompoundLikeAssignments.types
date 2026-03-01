@@ -1,0 +1,261 @@
+//// [tests/cases/compiler/literalWideningWithCompoundLikeAssignments.ts] ////
+
+=== literalWideningWithCompoundLikeAssignments.ts ===
+// repro from #13865
+
+const empty: "" = "";
+>empty : ""
+>      : ^^
+>"" : ""
+>   : ^^
+
+let foo = empty;
+>foo : ""
+>    : ^^
+>empty : ""
+>      : ^^
+
+foo = foo + "bar"
+>foo = foo + "bar" : string
+>                  : ^^^^^^
+>foo : string
+>    : ^^^^^^
+>foo + "bar" : string
+>            : ^^^^^^
+>foo : ""
+>    : ^^
+>"bar" : "bar"
+>      : ^^^^^
+
+foo // string
+>foo : string
+>    : ^^^^^^
+
+declare const numLiteral: 0;
+>numLiteral : 0
+>           : ^
+
+let t1 = numLiteral;
+>t1 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t1 = t1 + 42
+>t1 = t1 + 42 : number
+>             : ^^^^^^
+>t1 : number
+>   : ^^^^^^
+>t1 + 42 : number
+>        : ^^^^^^
+>t1 : 0
+>   : ^
+>42 : 42
+>   : ^^
+
+t1 // number
+>t1 : number
+>   : ^^^^^^
+
+let t2 = numLiteral;
+>t2 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t2 = t2 - 42
+>t2 = t2 - 42 : number
+>             : ^^^^^^
+>t2 : number
+>   : ^^^^^^
+>t2 - 42 : number
+>        : ^^^^^^
+>t2 : 0
+>   : ^
+>42 : 42
+>   : ^^
+
+t2 // number
+>t2 : number
+>   : ^^^^^^
+
+let t3 = numLiteral;
+>t3 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t3 = t3 * 42
+>t3 = t3 * 42 : number
+>             : ^^^^^^
+>t3 : number
+>   : ^^^^^^
+>t3 * 42 : number
+>        : ^^^^^^
+>t3 : 0
+>   : ^
+>42 : 42
+>   : ^^
+
+t3 // number
+>t3 : number
+>   : ^^^^^^
+
+let t4 = numLiteral;
+>t4 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t4 = t4 ** 42
+>t4 = t4 ** 42 : number
+>              : ^^^^^^
+>t4 : number
+>   : ^^^^^^
+>t4 ** 42 : number
+>         : ^^^^^^
+>t4 : 0
+>   : ^
+>42 : 42
+>   : ^^
+
+t4 // number
+>t4 : number
+>   : ^^^^^^
+
+let t5 = numLiteral;
+>t5 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t5 = t5 / 42
+>t5 = t5 / 42 : number
+>             : ^^^^^^
+>t5 : number
+>   : ^^^^^^
+>t5 / 42 : number
+>        : ^^^^^^
+>t5 : 0
+>   : ^
+>42 : 42
+>   : ^^
+
+t5 // number
+>t5 : number
+>   : ^^^^^^
+
+let t6 = numLiteral;
+>t6 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t6 = t6 % 42
+>t6 = t6 % 42 : number
+>             : ^^^^^^
+>t6 : number
+>   : ^^^^^^
+>t6 % 42 : number
+>        : ^^^^^^
+>t6 : 0
+>   : ^
+>42 : 42
+>   : ^^
+
+t6 // number
+>t6 : number
+>   : ^^^^^^
+
+let t7 = numLiteral;
+>t7 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t7 = t7 >> 0
+>t7 = t7 >> 0 : number
+>             : ^^^^^^
+>t7 : number
+>   : ^^^^^^
+>t7 >> 0 : number
+>        : ^^^^^^
+>t7 : 0
+>   : ^
+>0 : 0
+>  : ^
+
+t7 // number
+>t7 : number
+>   : ^^^^^^
+
+let t8 = numLiteral;
+>t8 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t8 = t8 >>> 0
+>t8 = t8 >>> 0 : number
+>              : ^^^^^^
+>t8 : number
+>   : ^^^^^^
+>t8 >>> 0 : number
+>         : ^^^^^^
+>t8 : 0
+>   : ^
+>0 : 0
+>  : ^
+
+t8 // number
+>t8 : number
+>   : ^^^^^^
+
+let t9 = numLiteral;
+>t9 : 0
+>   : ^
+>numLiteral : 0
+>           : ^
+
+t9 = t9 << 0
+>t9 = t9 << 0 : number
+>             : ^^^^^^
+>t9 : number
+>   : ^^^^^^
+>t9 << 0 : number
+>        : ^^^^^^
+>t9 : 0
+>   : ^
+>0 : 0
+>  : ^
+
+t9 // number
+>t9 : number
+>   : ^^^^^^
+
+declare const literalUnion: "a" | 0;
+>literalUnion : 0 | "a"
+>             : ^^^^^^^
+
+let t10 = literalUnion;
+>t10 : 0 | "a"
+>    : ^^^^^^^
+>literalUnion : 0 | "a"
+>             : ^^^^^^^
+
+t10 = t10 + 'b'
+>t10 = t10 + 'b' : string
+>                : ^^^^^^
+>t10 : string | number
+>    : ^^^^^^^^^^^^^^^
+>t10 + 'b' : string
+>          : ^^^^^^
+>t10 : 0 | "a"
+>    : ^^^^^^^
+>'b' : "b"
+>    : ^^^
+
+t10 // string
+>t10 : string
+>    : ^^^^^^
+

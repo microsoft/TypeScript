@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/symbolObserverMismatchingPolyfillsWorkTogether.ts] ////
+
 //// [symbolObserverMismatchingPolyfillsWorkTogether.ts]
 interface SymbolConstructor {
     readonly observer: symbol;
@@ -11,6 +13,7 @@ const obj = {
 };
 
 //// [symbolObserverMismatchingPolyfillsWorkTogether.js]
+"use strict";
 const obj = {
     [Symbol.observer]: 0
 };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads8.ts] ////
+
 //// [constructorOverloads8.ts]
 class C {
     constructor(x) { }
@@ -16,13 +18,11 @@ interface I {
 }
 
 //// [constructorOverloads8.js]
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D(x) {
-    }
-    return D;
-}());
+"use strict";
+class C {
+    constructor(x) { }
+    constructor(y, x) { } // illegal, 2 constructor implementations
+}
+class D {
+    constructor(x) { }
+}

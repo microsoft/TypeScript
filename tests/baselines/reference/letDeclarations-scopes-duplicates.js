@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-scopes-duplicates.ts] ////
+
 //// [letDeclarations-scopes-duplicates.ts]
 // Errors: redeclaration
 let var1 = 0;
@@ -77,6 +79,7 @@ function F() {
 
 
 //// [letDeclarations-scopes-duplicates.js]
+"use strict";
 // Errors: redeclaration
 let var1 = 0;
 let var1 = 0; // error

@@ -1,7 +1,7 @@
-tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts(18,7): error TS2322: Type 'string' is not assignable to type '{ important: boolean; }'.
+mappedTypeWithCombinedTypeMappers.ts(18,7): error TS2322: Type 'string' is not assignable to type '{ important: boolean; }'.
 
 
-==== tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts (1 errors) ====
+==== mappedTypeWithCombinedTypeMappers.ts (1 errors) ====
     // Repro from #13351
     
     type Meta<T, A> = {

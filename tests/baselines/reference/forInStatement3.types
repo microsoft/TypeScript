@@ -1,12 +1,18 @@
-=== tests/cases/compiler/forInStatement3.ts ===
+//// [tests/cases/compiler/forInStatement3.ts] ////
+
+=== forInStatement3.ts ===
 function F<T>() {
 >F : <T>() => void
+>  : ^ ^^^^^^^^^^^
 
   var expr: T;
 >expr : T
+>     : ^
 
   for (var a in expr) {
 >a : Extract<keyof T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >expr : T
+>     : ^
   }
 }

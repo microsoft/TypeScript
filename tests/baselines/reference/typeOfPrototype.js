@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfPrototype.ts] ////
+
 //// [typeOfPrototype.ts]
 class Foo {
     bar = 3;
@@ -7,11 +9,11 @@ Foo.prototype.bar = undefined; // Should be OK
 
 
 //// [typeOfPrototype.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.bar = 3;
     }
-    Foo.bar = '';
-    return Foo;
-}());
+}
+Foo.bar = '';
 Foo.prototype.bar = undefined; // Should be OK

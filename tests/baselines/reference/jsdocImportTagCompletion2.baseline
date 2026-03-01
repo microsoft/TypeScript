@@ -1,0 +1,53 @@
+// === Completions ===
+=== /b.js ===
+// /**
+//  * @import {  } from "./a"
+//              ^
+// | ----------------------------------------------------------------------
+// | interface A
+// | ----------------------------------------------------------------------
+//  */
+
+[
+  {
+    "marker": {
+      "fileName": "/b.js",
+      "position": 17,
+      "name": ""
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "A",
+          "kind": "interface",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

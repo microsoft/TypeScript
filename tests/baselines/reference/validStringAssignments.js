@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/string/validStringAssignments.ts] ////
+
 //// [validStringAssignments.ts]
 var x = '';
 
@@ -7,6 +9,7 @@ var c: string = x;
 var d: String = x;
 
 //// [validStringAssignments.js]
+"use strict";
 var x = '';
 var a = x;
 var b = x;

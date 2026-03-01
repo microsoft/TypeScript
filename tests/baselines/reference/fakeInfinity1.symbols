@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/fakeInfinity1.ts] ////
+
+=== fakeInfinity1.ts ===
+// These are not actually the real infinity.
+export type PositiveInfinity = 1e999;
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(fakeInfinity1.ts, 0, 0))
+
+export type NegativeInfinity = -1e999;
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(fakeInfinity1.ts, 1, 37))
+
+export type TypeOfInfinity = typeof Infinity;
+>TypeOfInfinity : Symbol(TypeOfInfinity, Decl(fakeInfinity1.ts, 2, 38))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+export type TypeOfNaN = typeof NaN;
+>TypeOfNaN : Symbol(TypeOfNaN, Decl(fakeInfinity1.ts, 4, 45))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+
+type A = 1e999;
+>A : Symbol(A, Decl(fakeInfinity1.ts, 5, 35))
+
+type B = 1e9999;
+>B : Symbol(B, Decl(fakeInfinity1.ts, 7, 15))
+
+declare let a: A;
+>a : Symbol(a, Decl(fakeInfinity1.ts, 10, 11))
+>A : Symbol(A, Decl(fakeInfinity1.ts, 5, 35))
+
+declare let b: B;
+>b : Symbol(b, Decl(fakeInfinity1.ts, 11, 11))
+>B : Symbol(B, Decl(fakeInfinity1.ts, 7, 15))
+
+a = b;
+>a : Symbol(a, Decl(fakeInfinity1.ts, 10, 11))
+>b : Symbol(b, Decl(fakeInfinity1.ts, 11, 11))
+
+b = a;
+>b : Symbol(b, Decl(fakeInfinity1.ts, 11, 11))
+>a : Symbol(a, Decl(fakeInfinity1.ts, 10, 11))
+
+a = Infinity;
+>a : Symbol(a, Decl(fakeInfinity1.ts, 10, 11))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+a = 1e999;
+>a : Symbol(a, Decl(fakeInfinity1.ts, 10, 11))
+
+a = 1e9999;
+>a : Symbol(a, Decl(fakeInfinity1.ts, 10, 11))
+
+export type Oops = 123456789123456789123456789123456789123456789123456789;
+>Oops : Symbol(Oops, Decl(fakeInfinity1.ts, 18, 11))
+
+export const oops = 123456789123456789123456789123456789123456789123456789;
+>oops : Symbol(oops, Decl(fakeInfinity1.ts, 21, 12))
+

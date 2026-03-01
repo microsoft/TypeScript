@@ -1,0 +1,23 @@
+computedPropertyNames48_ES5.ts(16,6): error TS2873: This kind of expression is always falsy.
+
+
+==== computedPropertyNames48_ES5.ts (1 errors) ====
+    declare function extractIndexer<T>(p: { [n: number]: T }): T;
+    
+    enum E { x }
+    
+    var a: any;
+    
+    extractIndexer({
+        [a]: ""
+    }); // Should return string
+    
+    extractIndexer({
+        [E.x]: ""
+    }); // Should return string
+    
+    extractIndexer({
+        ["" || 0]: ""
+         ~~
+!!! error TS2873: This kind of expression is always falsy.
+    }); // Should return any (widened form of undefined)

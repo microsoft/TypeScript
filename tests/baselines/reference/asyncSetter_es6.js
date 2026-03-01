@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncSetter_es6.ts] ////
+
 //// [asyncSetter_es6.ts]
 class C {
   async set foo(value) {
@@ -5,6 +7,7 @@ class C {
 }
 
 //// [asyncSetter_es6.js]
+"use strict";
 class C {
     set foo(value) {
     }

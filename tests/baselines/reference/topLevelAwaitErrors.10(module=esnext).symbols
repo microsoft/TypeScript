@@ -1,10 +1,12 @@
-=== tests/cases/conformance/externalModules/index.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.10.ts] ////
+
+=== index.ts ===
 // await disallowed in alias of named import
 import { await as await } from "./other";
 >await : Symbol(await, Decl(other.ts, 1, 8))
 >await : Symbol(await, Decl(index.ts, 1, 8))
 
-=== tests/cases/conformance/externalModules/other.ts ===
+=== other.ts ===
 declare const _await: any;
 >_await : Symbol(_await, Decl(other.ts, 0, 13))
 

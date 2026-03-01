@@ -1,91 +1,140 @@
-=== tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts ===
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts] ////
+
+=== constEnumPropertyAccess1.ts ===
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context
 // than a property access that selects one of the enum's members
 
 const enum G {
 >G : G
+>  : ^
 
     A = 1,
->A : G
+>A : G.A
+>  : ^^^
 >1 : 1
+>  : ^
 
     B = 2,
->B : G
+>B : G.B
+>  : ^^^
 >2 : 2
+>  : ^
 
     C = A + B,
->C : G
+>C : G.C
+>  : ^^^
 >A + B : number
->A : G
->B : G
+>      : ^^^^^^
+>A : G.A
+>  : ^^^
+>B : G.B
+>  : ^^^
 
     D = A * 2
->D : G
+>D : G.B
+>  : ^^^
 >A * 2 : number
->A : G
+>      : ^^^^^^
+>A : G.A
+>  : ^^^
 >2 : 2
+>  : ^
 }
 
 var o: {
 >o : { [idx: number]: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [idx: number]: boolean
 >idx : number
+>    : ^^^^^^
 
 } = {
 >{        1: true    } : { 1: true; }
+>                      : ^^^^^^^^^^^^
 
         1: true
 >1 : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     };
 
 var a = G.A;
 >a : G
->G.A : G
+>  : ^
+>G.A : G.A
+>    : ^^^
 >G : typeof G
->A : G
+>  : ^^^^^^^^
+>A : G.A
+>  : ^^^
 
 var a1 = G["A"];
 >a1 : G
->G["A"] : G
+>   : ^
+>G["A"] : G.A
+>       : ^^^
 >G : typeof G
+>  : ^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
 var g = o[G.A];
 >g : boolean
+>  : ^^^^^^^
 >o[G.A] : boolean
+>       : ^^^^^^^
 >o : { [idx: number]: boolean; }
->G.A : G
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>G.A : G.A
+>    : ^^^
 >G : typeof G
->A : G
+>  : ^^^^^^^^
+>A : G.A
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
     [G.A]() { }
 >[G.A] : () => void
->G.A : G
+>      : ^^^^^^^^^^
+>G.A : G.A
+>    : ^^^
 >G : typeof G
->A : G
+>  : ^^^^^^^^
+>A : G.A
+>  : ^^^
 
     get [G.B]() {
->[G.B] : boolean
->G.B : G
+>[G.B] : number
+>      : ^^^^^^
+>G.B : G.B
+>    : ^^^
 >G : typeof G
->B : G
+>  : ^^^^^^^^
+>B : G.B
+>  : ^^^
 
         return true;
 >true : true
+>     : ^^^^
     }
     set [G.B](x: number) { }
 >[G.B] : number
->G.B : G
+>      : ^^^^^^
+>G.B : G.B
+>    : ^^^
 >G : typeof G
->B : G
+>  : ^^^^^^^^
+>B : G.B
+>  : ^^^
 >x : number
+>  : ^^^^^^
 }
 
 

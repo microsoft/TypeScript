@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts] ////
+
 //// [arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts]
 // regression test for https://github.com/microsoft/TypeScript/issues/32914
 declare var value: boolean;
@@ -16,14 +18,15 @@ const test = () => ({
 
 
 //// [arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.js]
-var test = function () { return ({
+"use strict";
+const test = () => ({
     // "Identifier expected." error on "!" and two "Duplicate identifier '(Missing)'." errors on space.
-    prop: !value,
-    run: function () {
+    prop: !value, // remove ! to see that errors will be gone
+    run: () => {
         // comment next line or remove "()" to see that errors will be gone
         if (!a.b()) {
             return 'special';
         }
         return 'default';
     }
-}); };
+});

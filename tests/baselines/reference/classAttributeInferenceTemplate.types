@@ -1,36 +1,113 @@
-=== tests/cases/compiler/classAttributeInferenceTemplate.ts ===
+//// [tests/cases/compiler/classAttributeInferenceTemplate.ts] ////
+
+=== classAttributeInferenceTemplate.ts ===
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     property;
 >property : string
+>         : ^^^^^^
 
     property2;
 >property2 : string
+>          : ^^^^^^
 
     constructor() {
         const variable = 'something'
 >variable : "something"
+>         : ^^^^^^^^^^^
 >'something' : "something"
+>            : ^^^^^^^^^^^
 
         this.property = `foo`; // Correctly inferred as `string`
 >this.property = `foo` : "foo"
+>                      : ^^^^^
 >this.property : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >property : string
+>         : ^^^^^^
 >`foo` : "foo"
+>      : ^^^^^
 
         this.property2 = `foo-${variable}`; // Causes an error
->this.property2 = `foo-${variable}` : string
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
 >this.property2 : string
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >property2 : string
->`foo-${variable}` : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
 >variable : "something"
+>         : ^^^^^^^^^^^
 
         const localProperty = `foo-${variable}`; // Correctly inferred as `string`
->localProperty : string
->`foo-${variable}` : string
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
 >variable : "something"
+>         : ^^^^^^^^^^^
     }
 }
+
+class MyClass2 {
+>MyClass2 : MyClass2
+>         : ^^^^^^^^
+
+    accessor property;
+>property : string
+>         : ^^^^^^
+
+    accessor property2;
+>property2 : string
+>          : ^^^^^^
+
+    constructor() {
+        const variable = 'something'
+>variable : "something"
+>         : ^^^^^^^^^^^
+>'something' : "something"
+>            : ^^^^^^^^^^^
+
+        this.property = `foo`; // Correctly inferred as `string`
+>this.property = `foo` : "foo"
+>                      : ^^^^^
+>this.property : string
+>              : ^^^^^^
+>this : this
+>     : ^^^^
+>property : string
+>         : ^^^^^^
+>`foo` : "foo"
+>      : ^^^^^
+
+        this.property2 = `foo-${variable}`; // Causes an error
+>this.property2 = `foo-${variable}` : "foo-something"
+>                                   : ^^^^^^^^^^^^^^^
+>this.property2 : string
+>               : ^^^^^^
+>this : this
+>     : ^^^^
+>property2 : string
+>          : ^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+
+        const localProperty = `foo-${variable}`; // Correctly inferred as `string`
+>localProperty : "foo-something"
+>              : ^^^^^^^^^^^^^^^
+>`foo-${variable}` : "foo-something"
+>                  : ^^^^^^^^^^^^^^^
+>variable : "something"
+>         : ^^^^^^^^^^^
+    }
+}
+

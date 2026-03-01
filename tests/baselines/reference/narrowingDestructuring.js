@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingDestructuring.ts] ////
+
 //// [narrowingDestructuring.ts]
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 
@@ -34,12 +36,14 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
     const [head, ...tail] = x;
-    if (x[0] === 'number') {
+    if (typeof x[0] === 'number') {
         const [head, ...tail] = x;
     }
 }
 
+
 //// [narrowingDestructuring.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -54,36 +58,36 @@ var __rest = (this && this.__rest) || function (s, e) {
 function func(value) {
     if (value.kind === "a") {
         value.a;
-        var a = value.a;
+        const { a } = value;
     }
     else {
         value.b;
-        var b = value.b;
+        const { b } = value;
     }
 }
 function func2(value) {
     if (value.kind === "f") {
-        var f1 = value.f;
-        var _a = value.f, a = _a.a, spread = __rest(_a, ["a"]);
+        const { f: f1 } = value;
+        const _a = value.f, { a } = _a, spread = __rest(_a, ["a"]);
         value.f;
     }
     else {
-        var _b = value.g, c = _b.c, spread = __rest(_b, ["c"]);
+        const _b = value.g, { c } = _b, spread = __rest(_b, ["c"]);
         value.g;
     }
 }
 function func3(t) {
     if (t.kind === "a") {
-        var kind = t.kind, r1 = __rest(t, ["kind"]);
-        var r2 = (function (_a) {
-            var kind = _a.kind, rest = __rest(_a, ["kind"]);
+        const { kind } = t, r1 = __rest(t, ["kind"]);
+        const r2 = ((_a) => {
+            var { kind } = _a, rest = __rest(_a, ["kind"]);
             return rest;
         })(t);
     }
 }
 function farr(x) {
-    var head = x[0], tail = x.slice(1);
-    if (x[0] === 'number') {
-        var head_1 = x[0], tail_1 = x.slice(1);
+    const [head, ...tail] = x;
+    if (typeof x[0] === 'number') {
+        const [head, ...tail] = x;
     }
 }

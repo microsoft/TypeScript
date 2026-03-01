@@ -14,18 +14,17 @@ var x = d.p;
 //// [exportAssignmentClass_A.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this.p = 0;
         }
-        return C;
-    }());
+    }
     return C;
 });
 //// [exportAssignmentClass_B.js]
 define(["require", "exports", "exportAssignmentClass_A"], function (require, exports, D) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var d = new D();
     var x = d.p;
 });

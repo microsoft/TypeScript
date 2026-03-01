@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadNoTransform.ts] ////
+
 //// [objectSpreadNoTransform.ts]
 const y = { a: 'yes', b: 'no' };
 const o = { x: 1, ...y };
@@ -7,6 +9,7 @@ var rest: any;
 
 
 //// [objectSpreadNoTransform.js]
+"use strict";
 const y = { a: 'yes', b: 'no' };
 const o = { x: 1, ...y };
 var b;

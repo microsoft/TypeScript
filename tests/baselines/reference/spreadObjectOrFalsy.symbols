@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts ===
+//// [tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts] ////
+
+=== spreadObjectOrFalsy.ts ===
 function f1<T>(a: T & undefined) {
 >f1 : Symbol(f1, Decl(spreadObjectOrFalsy.ts, 0, 0))
 >T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 0, 12))

@@ -1,53 +1,84 @@
-=== tests/cases/compiler/missingSelf.ts ===
+//// [tests/cases/compiler/missingSelf.ts] ////
+
+=== missingSelf.ts ===
 class CalcButton
 >CalcButton : CalcButton
+>           : ^^^^^^^^^^
 {
     public a() { this.onClick(); }
 >a : () => void
+>  : ^^^^^^^^^^
 >this.onClick() : void
+>               : ^^^^
 >this.onClick : () => void
+>             : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >onClick : () => void
+>        : ^^^^^^^^^^
 
     public onClick() { }
 >onClick : () => void
+>        : ^^^^^^^^^^
 }
 
 class CalcButton2
 >CalcButton2 : CalcButton2
+>            : ^^^^^^^^^^^
 {
     public b() { () => this.onClick(); }
 >b : () => void
+>  : ^^^^^^^^^^
 >() => this.onClick() : () => void
+>                     : ^^^^^^^^^^
 >this.onClick() : void
+>               : ^^^^
 >this.onClick : () => void
+>             : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >onClick : () => void
+>        : ^^^^^^^^^^
 
     public onClick() { }
 >onClick : () => void
+>        : ^^^^^^^^^^
 }
 
 var c = new CalcButton();
 >c : CalcButton
+>  : ^^^^^^^^^^
 >new CalcButton() : CalcButton
+>                 : ^^^^^^^^^^
 >CalcButton : typeof CalcButton
+>           : ^^^^^^^^^^^^^^^^^
 
 c.a();
 >c.a() : void
+>      : ^^^^
 >c.a : () => void
+>    : ^^^^^^^^^^
 >c : CalcButton
+>  : ^^^^^^^^^^
 >a : () => void
+>  : ^^^^^^^^^^
 
 var c2 = new CalcButton2();
 >c2 : CalcButton2
+>   : ^^^^^^^^^^^
 >new CalcButton2() : CalcButton2
+>                  : ^^^^^^^^^^^
 >CalcButton2 : typeof CalcButton2
+>            : ^^^^^^^^^^^^^^^^^^
 
 c2.b();
 >c2.b() : void
+>       : ^^^^
 >c2.b : () => void
+>     : ^^^^^^^^^^
 >c2 : CalcButton2
+>   : ^^^^^^^^^^^
 >b : () => void
+>  : ^^^^^^^^^^
 
 

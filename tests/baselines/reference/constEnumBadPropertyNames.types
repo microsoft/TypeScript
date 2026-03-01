@@ -1,11 +1,19 @@
-=== tests/cases/compiler/constEnumBadPropertyNames.ts ===
+//// [tests/cases/compiler/constEnumBadPropertyNames.ts] ////
+
+=== constEnumBadPropertyNames.ts ===
 const enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 var x = E["B"]
 >x : any
+>  : ^^^
 >E["B"] : any
+>       : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >"B" : "B"
+>    : ^^^
 

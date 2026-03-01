@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator.js";
+
 describe("unittests:: evaluation:: externalModules", () => {
     // https://github.com/microsoft/TypeScript/issues/35420
     it("Correct 'this' in function exported from external module", async () => {
@@ -30,10 +32,10 @@ describe("unittests:: evaluation:: externalModules", () => {
 
                     // 3
                     other.f(other);
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         });
         assert.equal(result.output[0], true); // `f(undefined)` inside module. Existing behavior is correct.
         assert.equal(result.output[1], true); // `f(undefined)` from import. New behavior to match first case.
@@ -71,10 +73,10 @@ describe("unittests:: evaluation:: externalModules", () => {
 
                     // 3
                     other.f(other);
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         });
         assert.equal(result.output[0], true); // `f(undefined)` inside module. Existing behavior is incorrect.
         assert.equal(result.output[1], true); // `f(undefined)` from import. New behavior to match first case.

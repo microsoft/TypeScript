@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts] ////
+
 //// [privateNameConstructorReserved.ts]
 class A {
     #constructor() {}      // Error: `#constructor` is a reserved word.
@@ -5,6 +7,7 @@ class A {
 
 
 //// [privateNameConstructorReserved.js]
+"use strict";
 var _A_instances, _A_constructor;
 class A {
     constructor() {

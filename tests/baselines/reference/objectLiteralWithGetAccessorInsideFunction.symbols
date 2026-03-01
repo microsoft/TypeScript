@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts ===
+//// [tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts] ////
+
+=== objectLiteralWithGetAccessorInsideFunction.ts ===
 function bar() {
 >bar : Symbol(bar, Decl(objectLiteralWithGetAccessorInsideFunction.ts, 0, 0))
 

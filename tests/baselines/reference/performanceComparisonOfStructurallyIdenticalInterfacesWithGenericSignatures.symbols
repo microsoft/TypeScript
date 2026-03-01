@@ -1,4 +1,6 @@
-=== tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts ===
+//// [tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts] ////
+
+=== performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts ===
 export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
 >ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
 >T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))

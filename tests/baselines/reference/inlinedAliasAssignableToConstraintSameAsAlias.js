@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inlinedAliasAssignableToConstraintSameAsAlias.ts] ////
+
 //// [inlinedAliasAssignableToConstraintSameAsAlias.ts]
 interface RelationFields {
   x: A;
@@ -26,11 +28,9 @@ class A {
 
 
 //// [inlinedAliasAssignableToConstraintSameAsAlias.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.whereRelated = function () {
+"use strict";
+class A {
+    whereRelated() {
         return 1;
-    };
-    return A;
-}());
+    }
+}

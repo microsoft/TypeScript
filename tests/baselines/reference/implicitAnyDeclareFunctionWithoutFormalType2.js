@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts] ////
+
 //// [implicitAnyDeclareFunctionWithoutFormalType2.ts]
 // generates function fn1(): number;
 function fn1() {
@@ -17,6 +19,7 @@ function fn3() {
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType2.js]
+"use strict";
 // generates function fn1(): number;
 function fn1() {
     var x;

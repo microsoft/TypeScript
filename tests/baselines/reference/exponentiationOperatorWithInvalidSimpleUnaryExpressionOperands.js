@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts] ////
+
 //// [exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts]
 var temp: any;
 
@@ -37,6 +39,7 @@ var temp: any;
 1 ** (delete temp++) ** 3;
 
 //// [exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.js]
+"use strict";
 var temp;
 // Error: incorrect type on left-hand side 
 Math.pow((!--temp), 3);

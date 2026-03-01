@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsReference.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsReference.ts] ////
+
+=== compoundExponentiationAssignmentLHSIsReference.ts ===
 var value: any;
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsReference.ts, 0, 3))
 

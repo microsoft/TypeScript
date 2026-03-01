@@ -18,11 +18,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Foo = /** @class */ (function () {
-                function Foo() {
-                }
-                return Foo;
-            }());
+            Foo = class Foo {
+            };
             exports_1("Foo", Foo);
         }
     };
@@ -39,7 +36,7 @@ System.register(["./b"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            exports_1("x", x = new b_1["default"].Foo());
+            exports_1("x", x = new b_1.default.Foo());
         }
     };
 });

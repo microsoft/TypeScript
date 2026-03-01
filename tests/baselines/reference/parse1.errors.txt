@@ -1,7 +1,7 @@
-tests/cases/compiler/parse1.ts(4,1): error TS1003: Identifier expected.
+parse1.ts(4,1): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/parse1.ts (1 errors) ====
+==== parse1.ts (1 errors) ====
     var bar = 42;
     function foo() {
      bar.

@@ -1,0 +1,322 @@
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// <|interface [|I|] { x: number; }|>
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// --- (line: 5) skipped ---
+
+// --- (line: 21) skipped ---
+// function f8(j: J): J;
+// function f8(ij: any): any { return ij; }
+// 
+// /*GOTO TYPE*/f0();
+// f1();
+// f2();
+// f3();
+// --- (line: 29) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// interface I { x: number; }
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// 
+// type T = [|(i: I) => I|];
+// const f1: T = i => ({ x: i.x + 1 });
+// 
+// const f2 = (i: I): I => ({ x: i.x + 1 });
+// --- (line: 10) skipped ---
+
+// --- (line: 22) skipped ---
+// function f8(ij: any): any { return ij; }
+// 
+// f0();
+// /*GOTO TYPE*/f1();
+// f2();
+// f3();
+// f4();
+// --- (line: 30) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// <|interface [|I|] { x: number; }|>
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// --- (line: 5) skipped ---
+
+// --- (line: 23) skipped ---
+// 
+// f0();
+// f1();
+// /*GOTO TYPE*/f2();
+// f3();
+// f4();
+// f5();
+// --- (line: 31) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// --- (line: 7) skipped ---
+// 
+// const f2 = (i: I): I => ({ x: i.x + 1 });
+// 
+// const f3 = (i: I) => ([|{ x: i.x + 1 }|]);
+// 
+// const f4 = (i: I) => i;
+// 
+// --- (line: 15) skipped ---
+
+// --- (line: 24) skipped ---
+// f0();
+// f1();
+// f2();
+// /*GOTO TYPE*/f3();
+// f4();
+// f5();
+// f6();
+// f7();
+// f8();
+
+  // === Details ===
+  [
+   {
+    "kind": "",
+    "name": "__object",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// <|interface [|I|] { x: number; }|>
+// interface J { y: number; }
+// 
+// function f0(): I { return { x: 0 }; }
+// --- (line: 5) skipped ---
+
+// --- (line: 25) skipped ---
+// f1();
+// f2();
+// f3();
+// /*GOTO TYPE*/f4();
+// f5();
+// f6();
+// f7();
+// f8();
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// <|interface [|{| defId: 0 |}I|] { x: number; }|>
+// <|interface [|{| defId: 1 |}J|] { y: number; }|>
+// 
+// function f0(): I { return { x: 0 }; }
+// 
+// --- (line: 6) skipped ---
+
+// --- (line: 26) skipped ---
+// f2();
+// f3();
+// f4();
+// /*GOTO TYPE*/f5();
+// f6();
+// f7();
+// f8();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "name": "J",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// <|interface [|{| defId: 0 |}I|] { x: number; }|>
+// <|interface [|{| defId: 1 |}J|] { y: number; }|>
+// 
+// function f0(): I { return { x: 0 }; }
+// 
+// --- (line: 6) skipped ---
+
+// --- (line: 27) skipped ---
+// f3();
+// f4();
+// f5();
+// /*GOTO TYPE*/f6();
+// f7();
+// f8();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "name": "J",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// --- (line: 15) skipped ---
+// 
+// const f6 = (i: I, j: J, b: boolean) => b ? i : j;
+// 
+// const [|{| contextId: 0 |}f7|] = <|(i: I) => {}|>;
+// 
+// function f8(i: I): I;
+// function f8(j: J): J;
+// --- (line: 23) skipped ---
+
+// --- (line: 28) skipped ---
+// f4();
+// f5();
+// f6();
+// /*GOTO TYPE*/f7();
+// f8();
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "f7",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/goToTypeDefinition_returnType.ts ===
+// --- (line: 19) skipped ---
+// 
+// function f8(i: I): I;
+// function f8(j: J): J;
+// <|function [|f8|](ij: any): any { return ij; }|>
+// 
+// f0();
+// f1();
+// f2();
+// f3();
+// f4();
+// f5();
+// f6();
+// f7();
+// /*GOTO TYPE*/f8();
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "f8",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

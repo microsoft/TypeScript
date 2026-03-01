@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionOfMixinConstructorTypeAndNonConstructorType.ts] ////
+
 //// [intersectionOfMixinConstructorTypeAndNonConstructorType.ts]
 // Repro for #17388
 
@@ -6,5 +8,6 @@ new x();
 
 
 //// [intersectionOfMixinConstructorTypeAndNonConstructorType.js]
+"use strict";
 // Repro for #17388
 new x();

@@ -1,96 +1,170 @@
-=== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx ===
+//// [tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx] ////
+
+=== jsxAndTypeAssertion.tsx ===
 declare var createElement: any;
 >createElement : any
+>              : ^^^
 
 class foo {}
 >foo : foo
+>    : ^^^
 
 var x: any;
 >x : any
+>  : ^^^
 
 x = <any> { test: <any></any> };
 >x = <any> { test: <any></any> };x = <any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                                                                                                                                                                                                                           : ^^^
 >x : any
+>  : ^^^
 ><any> { test: <any></any> };x = <any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                                                                                                                                                                                                                       : ^^^
 >any : any
+>    : ^^^
 >test : any
+>     : ^^^
 ><any></any> : any
+>            : ^^^
 >any : any
+>    : ^^^
 >any : any
+>    : ^^^
 
 x = <any><any></any>;
 ><any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                                                                                                                                                                                       : ^^^
 >any : any
+>    : ^^^
 ><any></any> : any
+>            : ^^^
 >any : any
+>    : ^^^
 >any : any
+>    : ^^^
  
 x = <foo>hello {<foo>{}} </foo>;
 ><foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                                                                                                                                                                 : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo>{}} </foo> : any
+>                : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 x = <foo test={<foo>{}}>hello</foo>;
 ><foo test={<foo>{}}>hello</foo> : any
+>                                : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >test : any
+>     : ^^^
 ><foo>{}}>hello</foo> : any
+>                     : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
 ><foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                                                                                             : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >test : any
+>     : ^^^
 ><foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                                                                                  : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo>{}}</foo> : any
+>               : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 x = <foo>x</foo>, x = <foo/>;
 ><foo>x</foo> : any
+>             : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo/> : any
+>       : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
 ><foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                       : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                                 : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>                                                                            : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any
+>                                                                  : ^^^
 >/foo/.test(x) : boolean
+>              : ^^^^^^^
 >/foo/.test : (string: string) => boolean
+>           : ^      ^^      ^^^^^       
 >/foo/ : RegExp
+>      : ^^^^^^
 >test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
 >x : any
+>  : ^^^
 ><foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any
+>                                                  : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo></foo> : any
+>            : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo><foo></foo>}</foo> : any
+>                        : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 ><foo></foo> : any
+>            : ^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
     
 
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 

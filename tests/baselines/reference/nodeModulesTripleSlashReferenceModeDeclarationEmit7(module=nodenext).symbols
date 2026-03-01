@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit7.ts] ////
+
 === /index.ts ===
 // only an esm file can `import` both kinds of files
 import obj1 from "./sub1/uses.js"
@@ -40,12 +42,12 @@ declare global {
 >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 1, 16))
 }
 === /sub1/uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterI();
 >getInterI : Symbol(getInterI, Decl(import.d.ts, 2, 42))
 
 === /sub2/uses.ts ===
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 >getInterR : Symbol(getInterR, Decl(require.d.ts, 2, 43))
 

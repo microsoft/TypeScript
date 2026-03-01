@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature.ts] ////
+
 //// [interfaceWithConstructSignaturesThatHidesBaseSignature.ts]
 interface Foo {
     new (): { a: number };
@@ -11,5 +13,6 @@ var d: Derived;
 var r = new d();
 
 //// [interfaceWithConstructSignaturesThatHidesBaseSignature.js]
+"use strict";
 var d;
 var r = new d();

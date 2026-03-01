@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityChecks8.ts ===
+//// [tests/cases/compiler/reachabilityChecks8.ts] ////
+
+=== reachabilityChecks8.ts ===
 try {
     for (
         (function () { throw "1"; })();

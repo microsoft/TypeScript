@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedFunctionsinNamespaces2.ts] ////
+
 //// [unusedFunctionsinNamespaces2.ts]
 namespace Validation {
     var function1 = function() {
@@ -5,6 +7,7 @@ namespace Validation {
 }
 
 //// [unusedFunctionsinNamespaces2.js]
+"use strict";
 var Validation;
 (function (Validation) {
     var function1 = function () {

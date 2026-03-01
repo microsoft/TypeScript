@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithNaNProperty.ts] ////
+
 //// [enumWithNaNProperty.ts]
 enum A {
     NaN = 1
@@ -5,6 +7,7 @@ enum A {
 
 
 //// [enumWithNaNProperty.js]
+"use strict";
 var A;
 (function (A) {
     A[A["NaN"] = 1] = "NaN";

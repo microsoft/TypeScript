@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/vue.js ===
+//// [tests/cases/conformance/salsa/expandoOnAlias.ts] ////
+
+=== vue.js ===
 export class Vue {}
 >Vue : Symbol(Vue, Decl(vue.js, 0, 0))
 
@@ -6,7 +8,7 @@ export const config = { x: 0 };
 >config : Symbol(config, Decl(vue.js, 1, 12))
 >x : Symbol(x, Decl(vue.js, 1, 23))
 
-=== tests/cases/conformance/salsa/test.js ===
+=== test.js ===
 import { Vue, config } from "./vue";
 >Vue : Symbol(Vue, Decl(test.js, 0, 8))
 >config : Symbol(config, Decl(test.js, 0, 13))

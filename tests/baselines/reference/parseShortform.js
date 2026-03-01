@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseShortform.ts] ////
+
 //// [parseShortform.ts]
 interface I {
     w: {
@@ -12,3 +14,4 @@ interface I {
 }
 
 //// [parseShortform.js]
+"use strict";

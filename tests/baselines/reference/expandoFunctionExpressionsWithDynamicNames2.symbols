@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/expandoFunctionExpressionsWithDynamicNames2.ts] ////
+
+=== expandoFunctionExpressionsWithDynamicNames2.ts ===
+const mySymbol = Symbol();
+>mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 26))
+
+  (): void;
+  [mySymbol]: true;
+>[mySymbol] : Symbol(Foo[mySymbol], Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 2, 11))
+>mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
+}
+const foo: Foo = () => {};
+>foo : Symbol(foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 26))
+>Foo : Symbol(Foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 26))
+
+foo[mySymbol] = true;
+>foo : Symbol(foo, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 5, 26))
+>mySymbol : Symbol(mySymbol, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 0, 5))
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 6, 21))
+
+  (): void;
+  test: true;
+>test : Symbol(Bar.test, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 9, 11))
+}
+const t = "test" as const;
+>t : Symbol(t, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 12, 5))
+>const : Symbol(const)
+
+const bar: Bar = () => {};
+>bar : Symbol(bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 26))
+>Bar : Symbol(Bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 6, 21))
+
+bar[t] = true;
+>bar : Symbol(bar, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 5), Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 13, 26))
+>t : Symbol(t, Decl(expandoFunctionExpressionsWithDynamicNames2.ts, 12, 5))
+

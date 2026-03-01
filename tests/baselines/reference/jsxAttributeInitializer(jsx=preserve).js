@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxAttributeInitializer.ts] ////
+
 //// [a.tsx]
 declare var React: any;
 
@@ -10,6 +12,7 @@ declare var React: any;
 
 
 //// [a.jsx]
+"use strict";
 <div>
     <div attr=<div />/>
     <div attr=<div>foo</div>/>

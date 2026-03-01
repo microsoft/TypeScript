@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts ===
+//// [tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts] ////
+
+=== FunctionPropertyAssignments6_es6.ts ===
 var v = { *<T>() { } }
 >v : Symbol(v, Decl(FunctionPropertyAssignments6_es6.ts, 0, 3))
 > : Symbol((Missing), Decl(FunctionPropertyAssignments6_es6.ts, 0, 9))

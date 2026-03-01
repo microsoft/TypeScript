@@ -1,107 +1,73 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
-// /*FIND ALL REFS*/declare class [|C|] {
+// /*FIND ALL REFS*/<|declare class [|{| isWriteAccess: true, isDefinition: true |}C|] {
 //     static m(): void;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsDeclareClass.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 41
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsDeclareClass.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 41
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
+  // /*FIND ALL REFS*/<|declare class [|C|] {
+  //     static m(): void;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
-// declare class /*FIND ALL REFS*/[|C|] {
+// <|declare class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}C|] {
 //     static m(): void;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsDeclareClass.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 41
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsDeclareClass.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 41
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
+  // <|declare class /*FIND ALL REFS*/[|C|] {
+  //     static m(): void;
+  // }|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,14 +1,23 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/shorthand-property-es6-es6.ts] ////
+
+=== test.ts ===
 import {foo} from './foo';
 >foo : any
+>    : ^^^
 
 const baz = 42;
 >baz : 42
+>    : ^^
 >42 : 42
+>   : ^^
 
 const bar = { foo, baz };
 >bar : { foo: any; baz: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo, baz } : { foo: any; baz: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >baz : number
+>    : ^^^^^^
 

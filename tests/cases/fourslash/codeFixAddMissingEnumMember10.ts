@@ -18,8 +18,8 @@ verify.codeFix({
     c = "123"
 }
 enum A {
-    a = E.c,
-    b
+    a = E.c,    
+    b = "b"
 }
 A.b`
 });

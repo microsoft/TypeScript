@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tupleTypeInference.ts ===
+//// [tests/cases/compiler/tupleTypeInference.ts] ////
+
+=== tupleTypeInference.ts ===
 declare var $q: IQService;
 >$q : Symbol($q, Decl(tupleTypeInference.ts, 0, 11))
 >IQService : Symbol(IQService, Decl(tupleTypeInference.ts, 0, 26))

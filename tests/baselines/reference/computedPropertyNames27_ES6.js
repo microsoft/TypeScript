@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts] ////
+
 //// [computedPropertyNames27_ES6.ts]
 class Base {
 }
@@ -6,6 +8,7 @@ class C extends Base {
 }
 
 //// [computedPropertyNames27_ES6.js]
+"use strict";
 class Base {
 }
 class C extends Base {

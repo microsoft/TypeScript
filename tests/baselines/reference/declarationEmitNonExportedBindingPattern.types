@@ -1,55 +1,89 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/declarationEmitNonExportedBindingPattern.ts] ////
+
+=== test.ts ===
 function getFoo() {
 >getFoo : () => { foo: { test: number; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return { foo: { test: 42 } }
 >{ foo: { test: 42 } } : { foo: { test: number; }; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { test: number; }
+>    : ^^^^^^^^^^^^^^^^^
 >{ test: 42 } : { test: number; }
+>             : ^^^^^^^^^^^^^^^^^
 >test : number
+>     : ^^^^^^
 >42 : 42
+>   : ^^
 }
 
 const { foo } = getFoo()
 >foo : { test: number; }
+>    : ^^^^^^^^^^^^^^^^^
 >getFoo() : { foo: { test: number; }; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getFoo : () => { foo: { test: number; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type AliasType = typeof foo
 >AliasType : { test: number; }
+>          : ^^^^^^^^^^^^^^^^^
 >foo : { test: number; }
+>    : ^^^^^^^^^^^^^^^^^
 
 const { foo: renamed } = getFoo()
 >foo : any
+>    : ^^^
 >renamed : { test: number; }
+>        : ^^^^^^^^^^^^^^^^^
 >getFoo() : { foo: { test: number; }; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getFoo : () => { foo: { test: number; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type AliasType2 = typeof renamed
 >AliasType2 : { test: number; }
+>           : ^^^^^^^^^^^^^^^^^
 >renamed : { test: number; }
+>        : ^^^^^^^^^^^^^^^^^
 
 function getNested() {
 >getNested : () => { a: { b: { c: string; }; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return { a: { b: { c: 'd' } } }
 >{ a: { b: { c: 'd' } } } : { a: { b: { c: string; }; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: string; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >{ b: { c: 'd' } } : { b: { c: string; }; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^
 >b : { c: string; }
+>  : ^^^^^^^^^^^^^^
 >{ c: 'd' } : { c: string; }
+>           : ^^^^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 >'d' : "d"
+>    : ^^^
 }
 
 const { a: { b: { c } } } = getNested()
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : string
+>  : ^^^^^^
 >getNested() : { a: { b: { c: string; }; }; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getNested : () => { a: { b: { c: string; }; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type AliasType3 = typeof c
 >AliasType3 : string
+>           : ^^^^^^
 >c : string
+>  : ^^^^^^
 

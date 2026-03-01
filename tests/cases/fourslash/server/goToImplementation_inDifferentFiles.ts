@@ -1,6 +1,8 @@
 /// <reference path='../fourslash.ts'/>
 
-// @Filename: /bar.ts
+// @lib: es5
+
+// @Filename: /home/src/workspaces/project/bar.ts
 ////import {Foo} from './foo'
 ////
 ////class [|A|] implements Foo {
@@ -11,9 +13,9 @@
 ////    func() {}
 ////}
 
-// @Filename: /foo.ts
+// @Filename: /home/src/workspaces/project/foo.ts
 ////export interface /**/Foo {
 ////    func();
 ////}
 
-verify.allRangesAppearInImplementationList("");
+verify.baselineGoToImplementation("");

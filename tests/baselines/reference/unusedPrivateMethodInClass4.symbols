@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedPrivateMethodInClass4.ts ===
+//// [tests/cases/compiler/unusedPrivateMethodInClass4.ts] ////
+
+=== unusedPrivateMethodInClass4.ts ===
 class greeter {
 >greeter : Symbol(greeter, Decl(unusedPrivateMethodInClass4.ts, 0, 0))
 
@@ -7,33 +9,24 @@ class greeter {
 
         var y = 10;
 >y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 2, 11))
-
-        y++;
->y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 2, 11))
     }
 
     private function2() {
->function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass4.ts, 4, 5))
+>function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass4.ts, 3, 5))
 
         var y = 10;
->y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 7, 11))
-
-        y++;
->y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 7, 11))
+>y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 6, 11))
     }
 
     public function3() {
->function3 : Symbol(greeter.function3, Decl(unusedPrivateMethodInClass4.ts, 9, 5))
+>function3 : Symbol(greeter.function3, Decl(unusedPrivateMethodInClass4.ts, 7, 5))
 
         var y = 10;
->y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 12, 11))
-
-        y++;
->y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 12, 11))
+>y : Symbol(y, Decl(unusedPrivateMethodInClass4.ts, 10, 11))
 
         this.function2();
->this.function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass4.ts, 4, 5))
+>this.function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass4.ts, 3, 5))
 >this : Symbol(greeter, Decl(unusedPrivateMethodInClass4.ts, 0, 0))
->function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass4.ts, 4, 5))
+>function2 : Symbol(greeter.function2, Decl(unusedPrivateMethodInClass4.ts, 3, 5))
     }
 }

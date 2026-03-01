@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/asConstRefsNoErrors2.ts ===
+// class Tex {
+//     type = </*GOTO DEF*/const>'Text';
+// }

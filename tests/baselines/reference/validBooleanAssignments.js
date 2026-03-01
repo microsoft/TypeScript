@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts] ////
+
 //// [validBooleanAssignments.ts]
 var x = true;
 
@@ -7,6 +9,7 @@ var c: Boolean = x;
 var d: boolean = x;
 
 //// [validBooleanAssignments.js]
+"use strict";
 var x = true;
 var a = x;
 var b = x;

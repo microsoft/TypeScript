@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts] ////
+
 //// [ambientExternalModuleWithRelativeExternalImportDeclaration.ts]
 declare module "OuterModule" {
     import m2 = require("./SubModule");
@@ -11,3 +13,4 @@ declare module "OuterModule" {
 }
 
 //// [ambientExternalModuleWithRelativeExternalImportDeclaration.js]
+"use strict";

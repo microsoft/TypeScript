@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithUnionTypes01.ts] ////
+
 //// [equalityWithUnionTypes01.ts]
 interface I1 {
     p1: number
@@ -21,6 +23,7 @@ else if (y != z || z != y) {
 }
 
 //// [equalityWithUnionTypes01.js]
+"use strict";
 var x = { p1: 10, p2: 20 };
 var y = x;
 var z = x;

@@ -1,61 +1,94 @@
-=== tests/cases/compiler/awaitUnionPromise.ts ===
+//// [tests/cases/compiler/awaitUnionPromise.ts] ////
+
+=== awaitUnionPromise.ts ===
 // https://github.com/Microsoft/TypeScript/issues/18186
 
 class AsyncEnumeratorDone { };
 >AsyncEnumeratorDone : AsyncEnumeratorDone
+>                    : ^^^^^^^^^^^^^^^^^^^
 
 interface IAsyncEnumerator<T> {
     next1(): Promise<T | AsyncEnumeratorDone>;
 >next1 : () => Promise<T | AsyncEnumeratorDone>
+>      : ^^^^^^                                
 
     next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
 >next2 : () => Promise<T> | Promise<AsyncEnumeratorDone>
+>      : ^^^^^^                                         
 
     next3(): Promise<T | {}>;
 >next3 : () => Promise<T | {}>
+>      : ^^^^^^               
 
     next4(): Promise<T | { x: string }>;
->next4 : () => Promise<T | {    x: string;}>
+>next4 : () => Promise<T | { x: string; }>
+>      : ^^^^^^                           
 >x : string
+>  : ^^^^^^
 }
 
 async function main() {
 >main : () => Promise<void>
+>     : ^^^^^^^^^^^^^^^^^^^
 
     const x: IAsyncEnumerator<number> = null;
 >x : IAsyncEnumerator<number>
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     let a = await x.next1();
 >a : number | AsyncEnumeratorDone
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await x.next1() : number | AsyncEnumeratorDone
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.next1() : Promise<number | AsyncEnumeratorDone>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.next1 : () => Promise<number | AsyncEnumeratorDone>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IAsyncEnumerator<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >next1 : () => Promise<number | AsyncEnumeratorDone>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let b = await x.next2();
 >b : number | AsyncEnumeratorDone
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await x.next2() : number | AsyncEnumeratorDone
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.next2() : Promise<AsyncEnumeratorDone> | Promise<number>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.next2 : () => Promise<AsyncEnumeratorDone> | Promise<number>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IAsyncEnumerator<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >next2 : () => Promise<AsyncEnumeratorDone> | Promise<number>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let c = await x.next3();
 >c : number | {}
+>  : ^^^^^^^^^^^
 >await x.next3() : number | {}
+>                : ^^^^^^^^^^^
 >x.next3() : Promise<number | {}>
+>          : ^^^^^^^^^^^^^^^^^^^^
 >x.next3 : () => Promise<number | {}>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IAsyncEnumerator<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >next3 : () => Promise<number | {}>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let d = await x.next4();
 >d : number | { x: string; }
+>  : ^^^^^^^^^^^^^^      ^^^
 >await x.next4() : number | { x: string; }
+>                : ^^^^^^^^^^^^^^      ^^^
 >x.next4() : Promise<number | { x: string; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >x.next4 : () => Promise<number | { x: string; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >x : IAsyncEnumerator<number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >next4 : () => Promise<number | { x: string; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 }
 

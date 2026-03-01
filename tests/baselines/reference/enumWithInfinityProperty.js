@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithInfinityProperty.ts] ////
+
 //// [enumWithInfinityProperty.ts]
 enum A {
     Infinity = 1
@@ -5,6 +7,7 @@ enum A {
 
 
 //// [enumWithInfinityProperty.js]
+"use strict";
 var A;
 (function (A) {
     A[A["Infinity"] = 1] = "Infinity";

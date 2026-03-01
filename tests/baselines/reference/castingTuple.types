@@ -1,160 +1,262 @@
-=== tests/cases/conformance/types/tuple/castingTuple.ts ===
+//// [tests/cases/conformance/types/tuple/castingTuple.ts] ////
+
+=== castingTuple.ts ===
 interface I { }
 class A { a = 10; }
 >A : A
+>  : ^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 class C implements I { c };
 >C : C
+>  : ^
 >c : any
+>  : ^^^
 
 class D implements I { d };
 >D : D
+>  : ^
 >d : any
+>  : ^^^
 
 class E extends A { e };
 >E : E
+>  : ^
 >A : A
+>  : ^
 >e : any
+>  : ^^^
 
 class F extends A { f };
 >F : F
+>  : ^
 >A : A
+>  : ^
 >f : any
+>  : ^^^
 
 enum E1 { one }
 >E1 : E1
+>   : ^^
 >one : E1.one
+>    : ^^^^^^
 
 enum E2 { one }
 >E2 : E2
+>   : ^^
 >one : E2.one
+>    : ^^^^^^
 
 // no error
 var numStrTuple: [number, string] = [5, "foo"];
 >numStrTuple : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 >[5, "foo"] : [number, string]
+>           : ^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 >"foo" : "foo"
+>      : ^^^^^
 
 var emptyObjTuple = <[{}, {}]>numStrTuple;
 >emptyObjTuple : [{}, {}]
+>              : ^^^^^^^^
 ><[{}, {}]>numStrTuple : [{}, {}]
+>                      : ^^^^^^^^
 >numStrTuple : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 
 var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
 >numStrBoolTuple : [number, string, boolean]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 ><[number, string, boolean]>numStrTuple : [number, string, boolean]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >numStrTuple : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 
 var shorter = numStrBoolTuple as [number, string]
 >shorter : [number, string]
+>        : ^^^^^^^^^^^^^^^^
 >numStrBoolTuple as [number, string] : [number, string]
+>                                    : ^^^^^^^^^^^^^^^^
 >numStrBoolTuple : [number, string, boolean]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var longer = numStrTuple as [number, string, boolean]
 >longer : [number, string, boolean]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >numStrTuple as [number, string, boolean] : [number, string, boolean]
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >numStrTuple : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 
 var classCDTuple: [C, D] = [new C(), new D()];
 >classCDTuple : [C, D]
+>             : ^^^^^^
 >[new C(), new D()] : [C, D]
+>                   : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
 var interfaceIITuple = <[I, I]>classCDTuple;
 >interfaceIITuple : [I, I]
+>                 : ^^^^^^
 ><[I, I]>classCDTuple : [I, I]
+>                     : ^^^^^^
 >classCDTuple : [C, D]
+>             : ^^^^^^
 
 var classCDATuple = <[C, D, A]>classCDTuple;
 >classCDATuple : [C, D, A]
+>              : ^^^^^^^^^
 ><[C, D, A]>classCDTuple : [C, D, A]
+>                        : ^^^^^^^^^
 >classCDTuple : [C, D]
+>             : ^^^^^^
 
 var eleFromCDA1 = classCDATuple[2]; // A
 >eleFromCDA1 : A
+>            : ^
 >classCDATuple[2] : A
+>                 : ^
 >classCDATuple : [C, D, A]
+>              : ^^^^^^^^^
 >2 : 2
+>  : ^
 
 var eleFromCDA2 = classCDATuple[5]; // C | D | A
 >eleFromCDA2 : undefined
+>            : ^^^^^^^^^
 >classCDATuple[5] : undefined
+>                 : ^^^^^^^^^
 >classCDATuple : [C, D, A]
+>              : ^^^^^^^^^
 >5 : 5
+>  : ^
 
 var t10: [E1, E2] = [E1.one, E2.one];
 >t10 : [E1, E2]
+>    : ^^^^^^^^
 >[E1.one, E2.one] : [E1, E2]
+>                 : ^^^^^^^^
 >E1.one : E1
+>       : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >one : E1
+>    : ^^
 >E2.one : E2
+>       : ^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >one : E2
+>    : ^^
 
 var t11 = <[number, number]>t10;
 >t11 : [number, number]
+>    : ^^^^^^^^^^^^^^^^
 ><[number, number]>t10 : [number, number]
+>                      : ^^^^^^^^^^^^^^^^
 >t10 : [E1, E2]
+>    : ^^^^^^^^
 
 var array1 = <{}[]>emptyObjTuple;
 >array1 : {}[]
+>       : ^^^^
 ><{}[]>emptyObjTuple : {}[]
+>                    : ^^^^
 >emptyObjTuple : [{}, {}]
+>              : ^^^^^^^^
 
 var unionTuple: [C, string | number] = [new C(), "foo"];
 >unionTuple : [C, string | number]
+>           : ^^^^^^^^^^^^^^^^^^^^
 >[new C(), "foo"] : [C, string]
+>                 : ^^^^^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >unionTuple2 : [C, string | number, D]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >[new C(), "foo", new D()] : [C, string, D]
+>                          : ^^^^^^^^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
 var unionTuple3: [number, string| number] = [10, "foo"]; 
 >unionTuple3 : [number, string | number]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[10, "foo"] : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"foo" : "foo"
+>      : ^^^^^
 
 var unionTuple4 = <[number, number]>unionTuple3; 
 >unionTuple4 : [number, number]
+>            : ^^^^^^^^^^^^^^^^
 ><[number, number]>unionTuple3 : [number, number]
+>                              : ^^^^^^^^^^^^^^^^
 >unionTuple3 : [number, string | number]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // error
 var t3 = <[number, number]>numStrTuple;
 >t3 : [number, number]
+>   : ^^^^^^^^^^^^^^^^
 ><[number, number]>numStrTuple : [number, number]
+>                              : ^^^^^^^^^^^^^^^^
 >numStrTuple : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 
 var t9 = <[A, I]>classCDTuple;
 >t9 : [A, I]
+>   : ^^^^^^
 ><[A, I]>classCDTuple : [A, I]
+>                     : ^^^^^^
 >classCDTuple : [C, D]
+>             : ^^^^^^
 
 var array1 = <number[]>numStrTuple;
 >array1 : {}[]
+>       : ^^^^
 ><number[]>numStrTuple : number[]
+>                      : ^^^^^^^^
 >numStrTuple : [number, string]
+>            : ^^^^^^^^^^^^^^^^
 
 t4[2] = 10;
 >t4[2] = 10 : 10
+>           : ^^
 >t4[2] : any
+>      : ^^^
 >t4 : any
+>   : ^^^
 >2 : 2
+>  : ^
 >10 : 10
+>   : ^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fromAsIdentifier2.ts] ////
+
 //// [fromAsIdentifier2.ts]
 "use strict";
 var from;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalConstructorArgInSuper.ts ===
+//// [tests/cases/compiler/optionalConstructorArgInSuper.ts] ////
+
+=== optionalConstructorArgInSuper.ts ===
 class Base {
 >Base : Symbol(Base, Decl(optionalConstructorArgInSuper.ts, 0, 0))
 

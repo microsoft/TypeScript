@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofUsedBeforeBlockScoped.ts] ////
+
 //// [typeofUsedBeforeBlockScoped.ts]
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 class C {
@@ -9,11 +11,9 @@ let o = { n: 12 };
 
 
 //// [typeofUsedBeforeBlockScoped.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.s = 2;
-    return C;
-}());
-var o2;
-var o = { n: 12 };
+"use strict";
+class C {
+}
+C.s = 2;
+let o2;
+let o = { n: 12 };

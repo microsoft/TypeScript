@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/unknownSymbols2.ts] ////
+
 //// [unknownSymbols2.ts]
-module M {
+namespace M {
     var x: asdf;
     var y = x + asdf;
     var z = <asdf>x; // should be an error
@@ -23,7 +25,7 @@ module M {
     var a = () => asdf;
     var b = (asdf) => { return qwerty };
 
-    module N {
+    namespace N {
         var x = 1;
     }
     import c = N;
@@ -31,6 +33,7 @@ module M {
 }
 
 //// [unknownSymbols2.js]
+"use strict";
 var M;
 (function (M) {
     var x;
@@ -50,9 +53,9 @@ var M;
         default:
             break;
     }
-    var a = function () { return asdf; };
-    var b = function (asdf) { return qwerty; };
-    var N;
+    var a = () => asdf;
+    var b = (asdf) => { return qwerty; };
+    let N;
     (function (N) {
         var x = 1;
     })(N || (N = {}));

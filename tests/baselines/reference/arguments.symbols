@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arguments.ts ===
+//// [tests/cases/compiler/arguments.ts] ////
+
+=== arguments.ts ===
 function f() {
 >f : Symbol(f, Decl(arguments.ts, 0, 0))
 

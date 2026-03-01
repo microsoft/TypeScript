@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts] ////
+
+=== undefinedAsDiscriminantWithUnknown.ts ===
+type S = 
+>S : S
+>  : ^
+
+| { type: 'string', value: string } 
+>type : "string"
+>     : ^^^^^^^^
+>value : string
+>      : ^^^^^^
+
+| { type: 'number', value: number } 
+>type : "number"
+>     : ^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+| { type: 'unknown', value: unknown }
+>type : "unknown"
+>     : ^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+
+| { value: undefined };
+>value : undefined
+>      : ^^^^^^^^^
+
+declare var s: S
+>s : S
+>  : ^
+
+if (s.value !== undefined) {
+>s.value !== undefined : boolean
+>                      : ^^^^^^^
+>s.value : unknown
+>        : ^^^^^^^
+>s : S
+>  : ^
+>value : unknown
+>      : ^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+  s;
+>s : S
+>  : ^
+}
+else {
+  s;
+>s : S
+>  : ^
+}

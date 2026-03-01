@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts] ////
+
 //// [parserComputedPropertyName30.ts]
 enum E {
     // no ASI, comma expected
@@ -6,6 +8,7 @@ enum E {
 }
 
 //// [parserComputedPropertyName30.js]
+"use strict";
 var E;
 (function (E) {
     // no ASI, comma expected

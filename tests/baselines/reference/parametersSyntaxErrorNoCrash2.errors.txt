@@ -1,0 +1,35 @@
+parametersSyntaxErrorNoCrash2.ts(3,25): error TS2391: Function implementation is missing or not immediately following the declaration.
+parametersSyntaxErrorNoCrash2.ts(3,25): error TS7010: 'getThing', which lacks return-type annotation, implicitly has an 'any' return type.
+parametersSyntaxErrorNoCrash2.ts(3,43): error TS2300: Duplicate identifier '(Missing)'.
+parametersSyntaxErrorNoCrash2.ts(3,43): error TS2842: '(Missing)' is an unused renaming of 'return'. Did you intend to use it as a type annotation?
+parametersSyntaxErrorNoCrash2.ts(3,44): error TS1005: ':' expected.
+parametersSyntaxErrorNoCrash2.ts(3,51): error TS2300: Duplicate identifier '(Missing)'.
+parametersSyntaxErrorNoCrash2.ts(3,51): error TS2842: '(Missing)' is an unused renaming of ''thing''. Did you intend to use it as a type annotation?
+parametersSyntaxErrorNoCrash2.ts(3,51): error TS1005: ':' expected.
+parametersSyntaxErrorNoCrash2.ts(3,54): error TS1005: ')' expected.
+
+
+==== parametersSyntaxErrorNoCrash2.ts (9 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59353
+    
+    export default function getThing( { return 'thing'; }
+                            ~~~~~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+                            ~~~~~~~~
+!!! error TS7010: 'getThing', which lacks return-type annotation, implicitly has an 'any' return type.
+                                              
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                                              
+!!! error TS2842: '(Missing)' is an unused renaming of 'return'. Did you intend to use it as a type annotation?
+!!! related TS2843 parametersSyntaxErrorNoCrash2.ts:3:54: We can only write a type for 'return' by adding a type for the entire parameter here.
+                                               ~~~~~~~
+!!! error TS1005: ':' expected.
+                                                      
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                                                      
+!!! error TS2842: '(Missing)' is an unused renaming of ''thing''. Did you intend to use it as a type annotation?
+!!! related TS2843 parametersSyntaxErrorNoCrash2.ts:3:54: We can only write a type for ''thing'' by adding a type for the entire parameter here.
+                                                      ~
+!!! error TS1005: ':' expected.
+                                                         
+!!! error TS1005: ')' expected.

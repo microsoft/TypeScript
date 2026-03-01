@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts] ////
+
 //// [grammarAmbiguities.ts]
 function f(n: any) { return null; }
 function g<A, B>(x: any) { return null; }
@@ -12,6 +14,7 @@ f(g < A, B > +(7)); // Should error
 
 
 //// [grammarAmbiguities.js]
+"use strict";
 function f(n) { return null; }
 function g(x) { return null; }
 var A, B;

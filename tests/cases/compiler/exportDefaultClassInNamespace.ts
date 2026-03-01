@@ -1,3 +1,4 @@
+// @target: es2015
 namespace ns_class {
     export default class {}
 }

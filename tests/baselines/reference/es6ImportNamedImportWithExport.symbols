@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportWithExport.ts] ////
+
+=== server.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(server.ts, 0, 10))
 
@@ -25,7 +27,7 @@ export var z2 = 10;
 export var aaaa = 10;
 >aaaa : Symbol(aaaa, Decl(server.ts, 7, 10))
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import { } from "./server";
 export import { a } from "./server";
 >a : Symbol(a, Decl(client.ts, 1, 15))

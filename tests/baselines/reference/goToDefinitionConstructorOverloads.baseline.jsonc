@@ -1,0 +1,188 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// <|class [|{| defId: 0 |}ConstructorOverload|] {
+//     [|{| defId: 1 |}constructor();|]
+//     constructor(foo: string);
+//     constructor(foo: any)  { }
+// }|>
+// 
+// var constructorOverload = new /*GOTO DEF*/ConstructorOverload();
+// var constructorOverload = new ConstructorOverload("foo");
+// 
+// class Extended extends ConstructorOverload {
+// --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "class",
+    "name": "ConstructorOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "ConstructorOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// <|class [|{| defId: 0 |}ConstructorOverload|] {
+//     constructor();
+//     [|{| defId: 1 |}constructor(foo: string);|]
+//     constructor(foo: any)  { }
+// }|>
+// 
+// var constructorOverload = new ConstructorOverload();
+// var constructorOverload = new /*GOTO DEF*/ConstructorOverload("foo");
+// 
+// class Extended extends ConstructorOverload {
+//     readonly name = "extended";
+// --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "class",
+    "name": "ConstructorOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "ConstructorOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// class ConstructorOverload {
+//     /*GOTO DEF*/constructor();
+//     constructor(foo: string);
+//     [|constructor(foo: any)  { }|]
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "ConstructorOverload",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// class ConstructorOverload {
+//     [|{| defId: 1 |}constructor();|]
+//     constructor(foo: string);
+//     constructor(foo: any)  { }
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// var constructorOverload = new ConstructorOverload("foo");
+// 
+// <|class [|{| defId: 0 |}Extended|] extends ConstructorOverload {
+//     readonly name = "extended";
+// }|>
+// var extended1 = new /*GOTO DEF*/Extended();
+// var extended2 = new Extended("foo");
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "class",
+    "name": "Extended",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "ConstructorOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOverloads.ts ===
+// class ConstructorOverload {
+//     constructor();
+//     [|{| defId: 1 |}constructor(foo: string);|]
+//     constructor(foo: any)  { }
+// }
+// 
+// var constructorOverload = new ConstructorOverload();
+// var constructorOverload = new ConstructorOverload("foo");
+// 
+// <|class [|{| defId: 0 |}Extended|] extends ConstructorOverload {
+//     readonly name = "extended";
+// }|>
+// var extended1 = new Extended();
+// var extended2 = new /*GOTO DEF*/Extended("foo");
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "class",
+    "name": "Extended",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "ConstructorOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts] ////
+
 //// [typeArgumentsShouldDisallowNonGenericOverloads.ts]
 function foo(a: string): string;
 function foo<T>(a: T): number;
@@ -12,6 +14,7 @@ var w: string = foo<string>("hi"); // should error
 var z: number = foo("hi"); // should error
 
 //// [typeArgumentsShouldDisallowNonGenericOverloads.js]
+"use strict";
 function foo(a) {
     return "hi";
 }

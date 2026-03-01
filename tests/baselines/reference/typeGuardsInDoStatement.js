@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInDoStatement.ts] ////
+
 //// [typeGuardsInDoStatement.ts]
 let cond: boolean;
 function a(x: string | number | boolean) {
@@ -29,7 +31,8 @@ function c(x: string | number) {
 
 
 //// [typeGuardsInDoStatement.js]
-var cond;
+"use strict";
+let cond;
 function a(x) {
     x = true;
     do {

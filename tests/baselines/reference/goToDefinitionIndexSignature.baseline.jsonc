@@ -1,0 +1,185 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
+// interface I {
+//     [|[x: string]: boolean;|]
+// }
+// interface J {
+//     [x: string]: number;
+// }
+// interface K {
+//     [x: `a${string}`]: string;
+//     [x: `${string}b`]: string;
+// }
+// declare const i: I;
+// i./*GOTO DEF*/foo;
+// declare const ij: I | J;
+// ij.foo;
+// declare const k: K;
+// --- (line: 16) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "index",
+    "name": "__index",
+    "containerName": "I",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
+// interface I {
+//     [|{| defId: 0 |}[x: string]: boolean;|]
+// }
+// interface J {
+//     [|{| defId: 1 |}[x: string]: number;|]
+// }
+// interface K {
+//     [x: `a${string}`]: string;
+//     [x: `${string}b`]: string;
+// }
+// declare const i: I;
+// i.foo;
+// declare const ij: I | J;
+// ij./*GOTO DEF*/foo;
+// declare const k: K;
+// k.a;
+// k.b;
+// k.ab;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "index",
+    "name": "__index",
+    "containerName": "I",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   },
+   {
+    "defId": 1,
+    "kind": "index",
+    "name": "__index",
+    "containerName": "J",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
+// --- (line: 4) skipped ---
+//     [x: string]: number;
+// }
+// interface K {
+//     [|[x: `a${string}`]: string;|]
+//     [x: `${string}b`]: string;
+// }
+// declare const i: I;
+// i.foo;
+// declare const ij: I | J;
+// ij.foo;
+// declare const k: K;
+// k./*GOTO DEF*/a;
+// k.b;
+// k.ab;
+
+  // === Details ===
+  [
+   {
+    "kind": "index",
+    "name": "__index",
+    "containerName": "K",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
+// --- (line: 5) skipped ---
+// }
+// interface K {
+//     [x: `a${string}`]: string;
+//     [|[x: `${string}b`]: string;|]
+// }
+// declare const i: I;
+// i.foo;
+// declare const ij: I | J;
+// ij.foo;
+// declare const k: K;
+// k.a;
+// k./*GOTO DEF*/b;
+// k.ab;
+
+  // === Details ===
+  [
+   {
+    "kind": "index",
+    "name": "__index",
+    "containerName": "K",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionIndexSignature.ts ===
+// --- (line: 4) skipped ---
+//     [x: string]: number;
+// }
+// interface K {
+//     [|{| defId: 0 |}[x: `a${string}`]: string;|]
+//     [|{| defId: 1 |}[x: `${string}b`]: string;|]
+// }
+// declare const i: I;
+// i.foo;
+// declare const ij: I | J;
+// ij.foo;
+// declare const k: K;
+// k.a;
+// k.b;
+// k./*GOTO DEF*/ab;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "index",
+    "name": "__index",
+    "containerName": "K",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "index",
+    "name": "__index",
+    "containerName": "K",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

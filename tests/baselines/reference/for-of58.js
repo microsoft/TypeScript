@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of58.ts] ////
+
 //// [for-of58.ts]
 type X = { x: 'x' };
 type Y = { y: 'y' };
@@ -11,6 +13,7 @@ for (const item of arr) {
 
 
 //// [for-of58.js]
+"use strict";
 for (const item of arr) {
     item.x;
     item.y;

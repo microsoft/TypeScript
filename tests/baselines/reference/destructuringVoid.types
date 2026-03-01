@@ -1,7 +1,11 @@
-=== tests/cases/conformance/es6/destructuring/destructuringVoid.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringVoid.ts] ////
+
+=== destructuringVoid.ts ===
 declare const v: void;
 >v : void
+>  : ^^^^
 
 const {} = v;
 >v : void
+>  : ^^^^
 

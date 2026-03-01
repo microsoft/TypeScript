@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts] ////
+
+=== stringLiteralsWithTypeAssertions01.ts ===
 let fooOrBar: "foo" | "bar";
 >fooOrBar : Symbol(fooOrBar, Decl(stringLiteralsWithTypeAssertions01.ts, 0, 3))
 

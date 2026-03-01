@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/contextualSignatureInArrayElementLibEs2015.ts] ////
+
+=== contextualSignatureInArrayElementLibEs2015.ts ===
+// See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
+
+declare function test(
+>test : (arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>) => void
+>     : ^   ^^                                                                    ^^^^^    
+
+  arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
+>arg : Record<string, (arg: string) => void> | ((arg: number) => void)[]
+>    : ^^^^^^^^^^^^^^^^   ^^      ^^^^^    ^^^^^^   ^^      ^^^^^    ^^^
+>arg : string
+>    : ^^^^^^
+>arg : number
+>    : ^^^^^^
+
+): void;
+
+test([
+>test([  (arg) => {    arg; // number  },]) : void
+>                                           : ^^^^
+>test : (arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>) => void
+>     : ^   ^^                                                                    ^^^^^    
+>[  (arg) => {    arg; // number  },] : ((arg: any) => void)[]
+>                                     : ^^   ^^^^^^^^^^^^^^^^^
+
+  (arg) => {
+>(arg) => {    arg; // number  } : (arg: any) => void
+>                                : ^   ^^^^^^^^^^^^^^
+>arg : any
+>    : ^^^
+
+    arg; // number
+>arg : any
+>    : ^^^
+
+  },
+]);
+

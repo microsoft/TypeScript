@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIfStatement.ts] ////
+
 //// [controlFlowIfStatement.ts]
 let x: string | number | boolean | RegExp;
 let cond: boolean;
@@ -63,8 +65,9 @@ function e(x: I<"A" | "B">) {
 
 
 //// [controlFlowIfStatement.js]
-var x;
-var cond;
+"use strict";
+let x;
+let cond;
 x = /a/;
 if (x /* RegExp */, (x = true)) {
     x; // boolean
@@ -76,7 +79,7 @@ else {
 }
 x; // string | number
 function a() {
-    var x;
+    let x;
     if (cond) {
         x = 42;
     }
@@ -87,7 +90,7 @@ function a() {
     x; // number
 }
 function b() {
-    var x;
+    let x;
     if (cond) {
         x = 42;
         throw "";
@@ -115,6 +118,6 @@ function d(data) {
 }
 function e(x) {
     if (x.p === "A") {
-        var a_1 = null;
+        let a = null;
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6-sourcemap-amd.ts] ////
+
 //// [es6-sourcemap-amd.ts]
 class A
 {
@@ -13,6 +15,7 @@ class A
 }
 
 //// [es6-sourcemap-amd.js]
+"use strict";
 class A {
     constructor() {
     }

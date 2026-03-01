@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticAndNonStaticPropertiesSameName.ts] ////
+
 //// [staticAndNonStaticPropertiesSameName.ts]
 class C {
     x: number;
@@ -8,10 +10,8 @@ class C {
 }
 
 //// [staticAndNonStaticPropertiesSameName.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.f = function () { };
-    C.f = function () { };
-    return C;
-}());
+"use strict";
+class C {
+    f() { }
+    static f() { }
+}

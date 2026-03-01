@@ -1,26 +1,40 @@
-=== tests/cases/compiler/genericNewInterface.ts ===
+//// [tests/cases/compiler/genericNewInterface.ts] ////
+
+=== genericNewInterface.ts ===
 function createInstance<T>(ctor: new (s: string) => T): T {
 >createInstance : <T>(ctor: new (s: string) => T) => T
+>               : ^ ^^    ^^                    ^^^^^ 
 >ctor : new (s: string) => T
+>     : ^^^^^ ^^      ^^^^^ 
 >s : string
+>  : ^^^^^^
 
     return new ctor(42); //should be an error
 >new ctor(42) : T
+>             : ^
 >ctor : new (s: string) => T
+>     : ^^^^^ ^^      ^^^^^ 
 >42 : 42
+>   : ^^
 }
                    
 interface INewable<T> {
     new (param: string): T;
 >param : string
+>      : ^^^^^^
 }
 
 function createInstance2<T>(ctor: INewable<T>): T {
 >createInstance2 : <T>(ctor: INewable<T>) => T
+>                : ^ ^^    ^^           ^^^^^ 
 >ctor : INewable<T>
+>     : ^^^^^^^^^^^
 
     return new ctor(1024); //should be an error
 >new ctor(1024) : T
+>               : ^
 >ctor : INewable<T>
+>     : ^^^^^^^^^^^
 >1024 : 1024
+>     : ^^^^
 }

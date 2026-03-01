@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterProperty.ts] ////
+
 //// [redefinedPararameterProperty.ts]
 class Base {
     a = 1;
@@ -13,6 +15,7 @@ class Base {
   
 
 //// [redefinedPararameterProperty.js]
+"use strict";
 class Base {
     a = 1;
 }

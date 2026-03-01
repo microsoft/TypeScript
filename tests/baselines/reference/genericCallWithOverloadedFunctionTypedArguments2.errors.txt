@@ -1,12 +1,13 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts(28,20): error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+genericCallWithOverloadedFunctionTypedArguments2.ts(28,20): error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts (1 errors) ====
+==== genericCallWithOverloadedFunctionTypedArguments2.ts (1 errors) ====
     // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
     // Inferences are made quadratic-pairwise to and from these overload sets
     
-    module NonGenericParameter {
-        var a: {
+    namespace NonGenericParameter {
+        declare var a: {
             (x: boolean): boolean;
             (x: string): string;
         }
@@ -15,10 +16,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
             return cb;
         }
     
-        var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
+        var r3 = foo4(<T, U>(x: T) => { var r!: U; return r }); // ok
     }
     
-    module GenericParameter {
+    namespace GenericParameter {
         function foo5<T>(cb: { (x: T): string; (x: number): T }) {
             return cb;
         }
@@ -32,12 +33,13 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
         var r10 = foo6(<T>(x: T, y: T) => ''); // error
                        ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+!!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
         function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
             return cb;
         }
     
         var r13 = foo7(1, <T>(x: T) => x); // ok
-        var a: { <T>(x: T): number; <T>(x: number): T; }
+        declare var a: { <T>(x: T): number; <T>(x: number): T; }
         var r14 = foo7(1, a); // ok
     }

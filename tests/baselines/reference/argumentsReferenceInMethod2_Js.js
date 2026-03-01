@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod2_Js.ts] ////
+
 //// [a.js]
 class A {
 	/**
@@ -23,5 +25,5 @@ declare class A {
     /**
      * @type object
      */
-    arguments: object;
+    arguments: object | undefined;
 }

@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/narrowingTypeofUndefined2.ts] ////
+
+=== narrowingTypeofUndefined2.ts ===
+declare function takeArray(arr: Array<unknown>): void;
+>takeArray : (arr: Array<unknown>) => void
+>          : ^   ^^              ^^^^^    
+>arr : unknown[]
+>    : ^^^^^^^^^
+
+function fn<T extends Array<unknown> | undefined>(arg: T) {
+>fn : <T extends Array<unknown> | undefined>(arg: T) => void
+>   : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^^^^^
+>arg : T
+>    : ^
+
+    if (typeof arg !== "undefined") {
+>typeof arg !== "undefined" : boolean
+>                           : ^^^^^^^
+>typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : T
+>    : ^
+>"undefined" : "undefined"
+>            : ^^^^^^^^^^^
+
+        takeArray(arg);
+>takeArray(arg) : void
+>               : ^^^^
+>takeArray : (arr: Array<unknown>) => void
+>          : ^   ^^              ^^^^^    
+>arg : unknown[]
+>    : ^^^^^^^^^
+
+        const n: Array<unknown> = arg;
+>n : unknown[]
+>  : ^^^^^^^^^
+>arg : unknown[]
+>    : ^^^^^^^^^
+
+        for (const p of arg) {  }
+>p : unknown
+>  : ^^^^^^^
+>arg : T & {}
+>    : ^^^^^^
+
+        const m = [...arg];
+>m : (T & {})[number][]
+>  : ^^^^^^^^^^^^^^^^^^
+>[...arg] : (T & {})[number][]
+>         : ^^^^^^^^^^^^^^^^^^
+>...arg : unknown
+>       : ^^^^^^^
+>arg : T & {}
+>    : ^^^^^^
+    }
+}
+

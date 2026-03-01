@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeVal.ts] ////
+
 //// [typeVal.ts]
 interface I {
     I:number;
@@ -9,5 +11,6 @@ I.I=4;
 
 
 //// [typeVal.js]
+"use strict";
 var I = { I: 3 };
 I.I = 4;

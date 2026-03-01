@@ -1,12 +1,18 @@
-=== tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts ===
-module M {
+//// [tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts] ////
+
+=== alwaysStrictNoImplicitUseStrict.ts ===
+namespace M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         var arguments = [];
 >arguments : any[]
->[] : undefined[]
+>          : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
 }

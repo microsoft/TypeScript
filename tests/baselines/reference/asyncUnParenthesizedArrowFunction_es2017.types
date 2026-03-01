@@ -1,23 +1,36 @@
-=== tests/cases/conformance/async/es2017/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es2017.ts ===
+//// [tests/cases/conformance/async/es2017/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es2017.ts] ////
+
+=== asyncUnParenthesizedArrowFunction_es2017.ts ===
 declare function someOtherFunction(i: any): Promise<void>;
 >someOtherFunction : (i: any) => Promise<void>
+>                  : ^ ^^   ^^^^^             
 >i : any
 
 const x = async i => await someOtherFunction(i)
 >x : (i: any) => Promise<void>
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >async i => await someOtherFunction(i) : (i: any) => Promise<void>
+>                                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >i : any
 >await someOtherFunction(i) : void
+>                           : ^^^^
 >someOtherFunction(i) : Promise<void>
+>                     : ^^^^^^^^^^^^^
 >someOtherFunction : (i: any) => Promise<void>
+>                  : ^ ^^   ^^^^^             
 >i : any
 
 const x1 = async (i) => await someOtherFunction(i);
 >x1 : (i: any) => Promise<void>
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >async (i) => await someOtherFunction(i) : (i: any) => Promise<void>
+>                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >i : any
 >await someOtherFunction(i) : void
+>                           : ^^^^
 >someOtherFunction(i) : Promise<void>
+>                     : ^^^^^^^^^^^^^
 >someOtherFunction : (i: any) => Promise<void>
+>                  : ^ ^^   ^^^^^             
 >i : any
 

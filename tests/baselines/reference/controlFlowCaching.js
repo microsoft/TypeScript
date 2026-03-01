@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowCaching.ts] ////
+
 //// [controlFlowCaching.ts]
 // Repro for #8401
 
@@ -68,6 +70,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 
 
 //// [controlFlowCaching.js]
+"use strict";
 // Repro for #8401
 function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
     var isRtl = this._isRtl(); // chart mirroring
@@ -115,5 +118,5 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
             labelOffset.y -= size;
             break;
     }
-    var _ = rotation;
+    let _ = rotation;
 }

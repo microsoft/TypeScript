@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedTypeIncompatibleSignatures.ts] ////
+
 //// [derivedTypeIncompatibleSignatures.ts]
 interface A {
     (a: string): string;
@@ -32,3 +34,4 @@ interface H extends G {
 }
 
 //// [derivedTypeIncompatibleSignatures.js]
+"use strict";

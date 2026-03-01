@@ -1,5 +1,6 @@
+// @strict: false
 // @target: ES6
-// @out: out.js
+// @outFile: out.js
 
 // @Filename: file1.ts
 c;

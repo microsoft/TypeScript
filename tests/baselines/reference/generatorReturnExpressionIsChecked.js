@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorReturnExpressionIsChecked.ts] ////
+
 //// [generatorReturnExpressionIsChecked.ts]
 function* f(): Iterator<number> {
     return invalid;
@@ -5,6 +7,7 @@ function* f(): Iterator<number> {
 
 
 //// [generatorReturnExpressionIsChecked.js]
+"use strict";
 function* f() {
     return invalid;
 }

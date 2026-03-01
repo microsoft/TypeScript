@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionTypeArgumentArityErrors.ts] ////
+
 //// [functionTypeArgumentArityErrors.ts]
 // Overloaded functions with default type arguments
 declare function f1<A = any>(): void;
@@ -28,6 +30,7 @@ f5<number, number, number>();
 
 
 //// [functionTypeArgumentArityErrors.js]
+"use strict";
 f1();
 f1();
 f2();

@@ -1,325 +1,189 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
-// /*FIND ALL REFS*/var [|x|] = 10;
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}x|] = 10;|>
 // var y = `${ [|x|] } ${ [|x|] }`
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // /*FIND ALL REFS*/<|var [|x|] = 10;|>
+  // var y = `${ x } ${ x }`
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
-// var /*FIND ALL REFS*/[|x|] = 10;
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 10;|>
 // var y = `${ [|x|] } ${ [|x|] }`
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // <|var /*FIND ALL REFS*/[|x|] = 10;|>
+  // var y = `${ x } ${ x }`
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
-// var [|x|] = 10;
+// <|var [|{| isWriteAccess: true |}x|] = 10;|>
 // var y = `${ /*FIND ALL REFS*/[|x|] } ${ [|x|] }`
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 11
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // <|var [|x|] = 10;|>
+  // var y = `${ /*FIND ALL REFS*/x } ${ x }`
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
-// var [|x|] = 10;
+// <|var [|{| isWriteAccess: true |}x|] = 10;|>
 // var y = `${ [|x|] } ${ /*FIND ALL REFS*/[|x|] }`
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 11
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 31,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideTemplates1.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // <|var [|x|] = 10;|>
+  // var y = `${ x } ${ /*FIND ALL REFS*/x }`
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

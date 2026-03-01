@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts] ////
+
 //// [classStaticBlock11.ts]
 let getX;
 class C {
@@ -14,6 +16,7 @@ class C {
 
 
 //// [classStaticBlock11.js]
+"use strict";
 let getX;
 class C {
     #x = 1;

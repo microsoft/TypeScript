@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts] ////
+
 //// [objectLiteralWidened.ts]
 // object literal properties are widened to any
 
@@ -33,6 +35,7 @@ var y2 = {
 }
 
 //// [objectLiteralWidened.js]
+"use strict";
 // object literal properties are widened to any
 var x1 = {
     foo: null,

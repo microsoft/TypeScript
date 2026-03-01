@@ -2,7 +2,7 @@ error TS5091: Option 'preserveConstEnums' cannot be disabled when 'isolatedModul
 
 
 !!! error TS5091: Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.
-==== tests/cases/compiler/file1.ts (0 errors) ====
+==== file1.ts (0 errors) ====
     export {};
     
     

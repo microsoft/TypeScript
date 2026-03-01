@@ -1,5 +1,7 @@
 interface Map<K, V> {
-
+    /**
+     * Removes all elements from the Map.
+     */
     clear(): void;
     /**
      * @returns true if an element in the Map existed and has been removed, or false if the element does not exist.
@@ -29,7 +31,7 @@ interface Map<K, V> {
 }
 
 interface MapConstructor {
-    new(): Map<any, any>;
+    new (): Map<any, any>;
     new <K, V>(entries?: readonly (readonly [K, V])[] | null): Map<K, V>;
     readonly prototype: Map<any, any>;
 }
@@ -42,7 +44,7 @@ interface ReadonlyMap<K, V> {
     readonly size: number;
 }
 
-interface WeakMap<K extends object, V> {
+interface WeakMap<K extends WeakKey, V> {
     /**
      * Removes the specified element from the WeakMap.
      * @returns true if the element was successfully removed, or false if it was not present.
@@ -58,14 +60,14 @@ interface WeakMap<K extends object, V> {
     has(key: K): boolean;
     /**
      * Adds a new element with a specified key and value.
-     * @param key Must be an object.
+     * @param key Must be an object or symbol.
      */
     set(key: K, value: V): this;
 }
 
 interface WeakMapConstructor {
-    new <K extends object = object, V = any>(entries?: readonly [K, V][] | null): WeakMap<K, V>;
-    readonly prototype: WeakMap<object, any>;
+    new <K extends WeakKey = WeakKey, V = any>(entries?: readonly (readonly [K, V])[] | null): WeakMap<K, V>;
+    readonly prototype: WeakMap<WeakKey, any>;
 }
 declare var WeakMap: WeakMapConstructor;
 
@@ -74,7 +76,9 @@ interface Set<T> {
      * Appends a new element with a specified value to the end of the Set.
      */
     add(value: T): this;
-
+    /**
+     * Removes all elements from the Set.
+     */
     clear(): void;
     /**
      * Removes a specified value from the Set.
@@ -107,9 +111,9 @@ interface ReadonlySet<T> {
     readonly size: number;
 }
 
-interface WeakSet<T extends object> {
+interface WeakSet<T extends WeakKey> {
     /**
-     * Appends a new object to the end of the WeakSet.
+     * Appends a new value to the end of the WeakSet.
      */
     add(value: T): this;
     /**
@@ -118,13 +122,13 @@ interface WeakSet<T extends object> {
      */
     delete(value: T): boolean;
     /**
-     * @returns a boolean indicating whether an object exists in the WeakSet or not.
+     * @returns a boolean indicating whether a value exists in the WeakSet or not.
      */
     has(value: T): boolean;
 }
 
 interface WeakSetConstructor {
-    new <T extends object = object>(values?: readonly T[] | null): WeakSet<T>;
-    readonly prototype: WeakSet<object>;
+    new <T extends WeakKey = WeakKey>(values?: readonly T[] | null): WeakSet<T>;
+    readonly prototype: WeakSet<WeakKey>;
 }
 declare var WeakSet: WeakSetConstructor;

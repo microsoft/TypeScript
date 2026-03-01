@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingBaseTypes2.ts] ////
+
 //// [infinitelyExpandingBaseTypes2.ts]
 interface A<T>
 {
@@ -14,5 +16,6 @@ var b: B<string> = a
 
 
 //// [infinitelyExpandingBaseTypes2.js]
+"use strict";
 var a;
 var b = a;

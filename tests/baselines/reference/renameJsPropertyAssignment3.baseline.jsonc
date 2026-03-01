@@ -1,0 +1,15 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// var C = class  {
+// }
+// <|C./*RENAME*/[|staticPropertyRENAME|] = "string";|>
+// console.log(C.[|staticPropertyRENAME|]);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.js ===
+// var C = class  {
+// }
+// <|C.[|staticPropertyRENAME|] = "string";|>
+// console.log(C./*RENAME*/[|staticPropertyRENAME|]);

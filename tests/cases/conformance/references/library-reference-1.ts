@@ -1,7 +1,7 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
-// @currentDirectory: /src
-// @typeRoots: types
+// @typeRoots: /src/types
 
 // We can find typings in the ./types folder
 

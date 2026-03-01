@@ -1,29 +1,44 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass1.ts] ////
+
+=== parserClass1.ts ===
     export class NullLogger implements ILogger {
 >NullLogger : NullLogger
+>           : ^^^^^^^^^^
 
         public information(): boolean { return false; }
 >information : () => boolean
+>            : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public debug(): boolean { return false; }
 >debug : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public warning(): boolean { return false; }
 >warning : () => boolean
+>        : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public error(): boolean { return false; }
 >error : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public fatal(): boolean { return false; }
 >fatal : () => boolean
+>      : ^^^^^^       
 >false : false
+>      : ^^^^^
 
         public log(s: string): void {
 >log : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
         }
     }

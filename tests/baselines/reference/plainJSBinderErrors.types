@@ -1,105 +1,152 @@
-=== tests/cases/conformance/salsa/plainJSBinderErrors.js ===
+//// [tests/cases/conformance/salsa/plainJSBinderErrors.ts] ////
+
+=== plainJSBinderErrors.js ===
 export default 12
 export default 13
 const await = 1
 >await : 1
+>      : ^
 >1 : 1
+>  : ^
 
 const yield = 2
 >yield : 2
+>      : ^
 >2 : 2
+>  : ^
 
 async function f() {
 >f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
 
     const await = 3
 >await : 3
+>      : ^
 >3 : 3
+>  : ^
 }
 function* g() {
 >g : () => Generator<never, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const yield = 4
 >yield : 4
+>      : ^
 >4 : 4
+>  : ^
 }
 class C {
 >C : C
+>  : ^
 
     #constructor = 5
 >#constructor : number
+>             : ^^^^^^
 >5 : 5
+>  : ^
 
     deleted() {
 >deleted : () => void
+>        : ^^^^^^^^^^
 
         function container(f) {
 >container : (f: any) => void
+>          : ^ ^^^^^^^^^^^^^^
 >f : any
+>  : ^^^
 
             delete f
 >delete f : boolean
+>         : ^^^^^^^
 >f : any
+>  : ^^^
         }
         var g = 6
 >g : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
 
         delete g
 >delete g : boolean
+>         : ^^^^^^^
 >g : number
+>  : ^^^^^^
 
         delete container
 >delete container : boolean
+>                 : ^^^^^^^
 >container : (f: any) => void
+>          : ^ ^^^^^^^^^^^^^^
     }
     evalArguments() {
 >evalArguments : () => void
+>              : ^^^^^^^^^^
 
         const eval = 7
 >eval : 7
+>     : ^
 >7 : 7
+>  : ^
 
         const arguments = 8
 >arguments : 8
+>          : ^
 >8 : 8
+>  : ^
     }
     withOctal() {
 >withOctal : () => any
+>          : ^^^^^^^^^
 
-        const redundant = 010
->redundant : 10
->010 : 10
+        const redundant = 0o10
+>redundant : 8
+>          : ^
+>0o10 : 8
+>     : ^
 
         with (redundant) {
->redundant : 10
+>redundant : 8
+>          : ^
 
             return toFixed()
 >toFixed() : any
+>          : ^^^
 >toFixed : any
+>        : ^^^
         }
     }
     label() {
 >label : () => number
+>      : ^^^^^^^^^^^^
 
         for(;;) {
             label: var x = 1
 >label : any
+>      : ^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             break label
 >label : any
+>      : ^^^
         }
         return x
 >x : number
+>  : ^^^^^^
     }
 }
 const eval = 9
 >eval : 9
+>     : ^
 >9 : 9
+>  : ^
 
 const arguments = 10
 >arguments : 10
+>          : ^^
 >10 : 10
+>   : ^^
 

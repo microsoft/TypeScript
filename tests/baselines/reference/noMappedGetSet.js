@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noMappedGetSet.ts] ////
+
 //// [noMappedGetSet.ts]
 type OH_NO = {
     get [K in WAT](): string
@@ -5,3 +7,4 @@ type OH_NO = {
 
 
 //// [noMappedGetSet.js]
+"use strict";

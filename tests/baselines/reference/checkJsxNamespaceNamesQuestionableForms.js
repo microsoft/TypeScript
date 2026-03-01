@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx] ////
+
 //// [checkJsxNamespaceNamesQuestionableForms.tsx]
 declare namespace JSX {
     interface IntrinsicElements {
@@ -14,6 +16,8 @@ declare namespace JSX {
 <this:b></this:b>;
 
 //// [checkJsxNamespaceNamesQuestionableForms.jsx]
+"use strict";
 <a:b></a:b>;
-<b:c.x></b:c.x>;
+<b:c x></b:c>;
+x > ;
 <this:b></this:b>;

@@ -1,95 +1,61 @@
-// === /c.js ===
-// require([|"./b"|]);
-// require("globals");
-
+// === findAllReferences ===
 // === /a.ts ===
 // /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />
 // /// <reference types="globals" />
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "string",
-      "name": "b.ts",
-      "textSpan": {
-        "start": 21,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "\"b.ts\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 4
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 8,
-          "length": 5
-        },
-        "fileName": "/c.js",
-        "isWriteAccess": false
-      }
+// === /c.js ===
+// require([|"./b"|]);
+// require("globals");
+
+  // === Definitions ===
+  // === /a.ts ===
+  // /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />
+  // /// <reference types="globals" />
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "string",
+    "name": "b.ts",
+    "displayParts": [
+     {
+      "text": "\"b.ts\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// /// <reference path="b.ts" />
+// /// <reference types="[|globals|]/*FIND ALL REFS*/" />
 
 // === /c.js ===
 // require("./b");
 // require([|"globals"|]);
 
-// === /a.ts ===
-// /// <reference path="b.ts" />
-// /// <reference types="[|globals|]/*FIND ALL REFS*/" />
+  // === Definitions ===
+  // === /a.ts ===
+  // /// <reference path="b.ts" />
+  // /// <reference types="[|globals|]/*FIND ALL REFS*/" />
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "string",
-      "name": "globals",
-      "textSpan": {
-        "start": 52,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "\"globals\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 52,
-          "length": 7
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 24,
-          "length": 9
-        },
-        "fileName": "/c.js",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "string",
+    "name": "globals",
+    "displayParts": [
+     {
+      "text": "\"globals\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]

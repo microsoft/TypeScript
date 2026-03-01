@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6-amd.ts] ////
+
 //// [es6-amd.ts]
 class A
 {
@@ -13,6 +15,7 @@ class A
 }
 
 //// [es6-amd.js]
+"use strict";
 class A {
     constructor() {
     }

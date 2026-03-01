@@ -1,80 +1,118 @@
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_main.ts ===
+//// [tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer.ts] ////
+
+=== extendingClassFromAliasAndUsageInIndexer_main.ts ===
 import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 import moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
 import moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 >moduleB : typeof moduleB
+>        : ^^^^^^^^^^^^^^
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone.Model : typeof Backbone.Model
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 }
 var moduleATyped: IHasVisualizationModel = moduleA;
 >moduleATyped : IHasVisualizationModel
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
 var moduleMap: { [key: string]: IHasVisualizationModel } = {
 >moduleMap : { [key: string]: IHasVisualizationModel; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >{    "moduleA": moduleA,    "moduleB": moduleB} : { moduleA: typeof moduleA; moduleB: typeof moduleB; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "moduleA": moduleA,
 >"moduleA" : typeof moduleA
+>          : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
+>        : ^^^^^^^^^^^^^^
 
     "moduleB": moduleB
 >"moduleB" : typeof moduleB
+>          : ^^^^^^^^^^^^^^
 >moduleB : typeof moduleB
+>        : ^^^^^^^^^^^^^^
 
 };
 var moduleName: string;
 >moduleName : string
+>           : ^^^^^^
 
 var visModel = new moduleMap[moduleName].VisualizationModel();
 >visModel : Backbone.Model
+>         : ^^^^^^^^^^^^^^
 >new moduleMap[moduleName].VisualizationModel() : Backbone.Model
+>                                               : ^^^^^^^^^^^^^^
 >moduleMap[moduleName].VisualizationModel : typeof Backbone.Model
+>                                         : ^^^^^^^^^^^^^^^^^^^^^
 >moduleMap[moduleName] : IHasVisualizationModel
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >moduleMap : { [key: string]: IHasVisualizationModel; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >moduleName : string
+>           : ^^^^^^
 >VisualizationModel : typeof Backbone.Model
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_backbone.ts ===
+=== extendingClassFromAliasAndUsageInIndexer_backbone.ts ===
 export class Model {
 >Model : Model
+>      : ^^^^^
 
     public someData: string;
 >someData : string
+>         : ^^^^^^
 }
 
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
+=== extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
 import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>                   : ^^^^^^^^^^^^^^^^^^
 >Backbone.Model : Backbone.Model
+>               : ^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     // interesting stuff here
 }
 
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
+=== extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
 import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>                   : ^^^^^^^^^^^^^^^^^^
 >Backbone.Model : Backbone.Model
+>               : ^^^^^^^^^^^^^^
 >Backbone : typeof Backbone
+>         : ^^^^^^^^^^^^^^^
 >Model : typeof Backbone.Model
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     // different interesting stuff here
 }

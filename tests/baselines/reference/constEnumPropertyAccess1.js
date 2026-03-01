@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts] ////
+
 //// [constEnumPropertyAccess1.ts]
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context
@@ -31,6 +33,7 @@ class C {
 
 
 //// [constEnumPropertyAccess1.js]
+"use strict";
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context
 // than a property access that selects one of the enum's members
@@ -63,4 +66,7 @@ declare var a: G;
 declare var a1: G;
 declare var g: boolean;
 declare class C {
+    [G.A](): void;
+    get [G.B](): number;
+    set [G.B](x: number);
 }

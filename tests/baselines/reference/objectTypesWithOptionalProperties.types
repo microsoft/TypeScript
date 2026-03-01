@@ -1,42 +1,56 @@
-=== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts] ////
+
+=== objectTypesWithOptionalProperties.ts ===
 // Basic uses of optional properties
 
 var a: {
 >a : { x?: number; }
+>  : ^^^^^^      ^^^
 
     x?: number; // ok
->x : number
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I {
     x?: number; // ok
->x : number
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     x?: number; // ok
->x : number
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface I2<T> {
     x?: T; // ok
->x : T
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 }
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     x?: T; // ok
->x : T
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 }
 
 var b = {
 >b : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{    x?: 1 // error} : { x: number; }
+>                     : ^^^^^^^^^^^^^^
 
     x?: 1 // error
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

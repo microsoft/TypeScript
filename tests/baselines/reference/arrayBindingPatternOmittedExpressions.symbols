@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts ===
+//// [tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts] ////
+
+=== arrayBindingPatternOmittedExpressions.ts ===
 var results: string[];
 >results : Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 0, 3))
 

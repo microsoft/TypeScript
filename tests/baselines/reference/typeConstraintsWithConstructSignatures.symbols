@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeConstraintsWithConstructSignatures.ts ===
+//// [tests/cases/compiler/typeConstraintsWithConstructSignatures.ts] ////
+
+=== typeConstraintsWithConstructSignatures.ts ===
 interface Constructable {
 >Constructable : Symbol(Constructable, Decl(typeConstraintsWithConstructSignatures.ts, 0, 0))
 

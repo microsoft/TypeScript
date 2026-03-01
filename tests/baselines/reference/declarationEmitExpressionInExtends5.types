@@ -1,6 +1,9 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends5.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends5.ts] ////
+
+=== declarationEmitExpressionInExtends5.ts ===
 namespace Test
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 {
 	export interface IFace
 	{
@@ -8,22 +11,29 @@ namespace Test
 
 	export class SomeClass implements IFace
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 	{
 	}
 
 	export class Derived extends getClass<IFace>()
 >Derived : Derived
+>        : ^^^^^^^
 >getClass<IFace>() : IFace
+>                  : ^^^^^
 >getClass : <T>() => new () => T
+>         : ^ ^^^^^^^           
 	{
 	}
 
 	export function getClass<T>() : new() => T
 >getClass : <T>() => new () => T
+>         : ^ ^^^^^^^           
 	{
 		return SomeClass as (new() => T);
 >SomeClass as (new() => T) : new () => T
+>                          : ^^^^^^^^^^ 
 >SomeClass : typeof SomeClass
+>          : ^^^^^^^^^^^^^^^^
 	}
 }
 

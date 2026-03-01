@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedPropertyNameAndTypeParameterConflict.ts] ////
+
 //// [computedPropertyNameAndTypeParameterConflict.ts]
 declare const O: unique symbol;
 declare class Bar<O> {
@@ -7,6 +9,7 @@ declare class Bar<O> {
 
 
 //// [computedPropertyNameAndTypeParameterConflict.js]
+"use strict";
 
 
 //// [computedPropertyNameAndTypeParameterConflict.d.ts]

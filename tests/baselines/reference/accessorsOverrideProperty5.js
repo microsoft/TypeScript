@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty5.ts] ////
+
 //// [accessorsOverrideProperty5.ts]
 interface I {
     p: number
@@ -11,6 +13,7 @@ class C extends B {
 
 
 //// [accessorsOverrideProperty5.js]
+"use strict";
 class B {
 }
 class C extends B {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget2.ts] ////
+
 //// [parser_continueTarget2.ts]
 target:
 while (true) {
@@ -5,6 +7,7 @@ while (true) {
 }
 
 //// [parser_continueTarget2.js]
+"use strict";
 target: while (true) {
     continue target;
 }

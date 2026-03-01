@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts] ////
+
 //// [negateOperatorInvalidOperations.ts]
 // Unary operator -
 
@@ -13,6 +15,7 @@ var NUMBER4 = -(undefined - undefined);
 var NUMBER =-;
 
 //// [negateOperatorInvalidOperations.js]
+"use strict";
 // Unary operator -
 // operand before -
 var NUMBER1 = ;

@@ -1,763 +1,1189 @@
-=== tests/cases/conformance/types/members/indexSignatures1.ts ===
+//// [tests/cases/conformance/types/members/indexSignatures1.ts] ////
+
+=== indexSignatures1.ts ===
 // Symbol index signature checking
 
 const sym = Symbol();
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [sym]: number }) {
->gg3 : (x: { [key: string]: string; }, y: { [key: symbol]: string; }, z: {    [sym]: number;}) => void
+>gg3 : (x: { [key: string]: string; }, y: { [key: symbol]: string; }, z: { [sym]: number; }) => void
+>    : ^ ^^                          ^^ ^^                          ^^ ^^                  ^^^^^^^^^
 >x : { [key: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >y : { [key: symbol]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : symbol
+>    : ^^^^^^
 >z : { [sym]: number; }
+>  : ^^^^^^^^^      ^^^
 >[sym] : number
+>      : ^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 
     x = z;
 >x = z : { [sym]: number; }
+>      : ^^^^^^^^^      ^^^
 >x : { [key: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { [sym]: number; }
+>  : ^^^^^^^^^      ^^^
 
     y = z;  // Error
 >y = z : { [sym]: number; }
+>      : ^^^^^^^^^      ^^^
 >y : { [key: symbol]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { [sym]: number; }
+>  : ^^^^^^^^^      ^^^
 }
 
 // Overlapping index signatures
 
 function gg1(x: { [key: `a${string}`]: string, [key: `${string}a`]: string }, y: { [key: `a${string}a`]: string }) {
 >gg1 : (x: { [key: `a${string}`]: string; [key: `${string}a`]: string; }, y: { [key: `a${string}a`]: string; }) => void
+>    : ^ ^^                                                             ^^ ^^                                 ^^^^^^^^^
 >x : { [key: `a${string}`]: string; [key: `${string}a`]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : `a${string}`
+>    : ^^^^^^^^^^^^
 >key : `${string}a`
+>    : ^^^^^^^^^^^^
 >y : { [key: `a${string}a`]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : `a${string}a`
+>    : ^^^^^^^^^^^^^
 
     x = y;
 >x = y : { [key: `a${string}a`]: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { [key: `a${string}`]: string; [key: `${string}a`]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { [key: `a${string}a`]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     y = x;
 >y = x : { [key: `a${string}`]: string; [key: `${string}a`]: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { [key: `a${string}a`]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { [key: `a${string}`]: string; [key: `${string}a`]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface IX { [key: `a${string}`]: string, [key: `${string}a`]: string }
 >key : `a${string}`
+>    : ^^^^^^^^^^^^
 >key : `${string}a`
+>    : ^^^^^^^^^^^^
 
 interface IY { [key: `a${string}a`]: string }
 >key : `a${string}a`
+>    : ^^^^^^^^^^^^^
 
 function gg2(x: IX, y: IY) {
 >gg2 : (x: IX, y: IY) => void
+>    : ^ ^^  ^^ ^^  ^^^^^^^^^
 >x : IX
+>  : ^^
 >y : IY
+>  : ^^
 
     x = y;  // Error
 >x = y : IY
+>      : ^^
 >x : IX
+>  : ^^
 >y : IY
+>  : ^^
 
     y = x;
 >y = x : IX
+>      : ^^
 >y : IY
+>  : ^^
 >x : IX
+>  : ^^
 }
 
 // Intersection of multiple applicable index signatures
 
 declare let combo: { [x: `foo-${string}`]: 'a' | 'b' } & { [x: `${string}-bar`]: 'b' | 'c' };
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : `foo-${string}`
+>  : ^^^^^^^^^^^^^^^
 >x : `${string}-bar`
+>  : ^^^^^^^^^^^^^^^
 
 const x1 = combo['foo-test'];  // 'a' | 'b'
 >x1 : "a" | "b"
+>   : ^^^^^^^^^
 >combo['foo-test'] : "a" | "b"
+>                  : ^^^^^^^^^
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'foo-test' : "foo-test"
+>           : ^^^^^^^^^^
 
 const x2 = combo['test-bar'];  // 'b' | 'c'
 >x2 : "b" | "c"
+>   : ^^^^^^^^^
 >combo['test-bar'] : "b" | "c"
+>                  : ^^^^^^^^^
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'test-bar' : "test-bar"
+>           : ^^^^^^^^^^
 
 const x3 = combo['foo-test-bar'];  // 'b' (('a' | 'b') & ('b' | 'c'))
 >x3 : "b"
+>   : ^^^
 >combo['foo-test-bar'] : "b"
+>                      : ^^^
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'foo-test-bar' : "foo-test-bar"
+>               : ^^^^^^^^^^^^^^
 
 declare var str: string;
 >str : string
+>    : ^^^^^^
 
 const x4 = combo[`foo-${str}`];
 >x4 : "a" | "b"
+>   : ^^^^^^^^^
 >combo[`foo-${str}`] : "a" | "b"
+>                    : ^^^^^^^^^
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`foo-${str}` : `foo-${string}`
+>             : ^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 
 const x5 = combo[`${str}-bar`];
 >x5 : "b" | "c"
+>   : ^^^^^^^^^
 >combo[`${str}-bar`] : "b" | "c"
+>                    : ^^^^^^^^^
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`${str}-bar` : `${string}-bar`
+>             : ^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 
 const x6 = combo[`foo-${str}-bar`];
 >x6 : "b"
+>   : ^^^
 >combo[`foo-${str}-bar`] : "b"
+>                        : ^^^
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`foo-${str}-bar` : `foo-${string}-bar`
+>                 : ^^^^^^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 
 declare let combo2: { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string };
 >combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : `${string}xxx${string}` & `${string}yyy${string}`
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const x7 = combo2['axxxbyyyc'];
 >x7 : string
+>   : ^^^^^^
 >combo2['axxxbyyyc'] : string
+>                    : ^^^^^^
 >combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'axxxbyyyc' : "axxxbyyyc"
+>            : ^^^^^^^^^^^
 
 const x8 = combo2['ayyyxxxbc'];
 >x8 : string
+>   : ^^^^^^
 >combo2['ayyyxxxbc'] : string
+>                    : ^^^^^^
 >combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'ayyyxxxbc' : "ayyyxxxbc"
+>            : ^^^^^^^^^^^
 
 const x9 = combo2['axxxbbbyc'];  // Error
 >x9 : any
+>   : ^^^
 >combo2['axxxbbbyc'] : any
+>                    : ^^^
 >combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'axxxbbbyc' : "axxxbbbyc"
+>            : ^^^^^^^^^^^
 
 // Property access on template pattern index signature
 
 declare let dom: { [x: `data${string}`]: string };
 >dom : { [x: `data${string}`]: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : `data${string}`
+>  : ^^^^^^^^^^^^^^^
 
 const y1 = dom['data123'];
 >y1 : string
+>   : ^^^^^^
 >dom['data123'] : string
+>               : ^^^^^^
 >dom : { [x: `data${string}`]: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'data123' : "data123"
+>          : ^^^^^^^^^
 
 const y2 = dom.data123;
 >y2 : string
+>   : ^^^^^^
 >dom.data123 : string
+>            : ^^^^^^
 >dom : { [x: `data${string}`]: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data123 : string
+>        : ^^^^^^
 
 // Excess property checking for template pattern index signature
 
 dom = { data123: 'hello' };
 >dom = { data123: 'hello' } : { data123: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^
 >dom : { [x: `data${string}`]: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ data123: 'hello' } : { data123: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >data123 : string
+>        : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 dom = { date123: 'hello' };  // Error
 >dom = { date123: 'hello' } : { date123: string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^
 >dom : { [x: `data${string}`]: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ date123: 'hello' } : { date123: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >date123 : string
+>        : ^^^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 
 // Contextual typing by index signature with template literal pattern
 
 type Funcs = {
->Funcs : { [key: `s${string}`]: (x: string) => void; [key: `n${string}`]: (x: number) => void; }
+>Funcs : Funcs
+>      : ^^^^^
 
     [key: `s${string}`]: (x: string) => void,
 >key : `s${string}`
+>    : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     [key: `n${string}`]: (x: number) => void,
 >key : `n${string}`
+>    : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 const funcs: Funcs = {
 >funcs : Funcs
+>      : ^^^^^
 >{    sfoo: x => x.length,  // x: string    nfoo: x => x * 2,     // n: number} : { sfoo: (x: string) => number; nfoo: (x: number) => number; }
+>                                                                               : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     sfoo: x => x.length,  // x: string
 >sfoo : (x: string) => number
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x.length : (x: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     nfoo: x => x * 2,     // n: number
 >nfoo : (x: number) => number
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x * 2 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 // Duplicate index signature checking
 
 type Duplicates = {
->Duplicates : { [key: string]: any; [key: number]: any; [key: symbol]: any; [key: `foo${string}`]: any; }
+>Duplicates : Duplicates
+>           : ^^^^^^^^^^
 
     [key: string | number]: any;  // Error
 >key : string | number
+>    : ^^^^^^^^^^^^^^^
 
     [key: number | symbol]: any;  // Error
 >key : number | symbol
+>    : ^^^^^^^^^^^^^^^
 
     [key: symbol | `foo${string}`]: any;  // Error
 >key : symbol | `foo${string}`
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
     [key: `foo${string}`]: any;  // Error
 >key : `foo${string}`
+>    : ^^^^^^^^^^^^^^
 }
 
 // Conflicting index signature checking
 
 type Conflicting = {
->Conflicting : { [key: `a${string}`]: "a"; [key: `${string}a`]: "b"; [key: `a${string}a`]: "c"; }
+>Conflicting : Conflicting
+>            : ^^^^^^^^^^^
 
     [key: `a${string}`]: 'a';
 >key : `a${string}`
+>    : ^^^^^^^^^^^^
 
     [key: `${string}a`]: 'b';
 >key : `${string}a`
+>    : ^^^^^^^^^^^^
 
     [key: `a${string}a`]: 'c';  // Error
 >key : `a${string}a`
+>    : ^^^^^^^^^^^^^
 }
 
 // Invalid index signatures
 
 type Invalid<T extends string> = {
 >Invalid : Invalid<T>
+>        : ^^^^^^^^^^
 
     [key: 'a' | 'b' | 'c']: string;  // Error
 >key : "a" | "b" | "c"
+>    : ^^^^^^^^^^^^^^^
 
     [key: T | number]: string;  // Error
 >key : number | T
+>    : ^^^^^^^^^^
 
     [key: Error]: string;  // Error
 >key : Error
+>    : ^^^^^
 
     [key: T & string]: string;  // Error
->key : T & string
+>key : T
+>    : ^
 }
 
 // Intersections in index signatures
 
 type Tag1 = { __tag1__: void };
->Tag1 : { __tag1__: void; }
+>Tag1 : Tag1
+>     : ^^^^
 >__tag1__ : void
+>         : ^^^^
 
 type Tag2 = { __tag2__: void };
->Tag2 : { __tag2__: void; }
+>Tag2 : Tag2
+>     : ^^^^
 >__tag2__ : void
+>         : ^^^^
 
 type TaggedString1 = string & Tag1;
->TaggedString1 : string & Tag1
+>TaggedString1 : TaggedString1
+>              : ^^^^^^^^^^^^^
 
 type TaggedString2 = string & Tag2;
->TaggedString2 : string & Tag2
+>TaggedString2 : TaggedString2
+>              : ^^^^^^^^^^^^^
 
 declare let s0: string;
 >s0 : string
+>   : ^^^^^^
 
 declare let s1: TaggedString1;
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 declare let s2: TaggedString2;
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 declare let s3: TaggedString1 | TaggedString2;
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let s4: TaggedString1 & TaggedString2;
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 interface I1 { [key: TaggedString1]: string }
 >key : TaggedString1
+>    : ^^^^^^^^^^^^^
 
 interface I2 { [key: TaggedString2]: string }
 >key : TaggedString2
+>    : ^^^^^^^^^^^^^
 
 interface I3 { [key: TaggedString1 | TaggedString2]: string }
 >key : TaggedString1 | TaggedString2
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface I4 { [key: TaggedString1 & TaggedString2]: string }
 >key : string & Tag1 & Tag2
+>    : ^^^^^^^^^^^^^^^^^^^^
 
 declare let i1: I1;
 >i1 : I1
+>   : ^^
 
 declare let i2: I2;
 >i2 : I2
+>   : ^^
 
 declare let i3: I3;
 >i3 : I3
+>   : ^^
 
 declare let i4: I4;
 >i4 : I4
+>   : ^^
 
 i1[s0];  // Error
 >i1[s0] : any
+>       : ^^^
 >i1 : I1
+>   : ^^
 >s0 : string
+>   : ^^^^^^
 
 i1[s1];
 >i1[s1] : string
+>       : ^^^^^^
 >i1 : I1
+>   : ^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 i1[s2];  // Error
 >i1[s2] : any
+>       : ^^^
 >i1 : I1
+>   : ^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 i1[s3];  // Error
 >i1[s3] : any
+>       : ^^^
 >i1 : I1
+>   : ^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 i1[s4];
 >i1[s4] : string
+>       : ^^^^^^
 >i1 : I1
+>   : ^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 i2[s0];  // Error
 >i2[s0] : any
+>       : ^^^
 >i2 : I2
+>   : ^^
 >s0 : string
+>   : ^^^^^^
 
 i2[s1];  // Error
 >i2[s1] : any
+>       : ^^^
 >i2 : I2
+>   : ^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 i2[s2];
 >i2[s2] : string
+>       : ^^^^^^
 >i2 : I2
+>   : ^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 i2[s3];  // Error
 >i2[s3] : any
+>       : ^^^
 >i2 : I2
+>   : ^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 i2[s4];
 >i2[s4] : string
+>       : ^^^^^^
 >i2 : I2
+>   : ^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 i3[s0];  // Error
 >i3[s0] : any
+>       : ^^^
 >i3 : I3
+>   : ^^
 >s0 : string
+>   : ^^^^^^
 
 i3[s1];
 >i3[s1] : string
+>       : ^^^^^^
 >i3 : I3
+>   : ^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 i3[s2];
 >i3[s2] : string
+>       : ^^^^^^
 >i3 : I3
+>   : ^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 i3[s3];
 >i3[s3] : string
+>       : ^^^^^^
 >i3 : I3
+>   : ^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 i3[s4];
 >i3[s4] : string
+>       : ^^^^^^
 >i3 : I3
+>   : ^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 i4[s0];  // Error
 >i4[s0] : any
+>       : ^^^
 >i4 : I4
+>   : ^^
 >s0 : string
+>   : ^^^^^^
 
 i4[s1];  // Error
 >i4[s1] : any
+>       : ^^^
 >i4 : I4
+>   : ^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 i4[s2];  // Error
 >i4[s2] : any
+>       : ^^^
 >i4 : I4
+>   : ^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 i4[s3];  // Error
 >i4[s3] : any
+>       : ^^^
 >i4 : I4
+>   : ^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 i4[s4];
 >i4[s4] : string
+>       : ^^^^^^
 >i4 : I4
+>   : ^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 i1 = i2;  // Error
 >i1 = i2 : I2
+>        : ^^
 >i1 : I1
+>   : ^^
 >i2 : I2
+>   : ^^
 
 i1 = i3;
 >i1 = i3 : I3
+>        : ^^
 >i1 : I1
+>   : ^^
 >i3 : I3
+>   : ^^
 
 i1 = i4;  // Error
 >i1 = i4 : I4
+>        : ^^
 >i1 : I1
+>   : ^^
 >i4 : I4
+>   : ^^
 
 i2 = i1;  // Error
 >i2 = i1 : I1
+>        : ^^
 >i2 : I2
+>   : ^^
 >i1 : I1
+>   : ^^
 
 i2 = i3;
 >i2 = i3 : I3
+>        : ^^
 >i2 : I2
+>   : ^^
 >i3 : I3
+>   : ^^
 
 i2 = i4;  // Error
 >i2 = i4 : I4
+>        : ^^
 >i2 : I2
+>   : ^^
 >i4 : I4
+>   : ^^
 
 i3 = i1;  // Error
 >i3 = i1 : I1
+>        : ^^
 >i3 : I3
+>   : ^^
 >i1 : I1
+>   : ^^
 
 i3 = i2;  // Error
 >i3 = i2 : I2
+>        : ^^
 >i3 : I3
+>   : ^^
 >i2 : I2
+>   : ^^
 
 i3 = i4;  // Error
 >i3 = i4 : I4
+>        : ^^
 >i3 : I3
+>   : ^^
 >i4 : I4
+>   : ^^
 
 i4 = i1;
 >i4 = i1 : I1
+>        : ^^
 >i4 : I4
+>   : ^^
 >i1 : I1
+>   : ^^
 
 i4 = i2;
 >i4 = i2 : I2
+>        : ^^
 >i4 : I4
+>   : ^^
 >i2 : I2
+>   : ^^
 
 i4 = i3;
 >i4 = i3 : I3
+>        : ^^
 >i4 : I4
+>   : ^^
 >i3 : I3
+>   : ^^
 
 declare let o1: { [key: TaggedString1]: string };
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : TaggedString1
+>    : ^^^^^^^^^^^^^
 
 declare let o2: { [key: TaggedString2]: string };
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : TaggedString2
+>    : ^^^^^^^^^^^^^
 
 declare let o3: { [key: TaggedString1 | TaggedString2]: string };
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : TaggedString1 | TaggedString2
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let o4: { [key: TaggedString1 & TaggedString2]: string };
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string & Tag1 & Tag2
+>    : ^^^^^^^^^^^^^^^^^^^^
 
 o1[s0];  // Error
 >o1[s0] : any
+>       : ^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s0 : string
+>   : ^^^^^^
 
 o1[s1];
 >o1[s1] : string
+>       : ^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 o1[s2];  // Error
 >o1[s2] : any
+>       : ^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 o1[s3];  // Error
 >o1[s3] : any
+>       : ^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o1[s4];
 >o1[s4] : string
+>       : ^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 o2[s0];  // Error
 >o2[s0] : any
+>       : ^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s0 : string
+>   : ^^^^^^
 
 o2[s1];  // Error
 >o2[s1] : any
+>       : ^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 o2[s2];
 >o2[s2] : string
+>       : ^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 o2[s3];  // Error
 >o2[s3] : any
+>       : ^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o2[s4];
 >o2[s4] : string
+>       : ^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 o3[s0];  // Error
 >o3[s0] : any
+>       : ^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s0 : string
+>   : ^^^^^^
 
 o3[s1];
 >o3[s1] : string
+>       : ^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 o3[s2];
 >o3[s2] : string
+>       : ^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 o3[s3];
 >o3[s3] : string
+>       : ^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o3[s4];
 >o3[s4] : string
+>       : ^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 o4[s0];  // Error
 >o4[s0] : any
+>       : ^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s0 : string
+>   : ^^^^^^
 
 o4[s1];  // Error
 >o4[s1] : any
+>       : ^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s1 : TaggedString1
+>   : ^^^^^^^^^^^^^
 
 o4[s2];  // Error
 >o4[s2] : any
+>       : ^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : TaggedString2
+>   : ^^^^^^^^^^^^^
 
 o4[s3];  // Error
 >o4[s3] : any
+>       : ^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s3 : TaggedString1 | TaggedString2
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o4[s4];
 >o4[s4] : string
+>       : ^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s4 : string & Tag1 & Tag2
+>   : ^^^^^^^^^^^^^^^^^^^^
 
 o1 = o2;
 >o1 = o2 : { [key: TaggedString2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o1 = o3;
 >o1 = o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o1 = o4;
 >o1 = o4 : { [key: string & Tag1 & Tag2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o2 = o1;
 >o2 = o1 : { [key: TaggedString1]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o2 = o3;
 >o2 = o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o2 = o4;
 >o2 = o4 : { [key: string & Tag1 & Tag2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o3 = o1;
 >o3 = o1 : { [key: TaggedString1]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o3 = o2;
 >o3 = o2 : { [key: TaggedString2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o3 = o4;
 >o3 = o4 : { [key: string & Tag1 & Tag2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o4 = o1;
 >o4 = o1 : { [key: TaggedString1]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { [key: TaggedString1]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o4 = o2;
 >o4 = o2 : { [key: TaggedString2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o4 = o3;
 >o4 = o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { [key: string & Tag1 & Tag2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Index signatures inferred from computed property names
 
 const obj10 = {
 >obj10 : { [x: string]: 0 | 1; x: 0; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    ['x']: 0 as const,    ['a' + 'b']: 1 as const,} : { [x: string]: 0 | 1; x: 0; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ['x']: 0 as const,
 >['x'] : 0
+>      : ^
 >'x' : "x"
+>    : ^^^
 >0 as const : 0
+>           : ^
 >0 : 0
+>  : ^
 
     ['a' + 'b']: 1 as const,
 >['a' + 'b'] : 1
+>            : ^
 >'a' + 'b' : string
+>          : ^^^^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 >1 as const : 1
+>           : ^
 >1 : 1
+>  : ^
 
 };
 
 const obj11 = {
 >obj11 : { [x: number]: 2 | 3; 1: 2; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [1]: 2 as const,    [1 + 2]: 3 as const,} : { [x: number]: 2 | 3; 1: 2; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [1]: 2 as const,
 >[1] : 2
+>    : ^
 >1 : 1
+>  : ^
 >2 as const : 2
+>           : ^
 >2 : 2
+>  : ^
 
     [1 + 2]: 3 as const,
 >[1 + 2] : 3
+>        : ^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 as const : 3
+>           : ^
 >3 : 3
+>  : ^
 
 };
 
 const obj12 = {
 >obj12 : { [x: symbol]: 4 | 5; [sym]: 4; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [sym]: 4 as const,    [Symbol()]: 5 as const,} : { [x: symbol]: 4 | 5; [sym]: 4; }
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [sym]: 4 as const,
 >[sym] : 4
+>      : ^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >4 as const : 4
+>           : ^
 >4 : 4
+>  : ^
 
     [Symbol()]: 5 as const,
 >[Symbol()] : 5
+>           : ^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >5 as const : 5
+>           : ^
 >5 : 5
+>  : ^
 
 };
 
 const obj13 = {
 >obj13 : { [x: string]: 0 | 2 | 1 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; 1: 2; [sym]: 4; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    ['x']: 0 as const,    ['a' + 'b']: 1 as const,    [1]: 2 as const,    [1 + 2]: 3 as const,    [sym]: 4 as const,    [Symbol()]: 5 as const,} : { [x: string]: 0 | 2 | 1 | 3; [x: number]: 2 | 3; [x: symbol]: 4 | 5; x: 0; 1: 2; [sym]: 4; }
+>                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ['x']: 0 as const,
 >['x'] : 0
+>      : ^
 >'x' : "x"
+>    : ^^^
 >0 as const : 0
+>           : ^
 >0 : 0
+>  : ^
 
     ['a' + 'b']: 1 as const,
 >['a' + 'b'] : 1
+>            : ^
 >'a' + 'b' : string
+>          : ^^^^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 >1 as const : 1
+>           : ^
 >1 : 1
+>  : ^
 
     [1]: 2 as const,
 >[1] : 2
+>    : ^
 >1 : 1
+>  : ^
 >2 as const : 2
+>           : ^
 >2 : 2
+>  : ^
 
     [1 + 2]: 3 as const,
 >[1 + 2] : 3
+>        : ^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 as const : 3
+>           : ^
 >3 : 3
+>  : ^
 
     [sym]: 4 as const,
 >[sym] : 4
+>      : ^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >4 as const : 4
+>           : ^
 >4 : 4
+>  : ^
 
     [Symbol()]: 5 as const,
 >[Symbol()] : 5
+>           : ^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >5 as const : 5
+>           : ^
 >5 : 5
+>  : ^
 
 };
 
@@ -765,182 +1191,301 @@ const obj13 = {
 
 const system = Symbol('system');
 >system : unique symbol
+>       : ^^^^^^^^^^^^^
 >Symbol('system') : unique symbol
+>                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'system' : "system"
+>         : ^^^^^^^^
 
 const SomeSytePlugin = Symbol('SomeSytePlugin');
 >SomeSytePlugin : unique symbol
+>               : ^^^^^^^^^^^^^
 >Symbol('SomeSytePlugin') : unique symbol
+>                         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'SomeSytePlugin' : "SomeSytePlugin"
+>                 : ^^^^^^^^^^^^^^^^
 
 interface Plugs {
     [key: symbol]: (...args: any) => unknown;
 >key : symbol
+>    : ^^^^^^
 >args : any
+>     : ^^^
 }
 
 const plugins = {
 >plugins : { user: Plugs; [system]: Plugs; }
+>        : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 >{    "user": {} as Plugs,    [system]: {} as Plugs} : { user: Plugs; [system]: Plugs; }
+>                                                    : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 
     "user": {} as Plugs,
 >"user" : Plugs
+>       : ^^^^^
 >{} as Plugs : Plugs
+>            : ^^^^^
 >{} : {}
+>   : ^^
 
     [system]: {} as Plugs
 >[system] : Plugs
+>         : ^^^^^
 >system : unique symbol
+>       : ^^^^^^^^^^^^^
 >{} as Plugs : Plugs
+>            : ^^^^^
 >{} : {}
+>   : ^^
 
 };
 
 plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >plugins[system][SomeSytePlugin] = () => console.log('awsome') : () => void
+>                                                              : ^^^^^^^^^^
 >plugins[system][SomeSytePlugin] : (...args: any) => unknown
+>                                : ^^^^    ^^   ^^^^^       
 >plugins[system] : Plugs
+>                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
+>        : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 >system : unique symbol
+>       : ^^^^^^^^^^^^^
 >SomeSytePlugin : unique symbol
+>               : ^^^^^^^^^^^^^
 >() => console.log('awsome') : () => void
+>                            : ^^^^^^^^^^
 >console.log('awsome') : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >'awsome' : "awsome"
+>         : ^^^^^^^^
 
 plugins[system][SomeSytePlugin]();
 >plugins[system][SomeSytePlugin]() : unknown
+>                                  : ^^^^^^^
 >plugins[system][SomeSytePlugin] : (...args: any) => unknown
+>                                : ^^^^    ^^   ^^^^^       
 >plugins[system] : Plugs
+>                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
+>        : ^^^^^^^^     ^^^^^^^^^^^^     ^^^
 >system : unique symbol
+>       : ^^^^^^^^^^^^^
 >SomeSytePlugin : unique symbol
+>               : ^^^^^^^^^^^^^
 
 var theAnswer: symbol = Symbol('secret');
 >theAnswer : symbol
+>          : ^^^^^^
 >Symbol('secret') : symbol
+>                 : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'secret' : "secret"
+>         : ^^^^^^^^
 
 var obj = {} as Record<symbol, number>;
 >obj : Record<symbol, number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >{} as Record<symbol, number> : Record<symbol, number>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 obj[theAnswer] = 42;
 >obj[theAnswer] = 42 : 42
+>                    : ^^
 >obj[theAnswer] : number
+>               : ^^^^^^
 >obj : Record<symbol, number>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 >theAnswer : symbol
+>          : ^^^^^^
 >42 : 42
+>   : ^^
 
 // Repro from #26470
 
 const directive = Symbol('directive');
 >directive : unique symbol
+>          : ^^^^^^^^^^^^^
 >Symbol('directive') : unique symbol
+>                    : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >'directive' : "directive"
+>            : ^^^^^^^^^^^
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
->options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
+>options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }
+>        : ^^^^^^^^^^^^^^^^   ^^    ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >arg : TArg
+>    : ^^^^
 >[directive] : TDir | undefined
+>            : ^^^^^^^^^^^^^^^^
 >directive : unique symbol
+>          : ^^^^^^^^^^^^^
 
 let case1 = foo({
 >case1 : void
+>      : ^^^^
 >foo({    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
+>                                                                                                                : ^^^^
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >{    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: (x: string) => "str"; addOne: (x: number) => number; double: (x: number) => number; }
+>                                                                                                           : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 
     [directive]: (x: string) => 'str',
 >[directive] : (x: string) => "str"
+>            : ^ ^^      ^^^^^^^^^^
 >directive : unique symbol
+>          : ^^^^^^^^^^^^^
 >(x: string) => 'str' : (x: string) => "str"
+>                     : ^ ^^      ^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'str' : "str"
+>      : ^^^^^
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     double: (x: number) => x + x,
 >double : (x: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 });
 
 let case2 = foo({
 >case2 : void
+>      : ^^^^
 >foo({    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',}) : void
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
+>                                                                                                                : ^^^^
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >{    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',} : { addOne: (x: number) => number; double: (x: number) => number; [directive]: (x: string) => "str"; }
+>                                                                                                           : ^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     double: (x: number) => x + x,
 >double : (x: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     [directive]: (x: string) => 'str',
 >[directive] : (x: string) => "str"
+>            : ^ ^^      ^^^^^^^^^^
 >directive : unique symbol
+>          : ^^^^^^^^^^^^^
 >(x: string) => 'str' : (x: string) => "str"
+>                     : ^ ^^      ^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'str' : "str"
+>      : ^^^^^
 
 });
 
 let case3 = foo({
 >case3 : void
+>      : ^^^^
 >foo({    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
+>                                                                                                 : ^^^^
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 
     [directive]: 'str',
 >[directive] : string
+>            : ^^^^^^
 >directive : unique symbol
+>          : ^^^^^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     double: (x: number) => x + x,
 >double : (x: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 });
 
@@ -948,125 +1493,189 @@ let case3 = foo({
 
 type Pseudo = `&:${string}`;
 >Pseudo : `&:${string}`
+>       : ^^^^^^^^^^^^^
 
 const AmIPseudo1: Pseudo = '&:test';
 >AmIPseudo1 : `&:${string}`
+>           : ^^^^^^^^^^^^^
 >'&:test' : "&:test"
+>         : ^^^^^^^^
 
 const AmIPseudo: Pseudo = '&';  // Error
 >AmIPseudo : `&:${string}`
+>          : ^^^^^^^^^^^^^
 >'&' : "&"
+>    : ^^^
 
 type PseudoDeclaration = { [key in Pseudo]: string };
->PseudoDeclaration : { [x: `&:${string}`]: string; }
+>PseudoDeclaration : PseudoDeclaration
+>                  : ^^^^^^^^^^^^^^^^^
 
 const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
 >test : PseudoDeclaration
+>     : ^^^^^^^^^^^^^^^^^
 >{ 'someKey' : 'someValue' } : { someKey: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^
 >'someKey' : string
+>          : ^^^^^^
 >'someValue' : "someValue"
+>            : ^^^^^^^^^^^
 
 type FieldPattern = `/${string}`;
 >FieldPattern : `/${string}`
+>             : ^^^^^^^^^^^^
 
 const path1: FieldPattern = '/one';
 >path1 : `/${string}`
+>      : ^^^^^^^^^^^^
 >'/one' : "/one"
+>       : ^^^^^^
 
 const path2: FieldPattern = 'two';  // Error
 >path2 : `/${string}`
+>      : ^^^^^^^^^^^^
 >'two' : "two"
+>      : ^^^^^
 
 type PathsObject = { [P in FieldPattern]: object; };
->PathsObject : { [x: `/${string}`]: object; }
+>PathsObject : PathsObject
+>            : ^^^^^^^^^^^
 
 const pathObject: PathsObject = 123;  // Error
 >pathObject : PathsObject
+>           : ^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 type IdType = `${number}-${number}-${number}-${number}`
 >IdType : `${number}-${number}-${number}-${number}`
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const id: IdType = '0000-0000-0000-0001';
 >id : `${number}-${number}-${number}-${number}`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'0000-0000-0000-0001' : "0000-0000-0000-0001"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 
 type A = Record<IdType, string>;
->A : { [x: `${number}-${number}-${number}-${number}`]: string; }
+>A : A
+>  : ^
 
 const a: A = { [id]: 'test' }
 >a : A
->{ [id]: 'test' } : { [x: string]: string; }
+>  : ^
+>{ [id]: 'test' } : { [id]: string; }
+>                 : ^^      ^^^^^^ ^^
 >[id] : string
+>     : ^^^^^^
 >id : `${number}-${number}-${number}-${number}`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
 let aid = a[id];
 >aid : string
+>    : ^^^^^^
 >a[id] : string
+>      : ^^^^^^
 >a : A
+>  : ^
 >id : `${number}-${number}-${number}-${number}`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #44793
 
 interface AA {
     a?: string;
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     b?: number;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     [key: symbol]: string;
 >key : symbol
+>    : ^^^^^^
 }
 
 const aa: AA = { [sym]: '123' };
 >aa : AA
+>   : ^^
 >{ [sym]: '123' } : { [sym]: string; }
+>                 : ^^^^^^^^^^^^^^^^^^
 >[sym] : string
+>      : ^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >'123' : "123"
+>      : ^^^^^
 
 const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 >obj1 : { [key: symbol]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : symbol
+>    : ^^^^^^
 >{ [sym]: 'hello '} : { [sym]: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >[sym] : string
+>      : ^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >'hello ' : "hello "
+>         : ^^^^^^^^
 
 const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
 >obj2 : { [key: string]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >{ [sym]: 'hello '} : { [sym]: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >[sym] : string
+>      : ^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >'hello ' : "hello "
+>         : ^^^^^^^^
 
 const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 >obj3 : { [key: number]: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : number
+>    : ^^^^^^
 >{ [sym]: 'hello '} : { [sym]: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >[sym] : string
+>      : ^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >'hello ' : "hello "
+>         : ^^^^^^^^
 
 // Repro from #45772
 
 type Id = string & { __tag: 'id '};
->Id : string & { __tag: 'id '; }
+>Id : Id
+>   : ^^
 >__tag : "id "
+>      : ^^^^^
 
 type Rec1 = { [key: Id]: number };
->Rec1 : { [key: Id]: number; }
+>Rec1 : Rec1
+>     : ^^^^
 >key : Id
+>    : ^^
 
 type Rec2 = Record<Id, number>;
->Rec2 : { [x: string & { __tag: "id "; }]: number; }
+>Rec2 : Rec2
+>     : ^^^^
 
 type K1 = keyof Rec1;  // Id
 >K1 : Id
+>   : ^^
 
 type K2 = keyof Rec2;  // Id
 >K2 : Id
+>   : ^^
 

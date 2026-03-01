@@ -1,0 +1,104 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty01.ts ===
+// <|var [|name|] = "hello";|>
+// var id = 100000;
+// declare var id;
+// var obj = {/*GOTO DEF*/name, id};
+// obj.name;
+// obj.id;
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "name",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// <|var [|{| defId: 0 |}id|] = 100000;|>
+// <|declare var [|{| defId: 1 |}id|];|>
+// var obj = {name, /*GOTO DEF*/id};
+// obj.name;
+// obj.id;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "var",
+    "name": "id",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "var",
+    "name": "id",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// var id = 100000;
+// declare var id;
+// var obj = {[|name|], id};
+// obj./*GOTO DEF*/name;
+// obj.id;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "name",
+    "containerName": "obj",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionShorthandProperty01.ts ===
+// var name = "hello";
+// var id = 100000;
+// declare var id;
+// var obj = {name, [|id|]};
+// obj.name;
+// obj./*GOTO DEF*/id;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "id",
+    "containerName": "obj",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

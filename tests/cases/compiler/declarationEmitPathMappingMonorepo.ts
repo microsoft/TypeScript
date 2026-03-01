@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: packages/a/index.d.ts
 declare module "@ts-bug/a" {
     export type AText = {
@@ -24,5 +26,5 @@ export function b(text: string) {
     }
 }
 
-// @link: tests/cases/compiler/packages/a -> tests/cases/compiler/node_modules/@ts-bug/a
-// @link: tests/cases/compiler/packages/b -> tests/cases/compiler/node_modules/@ts-bug/b
+// @link: packages/a -> node_modules/@ts-bug/a
+// @link: packages/b -> node_modules/@ts-bug/b

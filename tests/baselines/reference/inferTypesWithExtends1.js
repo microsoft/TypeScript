@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypesWithExtends1.ts] ////
+
 //// [inferTypesWithExtends1.ts]
 // infer to tuple element
 type X1<T extends any[]> =
@@ -292,7 +294,7 @@ type X21_T4 = X21<1 | 2, 2 | 3>;
 type X21_T5 = X21<1 | 2, 3>;
 type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
 declare const x1: <T>() => (T extends infer U extends number ? 1 : 0);
-declare function f1(): <T>() => T extends infer U extends number ? 1 : 0;
+declare function f1(): <T>() => (T extends infer U extends number ? 1 : 0);
 type ExpectNumber<T extends number> = T;
 declare const x2: <T>() => (T extends ExpectNumber<infer U> ? 1 : 0);
-declare function f2(): <T>() => T extends infer U extends number ? 1 : 0;
+declare function f2(): <T>() => (T extends ExpectNumber<infer U> ? 1 : 0);

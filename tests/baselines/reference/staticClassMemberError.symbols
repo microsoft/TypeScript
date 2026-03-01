@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticClassMemberError.ts ===
+//// [tests/cases/compiler/staticClassMemberError.ts] ////
+
+=== staticClassMemberError.ts ===
 class C {
 >C : Symbol(C, Decl(staticClassMemberError.ts, 0, 0))
 

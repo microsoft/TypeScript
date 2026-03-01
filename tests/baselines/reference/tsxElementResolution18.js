@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution18.tsx] ////
+
 //// [file1.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 }
 
@@ -8,5 +10,6 @@ declare module JSX {
 
 
 //// [file1.jsx]
+"use strict";
 // Error under implicit any
 <div n='x'/>;

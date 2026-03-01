@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement3.ts] ////
+
 //// [parser_continueNotInIterationStatement3.ts]
 switch (0) {
   default:
@@ -5,6 +7,7 @@ switch (0) {
 }
 
 //// [parser_continueNotInIterationStatement3.js]
+"use strict";
 switch (0) {
     default:
         continue;

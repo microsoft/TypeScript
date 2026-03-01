@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterDiamond1.ts] ////
+
 //// [typeParameterDiamond1.ts]
 function diamondTop<Top>() {
     function diamondMiddle<T extends Top, U extends Top>() {
@@ -14,6 +16,7 @@ function diamondTop<Top>() {
 }
 
 //// [typeParameterDiamond1.js]
+"use strict";
 function diamondTop() {
     function diamondMiddle() {
         function diamondBottom() {

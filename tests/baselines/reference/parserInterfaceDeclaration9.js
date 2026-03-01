@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration9.ts] ////
+
 //// [parserInterfaceDeclaration9.ts]
 interface I1 {
     get foo(): number,
@@ -16,3 +18,4 @@ interface I3 {
 
 
 //// [parserInterfaceDeclaration9.js]
+"use strict";

@@ -1,14 +1,21 @@
-=== tests/cases/compiler/controlFlowPropertyInitializer.ts ===
+//// [tests/cases/compiler/controlFlowPropertyInitializer.ts] ////
+
+=== controlFlowPropertyInitializer.ts ===
 // Repro from #8967
 
 const LANG = "Turbo Pascal"
 >LANG : "Turbo Pascal"
+>     : ^^^^^^^^^^^^^^
 >"Turbo Pascal" : "Turbo Pascal"
+>               : ^^^^^^^^^^^^^^
 
 class BestLanguage {
 >BestLanguage : BestLanguage
+>             : ^^^^^^^^^^^^
 
     name = LANG;
 >name : string
+>     : ^^^^^^
 >LANG : "Turbo Pascal"
+>     : ^^^^^^^^^^^^^^
 }

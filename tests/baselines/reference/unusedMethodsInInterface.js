@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMethodsInInterface.ts] ////
+
 //// [unusedMethodsInInterface.ts]
 interface I1 {
     f1();
@@ -5,3 +7,4 @@ interface I1 {
 }
 
 //// [unusedMethodsInInterface.js]
+"use strict";

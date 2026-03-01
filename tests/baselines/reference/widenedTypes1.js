@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/widenedTypes1.ts] ////
+
 //// [widenedTypes1.ts]
 var a = null;
 var b = undefined;
@@ -10,6 +12,7 @@ var h = [{x: undefined}];
 
 
 //// [widenedTypes1.js]
+"use strict";
 var a = null;
 var b = undefined;
 var c = { x: null };

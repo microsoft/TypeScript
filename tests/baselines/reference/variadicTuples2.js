@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
 //// [variadicTuples2.ts]
 // Declarations
 
@@ -8,6 +10,11 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];  // Error
 type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
+
+type V15 = [...string[], ...number[]];  // Error
+type V16 = [...string[], ...Array<number>];  // Error
+type V17 = [...Array<string>, ...number[]];  // Error
+type V18 = [...Array<string>, ...Array<number>];  // Error
 
 // Normalization
 
@@ -75,6 +82,10 @@ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [nu
     z = x;  // Error
 }
 
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+let tt4: [number, ...number[]] = tt3  // Error
+
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
@@ -123,7 +134,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 // Repro from #39595
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
-    
+
 const a1 = foo('blah1', 1);
 const b1 = foo('blah1', 'blah2', 1);
 const c1 = foo(1);  // Error
@@ -134,15 +145,6 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 //// [variadicTuples2.js]
 "use strict";
 // Declarations
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 tt1 = [5];
 tt1 = ['abc', 5];
 tt1 = ['abc', 'def', 5];
@@ -173,46 +175,31 @@ function ft3(x, y, z) {
     y = x; // Error
     z = x; // Error
 }
+let tt4 = tt3; // Error
 // Inference
-function pipe() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var callback = args[args.length - 1];
-    var values = args.slice(0, -1);
-    callback.apply(void 0, values);
+function pipe(...args) {
+    const callback = args[args.length - 1];
+    const values = args.slice(0, -1);
+    callback(...values);
 }
-pipe("foo", 123, true, function (a, b, c) {
+pipe("foo", 123, true, (a, b, c) => {
     a; // string
     b; // number
     c; // boolean
 });
-pipe("foo", 123, true, function () {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
+pipe("foo", 123, true, (...x) => {
     x; // [string, number, boolean]
 });
-pipe.apply(void 0, __spreadArray(__spreadArray([], sa, false), [function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i] = arguments[_i];
-        }
-        x; // string[]
-    }], false));
-pipe.apply(void 0, __spreadArray(__spreadArray([1], sa, false), [2, function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i] = arguments[_i];
-        }
-        x; // [number, ...string[], number]
-        var qq = x[x.length - 1];
-        var ww = x[0];
-    }], false));
+pipe(...sa, (...x) => {
+    x; // string[]
+});
+pipe(1, ...sa, 2, (...x) => {
+    x; // [number, ...string[], number]
+    let qq = x[x.length - 1];
+    let ww = x[0];
+});
 pipe(1, 2, 3, 4); // Error
-pipe.apply(void 0, sa); // Error
+pipe(...sa); // Error
 fn1([]); // Error
 fn1([1]); // Error
 fn1([1, 'abc']); // [number, string]
@@ -221,11 +208,11 @@ fn2([]); // Error
 fn2([1]); // Error
 fn2([1, 'abc']); // [number, string]
 fn2([1, 'abc', true]); // [number, boolean]
-var a1 = foo('blah1', 1);
-var b1 = foo('blah1', 'blah2', 1);
-var c1 = foo(1); // Error
-var d1 = foo(1, 2); // Error
-var e1 = foo('blah1', 'blah2', 1, 2, 3); // Error
+const a1 = foo('blah1', 1);
+const b1 = foo('blah1', 'blah2', 1);
+const c1 = foo(1); // Error
+const d1 = foo(1, 2); // Error
+const e1 = foo('blah1', 'blah2', 1, 2, 3); // Error
 
 
 //// [variadicTuples2.d.ts]
@@ -235,6 +222,10 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];
 type V11 = [number, ...string[], boolean?];
 type V12 = [number, string?, boolean];
+type V15 = [...string[], ...number[]];
+type V16 = [...string[], ...Array<number>];
+type V17 = [...Array<string>, ...number[]];
+type V18 = [...Array<string>, ...Array<number>];
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
 type V20 = Tup3<[number], string[], [number]>;
 type V21 = Tup3<[number], [string?], [boolean]>;
@@ -258,6 +249,8 @@ declare function ft1(...args: [...strs: string[], num: number]): void;
 declare let tt2: [number, ...string[], number];
 declare function ft2(n1: number, ...rest: [...strs: string[], n2: number]): void;
 declare function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]): void;
+declare let tt3: [number, string, ...any[]];
+declare let tt4: [number, ...number[]];
 declare function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]): void;
 declare const sa: string[];
 declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];

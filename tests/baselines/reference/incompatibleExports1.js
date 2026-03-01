@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incompatibleExports1.ts] ////
+
 //// [incompatibleExports1.ts]
 declare module "foo" { 
     export interface x { a: string } 
@@ -6,11 +8,11 @@ declare module "foo" {
 }
  
 declare module "baz" {
-    export module a {
+    export namespace a {
         export var b: number;
     }
  
-    module c {
+    namespace c {
         export var c: string;
     }
  
@@ -19,3 +21,4 @@ declare module "baz" {
 
 
 //// [incompatibleExports1.js]
+"use strict";

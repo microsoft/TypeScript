@@ -1,80 +1,138 @@
-=== tests/cases/conformance/salsa/mod1.js ===
+//// [tests/cases/conformance/salsa/importAliasModuleExports.ts] ////
+
+=== mod1.js ===
 class Alias {
 >Alias : Alias
+>      : ^^^^^
 
     bar() { return 1 }
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 module.exports = Alias;
 >module.exports = Alias : typeof Alias
+>                       : ^^^^^^^^^^^^
 >module.exports : typeof Alias
+>               : ^^^^^^^^^^^^
 >module : { exports: typeof Alias; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof Alias
+>        : ^^^^^^^^^^^^
 >Alias : typeof Alias
+>      : ^^^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 import A from './mod1'
 >A : typeof A
+>  : ^^^^^^^^
 
 A.prototype.foo = 0
 >A.prototype.foo = 0 : 0
+>                    : ^
 >A.prototype.foo : any
+>                : ^^^
 >A.prototype : A
+>            : ^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : A
+>          : ^
 >foo : any
+>    : ^^^
 >0 : 0
+>  : ^
 
 A.prototype.func = function() { this._func = 0; }
 >A.prototype.func = function() { this._func = 0; } : () => void
+>                                                  : ^^^^^^^^^^
 >A.prototype.func : any
+>                 : ^^^
 >A.prototype : A
+>            : ^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : A
+>          : ^
 >func : any
+>     : ^^^
 >function() { this._func = 0; } : () => void
+>                               : ^^^^^^^^^^
 >this._func = 0 : 0
+>               : ^
 >this._func : any
+>           : ^^^
 >this : A
+>     : ^
 >_func : any
+>      : ^^^
 >0 : 0
+>  : ^
 
 Object.defineProperty(A.prototype, "def", { value: 0 });
 >Object.defineProperty(A.prototype, "def", { value: 0 }) : A
+>                                                        : ^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >A.prototype : A
+>            : ^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : A
+>          : ^
 >"def" : "def"
+>      : ^^^^^
 >{ value: 0 } : { value: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
 new A().bar
 >new A().bar : () => number
+>            : ^^^^^^^^^^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
 new A().foo
 >new A().foo : any
+>            : ^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : any
+>    : ^^^
 
 new A().func()
 >new A().func() : any
+>               : ^^^
 >new A().func : any
+>             : ^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >func : any
+>     : ^^^
 
 new A().def
 >new A().def : any
+>            : ^^^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 >def : any
+>    : ^^^
 

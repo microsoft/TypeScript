@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons01.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons01.ts] ////
+
+=== stringLiteralsAssertionsInEqualityComparisons01.ts ===
 var a = "foo" === "bar" as string;
 >a : Symbol(a, Decl(stringLiteralsAssertionsInEqualityComparisons01.ts, 0, 3))
 

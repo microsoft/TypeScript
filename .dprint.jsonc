@@ -1,0 +1,60 @@
+{
+    // If updating this, also update the config in dtsBundler.mjs.
+    "indentWidth": 4,
+    "lineWidth": 1000,
+    "newLineKind": "auto",
+    "useTabs": false,
+    "typescript": {
+        "newLineKind": "crlf",
+        "semiColons": "always",
+        "quoteStyle": "preferDouble",
+        "quoteProps": "consistent",
+        "useBraces": "whenNotSingleLine",
+        "bracePosition": "sameLineUnlessHanging",
+        "singleBodyPosition": "sameLine",
+        "nextControlFlowPosition": "nextLine", // Stroustrup style braces.
+        "trailingCommas": "onlyMultiLine",
+        "preferHanging": false,
+        "operatorPosition": "maintain",
+
+        "arrowFunction.useParentheses": "preferNone",
+        "conditionalExpression.linePerExpression": false, // Keep our "match/case"-ish conditionals.
+        "functionExpression.spaceAfterFunctionKeyword": true,
+        "importDeclaration.forceMultiLine": "whenMultiple",
+        "constructorType.spaceAfterNewKeyword": true,
+        "constructSignature.spaceAfterNewKeyword": true,
+
+        "module.sortImportDeclarations": "caseInsensitive",
+        "module.sortExportDeclarations": "caseInsensitive",
+        "exportDeclaration.sortNamedExports": "caseInsensitive",
+        "importDeclaration.sortNamedImports": "caseInsensitive"
+    },
+    "yaml": {
+        "indentWidth": 2,
+        "quotes": "preferSingle"
+    },
+    "json": {
+        // This would be good to do in known-JSONC files, but VS Code warns on trailing commas.
+        "trailingCommas": "never"
+    },
+    "excludes": [
+        "**/.git",
+        "**/node_modules",
+        "**/*-lock.json",
+        "coverage/**",
+        "lib/**",
+        "built/**",
+        "tests/**",
+        "internal/**",
+        "**/*.generated.*",
+        "scripts/*.d.*",
+        "**/_namespaces/**"
+    ],
+    // Note: if adding new languages, make sure settings.template.json is updated too.
+    // Also, if updating typescript, update the one in package.json.
+    "plugins": [
+        "https://plugins.dprint.dev/typescript-0.93.4.wasm",
+        "https://plugins.dprint.dev/json-0.19.4.wasm",
+        "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm"
+    ]
+}

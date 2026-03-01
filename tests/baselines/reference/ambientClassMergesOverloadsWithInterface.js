@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts] ////
+
 //// [ambientClassMergesOverloadsWithInterface.ts]
 declare class C {
     baz(): any;
@@ -10,3 +12,4 @@ interface C {
 
 
 //// [ambientClassMergesOverloadsWithInterface.js]
+"use strict";

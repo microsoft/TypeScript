@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitThis: true
 // @strict: true
 
@@ -50,7 +51,7 @@ namespace Test6 {
     }
 }
 
-module Test7 {
+namespace Test7 {
     export let f = () => {
         let x: typeof this.no = 1;
     }

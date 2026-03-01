@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>(x = class { static prop: T }): T {
     return undefined;
 }

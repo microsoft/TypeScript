@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializedSignatureOverloadReturnTypeWithIndexers.ts] ////
+
 //// [specializedSignatureOverloadReturnTypeWithIndexers.ts]
 interface A {
     f(p: string): { [p: string]: string; };
@@ -17,3 +19,4 @@ interface D {
 }
 
 //// [specializedSignatureOverloadReturnTypeWithIndexers.js]
+"use strict";

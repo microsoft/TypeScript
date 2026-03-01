@@ -1,0 +1,47 @@
+/node_modules/@fullcalendar/core/index.d.ts(4,10): error TS2300: Duplicate identifier 'VNode'.
+/node_modules/@fullcalendar/react/index.d.ts(4,19): error TS2300: Duplicate identifier 'VNode'.
+
+
+==== /node_modules/@fullcalendar/react/index.d.ts (1 errors) ====
+    import * as react from 'react';
+    declare global {
+      namespace FullCalendarVDom {
+        export import VNode = react.ReactNode;
+                      ~~~~~
+!!! error TS2300: Duplicate identifier 'VNode'.
+!!! related TS6203 /node_modules/@fullcalendar/core/index.d.ts:4:10: 'VNode' was also declared here.
+      }
+    }
+    
+    export default class FullCalendar {
+    }
+    
+==== /node_modules/@fullcalendar/core/index.d.ts (1 errors) ====
+    import * as preact from 'preact';
+    declare global {
+      namespace FullCalendarVDom {
+        type VNode = preact.VNode<any>;
+             ~~~~~
+!!! error TS2300: Duplicate identifier 'VNode'.
+!!! related TS6203 /node_modules/@fullcalendar/react/index.d.ts:4:19: 'VNode' was also declared here.
+      }
+    }
+    
+    export type EventInput = any;
+    
+==== /node_modules/@types/react/index.d.ts (0 errors) ====
+    export = React;
+    export as namespace React;
+    declare namespace React {
+        type ReactNode = any;
+        function useMemo<T>(factory: () => T, deps: undefined): T;
+    }
+    
+==== /node_modules/preact/index.d.ts (0 errors) ====
+    export as namespace preact;
+    export interface VNode<P = {}> {}
+    
+==== /index.tsx (0 errors) ====
+    import FullCalendar from "@fullcalendar/react";
+    import { EventInput } from "@fullcalendar/core";
+    

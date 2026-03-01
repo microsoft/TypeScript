@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics2.ts] ////
+
 //// [generics2.ts]
 interface A { a: string; }
 interface B extends A { b: string; }
@@ -23,6 +25,7 @@ var v7: G;                     // Error, no type arguments
 
 
 //// [generics2.js]
+"use strict";
 var v1; // Ok
 var v2; // Ok, equivalent to G<A, C>
 var v3; // Error, A not valid argument for U

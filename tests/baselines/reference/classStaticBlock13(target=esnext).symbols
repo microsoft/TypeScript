@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock13.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock13.ts] ////
+
+=== classStaticBlock13.ts ===
 class C {
 >C : Symbol(C, Decl(classStaticBlock13.ts, 0, 0))
 

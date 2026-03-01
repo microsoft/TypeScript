@@ -1,9 +1,13 @@
-=== tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts ===
+//// [tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts] ////
+
+=== interfaceMayNotBeExtendedWitACall.ts ===
 interface color {}
 
 interface blue extends color() { // error
 >color() : any
+>        : ^^^
 >color : any
+>      : ^^^
 
 }
 

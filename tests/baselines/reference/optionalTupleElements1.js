@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/optionalTupleElements1.ts] ////
+
 //// [optionalTupleElements1.ts]
 type T1 = [number, string, boolean];
 type T2 = [number, string, boolean?];
@@ -65,9 +67,9 @@ function f1(t1, t2, t3, t4) {
     t4 = t3;
     t4 = t4;
 }
-var t2;
-var t3;
-var t4;
+let t2;
+let t3;
+let t4;
 t2 = [42, "hello"];
 t3 = [42, "hello"];
 t3 = [42, , true];

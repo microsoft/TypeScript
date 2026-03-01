@@ -1,0 +1,146 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_02.ts ===
+// --- (line: 6) skipped ---
+// }
+// 
+// class Bar extends AbstractBar {
+//     <|[|hello|]() {}|>
+// }
+// 
+// function whatever(a: AbstractBar) {
+//     a.he/*GOTO IMPL*/llo();
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterfaceMethod_02.ts ===
+// interface Foo {
+//     he/*GOTO IMPL*/llo(): void
+// }
+// 
+// abstract class AbstractBar implements Foo {
+//     abstract hello(): void;
+// }
+// 
+// class Bar extends AbstractBar {
+//     <|[|hello|]() {}|>
+// }
+// 
+// function whatever(a: AbstractBar) {
+//     a.hello();
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "hello",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "method"
+   }
+  ]

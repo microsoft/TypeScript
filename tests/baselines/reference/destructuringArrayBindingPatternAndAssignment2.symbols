@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts] ////
+
+=== destructuringArrayBindingPatternAndAssignment2.ts ===
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or
 var [[a0], [[a1]]] = []         // Error
@@ -20,7 +22,7 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 
 interface J extends Array<Number> {
 >J : Symbol(J, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 63))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     2: number;

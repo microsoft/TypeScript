@@ -1,3 +1,43 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts ===
+// /** This comment should appear for foo*/
+// function foo() {
+// }
+// foo();
+//     ^
+// | ----------------------------------------------------------------------
+// | foo(): void
+// | This comment should appear for foo
+// | ----------------------------------------------------------------------
+// /** This is comment for function signature*/
+// function fooWithParameters(/** this is comment about a*/a: string,
+//     /** this is comment for b*/
+//     b: number) {
+//     var d = a;
+// }
+// fooWithParameters("a",10);
+//                   ^
+// | ----------------------------------------------------------------------
+// | fooWithParameters(**a: string**, b: number): void
+// | ----------------------------------------------------------------------
+//                       ^
+// | ----------------------------------------------------------------------
+// | fooWithParameters(a: string, **b: number**): void
+// | This is comment for function signature
+// | ----------------------------------------------------------------------
+// /**
+// * Does something
+// * @param a a string
+// */
+// declare function fn(a: string);
+// fn("hello");
+//    ^
+// | ----------------------------------------------------------------------
+// | fn(**a: string**): any
+// | Does something
+// | @param a a string
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +45,7 @@
       "position": 64,
       "name": "4"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -72,7 +112,7 @@
       "position": 263,
       "name": "10"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -198,7 +238,7 @@
       "position": 267,
       "name": "11"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -324,7 +364,7 @@
       "position": 351,
       "name": "12"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

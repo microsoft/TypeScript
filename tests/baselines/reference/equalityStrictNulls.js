@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts] ////
+
 //// [equalityStrictNulls.ts]
 function f1(x: string) {
     if (x == undefined) {
@@ -79,6 +81,7 @@ function f5(x: string) {
 
 
 //// [equalityStrictNulls.js]
+"use strict";
 function f1(x) {
     if (x == undefined) {
     }

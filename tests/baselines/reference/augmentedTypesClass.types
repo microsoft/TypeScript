@@ -1,19 +1,29 @@
-=== tests/cases/compiler/augmentedTypesClass.ts ===
+//// [tests/cases/compiler/augmentedTypesClass.ts] ////
+
+=== augmentedTypesClass.ts ===
 //// class then var
 class c1 { public foo() { } }
 >c1 : c1
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 var c1 = 1; // error
 >c1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 //// class then enum
 class c4 { public foo() { } }
 >c4 : c4
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 enum c4 { One } // error
 >c4 : c4
+>   : ^^
 >One : c4.One
+>    : ^^^^^^
 

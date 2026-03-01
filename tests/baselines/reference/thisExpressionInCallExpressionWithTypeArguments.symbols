@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisExpressionInCallExpressionWithTypeArguments.ts ===
+//// [tests/cases/compiler/thisExpressionInCallExpressionWithTypeArguments.ts] ////
+
+=== thisExpressionInCallExpressionWithTypeArguments.ts ===
 class C {
 >C : Symbol(C, Decl(thisExpressionInCallExpressionWithTypeArguments.ts, 0, 0))
 

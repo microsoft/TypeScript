@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/strictBindCallApply2.ts] ////
+
 //// [strictBindCallApply2.ts]
 // Repro from #32964
 
@@ -10,7 +12,8 @@ const fb = fn.bind({ blub: "blub" });
 
 
 //// [strictBindCallApply2.js]
+"use strict";
 // Repro from #32964
 ;
 function fn() { }
-var fb = fn.bind({ blub: "blub" });
+const fb = fn.bind({ blub: "blub" });

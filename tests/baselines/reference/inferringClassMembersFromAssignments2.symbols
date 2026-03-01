@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments2.ts] ////
+
+=== a.js ===
 OOOrder.prototype.m = function () {
 >OOOrder.prototype : Symbol(OOOrder.m, Decl(a.js, 0, 0))
 >OOOrder : Symbol(OOOrder, Decl(a.js, 2, 1))

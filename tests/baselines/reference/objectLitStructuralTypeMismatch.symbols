@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLitStructuralTypeMismatch.ts ===
+//// [tests/cases/compiler/objectLitStructuralTypeMismatch.ts] ////
+
+=== objectLitStructuralTypeMismatch.ts ===
 // Shouldn't compile
 var x: { a: number; } = { b: 5 };
 >x : Symbol(x, Decl(objectLitStructuralTypeMismatch.ts, 1, 3))

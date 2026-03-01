@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDeclarationEmit3.ts] ////
+
 //// [typeAliasDeclarationEmit3.ts]
 function f1(): void {
     for (let i = 0; i < 1; i++)
@@ -19,8 +21,9 @@ function f3(): void {
 
 
 //// [typeAliasDeclarationEmit3.js]
+"use strict";
 function f1() {
-    for (var i = 0; i < 1; i++)
+    for (let i = 0; i < 1; i++)
         ;
     console.log('f1');
 }

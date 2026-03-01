@@ -1,0 +1,27 @@
+autoAccessor11.ts(2,5): error TS2300: Duplicate identifier 'accessor'.
+autoAccessor11.ts(9,5): error TS2300: Duplicate identifier 'accessor'.
+autoAccessor11.ts(12,14): error TS2300: Duplicate identifier 'accessor'.
+
+
+==== autoAccessor11.ts (3 errors) ====
+    class C {
+        accessor
+        ~~~~~~~~
+!!! error TS2300: Duplicate identifier 'accessor'.
+        a
+    
+        static accessor
+        b
+    
+        static
+        accessor
+        ~~~~~~~~
+!!! error TS2300: Duplicate identifier 'accessor'.
+        c
+    
+        accessor accessor
+                 ~~~~~~~~
+!!! error TS2300: Duplicate identifier 'accessor'.
+        d;
+    }
+    

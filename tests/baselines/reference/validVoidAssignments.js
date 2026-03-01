@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/void/validVoidAssignments.ts] ////
+
 //// [validVoidAssignments.ts]
 var x: void;
 var y: any;
@@ -7,6 +9,7 @@ x = y;
 x = z;
 
 //// [validVoidAssignments.js]
+"use strict";
 var x;
 var y;
 var z;

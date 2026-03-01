@@ -1,10 +1,10 @@
-tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
+test.ts(4,5): error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
   The types returned by 'use()' are incompatible between these types.
     Type 'PassportStatic' is not assignable to type 'this'.
-      'this' could be instantiated with an arbitrary type which could be unrelated to 'PassportStatic'.
+      'PassportStatic' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Passport'.
 
 
-==== tests/cases/compiler/passport.d.ts (0 errors) ====
+==== passport.d.ts (0 errors) ====
     declare module 'passport' {
         namespace passport {
             interface Passport {
@@ -20,7 +20,7 @@ tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not as
         export = passport;
     }
     
-==== tests/cases/compiler/test.ts (1 errors) ====
+==== test.ts (1 errors) ====
     import * as passport from "passport";
     import { Passport } from "passport";
     
@@ -29,4 +29,4 @@ tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not as
 !!! error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
 !!! error TS2322:   The types returned by 'use()' are incompatible between these types.
 !!! error TS2322:     Type 'PassportStatic' is not assignable to type 'this'.
-!!! error TS2322:       'this' could be instantiated with an arbitrary type which could be unrelated to 'PassportStatic'.
+!!! error TS2322:       'PassportStatic' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Passport'.

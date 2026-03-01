@@ -1,861 +1,703 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// /*FIND ALL REFS*/declare abstract class [|C1|] {
+// /*FIND ALL REFS*/<|declare abstract class [|{| isWriteAccess: true, isDefinition: true |}C1|] {
 //     static a;
 //     readonly b;
 //     public c;
 //     protected d;
 //     private e;
-// }
+// }|>
 // const enum E {
 // }
 // async function fn() {}
 // export default class C2 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "class",
-      "name": "class C1",
-      "textSpan": {
-        "start": 23,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 105
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 105
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // /*FIND ALL REFS*/<|declare abstract class [|C1|] {
+  //     static a;
+  //     readonly b;
+  //     public c;
+  //     protected d;
+  //     private e;
+  // }|>
+  // const enum E {
+  // }
+  // async function fn() {}
+  // export default class C2 {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C1",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare /*FIND ALL REFS*/abstract class [|C1|] {
+// <|declare /*FIND ALL REFS*/abstract class [|{| isWriteAccess: true, isDefinition: true |}C1|] {
 //     static a;
 //     readonly b;
 //     public c;
 //     protected d;
 //     private e;
-// }
+// }|>
 // const enum E {
 // }
 // async function fn() {}
 // export default class C2 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "class",
-      "name": "class C1",
-      "textSpan": {
-        "start": 23,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 105
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 105
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // <|declare /*FIND ALL REFS*/abstract class [|C1|] {
+  //     static a;
+  //     readonly b;
+  //     public c;
+  //     protected d;
+  //     private e;
+  // }|>
+  // const enum E {
+  // }
+  // async function fn() {}
+  // export default class C2 {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C1",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
 // declare abstract class C1 {
-//     /*FIND ALL REFS*/static [|a|];
+//     /*FIND ALL REFS*/<|static [|{| isWriteAccess: true, isDefinition: true |}a|];|>
 //     readonly b;
 //     public c;
 //     protected d;
-//     private e;
-// }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "property",
-      "name": "(property) C1.a: any",
-      "textSpan": {
-        "start": 39,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "a",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 32,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 39,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 32,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // declare abstract class C1 {
+  //     /*FIND ALL REFS*/<|static [|a|];|>
+  //     readonly b;
+  //     public c;
+  //     protected d;
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.a: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "a",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
 // declare abstract class C1 {
 //     static a;
-//     /*FIND ALL REFS*/readonly [|b|];
+//     /*FIND ALL REFS*/<|readonly [|{| isWriteAccess: true, isDefinition: true |}b|];|>
 //     public c;
 //     protected d;
 //     private e;
-// }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 7) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "property",
-      "name": "(property) C1.b: any",
-      "textSpan": {
-        "start": 55,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "b",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 46,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 55,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 46,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // declare abstract class C1 {
+  //     static a;
+  //     /*FIND ALL REFS*/<|readonly [|b|];|>
+  //     public c;
+  //     protected d;
+  //     private e;
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.b: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "b",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
 // declare abstract class C1 {
 //     static a;
 //     readonly b;
-//     /*FIND ALL REFS*/public [|c|];
+//     /*FIND ALL REFS*/<|public [|{| isWriteAccess: true, isDefinition: true |}c|];|>
 //     protected d;
 //     private e;
 // }
-// const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 8) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "property",
-      "name": "(property) C1.c: any",
-      "textSpan": {
-        "start": 69,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "c",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 62,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 69,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 62,
-          "length": 9
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // declare abstract class C1 {
+  //     static a;
+  //     readonly b;
+  //     /*FIND ALL REFS*/<|public [|c|];|>
+  //     protected d;
+  //     private e;
+  // }
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.c: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "c",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
 // declare abstract class C1 {
 //     static a;
 //     readonly b;
 //     public c;
-//     /*FIND ALL REFS*/protected [|d|];
+//     /*FIND ALL REFS*/<|protected [|{| isWriteAccess: true, isDefinition: true |}d|];|>
 //     private e;
 // }
 // const enum E {
-// }
-// async function fn() {}
-// export default class C2 {}
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "property",
-      "name": "(property) C1.d: any",
-      "textSpan": {
-        "start": 86,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "d",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 76,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 86,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 76,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // declare abstract class C1 {
+  //     static a;
+  //     readonly b;
+  //     public c;
+  //     /*FIND ALL REFS*/<|protected [|d|];|>
+  //     private e;
+  // }
+  // const enum E {
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.d: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "d",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
 // declare abstract class C1 {
 //     static a;
 //     readonly b;
 //     public c;
 //     protected d;
-//     /*FIND ALL REFS*/private [|e|];
+//     /*FIND ALL REFS*/<|private [|{| isWriteAccess: true, isDefinition: true |}e|];|>
 // }
 // const enum E {
 // }
 // async function fn() {}
 // export default class C2 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "property",
-      "name": "(property) C1.e: any",
-      "textSpan": {
-        "start": 101,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C1",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "e",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 93,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 101,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 93,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // declare abstract class C1 {
+  //     static a;
+  //     readonly b;
+  //     public c;
+  //     protected d;
+  //     /*FIND ALL REFS*/<|private [|e|];|>
+  // }
+  // const enum E {
+  // }
+  // async function fn() {}
+  // export default class C2 {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C1.e: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C1",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "e",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
+// --- (line: 4) skipped ---
 //     protected d;
 //     private e;
 // }
-// /*FIND ALL REFS*/const enum [|E|] {
-// }
+// /*FIND ALL REFS*/<|const enum [|{| isWriteAccess: true, isDefinition: true |}E|] {
+// }|>
 // async function fn() {}
 // export default class C2 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "enum",
-      "name": "const enum E",
-      "textSpan": {
-        "start": 117,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 106,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 117,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 106,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // --- (line: 4) skipped ---
+  //     protected d;
+  //     private e;
+  // }
+  // /*FIND ALL REFS*/<|const enum [|E|] {
+  // }|>
+  // async function fn() {}
+  // export default class C2 {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "const enum E",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
+// --- (line: 6) skipped ---
 // }
 // const enum E {
 // }
-// /*FIND ALL REFS*/async function [|fn|]() {}
+// /*FIND ALL REFS*/<|async function [|{| isWriteAccess: true, isDefinition: true |}fn|]() {}|>
 // export default class C2 {}
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "function",
-      "name": "function fn(): Promise<void>",
-      "textSpan": {
-        "start": 138,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "fn",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Promise",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 123,
-        "length": 22
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 138,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 123,
-          "length": 22
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // --- (line: 6) skipped ---
+  // }
+  // const enum E {
+  // }
+  // /*FIND ALL REFS*/<|async function [|fn|]() {}|>
+  // export default class C2 {}
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function fn(): Promise<void>",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "fn",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Promise",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
-// }
+// --- (line: 7) skipped ---
 // const enum E {
 // }
 // async function fn() {}
-// /*FIND ALL REFS*/export default class [|C2|] {}
+// /*FIND ALL REFS*/<|export default class [|{| isWriteAccess: true, isDefinition: true |}C2|] {}|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "class",
-      "name": "class C2",
-      "textSpan": {
-        "start": 167,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C2",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 146,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 167,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 146,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // --- (line: 7) skipped ---
+  // const enum E {
+  // }
+  // async function fn() {}
+  // /*FIND ALL REFS*/<|export default class [|C2|] {}|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C2",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C2",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
-// declare abstract class C1 {
-//     static a;
-//     readonly b;
-//     public c;
-//     protected d;
-//     private e;
-// }
+// --- (line: 7) skipped ---
 // const enum E {
 // }
 // async function fn() {}
-// export /*FIND ALL REFS*/[|default|] class C2 {}
+// <|export /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}default|] class C2 {}|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-      "kind": "class",
-      "name": "class C2",
-      "textSpan": {
-        "start": 167,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C2",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 146,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 153,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/referencesForModifiers.ts",
-        "contextSpan": {
-          "start": 146,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForModifiers.ts ===
+  // --- (line: 7) skipped ---
+  // const enum E {
+  // }
+  // async function fn() {}
+  // <|export /*FIND ALL REFS*/default class [|C2|] {}|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C2",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C2",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

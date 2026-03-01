@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowForCompoundAssignmentToThisMember.ts] ////
+
 //// [controlFlowForCompoundAssignmentToThisMember.ts]
 class DatasourceCommandWidgetElement {
     _commandBased: boolean;
@@ -19,8 +21,9 @@ class DatasourceCommandWidgetElement {
 }
 
 //// [controlFlowForCompoundAssignmentToThisMember.js]
-var DatasourceCommandWidgetElement = /** @class */ (function () {
-    function DatasourceCommandWidgetElement(target) {
+"use strict";
+class DatasourceCommandWidgetElement {
+    constructor(target) {
         if (target instanceof DatasourceCommandWidgetElement) {
             this._commandBased = true;
             this._commandElement = target.commandElement;
@@ -32,5 +35,4 @@ var DatasourceCommandWidgetElement = /** @class */ (function () {
             this._commandElement = target.commandElement;
         }
     }
-    return DatasourceCommandWidgetElement;
-}());
+}

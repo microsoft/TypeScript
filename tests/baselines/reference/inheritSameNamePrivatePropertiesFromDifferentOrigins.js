@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritSameNamePrivatePropertiesFromDifferentOrigins.ts] ////
+
 //// [inheritSameNamePrivatePropertiesFromDifferentOrigins.ts]
 class C {
     private x: number;
@@ -12,13 +14,8 @@ interface A extends C, C2 { // error
 }
 
 //// [inheritSameNamePrivatePropertiesFromDifferentOrigins.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+"use strict";
+class C {
+}
+class C2 {
+}

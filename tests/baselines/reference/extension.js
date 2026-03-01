@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extension.ts] ////
+
 //// [extension.ts]
 interface I {
     x;
@@ -7,13 +9,13 @@ interface I {
     y;
 }
 
-declare module M {
+declare namespace M {
     export class C {
         public p:number;
     }
 }
 
-declare module M {
+declare namespace M {
     export extension class C {
         public pe:string;
     }
@@ -22,16 +24,16 @@ declare module M {
 var c=new M.C();
 c.pe;
 c.p;
-var i:I;
+declare var i:I;
 i.x;
 i.y;
 
 
 
 //// [extension.js]
+"use strict";
 var c = new M.C();
 c.pe;
 c.p;
-var i;
 i.x;
 i.y;

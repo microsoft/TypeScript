@@ -1,21 +1,33 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesImportConstEnum.ts] ////
+
+=== file1.ts ===
 import { Foo } from './file2';
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 console.log(Foo.BAR);
 >console.log(Foo.BAR) : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >Foo.BAR : Foo
+>        : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >BAR : Foo
+>    : ^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export const enum Foo {
 >Foo : Foo
+>    : ^^^
 
   BAR,
 >BAR : Foo.BAR
+>    : ^^^^^^^
 }
 

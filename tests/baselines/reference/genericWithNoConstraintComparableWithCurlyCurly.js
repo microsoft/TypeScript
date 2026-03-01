@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts] ////
+
 //// [genericWithNoConstraintComparableWithCurlyCurly.ts]
 function foo<T>() {
     let x = {};
@@ -32,26 +34,26 @@ function yes<T extends object | null | undefined>() {
 //// [genericWithNoConstraintComparableWithCurlyCurly.js]
 "use strict";
 function foo() {
-    var x = {};
+    let x = {};
     x;
 }
 function bar() {
-    var x = {};
+    let x = {};
     x;
 }
 function baz() {
-    var x = {};
+    let x = {};
     x;
 }
 function bat() {
-    var x = {};
+    let x = {};
     x;
 }
 function no() {
-    var x = {};
+    let x = {};
     x; // should error
 }
 function yes() {
-    var x = {};
+    let x = {};
     x;
 }

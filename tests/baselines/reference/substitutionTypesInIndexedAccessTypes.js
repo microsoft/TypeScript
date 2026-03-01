@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substitutionTypesInIndexedAccessTypes.ts] ////
+
 //// [substitutionTypesInIndexedAccessTypes.ts]
 // Repro from #31086
 
@@ -22,9 +24,9 @@ const withoutBoundaryResult = withoutBoundary({
 //// [substitutionTypesInIndexedAccessTypes.js]
 "use strict";
 // Repro from #31086
-var boundaryResult = withBoundary({
-    select: true
+const boundaryResult = withBoundary({
+    select: true,
 });
-var withoutBoundaryResult = withoutBoundary({
-    select: true
+const withoutBoundaryResult = withoutBoundary({
+    select: true,
 });

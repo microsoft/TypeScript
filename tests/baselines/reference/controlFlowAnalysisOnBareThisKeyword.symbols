@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowAnalysisOnBareThisKeyword.ts ===
+//// [tests/cases/compiler/controlFlowAnalysisOnBareThisKeyword.ts] ////
+
+=== controlFlowAnalysisOnBareThisKeyword.ts ===
 declare function isBig(x: any): x is { big: true };
 >isBig : Symbol(isBig, Decl(controlFlowAnalysisOnBareThisKeyword.ts, 0, 0))
 >x : Symbol(x, Decl(controlFlowAnalysisOnBareThisKeyword.ts, 0, 23))

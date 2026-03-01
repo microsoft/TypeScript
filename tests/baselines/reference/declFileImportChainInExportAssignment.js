@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/declFileImportChainInExportAssignment.ts] ////
+
 //// [declFileImportChainInExportAssignment.ts]
-module m {
-    export module c {
+namespace m {
+    export namespace c {
         export class c {
         }
     }
@@ -13,13 +15,10 @@ export = b;
 "use strict";
 var m;
 (function (m) {
-    var c;
+    let c;
     (function (c_1) {
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         c_1.c = c;
     })(c = m.c || (m.c = {}));
 })(m || (m = {}));
@@ -29,8 +28,8 @@ module.exports = b;
 
 
 //// [declFileImportChainInExportAssignment.d.ts]
-declare module m {
-    module c {
+declare namespace m {
+    namespace c {
         class c {
         }
     }

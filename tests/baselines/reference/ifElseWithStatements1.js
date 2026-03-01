@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ifElseWithStatements1.ts] ////
+
 //// [ifElseWithStatements1.ts]
 if (true)
     f();
@@ -13,6 +15,7 @@ function foo(): boolean {
 
 
 //// [ifElseWithStatements1.js]
+"use strict";
 if (true)
     f();
 else

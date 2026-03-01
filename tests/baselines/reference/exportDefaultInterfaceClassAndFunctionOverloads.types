@@ -1,24 +1,35 @@
-=== tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts ===
+//// [tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts] ////
+
+=== exportDefaultInterfaceClassAndFunctionOverloads.ts ===
 export default function foo(value: number): number
 >foo : { (value: number): number; (value: string): string; }
+>    : ^^^     ^^      ^^^      ^^^     ^^      ^^^      ^^^
 >value : number
+>      : ^^^^^^
 
 export default function foo(value: string): string
 >foo : { (value: number): number; (value: string): string; }
+>    : ^^^     ^^      ^^^      ^^^     ^^      ^^^      ^^^
 >value : string
+>      : ^^^^^^
 
 export default function foo(value: string | number): string | number {
 >foo : { (value: number): number; (value: string): string; }
+>    : ^^^     ^^      ^^^      ^^^     ^^      ^^^      ^^^
 >value : string | number
+>      : ^^^^^^^^^^^^^^^
 
     return 1
 >1 : 1
+>  : ^
 }
 declare class Foo {}
 >Foo : Foo
+>    : ^^^
 
 export default Foo
 >Foo : Foo
+>    : ^^^
 
 export default interface Bar {}
 

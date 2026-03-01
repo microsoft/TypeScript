@@ -1,18 +1,20 @@
-=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/extendsClause.ts] ////
+
+=== types.ts ===
 export interface I {}
 >I : Symbol(I, Decl(types.ts, 0, 0))
 
 export class C {}
 >C : Symbol(C, Decl(types.ts, 0, 21))
 
-=== tests/cases/conformance/externalModules/typeOnly/ns.ts ===
+=== ns.ts ===
 import type * as types from './types';
 >types : Symbol(types, Decl(ns.ts, 0, 11))
 
 export { types };
 >types : Symbol(types, Decl(ns.ts, 1, 8))
 
-=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+=== index.ts ===
 import { types } from './ns';
 >types : Symbol(types, Decl(index.ts, 0, 8))
 

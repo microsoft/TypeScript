@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors4.ts ===
-var v = { set Foo(a) { } };
->v : Symbol(v, Decl(parserAccessors4.ts, 0, 3))
->Foo : Symbol(Foo, Decl(parserAccessors4.ts, 0, 9))
->a : Symbol(a, Decl(parserAccessors4.ts, 0, 18))
-

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumPropertyAccess.ts] ////
+
 //// [enumPropertyAccess.ts]
 enum Colors {
     Red,
@@ -15,6 +17,7 @@ function fill<B extends Colors>(f: B) {
 }
 
 //// [enumPropertyAccess.js]
+"use strict";
 var Colors;
 (function (Colors) {
     Colors[Colors["Red"] = 0] = "Red";

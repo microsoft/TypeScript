@@ -18,6 +18,6 @@ X(0); // shouldn't cause a crash
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
-var X = require("./file");
+Object.defineProperty(exports, "__esModule", { value: true });
+const X = require("./file");
 X(0); // shouldn't cause a crash

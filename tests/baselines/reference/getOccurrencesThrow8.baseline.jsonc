@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow8.ts ===
+// try {
+//     throw 10;
+// 
+//     try {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+//     }
+//     catch (x) {
+//         throw 10;
+// --- (line: 9) skipped ---

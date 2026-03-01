@@ -1,4 +1,5 @@
-module Test {
+// @target: es2015
+namespace Test {
     class Mocked {
         myProp: string;
     }

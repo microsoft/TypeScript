@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchCases.ts] ////
+
 //// [switchCases.ts]
 switch(0) {
  case 1:
@@ -6,6 +8,7 @@ switch(0) {
 
 
 //// [switchCases.js]
+"use strict";
 switch (0) {
     case 1:
         break;

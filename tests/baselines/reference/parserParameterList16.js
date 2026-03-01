@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts] ////
+
 //// [parserParameterList16.ts]
 class C {
    foo(a = 4);
@@ -5,9 +7,7 @@ class C {
 }
 
 //// [parserParameterList16.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (a, b) { };
-    return C;
-}());
+"use strict";
+class C {
+    foo(a, b) { }
+}

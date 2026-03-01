@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/paramterDestrcuturingDeclaration.ts] ////
+
 //// [paramterDestrcuturingDeclaration.ts]
 interface C {
     ({p: name}): any;
@@ -6,14 +8,15 @@ interface C {
 
 
 //// [paramterDestrcuturingDeclaration.js]
+"use strict";
 
 
 //// [paramterDestrcuturingDeclaration.d.ts]
 interface C {
-    ({ p }: {
+    ({ p: name }: {
         p: any;
     }): any;
-    new ({ p }: {
+    new ({ p: boolean }: {
         p: any;
     }): any;
 }

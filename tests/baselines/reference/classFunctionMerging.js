@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classFunctionMerging.ts] ////
+
 //// [classFunctionMerging.ts]
 // We allow ambient classes and functions to merge, this way callable classes
 // which are also namespaces can be represented in declaration files
@@ -13,5 +15,6 @@ const a = new Foo("");
 const b = Foo(12);
 
 //// [classFunctionMerging.js]
-var a = new Foo("");
-var b = Foo(12);
+"use strict";
+const a = new Foo("");
+const b = Foo(12);

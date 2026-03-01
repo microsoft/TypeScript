@@ -1,27 +1,36 @@
-=== tests/cases/compiler/deeplyNestedAssignabilityIssue.ts ===
+//// [tests/cases/compiler/deeplyNestedAssignabilityIssue.ts] ////
+
+=== deeplyNestedAssignabilityIssue.ts ===
 interface A {
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 interface Large {
     something: {
->something : { another: {    more: {        thing: A;    };    yetstill: {        another: A;    };}; }
+>something : { another: { more: { thing: A; }; yetstill: { another: A; }; }; }
+>          : ^^^^^^^^^^^                                                   ^^^
 
         another: {
->another : { more: {    thing: A;}; yetstill: {    another: A;}; }
+>another : { more: { thing: A; }; yetstill: { another: A; }; }
+>        : ^^^^^^^^             ^^^^^^^^^^^^               ^^^
 
             more: {
 >more : { thing: A; }
+>     : ^^^^^^^^^ ^^^
 
                 thing: A;
 >thing : A
+>      : ^
             }
             yetstill: {
 >yetstill : { another: A; }
+>         : ^^^^^^^^^^^ ^^^
 
                 another: A;
 >another : A
+>        : ^
             }
         }
     }
@@ -29,32 +38,46 @@ interface Large {
 
 const x: Large = {
 >x : Large
+>  : ^^^^^
 >{    something: {        another: {            more: {                thing: {}            },            yetstill: {                another: {}            }        }    }} : { something: { another: { more: { thing: {}; }; yetstill: { another: {}; }; }; }; }
+>                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     something: {
 >something : { another: { more: { thing: {}; }; yetstill: { another: {}; }; }; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        another: {            more: {                thing: {}            },            yetstill: {                another: {}            }        }    } : { another: { more: { thing: {}; }; yetstill: { another: {}; }; }; }
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         another: {
 >another : { more: { thing: {}; }; yetstill: { another: {}; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            more: {                thing: {}            },            yetstill: {                another: {}            }        } : { more: { thing: {}; }; yetstill: { another: {}; }; }
+>                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             more: {
 >more : { thing: {}; }
+>     : ^^^^^^^^^^^^^^
 >{                thing: {}            } : { thing: {}; }
+>                                        : ^^^^^^^^^^^^^^
 
                 thing: {}
 >thing : {}
+>      : ^^
 >{} : {}
+>   : ^^
 
             },
             yetstill: {
 >yetstill : { another: {}; }
+>         : ^^^^^^^^^^^^^^^^
 >{                another: {}            } : { another: {}; }
+>                                          : ^^^^^^^^^^^^^^^^
 
                 another: {}
 >another : {}
+>        : ^^
 >{} : {}
+>   : ^^
             }
         }
     }

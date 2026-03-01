@@ -1,36 +1,57 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef1.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef1.ts] ////
+
+=== classStaticBlockUseBeforeDef1.ts ===
 class C {
 >C : C
+>  : ^
 
     static x;
 >x : number
+>  : ^^^^^^
 
     static {
         this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : number
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     static y = this.x;
 >y : number
+>  : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     static z;
 >z : number
+>  : ^^^^^^
 
     static {
         this.z = this.y;
 >this.z = this.y : number
+>                : ^^^^^^
 >this.z : number
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >z : number
+>  : ^^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 >y : number
+>  : ^^^^^^
     }
 }
 

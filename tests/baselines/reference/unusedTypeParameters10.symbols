@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameters10.ts ===
+//// [tests/cases/compiler/unusedTypeParameters10.ts] ////
+
+=== unusedTypeParameters10.ts ===
 type Alias<T> = { };
 >Alias : Symbol(Alias, Decl(unusedTypeParameters10.ts, 0, 0))
 >T : Symbol(T, Decl(unusedTypeParameters10.ts, 0, 11))

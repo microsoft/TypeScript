@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeArrayReturnType.ts ===
+//// [tests/cases/compiler/contextualTypeArrayReturnType.ts] ////
+
+=== contextualTypeArrayReturnType.ts ===
 interface IBookStyle {
 >IBookStyle : Symbol(IBookStyle, Decl(contextualTypeArrayReturnType.ts, 0, 0))
 

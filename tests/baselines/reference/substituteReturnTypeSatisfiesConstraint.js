@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts] ////
+
 //// [substituteReturnTypeSatisfiesConstraint.ts]
 type M = { p: string };
 type O = { m: () => M };
@@ -6,3 +8,4 @@ type FFG<T> = T extends O ? X<ReturnType<T['m']>> : never; // error!
 
 
 //// [substituteReturnTypeSatisfiesConstraint.js]
+"use strict";

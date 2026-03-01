@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesEnum.ts] ////
+
 //// [augmentedTypesEnum.ts]
 // enum then var
 enum e1111 { One } // error
@@ -23,19 +25,20 @@ enum e5a { One } // error
 
 // enum then internal module
 enum e6 { One } 
-module e6 { } // ok
+namespace e6 { } // ok
 
 enum e6a { One }
-module e6a { var y = 2; } // should be error
+namespace e6a { var y = 2; } // should be error
 
 enum e6b { One }
-module e6b { export var y = 2; } // should be error
+namespace e6b { export var y = 2; } // should be error
 
 // enum then import, messes with error reporting
 //enum e7 { One }
 //import e7 = require(''); // should be error
 
 //// [augmentedTypesEnum.js]
+"use strict";
 // enum then var
 var e1111;
 (function (e1111) {
@@ -52,18 +55,15 @@ var e3;
 (function (e3) {
     e3[e3["One"] = 0] = "One";
 })(e3 || (e3 = {})); // error
-var e3 = function () { }; // error
+var e3 = () => { }; // error
 // enum then class
 var e4;
 (function (e4) {
     e4[e4["One"] = 0] = "One";
 })(e4 || (e4 = {})); // error
-var e4 = /** @class */ (function () {
-    function e4() {
-    }
-    e4.prototype.foo = function () { };
-    return e4;
-}()); // error
+class e4 {
+    foo() { }
+} // error
 // enum then enum
 var e5;
 (function (e5) {

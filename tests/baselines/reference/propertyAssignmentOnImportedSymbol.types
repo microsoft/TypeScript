@@ -1,16 +1,25 @@
-=== tests/cases/conformance/salsa/mod1.js ===
+//// [tests/cases/conformance/salsa/propertyAssignmentOnImportedSymbol.ts] ////
+
+=== mod1.js ===
 export var hurk = {}
 >hurk : {}
+>     : ^^
 >{} : {}
+>   : ^^
 
-=== tests/cases/conformance/salsa/bug24658.js ===
+=== bug24658.js ===
 import { hurk } from './mod1'
 >hurk : {}
+>     : ^^
 
 hurk.expando = 4
 >hurk.expando = 4 : 4
+>                 : ^
 >hurk.expando : any
 >hurk : {}
+>     : ^^
 >expando : any
+>        : ^^^
 >4 : 4
+>  : ^
 

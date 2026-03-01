@@ -1,3 +1,4 @@
+"use strict";
 /*comment*/
 var Foo;
 (function (Foo) {

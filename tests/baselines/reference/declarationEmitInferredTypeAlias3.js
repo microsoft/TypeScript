@@ -12,20 +12,17 @@ var x = "hi" || 5;
 export default x;
 
 //// [0.js]
-"use strict";
-exports.__esModule = true;
 {
-    var obj = true;
+    let obj = true;
 }
+export {};
 //// [1.js]
-"use strict";
-exports.__esModule = true;
 var x = "hi" || 5;
-exports["default"] = x;
+export default x;
 
 
 //// [0.d.ts]
 export {};
 //// [1.d.ts]
-declare var x: string | number;
+declare var x: string;
 export default x;

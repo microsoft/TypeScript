@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/classWithPublicProperty.ts] ////
+
 //// [classWithPublicProperty.ts]
 class C {
     public x;
@@ -22,17 +24,17 @@ var r7: string = C.f();
 var r8: string = C.g();
 
 //// [classWithPublicProperty.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.a = '';
         this.b = '';
-        this.d = function () { return ''; };
+        this.d = () => '';
     }
-    C.prototype.c = function () { return ''; };
-    C.f = function () { return ''; };
-    C.g = function () { return ''; };
-    return C;
-}());
+    c() { return ''; }
+    static f() { return ''; }
+}
+C.g = () => '';
 // all of these are valid
 var c = new C();
 var r1 = c.x;

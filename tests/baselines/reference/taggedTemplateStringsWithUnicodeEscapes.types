@@ -1,12 +1,20 @@
-=== tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapes.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsWithUnicodeEscapes.ts] ////
+
+=== taggedTemplateStringsWithUnicodeEscapes.ts ===
 function f(...args: any[]) {
 >f : (...args: any[]) => void
+>  : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 }
 
 f `'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'`;
 >f `'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'` : void
+>                                                             : ^^^^
 >f : (...args: any[]) => void
+>  : ^^^^    ^^     ^^^^^^^^^
 >`'\u{1f4a9}'${ " should be converted to " }'\uD83D\uDCA9'` : string
+>                                                           : ^^^^^^
 >" should be converted to " : " should be converted to "
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

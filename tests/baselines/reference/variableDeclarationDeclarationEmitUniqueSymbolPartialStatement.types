@@ -1,16 +1,27 @@
-=== tests/cases/compiler/variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts ===
+//// [tests/cases/compiler/variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts] ////
+
+=== variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.ts ===
 const key = Symbol(), value = 12;
 >key : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >value : 12
+>      : ^^
 >12 : 12
+>   : ^^
 
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     [key] = value;
 >[key] : number
+>      : ^^^^^^
 >key : unique symbol
+>    : ^^^^^^^^^^^^^
 >value : 12
+>      : ^^
 }

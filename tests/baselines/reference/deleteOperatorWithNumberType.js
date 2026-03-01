@@ -1,6 +1,8 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts] ////
+
 //// [deleteOperatorWithNumberType.ts]
 // delete  operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
@@ -9,7 +11,7 @@ class A {
     public a: number;
     static foo() { return 1; }
 }
-module M {
+namespace M {
     export var n: number;
 }
 
@@ -46,16 +48,12 @@ delete M.n;
 delete objA.a, M.n;
 
 //// [deleteOperatorWithNumberType.js]
-// delete  operator on number type
-var NUMBER;
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -66,7 +64,7 @@ var ResultIsBoolean2 = delete NUMBER1;
 // number type literal
 var ResultIsBoolean3 = delete 1;
 var ResultIsBoolean4 = delete { x: 1, y: 2 };
-var ResultIsBoolean5 = delete { x: 1, y: function (n) { return n; } };
+var ResultIsBoolean5 = delete { x: 1, y: (n) => { return n; } };
 // number type expressions
 var ResultIsBoolean6 = delete objA.a;
 var ResultIsBoolean7 = delete M.n;

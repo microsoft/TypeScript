@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts ===
+//// [tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts] ////
+
+=== bindingPatternCannotBeOnlyInferenceSource.ts ===
 declare function f<T>(): T;
 >f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 0))
 >T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 19))

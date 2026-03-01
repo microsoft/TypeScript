@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts] ////
+
 //// [shorthandPropertyAssignmentsInDestructuring_ES6.ts]
 (function() {
 	var s0;
@@ -116,6 +118,7 @@ function foo({a = 4, b = { x: 5 }}) {
 }
 
 //// [shorthandPropertyAssignmentsInDestructuring_ES6.js]
+"use strict";
 (function () {
     var s0;
     for ({ s0 = 5 } of [{ s0: 1 }]) {

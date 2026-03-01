@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadExpressionContextualTypeWithNamespace_0.ts ===
+//// [tests/cases/compiler/spreadExpressionContextualTypeWithNamespace.ts] ////
+
+=== spreadExpressionContextualTypeWithNamespace_0.ts ===
 // Repro from #44179 with some modification
 
 function func() {}
@@ -19,7 +21,7 @@ export { func, klass, obj };
 export function exportedDirectly() {}
 >exportedDirectly : Symbol(exportedDirectly, Decl(spreadExpressionContextualTypeWithNamespace_0.ts, 6, 28))
 
-=== tests/cases/compiler/spreadExpressionContextualTypeWithNamespace_1.ts ===
+=== spreadExpressionContextualTypeWithNamespace_1.ts ===
 import * as stuff from "./spreadExpressionContextualTypeWithNamespace_0";
 >stuff : Symbol(stuff, Decl(spreadExpressionContextualTypeWithNamespace_1.ts, 0, 6))
 

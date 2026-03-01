@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/indexTypeNoSubstitutionTemplateLiteral.ts] ////
+
+=== indexTypeNoSubstitutionTemplateLiteral.ts ===
+function Foo() {}
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+Foo[`b`] = function () {};
+>Foo[`b`] = function () {} : () => void
+>                          : ^^^^^^^^^^
+>Foo[`b`] : () => void
+>         : ^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>`b` : "b"
+>    : ^^^
+>function () {} : () => void
+>               : ^^^^^^^^^^
+
+type Test = keyof typeof Foo;
+>Test : "b"
+>     : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+

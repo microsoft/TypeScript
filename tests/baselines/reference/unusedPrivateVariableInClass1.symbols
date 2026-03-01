@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedPrivateVariableInClass1.ts ===
+//// [tests/cases/compiler/unusedPrivateVariableInClass1.ts] ////
+
+=== unusedPrivateVariableInClass1.ts ===
 class greeter {
 >greeter : Symbol(greeter, Decl(unusedPrivateVariableInClass1.ts, 0, 0))
 

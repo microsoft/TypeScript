@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts] ////
+
 //// [comparisonOperatorWithTypeParameter.ts]
 var a: {};
 var b: Object;
@@ -79,6 +81,7 @@ function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
 }
 
 //// [comparisonOperatorWithTypeParameter.js]
+"use strict";
 var a;
 var b;
 function foo(t, u, v) {

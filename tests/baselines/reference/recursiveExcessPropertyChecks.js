@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveExcessPropertyChecks.ts] ////
+
 //// [recursiveExcessPropertyChecks.ts]
 // Repro from #35804
 
@@ -19,5 +21,5 @@ getMaxId(nodes);
 // Repro from #35804
 function getMaxId(items) {
 }
-var nodes = [];
+const nodes = [];
 getMaxId(nodes);

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts] ////
+
 //// [callOfConditionalTypeWithConcreteBranches.ts]
 type Q<T> = number extends T ? (n: number) => void : never;
 function fn<T>(arg: Q<T>) {
@@ -42,21 +44,20 @@ export type AddFirstParameterToFunctions<Target> = {
 };
 
 //// [callOfConditionalTypeWithConcreteBranches.js]
-"use strict";
-exports.__esModule = true;
 function fn(arg) {
     // Expected: OK
     // Actual: Cannot convert 10 to number & T
     arg(10);
 }
 // Legal invocations are not problematic
-fn(function (m) { return m.toFixed(); });
-fn(function (m) { return m.toFixed(); });
+fn(m => m.toFixed());
+fn(m => m.toFixed());
 function fn2(arg) {
     function useT(_arg) { }
     // Expected: OK
-    arg(function (arg) { return useT(arg); });
+    arg(arg => useT(arg));
 }
 // Legal invocations are not problematic
-fn2(function (m) { return m(42); });
-fn2(function (m) { return m(42); });
+fn2(m => m(42));
+fn2(m => m(42));
+export {};

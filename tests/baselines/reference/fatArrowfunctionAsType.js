@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatArrowfunctionAsType.ts] ////
+
 //// [fatArrowfunctionAsType.ts]
 declare var b: <T>(x: T) => void ;
 
@@ -7,5 +9,6 @@ b = c;
 
 
 //// [fatArrowfunctionAsType.js]
+"use strict";
 var c = function (x) { return 42; };
 b = c;

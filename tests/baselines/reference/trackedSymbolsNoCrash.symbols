@@ -1,0 +1,944 @@
+//// [tests/cases/compiler/trackedSymbolsNoCrash.ts] ////
+
+=== ast.ts ===
+export enum SyntaxKind { Node0, Node1, Node2, Node3, Node4, Node5, Node6, Node7, Node8, Node9, Node10, Node11, Node12, Node13, Node14, Node15, Node16, Node17, Node18, Node19, Node20, Node21, Node22, Node23, Node24, Node25, Node26, Node27, Node28, Node29, Node30, Node31, Node32, Node33, Node34, Node35, Node36, Node37, Node38, Node39, Node40, Node41, Node42, Node43, Node44, Node45, Node46, Node47, Node48, Node49, Node50, Node51, Node52, Node53, Node54, Node55, Node56, Node57, Node58, Node59, Node60, Node61, Node62, Node63, Node64, Node65, Node66, Node67, Node68, Node69, Node70, Node71, Node72, Node73, Node74, Node75, Node76, Node77, Node78, Node79, Node80, Node81, Node82, Node83, Node84, Node85, Node86, Node87, Node88, Node89, Node90, Node91, Node92, Node93, Node94, Node95, Node96, Node97, Node98, Node99 }
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node0 : Symbol(SyntaxKind.Node0, Decl(ast.ts, 0, 24))
+>Node1 : Symbol(SyntaxKind.Node1, Decl(ast.ts, 0, 31))
+>Node2 : Symbol(SyntaxKind.Node2, Decl(ast.ts, 0, 38))
+>Node3 : Symbol(SyntaxKind.Node3, Decl(ast.ts, 0, 45))
+>Node4 : Symbol(SyntaxKind.Node4, Decl(ast.ts, 0, 52))
+>Node5 : Symbol(SyntaxKind.Node5, Decl(ast.ts, 0, 59))
+>Node6 : Symbol(SyntaxKind.Node6, Decl(ast.ts, 0, 66))
+>Node7 : Symbol(SyntaxKind.Node7, Decl(ast.ts, 0, 73))
+>Node8 : Symbol(SyntaxKind.Node8, Decl(ast.ts, 0, 80))
+>Node9 : Symbol(SyntaxKind.Node9, Decl(ast.ts, 0, 87))
+>Node10 : Symbol(SyntaxKind.Node10, Decl(ast.ts, 0, 94))
+>Node11 : Symbol(SyntaxKind.Node11, Decl(ast.ts, 0, 102))
+>Node12 : Symbol(SyntaxKind.Node12, Decl(ast.ts, 0, 110))
+>Node13 : Symbol(SyntaxKind.Node13, Decl(ast.ts, 0, 118))
+>Node14 : Symbol(SyntaxKind.Node14, Decl(ast.ts, 0, 126))
+>Node15 : Symbol(SyntaxKind.Node15, Decl(ast.ts, 0, 134))
+>Node16 : Symbol(SyntaxKind.Node16, Decl(ast.ts, 0, 142))
+>Node17 : Symbol(SyntaxKind.Node17, Decl(ast.ts, 0, 150))
+>Node18 : Symbol(SyntaxKind.Node18, Decl(ast.ts, 0, 158))
+>Node19 : Symbol(SyntaxKind.Node19, Decl(ast.ts, 0, 166))
+>Node20 : Symbol(SyntaxKind.Node20, Decl(ast.ts, 0, 174))
+>Node21 : Symbol(SyntaxKind.Node21, Decl(ast.ts, 0, 182))
+>Node22 : Symbol(SyntaxKind.Node22, Decl(ast.ts, 0, 190))
+>Node23 : Symbol(SyntaxKind.Node23, Decl(ast.ts, 0, 198))
+>Node24 : Symbol(SyntaxKind.Node24, Decl(ast.ts, 0, 206))
+>Node25 : Symbol(SyntaxKind.Node25, Decl(ast.ts, 0, 214))
+>Node26 : Symbol(SyntaxKind.Node26, Decl(ast.ts, 0, 222))
+>Node27 : Symbol(SyntaxKind.Node27, Decl(ast.ts, 0, 230))
+>Node28 : Symbol(SyntaxKind.Node28, Decl(ast.ts, 0, 238))
+>Node29 : Symbol(SyntaxKind.Node29, Decl(ast.ts, 0, 246))
+>Node30 : Symbol(SyntaxKind.Node30, Decl(ast.ts, 0, 254))
+>Node31 : Symbol(SyntaxKind.Node31, Decl(ast.ts, 0, 262))
+>Node32 : Symbol(SyntaxKind.Node32, Decl(ast.ts, 0, 270))
+>Node33 : Symbol(SyntaxKind.Node33, Decl(ast.ts, 0, 278))
+>Node34 : Symbol(SyntaxKind.Node34, Decl(ast.ts, 0, 286))
+>Node35 : Symbol(SyntaxKind.Node35, Decl(ast.ts, 0, 294))
+>Node36 : Symbol(SyntaxKind.Node36, Decl(ast.ts, 0, 302))
+>Node37 : Symbol(SyntaxKind.Node37, Decl(ast.ts, 0, 310))
+>Node38 : Symbol(SyntaxKind.Node38, Decl(ast.ts, 0, 318))
+>Node39 : Symbol(SyntaxKind.Node39, Decl(ast.ts, 0, 326))
+>Node40 : Symbol(SyntaxKind.Node40, Decl(ast.ts, 0, 334))
+>Node41 : Symbol(SyntaxKind.Node41, Decl(ast.ts, 0, 342))
+>Node42 : Symbol(SyntaxKind.Node42, Decl(ast.ts, 0, 350))
+>Node43 : Symbol(SyntaxKind.Node43, Decl(ast.ts, 0, 358))
+>Node44 : Symbol(SyntaxKind.Node44, Decl(ast.ts, 0, 366))
+>Node45 : Symbol(SyntaxKind.Node45, Decl(ast.ts, 0, 374))
+>Node46 : Symbol(SyntaxKind.Node46, Decl(ast.ts, 0, 382))
+>Node47 : Symbol(SyntaxKind.Node47, Decl(ast.ts, 0, 390))
+>Node48 : Symbol(SyntaxKind.Node48, Decl(ast.ts, 0, 398))
+>Node49 : Symbol(SyntaxKind.Node49, Decl(ast.ts, 0, 406))
+>Node50 : Symbol(SyntaxKind.Node50, Decl(ast.ts, 0, 414))
+>Node51 : Symbol(SyntaxKind.Node51, Decl(ast.ts, 0, 422))
+>Node52 : Symbol(SyntaxKind.Node52, Decl(ast.ts, 0, 430))
+>Node53 : Symbol(SyntaxKind.Node53, Decl(ast.ts, 0, 438))
+>Node54 : Symbol(SyntaxKind.Node54, Decl(ast.ts, 0, 446))
+>Node55 : Symbol(SyntaxKind.Node55, Decl(ast.ts, 0, 454))
+>Node56 : Symbol(SyntaxKind.Node56, Decl(ast.ts, 0, 462))
+>Node57 : Symbol(SyntaxKind.Node57, Decl(ast.ts, 0, 470))
+>Node58 : Symbol(SyntaxKind.Node58, Decl(ast.ts, 0, 478))
+>Node59 : Symbol(SyntaxKind.Node59, Decl(ast.ts, 0, 486))
+>Node60 : Symbol(SyntaxKind.Node60, Decl(ast.ts, 0, 494))
+>Node61 : Symbol(SyntaxKind.Node61, Decl(ast.ts, 0, 502))
+>Node62 : Symbol(SyntaxKind.Node62, Decl(ast.ts, 0, 510))
+>Node63 : Symbol(SyntaxKind.Node63, Decl(ast.ts, 0, 518))
+>Node64 : Symbol(SyntaxKind.Node64, Decl(ast.ts, 0, 526))
+>Node65 : Symbol(SyntaxKind.Node65, Decl(ast.ts, 0, 534))
+>Node66 : Symbol(SyntaxKind.Node66, Decl(ast.ts, 0, 542))
+>Node67 : Symbol(SyntaxKind.Node67, Decl(ast.ts, 0, 550))
+>Node68 : Symbol(SyntaxKind.Node68, Decl(ast.ts, 0, 558))
+>Node69 : Symbol(SyntaxKind.Node69, Decl(ast.ts, 0, 566))
+>Node70 : Symbol(SyntaxKind.Node70, Decl(ast.ts, 0, 574))
+>Node71 : Symbol(SyntaxKind.Node71, Decl(ast.ts, 0, 582))
+>Node72 : Symbol(SyntaxKind.Node72, Decl(ast.ts, 0, 590))
+>Node73 : Symbol(SyntaxKind.Node73, Decl(ast.ts, 0, 598))
+>Node74 : Symbol(SyntaxKind.Node74, Decl(ast.ts, 0, 606))
+>Node75 : Symbol(SyntaxKind.Node75, Decl(ast.ts, 0, 614))
+>Node76 : Symbol(SyntaxKind.Node76, Decl(ast.ts, 0, 622))
+>Node77 : Symbol(SyntaxKind.Node77, Decl(ast.ts, 0, 630))
+>Node78 : Symbol(SyntaxKind.Node78, Decl(ast.ts, 0, 638))
+>Node79 : Symbol(SyntaxKind.Node79, Decl(ast.ts, 0, 646))
+>Node80 : Symbol(SyntaxKind.Node80, Decl(ast.ts, 0, 654))
+>Node81 : Symbol(SyntaxKind.Node81, Decl(ast.ts, 0, 662))
+>Node82 : Symbol(SyntaxKind.Node82, Decl(ast.ts, 0, 670))
+>Node83 : Symbol(SyntaxKind.Node83, Decl(ast.ts, 0, 678))
+>Node84 : Symbol(SyntaxKind.Node84, Decl(ast.ts, 0, 686))
+>Node85 : Symbol(SyntaxKind.Node85, Decl(ast.ts, 0, 694))
+>Node86 : Symbol(SyntaxKind.Node86, Decl(ast.ts, 0, 702))
+>Node87 : Symbol(SyntaxKind.Node87, Decl(ast.ts, 0, 710))
+>Node88 : Symbol(SyntaxKind.Node88, Decl(ast.ts, 0, 718))
+>Node89 : Symbol(SyntaxKind.Node89, Decl(ast.ts, 0, 726))
+>Node90 : Symbol(SyntaxKind.Node90, Decl(ast.ts, 0, 734))
+>Node91 : Symbol(SyntaxKind.Node91, Decl(ast.ts, 0, 742))
+>Node92 : Symbol(SyntaxKind.Node92, Decl(ast.ts, 0, 750))
+>Node93 : Symbol(SyntaxKind.Node93, Decl(ast.ts, 0, 758))
+>Node94 : Symbol(SyntaxKind.Node94, Decl(ast.ts, 0, 766))
+>Node95 : Symbol(SyntaxKind.Node95, Decl(ast.ts, 0, 774))
+>Node96 : Symbol(SyntaxKind.Node96, Decl(ast.ts, 0, 782))
+>Node97 : Symbol(SyntaxKind.Node97, Decl(ast.ts, 0, 790))
+>Node98 : Symbol(SyntaxKind.Node98, Decl(ast.ts, 0, 798))
+>Node99 : Symbol(SyntaxKind.Node99, Decl(ast.ts, 0, 806))
+
+export interface Node0 { kind: SyntaxKind.Node0; propNode0: number; }
+>Node0 : Symbol(Node0, Decl(ast.ts, 0, 815))
+>kind : Symbol(Node0.kind, Decl(ast.ts, 2, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node0 : Symbol(SyntaxKind.Node0, Decl(ast.ts, 0, 24))
+>propNode0 : Symbol(Node0.propNode0, Decl(ast.ts, 2, 48))
+
+export interface Node1 { kind: SyntaxKind.Node1; propNode1: number; }
+>Node1 : Symbol(Node1, Decl(ast.ts, 2, 69))
+>kind : Symbol(Node1.kind, Decl(ast.ts, 3, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node1 : Symbol(SyntaxKind.Node1, Decl(ast.ts, 0, 31))
+>propNode1 : Symbol(Node1.propNode1, Decl(ast.ts, 3, 48))
+
+export interface Node2 { kind: SyntaxKind.Node2; propNode2: number; }
+>Node2 : Symbol(Node2, Decl(ast.ts, 3, 69))
+>kind : Symbol(Node2.kind, Decl(ast.ts, 4, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node2 : Symbol(SyntaxKind.Node2, Decl(ast.ts, 0, 38))
+>propNode2 : Symbol(Node2.propNode2, Decl(ast.ts, 4, 48))
+
+export interface Node3 { kind: SyntaxKind.Node3; propNode3: number; }
+>Node3 : Symbol(Node3, Decl(ast.ts, 4, 69))
+>kind : Symbol(Node3.kind, Decl(ast.ts, 5, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node3 : Symbol(SyntaxKind.Node3, Decl(ast.ts, 0, 45))
+>propNode3 : Symbol(Node3.propNode3, Decl(ast.ts, 5, 48))
+
+export interface Node4 { kind: SyntaxKind.Node4; propNode4: number; }
+>Node4 : Symbol(Node4, Decl(ast.ts, 5, 69))
+>kind : Symbol(Node4.kind, Decl(ast.ts, 6, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node4 : Symbol(SyntaxKind.Node4, Decl(ast.ts, 0, 52))
+>propNode4 : Symbol(Node4.propNode4, Decl(ast.ts, 6, 48))
+
+export interface Node5 { kind: SyntaxKind.Node5; propNode5: number; }
+>Node5 : Symbol(Node5, Decl(ast.ts, 6, 69))
+>kind : Symbol(Node5.kind, Decl(ast.ts, 7, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node5 : Symbol(SyntaxKind.Node5, Decl(ast.ts, 0, 59))
+>propNode5 : Symbol(Node5.propNode5, Decl(ast.ts, 7, 48))
+
+export interface Node6 { kind: SyntaxKind.Node6; propNode6: number; }
+>Node6 : Symbol(Node6, Decl(ast.ts, 7, 69))
+>kind : Symbol(Node6.kind, Decl(ast.ts, 8, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node6 : Symbol(SyntaxKind.Node6, Decl(ast.ts, 0, 66))
+>propNode6 : Symbol(Node6.propNode6, Decl(ast.ts, 8, 48))
+
+export interface Node7 { kind: SyntaxKind.Node7; propNode7: number; }
+>Node7 : Symbol(Node7, Decl(ast.ts, 8, 69))
+>kind : Symbol(Node7.kind, Decl(ast.ts, 9, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node7 : Symbol(SyntaxKind.Node7, Decl(ast.ts, 0, 73))
+>propNode7 : Symbol(Node7.propNode7, Decl(ast.ts, 9, 48))
+
+export interface Node8 { kind: SyntaxKind.Node8; propNode8: number; }
+>Node8 : Symbol(Node8, Decl(ast.ts, 9, 69))
+>kind : Symbol(Node8.kind, Decl(ast.ts, 10, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node8 : Symbol(SyntaxKind.Node8, Decl(ast.ts, 0, 80))
+>propNode8 : Symbol(Node8.propNode8, Decl(ast.ts, 10, 48))
+
+export interface Node9 { kind: SyntaxKind.Node9; propNode9: number; }
+>Node9 : Symbol(Node9, Decl(ast.ts, 10, 69))
+>kind : Symbol(Node9.kind, Decl(ast.ts, 11, 24))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node9 : Symbol(SyntaxKind.Node9, Decl(ast.ts, 0, 87))
+>propNode9 : Symbol(Node9.propNode9, Decl(ast.ts, 11, 48))
+
+export interface Node10 { kind: SyntaxKind.Node10; propNode10: number; }
+>Node10 : Symbol(Node10, Decl(ast.ts, 11, 69))
+>kind : Symbol(Node10.kind, Decl(ast.ts, 12, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node10 : Symbol(SyntaxKind.Node10, Decl(ast.ts, 0, 94))
+>propNode10 : Symbol(Node10.propNode10, Decl(ast.ts, 12, 50))
+
+export interface Node11 { kind: SyntaxKind.Node11; propNode11: number; }
+>Node11 : Symbol(Node11, Decl(ast.ts, 12, 72))
+>kind : Symbol(Node11.kind, Decl(ast.ts, 13, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node11 : Symbol(SyntaxKind.Node11, Decl(ast.ts, 0, 102))
+>propNode11 : Symbol(Node11.propNode11, Decl(ast.ts, 13, 50))
+
+export interface Node12 { kind: SyntaxKind.Node12; propNode12: number; }
+>Node12 : Symbol(Node12, Decl(ast.ts, 13, 72))
+>kind : Symbol(Node12.kind, Decl(ast.ts, 14, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node12 : Symbol(SyntaxKind.Node12, Decl(ast.ts, 0, 110))
+>propNode12 : Symbol(Node12.propNode12, Decl(ast.ts, 14, 50))
+
+export interface Node13 { kind: SyntaxKind.Node13; propNode13: number; }
+>Node13 : Symbol(Node13, Decl(ast.ts, 14, 72))
+>kind : Symbol(Node13.kind, Decl(ast.ts, 15, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node13 : Symbol(SyntaxKind.Node13, Decl(ast.ts, 0, 118))
+>propNode13 : Symbol(Node13.propNode13, Decl(ast.ts, 15, 50))
+
+export interface Node14 { kind: SyntaxKind.Node14; propNode14: number; }
+>Node14 : Symbol(Node14, Decl(ast.ts, 15, 72))
+>kind : Symbol(Node14.kind, Decl(ast.ts, 16, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node14 : Symbol(SyntaxKind.Node14, Decl(ast.ts, 0, 126))
+>propNode14 : Symbol(Node14.propNode14, Decl(ast.ts, 16, 50))
+
+export interface Node15 { kind: SyntaxKind.Node15; propNode15: number; }
+>Node15 : Symbol(Node15, Decl(ast.ts, 16, 72))
+>kind : Symbol(Node15.kind, Decl(ast.ts, 17, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node15 : Symbol(SyntaxKind.Node15, Decl(ast.ts, 0, 134))
+>propNode15 : Symbol(Node15.propNode15, Decl(ast.ts, 17, 50))
+
+export interface Node16 { kind: SyntaxKind.Node16; propNode16: number; }
+>Node16 : Symbol(Node16, Decl(ast.ts, 17, 72))
+>kind : Symbol(Node16.kind, Decl(ast.ts, 18, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node16 : Symbol(SyntaxKind.Node16, Decl(ast.ts, 0, 142))
+>propNode16 : Symbol(Node16.propNode16, Decl(ast.ts, 18, 50))
+
+export interface Node17 { kind: SyntaxKind.Node17; propNode17: number; }
+>Node17 : Symbol(Node17, Decl(ast.ts, 18, 72))
+>kind : Symbol(Node17.kind, Decl(ast.ts, 19, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node17 : Symbol(SyntaxKind.Node17, Decl(ast.ts, 0, 150))
+>propNode17 : Symbol(Node17.propNode17, Decl(ast.ts, 19, 50))
+
+export interface Node18 { kind: SyntaxKind.Node18; propNode18: number; }
+>Node18 : Symbol(Node18, Decl(ast.ts, 19, 72))
+>kind : Symbol(Node18.kind, Decl(ast.ts, 20, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node18 : Symbol(SyntaxKind.Node18, Decl(ast.ts, 0, 158))
+>propNode18 : Symbol(Node18.propNode18, Decl(ast.ts, 20, 50))
+
+export interface Node19 { kind: SyntaxKind.Node19; propNode19: number; }
+>Node19 : Symbol(Node19, Decl(ast.ts, 20, 72))
+>kind : Symbol(Node19.kind, Decl(ast.ts, 21, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node19 : Symbol(SyntaxKind.Node19, Decl(ast.ts, 0, 166))
+>propNode19 : Symbol(Node19.propNode19, Decl(ast.ts, 21, 50))
+
+export interface Node20 { kind: SyntaxKind.Node20; propNode20: number; }
+>Node20 : Symbol(Node20, Decl(ast.ts, 21, 72))
+>kind : Symbol(Node20.kind, Decl(ast.ts, 22, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node20 : Symbol(SyntaxKind.Node20, Decl(ast.ts, 0, 174))
+>propNode20 : Symbol(Node20.propNode20, Decl(ast.ts, 22, 50))
+
+export interface Node21 { kind: SyntaxKind.Node21; propNode21: number; }
+>Node21 : Symbol(Node21, Decl(ast.ts, 22, 72))
+>kind : Symbol(Node21.kind, Decl(ast.ts, 23, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node21 : Symbol(SyntaxKind.Node21, Decl(ast.ts, 0, 182))
+>propNode21 : Symbol(Node21.propNode21, Decl(ast.ts, 23, 50))
+
+export interface Node22 { kind: SyntaxKind.Node22; propNode22: number; }
+>Node22 : Symbol(Node22, Decl(ast.ts, 23, 72))
+>kind : Symbol(Node22.kind, Decl(ast.ts, 24, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node22 : Symbol(SyntaxKind.Node22, Decl(ast.ts, 0, 190))
+>propNode22 : Symbol(Node22.propNode22, Decl(ast.ts, 24, 50))
+
+export interface Node23 { kind: SyntaxKind.Node23; propNode23: number; }
+>Node23 : Symbol(Node23, Decl(ast.ts, 24, 72))
+>kind : Symbol(Node23.kind, Decl(ast.ts, 25, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node23 : Symbol(SyntaxKind.Node23, Decl(ast.ts, 0, 198))
+>propNode23 : Symbol(Node23.propNode23, Decl(ast.ts, 25, 50))
+
+export interface Node24 { kind: SyntaxKind.Node24; propNode24: number; }
+>Node24 : Symbol(Node24, Decl(ast.ts, 25, 72))
+>kind : Symbol(Node24.kind, Decl(ast.ts, 26, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node24 : Symbol(SyntaxKind.Node24, Decl(ast.ts, 0, 206))
+>propNode24 : Symbol(Node24.propNode24, Decl(ast.ts, 26, 50))
+
+export interface Node25 { kind: SyntaxKind.Node25; propNode25: number; }
+>Node25 : Symbol(Node25, Decl(ast.ts, 26, 72))
+>kind : Symbol(Node25.kind, Decl(ast.ts, 27, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node25 : Symbol(SyntaxKind.Node25, Decl(ast.ts, 0, 214))
+>propNode25 : Symbol(Node25.propNode25, Decl(ast.ts, 27, 50))
+
+export interface Node26 { kind: SyntaxKind.Node26; propNode26: number; }
+>Node26 : Symbol(Node26, Decl(ast.ts, 27, 72))
+>kind : Symbol(Node26.kind, Decl(ast.ts, 28, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node26 : Symbol(SyntaxKind.Node26, Decl(ast.ts, 0, 222))
+>propNode26 : Symbol(Node26.propNode26, Decl(ast.ts, 28, 50))
+
+export interface Node27 { kind: SyntaxKind.Node27; propNode27: number; }
+>Node27 : Symbol(Node27, Decl(ast.ts, 28, 72))
+>kind : Symbol(Node27.kind, Decl(ast.ts, 29, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node27 : Symbol(SyntaxKind.Node27, Decl(ast.ts, 0, 230))
+>propNode27 : Symbol(Node27.propNode27, Decl(ast.ts, 29, 50))
+
+export interface Node28 { kind: SyntaxKind.Node28; propNode28: number; }
+>Node28 : Symbol(Node28, Decl(ast.ts, 29, 72))
+>kind : Symbol(Node28.kind, Decl(ast.ts, 30, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node28 : Symbol(SyntaxKind.Node28, Decl(ast.ts, 0, 238))
+>propNode28 : Symbol(Node28.propNode28, Decl(ast.ts, 30, 50))
+
+export interface Node29 { kind: SyntaxKind.Node29; propNode29: number; }
+>Node29 : Symbol(Node29, Decl(ast.ts, 30, 72))
+>kind : Symbol(Node29.kind, Decl(ast.ts, 31, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node29 : Symbol(SyntaxKind.Node29, Decl(ast.ts, 0, 246))
+>propNode29 : Symbol(Node29.propNode29, Decl(ast.ts, 31, 50))
+
+export interface Node30 { kind: SyntaxKind.Node30; propNode30: number; }
+>Node30 : Symbol(Node30, Decl(ast.ts, 31, 72))
+>kind : Symbol(Node30.kind, Decl(ast.ts, 32, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node30 : Symbol(SyntaxKind.Node30, Decl(ast.ts, 0, 254))
+>propNode30 : Symbol(Node30.propNode30, Decl(ast.ts, 32, 50))
+
+export interface Node31 { kind: SyntaxKind.Node31; propNode31: number; }
+>Node31 : Symbol(Node31, Decl(ast.ts, 32, 72))
+>kind : Symbol(Node31.kind, Decl(ast.ts, 33, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node31 : Symbol(SyntaxKind.Node31, Decl(ast.ts, 0, 262))
+>propNode31 : Symbol(Node31.propNode31, Decl(ast.ts, 33, 50))
+
+export interface Node32 { kind: SyntaxKind.Node32; propNode32: number; }
+>Node32 : Symbol(Node32, Decl(ast.ts, 33, 72))
+>kind : Symbol(Node32.kind, Decl(ast.ts, 34, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node32 : Symbol(SyntaxKind.Node32, Decl(ast.ts, 0, 270))
+>propNode32 : Symbol(Node32.propNode32, Decl(ast.ts, 34, 50))
+
+export interface Node33 { kind: SyntaxKind.Node33; propNode33: number; }
+>Node33 : Symbol(Node33, Decl(ast.ts, 34, 72))
+>kind : Symbol(Node33.kind, Decl(ast.ts, 35, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node33 : Symbol(SyntaxKind.Node33, Decl(ast.ts, 0, 278))
+>propNode33 : Symbol(Node33.propNode33, Decl(ast.ts, 35, 50))
+
+export interface Node34 { kind: SyntaxKind.Node34; propNode34: number; }
+>Node34 : Symbol(Node34, Decl(ast.ts, 35, 72))
+>kind : Symbol(Node34.kind, Decl(ast.ts, 36, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node34 : Symbol(SyntaxKind.Node34, Decl(ast.ts, 0, 286))
+>propNode34 : Symbol(Node34.propNode34, Decl(ast.ts, 36, 50))
+
+export interface Node35 { kind: SyntaxKind.Node35; propNode35: number; }
+>Node35 : Symbol(Node35, Decl(ast.ts, 36, 72))
+>kind : Symbol(Node35.kind, Decl(ast.ts, 37, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node35 : Symbol(SyntaxKind.Node35, Decl(ast.ts, 0, 294))
+>propNode35 : Symbol(Node35.propNode35, Decl(ast.ts, 37, 50))
+
+export interface Node36 { kind: SyntaxKind.Node36; propNode36: number; }
+>Node36 : Symbol(Node36, Decl(ast.ts, 37, 72))
+>kind : Symbol(Node36.kind, Decl(ast.ts, 38, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node36 : Symbol(SyntaxKind.Node36, Decl(ast.ts, 0, 302))
+>propNode36 : Symbol(Node36.propNode36, Decl(ast.ts, 38, 50))
+
+export interface Node37 { kind: SyntaxKind.Node37; propNode37: number; }
+>Node37 : Symbol(Node37, Decl(ast.ts, 38, 72))
+>kind : Symbol(Node37.kind, Decl(ast.ts, 39, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node37 : Symbol(SyntaxKind.Node37, Decl(ast.ts, 0, 310))
+>propNode37 : Symbol(Node37.propNode37, Decl(ast.ts, 39, 50))
+
+export interface Node38 { kind: SyntaxKind.Node38; propNode38: number; }
+>Node38 : Symbol(Node38, Decl(ast.ts, 39, 72))
+>kind : Symbol(Node38.kind, Decl(ast.ts, 40, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node38 : Symbol(SyntaxKind.Node38, Decl(ast.ts, 0, 318))
+>propNode38 : Symbol(Node38.propNode38, Decl(ast.ts, 40, 50))
+
+export interface Node39 { kind: SyntaxKind.Node39; propNode39: number; }
+>Node39 : Symbol(Node39, Decl(ast.ts, 40, 72))
+>kind : Symbol(Node39.kind, Decl(ast.ts, 41, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node39 : Symbol(SyntaxKind.Node39, Decl(ast.ts, 0, 326))
+>propNode39 : Symbol(Node39.propNode39, Decl(ast.ts, 41, 50))
+
+export interface Node40 { kind: SyntaxKind.Node40; propNode40: number; }
+>Node40 : Symbol(Node40, Decl(ast.ts, 41, 72))
+>kind : Symbol(Node40.kind, Decl(ast.ts, 42, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node40 : Symbol(SyntaxKind.Node40, Decl(ast.ts, 0, 334))
+>propNode40 : Symbol(Node40.propNode40, Decl(ast.ts, 42, 50))
+
+export interface Node41 { kind: SyntaxKind.Node41; propNode41: number; }
+>Node41 : Symbol(Node41, Decl(ast.ts, 42, 72))
+>kind : Symbol(Node41.kind, Decl(ast.ts, 43, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node41 : Symbol(SyntaxKind.Node41, Decl(ast.ts, 0, 342))
+>propNode41 : Symbol(Node41.propNode41, Decl(ast.ts, 43, 50))
+
+export interface Node42 { kind: SyntaxKind.Node42; propNode42: number; }
+>Node42 : Symbol(Node42, Decl(ast.ts, 43, 72))
+>kind : Symbol(Node42.kind, Decl(ast.ts, 44, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node42 : Symbol(SyntaxKind.Node42, Decl(ast.ts, 0, 350))
+>propNode42 : Symbol(Node42.propNode42, Decl(ast.ts, 44, 50))
+
+export interface Node43 { kind: SyntaxKind.Node43; propNode43: number; }
+>Node43 : Symbol(Node43, Decl(ast.ts, 44, 72))
+>kind : Symbol(Node43.kind, Decl(ast.ts, 45, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node43 : Symbol(SyntaxKind.Node43, Decl(ast.ts, 0, 358))
+>propNode43 : Symbol(Node43.propNode43, Decl(ast.ts, 45, 50))
+
+export interface Node44 { kind: SyntaxKind.Node44; propNode44: number; }
+>Node44 : Symbol(Node44, Decl(ast.ts, 45, 72))
+>kind : Symbol(Node44.kind, Decl(ast.ts, 46, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node44 : Symbol(SyntaxKind.Node44, Decl(ast.ts, 0, 366))
+>propNode44 : Symbol(Node44.propNode44, Decl(ast.ts, 46, 50))
+
+export interface Node45 { kind: SyntaxKind.Node45; propNode45: number; }
+>Node45 : Symbol(Node45, Decl(ast.ts, 46, 72))
+>kind : Symbol(Node45.kind, Decl(ast.ts, 47, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node45 : Symbol(SyntaxKind.Node45, Decl(ast.ts, 0, 374))
+>propNode45 : Symbol(Node45.propNode45, Decl(ast.ts, 47, 50))
+
+export interface Node46 { kind: SyntaxKind.Node46; propNode46: number; }
+>Node46 : Symbol(Node46, Decl(ast.ts, 47, 72))
+>kind : Symbol(Node46.kind, Decl(ast.ts, 48, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node46 : Symbol(SyntaxKind.Node46, Decl(ast.ts, 0, 382))
+>propNode46 : Symbol(Node46.propNode46, Decl(ast.ts, 48, 50))
+
+export interface Node47 { kind: SyntaxKind.Node47; propNode47: number; }
+>Node47 : Symbol(Node47, Decl(ast.ts, 48, 72))
+>kind : Symbol(Node47.kind, Decl(ast.ts, 49, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node47 : Symbol(SyntaxKind.Node47, Decl(ast.ts, 0, 390))
+>propNode47 : Symbol(Node47.propNode47, Decl(ast.ts, 49, 50))
+
+export interface Node48 { kind: SyntaxKind.Node48; propNode48: number; }
+>Node48 : Symbol(Node48, Decl(ast.ts, 49, 72))
+>kind : Symbol(Node48.kind, Decl(ast.ts, 50, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node48 : Symbol(SyntaxKind.Node48, Decl(ast.ts, 0, 398))
+>propNode48 : Symbol(Node48.propNode48, Decl(ast.ts, 50, 50))
+
+export interface Node49 { kind: SyntaxKind.Node49; propNode49: number; }
+>Node49 : Symbol(Node49, Decl(ast.ts, 50, 72))
+>kind : Symbol(Node49.kind, Decl(ast.ts, 51, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node49 : Symbol(SyntaxKind.Node49, Decl(ast.ts, 0, 406))
+>propNode49 : Symbol(Node49.propNode49, Decl(ast.ts, 51, 50))
+
+export interface Node50 { kind: SyntaxKind.Node50; propNode50: number; }
+>Node50 : Symbol(Node50, Decl(ast.ts, 51, 72))
+>kind : Symbol(Node50.kind, Decl(ast.ts, 52, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node50 : Symbol(SyntaxKind.Node50, Decl(ast.ts, 0, 414))
+>propNode50 : Symbol(Node50.propNode50, Decl(ast.ts, 52, 50))
+
+export interface Node51 { kind: SyntaxKind.Node51; propNode51: number; }
+>Node51 : Symbol(Node51, Decl(ast.ts, 52, 72))
+>kind : Symbol(Node51.kind, Decl(ast.ts, 53, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node51 : Symbol(SyntaxKind.Node51, Decl(ast.ts, 0, 422))
+>propNode51 : Symbol(Node51.propNode51, Decl(ast.ts, 53, 50))
+
+export interface Node52 { kind: SyntaxKind.Node52; propNode52: number; }
+>Node52 : Symbol(Node52, Decl(ast.ts, 53, 72))
+>kind : Symbol(Node52.kind, Decl(ast.ts, 54, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node52 : Symbol(SyntaxKind.Node52, Decl(ast.ts, 0, 430))
+>propNode52 : Symbol(Node52.propNode52, Decl(ast.ts, 54, 50))
+
+export interface Node53 { kind: SyntaxKind.Node53; propNode53: number; }
+>Node53 : Symbol(Node53, Decl(ast.ts, 54, 72))
+>kind : Symbol(Node53.kind, Decl(ast.ts, 55, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node53 : Symbol(SyntaxKind.Node53, Decl(ast.ts, 0, 438))
+>propNode53 : Symbol(Node53.propNode53, Decl(ast.ts, 55, 50))
+
+export interface Node54 { kind: SyntaxKind.Node54; propNode54: number; }
+>Node54 : Symbol(Node54, Decl(ast.ts, 55, 72))
+>kind : Symbol(Node54.kind, Decl(ast.ts, 56, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node54 : Symbol(SyntaxKind.Node54, Decl(ast.ts, 0, 446))
+>propNode54 : Symbol(Node54.propNode54, Decl(ast.ts, 56, 50))
+
+export interface Node55 { kind: SyntaxKind.Node55; propNode55: number; }
+>Node55 : Symbol(Node55, Decl(ast.ts, 56, 72))
+>kind : Symbol(Node55.kind, Decl(ast.ts, 57, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node55 : Symbol(SyntaxKind.Node55, Decl(ast.ts, 0, 454))
+>propNode55 : Symbol(Node55.propNode55, Decl(ast.ts, 57, 50))
+
+export interface Node56 { kind: SyntaxKind.Node56; propNode56: number; }
+>Node56 : Symbol(Node56, Decl(ast.ts, 57, 72))
+>kind : Symbol(Node56.kind, Decl(ast.ts, 58, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node56 : Symbol(SyntaxKind.Node56, Decl(ast.ts, 0, 462))
+>propNode56 : Symbol(Node56.propNode56, Decl(ast.ts, 58, 50))
+
+export interface Node57 { kind: SyntaxKind.Node57; propNode57: number; }
+>Node57 : Symbol(Node57, Decl(ast.ts, 58, 72))
+>kind : Symbol(Node57.kind, Decl(ast.ts, 59, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node57 : Symbol(SyntaxKind.Node57, Decl(ast.ts, 0, 470))
+>propNode57 : Symbol(Node57.propNode57, Decl(ast.ts, 59, 50))
+
+export interface Node58 { kind: SyntaxKind.Node58; propNode58: number; }
+>Node58 : Symbol(Node58, Decl(ast.ts, 59, 72))
+>kind : Symbol(Node58.kind, Decl(ast.ts, 60, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node58 : Symbol(SyntaxKind.Node58, Decl(ast.ts, 0, 478))
+>propNode58 : Symbol(Node58.propNode58, Decl(ast.ts, 60, 50))
+
+export interface Node59 { kind: SyntaxKind.Node59; propNode59: number; }
+>Node59 : Symbol(Node59, Decl(ast.ts, 60, 72))
+>kind : Symbol(Node59.kind, Decl(ast.ts, 61, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node59 : Symbol(SyntaxKind.Node59, Decl(ast.ts, 0, 486))
+>propNode59 : Symbol(Node59.propNode59, Decl(ast.ts, 61, 50))
+
+export interface Node60 { kind: SyntaxKind.Node60; propNode60: number; }
+>Node60 : Symbol(Node60, Decl(ast.ts, 61, 72))
+>kind : Symbol(Node60.kind, Decl(ast.ts, 62, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node60 : Symbol(SyntaxKind.Node60, Decl(ast.ts, 0, 494))
+>propNode60 : Symbol(Node60.propNode60, Decl(ast.ts, 62, 50))
+
+export interface Node61 { kind: SyntaxKind.Node61; propNode61: number; }
+>Node61 : Symbol(Node61, Decl(ast.ts, 62, 72))
+>kind : Symbol(Node61.kind, Decl(ast.ts, 63, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node61 : Symbol(SyntaxKind.Node61, Decl(ast.ts, 0, 502))
+>propNode61 : Symbol(Node61.propNode61, Decl(ast.ts, 63, 50))
+
+export interface Node62 { kind: SyntaxKind.Node62; propNode62: number; }
+>Node62 : Symbol(Node62, Decl(ast.ts, 63, 72))
+>kind : Symbol(Node62.kind, Decl(ast.ts, 64, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node62 : Symbol(SyntaxKind.Node62, Decl(ast.ts, 0, 510))
+>propNode62 : Symbol(Node62.propNode62, Decl(ast.ts, 64, 50))
+
+export interface Node63 { kind: SyntaxKind.Node63; propNode63: number; }
+>Node63 : Symbol(Node63, Decl(ast.ts, 64, 72))
+>kind : Symbol(Node63.kind, Decl(ast.ts, 65, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node63 : Symbol(SyntaxKind.Node63, Decl(ast.ts, 0, 518))
+>propNode63 : Symbol(Node63.propNode63, Decl(ast.ts, 65, 50))
+
+export interface Node64 { kind: SyntaxKind.Node64; propNode64: number; }
+>Node64 : Symbol(Node64, Decl(ast.ts, 65, 72))
+>kind : Symbol(Node64.kind, Decl(ast.ts, 66, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node64 : Symbol(SyntaxKind.Node64, Decl(ast.ts, 0, 526))
+>propNode64 : Symbol(Node64.propNode64, Decl(ast.ts, 66, 50))
+
+export interface Node65 { kind: SyntaxKind.Node65; propNode65: number; }
+>Node65 : Symbol(Node65, Decl(ast.ts, 66, 72))
+>kind : Symbol(Node65.kind, Decl(ast.ts, 67, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node65 : Symbol(SyntaxKind.Node65, Decl(ast.ts, 0, 534))
+>propNode65 : Symbol(Node65.propNode65, Decl(ast.ts, 67, 50))
+
+export interface Node66 { kind: SyntaxKind.Node66; propNode66: number; }
+>Node66 : Symbol(Node66, Decl(ast.ts, 67, 72))
+>kind : Symbol(Node66.kind, Decl(ast.ts, 68, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node66 : Symbol(SyntaxKind.Node66, Decl(ast.ts, 0, 542))
+>propNode66 : Symbol(Node66.propNode66, Decl(ast.ts, 68, 50))
+
+export interface Node67 { kind: SyntaxKind.Node67; propNode67: number; }
+>Node67 : Symbol(Node67, Decl(ast.ts, 68, 72))
+>kind : Symbol(Node67.kind, Decl(ast.ts, 69, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node67 : Symbol(SyntaxKind.Node67, Decl(ast.ts, 0, 550))
+>propNode67 : Symbol(Node67.propNode67, Decl(ast.ts, 69, 50))
+
+export interface Node68 { kind: SyntaxKind.Node68; propNode68: number; }
+>Node68 : Symbol(Node68, Decl(ast.ts, 69, 72))
+>kind : Symbol(Node68.kind, Decl(ast.ts, 70, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node68 : Symbol(SyntaxKind.Node68, Decl(ast.ts, 0, 558))
+>propNode68 : Symbol(Node68.propNode68, Decl(ast.ts, 70, 50))
+
+export interface Node69 { kind: SyntaxKind.Node69; propNode69: number; }
+>Node69 : Symbol(Node69, Decl(ast.ts, 70, 72))
+>kind : Symbol(Node69.kind, Decl(ast.ts, 71, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node69 : Symbol(SyntaxKind.Node69, Decl(ast.ts, 0, 566))
+>propNode69 : Symbol(Node69.propNode69, Decl(ast.ts, 71, 50))
+
+export interface Node70 { kind: SyntaxKind.Node70; propNode70: number; }
+>Node70 : Symbol(Node70, Decl(ast.ts, 71, 72))
+>kind : Symbol(Node70.kind, Decl(ast.ts, 72, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node70 : Symbol(SyntaxKind.Node70, Decl(ast.ts, 0, 574))
+>propNode70 : Symbol(Node70.propNode70, Decl(ast.ts, 72, 50))
+
+export interface Node71 { kind: SyntaxKind.Node71; propNode71: number; }
+>Node71 : Symbol(Node71, Decl(ast.ts, 72, 72))
+>kind : Symbol(Node71.kind, Decl(ast.ts, 73, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node71 : Symbol(SyntaxKind.Node71, Decl(ast.ts, 0, 582))
+>propNode71 : Symbol(Node71.propNode71, Decl(ast.ts, 73, 50))
+
+export interface Node72 { kind: SyntaxKind.Node72; propNode72: number; }
+>Node72 : Symbol(Node72, Decl(ast.ts, 73, 72))
+>kind : Symbol(Node72.kind, Decl(ast.ts, 74, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node72 : Symbol(SyntaxKind.Node72, Decl(ast.ts, 0, 590))
+>propNode72 : Symbol(Node72.propNode72, Decl(ast.ts, 74, 50))
+
+export interface Node73 { kind: SyntaxKind.Node73; propNode73: number; }
+>Node73 : Symbol(Node73, Decl(ast.ts, 74, 72))
+>kind : Symbol(Node73.kind, Decl(ast.ts, 75, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node73 : Symbol(SyntaxKind.Node73, Decl(ast.ts, 0, 598))
+>propNode73 : Symbol(Node73.propNode73, Decl(ast.ts, 75, 50))
+
+export interface Node74 { kind: SyntaxKind.Node74; propNode74: number; }
+>Node74 : Symbol(Node74, Decl(ast.ts, 75, 72))
+>kind : Symbol(Node74.kind, Decl(ast.ts, 76, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node74 : Symbol(SyntaxKind.Node74, Decl(ast.ts, 0, 606))
+>propNode74 : Symbol(Node74.propNode74, Decl(ast.ts, 76, 50))
+
+export interface Node75 { kind: SyntaxKind.Node75; propNode75: number; }
+>Node75 : Symbol(Node75, Decl(ast.ts, 76, 72))
+>kind : Symbol(Node75.kind, Decl(ast.ts, 77, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node75 : Symbol(SyntaxKind.Node75, Decl(ast.ts, 0, 614))
+>propNode75 : Symbol(Node75.propNode75, Decl(ast.ts, 77, 50))
+
+export interface Node76 { kind: SyntaxKind.Node76; propNode76: number; }
+>Node76 : Symbol(Node76, Decl(ast.ts, 77, 72))
+>kind : Symbol(Node76.kind, Decl(ast.ts, 78, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node76 : Symbol(SyntaxKind.Node76, Decl(ast.ts, 0, 622))
+>propNode76 : Symbol(Node76.propNode76, Decl(ast.ts, 78, 50))
+
+export interface Node77 { kind: SyntaxKind.Node77; propNode77: number; }
+>Node77 : Symbol(Node77, Decl(ast.ts, 78, 72))
+>kind : Symbol(Node77.kind, Decl(ast.ts, 79, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node77 : Symbol(SyntaxKind.Node77, Decl(ast.ts, 0, 630))
+>propNode77 : Symbol(Node77.propNode77, Decl(ast.ts, 79, 50))
+
+export interface Node78 { kind: SyntaxKind.Node78; propNode78: number; }
+>Node78 : Symbol(Node78, Decl(ast.ts, 79, 72))
+>kind : Symbol(Node78.kind, Decl(ast.ts, 80, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node78 : Symbol(SyntaxKind.Node78, Decl(ast.ts, 0, 638))
+>propNode78 : Symbol(Node78.propNode78, Decl(ast.ts, 80, 50))
+
+export interface Node79 { kind: SyntaxKind.Node79; propNode79: number; }
+>Node79 : Symbol(Node79, Decl(ast.ts, 80, 72))
+>kind : Symbol(Node79.kind, Decl(ast.ts, 81, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node79 : Symbol(SyntaxKind.Node79, Decl(ast.ts, 0, 646))
+>propNode79 : Symbol(Node79.propNode79, Decl(ast.ts, 81, 50))
+
+export interface Node80 { kind: SyntaxKind.Node80; propNode80: number; }
+>Node80 : Symbol(Node80, Decl(ast.ts, 81, 72))
+>kind : Symbol(Node80.kind, Decl(ast.ts, 82, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node80 : Symbol(SyntaxKind.Node80, Decl(ast.ts, 0, 654))
+>propNode80 : Symbol(Node80.propNode80, Decl(ast.ts, 82, 50))
+
+export interface Node81 { kind: SyntaxKind.Node81; propNode81: number; }
+>Node81 : Symbol(Node81, Decl(ast.ts, 82, 72))
+>kind : Symbol(Node81.kind, Decl(ast.ts, 83, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node81 : Symbol(SyntaxKind.Node81, Decl(ast.ts, 0, 662))
+>propNode81 : Symbol(Node81.propNode81, Decl(ast.ts, 83, 50))
+
+export interface Node82 { kind: SyntaxKind.Node82; propNode82: number; }
+>Node82 : Symbol(Node82, Decl(ast.ts, 83, 72))
+>kind : Symbol(Node82.kind, Decl(ast.ts, 84, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node82 : Symbol(SyntaxKind.Node82, Decl(ast.ts, 0, 670))
+>propNode82 : Symbol(Node82.propNode82, Decl(ast.ts, 84, 50))
+
+export interface Node83 { kind: SyntaxKind.Node83; propNode83: number; }
+>Node83 : Symbol(Node83, Decl(ast.ts, 84, 72))
+>kind : Symbol(Node83.kind, Decl(ast.ts, 85, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node83 : Symbol(SyntaxKind.Node83, Decl(ast.ts, 0, 678))
+>propNode83 : Symbol(Node83.propNode83, Decl(ast.ts, 85, 50))
+
+export interface Node84 { kind: SyntaxKind.Node84; propNode84: number; }
+>Node84 : Symbol(Node84, Decl(ast.ts, 85, 72))
+>kind : Symbol(Node84.kind, Decl(ast.ts, 86, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node84 : Symbol(SyntaxKind.Node84, Decl(ast.ts, 0, 686))
+>propNode84 : Symbol(Node84.propNode84, Decl(ast.ts, 86, 50))
+
+export interface Node85 { kind: SyntaxKind.Node85; propNode85: number; }
+>Node85 : Symbol(Node85, Decl(ast.ts, 86, 72))
+>kind : Symbol(Node85.kind, Decl(ast.ts, 87, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node85 : Symbol(SyntaxKind.Node85, Decl(ast.ts, 0, 694))
+>propNode85 : Symbol(Node85.propNode85, Decl(ast.ts, 87, 50))
+
+export interface Node86 { kind: SyntaxKind.Node86; propNode86: number; }
+>Node86 : Symbol(Node86, Decl(ast.ts, 87, 72))
+>kind : Symbol(Node86.kind, Decl(ast.ts, 88, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node86 : Symbol(SyntaxKind.Node86, Decl(ast.ts, 0, 702))
+>propNode86 : Symbol(Node86.propNode86, Decl(ast.ts, 88, 50))
+
+export interface Node87 { kind: SyntaxKind.Node87; propNode87: number; }
+>Node87 : Symbol(Node87, Decl(ast.ts, 88, 72))
+>kind : Symbol(Node87.kind, Decl(ast.ts, 89, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node87 : Symbol(SyntaxKind.Node87, Decl(ast.ts, 0, 710))
+>propNode87 : Symbol(Node87.propNode87, Decl(ast.ts, 89, 50))
+
+export interface Node88 { kind: SyntaxKind.Node88; propNode88: number; }
+>Node88 : Symbol(Node88, Decl(ast.ts, 89, 72))
+>kind : Symbol(Node88.kind, Decl(ast.ts, 90, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node88 : Symbol(SyntaxKind.Node88, Decl(ast.ts, 0, 718))
+>propNode88 : Symbol(Node88.propNode88, Decl(ast.ts, 90, 50))
+
+export interface Node89 { kind: SyntaxKind.Node89; propNode89: number; }
+>Node89 : Symbol(Node89, Decl(ast.ts, 90, 72))
+>kind : Symbol(Node89.kind, Decl(ast.ts, 91, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node89 : Symbol(SyntaxKind.Node89, Decl(ast.ts, 0, 726))
+>propNode89 : Symbol(Node89.propNode89, Decl(ast.ts, 91, 50))
+
+export interface Node90 { kind: SyntaxKind.Node90; propNode90: number; }
+>Node90 : Symbol(Node90, Decl(ast.ts, 91, 72))
+>kind : Symbol(Node90.kind, Decl(ast.ts, 92, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node90 : Symbol(SyntaxKind.Node90, Decl(ast.ts, 0, 734))
+>propNode90 : Symbol(Node90.propNode90, Decl(ast.ts, 92, 50))
+
+export interface Node91 { kind: SyntaxKind.Node91; propNode91: number; }
+>Node91 : Symbol(Node91, Decl(ast.ts, 92, 72))
+>kind : Symbol(Node91.kind, Decl(ast.ts, 93, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node91 : Symbol(SyntaxKind.Node91, Decl(ast.ts, 0, 742))
+>propNode91 : Symbol(Node91.propNode91, Decl(ast.ts, 93, 50))
+
+export interface Node92 { kind: SyntaxKind.Node92; propNode92: number; }
+>Node92 : Symbol(Node92, Decl(ast.ts, 93, 72))
+>kind : Symbol(Node92.kind, Decl(ast.ts, 94, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node92 : Symbol(SyntaxKind.Node92, Decl(ast.ts, 0, 750))
+>propNode92 : Symbol(Node92.propNode92, Decl(ast.ts, 94, 50))
+
+export interface Node93 { kind: SyntaxKind.Node93; propNode93: number; }
+>Node93 : Symbol(Node93, Decl(ast.ts, 94, 72))
+>kind : Symbol(Node93.kind, Decl(ast.ts, 95, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node93 : Symbol(SyntaxKind.Node93, Decl(ast.ts, 0, 758))
+>propNode93 : Symbol(Node93.propNode93, Decl(ast.ts, 95, 50))
+
+export interface Node94 { kind: SyntaxKind.Node94; propNode94: number; }
+>Node94 : Symbol(Node94, Decl(ast.ts, 95, 72))
+>kind : Symbol(Node94.kind, Decl(ast.ts, 96, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node94 : Symbol(SyntaxKind.Node94, Decl(ast.ts, 0, 766))
+>propNode94 : Symbol(Node94.propNode94, Decl(ast.ts, 96, 50))
+
+export interface Node95 { kind: SyntaxKind.Node95; propNode95: number; }
+>Node95 : Symbol(Node95, Decl(ast.ts, 96, 72))
+>kind : Symbol(Node95.kind, Decl(ast.ts, 97, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node95 : Symbol(SyntaxKind.Node95, Decl(ast.ts, 0, 774))
+>propNode95 : Symbol(Node95.propNode95, Decl(ast.ts, 97, 50))
+
+export interface Node96 { kind: SyntaxKind.Node96; propNode96: number; }
+>Node96 : Symbol(Node96, Decl(ast.ts, 97, 72))
+>kind : Symbol(Node96.kind, Decl(ast.ts, 98, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node96 : Symbol(SyntaxKind.Node96, Decl(ast.ts, 0, 782))
+>propNode96 : Symbol(Node96.propNode96, Decl(ast.ts, 98, 50))
+
+export interface Node97 { kind: SyntaxKind.Node97; propNode97: number; }
+>Node97 : Symbol(Node97, Decl(ast.ts, 98, 72))
+>kind : Symbol(Node97.kind, Decl(ast.ts, 99, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node97 : Symbol(SyntaxKind.Node97, Decl(ast.ts, 0, 790))
+>propNode97 : Symbol(Node97.propNode97, Decl(ast.ts, 99, 50))
+
+export interface Node98 { kind: SyntaxKind.Node98; propNode98: number; }
+>Node98 : Symbol(Node98, Decl(ast.ts, 99, 72))
+>kind : Symbol(Node98.kind, Decl(ast.ts, 100, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node98 : Symbol(SyntaxKind.Node98, Decl(ast.ts, 0, 798))
+>propNode98 : Symbol(Node98.propNode98, Decl(ast.ts, 100, 50))
+
+export interface Node99 { kind: SyntaxKind.Node99; propNode99: number; }
+>Node99 : Symbol(Node99, Decl(ast.ts, 100, 72))
+>kind : Symbol(Node99.kind, Decl(ast.ts, 101, 25))
+>SyntaxKind : Symbol(SyntaxKind, Decl(ast.ts, 0, 0))
+>Node99 : Symbol(SyntaxKind.Node99, Decl(ast.ts, 0, 806))
+>propNode99 : Symbol(Node99.propNode99, Decl(ast.ts, 101, 50))
+
+export type Node = Node0 | Node1 | Node2 | Node3 | Node4 | Node5 | Node6 | Node7 | Node8 | Node9 | Node10 | Node11 | Node12 | Node13 | Node14 | Node15 | Node16 | Node17 | Node18 | Node19 | Node20 | Node21 | Node22 | Node23 | Node24 | Node25 | Node26 | Node27 | Node28 | Node29 | Node30 | Node31 | Node32 | Node33 | Node34 | Node35 | Node36 | Node37 | Node38 | Node39 | Node40 | Node41 | Node42 | Node43 | Node44 | Node45 | Node46 | Node47 | Node48 | Node49 | Node50 | Node51 | Node52 | Node53 | Node54 | Node55 | Node56 | Node57 | Node58 | Node59 | Node60 | Node61 | Node62 | Node63 | Node64 | Node65 | Node66 | Node67 | Node68 | Node69 | Node70 | Node71 | Node72 | Node73 | Node74 | Node75 | Node76 | Node77 | Node78 | Node79 | Node80 | Node81 | Node82 | Node83 | Node84 | Node85 | Node86 | Node87 | Node88 | Node89 | Node90 | Node91 | Node92 | Node93 | Node94 | Node95 | Node96 | Node97 | Node98 | Node99;
+>Node : Symbol(Node, Decl(ast.ts, 101, 72))
+>Node0 : Symbol(Node0, Decl(ast.ts, 0, 815))
+>Node1 : Symbol(Node1, Decl(ast.ts, 2, 69))
+>Node2 : Symbol(Node2, Decl(ast.ts, 3, 69))
+>Node3 : Symbol(Node3, Decl(ast.ts, 4, 69))
+>Node4 : Symbol(Node4, Decl(ast.ts, 5, 69))
+>Node5 : Symbol(Node5, Decl(ast.ts, 6, 69))
+>Node6 : Symbol(Node6, Decl(ast.ts, 7, 69))
+>Node7 : Symbol(Node7, Decl(ast.ts, 8, 69))
+>Node8 : Symbol(Node8, Decl(ast.ts, 9, 69))
+>Node9 : Symbol(Node9, Decl(ast.ts, 10, 69))
+>Node10 : Symbol(Node10, Decl(ast.ts, 11, 69))
+>Node11 : Symbol(Node11, Decl(ast.ts, 12, 72))
+>Node12 : Symbol(Node12, Decl(ast.ts, 13, 72))
+>Node13 : Symbol(Node13, Decl(ast.ts, 14, 72))
+>Node14 : Symbol(Node14, Decl(ast.ts, 15, 72))
+>Node15 : Symbol(Node15, Decl(ast.ts, 16, 72))
+>Node16 : Symbol(Node16, Decl(ast.ts, 17, 72))
+>Node17 : Symbol(Node17, Decl(ast.ts, 18, 72))
+>Node18 : Symbol(Node18, Decl(ast.ts, 19, 72))
+>Node19 : Symbol(Node19, Decl(ast.ts, 20, 72))
+>Node20 : Symbol(Node20, Decl(ast.ts, 21, 72))
+>Node21 : Symbol(Node21, Decl(ast.ts, 22, 72))
+>Node22 : Symbol(Node22, Decl(ast.ts, 23, 72))
+>Node23 : Symbol(Node23, Decl(ast.ts, 24, 72))
+>Node24 : Symbol(Node24, Decl(ast.ts, 25, 72))
+>Node25 : Symbol(Node25, Decl(ast.ts, 26, 72))
+>Node26 : Symbol(Node26, Decl(ast.ts, 27, 72))
+>Node27 : Symbol(Node27, Decl(ast.ts, 28, 72))
+>Node28 : Symbol(Node28, Decl(ast.ts, 29, 72))
+>Node29 : Symbol(Node29, Decl(ast.ts, 30, 72))
+>Node30 : Symbol(Node30, Decl(ast.ts, 31, 72))
+>Node31 : Symbol(Node31, Decl(ast.ts, 32, 72))
+>Node32 : Symbol(Node32, Decl(ast.ts, 33, 72))
+>Node33 : Symbol(Node33, Decl(ast.ts, 34, 72))
+>Node34 : Symbol(Node34, Decl(ast.ts, 35, 72))
+>Node35 : Symbol(Node35, Decl(ast.ts, 36, 72))
+>Node36 : Symbol(Node36, Decl(ast.ts, 37, 72))
+>Node37 : Symbol(Node37, Decl(ast.ts, 38, 72))
+>Node38 : Symbol(Node38, Decl(ast.ts, 39, 72))
+>Node39 : Symbol(Node39, Decl(ast.ts, 40, 72))
+>Node40 : Symbol(Node40, Decl(ast.ts, 41, 72))
+>Node41 : Symbol(Node41, Decl(ast.ts, 42, 72))
+>Node42 : Symbol(Node42, Decl(ast.ts, 43, 72))
+>Node43 : Symbol(Node43, Decl(ast.ts, 44, 72))
+>Node44 : Symbol(Node44, Decl(ast.ts, 45, 72))
+>Node45 : Symbol(Node45, Decl(ast.ts, 46, 72))
+>Node46 : Symbol(Node46, Decl(ast.ts, 47, 72))
+>Node47 : Symbol(Node47, Decl(ast.ts, 48, 72))
+>Node48 : Symbol(Node48, Decl(ast.ts, 49, 72))
+>Node49 : Symbol(Node49, Decl(ast.ts, 50, 72))
+>Node50 : Symbol(Node50, Decl(ast.ts, 51, 72))
+>Node51 : Symbol(Node51, Decl(ast.ts, 52, 72))
+>Node52 : Symbol(Node52, Decl(ast.ts, 53, 72))
+>Node53 : Symbol(Node53, Decl(ast.ts, 54, 72))
+>Node54 : Symbol(Node54, Decl(ast.ts, 55, 72))
+>Node55 : Symbol(Node55, Decl(ast.ts, 56, 72))
+>Node56 : Symbol(Node56, Decl(ast.ts, 57, 72))
+>Node57 : Symbol(Node57, Decl(ast.ts, 58, 72))
+>Node58 : Symbol(Node58, Decl(ast.ts, 59, 72))
+>Node59 : Symbol(Node59, Decl(ast.ts, 60, 72))
+>Node60 : Symbol(Node60, Decl(ast.ts, 61, 72))
+>Node61 : Symbol(Node61, Decl(ast.ts, 62, 72))
+>Node62 : Symbol(Node62, Decl(ast.ts, 63, 72))
+>Node63 : Symbol(Node63, Decl(ast.ts, 64, 72))
+>Node64 : Symbol(Node64, Decl(ast.ts, 65, 72))
+>Node65 : Symbol(Node65, Decl(ast.ts, 66, 72))
+>Node66 : Symbol(Node66, Decl(ast.ts, 67, 72))
+>Node67 : Symbol(Node67, Decl(ast.ts, 68, 72))
+>Node68 : Symbol(Node68, Decl(ast.ts, 69, 72))
+>Node69 : Symbol(Node69, Decl(ast.ts, 70, 72))
+>Node70 : Symbol(Node70, Decl(ast.ts, 71, 72))
+>Node71 : Symbol(Node71, Decl(ast.ts, 72, 72))
+>Node72 : Symbol(Node72, Decl(ast.ts, 73, 72))
+>Node73 : Symbol(Node73, Decl(ast.ts, 74, 72))
+>Node74 : Symbol(Node74, Decl(ast.ts, 75, 72))
+>Node75 : Symbol(Node75, Decl(ast.ts, 76, 72))
+>Node76 : Symbol(Node76, Decl(ast.ts, 77, 72))
+>Node77 : Symbol(Node77, Decl(ast.ts, 78, 72))
+>Node78 : Symbol(Node78, Decl(ast.ts, 79, 72))
+>Node79 : Symbol(Node79, Decl(ast.ts, 80, 72))
+>Node80 : Symbol(Node80, Decl(ast.ts, 81, 72))
+>Node81 : Symbol(Node81, Decl(ast.ts, 82, 72))
+>Node82 : Symbol(Node82, Decl(ast.ts, 83, 72))
+>Node83 : Symbol(Node83, Decl(ast.ts, 84, 72))
+>Node84 : Symbol(Node84, Decl(ast.ts, 85, 72))
+>Node85 : Symbol(Node85, Decl(ast.ts, 86, 72))
+>Node86 : Symbol(Node86, Decl(ast.ts, 87, 72))
+>Node87 : Symbol(Node87, Decl(ast.ts, 88, 72))
+>Node88 : Symbol(Node88, Decl(ast.ts, 89, 72))
+>Node89 : Symbol(Node89, Decl(ast.ts, 90, 72))
+>Node90 : Symbol(Node90, Decl(ast.ts, 91, 72))
+>Node91 : Symbol(Node91, Decl(ast.ts, 92, 72))
+>Node92 : Symbol(Node92, Decl(ast.ts, 93, 72))
+>Node93 : Symbol(Node93, Decl(ast.ts, 94, 72))
+>Node94 : Symbol(Node94, Decl(ast.ts, 95, 72))
+>Node95 : Symbol(Node95, Decl(ast.ts, 96, 72))
+>Node96 : Symbol(Node96, Decl(ast.ts, 97, 72))
+>Node97 : Symbol(Node97, Decl(ast.ts, 98, 72))
+>Node98 : Symbol(Node98, Decl(ast.ts, 99, 72))
+>Node99 : Symbol(Node99, Decl(ast.ts, 100, 72))
+
+=== index.ts ===
+import * as ast from "./ast";
+>ast : Symbol(ast, Decl(index.ts, 0, 6))
+
+export const isNodeOfType =
+>isNodeOfType : Symbol(isNodeOfType, Decl(index.ts, 2, 12))
+
+  <NodeType extends ast.SyntaxKind>(nodeType: NodeType) =>
+>NodeType : Symbol(NodeType, Decl(index.ts, 3, 3))
+>ast : Symbol(ast, Decl(index.ts, 0, 6))
+>SyntaxKind : Symbol(ast.SyntaxKind, Decl(ast.ts, 0, 0))
+>nodeType : Symbol(nodeType, Decl(index.ts, 3, 36))
+>NodeType : Symbol(NodeType, Decl(index.ts, 3, 3))
+
+  (
+    node: ast.Node | null | undefined,
+>node : Symbol(node, Decl(index.ts, 4, 3))
+>ast : Symbol(ast, Decl(index.ts, 0, 6))
+>Node : Symbol(ast.Node, Decl(ast.ts, 101, 72))
+
+  ): node is Extract<ast.Node, { kind: NodeType }> =>
+>node : Symbol(node, Decl(index.ts, 4, 3))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>ast : Symbol(ast, Decl(index.ts, 0, 6))
+>Node : Symbol(ast.Node, Decl(ast.ts, 101, 72))
+>kind : Symbol(kind, Decl(index.ts, 6, 32))
+>NodeType : Symbol(NodeType, Decl(index.ts, 3, 3))
+
+    node?.kind === nodeType;
+>node?.kind : Symbol(kind, Decl(ast.ts, 2, 24), Decl(ast.ts, 3, 24), Decl(ast.ts, 4, 24), Decl(ast.ts, 5, 24), Decl(ast.ts, 6, 24) ... and 95 more)
+>node : Symbol(node, Decl(index.ts, 4, 3))
+>kind : Symbol(kind, Decl(ast.ts, 2, 24), Decl(ast.ts, 3, 24), Decl(ast.ts, 4, 24), Decl(ast.ts, 5, 24), Decl(ast.ts, 6, 24) ... and 95 more)
+>nodeType : Symbol(nodeType, Decl(index.ts, 3, 36))
+
+

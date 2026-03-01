@@ -1,10 +1,18 @@
-=== tests/cases/compiler/objectLiteral2.ts ===
+//// [tests/cases/compiler/objectLiteral2.ts] ////
+
+=== objectLiteral2.ts ===
 var v30 = {a:1, b:2}, v31;
 >v30 : { a: number; b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{a:1, b:2} : { a: number; b: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >v31 : any
 

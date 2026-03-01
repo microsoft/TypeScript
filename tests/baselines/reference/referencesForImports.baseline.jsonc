@@ -1,454 +1,359 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
 // declare module "jquery" {
 //     function $(s: string): any;
 //     export = $;
 // }
-// /*FIND ALL REFS*/import [|$|] = require("jquery");
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}$|] = require("jquery");|>
 // [|$|]("a");
 // import $ = require("jquery");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-      "kind": "alias",
-      "name": "import $ = require(\"jquery\")",
-      "textSpan": {
-        "start": 83,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "$",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"jquery\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 76,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "contextSpan": {
-          "start": 76,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 106,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForImports.ts ===
+  // declare module "jquery" {
+  //     function $(s: string): any;
+  //     export = $;
+  // }
+  // /*FIND ALL REFS*/<|import [|$|] = require("jquery");|>
+  // $("a");
+  // import $ = require("jquery");
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import $ = require(\"jquery\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "$",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"jquery\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
 // declare module "jquery" {
 //     function $(s: string): any;
 //     export = $;
 // }
-// import /*FIND ALL REFS*/[|$|] = require("jquery");
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}$|] = require("jquery");|>
 // [|$|]("a");
 // import $ = require("jquery");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-      "kind": "alias",
-      "name": "import $ = require(\"jquery\")",
-      "textSpan": {
-        "start": 83,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "$",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"jquery\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 76,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "contextSpan": {
-          "start": 76,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 106,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForImports.ts ===
+  // declare module "jquery" {
+  //     function $(s: string): any;
+  //     export = $;
+  // }
+  // <|import /*FIND ALL REFS*/[|$|] = require("jquery");|>
+  // $("a");
+  // import $ = require("jquery");
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import $ = require(\"jquery\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "$",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"jquery\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
 // declare module "jquery" {
 //     function $(s: string): any;
 //     export = $;
 // }
-// import [|$|] = require("jquery");
+// <|import [|{| isWriteAccess: true |}$|] = require("jquery");|>
 // /*FIND ALL REFS*/[|$|]("a");
 // import $ = require("jquery");
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-      "kind": "alias",
-      "name": "import $ = require(\"jquery\")",
-      "textSpan": {
-        "start": 83,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "$",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"jquery\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 76,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "contextSpan": {
-          "start": 76,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 106,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForImports.ts ===
+  // declare module "jquery" {
+  //     function $(s: string): any;
+  //     export = $;
+  // }
+  // <|import [|$|] = require("jquery");|>
+  // /*FIND ALL REFS*/$("a");
+  // import $ = require("jquery");
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import $ = require(\"jquery\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "$",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"jquery\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
-// declare module "jquery" {
-//     function $(s: string): any;
-//     export = $;
+// --- (line: 3) skipped ---
 // }
 // import $ = require("jquery");
 // $("a");
-// /*FIND ALL REFS*/import [|$|] = require("jquery");
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}$|] = require("jquery");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-      "kind": "alias",
-      "name": "import $ = require(\"jquery\")",
-      "textSpan": {
-        "start": 121,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "$",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"jquery\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 114,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "contextSpan": {
-          "start": 114,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForImports.ts ===
+  // --- (line: 3) skipped ---
+  // }
+  // import $ = require("jquery");
+  // $("a");
+  // /*FIND ALL REFS*/<|import [|$|] = require("jquery");|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import $ = require(\"jquery\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "$",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"jquery\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForImports.ts ===
-// declare module "jquery" {
-//     function $(s: string): any;
-//     export = $;
+// --- (line: 3) skipped ---
 // }
 // import $ = require("jquery");
 // $("a");
-// import /*FIND ALL REFS*/[|$|] = require("jquery");
+// <|import /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}$|] = require("jquery");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-      "kind": "alias",
-      "name": "import $ = require(\"jquery\")",
-      "textSpan": {
-        "start": 121,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "$",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"jquery\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 114,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 121,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/referencesForImports.ts",
-        "contextSpan": {
-          "start": 114,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForImports.ts ===
+  // --- (line: 3) skipped ---
+  // }
+  // import $ = require("jquery");
+  // $("a");
+  // <|import /*FIND ALL REFS*/[|$|] = require("jquery");|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import $ = require(\"jquery\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "$",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"jquery\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

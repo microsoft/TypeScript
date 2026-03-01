@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts(11,5): error TS2448: Block-scoped variable 'getY' used before its declaration.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts(11,28): error TS18013: Property '#y' is not accessible outside class 'D' because it has a private identifier.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts(21,28): error TS18013: Property '#x' is not accessible outside class 'C' because it has a private identifier.
+classStaticBlock16.ts(11,5): error TS2448: Block-scoped variable 'getY' used before its declaration.
+classStaticBlock16.ts(11,28): error TS18013: Property '#y' is not accessible outside class 'D' because it has a private identifier.
+classStaticBlock16.ts(21,28): error TS18013: Property '#x' is not accessible outside class 'C' because it has a private identifier.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts (3 errors) ====
+==== classStaticBlock16.ts (3 errors) ====
     let getX: (c: C) => number;
     class C {
       #x = 1
@@ -17,7 +17,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts(21,28): e
         getY = (obj: D) => obj.#y;
         ~~~~
 !!! error TS2448: Block-scoped variable 'getY' used before its declaration.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock16.ts:15:5: 'getY' is declared here.
+!!! related TS2728 classStaticBlock16.ts:15:5: 'getY' is declared here.
                                ~~
 !!! error TS18013: Property '#y' is not accessible outside class 'D' because it has a private identifier.
       }

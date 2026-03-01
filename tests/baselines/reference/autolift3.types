@@ -1,53 +1,80 @@
-=== tests/cases/compiler/autolift3.ts ===
+//// [tests/cases/compiler/autolift3.ts] ////
+
+=== autolift3.ts ===
 class B {
 >B : B
+>  : ^
 
     constructor() {
         function foo() {  }
 >foo : () => void
+>    : ^^^^^^^^^^
 
         foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
         var a = 0;
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
         var inner: any = (function() {
 >inner : any
+>      : ^^^
 >(function() {            var CScriptIO = (function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            })();            return inner;        })() : any
+>                                                                                                                                                                                                                                                                                                                  : ^^^
 >(function() {            var CScriptIO = (function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            })();            return inner;        }) : () => any
+>                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^
 >function() {            var CScriptIO = (function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            })();            return inner;        } : () => any
+>                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^
 
             var CScriptIO = (function() {
 >CScriptIO : { readFile: (path: string) => string; }
+>          : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >(function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            })() : { readFile: (path: string) => string; }
+>                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >(function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            }) : () => { readFile: (path: string) => string; }
+>                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            } : () => { readFile: (path: string) => string; }
+>                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 
                 var fso = 0
 >fso : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
                 return {
 >{                    readFile: function(path: string): string {                        return fso.toString();                    }                } : { readFile: (path: string) => string; }
+>                                                                                                                                                    : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 
                     readFile: function(path: string): string {
 >readFile : (path: string) => string
+>         : ^    ^^      ^^^^^      
 >function(path: string): string {                        return fso.toString();                    } : (path: string) => string
+>                                                                                                    : ^    ^^      ^^^^^      
 >path : string
+>     : ^^^^^^
 
                         return fso.toString();
 >fso.toString() : string
+>               : ^^^^^^
 >fso.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >fso : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
                     }
                 }
             })();
             return inner;
 >inner : any
+>      : ^^^
 
         })();
     }
@@ -55,14 +82,21 @@ class B {
 
 var b = new B();
 >b : B
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 b.foo();
 >b.foo() : any
+>        : ^^^
 >b.foo : any
+>      : ^^^
 >b : B
+>  : ^
 >foo : any
+>    : ^^^
 
 
 

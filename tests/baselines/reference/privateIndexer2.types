@@ -1,20 +1,30 @@
-=== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts ===
+//// [tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts] ////
+
+=== privateIndexer2.ts ===
 // private indexers not allowed
 
 var x = {
 >x : any
->{    private [x: string]: string;} : { [x: number]: any; string: any; }
+>  : ^^^
+>{    private [x: string]: string;} : { [x]: any; string: any; }
+>                                   : ^^     ^^^ ^^^^^^^^^^^^^^^
 
     private [x: string]: string;
 >[x : any
+>   : ^^^
 >x : any
+>  : ^^^
 >string : any
+>       : ^^^
 >string : any
+>       : ^^^
 }
 
 var y: {
 >y : { [x: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     private[x: string]: string;
 >x : string
+>  : ^^^^^^
 }

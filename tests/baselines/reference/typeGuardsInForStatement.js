@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInForStatement.ts] ////
+
 //// [typeGuardsInForStatement.ts]
 let cond: boolean;
 function a(x: string | number) {
@@ -23,7 +25,8 @@ function c(x: string | number) {
 
 
 //// [typeGuardsInForStatement.js]
-var cond;
+"use strict";
+let cond;
 function a(x) {
     for (x = undefined; typeof x !== "number"; x = undefined) {
         x; // string

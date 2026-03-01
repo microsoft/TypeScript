@@ -1,4 +1,6 @@
-=== tests/cases/compiler/avoid.ts ===
+//// [tests/cases/compiler/avoid.ts] ////
+
+=== avoid.ts ===
 function f() {
 >f : Symbol(f, Decl(avoid.ts, 0, 0))
 

@@ -1,6 +1,0 @@
-=== tests/cases/compiler/esnext.bigintIncludesNumberFormatPartTypes.ts ===
-/// <reference lib="esnext.bigint" />
-var t: Intl.NumberFormatPartTypes
->t : Intl.NumberFormatPartTypes
->Intl : any
-

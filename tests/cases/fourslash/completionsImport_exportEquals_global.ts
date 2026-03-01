@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: es6
 
 // @Filename: /console.d.ts

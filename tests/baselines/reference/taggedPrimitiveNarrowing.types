@@ -1,49 +1,79 @@
-=== tests/cases/compiler/taggedPrimitiveNarrowing.ts ===
+//// [tests/cases/compiler/taggedPrimitiveNarrowing.ts] ////
+
+=== taggedPrimitiveNarrowing.ts ===
 type Hash = string & { __hash: true };
->Hash : string & { __hash: true; }
+>Hash : Hash
+>     : ^^^^
 >__hash : true
+>       : ^^^^
 >true : true
+>     : ^^^^
 
 function getHashLength(hash: Hash): number {
 >getHashLength : (hash: Hash) => number
+>              : ^    ^^    ^^^^^      
 >hash : Hash
+>     : ^^^^
 
     if (typeof hash !== "string") {
 >typeof hash !== "string" : boolean
+>                         : ^^^^^^^
 >typeof hash : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hash : Hash
+>     : ^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         throw new Error("This doesn't look like a hash");
 >new Error("This doesn't look like a hash") : Error
+>                                           : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"This doesn't look like a hash" : "This doesn't look like a hash"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     return hash.length;
 >hash.length : number
+>            : ^^^^^^
 >hash : Hash
+>     : ^^^^
 >length : number
+>       : ^^^^^^
 }
 
 function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
 >getHashLength2 : <T extends { __tag__: unknown; }>(hash: string & T) => number
+>               : ^ ^^^^^^^^^                     ^^    ^^          ^^^^^      
 >__tag__ : unknown
+>        : ^^^^^^^
 >hash : string & T
+>     : ^^^^^^^^^^
 
     if (typeof hash !== "string") {
 >typeof hash !== "string" : boolean
+>                         : ^^^^^^^
 >typeof hash : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hash : string & T
+>     : ^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         throw new Error("This doesn't look like a hash");
 >new Error("This doesn't look like a hash") : Error
+>                                           : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >"This doesn't look like a hash" : "This doesn't look like a hash"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     return hash.length;
 >hash.length : number
+>            : ^^^^^^
 >hash : string & T
+>     : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 }
 

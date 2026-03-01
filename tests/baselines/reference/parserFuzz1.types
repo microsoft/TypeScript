@@ -1,9 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts] ////
+
+=== parserFuzz1.ts ===
 cla <ss {
 >cla <ss : boolean
+>        : ^^^^^^^
 >cla : any
+>    : ^^^
 >ss : any
+>   : ^^^
 
   _ static try
 >_ : any
+>  : ^^^
 

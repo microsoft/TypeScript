@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////function m2g() { };
-////module m2g { export class C { foo(x: number) { } } }
+////namespace m2g { export class C { foo(x: number) { } } }
 ////var x: m2g./*1*/;
 ////var /*2*/r = m2g/*3*/;
 

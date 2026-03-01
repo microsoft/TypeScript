@@ -1,23 +1,23 @@
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(1,11): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(2,17): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(5,6): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(6,18): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(7,22): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(8,20): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(9,15): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(11,13): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(12,25): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(13,29): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(14,27): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(15,22): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(19,6): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(20,18): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(21,22): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(22,20): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
-tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts(23,8): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(1,11): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(2,17): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(5,6): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(6,18): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(7,22): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(8,20): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(9,15): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(11,13): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(12,25): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(13,29): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(14,27): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(15,22): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(19,6): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(20,18): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(21,22): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(22,20): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
+invalidNewTarget.es6.ts(23,8): error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.
 
 
-==== tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts (17 errors) ====
+==== invalidNewTarget.es6.ts (17 errors) ====
     const a = new.target;
               ~~~~~~~~~~
 !!! error TS17013: Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor.

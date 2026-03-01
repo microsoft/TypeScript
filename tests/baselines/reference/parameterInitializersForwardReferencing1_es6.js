@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts] ////
+
 //// [parameterInitializersForwardReferencing1_es6.ts]
 let foo: string = "";
 
@@ -39,6 +41,7 @@ function f8(foo1: string, bar = foo1) { }
 
 
 //// [parameterInitializersForwardReferencing1_es6.js]
+"use strict";
 let foo = "";
 function f1(bar = foo) {
     var foo = 2;

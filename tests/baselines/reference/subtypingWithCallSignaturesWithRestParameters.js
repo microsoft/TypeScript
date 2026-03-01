@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts] ////
+
 //// [subtypingWithCallSignaturesWithRestParameters.ts]
 // call signatures in derived types must have the same or fewer optional parameters as the base type
 
@@ -134,4 +136,5 @@ interface I17 extends Base {
 
 
 //// [subtypingWithCallSignaturesWithRestParameters.js]
+"use strict";
 // call signatures in derived types must have the same or fewer optional parameters as the base type

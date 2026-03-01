@@ -1,0 +1,26 @@
+functionReturn.ts(6,25): error TS2322: Type 'undefined' is not assignable to type 'string'.
+functionReturn.ts(9,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+functionReturn.ts(13,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+
+
+==== functionReturn.ts (3 errors) ====
+    function f0(): void { }
+    function f1() {
+        var n: any = f0();
+    }
+    function f2(): any { }
+    function f3(): string { return; }
+                            ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    function f4(): string {
+        return '';
+        return;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    }
+    function f5(): string {
+        return '';
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    }

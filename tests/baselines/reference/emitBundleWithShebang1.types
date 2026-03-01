@@ -1,9 +1,0 @@
-=== tests/cases/compiler/emitBundleWithShebang1.ts ===
-#!/usr/bin/env gjs
-class Doo {}
->Doo : Doo
-
-class Scooby extends Doo {}
->Scooby : Scooby
->Doo : Doo
-

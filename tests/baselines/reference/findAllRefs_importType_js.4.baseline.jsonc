@@ -1,0 +1,96 @@
+// === findAllReferences ===
+// === /a.js ===
+// /**
+//  * <|@callback /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}A|]
+//  * @param {unknown} response
+//  |>*/
+// 
+// module.exports = {};
+
+// === /b.js ===
+// /** @typedef {import("./a").[|A|]} A */
+
+  // === Definitions ===
+  // === /a.js ===
+  // /**
+  //  * <|@callback /*FIND ALL REFS*/[|A|]
+  //  * @param {unknown} response
+  //  |>*/
+  // 
+  // module.exports = {};
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type A = (response: unknown) => any",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "response",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "unknown",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

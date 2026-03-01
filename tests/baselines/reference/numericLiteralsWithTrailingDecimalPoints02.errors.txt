@@ -1,10 +1,10 @@
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts(3,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts(9,15): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts(9,23): error TS1005: ',' expected.
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts(9,24): error TS1109: Expression expected.
+numericLiteralsWithTrailingDecimalPoints02.ts(3,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+numericLiteralsWithTrailingDecimalPoints02.ts(9,15): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+numericLiteralsWithTrailingDecimalPoints02.ts(9,23): error TS1005: ',' expected.
+numericLiteralsWithTrailingDecimalPoints02.ts(9,24): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts (4 errors) ====
+==== numericLiteralsWithTrailingDecimalPoints02.ts (4 errors) ====
     1..toString();
     1.0.toString();
     1.toString();

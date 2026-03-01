@@ -1,44 +1,71 @@
-=== tests/cases/compiler/constDeclarations-errors.ts ===
+//// [tests/cases/compiler/constDeclarations-errors.ts] ////
+
+=== constDeclarations-errors.ts ===
 // error, missing intialicer
 const c1;
 >c1 : any
+>   : ^^^
 
 const c2: number;
 >c2 : number
+>   : ^^^^^^
 
 const c3, c4, c5 :string, c6;  // error, missing initialicer
 >c3 : any
+>   : ^^^
 >c4 : any
+>   : ^^^
 >c5 : string
+>   : ^^^^^^
 >c6 : any
+>   : ^^^
 
 for(const c in {}) { }
 >c : string
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 
 // error, assigning to a const
 for(const c8 = 0; c8 < 1; c8++) { }
 >c8 : 0
+>   : ^
 >0 : 0
+>  : ^
 >c8 < 1 : boolean
+>       : ^^^^^^^
 >c8 : 0
+>   : ^
 >1 : 1
+>  : ^
 >c8++ : number
+>     : ^^^^^^
 >c8 : any
+>   : ^^^
 
 // error, can not be unintalized
 for(const c9; c9 < 1;) { }
 >c9 : any
+>   : ^^^
 >c9 < 1 : boolean
+>       : ^^^^^^^
 >c9 : any
+>   : ^^^
 >1 : 1
+>  : ^
 
 // error, can not be unintalized
 for(const c10 = 0, c11; c10 < 1;) { }
 >c10 : 0
+>    : ^
 >0 : 0
+>  : ^
 >c11 : any
+>    : ^^^
 >c10 < 1 : boolean
+>        : ^^^^^^^
 >c10 : 0
+>    : ^
 >1 : 1
+>  : ^
 

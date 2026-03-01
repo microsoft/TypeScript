@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/never/neverUnionIntersection.ts ===
+//// [tests/cases/conformance/types/never/neverUnionIntersection.ts] ////
+
+=== neverUnionIntersection.ts ===
 type T01 = string | never;
 >T01 : Symbol(T01, Decl(neverUnionIntersection.ts, 0, 0))
 

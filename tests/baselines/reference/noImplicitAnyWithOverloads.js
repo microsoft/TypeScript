@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyWithOverloads.ts] ////
+
 //// [noImplicitAnyWithOverloads.ts]
 interface A {
     foo;
@@ -10,5 +12,6 @@ function callb(a) { }
 callb((a) => { a.foo; }); // error, chose first overload
 
 //// [noImplicitAnyWithOverloads.js]
+"use strict";
 function callb(a) { }
-callb(function (a) { a.foo; }); // error, chose first overload
+callb((a) => { a.foo; }); // error, chose first overload

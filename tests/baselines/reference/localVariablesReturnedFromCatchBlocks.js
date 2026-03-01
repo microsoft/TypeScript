@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localVariablesReturnedFromCatchBlocks.ts] ////
+
 //// [localVariablesReturnedFromCatchBlocks.ts]
 function f() {
     try {
@@ -8,6 +10,7 @@ function f() {
 }
 
 //// [localVariablesReturnedFromCatchBlocks.js]
+"use strict";
 function f() {
     try {
     }

@@ -1,9 +1,14 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution13.tsx] ////
+
+=== test.tsx ===
 function Test() { }
 >Test : () => void
+>     : ^^^^^^^^^^
 
 <Test></Test>
 ><Test></Test> : error
 >Test : () => void
+>     : ^^^^^^^^^^
 >Test : () => void
+>     : ^^^^^^^^^^
 

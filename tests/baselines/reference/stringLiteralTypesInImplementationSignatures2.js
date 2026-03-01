@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts] ////
+
 //// [stringLiteralTypesInImplementationSignatures2.ts]
 // String literal types are only valid in overload signatures
 
@@ -30,16 +32,14 @@ var b = {
 
 
 //// [stringLiteralTypesInImplementationSignatures2.js]
+"use strict";
 // String literal types are only valid in overload signatures
 function foo(x) { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x) { };
-    return C;
-}());
+class C {
+    foo(x) { }
+}
 var a;
 var b = {
-    foo: function (x) { },
-    foo: function (x) { }
+    foo(x) { },
+    foo(x) { },
 };

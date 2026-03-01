@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/declarationEmitObjectLiteralAccessorsJs1.ts] ////
+
+=== index.js ===
+// same type accessors
+export const obj1 = {
+>obj1 : Symbol(obj1, Decl(index.js, 1, 12))
+
+  /**
+   * my awesome getter (first in source order)
+   * @returns {string}
+   */
+  get x() {
+>x : Symbol(x, Decl(index.js, 1, 21), Decl(index.js, 8, 4))
+
+    return "";
+  },
+  /** 
+   * my awesome setter (second in source order)
+   * @param {string} a
+   */
+  set x(a) {},
+>x : Symbol(x, Decl(index.js, 1, 21), Decl(index.js, 8, 4))
+>a : Symbol(a, Decl(index.js, 13, 8))
+
+};
+
+// divergent accessors
+export const obj2 = {
+>obj2 : Symbol(obj2, Decl(index.js, 17, 12))
+
+  /** 
+   * my awesome getter
+   * @returns {string}
+   */
+  get x() {
+>x : Symbol(x, Decl(index.js, 17, 21), Decl(index.js, 24, 4))
+
+    return "";
+  },
+  /** 
+   * my awesome setter
+   * @param {number} a
+   */
+  set x(a) {},
+>x : Symbol(x, Decl(index.js, 17, 21), Decl(index.js, 24, 4))
+>a : Symbol(a, Decl(index.js, 29, 8))
+
+};
+
+export const obj3 = {
+>obj3 : Symbol(obj3, Decl(index.js, 32, 12))
+
+  /**
+   * my awesome getter
+   * @returns {string}
+   */
+  get x() {
+>x : Symbol(x, Decl(index.js, 32, 21))
+
+    return "";
+  },
+};
+
+export const obj4 = {
+>obj4 : Symbol(obj4, Decl(index.js, 42, 12))
+
+  /**
+   * my awesome setter
+   * @param {number} a
+   */
+  set x(a) {},
+>x : Symbol(x, Decl(index.js, 42, 21))
+>a : Symbol(a, Decl(index.js, 47, 8))
+
+};
+

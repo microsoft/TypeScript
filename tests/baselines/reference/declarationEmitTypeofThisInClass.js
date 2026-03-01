@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeofThisInClass.ts] ////
+
 //// [declarationEmitTypeofThisInClass.ts]
 class Foo {
     public foo!: string
@@ -6,11 +8,8 @@ class Foo {
 
 //// [declarationEmitTypeofThisInClass.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 
 
 //// [declarationEmitTypeofThisInClass.d.ts]

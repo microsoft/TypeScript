@@ -1,0 +1,6 @@
+error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
+==== input.js (0 errors) ====
+    x;

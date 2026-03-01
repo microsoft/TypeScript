@@ -1,0 +1,36 @@
+/a.tsx(5,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(9,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(13,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(17,13): error TS2304: Cannot find name 'Comp'.
+
+
+==== /a.tsx (4 errors) ====
+    declare const React: any;
+    
+    const t1 = <div {...<span />} />;
+    const t2 = <div {...<span className="foo" />} />;
+    const t3 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ wrong: <div>x</div>}}
+    />;
+    const t4 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ wrong() { return <div>x</div>; }}}
+    />;
+    const t5 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ get wrong() { return <div>x</div>; }}}
+    />;
+    const t6 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ set wrong(s) { let a = <div>x</div>; }}}
+    />;
+    

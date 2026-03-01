@@ -5,10 +5,12 @@
         "globalThisCapture.ts",
         "__extends.ts"
     ],
-    "out": "out.js",
+    "outFile": "out.js",
     "baselineCheck": true,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "globalThisCapture.ts",
         "__extends.ts"
     ],

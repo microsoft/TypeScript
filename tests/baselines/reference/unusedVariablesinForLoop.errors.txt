@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedVariablesinForLoop.ts(2,13): error TS6133: 'i' is declared but its value is never read.
+unusedVariablesinForLoop.ts(2,13): error TS6133: 'i' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedVariablesinForLoop.ts (1 errors) ====
+==== unusedVariablesinForLoop.ts (1 errors) ====
     function f1 () {
         for(var i = 0; ;) {
                 ~

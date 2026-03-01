@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "outDir": "../../out",
-    "rootDir": "../"
-  },
-  "include": ["**/*.ts"],
-  "references": [{ "path": "../pure" }]
-}

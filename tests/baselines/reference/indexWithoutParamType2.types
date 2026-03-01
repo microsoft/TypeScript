@@ -1,9 +1,14 @@
-=== tests/cases/compiler/indexWithoutParamType2.ts ===
+//// [tests/cases/compiler/indexWithoutParamType2.ts] ////
+
+=== indexWithoutParamType2.ts ===
 class C {
 >C : C
+>  : ^
 
     // Used to be indexer, now it is a computed property
     [x]: string
 >[x] : string
+>    : ^^^^^^
 >x : any
+>  : ^^^
 }

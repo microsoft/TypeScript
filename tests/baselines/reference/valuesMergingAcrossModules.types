@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/externalModules/valuesMergingAcrossModules.ts] ////
+
+=== a.ts ===
+function A() {}
+>A : () => void
+>  : ^^^^^^^^^^
+
+export { A };
+>A : () => void
+>  : ^^^^^^^^^^
+
+=== b.ts ===
+import { A } from "./a";
+>A : () => void
+>  : ^^^^^^^^^^
+
+type A = 0;
+>A : 0
+>  : ^
+
+export { A };
+>A : () => void
+>  : ^^^^^^^^^^
+
+=== c.ts ===
+import { A } from "./b";
+>A : typeof A
+>  : ^^^^^^^^
+
+namespace A {
+>A : typeof A
+>  : ^^^^^^^^
+
+  export const displayName = "A";
+>displayName : "A"
+>            : ^^^
+>"A" : "A"
+>    : ^^^
+}
+
+A();
+>A() : any
+>    : ^^^
+>A : typeof A
+>  : ^^^^^^^^
+
+A.displayName;
+>A.displayName : "A"
+>              : ^^^
+>A : typeof A
+>  : ^^^^^^^^
+>displayName : "A"
+>            : ^^^
+

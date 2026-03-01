@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParamsWithNonRestParams.ts ===
+//// [tests/cases/compiler/restParamsWithNonRestParams.ts] ////
+
+=== restParamsWithNonRestParams.ts ===
 function foo(...b:number[]){}
 >foo : Symbol(foo, Decl(restParamsWithNonRestParams.ts, 0, 0))
 >b : Symbol(b, Decl(restParamsWithNonRestParams.ts, 0, 13))

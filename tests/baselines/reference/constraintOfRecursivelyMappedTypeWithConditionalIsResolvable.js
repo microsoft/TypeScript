@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts] ////
+
 //// [constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.ts]
 // https://github.com/Microsoft/TypeScript/issues/25379
 
@@ -22,6 +24,5 @@ export interface IImmutableMap2<T extends ImmutableModel2<T>> extends Map<string
 
 
 //// [constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.js]
-"use strict";
 // https://github.com/Microsoft/TypeScript/issues/25379
-exports.__esModule = true;
+export {};

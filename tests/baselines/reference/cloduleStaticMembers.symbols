@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cloduleStaticMembers.ts ===
+//// [tests/cases/compiler/cloduleStaticMembers.ts] ////
+
+=== cloduleStaticMembers.ts ===
 class Clod {
 >Clod : Symbol(Clod, Decl(cloduleStaticMembers.ts, 0, 0), Decl(cloduleStaticMembers.ts, 3, 1))
 
@@ -8,7 +10,7 @@ class Clod {
     public static y = 10;
 >y : Symbol(Clod.y, Decl(cloduleStaticMembers.ts, 1, 26))
 }
-module Clod {
+namespace Clod {
 >Clod : Symbol(Clod, Decl(cloduleStaticMembers.ts, 0, 0), Decl(cloduleStaticMembers.ts, 3, 1))
 
     var p = Clod.x;

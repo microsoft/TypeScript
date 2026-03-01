@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendPrivateConstructorClass.ts ===
+//// [tests/cases/compiler/extendPrivateConstructorClass.ts] ////
+
+=== extendPrivateConstructorClass.ts ===
 declare namespace abc {
 >abc : Symbol(abc, Decl(extendPrivateConstructorClass.ts, 0, 0))
 

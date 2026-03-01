@@ -1,8 +1,8 @@
-tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts(4,15): error TS1003: Identifier expected.
-tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts(9,2): error TS1005: '}' expected.
+errorRecoveryWithDotFollowedByNamespaceKeyword.ts(4,15): error TS1003: Identifier expected.
+errorRecoveryWithDotFollowedByNamespaceKeyword.ts(9,2): error TS1005: '}' expected.
 
 
-==== tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts (2 errors) ====
+==== errorRecoveryWithDotFollowedByNamespaceKeyword.ts (2 errors) ====
     namespace A {
         function foo() {
             if (true) {
@@ -16,4 +16,4 @@ tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts(9,2): err
     }
      
 !!! error TS1005: '}' expected.
-!!! related TS1007 tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts:3:19: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 errorRecoveryWithDotFollowedByNamespaceKeyword.ts:3:19: The parser expected to find a '}' to match the '{' token here.

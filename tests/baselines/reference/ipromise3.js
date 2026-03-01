@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ipromise3.ts] ////
+
 //// [ipromise3.ts]
 interface IPromise3<T> {
     then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
@@ -13,6 +15,7 @@ var p2: IPromise3<string> = p1.then(function (x) {
 
 
 //// [ipromise3.js]
+"use strict";
 var p1;
 var p2 = p1.then(function (x) {
     return x;

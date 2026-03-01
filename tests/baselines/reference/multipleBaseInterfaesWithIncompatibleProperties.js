@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts] ////
+
 //// [multipleBaseInterfaesWithIncompatibleProperties.ts]
 interface A<T>
 {
@@ -8,3 +10,4 @@ interface C extends A<string>, A<number> { }
 
 
 //// [multipleBaseInterfaesWithIncompatibleProperties.js]
+"use strict";

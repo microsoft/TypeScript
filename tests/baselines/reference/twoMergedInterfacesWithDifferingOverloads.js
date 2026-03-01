@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads.ts] ////
+
 //// [twoMergedInterfacesWithDifferingOverloads.ts]
 // interfaces that merge must not have members that conflict
 
@@ -51,6 +53,7 @@ var d: D<boolean, Date>;
 var r3 = d.foo(1, 1); // boolean, last definition wins
 
 //// [twoMergedInterfacesWithDifferingOverloads.js]
+"use strict";
 // interfaces that merge must not have members that conflict
 var b;
 var r = b.foo(true); // returns Date

@@ -1,0 +1,48 @@
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/server/a.ts ===
+// function /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}foo|] () {
+// 	return 1;
+// }
+// [|{| kind: "reference" |}foo|]();
+
+// === /tests/cases/fourslash/server/b.ts ===
+// /// <reference path="a.ts"/>
+// [|{| kind: "reference" |}foo|]();
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/server/a.ts ===
+// function [|{| kind: "writtenReference" |}foo|] () {
+// 	return 1;
+// }
+// /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|]();
+
+// === /tests/cases/fourslash/server/b.ts ===
+// /// <reference path="a.ts"/>
+// [|{| kind: "reference" |}foo|]();
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/server/a.ts ===
+// function [|{| kind: "writtenReference" |}foo|] () {
+// 	return 1;
+// }
+// [|{| kind: "reference" |}foo|]();
+
+// === /tests/cases/fourslash/server/b.ts ===
+// /// <reference path="a.ts"/>
+// /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|]();

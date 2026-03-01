@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccess_ES6.ts] ////
+
 //// [superPropertyAccess_ES6.ts]
 class MyBase {
   getValue(): number { return 1; }
@@ -29,6 +31,7 @@ class B extends A {
 }
 
 //// [superPropertyAccess_ES6.js]
+"use strict";
 class MyBase {
     getValue() { return 1; }
     get value() { return 1; }

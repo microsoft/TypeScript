@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts] ////
+
 //// [uniqueSymbolsErrors.ts]
 // declarations
 declare const invalidUniqueType: unique number;
@@ -88,6 +90,7 @@ declare const invalidIntersection: unique symbol | unique symbol;
 const shouldNotBeAssignable: string = Symbol();
 
 //// [uniqueSymbolsErrors.js]
+"use strict";
 // classes
 class InvalidClass {
     constructor(invalidConstructorArgType) { }

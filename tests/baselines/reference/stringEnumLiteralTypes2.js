@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringEnumLiteralTypes2.ts] ////
+
 //// [stringEnumLiteralTypes2.ts]
 const enum Choice { Unknown = "", Yes = "yes", No = "no" };
 
@@ -100,6 +102,7 @@ function f21(x: Item) {
 }
 
 //// [stringEnumLiteralTypes2.js]
+"use strict";
 ;
 function f1() {
     var a;

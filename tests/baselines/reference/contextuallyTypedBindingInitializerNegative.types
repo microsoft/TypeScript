@@ -1,82 +1,136 @@
-=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts ===
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts] ////
+
+=== contextuallyTypedBindingInitializerNegative.ts ===
 interface Show {
     show: (x: number) => string;
 >show : (x: number) => string
+>     : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 }
 function f({ show: showRename = v => v }: Show) {}
->f : ({ show }: Show) => void
+>f : ({ show: showRename }: Show) => void
+>  : ^                    ^^    ^^^^^^^^^
 >show : any
+>     : ^^^
 >showRename : (x: number) => string
+>           : ^ ^^      ^^^^^      
 >v => v : (v: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
 function f2({ "show": showRename = v => v }: Show) {}
 >f2 : ({ "show": showRename }: Show) => void
+>   : ^                      ^^    ^^^^^^^^^
 >showRename : (x: number) => string
+>           : ^ ^^      ^^^^^      
 >v => v : (v: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
 function f3({ ["show"]: showRename = v => v }: Show) {}
 >f3 : ({ ["show"]: showRename }: Show) => void
+>   : ^                        ^^    ^^^^^^^^^
 >"show" : "show"
+>       : ^^^^^^
 >showRename : (x: number) => string
+>           : ^ ^^      ^^^^^      
 >v => v : (v: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
 interface Nested {
     nested: Show
 >nested : Show
+>       : ^^^^
 }
 function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
->ff : ({ nested }: Nested) => void
+>ff : ({ nested: nestedRename }: Nested) => void
+>   : ^                        ^^      ^^^^^^^^^
 >nested : any
+>       : ^^^
 >nestedRename : Show
+>             : ^^^^
 >{ show: v => v } : { show: (v: number) => number; }
+>                 : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >show : (v: number) => number
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v : (v: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
 interface StringIdentity {
     stringIdentity(s: string): string;
 >stringIdentity : (s: string) => string
+>               : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 }
 let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentity: x => x};
 >stringIdentity : any
+>               : ^^^
 >id : (s: string) => string
+>   : ^ ^^      ^^^^^      
 >arg => arg.length : (arg: string) => number
+>                  : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string
+>    : ^^^^^^
 >arg.length : number
+>           : ^^^^^^
 >arg : string
+>    : ^^^^^^
 >length : number
+>       : ^^^^^^
 >{ stringIdentity: x => x} : { stringIdentity: (x: string) => string; }
+>                          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >stringIdentity : (x: string) => string
+>               : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: string) => string
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 interface Tuples {
     prop: [string, number];
 >prop : [string, number]
+>     : ^^^^^^^^^^^^^^^^
 }
 function g({ prop = [101, 1234] }: Tuples) {}
 >g : ({ prop }: Tuples) => void
+>  : ^        ^^      ^^^^^^^^^
 >prop : [string, number]
+>     : ^^^^^^^^^^^^^^^^
 >[101, 1234] : [number, number]
+>            : ^^^^^^^^^^^^^^^^
 >101 : 101
+>    : ^^^
 >1234 : 1234
+>     : ^^^^
 
 interface StringUnion {
     prop: "foo" | "bar";
 >prop : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 }
 function h({ prop = "baz" }: StringUnion) {}
 >h : ({ prop }: StringUnion) => void
+>  : ^        ^^           ^^^^^^^^^
 >prop : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
 >"baz" : "baz"
+>      : ^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditional.ts ===
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional.ts] ////
+
+=== uncalledFunctionChecksInConditional.ts ===
 declare function isFoo(): boolean;
 >isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsVisibility1.ts] ////
+
 //// [divergentAccessorsVisibility1.ts]
 class Base {
     get PublicPublic() { return 0; }

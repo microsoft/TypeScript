@@ -17,10 +17,11 @@ var z2 = foo.y() + 10; // Should resolve
 
 
 //// [foo_1.js]
+"use strict";
 //// [foo_2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="foo_1.ts"/>
-var foo = require("vs/foo_0");
+const foo = require("vs/foo_0");
 var z1 = foo.x + 10; // Should error, as declaration should win
 var z2 = foo.y() + 10; // Should resolve

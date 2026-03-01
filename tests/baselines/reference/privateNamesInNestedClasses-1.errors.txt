@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts(11,18): error TS18014: The property '#foo' cannot be accessed on type 'A' within this class because it is shadowed by another private identifier with the same spelling.
+privateNamesInNestedClasses-1.ts(11,18): error TS18014: The property '#foo' cannot be accessed on type 'A' within this class because it is shadowed by another private identifier with the same spelling.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts (1 errors) ====
+==== privateNamesInNestedClasses-1.ts (1 errors) ====
     class A {
        #foo = "A's #foo";
        #bar = "A's #bar";
@@ -15,8 +15,8 @@ tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses
                    a.#foo; // compile-time error, shadowed
                      ~~~~
 !!! error TS18014: The property '#foo' cannot be accessed on type 'A' within this class because it is shadowed by another private identifier with the same spelling.
-!!! related TS18017 tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts:6:12: The shadowing declaration of '#foo' is defined here
-!!! related TS18018 tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts:2:4: The declaration of '#foo' that you probably intended to use is defined here
+!!! related TS18017 privateNamesInNestedClasses-1.ts:6:12: The shadowing declaration of '#foo' is defined here
+!!! related TS18018 privateNamesInNestedClasses-1.ts:2:4: The declaration of '#foo' that you probably intended to use is defined here
                }
                quux (b: B) {
                    b.#foo; // OK

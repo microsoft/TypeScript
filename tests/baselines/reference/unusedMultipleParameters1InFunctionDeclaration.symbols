@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts ===
+//// [tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts] ////
+
+=== unusedMultipleParameters1InFunctionDeclaration.ts ===
 function greeter(person: string, person2: string) {
 >greeter : Symbol(greeter, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 0, 0))
 >person : Symbol(person, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 0, 17))

@@ -1,11 +1,15 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignableReturnExpression.ts(12,9): error TS2322: Type 'number' is not assignable to type 'D'.
-tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignableReturnExpression.ts(12,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
-tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignableReturnExpression.ts(26,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
-tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignableReturnExpression.ts(26,18): error TS2322: Type 'number' is not assignable to type 'T'.
+constructorWithAssignableReturnExpression.ts(10,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+constructorWithAssignableReturnExpression.ts(12,9): error TS2322: Type 'number' is not assignable to type 'D'.
+constructorWithAssignableReturnExpression.ts(12,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
+constructorWithAssignableReturnExpression.ts(17,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+constructorWithAssignableReturnExpression.ts(24,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+constructorWithAssignableReturnExpression.ts(26,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
+constructorWithAssignableReturnExpression.ts(26,18): error TS2322: Type 'number' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+constructorWithAssignableReturnExpression.ts(31,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignableReturnExpression.ts (4 errors) ====
+==== constructorWithAssignableReturnExpression.ts (8 errors) ====
     // a class constructor may return an expression, it must be assignable to the class instance type to be valid
     
     class C {
@@ -16,17 +20,21 @@ tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignabl
     
     class D {
         x: number;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         constructor() {
             return 1; // error
-            ~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'D'.
-            ~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
     }
     
     class E {
         x: number;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         constructor() {
             return { x: 1 };
         }
@@ -34,19 +42,23 @@ tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignabl
     
     class F<T> {
         x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         constructor() {
             return { x: 1 }; // error
-            ~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
                      ~
 !!! error TS2322: Type 'number' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-!!! related TS6500 tests/cases/conformance/classes/constructorDeclarations/constructorWithAssignableReturnExpression.ts:24:5: The expected type comes from property 'x' which is declared here on type 'F<T>'
+!!! related TS6500 constructorWithAssignableReturnExpression.ts:24:5: The expected type comes from property 'x' which is declared here on type 'F<T>'
         }
     }
     
     class G<T> {
         x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         constructor() {
             return { x: <T>null };
         }

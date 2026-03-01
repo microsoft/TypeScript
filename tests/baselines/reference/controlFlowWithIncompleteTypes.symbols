@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowWithIncompleteTypes.ts ===
+//// [tests/cases/compiler/controlFlowWithIncompleteTypes.ts] ////
+
+=== controlFlowWithIncompleteTypes.ts ===
 // Repro from #11000
 
 declare var cond: boolean;

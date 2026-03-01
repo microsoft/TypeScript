@@ -34,14 +34,14 @@
 /////*f7*/f7();
 /////*f8*/f8();
 
-verify.goToType({
-    f0: "I",
-    f1: "T",
-    f2: "I",
-    f3: "f3Def",
-    f4: "I",
-    f5: ["I", "J"],
-    f6: ["I", "J"],
-    f7: "f7Def",
-    f8: "f8Def",
-});
+verify.baselineGoToType(
+    "f0",
+    "f1",
+    "f2",
+    "f3",
+    "f4",
+    "f5",
+    "f6",
+    "f7",
+    "f8"
+);

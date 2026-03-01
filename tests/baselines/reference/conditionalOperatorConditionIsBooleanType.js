@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsBooleanType.ts] ////
+
 //// [conditionalOperatorConditionIsBooleanType.ts]
 //Cond ? Expr1 : Expr2,  Cond is of boolean type, Expr1 and Expr2 have the same type
 var condBoolean: boolean;
@@ -63,6 +65,7 @@ var resultIsStringOrBoolean4 = typeof "123" === "string" ? exprString1 : exprBoo
 
 
 //// [conditionalOperatorConditionIsBooleanType.js]
+"use strict";
 //Cond ? Expr1 : Expr2,  Cond is of boolean type, Expr1 and Expr2 have the same type
 var condBoolean;
 var exprAny1;

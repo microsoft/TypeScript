@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumCodeGenNewLines1.ts] ////
+
 //// [enumCodeGenNewLines1.ts]
 enum foo {
   b = 1,
@@ -7,6 +9,7 @@ enum foo {
 
 
 //// [enumCodeGenNewLines1.js]
+"use strict";
 var foo;
 (function (foo) {
     foo[foo["b"] = 1] = "b";

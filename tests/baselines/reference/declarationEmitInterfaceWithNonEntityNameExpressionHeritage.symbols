@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts ===
+//// [tests/cases/compiler/declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts] ////
+
+=== declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts ===
 class A { }
 >A : Symbol(A, Decl(declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts, 0, 0))
 

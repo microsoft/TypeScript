@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/parserPrivateIdentifierInArrayAssignment.ts] ////
+
+=== parserPrivateIdentifierInArrayAssignment.ts ===
+[#abc]=
+>[#abc]= : any
+>        : ^^^
+>[#abc] : [any]
+>       : ^^^^^
+
+> : any
+> : ^^^
+

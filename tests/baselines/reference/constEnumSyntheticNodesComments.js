@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumSyntheticNodesComments.ts] ////
+
 //// [constEnumSyntheticNodesComments.ts]
 const enum En { A, B, C, D }
 
@@ -19,6 +21,7 @@ function verify(a: En) {
 }
 
 //// [constEnumSyntheticNodesComments.js]
+"use strict";
 function assert(x) {
     return x;
 }

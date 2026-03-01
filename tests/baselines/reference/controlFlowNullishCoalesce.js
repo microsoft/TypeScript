@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts] ////
+
 //// [controlFlowNullishCoalesce.ts]
 // assignments in shortcutting rhs
 let a: number;
@@ -16,10 +18,10 @@ if (x = o ?? true) {
 //// [controlFlowNullishCoalesce.js]
 "use strict";
 // assignments in shortcutting rhs
-var a;
+let a;
 o !== null && o !== void 0 ? o : (a = 1);
 a.toString();
-var x;
+let x;
 if (x = o !== null && o !== void 0 ? o : true) {
     x;
 }

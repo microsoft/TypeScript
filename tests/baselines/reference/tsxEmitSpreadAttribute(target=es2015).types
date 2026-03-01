@@ -1,68 +1,91 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxEmitSpreadAttribute.ts] ////
+
+=== test.tsx ===
 declare const React: any;
 >React : any
 
 export function T1(a: any) {
 >T1 : (a: any) => any
+>   : ^ ^^   ^^^^^^^^
 >a : any
 
     return <div className={"T1"} { ...a }>T1</div>;
 ><div className={"T1"} { ...a }>T1</div> : error
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >"T1" : "T1"
+>     : ^^^^
 >a : any
 >div : any
+>    : ^^^
 }
 
 export function T2(a: any, b: any) {
 >T2 : (a: any, b: any) => any
+>   : ^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 
     return <div className={"T2"} { ...a } { ...b }>T2</div>;
 ><div className={"T2"} { ...a } { ...b }>T2</div> : error
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >"T2" : "T2"
+>     : ^^^^
 >a : any
 >b : any
 >div : any
+>    : ^^^
 }
 
 export function T3(a: any, b: any) {
 >T3 : (a: any, b: any) => any
+>   : ^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 
     return <div { ...a } className={"T3"} { ...b }>T3</div>;
 ><div { ...a } className={"T3"} { ...b }>T3</div> : error
 >div : any
+>    : ^^^
 >a : any
 >className : string
+>          : ^^^^^^
 >"T3" : "T3"
+>     : ^^^^
 >b : any
 >div : any
+>    : ^^^
 }
 
 export function T4(a: any, b: any) {
 >T4 : (a: any, b: any) => any
+>   : ^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 
     return <div className={"T4"} { ...{ ...a, ...b } }>T4</div>;
 ><div className={"T4"} { ...{ ...a, ...b } }>T4</div> : error
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >"T4" : "T4"
+>     : ^^^^
 >{ ...a, ...b } : any
 >a : any
 >b : any
 >div : any
+>    : ^^^
 }
 
 export function T5(a: any, b: any, c: any, d: any) {
 >T5 : (a: any, b: any, c: any, d: any) => any
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -71,19 +94,25 @@ export function T5(a: any, b: any, c: any, d: any) {
     return <div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div>;
 ><div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div> : error
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >"T5" : "T5"
+>     : ^^^^
 >{ ...a, ...b, ...{ c, d } } : any
 >a : any
 >b : any
 >{ c, d } : { c: any; d: any; }
+>         : ^^^^^^^^^^^^^^^^^^^
 >c : any
 >d : any
 >div : any
+>    : ^^^
 }
 
 export function T6(a: any, b: any, c: any, d: any) {
 >T6 : (a: any, b: any, c: any, d: any) => any
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
 >a : any
 >b : any
 >c : any
@@ -92,8 +121,11 @@ export function T6(a: any, b: any, c: any, d: any) {
     return <div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div>;
 ><div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div> : error
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >"T6" : "T6"
+>     : ^^^^
 >{ ...a, ...b, ...{ ...c, ...d } } : any
 >a : any
 >b : any
@@ -101,5 +133,138 @@ export function T6(a: any, b: any, c: any, d: any) {
 >c : any
 >d : any
 >div : any
+>    : ^^^
+}
+
+export function T7(a: any, b: any, c: any, d: any) {
+>T7 : (a: any, b: any, c: any, d: any) => any
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div>;
+><div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div> : error
+>div : any
+>    : ^^^
+>className : string
+>          : ^^^^^^
+>"T7" : "T7"
+>     : ^^^^
+>{ __proto__: null, dir: 'rtl' } : { __proto__: null; dir: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>__proto__ : null
+>          : ^^^^
+>dir : string
+>    : ^^^^^^
+>'rtl' : "rtl"
+>      : ^^^^^
+>div : any
+>    : ^^^
+}
+
+export function T8(a: any, b: any, c: any, d: any) {
+>T8 : (a: any, b: any, c: any, d: any) => any
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T8"} { ...{ "__proto__": null } }>T8</div>;
+><div className={"T8"} { ...{ "__proto__": null } }>T8</div> : error
+>div : any
+>    : ^^^
+>className : string
+>          : ^^^^^^
+>"T8" : "T8"
+>     : ^^^^
+>{ "__proto__": null } : { __proto__: null; }
+>                      : ^^^^^^^^^^^^^^^^^^^^
+>"__proto__" : null
+>            : ^^^^
+>div : any
+>    : ^^^
+}
+
+declare const __proto__: string;
+>__proto__ : string
+>          : ^^^^^^
+
+export function T9(a: any, b: any, c: any, d: any) {
+>T9 : (a: any, b: any, c: any, d: any) => any
+>   : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T9"} { ...{ [__proto__]: null } }>T9</div>;
+><div className={"T9"} { ...{ [__proto__]: null } }>T9</div> : error
+>div : any
+>    : ^^^
+>className : string
+>          : ^^^^^^
+>"T9" : "T9"
+>     : ^^^^
+>{ [__proto__]: null } : { [__proto__]: null; }
+>                      : ^^             ^^^^ ^^
+>[__proto__] : null
+>            : ^^^^
+>__proto__ : string
+>          : ^^^^^^
+>div : any
+>    : ^^^
+}
+
+export function T10(a: any, b: any, c: any, d: any) {
+>T10 : (a: any, b: any, c: any, d: any) => any
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
+><div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div> : error
+>div : any
+>    : ^^^
+>className : string
+>          : ^^^^^^
+>"T10" : "T10"
+>      : ^^^^^
+>{ ["__proto__"]: null } : { __proto__: null; }
+>                        : ^^^^^^^^^^^^^^^^^^^^
+>["__proto__"] : null
+>              : ^^^^
+>"__proto__" : "__proto__"
+>            : ^^^^^^^^^^^
+>div : any
+>    : ^^^
+}
+
+export function T11(a: any, b: any, c: any, d: any) {
+>T11 : (a: any, b: any, c: any, d: any) => any
+>    : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+><div className={"T11"} { ...{ __proto__ } }>T11</div> : error
+>div : any
+>    : ^^^
+>className : string
+>          : ^^^^^^
+>"T11" : "T11"
+>      : ^^^^^
+>{ __proto__ } : { __proto__: string; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>__proto__ : string
+>          : ^^^^^^
+>div : any
+>    : ^^^
 }
 

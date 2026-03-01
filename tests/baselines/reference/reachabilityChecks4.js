@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks4.ts] ////
+
 //// [reachabilityChecks4.ts]
 function foo(x, y) {
     switch (x) {
@@ -66,6 +68,7 @@ function f2(transition: Transition): any {
 
 
 //// [reachabilityChecks4.js]
+"use strict";
 function foo(x, y) {
     switch (x) {
         case 1:

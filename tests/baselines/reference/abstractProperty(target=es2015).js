@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts] ////
+
 //// [abstractProperty.ts]
 abstract class A {
     protected abstract x: string;
@@ -16,6 +18,7 @@ class C extends A {
 
 
 //// [abstractProperty.js]
+"use strict";
 class A {
     foo() {
         console.log(this.x);

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultVariable.ts] ////
+
 //// [exportDefaultVariable.ts]
 // Regression test for #3018
 
@@ -9,4 +11,5 @@ declare module 'module' {
 
 
 //// [exportDefaultVariable.js]
+"use strict";
 // Regression test for #3018

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/importMeta/example.ts ===
+//// [tests/cases/conformance/es2019/importMeta/importMeta.ts] ////
+
+=== example.ts ===
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
 (async () => {
   const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
@@ -55,7 +57,7 @@
 
 })();
 
-=== tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts ===
+=== moduleLookingFile01.ts ===
 export let x = import.meta;
 >x : Symbol(x, Decl(moduleLookingFile01.ts, 0, 10))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
@@ -67,7 +69,7 @@ export let y = import.metal;
 export let z = import.import.import.malkovich;
 >z : Symbol(z, Decl(moduleLookingFile01.ts, 2, 10))
 
-=== tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts ===
+=== scriptLookingFile01.ts ===
 let globalA = import.meta;
 >globalA : Symbol(globalA, Decl(scriptLookingFile01.ts, 0, 3))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
@@ -79,7 +81,7 @@ let globalB = import.metal;
 let globalC = import.import.import.malkovich;
 >globalC : Symbol(globalC, Decl(scriptLookingFile01.ts, 2, 3))
 
-=== tests/cases/conformance/es2019/importMeta/assignmentTargets.ts ===
+=== assignmentTargets.ts ===
 export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
 >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))

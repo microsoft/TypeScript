@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bestCommonTypeWithContextualTyping.ts] ////
+
 //// [bestCommonTypeWithContextualTyping.ts]
 interface Contextual {
     dummy;
@@ -9,7 +11,7 @@ interface Ellement {
     p: any;
 }
 
-var e: Ellement;
+declare var e: Ellement;
 
 // All of these should pass. Neither type is a supertype of the other, but the RHS should
 // always use Ellement in these examples (not Contextual). Because Ellement is assignable
@@ -21,7 +23,7 @@ var conditional: Contextual = null ? e : e; // Ellement
 var contextualOr: Contextual = e || e; // Ellement
 
 //// [bestCommonTypeWithContextualTyping.js]
-var e;
+"use strict";
 // All of these should pass. Neither type is a supertype of the other, but the RHS should
 // always use Ellement in these examples (not Contextual). Because Ellement is assignable
 // to Contextual, no errors.

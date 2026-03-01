@@ -1,111 +1,162 @@
-=== tests/cases/compiler/es2017basicAsync.ts ===
+//// [tests/cases/compiler/es2017basicAsync.ts] ////
+
+=== es2017basicAsync.ts ===
 async (): Promise<void> => {
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
+>                                          : ^^^^^^             
 
     await 0;
 >await 0 : 0
+>        : ^
 >0 : 0
+>  : ^
 }
 
 async function asyncFunc() {
 >asyncFunc : () => Promise<void>
+>          : ^^^^^^^^^^^^^^^^^^^
 
     await 0;
 >await 0 : 0
+>        : ^
 >0 : 0
+>  : ^
 }
 
 const asyncArrowFunc = async (): Promise<void> => {
 >asyncArrowFunc : () => Promise<void>
+>               : ^^^^^^             
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
+>                                          : ^^^^^^             
 
     await 0;
 >await 0 : 0
+>        : ^
 >0 : 0
+>  : ^
 }
 
 async function asyncIIFE() {
 >asyncIIFE : () => Promise<void>
+>          : ^^^^^^^^^^^^^^^^^^^
 
     await 0;
 >await 0 : 0
+>        : ^
 >0 : 0
+>  : ^
 
     await (async function(): Promise<void> {
 >await (async function(): Promise<void> {        await 1;    })() : void
+>                                                                 : ^^^^
 >(async function(): Promise<void> {        await 1;    })() : Promise<void>
+>                                                           : ^^^^^^^^^^^^^
 >(async function(): Promise<void> {        await 1;    }) : () => Promise<void>
+>                                                         : ^^^^^^             
 >async function(): Promise<void> {        await 1;    } : () => Promise<void>
+>                                                       : ^^^^^^             
 
         await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
     })();
     
     await (async function asyncNamedFunc(): Promise<void> {
 >await (async function asyncNamedFunc(): Promise<void> {        await 1;    })() : void
+>                                                                                : ^^^^
 >(async function asyncNamedFunc(): Promise<void> {        await 1;    })() : Promise<void>
+>                                                                          : ^^^^^^^^^^^^^
 >(async function asyncNamedFunc(): Promise<void> {        await 1;    }) : () => Promise<void>
+>                                                                        : ^^^^^^             
 >async function asyncNamedFunc(): Promise<void> {        await 1;    } : () => Promise<void>
+>                                                                      : ^^^^^^             
 >asyncNamedFunc : () => Promise<void>
+>               : ^^^^^^             
 
         await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
     })();
     
     await (async (): Promise<void> => {
 >await (async (): Promise<void> => {        await 1;    })() : void
+>                                                            : ^^^^
 >(async (): Promise<void> => {        await 1;    })() : Promise<void>
+>                                                      : ^^^^^^^^^^^^^
 >(async (): Promise<void> => {        await 1;    }) : () => Promise<void>
+>                                                    : ^^^^^^             
 >async (): Promise<void> => {        await 1;    } : () => Promise<void>
+>                                                  : ^^^^^^             
 
         await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
     })();
 }
 
 class AsyncClass {
 >AsyncClass : AsyncClass
+>           : ^^^^^^^^^^
 
     asyncPropFunc = async function(): Promise<void> {
 >asyncPropFunc : () => Promise<void>
+>              : ^^^^^^             
 >async function(): Promise<void> {        await 2;    } : () => Promise<void>
+>                                                       : ^^^^^^             
 
         await 2;
 >await 2 : 2
+>        : ^
 >2 : 2
+>  : ^
     }
     
     asyncPropNamedFunc = async function namedFunc(): Promise<void> {
 >asyncPropNamedFunc : () => Promise<void>
+>                   : ^^^^^^             
 >async function namedFunc(): Promise<void> {        await 2;    } : () => Promise<void>
+>                                                                 : ^^^^^^             
 >namedFunc : () => Promise<void>
+>          : ^^^^^^             
 
         await 2;
 >await 2 : 2
+>        : ^
 >2 : 2
+>  : ^
     }
 
     asyncPropArrowFunc = async (): Promise<void> => {
 >asyncPropArrowFunc : () => Promise<void>
+>                   : ^^^^^^             
 >async (): Promise<void> => {        await 2;    } : () => Promise<void>
+>                                                  : ^^^^^^             
 
         await 2;
 >await 2 : 2
+>        : ^
 >2 : 2
+>  : ^
     }
 
     async asyncMethod(): Promise<void> {
 >asyncMethod : () => Promise<void>
+>            : ^^^^^^             
 
         await 2;
 >await 2 : 2
+>        : ^
 >2 : 2
+>  : ^
     }
 }
 

@@ -1,16 +1,20 @@
-=== tests/cases/compiler/letKeepNamesOfTopLevelItems.ts ===
+//// [tests/cases/compiler/letKeepNamesOfTopLevelItems.ts] ////
+
+=== letKeepNamesOfTopLevelItems.ts ===
 let x;
 >x : any
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     let x;
 >x : any
 }
 
-module A {
+namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     let x;
 >x : any

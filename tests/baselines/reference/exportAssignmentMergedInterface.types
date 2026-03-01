@@ -1,68 +1,106 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentMergedInterface.ts] ////
+
+=== foo_1.ts ===
 import foo = require("./foo_0");
 >foo : any
+>    : ^^^
 
 var x: foo;
 >x : foo
+>  : ^^^
 
 x("test");
 >x("test") : void
+>          : ^^^^
 >x : foo
+>  : ^^^
 >"test" : "test"
+>       : ^^^^^^
 
 x(42);
 >x(42) : number
+>      : ^^^^^^
 >x : foo
+>  : ^^^
 >42 : 42
+>   : ^^
 
 var y: string = x.b;
 >y : string
+>  : ^^^^^^
 >x.b : string
+>    : ^^^^^^
 >x : foo
+>  : ^^^
 >b : string
+>  : ^^^^^^
 
 if(!!x.c){ }
 >!!x.c : boolean
+>      : ^^^^^^^
 >!x.c : boolean
+>     : ^^^^^^^
 >x.c : boolean
+>    : ^^^^^^^
 >x : foo
+>  : ^^^
 >c : boolean
+>  : ^^^^^^^
 
 var z = {x: 1, y: 2};
 >z : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{x: 1, y: 2} : { x: number; y: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 z = x.d;
 >z = x.d : { x: number; y: number; }
+>        : ^^^^^      ^^^^^      ^^^
 >z : { x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.d : { x: number; y: number; }
+>    : ^^^^^      ^^^^^      ^^^
 >x : foo
+>  : ^^^
 >d : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 interface Foo {
 	(a: string): void;
 >a : string
+>  : ^^^^^^
 
 	b: string;
 >b : string
+>  : ^^^^^^
 }
 interface Foo {
 	(a: number): number;
 >a : number
+>  : ^^^^^^
 
 	c: boolean;
 >c : boolean
+>  : ^^^^^^^
 
 	d: {x: number; y: number};
 >d : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 }
 export = Foo;
 >Foo : Foo
+>    : ^^^
 

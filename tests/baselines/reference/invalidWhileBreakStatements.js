@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/invalidWhileBreakStatements.ts] ////
+
 //// [invalidWhileBreakStatements.ts]
 // All errors
 
@@ -39,6 +41,7 @@ while (true) {
 }
 
 //// [invalidWhileBreakStatements.js]
+"use strict";
 // All errors
 // naked break not allowed
 break;
@@ -47,7 +50,7 @@ ONE: while (true)
     break TWO;
 // break from inside function
 TWO: while (true) {
-    var x = function () {
+    var x = () => {
         break TWO;
     };
 }

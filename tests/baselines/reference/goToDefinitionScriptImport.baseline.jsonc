@@ -1,0 +1,37 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/scriptThing.ts ===
+// [||]console.log("woooo side effects")
+
+// === /tests/cases/fourslash/moduleThing.ts ===
+// import /*GOTO DEF*/[|"./scriptThing"|];
+// import "./stylez.css";
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./scriptThing",
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/stylez.css ===
+// [||]div {
+//   color: magenta;
+// }
+
+// === /tests/cases/fourslash/moduleThing.ts ===
+// import "./scriptThing";
+// import /*GOTO DEF*/[|"./stylez.css"|];
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./stylez.css",
+    "unverified": true
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseBigInt.ts] ////
+
 //// [parseBigInt.ts]
 // All bases should allow "n" suffix
 const bin = 0b101, binBig = 0b101n; // 5, 5n
@@ -71,6 +73,7 @@ oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
 oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
 
 //// [parseBigInt.js]
+"use strict";
 // All bases should allow "n" suffix
 const bin = 0b101, binBig = 5n; // 5, 5n
 const oct = 0o567, octBig = 375n; // 375, 375n
@@ -120,7 +123,7 @@ const unaryPlusHex = +0x123n;
 // Parsing errors
 // In separate blocks because they each declare an "n" variable
 {
-    const legacyOct = 0123, n;
+    const legacyOct = 83, n;
 }
 {
     const scientific = 1e2n;

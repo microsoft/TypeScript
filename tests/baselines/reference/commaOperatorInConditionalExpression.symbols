@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commaOperatorInConditionalExpression.ts ===
+//// [tests/cases/compiler/commaOperatorInConditionalExpression.ts] ////
+
+=== commaOperatorInConditionalExpression.ts ===
 function f (m: string) {
 >f : Symbol(f, Decl(commaOperatorInConditionalExpression.ts, 0, 0))
 >m : Symbol(m, Decl(commaOperatorInConditionalExpression.ts, 0, 12))

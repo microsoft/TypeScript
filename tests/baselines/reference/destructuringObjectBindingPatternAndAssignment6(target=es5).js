@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment6.ts] ////
+
 //// [destructuringObjectBindingPatternAndAssignment6.ts]
 const a = "a";
 const b = "b";
@@ -9,6 +11,7 @@ console.log(aVal, bVal);
 
 
 //// [destructuringObjectBindingPatternAndAssignment6.js]
+"use strict";
 var a = "a";
 var b = "b";
 var _a = (function () {

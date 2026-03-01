@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-// @importsNotUsedAsValues: error
+// @module: esnext
+// @verbatimModuleSyntax: true
 
 // @Filename: types1.ts
 ////type A = {};

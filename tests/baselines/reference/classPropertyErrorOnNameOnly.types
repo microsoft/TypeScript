@@ -1,52 +1,72 @@
-=== tests/cases/compiler/classPropertyErrorOnNameOnly.ts ===
+//// [tests/cases/compiler/classPropertyErrorOnNameOnly.ts] ////
+
+=== classPropertyErrorOnNameOnly.ts ===
 type Values = 1 | 2 | 3 | 4 | 5 | 6
->Values : 1 | 2 | 3 | 4 | 5 | 6
+>Values : Values
+>       : ^^^^^^
 
 type FuncType = (arg: Values) => string
->FuncType : (arg: Values) => string
+>FuncType : FuncType
+>         : ^^^^^^^^
 >arg : Values
+>    : ^^^^^^
 
 // turn on strictNullChecks
 class Example {
 >Example : Example
+>        : ^^^^^^^
 
   insideClass: FuncType = function(val) { // error span goes from here
 >insideClass : FuncType
+>            : ^^^^^^^^
 >function(val) { // error span goes from here    switch (val) {      case 1:        return "1";      case 2:        return "2";      case 3:        return "3"      case 4:        return "4"      case 5:        return "5"      // forgot case 6    }  } : (val: Values) => "1" | "2" | "3" | "4" | "5" | undefined
+>                                                                                                                                                                                                                                                          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Values
+>    : ^^^^^^
 
     switch (val) {
 >val : Values
+>    : ^^^^^^
 
       case 1:
 >1 : 1
+>  : ^
 
         return "1";
 >"1" : "1"
+>    : ^^^
 
       case 2:
 >2 : 2
+>  : ^
 
         return "2";
 >"2" : "2"
+>    : ^^^
 
       case 3:
 >3 : 3
+>  : ^
 
         return "3"
 >"3" : "3"
+>    : ^^^
 
       case 4:
 >4 : 4
+>  : ^
 
         return "4"
 >"4" : "4"
+>    : ^^^
 
       case 5:
 >5 : 5
+>  : ^
 
         return "5"
 >"5" : "5"
+>    : ^^^
 
       // forgot case 6
     }
@@ -55,41 +75,55 @@ class Example {
 
 const outsideClass: FuncType = function(val) { // compare to errors only on this line in this case 
 >outsideClass : FuncType
+>             : ^^^^^^^^
 >function(val) { // compare to errors only on this line in this case     switch (val) {      case 1:        return "1";      case 2:        return "2";      case 3:        return "3"      case 4:        return "4"      case 5:        return "5"      // forgot case 6    }} : (val: Values) => "1" | "2" | "3" | "4" | "5" | undefined
+>                                                                                                                                                                                                                                                                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Values
+>    : ^^^^^^
 
     switch (val) {
 >val : Values
+>    : ^^^^^^
 
       case 1:
 >1 : 1
+>  : ^
 
         return "1";
 >"1" : "1"
+>    : ^^^
 
       case 2:
 >2 : 2
+>  : ^
 
         return "2";
 >"2" : "2"
+>    : ^^^
 
       case 3:
 >3 : 3
+>  : ^
 
         return "3"
 >"3" : "3"
+>    : ^^^
 
       case 4:
 >4 : 4
+>  : ^
 
         return "4"
 >"4" : "4"
+>    : ^^^
 
       case 5:
 >5 : 5
+>  : ^
 
         return "5"
 >"5" : "5"
+>    : ^^^
 
       // forgot case 6
     }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction.ts] ////
+
+=== templateTagOnConstructorFunctions.js ===
 /**
  * @template U
  * @typedef {(u: U) => U} Id

@@ -1,59 +1,61 @@
-=== tests/cases/compiler/valueOfTypedArray.ts ===
+//// [tests/cases/compiler/valueOfTypedArray.ts] ////
+
+=== valueOfTypedArray.ts ===
 // All declarations should pass, as valueOf has been specialized for all TypedArrays
 const typedArray0: Int8Array = (new Int8Array()).valueOf();
 >typedArray0 : Symbol(typedArray0, Decl(valueOfTypedArray.ts, 1, 5))
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Int8Array()).valueOf : Symbol(Int8Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Int8Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray1: Uint8Array = (new Uint8Array()).valueOf();
 >typedArray1 : Symbol(typedArray1, Decl(valueOfTypedArray.ts, 2, 5))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Uint8Array()).valueOf : Symbol(Uint8Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Uint8Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray2: Int16Array = (new Int16Array()).valueOf();
 >typedArray2 : Symbol(typedArray2, Decl(valueOfTypedArray.ts, 3, 5))
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Int16Array()).valueOf : Symbol(Int16Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Int16Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray3: Uint16Array = (new Uint16Array()).valueOf();
 >typedArray3 : Symbol(typedArray3, Decl(valueOfTypedArray.ts, 4, 5))
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Uint16Array()).valueOf : Symbol(Uint16Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Uint16Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray4: Int32Array = (new Int32Array()).valueOf();
 >typedArray4 : Symbol(typedArray4, Decl(valueOfTypedArray.ts, 5, 5))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Int32Array()).valueOf : Symbol(Int32Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Int32Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray5: Uint32Array = (new Uint32Array()).valueOf();
 >typedArray5 : Symbol(typedArray5, Decl(valueOfTypedArray.ts, 6, 5))
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Uint32Array()).valueOf : Symbol(Uint32Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Uint32Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray6: Float32Array = (new Float32Array()).valueOf();
 >typedArray6 : Symbol(typedArray6, Decl(valueOfTypedArray.ts, 7, 5))
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Float32Array()).valueOf : Symbol(Float32Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Float32Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray7: Float64Array = (new Float64Array()).valueOf();
 >typedArray7 : Symbol(typedArray7, Decl(valueOfTypedArray.ts, 8, 5))
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >(new Float64Array()).valueOf : Symbol(Float64Array.valueOf, Decl(lib.es5.d.ts, --, --))
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 >valueOf : Symbol(Float64Array.valueOf, Decl(lib.es5.d.ts, --, --))
 
 const typedArray8: BigInt64Array = (new BigInt64Array()).valueOf();

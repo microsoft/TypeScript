@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts] ////
+
 //// [destructuringInFunctionType.ts]
 interface a { a }
 interface b { b }
@@ -22,10 +24,8 @@ var v2: ([a, b, c]) => string;
 
 
 //// [destructuringInFunctionType.js]
-var v1 = function (_a) {
-    var a = _a[0], b = _a[1], c = _a[2];
-    return "hello";
-};
+"use strict";
+var v1 = ([a, b, c]) => "hello";
 var v2;
 
 
@@ -52,7 +52,7 @@ type T3 = ([{
 }, {
     b: a;
 }]);
-type F3 = ([{ a }, { b }]: [{
+type F3 = ([{ a: b }, { b: a }]: [{
     a: any;
 }, {
     b: any;

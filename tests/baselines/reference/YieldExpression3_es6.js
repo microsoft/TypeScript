@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression3_es6.ts] ////
+
 //// [YieldExpression3_es6.ts]
 function* foo() {
   yield
@@ -5,6 +7,7 @@ function* foo() {
 }
 
 //// [YieldExpression3_es6.js]
+"use strict";
 function* foo() {
     yield;
     yield;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInClassBodyStaticESNext.ts] ////
+
 //// [thisInClassBodyStaticESNext.ts]
 // all are allowed with es-compliant class field emit
 class Foo {
@@ -10,6 +12,7 @@ class Foo {
 
 
 //// [thisInClassBodyStaticESNext.js]
+"use strict";
 // all are allowed with es-compliant class field emit
 class Foo {
     x = this;

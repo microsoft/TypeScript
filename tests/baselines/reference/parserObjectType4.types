@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType4.ts] ////
+
+=== parserObjectType4.ts ===
 var v: {
 >v : { x: any; y: any; }
+>  : ^^^^^^^^^^^^^^^^^^^
 
   x
 >x : any

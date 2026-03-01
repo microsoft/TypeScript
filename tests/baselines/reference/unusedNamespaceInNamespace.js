@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedNamespaceInNamespace.ts] ////
+
 //// [unusedNamespaceInNamespace.ts]
 namespace A {
     namespace B { }
@@ -5,3 +7,4 @@ namespace A {
 }
 
 //// [unusedNamespaceInNamespace.js]
+"use strict";

@@ -1,5 +1,7 @@
-=== tests/cases/compiler/missingImportAfterModuleImport_1.ts ===
-///<reference path='missingImportAfterModuleImport_0.ts'/>
+//// [tests/cases/compiler/missingImportAfterModuleImport.ts] ////
+
+=== missingImportAfterModuleImport_1.ts ===
+///<reference path='missingImportAfterModuleImport_0.ts' preserve="true" />
 import SubModule = require('SubModule');
 >SubModule : Symbol(SubModule, Decl(missingImportAfterModuleImport_1.ts, 0, 0))
 
@@ -17,7 +19,7 @@ export = MainModule;
 >MainModule : Symbol(MainModule, Decl(missingImportAfterModuleImport_1.ts, 1, 40))
 
 
-=== tests/cases/compiler/missingImportAfterModuleImport_0.ts ===
+=== missingImportAfterModuleImport_0.ts ===
 declare module "SubModule" {
 >"SubModule" : Symbol("SubModule", Decl(missingImportAfterModuleImport_0.ts, 0, 0))
 

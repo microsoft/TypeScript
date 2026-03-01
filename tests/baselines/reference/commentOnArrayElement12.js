@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnArrayElement12.ts] ////
+
 //// [commentOnArrayElement12.ts]
 const array = [
     ,, /* comment */
@@ -5,7 +7,8 @@ const array = [
 
 
 //// [commentOnArrayElement12.js]
-var array = [
+"use strict";
+const array = [
     ,
     , /* comment */
 ];

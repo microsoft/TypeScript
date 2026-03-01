@@ -1,9 +1,9 @@
-tests/cases/conformance/jsdoc/a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/jsdoc/a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/jsdoc/a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
+a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
+a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
+a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/conformance/jsdoc/a.js (3 errors) ====
+==== a.js (3 errors) ====
     /** @type {function(string): void} */
     const f = (value) => {
     };
@@ -15,15 +15,15 @@ tests/cases/conformance/jsdoc/a.js(13,1): error TS2554: Expected 1 arguments, bu
     }
     
     f() // should error
-    ~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/jsdoc/a.js:1:21: An argument for '0' was not provided.
+!!! related TS6210 a.js:1:21: An argument for '0' was not provided.
     g() // should error
-    ~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/jsdoc/a.js:4:13: An argument for 's' was not provided.
+!!! related TS6210 a.js:4:13: An argument for 's' was not provided.
     h()
-    ~~~
+    ~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/jsdoc/a.js:7:14: An argument for 's' was not provided.
+!!! related TS6210 a.js:7:14: An argument for 's' was not provided.
     

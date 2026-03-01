@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameLateSuper.ts] ////
+
 //// [privateNameLateSuper.ts]
 class B {}
 class A extends B {
@@ -10,6 +12,7 @@ class A extends B {
 
 
 //// [privateNameLateSuper.js]
+"use strict";
 var _A_x;
 class B {
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccessOnObjectLiteral.ts] ////
+
 //// [propertyAccessOnObjectLiteral.ts]
 class A { }
 
@@ -9,12 +11,10 @@ class A { }
 
 
 //// [propertyAccessOnObjectLiteral.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}
 ({}.toString());
-(function () {
+(() => {
     ({}.toString());
 })();

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParameterAssignmentCompatibility.ts ===
+//// [tests/cases/compiler/restParameterAssignmentCompatibility.ts] ////
+
+=== restParameterAssignmentCompatibility.ts ===
 class T {
 >T : Symbol(T, Decl(restParameterAssignmentCompatibility.ts, 0, 0))
 

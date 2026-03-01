@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports_entireImportDeclaration.ts] ////
+
 === /a.ts ===
 export const a = 0;
 >a : Symbol(a, Decl(a.ts, 0, 12))

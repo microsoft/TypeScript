@@ -1,77 +1,118 @@
-=== tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts ===
+//// [tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts] ////
+
+=== assignmentCompatability_checking-call-member-off-of-function-interface.ts ===
 // 3.8.4 Assignment Compatibility 
 
 interface Callable {
     call(blah: any); // also works for 'apply'
 >call : (blah: any) => any
+>     : ^    ^^   ^^^^^^^^
 >blah : any
+>     : ^^^
 }
 
 var x: Callable;
 >x : Callable
+>  : ^^^^^^^^
 
 // Should fail
 x = '';
 >x = '' : ""
+>       : ^^
 >x : Callable
+>  : ^^^^^^^^
 >'' : ""
+>   : ^^
 
 x = [''];
 >x = [''] : string[]
+>         : ^^^^^^^^
 >x : Callable
+>  : ^^^^^^^^
 >[''] : string[]
+>     : ^^^^^^^^
 >'' : ""
+>   : ^^
 
 x = 4;
 >x = 4 : 4
+>      : ^
 >x : Callable
+>  : ^^^^^^^^
 >4 : 4
+>  : ^
 
 x = {};
 >x = {} : {}
+>       : ^^
 >x : Callable
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 // Should work
 function f() { };
 >f : () => void
+>  : ^^^^^^^^^^
 
 x = f;
 >x = f : () => void
+>      : ^^^^^^^^^^
 >x : Callable
+>  : ^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
 function fn(c: Callable) { }
 >fn : (c: Callable) => void
+>   : ^ ^^        ^^^^^^^^^
 >c : Callable
+>  : ^^^^^^^^
 
 // Should Fail
 fn('');
 >fn('') : void
+>       : ^^^^
 >fn : (c: Callable) => void
+>   : ^ ^^        ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 fn(['']);
 >fn(['']) : void
+>         : ^^^^
 >fn : (c: Callable) => void
+>   : ^ ^^        ^^^^^^^^^
 >[''] : string[]
+>     : ^^^^^^^^
 >'' : ""
+>   : ^^
 
 fn(4);
 >fn(4) : void
+>      : ^^^^
 >fn : (c: Callable) => void
+>   : ^ ^^        ^^^^^^^^^
 >4 : 4
+>  : ^
 
 fn({});
 >fn({}) : void
+>       : ^^^^
 >fn : (c: Callable) => void
+>   : ^ ^^        ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 
 // Should work
 fn(a => { });
 >fn(a => { }) : void
+>             : ^^^^
 >fn : (c: Callable) => void
+>   : ^ ^^        ^^^^^^^^^
 >a => { } : (a: any) => void
+>         : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 

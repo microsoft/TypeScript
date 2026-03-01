@@ -1,7 +1,7 @@
-tests/cases/compiler/propertyAccess4.ts(1,1): error TS2531: Object is possibly 'null'.
+propertyAccess4.ts(1,1): error TS18050: The value 'null' cannot be used here.
 
 
-==== tests/cases/compiler/propertyAccess4.ts (1 errors) ====
+==== propertyAccess4.ts (1 errors) ====
     null.toBAZ();
     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.

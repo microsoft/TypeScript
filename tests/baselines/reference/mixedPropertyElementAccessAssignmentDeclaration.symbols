@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/mixedPropertyElementAccessAssignmentDeclaration.ts ===
+//// [tests/cases/conformance/salsa/mixedPropertyElementAccessAssignmentDeclaration.ts] ////
+
+=== mixedPropertyElementAccessAssignmentDeclaration.ts ===
 // Should not crash: #34642
 var arr = [];
 >arr : Symbol(arr, Decl(mixedPropertyElementAccessAssignmentDeclaration.ts, 1, 3))

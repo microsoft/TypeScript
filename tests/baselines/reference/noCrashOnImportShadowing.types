@@ -1,55 +1,83 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/noCrashOnImportShadowing.ts] ////
+
+=== b.ts ===
 export const zzz = 123;
 >zzz : 123
+>    : ^^^
 >123 : 123
+>    : ^^^
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import * as B from "./b";
 >B : typeof B
+>  : ^^^^^^^^
 
 interface B {
     x: string;
 >x : string
+>  : ^^^^^^
 }
 
 const x: B = { x: "" };
 >x : B
+>  : ^
 >{ x: "" } : { x: string; }
+>          : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 B.zzz;
 >B.zzz : 123
+>      : ^^^
 >B : typeof B
+>  : ^^^^^^^^
 >zzz : 123
+>    : ^^^
 
 export { B };
->B : any
+>B : typeof B
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { B } from "./a";
->B : any
+>B : typeof OriginalB
+>  : ^^^^^^^^^^^^^^^^
 
 const x: B = { x: "" };
 >x : B
+>  : ^
 >{ x: "" } : { x: string; }
+>          : ^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 B.zzz;
->B.zzz : any
->B : any
->zzz : any
+>B.zzz : 123
+>      : ^^^
+>B : typeof OriginalB
+>  : ^^^^^^^^^^^^^^^^
+>zzz : 123
+>    : ^^^
 
 import * as OriginalB from "./b";
 >OriginalB : typeof OriginalB
+>          : ^^^^^^^^^^^^^^^^
 
 OriginalB.zzz;
 >OriginalB.zzz : 123
+>              : ^^^
 >OriginalB : typeof OriginalB
+>          : ^^^^^^^^^^^^^^^^
 >zzz : 123
+>    : ^^^
 
 const y: OriginalB = x;
 >y : OriginalB
+>  : ^^^^^^^^^
 >x : B
+>  : ^
 

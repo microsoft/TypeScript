@@ -1,4 +1,5 @@
-// @module: node16,nodenext
+// @module: node16,node18,node20,nodenext
+// @target: es5, es2015
 // @declaration: true
 // @importHelpers: true
 // @allowJs: true

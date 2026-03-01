@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
-////module MemoryAnalyzer {
-////    export module Foo.Charting { }
+////namespace MemoryAnalyzer {
+////    export namespace Foo.Charting { }
 ////    /**/
 
 goTo.marker();

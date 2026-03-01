@@ -1,0 +1,175 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsUsing.ts ===
+// using a = "a";
+//       ^
+// | ----------------------------------------------------------------------
+// | using a: "a"
+// | ----------------------------------------------------------------------
+// const f = async () => {
+//     await using b = { async [Symbol.asyncDispose]() {} };
+//                 ^
+// | ----------------------------------------------------------------------
+// | await using b: {
+// |     [Symbol.asyncDispose](): Promise<void>;
+// | }
+// | ----------------------------------------------------------------------
+// };
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsUsing.ts",
+      "position": 7,
+      "name": "a"
+    },
+    "item": {
+      "kind": "using",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "using",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"a\"",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsUsing.ts",
+      "position": 55,
+      "name": "b"
+    },
+    "item": {
+      "kind": "await using",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 55,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "await using",
+          "kind": "text"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "b",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "    ",
+          "kind": "space"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Symbol",
+          "kind": "localName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "asyncDispose",
+          "kind": "propertyName"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Promise",
+          "kind": "localName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        },
+        {
+          "text": ";",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

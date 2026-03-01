@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/declarationEmitScopeConsistency3.ts] ////
+
+=== a.ts ===
+export const g = (v: "outer") => {
+>g : Symbol(g, Decl(a.ts, 0, 12))
+>v : Symbol(v, Decl(a.ts, 0, 18))
+
+    const f = (v: "inner") => () => null! as typeof v;
+>f : Symbol(f, Decl(a.ts, 1, 9))
+>v : Symbol(v, Decl(a.ts, 1, 15))
+>v : Symbol(v, Decl(a.ts, 1, 15))
+
+    const r = f(null!)
+>r : Symbol(r, Decl(a.ts, 2, 9))
+>f : Symbol(f, Decl(a.ts, 1, 9))
+
+    return r;
+>r : Symbol(r, Decl(a.ts, 2, 9))
+}

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/t.ts ===
+//// [tests/cases/compiler/fileReferencesWithNoExtensions.ts] ////
+
+=== t.ts ===
 /// <reference path="a"/>
 /// <reference path="b"/>
 /// <reference path="c"/>
@@ -14,19 +16,19 @@ var c = cc;  // Check that c.ts has precedence over c.d.ts
 >c : Symbol(c, Decl(t.ts, 5, 3))
 >cc : Symbol(cc, Decl(c.ts, 0, 3))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 var aa = 1;
 >aa : Symbol(aa, Decl(a.ts, 0, 3))
 
-=== tests/cases/compiler/b.d.ts ===
+=== b.d.ts ===
 declare var bb: number;
 >bb : Symbol(bb, Decl(b.d.ts, 0, 11))
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 var cc = 1;
 >cc : Symbol(cc, Decl(c.ts, 0, 3))
 
-=== tests/cases/compiler/c.d.ts ===
+=== c.d.ts ===
 declare var xx: number;
 >xx : Symbol(xx, Decl(c.d.ts, 0, 11))
 

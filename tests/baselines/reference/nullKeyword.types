@@ -1,6 +1,9 @@
-=== tests/cases/compiler/nullKeyword.ts ===
+//// [tests/cases/compiler/nullKeyword.ts] ////
+
+=== nullKeyword.ts ===
 null.foo;
 >null.foo : any
->null : null
+>         : ^^^
 >foo : any
+>    : ^^^
 

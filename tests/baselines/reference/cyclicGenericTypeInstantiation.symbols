@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cyclicGenericTypeInstantiation.ts ===
+//// [tests/cases/compiler/cyclicGenericTypeInstantiation.ts] ////
+
+=== cyclicGenericTypeInstantiation.ts ===
 function foo<T>() {
 >foo : Symbol(foo, Decl(cyclicGenericTypeInstantiation.ts, 0, 0))
 >T : Symbol(T, Decl(cyclicGenericTypeInstantiation.ts, 0, 13))

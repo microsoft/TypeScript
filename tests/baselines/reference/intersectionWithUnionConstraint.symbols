@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts] ////
+
+=== intersectionWithUnionConstraint.ts ===
 function f1<T extends string | number, U extends string | number>(x: T & U) {
 >f1 : Symbol(f1, Decl(intersectionWithUnionConstraint.ts, 0, 0))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 0, 12))
@@ -118,7 +120,7 @@ type a<T> = T extends Array<infer U> ? U : never;
 >a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
 >U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
 

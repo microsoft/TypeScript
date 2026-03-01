@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithEnumType.ts] ////
+
 //// [logicalNotOperatorWithEnumType.ts]
 // ! operator on enum type
 
@@ -22,6 +24,7 @@ var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 !ENUM, ENUM1;
 
 //// [logicalNotOperatorWithEnumType.js]
+"use strict";
 // ! operator on enum type
 var ENUM;
 (function (ENUM) {

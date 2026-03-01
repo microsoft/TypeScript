@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyIndexing.ts ===
+//// [tests/cases/compiler/noImplicitAnyIndexing.ts] ////
+
+=== noImplicitAnyIndexing.ts ===
 enum MyEmusEnum {
 >MyEmusEnum : Symbol(MyEmusEnum, Decl(noImplicitAnyIndexing.ts, 0, 0))
 

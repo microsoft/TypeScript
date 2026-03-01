@@ -1,9 +1,11 @@
-=== tests/cases/compiler/out.d.ts ===
+//// [tests/cases/compiler/declarationFileOverwriteErrorWithOut.ts] ////
+
+=== /out.d.ts ===
 declare class c {
 >c : Symbol(c, Decl(out.d.ts, 0, 0))
 }
 
-=== tests/cases/compiler/a.ts ===
+=== /a.ts ===
 class d {
 >d : Symbol(d, Decl(a.ts, 0, 0))
 }

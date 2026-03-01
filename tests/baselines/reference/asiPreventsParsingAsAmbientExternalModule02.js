@@ -1,8 +1,10 @@
+//// [tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule02.ts] ////
+
 //// [asiPreventsParsingAsAmbientExternalModule02.ts]
 var declare: number;
 var module: string;
 
-module container {
+namespace container {
     declare                // this is the identifier 'declare'
     module                 // this is the identifier 'module'
     "my external module"   // this is just a string
@@ -10,6 +12,7 @@ module container {
 }
 
 //// [asiPreventsParsingAsAmbientExternalModule02.js]
+"use strict";
 var declare;
 var module;
 var container;

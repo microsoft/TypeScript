@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/functionInIfStatementInModule.ts] ////
+
 //// [functionInIfStatementInModule.ts]
  
-module Midori
+namespace Midori
 {
     if (false) {
         function Foo(src)
@@ -11,6 +13,7 @@ module Midori
 
 
 //// [functionInIfStatementInModule.js]
+"use strict";
 var Midori;
 (function (Midori) {
     if (false) {

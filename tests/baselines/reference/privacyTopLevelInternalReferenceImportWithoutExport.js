@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts] ////
+
 //// [privacyTopLevelInternalReferenceImportWithoutExport.ts]
 // private elements
-module m_private {
+namespace m_private {
     export class c_private {
     }
     export enum e_private {
@@ -13,18 +15,18 @@ module m_private {
     export var v_private = new c_private();
     export interface i_private {
     }
-    export module mi_private {
+    export namespace mi_private {
         export class c {
         }
     }
-    export module mu_private {
+    export namespace mu_private {
         export interface i {
         }
     }
 }
 
 // Public elements
-export module m_public {
+export namespace m_public {
     export class c_public {
     }
     export enum e_public {
@@ -37,11 +39,11 @@ export module m_public {
     export var v_public = 10;
     export interface i_public {
     }
-    export module mi_public {
+    export namespace mi_public {
         export class c {
         }
     }
-    export module mu_public {
+    export namespace mu_public {
         export interface i {
         }
     }
@@ -102,18 +104,15 @@ export var publicUse_im_private_mu_public: im_private_mu_public.i;
 //// [privacyTopLevelInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.publicUse_im_private_mu_public = exports.publicUse_im_private_mi_public = exports.publicUse_im_private_i_public = exports.publicUse_im_private_v_public = exports.publicUse_im_private_f_public = exports.publicUse_im_private_e_public = exports.publicUse_im_private_c_public = exports.publicUse_im_private_mu_private = exports.publicUse_im_private_mi_private = exports.publicUse_im_private_i_private = exports.publicUse_im_private_v_private = exports.publicUse_im_private_f_private = exports.publicUse_im_private_e_private = exports.publicUse_im_private_c_private = exports.m_public = void 0;
     // private elements
     var m_private;
     (function (m_private) {
-        var c_private = /** @class */ (function () {
-            function c_private() {
-            }
-            return c_private;
-        }());
+        class c_private {
+        }
         m_private.c_private = c_private;
-        var e_private;
+        let e_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
             e_private[e_private["Grumpy"] = 1] = "Grumpy";
@@ -123,26 +122,20 @@ define(["require", "exports"], function (require, exports) {
         }
         m_private.f_private = f_private;
         m_private.v_private = new c_private();
-        var mi_private;
+        let mi_private;
         (function (mi_private) {
-            var c = /** @class */ (function () {
-                function c() {
-                }
-                return c;
-            }());
+            class c {
+            }
             mi_private.c = c;
         })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
     })(m_private || (m_private = {}));
     // Public elements
     var m_public;
     (function (m_public) {
-        var c_public = /** @class */ (function () {
-            function c_public() {
-            }
-            return c_public;
-        }());
+        class c_public {
+        }
         m_public.c_public = c_public;
-        var e_public;
+        let e_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
             e_public[e_public["Grumpy"] = 1] = "Grumpy";
@@ -152,16 +145,13 @@ define(["require", "exports"], function (require, exports) {
         }
         m_public.f_public = f_public;
         m_public.v_public = 10;
-        var mi_public;
+        let mi_public;
         (function (mi_public) {
-            var c = /** @class */ (function () {
-                function c() {
-                }
-                return c;
-            }());
+            class c {
+            }
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
-    })(m_public = exports.m_public || (exports.m_public = {}));
+    })(m_public || (exports.m_public = m_public = {}));
     // No Privacy errors - importing private elements
     var im_private_c_private = m_private.c_private;
     var im_private_e_private = m_private.e_private;
@@ -204,7 +194,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [privacyTopLevelInternalReferenceImportWithoutExport.d.ts]
-declare module m_private {
+declare namespace m_private {
     class c_private {
     }
     enum e_private {
@@ -215,16 +205,16 @@ declare module m_private {
     var v_private: c_private;
     interface i_private {
     }
-    module mi_private {
+    namespace mi_private {
         class c {
         }
     }
-    module mu_private {
+    namespace mu_private {
         interface i {
         }
     }
 }
-export declare module m_public {
+export declare namespace m_public {
     class c_public {
     }
     enum e_public {
@@ -235,11 +225,11 @@ export declare module m_public {
     var v_public: number;
     interface i_public {
     }
-    module mi_public {
+    namespace mi_public {
         class c {
         }
     }
-    module mu_public {
+    namespace mu_public {
         interface i {
         }
     }

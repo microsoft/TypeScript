@@ -1,24 +1,24 @@
-tests/cases/compiler/augmentedTypesClass2a.ts(2,7): error TS2300: Duplicate identifier 'c2'.
-tests/cases/compiler/augmentedTypesClass2a.ts(2,7): error TS2813: Class declaration cannot implement overload list for 'c2'.
-tests/cases/compiler/augmentedTypesClass2a.ts(3,10): error TS2300: Duplicate identifier 'c2'.
-tests/cases/compiler/augmentedTypesClass2a.ts(3,10): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/augmentedTypesClass2a.ts(4,5): error TS2300: Duplicate identifier 'c2'.
+augmentedTypesClass2a.ts(2,7): error TS2300: Duplicate identifier 'c2'.
+augmentedTypesClass2a.ts(2,7): error TS2813: Class declaration cannot implement overload list for 'c2'.
+augmentedTypesClass2a.ts(3,10): error TS2300: Duplicate identifier 'c2'.
+augmentedTypesClass2a.ts(3,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+augmentedTypesClass2a.ts(4,5): error TS2300: Duplicate identifier 'c2'.
 
 
-==== tests/cases/compiler/augmentedTypesClass2a.ts (5 errors) ====
+==== augmentedTypesClass2a.ts (5 errors) ====
     //// class then function
     class c2 { public foo() { } } // error
           ~~
 !!! error TS2300: Duplicate identifier 'c2'.
           ~~
 !!! error TS2813: Class declaration cannot implement overload list for 'c2'.
-!!! related TS6506 tests/cases/compiler/augmentedTypesClass2a.ts:2:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 augmentedTypesClass2a.ts:2:7: Consider adding a 'declare' modifier to this class.
     function c2() { } // error
              ~~
 !!! error TS2300: Duplicate identifier 'c2'.
              ~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/augmentedTypesClass2a.ts:2:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 augmentedTypesClass2a.ts:2:7: Consider adding a 'declare' modifier to this class.
     var c2 = () => { }
         ~~
 !!! error TS2300: Duplicate identifier 'c2'.

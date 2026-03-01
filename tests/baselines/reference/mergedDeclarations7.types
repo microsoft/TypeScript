@@ -1,38 +1,53 @@
-=== tests/cases/compiler/passport.d.ts ===
+//// [tests/cases/compiler/mergedDeclarations7.ts] ////
+
+=== passport.d.ts ===
 declare module 'passport' {
 >'passport' : typeof import("passport")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     namespace passport {
         interface Passport {
             use(): this;
 >use : () => this
+>    : ^^^^^^    
         }
 
         interface PassportStatic extends Passport {
             Passport: {new(): Passport};
 >Passport : new () => Passport
+>         : ^^^^^^^^^^        
         }
     }
 
     const passport: passport.PassportStatic;
 >passport : passport.PassportStatic
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >passport : any
+>         : ^^^
 
     export = passport;
 >passport : passport.PassportStatic
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import * as passport from "passport";
 >passport : passport.PassportStatic
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
 import { Passport } from "passport";
 >Passport : new () => passport.Passport
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let p: Passport = passport.use();
 >p : Passport
+>  : ^^^^^^^^
 >passport.use() : passport.PassportStatic
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >passport.use : () => passport.PassportStatic
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >passport : passport.PassportStatic
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >use : () => passport.PassportStatic
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

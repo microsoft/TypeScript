@@ -1,3 +1,4 @@
+// @target: es2015
 const validHasKey = <T extends object>(
   thing: T,
   key: string,

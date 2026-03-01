@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts] ////
+
 //// [constraintReferencingTypeParameterFromSameTypeParameterList.ts]
 // used to be valid, now an error to do this
 
@@ -25,6 +27,7 @@ function foo<T, U extends <V extends T>(v: V) => void>() {
 
 
 //// [constraintReferencingTypeParameterFromSameTypeParameterList.js]
+"use strict";
 // used to be valid, now an error to do this
 function f() {
 }

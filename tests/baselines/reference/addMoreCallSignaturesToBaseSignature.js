@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/addMoreCallSignaturesToBaseSignature.ts] ////
+
 //// [addMoreCallSignaturesToBaseSignature.ts]
 interface Foo {
     (): string;
@@ -12,5 +14,6 @@ var kitty = a();
 
 
 //// [addMoreCallSignaturesToBaseSignature.js]
+"use strict";
 var a;
 var kitty = a();

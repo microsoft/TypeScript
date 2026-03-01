@@ -1,49 +1,74 @@
-=== tests/cases/compiler/func.ts ===
+//// [tests/cases/compiler/allowJscheckJsTypeParameterNoCrash.ts] ////
+
+=== func.ts ===
 interface ComponentOptions<V> {
     watch: Record<string, WatchHandler<any>>;
 >watch : Record<string, WatchHandler<any>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 type WatchHandler<T> = (val: T) => void;
 >WatchHandler : WatchHandler<T>
+>             : ^^^^^^^^^^^^^^^
 >val : T
+>    : ^
 
 declare function extend(options: ComponentOptions<{}>): void;
 >extend : (options: ComponentOptions<{}>) => void
+>       : ^       ^^                    ^^^^^    
 >options : ComponentOptions<{}>
+>        : ^^^^^^^^^^^^^^^^^^^^
 
 export var vextend = extend;
 >vextend : (options: ComponentOptions<{}>) => void
+>        : ^       ^^                    ^^^^^    
 >extend : (options: ComponentOptions<{}>) => void
+>       : ^       ^^                    ^^^^^    
 
-=== tests/cases/compiler/app.js ===
+=== app.js ===
 import {vextend} from './func';
 >vextend : (options: ComponentOptions<{}>) => void
+>        : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 
 // hover on vextend
 export var a = vextend({
 >a : void
+>  : ^^^^
 >vextend({  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }}) : void
+>                                                                                       : ^^^^
 >vextend : (options: ComponentOptions<{}>) => void
+>        : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >{  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }} : { watch: { data1(val: any): void; }; }
+>                                                                              : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 
   watch: {
 >watch : { data1(val: any): void; }
+>      : ^^^^^^^^   ^^^^^^^^^^^^^^^
 >{    data1(val) {      this.data2 = 1;    },    data2(val) { },  } : { data1(val: any): void; }
+>                                                                   : ^^^^^^^^   ^^^^^^^^^^^^^^^
 
     data1(val) {
 >data1 : (val: any) => void
+>      : ^   ^^^^^^^^^^^^^^
 >val : any
+>    : ^^^
 
       this.data2 = 1;
 >this.data2 = 1 : 1
+>               : ^
 >this.data2 : (val: any) => void
+>           : ^   ^^^^^^^^^^    
 >this : Record<string, (val: any) => void>
+>     : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^    ^
 >data2 : (val: any) => void
+>      : ^   ^^^^^^^^^^    
 >1 : 1
+>  : ^
 
     },
     data2(val) { },
 >data2 : any
+>      : ^^^
 >val : any
+>    : ^^^
   }
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions2.ts] ////
+
 //// [taggedTemplatesWithIncompleteTemplateExpressions2.ts]
 function f(x: TemplateStringsArray, y: string, z: string) {
 }
@@ -6,6 +8,7 @@ function f(x: TemplateStringsArray, y: string, z: string) {
 f `123qdawdrqw${ }${
 
 //// [taggedTemplatesWithIncompleteTemplateExpressions2.js]
+"use strict";
 function f(x, y, z) {
 }
 // Incomplete call, enough parameters.

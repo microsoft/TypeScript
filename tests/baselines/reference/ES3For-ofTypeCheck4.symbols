@@ -1,8 +1,0 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck4.ts ===
-var union: string | string[];
->union : Symbol(union, Decl(ES3For-ofTypeCheck4.ts, 0, 3))
-
-for (const v of union) { }
->v : Symbol(v, Decl(ES3For-ofTypeCheck4.ts, 1, 10))
->union : Symbol(union, Decl(ES3For-ofTypeCheck4.ts, 0, 3))
-

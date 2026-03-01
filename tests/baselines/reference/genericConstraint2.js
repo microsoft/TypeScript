@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstraint2.ts] ////
+
 //// [genericConstraint2.ts]
 interface Comparable<T> {
     comparer(other: T): number;
@@ -22,6 +24,7 @@ var b = new ComparableString("b");
 var c = compare<ComparableString>(a, b);
 
 //// [genericConstraint2.js]
+"use strict";
 function compare(x, y) {
     if (x == null)
         return y == null ? 0 : -1;
@@ -29,15 +32,14 @@ function compare(x, y) {
         return 1;
     return x.comparer(y);
 }
-var ComparableString = /** @class */ (function () {
-    function ComparableString(currentValue) {
+class ComparableString {
+    constructor(currentValue) {
         this.currentValue = currentValue;
     }
-    ComparableString.prototype.localeCompare = function (other) {
+    localeCompare(other) {
         return 0;
-    };
-    return ComparableString;
-}());
+    }
+}
 var a = new ComparableString("a");
 var b = new ComparableString("b");
 var c = compare(a, b);

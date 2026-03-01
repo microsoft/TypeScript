@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/nonNullableWithNullableGenericIndexedAccessArg.ts] ////
+
+=== nonNullableWithNullableGenericIndexedAccessArg.ts ===
+// repro from #50539
+
+interface StateSchema {
+>StateSchema : Symbol(StateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 0, 0))
+
+  states?: {
+>states : Symbol(StateSchema.states, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 2, 23))
+
+    [key: string]: StateSchema;
+>key : Symbol(key, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 4, 5))
+>StateSchema : Symbol(StateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 0, 0))
+
+  };
+}
+
+declare class StateNode<TStateSchema extends StateSchema> {
+>StateNode : Symbol(StateNode, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 6, 1))
+>TStateSchema : Symbol(TStateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 8, 24))
+>StateSchema : Symbol(StateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 0, 0))
+
+  schema: TStateSchema;
+>schema : Symbol(StateNode.schema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 8, 59))
+>TStateSchema : Symbol(TStateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 8, 24))
+}
+
+type StateNodesConfig<TStateSchema extends StateSchema> = {
+>StateNodesConfig : Symbol(StateNodesConfig, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 10, 1))
+>TStateSchema : Symbol(TStateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 12, 22))
+>StateSchema : Symbol(StateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 0, 0))
+
+  [K in keyof TStateSchema["states"]]: StateNode<NonNullable<TStateSchema["states"]>[K]>;
+>K : Symbol(K, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 13, 3))
+>TStateSchema : Symbol(TStateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 12, 22))
+>StateNode : Symbol(StateNode, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 6, 1))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>TStateSchema : Symbol(TStateSchema, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 12, 22))
+>K : Symbol(K, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 13, 3))
+
+};
+
+// repro from #50539#issuecomment-1234067835
+
+type Ordering<TOrderBy extends string> = {
+>Ordering : Symbol(Ordering, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 14, 2))
+>TOrderBy : Symbol(TOrderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 18, 14))
+
+    orderBy: TOrderBy
+>orderBy : Symbol(orderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 18, 42))
+>TOrderBy : Symbol(TOrderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 18, 14))
+}
+
+type Query<TOrderBy extends string> = {
+>Query : Symbol(Query, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 20, 1))
+>TOrderBy : Symbol(TOrderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 22, 11))
+
+    order?: Ordering<TOrderBy>
+>order : Symbol(order, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 22, 39))
+>Ordering : Symbol(Ordering, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 14, 2))
+>TOrderBy : Symbol(TOrderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 22, 11))
+}
+
+type QueryHandler<
+>QueryHandler : Symbol(QueryHandler, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 24, 1))
+
+    TQuery extends Query<TOrderBy>,
+>TQuery : Symbol(TQuery, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 26, 18))
+>Query : Symbol(Query, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 20, 1))
+>TOrderBy : Symbol(TOrderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 27, 35))
+
+    TOrderBy extends string = NonNullable<TQuery["order"]>["orderBy"]
+>TOrderBy : Symbol(TOrderBy, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 27, 35))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>TQuery : Symbol(TQuery, Decl(nonNullableWithNullableGenericIndexedAccessArg.ts, 26, 18))
+
+> = {}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts] ////
+
 //// [binaryIntegerLiteralError.ts]
 // error
 var bin1 = 0B1102110;
@@ -11,13 +13,14 @@ var obj1 = {
 
 
 //// [binaryIntegerLiteralError.js]
+"use strict";
 // error
-var bin1 = 6;
+var bin1 = 0B110;
 2110;
-var bin1 = 6;
+var bin1 = 0b110;
 23410;
 var obj1 = {
-    26: "hi",
+    0b11010: "hi",
     26: "Hello",
-    "26": "world"
+    "26": "world",
 };

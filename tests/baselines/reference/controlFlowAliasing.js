@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowAliasing.ts] ////
+
 //// [controlFlowAliasing.ts]
 // Narrowing by aliased conditional expressions
 
@@ -132,10 +134,10 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     let obj = arg;
     const isFoo = obj.kind === 'foo';
     if (isFoo) {
-        obj.foo;  // Not narrowed because obj is mutable
+        obj.foo;
     }
     else {
-        obj.bar;  // Not narrowed because obj is mutable
+        obj.bar;
     }
 }
 
@@ -282,78 +284,96 @@ if (a) { }
 
 const a = obj.fn();
 
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+  static isDefined<T>(value: T): value is NonNullable<T> {
+    return value != null;
+  }
+}
+
+class A53267 {
+  public readonly testNumber: number | undefined;
+
+  foo() {
+    const isNumber = Utils.isDefined(this.testNumber);
+
+    if (isNumber) {
+      const x: number = this.testNumber;
+    }
+  }
+}
 
 //// [controlFlowAliasing.js]
 "use strict";
 // Narrowing by aliased conditional expressions
 function f10(x) {
-    var isString = typeof x === "string";
+    const isString = typeof x === "string";
     if (isString) {
-        var t = x;
+        let t = x;
     }
     else {
-        var t = x;
+        let t = x;
     }
 }
 function f11(x) {
-    var isString = typeof x === "string";
+    const isString = typeof x === "string";
     if (isString) {
-        var t = x;
+        let t = x;
     }
 }
 function f12(x) {
-    var isString = typeof x === "string";
-    var isNumber = typeof x === "number";
+    const isString = typeof x === "string";
+    const isNumber = typeof x === "number";
     if (isString || isNumber) {
-        var t = x;
+        let t = x;
     }
     else {
-        var t = x;
+        let t = x;
     }
 }
 function f13(x) {
-    var isString = typeof x === "string";
-    var isNumber = typeof x === "number";
-    var isStringOrNumber = isString || isNumber;
+    const isString = typeof x === "string";
+    const isNumber = typeof x === "number";
+    const isStringOrNumber = isString || isNumber;
     if (isStringOrNumber) {
-        var t = x;
+        let t = x;
     }
     else {
-        var t = x;
+        let t = x;
     }
 }
 function f14(x) {
-    var notUndefined = x !== undefined;
+    const notUndefined = x !== undefined;
     return notUndefined ? x : 0;
 }
 function f15(obj) {
-    var isString = typeof obj.x === 'string';
+    const isString = typeof obj.x === 'string';
     if (isString) {
-        var s = obj.x;
+        let s = obj.x;
     }
 }
 function f16(obj) {
-    var isString = typeof obj.x === 'string';
+    const isString = typeof obj.x === 'string';
     obj = { x: 42 };
     if (isString) {
-        var s = obj.x; // Not narrowed because of is assigned in function body
+        let s = obj.x; // Not narrowed because of is assigned in function body
     }
 }
 function f17(obj) {
-    var isString = typeof obj[0] === 'string';
+    const isString = typeof obj[0] === 'string';
     if (isString) {
-        var s = obj[0];
+        let s = obj[0];
     }
 }
 function f18(obj) {
-    var isString = typeof obj[0] === 'string';
+    const isString = typeof obj[0] === 'string';
     obj = [42];
     if (isString) {
-        var s = obj[0]; // Not narrowed because of is assigned in function body
+        let s = obj[0]; // Not narrowed because of is assigned in function body
     }
 }
 function f20(obj) {
-    var isFoo = obj.kind === 'foo';
+    const isFoo = obj.kind === 'foo';
     if (isFoo) {
         obj.foo;
     }
@@ -362,7 +382,7 @@ function f20(obj) {
     }
 }
 function f21(obj) {
-    var isFoo = obj.kind === 'foo';
+    const isFoo = obj.kind === 'foo';
     if (isFoo) {
         obj.foo; // Not narrowed because isFoo has type annotation
     }
@@ -371,7 +391,7 @@ function f21(obj) {
     }
 }
 function f22(obj) {
-    var isFoo = obj.kind === 'foo';
+    let isFoo = obj.kind === 'foo';
     if (isFoo) {
         obj.foo; // Not narrowed because isFoo is mutable
     }
@@ -380,7 +400,7 @@ function f22(obj) {
     }
 }
 function f23(obj) {
-    var isFoo = obj.kind === 'foo';
+    const isFoo = obj.kind === 'foo';
     obj = obj;
     if (isFoo) {
         obj.foo; // Not narrowed because obj is assigned in function body
@@ -390,8 +410,8 @@ function f23(obj) {
     }
 }
 function f24(arg) {
-    var obj = arg;
-    var isFoo = obj.kind === 'foo';
+    const obj = arg;
+    const isFoo = obj.kind === 'foo';
     if (isFoo) {
         obj.foo;
     }
@@ -400,17 +420,17 @@ function f24(arg) {
     }
 }
 function f25(arg) {
-    var obj = arg;
-    var isFoo = obj.kind === 'foo';
+    let obj = arg;
+    const isFoo = obj.kind === 'foo';
     if (isFoo) {
-        obj.foo; // Not narrowed because obj is mutable
+        obj.foo;
     }
     else {
-        obj.bar; // Not narrowed because obj is mutable
+        obj.bar;
     }
 }
 function f26(outer) {
-    var isFoo = outer.obj.kind === 'foo';
+    const isFoo = outer.obj.kind === 'foo';
     if (isFoo) {
         outer.obj.foo;
     }
@@ -419,7 +439,7 @@ function f26(outer) {
     }
 }
 function f27(outer) {
-    var isFoo = outer.obj.kind === 'foo';
+    const isFoo = outer.obj.kind === 'foo';
     if (isFoo) {
         outer.obj.foo; // Not narrowed because obj is mutable
     }
@@ -428,8 +448,8 @@ function f27(outer) {
     }
 }
 function f28(obj) {
-    var isFoo = obj && obj.kind === 'foo';
-    var isBar = obj && obj.kind === 'bar';
+    const isFoo = obj && obj.kind === 'foo';
+    const isBar = obj && obj.kind === 'bar';
     if (isFoo) {
         obj.foo;
     }
@@ -439,7 +459,7 @@ function f28(obj) {
 }
 // Narrowing by aliased discriminant property access
 function f30(obj) {
-    var kind = obj.kind;
+    const kind = obj.kind;
     if (kind === 'foo') {
         obj.foo;
     }
@@ -448,7 +468,7 @@ function f30(obj) {
     }
 }
 function f31(obj) {
-    var kind = obj.kind;
+    const { kind } = obj;
     if (kind === 'foo') {
         obj.foo;
     }
@@ -457,7 +477,7 @@ function f31(obj) {
     }
 }
 function f32(obj) {
-    var k = obj.kind;
+    const { kind: k } = obj;
     if (k === 'foo') {
         obj.foo;
     }
@@ -466,7 +486,7 @@ function f32(obj) {
     }
 }
 function f33(obj) {
-    var kind = obj.kind;
+    const { kind } = obj;
     switch (kind) {
         case 'foo':
             obj.foo;
@@ -476,27 +496,26 @@ function f33(obj) {
             break;
     }
 }
-var C10 = /** @class */ (function () {
-    function C10(x) {
+class C10 {
+    constructor(x) {
         this.x = x;
-        var thisX_isString = typeof this.x === 'string';
-        var xIsString = typeof x === 'string';
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
         if (thisX_isString && xIsString) {
-            var s = void 0;
+            let s;
             s = this.x;
             s = x;
         }
     }
-    return C10;
-}());
-var C11 = /** @class */ (function () {
-    function C11(x) {
+}
+class C11 {
+    constructor(x) {
         this.x = x;
-        var thisX_isString = typeof this.x === 'string';
-        var xIsString = typeof x === 'string';
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
         if (thisX_isString && xIsString) {
             // Some narrowings may be invalidated due to later assignments.
-            var s = void 0;
+            let s;
             s = this.x;
             s = x;
         }
@@ -505,39 +524,51 @@ var C11 = /** @class */ (function () {
             x = 10;
         }
     }
-    return C11;
-}());
+}
 // Mixing of aliased discriminants and conditionals
 function f40(obj) {
-    var kind = obj.kind;
-    var isFoo = kind == 'foo';
+    const { kind } = obj;
+    const isFoo = kind == 'foo';
     if (isFoo && obj.foo) {
-        var t = obj.foo;
+        let t = obj.foo;
     }
 }
 function gg2(obj) {
     if (obj.kind === 'str') {
-        var t = obj.payload;
+        let t = obj.payload;
     }
     else {
-        var t = obj.payload;
+        let t = obj.payload;
     }
 }
-function foo(_a) {
-    var kind = _a.kind, payload = _a.payload;
+function foo({ kind, payload }) {
     if (kind === 'str') {
-        var t = payload;
+        let t = payload;
     }
     else {
-        var t = payload;
+        let t = payload;
     }
 }
 // Repro from #45830
-var obj = {
-    fn: function () { return true; }
+const obj = {
+    fn: () => true
 };
 if (a) { }
-var a = obj.fn();
+const a = obj.fn();
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+    static isDefined(value) {
+        return value != null;
+    }
+}
+class A53267 {
+    foo() {
+        const isNumber = Utils.isDefined(this.testNumber);
+        if (isNumber) {
+            const x = this.testNumber;
+        }
+    }
+}
 
 
 //// [controlFlowAliasing.d.ts]
@@ -677,3 +708,10 @@ declare const obj: {
     fn: () => boolean;
 };
 declare const a: boolean;
+declare class Utils {
+    static isDefined<T>(value: T): value is NonNullable<T>;
+}
+declare class A53267 {
+    readonly testNumber: number | undefined;
+    foo(): void;
+}

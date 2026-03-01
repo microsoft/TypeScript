@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticsInAFunction.ts] ////
+
 //// [staticsInAFunction.ts]
 function boo{
    static test()
@@ -7,6 +9,7 @@ function boo{
 
 
 //// [staticsInAFunction.js]
+"use strict";
 function boo() {
     test();
     test(name, string);

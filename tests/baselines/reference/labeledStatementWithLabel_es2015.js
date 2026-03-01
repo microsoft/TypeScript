@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts] ////
+
 //// [labeledStatementWithLabel_es2015.ts]
 label: function fn() { }
 label: function* gen() { }
@@ -9,12 +11,13 @@ label: var a = 1;
 label: let b = 1;
 label: const c = 1;
 
-label: module M { }
+label: namespace M { }
 label: namespace N {}
 label: type T = {}
 
 
 //// [labeledStatementWithLabel_es2015.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

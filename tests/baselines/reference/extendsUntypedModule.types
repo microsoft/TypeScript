@@ -1,11 +1,17 @@
+//// [tests/cases/compiler/extendsUntypedModule.ts] ////
+
 === /a.ts ===
 import Foo from "foo";
 >Foo : any
+>    : ^^^
 
 import Bar from "bar"; // error: unused
 >Bar : any
+>    : ^^^
 
 export class A extends Foo { }
 >A : A
+>  : ^
 >Foo : any
+>    : ^^^
 

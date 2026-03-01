@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/asOperator/asOpEmitParens.ts] ////
+
 //// [asOpEmitParens.ts]
 declare var x;
 // Must emit as (x + 1) * 3
@@ -11,6 +13,7 @@ new (x() as any);
 
 
 //// [asOpEmitParens.js]
+"use strict";
 // Must emit as (x + 1) * 3
 (x + 1) * 3;
 // Should still emit as x.y

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument.ts] ////
+
 //// [objectLiteralShorthandPropertiesFunctionArgument.ts]
 var id: number = 10000;
 var name: string = "my name";
@@ -11,9 +13,10 @@ foo(person);
 var obj = { name: name, id: id };
 
 //// [objectLiteralShorthandPropertiesFunctionArgument.js]
+"use strict";
 var id = 10000;
 var name = "my name";
-var person = { name: name, id: id };
+var person = { name, id };
 function foo(p) { }
 foo(person);
 var obj = { name: name, id: id };

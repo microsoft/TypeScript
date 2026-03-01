@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/templateLiteralIntersection4.ts] ////
+
+=== templateLiteralIntersection4.ts ===
+type StateHook<S> = () => [S, unknown];
+>StateHook : Symbol(StateHook, Decl(templateLiteralIntersection4.ts, 0, 0))
+>S : Symbol(S, Decl(templateLiteralIntersection4.ts, 0, 15))
+>S : Symbol(S, Decl(templateLiteralIntersection4.ts, 0, 15))
+
+type StoreUtils<Store extends { [K: string]: any }> = Omit<{
+>StoreUtils : Symbol(StoreUtils, Decl(templateLiteralIntersection4.ts, 0, 39))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 2, 16))
+>K : Symbol(K, Decl(templateLiteralIntersection4.ts, 2, 33))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+
+    [K in keyof Store as `use${Capitalize<string & K>}`]: StateHook<Store[K]>
+>K : Symbol(K, Decl(templateLiteralIntersection4.ts, 3, 5))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 2, 16))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(templateLiteralIntersection4.ts, 3, 5))
+>StateHook : Symbol(StateHook, Decl(templateLiteralIntersection4.ts, 0, 0))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 2, 16))
+>K : Symbol(K, Decl(templateLiteralIntersection4.ts, 3, 5))
+
+}, 'useStore'> & {
+  Provider: unknown,
+>Provider : Symbol(Provider, Decl(templateLiteralIntersection4.ts, 4, 18))
+
+  useStore: StateHook<Store>
+>useStore : Symbol(useStore, Decl(templateLiteralIntersection4.ts, 5, 20))
+>StateHook : Symbol(StateHook, Decl(templateLiteralIntersection4.ts, 0, 0))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 2, 16))
+
+};
+
+declare function createStore<Store extends { [K: string]: any }>(store: Store): StoreUtils<Store>;
+>createStore : Symbol(createStore, Decl(templateLiteralIntersection4.ts, 7, 2))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 9, 29))
+>K : Symbol(K, Decl(templateLiteralIntersection4.ts, 9, 46))
+>store : Symbol(store, Decl(templateLiteralIntersection4.ts, 9, 65))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 9, 29))
+>StoreUtils : Symbol(StoreUtils, Decl(templateLiteralIntersection4.ts, 0, 39))
+>Store : Symbol(Store, Decl(templateLiteralIntersection4.ts, 9, 29))
+
+const { Provider, useUsername, useAge, useStore } = createStore({
+>Provider : Symbol(Provider, Decl(templateLiteralIntersection4.ts, 11, 7))
+>useUsername : Symbol(useUsername, Decl(templateLiteralIntersection4.ts, 11, 17))
+>useAge : Symbol(useAge, Decl(templateLiteralIntersection4.ts, 11, 30))
+>useStore : Symbol(useStore, Decl(templateLiteralIntersection4.ts, 11, 38))
+>createStore : Symbol(createStore, Decl(templateLiteralIntersection4.ts, 7, 2))
+
+  username: "Aral",
+>username : Symbol(username, Decl(templateLiteralIntersection4.ts, 11, 65))
+
+  age: 31
+>age : Symbol(age, Decl(templateLiteralIntersection4.ts, 12, 19))
+
+});
+

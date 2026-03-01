@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/protectedAccessThroughContextualThis.ts] ////
+
+=== protectedAccessThroughContextualThis.ts ===
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+  protected protec = 'bar';
+>protec : string
+>       : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+
+  private privat = '';
+>privat : string
+>       : ^^^^^^
+>'' : ""
+>   : ^^
+
+  copy!: string
+>copy : string
+>     : ^^^^^^
+
+  constructor() {
+    bindCopy.call(this)
+>bindCopy.call(this) : void
+>                    : ^^^^
+>bindCopy.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>              : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>bindCopy : (this: Foo) => void
+>         : ^    ^^   ^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : this
+>     : ^^^^
+
+    bindCopy2.call(this)
+>bindCopy2.call(this) : void
+>                     : ^^^^
+>bindCopy2.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>               : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>bindCopy2 : BindingFunction
+>          : ^^^^^^^^^^^^^^^
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
+>this : this
+>     : ^^^^
+  }
+}
+
+function bindCopy(this: Foo) {
+>bindCopy : (this: Foo) => void
+>         : ^    ^^   ^^^^^^^^^
+>this : Foo
+>     : ^^^
+
+  this.copy = this.protec; // Should OK
+>this.copy = this.protec : string
+>                        : ^^^^^^
+>this.copy : string
+>          : ^^^^^^
+>this : Foo
+>     : ^^^
+>copy : string
+>     : ^^^^^^
+>this.protec : string
+>            : ^^^^^^
+>this : Foo
+>     : ^^^
+>protec : string
+>       : ^^^^^^
+
+  console.log(this.privat); // Should error
+>console.log(this.privat) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>this.privat : string
+>            : ^^^^^^
+>this : Foo
+>     : ^^^
+>privat : string
+>       : ^^^^^^
+}
+
+type BindingFunction = (this: Foo) => void;
+>BindingFunction : BindingFunction
+>                : ^^^^^^^^^^^^^^^
+>this : Foo
+>     : ^^^
+
+const bindCopy2: BindingFunction = function () {
+>bindCopy2 : BindingFunction
+>          : ^^^^^^^^^^^^^^^
+>function () {  this.copy = this.protec; // Should OK  console.log(this.privat); // Should error} : (this: Foo) => void
+>                                                                                                 : ^    ^^   ^^^^^^^^^
+
+  this.copy = this.protec; // Should OK
+>this.copy = this.protec : string
+>                        : ^^^^^^
+>this.copy : string
+>          : ^^^^^^
+>this : Foo
+>     : ^^^
+>copy : string
+>     : ^^^^^^
+>this.protec : string
+>            : ^^^^^^
+>this : Foo
+>     : ^^^
+>protec : string
+>       : ^^^^^^
+
+  console.log(this.privat); // Should error
+>console.log(this.privat) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>this.privat : string
+>            : ^^^^^^
+>this : Foo
+>     : ^^^
+>privat : string
+>       : ^^^^^^
+}

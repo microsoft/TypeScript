@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks3.ts] ////
+
 //// [reachabilityChecks3.ts]
 let x = 1;
 loop: while (true) {
@@ -15,7 +17,8 @@ loop: while (true) {
 var y = () => { f: 1 }
 
 //// [reachabilityChecks3.js]
-var x = 1;
+"use strict";
+let x = 1;
 loop: while (true) {
     if (x == 100) {
         break;
@@ -27,4 +30,4 @@ loop: while (true) {
 {
     x: 100;
 }
-var y = function () { f: 1; };
+var y = () => { f: 1; };

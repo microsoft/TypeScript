@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads1.ts] ////
+
 //// [constructorOverloads1.ts]
 class Foo {
     constructor(s: string);
@@ -22,13 +24,15 @@ f1.bar2();
 
 
 //// [constructorOverloads1.js]
-var Foo = /** @class */ (function () {
-    function Foo(x) {
+"use strict";
+class Foo {
+    constructor(x) {
     }
-    Foo.prototype.bar1 = function () { };
-    Foo.prototype.bar2 = function () { };
-    return Foo;
-}());
+    constructor(x) {
+    }
+    bar1() { }
+    bar2() { }
+}
 var f1 = new Foo("hey");
 var f2 = new Foo(0);
 var f3 = new Foo(f1);

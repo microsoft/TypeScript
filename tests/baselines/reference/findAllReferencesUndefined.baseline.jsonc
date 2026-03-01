@@ -1,3 +1,4 @@
+// === findAllReferences ===
 // === /a.ts ===
 // /*FIND ALL REFS*/[|undefined|];
 // 
@@ -6,58 +7,32 @@
 // === /b.ts ===
 // [|undefined|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "var",
-      "name": "var undefined",
-      "textSpan": {
-        "start": 0,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "undefined",
-          "kind": "propertyName"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 9
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 9
-        },
-        "fileName": "/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 0,
-          "length": 9
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // /*FIND ALL REFS*/[|undefined|];
+  // 
+  // void undefined;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var undefined",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
+      "kind": "propertyName"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,43 +1,65 @@
-=== tests/cases/compiler/arrayDestructuringInSwitch2.ts ===
+//// [tests/cases/compiler/arrayDestructuringInSwitch2.ts] ////
+
+=== arrayDestructuringInSwitch2.ts ===
 type X = { kind: "a", a: [1] } | { kind: "b", a: [] }
->X : { kind: "a"; a: [1]; } | { kind: "b"; a: []; }
+>X : X
+>  : ^
 >kind : "a"
+>     : ^^^
 >a : [1]
+>  : ^^^
 >kind : "b"
+>     : ^^^
 >a : []
+>  : ^^
 
 function foo(x: X): 1 {
 >foo : (x: X) => 1
+>    : ^ ^^ ^^^^^ 
 >x : X
+>  : ^
 
   const { kind, a } = x;
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >a : [1] | []
+>  : ^^^^^^^^
 >x : X
+>  : ^
 
   switch (kind) {
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 
     case "a":
 >"a" : "a"
+>    : ^^^
 
       return a[0];
 >a[0] : 1
+>     : ^
 >a : [1]
+>  : ^^^
 >0 : 0
+>  : ^
 
     case "b":
 >"b" : "b"
+>    : ^^^
 
       return 1;
 >1 : 1
+>  : ^
 
     default:
       const [n] = a;
 >n : never
+>  : ^^^^^
 >a : never
+>  : ^^^^^
 
       return a;
 >a : never
+>  : ^^^^^
   }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedClassNamespaceRecordCast.ts] ////
+
 //// [mergedClassNamespaceRecordCast.ts]
 class C1 { foo() {} }
 
@@ -19,19 +21,14 @@ C3 as Record<string, unknown>;
 
 
 //// [mergedClassNamespaceRecordCast.js]
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    C1.prototype.foo = function () { };
-    return C1;
-}());
+"use strict";
+class C1 {
+    foo() { }
+}
 new C1();
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    C2.prototype.foo = function () { };
-    return C2;
-}());
+class C2 {
+    foo() { }
+}
 (function (C2) {
     C2.unrelated = 3;
 })(C2 || (C2 = {}));

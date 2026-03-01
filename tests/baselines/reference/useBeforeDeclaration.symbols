@@ -1,4 +1,6 @@
-=== tests/cases/compiler/A.ts ===
+//// [tests/cases/compiler/useBeforeDeclaration.ts] ////
+
+=== A.ts ===
 namespace ts {
 >ts : Symbol(ts, Decl(A.ts, 0, 0), Decl(B.ts, 0, 0))
 
@@ -19,7 +21,7 @@ namespace ts {
     }
 }
 
-=== tests/cases/compiler/B.ts ===
+=== B.ts ===
 namespace ts {
 >ts : Symbol(ts, Decl(A.ts, 0, 0), Decl(B.ts, 0, 0))
 

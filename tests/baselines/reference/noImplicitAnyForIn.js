@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyForIn.ts] ////
+
 //// [noImplicitAnyForIn.ts]
 var x: {}[] = [[1, 2, 3], ["hello"]];
 
@@ -31,6 +33,7 @@ var n = [[]] || [];
 for (n[idx++] in m);
 
 //// [noImplicitAnyForIn.js]
+"use strict";
 var x = [[1, 2, 3], ["hello"]];
 for (var i in x) {
     for (var j in x[i]) {

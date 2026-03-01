@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/test.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag6.ts] ////
+
+=== test.js ===
 /** @type {number} */
 function f() {
 >f : Symbol(f, Decl(test.js, 0, 0))

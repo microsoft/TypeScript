@@ -1,9 +1,11 @@
-=== tests/cases/compiler/test.tsx ===
-declare module JSX {
+//// [tests/cases/compiler/jsxFactoryQualifiedNameResolutionError.ts] ////
+
+=== test.tsx ===
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
 
     interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(test.tsx, 0, 20))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(test.tsx, 0, 23))
 
         [s: string]: any;
 >s : Symbol(s, Decl(test.tsx, 2, 9))

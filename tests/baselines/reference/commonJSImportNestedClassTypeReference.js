@@ -20,18 +20,15 @@ exports.K = NS.K;
 //// [mod1.js]
 "use strict";
 var NS = {};
-NS.K = /** @class */ (function () {
-    function K() {
-    }
-    K.prototype.values = function () {
+NS.K = class {
+    values() {
         return new NS.K();
-    };
-    return K;
-}());
+    }
+};
 exports.K = NS.K;
 //// [main.js]
 "use strict";
-var K = require("./mod1").K;
+const { K } = require("./mod1");
 /** @param {K} k */
 function f(k) {
     k.values();
@@ -41,7 +38,7 @@ function f(k) {
 //// [mod1.d.ts]
 export var K: {
     new (): {
-        values(): any;
+        values(): /*elided*/ any;
     };
 };
 //// [main.d.ts]

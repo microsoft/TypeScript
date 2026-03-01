@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyArgumentsListComment.ts] ////
+
 //// [emptyArgumentsListComment.ts]
 declare var a;
 
@@ -12,6 +14,7 @@ a(
 
 
 //// [emptyArgumentsListComment.js]
+"use strict";
 a( /*1*/);
 a(
 /*first*/

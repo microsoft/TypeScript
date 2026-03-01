@@ -1,51 +1,66 @@
-=== tests/cases/compiler/mappedTypeAndIndexSignatureRelation.ts ===
+//// [tests/cases/compiler/mappedTypeAndIndexSignatureRelation.ts] ////
+
+=== mappedTypeAndIndexSignatureRelation.ts ===
 type Same<T> = { [P in keyof T]: T[P] };
 >Same : Same<T>
+>     : ^^^^^^^
 
 type T1<T extends Record<PropertyKey, number>> = T;
 >T1 : T
+>   : ^
 
 type T2<U extends Record<PropertyKey, number>> = T1<Same<U>>;
 >T2 : Same<U>
+>   : ^^^^^^^
 
 // Repro from #38235
 
 type Foo<IdentifierT extends Record<PropertyKey, PropertyKey>> =
 >Foo : IdentifierT
+>    : ^^^^^^^^^^^
 
     IdentifierT
 ;
 
 type Bar<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
 >Bar : Bar<IdentifierT, T>
+>    : ^^^^^^^^^^^^^^^^^^^
     {
         [k in keyof T] : Foo<IdentifierT & { k : k }>
 >k : k
+>  : ^
     }
 ;
 
 type Merge2<T> = { [k in keyof T] : T[k] }
 >Merge2 : Merge2<T>
+>       : ^^^^^^^^^
 
 type Bar2<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
 >Bar2 : Bar2<IdentifierT, T>
+>     : ^^^^^^^^^^^^^^^^^^^^
     {
         [k in keyof T]: Foo<Merge2<IdentifierT & { k: k }>>
 >k : k
+>  : ^
     }
 ;
 
 type Identity<T> = T;
 >Identity : T
+>         : ^
 
 type Merge3<T> = Identity<{ [k in keyof T] : T[k] }>
 >Merge3 : { [k in keyof T]: T[k]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 type Bar3<IdentifierT extends Record<PropertyKey, PropertyKey>, T> =
 >Bar3 : Bar3<IdentifierT, T>
+>     : ^^^^^^^^^^^^^^^^^^^^
     {
         [k in keyof T]: Foo<Merge3<IdentifierT & { k: k }>>
 >k : k
+>  : ^
     }
 ;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticsInConstructorBodies.ts] ////
+
 //// [staticsInConstructorBodies.ts]
 class C {
 	constructor() {
@@ -7,10 +9,10 @@ class C {
 }
 
 //// [staticsInConstructorBodies.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
     }
-    C.m1 = function () { }; // ERROR
-    C.p1 = 0; // ERROR
-    return C;
-}());
+    static m1() { } // ERROR
+}
+C.p1 = 0; // ERROR

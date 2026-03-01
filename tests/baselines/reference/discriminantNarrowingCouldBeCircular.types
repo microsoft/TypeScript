@@ -1,0 +1,216 @@
+//// [tests/cases/compiler/discriminantNarrowingCouldBeCircular.ts] ////
+
+=== discriminantNarrowingCouldBeCircular.ts ===
+// #57705, 57690
+declare function is<T>(v: T): v is T;
+>is : <T>(v: T) => v is T
+>   : ^ ^^ ^^ ^^^^^      
+>v : T
+>  : ^
+
+const o: Record<string, string> | undefined = {};
+>o : Record<string, string> | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+if (o) {
+>o : Record<string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  for (const key in o) {
+>key : string
+>    : ^^^^^^
+>o : Record<string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+    const value = o[key];
+>value : string
+>      : ^^^^^^
+>o[key] : string
+>       : ^^^^^^
+>o : Record<string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+    if (is<string>(value)) {
+>is<string>(value) : boolean
+>                  : ^^^^^^^
+>is : <T>(v: T) => v is T
+>   : ^ ^^ ^^ ^^^^^      
+>value : string
+>      : ^^^^^^
+    }
+  }
+}
+
+type SomeRecord = { a: string };
+>SomeRecord : SomeRecord
+>           : ^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+declare const kPresentationInheritanceParents: { [tagName: string]: string[] };
+>kPresentationInheritanceParents : { [tagName: string]: string[]; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tagName : string
+>        : ^^^^^^
+
+declare function parentElementOrShadowHost(element: SomeRecord): SomeRecord | undefined;
+>parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
+>                          : ^       ^^          ^^^^^                      
+>element : SomeRecord
+>        : ^^^^^^^^^^
+
+function getImplicitAriaRole(element: SomeRecord) {
+>getImplicitAriaRole : (element: SomeRecord) => void
+>                    : ^       ^^          ^^^^^^^^^
+>element : SomeRecord
+>        : ^^^^^^^^^^
+
+  let ancestor: SomeRecord | null = element;
+>ancestor : SomeRecord | null
+>         : ^^^^^^^^^^^^^^^^^
+>element : SomeRecord
+>        : ^^^^^^^^^^
+
+  while (ancestor) {
+>ancestor : SomeRecord
+>         : ^^^^^^^^^^
+
+    const parent = parentElementOrShadowHost(ancestor);
+>parent : SomeRecord | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>parentElementOrShadowHost(ancestor) : SomeRecord | undefined
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^
+>parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
+>                          : ^       ^^          ^^^^^                      
+>ancestor : SomeRecord
+>         : ^^^^^^^^^^
+
+    const parents = kPresentationInheritanceParents[ancestor.a];
+>parents : string[]
+>        : ^^^^^^^^
+>kPresentationInheritanceParents[ancestor.a] : string[]
+>                                            : ^^^^^^^^
+>kPresentationInheritanceParents : { [tagName: string]: string[]; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ancestor.a : string
+>           : ^^^^^^
+>ancestor : SomeRecord
+>         : ^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+    if (!parents || !parent || !parents.includes(parent.a))
+>!parents || !parent || !parents.includes(parent.a) : boolean
+>                                                   : ^^^^^^^
+>!parents || !parent : boolean
+>                    : ^^^^^^^
+>!parents : false
+>         : ^^^^^
+>parents : string[]
+>        : ^^^^^^^^
+>!parent : boolean
+>        : ^^^^^^^
+>parent : SomeRecord | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>!parents.includes(parent.a) : boolean
+>                            : ^^^^^^^
+>parents.includes(parent.a) : boolean
+>                           : ^^^^^^^
+>parents.includes : (searchElement: string, fromIndex?: number) => boolean
+>                 : ^             ^^^^^^^^^^         ^^^      ^^^^^       
+>parents : string[]
+>        : ^^^^^^^^
+>includes : (searchElement: string, fromIndex?: number) => boolean
+>         : ^             ^^^^^^^^^^         ^^^      ^^^^^       
+>parent.a : string
+>         : ^^^^^^
+>parent : SomeRecord
+>       : ^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+      break;
+    ancestor = parent;
+>ancestor = parent : SomeRecord
+>                  : ^^^^^^^^^^
+>ancestor : SomeRecord | null
+>         : ^^^^^^^^^^^^^^^^^
+>parent : SomeRecord
+>       : ^^^^^^^^^^
+  }
+}
+
+declare function isPlainObject2<T>(
+>isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
+>               : ^ ^^    ^^       ^^^^^                                    
+
+    data: unknown,
+>data : unknown
+>     : ^^^^^^^
+
+  ): data is Record<PropertyKey, unknown>;
+  
+  declare const myObj2: unknown;
+>myObj2 : unknown
+>       : ^^^^^^^
+
+  if (isPlainObject2(myObj2)) {
+>isPlainObject2(myObj2) : boolean
+>                       : ^^^^^^^
+>isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
+>               : ^ ^^    ^^       ^^^^^                                    
+>myObj2 : unknown
+>       : ^^^^^^^
+
+      for (const key of ["a", "b", "c"]) {
+>key : string
+>    : ^^^^^^
+>["a", "b", "c"] : string[]
+>                : ^^^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+>"c" : "c"
+>    : ^^^
+
+        const deeper = myObj2[key];
+>deeper : unknown
+>       : ^^^^^^^
+>myObj2[key] : unknown
+>            : ^^^^^^^
+>myObj2 : Record<PropertyKey, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+        const deeperKeys = isPlainObject2(deeper) ? Object.keys(deeper) : [];
+>deeperKeys : string[]
+>           : ^^^^^^^^
+>isPlainObject2(deeper) ? Object.keys(deeper) : [] : string[]
+>                                                  : ^^^^^^^^
+>isPlainObject2(deeper) : boolean
+>                       : ^^^^^^^
+>isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
+>               : ^ ^^    ^^       ^^^^^                                    
+>deeper : unknown
+>       : ^^^^^^^
+>Object.keys(deeper) : string[]
+>                    : ^^^^^^^^
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
+>deeper : Record<PropertyKey, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+      }
+  }
+

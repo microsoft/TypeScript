@@ -1,191 +1,270 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardFunction.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunction.ts] ////
+
+=== typeGuardFunction.ts ===
 class A {
 >A : A
+>  : ^
 
     propA: number;
 >propA : number
+>      : ^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     propB: number;
 >propB : number
+>      : ^^^^^^
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     propC: number;
 >propC : number
+>      : ^^^^^^
 }
 
 declare function isA(p1: any): p1 is A;
 >isA : (p1: any) => p1 is A
+>    : ^  ^^   ^^^^^       
 >p1 : any
 
 declare function isB(p1: any): p1 is B;
 >isB : (p1: any) => p1 is B
+>    : ^  ^^   ^^^^^       
 >p1 : any
 
 declare function isC(p1: any): p1 is C;
 >isC : (p1: any) => p1 is C
+>    : ^  ^^   ^^^^^       
 >p1 : any
 
 declare function retC(): C;
 >retC : () => C
+>     : ^^^^^^ 
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 // Basic
 if (isC(a)) {
 >isC(a) : boolean
+>       : ^^^^^^^
 >isC : (p1: any) => p1 is C
+>    : ^  ^^   ^^^^^       
 >a : A
+>  : ^
 
     a.propC;
 >a.propC : number
+>        : ^^^^^^
 >a : C
+>  : ^
 >propC : number
+>      : ^^^^^^
 }
 
 // Sub type
 var subType: C;
 >subType : C
+>        : ^
 
 if(isA(subType)) {
 >isA(subType) : boolean
+>             : ^^^^^^^
 >isA : (p1: any) => p1 is A
+>    : ^  ^^   ^^^^^       
 >subType : C
+>        : ^
 
     subType.propC;
 >subType.propC : number
+>              : ^^^^^^
 >subType : C
+>        : ^
 >propC : number
+>      : ^^^^^^
 }
 
 // Union type
 var union: A | B;
 >union : A | B
+>      : ^^^^^
 
 if(isA(union)) {
 >isA(union) : boolean
+>           : ^^^^^^^
 >isA : (p1: any) => p1 is A
+>    : ^  ^^   ^^^^^       
 >union : A | B
+>      : ^^^^^
 
     union.propA;
 >union.propA : number
+>            : ^^^^^^
 >union : A
+>      : ^
 >propA : number
+>      : ^^^^^^
 }
 
 // Call signature
 interface I1 {
     (p1: A): p1 is C;
 >p1 : A
+>   : ^
 }
 
 // The parameter index and argument index for the type guard target is matching.
 // The type predicate type is assignable to the parameter type.
 declare function isC_multipleParams(p1, p2): p1 is C;
 >isC_multipleParams : (p1: any, p2: any) => p1 is C
+>                   : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >p2 : any
 
 if (isC_multipleParams(a, 0)) {
 >isC_multipleParams(a, 0) : boolean
+>                         : ^^^^^^^
 >isC_multipleParams : (p1: any, p2: any) => p1 is C
+>                   : ^  ^^^^^^^  ^^^^^^^^^^       
 >a : A
+>  : ^
 >0 : 0
+>  : ^
 
     a.propC;
 >a.propC : number
+>        : ^^^^^^
 >a : C
+>  : ^
 >propC : number
+>      : ^^^^^^
 }
 
 // Methods
 var obj: {
 >obj : { func1(p1: A): p1 is C; }
+>    : ^^^^^^^^  ^^ ^^^       ^^^
 
     func1(p1: A): p1 is C;
 >func1 : (p1: A) => p1 is C
+>      : ^  ^^ ^^^^^       
 >p1 : A
+>   : ^
 }
 class D {
 >D : D
+>  : ^
 
     method1(p1: A): p1 is C {
 >method1 : (p1: A) => p1 is C
+>        : ^  ^^ ^^^^^       
 >p1 : A
+>   : ^
 
         return true;
 >true : true
+>     : ^^^^
     }
 }
 
 // Arrow function
 let f1 = (p1: A): p1 is C => false;
 >f1 : (p1: A) => p1 is C
+>   : ^  ^^ ^^^^^       
 >(p1: A): p1 is C => false : (p1: A) => p1 is C
+>                          : ^  ^^ ^^^^^       
 >p1 : A
+>   : ^
 >false : false
+>      : ^^^^^
 
 // Function type
 declare function f2(p1: (p1: A) => p1 is C);
 >f2 : (p1: (p1: A) => p1 is C) => any
+>   : ^  ^^                  ^^^^^^^^
 >p1 : (p1: A) => p1 is C
+>   : ^  ^^ ^^^^^       
 >p1 : A
+>   : ^
 
 // Function expressions
 f2(function(p1: A): p1 is C {
 >f2(function(p1: A): p1 is C {    return true;}) : any
 >f2 : (p1: (p1: A) => p1 is C) => any
+>   : ^  ^^                  ^^^^^^^^
 >function(p1: A): p1 is C {    return true;} : (p1: A) => p1 is C
+>                                            : ^  ^^ ^^^^^       
 >p1 : A
+>   : ^
 
     return true;
 >true : true
+>     : ^^^^
 
 });
 
 // Evaluations are asssignable to boolean.
 declare function acceptingBoolean(a: boolean);
 >acceptingBoolean : (a: boolean) => any
+>                 : ^ ^^       ^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 acceptingBoolean(isA(a));
 >acceptingBoolean(isA(a)) : any
 >acceptingBoolean : (a: boolean) => any
+>                 : ^ ^^       ^^^^^^^^
 >isA(a) : boolean
+>       : ^^^^^^^
 >isA : (p1: any) => p1 is A
+>    : ^  ^^   ^^^^^       
 >a : A
+>  : ^
 
 // Type predicates with different parameter name.
 declare function acceptingTypeGuardFunction(p1: (item) => item is A);
 >acceptingTypeGuardFunction : (p1: (item: any) => item is A) => any
+>                           : ^  ^^       ^^^              ^^^^^^^^
 >p1 : (item: any) => item is A
+>   : ^    ^^^^^^^^^^         
 >item : any
 
 acceptingTypeGuardFunction(isA);
 >acceptingTypeGuardFunction(isA) : any
 >acceptingTypeGuardFunction : (p1: (item: any) => item is A) => any
+>                           : ^  ^^       ^^^              ^^^^^^^^
 >isA : (p1: any) => p1 is A
+>    : ^  ^^   ^^^^^       
 
 // Binary expressions
 let union2: C | B;
 >union2 : B | C
+>       : ^^^^^
 
 let union3: boolean | B = isA(union2) || union2;
 >union3 : boolean | B
+>       : ^^^^^^^^^^^
 >isA(union2) || union2 : true | B
+>                      : ^^^^^^^^
 >isA(union2) : boolean
+>            : ^^^^^^^
 >isA : (p1: any) => p1 is A
+>    : ^  ^^   ^^^^^       
 >union2 : B | C
+>       : ^^^^^
 >union2 : B
+>       : ^
 

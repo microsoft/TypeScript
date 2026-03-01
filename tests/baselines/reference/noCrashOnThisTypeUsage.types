@@ -1,55 +1,75 @@
-=== tests/cases/compiler/noCrashOnThisTypeUsage.ts ===
+//// [tests/cases/compiler/noCrashOnThisTypeUsage.ts] ////
+
+=== noCrashOnThisTypeUsage.ts ===
 interface IListenable {
     changeListeners: Function[] | null
 >changeListeners : Function[] | null
->null : null
+>                : ^^^^^^^^^^^^^^^^^
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
 >observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
+>        : ^       ^^                                     ^^               ^^^       ^^^^^    
 >handler : (change: any, oldValue?: any) => void
+>        : ^      ^^   ^^        ^^^   ^^^^^    
 >change : any
 >oldValue : any
 >fireImmediately : boolean | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 }
 
 function notifyListeners<T>(listenable: IListenable, change: T) {
 >notifyListeners : <T>(listenable: IListenable, change: T) => void
+>                : ^ ^^          ^^           ^^      ^^ ^^^^^^^^^
 >listenable : IListenable
+>           : ^^^^^^^^^^^
 >change : T
+>       : ^
 }
 
 export class ObservableValue<T> {
 >ObservableValue : ObservableValue<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
     constructor(
         public value: T
 >value : T
+>      : ^
 
     ) {
         const newValue: T = value;
 >newValue : T
+>         : ^
 >value : T
+>      : ^
 
         const oldValue: any = null;
 >oldValue : any
->null : null
 
         notifyListeners(this, {
 >notifyListeners(this, {            type: "update",            object: this,            newValue,            oldValue        }) : void
->notifyListeners : <T>(listenable: IListenable, change: T) => void
+>                                                                                                                               : ^^^^
+>notifyListeners : <T_1>(listenable: IListenable, change: T_1) => void
+>                : ^^^^^^          ^^           ^^      ^^   ^^^^^^^^^
 >this : this
+>     : ^^^^
 >{            type: "update",            object: this,            newValue,            oldValue        } : { type: string; object: this; newValue: T; oldValue: any; }
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             type: "update",
 >type : string
+>     : ^^^^^^
 >"update" : "update"
+>         : ^^^^^^^^
 
             object: this,
 >object : this
+>       : ^^^^
 >this : this
+>     : ^^^^
 
             newValue,
 >newValue : T
+>         : ^
 
             oldValue
 >oldValue : any
@@ -58,13 +78,17 @@ export class ObservableValue<T> {
     }
     changeListeners: Function[] | null = [];
 >changeListeners : Function[] | null
->null : null
+>                : ^^^^^^^^^^^^^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
 >observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
+>        : ^       ^^                                     ^^               ^^^       ^^^^^^^^^
 >handler : (change: any, oldValue?: any) => void
+>        : ^      ^^   ^^        ^^^   ^^^^^    
 >change : any
 >oldValue : any
 >fireImmediately : boolean | undefined
+>                : ^^^^^^^^^^^^^^^^^^^
 }

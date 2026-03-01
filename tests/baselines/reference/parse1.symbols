@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parse1.ts ===
+//// [tests/cases/compiler/parse1.ts] ////
+
+=== parse1.ts ===
 var bar = 42;
 >bar : Symbol(bar, Decl(parse1.ts, 0, 3))
 

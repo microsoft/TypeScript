@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypes5.ts] ////
+
 //// [infinitelyExpandingTypes5.ts]
 interface Query<T> {
     foo(x: T): Query<T[]>;
@@ -15,6 +17,7 @@ function from(arg: any): any {
 
 
 //// [infinitelyExpandingTypes5.js]
+"use strict";
 function from(arg) {
     return undefined;
 }

@@ -1,68 +1,103 @@
-=== tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts] ////
+
+=== narrowingGenericTypeFromInstanceof01.ts ===
 class A<T> {
 >A : A<T>
+>  : ^^^^
 
     constructor(private a: string) { }
 >a : string
+>  : ^^^^^^
 }
 
 class B<T> {
 >B : B<T>
+>  : ^^^^
 }
 
 function acceptA<T>(a: A<T>) { }
 >acceptA : <T>(a: A<T>) => void
+>        : ^ ^^ ^^    ^^^^^^^^^
 >a : A<T>
+>  : ^^^^
 
 function acceptB<T>(b: B<T>) { }
 >acceptB : <T>(b: B<T>) => void
+>        : ^ ^^ ^^    ^^^^^^^^^
 >b : B<T>
+>  : ^^^^
 
 function test<T>(x: A<T> | B<T>) {
 >test : <T>(x: A<T> | B<T>) => void
+>     : ^ ^^ ^^           ^^^^^^^^^
 >x : A<T> | B<T>
+>  : ^^^^^^^^^^^
 
     if (x instanceof B) {
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : A<T> | B<T>
+>  : ^^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
         acceptA(x);
 >acceptA(x) : void
->acceptA : <T>(a: A<T>) => void
+>           : ^^^^
+>acceptA : <T_1>(a: A<T_1>) => void
+>        : ^^^^^^ ^^      ^^^^^^^^^
 >x : B<T>
+>  : ^^^^
     }
 
     if (x instanceof A) {
 >x instanceof A : boolean
+>               : ^^^^^^^
 >x : A<T> | B<T>
+>  : ^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
         acceptA(x);
 >acceptA(x) : void
->acceptA : <T>(a: A<T>) => void
+>           : ^^^^
+>acceptA : <T_1>(a: A<T_1>) => void
+>        : ^^^^^^ ^^      ^^^^^^^^^
 >x : A<T>
+>  : ^^^^
     }
 
     if (x instanceof B) {
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : A<T> | B<T>
+>  : ^^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
         acceptB(x);
 >acceptB(x) : void
->acceptB : <T>(b: B<T>) => void
+>           : ^^^^
+>acceptB : <T_1>(b: B<T_1>) => void
+>        : ^^^^^^ ^^      ^^^^^^^^^
 >x : B<T>
+>  : ^^^^
     }
 
     if (x instanceof B) {
 >x instanceof B : boolean
+>               : ^^^^^^^
 >x : A<T> | B<T>
+>  : ^^^^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
         acceptB(x);
 >acceptB(x) : void
->acceptB : <T>(b: B<T>) => void
+>           : ^^^^
+>acceptB : <T_1>(b: B<T_1>) => void
+>        : ^^^^^^ ^^      ^^^^^^^^^
 >x : B<T>
+>  : ^^^^
     }
 }

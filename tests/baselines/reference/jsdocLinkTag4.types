@@ -1,14 +1,20 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag4.ts] ////
+
 === /a.ts ===
+
 export interface A {}
-No type information for this code.
-No type information for this code.=== /b.ts ===
+
+=== /b.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 /**
  * @param {number} a - see {@link a.A}
  */
 export function foo(a: string) {}
 >foo : (a: string) => void
+>    : ^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deferredLookupTypeResolution2.ts] ////
+
 //// [deferredLookupTypeResolution2.ts]
 // Repro from #17456
 

@@ -1,59 +1,95 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorOtherValidOperation.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorOtherValidOperation.ts] ////
+
+=== commaOperatorOtherValidOperation.ts ===
 //Comma operator in for loop
 for (var i = 0, j = 10; i < j; i++, j--)
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i < j : boolean
+>      : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >j : number
+>  : ^^^^^^
 >i++, j-- : number
+>         : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 >j-- : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 {
 }
 
 //Comma operator in function arguments and return
 function foo(x: number, y: string)
 >foo : (x: number, y: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 {
     return x, y;
 >x, y : string
+>     : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 var resultIsString = foo(1, "123");
 >resultIsString : string
+>               : ^^^^^^
 >foo(1, "123") : string
+>              : ^^^^^^
 >foo : (x: number, y: string) => string
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"123" : "123"
+>      : ^^^^^
 
 //TypeParameters
 function foo1<T1, T2>()
 >foo1 : <T1, T2>() => void
+>     : ^  ^^  ^^^^^^^^^^^
 {
     var x: T1;
 >x : T1
+>  : ^^
 
     var y: T2;
 >y : T2
+>  : ^^
 
     x, y;
 >x, y : T2
+>     : ^^
 >x : T1
+>  : ^^
 >y : T2
+>  : ^^
 
     var resultIsT1 = (y, x);
 >resultIsT1 : T1
+>           : ^^
 >(y, x) : T1
+>       : ^^
 >y, x : T1
+>     : ^^
 >y : T2
+>  : ^^
 >x : T1
+>  : ^^
 }
 

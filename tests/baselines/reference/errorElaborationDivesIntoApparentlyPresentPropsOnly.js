@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts] ////
+
 //// [errorElaborationDivesIntoApparentlyPresentPropsOnly.ts]
 function foo<T extends { a: string }>(x: T) {
     x = { a: "abc", b: 20, c: 30 };
@@ -13,6 +15,7 @@ function baz<T extends { a: string }>(x: T) {
 
 
 //// [errorElaborationDivesIntoApparentlyPresentPropsOnly.js]
+"use strict";
 function foo(x) {
     x = { a: "abc", b: 20, c: 30 };
 }

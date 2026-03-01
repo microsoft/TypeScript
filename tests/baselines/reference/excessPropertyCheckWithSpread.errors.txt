@@ -1,11 +1,11 @@
-tests/cases/compiler/excessPropertyCheckWithSpread.ts(1,25): error TS2842: 'number' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+excessPropertyCheckWithSpread.ts(1,25): error TS2842: 'number' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 
 
-==== tests/cases/compiler/excessPropertyCheckWithSpread.ts (1 errors) ====
+==== excessPropertyCheckWithSpread.ts (1 errors) ====
     declare function f({ a: number }): void
                             ~~~~~~
 !!! error TS2842: 'number' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/excessPropertyCheckWithSpread.ts:1:33: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 excessPropertyCheckWithSpread.ts:1:33: We can only write a type for 'a' by adding a type for the entire parameter here.
     interface I {
         readonly n: number;
     }

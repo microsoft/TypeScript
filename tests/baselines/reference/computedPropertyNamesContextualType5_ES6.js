@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType5_ES6.ts] ////
+
 //// [computedPropertyNamesContextualType5_ES6.ts]
 interface I {
     [s: string]: any;
@@ -10,6 +12,7 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType5_ES6.js]
+"use strict";
 var o = {
     [+"foo"]: "",
     [+"bar"]: 0

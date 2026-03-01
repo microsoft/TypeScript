@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts] ////
+
 //// [iterableArrayPattern16.ts]
 function fun(...[a, b]: [Bar, Bar][]) { }
 fun(...new FooIteratorIterator);
@@ -30,6 +32,7 @@ class FooIteratorIterator {
 }
 
 //// [iterableArrayPattern16.js]
+"use strict";
 function fun(...[a, b]) { }
 fun(...new FooIteratorIterator);
 class Bar {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowAnalysisOnBareThisKeyword.ts] ////
+
 //// [controlFlowAnalysisOnBareThisKeyword.ts]
 declare function isBig(x: any): x is { big: true };
 function bigger(this: {}) {
@@ -21,6 +23,6 @@ function bigger() {
 }
 function bar() {
     if (typeof this === "string") {
-        var x = this;
+        const x = this;
     }
 }

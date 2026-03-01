@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mutuallyRecursiveCallbacks.ts] ////
+
 //// [mutuallyRecursiveCallbacks.ts]
 // Repro from #18277
 
@@ -9,6 +11,7 @@ bar = foo;
 
 
 //// [mutuallyRecursiveCallbacks.js]
+"use strict";
 // Repro from #18277
 ;
 bar = foo;

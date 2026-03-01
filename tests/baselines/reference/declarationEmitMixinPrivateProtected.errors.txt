@@ -1,12 +1,12 @@
-tests/cases/compiler/another.ts(11,1): error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
-tests/cases/compiler/another.ts(11,1): error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
-tests/cases/compiler/first.ts(12,1): error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
-tests/cases/compiler/first.ts(12,1): error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
-tests/cases/compiler/first.ts(13,14): error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
-tests/cases/compiler/first.ts(13,14): error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
+another.ts(11,1): error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+another.ts(11,1): error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+first.ts(12,1): error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+first.ts(12,1): error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
+first.ts(13,14): error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
+first.ts(13,14): error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
 
 
-==== tests/cases/compiler/first.ts (4 errors) ====
+==== first.ts (4 errors) ====
     declare function mix<TMix>(mixin: TMix): TMix;
     
     const DisposableMixin = class {
@@ -20,19 +20,19 @@ tests/cases/compiler/first.ts(13,14): error TS4094: Property '_onDispose' of exp
     // No error, but definition is wrong. 
     export default mix(DisposableMixin);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
+!!! error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
+!!! error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
     export class Monitor extends mix(DisposableMixin) {
                  ~~~~~~~
-!!! error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
+!!! error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
                  ~~~~~~~
-!!! error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
+!!! error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
         protected _onDispose() {
         }
     }
     
-==== tests/cases/compiler/another.ts (2 errors) ====
+==== another.ts (2 errors) ====
     declare function mix<TMix>(mixin: TMix): TMix;
     
     const DisposableMixin = class {
@@ -45,9 +45,9 @@ tests/cases/compiler/first.ts(13,14): error TS4094: Property '_onDispose' of exp
     
     export default class extends mix(DisposableMixin) {
     ~~~~~~
-!!! error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
+!!! error TS4094: Property '_assertIsStripped' of exported anonymous class type may not be private or protected.
     ~~~~~~
-!!! error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
+!!! error TS4094: Property '_onDispose' of exported anonymous class type may not be private or protected.
         protected _onDispose() {
         }
     }

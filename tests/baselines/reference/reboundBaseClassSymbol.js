@@ -1,11 +1,14 @@
+//// [tests/cases/compiler/reboundBaseClassSymbol.ts] ////
+
 //// [reboundBaseClassSymbol.ts]
 interface A { a: number; }
-module Foo {
+namespace Foo {
     var A = 1;
     interface B extends A { b: string; } 
 }
 
 //// [reboundBaseClassSymbol.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var A = 1;

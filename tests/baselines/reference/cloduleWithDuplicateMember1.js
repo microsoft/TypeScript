@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleWithDuplicateMember1.ts] ////
+
 //// [cloduleWithDuplicateMember1.ts]
 class C {
     get x() { return 1; }
@@ -7,33 +9,23 @@ class C {
     static foo() { }
 }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function foo() { }
     export function x() { }
 }
 
 //// [cloduleWithDuplicateMember1.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    get x() { return 1; }
+    static get x() {
+        return '';
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "x", {
-        get: function () {
-            return '';
-        },
-        enumerable: false,
-        configurable: true
-    });
-    C.foo = function () { };
-    return C;
-}());
+    static foo() { }
+}
 (function (C) {
     C.x = 1;
 })(C || (C = {}));

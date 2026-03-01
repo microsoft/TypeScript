@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/chained.ts] ////
+
 === /a.ts ===
 class A { a!: string }
 >A : Symbol(A, Decl(a.ts, 0, 0))

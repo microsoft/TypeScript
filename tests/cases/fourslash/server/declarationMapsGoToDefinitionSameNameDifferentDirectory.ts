@@ -21,6 +21,8 @@
 ////    "$schema": "http://json.schemastore.org/tsconfig",
 ////    "compileOnSave": true,
 ////    "compilerOptions": {
+////      "lib": ["es5"],
+////      "strict": false,
 ////      "sourceMap": true,
 ////      "declaration": true,
 ////      "declarationMap": true
@@ -54,5 +56,4 @@
 ////    }
 ////}
 
-verify.goToDefinition("1", "2");
-verify.goToDefinition("3", "4");
+verify.baselineGoToDefinition("1", "3");

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts] ////
+
 //// [typeOfThisInStaticMembers12.ts]
 class C {
     static readonly c: "foo" = "foo"
@@ -9,6 +11,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers12.js]
+"use strict";
 var _a, _b, _c, _d;
 class C {
 }

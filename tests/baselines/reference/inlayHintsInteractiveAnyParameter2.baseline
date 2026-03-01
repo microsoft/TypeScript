@@ -1,0 +1,286 @@
+// === Inlay Hints ===
+foo(1);
+    ^
+{
+  "text": "",
+  "position": 29,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo('');
+    ^
+{
+  "text": "",
+  "position": 37,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(true);
+    ^
+{
+  "text": "",
+  "position": 46,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(() => 1);
+    ^
+{
+  "text": "",
+  "position": 57,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(function () { return 1 });
+    ^
+{
+  "text": "",
+  "position": 71,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo({});
+    ^
+{
+  "text": "",
+  "position": 102,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo({ a: 1 });
+    ^
+{
+  "text": "",
+  "position": 111,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo([]);
+    ^
+{
+  "text": "",
+  "position": 126,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo([1]);
+    ^
+{
+  "text": "",
+  "position": 135,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(foo);
+    ^
+{
+  "text": "",
+  "position": 145,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo((1));
+    ^
+{
+  "text": "",
+  "position": 155,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(foo(1));
+    ^
+{
+  "text": "",
+  "position": 165,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(foo(1));
+        ^
+{
+  "text": "",
+  "position": 169,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveAnyParameter2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

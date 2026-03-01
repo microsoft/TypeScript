@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethod1.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractUsingAbstractMethod1.ts] ////
+
+=== classAbstractUsingAbstractMethod1.ts ===
 abstract class A {
 >A : Symbol(A, Decl(classAbstractUsingAbstractMethod1.ts, 0, 0))
 

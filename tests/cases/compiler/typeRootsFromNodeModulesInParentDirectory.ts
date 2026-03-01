@@ -1,6 +1,9 @@
+// @module: commonjs
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
 // @currentDirectory: /src
+// @types: *
 
 // @Filename: /node_modules/@types/foo/index.d.ts
 declare module "xyz" {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType4.ts] ////
+
 //// [parserObjectType4.ts]
 var v: {
   x
@@ -5,4 +7,5 @@ var v: {
 };
 
 //// [parserObjectType4.js]
+"use strict";
 var v;

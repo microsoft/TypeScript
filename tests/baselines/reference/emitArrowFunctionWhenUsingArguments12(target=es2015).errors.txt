@@ -1,0 +1,11 @@
+emitArrowFunctionWhenUsingArguments12.ts(2,7): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+
+
+==== emitArrowFunctionWhenUsingArguments12.ts (1 errors) ====
+    class C {
+        f(arguments) {
+          ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            var a = () => arguments;
+        }
+    }

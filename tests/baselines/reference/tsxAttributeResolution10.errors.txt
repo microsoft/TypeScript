@@ -1,22 +1,28 @@
-tests/cases/conformance/jsx/file.tsx(11,14): error TS2322: Type 'string' is not assignable to type 'boolean'.
+file.tsx(5,3): error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
+file.tsx(11,14): error TS2322: Type 'string' is not assignable to type 'boolean'.
+react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    declare module JSX {
+==== react.d.ts (1 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}
     	interface ElementAttributesProperty {
     		props;
+    		~~~~~
+!!! error TS7008: Member 'props' implicitly has an 'any' type.
     	}
     }
     
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     export class MyComponent {  
       render() {
       }
     
       props: {
+      ~~~~~
+!!! error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
       	[s: string]: boolean;
       }
     }
@@ -25,7 +31,7 @@ tests/cases/conformance/jsx/file.tsx(11,14): error TS2322: Type 'string' is not 
     <MyComponent bar='world' />;
                  ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
-!!! related TS6501 tests/cases/conformance/jsx/file.tsx:6:4: The expected type comes from this index signature.
+!!! related TS6501 file.tsx:6:4: The expected type comes from this index signature.
     
     // Should be OK
     <MyComponent bar={true} />;

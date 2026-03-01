@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function f(n: any) { return null; }
 function g<A, B>(x: any) { return null; }
 interface A { }

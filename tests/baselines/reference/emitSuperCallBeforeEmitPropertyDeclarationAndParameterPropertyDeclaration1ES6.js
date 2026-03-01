@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts] ////
+
 //// [emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.ts]
 class A {
     blub = 6;
@@ -14,6 +16,7 @@ class B extends A {
 }
 
 //// [emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1ES6.js]
+"use strict";
 class A {
     constructor() {
         this.blub = 6;

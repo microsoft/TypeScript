@@ -1,73 +1,110 @@
-=== tests/cases/conformance/salsa/test.js ===
+//// [tests/cases/conformance/salsa/unannotatedParametersAreOptional.ts] ////
+
+=== test.js ===
 function f(x) {}
 >f : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x : any
 
 f(); // Always been ok
 >f() : void
+>    : ^^^^
 >f : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
   static m(x) {}
 >m : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x : any
 
   p = x => {}
 >p : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x => {} : (x: any) => void
+>        : ^ ^^^^^^^^^^^^^^
 >x : any
 
   m(x) {}
 >m : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x : any
 }
 
 C.m();       // Always been ok
 >C.m() : void
+>      : ^^^^
 >C.m : (x: any) => void
+>    : ^ ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >m : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 
 new C().m(); // Regression #39261
 >new C().m() : void
+>            : ^^^^
 >new C().m : (x: any) => void
+>          : ^ ^^^^^^^^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >m : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 
 new C().p(); // Regression #39261
 >new C().p() : void
+>            : ^^^^
 >new C().p : (x: any) => void
+>          : ^ ^^^^^^^^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >p : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 
 const obj = {
 >obj : { m(x: any): void; p: (x: any) => void; }
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >{  m(x) {},  p: x => {}} : { m(x: any): void; p: (x: any) => void; }
+>                         : ^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
   m(x) {},
 >m : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x : any
 
   p: x => {}
 >p : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 >x => {} : (x: any) => void
+>        : ^ ^^^^^^^^^^^^^^
 >x : any
 
 };
 
 obj.m(); // Always been ok
 >obj.m() : void
+>        : ^^^^
 >obj.m : (x: any) => void
+>      : ^ ^^^^^^^^^^^^^^
 >obj : { m(x: any): void; p: (x: any) => void; }
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >m : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 
 obj.p(); // Always been ok
 >obj.p() : void
+>        : ^^^^
 >obj.p : (x: any) => void
+>      : ^ ^^^^^^^^^^^^^^
 >obj : { m(x: any): void; p: (x: any) => void; }
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >p : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
 

@@ -1,9 +1,12 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperatorInParameterInitializer.ts] ////
+
 //// [nullishCoalescingOperatorInParameterInitializer.ts]
 // https://github.com/microsoft/TypeScript/issues/36295
 const a = (): string | undefined => undefined;
 ((b = a() ?? "d") => {})();
 
 //// [nullishCoalescingOperatorInParameterInitializer.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/36295
 var a = function () { return undefined; };
 (function (b) {

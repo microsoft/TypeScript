@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads5.ts] ////
+
 //// [functionOverloads5.ts]
 class baz { 
   public foo();
@@ -6,9 +8,7 @@ class baz {
 
 
 //// [functionOverloads5.js]
-var baz = /** @class */ (function () {
-    function baz() {
-    }
-    baz.prototype.foo = function (bar) { };
-    return baz;
-}());
+"use strict";
+class baz {
+    foo(bar) { }
+}

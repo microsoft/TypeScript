@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty8.ts] ////
+
 //// [accessorsOverrideProperty8.ts]
 type Types = 'boolean' | 'unknown' | 'string';
 
@@ -33,6 +35,7 @@ const value = mine.x;
 
 
 //// [accessorsOverrideProperty8.js]
+"use strict";
 const Base = classWithProperties({
     get x() { return 'boolean'; },
     y: 'string',

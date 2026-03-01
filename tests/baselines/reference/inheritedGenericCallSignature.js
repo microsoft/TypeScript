@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedGenericCallSignature.ts] ////
+
 //// [inheritedGenericCallSignature.ts]
 interface I1<T> {
 
@@ -28,6 +30,7 @@ y.length;  // should not error
 
 
 //// [inheritedGenericCallSignature.js]
+"use strict";
 var x;
 var y = x(undefined);
 y.length; // should not error

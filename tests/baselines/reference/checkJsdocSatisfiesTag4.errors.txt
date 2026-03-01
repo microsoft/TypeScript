@@ -1,0 +1,22 @@
+/a.js(5,21): error TS1360: Type '{}' does not satisfy the expected type 'Foo'.
+  Property 'a' is missing in type '{}' but required in type 'Foo'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef {Object} Foo
+     * @property {number} a
+     */
+    export default /** @satisfies {Foo} */ ({});
+                        ~~~~~~~~~
+!!! error TS1360: Type '{}' does not satisfy the expected type 'Foo'.
+!!! error TS1360:   Property 'a' is missing in type '{}' but required in type 'Foo'.
+!!! related TS2728 /a.js:3:4: 'a' is declared here.
+    
+==== /b.js (0 errors) ====
+    /**
+     * @typedef {Object} Foo
+     * @property {number} a
+     */
+    
+    export default /** @satisfies {Foo} */ ({ a: 1 });

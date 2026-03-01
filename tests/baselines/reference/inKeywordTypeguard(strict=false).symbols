@@ -1,0 +1,949 @@
+//// [tests/cases/compiler/inKeywordTypeguard.ts] ////
+
+=== inKeywordTypeguard.ts ===
+class A { a: string; }
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
+>a : Symbol(A.a, Decl(inKeywordTypeguard.ts, 0, 9))
+
+class B { b: string; }
+>B : Symbol(B, Decl(inKeywordTypeguard.ts, 0, 22))
+>b : Symbol(B.b, Decl(inKeywordTypeguard.ts, 1, 9))
+
+function negativeClassesTest(x: A | B) {
+>negativeClassesTest : Symbol(negativeClassesTest, Decl(inKeywordTypeguard.ts, 1, 22))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 3, 29))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
+>B : Symbol(B, Decl(inKeywordTypeguard.ts, 0, 22))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 3, 29))
+
+        x.b = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 3, 29))
+
+    } else {
+        x.a = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 3, 29))
+    }
+}
+
+function positiveClassesTest(x: A | B) {
+>positiveClassesTest : Symbol(positiveClassesTest, Decl(inKeywordTypeguard.ts, 9, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 11, 29))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
+>B : Symbol(B, Decl(inKeywordTypeguard.ts, 0, 22))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 11, 29))
+
+        x.b = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 11, 29))
+
+    } else {
+        x.a = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 11, 29))
+    }
+}
+
+class AWithOptionalProp { a?: string; }
+>AWithOptionalProp : Symbol(AWithOptionalProp, Decl(inKeywordTypeguard.ts, 17, 1))
+>a : Symbol(AWithOptionalProp.a, Decl(inKeywordTypeguard.ts, 19, 25))
+
+class BWithOptionalProp { b?: string; }
+>BWithOptionalProp : Symbol(BWithOptionalProp, Decl(inKeywordTypeguard.ts, 19, 39))
+>b : Symbol(BWithOptionalProp.b, Decl(inKeywordTypeguard.ts, 20, 25))
+
+function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
+>positiveTestClassesWithOptionalProperties : Symbol(positiveTestClassesWithOptionalProperties, Decl(inKeywordTypeguard.ts, 20, 39))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 22, 51))
+>AWithOptionalProp : Symbol(AWithOptionalProp, Decl(inKeywordTypeguard.ts, 17, 1))
+>BWithOptionalProp : Symbol(BWithOptionalProp, Decl(inKeywordTypeguard.ts, 19, 39))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 22, 51))
+
+        x.a = "1";
+>x.a : Symbol(AWithOptionalProp.a, Decl(inKeywordTypeguard.ts, 19, 25))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 22, 51))
+>a : Symbol(AWithOptionalProp.a, Decl(inKeywordTypeguard.ts, 19, 25))
+
+    } else {
+        x.b = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 22, 51))
+    }
+}
+
+class AWithMethod {
+>AWithMethod : Symbol(AWithMethod, Decl(inKeywordTypeguard.ts, 28, 1))
+
+    a(): string { return ""; }
+>a : Symbol(AWithMethod.a, Decl(inKeywordTypeguard.ts, 30, 19))
+}
+
+class BWithMethod {
+>BWithMethod : Symbol(BWithMethod, Decl(inKeywordTypeguard.ts, 32, 1))
+
+    b(): string { return ""; }
+>b : Symbol(BWithMethod.b, Decl(inKeywordTypeguard.ts, 34, 19))
+}
+
+function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
+>negativeTestClassesWithMembers : Symbol(negativeTestClassesWithMembers, Decl(inKeywordTypeguard.ts, 36, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 38, 40))
+>AWithMethod : Symbol(AWithMethod, Decl(inKeywordTypeguard.ts, 28, 1))
+>BWithMethod : Symbol(BWithMethod, Decl(inKeywordTypeguard.ts, 32, 1))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 38, 40))
+
+        x.a();
+>x.a : Symbol(AWithMethod.a, Decl(inKeywordTypeguard.ts, 30, 19))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 38, 40))
+>a : Symbol(AWithMethod.a, Decl(inKeywordTypeguard.ts, 30, 19))
+
+        x.b();
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 38, 40))
+
+    } else {
+    }
+}
+
+function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWithMethod) {
+>negativeTestClassesWithMemberMissingInBothClasses : Symbol(negativeTestClassesWithMemberMissingInBothClasses, Decl(inKeywordTypeguard.ts, 44, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 46, 59))
+>AWithMethod : Symbol(AWithMethod, Decl(inKeywordTypeguard.ts, 28, 1))
+>BWithMethod : Symbol(BWithMethod, Decl(inKeywordTypeguard.ts, 32, 1))
+
+    if ("c" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 46, 59))
+
+        x.a();
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 46, 59))
+
+        x.b();
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 46, 59))
+
+    } else {
+        x.a();
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 46, 59))
+
+        x.b();
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 46, 59))
+    }
+}
+
+class C { a: string; }
+>C : Symbol(C, Decl(inKeywordTypeguard.ts, 54, 1))
+>a : Symbol(C.a, Decl(inKeywordTypeguard.ts, 56, 9))
+
+class D { a: string; }
+>D : Symbol(D, Decl(inKeywordTypeguard.ts, 56, 22))
+>a : Symbol(D.a, Decl(inKeywordTypeguard.ts, 57, 9))
+
+function negativeMultipleClassesTest(x: A | B | C | D) {
+>negativeMultipleClassesTest : Symbol(negativeMultipleClassesTest, Decl(inKeywordTypeguard.ts, 57, 22))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 59, 37))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
+>B : Symbol(B, Decl(inKeywordTypeguard.ts, 0, 22))
+>C : Symbol(C, Decl(inKeywordTypeguard.ts, 54, 1))
+>D : Symbol(D, Decl(inKeywordTypeguard.ts, 56, 22))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 59, 37))
+
+        x.b = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 59, 37))
+
+    } else {
+        x.a = "1";
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 59, 37))
+    }
+}
+
+class ClassWithUnionProp { prop: A | B }
+>ClassWithUnionProp : Symbol(ClassWithUnionProp, Decl(inKeywordTypeguard.ts, 65, 1))
+>prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
+>B : Symbol(B, Decl(inKeywordTypeguard.ts, 0, 22))
+
+function negativePropTest(x: ClassWithUnionProp) {
+>negativePropTest : Symbol(negativePropTest, Decl(inKeywordTypeguard.ts, 67, 40))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 69, 26))
+>ClassWithUnionProp : Symbol(ClassWithUnionProp, Decl(inKeywordTypeguard.ts, 65, 1))
+
+    if ("a" in x.prop) {
+>x.prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 69, 26))
+>prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+
+        let y: string = x.prop.b;
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 71, 11))
+>x.prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 69, 26))
+>prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+
+    } else {
+        let z: string = x.prop.a;
+>z : Symbol(z, Decl(inKeywordTypeguard.ts, 73, 11))
+>x.prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 69, 26))
+>prop : Symbol(ClassWithUnionProp.prop, Decl(inKeywordTypeguard.ts, 67, 26))
+    }
+}
+
+class NegativeClassTest {
+>NegativeClassTest : Symbol(NegativeClassTest, Decl(inKeywordTypeguard.ts, 75, 1))
+
+    protected prop: A | B;
+>prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 0, 0))
+>B : Symbol(B, Decl(inKeywordTypeguard.ts, 0, 22))
+
+    inThis() {
+>inThis : Symbol(NegativeClassTest.inThis, Decl(inKeywordTypeguard.ts, 78, 26))
+
+        if ("a" in this.prop) {
+>this.prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+>this : Symbol(NegativeClassTest, Decl(inKeywordTypeguard.ts, 75, 1))
+>prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+
+            let z: number = this.prop.b;
+>z : Symbol(z, Decl(inKeywordTypeguard.ts, 81, 15))
+>this.prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+>this : Symbol(NegativeClassTest, Decl(inKeywordTypeguard.ts, 75, 1))
+>prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+
+        } else {
+            let y: string = this.prop.a;
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 83, 15))
+>this.prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+>this : Symbol(NegativeClassTest, Decl(inKeywordTypeguard.ts, 75, 1))
+>prop : Symbol(NegativeClassTest.prop, Decl(inKeywordTypeguard.ts, 77, 25))
+        }
+    }
+}
+
+class UnreachableCodeDetection {
+>UnreachableCodeDetection : Symbol(UnreachableCodeDetection, Decl(inKeywordTypeguard.ts, 86, 1))
+
+    a: string;
+>a : Symbol(UnreachableCodeDetection.a, Decl(inKeywordTypeguard.ts, 88, 32))
+
+    inThis() {
+>inThis : Symbol(UnreachableCodeDetection.inThis, Decl(inKeywordTypeguard.ts, 89, 14))
+
+        if ("a" in this) {
+>this : Symbol(UnreachableCodeDetection, Decl(inKeywordTypeguard.ts, 86, 1))
+
+        } else {
+            let y = this.a;
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 93, 15))
+        }
+    }
+}
+
+function positiveIntersectionTest(x: { a: string } & { b: string }) {
+>positiveIntersectionTest : Symbol(positiveIntersectionTest, Decl(inKeywordTypeguard.ts, 96, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 98, 38))
+>b : Symbol(b, Decl(inKeywordTypeguard.ts, 98, 54))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+
+        let s: string = x.a;
+>s : Symbol(s, Decl(inKeywordTypeguard.ts, 100, 11))
+>x.a : Symbol(a, Decl(inKeywordTypeguard.ts, 98, 38))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 98, 38))
+
+    } else {
+        let n: never = x;
+>n : Symbol(n, Decl(inKeywordTypeguard.ts, 102, 11))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
+    }
+}
+
+// Repro from #38608
+declare const error: Error;
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+if ('extra' in error) {
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+
+    error // Still Error
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+
+} else {
+    error // Error
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+>narrowsToNever : Symbol(narrowsToNever, Decl(inKeywordTypeguard.ts, 112, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+>r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+
+    let v: number;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+
+    if ("l" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+
+        v = x.l;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x.l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+    }
+    else if ("r" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+
+        v = x.r;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x.r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+    }
+    else {
+        v = x
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+    }
+    return v;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+}
+
+type AOrB = { aProp: number } | { bProp: number };
+>AOrB : Symbol(AOrB, Decl(inKeywordTypeguard.ts, 126, 1))
+>aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+>bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+
+declare function isAOrB(x: unknown): x is AOrB;
+>isAOrB : Symbol(isAOrB, Decl(inKeywordTypeguard.ts, 128, 50))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 129, 24))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 129, 24))
+>AOrB : Symbol(AOrB, Decl(inKeywordTypeguard.ts, 126, 1))
+
+declare var x: unknown;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+if (isAOrB(x)) {
+>isAOrB : Symbol(isAOrB, Decl(inKeywordTypeguard.ts, 128, 50))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+    if ("aProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        x.aProp;
+>x.aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+>aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+    }
+    else if ("bProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        x.bProp;
+>x.bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+>bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+    }
+    // x is never because of the type predicate from unknown
+    else if ("cProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        const _never: never = x;
+>_never : Symbol(_never, Decl(inKeywordTypeguard.ts, 141, 13))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+    }
+}
+
+function negativeIntersectionTest() {
+>negativeIntersectionTest : Symbol(negativeIntersectionTest, Decl(inKeywordTypeguard.ts, 143, 1))
+
+    if ("ontouchstart" in window) {
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+        window.ontouchstart
+>window.ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    } else {
+        window.ontouchstart
+>window.ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+    }
+}
+
+function f1(x: unknown) {
+>f1 : Symbol(f1, Decl(inKeywordTypeguard.ts, 151, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>a : Symbol(a)
+    }
+    if (x && "a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>a : Symbol(a)
+    }
+    if (x && typeof x === "object" && "a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>a : Symbol(a)
+    }
+    if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>a : Symbol(a)
+
+        x.b;
+>x.b : Symbol(b)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>b : Symbol(b)
+
+        x.c;
+>x.c : Symbol(c)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 153, 12))
+>c : Symbol(c)
+    }
+}
+
+function f2(x: object) {
+>f2 : Symbol(f2, Decl(inKeywordTypeguard.ts, 168, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+>a : Symbol(a)
+    }
+    if ("a" in x && "b" in x && "c" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+>a : Symbol(a)
+
+        x.b;
+>x.b : Symbol(b)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+>b : Symbol(b)
+
+        x.c;
+>x.c : Symbol(c)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 170, 12))
+>c : Symbol(c)
+    }
+}
+
+function f3<T>(x: T) {
+>f3 : Symbol(f3, Decl(inKeywordTypeguard.ts, 179, 1))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 181, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 181, 12))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>a : Symbol(a)
+    }
+    if (x && "a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>a : Symbol(a)
+    }
+    if (x && typeof x === "object" && "a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>a : Symbol(a)
+    }
+    if (x && typeof x === "object" && "a" in x && "b" in x && "c" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>a : Symbol(a)
+
+        x.b;
+>x.b : Symbol(b)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>b : Symbol(b)
+
+        x.c;
+>x.c : Symbol(c)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 181, 15))
+>c : Symbol(c)
+    }
+}
+
+function f4(x: { a: string }) {
+>f4 : Symbol(f4, Decl(inKeywordTypeguard.ts, 196, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 198, 16))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+
+        x.a;
+>x.a : Symbol(a, Decl(inKeywordTypeguard.ts, 198, 16))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 198, 16))
+    }
+    if ("a" in x && "b" in x && "c" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+
+        x.a;
+>x.a : Symbol(a, Decl(inKeywordTypeguard.ts, 198, 16))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 198, 16))
+
+        x.b;
+>x.b : Symbol(b)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>b : Symbol(b)
+
+        x.c;
+>x.c : Symbol(c)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 198, 12))
+>c : Symbol(c)
+    }
+}
+
+function f5(x: { a: string } | { b: string }) {
+>f5 : Symbol(f5, Decl(inKeywordTypeguard.ts, 207, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 209, 12))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 209, 16))
+>b : Symbol(b, Decl(inKeywordTypeguard.ts, 209, 32))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 209, 12))
+
+        x;  // { a: string }
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 209, 12))
+    }
+    else if ("b" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 209, 12))
+
+        x;  // { b: string }
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 209, 12))
+    }
+    else {
+        x;  // never
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 209, 12))
+    }
+}
+
+function f6(x: { a: string } | { b: string }) {
+>f6 : Symbol(f6, Decl(inKeywordTypeguard.ts, 219, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 221, 12))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 221, 16))
+>b : Symbol(b, Decl(inKeywordTypeguard.ts, 221, 32))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 221, 12))
+
+        x;  // { a: string }
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 221, 12))
+    }
+    else if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 221, 12))
+
+        x;  // { b: string } & Record<"a", unknown>
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 221, 12))
+    }
+    else {
+        x;  // { b: string }
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 221, 12))
+    }
+}
+
+// Object and corresponding intersection should narrow the same
+
+function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
+>f7 : Symbol(f7, Decl(inKeywordTypeguard.ts, 231, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 235, 12))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 235, 16))
+>b : Symbol(b, Decl(inKeywordTypeguard.ts, 235, 27))
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 235, 40))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 235, 45))
+>b : Symbol(b, Decl(inKeywordTypeguard.ts, 235, 61))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 235, 12))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 235, 12))
+    }
+    else {
+        x;  // never
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 235, 12))
+    }
+    if ("a" in y) {
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 235, 40))
+
+        y;
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 235, 40))
+    }
+    else {
+        y;  // never
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 235, 40))
+    }
+}
+
+const sym = Symbol();
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+function f8(x: object) {
+>f8 : Symbol(f8, Decl(inKeywordTypeguard.ts, 250, 21))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+
+    if ("a" in x && 1 in x && sym in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>a : Symbol(a)
+
+        x["a"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>"a" : Symbol(a)
+
+        x[1];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>1 : Symbol(1)
+
+        x["1"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>"1" : Symbol(1)
+
+        x[sym];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+    }
+}
+
+function f9(x: object) {
+>f9 : Symbol(f9, Decl(inKeywordTypeguard.ts, 260, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+
+    if ("a" in x && "1" in x && sym in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+
+        x.a;
+>x.a : Symbol(a)
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>a : Symbol(a)
+
+        x["a"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>"a" : Symbol(a)
+
+        x[1];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>1 : Symbol(1)
+
+        x["1"];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>"1" : Symbol(1)
+
+        x[sym];
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
+>sym : Symbol(sym, Decl(inKeywordTypeguard.ts, 250, 5))
+    }
+}
+
+function f10(x: { a: unknown }) {
+>f10 : Symbol(f10, Decl(inKeywordTypeguard.ts, 270, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 272, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 272, 13))
+    }
+}
+
+function f11(x: { a: any }) {
+>f11 : Symbol(f11, Decl(inKeywordTypeguard.ts, 279, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 281, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 281, 13))
+    }
+}
+
+function f12(x: { a: string }) {
+>f12 : Symbol(f12, Decl(inKeywordTypeguard.ts, 288, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 290, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 290, 13))
+    }
+}
+
+function f13(x: { a?: string }) {
+>f13 : Symbol(f13, Decl(inKeywordTypeguard.ts, 297, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 299, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 299, 13))
+    }
+}
+
+function f14(x: { a: string | undefined }) {
+>f14 : Symbol(f14, Decl(inKeywordTypeguard.ts, 306, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 308, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 308, 13))
+    }
+}
+
+function f15(x: { a?: string | undefined }) {
+>f15 : Symbol(f15, Decl(inKeywordTypeguard.ts, 315, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 317, 17))
+
+    if ("a" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 317, 13))
+    }
+}
+
+function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+>f16 : Symbol(f16, Decl(inKeywordTypeguard.ts, 324, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 326, 13))
+>globalThis : Symbol(globalThis)
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 326, 34))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+
+    x = y;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 326, 13))
+>y : Symbol(y, Decl(inKeywordTypeguard.ts, 326, 34))
+}
+
+// Repro from #50639
+
+function foo<A>(value: A) {
+>foo : Symbol(foo, Decl(inKeywordTypeguard.ts, 328, 1))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 332, 13))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>A : Symbol(A, Decl(inKeywordTypeguard.ts, 332, 13))
+
+    if (typeof value === "object" && value !== null && "prop" in value) {
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+
+        value;  // A & object & Record<"prop", unknown>
+>value : Symbol(value, Decl(inKeywordTypeguard.ts, 332, 16))
+    }
+}
+
+// Repro from #50954
+
+const checkIsTouchDevice = () =>
+>checkIsTouchDevice : Symbol(checkIsTouchDevice, Decl(inKeywordTypeguard.ts, 340, 5))
+
+    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>window.navigator : Symbol(navigator, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>navigator : Symbol(navigator, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+// Repro from #51501
+
+function isHTMLTable<T extends object | null>(table: T): boolean {
+>isHTMLTable : Symbol(isHTMLTable, Decl(inKeywordTypeguard.ts, 341, 71))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 345, 21))
+>table : Symbol(table, Decl(inKeywordTypeguard.ts, 345, 46))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 345, 21))
+
+    return !!table && 'html' in table;
+>table : Symbol(table, Decl(inKeywordTypeguard.ts, 345, 46))
+>table : Symbol(table, Decl(inKeywordTypeguard.ts, 345, 46))
+}
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+>f : Symbol(f, Decl(inKeywordTypeguard.ts, 351, 5))
+>P : Symbol(P, Decl(inKeywordTypeguard.ts, 351, 11))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 351, 29))
+>P : Symbol(P, Decl(inKeywordTypeguard.ts, 351, 11))
+
+    "foo" in a;
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 351, 29))
+
+};
+
+// Repro from #53773
+
+function test1<T extends any[] | Record<string, any>>(obj: T) {
+>test1 : Symbol(test1, Decl(inKeywordTypeguard.ts, 353, 2))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 357, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 357, 15))
+
+    if (Array.isArray(obj) || 'length' in obj) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+    }
+    else {
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 357, 54))
+    }
+}
+
+function test2<T extends any[] | Record<string, any>>(obj: T) {
+>test2 : Symbol(test2, Decl(inKeywordTypeguard.ts, 364, 1))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 366, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 366, 15))
+
+    if (Array.isArray(obj)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+
+      obj;  // T & any[]
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+    }
+    else {
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 366, 54))
+    }
+}
+
+function test3<T extends any[] | Record<string, any>>(obj: T) {
+>test3 : Symbol(test3, Decl(inKeywordTypeguard.ts, 373, 1))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 375, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 375, 15))
+
+    if ('length' in obj) {
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+    }
+    else {
+      obj;  // T
+>obj : Symbol(obj, Decl(inKeywordTypeguard.ts, 375, 54))
+    }
+}
+

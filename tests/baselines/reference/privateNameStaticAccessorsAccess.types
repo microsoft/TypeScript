@@ -1,65 +1,95 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts] ////
+
+=== privateNameStaticAccessorsAccess.ts ===
 export {}
 class A2 {
 >A2 : A2
+>   : ^^
 
     static get #prop() { return ""; }
 >#prop : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
     static set #prop(param: string) { }
 >#prop : string
+>      : ^^^^^^
 >param : string
+>      : ^^^^^^
 
     constructor() {
         console.log(A2.#prop);
 >console.log(A2.#prop) : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >A2.#prop : string
+>         : ^^^^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 
         let a: typeof A2 = A2;
 >a : typeof A2
+>  : ^^^^^^^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 
         a.#prop;
 >a.#prop : string
+>        : ^^^^^^
 >a : typeof A2
+>  : ^^^^^^^^^
 
         function  foo (){
 >foo : () => void
+>    : ^^^^^^^^^^
 
             a.#prop;
 >a.#prop : string
+>        : ^^^^^^
 >a : typeof A2
+>  : ^^^^^^^^^
         }
     }
 }
 
 A2.#prop; // Error
 >A2.#prop : any
+>         : ^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 
 function  foo (){
 >foo : () => void
+>    : ^^^^^^^^^^
 
     A2.#prop; // Error
 >A2.#prop : any
+>         : ^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
 }
 
 class B2 {
 >B2 : B2
+>   : ^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         A2.#prop;
 >A2.#prop : any
+>         : ^^^
 >A2 : typeof A2
+>   : ^^^^^^^^^
     }
 }
 

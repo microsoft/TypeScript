@@ -1,8 +1,14 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty59.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty59.ts] ////
+
+=== symbolProperty59.ts ===
 interface I {
     [Symbol.keyFor]: string;
 >[Symbol.keyFor] : string
->Symbol.keyFor : (sym: symbol) => string
+>                : ^^^^^^
+>Symbol.keyFor : (sym: symbol) => string | undefined
+>              : ^   ^^      ^^^^^                  
 >Symbol : SymbolConstructor
->keyFor : (sym: symbol) => string
+>       : ^^^^^^^^^^^^^^^^^
+>keyFor : (sym: symbol) => string | undefined
+>       : ^   ^^      ^^^^^                  
 }

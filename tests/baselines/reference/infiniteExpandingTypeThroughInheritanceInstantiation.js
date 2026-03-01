@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infiniteExpandingTypeThroughInheritanceInstantiation.ts] ////
+
 //// [infiniteExpandingTypeThroughInheritanceInstantiation.ts]
 interface A<T>
 {
@@ -11,3 +13,4 @@ interface B<T> extends A<T> // error
 
 
 //// [infiniteExpandingTypeThroughInheritanceInstantiation.js]
+"use strict";

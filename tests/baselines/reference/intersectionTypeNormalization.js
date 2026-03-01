@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionTypeNormalization.ts] ////
+
 //// [intersectionTypeNormalization.ts]
 interface A { a: string }
 interface B { b: string }
@@ -106,6 +108,7 @@ function foo(so: any) {
 }
 
 //// [intersectionTypeNormalization.js]
+"use strict";
 var x;
 var x;
 var x;
@@ -123,7 +126,7 @@ function getValueAsString(value) {
     return value.str;
 }
 function foo(so) {
-    var val = so;
-    var isGenre = val.genreId;
+    const val = so;
+    const isGenre = val.genreId;
     return isGenre;
 }

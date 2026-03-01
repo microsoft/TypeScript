@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts] ////
+
 //// [nonPrimitiveInGeneric.ts]
 function generic<T>(t: T) {
     var o: object = t; // expect error
@@ -45,6 +47,7 @@ var u: Proxy<Blah>; // ok
 
 
 //// [nonPrimitiveInGeneric.js]
+"use strict";
 function generic(t) {
     var o = t; // expect error
 }

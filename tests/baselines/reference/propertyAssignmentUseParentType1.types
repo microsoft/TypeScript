@@ -1,44 +1,72 @@
-=== tests/cases/conformance/salsa/propertyAssignmentUseParentType1.ts ===
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType1.ts] ////
+
+=== propertyAssignmentUseParentType1.ts ===
 interface N {
     (): boolean
     num: 123;
 >num : 123
+>    : ^^^
 }
 export const interfaced: N = () => true;
 >interfaced : N
+>           : ^
 >() => true : { (): true; num: 123; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 interfaced.num = 123;
 >interfaced.num = 123 : 123
+>                     : ^^^
 >interfaced.num : 123
+>               : ^^^
 >interfaced : N
+>           : ^
 >num : 123
+>    : ^^^
 >123 : 123
+>    : ^^^
 
 export const inlined: { (): boolean; nun: 456 } = () => true;
 >inlined : { (): boolean; nun: 456; }
+>        : ^^^^^^       ^^^^^^^   ^^^
 >nun : 456
+>    : ^^^
 >() => true : { (): true; nun: 456; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 inlined.nun = 456;
 >inlined.nun = 456 : 456
+>                  : ^^^
 >inlined.nun : 456
+>            : ^^^
 >inlined : { (): boolean; nun: 456; }
+>        : ^^^^^^       ^^^^^^^   ^^^
 >nun : 456
+>    : ^^^
 >456 : 456
+>    : ^^^
 
 export const ignoreJsdoc = () => true;
 >ignoreJsdoc : { (): boolean; extra: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => true : { (): boolean; extra: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 /** @type {string} make sure to ignore jsdoc! */
 ignoreJsdoc.extra = 111
 >ignoreJsdoc.extra = 111 : 111
+>                        : ^^^
 >ignoreJsdoc.extra : number
+>                  : ^^^^^^
 >ignoreJsdoc : { (): boolean; extra: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extra : number
+>      : ^^^^^^
 >111 : 111
+>    : ^^^
 

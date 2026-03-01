@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx] ////
+
+=== jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
+/// <reference path="react16.d.ts" />
+
+// repro #51577
+
+declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
+>omit : Symbol(omit, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 0, 0), Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 84))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 22))
+>K : Symbol(K, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 24))
+>names : Symbol(names, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 43))
+>K : Symbol(K, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 24))
+>obj : Symbol(obj, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 63))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 22))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 22))
+>K : Symbol(K, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 24))
+
+declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
+>omit : Symbol(omit, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 0, 0), Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 84))
+>K : Symbol(K, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 22))
+>names : Symbol(names, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 40))
+>K : Symbol(K, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 22))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 63))
+>obj : Symbol(obj, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 66))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 63))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 63))
+>K : Symbol(K, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 5, 22))
+
+declare const otherProps: { bar: string, qwe: boolean }
+>otherProps : Symbol(otherProps, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 7, 13))
+>bar : Symbol(bar, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 7, 27))
+>qwe : Symbol(qwe, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 7, 40))
+
+declare function GenericComponent<T>(props: T): null
+>GenericComponent : Symbol(GenericComponent, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 7, 55))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 9, 34))
+>props : Symbol(props, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 9, 37))
+>T : Symbol(T, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 9, 34))
+
+<GenericComponent {...omit(['bar'], otherProps)} />; // no error
+>GenericComponent : Symbol(GenericComponent, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 7, 55))
+>omit : Symbol(omit, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 0, 0), Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 4, 84))
+>otherProps : Symbol(otherProps, Decl(jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx, 7, 13))
+
+
+

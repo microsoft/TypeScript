@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration13.ts] ////
+
 //// [parserClassDeclaration13.ts]
 class C {
    foo();
@@ -5,9 +7,7 @@ class C {
 }
 
 //// [parserClassDeclaration13.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar = function () { };
-    return C;
-}());
+"use strict";
+class C {
+    bar() { }
+}

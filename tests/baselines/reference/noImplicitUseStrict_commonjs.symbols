@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitUseStrict_commonjs.ts ===
+//// [tests/cases/compiler/noImplicitUseStrict_commonjs.ts] ////
+
+=== noImplicitUseStrict_commonjs.ts ===
 export var x = 0;
 >x : Symbol(x, Decl(noImplicitUseStrict_commonjs.ts, 0, 10))
 

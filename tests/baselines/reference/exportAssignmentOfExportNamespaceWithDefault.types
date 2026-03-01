@@ -1,40 +1,56 @@
-=== tests/cases/conformance/externalModules/main.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentOfExportNamespaceWithDefault.ts] ////
+
+=== main.ts ===
 // https://github.com/microsoft/TypeScript/issues/39149
 import a from "a";
 >a : typeof import("b").a
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 a();
 >a() : void
+>    : ^^^^
 >a : typeof import("b").a
+>  : ^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/external.d.ts ===
+=== external.d.ts ===
 declare module "b" {
 >"b" : typeof import("b")
+>    : ^^^^^^^^^^^^^^^^^^
 
     export function a(): void;
 >a : typeof a
+>  : ^^^^^^^^
 
     export namespace a {
 >a : typeof a
+>  : ^^^^^^^^
 
         var _a: typeof a;
 >_a : typeof a
+>   : ^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 
         export { _a as default };
 >_a : typeof a
+>   : ^^^^^^^^
 >default : typeof a
+>        : ^^^^^^^^
     }
     export default a;
 >a : typeof a
+>  : ^^^^^^^^
 }
 
 declare module "a" {
 >"a" : typeof import("a")
+>    : ^^^^^^^^^^^^^^^^^^
 
     import { a } from "b";
 >a : typeof a
+>  : ^^^^^^^^
 
     export = a;
 >a : typeof a
+>  : ^^^^^^^^
 }

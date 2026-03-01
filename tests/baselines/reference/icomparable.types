@@ -1,23 +1,34 @@
-=== tests/cases/compiler/icomparable.ts ===
+//// [tests/cases/compiler/icomparable.ts] ////
+
+=== icomparable.ts ===
     interface IComparable<T> {
        compareTo(other: T);
 >compareTo : (other: T) => any
+>          : ^     ^^ ^^^^^^^^
 >other : T
+>      : ^
     }
 
     declare function sort<U extends IComparable<any>>(items: U[]): U[];
 >sort : <U extends IComparable<any>>(items: U[]) => U[]
+>     : ^ ^^^^^^^^^                ^^     ^^   ^^^^^   
 >items : U[]
+>      : ^^^
 
     interface StringComparable extends IComparable<string> {
     }
 
     var sc: StringComparable[];
 >sc : StringComparable[]
+>   : ^^^^^^^^^^^^^^^^^^
 
     var x = sort(sc);
 >x : StringComparable[]
+>  : ^^^^^^^^^^^^^^^^^^
 >sort(sc) : StringComparable[]
+>         : ^^^^^^^^^^^^^^^^^^
 >sort : <U extends IComparable<any>>(items: U[]) => U[]
+>     : ^ ^^^^^^^^^                ^^     ^^   ^^^^^   
 >sc : StringComparable[]
+>   : ^^^^^^^^^^^^^^^^^^
 

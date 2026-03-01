@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericMethodOverspecialization.ts] ////
+
 //// [genericMethodOverspecialization.ts]
 var names = ["list", "table1", "table2", "table3", "summary"];
 
@@ -27,6 +29,7 @@ var widths:number[] = elements.map(function (e) { // should not error
 
 
 //// [genericMethodOverspecialization.js]
+"use strict";
 var names = ["list", "table1", "table2", "table3", "summary"];
 var elements = names.map(function (name) {
     return document.getElementById(name);

@@ -1,0 +1,59 @@
+// === findAllReferences ===
+// === /bar.ts ===
+// <|import { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}Foo|]/*FIND ALL REFS*/ } from "./foo";|>
+
+// === /foo.ts ===
+// <|export { [|{| defId: 1, isWriteAccess: true |}Foo|] }|>
+
+  // === Definitions ===
+  // === /bar.ts ===
+  // <|import { [|{| defId: 0 |}Foo|]/*FIND ALL REFS*/ } from "./foo";|>
+
+  // === /foo.ts ===
+  // <|export { [|{| defId: 1 |}Foo|] }|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import Foo",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export Foo",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

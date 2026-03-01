@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/thisPropertyAssignment.ts] ////
+
+=== a.js ===
 // This test is asserting that a single property/element access
 // on `this` is a special assignment declaration, but chaining
 // off that does not create additional declarations. I’m not sure

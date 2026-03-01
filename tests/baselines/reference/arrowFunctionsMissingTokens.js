@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
+
 //// [arrowFunctionsMissingTokens.ts]
-module missingArrowsWithCurly {
+namespace missingArrowsWithCurly {
     var a = () { };
 
     var b = (): void { }
@@ -11,8 +13,8 @@ module missingArrowsWithCurly {
     var e = (x: number, y: string): void { };
 }
 
-module missingCurliesWithArrow {
-    module withStatement {
+namespace missingCurliesWithArrow {
+    namespace withStatement {
         var a = () => var k = 10;};
 
         var b = (): void => var k = 10;}
@@ -26,7 +28,7 @@ module missingCurliesWithArrow {
         var f = () => var k = 10;}
     }
 
-    module withoutStatement {
+    namespace withoutStatement {
         var a = () => };
 
         var b = (): void => }
@@ -41,7 +43,7 @@ module missingCurliesWithArrow {
     }
 }
 
-module ce_nEst_pas_une_arrow_function {
+namespace ce_nEst_pas_une_arrow_function {
     var a = ();
 
     var b = (): void;
@@ -53,7 +55,7 @@ module ce_nEst_pas_une_arrow_function {
     var e = (x: number, y: string): void;
 }
 
-module okay {
+namespace okay {
     var a = () => { };
 
     var b = (): void => { }
@@ -66,52 +68,53 @@ module okay {
 }
 
 //// [arrowFunctionsMissingTokens.js]
+"use strict";
 var missingArrowsWithCurly;
 (function (missingArrowsWithCurly) {
-    var a = function () { };
-    var b = function () { };
-    var c = function (x) { };
-    var d = function (x, y) { };
-    var e = function (x, y) { };
+    var a = () => { };
+    var b = () => { };
+    var c = (x) => { };
+    var d = (x, y) => { };
+    var e = (x, y) => { };
 })(missingArrowsWithCurly || (missingArrowsWithCurly = {}));
 var missingCurliesWithArrow;
 (function (missingCurliesWithArrow) {
-    var withStatement;
+    let withStatement;
     (function (withStatement) {
-        var a = function () { var k = 10; };
-        var b = function () { var k = 10; };
-        var c = function (x) { var k = 10; };
-        var d = function (x, y) { var k = 10; };
-        var e = function (x, y) { var k = 10; };
-        var f = function () { var k = 10; };
+        var a = () => { var k = 10; };
+        var b = () => { var k = 10; };
+        var c = (x) => { var k = 10; };
+        var d = (x, y) => { var k = 10; };
+        var e = (x, y) => { var k = 10; };
+        var f = () => { var k = 10; };
     })(withStatement || (withStatement = {}));
-    var withoutStatement;
+    let withoutStatement;
     (function (withoutStatement) {
-        var a = function () { return ; };
+        var a = () => ;
     })(withoutStatement || (withoutStatement = {}));
     ;
-    var b = function () { return ; };
+    var b = () => ;
 })(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
-var c = function (x) { return ; };
+var c = (x) => ;
 ;
-var d = function (x, y) { return ; };
+var d = (x, y) => ;
 ;
-var e = function (x, y) { return ; };
+var e = (x, y) => ;
 ;
-var f = function () { return ; };
+var f = () => ;
 var ce_nEst_pas_une_arrow_function;
 (function (ce_nEst_pas_une_arrow_function) {
     var a = ();
-    var b = function () { return ; };
+    var b = () => ;
     var c = (x);
-    var d = function (x, y) { return ; };
-    var e = function (x, y) { return ; };
+    var d = (x, y) => ;
+    var e = (x, y) => ;
 })(ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {}));
 var okay;
 (function (okay) {
-    var a = function () { };
-    var b = function () { };
-    var c = function (x) { };
-    var d = function (x, y) { };
-    var e = function (x, y) { };
+    var a = () => { };
+    var b = () => { };
+    var c = (x) => { };
+    var d = (x, y) => { };
+    var e = (x, y) => { };
 })(okay || (okay = {}));

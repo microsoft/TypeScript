@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs.ts] ////
+
+=== esDecorators-classDeclaration-commonjs.ts ===
+declare var deco: any;
+>deco : any
+
+@deco
+>deco : any
+
+export class Example {
+>Example : Example
+>        : ^^^^^^^
+
+    static foo() {}
+>foo : () => void
+>    : ^^^^^^^^^^
+}
+
+Example.foo();
+>Example.foo() : void
+>              : ^^^^
+>Example.foo : () => void
+>            : ^^^^^^^^^^
+>Example : typeof Example
+>        : ^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+

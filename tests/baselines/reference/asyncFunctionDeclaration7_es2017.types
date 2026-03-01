@@ -1,12 +1,19 @@
-=== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration7_es2017.ts ===
+//// [tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration7_es2017.ts] ////
+
+=== asyncFunctionDeclaration7_es2017.ts ===
 async function bar(): Promise<void> {
 >bar : () => Promise<void>
+>    : ^^^^^^             
 
   // 'await' here is an identifier, and not a yield expression.
   async function foo(a = await): Promise<void> {
 >foo : (a?: any) => Promise<void>
+>    : ^ ^^^^^^^^^^^             
 >a : any
+>  : ^^^
 >await : any
+>      : ^^^
 > : any
+> : ^^^
   }
 }

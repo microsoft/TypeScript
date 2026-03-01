@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tupleTypeInference.ts] ////
+
 //// [tupleTypeInference.ts]
 declare var $q: IQService;
 
@@ -23,6 +25,7 @@ var c = $q.all([$q.when<string>(), $q.when<string>()]);
 
 
 //// [tupleTypeInference.js]
+"use strict";
 // Implicit different types
 var a = $q.all([$q.when(), $q.when()]);
 // Explicit different types

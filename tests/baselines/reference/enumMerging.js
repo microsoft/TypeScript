@@ -1,7 +1,9 @@
+//// [tests/cases/conformance/enums/enumMerging.ts] ////
+
 //// [enumMerging.ts]
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
-module M1 {
+namespace M1 {
     enum EImpl1 {
         A, B, C
     }
@@ -22,7 +24,7 @@ module M1 {
 }
 
 // Enum with only computed members across 2 declarations with the same root module 
-module M2 {
+namespace M2 {
     export enum EComp2 {
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
     }
@@ -35,7 +37,7 @@ module M2 {
 }
 
 // Enum with initializer in only one of two declarations with constant members with the same root module
-module M3 {
+namespace M3 {
     enum EInit {
         A,
         B
@@ -47,18 +49,18 @@ module M3 {
 }
 
 // Enums with same name but different root module
-module M4 {
+namespace M4 {
     export enum Color { Red, Green, Blue }
 }
-module M5 {
+namespace M5 {
     export enum Color { Red, Green, Blue }
 }
 
-module M6.A {
+namespace M6.A {
     export enum Color { Red, Green, Blue }
 }
-module M6 {
-    export module A {
+namespace M6 {
+    export namespace A {
         export enum Color { Yellow = 1 }
     }
     var t = A.Color.Yellow;
@@ -67,11 +69,12 @@ module M6 {
 
 
 //// [enumMerging.js]
+"use strict";
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
 var M1;
 (function (M1) {
-    var EImpl1;
+    let EImpl1;
     (function (EImpl1) {
         EImpl1[EImpl1["A"] = 0] = "A";
         EImpl1[EImpl1["B"] = 1] = "B";
@@ -82,7 +85,7 @@ var M1;
         EImpl1[EImpl1["E"] = 2] = "E";
         EImpl1[EImpl1["F"] = 3] = "F";
     })(EImpl1 || (EImpl1 = {}));
-    var EConst1;
+    let EConst1;
     (function (EConst1) {
         EConst1[EConst1["A"] = 3] = "A";
         EConst1[EConst1["B"] = 2] = "B";
@@ -98,7 +101,7 @@ var M1;
 // Enum with only computed members across 2 declarations with the same root module 
 var M2;
 (function (M2) {
-    var EComp2;
+    let EComp2;
     (function (EComp2) {
         EComp2[EComp2["A"] = 'foo'.length] = "A";
         EComp2[EComp2["B"] = 'foo'.length] = "B";
@@ -114,7 +117,7 @@ var M2;
 // Enum with initializer in only one of two declarations with constant members with the same root module
 var M3;
 (function (M3) {
-    var EInit;
+    let EInit;
     (function (EInit) {
         EInit[EInit["A"] = 0] = "A";
         EInit[EInit["B"] = 1] = "B";
@@ -128,7 +131,7 @@ var M3;
 // Enums with same name but different root module
 var M4;
 (function (M4) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
@@ -137,7 +140,7 @@ var M4;
 })(M4 || (M4 = {}));
 var M5;
 (function (M5) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
@@ -148,7 +151,7 @@ var M6;
 (function (M6) {
     var A;
     (function (A) {
-        var Color;
+        let Color;
         (function (Color) {
             Color[Color["Red"] = 0] = "Red";
             Color[Color["Green"] = 1] = "Green";
@@ -157,9 +160,9 @@ var M6;
     })(A = M6.A || (M6.A = {}));
 })(M6 || (M6 = {}));
 (function (M6) {
-    var A;
+    let A;
     (function (A) {
-        var Color;
+        let Color;
         (function (Color) {
             Color[Color["Yellow"] = 1] = "Yellow";
         })(Color = A.Color || (A.Color = {}));

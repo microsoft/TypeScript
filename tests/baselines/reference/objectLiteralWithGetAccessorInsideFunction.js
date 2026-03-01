@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts] ////
+
 //// [objectLiteralWithGetAccessorInsideFunction.ts]
 function bar() {
     var x = {
@@ -9,11 +11,12 @@ function bar() {
 }
 
 //// [objectLiteralWithGetAccessorInsideFunction.js]
+"use strict";
 function bar() {
     var x = {
         get _extraOccluded() {
             var occluded = 0;
             return occluded;
-        }
+        },
     };
 }

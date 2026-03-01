@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod3_Js.ts] ////
+
 //// [a.js]
 class A {
 	get arguments() {
@@ -39,9 +41,9 @@ declare class B extends A {
     /**
      * @type object
      */
-    x: object;
+    x: object | undefined;
     /**
      * @type object
      */
-    y: object;
+    y: object | undefined;
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts] ////
+
 //// [privateNamesUnique-4.ts]
 class A1 { }
 interface A2 extends A1 { }
@@ -8,6 +10,7 @@ const c: C = a;
 
 
 //// [privateNamesUnique-4.js]
+"use strict";
 var _C_something;
 class A1 {
 }

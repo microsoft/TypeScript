@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChain.2.ts] ////
+
 //// [callChain.2.ts]
 declare const o1: undefined | (() => number);
 o1?.();
@@ -10,6 +12,7 @@ o3.b?.().c;
 
 
 //// [callChain.2.js]
+"use strict";
 var _a;
 o1 === null || o1 === void 0 ? void 0 : o1();
 o2 === null || o2 === void 0 ? void 0 : o2.b();

@@ -1,0 +1,519 @@
+//// [tests/cases/compiler/computedEnumTypeWidening.ts] ////
+
+=== computedEnumTypeWidening.ts ===
+declare function computed(x: number): number;
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>x : number
+>  : ^^^^^^
+
+enum E {
+>E : E
+>  : ^
+
+    A = computed(0),
+>A : E.A
+>  : ^^^
+>computed(0) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>0 : 0
+>  : ^
+
+    B = computed(1),
+>B : E.B
+>  : ^^^
+>computed(1) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>1 : 1
+>  : ^
+
+    C = computed(2),
+>C : E.C
+>  : ^^^
+>computed(2) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>2 : 2
+>  : ^
+
+    D = computed(3),
+>D : E.D
+>  : ^^^
+>computed(3) : number
+>            : ^^^^^^
+>computed : (x: number) => number
+>         : ^ ^^      ^^^^^      
+>3 : 3
+>  : ^
+}
+
+function f1() {
+>f1 : () => void
+>   : ^^^^^^^^^^
+
+    const c1 = E.B;  // Fresh E.B
+>c1 : E.B
+>   : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    let v1 = c1;  // E
+>v1 : E
+>   : ^
+>c1 : E.B
+>   : ^^^
+
+    const c2 = c1;  // Fresh E.B
+>c2 : E.B
+>   : ^^^
+>c1 : E.B
+>   : ^^^
+
+    let v2 = c2;  // E
+>v2 : E
+>   : ^
+>c2 : E.B
+>   : ^^^
+
+    const c3: E.B = E.B;  // E.B
+>c3 : E.B
+>   : ^^^
+>E : any
+>  : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    let v3 = c3;  // E.B
+>v3 : E.B
+>   : ^^^
+>c3 : E.B
+>   : ^^^
+
+    const c4: E.B = c1;  // E.B
+>c4 : E.B
+>   : ^^^
+>E : any
+>  : ^^^
+>c1 : E.B
+>   : ^^^
+
+    let v4 = c4;  // E.B
+>v4 : E.B
+>   : ^^^
+>c4 : E.B
+>   : ^^^
+}
+
+function f2(cond: boolean) {
+>f2 : (cond: boolean) => void
+>   : ^    ^^       ^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+
+    const c1 = cond ? E.A : E.B;  // Fresh E.A | fresh E.B
+>c1 : E.A | E.B
+>   : ^^^^^^^^^
+>cond ? E.A : E.B : E.A | E.B
+>                 : ^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    const c2: E.A | E.B = c1;  // E.A | E.B
+>c2 : E.A | E.B
+>   : ^^^^^^^^^
+>E : any
+>  : ^^^
+>E : any
+>  : ^^^
+>c1 : E.A | E.B
+>   : ^^^^^^^^^
+
+    const c3 = cond ? c1 : c2;  // E.A | E.B
+>c3 : E.A | E.B
+>   : ^^^^^^^^^
+>cond ? c1 : c2 : E.A | E.B
+>               : ^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>c1 : E.A | E.B
+>   : ^^^^^^^^^
+>c2 : E.A | E.B
+>   : ^^^^^^^^^
+
+    const c4 = cond ? c3 : E.C;  // E.A | E.B | fresh E.C
+>c4 : E.A | E.B | E.C
+>   : ^^^^^^^^^^^^^^^
+>cond ? c3 : E.C : E.A | E.B | E.C
+>                : ^^^^^^^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>c3 : E.A | E.B
+>   : ^^^^^^^^^
+>E.C : E.C
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>C : E.C
+>  : ^^^
+
+    const c5: E.A | E.B | E.C = c4; // E.A | E.B | E.C
+>c5 : E.A | E.B | E.C
+>   : ^^^^^^^^^^^^^^^
+>E : any
+>  : ^^^
+>E : any
+>  : ^^^
+>E : any
+>  : ^^^
+>c4 : E.A | E.B | E.C
+>   : ^^^^^^^^^^^^^^^
+
+    let v1 = c1;  // E
+>v1 : E
+>   : ^
+>c1 : E.A | E.B
+>   : ^^^^^^^^^
+
+    let v2 = c2;  // E.A | E.B
+>v2 : E.A | E.B
+>   : ^^^^^^^^^
+>c2 : E.A | E.B
+>   : ^^^^^^^^^
+
+    let v3 = c3;  // E.A | E.B
+>v3 : E.A | E.B
+>   : ^^^^^^^^^
+>c3 : E.A | E.B
+>   : ^^^^^^^^^
+
+    let v4 = c4;  // E
+>v4 : E
+>   : ^
+>c4 : E.A | E.B | E.C
+>   : ^^^^^^^^^^^^^^^
+
+    let v5 = c5;  // E.A | E.B | E.C
+>v5 : E.A | E.B | E.C
+>   : ^^^^^^^^^^^^^^^
+>c5 : E.A | E.B | E.C
+>   : ^^^^^^^^^^^^^^^
+}
+
+function f3() {
+>f3 : () => void
+>   : ^^^^^^^^^^
+
+    const c1 = E.B;
+>c1 : E.B
+>   : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    let v1 = c1;  // E
+>v1 : E
+>   : ^
+>c1 : E.B
+>   : ^^^
+
+    const c2: E.B = E.B;
+>c2 : E.B
+>   : ^^^
+>E : any
+>  : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    let v2 = c2;  // E.B
+>v2 : E.B
+>   : ^^^
+>c2 : E.B
+>   : ^^^
+
+    const c3 = E.B as E.B;
+>c3 : E.B
+>   : ^^^
+>E.B as E.B : E.B
+>           : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+>E : any
+>  : ^^^
+
+    let v3 = c3;  // E.B
+>v3 : E.B
+>   : ^^^
+>c3 : E.B
+>   : ^^^
+
+    const c4 = <E.B>E.B;
+>c4 : E.B
+>   : ^^^
+><E.B>E.B : E.B
+>         : ^^^
+>E : any
+>  : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    let v4 = c4;  // E.B
+>v4 : E.B
+>   : ^^^
+>c4 : E.B
+>   : ^^^
+
+    const c5 = E.B as const;
+>c5 : E.B
+>   : ^^^
+>E.B as const : E.B
+>             : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+    let v5 = c5;  // E.B
+>v5 : E.B
+>   : ^^^
+>c5 : E.B
+>   : ^^^
+}
+
+declare enum E2 { A, B, C, D }
+>E2 : E2
+>   : ^^
+>A : E2.A
+>  : ^^^^
+>B : E2.B
+>  : ^^^^
+>C : E2.C
+>  : ^^^^
+>D : E2.D
+>  : ^^^^
+
+function f4() {
+>f4 : () => void
+>   : ^^^^^^^^^^
+
+    const c1 = E2.B;  // Fresh E2.B
+>c1 : E2.B
+>   : ^^^^
+>E2.B : E2.B
+>     : ^^^^
+>E2 : typeof E2
+>   : ^^^^^^^^^
+>B : E2.B
+>  : ^^^^
+
+    let v1 = E.B;  // E2
+>v1 : E
+>   : ^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+}
+
+const c1 = E.B;
+>c1 : E.B
+>   : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+const c2 = E.B as const;
+>c2 : E.B
+>   : ^^^
+>E.B as const : E.B
+>             : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+let v1 = E.B;
+>v1 : E
+>   : ^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+let v2 = E.B as const;
+>v2 : E.B
+>   : ^^^
+>E.B as const : E.B
+>             : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+class C {
+>C : C
+>  : ^
+
+  p1 = E.B;
+>p1 : E
+>   : ^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+  p2 = E.B as const;
+>p2 : E.B
+>   : ^^^
+>E.B as const : E.B
+>             : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+  readonly p3 = E.B;
+>p3 : E.B
+>   : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+
+  readonly p4 = E.B as const;
+>p4 : E.B
+>   : ^^^
+>E.B as const : E.B
+>             : ^^^
+>E.B : E.B
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
+}
+
+// Repro from #52531
+
+enum MyEnum { A, B, C }
+>MyEnum : MyEnum
+>       : ^^^^^^
+>A : MyEnum.A
+>  : ^^^^^^^^
+>B : MyEnum.B
+>  : ^^^^^^^^
+>C : MyEnum.C
+>  : ^^^^^^^^
+
+let val1 = MyEnum.A;
+>val1 : MyEnum
+>     : ^^^^^^
+>MyEnum.A : MyEnum.A
+>         : ^^^^^^^^
+>MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
+>A : MyEnum.A
+>  : ^^^^^^^^
+
+val1 = MyEnum.B;
+>val1 = MyEnum.B : MyEnum.B
+>                : ^^^^^^^^
+>val1 : MyEnum
+>     : ^^^^^^
+>MyEnum.B : MyEnum.B
+>         : ^^^^^^^^
+>MyEnum : typeof MyEnum
+>       : ^^^^^^^^^^^^^
+>B : MyEnum.B
+>  : ^^^^^^^^
+
+declare enum MyDeclaredEnum { A, B, C }
+>MyDeclaredEnum : MyDeclaredEnum
+>               : ^^^^^^^^^^^^^^
+>A : MyDeclaredEnum.A
+>  : ^^^^^^^^^^^^^^^^
+>B : MyDeclaredEnum.B
+>  : ^^^^^^^^^^^^^^^^
+>C : MyDeclaredEnum.C
+>  : ^^^^^^^^^^^^^^^^
+
+let val2 = MyDeclaredEnum.A;
+>val2 : MyDeclaredEnum
+>     : ^^^^^^^^^^^^^^
+>MyDeclaredEnum.A : MyDeclaredEnum.A
+>                 : ^^^^^^^^^^^^^^^^
+>MyDeclaredEnum : typeof MyDeclaredEnum
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>A : MyDeclaredEnum.A
+>  : ^^^^^^^^^^^^^^^^
+
+val2 = MyDeclaredEnum.B;
+>val2 = MyDeclaredEnum.B : MyDeclaredEnum.B
+>                        : ^^^^^^^^^^^^^^^^
+>val2 : MyDeclaredEnum
+>     : ^^^^^^^^^^^^^^
+>MyDeclaredEnum.B : MyDeclaredEnum.B
+>                 : ^^^^^^^^^^^^^^^^
+>MyDeclaredEnum : typeof MyDeclaredEnum
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>B : MyDeclaredEnum.B
+>  : ^^^^^^^^^^^^^^^^
+

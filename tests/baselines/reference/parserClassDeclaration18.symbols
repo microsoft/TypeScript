@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts] ////
+
+=== parserClassDeclaration18.ts ===
 declare class FooBase {
 >FooBase : Symbol(FooBase, Decl(parserClassDeclaration18.ts, 0, 0))
 

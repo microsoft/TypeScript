@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_jsdoc.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_jsdoc.ts]
@@ -128,27 +129,59 @@ function getSomeOtherTags(node: ts.Node) {
  *           https://github.com/vega/ts-json-schema-generator
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
-var ts = require("typescript");
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const ts = __importStar(require("typescript"));
 // excerpted from https://github.com/YousefED/typescript-json-schema
 // (converted from a method and modified; for example, `this: any` to compensate, among other changes)
 function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
-    var _this = this;
     if (!symbol) {
         return;
     }
     // the comments for a symbol
-    var comments = symbol.getDocumentationComment(undefined);
+    let comments = symbol.getDocumentationComment(undefined);
     if (comments.length) {
-        definition.description = comments.map(function (comment) { return comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n"); }).join("");
+        definition.description = comments.map(comment => comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n")).join("");
     }
     // jsdocs are separate from comments
-    var jsdocs = symbol.getJsDocTags(this.checker);
-    jsdocs.forEach(function (doc) {
+    const jsdocs = symbol.getJsDocTags(this.checker);
+    jsdocs.forEach(doc => {
         // if we have @TJS-... annotations, we have to parse them
-        var name = doc.name, text = doc.text;
-        if (_this.userValidationKeywords[name]) {
-            definition[name] = _this.parseValue(text);
+        const { name, text } = doc;
+        if (this.userValidationKeywords[name]) {
+            definition[name] = this.parseValue(text);
         }
         else {
             // special annotations
@@ -157,17 +190,16 @@ function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
     });
 }
 function getAnnotations(node) {
-    var _this = this;
-    var symbol = node.symbol;
+    const symbol = node.symbol;
     if (!symbol) {
         return undefined;
     }
-    var jsDocTags = symbol.getJsDocTags(this.checker);
+    const jsDocTags = symbol.getJsDocTags(this.checker);
     if (!jsDocTags || !jsDocTags.length) {
         return undefined;
     }
-    var annotations = jsDocTags.reduce(function (result, jsDocTag) {
-        var value = _this.parseJsDocTag(jsDocTag);
+    const annotations = jsDocTags.reduce((result, jsDocTag) => {
+        const value = this.parseJsDocTag(jsDocTag);
         if (value !== undefined) {
             result[jsDocTag.name] = value;
         }
@@ -181,13 +213,12 @@ function parseSpecificTags(node) {
         return ts.getJSDocParameterTags(node);
     }
     if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
-        var func = node;
+        const func = node;
         if (ts.hasJSDocParameterTags(func)) {
-            var flat = [];
-            for (var _i = 0, _a = func.parameters.map(ts.getJSDocParameterTags); _i < _a.length; _i++) {
-                var tags = _a[_i];
+            const flat = [];
+            for (const tags of func.parameters.map(ts.getJSDocParameterTags)) {
                 if (tags)
-                    flat.push.apply(flat, tags);
+                    flat.push(...tags);
             }
             return flat;
         }
@@ -197,7 +228,7 @@ function getReturnTypeFromJSDoc(node) {
     if (node.kind === ts.SyntaxKind.FunctionDeclaration) {
         return ts.getJSDocReturnType(node);
     }
-    var type = ts.getJSDocType(node);
+    let type = ts.getJSDocType(node);
     if (type && type.kind === ts.SyntaxKind.FunctionType) {
         return type.type;
     }
@@ -206,11 +237,11 @@ function getAllTags(node) {
     ts.getJSDocTags(node);
 }
 function getSomeOtherTags(node) {
-    var tags = [];
+    const tags = [];
     tags.push(ts.getJSDocAugmentsTag(node));
     tags.push(ts.getJSDocClassTag(node));
     tags.push(ts.getJSDocReturnTag(node));
-    var type = ts.getJSDocTypeTag(node);
+    const type = ts.getJSDocTypeTag(node);
     if (type) {
         tags.push(type);
     }

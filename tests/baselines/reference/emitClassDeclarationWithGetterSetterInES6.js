@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts] ////
+
 //// [emitClassDeclarationWithGetterSetterInES6.ts]
 class C {
     _name: string;
@@ -28,6 +30,7 @@ class C {
 }
 
 //// [emitClassDeclarationWithGetterSetterInES6.js]
+"use strict";
 class C {
     get name() {
         return this._name;

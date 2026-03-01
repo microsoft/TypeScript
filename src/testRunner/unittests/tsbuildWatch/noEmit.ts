@@ -1,33 +1,45 @@
-namespace ts.tscWatch {
-    describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
+import { jsonToReadableText } from "../helpers.js";
+import { forEachNoEmitTscWatch } from "../helpers/noEmit.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+
+describe("unittests:: tsbuildWatch:: watchMode:: with noEmit::", () => {
+    function verify(outFile?: object) {
         verifyTscWatch({
             scenario: "noEmit",
-            subScenario: "does not go in loop when watching when no files are emitted",
+            subScenario: `${outFile ? "outFile" : "multiFile"}/does not go in loop when watching when no files are emitted`,
             commandLineArgs: ["-b", "-w", "-verbose"],
-            sys: () => createWatchedSystem(
-                [
-                    { path: libFile.path, content: libContent },
-                    { path: `${projectRoot}/a.js`, content: "" },
-                    { path: `${projectRoot}/b.ts`, content: "" },
-                    { path: `${projectRoot}/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
-                ],
-                { currentDirectory: projectRoot }
-            ),
-            changes: [
+            sys: () =>
+                TestServerHost.createWatchedSystem({
+                    "/user/username/projects/myproject/a.js": "",
+                    "/user/username/projects/myproject/b.ts": "",
+                    "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({
+                        compilerOptions: {
+                            allowJs: true,
+                            noEmit: true,
+                            ...outFile,
+                        },
+                    }),
+                }, { currentDirectory: "/user/username/projects/myproject" }),
+            edits: [
                 {
                     caption: "No change",
-                    change: sys => sys.writeFile(`${projectRoot}/a.js`, sys.readFile(`${projectRoot}/a.js`)!),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
                     // build project
-                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "change",
-                    change: sys => sys.writeFile(`${projectRoot}/a.js`, "const x = 10;"),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, "const x = 10;"),
                     // build project
-                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
-            baselineIncremental: true
+            baselineIncremental: true,
         });
-    });
-}
+    }
+    verify();
+    verify({ outFile: "../out.js" });
+
+    forEachNoEmitTscWatch(["-b", "-verbose"]);
+});

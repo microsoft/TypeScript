@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts] ////
+
 //// [readonlyFloat32ArrayAssignableWithFloat32Array.ts]
 function update(b: Readonly<Float32Array>) {
     const c = copy(b);
@@ -15,11 +17,10 @@ function copy(a: Float32Array) {
 //// [readonlyFloat32ArrayAssignableWithFloat32Array.js]
 "use strict";
 function update(b) {
-    var c = copy(b);
+    const c = copy(b);
     add(c, c);
 }
-function add(a, b, c) {
-    if (c === void 0) { c = a; }
+function add(a, b, c = a) {
     c[0] = a[0] + b[0];
 }
 function copy(a) {

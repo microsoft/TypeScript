@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts] ////
+
 //// [reservedNamesInAliases.ts]
 interface I {}
 type any = I;
@@ -9,6 +11,7 @@ type object = I;
 
 
 //// [reservedNamesInAliases.js]
+"use strict";
 type;
 void ;
 I;

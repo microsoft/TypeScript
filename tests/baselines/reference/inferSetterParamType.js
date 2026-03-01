@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferSetterParamType.ts] ////
+
 //// [inferSetterParamType.ts]
 class Foo {
 
@@ -19,31 +21,18 @@ class Foo2 {
 
 
 //// [inferSetterParamType.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    get bar() {
+        return 0;
     }
-    Object.defineProperty(Foo.prototype, "bar", {
-        get: function () {
-            return 0;
-        },
-        set: function (n) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Foo;
-}());
-var Foo2 = /** @class */ (function () {
-    function Foo2() {
+    set bar(n) {
     }
-    Object.defineProperty(Foo2.prototype, "bar", {
-        get: function () {
-            return 0; // should be an error - can't coerce infered return type to match setter annotated type
-        },
-        set: function (n) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Foo2;
-}());
+}
+class Foo2 {
+    get bar() {
+        return 0; // should be an error - can't coerce infered return type to match setter annotated type
+    }
+    set bar(n) {
+    }
+}

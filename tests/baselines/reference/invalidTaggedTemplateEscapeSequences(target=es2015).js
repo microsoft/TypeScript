@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts] ////
+
 //// [invalidTaggedTemplateEscapeSequences.ts]
 function tag (str: any, ...args: any[]): any {
   return str
@@ -26,6 +28,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 
 
 //// [invalidTaggedTemplateEscapeSequences.js]
+"use strict";
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;

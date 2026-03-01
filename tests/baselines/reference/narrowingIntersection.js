@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingIntersection.ts] ////
+
 //// [narrowingIntersection.ts]
 // Somehow this being an intersection matters.
 type FooAndBaz = { foo: unknown } & { baz: unknown };
@@ -25,6 +27,7 @@ function test2(a: 0 | TrivialIntersection) {
 }
 
 //// [narrowingIntersection.js]
+"use strict";
 function test1(result) {
     if (result.err) {
         throw result.err;

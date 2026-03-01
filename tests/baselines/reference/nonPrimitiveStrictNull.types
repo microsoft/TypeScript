@@ -1,187 +1,277 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts] ////
+
+=== nonPrimitiveStrictNull.ts ===
 var a: object
 >a : object
+>  : ^^^^^^
 
 declare var b: object | null
 >b : object | null
->null : null
+>  : ^^^^^^^^^^^^^
 
 declare var c: object | undefined
 >c : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare var d: object | null | undefined
 >d : object | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var e: object | null
 >e : object | null
->null : null
+>  : ^^^^^^^^^^^^^
 
 a.toString; // error
 >a.toString : () => string
+>           : ^^^^^^      
 >a : object
+>  : ^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 a = undefined; // error
 >a = undefined : undefined
+>              : ^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 a = null; // error
 >a = null : null
+>         : ^^^^
 >a : object
->null : null
+>  : ^^^^^^
 
 a = b; // error
 >a = b : object | null
+>      : ^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >b : object | null
+>  : ^^^^^^^^^^^^^
 
 a = c; // error
 >a = c : object | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >c : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 a = d; // error
 >a = d : object | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >d : object | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 e = a; // ok
 >e = a : object
+>      : ^^^^^^
 >e : object | null
+>  : ^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 
 a = e; // ok
 >a = e : object
+>      : ^^^^^^
 >a : object
+>  : ^^^^^^
 >e : object
+>  : ^^^^^^
 
 if (typeof b !== 'object') {
 >typeof b !== 'object' : boolean
+>                      : ^^^^^^^
 >typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : object | null
+>  : ^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
     b.toString(); // error, never
 >b.toString() : any
+>             : ^^^
 >b.toString : any
+>           : ^^^
 >b : never
+>  : ^^^^^
 >toString : any
+>         : ^^^
 }
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
+>                      : ^^^^^^^
 >typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : object | null
+>  : ^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
     a = b; // error, b is not narrowed
 >a = b : object | null
+>      : ^^^^^^^^^^^^^
 >a : object
+>  : ^^^^^^
 >b : object | null
+>  : ^^^^^^^^^^^^^
 }
 
 if (typeof d === 'object') {
 >typeof d === 'object' : boolean
+>                      : ^^^^^^^
 >typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : object | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'object' : "object"
+>         : ^^^^^^^^
 
     b = d; // ok
 >b = d : object | null
+>      : ^^^^^^^^^^^^^
 >b : object | null
+>  : ^^^^^^^^^^^^^
 >d : object | null
+>  : ^^^^^^^^^^^^^
 
     d.toString(); // error, object | null
 >d.toString() : string
+>             : ^^^^^^
 >d.toString : () => string
+>           : ^^^^^^      
 >d : object | null
+>  : ^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 
 } else {
     d.toString(); // error, undefined
 >d.toString() : any
+>             : ^^^
 >d.toString : any
+>           : ^^^
 >d : undefined
+>  : ^^^^^^^^^
 >toString : any
+>         : ^^^
 }
 
 if (d == null) {
 >d == null : boolean
+>          : ^^^^^^^
 >d : object | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     d.toString(); // error, undefined | null
 >d.toString() : any
+>             : ^^^
 >d.toString : any
+>           : ^^^
 >d : null | undefined
+>  : ^^^^^^^^^^^^^^^^
 >toString : any
+>         : ^^^
 
 } else {
     d.toString(); // object
 >d.toString() : string
+>             : ^^^^^^
 >d.toString : () => string
+>           : ^^^^^^      
 >d : object
+>  : ^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 }
 
 if (d === null) {
 >d === null : boolean
+>           : ^^^^^^^
 >d : object | null | undefined
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     d.toString(); // error, null
 >d.toString() : any
+>             : ^^^
 >d.toString : any
+>           : ^^^
 >d : null
+>  : ^^^^
 >toString : any
+>         : ^^^
 
 } else {
     d.toString(); // error, object | undefined
 >d.toString() : string
+>             : ^^^^^^
 >d.toString : () => string
+>           : ^^^^^^      
 >d : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 }
 
 if (typeof d === 'undefined') {
 >typeof d === 'undefined' : boolean
+>                         : ^^^^^^^
 >typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : object | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'undefined' : "undefined"
+>            : ^^^^^^^^^^^
 
     d.toString(); // error, undefined
 >d.toString() : any
+>             : ^^^
 >d.toString : any
+>           : ^^^
 >d : undefined
+>  : ^^^^^^^^^
 >toString : any
+>         : ^^^
 
 } else {
     d.toString(); // error, object | null
 >d.toString() : string
+>             : ^^^^^^
 >d.toString : () => string
+>           : ^^^^^^      
 >d : object | null
+>  : ^^^^^^^^^^^^^
 >toString : () => string
+>         : ^^^^^^      
 }
 
 interface Proxy<T extends object> {}
 
 var x: Proxy<number>; // error
 >x : Proxy<number>
+>  : ^^^^^^^^^^^^^
 
 var y: Proxy<null>; // error
 >y : Proxy<null>
->null : null
+>  : ^^^^^^^^^^^
 
 var z: Proxy<undefined>; // error
 >z : Proxy<undefined>
+>  : ^^^^^^^^^^^^^^^^
 
 interface Blah {
   foo: number;
 >foo : number
+>    : ^^^^^^
 }
 
 var u: Proxy<Blah>; // ok
 >u : Proxy<Blah>
+>  : ^^^^^^^^^^^
 

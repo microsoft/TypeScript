@@ -1,9 +1,15 @@
-=== tests/cases/compiler/es6ClassTest9.ts ===
+//// [tests/cases/compiler/es6ClassTest9.ts] ////
+
+=== es6ClassTest9.ts ===
 declare class foo();
 >foo : foo
+>    : ^^^
 >() : any
+>   : ^^^
 > : any
+> : ^^^
 
 function foo() {}
 >foo : typeof foo
+>    : ^^^^^^^^^^
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @types: node
 // @declaration: true
 // @currentDirectory: /

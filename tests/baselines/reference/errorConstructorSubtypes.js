@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorConstructorSubtypes.ts] ////
+
 //// [errorConstructorSubtypes.ts]
 // In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
 interface ErrorConstructor {
@@ -12,6 +14,7 @@ x.captureStackTrace
 
 
 //// [errorConstructorSubtypes.js]
+"use strict";
 x = Error; // OK
 x = RangeError;
 new x().message;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializationsShouldNotAffectEachOther.ts] ////
+
 //// [specializationsShouldNotAffectEachOther.ts]
 interface Series  {
     data: string[];
@@ -20,9 +22,10 @@ function foo() {
 var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 
 //// [specializationsShouldNotAffectEachOther.js]
+"use strict";
 var series;
 function foo() {
-    var seriesExtent = function (series) { return null; };
+    var seriesExtent = (series) => null;
     var series2;
     series2.map(seriesExtent);
     return null;

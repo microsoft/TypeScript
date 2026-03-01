@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface I2 {
     value: string;
     doStuff: (t: string) => string;

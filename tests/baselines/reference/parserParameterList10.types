@@ -1,9 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList10.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList10.ts] ////
+
+=== parserParameterList10.ts ===
 class C {
 >C : C
+>  : ^
 
    foo(...bar = 0) { }
 >foo : (...bar?: number) => void
+>    : ^^^^   ^^^^^^^^^^^^^^^^^^
 >bar : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 }

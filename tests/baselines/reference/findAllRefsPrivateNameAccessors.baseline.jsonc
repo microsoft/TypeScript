@@ -1,1203 +1,777 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
 // class C {
-//     /*FIND ALL REFS*/get [|#foo|](){ return 1; }
-//     set [|#foo|](value: number){  }
+//     /*FIND ALL REFS*/<|get [|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) C.#foo: number",
-      "textSpan": {
-        "start": 18,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 103,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // class C {
+  //     /*FIND ALL REFS*/<|get [|#foo|](){ return 1; }|>
+  //     set #foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
 // class C {
-//     get /*FIND ALL REFS*/[|#foo|](){ return 1; }
-//     set [|#foo|](value: number){  }
+//     <|get /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) C.#foo: number",
-      "textSpan": {
-        "start": 18,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 103,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // class C {
+  //     <|get /*FIND ALL REFS*/[|#foo|](){ return 1; }|>
+  //     set #foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
 // class C {
-//     get [|#foo|](){ return 1; }
-//     /*FIND ALL REFS*/set [|#foo|](value: number){  }
+//     <|get [|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     /*FIND ALL REFS*/<|set [|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) C.#foo: number",
-      "textSpan": {
-        "start": 18,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 103,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // class C {
+  //     <|get [|#foo|](){ return 1; }|>
+  //     /*FIND ALL REFS*/set #foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
 // class C {
-//     get [|#foo|](){ return 1; }
-//     set /*FIND ALL REFS*/[|#foo|](value: number){  }
+//     <|get [|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     <|set /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) C.#foo: number",
-      "textSpan": {
-        "start": 18,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 103,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // class C {
+  //     <|get [|#foo|](){ return 1; }|>
+  //     set /*FIND ALL REFS*/#foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
 // class C {
-//     get [|#foo|](){ return 1; }
-//     set [|#foo|](value: number){  }
+//     <|get [|{| isWriteAccess: true |}#foo|](){ return 1; }|>
+//     <|set [|{| isWriteAccess: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this./*FIND ALL REFS*/[|#foo|]();
 //     }
 // }
 // class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
-//     }
-// }
-// class E {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) C.#foo: number",
-      "textSpan": {
-        "start": 18,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 14,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 23
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 42,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 103,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // class C {
+  //     <|get [|#foo|](){ return 1; }|>
+  //     set #foo(value: number){  }
+  //     constructor() {
+  //         this./*FIND ALL REFS*/#foo();
+  //     }
+  // }
+  // class D extends C {
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) C.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
-//     /*FIND ALL REFS*/get [|#foo|](){ return 1; }
-//     set [|#foo|](value: number){  }
+//     /*FIND ALL REFS*/<|get [|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) E.#foo: number",
-      "textSpan": {
-        "start": 225,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 221,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 225,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 221,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 253,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 249,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 310,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // --- (line: 11) skipped ---
+  //     }
+  // }
+  // class E {
+  //     /*FIND ALL REFS*/<|get [|#foo|](){ return 1; }|>
+  //     set #foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) E.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
-//     get /*FIND ALL REFS*/[|#foo|](){ return 1; }
-//     set [|#foo|](value: number){  }
+//     <|get /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     <|set [|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) E.#foo: number",
-      "textSpan": {
-        "start": 225,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 221,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 225,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 221,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 253,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 249,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 310,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // --- (line: 11) skipped ---
+  //     }
+  // }
+  // class E {
+  //     <|get /*FIND ALL REFS*/[|#foo|](){ return 1; }|>
+  //     set #foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) E.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
-//     get [|#foo|](){ return 1; }
-//     /*FIND ALL REFS*/set [|#foo|](value: number){  }
+//     <|get [|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     /*FIND ALL REFS*/<|set [|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) E.#foo: number",
-      "textSpan": {
-        "start": 225,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 221,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 225,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 221,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 253,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 249,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 310,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // --- (line: 11) skipped ---
+  //     }
+  // }
+  // class E {
+  //     <|get [|#foo|](){ return 1; }|>
+  //     /*FIND ALL REFS*/set #foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) E.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
-//     get [|#foo|](){ return 1; }
-//     set /*FIND ALL REFS*/[|#foo|](value: number){  }
+//     <|get [|{| isWriteAccess: true, isDefinition: true |}#foo|](){ return 1; }|>
+//     <|set /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this.[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) E.#foo: number",
-      "textSpan": {
-        "start": 225,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 221,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 225,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 221,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 253,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 249,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 310,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // --- (line: 11) skipped ---
+  //     }
+  // }
+  // class E {
+  //     <|get [|#foo|](){ return 1; }|>
+  //     set /*FIND ALL REFS*/#foo(value: number){  }
+  //     constructor() {
+  //         this.#foo();
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) E.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
-// class C {
-//     get #foo(){ return 1; }
-//     set #foo(value: number){  }
-//     constructor() {
-//         this.#foo();
-//     }
-// }
-// class D extends C {
-//     constructor() {
-//         super()
-//         this.#foo = 20;
+// --- (line: 11) skipped ---
 //     }
 // }
 // class E {
-//     get [|#foo|](){ return 1; }
-//     set [|#foo|](value: number){  }
+//     <|get [|{| isWriteAccess: true |}#foo|](){ return 1; }|>
+//     <|set [|{| isWriteAccess: true |}#foo|](value: number){  }|>
 //     constructor() {
 //         this./*FIND ALL REFS*/[|#foo|]();
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-      "kind": "property",
-      "name": "(property) E.#foo: number",
-      "textSpan": {
-        "start": 225,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "#foo",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 221,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 225,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 221,
-          "length": 23
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 253,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "contextSpan": {
-          "start": 249,
-          "length": 27
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 310,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsPrivateNameAccessors.ts ===
+  // --- (line: 11) skipped ---
+  //     }
+  // }
+  // class E {
+  //     <|get [|#foo|](){ return 1; }|>
+  //     set #foo(value: number){  }
+  //     constructor() {
+  //         this./*FIND ALL REFS*/#foo();
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) E.#foo: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "#foo",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

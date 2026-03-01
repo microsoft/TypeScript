@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitGetterSetter.ts] ////
+
 //// [objectLitGetterSetter.ts]
             var obj = {};
             Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
@@ -11,6 +13,7 @@
 
 
 //// [objectLitGetterSetter.js]
+"use strict";
 var obj = {};
 Object.defineProperty(obj, "accProperty", ({
     get: function () {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclaration21.ts] ////
+
 //// [ClassDeclaration21.ts]
 class C {
     0();
@@ -5,9 +7,7 @@ class C {
 }
 
 //// [ClassDeclaration21.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype[1] = function () { };
-    return C;
-}());
+"use strict";
+class C {
+    1() { }
+}

@@ -1,42 +1,61 @@
-=== tests/cases/compiler/f.ts ===
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule5.ts] ////
+
+=== f.ts ===
 /// <reference path="array.d.ts"/>
 import "array";
 
 let x = [1];
 >x : number[]
+>  : ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 let y = x.getA().x;
 >y : number
+>  : ^^^^^^
 >x.getA().x : number
+>           : ^^^^^^
 >x.getA() : import("A").A
+>         : ^^^^^^^^^^^^^
 >x.getA : () => import("A").A
+>       : ^^^^^^       ^^^  ^
 >x : number[]
+>  : ^^^^^^^^
 >getA : () => import("A").A
+>     : ^^^^^^       ^^^  ^
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/array.d.ts ===
+=== array.d.ts ===
 declare module "A" {
 >"A" : typeof import("A")
+>    : ^^^^^^^^^^^^^^^^^^
 
     class A { x: number; }
 >A : A
+>  : ^
 >x : number
+>  : ^^^^^^
 }
 
 declare module "array" {
 >"array" : typeof import("array")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     import {A} from "A";
 >A : typeof A
+>  : ^^^^^^^^
 
     global {
 >global : any
+>       : ^^^
 
         interface Array<T> {
             getA(): A;
 >getA : () => A
+>     : ^^^^^^ 
         }
     }
 }

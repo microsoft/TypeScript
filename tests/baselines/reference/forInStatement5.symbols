@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forInStatement5.ts ===
+//// [tests/cases/compiler/forInStatement5.ts] ////
+
+=== forInStatement5.ts ===
 var a: string;
 >a : Symbol(a, Decl(forInStatement5.ts, 0, 3))
 

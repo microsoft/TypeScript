@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLocalVariable3.ts] ////
+
 //// [duplicateLocalVariable3.ts]
 var x = 1;
 var x = 2; 
@@ -13,6 +15,7 @@ function f2() {
 }
 
 //// [duplicateLocalVariable3.js]
+"use strict";
 var x = 1;
 var x = 2;
 function f() {

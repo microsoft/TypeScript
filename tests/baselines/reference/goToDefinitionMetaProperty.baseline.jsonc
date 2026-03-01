@@ -1,0 +1,72 @@
+// === goToDefinition ===
+// === /a.ts ===
+// im/*GOTO DEF*/port.meta;
+// function f() { new.target; }
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// import.met/*GOTO DEF*/a;
+// function f() { new.target; }
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// import.meta;
+// function f() { n/*GOTO DEF*/ew.target; }
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// import.meta;
+// <|function [|f|]() { new.t/*GOTO DEF*/arget; }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "f",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// im/*GOTO DEF*/port.m;
+// class c { constructor() { new.target; } }
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// import.m;
+// class c { constructor() { n/*GOTO DEF*/ew.target; } }
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// import.m;
+// <|class [|c|] { constructor() { new.t/*GOTO DEF*/arget; } }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "c",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

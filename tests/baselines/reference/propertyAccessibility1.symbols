@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAccessibility1.ts ===
+//// [tests/cases/compiler/propertyAccessibility1.ts] ////
+
+=== propertyAccessibility1.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(propertyAccessibility1.ts, 0, 0))
 

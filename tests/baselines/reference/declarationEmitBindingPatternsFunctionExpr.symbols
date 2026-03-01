@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternsFunctionExpr.ts] ////
+
+=== declarationEmitBindingPatternsFunctionExpr.ts ===
+type Named = { name: string }
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+
+// Tempting to remove alias if unused 
+let notReferenced = ({ name: alias }: Named) => { }
+>notReferenced : Symbol(notReferenced, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 2, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 2, 22))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
+
+// Resons we can't remove aliases that are not used in the function signature: 
+
+// 1.Causes duplicate identifier if we remove alias
+const duplicateIndetifiers = ({ name: alias, name: alias2 }: Named) => { }
+>duplicateIndetifiers : Symbol(duplicateIndetifiers, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 7, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 7, 31))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+>alias2 : Symbol(alias2, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 7, 44))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
+
+const duplicateIndetifiers2 = (name: string, { name: alias }: Named) => { }
+>duplicateIndetifiers2 : Symbol(duplicateIndetifiers2, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 8, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 8, 31))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 8, 46))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
+
+const duplicateIndetifiers3 = ({ name: alias }: Named, { name: alias2 }: Named) => { }
+>duplicateIndetifiers3 : Symbol(duplicateIndetifiers3, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 9, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 9, 32))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 14))
+>alias2 : Symbol(alias2, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 9, 56))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 0, 0))
+
+let value = "";
+>value : Symbol(value, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 11, 3))
+
+// 2.Can change in meaning for typeof value if we remove alias
+const shadowedVariable = ({ value: alias }: { value: string }): typeof value => value;
+>shadowedVariable : Symbol(shadowedVariable, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 13, 5))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 13, 45))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 13, 27))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 13, 45))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 11, 3))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsFunctionExpr.ts, 11, 3))
+

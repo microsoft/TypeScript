@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of58.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of58.ts] ////
+
+=== for-of58.ts ===
 type X = { x: 'x' };
 >X : Symbol(X, Decl(for-of58.ts, 0, 0))
 >x : Symbol(x, Decl(for-of58.ts, 0, 10))

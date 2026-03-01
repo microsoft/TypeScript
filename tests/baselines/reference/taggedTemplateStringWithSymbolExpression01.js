@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringWithSymbolExpression01.ts] ////
+
 //// [taggedTemplateStringWithSymbolExpression01.ts]
 // taggedTemplateStringWithSymbolExpression01.ts
 
@@ -8,10 +10,7 @@ let result: number = foo`${x}`;
 
 
 //// [taggedTemplateStringWithSymbolExpression01.js]
+"use strict";
 // taggedTemplateStringWithSymbolExpression01.ts
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
-var x;
-var result = foo(__makeTemplateObject(["", ""], ["", ""]), x);
+let x;
+let result = foo `${x}`;

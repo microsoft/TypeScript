@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsTypeOnInterfaces.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsTypeOnInterfaces.ts] ////
+
+=== typeGuardOfFormIsTypeOnInterfaces.ts ===
 interface C1 {
 >C1 : Symbol(C1, Decl(typeGuardOfFormIsTypeOnInterfaces.ts, 0, 0))
 

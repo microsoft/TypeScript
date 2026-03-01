@@ -1,8 +1,0 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck9.ts(2,15): error TS2461: Type 'number | symbol | string[]' is not an array type.
-
-
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck9.ts (1 errors) ====
-    var union: string | string[] | number | symbol;
-    for (let v of union) { }
-                  ~~~~~
-!!! error TS2461: Type 'number | symbol | string[]' is not an array type.

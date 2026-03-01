@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/contextualIntersectionType.ts] ////
+
 //// [contextualIntersectionType.ts]
 var x: { a: (s: string) => string } & { b: (n: number) => number };
 x = {
@@ -7,8 +9,9 @@ x = {
 
 
 //// [contextualIntersectionType.js]
+"use strict";
 var x;
 x = {
-    a: function (s) { return s; },
-    b: function (n) { return n; }
+    a: s => s,
+    b: n => n
 };

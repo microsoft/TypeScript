@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/isolatedModulesConstEnum.ts] ////
+
+=== /foo.d.ts ===
+declare const enum EventName {
+>EventName : EventName
+>          : ^^^^^^^^^
+
+    FOO = 1,
+>FOO : EventName.FOO
+>    : ^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+    BAR = 2
+>BAR : EventName.BAR
+>    : ^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+}
+
+type E1 = {
+>E1 : E1
+>   : ^^
+
+    [EventName.FOO]: number;
+>[EventName.FOO] : number
+>                : ^^^^^^
+>EventName.FOO : EventName.FOO
+>              : ^^^^^^^^^^^^^
+>EventName : typeof EventName
+>          : ^^^^^^^^^^^^^^^^
+>FOO : EventName.FOO
+>    : ^^^^^^^^^^^^^
+
+    [EventName.BAR]: string;
+>[EventName.BAR] : string
+>                : ^^^^^^
+>EventName.BAR : EventName.BAR
+>              : ^^^^^^^^^^^^^
+>EventName : typeof EventName
+>          : ^^^^^^^^^^^^^^^^
+>BAR : EventName.BAR
+>    : ^^^^^^^^^^^^^
+
+};
+
+=== /bar.ts ===
+type E2 = {
+>E2 : E2
+>   : ^^
+
+    [EventName.FOO]: number;
+>[EventName.FOO] : number
+>                : ^^^^^^
+>EventName.FOO : EventName.FOO
+>              : ^^^^^^^^^^^^^
+>EventName : typeof EventName
+>          : ^^^^^^^^^^^^^^^^
+>FOO : EventName.FOO
+>    : ^^^^^^^^^^^^^
+
+    [EventName.BAR]: string;
+>[EventName.BAR] : string
+>                : ^^^^^^
+>EventName.BAR : EventName.BAR
+>              : ^^^^^^^^^^^^^
+>EventName : typeof EventName
+>          : ^^^^^^^^^^^^^^^^
+>BAR : EventName.BAR
+>    : ^^^^^^^^^^^^^
+
+};
+

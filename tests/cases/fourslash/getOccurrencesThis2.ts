@@ -23,7 +23,7 @@
 ////    }
 ////}
 ////
-////module m {
+////namespace m {
 ////    function f() {
 ////        this;
 ////        this;
@@ -140,4 +140,4 @@
 ////    }
 ////}
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

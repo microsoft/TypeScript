@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts] ////
+
 //// [anyAsGenericFunctionCall.ts]
 // any is considered an untyped function call
 // can be called except with type arguments which is an error
@@ -11,15 +13,13 @@ var c = x<C>(x);
 var d = x<any>(x);
 
 //// [anyAsGenericFunctionCall.js]
+"use strict";
 // any is considered an untyped function call
 // can be called except with type arguments which is an error
 var x;
 var a = x();
 var b = x('hello');
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = x(x);
 var d = x(x);

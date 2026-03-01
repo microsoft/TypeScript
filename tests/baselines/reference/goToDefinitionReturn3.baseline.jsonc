@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionReturn3.ts ===
+// class C {
+//     <|[|m|]() {
+//         /*GOTO DEF*/return 1;
+//     }|>
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "m",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

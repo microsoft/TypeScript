@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorOverloads2.ts ===
+//// [tests/cases/compiler/constructorOverloads2.ts] ////
+
+=== constructorOverloads2.ts ===
 class FooBase {
 >FooBase : Symbol(FooBase, Decl(constructorOverloads2.ts, 0, 0))
 

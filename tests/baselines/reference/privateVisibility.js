@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateVisibility.ts] ////
+
 //// [privateVisibility.ts]
 class Foo {
 	public pubMeth() {this.privMeth();}
@@ -13,7 +15,7 @@ f.privProp; // should not work
 f.pubMeth(); // should work
 f.pubProp; // should work
 
-module M {
+namespace M {
     export class C { public pub = 0; private priv = 1; }
     export var V = 0;
 }
@@ -27,15 +29,15 @@ c.priv; // should not work
 
 
 //// [privateVisibility.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.pubProp = 0;
         this.privProp = 0;
     }
-    Foo.prototype.pubMeth = function () { this.privMeth(); };
-    Foo.prototype.privMeth = function () { };
-    return Foo;
-}());
+    pubMeth() { this.privMeth(); }
+    privMeth() { }
+}
 var f = new Foo();
 f.privMeth(); // should not work
 f.privProp; // should not work
@@ -43,13 +45,12 @@ f.pubMeth(); // should work
 f.pubProp; // should work
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this.pub = 0;
             this.priv = 1;
         }
-        return C;
-    }());
+    }
     M.C = C;
     M.V = 0;
 })(M || (M = {}));

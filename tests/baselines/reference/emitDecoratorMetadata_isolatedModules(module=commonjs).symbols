@@ -1,19 +1,21 @@
-=== tests/cases/compiler/type1.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_isolatedModules.ts] ////
+
+=== type1.ts ===
 interface T1 {}
 >T1 : Symbol(T1, Decl(type1.ts, 0, 0))
 
 export type { T1 }
 >T1 : Symbol(T1, Decl(type1.ts, 1, 13))
 
-=== tests/cases/compiler/type2.ts ===
+=== type2.ts ===
 export interface T2 {}
 >T2 : Symbol(T2, Decl(type2.ts, 0, 0))
 
-=== tests/cases/compiler/class3.ts ===
+=== class3.ts ===
 export class C3 {}
 >C3 : Symbol(C3, Decl(class3.ts, 0, 0))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { T1 } from "./type1";
 >T1 : Symbol(T1, Decl(index.ts, 0, 8))
 

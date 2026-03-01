@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of48.ts] ////
+
 //// [for-of48.ts]
 var x: string, y: number;
 var array = [{ x: "", y: true }]
@@ -8,6 +10,7 @@ for ({x, y = E.x} of array) {
 }
 
 //// [for-of48.js]
+"use strict";
 var x, y;
 var array = [{ x: "", y: true }];
 var E;

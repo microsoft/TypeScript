@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts] ////
+
 //// [parserVariableDeclaration3.ts]
 function runTests() {
     var outfile = new Harness.Compiler.WriterAggregator()
@@ -7,6 +9,7 @@ function runTests() {
 }
 
 //// [parserVariableDeclaration3.js]
+"use strict";
 function runTests() {
     var outfile = new Harness.Compiler.WriterAggregator(), outerr = new Harness.Compiler.WriterAggregator(), compiler = new TypeScript.TypeScriptCompiler(outerr), code;
 }

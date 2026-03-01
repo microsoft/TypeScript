@@ -1,9 +1,11 @@
+//// [tests/cases/compiler/cloduleTest1.ts] ////
+
 //// [cloduleTest1.ts]
   declare function $(selector: string): $;  
   interface $ {
       addClass(className: string): $;
   }
-  module $ {
+  namespace $ {
     export interface AjaxSettings {
     }
     export function ajax(options: AjaxSettings) { }
@@ -12,6 +14,7 @@
 
 
 //// [cloduleTest1.js]
+"use strict";
 var $;
 (function ($) {
     function ajax(options) { }

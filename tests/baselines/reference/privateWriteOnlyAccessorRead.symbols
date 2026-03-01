@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts] ////
+
+=== privateWriteOnlyAccessorRead.ts ===
 class Test {
 >Test : Symbol(Test, Decl(privateWriteOnlyAccessorRead.ts, 0, 0))
 

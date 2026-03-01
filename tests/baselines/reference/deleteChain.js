@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts] ////
+
 //// [deleteChain.ts]
 declare const o1: undefined | { b: string };
 delete o1?.b;

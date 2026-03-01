@@ -1,6 +1,7 @@
+// @target: es2015
 // @declaration: true
 // @module: amd
-// @out: dist.js
+// @outFile: dist.js
 // @filename: Class.ts
 import { Configurable } from "./Configurable"
 

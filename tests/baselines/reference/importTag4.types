@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/importTag4.ts] ////
+
+=== /types.ts ===
+export interface Foo {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+
+=== /foo.js ===
+/**
+ * @import { Foo } from "./types"
+ */
+
+/**
+ * @import { Foo } from "./types"
+ */
+
+/**
+ * @param { Foo } foo
+ */
+function f(foo) {}
+>f : (foo: Foo) => void
+>  : ^   ^^^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+

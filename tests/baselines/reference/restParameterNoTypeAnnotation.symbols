@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParameterNoTypeAnnotation.ts ===
+//// [tests/cases/compiler/restParameterNoTypeAnnotation.ts] ////
+
+=== restParameterNoTypeAnnotation.ts ===
 function foo(...rest) {   
 >foo : Symbol(foo, Decl(restParameterNoTypeAnnotation.ts, 0, 0))
 >rest : Symbol(rest, Decl(restParameterNoTypeAnnotation.ts, 0, 13))

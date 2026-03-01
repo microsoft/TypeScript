@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseConstraintOfDecorator.ts ===
+//// [tests/cases/compiler/baseConstraintOfDecorator.ts] ////
+
+=== baseConstraintOfDecorator.ts ===
 export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
 >classExtender : Symbol(classExtender, Decl(baseConstraintOfDecorator.ts, 0, 0))
 >TFunction : Symbol(TFunction, Decl(baseConstraintOfDecorator.ts, 0, 30))

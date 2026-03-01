@@ -1,4 +1,6 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_unexpected2.ts] ////
+
 === /a.ts ===
+
 import "foo";
-No type information for this code.
-No type information for this code.
+

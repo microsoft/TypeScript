@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayConcat2.ts] ////
+
 //// [arrayConcat2.ts]
 var a: string[] = [];
 a.concat("hello", 'world');
@@ -9,6 +11,7 @@ b.concat('hello');
 
 
 //// [arrayConcat2.js]
+"use strict";
 var a = [];
 a.concat("hello", 'world');
 a.concat('Hello');

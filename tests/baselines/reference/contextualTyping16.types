@@ -1,13 +1,25 @@
-=== tests/cases/compiler/contextualTyping16.ts ===
+//// [tests/cases/compiler/contextualTyping16.ts] ////
+
+=== contextualTyping16.ts ===
 var foo: {id:number;} = {id:4}; foo = {id:5};
 >foo : { id: number; }
+>    : ^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >{id:4} : { id: number; }
+>       : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >4 : 4
+>  : ^
 >foo = {id:5} : { id: number; }
+>             : ^^^^^^^^^^^^^^^
 >foo : { id: number; }
+>    : ^^^^^^      ^^^
 >{id:5} : { id: number; }
+>       : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 

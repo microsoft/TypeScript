@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @noUncheckedIndexedAccess: true
 
@@ -42,6 +43,18 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
     x.toFixed(); // Should OK
     q.y.toFixed(); // Should OK
     q.z.toFixed(); // Should error
+}
+
+{
+    const { x, ...q } = numMapPoint;
+    x.
+    toFixed(); // Should OK
+
+    q.
+    y.toFixed(); // Should OK
+
+    q.
+    z.toFixed(); // Should error
 }
 
 

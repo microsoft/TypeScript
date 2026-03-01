@@ -1,36 +1,60 @@
-=== tests/cases/compiler/arithmeticOnInvalidTypes2.ts ===
+//// [tests/cases/compiler/arithmeticOnInvalidTypes2.ts] ////
+
+=== arithmeticOnInvalidTypes2.ts ===
 var obj = function f<T>(a: T, b: T) {
 >obj : <T>(a: T, b: T) => T
+>    : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >function f<T>(a: T, b: T) {    var z1 = a + b;    var z2 = a - b;    var z3 = a * b;    var z4 = a / b;    return a;} : <T>(a: T, b: T) => T
+>                                                                                                                      : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >f : <T>(a: T, b: T) => T
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     var z1 = a + b;
 >z1 : any
+>   : ^^^
 >a + b : any
+>      : ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     var z2 = a - b;
 >z2 : number
+>   : ^^^^^^
 >a - b : number
+>      : ^^^^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     var z3 = a * b;
 >z3 : number
+>   : ^^^^^^
 >a * b : number
+>      : ^^^^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     var z4 = a / b;
 >z4 : number
+>   : ^^^^^^
 >a / b : number
+>      : ^^^^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     return a;
 >a : T
+>  : ^
 
 };

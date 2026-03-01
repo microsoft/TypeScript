@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts] ////
+
 //// [parserUsingConstructorAsIdentifier.ts]
         function define(constructor, instanceMembers, staticMembers) {
             constructor = constructor || function () { };
@@ -40,6 +42,7 @@
         }
 
 //// [parserUsingConstructorAsIdentifier.js]
+"use strict";
 function define(constructor, instanceMembers, staticMembers) {
     constructor = constructor || function () { };
     PluginUtilities.Utilities.markSupportedForProcessing(constructor);

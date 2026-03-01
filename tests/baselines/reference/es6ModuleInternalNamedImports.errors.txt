@@ -1,15 +1,15 @@
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(26,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(26,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
+es6ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
 
 
-==== tests/cases/compiler/es6ModuleInternalNamedImports.ts (8 errors) ====
-    export module M {
+==== es6ModuleInternalNamedImports.ts (8 errors) ====
+    export namespace M {
         // variable
         export var M_V = 0;
         // interface
@@ -17,9 +17,9 @@ tests/cases/compiler/es6ModuleInternalNamedImports.ts(29,5): error TS1194: Expor
         //calss
         export class M_C { }
         // instantiated module
-        export module M_M { var x; }
+        export namespace M_M { var x; }
         // uninstantiated module
-        export module M_MU { }
+        export namespace M_MU { }
         // function
         export function M_F() { }
         // enum

@@ -1,4 +1,7 @@
-=== tests/cases/compiler/emptyEnum.ts ===
+//// [tests/cases/compiler/emptyEnum.ts] ////
+
+=== emptyEnum.ts ===
 enum E {
 >E : E
+>  : ^
 }

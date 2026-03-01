@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts] ////
+
 //// [exhaustiveSwitchStatements1.ts]
 function f1(x: 1 | 2): string {
     if (!!true) {
@@ -264,7 +266,7 @@ function f1(x) {
     }
 }
 function f2(x) {
-    var z;
+    let z;
     switch (x) {
         case 1:
             z = 10;
@@ -305,7 +307,7 @@ function g(e) {
         }
 }
 function area(s) {
-    var area;
+    let area;
     switch (s.kind) {
         case "square":
             area = s.size * s.size;
@@ -323,8 +325,8 @@ function area(s) {
     return area;
 }
 function areaWrapped(s) {
-    var area;
-    area = (function () {
+    let area;
+    area = (() => {
         switch (s.kind) {
             case "square": return s.size * s.size;
             case "rectangle": return s.width * s.height;
@@ -341,7 +343,7 @@ var MyEnum;
     MyEnum[MyEnum["B"] = 1] = "B";
 })(MyEnum || (MyEnum = {}));
 function thisGivesError(e) {
-    var s;
+    let s;
     switch (e) {
         case MyEnum.A:
             s = "it was A";
@@ -353,7 +355,7 @@ function thisGivesError(e) {
     return s;
 }
 function good1(e) {
-    var s;
+    let s;
     switch (e) {
         case MyEnum.A:
             s = "it was A";
@@ -379,8 +381,8 @@ var Level;
     Level[Level["One"] = 0] = "One";
     Level[Level["Two"] = 1] = "Two";
 })(Level || (Level = {}));
-var doSomethingWithLevel = function (level) {
-    var next;
+const doSomethingWithLevel = (level) => {
+    let next;
     switch (level) {
         case Level.One:
             next = Level.Two;
@@ -421,7 +423,7 @@ function withoutDefault(s1, s2) {
 }
 // Repro from #20823
 function test4(value) {
-    var x;
+    let x;
     switch (value) {
         case 1:
             x = "one";
@@ -447,9 +449,9 @@ function expression() {
 }
 // Repro from #34840
 function foo() {
-    var foo = 0;
+    const foo = 0;
     while (true) {
-        var stats = foo;
+        const stats = foo;
         switch (stats) {
             case 1: break;
             case 2: break;

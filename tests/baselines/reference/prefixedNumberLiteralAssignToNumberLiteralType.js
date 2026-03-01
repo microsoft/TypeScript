@@ -1,8 +1,11 @@
+//// [tests/cases/compiler/prefixedNumberLiteralAssignToNumberLiteralType.ts] ////
+
 //// [prefixedNumberLiteralAssignToNumberLiteralType.ts]
 let x: 1 = +1;
 
 let y: -1 = -1;
 
 //// [prefixedNumberLiteralAssignToNumberLiteralType.js]
-var x = +1;
-var y = -1;
+"use strict";
+let x = +1;
+let y = -1;

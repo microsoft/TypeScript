@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/regularExpressionGroupNameSuggestions.ts] ////
+
+=== regularExpressionGroupNameSuggestions.ts ===
+const regex = /(?<foo>)\k<Foo>/;
+>regex : RegExp
+>      : ^^^^^^
+>/(?<foo>)\k<Foo>/ : RegExp
+>                  : ^^^^^^
+

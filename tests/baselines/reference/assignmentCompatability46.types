@@ -1,22 +1,39 @@
-=== tests/cases/compiler/assignmentCompatability46.ts ===
+//// [tests/cases/compiler/assignmentCompatability46.ts] ////
+
+=== assignmentCompatability46.ts ===
 declare function fn(x: never): void;
 >fn : (x: never) => void
+>   : ^ ^^     ^^^^^    
 >x : never
+>  : ^^^^^
 
 fn([1, 2, 3])
 >fn([1, 2, 3]) : void
+>              : ^^^^
 >fn : (x: never) => void
+>   : ^ ^^     ^^^^^    
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 fn({ a: 1, b: 2 })
 >fn({ a: 1, b: 2 }) : void
+>                   : ^^^^
 >fn : (x: never) => void
+>   : ^ ^^     ^^^^^    
 >{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 

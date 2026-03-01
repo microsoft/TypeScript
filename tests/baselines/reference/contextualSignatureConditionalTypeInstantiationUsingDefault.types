@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/contextualSignatureConditionalTypeInstantiationUsingDefault.ts] ////
+
+=== contextualSignatureConditionalTypeInstantiationUsingDefault.ts ===
+// repro #46310
+
+export interface TypegenDisabled {
+  "@@xstate/typegen": false;
+>"@@xstate/typegen" : false
+>                   : ^^^^^
+>false : false
+>      : ^^^^^
+}
+export interface TypegenEnabled {
+  "@@xstate/typegen": true;
+>"@@xstate/typegen" : true
+>                   : ^^^^
+>true : true
+>     : ^^^^
+}
+
+type ActionFunction<TEvent extends { type: string }> = (event: TEvent) => void;
+>ActionFunction : ActionFunction<TEvent>
+>               : ^^^^^^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>event : TEvent
+>      : ^^^^^^
+
+declare function createMachine<
+>createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
+>              : ^          ^^^^^^^^^                                ^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^    
+
+  TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled
+>(
+  config: {
+>config : { types?: TTypesMeta; }
+>       : ^^^^^^^^^^          ^^^
+
+    types?: TTypesMeta;
+>types : TTypesMeta | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+
+  },
+  implementations: TTypesMeta extends TypegenEnabled
+>implementations : TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
+
+    ? ActionFunction<{ type: "test" }>
+>type : "test"
+>     : ^^^^^^
+
+    : ActionFunction<{ type: string }>
+>type : string
+>     : ^^^^^^
+
+): void;
+
+createMachine({}, (ev) => {
+>createMachine({}, (ev) => {  ev.type; // should be `string`}) : void
+>                                                              : ^^^^
+>createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
+>              : ^          ^^^^^^^^^                                ^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^    
+>{} : {}
+>   : ^^
+>(ev) => {  ev.type; // should be `string`} : (ev: { type: string; }) => void
+>                                           : ^  ^^^^^^^^^^      ^^^^^^^^^^^^
+>ev : { type: string; }
+>   : ^^^^^^^^      ^^^
+
+  ev.type; // should be `string`
+>ev.type : string
+>        : ^^^^^^
+>ev : { type: string; }
+>   : ^^^^^^^^      ^^^
+>type : string
+>     : ^^^^^^
+
+});
+

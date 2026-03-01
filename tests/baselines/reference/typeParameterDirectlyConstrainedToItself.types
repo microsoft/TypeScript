@@ -1,23 +1,30 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterDirectlyConstrainedToItself.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterDirectlyConstrainedToItself.ts] ////
+
+=== typeParameterDirectlyConstrainedToItself.ts ===
 // all of the below should be errors
 
 class C<T extends T> { } 
 >C : C<T>
+>  : ^^^^
 
 class C2<T, U extends U> { } 
 >C2 : C2<T, U>
+>   : ^^^^^^^^
 
 interface I<T extends T> { }
 interface I2<T, U extends U> { }
 
 function f<T extends T>() { }
 >f : <T>() => void
+>  : ^ ^^^^^^^^^^^
 
 function f2<T, U extends U>() { }
 >f2 : <T, U>() => void
+>   : ^ ^^ ^^^^^^^^^^^
 
 var a: {
 >a : { <T>(): void; <T, U>(): void; }
+>  : ^^^ ^^^^^    ^^^ ^^ ^^^^^    ^^^
 
     <T extends T>(): void;
     <T, U extends U>(): void;
@@ -25,9 +32,13 @@ var a: {
 
 var b = <T extends T>() => { }
 >b : <T>() => void
+>  : ^ ^^^^^^^^^^^
 ><T extends T>() => { } : <T>() => void
+>                       : ^ ^^^^^^^^^^^
 
 var b2 = <T, U extends U>() => { }
 >b2 : <T, U>() => void
+>   : ^ ^^ ^^^^^^^^^^^
 ><T, U extends U>() => { } : <T, U>() => void
+>                          : ^ ^^ ^^^^^^^^^^^
 

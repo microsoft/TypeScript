@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes3.ts] ////
+
 //// [discriminatedUnionTypes3.ts]
 // Repro from #44435
 
@@ -20,7 +22,7 @@ if (example.err === undefined) {
 //// [discriminatedUnionTypes3.js]
 "use strict";
 // Repro from #44435
-var example = {};
+const example = {};
 if (example.err === undefined) {
     example.property; // true
 }

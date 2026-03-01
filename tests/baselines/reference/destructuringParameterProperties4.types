@@ -1,93 +1,153 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts] ////
+
+=== destructuringParameterProperties4.ts ===
 class C1<T, U, V> {
 >C1 : C1<T, U, V>
+>   : ^^^^^^^^^^^
 
     constructor(private k: T, protected [a, b, c]: [T,U,V]) {
 >k : T
+>  : ^
 >a : T
+>  : ^
 >b : U
+>  : ^
 >c : V
+>  : ^
 
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
 >(b === undefined && c === undefined) || (this.b === undefined && this.c === undefined) : boolean
+>                                                                                       : ^^^^^^^
 >(b === undefined && c === undefined) : boolean
+>                                     : ^^^^^^^
 >b === undefined && c === undefined : boolean
+>                                   : ^^^^^^^
 >b === undefined : boolean
+>                : ^^^^^^^
 >b : U
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c === undefined : boolean
+>                : ^^^^^^^
 >c : V
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 >(this.b === undefined && this.c === undefined) : boolean
+>                                               : ^^^^^^^
 >this.b === undefined && this.c === undefined : boolean
+>                                             : ^^^^^^^
 >this.b === undefined : boolean
+>                     : ^^^^^^^
 >this.b : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >b : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >this.c === undefined : boolean
+>                     : ^^^^^^^
 >this.c : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >c : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
             this.a = a || k;
 >this.a = a || k : T
+>                : ^
 >this.a : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >a : any
+>  : ^^^
 >a || k : T
+>       : ^
 >a : T
+>  : ^
 >k : T
+>  : ^
         }
     }
 
     public getA() {
 >getA : () => any
+>     : ^^^^^^^^^
 
         return this.a
 >this.a : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >a : any
+>  : ^^^
     }
 
     public getB() {
 >getB : () => any
+>     : ^^^^^^^^^
 
         return this.b
 >this.b : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >b : any
+>  : ^^^
     }
 
     public getC() {
 >getC : () => any
+>     : ^^^^^^^^^
 
         return this.c;
 >this.c : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >c : any
+>  : ^^^
     }
 }
 
 class C2 extends C1<number, string, boolean> {
 >C2 : C2
+>   : ^^
 >C1 : C1<number, string, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     public doSomethingWithSuperProperties() {
 >doSomethingWithSuperProperties : () => string
+>                               : ^^^^^^^^^^^^
 
         return `${this.a} ${this.b} ${this.c}`;
 >`${this.a} ${this.b} ${this.c}` : string
+>                                : ^^^^^^
 >this.a : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >a : any
+>  : ^^^
 >this.b : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >b : any
+>  : ^^^
 >this.c : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >c : any
+>  : ^^^
     }
 }
 

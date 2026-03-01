@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es6, dom
 interface A { a: A }
 declare let a: A;
@@ -16,7 +17,7 @@ oub.b
 oub.b.b
 oub.b.a.n.a.n.a
 
-let xhr: XMLHttpRequest;
+declare let xhr: XMLHttpRequest;
 const out2 = foo(xhr);
 out2.responseXML
 out2.responseXML.activeElement.className.length

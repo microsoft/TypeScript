@@ -1,7 +1,11 @@
-=== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration2_es6.ts ===
+//// [tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration2_es6.ts] ////
+
+=== MemberFunctionDeclaration2_es6.ts ===
 class C {
 >C : C
+>  : ^
 
    public * foo() { }
 >foo : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -1,0 +1,31 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.ts ===
+// [||]export function foo() { return "foo"; }
+// import("./f/*GOTO DEF*/oo")
+// var x = import("./foo")
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./foo",
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.ts ===
+// [||]export function foo() { return "foo"; }
+// import("./foo")
+// var x = import("./fo/*GOTO DEF*/o")
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./foo",
+    "unverified": false
+   }
+  ]

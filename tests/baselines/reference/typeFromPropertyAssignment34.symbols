@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/file1.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment34.ts] ////
+
+=== file1.js ===
 var N = {};
 >N : Symbol(N, Decl(file1.js, 0, 3), Decl(file1.js, 0, 11), Decl(file2.js, 0, 0), Decl(file2.js, 0, 19))
 
@@ -7,7 +9,7 @@ N.commands = {};
 >N : Symbol(N, Decl(file1.js, 0, 3), Decl(file1.js, 0, 11), Decl(file2.js, 0, 0), Decl(file2.js, 0, 19))
 >commands : Symbol(N.commands, Decl(file1.js, 0, 11), Decl(file2.js, 0, 2), Decl(file2.js, 1, 2))
 
-=== tests/cases/conformance/salsa/file2.js ===
+=== file2.js ===
 N.commands.a = 111;
 >N.commands.a : Symbol(N.commands.a, Decl(file2.js, 0, 0))
 >N.commands : Symbol(N.commands, Decl(file1.js, 0, 11), Decl(file2.js, 0, 2), Decl(file2.js, 1, 2))

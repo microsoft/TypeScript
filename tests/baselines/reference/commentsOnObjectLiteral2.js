@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnObjectLiteral2.ts] ////
+
 //// [commentsOnObjectLiteral2.ts]
 var Person = makeClass( 
    { 
@@ -13,6 +15,7 @@ var Person = makeClass(
 );
 
 //// [commentsOnObjectLiteral2.js]
+"use strict";
 var Person = makeClass({
     /**
      This is just another way to define a constructor.
@@ -21,5 +24,5 @@ var Person = makeClass({
      */
     initialize: function (name) {
         this.name = name;
-    } /* trailing comment 1*/
+    } /* trailing comment 1*/,
 });

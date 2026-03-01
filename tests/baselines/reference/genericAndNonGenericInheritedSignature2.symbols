@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts ===
+//// [tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts] ////
+
+=== genericAndNonGenericInheritedSignature2.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(genericAndNonGenericInheritedSignature2.ts, 0, 0))
 

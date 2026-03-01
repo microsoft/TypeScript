@@ -1,0 +1,49 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions4.ts] ////
+
+=== thisTypeInFunctions4.ts ===
+type WrongObject = {value: number};
+>WrongObject : Symbol(WrongObject, Decl(thisTypeInFunctions4.ts, 0, 0))
+>value : Symbol(value, Decl(thisTypeInFunctions4.ts, 0, 20))
+
+type CorrectObject = {name: string};
+>CorrectObject : Symbol(CorrectObject, Decl(thisTypeInFunctions4.ts, 0, 35))
+>name : Symbol(name, Decl(thisTypeInFunctions4.ts, 1, 22))
+
+declare function isCorrect(obj: any): obj is CorrectObject
+>isCorrect : Symbol(isCorrect, Decl(thisTypeInFunctions4.ts, 1, 36))
+>obj : Symbol(obj, Decl(thisTypeInFunctions4.ts, 3, 27))
+>obj : Symbol(obj, Decl(thisTypeInFunctions4.ts, 3, 27))
+>CorrectObject : Symbol(CorrectObject, Decl(thisTypeInFunctions4.ts, 0, 35))
+
+declare function callsCallback(cb: (name: string)=>void)
+>callsCallback : Symbol(callsCallback, Decl(thisTypeInFunctions4.ts, 3, 58))
+>cb : Symbol(cb, Decl(thisTypeInFunctions4.ts, 5, 31))
+>name : Symbol(name, Decl(thisTypeInFunctions4.ts, 5, 36))
+
+function problemFunction(this: CorrectObject | WrongObject): void {
+>problemFunction : Symbol(problemFunction, Decl(thisTypeInFunctions4.ts, 5, 56))
+>this : Symbol(this, Decl(thisTypeInFunctions4.ts, 7, 25))
+>CorrectObject : Symbol(CorrectObject, Decl(thisTypeInFunctions4.ts, 0, 35))
+>WrongObject : Symbol(WrongObject, Decl(thisTypeInFunctions4.ts, 0, 0))
+
+    //check type
+    if (!isCorrect(this)) return;
+>isCorrect : Symbol(isCorrect, Decl(thisTypeInFunctions4.ts, 1, 36))
+>this : Symbol(this, Decl(thisTypeInFunctions4.ts, 7, 25))
+
+    callsCallback((name)=>{
+>callsCallback : Symbol(callsCallback, Decl(thisTypeInFunctions4.ts, 3, 58))
+>name : Symbol(name, Decl(thisTypeInFunctions4.ts, 11, 19))
+
+        this.name = name; //should not error
+>this.name : Symbol(name, Decl(thisTypeInFunctions4.ts, 1, 22))
+>this : Symbol(this, Decl(thisTypeInFunctions4.ts, 7, 25))
+>name : Symbol(name, Decl(thisTypeInFunctions4.ts, 1, 22))
+>name : Symbol(name, Decl(thisTypeInFunctions4.ts, 11, 19))
+
+        type T = typeof this;
+>T : Symbol(T, Decl(thisTypeInFunctions4.ts, 12, 25))
+>this : Symbol(this, Decl(thisTypeInFunctions4.ts, 7, 25))
+
+    });
+}

@@ -1,47 +1,69 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 import {default as _fs} from "fs";
 >default : any
+>        : ^^^
 >_fs : any
+>    : ^^^
 
 _fs.readFile;
 >_fs.readFile : any
+>             : ^^^
 >_fs : any
+>    : ^^^
 >readFile : any
+>         : ^^^
 
 import * as fs from "fs";
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
+>            : ^^^
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 import {default as _fs} from "fs";
 >default : any
+>        : ^^^
 >_fs : any
+>    : ^^^
 
 _fs.readFile;
 >_fs.readFile : any
+>             : ^^^
 >_fs : any
+>    : ^^^
 >readFile : any
+>         : ^^^
 
 import * as fs from "fs";
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
+>            : ^^^
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
-=== tests/cases/conformance/node/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : any
+>     : ^^^
 
 declare module "tslib" {
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     export {};
     // intentionally missing all helpers

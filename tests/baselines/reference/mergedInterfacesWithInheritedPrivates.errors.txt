@@ -1,13 +1,13 @@
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts(13,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
+mergedInterfacesWithInheritedPrivates.ts(13,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
   Types have separate declarations of a private property 'x'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts(19,7): error TS2420: Class 'E' incorrectly implements interface 'A'.
+mergedInterfacesWithInheritedPrivates.ts(19,7): error TS2420: Class 'E' incorrectly implements interface 'A'.
   Property 'x' is private in type 'A' but not in type 'E'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts(26,11): error TS2341: Property 'x' is private and only accessible within class 'C'.
+mergedInterfacesWithInheritedPrivates.ts(26,11): error TS2341: Property 'x' is private and only accessible within class 'C'.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts (3 errors) ====
+==== mergedInterfacesWithInheritedPrivates.ts (3 errors) ====
     class C {
-        private x: number;
+        private x!: number;
     }
     
     interface A extends C {
@@ -22,21 +22,21 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
           ~
 !!! error TS2420: Class 'D' incorrectly implements interface 'A'.
 !!! error TS2420:   Types have separate declarations of a private property 'x'.
-        private x: number;
-        y: string;
-        z: string;
+        private x!: number;
+        y!: string;
+        z!: string;
     }
     
     class E implements A { // error
           ~
 !!! error TS2420: Class 'E' incorrectly implements interface 'A'.
 !!! error TS2420:   Property 'x' is private in type 'A' but not in type 'E'.
-        x: number;
-        y: string;
-        z: string;
+        x!: number;
+        y!: string;
+        z!: string;
     }
     
-    var a: A;
+    declare var a: A;
     var r = a.x; // error
               ~
 !!! error TS2341: Property 'x' is private and only accessible within class 'C'.

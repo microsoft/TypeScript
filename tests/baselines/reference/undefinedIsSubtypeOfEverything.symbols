@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/undefinedIsSubtypeOfEverything.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/undefinedIsSubtypeOfEverything.ts] ////
+
+=== undefinedIsSubtypeOfEverything.ts ===
 // undefined is a subtype of every other types, no errors expected below
 
 class Base {
@@ -40,7 +42,7 @@ class D1A extends Base {
 
     foo: String;
 >foo : Symbol(D1A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 18, 24))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 }
 
 
@@ -86,7 +88,7 @@ class D4 extends Base {
 
     foo: RegExp;
 >foo : Symbol(D4.foo, Decl(undefinedIsSubtypeOfEverything.ts, 41, 23))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 class D5 extends Base {
@@ -95,7 +97,7 @@ class D5 extends Base {
 
     foo: Date;
 >foo : Symbol(D5.foo, Decl(undefinedIsSubtypeOfEverything.ts, 45, 23))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 
@@ -166,7 +168,7 @@ class D11 extends Base {
 function f() { }
 >f : Symbol(f, Decl(undefinedIsSubtypeOfEverything.ts, 78, 1), Decl(undefinedIsSubtypeOfEverything.ts, 80, 16))
 
-module f {
+namespace f {
 >f : Symbol(f, Decl(undefinedIsSubtypeOfEverything.ts, 78, 1), Decl(undefinedIsSubtypeOfEverything.ts, 80, 16))
 
     export var bar = 1;
@@ -186,7 +188,7 @@ class c { baz: string }
 >c : Symbol(c, Decl(undefinedIsSubtypeOfEverything.ts, 86, 1), Decl(undefinedIsSubtypeOfEverything.ts, 89, 23))
 >baz : Symbol(c.baz, Decl(undefinedIsSubtypeOfEverything.ts, 89, 9))
 
-module c {
+namespace c {
 >c : Symbol(c, Decl(undefinedIsSubtypeOfEverything.ts, 86, 1), Decl(undefinedIsSubtypeOfEverything.ts, 89, 23))
 
     export var bar = 1;

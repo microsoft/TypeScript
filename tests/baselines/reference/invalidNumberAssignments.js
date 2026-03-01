@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/number/invalidNumberAssignments.ts] ////
+
 //// [invalidNumberAssignments.ts]
 var x = 1;
 
@@ -15,7 +17,7 @@ var f: I = x;
 var g: { baz: string } = 1;
 var g2: { 0: number } = 1;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = x;
 
 function i<T>(a: T) {
@@ -24,16 +26,14 @@ function i<T>(a: T) {
 i = x;
 
 //// [invalidNumberAssignments.js]
+"use strict";
 var x = 1;
 var a = x;
 var b = x;
 var c = x;
 var d = x;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var e = x;
 var f = x;
 var g = 1;

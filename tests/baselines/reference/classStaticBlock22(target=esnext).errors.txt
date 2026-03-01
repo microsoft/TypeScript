@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(7,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(29,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(32,12): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(4,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(7,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(13,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(16,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(19,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(29,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+classStaticBlock22.ts(32,12): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (7 errors) ====
+==== classStaticBlock22.ts (7 errors) ====
     let await: "any";
     class C {
       static {

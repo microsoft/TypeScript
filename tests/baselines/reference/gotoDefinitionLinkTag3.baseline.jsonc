@@ -1,0 +1,22 @@
+// === getDefinitionAtPosition ===
+// === /a.ts ===
+// enum E {
+//     /** {@link /*GOTO DEF POS*/Foo} */
+//     Foo
+// }
+// <|interface [|Foo|] {
+//     foo: E.Foo;
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

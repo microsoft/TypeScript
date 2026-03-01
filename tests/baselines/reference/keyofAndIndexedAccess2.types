@@ -1,339 +1,569 @@
-=== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts ===
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+
+=== keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
->f1 : (obj: {    a: number;    b: 0 | 1;    c: string;}, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
+>f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
+>   : ^   ^^                                   ^^  ^^   ^^  ^^         ^^  ^^               ^^^^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : 0 | 1
+>  : ^^^^^
 >c : string
+>  : ^^^^^^
 >k0 : "a"
+>   : ^^^
 >k1 : "a" | "b"
+>   : ^^^^^^^^^
 >k2 : "a" | "b" | "c"
+>   : ^^^^^^^^^^^^^^^
 
     obj[k0] = 1;
 >obj[k0] = 1 : 1
+>            : ^
 >obj[k0] : number
+>        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
+>   : ^^^
 >1 : 1
+>  : ^
 
     obj[k0] = 2;
 >obj[k0] = 2 : 2
+>            : ^
 >obj[k0] : number
+>        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
+>   : ^^^
 >2 : 2
+>  : ^
 
     obj[k0] = 'x';  // Error
 >obj[k0] = 'x' : "x"
+>              : ^^^
 >obj[k0] : number
+>        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
+>   : ^^^
 >'x' : "x"
+>    : ^^^
 
     obj[k1] = 1;
 >obj[k1] = 1 : 1
+>            : ^
 >obj[k1] : 0 | 1
+>        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k1 : "a" | "b"
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
     obj[k1] = 2;    // Error
 >obj[k1] = 2 : 2
+>            : ^
 >obj[k1] : 0 | 1
+>        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k1 : "a" | "b"
+>   : ^^^^^^^^^
 >2 : 2
+>  : ^
 
     obj[k1] = 'x';  // Error
 >obj[k1] = 'x' : "x"
+>              : ^^^
 >obj[k1] : 0 | 1
+>        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k1 : "a" | "b"
+>   : ^^^^^^^^^
 >'x' : "x"
+>    : ^^^
 
     obj[k2] = 1;    // Error
 >obj[k2] = 1 : 1
+>            : ^
 >obj[k2] : never
+>        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
+>   : ^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     obj[k2] = 2;    // Error
 >obj[k2] = 2 : 2
+>            : ^
 >obj[k2] : never
+>        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
+>   : ^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
     obj[k2] = 'x';  // Error
 >obj[k2] = 'x' : "x"
+>              : ^^^
 >obj[k2] : never
+>        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
+>   : ^^^^^^^^^^^^^^^
 >'x' : "x"
+>    : ^^^
 }
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
->f2 : <T extends { [key: string]: number; }>(a: {    x: number;    y: number;}, b: { [key: string]: number; }, c: T, k: keyof T) => void
+>f2 : <T extends { [key: string]: number; }>(a: { x: number; y: number; }, b: { [key: string]: number; }, c: T, k: keyof T) => void
+>   : ^ ^^^^^^^^^                          ^^ ^^                         ^^ ^^                          ^^ ^^ ^^ ^^       ^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >c : T
+>  : ^
 >k : keyof T
+>  : ^^^^^^^
 
     a = b;  // Error, index signature in source doesn't imply properties are present
 >a = b : { [key: string]: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a = c;  // Error, index signature in source doesn't imply properties are present
 >a = c : T
+>      : ^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >c : T
+>  : ^
 
     b = a;
 >b = a : { x: number; y: number; }
+>      : ^^^^^      ^^^^^      ^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
     b = c;
 >b = c : T
+>      : ^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : T
+>  : ^
 
     c = a;  // Error, constraint on target doesn't imply any properties or signatures
 >c = a : { x: number; y: number; }
+>      : ^^^^^      ^^^^^      ^^^
 >c : T
+>  : ^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
     c = b;  // Error, constraint on target doesn't imply any properties or signatures
 >c = b : { [key: string]: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : T
+>  : ^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a.x;
 >a.x : number
+>    : ^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
     b.x;
 >b.x : number
+>    : ^^^^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     c.x;
 >c.x : number
+>    : ^^^^^^
 >c : T
+>  : ^
 >x : number
+>  : ^^^^^^
 
     c[k];
 >c[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >c : T
+>  : ^
 >k : keyof T
+>  : ^^^^^^^
 
     a.x = 1;
 >a.x = 1 : 1
+>        : ^
 >a.x : number
+>    : ^^^^^^
 >a : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     b.x = 1;
 >b.x = 1 : 1
+>        : ^
 >b.x : number
+>    : ^^^^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     c.x = 1;  // Error, cannot write to index signature through constraint
 >c.x = 1 : 1
+>        : ^
 >c.x : any
+>    : ^^^
 >c : T
+>  : ^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     c[k] = 1; // Error, cannot write to index signature through constraint
 >c[k] = 1 : 1
+>         : ^
 >c[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >c : T
+>  : ^
 >k : keyof T
+>  : ^^^^^^^
 >1 : 1
+>  : ^
 }
 
 function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
 >f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >k : K
+>  : ^
 
     a = b;  // Error, index signature doesn't imply properties are present
 >a = b : { [key: string]: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b = a;
 >b = a : { [P in K]: number; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 
     a[k];
 >a[k] : { [P in K]: number; }[K]
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >k : K
+>  : ^
 
     a[k] = 1;
 >a[k] = 1 : 1
+>         : ^
 >a[k] : { [P in K]: number; }[K]
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >k : K
+>  : ^
 >1 : 1
+>  : ^
 }
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
->f3b : <K extends string>(a: { [P in K]: number; }, b: { [x: string]: number; }, k: K) => void
+>f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
+>    : ^ ^^^^^^^^^      ^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : K
+>  : ^
 
     a = b;  // Error, index signature doesn't imply properties are present
 >a = b : { [x: string]: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     b = a;
 >b = a : { [P in K]: number; }
+>      : ^^^ ^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { [P in K]: number; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^
 }
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
->f4 : <K extends string>(a: number, b: number) => void
+>f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
+>   : ^ ^^^^^^^^^      ^^ ^^                             ^^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >key : string
+>    : ^^^^^^
 >b : number
+>  : ^^^^^^
 
   a = b;
 >a = b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
   b = a;
 >b = a : number
+>      : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 }
 
 type Item = { a: string, b: number };
->Item : { a: string; b: number; }
+>Item : Item
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
 >f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
+>    : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^   ^^ ^^  ^^      ^^  ^^          ^^  ^^       ^^  ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 >k1 : string
+>   : ^^^^^^
 >k2 : keyof Item
+>   : ^^^^^^^^^^
 >k3 : keyof T
+>   : ^^^^^^^
 >k4 : K
+>   : ^
 
   obj[k1] = 123;  // Error
 >obj[k1] = 123 : 123
+>              : ^^^
 >obj[k1] : any
+>        : ^^^
 >obj : T
+>    : ^
 >k1 : string
+>   : ^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k2] = 123;  // Error
 >obj[k2] = 123 : 123
+>              : ^^^
 >obj[k2] : never
+>        : ^^^^^
 >obj : T
+>    : ^
 >k2 : keyof Item
+>   : ^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k3] = 123;  // Error
 >obj[k3] = 123 : 123
+>              : ^^^
 >obj[k3] : T[keyof T]
+>        : ^^^^^^^^^^
 >obj : T
+>    : ^
 >k3 : keyof T
+>   : ^^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k4] = 123;  // Error
 >obj[k4] = 123 : 123
+>              : ^^^
 >obj[k4] : T[K]
+>        : ^^^^
 >obj : T
+>    : ^
 >k4 : K
+>   : ^
 >123 : 123
+>    : ^^^
 }
 
 type Dict = Record<string, number>;
->Dict : { [x: string]: number; }
+>Dict : Dict
+>     : ^^^^
 
 function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
->f11 : <K extends string>(obj: Dict, k1: keyof Dict, k2: K) => void
+>f11 : <K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) => void
+>    : ^ ^^^^^^^^^          ^^   ^^    ^^  ^^          ^^  ^^ ^^^^^^^^^
 >obj : Dict
+>    : ^^^^
 >k1 : string
+>   : ^^^^^^
 >k2 : K
+>   : ^
 
   obj.foo = 123;
 >obj.foo = 123 : 123
+>              : ^^^
 >obj.foo : number
+>        : ^^^^^^
 >obj : Dict
+>    : ^^^^
 >foo : number
+>    : ^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k1] = 123;
 >obj[k1] = 123 : 123
+>              : ^^^
 >obj[k1] : number
+>        : ^^^^^^
 >obj : Dict
+>    : ^^^^
 >k1 : string
+>   : ^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k2] = 123;
 >obj[k2] = 123 : 123
+>              : ^^^
 >obj[k2] : number
+>        : ^^^^^^
 >obj : Dict
+>    : ^^^^
 >k2 : K
+>   : ^
 >123 : 123
+>    : ^^^
 }
 
 function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
 >f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
+>    : ^ ^^^^^^^^^              ^^ ^^^^^^^^^       ^^   ^^ ^^  ^^          ^^  ^^       ^^  ^^ ^^^^^^^^^
 >obj : T
+>    : ^
 >k1 : string
+>   : ^^^^^^
 >k2 : keyof T
+>   : ^^^^^^^
 >k3 : K
+>   : ^
 
   obj.foo = 123;  // Error
 >obj.foo = 123 : 123
+>              : ^^^
 >obj.foo : any
+>        : ^^^
 >obj : T
+>    : ^
 >foo : any
+>    : ^^^
 >123 : 123
+>    : ^^^
 
   obj[k1] = 123;  // Error
 >obj[k1] = 123 : 123
+>              : ^^^
 >obj[k1] : any
+>        : ^^^
 >obj : T
+>    : ^
 >k1 : string
+>   : ^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k2] = 123;  // Error
 >obj[k2] = 123 : 123
+>              : ^^^
 >obj[k2] : T[keyof T]
+>        : ^^^^^^^^^^
 >obj : T
+>    : ^
 >k2 : keyof T
+>   : ^^^^^^^
 >123 : 123
+>    : ^^^
 
   obj[k3] = 123;  // Error
 >obj[k3] = 123 : 123
+>              : ^^^
 >obj[k3] : T[K]
+>        : ^^^^
 >obj : T
+>    : ^
 >k3 : K
+>   : ^
 >123 : 123
+>    : ^^^
 }
 
 // Repro from #27895
@@ -341,69 +571,105 @@ function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict
 export interface Entity {
     id: number | string;
 >id : string | number
+>   : ^^^^^^^^^^^^^^^
 }
 
 export type IdOf<E extends Entity> = E['id'];
 >IdOf : IdOf<E>
+>     : ^^^^^^^
 
 export interface EntityState<E extends Entity> {
     ids: IdOf<E>[];
 >ids : IdOf<E>[]
+>    : ^^^^^^^^^
 
     entities: { [key: string]: E, [key: number]: E };
 >entities : { [key: string]: E; [key: number]: E; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 >key : number
+>    : ^^^^^^
 }
 
 
 export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >getAllEntities : <E extends Entity>(state: EntityState<E>) => E[]
+>               : ^ ^^^^^^^^^      ^^     ^^              ^^^^^   
 >state : EntityState<E>
+>      : ^^^^^^^^^^^^^^
 
     const { ids, entities } = state;
 >ids : IdOf<E>[]
+>    : ^^^^^^^^^
 >entities : { [key: string]: E; [key: number]: E; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : EntityState<E>
+>      : ^^^^^^^^^^^^^^
 
     return ids.map(id => entities[id]);
 >ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[IdOf<E>][]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ids.map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >ids : IdOf<E>[]
+>    : ^^^^^^^^^
 >map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >id => entities[id] : (id: IdOf<E>) => { [key: string]: E; [key: number]: E; }[IdOf<E>]
+>                   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : IdOf<E>
+>   : ^^^^^^^
 >entities[id] : { [key: string]: E; [key: number]: E; }[IdOf<E>]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entities : { [key: string]: E; [key: number]: E; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : IdOf<E>
+>   : ^^^^^^^
 }
 
 export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
 >getEntity : <E extends Entity>(id: IdOf<E>, state: EntityState<E>) => E | undefined
+>          : ^ ^^^^^^^^^      ^^  ^^       ^^     ^^              ^^^^^             
 >id : IdOf<E>
+>   : ^^^^^^^
 >state : EntityState<E>
+>      : ^^^^^^^^^^^^^^
 
     const { ids, entities } = state;
 >ids : IdOf<E>[]
+>    : ^^^^^^^^^
 >entities : { [key: string]: E; [key: number]: E; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : EntityState<E>
+>      : ^^^^^^^^^^^^^^
 
     if (!ids.includes(id)) {
 >!ids.includes(id) : boolean
+>                  : ^^^^^^^
 >ids.includes(id) : boolean
->ids.includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
+>                 : ^^^^^^^
+>ids.includes : (searchElement: IdOf<E>, fromIndex?: number) => boolean
+>             : ^             ^^^^^^^^^^^         ^^^      ^^^^^       
 >ids : IdOf<E>[]
->includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
+>    : ^^^^^^^^^
+>includes : (searchElement: IdOf<E>, fromIndex?: number) => boolean
+>         : ^             ^^^^^^^^^^^         ^^^      ^^^^^       
 >id : IdOf<E>
+>   : ^^^^^^^
 
         return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 
     return entities[id];
 >entities[id] : { [key: string]: E; [key: number]: E; }[IdOf<E>]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entities : { [key: string]: E; [key: number]: E; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : IdOf<E>
+>   : ^^^^^^^
 }
 
 // Repro from #30603
@@ -411,116 +677,172 @@ export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>):
 interface Type {
     a: 123;
 >a : 123
+>  : ^^^
 
     b: "some string";
 >b : "some string"
+>  : ^^^^^^^^^^^^^
 }
 
 function get123<K extends keyof Type>(): Type[K] {
 >get123 : <K extends keyof Type>() => Type[K]
+>       : ^ ^^^^^^^^^          ^^^^^^^       
 
     return 123;  // Error
 >123 : 123
+>    : ^^^
 }
 
 // Repro from #30920
 
 type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
 >StrictExtract : StrictExtract<T, U>
+>              : ^^^^^^^^^^^^^^^^^^^
 
 type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
 >StrictExclude : StrictExclude<T, U>
+>              : ^^^^^^^^^^^^^^^^^^^
 
 type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 >A : A<T>
+>  : ^^^^
 
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 >B : B<T, V>
+>  : ^^^^^^^
 
 // Repros from #30938
 
 function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
->fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T['elements'][number]) => void) => void
+>fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T["elements"][number]) => void) => void
+>   : ^ ^^^^^^^^^                                                           ^^     ^^ ^^  ^^                                        ^^^^^^^^^
 >elements : string[]
+>         : ^^^^^^^^
 >elements : number[]
+>         : ^^^^^^^^
 >param : T
->cb : (element: T['elements'][number]) => void
+>      : ^
+>cb : (element: T["elements"][number]) => void
+>   : ^       ^^                     ^^^^^    
 >element : T["elements"][number]
+>        : ^^^^^^^^^^^^^^^^^^^^^
 
     cb(param.elements[0]);
 >cb(param.elements[0]) : void
+>                      : ^^^^
 >cb : (element: T["elements"][number]) => void
+>   : ^       ^^                     ^^^^^    
 >param.elements[0] : string | number
+>                  : ^^^^^^^^^^^^^^^
 >param.elements : string[] | number[]
->param : { elements: string[]; } | { elements: number[]; }
+>               : ^^^^^^^^^^^^^^^^^^^
+>param : { elements: Array<string>; } | { elements: Array<number>; }
+>      : ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^             ^^^
 >elements : string[] | number[]
+>         : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
->fn2 : <T extends string[]>(param: T, cb: (element: T[number]) => void) => void
+>fn2 : <T extends Array<string>>(param: T, cb: (element: T[number]) => void) => void
+>    : ^ ^^^^^^^^^             ^^     ^^ ^^  ^^                            ^^^^^^^^^
 >param : T
+>      : ^
 >cb : (element: T[number]) => void
+>   : ^       ^^         ^^^^^    
 >element : T[number]
+>        : ^^^^^^^^^
 
     cb(param[0]);
 >cb(param[0]) : void
+>             : ^^^^
 >cb : (element: T[number]) => void
+>   : ^       ^^         ^^^^^    
 >param[0] : string
+>         : ^^^^^^
 >param : T
+>      : ^
 >0 : 0
+>  : ^
 }
 
 // Repro from #31149
 
 function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
->fn3 : <T extends readonly string[]>(param: T, cb: (element: T[number]) => void) => void
+>fn3 : <T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) => void
+>    : ^ ^^^^^^^^^                     ^^     ^^ ^^  ^^                            ^^^^^^^^^
 >param : T
+>      : ^
 >cb : (element: T[number]) => void
+>   : ^       ^^         ^^^^^    
 >element : T[number]
+>        : ^^^^^^^^^
 
     cb(param[0]);
 >cb(param[0]) : void
+>             : ^^^^
 >cb : (element: T[number]) => void
+>   : ^       ^^         ^^^^^    
 >param[0] : string
+>         : ^^^^^^
 >param : T
+>      : ^
 >0 : 0
+>  : ^
 }
 
 function fn4<K extends number>() {
 >fn4 : <K extends number>() => void
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
     let x: Array<string>[K] = 'abc';
 >x : string[][K]
+>  : ^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 
     let y: ReadonlyArray<string>[K] = 'abc';
 >y : (readonly string[])[K]
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 }
 
 // Repro from #31439 and #31691
 
 export class c {
 >c : c
+>  : ^
 
   [x: string]: string;
 >x : string
+>  : ^^^^^^
 
   constructor() {
     this.a = "b";
 >this.a = "b" : "b"
+>             : ^^^
 >this.a : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >a : string
+>  : ^^^^^^
 >"b" : "b"
+>    : ^^^
 
     this["a"] = "b";
 >this["a"] = "b" : "b"
+>                : ^^^
 >this["a"] : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >"a" : "a"
+>    : ^^^
 >"b" : "b"
+>    : ^^^
   }
 }
 
@@ -528,47 +850,73 @@ export class c {
 
 type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
 >Foo : Foo<T>
+>    : ^^^^^^
 >key : string
+>    : ^^^^^^
 
 type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
 >Bar : Bar<T>
+>    : ^^^^^^
 >key : string
+>    : ^^^^^^
 
 type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
 >Baz : Baz<T, Q>
+>    : ^^^^^^^^^
 
 type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
 >Qux : Qux<T, Q>
+>    : ^^^^^^^^^
 
 // Repro from #32038
 
 const actions = ['resizeTo', 'resizeBy'] as const;
 >actions : readonly ["resizeTo", "resizeBy"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['resizeTo', 'resizeBy'] as const : readonly ["resizeTo", "resizeBy"]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['resizeTo', 'resizeBy'] : readonly ["resizeTo", "resizeBy"]
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'resizeTo' : "resizeTo"
+>           : ^^^^^^^^^^
 >'resizeBy' : "resizeBy"
+>           : ^^^^^^^^^^
 
 for (const action of actions) {
 >action : "resizeTo" | "resizeBy"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >actions : readonly ["resizeTo", "resizeBy"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	window[action] = (x, y) => {
 >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
+>                                                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >window[action] : ((width: number, height: number) => void) & ((width: number, height: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
+>               : ^^     ^^      ^^      ^^      ^^^^^    ^^^^^^     ^^      ^^      ^^      ^^^^^    ^^^^^^ ^^      ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^ ^^      ^^^^^    ^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >action : "resizeTo" | "resizeBy"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >(x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
+>                                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 		window[action](x, y);
 >window[action](x, y) : void
+>                     : ^^^^
 >window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((width: number, height: number) => void) & ((width: number, height: number) => void))
+>               : ^^^ ^^      ^^ ^^      ^^^^^    ^^^^^^ ^^      ^^ ^^      ^^^^^    ^^^^^^^^     ^^      ^^      ^^      ^^^^^    ^^^^^^     ^^      ^^      ^^      ^^^^^    ^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >action : "resizeTo" | "resizeBy"
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 	}
 }
 

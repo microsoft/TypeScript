@@ -1,19 +1,33 @@
-=== tests/cases/compiler/restIntersection.ts ===
+//// [tests/cases/compiler/restIntersection.ts] ////
+
+=== restIntersection.ts ===
 var intersection: { x: number, y: number } & { w: string, z: string };
 >intersection : { x: number; y: number; } & { w: string; z: string; }
+>             : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >w : string
+>  : ^^^^^^
 >z : string
+>  : ^^^^^^
 
 var rest1: { y: number, w: string, z: string };
 >rest1 : { y: number; w: string; z: string; }
+>      : ^^^^^      ^^^^^      ^^^^^      ^^^
 >y : number
+>  : ^^^^^^
 >w : string
+>  : ^^^^^^
 >z : string
+>  : ^^^^^^
 
 var {x, ...rest1 } = intersection;
 >x : number
+>  : ^^^^^^
 >rest1 : { y: number; w: string; z: string; }
+>      : ^^^^^      ^^^^^      ^^^^^      ^^^
 >intersection : { x: number; y: number; } & { w: string; z: string; }
+>             : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 

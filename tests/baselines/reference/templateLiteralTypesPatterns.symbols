@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts] ////
+
+=== templateLiteralTypesPatterns.ts ===
 type RequiresLeadingSlash = `/${string}`;
 >RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
 
@@ -484,4 +486,43 @@ export abstract class BB {
 >id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
     }
 }
+
+// repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
+>conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 200, 1))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 203, 24))
+
+conversionTest("testDowncast");
+>conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 200, 1))
+
+function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
+>conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 204, 31))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 205, 25))
+
+conversionTest2("testDowncast");
+>conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 204, 31))
+
+function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+>conversionTest3 : Symbol(conversionTest3, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 207, 25))
+
+conversionTest3("testDowncast");
+>conversionTest3 : Symbol(conversionTest3, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+
+function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+>conversionTest4 : Symbol(conversionTest4, Decl(templateLiteralTypesPatterns.ts, 208, 32))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 209, 25))
+
+conversionTest4("testDowncast");
+>conversionTest4 : Symbol(conversionTest4, Decl(templateLiteralTypesPatterns.ts, 208, 32))
+
+function foo(str: `${`a${string}` & `${string}a`}Test`) {}
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 210, 32))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 212, 13))
+
+foo("abaTest"); // ok
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 210, 32))
+
+foo("abcTest"); // error
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 210, 32))
 

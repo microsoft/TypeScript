@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx ===
+//// [tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx] ////
+
+=== jsxAndTypeAssertion.tsx ===
 declare var createElement: any;
 >createElement : Symbol(createElement, Decl(jsxAndTypeAssertion.tsx, 0, 11))
 

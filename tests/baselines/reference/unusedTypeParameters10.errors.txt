@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameters10.ts(1,11): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParameters10.ts(1,11): error TS6133: 'T' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameters10.ts (1 errors) ====
+==== unusedTypeParameters10.ts (1 errors) ====
     type Alias<T> = { };
               ~~~
 !!! error TS6133: 'T' is declared but its value is never read.

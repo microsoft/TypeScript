@@ -1,9 +1,12 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit1.ts] ////
+
 //// [symbolDeclarationEmit1.ts]
 class C {
     [Symbol.toPrimitive]: number;
 }
 
 //// [symbolDeclarationEmit1.js]
+"use strict";
 class C {
 }
 Symbol.toPrimitive;

@@ -1,55 +1,78 @@
-=== tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts ===
+//// [tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts] ////
+
+=== declarationEmitClassMixinLocalClassDeclaration.ts ===
 export type AnyFunction<Result = any> = (...input: any[]) => Result
 >AnyFunction : AnyFunction<Result>
+>            : ^^^^^^^^^^^^^^^^^^^
 >input : any[]
+>      : ^^^^^
 
 export type AnyConstructor<Instance extends object = object, Static extends object = object> =
 >AnyConstructor : AnyConstructor<Instance, Static>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     (new (...input: any[]) => Instance) & Static
 >input : any[]
+>      : ^^^^^
 
 
 type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T extends AnyFunction<infer M> ? M : never
->MixinHelperFunc : <A extends AnyConstructor<object, object>, T>(required: [A], arg: T) => T extends AnyFunction<infer M> ? M : never
+>MixinHelperFunc : MixinHelperFunc
+>                : ^^^^^^^^^^^^^^^
 >required : [A]
+>         : ^^^
 >arg : T
+>    : ^
 
 
 export const Mixin: MixinHelperFunc = null as any
 >Mixin : MixinHelperFunc
+>      : ^^^^^^^^^^^^^^^
 >null as any : any
->null : null
 
 
 export class Base {}
 >Base : Base
+>     : ^^^^
 
 
 export class XmlElement2 extends Mixin(
 >XmlElement2 : XmlElement2
+>            : ^^^^^^^^^^^
 >Mixin(    [Base],    (base: AnyConstructor<Base, typeof Base>) => {        class XmlElement2 extends base {            num: number = 0        }        return XmlElement2;    }) : XmlElement2
+>                                                                                                                                                                                 : ^^^^^^^^^^^
 >Mixin : MixinHelperFunc
+>      : ^^^^^^^^^^^^^^^
 
     [Base],
 >[Base] : [typeof Base]
+>       : ^^^^^^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
     (base: AnyConstructor<Base, typeof Base>) => {
 >(base: AnyConstructor<Base, typeof Base>) => {        class XmlElement2 extends base {            num: number = 0        }        return XmlElement2;    } : (base: AnyConstructor<Base, typeof Base>) => typeof XmlElement2
+>                                                                                                                                                           : ^    ^^                                 ^^^^^^^^^^^^^^^^^^^^^^^
 >base : AnyConstructor<Base, typeof Base>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : typeof Base
+>     : ^^^^^^^^^^^
 
         class XmlElement2 extends base {
 >XmlElement2 : XmlElement2
+>            : ^^^^^^^^^^^
 >base : Base
+>     : ^^^^
 
             num: number = 0
 >num : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
         }
         return XmlElement2;
 >XmlElement2 : typeof XmlElement2
+>            : ^^^^^^^^^^^^^^^^^^
 
     }) { }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localClassesInLoop_ES6.ts] ////
+
 //// [localClassesInLoop_ES6.ts]
 declare function use(a: any);
 
@@ -11,6 +13,7 @@ for (let x = 0; x < 2; ++x) {
 use(data[0]() === data[1]());
 
 //// [localClassesInLoop_ES6.js]
+"use strict";
 "use strict";
 var data = [];
 for (let x = 0; x < 2; ++x) {

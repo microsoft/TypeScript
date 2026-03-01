@@ -1,6 +1,29 @@
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/workspaces/solution/project/src/index.ts]
+import hello from "./index.json"
+export default hello.hello
+
+
+//// [/home/src/workspaces/solution/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -14,178 +37,145 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/src/index.json]
-{"hello":"world"}
-
-//// [/src/src/index.ts]
-import hello from "./index.json"
-
-export default hello.hello
-
-//// [/src/tsconfig_withFiles.json]
+//// [/home/src/workspaces/solution/project/src/index.json]
 {
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "src/index.ts", "src/hello.json"
-  ]
-}
-
-//// [/src/tsconfig_withInclude.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "include": [
-    "src/**/*"
-  ]
-}
-
-//// [/src/tsconfig_withIncludeAndFiles.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "src/hello.json"
-  ],
-  "include": [
-    "src/**/*"
-  ]
-}
-
-//// [/src/tsconfig_withIncludeOfJson.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "include": [
-    "src/**/*", "src/**/*.json"
-  ]
+  "hello": "world"
 }
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --b project --v --explainFiles --listEmittedFiles
 Output::
-/lib/tsc --b /src/tsconfig_withIncludeOfJson.json --v --explainFiles
-[[90m12:00:09 AM[0m] Projects in this build: 
-    * src/tsconfig_withIncludeOfJson.json
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * project/tsconfig.json
 
-[[90m12:00:10 AM[0m] Project 'src/tsconfig_withIncludeOfJson.json' is out of date because output file 'src/dist/tsconfig_withIncludeOfJson.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:11 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-lib/lib.d.ts
-  Default library for target 'es3'
-src/src/index.json
-  Imported via "./index.json" from file 'src/src/index.ts'
-  Matched by include pattern 'src/**/*.json' in 'src/tsconfig_withIncludeOfJson.json'
-src/src/index.ts
-  Matched by include pattern 'src/**/*' in 'src/tsconfig_withIncludeOfJson.json'
-exitCode:: ExitStatus.Success
+[96mproject/tsconfig.json[0m:[93m4[0m:[93m25[0m - [91merror[0m[90m TS5107: [0mOption 'moduleResolution=node10' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m4[0m     "moduleResolution": "node",
+[7m [0m [91m                        ~~~~~~[0m
+
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.json
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE: /home/src/workspaces/solution/project/dist/src/index.d.ts
+TSFILE: /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
+project/src/index.json
+  Imported via "./index.json" from file 'project/src/index.ts'
+  Matched by include pattern 'src/**/*.json' in 'project/tsconfig.json'
+project/src/index.ts
+  Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
+
+Found 1 error.
 
 
-//// [/src/dist/src/index.d.ts]
-declare const _default: string;
-export default _default;
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/home/src/workspaces/solution/project/dist/src/index.json]
+{
+    "hello": "world"
+}
 
 
-//// [/src/dist/src/index.js]
+//// [/home/src/workspaces/solution/project/dist/src/index.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-var index_json_1 = __importDefault(require("./index.json"));
-exports["default"] = index_json_1["default"].hello;
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_json_1 = __importDefault(require("./index.json"));
+exports.default = index_json_1.default.hello;
 
 
-//// [/src/dist/src/index.json]
-{ "hello": "world" }
+//// [/home/src/workspaces/solution/project/dist/src/index.d.ts]
+declare const _default: string;
+export default _default;
 
 
-//// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}",{"version":"-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello","signature":"-1680156224-declare const _default: string;\r\nexport default _default;\r\n"}],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts"},"version":"FakeTSVersion"}
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo]
+{"fileNames":["../../../../tslibs/ts/lib/lib.es2025.full.d.ts","../src/index.json","../src/index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}",{"version":"-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n","signature":"6785192742-declare const _default: string;\nexport default _default;\n"}],"root":[2,3],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./src/index.d.ts","version":"FakeTSVersion"}
 
-//// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "../src/index.json",
-      "../src/index.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../src/index.json"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+  "fileNames": [
+    "../../../../tslibs/ts/lib/lib.es2025.full.d.ts",
+    "../src/index.json",
+    "../src/index.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../src/index.json"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
+      "original": {
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../src/index.json": {
-        "version": "-2379406821-{\"hello\":\"world\"}",
-        "signature": "-2379406821-{\"hello\":\"world\"}"
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../src/index.json": {
+      "version": "6651571919-{\n  \"hello\": \"world\"\n}",
+      "signature": "6651571919-{\n  \"hello\": \"world\"\n}"
+    },
+    "../src/index.ts": {
+      "original": {
+        "version": "-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n",
+        "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
       },
-      "../src/index.ts": {
-        "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
-        "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
-      }
-    },
-    "options": {
-      "allowSyntheticDefaultImports": true,
-      "composite": true,
-      "esModuleInterop": true,
-      "module": 1,
-      "outDir": "./",
-      "skipDefaultLibCheck": true
-    },
-    "referencedMap": {
-      "../src/index.ts": [
-        "../src/index.json"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "../src/index.json",
-      "../src/index.ts"
-    ],
-    "latestChangedDtsFile": "./src/index.d.ts"
+      "version": "-19435552038-import hello from \"./index.json\"\nexport default hello.hello\n",
+      "signature": "6785192742-declare const _default: string;\nexport default _default;\n"
+    }
   },
+  "root": [
+    [
+      2,
+      "../src/index.json"
+    ],
+    [
+      3,
+      "../src/index.ts"
+    ]
+  ],
+  "options": {
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "module": 1,
+    "outDir": "./",
+    "skipDefaultLibCheck": true
+  },
+  "referencedMap": {
+    "../src/index.ts": [
+      "../src/index.json"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../tslibs/ts/lib/lib.es2025.full.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/index.json",
+      "not cached or not changed"
+    ],
+    [
+      "../src/index.ts",
+      "not cached or not changed"
+    ]
+  ],
+  "latestChangedDtsFile": "./src/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1109
+  "size": 1076
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

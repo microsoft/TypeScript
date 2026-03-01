@@ -1,71 +1,108 @@
-=== tests/cases/conformance/salsa/webpackLibNormalModule.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment6.ts] ////
+
+=== webpackLibNormalModule.js ===
 class C {
 >C : C
+>  : ^
 
     /** @param {number} x */
     constructor(x) {
 >x : number
+>  : ^^^^^^
 
         this.x = x
 >this.x = x : number
+>           : ^^^^^^
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >x : number
+>  : ^^^^^^
 
         this.exports = [x]
 >this.exports = [x] : number[]
+>                   : ^^^^^^^^
 >this.exports : any
 >this : this
+>     : ^^^^
 >exports : any
+>        : ^^^
 >[x] : number[]
+>    : ^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
     /** @param {number} y */
     m(y) {
 >m : (y: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 
         return this.x + y
 >this.x + y : number
+>           : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
 }
 function exec() {
 >exec : () => number[]
+>     : ^^^^^^^^^^^^^^
 
     const module = new C(12);
 >module : C
+>       : ^
 >new C(12) : C
+>          : ^
 >C : typeof C
+>  : ^^^^^^^^
 >12 : 12
+>   : ^^
 
     return module.exports; // should be fine because `module` is defined locally
 >module.exports : number[]
+>               : ^^^^^^^^
 >module : C
+>       : ^
 >exports : number[]
+>        : ^^^^^^^^
 }
 
 function tricky() {
 >tricky : () => () => number[]
+>       : ^^^^^^^^^^^^^^^^^^^^
 
     // (a trickier variant of what webpack does)
     const module = new C(12);
 >module : C
+>       : ^
 >new C(12) : C
+>          : ^
 >C : typeof C
+>  : ^^^^^^^^
 >12 : 12
+>   : ^^
 
     return () => {
 >() => {        return module.exports;    } : () => number[]
+>                                           : ^^^^^^^^^^^^^^
 
         return module.exports;
 >module.exports : number[]
+>               : ^^^^^^^^
 >module : C
+>       : ^
 >exports : number[]
+>        : ^^^^^^^^
     }
 }
 

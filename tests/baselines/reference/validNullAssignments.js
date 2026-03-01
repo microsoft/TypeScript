@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/null/validNullAssignments.ts] ////
+
 //// [validNullAssignments.ts]
 var a: number = null;
 var b: boolean = null;
@@ -20,7 +22,7 @@ var g: I;
 g = null; // ok
 I = null; // error
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = null; // error
 
 var h: { f(): void } = null;
@@ -31,6 +33,7 @@ function i<T>(a: T) {
 i = null; // error
 
 //// [validNullAssignments.js]
+"use strict";
 var a = null;
 var b = null;
 var c = null;
@@ -42,11 +45,8 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 E.A = null; // error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var f;
 f = null; // ok
 C = null; // error

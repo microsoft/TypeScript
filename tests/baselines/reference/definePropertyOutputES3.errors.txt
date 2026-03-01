@@ -1,9 +1,0 @@
-error TS5048: Option 'useDefineForClassFields' cannot be specified when option 'target' is 'ES3'.
-
-
-!!! error TS5048: Option 'useDefineForClassFields' cannot be specified when option 'target' is 'ES3'.
-==== tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyOutputES3.ts (0 errors) ====
-    class A {
-        a = 12
-    }
-    

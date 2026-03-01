@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationRestParamJsDocFunction.ts] ////
+
 //// [_apply.js]
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`
@@ -22,10 +24,11 @@ function apply(func, thisArg, ...args) {
 
 export default apply;
 
+
 //// [apply.js]
 define("_apply", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     /**
      * A faster alternative to `Function#apply`, this function invokes `func`
      * with the `this` binding of `thisArg` and the arguments of `args`.
@@ -36,11 +39,7 @@ define("_apply", ["require", "exports"], function (require, exports) {
      * @param {...*} args The arguments to invoke `func` with.
      * @returns {*} Returns the result of `func`.
      */
-    function apply(func, thisArg) {
-        var args = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            args[_i - 2] = arguments[_i];
-        }
+    function apply(func, thisArg, ...args) {
         var length = args.length;
         switch (length) {
             case 0: return func.call(thisArg);
@@ -50,5 +49,5 @@ define("_apply", ["require", "exports"], function (require, exports) {
         }
         return func.apply(thisArg, args);
     }
-    exports["default"] = apply;
+    exports.default = apply;
 });

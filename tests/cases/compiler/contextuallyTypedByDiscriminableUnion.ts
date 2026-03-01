@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 type ADT = {
     kind: "a",
@@ -23,3 +24,11 @@ invoke({
         return +a;
     }
 });
+
+const kind = "a"
+invoke({
+    kind,
+    method(a) {
+        return +a;
+    }
+})

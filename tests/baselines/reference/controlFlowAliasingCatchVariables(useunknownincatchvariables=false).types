@@ -1,36 +1,54 @@
-=== tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts] ////
+
+=== controlFlowAliasingCatchVariables.ts ===
 try {}
 catch (e) {
 >e : any
 
     const isString = typeof e === 'string';
 >isString : boolean
+>         : ^^^^^^^
 >typeof e === 'string' : boolean
+>                      : ^^^^^^^
 >typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : any
 >'string' : "string"
+>         : ^^^^^^^^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         e.toUpperCase(); // e string
 >e.toUpperCase() : string
+>                : ^^^^^^
 >e.toUpperCase : () => string
+>              : ^^^^^^      
 >e : string
+>  : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 
     if (typeof e === 'string') {
 >typeof e === 'string' : boolean
+>                      : ^^^^^^^
 >typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : any
 >'string' : "string"
+>         : ^^^^^^^^
 
         e.toUpperCase(); // e string
 >e.toUpperCase() : string
+>                : ^^^^^^
 >e.toUpperCase : () => string
+>              : ^^^^^^      
 >e : string
+>  : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 }
 
@@ -40,37 +58,53 @@ catch (e) {
 
     const isString = typeof e === 'string';
 >isString : boolean
+>         : ^^^^^^^
 >typeof e === 'string' : boolean
+>                      : ^^^^^^^
 >typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : any
 >'string' : "string"
+>         : ^^^^^^^^
 
     e = 1;
 >e = 1 : 1
+>      : ^
 >e : any
 >1 : 1
+>  : ^
 
     if (isString) {
 >isString : boolean
+>         : ^^^^^^^
 
         e.toUpperCase(); // e any/unknown
 >e.toUpperCase() : any
 >e.toUpperCase : any
 >e : any
+>  : ^^^
 >toUpperCase : any
+>            : ^^^
     }
 
     if (typeof e === 'string') {
 >typeof e === 'string' : boolean
+>                      : ^^^^^^^
 >typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : any
 >'string' : "string"
+>         : ^^^^^^^^
 
         e.toUpperCase(); // e string
 >e.toUpperCase() : string
+>                : ^^^^^^
 >e.toUpperCase : () => string
+>              : ^^^^^^      
 >e : string
+>  : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
     }
 }
 

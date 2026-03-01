@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypeVoidFunc.ts ===
+//// [tests/cases/compiler/targetTypeVoidFunc.ts] ////
+
+=== targetTypeVoidFunc.ts ===
 function f1(): { new (): number; } {
 >f1 : Symbol(f1, Decl(targetTypeVoidFunc.ts, 0, 0))
 

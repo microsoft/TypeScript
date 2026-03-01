@@ -1,31 +1,43 @@
-=== tests/cases/compiler/inferSetterParamType.ts ===
+//// [tests/cases/compiler/inferSetterParamType.ts] ////
+
+=== inferSetterParamType.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     get bar() {
 >bar : number
+>    : ^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     set bar(n) { // should not be an error - infer number
 >bar : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
     }
 }
 
 class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
     get bar() {
 >bar : string
+>    : ^^^^^^
 
         return 0; // should be an error - can't coerce infered return type to match setter annotated type
 >0 : 0
+>  : ^
     }
     set bar(n:string) {
 >bar : string
+>    : ^^^^^^
 >n : string
+>  : ^^^^^^
     }
 }
 

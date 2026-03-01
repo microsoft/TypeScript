@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/a.js(3,15): error TS2694: Namespace 'ns' has no exported member 'NotFound'.
+a.js(3,15): error TS2694: Namespace 'ns' has no exported member 'NotFound'.
 
 
-==== tests/cases/conformance/salsa/a.js (1 errors) ====
+==== a.js (1 errors) ====
     // #22973
     var ns = (function() {})();
     /** @type {ns.NotFound} */

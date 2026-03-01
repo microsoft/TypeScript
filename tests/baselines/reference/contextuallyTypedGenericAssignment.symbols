@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypedGenericAssignment.ts ===
+//// [tests/cases/compiler/contextuallyTypedGenericAssignment.ts] ////
+
+=== contextuallyTypedGenericAssignment.ts ===
 function foo<A extends any[]>(
 >foo : Symbol(foo, Decl(contextuallyTypedGenericAssignment.ts, 0, 0))
 >A : Symbol(A, Decl(contextuallyTypedGenericAssignment.ts, 0, 13))

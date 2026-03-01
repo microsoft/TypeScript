@@ -1,24 +1,39 @@
-=== tests/cases/compiler/enumMemberResolution.ts ===
+//// [tests/cases/compiler/enumMemberResolution.ts] ////
+
+=== enumMemberResolution.ts ===
 enum Position2 {
 >Position2 : Position2
+>          : ^^^^^^^^^
 
     IgnoreRulesSpecific = 0
 >IgnoreRulesSpecific : Position2.IgnoreRulesSpecific
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 var x = IgnoreRulesSpecific. // error
 >x : any
+>  : ^^^
 >IgnoreRulesSpecific. : any
+>                     : ^^^
 >IgnoreRulesSpecific : any
+>                    : ^^^
 
 var y = 1;
 > : any
+> : ^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var z = Position2.IgnoreRulesSpecific; // no error
 >z : Position2
+>  : ^^^^^^^^^
 >Position2.IgnoreRulesSpecific : Position2
+>                              : ^^^^^^^^^
 >Position2 : typeof Position2
+>          : ^^^^^^^^^^^^^^^^
 >IgnoreRulesSpecific : Position2
+>                    : ^^^^^^^^^
 

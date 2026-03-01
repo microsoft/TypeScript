@@ -1,7 +1,7 @@
-tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts(18,4): error TS2559: Type 'MyObjA' has no properties in common with type 'ObjA'.
+incorrectNumberOfTypeArgumentsDuringErrorReporting.ts(18,4): error TS2559: Type 'MyObjA' has no properties in common with type 'ObjA'.
 
 
-==== tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts (1 errors) ====
+==== incorrectNumberOfTypeArgumentsDuringErrorReporting.ts (1 errors) ====
     interface ObjA {
       y?:string,
     }

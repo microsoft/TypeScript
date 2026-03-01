@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArraysSubarray.ts] ////
+
 //// [typedArraysSubarray.ts]
 function int8ArraySubarray() {
     var arr = new Int8Array(10);
@@ -64,6 +66,7 @@ function float64ArraySubarray() {
 
 
 //// [typedArraysSubarray.js]
+"use strict";
 function int8ArraySubarray() {
     var arr = new Int8Array(10);
     arr.subarray();

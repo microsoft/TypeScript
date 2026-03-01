@@ -1,45 +1,71 @@
-=== tests/cases/compiler/unusedDestructuring.ts ===
+//// [tests/cases/compiler/unusedDestructuring.ts] ////
+
+=== unusedDestructuring.ts ===
 export {};
 declare const o: any;
 >o : any
+>  : ^^^
 
 const { a, b } = o;
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >o : any
+>  : ^^^
 
 const { c, d }  = o;
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >o : any
+>  : ^^^
 
 d;
 >d : any
+>  : ^^^
 
 const { e } = o;
 >e : any
+>  : ^^^
 >o : any
+>  : ^^^
 
 const { f: g } = o;
 >f : any
+>  : ^^^
 >g : any
+>  : ^^^
 >o : any
+>  : ^^^
 
 const { h } = o, { i } = o;
 >h : any
+>  : ^^^
 >o : any
+>  : ^^^
 >i : any
+>  : ^^^
 >o : any
+>  : ^^^
 
 function f({ a, b }, { c, d }, { e }) {
 >f : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }, { e }: { e: any; }) => void
+>  : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
     d;
 >d : any
+>  : ^^^
 }
 

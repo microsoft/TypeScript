@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/contextualTypingReturnStatementWithReturnTypeAnnotation.ts] ////
+
+=== contextualTypingReturnStatementWithReturnTypeAnnotation.ts ===
+type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
+>PropOfRaw : Symbol(PropOfRaw, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 15))
+>T : Symbol(T, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 15))
+
+declare function isString(text: unknown): text is string;
+>isString : Symbol(isString, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 59))
+>text : Symbol(text, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 2, 26))
+>text : Symbol(text, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 2, 26))
+
+declare function getPropFromRaw<T>(
+>getPropFromRaw : Symbol(getPropFromRaw, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 2, 57))
+>T : Symbol(T, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 4, 32))
+
+  prop: "files" | "include" | "exclude" | "references",
+>prop : Symbol(prop, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 4, 35))
+
+  validateElement: (value: unknown) => boolean,
+>validateElement : Symbol(validateElement, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 5, 55))
+>value : Symbol(value, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 6, 20))
+
+  elementTypeName: string
+>elementTypeName : Symbol(elementTypeName, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 6, 47))
+
+): PropOfRaw<T>;
+>PropOfRaw : Symbol(PropOfRaw, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 4, 32))
+
+function getSpecsFromRaw(
+>getSpecsFromRaw : Symbol(getSpecsFromRaw, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 8, 16))
+
+  prop: "files" | "include" | "exclude"
+>prop : Symbol(prop, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 10, 25))
+
+): PropOfRaw<string> {
+>PropOfRaw : Symbol(PropOfRaw, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 0))
+
+  return getPropFromRaw(prop, isString, "string");
+>getPropFromRaw : Symbol(getPropFromRaw, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 2, 57))
+>prop : Symbol(prop, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 10, 25))
+>isString : Symbol(isString, Decl(contextualTypingReturnStatementWithReturnTypeAnnotation.ts, 0, 59))
+}
+

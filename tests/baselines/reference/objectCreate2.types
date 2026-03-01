@@ -1,102 +1,157 @@
-=== tests/cases/compiler/objectCreate2.ts ===
+//// [tests/cases/compiler/objectCreate2.ts] ////
+
+=== objectCreate2.ts ===
 declare var union: null | { a: number, b: string };
 >union : { a: number; b: string; }
->null : null
+>      : ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 var n = Object.create(null);             // any
 >n : any
 >Object.create(null) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 
 var t = Object.create({ a: 1, b: "" });  // {a: number, b: string }
 >t : any
 >Object.create({ a: 1, b: "" }) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >{ a: 1, b: "" } : { a: number; b: string; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 var u = Object.create(union);            // {a: number, b: string }
 >u : any
 >Object.create(union) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >union : { a: number; b: string; }
+>      : ^^^^^      ^^^^^      ^^^
 
 var e = Object.create({});               // {}
 >e : any
 >Object.create({}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >{} : {}
+>   : ^^
 
 var o = Object.create(<object>{});       // object
 >o : any
 >Object.create(<object>{}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 ><object>{} : object
+>           : ^^^^^^
 >{} : {}
+>   : ^^
 
 var a = Object.create(null, {});           // any
 >a : any
 >Object.create(null, {}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->null : null
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >{} : {}
+>   : ^^
 
 var a = Object.create({ a: 1, b: "" }, {});
 >a : any
 >Object.create({ a: 1, b: "" }, {}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >{ a: 1, b: "" } : { a: number; b: string; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : string
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >{} : {}
+>   : ^^
 
 var a = Object.create(union, {});
 >a : any
 >Object.create(union, {}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >union : { a: number; b: string; }
+>      : ^^^^^      ^^^^^      ^^^
 >{} : {}
+>   : ^^
 
 var a = Object.create({}, {});
 >a : any
 >Object.create({}, {}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 var a = Object.create(<object>{}, {});
 >a : any
 >Object.create(<object>{}, {}) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 ><object>{} : object
+>           : ^^^^^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 

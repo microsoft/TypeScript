@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads39.ts] ////
+
 //// [functionOverloads39.ts]
 function foo(bar:{a:number;}[]):string;
 function foo(bar:{a:boolean;}[]):number;
@@ -6,5 +8,6 @@ var x = foo([{a:true}]);
 
 
 //// [functionOverloads39.js]
+"use strict";
 function foo(bar) { return bar; }
 var x = foo([{ a: true }]);

@@ -1,762 +1,1259 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts] ////
+
+=== comparisonOperatorWithNoRelationshipTypeParameter.ts ===
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 var c: string;
 >c : string
+>  : ^^^^^^
 
 var d: void;
 >d : void
+>  : ^^^^
 
 var e: E;
 >e : E
+>  : ^
 
 var f: { a: string };
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 var g: any[];
 >g : any[]
+>  : ^^^^^
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r1 = t < u;
 >r1 : boolean
+>   : ^^^^^^^
 >t < u : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r2 = t > u;
 >r2 : boolean
+>   : ^^^^^^^
 >t > u : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r3 = t <= u;
 >r3 : boolean
+>   : ^^^^^^^
 >t <= u : boolean
+>       : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r4 = t >= u;
 >r4 : boolean
+>   : ^^^^^^^
 >t >= u : boolean
+>       : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r5 = t == u;
 >r5 : boolean
+>   : ^^^^^^^
 >t == u : boolean
+>       : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r6 = t != u;
 >r6 : boolean
+>   : ^^^^^^^
 >t != u : boolean
+>       : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r7 = t === u;
 >r7 : boolean
+>   : ^^^^^^^
 >t === u : boolean
+>        : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r8 = t !== u;
 >r8 : boolean
+>   : ^^^^^^^
 >t !== u : boolean
+>        : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     // operator <
     var r1a1 = t < a;
 >r1a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r1a2 = t < b;
 >r1a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r1a3 = t < c;
 >r1a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r1a4 = t < d;
 >r1a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r1a5 = t < e;
 >r1a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r1a6 = t < f;
 >r1a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r1a7 = t < g;
 >r1a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r1b1 = a < t;
 >r1b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r1b2 = b < t;
 >r1b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r1b3 = c < t;
 >r1b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r1b4 = d < t;
 >r1b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r1b5 = e < t;
 >r1b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r1b6 = f < t;
 >r1b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r1b7 = g < t;
 >r1b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator >
     var r2a1 = t < a;
 >r2a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r2a2 = t < b;
 >r2a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r2a3 = t < c;
 >r2a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r2a4 = t < d;
 >r2a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r2a5 = t < e;
 >r2a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r2a6 = t < f;
 >r2a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r2a7 = t < g;
 >r2a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r2b1 = a < t;
 >r2b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r2b2 = b < t;
 >r2b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r2b3 = c < t;
 >r2b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r2b4 = d < t;
 >r2b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r2b5 = e < t;
 >r2b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r2b6 = f < t;
 >r2b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r2b7 = g < t;
 >r2b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator <=
     var r3a1 = t < a;
 >r3a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r3a2 = t < b;
 >r3a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r3a3 = t < c;
 >r3a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r3a4 = t < d;
 >r3a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r3a5 = t < e;
 >r3a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r3a6 = t < f;
 >r3a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r3a7 = t < g;
 >r3a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r3b1 = a < t;
 >r3b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r3b2 = b < t;
 >r3b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r3b3 = c < t;
 >r3b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r3b4 = d < t;
 >r3b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r3b5 = e < t;
 >r3b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r3b6 = f < t;
 >r3b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r3b7 = g < t;
 >r3b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator >=
     var r4a1 = t < a;
 >r4a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r4a2 = t < b;
 >r4a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r4a3 = t < c;
 >r4a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r4a4 = t < d;
 >r4a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r4a5 = t < e;
 >r4a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r4a6 = t < f;
 >r4a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r4a7 = t < g;
 >r4a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r4b1 = a < t;
 >r4b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r4b2 = b < t;
 >r4b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r4b3 = c < t;
 >r4b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r4b4 = d < t;
 >r4b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r4b5 = e < t;
 >r4b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r4b6 = f < t;
 >r4b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r4b7 = g < t;
 >r4b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator ==
     var r5a1 = t < a;
 >r5a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r5a2 = t < b;
 >r5a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r5a3 = t < c;
 >r5a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r5a4 = t < d;
 >r5a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r5a5 = t < e;
 >r5a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r5a6 = t < f;
 >r5a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r5a7 = t < g;
 >r5a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r5b1 = a < t;
 >r5b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r5b2 = b < t;
 >r5b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r5b3 = c < t;
 >r5b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r5b4 = d < t;
 >r5b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r5b5 = e < t;
 >r5b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r5b6 = f < t;
 >r5b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r5b7 = g < t;
 >r5b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator !=
     var r6a1 = t < a;
 >r6a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r6a2 = t < b;
 >r6a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r6a3 = t < c;
 >r6a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r6a4 = t < d;
 >r6a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r6a5 = t < e;
 >r6a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r6a6 = t < f;
 >r6a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r6a7 = t < g;
 >r6a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r6b1 = a < t;
 >r6b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r6b2 = b < t;
 >r6b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r6b3 = c < t;
 >r6b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r6b4 = d < t;
 >r6b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r6b5 = e < t;
 >r6b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r6b6 = f < t;
 >r6b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r6b7 = g < t;
 >r6b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator ===
     var r7a1 = t < a;
 >r7a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r7a2 = t < b;
 >r7a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r7a3 = t < c;
 >r7a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r7a4 = t < d;
 >r7a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r7a5 = t < e;
 >r7a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r7a6 = t < f;
 >r7a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r7a7 = t < g;
 >r7a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r7b1 = a < t;
 >r7b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r7b2 = b < t;
 >r7b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r7b3 = c < t;
 >r7b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r7b4 = d < t;
 >r7b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r7b5 = e < t;
 >r7b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r7b6 = f < t;
 >r7b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r7b7 = g < t;
 >r7b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 
     // operator !==
     var r8a1 = t < a;
 >r8a1 : boolean
+>     : ^^^^^^^
 >t < a : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >a : boolean
+>  : ^^^^^^^
 
     var r8a2 = t < b;
 >r8a2 : boolean
+>     : ^^^^^^^
 >t < b : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >b : number
+>  : ^^^^^^
 
     var r8a3 = t < c;
 >r8a3 : boolean
+>     : ^^^^^^^
 >t < c : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >c : string
+>  : ^^^^^^
 
     var r8a4 = t < d;
 >r8a4 : boolean
+>     : ^^^^^^^
 >t < d : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >d : void
+>  : ^^^^
 
     var r8a5 = t < e;
 >r8a5 : boolean
+>     : ^^^^^^^
 >t < e : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >e : E
+>  : ^
 
     var r8a6 = t < f;
 >r8a6 : boolean
+>     : ^^^^^^^
 >t < f : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 
     var r8a7 = t < g;
 >r8a7 : boolean
+>     : ^^^^^^^
 >t < g : boolean
+>      : ^^^^^^^
 >t : T
+>  : ^
 >g : any[]
+>  : ^^^^^
 
     var r8b1 = a < t;
 >r8b1 : boolean
+>     : ^^^^^^^
 >a < t : boolean
+>      : ^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >t : T
+>  : ^
 
     var r8b2 = b < t;
 >r8b2 : boolean
+>     : ^^^^^^^
 >b < t : boolean
+>      : ^^^^^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r8b3 = c < t;
 >r8b3 : boolean
+>     : ^^^^^^^
 >c < t : boolean
+>      : ^^^^^^^
 >c : string
+>  : ^^^^^^
 >t : T
+>  : ^
 
     var r8b4 = d < t;
 >r8b4 : boolean
+>     : ^^^^^^^
 >d < t : boolean
+>      : ^^^^^^^
 >d : void
+>  : ^^^^
 >t : T
+>  : ^
 
     var r8b5 = e < t;
 >r8b5 : boolean
+>     : ^^^^^^^
 >e < t : boolean
+>      : ^^^^^^^
 >e : E
+>  : ^
 >t : T
+>  : ^
 
     var r8b6 = f < t;
 >r8b6 : boolean
+>     : ^^^^^^^
 >f < t : boolean
+>      : ^^^^^^^
 >f : { a: string; }
+>  : ^^^^^      ^^^
 >t : T
+>  : ^
 
     var r8b7 = g < t;
 >r8b7 : boolean
+>     : ^^^^^^^
 >g < t : boolean
+>      : ^^^^^^^
 >g : any[]
+>  : ^^^^^
 >t : T
+>  : ^
 }

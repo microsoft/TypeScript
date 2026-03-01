@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numberToString.ts] ////
+
 //// [numberToString.ts]
 function f1(n:number):string {
     return n; // error return type mismatch
@@ -12,6 +14,7 @@ f2(3+""); // ok + operator promotes
 
 
 //// [numberToString.js]
+"use strict";
 function f1(n) {
     return n; // error return type mismatch
 }

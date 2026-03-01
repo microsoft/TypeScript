@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useUnknownInCatchVariables01.ts] ////
+
 //// [useUnknownInCatchVariables01.ts]
 try {
     // ...
@@ -34,6 +36,7 @@ catch (e: any) {
 }
 
 //// [useUnknownInCatchVariables01.js]
+"use strict";
 var _a;
 try {
     // ...

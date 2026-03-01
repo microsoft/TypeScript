@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/checkingObjectWithThisInNamePositionNoCrash.ts] ////
+
+=== checkingObjectWithThisInNamePositionNoCrash.ts ===
+export const thing = {
+>thing : Symbol(thing, Decl(checkingObjectWithThisInNamePositionNoCrash.ts, 0, 12))
+
+    doit() {
+>doit : Symbol(doit, Decl(checkingObjectWithThisInNamePositionNoCrash.ts, 0, 22))
+
+        return {
+            [this.a]: "", // should refer to the outer object with the doit method, notably not present
+>[this.a] : Symbol([this.a], Decl(checkingObjectWithThisInNamePositionNoCrash.ts, 2, 16))
+>this : Symbol(thing, Decl(checkingObjectWithThisInNamePositionNoCrash.ts, 0, 20))
+        }
+    }
+}

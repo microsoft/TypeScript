@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingCloseBrace.ts] ////
+
 //// [missingCloseBrace.ts]
 function base_init() {
     {
@@ -10,6 +12,7 @@ function base_init() {
 
 
 //// [missingCloseBrace.js]
+"use strict";
 function base_init() {
     {
     }

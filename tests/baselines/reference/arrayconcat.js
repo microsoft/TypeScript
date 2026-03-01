@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayconcat.ts] ////
+
 //// [arrayconcat.ts]
 interface IOptions {
     name?: string;
@@ -29,10 +31,9 @@ class parser {
 }
 
 //// [arrayconcat.js]
-var parser = /** @class */ (function () {
-    function parser() {
-    }
-    parser.prototype.m = function () {
+"use strict";
+class parser {
+    m() {
         this.options = this.options.sort(function (a, b) {
             var aName = a.name.toLowerCase();
             var bName = b.name.toLowerCase();
@@ -46,6 +47,5 @@ var parser = /** @class */ (function () {
                 return 0;
             }
         });
-    };
-    return parser;
-}());
+    }
+}

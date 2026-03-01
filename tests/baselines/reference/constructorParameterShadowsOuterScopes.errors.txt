@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes.ts(8,9): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes.ts(10,9): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes.ts(16,9): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'y' declared in the constructor.
+constructorParameterShadowsOuterScopes.ts(8,9): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+constructorParameterShadowsOuterScopes.ts(10,9): error TS2322: Type 'number' is not assignable to type 'string'.
+constructorParameterShadowsOuterScopes.ts(16,9): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'y' declared in the constructor.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes.ts (3 errors) ====
+==== constructorParameterShadowsOuterScopes.ts (3 errors) ====
     // Initializer expressions for instance member variables are evaluated in the scope of the class constructor 
     // body but are not permitted to reference parameters or local variables of the constructor.
     // This effectively means that entities from outer scopes by the same name as a constructor parameter or 

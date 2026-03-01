@@ -1,22 +1,32 @@
-=== tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts ===
-module m {
->m : typeof m
+//// [tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts] ////
 
-    export module c {
+=== declarationEmitImportInExportAssignmentModule.ts ===
+namespace m {
+>m : typeof m
+>  : ^^^^^^^^
+
+    export namespace c {
 >c : typeof m.c
+>  : ^^^^^^^^^^
 
         export class c {
 >c : c
+>  : ^
         }
     }
     import x = c;
 >x : typeof c
+>  : ^^^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 
     export var a: typeof x;
 >a : typeof c
+>  : ^^^^^^^^
 >x : typeof c
+>  : ^^^^^^^^
 }
 export = m;
 >m : typeof m
+>  : ^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts] ////
+
+=== privateNameDuplicateField.ts ===
 function Field() {
 >Field : Symbol(Field, Decl(privateNameDuplicateField.ts, 0, 0))
 

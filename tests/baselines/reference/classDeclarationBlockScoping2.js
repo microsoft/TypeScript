@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classDeclarationBlockScoping2.ts] ////
+
 //// [classDeclarationBlockScoping2.ts]
 function f() {
     class C {}
@@ -10,20 +12,15 @@ function f() {
 }
 
 //// [classDeclarationBlockScoping2.js]
+"use strict";
 function f() {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     var c1 = C;
     {
-        var C_1 = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-        var c2 = C_1;
+        class C {
+        }
+        var c2 = C;
     }
     return C === c1;
 }

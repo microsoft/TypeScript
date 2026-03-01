@@ -1,20 +1,30 @@
-=== tests/cases/compiler/usage.ts ===
+//// [tests/cases/compiler/referenceTypesPreferedToPathIfPossible.ts] ////
+
+=== usage.ts ===
 import { parse } from "url";
 >parse : () => import("url").Url
+>      : ^^^^^^       ^^^^^  ^^^
 
 export const thing = () => parse();
 >thing : () => import("url").Url
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => parse() : () => import("url").Url
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >parse() : import("url").Url
+>        : ^^^^^^^^^^^^^^^^^
 >parse : () => import("url").Url
+>      : ^^^^^^       ^^^^^  ^^^
 
 === node_modules/@types/node/index.d.ts ===
 declare module "url" {
 >"url" : typeof import("url")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     export class Url {}
 >Url : Url
+>    : ^^^
 
     export function parse(): Url; 
 >parse : () => Url
+>      : ^^^^^^   
 }

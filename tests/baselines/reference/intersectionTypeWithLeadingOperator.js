@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionTypeWithLeadingOperator.ts] ////
+
 //// [intersectionTypeWithLeadingOperator.ts]
 type A = & string;
 type B =
@@ -8,3 +10,4 @@ type C = [& { foo: 1 } & { bar: 2 }, & { foo: 3 } & { bar: 4 }];
 
 
 //// [intersectionTypeWithLeadingOperator.js]
+"use strict";

@@ -1,122 +1,100 @@
-namespace ts {
-    describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
-        let sys: TscCompileSystem;
-        before(() => {
-            const inputFs = loadProjectFromFiles({
-                "/src/tsconfig.json": JSON.stringify({
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { commandLineCallbacks } from "../helpers/baseline.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+
+describe("unittests:: tsbuild:: PublicAPI:: with custom transformers when passed to build", () => {
+    verifyTsc({
+        scenario: "publicAPI",
+        subScenario: "build with custom transformers",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/solution/tsconfig.json": jsonToReadableText({
                     references: [
                         { path: "./shared/tsconfig.json" },
-                        { path: "./webpack/tsconfig.json" }
+                        { path: "./webpack/tsconfig.json" },
                     ],
-                    files: []
+                    files: [],
                 }),
-                "/src/shared/tsconfig.json": JSON.stringify({
+                "/home/src/workspaces/solution/shared/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                 }),
-                "/src/shared/index.ts": `export function f1() { }
+                "/home/src/workspaces/solution/shared/index.ts": `export function f1() { }
 export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`,
-                "/src/webpack/tsconfig.json": JSON.stringify({
+                "/home/src/workspaces/solution/webpack/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                     },
-                    references: [{ path: "../shared/tsconfig.json" }]
+                    references: [{ path: "../shared/tsconfig.json" }],
                 }),
-                "/src/webpack/index.ts": `export function f2() { }
+                "/home/src/workspaces/solution/webpack/index.ts": `export function f2() { }
 export class c2 { }
 export enum e2 { }
 // leading
 export function f22() { } // trailing`,
-            }).makeReadonly();
-            const fs = inputFs.shadow();
-
-            // Create system
-            sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
-            fakes.patchHostForBuildInfoReadWrite(sys);
-            const commandLineArgs = ["--b", "/src/tsconfig.json"];
-            sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
-            sys.exit = exitCode => sys.exitCode = exitCode;
-            const writtenFiles = sys.writtenFiles = new Set();
-            const originalWriteFile = sys.writeFile;
-            sys.writeFile = (fileName, content, writeByteOrderMark) => {
-                const path = toPathWithSystem(sys, fileName);
-                assert.isFalse(writtenFiles.has(path));
-                writtenFiles.add(path);
-                return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-            };
+            }, { currentDirectory: "/home/src/workspaces/solution" }),
+        commandLineArgs: ["--b"],
+        compile: sys => {
             const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
-            const buildHost = createSolutionBuilderHost(
+            const buildHost = ts.createSolutionBuilderHost(
                 sys,
-                    /*createProgram*/ undefined,
-                createDiagnosticReporter(sys, /*pretty*/ true),
-                createBuilderStatusReporter(sys, /*pretty*/ true),
-                (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
+                /*createProgram*/ undefined,
+                ts.createDiagnosticReporter(sys, /*pretty*/ true),
+                ts.createBuilderStatusReporter(sys, /*pretty*/ true),
+                (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
             );
             buildHost.afterProgramEmitAndDiagnostics = cb;
-            buildHost.afterEmitBundle = cb;
-            const builder = createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
-            const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
+            const builder = ts.createSolutionBuilder(
+                buildHost,
+                ["/home/src/workspaces/solution/tsconfig.json"],
+                { verbose: true },
+            );
+            const exitStatus = builder.build(
+                /*project*/ undefined,
+                /*cancellationToken*/ undefined,
+                /*writeFile*/ undefined,
+                project => {
+                    const before: ts.TransformerFactory<ts.SourceFile> = context => {
+                        return file => ts.visitEachChild(file, visit, context);
+                        function visit(node: ts.Node): ts.VisitResult<ts.Node> {
+                            switch (node.kind) {
+                                case ts.SyntaxKind.FunctionDeclaration:
+                                    return visitFunction(node as ts.FunctionDeclaration);
+                                default:
+                                    return ts.visitEachChild(node, visit, context);
+                            }
+                        }
+                        function visitFunction(node: ts.FunctionDeclaration) {
+                            ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
+                            return node;
+                        }
+                    };
+
+                    const after: ts.TransformerFactory<ts.SourceFile> = context => {
+                        return file => ts.visitEachChild(file, visit, context);
+                        function visit(node: ts.Node): ts.VisitResult<ts.Node> {
+                            switch (node.kind) {
+                                case ts.SyntaxKind.VariableStatement:
+                                    return visitVariableStatement(node as ts.VariableStatement);
+                                default:
+                                    return ts.visitEachChild(node, visit, context);
+                            }
+                        }
+                        function visitVariableStatement(node: ts.VariableStatement) {
+                            ts.addSyntheticLeadingComment(node, ts.SyntaxKind.SingleLineCommentTrivia, `@after${project}`);
+                            return node;
+                        }
+                    };
+                    return { before: [before], after: [after] };
+                },
+            );
             sys.exit(exitStatus);
-            sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
-            const baseline: string[] = [];
-            tscWatch.baselinePrograms(baseline, getPrograms, emptyArray, /*baselineDependencies*/ false);
-            sys.write(baseline.join("\n"));
-            fs.makeReadonly();
-            sys.baseLine = () => {
-                const baseFsPatch = inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
-                const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
-                return {
-                    file: `tsbuild/publicAPI/build-with-custom-transformers.js`,
-                    text: `Input::
-${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
-
-Output::
-${sys.output.join("")}
-
-${patch ? vfs.formatPatch(patch) : ""}`
-                };
-            };
-
-            function getCustomTransformers(project: string): CustomTransformers {
-                const before: TransformerFactory<SourceFile> = context => {
-                    return file => visitEachChild(file, visit, context);
-                    function visit(node: Node): VisitResult<Node> {
-                        switch (node.kind) {
-                            case SyntaxKind.FunctionDeclaration:
-                                return visitFunction(node as FunctionDeclaration);
-                            default:
-                                return visitEachChild(node, visit, context);
-                        }
-                    }
-                    function visitFunction(node: FunctionDeclaration) {
-                        addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
-                        return node;
-                    }
-                };
-
-                const after: TransformerFactory<SourceFile> = context => {
-                    return file => visitEachChild(file, visit, context);
-                    function visit(node: Node): VisitResult<Node> {
-                        switch (node.kind) {
-                            case SyntaxKind.VariableStatement:
-                                return visitVariableStatement(node as VariableStatement);
-                            default:
-                                return visitEachChild(node, visit, context);
-                        }
-                    }
-                    function visitVariableStatement(node: VariableStatement) {
-                        addSyntheticLeadingComment(node, SyntaxKind.SingleLineCommentTrivia, `@after${project}`);
-                        return node;
-                    }
-                };
-                return { before: [before], after: [after] };
-            }
-        });
-        after(() => {
-            sys = undefined!;
-        });
-        verifyTscBaseline(() => sys);
+            return getPrograms;
+        },
+        baselinePrograms: true,
     });
-}
+});

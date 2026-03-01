@@ -1,4 +1,6 @@
-=== tests/cases/compiler/color.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImportsCanPaintCrossModuleDeclaration.ts] ////
+
+=== color.ts ===
 interface Color {
 >Color : Symbol(Color, Decl(color.ts, 0, 0))
 
@@ -8,7 +10,7 @@ interface Color {
 export default Color;
 >Color : Symbol(Color, Decl(color.ts, 0, 0))
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 import Color from "./color";
 >Color : Symbol(Color, Decl(file1.ts, 0, 6))
 
@@ -16,7 +18,7 @@ export declare function styled(): Color;
 >styled : Symbol(styled, Decl(file1.ts, 0, 28))
 >Color : Symbol(Color, Decl(file1.ts, 0, 6))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import { styled }  from "./file1";
 >styled : Symbol(styled, Decl(file2.ts, 0, 8))
 

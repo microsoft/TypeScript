@@ -1,21 +1,32 @@
+//// [tests/cases/conformance/externalModules/typeOnly/namespaceMemberAccess.ts] ////
+
 === /a.ts ===
 class A { a!: string }
 >A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 export type { A };
 >A : A
+>  : ^
 
 === /b.ts ===
 import * as types from './a';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 types.A;
 >types.A : any
+>        : ^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >A : any
+>  : ^^^
 
 const { A } = types;
 >A : any
+>  : ^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 

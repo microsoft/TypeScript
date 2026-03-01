@@ -16,19 +16,18 @@ var x = foo2(); // should be boolean
 
 //// [foo1.js]
 "use strict";
-exports.__esModule = true;
-exports.x = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = x;
 function x() {
     return true;
 }
-exports.x = x;
 //// [foo2.js]
 "use strict";
-var foo1 = require("./foo1");
+const foo1 = require("./foo1");
 var x = foo1.x;
 module.exports = x;
 //// [foo3.js]
 "use strict";
-exports.__esModule = true;
-var foo2 = require("./foo2");
+Object.defineProperty(exports, "__esModule", { value: true });
+const foo2 = require("./foo2");
 var x = foo2(); // should be boolean

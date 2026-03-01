@@ -1,4 +1,6 @@
-=== tests/cases/compiler/protoAssignment.ts ===
+//// [tests/cases/compiler/protoAssignment.ts] ////
+
+=== protoAssignment.ts ===
 interface Number extends Comparable<number> {
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(protoAssignment.ts, 0, 0))
 

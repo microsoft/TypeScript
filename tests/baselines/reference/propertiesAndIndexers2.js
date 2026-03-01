@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertiesAndIndexers2.ts] ////
+
 //// [propertiesAndIndexers2.ts]
 interface A {
     [n: number]: string;
@@ -17,3 +19,4 @@ interface B extends A {
 
 
 //// [propertiesAndIndexers2.js]
+"use strict";

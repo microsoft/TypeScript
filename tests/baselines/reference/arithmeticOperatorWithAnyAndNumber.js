@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithAnyAndNumber.ts] ////
+
 //// [arithmeticOperatorWithAnyAndNumber.ts]
 var a: any;
 var b: number;
@@ -103,6 +105,7 @@ var rj7 = 0 | b;
 var rj8 = b | b;
 
 //// [arithmeticOperatorWithAnyAndNumber.js]
+"use strict";
 var a;
 var b;
 // operator *

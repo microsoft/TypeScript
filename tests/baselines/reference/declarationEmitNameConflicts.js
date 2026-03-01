@@ -1,15 +1,15 @@
 //// [tests/cases/compiler/declarationEmitNameConflicts.ts] ////
 
 //// [declarationEmit_nameConflicts_1.ts]
-module f { export class c { } }
+namespace f { export class c { } }
 export = f;
 
 //// [declarationEmit_nameConflicts_0.ts]
 import im = require('./declarationEmit_nameConflicts_1');
-export module M {
+export namespace M {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
@@ -20,10 +20,10 @@ export module M {
     export import d = im;
 }
 
-export module M.P {
+export namespace M.P {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
@@ -35,16 +35,16 @@ export module M.P {
     export var d = M.d; // emitted incorrectly as typeof im
 }
 
-export module M.Q {
+export namespace M.Q {
     export function f() { }
     export class C { }
-    export module N {
+    export namespace N {
         export function g() { };
         export interface I { }
     }
     export interface b extends M.b { } // ok
     export interface I extends M.c.I { } // ok
-    export module c {
+    export namespace c {
         export interface I extends M.c.I { } // ok
     }
 }
@@ -53,30 +53,24 @@ export module M.Q {
 "use strict";
 var f;
 (function (f) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     f.c = c;
 })(f || (f = {}));
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
-var im = require("./declarationEmit_nameConflicts_1");
+const im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
     function f() { }
     M.f = f;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
-    var N;
+    let N;
     (function (N) {
         function g() { }
         N.g = g;
@@ -86,19 +80,16 @@ var M;
     M.b = M.C;
     M.c = N;
     M.d = im;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 (function (M) {
     var P;
     (function (P) {
         function f() { }
         P.f = f;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         P.C = C;
-        var N;
+        let N;
         (function (N) {
             function g() { }
             N.g = g;
@@ -111,41 +102,38 @@ var M;
         P.g = M.c.g; // ok
         P.d = M.d; // emitted incorrectly as typeof im
     })(P = M.P || (M.P = {}));
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 (function (M) {
     var Q;
     (function (Q) {
         function f() { }
         Q.f = f;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         Q.C = C;
-        var N;
+        let N;
         (function (N) {
             function g() { }
             N.g = g;
             ;
         })(N = Q.N || (Q.N = {}));
     })(Q = M.Q || (M.Q = {}));
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 
 
 //// [declarationEmit_nameConflicts_1.d.ts]
-declare module f {
+declare namespace f {
     class c {
     }
 }
 export = f;
 //// [declarationEmit_nameConflicts_0.d.ts]
 import im = require('./declarationEmit_nameConflicts_1');
-export declare module M {
+export declare namespace M {
     function f(): void;
     class C {
     }
-    module N {
+    namespace N {
         function g(): void;
         interface I {
         }
@@ -155,11 +143,11 @@ export declare module M {
     export import c = N;
     export import d = im;
 }
-export declare module M.P {
+export declare namespace M.P {
     function f(): void;
     class C {
     }
-    module N {
+    namespace N {
         function g(): void;
         interface I {
         }
@@ -171,11 +159,11 @@ export declare module M.P {
     var g: typeof M.N.g;
     var d: typeof M.d;
 }
-export declare module M.Q {
+export declare namespace M.Q {
     function f(): void;
     class C {
     }
-    module N {
+    namespace N {
         function g(): void;
         interface I {
         }
@@ -184,7 +172,7 @@ export declare module M.Q {
     }
     interface I extends M.c.I {
     }
-    module c {
+    namespace c {
         interface I extends M.c.I {
         }
     }

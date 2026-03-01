@@ -1,21 +1,34 @@
-=== tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts ===
+//// [tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts] ////
+
+=== duplicateIdentifierDifferentSpelling.ts ===
 class A {
 >A : A
+>  : ^
 
   0b11 = '';
 >0b11 : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 
   3 = '';
 >3 : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 }
 
 var X = { 0b11: '', 3: '' };
 >X : { 3: string; }
+>  : ^^^^^^^^^^^^^^
 >{ 0b11: '', 3: '' } : { 3: string; }
+>                    : ^^^^^^^^^^^^^^
 >0b11 : string
+>     : ^^^^^^
 >'' : ""
+>   : ^^
 >3 : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 

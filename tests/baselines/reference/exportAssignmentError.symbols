@@ -1,5 +1,7 @@
-=== tests/cases/compiler/exportEqualsModule_A.ts ===
-module M {
+//// [tests/cases/compiler/exportAssignmentError.ts] ////
+
+=== exportEqualsModule_A.ts ===
+namespace M {
 >M : Symbol(M, Decl(exportEqualsModule_A.ts, 0, 0))
 
 	export var x;

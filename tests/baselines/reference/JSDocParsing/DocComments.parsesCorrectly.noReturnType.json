@@ -16,9 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "ReturnKeyword",
                 "escapedText": "return"
             }
         },

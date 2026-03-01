@@ -1,10 +1,11 @@
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : declSingleFile.js
+"use strict";
 var x = 5;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+class Bar {
+    x;
+    y;
+}
 

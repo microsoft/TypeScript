@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution.tsx] ////
+
 //// [tsxAttributeResolution.tsx]
 declare namespace JSX {
 	interface IntrinsicElements {
@@ -9,3 +11,4 @@ declare namespace JSX {
 
 
 //// [tsxAttributeResolution.jsx]
+"use strict";

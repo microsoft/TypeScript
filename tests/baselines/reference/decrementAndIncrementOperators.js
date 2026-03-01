@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decrementAndIncrementOperators.ts] ////
+
 //// [decrementAndIncrementOperators.ts]
 var x = 0;
 
@@ -39,6 +41,7 @@ x[x++]++;
 
 
 //// [decrementAndIncrementOperators.js]
+"use strict";
 var x = 0;
 // errors
 1++;

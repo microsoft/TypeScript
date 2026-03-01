@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: react-jsx,react-jsxdev
 // @strict: true
 // @module: commonjs

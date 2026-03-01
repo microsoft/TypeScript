@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionReturn.ts] ////
+
 //// [functionReturn.ts]
 function f0(): void { }
 function f1() {
@@ -15,6 +17,7 @@ function f5(): string {
 }
 
 //// [functionReturn.js]
+"use strict";
 function f0() { }
 function f1() {
     var n = f0();

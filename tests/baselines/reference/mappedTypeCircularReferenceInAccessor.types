@@ -1,24 +1,33 @@
-=== tests/cases/compiler/mappedTypeCircularReferenceInAccessor.ts ===
+//// [tests/cases/compiler/mappedTypeCircularReferenceInAccessor.ts] ////
+
+=== mappedTypeCircularReferenceInAccessor.ts ===
 interface User {
   firstName: string,
 >firstName : string
+>          : ^^^^^^
 
   level: number,
 >level : number
+>      : ^^^^^^
 
   get bestFriend(): User
 >bestFriend : User
+>           : ^^^^
 
   set bestFriend(user: SerializablePartial<User>)
 >bestFriend : User
+>           : ^^^^
 >user : SerializablePartial<User>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type FilteredKeys<T> = { [K in keyof T]: T[K] extends number ? K : T[K] extends string ? K : T[K] extends boolean ? K : never }[keyof T];
 >FilteredKeys : FilteredKeys<T>
+>             : ^^^^^^^^^^^^^^^
 
 type SerializablePartial<T> = {
 >SerializablePartial : SerializablePartial<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 
   [K in FilteredKeys<T>]: T[K]
 };

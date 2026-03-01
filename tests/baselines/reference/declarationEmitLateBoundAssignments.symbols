@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/declarationEmitLateBoundAssignments.ts] ////
+
+=== declarationEmitLateBoundAssignments.ts ===
+export function foo() {}
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+
+foo.bar = 12;
+>foo.bar : Symbol(foo.bar, Decl(declarationEmitLateBoundAssignments.ts, 0, 24))
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>bar : Symbol(foo.bar, Decl(declarationEmitLateBoundAssignments.ts, 0, 24))
+
+const _private = Symbol();
+>_private : Symbol(_private, Decl(declarationEmitLateBoundAssignments.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+foo[_private] = "ok";
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>_private : Symbol(_private, Decl(declarationEmitLateBoundAssignments.ts, 2, 5))
+
+const strMem = "strMemName";
+>strMem : Symbol(strMem, Decl(declarationEmitLateBoundAssignments.ts, 4, 5))
+
+foo[strMem] = "ok";
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>strMem : Symbol(strMem, Decl(declarationEmitLateBoundAssignments.ts, 4, 5))
+
+const dashStrMem = "dashed-str-mem";
+>dashStrMem : Symbol(dashStrMem, Decl(declarationEmitLateBoundAssignments.ts, 6, 5))
+
+foo[dashStrMem] = "ok";
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>dashStrMem : Symbol(dashStrMem, Decl(declarationEmitLateBoundAssignments.ts, 6, 5))
+
+const numMem = 42;
+>numMem : Symbol(numMem, Decl(declarationEmitLateBoundAssignments.ts, 8, 5))
+
+foo[numMem] = "ok";
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>numMem : Symbol(numMem, Decl(declarationEmitLateBoundAssignments.ts, 8, 5))
+
+const x: string = foo[_private];
+>x : Symbol(x, Decl(declarationEmitLateBoundAssignments.ts, 11, 5))
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>_private : Symbol(_private, Decl(declarationEmitLateBoundAssignments.ts, 2, 5))
+
+const y: string = foo[strMem];
+>y : Symbol(y, Decl(declarationEmitLateBoundAssignments.ts, 12, 5))
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>strMem : Symbol(strMem, Decl(declarationEmitLateBoundAssignments.ts, 4, 5))
+
+const z: string = foo[numMem];
+>z : Symbol(z, Decl(declarationEmitLateBoundAssignments.ts, 13, 5))
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>numMem : Symbol(numMem, Decl(declarationEmitLateBoundAssignments.ts, 8, 5))
+
+const a: string = foo[dashStrMem];
+>a : Symbol(a, Decl(declarationEmitLateBoundAssignments.ts, 14, 5))
+>foo : Symbol(foo, Decl(declarationEmitLateBoundAssignments.ts, 0, 0), Decl(declarationEmitLateBoundAssignments.ts, 0, 24), Decl(declarationEmitLateBoundAssignments.ts, 2, 26), Decl(declarationEmitLateBoundAssignments.ts, 4, 28), Decl(declarationEmitLateBoundAssignments.ts, 6, 36) ... and 1 more)
+>dashStrMem : Symbol(dashStrMem, Decl(declarationEmitLateBoundAssignments.ts, 6, 5))
+

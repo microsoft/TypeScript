@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext3.d.ts(2,5): error TS1221: Generators are not allowed in an ambient context.
+generatorInAmbientContext3.d.ts(2,5): error TS1221: Generators are not allowed in an ambient context.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext3.d.ts (1 errors) ====
+==== generatorInAmbientContext3.d.ts (1 errors) ====
     declare class C {
         *generator(): any;
         ~

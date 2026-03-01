@@ -1,46 +1,83 @@
-=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator8.ts ===
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator8.ts] ////
+
+=== nullishCoalescingOperator8.ts ===
 declare const a: { p: string | undefined, m(): string | undefined };
 >a : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >p : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >m : () => string | undefined
+>  : ^^^^^^                  
 
 declare const b: { p: string | undefined, m(): string | undefined };
 >b : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >p : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >m : () => string | undefined
+>  : ^^^^^^                  
 
 const n1 = a.p ?? "default";
 >n1 : string
+>   : ^^^^^^
 >a.p ?? "default" : string
+>                 : ^^^^^^
 >a.p : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >a : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >p : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"default" : "default"
+>          : ^^^^^^^^^
 
 const n2 = a.m() ?? "default";
 >n2 : string
+>   : ^^^^^^
 >a.m() ?? "default" : string
+>                   : ^^^^^^
 >a.m() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >a.m : () => string | undefined
+>    : ^^^^^^                  
 >a : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >m : () => string | undefined
+>  : ^^^^^^                  
 >"default" : "default"
+>          : ^^^^^^^^^
 
 const n3 = a.m() ?? b.p ?? b.m() ?? "default";;
 >n3 : string
+>   : ^^^^^^
 >a.m() ?? b.p ?? b.m() ?? "default" : string
+>                                   : ^^^^^^
 >a.m() ?? b.p ?? b.m() : string | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
 >a.m() ?? b.p : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >a.m() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >a.m : () => string | undefined
+>    : ^^^^^^                  
 >a : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >m : () => string | undefined
+>  : ^^^^^^                  
 >b.p : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >b : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >p : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b.m() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >b.m : () => string | undefined
+>    : ^^^^^^                  
 >b : { p: string | undefined; m(): string | undefined; }
+>  : ^^^^^                  ^^^^^^^                  ^^^
 >m : () => string | undefined
+>  : ^^^^^^                  
 >"default" : "default"
+>          : ^^^^^^^^^
 

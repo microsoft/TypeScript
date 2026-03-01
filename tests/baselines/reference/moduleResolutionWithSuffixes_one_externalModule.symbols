@@ -1,44 +1,10 @@
-=== /node_modules/some-library/index.ios.js ===
-"use strict";
-exports.__esModule = true;
->exports.__esModule : Symbol(__esModule, Decl(index.ios.js, 0, 13))
->exports : Symbol(__esModule, Decl(index.ios.js, 0, 13))
->__esModule : Symbol(__esModule, Decl(index.ios.js, 0, 13))
-
-function ios() {}
->ios : Symbol(ios, Decl(index.ios.js, 1, 26))
-
-exports.ios = ios;
->exports.ios : Symbol(ios, Decl(index.ios.js, 2, 17))
->exports : Symbol(ios, Decl(index.ios.js, 2, 17))
->ios : Symbol(ios, Decl(index.ios.js, 2, 17))
->ios : Symbol(ios, Decl(index.ios.js, 1, 26))
-
-=== /node_modules/some-library/index.ios.d.ts ===
-export declare function ios(): void;
->ios : Symbol(ios, Decl(index.ios.d.ts, 0, 0))
-
-=== /node_modules/some-library/index.js ===
-"use strict";
-exports.__esModule = true;
->exports.__esModule : Symbol(__esModule, Decl(index.js, 0, 13))
->exports : Symbol(__esModule, Decl(index.js, 0, 13))
->__esModule : Symbol(__esModule, Decl(index.js, 0, 13))
-
-function base() {}
->base : Symbol(base, Decl(index.js, 1, 26))
-
-exports.base = base;
->exports.base : Symbol(base, Decl(index.js, 2, 18))
->exports : Symbol(base, Decl(index.js, 2, 18))
->base : Symbol(base, Decl(index.js, 2, 18))
->base : Symbol(base, Decl(index.js, 1, 26))
-
-=== /node_modules/some-library/index.d.ts ===
-export declare function base(): void;
->base : Symbol(base, Decl(index.d.ts, 0, 0))
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalModule.ts] ////
 
 === /index.ts ===
 import { ios } from "some-library";
 >ios : Symbol(ios, Decl(index.ts, 0, 8))
+
+=== /node_modules/some-library/index.ios.d.ts ===
+export declare function ios(): void;
+>ios : Symbol(ios, Decl(index.ios.d.ts, 0, 0))
 

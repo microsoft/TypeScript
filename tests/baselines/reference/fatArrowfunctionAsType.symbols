@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatArrowfunctionAsType.ts ===
+//// [tests/cases/compiler/fatArrowfunctionAsType.ts] ////
+
+=== fatArrowfunctionAsType.ts ===
 declare var b: <T>(x: T) => void ;
 >b : Symbol(b, Decl(fatArrowfunctionAsType.ts, 0, 11))
 >T : Symbol(T, Decl(fatArrowfunctionAsType.ts, 0, 16))

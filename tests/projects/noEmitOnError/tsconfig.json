@@ -1,6 +1,0 @@
-{
-    "compilerOptions": {
-        "outDir": "./dev-build",
-        "noEmitOnError": true
-    }
-}

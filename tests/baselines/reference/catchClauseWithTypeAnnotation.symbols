@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts ===
+//// [tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts] ////
+
+=== catchClauseWithTypeAnnotation.ts ===
 type any1 = any;
 >any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
 
@@ -112,14 +114,14 @@ function fn(x: boolean) {
 >any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 34, 20))
 
-    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown) { console.log(x); } // error in the destructure
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 35, 20))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 35, 20))
 
-    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown1) { console.log(x); } // error in the destructure
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 36, 20))
 >unknown1 : Symbol(unknown1, Decl(catchClauseWithTypeAnnotation.ts, 0, 16))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

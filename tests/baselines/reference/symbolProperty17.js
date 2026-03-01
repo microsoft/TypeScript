@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty17.ts] ////
+
 //// [symbolProperty17.ts]
 interface I {
     [Symbol.iterator]: number;
@@ -5,9 +7,9 @@ interface I {
     "__@iterator": string;
 }
 
-var i: I;
+declare var i: I;
 var it = i[Symbol.iterator];
 
 //// [symbolProperty17.js]
-var i;
+"use strict";
 var it = i[Symbol.iterator];

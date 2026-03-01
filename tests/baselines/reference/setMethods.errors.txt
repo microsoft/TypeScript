@@ -1,0 +1,92 @@
+setMethods.ts(13,17): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+setMethods.ts(19,24): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+setMethods.ts(25,22): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+setMethods.ts(31,31): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+setMethods.ts(37,22): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+setMethods.ts(43,24): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+setMethods.ts(49,26): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+  Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+
+
+==== setMethods.ts (7 errors) ====
+    let numberSet = new Set([0, 1, 2]);
+    
+    let stringSet = new Set(["a", "b"]);
+    
+    let numberMap = new Map([[4, {}], [5, {}]]);
+    
+    let numberSetLike = {
+      size: 1,
+      *keys() { yield 3 },
+      has(x) { return x === 3 },
+    };
+    
+    numberSet.union([]);
+                    ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.union(new Set);
+    numberSet.union(stringSet);
+    numberSet.union(numberMap);
+    numberSet.union(numberSetLike);
+    
+    numberSet.intersection([]);
+                           ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.intersection(new Set);
+    numberSet.intersection(stringSet);
+    numberSet.intersection(numberMap);
+    numberSet.intersection(numberSetLike);
+    
+    numberSet.difference([]);
+                         ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.difference(new Set);
+    numberSet.difference(stringSet);
+    numberSet.difference(numberMap);
+    numberSet.difference(numberSetLike);
+    
+    numberSet.symmetricDifference([]);
+                                  ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.symmetricDifference(new Set);
+    numberSet.symmetricDifference(stringSet);
+    numberSet.symmetricDifference(numberMap);
+    numberSet.symmetricDifference(numberSetLike);
+    
+    numberSet.isSubsetOf([]);
+                         ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.isSubsetOf(new Set);
+    numberSet.isSubsetOf(stringSet);
+    numberSet.isSubsetOf(numberMap);
+    numberSet.isSubsetOf(numberSetLike);
+    
+    numberSet.isSupersetOf([]);
+                           ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.isSupersetOf(new Set);
+    numberSet.isSupersetOf(stringSet);
+    numberSet.isSupersetOf(numberMap);
+    numberSet.isSupersetOf(numberSetLike);
+    
+    numberSet.isDisjointFrom([]);
+                             ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'ReadonlySetLike<unknown>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'ReadonlySetLike<unknown>': has, size
+    numberSet.isDisjointFrom(new Set);
+    numberSet.isDisjointFrom(stringSet);
+    numberSet.isDisjointFrom(numberMap);
+    numberSet.isDisjointFrom(numberSetLike);
+    

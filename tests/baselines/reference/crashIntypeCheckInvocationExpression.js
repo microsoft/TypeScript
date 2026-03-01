@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashIntypeCheckInvocationExpression.ts] ////
+
 //// [crashIntypeCheckInvocationExpression.ts]
 var nake;
 function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
@@ -13,16 +15,11 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 
 
 //// [crashIntypeCheckInvocationExpression.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.compileServer = void 0;
-    var nake;
-    function doCompile(fileset, moduleType) {
-        return undefined;
-    }
-    exports.compileServer = task(function () {
-        var folder = path.join(), fileset = nake.fileSetSync(folder);
-        return doCompile(fileset, moduleType);
-    });
+var nake;
+function doCompile(fileset, moduleType) {
+    return undefined;
+}
+export var compileServer = task(() => {
+    var folder = path.join(), fileset = nake.fileSetSync(folder);
+    return doCompile(fileset, moduleType);
 });

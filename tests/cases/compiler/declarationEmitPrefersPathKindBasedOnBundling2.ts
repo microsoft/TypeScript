@@ -1,9 +1,9 @@
 // @declaration: true
-// @target: es5
-// @baseUrl: /.src/tests/cases/compiler
+// @target: es5, es2015
+// @baseUrl: .
 // @module: amd
 // @outFile: ./dist.js
-// @rootDir: ./tests/cases/compiler/src
+// @rootDir: ./src
 // @filename: src/lib/operators/scalar.ts
 export interface Scalar {
 	(): string;

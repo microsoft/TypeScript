@@ -1,0 +1,132 @@
+// === Inlay Hints ===
+fn(/* nobody knows exactly what this param is */ 42);
+                                                 ^
+{
+  "text": "",
+  "position": 76,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "x",
+      "span": {
+        "start": 12,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesWithComments.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    2,
+    ^
+{
+  "text": "",
+  "position": 215,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "bParameter",
+      "span": {
+        "start": 115,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesWithComments.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    3
+    ^
+{
+  "text": "",
+  "position": 419,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "cParameter",
+      "span": {
+        "start": 135,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesWithComments.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    1,
+    ^
+{
+  "text": "",
+  "position": 454,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "aParameter",
+      "span": {
+        "start": 95,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesWithComments.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    2,
+    ^
+{
+  "text": "",
+  "position": 461,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "bParameter",
+      "span": {
+        "start": 115,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesWithComments.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    3
+    ^
+{
+  "text": "",
+  "position": 521,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "cParameter",
+      "span": {
+        "start": 135,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveParameterNamesWithComments.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

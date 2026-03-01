@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts] ////
+
 //// [additionOperatorWithStringAndEveryType.ts]
 enum E { a, b, c }
 
@@ -39,6 +41,7 @@ var r19 = x + { a: '' };
 var r20 = x + [];
 
 //// [additionOperatorWithStringAndEveryType.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateStaticMembers.ts] ////
+
 //// [unusedPrivateStaticMembers.ts]
 class Test1 {
     private static m1() {}
@@ -44,6 +46,7 @@ class Test6 {
 
 
 //// [unusedPrivateStaticMembers.js]
+"use strict";
 class Test1 {
     static m1() { }
     static test() {

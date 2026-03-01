@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts(2,23): error TS2304: Cannot find name 'Harness'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts(3,22): error TS2304: Cannot find name 'Harness'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts(4,21): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts(4,55): error TS2304: Cannot find name 'TypeScript'.
+parserVariableDeclaration3.ts(2,23): error TS2304: Cannot find name 'Harness'.
+parserVariableDeclaration3.ts(3,22): error TS2304: Cannot find name 'Harness'.
+parserVariableDeclaration3.ts(4,21): error TS2503: Cannot find namespace 'TypeScript'.
+parserVariableDeclaration3.ts(4,55): error TS2304: Cannot find name 'TypeScript'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts (4 errors) ====
+==== parserVariableDeclaration3.ts (4 errors) ====
     function runTests() {
         var outfile = new Harness.Compiler.WriterAggregator()
                           ~~~~~~~

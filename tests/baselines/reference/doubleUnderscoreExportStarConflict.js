@@ -13,16 +13,14 @@ export function __foo(): string | void {}
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports.__foo = void 0;
-function __foo() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.__foo = __foo;
+function __foo() { }
 //// [c.js]
 "use strict";
-exports.__esModule = true;
-exports.__foo = void 0;
-function __foo() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.__foo = __foo;
+function __foo() { }
 //// [index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -39,6 +37,6 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./b"), exports);
 __exportStar(require("./c"), exports);

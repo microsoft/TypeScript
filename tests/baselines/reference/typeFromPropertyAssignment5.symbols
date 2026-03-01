@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment5.ts] ////
+
+=== a.js ===
 export default function MyClass() {
 >MyClass : Symbol(MyClass, Decl(a.js, 0, 0), Decl(a.js, 1, 1))
 }
@@ -13,7 +15,7 @@ MyClass.bar
 >MyClass : Symbol(MyClass, Decl(a.js, 0, 0), Decl(a.js, 1, 1))
 >bar : Symbol(MyClass.bar, Decl(a.js, 1, 1))
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 import MC from './a'
 >MC : Symbol(MC, Decl(b.js, 0, 6))
 

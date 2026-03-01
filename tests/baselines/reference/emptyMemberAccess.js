@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyMemberAccess.ts] ////
+
 //// [emptyMemberAccess.ts]
 function getObj() {
 
@@ -7,6 +9,7 @@ function getObj() {
  
 
 //// [emptyMemberAccess.js]
+"use strict";
 function getObj() {
     ().toString();
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexer2.ts] ////
+
 //// [indexer2.ts]
 interface IHeapObjectProperty {}
 interface IDirectChildrenMap { 
@@ -7,4 +9,5 @@ interface IDirectChildrenMap {
 var directChildrenMap = <IDirectChildrenMap>{}; 
 
 //// [indexer2.js]
+"use strict";
 var directChildrenMap = {};

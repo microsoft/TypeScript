@@ -1,0 +1,15 @@
+usingDeclarations.5.ts(3,11): error TS1492: 'using' declarations may not have binding patterns.
+usingDeclarations.5.ts(3,11): error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== usingDeclarations.5.ts (2 errors) ====
+    {
+        using a = null,
+              [b] = null,
+              ~~~
+!!! error TS1492: 'using' declarations may not have binding patterns.
+              ~~~
+!!! error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+              c = null;
+    }
+    

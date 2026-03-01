@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts] ////
+
 //// [taggedTemplateContextualTyping1.ts]
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 
@@ -18,6 +20,7 @@ tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y =>
 
 
 //// [taggedTemplateContextualTyping1.js]
+"use strict";
 function tempTag1(...rest) {
     return undefined;
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassNameConflict.ts] ////
+
 //// [privateNameNestedClassNameConflict.ts]
 class A {
     #foo: string;
@@ -10,6 +12,7 @@ class A {
 
 
 //// [privateNameNestedClassNameConflict.js]
+"use strict";
 var _A_foo;
 class A {
     constructor() {

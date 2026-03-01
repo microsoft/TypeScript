@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace01.ts] ////
+
 //// [asiPreventsParsingAsNamespace01.ts]
 var namespace: number;
 var n: string;
@@ -7,6 +9,7 @@ n            // this is the identifier 'n'
 { }          // this is a block body
 
 //// [asiPreventsParsingAsNamespace01.js]
+"use strict";
 var namespace;
 var n;
 namespace; // this is the identifier 'namespace'

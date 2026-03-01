@@ -14,15 +14,15 @@ export { x }
 
 //// [ch.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-var x = {
+const x = {
     grey: {}
 };
 exports.x = x;
 //// [main.js]
 "use strict";
-var x = require('./ch').x;
+const x = require('./ch').x;
 x;
 x.grey;
 x.x.grey;
@@ -30,7 +30,7 @@ x.x.grey;
 
 //// [ch.d.ts]
 export namespace x {
-    const grey: {};
+    let grey: {};
 }
 //// [main.d.ts]
 export {};

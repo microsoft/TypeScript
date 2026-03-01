@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration6.ts] ////
+
 //// [parserEnumDeclaration6.ts]
 enum E {
     A = 1,
@@ -7,6 +9,7 @@ enum E {
 }
 
 //// [parserEnumDeclaration6.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 1] = "A";

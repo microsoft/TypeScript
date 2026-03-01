@@ -1,34 +1,57 @@
-=== tests/cases/conformance/es6/Symbols/symbolType5.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType5.ts] ////
+
+=== symbolType5.ts ===
 var s = Symbol.for("multiply");
 >s : symbol
+>  : ^^^^^^
 >Symbol.for("multiply") : symbol
+>                       : ^^^^^^
 >Symbol.for : (key: string) => symbol
+>           : ^   ^^      ^^^^^      
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
+>    : ^   ^^      ^^^^^      
 >"multiply" : "multiply"
+>           : ^^^^^^^^^^
 
 s * s;
 >s * s : number
+>      : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s / s;
 >s / s : number
+>      : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s % s;
 >s % s : number
+>      : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 
 s * 0;
 >s * 0 : number
+>      : ^^^^^^
 >s : symbol
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 0 / s;
 >0 / s : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 >s : symbol
+>  : ^^^^^^
 

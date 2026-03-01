@@ -1,9 +1,13 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag1.ts] ////
+
 === /a.ts ===
+
 export interface A {}
-No type information for this code.
-No type information for this code.=== /b.ts ===
+
+=== /b.ts ===
 import type { A } from "./a";
 >A : A
+>  : ^
 
 /** {@link A} */
 export interface B {}

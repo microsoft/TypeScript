@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNumericLiteral.ts] ////
+
 //// [comparisonOperatorWithNumericLiteral.ts]
 type BrandedNum = number & { __numberBrand: any };
 var x : BrandedNum;
@@ -44,6 +46,7 @@ x !== <BrandedNum>0;
 
 
 //// [comparisonOperatorWithNumericLiteral.js]
+"use strict";
 var x;
 // operator >
 x > 0;

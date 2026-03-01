@@ -1,48 +1,67 @@
-=== tests/cases/compiler/ambientClassDeclarationExtends_singleFile.ts ===
+//// [tests/cases/compiler/ambientClassDeclarationWithExtends.ts] ////
+
+=== ambientClassDeclarationExtends_singleFile.ts ===
 declare class A { }
 >A : A
+>  : ^
 
 declare class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 declare class C {
 >C : C
+>  : ^
 
     public foo;
 >foo : any
 }
 namespace D { var x; }
 >D : typeof D
+>  : ^^^^^^^^
 >x : any
 
 declare class D extends C { }
 >D : D
+>  : ^
 >C : C
+>  : ^
 
 var d: C = new D();
 >d : C
+>  : ^
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/ambientClassDeclarationExtends_file1.ts ===
+=== ambientClassDeclarationExtends_file1.ts ===
 declare class E {
 >E : E
+>  : ^
 
     public bar;
 >bar : any
 }
 namespace F { var y; }
 >F : typeof F
+>  : ^^^^^^^^
 >y : any
 
-=== tests/cases/compiler/ambientClassDeclarationExtends_file2.ts ===
+=== ambientClassDeclarationExtends_file2.ts ===
 declare class F extends E { }
 >F : F
+>  : ^
 >E : E
+>  : ^
 
 var f: E = new F();
 >f : E
+>  : ^
 >new F() : F
+>        : ^
 >F : typeof F
+>  : ^^^^^^^^
 

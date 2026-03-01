@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getterMissingReturnError.ts] ////
+
 //// [getterMissingReturnError.ts]
 class test {
     public get p2(){
@@ -7,14 +9,8 @@ class test {
 
 
 //// [getterMissingReturnError.js]
-var test = /** @class */ (function () {
-    function test() {
+"use strict";
+class test {
+    get p2() {
     }
-    Object.defineProperty(test.prototype, "p2", {
-        get: function () {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return test;
-}());
+}

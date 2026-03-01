@@ -1,23 +1,23 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(3,14): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(4,22): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(5,11): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(5,11): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(5,23): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(8,9): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(12,6): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(13,9): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(13,9): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(13,23): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(17,6): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(18,9): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(22,9): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(23,21): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(23,21): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(23,35): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts(24,9): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(3,14): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(4,22): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(5,11): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes.ts(5,11): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(5,23): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(8,9): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(12,6): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(13,9): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes.ts(13,9): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(13,23): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(17,6): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(18,9): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(22,9): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(23,21): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes.ts(23,21): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(23,35): error TS2370: A rest parameter must be of an array type.
+restParametersOfNonArrayTypes.ts(24,9): error TS2370: A rest parameter must be of an array type.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts (17 errors) ====
+==== restParametersOfNonArrayTypes.ts (17 errors) ====
     // Rest parameters must be an array type if they have a type annotation, so all these are errors
     
     function foo(...x: string) { }

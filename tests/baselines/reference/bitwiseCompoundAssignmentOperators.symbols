@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts ===
+//// [tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts] ////
+
+=== bitwiseCompoundAssignmentOperators.ts ===
 var a = true;
 >a : Symbol(a, Decl(bitwiseCompoundAssignmentOperators.ts, 0, 3))
 

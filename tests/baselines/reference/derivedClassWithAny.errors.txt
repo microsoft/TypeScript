@@ -1,28 +1,22 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(9,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(19,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(27,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(38,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
+derivedClassWithAny.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedClassWithAny.ts(37,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts (7 errors) ====
+==== derivedClassWithAny.ts (3 errors) ====
     class C {
         x: number;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         get X(): number { return 1; }
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo(): number {
             return 1;
         }
     
         static y: number;
         static get Y(): number {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
         static bar(): number {
@@ -33,8 +27,6 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     class D extends C {
         x: any;
         get X(): any {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         foo(): any {
@@ -43,8 +35,6 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     
         static y: any;
         static get Y(): any {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         static bar(): any {
@@ -55,17 +45,15 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     // if D is a valid class definition than E is now not safe tranisitively through C
     class E extends D {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         get X(): string{ return ''; }
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo(): string {
             return '';
         }
     
         static y: string;
         static get Y(): string {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return '';
         }
         static bar(): string {
@@ -73,9 +61,9 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
         }
     }
     
-    var c: C;
-    var d: D;
-    var e: E;
+    declare var c: C;
+    declare var d: D;
+    declare var e: E;
     
     c = d;
     c = e;

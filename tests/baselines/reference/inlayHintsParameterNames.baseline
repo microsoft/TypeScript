@@ -1,0 +1,216 @@
+// === Inlay Hints ===
+ foo1(1, 2);
+      ^
+{
+  "text": "a:",
+  "position": 47,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+ foo1(1, 2);
+         ^
+{
+  "text": "b:",
+  "position": 50,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+ foo2(1, { c: 1 });
+      ^
+{
+  "text": "a:",
+  "position": 102,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo3({}, 1);
+         ^
+{
+  "text": "b:",
+  "position": 161,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+const C1 = class extends foo3(1) { }
+                              ^
+{
+  "text": "a:",
+  "position": 229,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+class C2 extends foo3(1) { }
+                      ^
+{
+  "text": "a:",
+  "position": 258,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo4(1, +1, -1, +"1");
+     ^
+{
+  "text": "a:",
+  "position": 331,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo4(1, +1, -1, +"1");
+        ^
+{
+  "text": "b:",
+  "position": 334,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo4(1, +1, -1, +"1");
+            ^
+{
+  "text": "c:",
+  "position": 338,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo4(1, +1, -1, +"1");
+                ^
+{
+  "text": "d:",
+  "position": 342,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    "hello",
+    ^
+{
+  "text": "a:",
+  "position": 533,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    undefined,
+    ^
+{
+  "text": "b:",
+  "position": 546,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    null,
+    ^
+{
+  "text": "c:",
+  "position": 561,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    true,
+    ^
+{
+  "text": "d:",
+  "position": 571,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    false,
+    ^
+{
+  "text": "e:",
+  "position": 581,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    Infinity,
+    ^
+{
+  "text": "f:",
+  "position": 592,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    -Infinity,
+    ^
+{
+  "text": "g:",
+  "position": 606,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    NaN,
+    ^
+{
+  "text": "h:",
+  "position": 621,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    /hello/g,
+    ^
+{
+  "text": "i:",
+  "position": 630,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    123n,
+    ^
+{
+  "text": "j:",
+  "position": 644,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+trace(`${1}`);
+      ^
+{
+  "text": "message:",
+  "position": 743,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+trace(``);
+      ^
+{
+  "text": "message:",
+  "position": 758,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    'foo',
+    ^
+{
+  "text": "param2:",
+  "position": 884,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    true,
+    ^
+{
+  "text": "param3:",
+  "position": 895,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

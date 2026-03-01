@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment5.ts] ////
+
 //// [destructuringObjectBindingPatternAndAssignment5.ts]
 function a () {
     let x: number;
@@ -7,6 +9,7 @@ function a () {
 
 
 //// [destructuringObjectBindingPatternAndAssignment5.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -20,7 +23,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 function a() {
     var _a;
-    var x;
-    var y;
-    (_a = {}, x = _a.x, y = __rest(_a, ["x"]));
+    let x;
+    let y;
+    (_a = {}, { x } = _a, y = __rest(_a, ["x"]));
 }

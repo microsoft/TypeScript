@@ -20,28 +20,22 @@ let t: typeof types = {
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+}
+class B {
+}
 exports.B = B;
 ;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-var A;
-var B;
-var t = {
+Object.defineProperty(exports, "__esModule", { value: true });
+let A;
+let B;
+let t = {
     // error: while you can ask for `typeof types.A`,
     // `typeof types` does not include `A`
     A: undefined,
-    B: undefined
+    B: undefined,
 };

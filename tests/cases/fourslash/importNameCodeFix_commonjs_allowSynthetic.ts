@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: esnext
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @allowJs: true
 // @checkJs: true
 // @allowSyntheticDefaultImports: true

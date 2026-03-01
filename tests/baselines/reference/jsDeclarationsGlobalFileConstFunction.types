@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/jsDeclarationsGlobalFileConstFunction.ts] ////
+
+=== file.js ===
+const SomeConstructor = function () {
+>SomeConstructor : typeof SomeConstructor
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>function () {	this.x = 1;} : typeof SomeConstructor
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
+
+	this.x = 1;
+>this.x = 1 : 1
+>           : ^
+>this.x : any
+>this : this
+>     : ^^^^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+
+};
+
+const SomeConstructor2 = function () {
+>SomeConstructor2 : { (): void; staticMember: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function () {} : { (): void; staticMember: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+SomeConstructor2.staticMember = "str";
+>SomeConstructor2.staticMember = "str" : "str"
+>                                      : ^^^^^
+>SomeConstructor2.staticMember : string
+>                              : ^^^^^^
+>SomeConstructor2 : { (): void; staticMember: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>staticMember : string
+>             : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
+
+const SomeConstructor3 = function () {
+>SomeConstructor3 : typeof SomeConstructor3
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>function () {	this.x = 1;} : typeof SomeConstructor3
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
+
+	this.x = 1;
+>this.x = 1 : 1
+>           : ^
+>this.x : any
+>this : this
+>     : ^^^^
+>x : any
+>  : ^^^
+>1 : 1
+>  : ^
+
+};
+SomeConstructor3.staticMember = "str";
+>SomeConstructor3.staticMember = "str" : "str"
+>                                      : ^^^^^
+>SomeConstructor3.staticMember : string
+>                              : ^^^^^^
+>SomeConstructor3 : typeof SomeConstructor3
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>staticMember : string
+>             : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
+

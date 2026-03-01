@@ -1,0 +1,121 @@
+===================================================================
+--- default
++++ ParseNone
+@@ -8,9 +8,8 @@
+         "0": {
+             "kind": "FunctionDeclaration",
+             "pos": 0,
+             "end": 46,
+-            "flags": "Deprecated",
+             "modifierFlagsCache": 0,
+             "transformFlags": 4194304,
+             "name": {
+                 "kind": "Identifier",
+@@ -39,42 +38,9 @@
+                     "hasTrailingComma": false,
+                     "transformFlags": 0
+                 },
+                 "multiLine": false
+-            },
+-            "jsDoc": [
+-                {
+-                    "kind": "JSDoc",
+-                    "pos": 1,
+-                    "end": 19,
+-                    "flags": "JSDoc",
+-                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
+-                    "tags": {
+-                        "0": {
+-                            "kind": "JSDocDeprecatedTag",
+-                            "pos": 5,
+-                            "end": 17,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 6,
+-                                "end": 16,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "deprecated"
+-                            }
+-                        },
+-                        "length": 1,
+-                        "pos": 5,
+-                        "end": 17,
+-                        "hasTrailingComma": false,
+-                        "transformFlags": 0
+-                    }
+-                }
+-            ]
++            }
+         },
+         "1": {
+             "kind": "ExpressionStatement",
+             "pos": 46,
+@@ -106,9 +72,8 @@
+         "2": {
+             "kind": "FunctionDeclaration",
+             "pos": 61,
+             "end": 135,
+-            "flags": "Deprecated",
+             "modifierFlagsCache": 0,
+             "transformFlags": 4194304,
+             "name": {
+                 "kind": "Identifier",
+@@ -137,43 +102,9 @@
+                     "hasTrailingComma": false,
+                     "transformFlags": 0
+                 },
+                 "multiLine": false
+-            },
+-            "jsDoc": [
+-                {
+-                    "kind": "JSDoc",
+-                    "pos": 62,
+-                    "end": 107,
+-                    "flags": "JSDoc",
+-                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
+-                    "comment": "{@see imDeprecated}",
+-                    "tags": {
+-                        "0": {
+-                            "kind": "JSDocDeprecatedTag",
+-                            "pos": 92,
+-                            "end": 105,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 93,
+-                                "end": 103,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "deprecated"
+-                            }
+-                        },
+-                        "length": 1,
+-                        "pos": 92,
+-                        "end": 105,
+-                        "hasTrailingComma": false,
+-                        "transformFlags": 0
+-                    }
+-                }
+-            ]
++            }
+         },
+         "3": {
+             "kind": "ExpressionStatement",
+             "pos": 135,
+@@ -230,6 +161,6 @@
+     "typeReferenceDirectives": [],
+     "libReferenceDirectives": [],
+     "amdDependencies": [],
+     "identifiers": {},
+-    "jsDocParsingMode": 0
++    "jsDocParsingMode": 1
+ }
+\ No newline at end of file

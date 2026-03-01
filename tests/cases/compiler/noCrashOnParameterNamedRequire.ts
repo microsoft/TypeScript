@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @allowJs: true
 // @checkJs: true
 // @outDir: ./built

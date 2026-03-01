@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInTypeAssertionES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInTypeAssertionES6.ts] ////
+
+=== templateStringInTypeAssertionES6.ts ===
 var x = <any>`abc${ 123 }def`;
 >x : Symbol(x, Decl(templateStringInTypeAssertionES6.ts, 0, 3))
 

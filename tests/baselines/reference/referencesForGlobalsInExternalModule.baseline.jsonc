@@ -1,927 +1,621 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// /*FIND ALL REFS*/var [|topLevelVar|] = 2;
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}topLevelVar|] = 2;|>
 // var topLevelVar2 = [|topLevelVar|];
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// 
-// interface topLevelInterface { }
-// var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "var",
-      "name": "var topLevelVar: number",
-      "textSpan": {
-        "start": 4,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelVar",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 20
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 20
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // /*FIND ALL REFS*/<|var [|topLevelVar|] = 2;|>
+  // var topLevelVar2 = topLevelVar;
+  // 
+  // class topLevelClass { }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var topLevelVar: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelVar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var /*FIND ALL REFS*/[|topLevelVar|] = 2;
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}topLevelVar|] = 2;|>
 // var topLevelVar2 = [|topLevelVar|];
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// 
-// interface topLevelInterface { }
-// var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "var",
-      "name": "var topLevelVar: number",
-      "textSpan": {
-        "start": 4,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelVar",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 20
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 20
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // <|var /*FIND ALL REFS*/[|topLevelVar|] = 2;|>
+  // var topLevelVar2 = topLevelVar;
+  // 
+  // class topLevelClass { }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var topLevelVar: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelVar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var [|topLevelVar|] = 2;
+// <|var [|{| isWriteAccess: true |}topLevelVar|] = 2;|>
 // var topLevelVar2 = /*FIND ALL REFS*/[|topLevelVar|];
 // 
 // class topLevelClass { }
 // var c = new topLevelClass();
-// 
-// interface topLevelInterface { }
-// var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "var",
-      "name": "var topLevelVar: number",
-      "textSpan": {
-        "start": 4,
-        "length": 11
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelVar",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 20
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 20
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // <|var [|topLevelVar|] = 2;|>
+  // var topLevelVar2 = /*FIND ALL REFS*/topLevelVar;
+  // 
+  // class topLevelClass { }
+  // var c = new topLevelClass();
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var topLevelVar: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelVar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
 // var topLevelVar = 2;
 // var topLevelVar2 = topLevelVar;
 // 
-// /*FIND ALL REFS*/class [|topLevelClass|] { }
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}topLevelClass|] { }|>
 // var c = new [|topLevelClass|]();
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "class",
-      "name": "class topLevelClass",
-      "textSpan": {
-        "start": 60,
-        "length": 13
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 54,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 13
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 54,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 13
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // var topLevelVar = 2;
+  // var topLevelVar2 = topLevelVar;
+  // 
+  // /*FIND ALL REFS*/<|class [|topLevelClass|] { }|>
+  // var c = new topLevelClass();
+  // 
+  // interface topLevelInterface { }
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class topLevelClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
 // var topLevelVar = 2;
 // var topLevelVar2 = topLevelVar;
 // 
-// class /*FIND ALL REFS*/[|topLevelClass|] { }
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}topLevelClass|] { }|>
 // var c = new [|topLevelClass|]();
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "class",
-      "name": "class topLevelClass",
-      "textSpan": {
-        "start": 60,
-        "length": 13
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 54,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 13
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 54,
-          "length": 23
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 13
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // var topLevelVar = 2;
+  // var topLevelVar2 = topLevelVar;
+  // 
+  // <|class /*FIND ALL REFS*/[|topLevelClass|] { }|>
+  // var c = new topLevelClass();
+  // 
+  // interface topLevelInterface { }
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class topLevelClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
 // var topLevelVar = 2;
 // var topLevelVar2 = topLevelVar;
 // 
-// class [|topLevelClass|] { }
+// <|class [|{| isWriteAccess: true |}topLevelClass|] { }|>
 // var c = new /*FIND ALL REFS*/[|topLevelClass|]();
 // 
 // interface topLevelInterface { }
 // var i: topLevelInterface;
-// 
-// module topLevelModule {
-//     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 9) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "class",
-      "name": "class topLevelClass",
-      "textSpan": {
-        "start": 60,
-        "length": 13
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 54,
-        "length": 23
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 60,
-          "length": 13
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 54,
-          "length": 23
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 13
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // var topLevelVar = 2;
+  // var topLevelVar2 = topLevelVar;
+  // 
+  // <|class [|topLevelClass|] { }|>
+  // var c = new /*FIND ALL REFS*/topLevelClass();
+  // 
+  // interface topLevelInterface { }
+  // var i: topLevelInterface;
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class topLevelClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
+// --- (line: 3) skipped ---
 // class topLevelClass { }
 // var c = new topLevelClass();
 // 
-// /*FIND ALL REFS*/interface [|topLevelInterface|] { }
+// /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}topLevelInterface|] { }|>
 // var i: [|topLevelInterface|];
 // 
 // module topLevelModule {
 //     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 12) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "interface",
-      "name": "interface topLevelInterface",
-      "textSpan": {
-        "start": 118,
-        "length": 17
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelInterface",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 118,
-          "length": 17
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 31
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 147,
-          "length": 17
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // --- (line: 3) skipped ---
+  // class topLevelClass { }
+  // var c = new topLevelClass();
+  // 
+  // /*FIND ALL REFS*/<|interface [|topLevelInterface|] { }|>
+  // var i: topLevelInterface;
+  // 
+  // module topLevelModule {
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface topLevelInterface",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelInterface",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
+// --- (line: 3) skipped ---
 // class topLevelClass { }
 // var c = new topLevelClass();
 // 
-// interface /*FIND ALL REFS*/[|topLevelInterface|] { }
+// <|interface /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}topLevelInterface|] { }|>
 // var i: [|topLevelInterface|];
 // 
 // module topLevelModule {
 //     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 12) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "interface",
-      "name": "interface topLevelInterface",
-      "textSpan": {
-        "start": 118,
-        "length": 17
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelInterface",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 118,
-          "length": 17
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 31
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 147,
-          "length": 17
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // --- (line: 3) skipped ---
+  // class topLevelClass { }
+  // var c = new topLevelClass();
+  // 
+  // <|interface /*FIND ALL REFS*/[|topLevelInterface|] { }|>
+  // var i: topLevelInterface;
+  // 
+  // module topLevelModule {
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface topLevelInterface",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelInterface",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
+// --- (line: 3) skipped ---
 // class topLevelClass { }
 // var c = new topLevelClass();
 // 
-// interface [|topLevelInterface|] { }
+// <|interface [|{| isWriteAccess: true |}topLevelInterface|] { }|>
 // var i: /*FIND ALL REFS*/[|topLevelInterface|];
 // 
 // module topLevelModule {
 //     export var x;
-// }
-// var x = topLevelModule.x;
-// 
-// export = x;
+// --- (line: 12) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "interface",
-      "name": "interface topLevelInterface",
-      "textSpan": {
-        "start": 118,
-        "length": 17
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelInterface",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 31
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 118,
-          "length": 17
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 31
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 147,
-          "length": 17
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // --- (line: 3) skipped ---
+  // class topLevelClass { }
+  // var c = new topLevelClass();
+  // 
+  // <|interface [|topLevelInterface|] { }|>
+  // var i: /*FIND ALL REFS*/topLevelInterface;
+  // 
+  // module topLevelModule {
+  //     export var x;
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "interface topLevelInterface",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelInterface",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
-// class topLevelClass { }
-// var c = new topLevelClass();
-// 
+// --- (line: 6) skipped ---
 // interface topLevelInterface { }
 // var i: topLevelInterface;
 // 
-// /*FIND ALL REFS*/module [|topLevelModule|] {
+// /*FIND ALL REFS*/<|module [|{| isWriteAccess: true, isDefinition: true |}topLevelModule|] {
 //     export var x;
-// }
+// }|>
 // var x = [|topLevelModule|].x;
 // 
 // export = x;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "module",
-      "name": "namespace topLevelModule",
-      "textSpan": {
-        "start": 174,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelModule",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 167,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 174,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 167,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 219,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // --- (line: 6) skipped ---
+  // interface topLevelInterface { }
+  // var i: topLevelInterface;
+  // 
+  // /*FIND ALL REFS*/<|module [|topLevelModule|] {
+  //     export var x;
+  // }|>
+  // var x = topLevelModule.x;
+  // 
+  // export = x;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace topLevelModule",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelModule",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
-// class topLevelClass { }
-// var c = new topLevelClass();
-// 
+// --- (line: 6) skipped ---
 // interface topLevelInterface { }
 // var i: topLevelInterface;
 // 
-// module /*FIND ALL REFS*/[|topLevelModule|] {
+// <|module /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}topLevelModule|] {
 //     export var x;
-// }
+// }|>
 // var x = [|topLevelModule|].x;
 // 
 // export = x;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "module",
-      "name": "namespace topLevelModule",
-      "textSpan": {
-        "start": 174,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelModule",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 167,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 174,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 167,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 219,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // --- (line: 6) skipped ---
+  // interface topLevelInterface { }
+  // var i: topLevelInterface;
+  // 
+  // <|module /*FIND ALL REFS*/[|topLevelModule|] {
+  //     export var x;
+  // }|>
+  // var x = topLevelModule.x;
+  // 
+  // export = x;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace topLevelModule",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelModule",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
-// var topLevelVar = 2;
-// var topLevelVar2 = topLevelVar;
-// 
-// class topLevelClass { }
-// var c = new topLevelClass();
-// 
+// --- (line: 6) skipped ---
 // interface topLevelInterface { }
 // var i: topLevelInterface;
 // 
-// module [|topLevelModule|] {
+// <|module [|{| isWriteAccess: true |}topLevelModule|] {
 //     export var x;
-// }
+// }|>
 // var x = /*FIND ALL REFS*/[|topLevelModule|].x;
 // 
 // export = x;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-      "kind": "module",
-      "name": "namespace topLevelModule",
-      "textSpan": {
-        "start": 174,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "topLevelModule",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 167,
-        "length": 43
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 174,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "contextSpan": {
-          "start": 167,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 219,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/referencesForGlobalsInExternalModule.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForGlobalsInExternalModule.ts ===
+  // --- (line: 6) skipped ---
+  // interface topLevelInterface { }
+  // var i: topLevelInterface;
+  // 
+  // <|module [|topLevelModule|] {
+  //     export var x;
+  // }|>
+  // var x = /*FIND ALL REFS*/topLevelModule.x;
+  // 
+  // export = x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "namespace topLevelModule",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "topLevelModule",
+      "kind": "moduleName"
+     }
     ]
-  }
-]
+   }
+  ]

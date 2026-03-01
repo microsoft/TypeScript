@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/isolatedDeclarationsAddUndefined.ts] ////
+
+=== file1.ts ===
+type N = 1;
+>N : 1
+>  : ^
+
+export class Bar {
+>Bar : Bar
+>    : ^^^
+
+    c? = [2 as N] as const;
+>c : readonly [1] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[2 as N] as const : readonly [1]
+>                  : ^^^^^^^^^^^^
+>[2 as N] : readonly [1]
+>         : ^^^^^^^^^^^^
+>2 as N : 1
+>       : ^
+>2 : 2
+>  : ^
+
+    c3? = 1 as N;
+>c3 : 1 | undefined
+>   : ^^^^^^^^^^^^^
+>1 as N : 1
+>       : ^
+>1 : 1
+>  : ^
+
+    readonly r = 1;
+>r : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    f = 2;
+>f : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+=== file2.ts ===
+export function foo(p = (ip = 10, v: number): void => {}): void{
+>foo : (p?: (ip: number | undefined, v: number) => void) => void
+>    : ^ ^^^^    ^^^^^^^^^^^^^^^^^^^^         ^^^^^    ^^^^^    
+>p : (ip: number | undefined, v: number) => void
+>  : ^  ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    
+>(ip = 10, v: number): void => {} : (ip: number | undefined, v: number) => void
+>                                 : ^  ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    
+>ip : number
+>   : ^^^^^^
+>10 : 10
+>   : ^^
+>v : number
+>  : ^^^^^^
+}
+type T = number
+>T : number
+>  : ^^^^^^
+
+export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
+>foo2 : (p?: (ip: T | undefined, v: number) => void) => void
+>     : ^ ^^^^     ^^^^^^^^^^^^^^         ^^^^^    ^^^^^    
+>p : (ip: T | undefined, v: number) => void
+>  : ^  ^^ ^^^^^^^^^^^^^^ ^^      ^^^^^    
+>(ip = 10 as T, v: number): void => {} : (ip: T | undefined, v: number) => void
+>                                      : ^  ^^ ^^^^^^^^^^^^^^ ^^      ^^^^^    
+>ip : number
+>   : ^^^^^^
+>10 as T : number
+>        : ^^^^^^
+>10 : 10
+>   : ^^
+>v : number
+>  : ^^^^^^
+
+export class Bar2 {
+>Bar2 : Bar2
+>     : ^^^^
+
+    readonly r = 1;
+>r : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    f = 2;
+>f : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}

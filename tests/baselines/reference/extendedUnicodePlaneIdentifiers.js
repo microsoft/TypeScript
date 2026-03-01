@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts] ////
+
 //// [extendedUnicodePlaneIdentifiers.ts]
 const 𝑚 = 4;
 const 𝑀 = 5;
@@ -44,6 +46,7 @@ const 𝓮𡚭𓀺ⱱ = "ok";
 
 
 //// [extendedUnicodePlaneIdentifiers.js]
+"use strict";
 var _K_𝑚, _K_𝑀;
 const 𝑚 = 4;
 const 𝑀 = 5;

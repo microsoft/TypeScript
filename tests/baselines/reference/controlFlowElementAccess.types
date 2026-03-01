@@ -1,45 +1,77 @@
-=== tests/cases/conformance/controlFlow/controlFlowElementAccess.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccess.ts] ////
+
+=== controlFlowElementAccess.ts ===
 let x: { o: boolean } = { o: false }
 >x : { o: boolean; }
+>  : ^^^^^       ^^^
 >o : boolean
+>  : ^^^^^^^
 >{ o: false } : { o: false; }
+>             : ^^^^^^^^^^^^^
 >o : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 if (x['o'] === false) {
 >x['o'] === false : boolean
+>                 : ^^^^^^^
 >x['o'] : boolean
+>       : ^^^^^^^
 >x : { o: boolean; }
+>  : ^^^^^       ^^^
 >'o' : "o"
+>    : ^^^
 >false : false
+>      : ^^^^^
 
     x['o'] = true
 >x['o'] = true : true
+>              : ^^^^
 >x['o'] : boolean
+>       : ^^^^^^^
 >x : { o: boolean; }
+>  : ^^^^^       ^^^
 >'o' : "o"
+>    : ^^^
 >true : true
+>     : ^^^^
 }
 
 const y: [number, number] = [0, 0];
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >[0, 0] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 if (y[0] === 0) {
 >y[0] === 0 : boolean
+>           : ^^^^^^^
 >y[0] : number
+>     : ^^^^^^
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
     y[0] = -1;
 >y[0] = -1 : -1
+>          : ^^
 >y[0] : number
+>     : ^^^^^^
 >y : [number, number]
+>  : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 }
 

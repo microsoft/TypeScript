@@ -1,9 +1,9 @@
-tests/cases/compiler/overloadResolutionOverCTLambda.ts(2,10): error TS2322: Type 'number' is not assignable to type 'boolean'.
+overloadResolutionOverCTLambda.ts(2,10): error TS2322: Type 'number' is not assignable to type 'boolean'.
 
 
-==== tests/cases/compiler/overloadResolutionOverCTLambda.ts (1 errors) ====
+==== overloadResolutionOverCTLambda.ts (1 errors) ====
     function foo(b: (item: number) => boolean) { }
     foo(a => a); // can not convert (number)=>bool to (number)=>number
              ~
 !!! error TS2322: Type 'number' is not assignable to type 'boolean'.
-!!! related TS6502 tests/cases/compiler/overloadResolutionOverCTLambda.ts:1:17: The expected type comes from the return type of this signature.
+!!! related TS6502 overloadResolutionOverCTLambda.ts:1:17: The expected type comes from the return type of this signature.

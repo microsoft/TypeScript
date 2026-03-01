@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstNoStringImplementation.ts] ////
+
 //// [overloadOnConstNoStringImplementation.ts]
 function x2(a: number, cb: (x: 'hi') => number);
 function x2(a: number, cb: (x: 'bye') => number);
@@ -16,6 +18,7 @@ x2(1, (x: 'hi') => 1); // error
 x2(1, (x: string) => 1);
 
 //// [overloadOnConstNoStringImplementation.js]
+"use strict";
 function x2(a, cb) {
     cb('hi');
     cb('bye');
@@ -24,7 +27,7 @@ function x2(a, cb) {
     cb('uh');
     cb(1);
 }
-var cb = function (x) { return 1; };
+var cb = (x) => 1;
 x2(1, cb); // error
-x2(1, function (x) { return 1; }); // error
-x2(1, function (x) { return 1; });
+x2(1, (x) => 1); // error
+x2(1, (x) => 1);

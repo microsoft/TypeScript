@@ -1,7 +1,11 @@
-=== tests/cases/compiler/separate1-2.ts ===
-module X {
+//// [tests/cases/compiler/separate1-2.ts] ////
+
+=== separate1-2.ts ===
+namespace X {
 >X : typeof X
+>  : ^^^^^^^^
 
     export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 }

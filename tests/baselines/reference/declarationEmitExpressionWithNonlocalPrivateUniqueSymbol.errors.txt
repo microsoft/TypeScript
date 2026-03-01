@@ -1,10 +1,10 @@
-tests/cases/compiler/b.ts(2,14): error TS2527: The inferred type of 'A1' references an inaccessible 'unique symbol' type. A type annotation is necessary.
+b.ts(2,14): error TS2527: The inferred type of 'A1' references an inaccessible 'unique symbol' type. A type annotation is necessary.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     type AX = { readonly A: unique symbol };
     export const A: AX = 0 as any;
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     import { A } from './a';
     export const A1 = A;
                  ~~

@@ -1,4 +1,7 @@
-=== tests/cases/compiler/declarationEmitAmdModuleDefault.ts ===
+//// [tests/cases/compiler/declarationEmitAmdModuleDefault.ts] ////
+
+=== declarationEmitAmdModuleDefault.ts ===
 export default class DefaultClass { }
 >DefaultClass : DefaultClass
+>             : ^^^^^^^^^^^^
 

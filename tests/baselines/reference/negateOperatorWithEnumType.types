@@ -1,59 +1,96 @@
-=== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithEnumType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithEnumType.ts] ////
+
+=== negateOperatorWithEnumType.ts ===
 // - operator on enum type
 
 enum ENUM { };
 >ENUM : ENUM
+>     : ^^^^
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
+>      : ^^^^^
 >A : ENUM1.A
+>  : ^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >"" : (typeof ENUM1)[""]
+>   : ^^^^^^^^^^^^^^^^^^
 
 // enum type var
 var ResultIsNumber1 = -ENUM;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >-ENUM : number
+>      : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 
 // expressions
 var ResultIsNumber2 = -ENUM1["B"];
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >-ENUM1["B"] : number
+>            : ^^^^^^
 >ENUM1["B"] : ENUM1.B
+>           : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >-(ENUM1.B + ENUM1[""]) : number
+>                       : ^^^^^^
 >(ENUM1.B + ENUM1[""]) : number
+>                      : ^^^^^^
 >ENUM1.B + ENUM1[""] : number
+>                    : ^^^^^^
 >ENUM1.B : ENUM1.B
+>        : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >B : ENUM1.B
+>  : ^^^^^^^
 >ENUM1[""] : (typeof ENUM1)[""]
+>          : ^^^^^^^^^^^^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
 // miss assignment operators
 -ENUM;
 >-ENUM : number
+>      : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 
 -ENUM1;
 >-ENUM1 : number
+>       : ^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 
 -ENUM1["B"];
 >-ENUM1["B"] : number
+>            : ^^^^^^
 >ENUM1["B"] : ENUM1.B
+>           : ^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 -ENUM, ENUM1;
 >-ENUM, ENUM1 : typeof ENUM1
+>             : ^^^^^^^^^^^^
 >-ENUM : number
+>      : ^^^^^^
 >ENUM : typeof ENUM
+>     : ^^^^^^^^^^^
 >ENUM1 : typeof ENUM1
+>      : ^^^^^^^^^^^^
 

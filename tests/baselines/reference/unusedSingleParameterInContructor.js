@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSingleParameterInContructor.ts] ////
+
 //// [unusedSingleParameterInContructor.ts]
 class Dummy {
     constructor(person: string) {
@@ -6,9 +8,9 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInContructor.js]
-var Dummy = /** @class */ (function () {
-    function Dummy(person) {
+"use strict";
+class Dummy {
+    constructor(person) {
         var unused = 20;
     }
-    return Dummy;
-}());
+}

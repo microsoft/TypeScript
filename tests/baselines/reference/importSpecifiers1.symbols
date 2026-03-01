@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importSpecifiers1.ts] ////
+
 === /mod.ts ===
 export const as = 0;
 >as : Symbol(as, Decl(mod.ts, 0, 12))

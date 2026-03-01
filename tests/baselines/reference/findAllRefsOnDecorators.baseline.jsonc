@@ -1,137 +1,10 @@
-// === /tests/cases/fourslash/b.ts ===
-// @[|decorator|] @[|decorator|]("again")
-// class C {
-//     @[|decorator|]
-//     method() {}
-// }
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// /*FIND ALL REFS*/function [|decorator|](target) {
+// /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}decorator|](target) {
 //     return target;
-// }
+// }|>
 // [|decorator|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "function",
-      "name": "function decorator(target: any): any",
-      "textSpan": {
-        "start": 9,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "decorator",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "target",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 1,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
 // === /tests/cases/fourslash/b.ts ===
 // @[|decorator|] @[|decorator|]("again")
 // class C {
@@ -139,133 +12,82 @@
 //     method() {}
 // }
 
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // /*FIND ALL REFS*/<|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// function /*FIND ALL REFS*/[|decorator|](target) {
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}decorator|](target) {
 //     return target;
-// }
+// }|>
 // [|decorator|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "function",
-      "name": "function decorator(target: any): any",
-      "textSpan": {
-        "start": 9,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "decorator",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "target",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 1,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
 // === /tests/cases/fourslash/b.ts ===
 // @[|decorator|] @[|decorator|]("again")
 // class C {
@@ -273,127 +95,164 @@
 //     method() {}
 // }
 
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function /*FIND ALL REFS*/[|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// function [|decorator|](target) {
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
 //     return target;
-// }
+// }|>
 // /*FIND ALL REFS*/[|decorator|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "function",
-      "name": "function decorator(target: any): any",
-      "textSpan": {
-        "start": 9,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "decorator",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "target",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 1,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
+// === /tests/cases/fourslash/b.ts ===
+// @[|decorator|] @[|decorator|]("again")
+// class C {
+//     @[|decorator|]
+//     method() {}
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // /*FIND ALL REFS*/decorator();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
 
 // === /tests/cases/fourslash/b.ts ===
 // @/*FIND ALL REFS*/[|decorator|] @[|decorator|]("again")
@@ -402,127 +261,81 @@
 //     method() {}
 // }
 
-// === /tests/cases/fourslash/a.ts ===
-// function [|decorator|](target) {
-//     return target;
-// }
-// [|decorator|]();
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "function",
-      "name": "function decorator(target: any): any",
-      "textSpan": {
-        "start": 9,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "decorator",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "target",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 1,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
 
 // === /tests/cases/fourslash/b.ts ===
 // @[|decorator|] @/*FIND ALL REFS*/[|decorator|]("again")
@@ -531,127 +344,81 @@
 //     method() {}
 // }
 
-// === /tests/cases/fourslash/a.ts ===
-// function [|decorator|](target) {
-//     return target;
-// }
-// [|decorator|]();
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "function",
-      "name": "function decorator(target: any): any",
-      "textSpan": {
-        "start": 9,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "decorator",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "target",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 1,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/a.ts ===
+// <|function [|{| isWriteAccess: true |}decorator|](target) {
+//     return target;
+// }|>
+// [|decorator|]();
 
 // === /tests/cases/fourslash/b.ts ===
 // @[|decorator|] @[|decorator|]("again")
@@ -660,124 +427,69 @@
 //     method() {}
 // }
 
-// === /tests/cases/fourslash/a.ts ===
-// function [|decorator|](target) {
-//     return target;
-// }
-// [|decorator|]();
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|function [|decorator|](target) {
+  //     return target;
+  // }|>
+  // decorator();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "function",
-      "name": "function decorator(target: any): any",
-      "textSpan": {
-        "start": 9,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "decorator",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "target",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 49
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 49
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 50,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 1,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 46,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function decorator(target: any): any",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "decorator",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "target",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

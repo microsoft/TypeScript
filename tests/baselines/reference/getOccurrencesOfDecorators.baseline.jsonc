@@ -1,0 +1,10 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/b.ts ===
+// @/*HIGHLIGHTS*/[|{| kind: "reference" |}decorator|]
+// class C {
+//     @[|{| kind: "reference" |}decorator|]
+//     method() {}
+// }
+// <|function [|{| kind: "writtenReference" |}decorator|](target) {
+//     return target;
+// }|>

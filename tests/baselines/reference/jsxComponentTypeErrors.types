@@ -1,107 +1,164 @@
-=== tests/cases/compiler/jsxComponentTypeErrors.tsx ===
+//// [tests/cases/compiler/jsxComponentTypeErrors.tsx] ////
+
+=== jsxComponentTypeErrors.tsx ===
 namespace JSX {
   export interface Element {
     type: 'element';
 >type : "element"
+>     : ^^^^^^^^^
   }
   export interface ElementClass {
     type: 'element-class';
 >type : "element-class"
+>     : ^^^^^^^^^^^^^^^
   }
 }
 
 function FunctionComponent<T extends string>({type}: {type?: T}) {
 >FunctionComponent : typeof FunctionComponent
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >type : T | undefined
+>     : ^^^^^^^^^^^^^
 >type : T | undefined
+>     : ^^^^^^^^^^^^^
 
   return {
 >{    type  } : { type: T | undefined; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     type
 >type : T | undefined
+>     : ^^^^^^^^^^^^^
   }
 }
 FunctionComponent.useThis = function() {
 >FunctionComponent.useThis = function() {  return <this type="foo" />;} : () => JSX.Element
+>                                                                       : ^^^^^^^^^^^^^^^^^
 >FunctionComponent.useThis : () => JSX.Element
+>                          : ^^^^^^^^^^^^^^^^^
 >FunctionComponent : typeof FunctionComponent
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >useThis : () => JSX.Element
+>        : ^^^^^^^^^^^^^^^^^
 >function() {  return <this type="foo" />;} : () => JSX.Element
+>                                           : ^^^^^^^^^^^^^^^^^
 
   return <this type="foo" />;
 ><this type="foo" /> : JSX.Element
+>                    : ^^^^^^^^^^^
 >this : typeof FunctionComponent
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "foo"
+>     : ^^^^^
 }
 
 class ClassComponent {
 >ClassComponent : ClassComponent
+>               : ^^^^^^^^^^^^^^
 
   type = 'string';
 >type : string
+>     : ^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 }
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 >MixedComponent : typeof FunctionComponent | typeof ClassComponent
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Math.random() ? FunctionComponent : ClassComponent : typeof FunctionComponent | typeof ClassComponent
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >FunctionComponent : typeof FunctionComponent
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassComponent : typeof ClassComponent
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
 const elem1 = <FunctionComponent type="abc" />;
 >elem1 : JSX.Element
+>      : ^^^^^^^^^^^
 ><FunctionComponent type="abc" /> : JSX.Element
+>                                 : ^^^^^^^^^^^
 >FunctionComponent : typeof FunctionComponent
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "abc"
+>     : ^^^^^
 
 const elem2 = <FunctionComponent<"abc"> />;
 >elem2 : JSX.Element
+>      : ^^^^^^^^^^^
 ><FunctionComponent<"abc"> /> : JSX.Element
+>                             : ^^^^^^^^^^^
 >FunctionComponent : typeof FunctionComponent
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 const elem3 = <ClassComponent />;
 >elem3 : JSX.Element
+>      : ^^^^^^^^^^^
 ><ClassComponent /> : JSX.Element
+>                   : ^^^^^^^^^^^
 >ClassComponent : typeof ClassComponent
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
 const elem4 = <MixedComponent />;
 >elem4 : JSX.Element
+>      : ^^^^^^^^^^^
 ><MixedComponent /> : JSX.Element
+>                   : ^^^^^^^^^^^
 >MixedComponent : typeof FunctionComponent | typeof ClassComponent
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const obj = {
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  MemberFunctionComponent() {    return {};  },  MemberClassComponent: class {},} : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   MemberFunctionComponent() {
 >MemberFunctionComponent : () => {}
+>                        : ^^^^^^^^
 
     return {};
 >{} : {}
+>   : ^^
 
   },
   MemberClassComponent: class {},
 >MemberClassComponent : typeof MemberClassComponent
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class {} : typeof MemberClassComponent
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 const elem5 = <obj.MemberFunctionComponent />;
 >elem5 : JSX.Element
+>      : ^^^^^^^^^^^
 ><obj.MemberFunctionComponent /> : JSX.Element
+>                                : ^^^^^^^^^^^
 >obj.MemberFunctionComponent : () => {}
+>                            : ^^^^^^^^
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MemberFunctionComponent : () => {}
+>                        : ^^^^^^^^
 
 const elem6 = <obj. MemberClassComponent />;
 >elem6 : JSX.Element
+>      : ^^^^^^^^^^^
 ><obj. MemberClassComponent /> : JSX.Element
+>                              : ^^^^^^^^^^^
 >obj. MemberClassComponent : typeof MemberClassComponent
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MemberClassComponent : typeof MemberClassComponent
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

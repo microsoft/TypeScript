@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty41.ts] ////
+
 //// [symbolProperty41.ts]
 class C {
     [Symbol.iterator](x: string): { x: string };
@@ -13,6 +15,7 @@ c[Symbol.iterator]("hello");
 
 
 //// [symbolProperty41.js]
+"use strict";
 class C {
     [Symbol.iterator](x) {
         return undefined;

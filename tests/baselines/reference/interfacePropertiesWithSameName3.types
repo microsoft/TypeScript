@@ -1,19 +1,27 @@
-=== tests/cases/compiler/interfacePropertiesWithSameName3.ts ===
+//// [tests/cases/compiler/interfacePropertiesWithSameName3.ts] ////
+
+=== interfacePropertiesWithSameName3.ts ===
 interface D { a: number; }
 >a : number
+>  : ^^^^^^
 
 interface E { a: string; }
 >a : string
+>  : ^^^^^^
 
 interface F extends E, D { } // error
 
 class D2 { a: number; }
 >D2 : D2
+>   : ^^
 >a : number
+>  : ^^^^^^
 
 class E2 { a: string; }
 >E2 : E2
+>   : ^^
 >a : string
+>  : ^^^^^^
 
 interface F2 extends E2, D2 { } // error
 

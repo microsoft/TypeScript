@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes2.ts] ////
+
 //// [arrayTypeOfFunctionTypes2.ts]
 // valid uses of arrays of function types
 
@@ -17,6 +19,7 @@ var r6 = new r5();
 var r6b = r5();
 
 //// [arrayTypeOfFunctionTypes2.js]
+"use strict";
 // valid uses of arrays of function types
 var x;
 var r = x[1];

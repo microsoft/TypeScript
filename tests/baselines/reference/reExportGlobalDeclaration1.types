@@ -1,51 +1,79 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/reExportGlobalDeclaration1.ts] ////
+
+=== file1.d.ts ===
 declare var x: number;
 >x : number
+>  : ^^^^^^
 
 declare var x1: number;
 >x1 : number
+>   : ^^^^^^
 
 declare let {a, b}: {a: number, b: number};
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export {x, x as y};
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 export {x1, x1 as y1};
 >x1 : number
+>   : ^^^^^^
 >x1 : number
+>   : ^^^^^^
 >y1 : number
+>   : ^^^^^^
 
 export {a, a as a1};
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >a1 : number
+>   : ^^^^^^
 
 export {b, b as b1};
 >b : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >b1 : number
+>   : ^^^^^^
 
 
 export {x as z};
 >x : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
 export {x1 as z1};
 >x1 : number
+>   : ^^^^^^
 >z1 : number
+>   : ^^^^^^
 
 export {a as a2};
 >a : number
+>  : ^^^^^^
 >a2 : number
+>   : ^^^^^^
 
 export {b as b2};
 >b : number
+>  : ^^^^^^
 >b2 : number
+>   : ^^^^^^
 

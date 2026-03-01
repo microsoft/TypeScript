@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionParsingGenericInObject.ts] ////
+
 //// [arrowFunctionParsingGenericInObject.ts]
 const fn1 = () => ({
     test: <T = undefined>(value: T): T => value,
@@ -41,6 +43,7 @@ const fn4async = () => ({
 
 
 //// [arrowFunctionParsingGenericInObject.js]
+"use strict";
 const fn1 = () => ({
     test: (value) => value,
     extraValue: () => { },

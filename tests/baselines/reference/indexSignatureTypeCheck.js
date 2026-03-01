@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignatureTypeCheck.ts] ////
+
 //// [indexSignatureTypeCheck.ts]
 interface IPropertySet {
 
@@ -19,6 +21,7 @@ interface indexErrors {
 }
 
 //// [indexSignatureTypeCheck.js]
+"use strict";
 var ps = null;
 var index = "hello";
 ps[index] = 12;

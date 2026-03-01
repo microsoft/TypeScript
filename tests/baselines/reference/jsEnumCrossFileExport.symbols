@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumDef.js ===
+//// [tests/cases/compiler/jsEnumCrossFileExport.ts] ////
+
+=== enumDef.js ===
 var Host = {};
 >Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
 
@@ -44,7 +46,7 @@ Host.UserMetrics.Blah = {
     x: 12
 >x : Symbol(x, Decl(enumDef.js, 15, 25))
 }
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 var Other = {};
 >Other : Symbol(Other, Decl(index.js, 0, 3), Decl(index.js, 0, 15))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts ===
+//// [tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts] ////
+
+=== deepExcessPropertyCheckingWhenTargetIsIntersection.ts ===
 interface StatelessComponent<P = {}> {
 >StatelessComponent : Symbol(StatelessComponent, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 0))
 >P : Symbol(P, Decl(deepExcessPropertyCheckingWhenTargetIsIntersection.ts, 0, 29))

@@ -1,12 +1,12 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts(3,9): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts(5,3): error TS2304: Cannot find name 'f2'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts(5,8): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts(7,3): error TS2304: Cannot find name 'f3'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts(7,8): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts(9,2): error TS1005: '}' expected.
+parserErrorRecoveryIfStatement5.ts(3,9): error TS2304: Cannot find name 'a'.
+parserErrorRecoveryIfStatement5.ts(5,3): error TS2304: Cannot find name 'f2'.
+parserErrorRecoveryIfStatement5.ts(5,8): error TS1005: ';' expected.
+parserErrorRecoveryIfStatement5.ts(7,3): error TS2304: Cannot find name 'f3'.
+parserErrorRecoveryIfStatement5.ts(7,8): error TS1005: ';' expected.
+parserErrorRecoveryIfStatement5.ts(9,2): error TS1005: '}' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts (6 errors) ====
+==== parserErrorRecoveryIfStatement5.ts (6 errors) ====
     class Foo {
       f1() {
         if (a.b) {

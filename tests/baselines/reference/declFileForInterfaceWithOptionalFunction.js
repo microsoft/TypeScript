@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileForInterfaceWithOptionalFunction.ts] ////
+
 //// [declFileForInterfaceWithOptionalFunction.ts]
 interface I {
     foo? (x?);
@@ -5,6 +7,7 @@ interface I {
 }
 
 //// [declFileForInterfaceWithOptionalFunction.js]
+"use strict";
 
 
 //// [declFileForInterfaceWithOptionalFunction.d.ts]

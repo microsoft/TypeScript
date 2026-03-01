@@ -1,18 +1,31 @@
-=== tests/cases/compiler/noObjectKeysToKeyofT.ts ===
+//// [tests/cases/compiler/noObjectKeysToKeyofT.ts] ////
+
+=== noObjectKeysToKeyofT.ts ===
 // Do not change Object.keys to return keyof T.
 // The current return type (string[]) is intentional.
 Object.keys({ a: 0 }).push("b");
 >Object.keys({ a: 0 }).push("b") : number
+>                                : ^^^^^^
 >Object.keys({ a: 0 }).push : (...items: string[]) => number
+>                           : ^^^^     ^^^^^^^^^^^^^^^      
 >Object.keys({ a: 0 }) : string[]
+>                      : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >"b" : "b"
+>    : ^^^
 
 // See also
 // https://stackoverflow.com/questions/55012174/why-doesnt-object-keys-return-a-keyof-type-in-typescript

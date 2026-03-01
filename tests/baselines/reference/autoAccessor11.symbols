@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor11.ts] ////
+
+=== autoAccessor11.ts ===
+class C {
+>C : Symbol(C, Decl(autoAccessor11.ts, 0, 0))
+
+    accessor
+>accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 0, 9))
+
+    a
+>a : Symbol(C.a, Decl(autoAccessor11.ts, 1, 12))
+
+    static accessor
+>accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 2, 5), Decl(autoAccessor11.ts, 5, 5))
+
+    b
+>b : Symbol(C.b, Decl(autoAccessor11.ts, 4, 19))
+
+    static
+    accessor
+>accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 2, 5), Decl(autoAccessor11.ts, 5, 5))
+
+    c
+>c : Symbol(C.c, Decl(autoAccessor11.ts, 8, 12))
+
+    accessor accessor
+>accessor : Symbol(C.accessor, Decl(autoAccessor11.ts, 9, 5))
+
+    d;
+>d : Symbol(C.d, Decl(autoAccessor11.ts, 11, 21))
+}
+

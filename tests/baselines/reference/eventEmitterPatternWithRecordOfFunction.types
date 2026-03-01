@@ -1,21 +1,32 @@
-=== tests/cases/compiler/eventEmitterPatternWithRecordOfFunction.ts ===
+//// [tests/cases/compiler/eventEmitterPatternWithRecordOfFunction.ts] ////
+
+=== eventEmitterPatternWithRecordOfFunction.ts ===
 interface A {
     emit(event: string, ...args: any[]): boolean;
 >emit : (event: string, ...args: any[]) => boolean
+>     : ^     ^^      ^^^^^    ^^     ^^^^^       
 >event : string
+>      : ^^^^^^
 >args : any[]
+>     : ^^^^^
 }
 
 type Args<F> = F extends (...args: infer A) => void ? A : never;
 >Args : Args<F>
+>     : ^^^^^^^
 >args : A
+>     : ^
 
 type EventMap = Record<string, Function>;
->EventMap : { [x: string]: Function; }
+>EventMap : EventMap
+>         : ^^^^^^^^
 
 interface B<M extends EventMap> extends A {
     emit<Event extends keyof M>(event: Event, ...args: Args<M[Event]>): boolean;
 >emit : <Event extends keyof M>(event: Event, ...args: Args<M[Event]>) => boolean
+>     : ^     ^^^^^^^^^       ^^     ^^     ^^^^^    ^^              ^^^^^       
 >event : Event
+>      : ^^^^^
 >args : Args<M[Event]>
+>     : ^^^^^^^^^^^^^^
 }

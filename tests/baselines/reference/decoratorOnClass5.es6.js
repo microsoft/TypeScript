@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/decorators/class/decoratorOnClass5.es6.ts] ////
+
 //// [decoratorOnClass5.es6.ts]
 declare function dec<T>(target: T): T;
 
@@ -10,6 +12,7 @@ class C {
 let c = new C();
 
 //// [decoratorOnClass5.es6.js]
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);

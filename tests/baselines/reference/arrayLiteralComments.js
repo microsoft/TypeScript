@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayLiteralComments.ts] ////
+
 //// [arrayLiteralComments.ts]
 var testArrayWithFunc = [
     // Function comment
@@ -15,10 +17,11 @@ var testArrayWithFunc = [
 ]
 
 //// [arrayLiteralComments.js]
+"use strict";
 var testArrayWithFunc = [
     // Function comment
     function () {
-        var x = 1;
+        let x = 1;
     },
     // String comment
     '1',

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 const a: { x?: number } = { };
 let x = 0;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface I1 {a:number; b:number;};
 interface I2 {c:number; d:number;};
 interface I3 {a:number; b:number; c:number; d:number;};

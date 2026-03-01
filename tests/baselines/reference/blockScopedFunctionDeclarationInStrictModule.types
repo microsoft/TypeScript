@@ -1,15 +1,22 @@
-=== tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts ===
+//// [tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts] ////
+
+=== blockScopedFunctionDeclarationInStrictModule.ts ===
 if (true) {
 >true : true
+>     : ^^^^
 
     function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     foo(); // ok
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 export = foo; // not ok
 >foo : any
+>    : ^^^
 

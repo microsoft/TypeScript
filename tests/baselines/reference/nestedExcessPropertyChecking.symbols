@@ -1,0 +1,220 @@
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
+=== nestedExcessPropertyChecking.ts ===
+type A1 = { x: { a?: string } };
+>A1 : Symbol(A1, Decl(nestedExcessPropertyChecking.ts, 0, 0))
+>x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 0, 11))
+>a : Symbol(a, Decl(nestedExcessPropertyChecking.ts, 0, 16))
+
+type B1 = { x: { b?: string } };
+>B1 : Symbol(B1, Decl(nestedExcessPropertyChecking.ts, 0, 32))
+>x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 1, 11))
+>b : Symbol(b, Decl(nestedExcessPropertyChecking.ts, 1, 16))
+
+type C1 = { x: { c: string } };
+>C1 : Symbol(C1, Decl(nestedExcessPropertyChecking.ts, 1, 32))
+>x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 3, 11))
+>c : Symbol(c, Decl(nestedExcessPropertyChecking.ts, 3, 16))
+
+const ab1: A1 & B1 = {} as C1;  // Error
+>ab1 : Symbol(ab1, Decl(nestedExcessPropertyChecking.ts, 5, 5))
+>A1 : Symbol(A1, Decl(nestedExcessPropertyChecking.ts, 0, 0))
+>B1 : Symbol(B1, Decl(nestedExcessPropertyChecking.ts, 0, 32))
+>C1 : Symbol(C1, Decl(nestedExcessPropertyChecking.ts, 1, 32))
+
+type A2 = { a?: string };
+>A2 : Symbol(A2, Decl(nestedExcessPropertyChecking.ts, 5, 30))
+>a : Symbol(a, Decl(nestedExcessPropertyChecking.ts, 7, 11))
+
+type B2 = { b?: string };
+>B2 : Symbol(B2, Decl(nestedExcessPropertyChecking.ts, 7, 25))
+>b : Symbol(b, Decl(nestedExcessPropertyChecking.ts, 8, 11))
+
+type C2 = { c: string };
+>C2 : Symbol(C2, Decl(nestedExcessPropertyChecking.ts, 8, 25))
+>c : Symbol(c, Decl(nestedExcessPropertyChecking.ts, 10, 11))
+
+const ab2: A2 & B2 = {} as C2;  // Error
+>ab2 : Symbol(ab2, Decl(nestedExcessPropertyChecking.ts, 12, 5))
+>A2 : Symbol(A2, Decl(nestedExcessPropertyChecking.ts, 5, 30))
+>B2 : Symbol(B2, Decl(nestedExcessPropertyChecking.ts, 7, 25))
+>C2 : Symbol(C2, Decl(nestedExcessPropertyChecking.ts, 8, 25))
+
+enum E { A = "A" }
+>E : Symbol(E, Decl(nestedExcessPropertyChecking.ts, 12, 30))
+>A : Symbol(E.A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
+
+let x: { nope?: any } = E.A;  // Error
+>x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 16, 3))
+>nope : Symbol(nope, Decl(nestedExcessPropertyChecking.ts, 16, 8))
+>E.A : Symbol(E.A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
+>E : Symbol(E, Decl(nestedExcessPropertyChecking.ts, 12, 30))
+>A : Symbol(E.A, Decl(nestedExcessPropertyChecking.ts, 14, 8))
+
+let y: { nope?: any } = "A";  // Error
+>y : Symbol(y, Decl(nestedExcessPropertyChecking.ts, 17, 3))
+>nope : Symbol(nope, Decl(nestedExcessPropertyChecking.ts, 17, 8))
+
+// Repros from #51043
+
+type OverridesInput = {
+>OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+
+    someProp?: 'A' | 'B'
+>someProp : Symbol(someProp, Decl(nestedExcessPropertyChecking.ts, 21, 23))
+}
+
+const foo1: Partial<{ something: any }> & { variables: {
+>foo1 : Symbol(foo1, Decl(nestedExcessPropertyChecking.ts, 25, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>something : Symbol(something, Decl(nestedExcessPropertyChecking.ts, 25, 21))
+>variables : Symbol(variables, Decl(nestedExcessPropertyChecking.ts, 25, 43))
+
+    overrides?: OverridesInput;
+>overrides : Symbol(overrides, Decl(nestedExcessPropertyChecking.ts, 25, 56))
+>OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+
+} & Partial<{
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+
+    overrides?: OverridesInput;
+>overrides : Symbol(overrides, Decl(nestedExcessPropertyChecking.ts, 27, 13))
+>OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+
+}>} = { variables: { overrides: false } };  // Error
+>variables : Symbol(variables, Decl(nestedExcessPropertyChecking.ts, 29, 7))
+>overrides : Symbol(overrides, Decl(nestedExcessPropertyChecking.ts, 29, 20))
+
+
+interface Unrelated { _?: any }
+>Unrelated : Symbol(Unrelated, Decl(nestedExcessPropertyChecking.ts, 29, 42))
+>_ : Symbol(Unrelated._, Decl(nestedExcessPropertyChecking.ts, 32, 21))
+
+interface VariablesA { overrides?: OverridesInput; }
+>VariablesA : Symbol(VariablesA, Decl(nestedExcessPropertyChecking.ts, 32, 31))
+>overrides : Symbol(VariablesA.overrides, Decl(nestedExcessPropertyChecking.ts, 34, 22))
+>OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+
+interface VariablesB { overrides?: OverridesInput; }
+>VariablesB : Symbol(VariablesB, Decl(nestedExcessPropertyChecking.ts, 34, 52))
+>overrides : Symbol(VariablesB.overrides, Decl(nestedExcessPropertyChecking.ts, 35, 22))
+>OverridesInput : Symbol(OverridesInput, Decl(nestedExcessPropertyChecking.ts, 17, 28))
+
+const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
+>foo2 : Symbol(foo2, Decl(nestedExcessPropertyChecking.ts, 37, 5))
+>Unrelated : Symbol(Unrelated, Decl(nestedExcessPropertyChecking.ts, 29, 42))
+>variables : Symbol(variables, Decl(nestedExcessPropertyChecking.ts, 37, 25))
+>VariablesA : Symbol(VariablesA, Decl(nestedExcessPropertyChecking.ts, 32, 31))
+>VariablesB : Symbol(VariablesB, Decl(nestedExcessPropertyChecking.ts, 34, 52))
+
+    variables: {
+>variables : Symbol(variables, Decl(nestedExcessPropertyChecking.ts, 37, 66))
+
+        overrides: false  // Error
+>overrides : Symbol(overrides, Decl(nestedExcessPropertyChecking.ts, 38, 16))
+    }
+};
+
+// Simplified repro from #52252
+
+type T1 = {
+>T1 : Symbol(T1, Decl(nestedExcessPropertyChecking.ts, 41, 2))
+
+    primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+>primary : Symbol(primary, Decl(nestedExcessPropertyChecking.ts, 45, 11))
+>__typename : Symbol(__typename, Decl(nestedExcessPropertyChecking.ts, 46, 14))
+>colors : Symbol(colors, Decl(nestedExcessPropertyChecking.ts, 46, 43))
+>light : Symbol(light, Decl(nestedExcessPropertyChecking.ts, 46, 53))
+>dark : Symbol(dark, Decl(nestedExcessPropertyChecking.ts, 46, 68))
+
+};
+
+type T2 = {
+>T2 : Symbol(T2, Decl(nestedExcessPropertyChecking.ts, 47, 2))
+
+    primary: { __typename?: 'Feature' } & { colors: { light: number } },
+>primary : Symbol(primary, Decl(nestedExcessPropertyChecking.ts, 49, 11))
+>__typename : Symbol(__typename, Decl(nestedExcessPropertyChecking.ts, 50, 14))
+>colors : Symbol(colors, Decl(nestedExcessPropertyChecking.ts, 50, 43))
+>light : Symbol(light, Decl(nestedExcessPropertyChecking.ts, 50, 53))
+
+};
+
+type Query = T1 & T2;
+>Query : Symbol(Query, Decl(nestedExcessPropertyChecking.ts, 51, 2))
+>T1 : Symbol(T1, Decl(nestedExcessPropertyChecking.ts, 41, 2))
+>T2 : Symbol(T2, Decl(nestedExcessPropertyChecking.ts, 47, 2))
+
+const response: Query = {
+>response : Symbol(response, Decl(nestedExcessPropertyChecking.ts, 55, 5))
+>Query : Symbol(Query, Decl(nestedExcessPropertyChecking.ts, 51, 2))
+
+    primary: {
+>primary : Symbol(primary, Decl(nestedExcessPropertyChecking.ts, 55, 25))
+
+        colors: {
+>colors : Symbol(colors, Decl(nestedExcessPropertyChecking.ts, 56, 14))
+
+            light: 1,
+>light : Symbol(light, Decl(nestedExcessPropertyChecking.ts, 57, 17))
+
+            dark: 3,
+>dark : Symbol(dark, Decl(nestedExcessPropertyChecking.ts, 58, 21))
+
+        },
+    },
+};
+
+// Repro from #53412
+
+type BaseItem = {
+>BaseItem : Symbol(BaseItem, Decl(nestedExcessPropertyChecking.ts, 62, 2))
+
+    id: number;
+>id : Symbol(id, Decl(nestedExcessPropertyChecking.ts, 66, 17))
+}
+type ExtendedItem = BaseItem & {
+>ExtendedItem : Symbol(ExtendedItem, Decl(nestedExcessPropertyChecking.ts, 68, 1))
+>BaseItem : Symbol(BaseItem, Decl(nestedExcessPropertyChecking.ts, 62, 2))
+
+    description: string | null
+>description : Symbol(description, Decl(nestedExcessPropertyChecking.ts, 69, 32))
+
+};
+  
+type BaseValue = {
+>BaseValue : Symbol(BaseValue, Decl(nestedExcessPropertyChecking.ts, 71, 2))
+
+    // there are other fields
+    items: BaseItem[];
+>items : Symbol(items, Decl(nestedExcessPropertyChecking.ts, 73, 18))
+>BaseItem : Symbol(BaseItem, Decl(nestedExcessPropertyChecking.ts, 62, 2))
+}
+type ExtendedValue = BaseValue & {
+>ExtendedValue : Symbol(ExtendedValue, Decl(nestedExcessPropertyChecking.ts, 76, 1))
+>BaseValue : Symbol(BaseValue, Decl(nestedExcessPropertyChecking.ts, 71, 2))
+
+    // there are other fields
+    items: ExtendedItem[];
+>items : Symbol(items, Decl(nestedExcessPropertyChecking.ts, 77, 34))
+>ExtendedItem : Symbol(ExtendedItem, Decl(nestedExcessPropertyChecking.ts, 68, 1))
+}
+
+const TEST_VALUE: ExtendedValue = {
+>TEST_VALUE : Symbol(TEST_VALUE, Decl(nestedExcessPropertyChecking.ts, 82, 5))
+>ExtendedValue : Symbol(ExtendedValue, Decl(nestedExcessPropertyChecking.ts, 76, 1))
+
+    items: [
+>items : Symbol(items, Decl(nestedExcessPropertyChecking.ts, 82, 35))
+
+        {id: 1, description: null},
+>id : Symbol(id, Decl(nestedExcessPropertyChecking.ts, 84, 9))
+>description : Symbol(description, Decl(nestedExcessPropertyChecking.ts, 84, 15))
+
+        {id: 2, description: 'wigglytubble'},
+>id : Symbol(id, Decl(nestedExcessPropertyChecking.ts, 85, 9))
+>description : Symbol(description, Decl(nestedExcessPropertyChecking.ts, 85, 15))
+
+    ]
+};
+

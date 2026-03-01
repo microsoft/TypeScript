@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitThisBigThis.ts] ////
+
 //// [noImplicitThisBigThis.ts]
 // https://github.com/microsoft/TypeScript/issues/29902
 
@@ -49,47 +51,48 @@ function createObjNoCrash() {
 
 
 //// [noImplicitThisBigThis.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/29902
 function createObj() {
     return {
-        func1: function () {
+        func1() {
             return this;
         },
-        func2: function () {
+        func2() {
             return this;
         },
-        func3: function () {
+        func3() {
             return this;
         }
     };
 }
 function createObjNoCrash() {
     return {
-        func1: function () {
+        func1() {
             return this;
         },
-        func2: function () {
+        func2() {
             return this;
         },
-        func3: function () {
+        func3() {
             return this;
         },
-        func4: function () {
+        func4() {
             return this;
         },
-        func5: function () {
+        func5() {
             return this;
         },
-        func6: function () {
+        func6() {
             return this;
         },
-        func7: function () {
+        func7() {
             return this;
         },
-        func8: function () {
+        func8() {
             return this;
         },
-        func9: function () {
+        func9() {
             return this;
         }
     };
@@ -98,18 +101,18 @@ function createObjNoCrash() {
 
 //// [noImplicitThisBigThis.d.ts]
 declare function createObj(): {
-    func1(): any;
-    func2(): any;
-    func3(): any;
+    func1(): /*elided*/ any;
+    func2(): /*elided*/ any;
+    func3(): /*elided*/ any;
 };
 declare function createObjNoCrash(): {
-    func1(): any;
-    func2(): any;
-    func3(): any;
-    func4(): any;
-    func5(): any;
-    func6(): any;
-    func7(): any;
-    func8(): any;
-    func9(): any;
+    func1(): /*elided*/ any;
+    func2(): /*elided*/ any;
+    func3(): /*elided*/ any;
+    func4(): /*elided*/ any;
+    func5(): /*elided*/ any;
+    func6(): /*elided*/ any;
+    func7(): /*elided*/ any;
+    func8(): /*elided*/ any;
+    func9(): /*elided*/ any;
 };

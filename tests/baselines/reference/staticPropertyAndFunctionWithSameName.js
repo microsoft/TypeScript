@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyAndFunctionWithSameName.ts] ////
+
 //// [staticPropertyAndFunctionWithSameName.ts]
 class C {
     static f: number;
@@ -10,14 +12,9 @@ class D {
 }
 
 //// [staticPropertyAndFunctionWithSameName.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    D.prototype.f = function () { };
-    return D;
-}());
+"use strict";
+class C {
+}
+class D {
+    f() { }
+}

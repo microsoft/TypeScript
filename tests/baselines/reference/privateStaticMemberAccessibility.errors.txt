@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts(6,23): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
-tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts(7,23): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
+privateStaticMemberAccessibility.ts(6,23): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
+privateStaticMemberAccessibility.ts(7,23): error TS2341: Property 'foo' is private and only accessible within class 'Base'.
 
 
-==== tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts (2 errors) ====
+==== privateStaticMemberAccessibility.ts (2 errors) ====
     class Base {
         private static foo: string;
     }

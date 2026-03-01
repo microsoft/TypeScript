@@ -1,0 +1,32 @@
+a.js(7,7): error TS2375: Type '{ value: undefined; }' is not assignable to type 'A' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'value' are incompatible.
+    Type 'undefined' is not assignable to type 'number'.
+a.js(14,7): error TS2375: Type '{ value: undefined; }' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'value' are incompatible.
+    Type 'undefined' is not assignable to type 'number'.
+
+
+==== a.js (2 errors) ====
+    /**
+     * @typedef {object} A
+     * @property {number} [value]
+     */
+    
+    /** @type {A} */
+    const a = { value: undefined }; // error
+          ~
+!!! error TS2375: Type '{ value: undefined; }' is not assignable to type 'A' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'value' are incompatible.
+!!! error TS2375:     Type 'undefined' is not assignable to type 'number'.
+    
+    /**
+     * @typedef {{ value?: number }} B
+     */
+    
+    /** @type {B} */
+    const b = { value: undefined }; // error
+          ~
+!!! error TS2375: Type '{ value: undefined; }' is not assignable to type 'B' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'value' are incompatible.
+!!! error TS2375:     Type 'undefined' is not assignable to type 'number'.
+    

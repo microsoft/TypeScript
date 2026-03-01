@@ -1,0 +1,41 @@
+indirectDiscriminantAndExcessProperty.ts(9,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+indirectDiscriminantAndExcessProperty.ts(15,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+indirectDiscriminantAndExcessProperty.ts(22,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+
+
+==== indirectDiscriminantAndExcessProperty.ts (3 errors) ====
+    export type Blah =
+        | { type: "foo", abc: string }
+        | { type: "bar", xyz: number, extra: any };
+    
+    declare function thing(blah: Blah): void;
+    
+    let foo1 = "foo";
+    thing({
+        type: foo1,
+        ~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+!!! related TS6500 indirectDiscriminantAndExcessProperty.ts:2:9: The expected type comes from property 'type' which is declared here on type 'Blah'
+        abc: "hello!"
+    });
+    
+    let foo2 = "foo";
+    thing({
+        type: foo2,
+        ~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+!!! related TS6500 indirectDiscriminantAndExcessProperty.ts:2:9: The expected type comes from property 'type' which is declared here on type 'Blah'
+        abc: "hello!",
+        extra: 123,
+    });
+    
+    let bar = "bar";
+    thing({
+        type: bar,
+        ~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
+!!! related TS6500 indirectDiscriminantAndExcessProperty.ts:2:9: The expected type comes from property 'type' which is declared here on type 'Blah'
+        xyz: 123,
+        extra: 123,
+    });
+    

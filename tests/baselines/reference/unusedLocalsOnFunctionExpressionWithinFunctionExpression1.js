@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionExpression1.ts] ////
+
 //// [unusedLocalsOnFunctionExpressionWithinFunctionExpression1.ts]
 var greeter = function (person: string, person2: string) {
     var unused = 20;
@@ -8,6 +10,7 @@ var greeter = function (person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionExpressionWithinFunctionExpression1.js]
+"use strict";
 var greeter = function (person, person2) {
     var unused = 20;
     var maker = function (child) {

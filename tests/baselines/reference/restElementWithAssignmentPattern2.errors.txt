@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern2.ts(2,10): error TS2322: Type 'string | number' is not assignable to type 'string'.
+restElementWithAssignmentPattern2.ts(2,10): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern2.ts(2,18): error TS2339: Property 'b' does not exist on type '(string | number)[]'.
+restElementWithAssignmentPattern2.ts(2,18): error TS2339: Property 'b' does not exist on type '(string | number)[]'.
 
 
-==== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern2.ts (2 errors) ====
+==== restElementWithAssignmentPattern2.ts (2 errors) ====
     var a: string, b: number;
     [...{ 0: a = "", b }] = ["", 1];
              ~

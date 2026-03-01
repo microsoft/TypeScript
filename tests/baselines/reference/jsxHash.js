@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxHash.tsx] ////
+
 //// [jsxHash.tsx]
 var t02 = <a>{0}#</a>;
 var t03 = <a>#{0}</a>;
@@ -13,6 +15,7 @@ var t12 = <a>#</a>;
 
 
 //// [jsxHash.jsx]
+"use strict";
 var t02 = <a>{0}#</a>;
 var t03 = <a>#{0}</a>;
 var t04 = <a>#{0}#</a>;

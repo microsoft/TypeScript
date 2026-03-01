@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @allowNonTsExtensions: true
 // @Filename: jsDocTypedef_form3.js
 ////
@@ -14,4 +15,4 @@
 //// var person;
 
 goTo.file('jsDocTypedef_form3.js')
-verify.rangesAreRenameLocations({ findInComments: true, ranges: test.rangesByText().get("Person") });
+verify.baselineRename(test.rangesByText().get("Person"), { findInComments: true });

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bestCommonTypeReturnStatement.ts ===
+//// [tests/cases/compiler/bestCommonTypeReturnStatement.ts] ////
+
+=== bestCommonTypeReturnStatement.ts ===
 interface IPromise<T> {
 >IPromise : Symbol(IPromise, Decl(bestCommonTypeReturnStatement.ts, 0, 0))
 >T : Symbol(T, Decl(bestCommonTypeReturnStatement.ts, 0, 19))

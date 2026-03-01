@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts] ////
+
 //// [intersectionWithIndexSignatures.ts]
 type A = { a: string };
 type B = { b: string };
@@ -45,5 +47,5 @@ ta2 = sa2;
 tb1 = sb1; // Error
 q["asd"].a.substr(1);
 q["asd"].b; // Error
-var d = q; // Error
+const d = q; // Error
 tt = ss; // Error

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts] ////
+
+=== emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts ===
 class B<T> {
 >B : Symbol(B, Decl(emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts, 0, 0))
 >T : Symbol(T, Decl(emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts, 0, 8))

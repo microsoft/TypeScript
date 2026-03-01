@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.ts] ////
+
+=== elementAccessChain.ts ===
 declare const o1: undefined | { b: string };
 >o1 : Symbol(o1, Decl(elementAccessChain.ts, 0, 13))
 >b : Symbol(b, Decl(elementAccessChain.ts, 0, 31))

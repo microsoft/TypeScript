@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField2.ts] ////
+
+=== dist/bar.ts ===
+export const a = 1234;
+>a : Symbol(a, Decl(bar.ts, 0, 12))
+
+=== types/main.d.ts ===
+export const b: string;
+>b : Symbol(b, Decl(main.d.ts, 0, 12))
+
+=== test.ts ===
+import { a } from "foo/bar.ts";
+>a : Symbol(a, Decl(test.ts, 0, 8))
+
+import { b } from "baz/main.ts";
+>b : Symbol(b, Decl(test.ts, 1, 8))
+

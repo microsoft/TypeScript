@@ -1,7 +1,7 @@
-tests/cases/conformance/types/union/unionTypeCallSignatures5.ts(12,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'never'.
+unionTypeCallSignatures5.ts(12,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'never'.
 
 
-==== tests/cases/conformance/types/union/unionTypeCallSignatures5.ts (1 errors) ====
+==== unionTypeCallSignatures5.ts (1 errors) ====
     // #31485
     interface A {
       (this: void, b?: number): void;

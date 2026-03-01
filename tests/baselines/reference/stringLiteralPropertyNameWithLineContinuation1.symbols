@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringLiteralPropertyNameWithLineContinuation1.ts ===
+//// [tests/cases/compiler/stringLiteralPropertyNameWithLineContinuation1.ts] ////
+
+=== stringLiteralPropertyNameWithLineContinuation1.ts ===
 var x = {'text\
 >x : Symbol(x, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 3))
 >'text\' : Symbol('text\

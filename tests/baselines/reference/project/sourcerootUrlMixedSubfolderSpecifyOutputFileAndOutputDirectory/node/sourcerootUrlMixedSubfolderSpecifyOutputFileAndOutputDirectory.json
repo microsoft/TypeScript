@@ -4,7 +4,7 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/outAndOutDirFile.js",
+    "outFile": "bin/outAndOutDirFile.js",
     "outDir": "outdir/outAndOutDirFolder",
     "sourceMap": true,
     "declaration": true,
@@ -12,6 +12,8 @@
     "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "ref/m1.ts",
         "ref/m2.ts",
         "test.ts"

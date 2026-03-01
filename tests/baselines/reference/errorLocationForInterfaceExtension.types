@@ -1,7 +1,11 @@
-=== tests/cases/compiler/errorLocationForInterfaceExtension.ts ===
+//// [tests/cases/compiler/errorLocationForInterfaceExtension.ts] ////
+
+=== errorLocationForInterfaceExtension.ts ===
 var n = '';
 >n : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 interface x extends string { }
 

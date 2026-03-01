@@ -6,6 +6,8 @@
     ],
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "A/b.ts",
         "A/a.ts",
         "app.ts"

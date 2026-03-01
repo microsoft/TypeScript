@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letAsIdentifier.ts] ////
+
 //// [letAsIdentifier.ts]
 var let = 10;
 var a = 10;
@@ -6,10 +8,11 @@ let
 a;
 
 //// [letAsIdentifier.js]
+"use strict";
 var let = 10;
 var a = 10;
 let = 30;
-var a;
+let a;
 
 
 //// [letAsIdentifier.d.ts]

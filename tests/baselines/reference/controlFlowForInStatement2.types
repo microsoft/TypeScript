@@ -1,65 +1,100 @@
-=== tests/cases/conformance/controlFlow/controlFlowForInStatement2.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowForInStatement2.ts] ////
+
+=== controlFlowForInStatement2.ts ===
 const keywordA = 'a';
 >keywordA : "a"
+>         : ^^^
 >'a' : "a"
+>    : ^^^
 
 const keywordB = 'b';
 >keywordB : "b"
+>         : ^^^
 >'b' : "b"
+>    : ^^^
 
 type A = { [keywordA]: number };
->A : { a: number; }
+>A : A
+>  : ^
 >[keywordA] : number
+>           : ^^^^^^
 >keywordA : "a"
+>         : ^^^
 
 type B = { [keywordB]: string };
->B : { b: string; }
+>B : B
+>  : ^
 >[keywordB] : string
+>           : ^^^^^^
 >keywordB : "b"
+>         : ^^^
 
 declare const c: A | B;
 >c : A | B
+>  : ^^^^^
 
 if ('a' in c) {
 >'a' in c : boolean
+>         : ^^^^^^^
 >'a' : "a"
+>    : ^^^
 >c : A | B
+>  : ^^^^^
 
     c; // narrowed to `A`
 >c : A
+>  : ^
 }
 
 if (keywordA in c) {
 >keywordA in c : boolean
+>              : ^^^^^^^
 >keywordA : "a"
+>         : ^^^
 >c : A | B
+>  : ^^^^^
 
     c; // also narrowed to `A`
 >c : A
+>  : ^
 }
 
 let stringB: string = 'b';
 >stringB : string
+>        : ^^^^^^
 >'b' : "b"
+>    : ^^^
 
 if ((stringB as 'b') in c) {
 >(stringB as 'b') in c : boolean
+>                      : ^^^^^^^
 >(stringB as 'b') : "b"
+>                 : ^^^
 >stringB as 'b' : "b"
+>               : ^^^
 >stringB : string
+>        : ^^^^^^
 >c : A | B
+>  : ^^^^^
 
     c; // narrowed to `B`
 >c : B
+>  : ^
 }
 
 if ((stringB as ('a' | 'b')) in c) {
 >(stringB as ('a' | 'b')) in c : boolean
+>                              : ^^^^^^^
 >(stringB as ('a' | 'b')) : "a" | "b"
+>                         : ^^^^^^^^^
 >stringB as ('a' | 'b') : "a" | "b"
+>                       : ^^^^^^^^^
 >stringB : string
+>        : ^^^^^^
 >c : A | B
+>  : ^^^^^
 
     c; // not narrowed
 >c : A | B
+>  : ^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts] ////
+
 //// [typeOfThisInStaticMembers11.ts]
 declare const foo: any;
 
@@ -49,6 +51,7 @@ class DD extends CC {
 
 
 //// [typeOfThisInStaticMembers11.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||

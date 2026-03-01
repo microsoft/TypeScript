@@ -1,3 +1,5 @@
+// @target: es5,es2015
+// @strict: false
 // @downlevelIteration: true
 function f0() {
     var a = [1, 2, 3];

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypeCalls.ts ===
+//// [tests/cases/compiler/targetTypeCalls.ts] ////
+
+=== targetTypeCalls.ts ===
 var fra1: (v:any)=>string = function() { return function (v:string) {return v;}; }() // should work
 >fra1 : Symbol(fra1, Decl(targetTypeCalls.ts, 0, 3))
 >v : Symbol(v, Decl(targetTypeCalls.ts, 0, 11))

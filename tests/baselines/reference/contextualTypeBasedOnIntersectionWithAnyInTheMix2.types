@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts ===
+type IntrinsicElements = {
+>IntrinsicElements : IntrinsicElements
+>                  : ^^^^^^^^^^^^^^^^^
+
+  a: {
+>a : { href?: string; }
+>  : ^^^^^^^^^      ^^^
+
+    href?: string;
+>href : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  };
+  div: {
+>div : { dir?: string; }
+>    : ^^^^^^^^      ^^^
+
+    dir?: string;
+>dir : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+  };
+};
+
+type Component<Props> = (props: Props) => unknown;
+>Component : Component<Props>
+>          : ^^^^^^^^^^^^^^^^
+>props : Props
+>      : ^^^^^
+
+interface NestedMDXComponents {
+  [key: string]: Component<any>;
+>key : string
+>    : ^^^^^^
+}
+
+type MDXComponents = NestedMDXComponents & {
+>MDXComponents : MDXComponents
+>              : ^^^^^^^^^^^^^
+
+  [Key in keyof IntrinsicElements]?: Component<IntrinsicElements[Key]>;
+};
+
+export interface MDXProps {
+  components?: MDXComponents;
+>components : MDXComponents | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare function MyMDXComponent(props: MDXProps): null;
+>MyMDXComponent : (props: MDXProps) => null
+>               : ^     ^^        ^^^^^    
+>props : MDXProps
+>      : ^^^^^^^^
+
+MyMDXComponent({
+>MyMDXComponent({  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },}) : null
+>                                                                                                                    : ^^^^
+>MyMDXComponent : (props: MDXProps) => null
+>               : ^     ^^        ^^^^^    
+>{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+
+  components: {
+>components : { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }
+>           : ^^^^     ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^
+>{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }
+>                                                                                   : ^^^^     ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^
+
+    a(props) {
+>a : (props: { href?: string; }) => null
+>  : ^     ^^^^^^^^^^^      ^^^^^^^^^^^^
+>props : { href?: string; }
+>      : ^^^^^^^^^      ^^^
+
+      return null;
+    },
+    div(props) {
+>div : (props: { dir?: string; }) => null
+>    : ^     ^^^^^^^^^^      ^^^^^^^^^^^^
+>props : { dir?: string; }
+>      : ^^^^^^^^      ^^^
+
+      return null;
+    },
+  },
+});
+

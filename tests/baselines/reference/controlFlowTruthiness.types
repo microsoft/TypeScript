@@ -1,206 +1,287 @@
-=== tests/cases/conformance/controlFlow/controlFlowTruthiness.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowTruthiness.ts] ////
+
+=== controlFlowTruthiness.ts ===
 declare function foo(): string | undefined;
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x = foo();
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
     if (x) {
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         x; // string
 >x : string
+>  : ^^^^^^
     }
     else {
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | undefined;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x = foo();
 >x = foo() : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
     if (x) {
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         x; // string
 >x : string
+>  : ^^^^^^
     }
     else {
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | undefined;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (x = foo()) {
 >x = foo() : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
         x; // string
 >x : string
+>  : ^^^^^^
     }
     else {
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | undefined;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (!(x = foo())) {
 >!(x = foo()) : boolean
+>             : ^^^^^^^
 >(x = foo()) : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 >x = foo() : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
     else {
         x; // string
 >x : string
+>  : ^^^^^^
     }
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | undefined;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y: string | undefined;
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (x = y = foo()) {
 >x = y = foo() : string | undefined
+>              : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >y = foo() : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
         x; // string
 >x : string
+>  : ^^^^^^
 
         y; // string | undefined
 >y : string
+>  : ^^^^^^
     }
     else {
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         y; // string | undefined
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f6() {
 >f6 : () => void
+>   : ^^^^^^^^^^
 
     let x: string | undefined;
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let y: string | undefined;
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (x = foo(), y = foo()) {
 >x = foo(), y = foo() : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
 >x = foo() : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 >y = foo() : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >foo() : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
+>    : ^^^^^^                  
 
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         y; // string
 >y : string
+>  : ^^^^^^
     }
     else {
         x; // string | undefined
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         y; // string | undefined
 >y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f7(x: {}) {
 >f7 : (x: {}) => void
+>   : ^ ^^  ^^^^^^^^^
 >x : {}
+>  : ^^
 
     if (x) {
 >x : {}
+>  : ^^
 
         x; // {}
 >x : {}
+>  : ^^
     }
     else {
         x; // {}
 >x : {}
+>  : ^^
     }
 }
 
 function f8<T>(x: T) {
 >f8 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x) {
 >x : T
+>  : ^
 
         x; // {}
 >x : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
     }
     else {
         x; // {}
 >x : T
+>  : ^
     }
 }
 
 function f9<T extends object>(x: T) {
 >f9 : <T extends object>(x: T) => void
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (x) {
 >x : T
+>  : ^
 
         x; // {}
 >x : T
+>  : ^
     }
     else {
         x; // never
 >x : never
+>  : ^^^^^
     }
 }

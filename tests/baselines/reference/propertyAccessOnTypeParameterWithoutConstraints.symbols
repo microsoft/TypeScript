@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithoutConstraints.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithoutConstraints.ts] ////
+
+=== propertyAccessOnTypeParameterWithoutConstraints.ts ===
 class C<T> {
 >C : Symbol(C, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 8))

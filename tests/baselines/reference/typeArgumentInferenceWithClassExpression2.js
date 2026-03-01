@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts] ////
+
 //// [typeArgumentInferenceWithClassExpression2.ts]
 function foo<T>(x = class { prop: T }): T {
     return undefined;
@@ -7,20 +9,14 @@ function foo<T>(x = class { prop: T }): T {
 foo(class { static prop = "hello" }).length;
 
 //// [typeArgumentInferenceWithClassExpression2.js]
+"use strict";
 var _a;
-function foo(x) {
-    if (x === void 0) { x = /** @class */ (function () {
-        function class_1() {
-        }
-        return class_1;
-    }()); }
+function foo(x = class {
+}) {
     return undefined;
 }
 // Should not infer string because it is a static property
-foo((_a = /** @class */ (function () {
-        function class_2() {
-        }
-        return class_2;
-    }()),
+foo((_a = class {
+    },
     _a.prop = "hello",
     _a)).length;

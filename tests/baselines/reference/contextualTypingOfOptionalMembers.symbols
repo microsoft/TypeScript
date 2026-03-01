@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/contextualTypingOfOptionalMembers.tsx] ////
+
+=== index.tsx ===
 interface ActionsObject<State> {
 >ActionsObject : Symbol(ActionsObject, Decl(index.tsx, 0, 0))
 >State : Symbol(State, Decl(index.tsx, 0, 24))

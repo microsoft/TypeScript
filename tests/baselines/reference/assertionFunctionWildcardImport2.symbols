@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/assertionFunctionWildcardImport2.ts] ////
+
+=== asserts.ts ===
+function isNonNullable<T>(obj: T): asserts obj is NonNullable<T> {
+>isNonNullable : Symbol(isNonNullable, Decl(asserts.ts, 0, 0))
+>T : Symbol(T, Decl(asserts.ts, 0, 23))
+>obj : Symbol(obj, Decl(asserts.ts, 0, 26))
+>T : Symbol(T, Decl(asserts.ts, 0, 23))
+>obj : Symbol(obj, Decl(asserts.ts, 0, 26))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(asserts.ts, 0, 23))
+
+    if (obj === undefined || obj === null) {
+>obj : Symbol(obj, Decl(asserts.ts, 0, 26))
+>undefined : Symbol(undefined)
+>obj : Symbol(obj, Decl(asserts.ts, 0, 26))
+
+        throw new Error("Must not be a nullable value");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+export {
+    isNonNullable
+>isNonNullable : Symbol(isNonNullable, Decl(asserts.ts, 6, 8))
+
+};
+
+=== test.ts ===
+import * as asserts from "./asserts";
+>asserts : Symbol(asserts, Decl(test.ts, 0, 6))
+
+function test(obj: string | null): void {
+>test : Symbol(test, Decl(test.ts, 0, 37))
+>obj : Symbol(obj, Decl(test.ts, 2, 14))
+
+    asserts.isNonNullable(obj);
+>asserts.isNonNullable : Symbol(asserts.isNonNullable, Decl(asserts.ts, 6, 8))
+>asserts : Symbol(asserts, Decl(test.ts, 0, 6))
+>isNonNullable : Symbol(asserts.isNonNullable, Decl(asserts.ts, 6, 8))
+>obj : Symbol(obj, Decl(test.ts, 2, 14))
+
+    obj.trim();
+>obj.trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(test.ts, 2, 14))
+>trim : Symbol(String.trim, Decl(lib.es5.d.ts, --, --))
+}
+

@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/bug26693.js(2,22): error TS2307: Cannot find module 'nope' or its corresponding type declarations.
+bug26693.js(2,22): error TS2307: Cannot find module 'nope' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/jsdoc/bug26693.js (1 errors) ====
+==== bug26693.js (1 errors) ====
     /** @typedef {module:locale} hi */
     import { nope } from 'nope';
                          ~~~~~~

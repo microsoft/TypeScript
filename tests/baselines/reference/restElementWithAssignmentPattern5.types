@@ -1,16 +1,29 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern5.ts ===
+//// [tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern5.ts] ////
+
+=== restElementWithAssignmentPattern5.ts ===
 var s: string, s2: string;
 >s : string
+>  : ^^^^^^
 >s2 : string
+>   : ^^^^^^
 
 [...[s, s2]] = ["", ""];
 >[...[s, s2]] = ["", ""] : [string, string]
+>                        : ^^^^^^^^^^^^^^^^
 >[...[s, s2]] : [string, string]
+>             : ^^^^^^^^^^^^^^^^
 >...[s, s2] : string
+>           : ^^^^^^
 >[s, s2] : [string, string]
+>        : ^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s2 : string
+>   : ^^^^^^
 >["", ""] : [string, string]
+>         : ^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 

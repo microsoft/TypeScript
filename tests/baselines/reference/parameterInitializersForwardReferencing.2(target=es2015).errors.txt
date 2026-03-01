@@ -1,9 +1,9 @@
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.2.ts(5,18): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.2.ts(5,32): error TS2373: Parameter '{ b = a(), ...x }' cannot reference identifier 'a' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.2.ts(11,35): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
+parameterInitializersForwardReferencing.2.ts(5,18): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
+parameterInitializersForwardReferencing.2.ts(5,32): error TS2373: Parameter '{ b = a(), ...x }' cannot reference identifier 'a' declared after it.
+parameterInitializersForwardReferencing.2.ts(11,35): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
 
 
-==== tests/cases/conformance/functions/parameterInitializersForwardReferencing.2.ts (3 errors) ====
+==== parameterInitializersForwardReferencing.2.ts (3 errors) ====
     // https://github.com/microsoft/TypeScript/issues/36295
     
     function a(): any {}

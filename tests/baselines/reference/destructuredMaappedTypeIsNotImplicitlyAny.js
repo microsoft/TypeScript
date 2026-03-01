@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuredMaappedTypeIsNotImplicitlyAny.ts] ////
+
 //// [destructuredMaappedTypeIsNotImplicitlyAny.ts]
 function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
     const { [key]: bar } = obj; // Element implicitly has an 'any' type because type '{ [_ in T]: number; }' has no index signature.
@@ -8,9 +10,10 @@ function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
 }
 
 //// [destructuredMaappedTypeIsNotImplicitlyAny.js]
+"use strict";
 function foo(key, obj) {
-    var _a = obj, _b = key, bar = _a[_b]; // Element implicitly has an 'any' type because type '{ [_ in T]: number; }' has no index signature.
+    const { [key]: bar } = obj; // Element implicitly has an 'any' type because type '{ [_ in T]: number; }' has no index signature.
     bar; // bar : any
     // Note: this does work:
-    var lorem = obj[key];
+    const lorem = obj[key];
 }

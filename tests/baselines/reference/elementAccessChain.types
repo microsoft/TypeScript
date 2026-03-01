@@ -1,178 +1,311 @@
-=== tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.ts] ////
+
+=== elementAccessChain.ts ===
 declare const o1: undefined | { b: string };
 >o1 : { b: string; } | undefined
+>   : ^^^^^      ^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 o1?.["b"];
 >o1?.["b"] : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >o1 : { b: string; } | undefined
+>   : ^^^^^      ^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
 declare const o2: undefined | { b: { c: string } };
->o2 : { b: {    c: string;}; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >b : { c: string; }
+>  : ^^^^^      ^^^
 >c : string
+>  : ^^^^^^
 
 o2?.["b"].c;
 >o2?.["b"].c : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 >o2?.["b"] : { c: string; } | undefined
+>          : ^^^^^      ^^^^^^^^^^^^^^^
 >o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o2?.b["c"];
 >o2?.b["c"] : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >o2?.b : { c: string; } | undefined
+>      : ^^^^^      ^^^^^^^^^^^^^^^
 >o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 
 declare const o3: { b: undefined | { c: string } };
->o3 : { b: undefined | {    c: string;}; }
+>o3 : { b: undefined | { c: string; }; }
+>   : ^^^^^                          ^^^
 >b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 
 o3["b"]?.c;
 >o3["b"]?.c : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 >o3["b"] : { c: string; } | undefined
->o3 : { b: { c: string; } | undefined; }
+>        : ^^^^^      ^^^^^^^^^^^^^^^
+>o3 : { b: undefined | { c: string; }; }
+>   : ^^^^^                          ^^^
 >"b" : "b"
+>    : ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o3.b?.["c"];
 >o3.b?.["c"] : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 >o3.b : { c: string; } | undefined
->o3 : { b: { c: string; } | undefined; }
+>     : ^^^^^      ^^^^^^^^^^^^^^^
+>o3 : { b: undefined | { c: string; }; }
+>   : ^^^^^                          ^^^
 >b : { c: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 
 declare const o4: { b?: { c: { d?: { e: string } } } };
->o4 : { b?: { c: {    d?: {        e: string;    };}; } | undefined; }
->b : { c: {    d?: {        e: string;    };}; } | undefined
->c : { d?: { e: string; } | undefined; }
+>o4 : { b?: { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^                               ^^^
+>b : { c: { d?: { e: string; }; }; } | undefined
+>  : ^^^^^                       ^^^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 
 o4.b?.["c"].d?.e;
 >o4.b?.["c"].d?.e : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
 >o4.b?.["c"].d : { e: string; } | undefined
->o4.b?.["c"] : { d?: { e: string; } | undefined; } | undefined
->o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
->o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>              : ^^^^^      ^^^^^^^^^^^^^^^
+>o4.b?.["c"] : { d?: { e: string; }; } | undefined
+>            : ^^^^^^              ^^^^^^^^^^^^^^^
+>o4.b : { c: { d?: { e: string; }; }; } | undefined
+>     : ^^^^^                       ^^^^^^^^^^^^^^^
+>o4 : { b?: { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^                               ^^^
+>b : { c: { d?: { e: string; }; }; } | undefined
+>  : ^^^^^                       ^^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o4.b?.["c"].d?.["e"];
 >o4.b?.["c"].d?.["e"] : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
 >o4.b?.["c"].d : { e: string; } | undefined
->o4.b?.["c"] : { d?: { e: string; } | undefined; } | undefined
->o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
->o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>              : ^^^^^      ^^^^^^^^^^^^^^^
+>o4.b?.["c"] : { d?: { e: string; }; } | undefined
+>            : ^^^^^^              ^^^^^^^^^^^^^^^
+>o4.b : { c: { d?: { e: string; }; }; } | undefined
+>     : ^^^^^                       ^^^^^^^^^^^^^^^
+>o4 : { b?: { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^                               ^^^
+>b : { c: { d?: { e: string; }; }; } | undefined
+>  : ^^^^^                       ^^^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >"e" : "e"
+>    : ^^^
 
 declare const o5: { b?(): { c: { d?: { e: string } } } };
->o5 : { b?(): {    c: {        d?: {            e: string;        };    };}; }
->b : (() => {    c: {        d?: {            e: string;        };    };}) | undefined
->c : { d?: { e: string; } | undefined; }
+>o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^^^                               ^^^
+>b : (() => { c: { d?: { e: string; }; }; }) | undefined
+>  : ^^^^^^^                               ^^^^^^^^^^^^^
+>c : { d?: { e: string; }; }
+>  : ^^^^^^              ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string
+>  : ^^^^^^
 
 o5.b?.()["c"].d?.e;
 >o5.b?.()["c"].d?.e : string | undefined
+>                   : ^^^^^^^^^^^^^^^^^^
 >o5.b?.()["c"].d : { e: string; } | undefined
->o5.b?.()["c"] : { d?: { e: string; } | undefined; } | undefined
->o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
->o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
->b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>                : ^^^^^      ^^^^^^^^^^^^^^^
+>o5.b?.()["c"] : { d?: { e: string; }; } | undefined
+>              : ^^^^^^              ^^^^^^^^^^^^^^^
+>o5.b?.() : { c: { d?: { e: string; }; }; } | undefined
+>         : ^^^^^                       ^^^^^^^^^^^^^^^
+>o5.b : (() => { c: { d?: { e: string; }; }; }) | undefined
+>     : ^^^^^^^                               ^^^^^^^^^^^^^
+>o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^^^                               ^^^
+>b : (() => { c: { d?: { e: string; }; }; }) | undefined
+>  : ^^^^^^^                               ^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o5.b?.()["c"].d?.["e"];
 >o5.b?.()["c"].d?.["e"] : string | undefined
+>                       : ^^^^^^^^^^^^^^^^^^
 >o5.b?.()["c"].d : { e: string; } | undefined
->o5.b?.()["c"] : { d?: { e: string; } | undefined; } | undefined
->o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
->o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
->b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>                : ^^^^^      ^^^^^^^^^^^^^^^
+>o5.b?.()["c"] : { d?: { e: string; }; } | undefined
+>              : ^^^^^^              ^^^^^^^^^^^^^^^
+>o5.b?.() : { c: { d?: { e: string; }; }; } | undefined
+>         : ^^^^^                       ^^^^^^^^^^^^^^^
+>o5.b : (() => { c: { d?: { e: string; }; }; }) | undefined
+>     : ^^^^^^^                               ^^^^^^^^^^^^^
+>o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^^^                               ^^^
+>b : (() => { c: { d?: { e: string; }; }; }) | undefined
+>  : ^^^^^^^                               ^^^^^^^^^^^^^
 >"c" : "c"
+>    : ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >"e" : "e"
+>    : ^^^
 
 o5["b"]?.()["c"].d?.e;
 >o5["b"]?.()["c"].d?.e : string | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
 >o5["b"]?.()["c"].d : { e: string; } | undefined
->o5["b"]?.()["c"] : { d?: { e: string; } | undefined; } | undefined
->o5["b"]?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5["b"] : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
->o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
+>                   : ^^^^^      ^^^^^^^^^^^^^^^
+>o5["b"]?.()["c"] : { d?: { e: string; }; } | undefined
+>                 : ^^^^^^              ^^^^^^^^^^^^^^^
+>o5["b"]?.() : { c: { d?: { e: string; }; }; } | undefined
+>            : ^^^^^                       ^^^^^^^^^^^^^^^
+>o5["b"] : (() => { c: { d?: { e: string; }; }; }) | undefined
+>        : ^^^^^^^                               ^^^^^^^^^^^^^
+>o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^^^                               ^^^
 >"b" : "b"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >e : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o5["b"]?.()["c"].d?.["e"];
 >o5["b"]?.()["c"].d?.["e"] : string | undefined
+>                          : ^^^^^^^^^^^^^^^^^^
 >o5["b"]?.()["c"].d : { e: string; } | undefined
->o5["b"]?.()["c"] : { d?: { e: string; } | undefined; } | undefined
->o5["b"]?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
->o5["b"] : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
->o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
+>                   : ^^^^^      ^^^^^^^^^^^^^^^
+>o5["b"]?.()["c"] : { d?: { e: string; }; } | undefined
+>                 : ^^^^^^              ^^^^^^^^^^^^^^^
+>o5["b"]?.() : { c: { d?: { e: string; }; }; } | undefined
+>            : ^^^^^                       ^^^^^^^^^^^^^^^
+>o5["b"] : (() => { c: { d?: { e: string; }; }; }) | undefined
+>        : ^^^^^^^                               ^^^^^^^^^^^^^
+>o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+>   : ^^^^^^^^                               ^^^
 >"b" : "b"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
 >d : { e: string; } | undefined
+>  : ^^^^^      ^^^^^^^^^^^^^^^
 >"e" : "e"
+>    : ^^^
 
 // GH#33744
 declare const o6: <T>() => undefined | ({ x: number });
->o6 : <T>() => undefined | ({    x: number;})
+>o6 : <T>() => undefined | ({ x: number; })
+>   : ^ ^^^^^^^                            
 >x : number
+>  : ^^^^^^
 
 o6<number>()?.["x"];
 >o6<number>()?.["x"] : number | undefined
+>                    : ^^^^^^^^^^^^^^^^^^
 >o6<number>() : { x: number; } | undefined
->o6 : <T>() => { x: number; } | undefined
+>             : ^^^^^      ^^^^^^^^^^^^^^^
+>o6 : <T>() => undefined | ({ x: number; })
+>   : ^ ^^^^^^^                            
 >"x" : "x"
+>    : ^^^
 
 // GH#36031
 o2?.["b"]!.c;
 >o2?.["b"]!.c : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >o2?.["b"]! : { c: string; } | undefined
+>           : ^^^^^      ^^^^^^^^^^^^^^^
 >o2?.["b"] : { c: string; } | undefined
+>          : ^^^^^      ^^^^^^^^^^^^^^^
 >o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o2?.["b"]!["c"];
 >o2?.["b"]!["c"] : string | undefined
+>                : ^^^^^^^^^^^^^^^^^^
 >o2?.["b"]! : { c: string; } | undefined
+>           : ^^^^^      ^^^^^^^^^^^^^^^
 >o2?.["b"] : { c: string; } | undefined
+>          : ^^^^^      ^^^^^^^^^^^^^^^
 >o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
 
 o2?.["b"]!.c!;
 >o2?.["b"]!.c! : string
+>              : ^^^^^^
 >o2?.["b"]!.c : string | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >o2?.["b"]! : { c: string; } | undefined
+>           : ^^^^^      ^^^^^^^^^^^^^^^
 >o2?.["b"] : { c: string; } | undefined
+>          : ^^^^^      ^^^^^^^^^^^^^^^
 >o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 o2?.["b"]!["c"]!;
 >o2?.["b"]!["c"]! : string
+>                 : ^^^^^^
 >o2?.["b"]!["c"] : string | undefined
+>                : ^^^^^^^^^^^^^^^^^^
 >o2?.["b"]! : { c: string; } | undefined
+>           : ^^^^^      ^^^^^^^^^^^^^^^
 >o2?.["b"] : { c: string; } | undefined
+>          : ^^^^^      ^^^^^^^^^^^^^^^
 >o2 : { b: { c: string; }; } | undefined
+>   : ^^^^^              ^^^^^^^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 >"c" : "c"
+>    : ^^^
 

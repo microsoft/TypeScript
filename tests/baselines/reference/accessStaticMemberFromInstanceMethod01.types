@@ -1,15 +1,22 @@
-=== tests/cases/compiler/accessStaticMemberFromInstanceMethod01.ts ===
+//// [tests/cases/compiler/accessStaticMemberFromInstanceMethod01.ts] ////
+
+=== accessStaticMemberFromInstanceMethod01.ts ===
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     static bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         let k = foo;
 >k : any
+>  : ^^^
 >foo : any
+>    : ^^^
     }
 }

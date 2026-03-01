@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfFunctionBody.ts] ////
+
 //// [doNotEmitDetachedCommentsAtStartOfFunctionBody.ts]
 function foo1() {
     // Single line comment
@@ -34,6 +36,7 @@ function foo4() {
 
 
 //// [doNotEmitDetachedCommentsAtStartOfFunctionBody.js]
+"use strict";
 function foo1() {
     return 42;
 }

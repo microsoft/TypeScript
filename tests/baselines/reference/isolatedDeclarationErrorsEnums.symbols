@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsEnums.ts] ////
+
+=== isolatedDeclarationErrorsEnums.ts ===
+declare function computed(x: number): number;
+>computed : Symbol(computed, Decl(isolatedDeclarationErrorsEnums.ts, 0, 0))
+>x : Symbol(x, Decl(isolatedDeclarationErrorsEnums.ts, 0, 26))
+
+enum E {
+>E : Symbol(E, Decl(isolatedDeclarationErrorsEnums.ts, 0, 45))
+
+    A = computed(0),
+>A : Symbol(E.A, Decl(isolatedDeclarationErrorsEnums.ts, 2, 8))
+>computed : Symbol(computed, Decl(isolatedDeclarationErrorsEnums.ts, 0, 0))
+
+    B = computed(1),
+>B : Symbol(E.B, Decl(isolatedDeclarationErrorsEnums.ts, 3, 20))
+>computed : Symbol(computed, Decl(isolatedDeclarationErrorsEnums.ts, 0, 0))
+
+    C = computed(2),
+>C : Symbol(E.C, Decl(isolatedDeclarationErrorsEnums.ts, 4, 20))
+>computed : Symbol(computed, Decl(isolatedDeclarationErrorsEnums.ts, 0, 0))
+
+    D = computed(3),
+>D : Symbol(E.D, Decl(isolatedDeclarationErrorsEnums.ts, 5, 20))
+>computed : Symbol(computed, Decl(isolatedDeclarationErrorsEnums.ts, 0, 0))
+}
+
+
+enum F {
+>F : Symbol(F, Decl(isolatedDeclarationErrorsEnums.ts, 7, 1))
+
+    A = E.A,
+>A : Symbol(F.A, Decl(isolatedDeclarationErrorsEnums.ts, 10, 8))
+>E.A : Symbol(E.A, Decl(isolatedDeclarationErrorsEnums.ts, 2, 8))
+>E : Symbol(E, Decl(isolatedDeclarationErrorsEnums.ts, 0, 45))
+>A : Symbol(E.A, Decl(isolatedDeclarationErrorsEnums.ts, 2, 8))
+
+    B = A,
+>B : Symbol(F.B, Decl(isolatedDeclarationErrorsEnums.ts, 11, 12))
+>A : Symbol(F.A, Decl(isolatedDeclarationErrorsEnums.ts, 10, 8))
+}
+
+
+enum Flag {
+>Flag : Symbol(Flag, Decl(isolatedDeclarationErrorsEnums.ts, 13, 1))
+
+    A = 1 >> 1,
+>A : Symbol(Flag.A, Decl(isolatedDeclarationErrorsEnums.ts, 16, 11))
+
+    B = 2 >> 2,
+>B : Symbol(Flag.B, Decl(isolatedDeclarationErrorsEnums.ts, 17, 15))
+
+    C = 3 >> 2,
+>C : Symbol(Flag.C, Decl(isolatedDeclarationErrorsEnums.ts, 18, 15))
+
+    AB = A | B,
+>AB : Symbol(Flag.AB, Decl(isolatedDeclarationErrorsEnums.ts, 19, 15))
+>A : Symbol(Flag.A, Decl(isolatedDeclarationErrorsEnums.ts, 16, 11))
+>B : Symbol(Flag.B, Decl(isolatedDeclarationErrorsEnums.ts, 17, 15))
+
+    ABC = Flag.AB | C,
+>ABC : Symbol(Flag.ABC, Decl(isolatedDeclarationErrorsEnums.ts, 20, 15))
+>Flag.AB : Symbol(Flag.AB, Decl(isolatedDeclarationErrorsEnums.ts, 19, 15))
+>Flag : Symbol(Flag, Decl(isolatedDeclarationErrorsEnums.ts, 13, 1))
+>AB : Symbol(Flag.AB, Decl(isolatedDeclarationErrorsEnums.ts, 19, 15))
+>C : Symbol(Flag.C, Decl(isolatedDeclarationErrorsEnums.ts, 18, 15))
+
+    AC = Flag["A"] | C,
+>AC : Symbol(Flag.AC, Decl(isolatedDeclarationErrorsEnums.ts, 21, 22))
+>Flag : Symbol(Flag, Decl(isolatedDeclarationErrorsEnums.ts, 13, 1))
+>"A" : Symbol(Flag.A, Decl(isolatedDeclarationErrorsEnums.ts, 16, 11))
+>C : Symbol(Flag.C, Decl(isolatedDeclarationErrorsEnums.ts, 18, 15))
+}
+
+const EV = 1;
+>EV : Symbol(EV, Decl(isolatedDeclarationErrorsEnums.ts, 25, 5))
+
+enum ExtFlags {
+>ExtFlags : Symbol(ExtFlags, Decl(isolatedDeclarationErrorsEnums.ts, 25, 13))
+
+    D = 4 >> 1,
+>D : Symbol(ExtFlags.D, Decl(isolatedDeclarationErrorsEnums.ts, 26, 15))
+
+    E = EV,
+>E : Symbol(ExtFlags.E, Decl(isolatedDeclarationErrorsEnums.ts, 27, 15))
+>EV : Symbol(EV, Decl(isolatedDeclarationErrorsEnums.ts, 25, 5))
+
+    ABCD = Flag.ABC | D,
+>ABCD : Symbol(ExtFlags.ABCD, Decl(isolatedDeclarationErrorsEnums.ts, 28, 11))
+>Flag.ABC : Symbol(Flag.ABC, Decl(isolatedDeclarationErrorsEnums.ts, 20, 15))
+>Flag : Symbol(Flag, Decl(isolatedDeclarationErrorsEnums.ts, 13, 1))
+>ABC : Symbol(Flag.ABC, Decl(isolatedDeclarationErrorsEnums.ts, 20, 15))
+>D : Symbol(ExtFlags.D, Decl(isolatedDeclarationErrorsEnums.ts, 26, 15))
+
+    AC = Flag["A"] | D,
+>AC : Symbol(ExtFlags.AC, Decl(isolatedDeclarationErrorsEnums.ts, 29, 24))
+>Flag : Symbol(Flag, Decl(isolatedDeclarationErrorsEnums.ts, 13, 1))
+>"A" : Symbol(Flag.A, Decl(isolatedDeclarationErrorsEnums.ts, 16, 11))
+>D : Symbol(ExtFlags.D, Decl(isolatedDeclarationErrorsEnums.ts, 26, 15))
+}
+
+
+enum Str {
+>Str : Symbol(Str, Decl(isolatedDeclarationErrorsEnums.ts, 31, 1))
+
+    A = "A",
+>A : Symbol(Str.A, Decl(isolatedDeclarationErrorsEnums.ts, 34, 10))
+
+    B = "B",
+>B : Symbol(Str.B, Decl(isolatedDeclarationErrorsEnums.ts, 35, 12))
+
+    AB = A + B
+>AB : Symbol(Str.AB, Decl(isolatedDeclarationErrorsEnums.ts, 36, 12))
+>A : Symbol(Str.A, Decl(isolatedDeclarationErrorsEnums.ts, 34, 10))
+>B : Symbol(Str.B, Decl(isolatedDeclarationErrorsEnums.ts, 35, 12))
+}
+
+
+enum StrExt {
+>StrExt : Symbol(StrExt, Decl(isolatedDeclarationErrorsEnums.ts, 38, 1))
+
+    D = "D",
+>D : Symbol(StrExt.D, Decl(isolatedDeclarationErrorsEnums.ts, 41, 13))
+
+    ABD = Str.AB + D,
+>ABD : Symbol(StrExt.ABD, Decl(isolatedDeclarationErrorsEnums.ts, 42, 12))
+>Str.AB : Symbol(Str.AB, Decl(isolatedDeclarationErrorsEnums.ts, 36, 12))
+>Str : Symbol(Str, Decl(isolatedDeclarationErrorsEnums.ts, 31, 1))
+>AB : Symbol(Str.AB, Decl(isolatedDeclarationErrorsEnums.ts, 36, 12))
+>D : Symbol(StrExt.D, Decl(isolatedDeclarationErrorsEnums.ts, 41, 13))
+
+    AD = Str["A"] + D,
+>AD : Symbol(StrExt.AD, Decl(isolatedDeclarationErrorsEnums.ts, 43, 21))
+>Str : Symbol(Str, Decl(isolatedDeclarationErrorsEnums.ts, 31, 1))
+>"A" : Symbol(Str.A, Decl(isolatedDeclarationErrorsEnums.ts, 34, 10))
+>D : Symbol(StrExt.D, Decl(isolatedDeclarationErrorsEnums.ts, 41, 13))
+}

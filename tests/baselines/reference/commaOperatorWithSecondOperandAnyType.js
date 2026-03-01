@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandAnyType.ts] ////
+
 //// [commaOperatorWithSecondOperandAnyType.ts]
 var ANY: any;
 var BOOLEAN: boolean;
@@ -38,6 +40,7 @@ var resultIsAny11 = (!BOOLEAN, x.doSomeThing());
 
 
 //// [commaOperatorWithSecondOperandAnyType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

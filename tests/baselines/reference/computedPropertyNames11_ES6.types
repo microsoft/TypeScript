@@ -1,56 +1,82 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames11_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames11_ES6.ts] ////
+
+=== computedPropertyNames11_ES6.ts ===
 var s: string;
 >s : string
+>  : ^^^^^^
 
 var n: number;
 >n : number
+>  : ^^^^^^
 
 var a: any;
 >a : any
 
 var v = {
 >v : { [x: string]: any; [x: number]: any; "": any; readonly 0: number; "hello bye": any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    get [s]() { return 0; },    set [n](v) { },    get [s + s]() { return 0; },    set [s + n](v) { },    get [+s]() { return 0; },    set [""](v) { },    get [0]() { return 0; },    set [a](v) { },    get [<any>true]() { return 0; },    set [`hello bye`](v) { },    get [`hello ${a} bye`]() { return 0; }} : { [x: string]: any; [x: number]: any; "": any; readonly 0: number; "hello bye": any; }
+>                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get [s]() { return 0; },
 >[s] : number
+>    : ^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     set [n](v) { },
 >[n] : any
 >n : number
+>  : ^^^^^^
 >v : any
 
     get [s + s]() { return 0; },
 >[s + s] : number
+>        : ^^^^^^
 >s + s : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     set [s + n](v) { },
 >[s + n] : any
 >s + n : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 >v : any
 
     get [+s]() { return 0; },
 >[+s] : number
+>     : ^^^^^^
 >+s : number
+>   : ^^^^^^
 >s : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     set [""](v) { },
 >[""] : any
 >"" : ""
+>   : ^^
 >v : any
 
     get [0]() { return 0; },
 >[0] : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
     set [a](v) { },
 >[a] : any
@@ -59,18 +85,25 @@ var v = {
 
     get [<any>true]() { return 0; },
 >[<any>true] : number
+>            : ^^^^^^
 ><any>true : any
 >true : true
+>     : ^^^^
 >0 : 0
+>  : ^
 
     set [`hello bye`](v) { },
 >[`hello bye`] : any
 >`hello bye` : "hello bye"
+>            : ^^^^^^^^^^^
 >v : any
 
     get [`hello ${a} bye`]() { return 0; }
 >[`hello ${a} bye`] : number
+>                   : ^^^^^^
 >`hello ${a} bye` : string
+>                 : ^^^^^^
 >a : any
 >0 : 0
+>  : ^
 }

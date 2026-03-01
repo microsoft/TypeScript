@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisTypeAsConstraint.ts] ////
+
 //// [thisTypeAsConstraint.ts]
 class C {
   public m<T extends this>() {
@@ -5,10 +7,8 @@ class C {
 }
 
 //// [thisTypeAsConstraint.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    m() {
     }
-    C.prototype.m = function () {
-    };
-    return C;
-}());
+}

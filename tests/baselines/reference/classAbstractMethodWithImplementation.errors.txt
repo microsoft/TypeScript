@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodWithImplementation.ts(2,14): error TS1245: Method 'foo' cannot have an implementation because it is marked abstract.
+classAbstractMethodWithImplementation.ts(2,14): error TS1245: Method 'foo' cannot have an implementation because it is marked abstract.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodWithImplementation.ts (1 errors) ====
+==== classAbstractMethodWithImplementation.ts (1 errors) ====
     abstract class A {
         abstract foo() {}
                  ~~~

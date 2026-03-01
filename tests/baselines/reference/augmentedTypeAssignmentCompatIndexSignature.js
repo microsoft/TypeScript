@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts] ////
+
 //// [augmentedTypeAssignmentCompatIndexSignature.ts]
 interface Foo { a }
 interface Bar { b }
@@ -22,7 +24,8 @@ var v2: {
 } = f; // Should be allowed
 
 //// [augmentedTypeAssignmentCompatIndexSignature.js]
+"use strict";
 var o = {};
-var f = function () { };
+var f = () => { };
 var v1 = o; // Should be allowed
 var v2 = f; // Should be allowed

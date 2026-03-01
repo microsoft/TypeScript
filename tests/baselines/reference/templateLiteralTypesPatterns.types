@@ -1,639 +1,1052 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts] ////
+
+=== templateLiteralTypesPatterns.ts ===
 type RequiresLeadingSlash = `/${string}`;
 >RequiresLeadingSlash : `/${string}`
+>                     : ^^^^^^^^^^^^
 
 // ok
 const a: RequiresLeadingSlash = "/bin";
 >a : `/${string}`
+>  : ^^^^^^^^^^^^
 >"/bin" : "/bin"
+>       : ^^^^^^
 
 // not ok
 const b: RequiresLeadingSlash = "no slash";
 >b : `/${string}`
+>  : ^^^^^^^^^^^^
 >"no slash" : "no slash"
+>           : ^^^^^^^^^^
 
 type Protocol<T extends string, U extends string> = `${T}://${U}`;
 >Protocol : `${T}://${U}`
+>         : ^^^^^^^^^^^^^
 
 function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 >download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
+>         : ^        ^^                                          ^^^^^^^^^
 >hostSpec : `http://${string}` | `https://${string}` | `ftp://${string}`
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // ok, has protocol
 download("http://example.com/protocol");
 >download("http://example.com/protocol") : void
->download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>                                        : ^^^^
+>download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
+>         : ^        ^^                                          ^^^^^^^^^
 >"http://example.com/protocol" : "http://example.com/protocol"
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // issues error - no protocol
 download("example.com/noprotocol");
 >download("example.com/noprotocol") : void
->download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>                                   : ^^^^
+>download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
+>         : ^        ^^                                          ^^^^^^^^^
 >"example.com/noprotocol" : "example.com/noprotocol"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 // issues error, incorrect protocol
 download("gopher://example.com/protocol");
 >download("gopher://example.com/protocol") : void
->download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>                                          : ^^^^
+>download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
+>         : ^        ^^                                          ^^^^^^^^^
 >"gopher://example.com/protocol" : "gopher://example.com/protocol"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const q: RequiresLeadingSlash extends string ? true : false = true;
 >q : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 >true : true
+>     : ^^^^
 
 declare function bools(x: `${boolean}`): void;
 >bools : (x: `${boolean}`) => void
+>      : ^ ^^            ^^^^^    
 >x : "false" | "true"
+>  : ^^^^^^^^^^^^^^^^
 
 // ok
 bools("true");
 >bools("true") : void
->bools : (x: "false" | "true") => void
+>              : ^^^^
+>bools : (x: `${boolean}`) => void
+>      : ^ ^^            ^^^^^    
 >"true" : "true"
+>       : ^^^^^^
 
 bools("false");
 >bools("false") : void
->bools : (x: "false" | "true") => void
+>               : ^^^^
+>bools : (x: `${boolean}`) => void
+>      : ^ ^^            ^^^^^    
 >"false" : "false"
+>        : ^^^^^^^
 
 // not ok
 bools("other");
 >bools("other") : void
->bools : (x: "false" | "true") => void
+>               : ^^^^
+>bools : (x: `${boolean}`) => void
+>      : ^ ^^            ^^^^^    
 >"other" : "other"
+>        : ^^^^^^^
 
 type Pat<T extends string | null | undefined> = `${T}`
 >Pat : `${T}`
->null : null
+>    : ^^^^^^
 
 declare function nullishes(x: Pat<null | undefined>): void;
 >nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >x : "undefined" | "null"
->null : null
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 // ok
 nullishes("null");
 >nullishes("null") : void
->nullishes : (x: "undefined" | "null") => void
+>                  : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"null" : "null"
+>       : ^^^^^^
 
 nullishes("undefined");
 >nullishes("undefined") : void
->nullishes : (x: "undefined" | "null") => void
+>                       : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"undefined" : "undefined"
+>            : ^^^^^^^^^^^
 
 // not ok
 nullishes("0");
 >nullishes("0") : void
->nullishes : (x: "undefined" | "null") => void
+>               : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"0" : "0"
+>    : ^^^
 
 nullishes("false");
 >nullishes("false") : void
->nullishes : (x: "undefined" | "null") => void
+>                   : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"false" : "false"
+>        : ^^^^^^^
 
 nullishes("NaN");
 >nullishes("NaN") : void
->nullishes : (x: "undefined" | "null") => void
+>                 : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"NaN" : "NaN"
+>      : ^^^^^
 
 nullishes("");
 >nullishes("") : void
->nullishes : (x: "undefined" | "null") => void
+>              : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"" : ""
+>   : ^^
 
 nullishes("other");
 >nullishes("other") : void
->nullishes : (x: "undefined" | "null") => void
+>                   : ^^^^
+>nullishes : (x: Pat<null | undefined>) => void
+>          : ^ ^^                     ^^^^^    
 >"other" : "other"
+>        : ^^^^^^^
 
 declare function numbers(x: `${number}`): void;
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >x : `${number}`
+>  : ^^^^^^^^^^^
 
 // the following should work
 numbers("1");
 >numbers("1") : void
+>             : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1" : "1"
+>    : ^^^
 
 numbers("-1");
 >numbers("-1") : void
+>              : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1" : "-1"
+>     : ^^^^
 
 numbers("0");
 >numbers("0") : void
+>             : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"0" : "0"
+>    : ^^^
 
 numbers("0b1");
 >numbers("0b1") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"0b1" : "0b1"
+>      : ^^^^^
 
 numbers("0x1");
 >numbers("0x1") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"0x1" : "0x1"
+>      : ^^^^^
 
 numbers("0o1");
 >numbers("0o1") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"0o1" : "0o1"
+>      : ^^^^^
 
 numbers("1e21");
 >numbers("1e21") : void
+>                : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1e21" : "1e21"
+>       : ^^^^^^
 
 numbers("1E21");
 >numbers("1E21") : void
+>                : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1E21" : "1E21"
+>       : ^^^^^^
 
 numbers("1e-21");
 >numbers("1e-21") : void
+>                 : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1e-21" : "1e-21"
+>        : ^^^^^^^
 
 numbers("1E-21");
 >numbers("1E-21") : void
+>                 : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1E-21" : "1E-21"
+>        : ^^^^^^^
 
 numbers("1.1");
 >numbers("1.1") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.1" : "1.1"
+>      : ^^^^^
 
 numbers("-1.1");
 >numbers("-1.1") : void
+>                : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1" : "-1.1"
+>       : ^^^^^^
 
 numbers("-1.1e-10");
 >numbers("-1.1e-10") : void
+>                    : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1e-10" : "-1.1e-10"
+>           : ^^^^^^^^^^
 
 numbers("-1.1E-10");
 >numbers("-1.1E-10") : void
+>                    : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1E-10" : "-1.1E-10"
+>           : ^^^^^^^^^^
 
 numbers("1.1e-10");
 >numbers("1.1e-10") : void
+>                   : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.1e-10" : "1.1e-10"
+>          : ^^^^^^^^^
 
 // the following should be errors since they're not numbers
 numbers("?");
 >numbers("?") : void
+>             : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"?" : "?"
+>    : ^^^
 
 numbers("NaN");
 >numbers("NaN") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"NaN" : "NaN"
+>      : ^^^^^
 
 numbers("Infinity");
 >numbers("Infinity") : void
+>                    : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"Infinity" : "Infinity"
+>           : ^^^^^^^^^^
 
 numbers("+Infinity");
 >numbers("+Infinity") : void
+>                     : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"+Infinity" : "+Infinity"
+>            : ^^^^^^^^^^^
 
 numbers("-Infinity");
 >numbers("-Infinity") : void
+>                     : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"-Infinity" : "-Infinity"
+>            : ^^^^^^^^^^^
 
 numbers("1_000");
 >numbers("1_000") : void
+>                 : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"1_000" : "1_000"
+>        : ^^^^^^^
 
 // the following should be errors since they don't match the pattern
 numbers("a10");
 >numbers("a10") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"a10" : "a10"
+>      : ^^^^^
 
 numbers("10a");
 >numbers("10a") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"10a" : "10a"
+>      : ^^^^^
 
 // whitespace and comments aren't part of numbers
 numbers("- 1");
 >numbers("- 1") : void
+>               : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"- 1" : "- 1"
+>      : ^^^^^
 
 numbers("-/**/1");
 >numbers("-/**/1") : void
+>                  : ^^^^
 >numbers : (x: `${number}`) => void
+>        : ^ ^^           ^^^^^    
 >"-/**/1" : "-/**/1"
+>         : ^^^^^^^^
 
 declare function bigints(x: `${bigint}`): void;
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >x : `${bigint}`
+>  : ^^^^^^^^^^^
 
 // the following should work
 bigints("1");
 >bigints("1") : void
+>             : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1" : "1"
+>    : ^^^
 
 bigints("-1");
 >bigints("-1") : void
+>              : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1" : "-1"
+>     : ^^^^
 
 bigints("0");
 >bigints("0") : void
+>             : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0" : "0"
+>    : ^^^
 
 bigints("0b1");
 >bigints("0b1") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0b1" : "0b1"
+>      : ^^^^^
 
 bigints("0x1");
 >bigints("0x1") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0x1" : "0x1"
+>      : ^^^^^
 
 bigints("0o1");
 >bigints("0o1") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0o1" : "0o1"
+>      : ^^^^^
 
 // bigints do not allow scientific notation in their parsing/scanning, so these are all errors
 bigints("1e21");
 >bigints("1e21") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1e21" : "1e21"
+>       : ^^^^^^
 
 bigints("1E21");
 >bigints("1E21") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1E21" : "1E21"
+>       : ^^^^^^
 
 bigints("1e-21");
 >bigints("1e-21") : void
+>                 : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1e-21" : "1e-21"
+>        : ^^^^^^^
 
 bigints("1E-21");
 >bigints("1E-21") : void
+>                 : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1E-21" : "1E-21"
+>        : ^^^^^^^
 
 // these are all errors because they're not big_int_s
 bigints("1.0");
 >bigints("1.0") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.0" : "1.0"
+>      : ^^^^^
 
 bigints("1.1");
 >bigints("1.1") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.1" : "1.1"
+>      : ^^^^^
 
 bigints("-1.1");
 >bigints("-1.1") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1" : "-1.1"
+>       : ^^^^^^
 
 bigints("-1.1e-10");
 >bigints("-1.1e-10") : void
+>                    : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1e-10" : "-1.1e-10"
+>           : ^^^^^^^^^^
 
 bigints("-1.1E-10");
 >bigints("-1.1E-10") : void
+>                    : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1E-10" : "-1.1E-10"
+>           : ^^^^^^^^^^
 
 bigints("1.1e-10");
 >bigints("1.1e-10") : void
+>                   : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.1e-10" : "1.1e-10"
+>          : ^^^^^^^^^
 
 // the following should be errors since they're not numbers
 bigints("?");
 >bigints("?") : void
+>             : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"?" : "?"
+>    : ^^^
 
 bigints("NaN");
 >bigints("NaN") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"NaN" : "NaN"
+>      : ^^^^^
 
 bigints("Infinity");
 >bigints("Infinity") : void
+>                    : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"Infinity" : "Infinity"
+>           : ^^^^^^^^^^
 
 bigints("+Infinity");
 >bigints("+Infinity") : void
+>                     : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"+Infinity" : "+Infinity"
+>            : ^^^^^^^^^^^
 
 bigints("-Infinity");
 >bigints("-Infinity") : void
+>                     : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-Infinity" : "-Infinity"
+>            : ^^^^^^^^^^^
 
 bigints("1_000");
 >bigints("1_000") : void
+>                 : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1_000" : "1_000"
+>        : ^^^^^^^
 
 // whitespace and comments aren't part of numbers
 bigints("- 1");
 >bigints("- 1") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"- 1" : "- 1"
+>      : ^^^^^
 
 bigints("-/**/1");
 >bigints("-/**/1") : void
+>                  : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-/**/1" : "-/**/1"
+>         : ^^^^^^^^
 
 // the following should be errors since they don't match the pattern
 bigints("a10n");
 >bigints("a10n") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"a10n" : "a10n"
+>       : ^^^^^^
 
 bigints("10an");
 >bigints("10an") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"10an" : "10an"
+>       : ^^^^^^
 
 // the following should all be errors because the `BigInt` constructor (and thus bigint parsing) doesn't take the trailing `n` used in literals
 bigints("1n");
 >bigints("1n") : void
+>              : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1n" : "1n"
+>     : ^^^^
 
 bigints("-1n");
 >bigints("-1n") : void
+>               : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1n" : "-1n"
+>      : ^^^^^
 
 bigints("0n");
 >bigints("0n") : void
+>              : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0n" : "0n"
+>     : ^^^^
 
 bigints("0b1n");
 >bigints("0b1n") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0b1n" : "0b1n"
+>       : ^^^^^^
 
 bigints("0x1n");
 >bigints("0x1n") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0x1n" : "0x1n"
+>       : ^^^^^^
 
 bigints("0o1n");
 >bigints("0o1n") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"0o1n" : "0o1n"
+>       : ^^^^^^
 
 bigints("1e21n");
 >bigints("1e21n") : void
+>                 : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1e21n" : "1e21n"
+>        : ^^^^^^^
 
 bigints("1E21n");
 >bigints("1E21n") : void
+>                 : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1E21n" : "1E21n"
+>        : ^^^^^^^
 
 bigints("1e-21n");
 >bigints("1e-21n") : void
+>                  : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1e-21n" : "1e-21n"
+>         : ^^^^^^^^
 
 bigints("1E-21n");
 >bigints("1E-21n") : void
+>                  : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1E-21n" : "1E-21n"
+>         : ^^^^^^^^
 
 bigints("1.1n");
 >bigints("1.1n") : void
+>                : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.1n" : "1.1n"
+>       : ^^^^^^
 
 bigints("-1.1n");
 >bigints("-1.1n") : void
+>                 : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1n" : "-1.1n"
+>        : ^^^^^^^
 
 bigints("-1.1e-10n");
 >bigints("-1.1e-10n") : void
+>                     : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1e-10n" : "-1.1e-10n"
+>            : ^^^^^^^^^^^
 
 bigints("-1.1E-10n");
 >bigints("-1.1E-10n") : void
+>                     : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"-1.1E-10n" : "-1.1E-10n"
+>            : ^^^^^^^^^^^
 
 bigints("1.1e-10n");
 >bigints("1.1e-10n") : void
+>                    : ^^^^
 >bigints : (x: `${bigint}`) => void
+>        : ^ ^^           ^^^^^    
 >"1.1e-10n" : "1.1e-10n"
+>           : ^^^^^^^^^^
 
 type AStr = `a${string}`;
 >AStr : `a${string}`
+>     : ^^^^^^^^^^^^
 
 type ANum = `a${number}`;
 >ANum : `a${number}`
+>     : ^^^^^^^^^^^^
 
 type AAny = `a${any}`;
 >AAny : `a${any}`
+>     : ^^^^^^^^^
 
 declare var str: AStr;
 >str : `a${string}`
+>    : ^^^^^^^^^^^^
 
 declare var num: ANum;
 >num : `a${number}`
+>    : ^^^^^^^^^^^^
 
 declare var anyish: AAny;
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 
 // not ok
 num = str;
 >num = str : `a${string}`
+>          : ^^^^^^^^^^^^
 >num : `a${number}`
+>    : ^^^^^^^^^^^^
 >str : `a${string}`
+>    : ^^^^^^^^^^^^
 
 anyish = `bno`
 >anyish = `bno` : "bno"
+>               : ^^^^^
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 >`bno` : "bno"
+>      : ^^^^^
 
 // ok
 str = num;
 >str = num : `a${number}`
+>          : ^^^^^^^^^^^^
 >str : `a${string}`
+>    : ^^^^^^^^^^^^
 >num : `a${number}`
+>    : ^^^^^^^^^^^^
 
 anyish = str;
 >anyish = str : `a${string}`
+>             : ^^^^^^^^^^^^
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 >str : `a${string}`
+>    : ^^^^^^^^^^^^
 
 str = anyish;
 >str = anyish : `a${any}`
+>             : ^^^^^^^^^
 >str : `a${string}`
+>    : ^^^^^^^^^^^^
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 
 anyish = num;
 >anyish = num : `a${number}`
+>             : ^^^^^^^^^^^^
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 >num : `a${number}`
+>    : ^^^^^^^^^^^^
 
 num = anyish;
 >num = anyish : `a${any}`
+>             : ^^^^^^^^^
 >num : `a${number}`
+>    : ^^^^^^^^^^^^
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 
 anyish = `aok`
 >anyish = `aok` : "aok"
+>               : ^^^^^
 >anyish : `a${any}`
+>       : ^^^^^^^^^
 >`aok` : "aok"
+>      : ^^^^^
 
 
 // Validates variance isn't measured as strictly covariant
 type AGen<T extends string | number> = {field: `a${T}`};
 >AGen : AGen<T>
+>     : ^^^^^^^
 >field : `a${T}`
+>      : ^^^^^^^
 
 const shouldWork1: AGen<string> = null as any as AGen<"yes">;
 >shouldWork1 : AGen<string>
+>            : ^^^^^^^^^^^^
 >null as any as AGen<"yes"> : AGen<"yes">
+>                           : ^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 const shouldWork2: AGen<string> = null as any as AGen<number>;
 >shouldWork2 : AGen<string>
+>            : ^^^^^^^^^^^^
 >null as any as AGen<number> : AGen<number>
+>                            : ^^^^^^^^^^^^
 >null as any : any
->null : null
+>            : ^^^
 
 // validates concatenation of patterns
 type A = `${number}`;
 >A : `${number}`
+>  : ^^^^^^^^^^^
 
 type B = `${A} ${A}`;
 >B : `${number} ${number}`
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 const exampleBad: B = "anything"; // fails
 >exampleBad : `${number} ${number}`
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >"anything" : "anything"
+>           : ^^^^^^^^^^
 
 const exampleGood: B = "1 2"; // ok
 >exampleGood : `${number} ${number}`
+>            : ^^^^^^^^^^^^^^^^^^^^^
 >"1 2" : "1 2"
+>      : ^^^^^
 
 // Repro from #41161
 
 var aa: '0';
 >aa : "0"
+>   : ^^^
 
 var aa: '0' & `${number}`;
 >aa : "0"
+>   : ^^^
 
 // Remove string literals from unions with matching template literals
 
 let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
 >t1 : `foo${string}` | "1foo"
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
 let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
 >t2 : `foo${string}` | "1foo" | "xfoo"
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
 >t3 : `foo${string}` | "xfoo" | `${number}foo`
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var bb: `${number}`;
 >bb : `${number}`
+>   : ^^^^^^^^^^^
 
 var bb: `${number}` | '0';
 >bb : `${number}`
+>   : ^^^^^^^^^^^
 
 // Normalize `${string}` to just string
 
 type T2S<A extends string, B extends string> = `${A}${B}`;
 >T2S : `${A}${B}`
+>    : ^^^^^^^^^^
 
 type S10 = `${string}`;  // string
 >S10 : string
+>    : ^^^^^^
 
 type S11 = `${string}${string}${string}`;  // string
 >S11 : string
+>    : ^^^^^^
 
 type S12 = T2S<string, string>;  // string
 >S12 : string
+>    : ^^^^^^
 
 function ff1(x: `${string}-${string}`) {
 >ff1 : (x: `${string}-${string}`) => void
+>    : ^ ^^                     ^^^^^^^^^
 >x : `${string}-${string}`
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     let s1 = x && 42;  // number
 >s1 : number
+>   : ^^^^^^
 >x && 42 : 42
+>        : ^^
 >x : `${string}-${string}`
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     let s2 = x || 42;  // `${string}-${string}`
 >s2 : `${string}-${string}`
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >x || 42 : `${string}-${string}`
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >x : `${string}-${string}`
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 }
 
 // Repro from #41651
 
 export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
 >Id : `${TId}-${TId}`
+>   : ^^^^^^^^^^^^^^^
 
 export class AA {}
 >AA : AA
+>   : ^^
 
 export abstract class BB {
 >BB : BB
+>   : ^^
 
     abstract get(id: Id<AA>): void;
 >get : (id: Id<AA>) => void
+>    : ^  ^^      ^^^^^    
 >id : `${string}-${string}`
+>   : ^^^^^^^^^^^^^^^^^^^^^
 
     update(id: Id<AA>): void {
 >update : (id: Id<AA>) => void
+>       : ^  ^^      ^^^^^    
 >id : `${string}-${string}`
+>   : ^^^^^^^^^^^^^^^^^^^^^
 
         this.get(id!);
 >this.get(id!) : void
->this.get : (id: `${string}-${string}`) => void
+>              : ^^^^
+>this.get : (id: Id<AA>) => void
+>         : ^  ^^      ^^^^^    
 >this : this
->get : (id: `${string}-${string}`) => void
+>     : ^^^^
+>get : (id: Id<AA>) => void
+>    : ^  ^^      ^^^^^    
 >id! : `${string}-${string}`
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >id : `${string}-${string}`
+>   : ^^^^^^^^^^^^^^^^^^^^^
     }
 }
+
+// repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
+>conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
+>               : ^         ^^                                                  ^                        ^^^^^^^^^^
+>groupName : (`${string}Downcast` & {}) | "downcast" | "dataDowncast" | "editingDowncast"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+conversionTest("testDowncast");
+>conversionTest("testDowncast") : void
+>                               : ^^^^
+>conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
+>               : ^         ^^                                                  ^                        ^^^^^^^^^^
+>"testDowncast" : "testDowncast"
+>               : ^^^^^^^^^^^^^^
+
+function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
+>conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
+>                : ^         ^^                                                  ^                        ^^^^^^^^^^
+>groupName : "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+conversionTest2("testDowncast");
+>conversionTest2("testDowncast") : void
+>                                : ^^^^
+>conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
+>                : ^         ^^                                                  ^                        ^^^^^^^^^^
+>"testDowncast" : "testDowncast"
+>               : ^^^^^^^^^^^^^^
+
+function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+>conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
+>                : ^         ^^                                                                          ^^^^^^^^^
+>groupName : "downcast" | `${string & {}}Downcast`
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+conversionTest3("testDowncast");
+>conversionTest3("testDowncast") : void
+>                                : ^^^^
+>conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
+>                : ^         ^^                                                                          ^^^^^^^^^
+>"testDowncast" : "testDowncast"
+>               : ^^^^^^^^^^^^^^
+
+function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+>conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
+>                : ^         ^^                                                                          ^^^^^^^^^
+>groupName : "downcast" | `${{} & string}Downcast`
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+conversionTest4("testDowncast");
+>conversionTest4("testDowncast") : void
+>                                : ^^^^
+>conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
+>                : ^         ^^                                                                          ^^^^^^^^^
+>"testDowncast" : "testDowncast"
+>               : ^^^^^^^^^^^^^^
+
+function foo(str: `${`a${string}` & `${string}a`}Test`) {}
+>foo : (str: `${`a${string}` & `${string}a`}Test`) => void
+>    : ^   ^^                                    ^^^^^^^^^
+>str : `${`a${string}` & `${string}a`}Test`
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+foo("abaTest"); // ok
+>foo("abaTest") : void
+>               : ^^^^
+>foo : (str: `${`a${string}` & `${string}a`}Test`) => void
+>    : ^   ^^                                    ^^^^^^^^^
+>"abaTest" : "abaTest"
+>          : ^^^^^^^^^
+
+foo("abcTest"); // error
+>foo("abcTest") : void
+>               : ^^^^
+>foo : (str: `${`a${string}` & `${string}a`}Test`) => void
+>    : ^   ^^                                    ^^^^^^^^^
+>"abcTest" : "abcTest"
+>          : ^^^^^^^^^
 

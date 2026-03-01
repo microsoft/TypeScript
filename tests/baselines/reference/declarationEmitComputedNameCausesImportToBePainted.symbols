@@ -1,4 +1,6 @@
-=== tests/cases/compiler/context.ts ===
+//// [tests/cases/compiler/declarationEmitComputedNameCausesImportToBePainted.ts] ////
+
+=== context.ts ===
 export const Key = Symbol();
 >Key : Symbol(Key, Decl(context.ts, 0, 12))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -10,7 +12,7 @@ export interface Context {
 >[Key] : Symbol(Context[Key], Decl(context.ts, 1, 26))
 >Key : Symbol(Key, Decl(context.ts, 0, 12))
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { Key, Context } from "./context";
 >Key : Symbol(Key, Decl(index.ts, 0, 8))
 >Context : Symbol(Context, Decl(index.ts, 0, 13))

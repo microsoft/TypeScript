@@ -1,22 +1,34 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment4.ts] ////
+
+=== a.js ===
 function Multimap4() {
 >Multimap4 : typeof Multimap4
+>          : ^^^^^^^^^^^^^^^^
 
   this._map = {};
 >this._map = {} : {}
+>               : ^^
 >this._map : any
 >this : this
+>     : ^^^^
 >_map : any
+>     : ^^^
 >{} : {}
+>   : ^^
 
 };
 
 Multimap4["prototype"] = {
 >Multimap4["prototype"] = {  /**   * @param {string} key   * @returns {number} the value ok   */  get(key) {    return this._map[key + ''];  }} : { get(key: string): number; }
+>                                                                                                                                               : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4["prototype"] : { get(key: string): number; }
+>                       : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4 : typeof Multimap4
+>          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
+>            : ^^^^^^^^^^^
 >{  /**   * @param {string} key   * @returns {number} the value ok   */  get(key) {    return this._map[key + ''];  }} : { get(key: string): number; }
+>                                                                                                                      : ^^^^^^   ^^      ^^^      ^^^
 
   /**
    * @param {string} key
@@ -24,73 +36,119 @@ Multimap4["prototype"] = {
    */
   get(key) {
 >get : (key: string) => number
+>    : ^   ^^      ^^^^^      
 >key : string
+>    : ^^^^^^
 
     return this._map[key + ''];
 >this._map[key + ''] : any
 >this._map : {}
+>          : ^^
 >this : this
+>     : ^^^^
 >_map : {}
+>     : ^^
 >key + '' : string
+>         : ^^^^^^
 >key : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
   }
 };
 
 Multimap4["prototype"]["add-on"] = function() {};
 >Multimap4["prototype"]["add-on"] = function() {} : () => void
+>                                                 : ^^^^^^^^^^
 >Multimap4["prototype"]["add-on"] : any
 >Multimap4["prototype"] : { get(key: string): number; }
+>                       : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4 : typeof Multimap4
+>          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
+>            : ^^^^^^^^^^^
 >"add-on" : "add-on"
+>         : ^^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 
 Multimap4["prototype"]["addon"] = function() {};
 >Multimap4["prototype"]["addon"] = function() {} : () => void
+>                                                : ^^^^^^^^^^
 >Multimap4["prototype"]["addon"] : any
 >Multimap4["prototype"] : { get(key: string): number; }
+>                       : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4 : typeof Multimap4
+>          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
+>            : ^^^^^^^^^^^
 >"addon" : "addon"
+>        : ^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 
 Multimap4["prototype"]["__underscores__"] = function() {};
 >Multimap4["prototype"]["__underscores__"] = function() {} : () => void
+>                                                          : ^^^^^^^^^^
 >Multimap4["prototype"]["__underscores__"] : any
 >Multimap4["prototype"] : { get(key: string): number; }
+>                       : ^^^^^^   ^^      ^^^      ^^^
 >Multimap4 : typeof Multimap4
+>          : ^^^^^^^^^^^^^^^^
 >"prototype" : "prototype"
+>            : ^^^^^^^^^^^
 >"__underscores__" : "__underscores__"
+>                  : ^^^^^^^^^^^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 
 const map4 = new Multimap4();
 >map4 : Multimap4
+>     : ^^^^^^^^^
 >new Multimap4() : Multimap4
+>                : ^^^^^^^^^
 >Multimap4 : typeof Multimap4
+>          : ^^^^^^^^^^^^^^^^
 
 map4.get("");
 >map4.get("") : number
+>             : ^^^^^^
 >map4.get : (key: string) => number
+>         : ^   ^^      ^^^^^      
 >map4 : Multimap4
+>     : ^^^^^^^^^
 >get : (key: string) => number
+>    : ^   ^^      ^^^^^      
 >"" : ""
+>   : ^^
 
 map4["add-on"]();
 >map4["add-on"]() : void
+>                 : ^^^^
 >map4["add-on"] : () => void
+>               : ^^^^^^^^^^
 >map4 : Multimap4
+>     : ^^^^^^^^^
 >"add-on" : "add-on"
+>         : ^^^^^^^^
 
 map4.addon();
 >map4.addon() : void
+>             : ^^^^
 >map4.addon : () => void
+>           : ^^^^^^^^^^
 >map4 : Multimap4
+>     : ^^^^^^^^^
 >addon : () => void
+>      : ^^^^^^^^^^
 
 map4.__underscores__();
 >map4.__underscores__() : void
+>                       : ^^^^
 >map4.__underscores__ : () => void
+>                     : ^^^^^^^^^^
 >map4 : Multimap4
+>     : ^^^^^^^^^
 >__underscores__ : () => void
+>                : ^^^^^^^^^^
 

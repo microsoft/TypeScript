@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorNarrowAny.ts] ////
+
 //// [typeGuardConstructorNarrowAny.ts]
 // Narrowing any to primitives
 let var1: any;
@@ -23,6 +25,7 @@ if (var1.constructor === BigInt) {
 
 
 //// [typeGuardConstructorNarrowAny.js]
+"use strict";
 // Narrowing any to primitives
 let var1;
 if (var1.constructor === String) {

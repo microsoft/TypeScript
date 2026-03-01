@@ -1,19 +1,27 @@
-=== tests/cases/compiler/inheritanceStaticFuncOverridingPropertyOfFuncType.ts ===
+//// [tests/cases/compiler/inheritanceStaticFuncOverridingPropertyOfFuncType.ts] ////
+
+=== inheritanceStaticFuncOverridingPropertyOfFuncType.ts ===
 class a {
 >a : a
+>  : ^
 
     static x: () => string;
 >x : () => string
+>  : ^^^^^^      
 }
 
 class b extends a {
 >b : b
+>  : ^
 >a : a
+>  : ^
 
     static x() {
 >x : () => string
+>  : ^^^^^^^^^^^^
 
         return "20";
 >"20" : "20"
+>     : ^^^^
     }
 }

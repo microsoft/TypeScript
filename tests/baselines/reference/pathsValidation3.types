@@ -1,5 +1,9 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/pathsValidation3.ts] ////
+
+=== a.ts ===
 let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts] ////
+
 //// [taggedTemplateStringsTypeArgumentInferenceES6.ts]
 // Generic tag with one parameter
 function noParams<T>(n: T) { }
@@ -92,6 +94,7 @@ var arr: any[];
 
 
 //// [taggedTemplateStringsTypeArgumentInferenceES6.js]
+"use strict";
 // Generic tag with one parameter
 function noParams(n) { }
 noParams ``;

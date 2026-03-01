@@ -1,32 +1,50 @@
-=== tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
+//// [tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts] ////
+
+=== declFileRestParametersOfFunctionAndFunctionType.ts ===
 function f1(...args) { }
 >f1 : (...args: any[]) => void
+>   : ^^^^    ^^^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 function f2(x: (...args) => void) { }
->f2 : (x: (...args: any[]) => void) => void
+>f2 : (x: (...args: any) => void) => void
+>   : ^ ^^          ^^^         ^^^^^^^^^
 >x : (...args: any[]) => void
+>  : ^^^^    ^^^^^^^^^^^^    
 >args : any[]
+>     : ^^^^^
 
 function f3(x: { (...args): void }) { }
->f3 : (x: (...args: any[]) => void) => void
+>f3 : (x: { (...args: any): void; }) => void
+>   : ^ ^^            ^^^          ^^^^^^^^^
 >x : (...args: any[]) => void
+>  : ^^^^    ^^^^^^^^^^^^    
 >args : any[]
+>     : ^^^^^
 
 function f4<T extends (...args) => void>() { }
->f4 : <T extends (...args: any[]) => void>() => void
+>f4 : <T extends (...args: any) => void>() => void
+>   : ^ ^^^^^^^^^          ^^^         ^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 function f5<T extends { (...args): void }>() { }
->f5 : <T extends (...args: any[]) => void>() => void
+>f5 : <T extends { (...args: any): void; }>() => void
+>   : ^ ^^^^^^^^^            ^^^          ^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 var f6 = () => { return [<any>10]; }
 >f6 : () => any[]
+>   : ^^^^^^^^^^^
 >() => { return [<any>10]; } : () => any[]
+>                            : ^^^^^^^^^^^
 >[<any>10] : any[]
+>          : ^^^^^
 ><any>10 : any
 >10 : 10
+>   : ^^
 
 
 

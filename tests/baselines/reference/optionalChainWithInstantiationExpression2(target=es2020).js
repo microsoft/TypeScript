@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalChainWithInstantiationExpression2.ts] ////
+
 //// [optionalChainWithInstantiationExpression2.ts]
 declare interface A {
     c: number;
@@ -14,5 +16,6 @@ a<b>?.();
 
 
 //// [optionalChainWithInstantiationExpression2.js]
+"use strict";
 a?.();
 a?.();

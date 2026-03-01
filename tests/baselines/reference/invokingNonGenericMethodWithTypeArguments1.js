@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts] ////
+
 //// [invokingNonGenericMethodWithTypeArguments1.ts]
 class Foo {
     constructor() {
@@ -7,9 +9,9 @@ class Foo {
 
 
 //// [invokingNonGenericMethodWithTypeArguments1.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.foo();
     }
-    return Foo;
-}());
+}

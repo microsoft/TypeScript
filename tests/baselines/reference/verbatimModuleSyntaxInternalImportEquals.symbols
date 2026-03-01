@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts] ////
+
+=== verbatimModuleSyntaxInternalImportEquals.ts ===
+export {};
+import f1 = NonExistent;
+>f1 : Symbol(f1, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 0, 10))
+
+namespace Foo {
+>Foo : Symbol(Foo, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 1, 24))
+
+    export const foo = 1;
+>foo : Symbol(foo, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 4, 16))
+
+    export type T = any;
+>T : Symbol(T, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 4, 25))
+}
+
+import f2 = Foo.foo;
+>f2 : Symbol(f2, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 6, 1))
+>Foo : Symbol(Foo, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 1, 24))
+>foo : Symbol(f2, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 4, 16))
+
+import f3 = Foo.T;
+>f3 : Symbol(f3, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 8, 20))
+>Foo : Symbol(Foo, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 1, 24))
+>T : Symbol(f3, Decl(verbatimModuleSyntaxInternalImportEquals.ts, 4, 25))
+

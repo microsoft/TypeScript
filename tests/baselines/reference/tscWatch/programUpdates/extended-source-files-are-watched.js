@@ -1,6 +1,33 @@
+currentDirectory:: /user/username/workspace/solution/projects useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/workspace/solution/projects/project/commonFile1.ts]
+let x = 1
+
+//// [/user/username/workspace/solution/projects/project/commonFile2.ts]
+let y = 1
+
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {},
+  "files": [
+    "/user/username/workspace/solution/projects/project/commonFile1.ts",
+    "/user/username/workspace/solution/projects/project/commonFile2.ts"
+  ]
+}
+
+//// [/user/username/workspace/solution/projects/project/first.tsconfig.json]
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
+
+//// [/user/username/workspace/solution/projects/project/second.tsconfig.json]
+{
+  "extends": "./first.tsconfig.json"
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -11,299 +38,314 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a/b/commonFile1.ts]
-let x = 1
-
-//// [/a/b/commonFile2.ts]
-let y = 1
-
-//// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
-
-//// [/a/b/first.tsconfig.json]
-{"compilerOptions":{"strict":true}}
-
-//// [/a/b/second.tsconfig.json]
-{"extends":"./first.tsconfig.json"}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w -p /user/username/workspace/solution/projects/project/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+//// [/user/username/workspace/solution/projects/project/commonFile1.js]
+"use strict";
+let x = 1;
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (used version)
-/a/b/commonfile2.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+//// [/user/username/workspace/solution/projects/project/commonFile2.js]
+"use strict";
+let y = 1;
+
+
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/commonFile1.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/commonFile2.ts: *new*
+  {}
+/user/username/workspace/solution/projects/project/tsconfig.json: *new*
+  {}
 
-FsWatchesRecursive::
+Program root files: [
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile1.ts (used version)
+/user/username/workspace/solution/projects/project/commonfile2.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
 
 Change:: Change config to extend another config
 
 Input::
-//// [/a/b/tsconfig.json]
-{"extends":"./second.tsconfig.json","compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "extends": "./second.tsconfig.json",
+  "compilerOptions": {},
+  "files": [
+    "/user/username/workspace/solution/projects/project/commonFile1.ts",
+    "/user/username/workspace/solution/projects/project/commonFile2.ts"
+  ]
+}
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {}
+/user/username/workspace/solution/projects/project/commonFile1.ts:
+  {}
+/user/username/workspace/solution/projects/project/commonFile2.ts:
+  {}
+/user/username/workspace/solution/projects/project/first.tsconfig.json: *new*
+  {}
+/user/username/workspace/solution/projects/project/second.tsconfig.json: *new*
+  {}
+/user/username/workspace/solution/projects/project/tsconfig.json:
+  {}
+
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
+]
+Program options: {
+  "strict": true,
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-/a/b/second.tsconfig.json:
-  {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
-/a/b/first.tsconfig.json:
-  {"fileName":"/a/b/first.tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-"use strict";
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-"use strict";
-var y = 1;
-
-
 
 Change:: Change first extended config
 
 Input::
-//// [/a/b/first.tsconfig.json]
-{"compilerOptions":{"strict":false}}
+//// [/user/username/workspace/solution/projects/project/first.tsconfig.json]
+{
+  "compilerOptions": {
+    "strict": false
+  }
+}
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":false,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
+]
+Program options: {
+  "strict": false,
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-/a/b/second.tsconfig.json:
-  {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
-/a/b/first.tsconfig.json:
-  {"fileName":"/a/b/first.tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
 
 Change:: Change second extended config
 
 Input::
-//// [/a/b/second.tsconfig.json]
-{"extends":"./first.tsconfig.json","compilerOptions":{"strictNullChecks":true}}
+//// [/user/username/workspace/solution/projects/project/second.tsconfig.json]
+{
+  "extends": "./first.tsconfig.json",
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":false,"strictNullChecks":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
+]
+Program options: {
+  "strict": false,
+  "strictNullChecks": true,
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-/a/b/second.tsconfig.json:
-  {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
-/a/b/first.tsconfig.json:
-  {"fileName":"/a/b/first.tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Change config to stop extending another config
 
 Input::
-//// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+//// [/user/username/workspace/solution/projects/project/tsconfig.json]
+{
+  "compilerOptions": {},
+  "files": [
+    "/user/username/workspace/solution/projects/project/commonFile1.ts",
+    "/user/username/workspace/solution/projects/project/commonFile2.ts"
+  ]
+}
 
 
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {}
+/user/username/workspace/solution/projects/project/commonFile1.ts:
+  {}
+/user/username/workspace/solution/projects/project/commonFile2.ts:
+  {}
+/user/username/workspace/solution/projects/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/workspace/solution/projects/project/first.tsconfig.json:
+  {}
+/user/username/workspace/solution/projects/project/second.tsconfig.json:
+  {}
+
+
+Program root files: [
+  "/user/username/workspace/solution/projects/project/commonFile1.ts",
+  "/user/username/workspace/solution/projects/project/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/workspace/solution/projects/project/tsconfig.json",
+  "configFilePath": "/user/username/workspace/solution/projects/project/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/commonFile1.ts
+/user/username/workspace/solution/projects/project/commonFile2.ts
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectCreate-errors.ts ===
+//// [tests/cases/compiler/objectCreate-errors.ts] ////
+
+=== objectCreate-errors.ts ===
 var e1 = Object.create(1);               // Error
 >e1 : Symbol(e1, Decl(objectCreate-errors.ts, 0, 3))
 >Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

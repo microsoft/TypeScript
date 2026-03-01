@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunction.ts] ////
+
 //// [objectTypeWithConstructSignatureHidingMembersOfFunction.ts]
 interface I {
     new(): number;
@@ -22,6 +24,7 @@ var r2c = x.arguments;
 
 
 //// [objectTypeWithConstructSignatureHidingMembersOfFunction.js]
+"use strict";
 var i;
 var r1 = i.apply;
 var r1b = i.call;

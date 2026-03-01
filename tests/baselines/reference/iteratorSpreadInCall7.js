@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall7.ts] ////
+
 //// [iteratorSpreadInCall7.ts]
 function foo<T>(...s: T[]) { return s[0]; }
 class SymbolIterator {
@@ -29,6 +31,7 @@ class _StringIterator {
 foo(...new SymbolIterator, ...new _StringIterator);
 
 //// [iteratorSpreadInCall7.js]
+"use strict";
 function foo(...s) { return s[0]; }
 class SymbolIterator {
     next() {

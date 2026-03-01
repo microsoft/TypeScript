@@ -1,0 +1,29 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/server/occurrences02.ts ===
+// function /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}f|](x: typeof [|{| kind: "reference" |}f|]) {
+//     [|{| kind: "reference" |}f|]([|{| kind: "reference" |}f|]);
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/server/occurrences02.ts ===
+// function [|{| kind: "writtenReference" |}f|](x: typeof /*HIGHLIGHTS*/[|{| kind: "reference" |}f|]) {
+//     [|{| kind: "reference" |}f|]([|{| kind: "reference" |}f|]);
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/server/occurrences02.ts ===
+// function [|{| kind: "writtenReference" |}f|](x: typeof [|{| kind: "reference" |}f|]) {
+//     /*HIGHLIGHTS*/[|{| kind: "reference" |}f|]([|{| kind: "reference" |}f|]);
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/server/occurrences02.ts ===
+// function [|{| kind: "writtenReference" |}f|](x: typeof [|{| kind: "reference" |}f|]) {
+//     [|{| kind: "reference" |}f|](/*HIGHLIGHTS*/[|{| kind: "reference" |}f|]);
+// }

@@ -1,110 +1,172 @@
-=== tests/cases/conformance/types/mapped/mappedTypeConstraints.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints.ts] ////
+
+=== mappedTypeConstraints.ts ===
 function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b'>>) {
->f0 : <T extends { a: string; b: string; }>(obj: Pick<T, Extract<keyof T, 'b'>>) => void
+>f0 : <T extends { a: string; b: string; }>(obj: Pick<T, Extract<keyof T, "b">>) => void
+>   : ^ ^^^^^^^^^                         ^^   ^^                              ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >obj : Pick<T, Extract<keyof T, "b">>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj.b;
 >obj.b : T["b"]
+>      : ^^^^^^
 >obj : Pick<T, Extract<keyof T, "b">>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : T["b"]
+>  : ^^^^^^
 }
 
 function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a'>>) {
->f1 : <T extends { a: string; b: string; }>(obj: Pick<T, Exclude<keyof T, 'a'>>) => void
+>f1 : <T extends { a: string; b: string; }>(obj: Pick<T, Exclude<keyof T, "a">>) => void
+>   : ^ ^^^^^^^^^                         ^^   ^^                              ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >obj : Pick<T, Exclude<keyof T, "a">>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj.b;
 >obj.b : T["b"]
+>      : ^^^^^^
 >obj : Pick<T, Exclude<keyof T, "a">>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : T["b"]
+>  : ^^^^^^
 }
 
 function f2<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T | U, keyof (T | U)>) {
 >f2 : <T extends { a: string; b: string; }, U extends { b: string; c: string; }>(obj: Pick<T | U, keyof (T | U)>) => void
+>   : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^                         ^^   ^^                          ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 >obj : Pick<T | U, keyof T & keyof U>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj.b;
 >obj.b : (T | U)["b"]
+>      : ^^^^^^^^^^^^
 >obj : Pick<T | U, keyof T & keyof U>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : (T | U)["b"]
+>  : ^^^^^^^^^^^^
 }
 
 function f3<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T & U, keyof (T & U)>) {
 >f3 : <T extends { a: string; b: string; }, U extends { b: string; c: string; }>(obj: Pick<T & U, keyof (T & U)>) => void
+>   : ^ ^^^^^^^^^                         ^^ ^^^^^^^^^                         ^^   ^^                          ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 >obj : Pick<T & U, keyof T | keyof U>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj.a;
 >obj.a : (T & U)["a"]
+>      : ^^^^^^^^^^^^
 >obj : Pick<T & U, keyof T | keyof U>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : (T & U)["a"]
+>  : ^^^^^^^^^^^^
 
     obj.b;
 >obj.b : (T & U)["b"]
+>      : ^^^^^^^^^^^^
 >obj : Pick<T & U, keyof T | keyof U>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : (T & U)["b"]
+>  : ^^^^^^^^^^^^
 
     obj.c;
 >obj.c : (T & U)["c"]
+>      : ^^^^^^^^^^^^
 >obj : Pick<T & U, keyof T | keyof U>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : (T & U)["c"]
+>  : ^^^^^^^^^^^^
 }
 
 function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) {
->f4 : <T extends { a: string; b: string; }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) => void
+>f4 : <T extends { a: string; b: string; }>(obj: Record<Exclude<keyof T, "b"> | "c", string>) => void
+>   : ^ ^^^^^^^^^                         ^^   ^^                                           ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >obj : Record<"c" | Exclude<keyof T, "b">, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj.a;
 >obj.a : string
+>      : ^^^^^^
 >obj : Record<"c" | Exclude<keyof T, "b">, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
     obj.c;
 >obj.c : string
+>      : ^^^^^^
 >obj : Record<"c" | Exclude<keyof T, "b">, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : string
+>  : ^^^^^^
 }
 
 // Repro from #28821
 
 type TargetProps = {
->TargetProps : { foo: string; bar: string; }
+>TargetProps : TargetProps
+>            : ^^^^^^^^^^^
 
     foo: string,
 >foo : string
+>    : ^^^^^^
 
     bar: string
 >bar : string
+>    : ^^^^^^
 
 };
 
 const modifier = <T extends TargetProps>(targetProps: T) => {
 >modifier : <T extends TargetProps>(targetProps: T) => void
+>         : ^ ^^^^^^^^^           ^^           ^^ ^^^^^^^^^
 ><T extends TargetProps>(targetProps: T) => {    let {bar, ...rest} = targetProps;    rest.foo;} : <T extends TargetProps>(targetProps: T) => void
+>                                                                                                : ^ ^^^^^^^^^           ^^           ^^ ^^^^^^^^^
 >targetProps : T
+>            : ^
 
     let {bar, ...rest} = targetProps;
 >bar : string
+>    : ^^^^^^
 >rest : Omit<T, "bar">
+>     : ^^^^^^^^^^^^^^
 >targetProps : T
+>            : ^
 
     rest.foo;
 >rest.foo : T["foo"]
+>         : ^^^^^^^^
 >rest : Omit<T, "bar">
+>     : ^^^^^^^^^^^^^^
 >foo : T["foo"]
+>    : ^^^^^^^^
 
 };
 

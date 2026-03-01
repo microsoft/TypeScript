@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorArgsErrors3.ts] ////
+
 //// [constructorArgsErrors3.ts]
 class foo {
     constructor (public public a: number) {
@@ -6,9 +8,9 @@ class foo {
 
 
 //// [constructorArgsErrors3.js]
-var foo = /** @class */ (function () {
-    function foo(a) {
+"use strict";
+class foo {
+    constructor(a) {
         this.a = a;
     }
-    return foo;
-}());
+}

@@ -1,38 +1,382 @@
-=== tests/cases/conformance/generators/generatorYieldContextualType.ts ===
+//// [tests/cases/conformance/generators/generatorYieldContextualType.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== generatorYieldContextualType.ts ===
 declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
+>   : ^ ^^ ^^ ^^   ^^                        ^^^^^    
 >gen : () => Generator<R, T, S>
+>    : ^^^^^^                  
 
 f1<0, 0, 1>(function* () {
 >f1<0, 0, 1>(function* () {	const a = yield 0;	return 0;}) : void
+>                                                          : ^^^^
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
+>   : ^ ^^ ^^ ^^   ^^                        ^^^^^    
 >function* () {	const a = yield 0;	return 0;} : () => Generator<0, 0, 1>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 	const a = yield 0;
 >a : 1
+>  : ^
 >yield 0 : 1
+>        : ^
 >0 : 0
+>  : ^
 
 	return 0;
 >0 : 0
+>  : ^
 
 });
 
 declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>): void;
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
+>   : ^ ^^ ^^ ^^   ^^                                                  ^^^^^    
 >gen : () => Generator<R, T, S> | AsyncGenerator<R, T, S>
+>    : ^^^^^^                                            
 
 f2<0, 0, 1>(async function* () {
 >f2<0, 0, 1>(async function* () {	const a = yield 0;	return 0;}) : void
+>                                                                : ^^^^
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
->async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1 | undefined>
+>   : ^ ^^ ^^ ^^   ^^                                                  ^^^^^    
+>async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1>
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	const a = yield 0;
->a : 1 | undefined
->yield 0 : 1 | undefined
+>a : 1
+>  : ^
+>yield 0 : 1
+>        : ^
 >0 : 0
+>  : ^
 
 	return 0;
 >0 : 0
+>  : ^
 
 });
+
+// repro from #41428
+enum Directive {
+>Directive : Directive
+>          : ^^^^^^^^^
+
+  Back,
+>Back : Directive.Back
+>     : ^^^^^^^^^^^^^^
+
+  Cancel,
+>Cancel : Directive.Cancel
+>       : ^^^^^^^^^^^^^^^^
+
+  LoadMore,
+>LoadMore : Directive.LoadMore
+>         : ^^^^^^^^^^^^^^^^^^
+
+  Noop,
+>Noop : Directive.Noop
+>     : ^^^^^^^^^^^^^^
+}
+
+namespace Directive {
+>Directive : typeof Directive
+>          : ^^^^^^^^^^^^^^^^
+
+  export function is<T>(value: Directive | T): value is Directive {
+>is : <T>(value: Directive | T) => value is Directive
+>   : ^ ^^     ^^             ^^^^^                  
+>value : T | Directive
+>      : ^^^^^^^^^^^^^
+
+    return typeof value === "number" && Directive[value] != null;
+>typeof value === "number" && Directive[value] != null : boolean
+>                                                      : ^^^^^^^
+>typeof value === "number" : boolean
+>                          : ^^^^^^^
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : T | Directive
+>      : ^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+>Directive[value] != null : boolean
+>                         : ^^^^^^^
+>Directive[value] : (typeof Directive)[Directive | (T & number)]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Directive : typeof Directive
+>          : ^^^^^^^^^^^^^^^^
+>value : Directive | (T & number)
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+  }
+}
+
+interface QuickPickItem {
+  label: string;
+>label : string
+>      : ^^^^^^
+
+  description?: string;
+>description : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
+
+  detail?: string;
+>detail : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  picked?: boolean;
+>picked : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+
+  alwaysShow?: boolean;
+>alwaysShow : boolean | undefined
+>           : ^^^^^^^^^^^^^^^^^^^
+}
+
+interface QuickInputStep {
+  placeholder?: string;
+>placeholder : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
+
+  prompt?: string;
+>prompt : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+
+  title?: string;
+>title : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+}
+
+interface QuickPickStep<T extends QuickPickItem = QuickPickItem> {
+  placeholder?: string;
+>placeholder : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
+
+  title?: string;
+>title : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+}
+
+type StepGenerator =
+>StepGenerator : StepGenerator
+>              : ^^^^^^^^^^^^^
+
+  | Generator<
+      QuickPickStep | QuickInputStep,
+      StepResult<void | undefined>,
+      any | undefined
+    >
+  | AsyncGenerator<
+      QuickPickStep | QuickInputStep,
+      StepResult<void | undefined>,
+      any | undefined
+    >;
+
+type StepItemType<T> = T extends QuickPickStep<infer U>
+>StepItemType : StepItemType<T>
+>             : ^^^^^^^^^^^^^^^
+
+  ? U[]
+  : T extends QuickInputStep
+  ? string
+  : never;
+namespace StepResult {
+>StepResult : typeof StepResult
+>           : ^^^^^^^^^^^^^^^^^
+
+  export const Break = Symbol("BreakStep");
+>Break : unique symbol
+>      : ^^^^^^^^^^^^^
+>Symbol("BreakStep") : unique symbol
+>                    : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>"BreakStep" : "BreakStep"
+>            : ^^^^^^^^^^^
+}
+type StepResult<T> = typeof StepResult.Break | T;
+>StepResult : StepResult<T>
+>           : ^^^^^^^^^^^^^
+>StepResult.Break : unique symbol
+>                 : ^^^^^^^^^^^^^
+>StepResult : typeof StepResult
+>           : ^^^^^^^^^^^^^^^^^
+>Break : unique symbol
+>      : ^^^^^^^^^^^^^
+
+type StepResultGenerator<T> =
+>StepResultGenerator : StepResultGenerator<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  | Generator<QuickPickStep | QuickInputStep, StepResult<T>, any | undefined>
+  | AsyncGenerator<
+      QuickPickStep | QuickInputStep,
+      StepResult<T>,
+      any | undefined
+    >;
+type StepSelection<T> = T extends QuickPickStep<infer U>
+>StepSelection : StepSelection<T>
+>              : ^^^^^^^^^^^^^^^^
+
+  ? U[] | Directive
+  : T extends QuickInputStep
+  ? string | Directive
+  : never;
+type PartialStepState<T = unknown> = Partial<T> & {
+>PartialStepState : PartialStepState<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
+
+  counter: number;
+>counter : number
+>        : ^^^^^^
+
+  confirm?: boolean;
+>confirm : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
+
+  startingStep?: number;
+>startingStep : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+
+};
+type StepState<T = Record<string, unknown>> = T & {
+>StepState : StepState<T>
+>          : ^^^^^^^^^^^^
+
+  counter: number;
+>counter : number
+>        : ^^^^^^
+
+  confirm?: boolean;
+>confirm : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
+
+  startingStep?: number;
+>startingStep : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+
+};
+
+function canPickStepContinue<T extends QuickPickStep>(
+>canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
+>                    : ^ ^^^^^^^^^             ^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^                             
+
+  _step: T,
+>_step : T
+>      : ^
+
+  _state: PartialStepState,
+>_state : PartialStepState<unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  _selection: StepItemType<T> | Directive
+>_selection : Directive | StepItemType<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): _selection is StepItemType<T> {
+  return false;
+>false : false
+>      : ^^^^^
+}
+
+function createPickStep<T extends QuickPickItem>(
+>createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
+>               : ^ ^^^^^^^^^             ^^    ^^                ^^^^^                
+
+  step: QuickPickStep<T>
+>step : QuickPickStep<T>
+>     : ^^^^^^^^^^^^^^^^
+
+): QuickPickStep<T> {
+  return step;
+>step : QuickPickStep<T>
+>     : ^^^^^^^^^^^^^^^^
+}
+
+function* showStep<
+>showStep : <State extends PartialStepState & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
+>         : ^     ^^^^^^^^^                                 ^^       ^^^^^^^^^                                             ^^     ^^     ^^        ^^       ^^^^^                                  
+
+  State extends PartialStepState & { repo: any },
+>repo : any
+
+  Context extends { repos: any[]; title: string; status: any }
+>repos : any[]
+>      : ^^^^^
+>title : string
+>      : ^^^^^^
+>status : any
+
+>(state: State, _context: Context): StepResultGenerator<QuickPickItem> {
+>state : State
+>      : ^^^^^
+>_context : Context
+>         : ^^^^^^^
+
+  const step: QuickPickStep<QuickPickItem> = createPickStep<QuickPickItem>({
+>step : QuickPickStep<QuickPickItem>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createPickStep<QuickPickItem>({    title: "",    placeholder: "",  }) : QuickPickStep<QuickPickItem>
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
+>               : ^ ^^^^^^^^^             ^^    ^^                ^^^^^                
+>{    title: "",    placeholder: "",  } : { title: string; placeholder: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    title: "",
+>title : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+
+    placeholder: "",
+>placeholder : string
+>            : ^^^^^^
+>"" : ""
+>   : ^^
+
+  });
+  const selection: StepSelection<typeof step> = yield step;
+>selection : Directive | QuickPickItem[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>step : QuickPickStep<QuickPickItem>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield step : any
+>step : QuickPickStep<QuickPickItem>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return canPickStepContinue(step, state, selection)
+>canPickStepContinue(step, state, selection)    ? selection[0]    : StepResult.Break : QuickPickItem | unique symbol
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>canPickStepContinue(step, state, selection) : boolean
+>                                            : ^^^^^^^
+>canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
+>                    : ^ ^^^^^^^^^             ^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^                             
+>step : QuickPickStep<QuickPickItem>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>state : State
+>      : ^^^^^
+>selection : Directive | QuickPickItem[]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ? selection[0]
+>selection[0] : QuickPickItem
+>             : ^^^^^^^^^^^^^
+>selection : QuickPickItem[]
+>          : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    : StepResult.Break;
+>StepResult.Break : unique symbol
+>                 : ^^^^^^^^^^^^^
+>StepResult : typeof StepResult
+>           : ^^^^^^^^^^^^^^^^^
+>Break : unique symbol
+>      : ^^^^^^^^^^^^^
+}
+

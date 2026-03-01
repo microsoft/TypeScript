@@ -1,84 +1,131 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment17.ts] ////
+
+=== use.js ===
 /// <reference path='./types.d.ts'/>
 var mini = require('./minimatch')
 >mini : typeof mini
+>     : ^^^^^^^^^^^
 >require('./minimatch') : typeof mini
+>                       : ^^^^^^^^^^^
 >require : any
 >'./minimatch' : "./minimatch"
+>              : ^^^^^^^^^^^^^
 
 mini.M.defaults()
 >mini.M.defaults() : any
 >mini.M.defaults : (def: any) => any
+>                : ^   ^^^^^^^^^^^^^
 >mini.M : typeof M
+>       : ^^^^^^^^
 >mini : typeof mini
+>     : ^^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >defaults : (def: any) => any
+>         : ^   ^^^^^^^^^^^^^
 
 var m = new mini.M()
 >m : M
+>  : ^
 >new mini.M() : M
+>             : ^
 >mini.M : typeof M
+>       : ^^^^^^^^
 >mini : typeof mini
+>     : ^^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 m.m()
 >m.m() : void
+>      : ^^^^
 >m.m : () => void
+>    : ^^^^^^^^^^
 >m : M
+>  : ^
 >m : () => void
+>  : ^^^^^^^^^^
 
 mini.filter()
 >mini.filter() : void
+>              : ^^^^
 >mini.filter : () => void
+>            : ^^^^^^^^^^
 >mini : typeof mini
+>     : ^^^^^^^^^^^
 >filter : () => void
+>       : ^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/types.d.ts ===
+=== types.d.ts ===
 declare var require: any;
 >require : any
 
 declare var module: any;
 >module : any
 
-=== tests/cases/conformance/salsa/minimatch.js ===
+=== minimatch.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
 >module.exports = minimatch : typeof minimatch
+>                           : ^^^^^^^^^^^^^^^^
 >module.exports : typeof minimatch
+>               : ^^^^^^^^^^^^^^^^
 >module : { exports: typeof minimatch; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof minimatch
+>        : ^^^^^^^^^^^^^^^^
 >minimatch : typeof minimatch
+>          : ^^^^^^^^^^^^^^^^
 
 minimatch.M = M
 >minimatch.M = M : typeof M
+>                : ^^^^^^^^
 >minimatch.M : typeof M
+>            : ^^^^^^^^
 >minimatch : typeof minimatch
+>          : ^^^^^^^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 minimatch.filter = filter
 >minimatch.filter = filter : () => void
+>                          : ^^^^^^^^^^
 >minimatch.filter : () => void
+>                 : ^^^^^^^^^^
 >minimatch : typeof minimatch
+>          : ^^^^^^^^^^^^^^^^
 >filter : () => void
+>       : ^^^^^^^^^^
 >filter : () => void
+>       : ^^^^^^^^^^
 
 function filter() {
 >filter : () => void
+>       : ^^^^^^^^^^
 
     return minimatch()
 >minimatch() : void
+>            : ^^^^
 >minimatch : typeof minimatch
+>          : ^^^^^^^^^^^^^^^^
 }
 function minimatch() {
 >minimatch : typeof minimatch
+>          : ^^^^^^^^^^^^^^^^
 }
 M.defaults = function (def) {
 >M.defaults = function (def) {    return def} : (def: any) => any
+>                                             : ^   ^^^^^^^^^^^^^
 >M.defaults : (def: any) => any
+>           : ^   ^^^^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >defaults : (def: any) => any
+>         : ^   ^^^^^^^^^^^^^
 >function (def) {    return def} : (def: any) => any
+>                                : ^   ^^^^^^^^^^^^^
 >def : any
 
     return def
@@ -86,14 +133,21 @@ M.defaults = function (def) {
 }
 M.prototype.m = function () {
 >M.prototype.m = function () {} : () => void
+>                               : ^^^^^^^^^^
 >M.prototype.m : any
 >M.prototype : any
+>            : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >m : any
+>  : ^^^
 >function () {} : () => void
+>               : ^^^^^^^^^^
 }
 function M() {
 >M : typeof M
+>  : ^^^^^^^^
 }
 

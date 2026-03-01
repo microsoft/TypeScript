@@ -1,20 +1,29 @@
-=== tests/cases/compiler/aliasInaccessibleModule2.ts ===
-module M {
->M : typeof M
+//// [tests/cases/compiler/aliasInaccessibleModule2.ts] ////
 
-    module N {
+=== aliasInaccessibleModule2.ts ===
+namespace M {
+>M : typeof M
+>  : ^^^^^^^^
+
+    namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
         class C {
 >C : C
+>  : ^
         }
         
     }
     import R = N;
 >R : typeof N
+>  : ^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 
     export import X = R;
 >X : typeof N
+>  : ^^^^^^^^
 >R : typeof N
+>  : ^^^^^^^^
 }

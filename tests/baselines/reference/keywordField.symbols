@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keywordField.ts ===
+//// [tests/cases/compiler/keywordField.ts] ////
+
+=== keywordField.ts ===
 var obj:any = {};
 >obj : Symbol(obj, Decl(keywordField.ts, 0, 3))
 

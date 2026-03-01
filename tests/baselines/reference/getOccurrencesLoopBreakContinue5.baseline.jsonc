@@ -1,0 +1,21 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue5.ts ===
+// --- (line: 56) skipped ---
+//     }
+// }
+// 
+// label5: /*HIGHLIGHTS*/[|{| kind: "none" |}while|] (true) [|{| kind: "none" |}break|] label5;
+// 
+// label7: while (true) continue label5;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesLoopBreakContinue5.ts ===
+// --- (line: 56) skipped ---
+//     }
+// }
+// 
+// label5: [|{| kind: "none" |}while|] (true) /*HIGHLIGHTS*/[|{| kind: "none" |}break|] label5;
+// 
+// label7: while (true) continue label5;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference2.ts] ////
+
 //// [intersectionTypeInference2.ts]
 declare function f<T>(x: { prop: T }): T;
 
@@ -17,6 +19,7 @@ f2(obj, 'b');
 
 
 //// [intersectionTypeInference2.js]
+"use strict";
 f(a); // never
 f(b); // never
 f2(obj, 'a');

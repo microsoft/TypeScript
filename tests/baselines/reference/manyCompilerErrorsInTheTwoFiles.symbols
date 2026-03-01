@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/manyCompilerErrorsInTheTwoFiles.ts] ////
+
+=== a.ts ===
 const a =!@#!@$
 >a : Symbol(a, Decl(a.ts, 0, 5))
 
@@ -9,8 +11,8 @@ OK!
 HERE's A shouty thing
 GOTTA GO FAST
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
+
 fhqwhgads
-No type information for this code.to
-No type information for this code.limit
-No type information for this code.
+to
+limit

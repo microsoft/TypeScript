@@ -1,0 +1,21 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInvalid.ts ===
+// var x1 = 50/*GOTO IMPL*/0;
+// var x2 = "hello";
+// 
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInvalid.ts ===
+// var x1 = 500;
+// var x2 = "hel/*GOTO IMPL*/lo";
+// 
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInvalid.ts ===
+// var x1 = 500;
+// var x2 = "hello";
+// /*GOTO IMPL*/

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unaryPlus.ts] ////
+
 //// [unaryPlus.ts]
 // allowed per spec
 var a = +1;
@@ -12,6 +14,7 @@ var z = ~"3"; // should be valid
 
 
 //// [unaryPlus.js]
+"use strict";
 // allowed per spec
 var a = +1;
 var b = +"";

@@ -1,32 +1,49 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldClassExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldClassExpression.ts] ////
+
+=== privateNameFieldClassExpression.ts ===
 class B {
 >B : B
+>  : ^
 
     #foo = class {
 >#foo : typeof (Anonymous class)
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >class {        constructor() {            console.log("hello");        }        static test = 123;    } : typeof (Anonymous class)
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         constructor() {
             console.log("hello");
 >console.log("hello") : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
+>        : ^^^^^^^
         }
         static test = 123;
 >test : number
+>     : ^^^^^^
 >123 : 123
+>    : ^^^
 
     };
     #foo2 = class Foo {
 >#foo2 : typeof Foo
+>      : ^^^^^^^^^^
 >class Foo {        static otherClass = 123;    } : typeof Foo
+>                                                 : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
         static otherClass = 123;
 >otherClass : number
+>           : ^^^^^^
 >123 : 123
+>    : ^^^
 
     };
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts] ////
+
 //// [interfaceThatInheritsFromItself.ts]
 interface Foo extends Foo { // error
 }
@@ -14,3 +16,4 @@ interface Bar implements Bar { // error
 
 
 //// [interfaceThatInheritsFromItself.js]
+"use strict";

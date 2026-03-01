@@ -9,4 +9,4 @@
 ////var { x, ...rest } = t;
 ////rest.[|/*2*/parent|];
 
-verify.goToDefinition('2', [ '1' ]);
+verify.baselineGoToDefinition('2');

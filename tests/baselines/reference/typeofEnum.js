@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofEnum.ts] ////
+
 //// [typeofEnum.ts]
 enum E {
     e1,
@@ -8,6 +10,7 @@ var e1: typeof E;
 e1.e1;
 
 //// [typeofEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["e1"] = 0] = "e1";

@@ -1,12 +1,12 @@
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(1,25): error TS6133: 'person' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(1,41): error TS6133: 'person2' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(3,14): error TS6133: 'maker' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(3,20): error TS6133: 'child' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(4,13): error TS6133: 'unused2' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(1,25): error TS6133: 'person' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(1,41): error TS6133: 'person2' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(3,14): error TS6133: 'maker' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(3,20): error TS6133: 'child' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts(4,13): error TS6133: 'unused2' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts (6 errors) ====
+==== unusedLocalsOnFunctionDeclarationWithinFunctionExpression1.ts (6 errors) ====
     var greeter = function (person: string, person2: string) {
                             ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.

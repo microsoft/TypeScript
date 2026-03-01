@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace12.ts] ////
+
+=== main.ts ===
+import { c } from './types'
+>c : Symbol(c, Decl(main.ts, 0, 8))
+
+import * as types from './types'
+>types : Symbol(types, Decl(main.ts, 1, 6))
+
+console.log(c) // Fails as expected, import is still allowed though.
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>c : Symbol(c, Decl(main.ts, 0, 8))
+
+console.log(types.c) // Expected an error here.
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>types : Symbol(types, Decl(main.ts, 1, 6))
+
+=== types.ts ===
+
+export type * from './values'
+
+=== values.ts ===
+export const c = 10
+>c : Symbol(c, Decl(values.ts, 0, 12))
+

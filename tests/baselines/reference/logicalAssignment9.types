@@ -1,19 +1,33 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment9.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment9.ts] ////
+
+=== logicalAssignment9.ts ===
 declare let x: { a?: boolean };
->x : { a?: boolean | undefined; }
+>x : { a?: boolean; }
+>  : ^^^^^^       ^^^
 >a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 x.a ??= true;
 >x.a ??= true : boolean
+>             : ^^^^^^^
 >x.a : boolean | undefined
->x : { a?: boolean | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>x : { a?: boolean; }
+>  : ^^^^^^       ^^^
 >a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 x.a &&= false;
 >x.a &&= false : false | undefined
+>              : ^^^^^^^^^^^^^^^^^
 >x.a : boolean | undefined
->x : { a?: boolean | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^
+>x : { a?: boolean; }
+>  : ^^^^^^       ^^^
 >a : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 

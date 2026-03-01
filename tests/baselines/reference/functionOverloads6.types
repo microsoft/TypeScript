@@ -1,16 +1,23 @@
-=== tests/cases/compiler/functionOverloads6.ts ===
+//// [tests/cases/compiler/functionOverloads6.ts] ////
+
+=== functionOverloads6.ts ===
 class foo { 
 >foo : foo
+>    : ^^^
 
    static fnOverload();
 >fnOverload : { (): any; (foo: string): any; }
+>           : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 
    static fnOverload(foo:string);
 >fnOverload : { (): any; (foo: string): any; }
+>           : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
    static fnOverload(foo?: any){ }
 >fnOverload : { (): any; (foo: string): any; }
+>           : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : any
 }
 

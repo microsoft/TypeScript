@@ -21,27 +21,24 @@ export { c, Foo };
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.doThing = function (x) {
+class Foo {
+    doThing(x) {
         return { b: x.a };
-    };
-    Foo.make = function () {
+    }
+    static make() {
         return new Foo();
-    };
-    return Foo;
-}());
+    }
+}
 exports.Foo = Foo;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.c = exports.x = void 0;
-var a_1 = require("./a");
-exports.Foo = a_1.Foo;
-var c = new a_1.Foo();
+const a_1 = require("./a");
+Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return a_1.Foo; } });
+const c = new a_1.Foo();
 exports.c = c;
 c.doThing({ a: 42 });
 exports.x = c.doThing({ a: 12 });

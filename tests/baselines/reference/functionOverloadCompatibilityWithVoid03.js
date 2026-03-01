@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionOverloadCompatibilityWithVoid03.ts] ////
+
 //// [functionOverloadCompatibilityWithVoid03.ts]
 function f(x: string): void;
 function f(x: string): void {
@@ -5,6 +7,7 @@ function f(x: string): void {
 } 
 
 //// [functionOverloadCompatibilityWithVoid03.js]
+"use strict";
 function f(x) {
     return;
 }

@@ -1,25 +1,37 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts] ////
+
+=== computedPropertyNames34_ES6.ts ===
 function foo<T>() { return '' }
 >foo : <T>() => string
+>    : ^ ^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     static bar() {
 >bar : () => number
+>    : ^^^^^^^^^^^^
 
         var obj = {
 >obj : { [x: string]: () => void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            [foo<T>()]() { }        } : { [x: string]: () => void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             [foo<T>()]() { }
 >[foo<T>()] : () => void
+>           : ^^^^^^^^^^
 >foo<T>() : string
+>         : ^^^^^^
 >foo : <T>() => string
+>    : ^ ^^^^^^^^^^^^^
 
         };
         return 0;
 >0 : 0
+>  : ^
     }
 }

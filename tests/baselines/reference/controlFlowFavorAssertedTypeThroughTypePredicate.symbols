@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
+//// [tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts] ////
+
+=== controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
 // repro 49988#issuecomment-1192016929
 
 declare function isObject1(value: unknown): value is Record<string, unknown>;

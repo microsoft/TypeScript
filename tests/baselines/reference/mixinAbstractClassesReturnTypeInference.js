@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAbstractClassesReturnTypeInference.ts] ////
+
 //// [mixinAbstractClassesReturnTypeInference.ts]
 interface Mixin1 {
     mixinMethod(): void;
@@ -23,6 +25,7 @@ class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
 
 
 //// [mixinAbstractClassesReturnTypeInference.js]
+"use strict";
 class AbstractBase {
 }
 function Mixin2(baseClass) {

@@ -1,13 +1,20 @@
-=== tests/cases/compiler/node_modules/pkg/index.d.ts ===
+//// [tests/cases/compiler/tripleSlashTypesReferenceWithMissingExports.ts] ////
+
+=== node_modules/pkg/index.d.ts ===
 interface GlobalThing { a: number }
 >a : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 /// <reference types="pkg" />
 
 const a: GlobalThing = { a: 0 };
 >a : GlobalThing
+>  : ^^^^^^^^^^^
 >{ a: 0 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

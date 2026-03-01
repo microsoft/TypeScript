@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/underscoreEscapedNameInEnum.ts] ////
+
 //// [underscoreEscapedNameInEnum.ts]
 enum E {
     "__foo" = 1,
@@ -6,6 +8,7 @@ enum E {
 
 
 //// [underscoreEscapedNameInEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["__foo"] = 1] = "__foo";

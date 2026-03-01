@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypingOrOperator.ts ===
+//// [tests/cases/compiler/contextuallyTypingOrOperator.ts] ////
+
+=== contextuallyTypingOrOperator.ts ===
 var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 >v : Symbol(v, Decl(contextuallyTypingOrOperator.ts, 0, 3))
 >a : Symbol(a, Decl(contextuallyTypingOrOperator.ts, 0, 8))

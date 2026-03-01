@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/templates/templateStringInCallExpression.ts(1,1): error TS2349: This expression is not callable.
+templateStringInCallExpression.ts(1,1): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInCallExpression.ts (1 errors) ====
+==== templateStringInCallExpression.ts (1 errors) ====
     `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
     ~~~~~~~~~~~~
 !!! error TS2349: This expression is not callable.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts] ////
+
 //// [asiPreventsParsingAsNamespace05.ts]
 let namespace = 10;
 namespace a.b {
@@ -10,7 +12,8 @@ a.b.c
 }
 
 //// [asiPreventsParsingAsNamespace05.js]
-var namespace = 10;
+"use strict";
+let namespace = 10;
 var a;
 (function (a) {
     var b;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall6.ts] ////
+
 //// [functionCall6.ts]
 function foo(a:string){}; 
 foo('bar');
@@ -7,6 +9,7 @@ foo();
 
 
 //// [functionCall6.js]
+"use strict";
 function foo(a) { }
 ;
 foo('bar');

@@ -1,18 +1,29 @@
-=== tests/cases/compiler/evolvingArrayResolvedAssert.ts ===
+//// [tests/cases/compiler/evolvingArrayResolvedAssert.ts] ////
+
+=== evolvingArrayResolvedAssert.ts ===
 var C = [];
 >C : any[]
+>  : ^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 for (var a in C) {
 >a : string
+>  : ^^^^^^
 >C : any[]
+>  : ^^^^^
 
     if (C.hasOwnProperty(a)) {
 >C.hasOwnProperty(a) : boolean
+>                    : ^^^^^^^
 >C.hasOwnProperty : (v: PropertyKey) => boolean
+>                 : ^ ^^           ^^^^^       
 >C : any[]
+>  : ^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
+>               : ^ ^^           ^^^^^       
 >a : string
+>  : ^^^^^^
     }
 }
 

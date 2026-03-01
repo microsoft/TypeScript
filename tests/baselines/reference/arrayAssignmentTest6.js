@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/arrayAssignmentTest6.ts] ////
+
 //// [arrayAssignmentTest6.ts]
-module Test {
+namespace Test {
     interface IState {
     }
     interface IToken {
@@ -21,15 +23,13 @@ module Test {
 
 
 //// [arrayAssignmentTest6.js]
+"use strict";
 var Test;
 (function (Test) {
-    var Bug = /** @class */ (function () {
-        function Bug() {
-        }
-        Bug.prototype.tokenize = function (line, tokens, includeStates) {
+    class Bug {
+        tokenize(line, tokens, includeStates) {
             return null;
-        };
-        return Bug;
-    }());
+        }
+    }
     Test.Bug = Bug;
 })(Test || (Test = {}));

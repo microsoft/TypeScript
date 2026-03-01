@@ -1,19 +1,33 @@
-=== tests/cases/compiler/contextualTypeOnYield1.ts ===
+//// [tests/cases/compiler/contextualTypeOnYield1.ts] ////
+
+=== contextualTypeOnYield1.ts ===
 type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any, void>)
->FuncOrGeneratorFunc : () => number | Generator<(arg: number) => void, any, void>
+>FuncOrGeneratorFunc : FuncOrGeneratorFunc
+>                    : ^^^^^^^^^^^^^^^^^^^
 >arg : number
+>    : ^^^^^^
 
 const f: FuncOrGeneratorFunc = function*() {
 >f : FuncOrGeneratorFunc
->function*() {  yield (num) => console.log(num); // `num` should be inferred to have type `number`.} : () => Generator<(num: number) => void, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^
+>function*() {  yield (num) => console.log(num); // `num` should be inferred to have type `number`.} : () => Generator<(num: number) => void, void, void>
+>                                                                                                    : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   yield (num) => console.log(num); // `num` should be inferred to have type `number`.
->yield (num) => console.log(num) : any
+>yield (num) => console.log(num) : void
+>                                : ^^^^
 >(num) => console.log(num) : (num: number) => void
+>                          : ^   ^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >console.log(num) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >num : number
+>    : ^^^^^^
 }

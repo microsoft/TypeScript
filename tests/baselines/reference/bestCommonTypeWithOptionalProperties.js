@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bestCommonTypeWithOptionalProperties.ts] ////
+
 //// [bestCommonTypeWithOptionalProperties.ts]
 interface X { foo: string }
 interface Y extends X { bar?: number }
@@ -16,6 +18,7 @@ var b5 = [z, x, y];
 var b6 = [z, y, x];
 
 //// [bestCommonTypeWithOptionalProperties.js]
+"use strict";
 var x;
 var y;
 var z;

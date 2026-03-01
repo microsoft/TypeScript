@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd1.ts] ////
+
+=== a.ts ===
 /// <reference path="foo.d.ts" />
 Foo.fn();
 >Foo.fn : Symbol(Foo.fn, Decl(foo.d.ts, 0, 21))
@@ -16,7 +18,7 @@ let y: number = x.n;
 >x : Symbol(x, Decl(a.ts, 2, 3))
 >n : Symbol(Foo.Thing.n, Decl(foo.d.ts, 2, 24))
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 export var x: number;
 >x : Symbol(x, Decl(foo.d.ts, 0, 10))
 

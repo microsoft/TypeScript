@@ -1,32 +1,57 @@
-=== tests/cases/compiler/commaOperatorInConditionalExpression.ts ===
+//// [tests/cases/compiler/commaOperatorInConditionalExpression.ts] ////
+
+=== commaOperatorInConditionalExpression.ts ===
 function f (m: string) {
 >f : (m: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >m : string
+>  : ^^^^^^
 
     [1, 2, 3].map(i => {
->[1, 2, 3].map(i => {        return true? { [m]: i } : { [m]: i + 1 }    }) : { [x: string]: number; }[]
+>[1, 2, 3].map(i => {        return true? { [m]: i } : { [m]: i + 1 }    }) : { [m]: number; }[]
+>                                                                           : ^^     ^^^^^^ ^^^^
 >[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>              : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1, 2, 3] : number[]
+>          : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->i => {        return true? { [m]: i } : { [m]: i + 1 }    } : (i: number) => { [x: string]: number; }
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>i => {        return true? { [m]: i } : { [m]: i + 1 }    } : (i: number) => { [m]: number; }
+>                                                            : ^ ^^^^^^^^^^^^^^^     ^^^^^^ ^^
 >i : number
+>  : ^^^^^^
 
         return true? { [m]: i } : { [m]: i + 1 }
->true? { [m]: i } : { [m]: i + 1 } : { [x: string]: number; }
+>true? { [m]: i } : { [m]: i + 1 } : { [m]: number; }
+>                                  : ^^     ^^^^^^ ^^
 >true : true
->{ [m]: i } : { [x: string]: number; }
+>     : ^^^^
+>{ [m]: i } : { [m]: number; }
+>           : ^^     ^^^^^^ ^^
 >[m] : number
+>    : ^^^^^^
 >m : string
+>  : ^^^^^^
 >i : number
->{ [m]: i + 1 } : { [x: string]: number; }
+>  : ^^^^^^
+>{ [m]: i + 1 } : { [m]: number; }
+>               : ^^     ^^^^^^ ^^
 >[m] : number
+>    : ^^^^^^
 >m : string
+>  : ^^^^^^
 >i + 1 : number
+>      : ^^^^^^
 >i : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     })
 }

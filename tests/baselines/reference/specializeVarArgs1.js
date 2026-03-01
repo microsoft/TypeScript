@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializeVarArgs1.ts] ////
+
 //// [specializeVarArgs1.ts]
 interface Observable<T>{ }
 
@@ -23,6 +25,7 @@ a.push('Some Value');
 
 
 //// [specializeVarArgs1.js]
+"use strict";
 function observableArray() { return null; }
 var a = observableArray();
 a.push('Some Value');

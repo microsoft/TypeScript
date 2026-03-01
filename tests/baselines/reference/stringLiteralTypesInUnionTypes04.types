@@ -1,89 +1,134 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts] ////
+
+=== stringLiteralTypesInUnionTypes04.ts ===
 type T = "" | "foo";
->T : "" | "foo"
+>T : T
+>  : ^
 
 let x: T = undefined;
 >x : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 let y: T = undefined;
 >y : T
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 if (x === "") {
 >x === "" : boolean
+>         : ^^^^^^^
 >x : T
+>  : ^
 >"" : ""
+>   : ^^
 
     let a = x;
 >a : ""
+>  : ^^
 >x : ""
+>  : ^^
 }
 
 if (x !== "") {
 >x !== "" : boolean
+>         : ^^^^^^^
 >x : T
+>  : ^
 >"" : ""
+>   : ^^
 
     let b = x;
 >b : "foo"
+>  : ^^^^^
 >x : "foo"
+>  : ^^^^^
 }
 
 if (x == "") {
 >x == "" : boolean
+>        : ^^^^^^^
 >x : T
+>  : ^
 >"" : ""
+>   : ^^
 
     let c = x;
 >c : ""
+>  : ^^
 >x : ""
+>  : ^^
 }
 
 if (x != "") {
 >x != "" : boolean
+>        : ^^^^^^^
 >x : T
+>  : ^
 >"" : ""
+>   : ^^
 
     let d = x;
 >d : "foo"
+>  : ^^^^^
 >x : "foo"
+>  : ^^^^^
 }
 
 if (x) {
 >x : T
+>  : ^
 
     let e = x;
 >e : "foo"
+>  : ^^^^^
 >x : "foo"
+>  : ^^^^^
 }
 
 if (!x) {
 >!x : boolean
+>   : ^^^^^^^
 >x : T
+>  : ^
 
     let f = x;
 >f : T
+>  : ^
 >x : T
+>  : ^
 }
 
 if (!!x) {
 >!!x : boolean
+>    : ^^^^^^^
 >!x : boolean
+>   : ^^^^^^^
 >x : T
+>  : ^
 
     let g = x;
 >g : "foo"
+>  : ^^^^^
 >x : "foo"
+>  : ^^^^^
 }
 
 if (!!!x) {
 >!!!x : boolean
+>     : ^^^^^^^
 >!!x : boolean
+>    : ^^^^^^^
 >!x : boolean
+>   : ^^^^^^^
 >x : T
+>  : ^
 
     let h = x;
 >h : T
+>  : ^
 >x : T
+>  : ^
 }

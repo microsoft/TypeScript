@@ -1,4 +1,6 @@
-=== tests/cases/compiler/debuggerEmit.ts ===
+//// [tests/cases/compiler/debuggerEmit.ts] ////
+
+=== debuggerEmit.ts ===
 var x = function () { debugger; }
 >x : Symbol(x, Decl(debuggerEmit.ts, 0, 3))
 

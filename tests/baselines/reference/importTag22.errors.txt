@@ -1,0 +1,38 @@
+test.ts(2,17): error TS2304: Cannot find name 'tslib'.
+
+
+==== node_modules/tslib/package.json (0 errors) ====
+    {
+      "name": "tslib",
+      "exports": {
+          ".": {
+              "module": {
+                  "types": "./modules/index.d.ts",
+                  "default": "./tslib.es6.mjs"
+              },
+              "import": {
+                  "node": "./modules/index.js",
+                  "default": {
+                      "types": "./modules/index.d.ts",
+                      "default": "./tslib.es6.mjs"
+                  }
+              },
+              "default": "./tslib.js"
+          },
+          "./*": "./*",
+          "./": "./"
+      }
+    }
+    
+==== node_modules/tslib/modules/index.d.ts (0 errors) ====
+    export {};
+    
+==== node_modules/tslib/tslib.d.ts (0 errors) ====
+    export {};
+    
+==== test.ts (1 errors) ====
+    /** @import * as tslib from "tslib" */
+    type T = typeof tslib
+                    ~~~~~
+!!! error TS2304: Cannot find name 'tslib'.
+    

@@ -1,7 +1,7 @@
-tests/cases/compiler/unionSubtypeReductionErrors.ts(5006,9): error TS2590: Expression produces a union type that is too complex to represent.
+unionSubtypeReductionErrors.ts(5006,9): error TS2590: Expression produces a union type that is too complex to represent.
 
 
-==== tests/cases/compiler/unionSubtypeReductionErrors.ts (1 errors) ====
+==== unionSubtypeReductionErrors.ts (1 errors) ====
     let a = [
         0 as 0,
         1 as 1,

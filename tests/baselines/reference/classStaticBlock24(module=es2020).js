@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock24.ts] ////
+
 //// [classStaticBlock24.ts]
 export class C {
   static x: number;
@@ -8,12 +10,8 @@ export class C {
 
 
 //// [classStaticBlock24.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-export { C };
-(function () {
+export class C {
+}
+(() => {
     C.x = 1;
 })();

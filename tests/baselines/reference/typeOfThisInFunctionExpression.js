@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functions/typeOfThisInFunctionExpression.ts] ////
+
 //// [typeOfThisInFunctionExpression.ts]
 // type of 'this' in FunctionExpression is Any
 
@@ -27,7 +29,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
     function fn() {
         var p = this;
         var p: any;
@@ -46,6 +48,7 @@ module M {
 }
 
 //// [typeOfThisInFunctionExpression.js]
+"use strict";
 // type of 'this' in FunctionExpression is Any
 function fn() {
     var p = this;
@@ -59,8 +62,8 @@ var t2 = function f() {
     var x = this;
     var x;
 };
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = function () {
             var q;
             var q = this;
@@ -70,8 +73,7 @@ var C = /** @class */ (function () {
             var q = this;
         };
     }
-    return C;
-}());
+}
 var M;
 (function (M) {
     function fn() {

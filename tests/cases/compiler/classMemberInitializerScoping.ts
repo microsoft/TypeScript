@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var aaa = 1;
 class CCC {
     y: number = aaa;

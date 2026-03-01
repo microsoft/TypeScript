@@ -1,8 +1,8 @@
-tests/cases/compiler/parseCommaSeparatedNewlineString.ts(1,2): error TS2304: Cannot find name 'a'.
-tests/cases/compiler/parseCommaSeparatedNewlineString.ts(1,2): error TS2695: Left side of comma operator is unused and has no side effects.
+parseCommaSeparatedNewlineString.ts(1,2): error TS2304: Cannot find name 'a'.
+parseCommaSeparatedNewlineString.ts(1,2): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/compiler/parseCommaSeparatedNewlineString.ts (2 errors) ====
+==== parseCommaSeparatedNewlineString.ts (2 errors) ====
     (a,
      ~
 !!! error TS2304: Cannot find name 'a'.

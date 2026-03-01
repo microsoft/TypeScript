@@ -1,4 +1,5 @@
-declare module EM {
+// @target: es2015
+declare namespace EM {
 	export class Position { }
 
 	export class EC {

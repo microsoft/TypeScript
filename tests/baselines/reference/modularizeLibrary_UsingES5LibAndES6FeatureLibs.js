@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts] ////
+
 //// [modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts]
 var s = Symbol();
 var t = {};
@@ -14,6 +16,7 @@ function* idGen() {
 
 
 //// [modularizeLibrary_UsingES5LibAndES6FeatureLibs.js]
+"use strict";
 var s = Symbol();
 var t = {};
 var p = new Proxy(t, {});

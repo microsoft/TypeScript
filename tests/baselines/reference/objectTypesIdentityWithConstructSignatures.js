@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithConstructSignatures.ts] ////
+
 //// [objectTypesIdentityWithConstructSignatures.ts]
 // object types are identical structurally
 
@@ -88,22 +90,17 @@ function foo15(x: C<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignatures.js]
+"use strict";
 // object types are identical structurally
-var A = /** @class */ (function () {
-    function A(x) {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B(x) {
-    }
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
+class A {
+    constructor(x) { }
+}
+class B {
+    constructor(x) { }
+}
+class C {
+    constructor(x) { }
+}
 var a;
 function foo1(x) { }
 function foo1b(x) { }

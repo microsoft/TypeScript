@@ -1,10 +1,13 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts] ////
+
 //// [genericCallWithTupleType.ts]
 interface I<T, U> {
     tuple1: [T, U];
 } 
 
 var i1: I<string, number>;
-var i2: I<{}, {}>;
+declare var i1: I<string, number>;
+declare var i2: I<{}, {}>;
 
 // no error
 i1.tuple1 = ["foo", 5];
@@ -26,8 +29,8 @@ i2.tuple1 = [{}];
 
 
 //// [genericCallWithTupleType.js]
+"use strict";
 var i1;
-var i2;
 // no error
 i1.tuple1 = ["foo", 5];
 var e1 = i1.tuple1[0]; // string

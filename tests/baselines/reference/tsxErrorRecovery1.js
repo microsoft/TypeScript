@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxErrorRecovery1.tsx] ////
+
 //// [file.tsx]
 declare namespace JSX { interface Element { } }
 
@@ -9,6 +11,7 @@ var y = { a: 1 };
 
 
 //// [file.jsx]
+"use strict";
 function foo() {
     var x = <div>  {} </div>;
 }

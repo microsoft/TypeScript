@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeProperties.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeProperties.ts] ////
+
+=== mappedTypeProperties.ts ===
 export type PlaceType = 'openSky' | 'roofed' | 'garage'
 >PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
 

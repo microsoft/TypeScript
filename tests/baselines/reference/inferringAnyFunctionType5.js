@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferringAnyFunctionType5.ts] ////
+
 //// [inferringAnyFunctionType5.ts]
 function f<T extends { q: (p1: number) => number }>(p: T): T {
     return p;
@@ -6,7 +8,8 @@ function f<T extends { q: (p1: number) => number }>(p: T): T {
 var v = f({ q: x => x });
 
 //// [inferringAnyFunctionType5.js]
+"use strict";
 function f(p) {
     return p;
 }
-var v = f({ q: function (x) { return x; } });
+var v = f({ q: x => x });

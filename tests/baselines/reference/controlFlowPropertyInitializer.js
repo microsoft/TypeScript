@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowPropertyInitializer.ts] ////
+
 //// [controlFlowPropertyInitializer.ts]
 // Repro from #8967
 
@@ -8,11 +10,11 @@ class BestLanguage {
 }
 
 //// [controlFlowPropertyInitializer.js]
+"use strict";
 // Repro from #8967
-var LANG = "Turbo Pascal";
-var BestLanguage = /** @class */ (function () {
-    function BestLanguage() {
+const LANG = "Turbo Pascal";
+class BestLanguage {
+    constructor() {
         this.name = LANG;
     }
-    return BestLanguage;
-}());
+}

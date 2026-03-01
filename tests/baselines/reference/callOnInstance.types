@@ -1,32 +1,53 @@
-=== tests/cases/compiler/callOnInstance.ts ===
+//// [tests/cases/compiler/callOnInstance.ts] ////
+
+=== callOnInstance.ts ===
 declare function D(): string; // error
 >D : typeof D
+>  : ^^^^^^^^
 
 declare class D { constructor (value: number); } // error
 >D : D
+>  : ^
 >value : number
+>      : ^^^^^^
 
 var s1: string = D(); // OK
 >s1 : string
+>   : ^^^^^^
 >D() : string
+>    : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var s2: string = (new D(1))();
 >s2 : string
+>   : ^^^^^^
 >(new D(1))() : any
+>             : ^^^
 >(new D(1)) : D
+>           : ^
 >new D(1) : D
+>         : ^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
 declare class C { constructor(value: number); }
 >C : C
+>  : ^
 >value : number
+>      : ^^^^^^
 
 (new C(1))(); // Error for calling an instance
 >(new C(1))() : any
+>             : ^^^
 >(new C(1)) : C
+>           : ^
 >new C(1) : C
+>         : ^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 

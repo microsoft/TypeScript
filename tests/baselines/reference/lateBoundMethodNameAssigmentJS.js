@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lateBoundMethodNameAssigmentJS.ts] ////
+
 //// [lateBoundMethodNameAssigmentJS.js]
 const _symbol = Symbol("_sym");
 export class MyClass {
@@ -12,7 +14,7 @@ export class MyClass {
 
 //// [lateBoundMethodNameAssigmentJS.d.ts]
 export class MyClass {
-    [_symbol]: any;
+    [_symbol]: () => Promise<void>;
 }
 declare const _symbol: unique symbol;
 export {};

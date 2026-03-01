@@ -1,150 +1,213 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts] ////
+
+=== classStaticBlock22.ts ===
 let await: "any";
 >await : "any"
+>      : ^^^^^
 
 class C {
 >C : C
+>  : ^
 
   static {
     let await: any; // illegal, cannot declare a new binding for await
 >await : any
+>      : ^^^
   }
   static {
     let { await } = {} as any; // illegal, cannot declare a new binding for await
 >await : any
+>      : ^^^
 >{} as any : any
+>          : ^^^
 >{} : {}
+>   : ^^
   }
   static {
     let { await: other } = {} as any; // legal
 >await : any
+>      : ^^^
 >other : any
+>      : ^^^
 >{} as any : any
+>          : ^^^
 >{} : {}
+>   : ^^
   }
   static {
     let await; // illegal, cannot declare a new binding for await
 >await : any
+>      : ^^^
   }
   static {
     function await() { }; // illegal
 >await : () => void
+>      : ^^^^^^^^^^
   }
   static {
     class await { }; // illegal
 >await : await
+>      : ^^^^^
   }
 
   static {
     class D {
 >D : D
+>  : ^
 
       await = 1; // legal
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
       x = await; // legal (initializers have an implicit function boundary)
 >x : "any"
+>  : ^^^^^
 >await : "any"
+>      : ^^^^^
 
     };
   }
   static {
     (function await() { }); // legal, 'await' in function expression name not bound inside of static block
 >(function await() { }) : () => void
+>                       : ^^^^^^^^^^
 >function await() { } : () => void
+>                     : ^^^^^^^^^^
 >await : () => void
+>      : ^^^^^^^^^^
   }
   static {
     (class await { }); // legal, 'await' in class expression name not bound inside of static block
 >(class await { }) : typeof await
+>                  : ^^^^^^^^^^^^
 >class await { } : typeof await
+>                : ^^^^^^^^^^^^
 >await : typeof await
+>      : ^^^^^^^^^^^^
   }
   static {
     (function () { return await; }); // legal, 'await' is inside of a new function boundary
 >(function () { return await; }) : () => "any"
+>                                : ^^^^^^^^^^^
 >function () { return await; } : () => "any"
+>                              : ^^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
   }
   static {
     (() => await); // legal, 'await' is inside of a new function boundary
 >(() => await) : () => "any"
+>              : ^^^^^^^^^^^
 >() => await : () => "any"
+>            : ^^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
   }
 
   static {
     class E {
 >E : E
+>  : ^
 
       constructor() { await; }
 >await : "any"
+>      : ^^^^^
 
       method() { await; }
 >method : () => void
+>       : ^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
 
       get accessor() {
 >accessor : any
+>         : ^^^
 
         await;
 >await : "any"
+>      : ^^^^^
 
         return 1;
 >1 : 1
+>  : ^
       }
       set accessor(v: any) {
 >accessor : any
+>         : ^^^
 >v : any
+>  : ^^^
 
         await;
 >await : "any"
+>      : ^^^^^
       }
       propLambda = () => { await; }
 >propLambda : () => void
+>           : ^^^^^^^^^^
 >() => { await; } : () => void
+>                 : ^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
 
       propFunc = function () { await; }
 >propFunc : () => void
+>         : ^^^^^^^^^^
 >function () { await; } : () => void
+>                       : ^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
     }
   }
   static {
     class S {
 >S : S
+>  : ^
 
       static method() { await; }
 >method : () => void
+>       : ^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
 
       static get accessor() {
 >accessor : any
+>         : ^^^
 
         await;
 >await : "any"
+>      : ^^^^^
 
         return 1;
 >1 : 1
+>  : ^
       }
       static set accessor(v: any) {
 >accessor : any
+>         : ^^^
 >v : any
+>  : ^^^
 
         await;
 >await : "any"
+>      : ^^^^^
       }
       static propLambda = () => { await; }
 >propLambda : () => void
+>           : ^^^^^^^^^^
 >() => { await; } : () => void
+>                 : ^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
 
       static propFunc = function () { await; }
 >propFunc : () => void
+>         : ^^^^^^^^^^
 >function () { await; } : () => void
+>                       : ^^^^^^^^^^
 >await : "any"
+>      : ^^^^^
     }
   }
 }

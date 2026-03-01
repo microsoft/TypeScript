@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsObjectLiteralHasCheckedKeyof.ts] ////
+
 //// [file.js]
 // @ts-check
 const obj = {
@@ -13,13 +15,14 @@ selected = "z"; // should fail
 
 
 //// [file.js]
+"use strict";
 // @ts-check
-var obj = {
+const obj = {
     x: 1,
     y: 2
 };
 /**
  * @type {keyof typeof obj}
  */
-var selected = "x";
+let selected = "x";
 selected = "z"; // should fail

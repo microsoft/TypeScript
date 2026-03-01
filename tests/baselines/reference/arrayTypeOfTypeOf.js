@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts] ////
+
 //// [arrayTypeOfTypeOf.ts]
 // array type cannot use typeof.
 
@@ -8,6 +10,7 @@ var xs3: typeof Array<number>;
 var xs4: typeof Array<typeof x>;
 
 //// [arrayTypeOfTypeOf.js]
+"use strict";
 // array type cannot use typeof.
 var x = 1;
 var xs; // Not an error.  This is equivalent to Array<typeof x>

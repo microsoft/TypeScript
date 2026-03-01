@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of20.ts] ////
+
 //// [for-of20.ts]
 class Foo { }
 class FooIterator {
@@ -17,6 +19,7 @@ for (let v of new FooIterator) {
 }
 
 //// [for-of20.js]
+"use strict";
 class Foo {
 }
 class FooIterator {

@@ -1,44 +1,70 @@
-=== tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts ===
+//// [tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts] ////
+
+=== modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts ===
 var s = Symbol();
 >s : symbol
+>  : ^^^^^^
 >Symbol() : symbol
+>         : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var t = {};
 >t : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 var p = new Proxy(t, {});
 >p : {}
+>  : ^^
 >new Proxy(t, {}) : {}
+>                 : ^^
 >Proxy : ProxyConstructor
+>      : ^^^^^^^^^^^^^^^^
 >t : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 Reflect.ownKeys({});
 >Reflect.ownKeys({}) : (string | symbol)[]
+>                    : ^^^^^^^^^^^^^^^^^^^
 >Reflect.ownKeys : (target: object) => (string | symbol)[]
+>                : ^      ^^      ^^^^^                   
 >Reflect : typeof Reflect
+>        : ^^^^^^^^^^^^^^
 >ownKeys : (target: object) => (string | symbol)[]
+>        : ^      ^^      ^^^^^                   
 >{} : {}
+>   : ^^
 
 function* idGen() {
 >idGen : () => Generator<number, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let i = 10;
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     while (i < 20) {
 >i < 20 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
         yield i + 2;
 >yield i + 2 : any
 >i + 2 : number
+>      : ^^^^^^
 >i : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
     }
 }
 

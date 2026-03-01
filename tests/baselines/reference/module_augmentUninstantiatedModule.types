@@ -1,6 +1,9 @@
-=== tests/cases/compiler/module_augmentUninstantiatedModule.ts ===
+//// [tests/cases/compiler/module_augmentUninstantiatedModule.ts] ////
+
+=== module_augmentUninstantiatedModule.ts ===
 declare module "foo" {
 >"foo" : typeof import("foo")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
    namespace M {}
    var M;
@@ -8,10 +11,12 @@ declare module "foo" {
 
    export = M;
 >M : any
+>  : ^^^
 }
 
 declare module "bar" {
 >"bar" : typeof import("bar")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     module "foo" {}
 >"foo" : any

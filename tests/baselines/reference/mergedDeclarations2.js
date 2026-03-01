@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarations2.ts] ////
+
 //// [mergedDeclarations2.ts]
 enum Foo {
     b
@@ -6,11 +8,12 @@ enum Foo {
     a = b
 }
 
-module Foo {
+namespace Foo {
     export var x = b
 }
 
 //// [mergedDeclarations2.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo[Foo["b"] = 0] = "b";

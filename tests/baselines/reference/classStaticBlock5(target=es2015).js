@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts] ////
+
 //// [classStaticBlock5.ts]
 class B {
     static a = 1;
@@ -17,6 +19,7 @@ class C extends B {
 
 
 //// [classStaticBlock5.js]
+"use strict";
 var _a, _b;
 class B {
 }

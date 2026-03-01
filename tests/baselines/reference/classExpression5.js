@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classExpressions/classExpression5.ts] ////
+
 //// [classExpression5.ts]
 new class {
     hi() {
@@ -6,11 +8,9 @@ new class {
 }().hi();
 
 //// [classExpression5.js]
-new /** @class */ (function () {
-    function class_1() {
-    }
-    class_1.prototype.hi = function () {
+"use strict";
+new class {
+    hi() {
         return "Hi!";
-    };
-    return class_1;
-}())().hi();
+    }
+}().hi();

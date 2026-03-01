@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tupleTypes.ts] ////
+
 //// [tupleTypes.ts]
 var v1: [];  // Error
 var v2: [number];
@@ -67,6 +69,7 @@ b4.length = 0;
 
 
 //// [tupleTypes.js]
+"use strict";
 var v1; // Error
 var v2;
 var v3;
@@ -83,8 +86,8 @@ t = [1]; // Error
 t = [1, "hello"]; // Ok
 t = ["hello", 1]; // Error
 t = [1, "hello", 2]; // Error
-var tf = ["hello", function (x) { return x.length; }];
-var ff1 = ff("hello", ["foo", function (x) { return x.length; }]);
+var tf = ["hello", x => x.length];
+var ff1 = ff("hello", ["foo", x => x.length]);
 var ff1;
 function tuple2(item0, item1) {
     return [item0, item1];

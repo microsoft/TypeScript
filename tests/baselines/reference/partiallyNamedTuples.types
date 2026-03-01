@@ -1,0 +1,156 @@
+//// [tests/cases/conformance/types/tuple/named/partiallyNamedTuples.ts] ////
+
+=== partiallyNamedTuples.ts ===
+type NamedAndAnonymous = [a: string, number];
+>NamedAndAnonymous : NamedAndAnonymous
+>                  : ^^^^^^^^^^^^^^^^^
+
+function fa1(...args: NamedAndAnonymous) {}
+>fa1 : (a: string, args_1: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : NamedAndAnonymous
+>     : ^^^^^^^^^^^^^^^^^
+
+function fa2(a: NamedAndAnonymous, ...args: NamedAndAnonymous) {}
+>fa2 : (a: NamedAndAnonymous, a: string, args_1: number) => void
+>    : ^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : NamedAndAnonymous
+>  : ^^^^^^^^^^^^^^^^^
+>args : NamedAndAnonymous
+>     : ^^^^^^^^^^^^^^^^^
+
+type NamedAnonymousMixed = [a: string, number, c: number, NamedAndAnonymous];
+>NamedAnonymousMixed : NamedAnonymousMixed
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+function fb1(...args: NamedAnonymousMixed) {}
+>fb1 : (a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>args : NamedAnonymousMixed
+>     : ^^^^^^^^^^^^^^^^^^^
+
+function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
+>fb2 : (a: NamedAnonymousMixed, a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
+>    : ^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : NamedAnonymousMixed
+>  : ^^^^^^^^^^^^^^^^^^^
+>args : NamedAnonymousMixed
+>     : ^^^^^^^^^^^^^^^^^^^
+
+function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
+>fb3 : (a: NamedAnonymousMixed, a: string, args_1: number) => void
+>    : ^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : NamedAnonymousMixed
+>  : ^^^^^^^^^^^^^^^^^^^
+>args : NamedAndAnonymous
+>     : ^^^^^^^^^^^^^^^^^
+
+type ToAnonymousTuple<T extends unknown[]> = {
+>ToAnonymousTuple : ToAnonymousTuple<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof T]: [K, T[K], keyof T, T];
+};
+
+type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
+>AnonymousToAnonymous : [["0", boolean, keyof [boolean, number], [boolean, number]], ["1", number, keyof [boolean, number], [boolean, number]]]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type MixedToAnonymous = ToAnonymousTuple<[boolean, second: number]>;
+>MixedToAnonymous : [["0", boolean, keyof [boolean, second: number], [boolean, second: number]], second: ["1", number, keyof [boolean, second: number], [boolean, second: number]]]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type NamedToAnonymous = ToAnonymousTuple<[first: boolean, second: number]>;
+>NamedToAnonymous : [first: ["0", boolean, keyof [first: boolean, second: number], [first: boolean, second: number]], second: ["1", number, keyof [first: boolean, second: number], [first: boolean, second: number]]]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type ToMixedTuple<T extends unknown[]> = {
+>ToMixedTuple : ToMixedTuple<T>
+>             : ^^^^^^^^^^^^^^^
+
+  [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
+};
+
+type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
+>AnonymousToMixed : [["0", second: boolean, keyof [boolean, number], fourth: [boolean, number]], ["1", second: number, keyof [boolean, number], fourth: [boolean, number]]]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type MixedToMixed = ToMixedTuple<[boolean, second: number]>;
+>MixedToMixed : [["0", second: boolean, keyof [boolean, second: number], fourth: [boolean, second: number]], second: ["1", second: number, keyof [boolean, second: number], fourth: [boolean, second: number]]]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type NamedToMixed = ToMixedTuple<[first: boolean, second: number]>;
+>NamedToMixed : [first: ["0", second: boolean, keyof [first: boolean, second: number], fourth: [first: boolean, second: number]], second: ["1", second: number, keyof [first: boolean, second: number], fourth: [first: boolean, second: number]]]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type MixedSpread = [first: boolean, ...[second: string]];
+>MixedSpread : [first: boolean, second: string]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type ConditionalTuple = [
+>ConditionalTuple : [first: boolean, second: string]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  first: boolean,
+  ...(0 extends 0 ? [second: string] : [])
+];
+
+type AddMixedConditional<T> = [
+>AddMixedConditional : [first: boolean, null, third: T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  first: boolean,
+  null,
+  third: T extends number ? "a" : "b",
+  ...(T extends 0 ? [fourth: "c"] : [])
+];
+
+type AddMixedConditionalBoolean = AddMixedConditional<boolean>;
+>AddMixedConditionalBoolean : [first: boolean, null, third: "b"]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type AddMixedConditionalLiteral = AddMixedConditional<0>;
+>AddMixedConditionalLiteral : [first: boolean, null, third: "a", fourth: "c"]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
+>AddMixedConditionalNumberPrimitive : [first: boolean, null, third: "a"]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function test<T extends readonly unknown[]>(
+>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
+>     : ^ ^^^^^^^^^                  ^^   ^^                                         ^^^^^ 
+
+  arg: [
+>arg : [...{ [K in keyof T]: { type: T[K]; }; }]
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^
+
+    ...{
+      [K in keyof T]: {
+        type: T[K];
+>type : T[K]
+>     : ^^^^
+
+      };
+    }
+  ]
+): T;
+
+declare const input: [first: { type: number }, { type: string }];
+>input : [first: { type: number; }, { type: string; }]
+>      : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+>type : number
+>     : ^^^^^^
+>type : string
+>     : ^^^^^^
+
+const output = test(input);
+>output : [first: number, string]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>test(input) : [first: number, string]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
+>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
+>     : ^ ^^^^^^^^^                  ^^   ^^                                         ^^^^^ 
+>input : [first: { type: number; }, { type: string; }]
+>      : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^
+

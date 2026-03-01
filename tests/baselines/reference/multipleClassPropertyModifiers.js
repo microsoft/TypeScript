@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleClassPropertyModifiers.ts] ////
+
 //// [multipleClassPropertyModifiers.ts]
 class C {
     public static p1;
@@ -7,8 +9,6 @@ class C {
 }
 
 //// [multipleClassPropertyModifiers.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}

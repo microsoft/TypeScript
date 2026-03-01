@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorRecoveryWithDotFollowedByNamespaceKeyword.ts] ////
+
 //// [errorRecoveryWithDotFollowedByNamespaceKeyword.ts]
 namespace A {
     function foo() {
@@ -10,13 +12,14 @@ namespace A {
 }
 
 //// [errorRecoveryWithDotFollowedByNamespaceKeyword.js]
+"use strict";
 var A;
 (function (A) {
     function foo() {
         if (true) {
             B.
             ;
-            var B = void 0;
+            let B;
             (function (B) {
                 function baz() { }
                 B.baz = baz;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringTempOccursAfterPrologue.ts] ////
+
 //// [destructuringTempOccursAfterPrologue.ts]
 function test(p: any) {
     'use strict';
@@ -6,9 +8,9 @@ function test(p: any) {
 }
 
 //// [destructuringTempOccursAfterPrologue.js]
+"use strict";
 function test(p) {
     'use strict';
     'use strong';
-    var _a;
-    p = (_a = p, p = _a.prop, _a);
+    p = { prop: p } = p;
 }

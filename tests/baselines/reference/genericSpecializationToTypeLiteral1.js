@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializationToTypeLiteral1.ts] ////
+
 //// [genericSpecializationToTypeLiteral1.ts]
 interface IEnumerable<T> {
 
@@ -29,3 +31,4 @@ interface IDictionary<TKey, TValue> {
 }
 
 //// [genericSpecializationToTypeLiteral1.js]
+"use strict";

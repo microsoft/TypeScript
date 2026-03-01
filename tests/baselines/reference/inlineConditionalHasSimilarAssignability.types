@@ -1,51 +1,77 @@
-=== tests/cases/compiler/inlineConditionalHasSimilarAssignability.ts ===
+//// [tests/cases/compiler/inlineConditionalHasSimilarAssignability.ts] ////
+
+=== inlineConditionalHasSimilarAssignability.ts ===
 type MyExtract<T, U> = T extends U ? T : never
 >MyExtract : MyExtract<T, U>
+>          : ^^^^^^^^^^^^^^^
 
 function foo<T>(a: T) {
 >foo : <T>(a: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
   const b: Extract<any[], T> = 0 as any;
 >b : Extract<any[], T>
+>  : ^^^^^^^^^^^^^^^^^
 >0 as any : any
 >0 : 0
+>  : ^
 
   a = b; // ok
 >a = b : Extract<any[], T>
+>      : ^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 >b : Extract<any[], T>
+>  : ^^^^^^^^^^^^^^^^^
 
   const c: (any[] extends T ? any[] : never) = 0 as any;
 >c : any[] extends T ? any[] : never
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as any : any
 >0 : 0
+>  : ^
 
   a = c;
 >a = c : any[] extends T ? any[] : never
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 >c : any[] extends T ? any[] : never
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   const d: MyExtract<any[], T> = 0 as any;
 >d : MyExtract<any[], T>
+>  : ^^^^^^^^^^^^^^^^^^^
 >0 as any : any
 >0 : 0
+>  : ^
 
   a = d; // ok
 >a = d : MyExtract<any[], T>
+>      : ^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 >d : MyExtract<any[], T>
+>  : ^^^^^^^^^^^^^^^^^^^
 
   type CustomType = any[] extends T ? any[] : never;
 >CustomType : any[] extends T ? any[] : never
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   const e: CustomType = 0 as any;
 >e : any[] extends T ? any[] : never
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as any : any
 >0 : 0
+>  : ^
 
   a = e;
 >a = e : any[] extends T ? any[] : never
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
+>  : ^
 >e : any[] extends T ? any[] : never
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts] ////
+
 //// [genericTypeReferencesRequireTypeArgs.ts]
 class C<T> {
    foo(): T { return null }
@@ -12,12 +14,10 @@ var i2: I<C>; // should be an error
 
 
 //// [genericTypeReferencesRequireTypeArgs.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () { return null; };
-    return C;
-}());
+"use strict";
+class C {
+    foo() { return null; }
+}
 var c1; // error
 var i1; // error
 var c2; // should be an error

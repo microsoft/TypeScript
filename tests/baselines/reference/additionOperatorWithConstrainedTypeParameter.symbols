@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithConstrainedTypeParameter.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithConstrainedTypeParameter.ts] ////
+
+=== additionOperatorWithConstrainedTypeParameter.ts ===
 // test for #17069
 function sum<T extends Record<K, number>, K extends string>(n: number, v: T, k: K) {
 >sum : Symbol(sum, Decl(additionOperatorWithConstrainedTypeParameter.ts, 0, 0))

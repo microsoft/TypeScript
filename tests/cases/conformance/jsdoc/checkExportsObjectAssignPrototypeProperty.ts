@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @allowJs: true
 // @noEmit: true
 // @strict: true

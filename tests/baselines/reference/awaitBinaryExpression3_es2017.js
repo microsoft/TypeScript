@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/awaitBinaryExpression/awaitBinaryExpression3_es2017.ts] ////
+
 //// [awaitBinaryExpression3_es2017.ts]
 declare var a: number;
 declare var p: Promise<number>;
@@ -10,6 +12,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitBinaryExpression3_es2017.js]
+"use strict";
 async function func() {
     before();
     var b = await p + a;

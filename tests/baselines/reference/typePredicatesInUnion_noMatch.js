@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicatesInUnion_noMatch.ts] ////
+
 //// [typePredicatesInUnion_noMatch.ts]
 interface A {
     pred(x: {}, y: {}): x is boolean;
@@ -17,6 +19,7 @@ function f(o: Or, x: {}, y: {}) {
 
 
 //// [typePredicatesInUnion_noMatch.js]
+"use strict";
 function f(o, x, y) {
     if (o.pred(x, y)) {
         x;

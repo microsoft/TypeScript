@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/vueLikeDataAndPropsInference2.ts] ////
+
 //// [vueLikeDataAndPropsInference2.ts]
 interface Instance {
     _instanceBrand: never
@@ -47,17 +49,18 @@ test({
 })
 
 //// [vueLikeDataAndPropsInference2.js]
+"use strict";
 test({
     props: {
         foo: ''
     },
-    data: function () {
+    data() {
         return {
             bar: true
         };
     },
     watch: {
-        foo: function (newVal, oldVal) {
+        foo(newVal, oldVal) {
             this.bar = false;
         }
     }

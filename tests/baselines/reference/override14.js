@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override14.ts] ////
+
 //// [override14.ts]
 class Foo {
     property = 1
@@ -9,6 +11,7 @@ class SubFoo extends Foo {
 
 
 //// [override14.js]
+"use strict";
 class Foo {
     property = 1;
 }

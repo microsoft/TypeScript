@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newExpressionWithCast.ts] ////
+
 //// [newExpressionWithCast.ts]
 function Test() { }
 // valid but error with noImplicitAny
@@ -14,6 +16,7 @@ var test3 = new (<any>Test3)();
 
 
 //// [newExpressionWithCast.js]
+"use strict";
 function Test() { }
 // valid but error with noImplicitAny
 var test = new Test();

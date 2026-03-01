@@ -1,305 +1,454 @@
-=== tests/cases/conformance/types/conditional/conditionalTypes2.ts ===
+//// [tests/cases/conformance/types/conditional/conditionalTypes2.ts] ////
+
+=== conditionalTypes2.ts ===
 interface Covariant<T> {
     foo: T extends string ? T : number;
 >foo : T extends string ? T : number
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface Contravariant<T> {
     foo: T extends string ? keyof T : number;
 >foo : T extends string ? keyof T : number
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 interface Invariant<T> {
     foo: T extends string ? keyof T : T;
 >foo : T extends string ? keyof T : T
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 >f1 : <A, B extends A>(a: Covariant<A>, b: Covariant<B>) => void
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^            ^^ ^^            ^^^^^^^^^
 >a : Covariant<A>
+>  : ^^^^^^^^^^^^
 >b : Covariant<B>
+>  : ^^^^^^^^^^^^
 
     a = b;
 >a = b : Covariant<B>
+>      : ^^^^^^^^^^^^
 >a : Covariant<A>
+>  : ^^^^^^^^^^^^
 >b : Covariant<B>
+>  : ^^^^^^^^^^^^
 
     b = a;  // Error
 >b = a : Covariant<A>
+>      : ^^^^^^^^^^^^
 >b : Covariant<B>
+>  : ^^^^^^^^^^^^
 >a : Covariant<A>
+>  : ^^^^^^^^^^^^
 }
 
 function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 >f2 : <A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) => void
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^                ^^ ^^                ^^^^^^^^^
 >a : Contravariant<A>
+>  : ^^^^^^^^^^^^^^^^
 >b : Contravariant<B>
+>  : ^^^^^^^^^^^^^^^^
 
     a = b;  // Error
 >a = b : Contravariant<B>
+>      : ^^^^^^^^^^^^^^^^
 >a : Contravariant<A>
+>  : ^^^^^^^^^^^^^^^^
 >b : Contravariant<B>
+>  : ^^^^^^^^^^^^^^^^
 
     b = a;
 >b = a : Contravariant<A>
+>      : ^^^^^^^^^^^^^^^^
 >b : Contravariant<B>
+>  : ^^^^^^^^^^^^^^^^
 >a : Contravariant<A>
+>  : ^^^^^^^^^^^^^^^^
 }
 
 function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 >f3 : <A, B extends A>(a: Invariant<A>, b: Invariant<B>) => void
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^            ^^ ^^            ^^^^^^^^^
 >a : Invariant<A>
+>  : ^^^^^^^^^^^^
 >b : Invariant<B>
+>  : ^^^^^^^^^^^^
 
     a = b;  // Error
 >a = b : Invariant<B>
+>      : ^^^^^^^^^^^^
 >a : Invariant<A>
+>  : ^^^^^^^^^^^^
 >b : Invariant<B>
+>  : ^^^^^^^^^^^^
 
     b = a;  // Error
 >b = a : Invariant<A>
+>      : ^^^^^^^^^^^^
 >b : Invariant<B>
+>  : ^^^^^^^^^^^^
 >a : Invariant<A>
+>  : ^^^^^^^^^^^^
 }
 
 // Extract<T, Function> is a T that is known to be a Function
 function isFunction<T>(value: T): value is Extract<T, Function> {
 >isFunction : <T>(value: T) => value is Extract<T, Function>
+>           : ^ ^^     ^^ ^^^^^                             
 >value : T
+>      : ^
 
     return typeof value === "function";
 >typeof value === "function" : boolean
+>                            : ^^^^^^^
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
+>      : ^
 >"function" : "function"
+>           : ^^^^^^^^^^
 }
 
 function getFunction<T>(item: T) {
 >getFunction : <T>(item: T) => Extract<T, Function>
+>            : ^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : T
+>     : ^
 
     if (isFunction(item)) {
 >isFunction(item) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>                 : ^^^^^^^
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
+>           : ^^^^^^     ^^   ^^^^^                               
 >item : T
+>     : ^
 
         return item;
 >item : Extract<T, Function>
+>     : ^^^^^^^^^^^^^^^^^^^^
     }
     throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 }
 
 function f10<T>(x: T) {
 >f10 : <T>(x: T) => void
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     if (isFunction(x)) {
 >isFunction(x) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>              : ^^^^^^^
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
+>           : ^^^^^^     ^^   ^^^^^                               
 >x : T
+>  : ^
 
         const f: Function = x;
 >f : Function
+>  : ^^^^^^^^
 >x : Extract<T, Function>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
         const t: T = x;
 >t : T
+>  : ^
 >x : Extract<T, Function>
+>  : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f11(x: string | (() => string) | undefined) {
 >f11 : (x: string | (() => string) | undefined) => void
+>    : ^ ^^                                   ^^^^^^^^^
 >x : string | (() => string) | undefined
+>  : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 
     if (isFunction(x)) {
 >isFunction(x) : boolean
+>              : ^^^^^^^
 >isFunction : <T>(value: T) => value is Extract<T, Function>
+>           : ^ ^^     ^^ ^^^^^                             
 >x : string | (() => string) | undefined
+>  : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 
         x();
 >x() : string
+>    : ^^^^^^
 >x : () => string
+>  : ^^^^^^      
     }
 }
 
 function f12(x: string | (() => string) | undefined) {
 >f12 : (x: string | (() => string) | undefined) => void
+>    : ^ ^^                                   ^^^^^^^^^
 >x : string | (() => string) | undefined
+>  : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 
     const f = getFunction(x);  // () => string
 >f : () => string
+>  : ^^^^^^      
 >getFunction(x) : () => string
+>               : ^^^^^^      
 >getFunction : <T>(item: T) => Extract<T, Function>
+>            : ^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | (() => string) | undefined
+>  : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 
     f();
 >f() : string
+>    : ^^^^^^
 >f : () => string
+>  : ^^^^^^      
 }
 
 type Foo = { foo: string };
->Foo : { foo: string; }
+>Foo : Foo
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 
 type Bar = { bar: string };
->Bar : { bar: string; }
+>Bar : Bar
+>    : ^^^
 >bar : string
+>    : ^^^^^^
 
 declare function fooBar(x: { foo: string, bar: string }): void;
->fooBar : (x: {    foo: string;    bar: string;}) => void
+>fooBar : (x: { foo: string; bar: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >x : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 declare function fooBat(x: { foo: string, bat: string }): void;
->fooBat : (x: {    foo: string;    bat: string;}) => void
+>fooBat : (x: { foo: string; bat: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >x : { foo: string; bat: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 >bat : string
+>    : ^^^^^^
 
 type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
 >Extract2 : Extract2<T, U, V>
+>         : ^^^^^^^^^^^^^^^^^
 
 function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
 >f20 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
+>    : ^ ^^ ^^                             ^^ ^^                     ^^ ^^                     ^^^^^^^^^
 >x : Extract<Extract<T, Foo>, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : Extract<T, Foo & Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >z : Extract2<T, Foo, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     fooBar(x);
 >fooBar(x) : void
+>          : ^^^^
 >fooBar : (x: { foo: string; bar: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >x : Extract<Extract<T, Foo>, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fooBar(y);
 >fooBar(y) : void
+>          : ^^^^
 >fooBar : (x: { foo: string; bar: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >y : Extract<T, Foo & Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     fooBar(z);
 >fooBar(z) : void
+>          : ^^^^
 >fooBar : (x: { foo: string; bar: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >z : Extract2<T, Foo, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
 >f21 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
+>    : ^ ^^ ^^                             ^^ ^^                     ^^ ^^                     ^^^^^^^^^
 >x : Extract<Extract<T, Foo>, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : Extract<T, Foo & Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >z : Extract2<T, Foo, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     fooBat(x);  // Error
 >fooBat(x) : void
+>          : ^^^^
 >fooBat : (x: { foo: string; bat: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >x : Extract<Extract<T, Foo>, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fooBat(y);  // Error
 >fooBat(y) : void
+>          : ^^^^
 >fooBat : (x: { foo: string; bat: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >y : Extract<T, Foo & Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     fooBat(z);  // Error
 >fooBat(z) : void
+>          : ^^^^
 >fooBat : (x: { foo: string; bat: string; }) => void
+>       : ^ ^^                             ^^^^^    
 >z : Extract2<T, Foo, Bar>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repros from #22860
 
 class Opt<T> {
 >Opt : Opt<T>
+>    : ^^^^^^
 
     toVector(): Vector<T> {
 >toVector : () => Vector<T>
+>         : ^^^^^^         
 
         return <any>undefined;
 ><any>undefined : any
+>               : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 }
 
 interface Seq<T> {
     tail(): Opt<Seq<T>>;
 >tail : () => Opt<Seq<T>>
+>     : ^^^^^^           
 }
 
 class Vector<T> implements Seq<T> {
 >Vector : Vector<T>
+>       : ^^^^^^^^^
 
     tail(): Opt<Vector<T>> {
 >tail : () => Opt<Vector<T>>
+>     : ^^^^^^              
 
         return <any>undefined;
 ><any>undefined : any
+>               : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>           : ^^^ ^^^^^^^^^ ^^         ^^                ^^^                                  ^^^         ^^                 ^^^                      ^^^
 >predicate : (v: T) => v is U
+>          : ^ ^^ ^^^^^      
 >v : T
+>  : ^
 
     partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>           : ^^^ ^^^^^^^^^ ^^         ^^                ^^^                                  ^^^         ^^                 ^^^                      ^^^
 >predicate : (x: T) => boolean
+>          : ^ ^^ ^^^^^       
 >x : T
+>  : ^
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
->partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>partition2 : { <U_1 extends T>(predicate: (v: T) => v is U_1): [Vector<U_1>, Vector<Exclude<T, U_1>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>           : ^^^^^^^^^^^^^^^ ^^         ^^                  ^^^                                      ^^^         ^^                 ^^^                      ^^^
 >predicate : (v: T) => boolean
+>          : ^ ^^ ^^^^^       
 >v : T
+>  : ^
 
         return <any>undefined;
 ><any>undefined : any
+>               : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 }
 
 interface A1<T> {
     bat: B1<A1<T>>;
 >bat : B1<A1<T>>
+>    : ^^^^^^^^^
 }
 
 interface B1<T> extends A1<T> {
     bat: B1<B1<T>>;
 >bat : B1<B1<T>>
+>    : ^^^^^^^^^
 
     boom: T extends any ? true : true
 >boom : T extends any ? true : true
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 }
 
 // Repro from #22899
 
 declare function toString1(value: object | Function): string ;
 >toString1 : (value: object | Function) => string
+>          : ^     ^^                 ^^^^^      
 >value : object | Function
+>      : ^^^^^^^^^^^^^^^^^
 
 declare function toString2(value: Function): string ;
 >toString2 : (value: Function) => string
+>          : ^     ^^        ^^^^^      
 >value : Function
+>      : ^^^^^^^^
 
 function foo<T>(value: T) {
 >foo : <T>(value: T) => void
+>    : ^ ^^     ^^ ^^^^^^^^^
 >value : T
+>      : ^
 
     if (isFunction(value)) {
 >isFunction(value) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>                  : ^^^^^^^
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
+>           : ^^^^^^     ^^   ^^^^^                               
 >value : T
+>      : ^
 
         toString1(value);
 >toString1(value) : string
+>                 : ^^^^^^
 >toString1 : (value: object | Function) => string
+>          : ^     ^^                 ^^^^^      
 >value : Extract<T, Function>
+>      : ^^^^^^^^^^^^^^^^^^^^
 
         toString2(value);
 >toString2(value) : string
+>                 : ^^^^^^
 >toString2 : (value: Function) => string
+>          : ^     ^^        ^^^^^      
 >value : Extract<T, Function>
+>      : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -307,6 +456,7 @@ function foo<T>(value: T) {
 
 type A<T, V, E> =
 >A : A<T, V, E>
+>  : ^^^^^^^^^^
 
   T extends object
     ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
@@ -314,6 +464,7 @@ type A<T, V, E> =
 
 type B<T, V> =
 >B : B<T, V>
+>  : ^^^^^^^
 
   T extends object
     ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
@@ -321,6 +472,7 @@ type B<T, V> =
 
 type C<T, V, E> =
 >C : C<T, V, E>
+>  : ^^^^^^^^^^
 
   { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
 
@@ -328,16 +480,19 @@ type C<T, V, E> =
 
 type A2<T, V, E> =
 >A2 : A2<T, V, E>
+>   : ^^^^^^^^^^^
 
     T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
 
 type B2<T, V> =
 >B2 : B2<T, V>
+>   : ^^^^^^^^
 
     T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
 
 type C2<T, V, E> =
 >C2 : C2<T, V, E>
+>   : ^^^^^^^^^^^
 
     T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
 
@@ -345,162 +500,218 @@ type C2<T, V, E> =
 
 type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
 >MaybeTrue : MaybeTrue<T>
+>          : ^^^^^^^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 type T0 = MaybeTrue<{ b: never }>     // "no"
 >T0 : "no"
+>   : ^^^^
 >b : never
+>  : ^^^^^
 
 type T1 = MaybeTrue<{ b: false }>;    // "no"
 >T1 : "no"
+>   : ^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 
 type T2 = MaybeTrue<{ b: true }>;     // "yes"
 >T2 : "yes"
+>   : ^^^^^
 >b : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
 >T3 : "yes"
+>   : ^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 // Repro from #28824
 
 type Union = 'a' | 'b';
->Union : "b" | "a"
+>Union : Union
+>      : ^^^^^
 
 type Product<A extends Union, B> = { f1: A, f2: B};
 >Product : Product<A, B>
+>        : ^^^^^^^^^^^^^
 >f1 : A
+>   : ^
 >f2 : B
+>   : ^
 
 type ProductUnion = Product<'a', 0> | Product<'b', 1>;
->ProductUnion : Product<"a", 0> | Product<"b", 1>
+>ProductUnion : ProductUnion
+>             : ^^^^^^^^^^^^
 
 // {a: "b"; b: "a"}
 type UnionComplement = {
->UnionComplement : { b: "a"; a: "b"; }
+>UnionComplement : UnionComplement
+>                : ^^^^^^^^^^^^^^^
 
   [K in Union]: Exclude<Union, K>
 };
 type UCA = UnionComplement['a'];
 >UCA : "b"
+>    : ^^^
 
 type UCB = UnionComplement['b'];
 >UCB : "a"
+>    : ^^^
 
 // {a: "a"; b: "b"}
 type UnionComplementComplement = {
->UnionComplementComplement : { b: "b"; a: "a"; }
+>UnionComplementComplement : UnionComplementComplement
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [K in Union]: Exclude<Union, Exclude<Union, K>>
 };
 type UCCA = UnionComplementComplement['a'];
 >UCCA : "a"
+>     : ^^^
 
 type UCCB = UnionComplementComplement['b'];
 >UCCB : "b"
+>     : ^^^
 
 // {a: Product<'b', 1>; b: Product<'a', 0>}
 type ProductComplement = {
->ProductComplement : { b: Product<"a", 0>; a: Product<"b", 1>; }
+>ProductComplement : ProductComplement
+>                  : ^^^^^^^^^^^^^^^^^
 
   [K in Union]: Exclude<ProductUnion, { f1: K }>
 >f1 : K
+>   : ^
 
 };
 type PCA = ProductComplement['a'];
 >PCA : Product<"b", 1>
+>    : ^^^^^^^^^^^^^^^
 
 type PCB = ProductComplement['b'];
 >PCB : Product<"a", 0>
+>    : ^^^^^^^^^^^^^^^
 
 // {a: Product<'a', 0>; b: Product<'b', 1>}
 type ProductComplementComplement = {
->ProductComplementComplement : { b: Product<"b", 1>; a: Product<"a", 0>; }
+>ProductComplementComplement : ProductComplementComplement
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
 >f1 : K
+>   : ^
 
 };
 type PCCA = ProductComplementComplement['a'];
 >PCCA : Product<"a", 0>
+>     : ^^^^^^^^^^^^^^^
 
 type PCCB = ProductComplementComplement['b'];
 >PCCB : Product<"b", 1>
+>     : ^^^^^^^^^^^^^^^
 
 // Repro from #31326
 
 type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
 >Hmm : Hmm<T, U>
+>    : ^^^^^^^^^
 
 type What = Hmm<{}, { a: string }>
 >What : { a: number; }
+>     : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 const w: What = { a: 4 };
 >w : { a: number; }
+>  : ^^^^^^^^^^^^^^
 >{ a: 4 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
 // Repro from #33568
 
 declare function save(_response: IRootResponse<string>): void;
 >save : (_response: IRootResponse<string>) => void
+>     : ^         ^^                     ^^^^^    
 >_response : IResponse<string>
+>          : ^^^^^^^^^^^^^^^^^
 
 exportCommand(save);
 >exportCommand(save) : void
+>                    : ^^^^
 >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
->save : (_response: IResponse<string>) => void
+>              : ^         ^^              ^^                          ^^^^^    
+>save : (_response: IRootResponse<string>) => void
+>     : ^         ^^                     ^^^^^    
 
 declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
 >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
+>              : ^         ^^              ^^                          ^^^^^    
 >functionToCall : IExportCallback<TResponse>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface IExportCallback<TResponse> {
 	(response: IRootResponse<TResponse>): void;
 >response : IRootResponse<TResponse>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type IRootResponse<TResponse> =
 >IRootResponse : IRootResponse<TResponse>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 	TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
 
 interface IRecord {
 	readonly Id: string;
 >Id : string
+>   : ^^^^^^
 }
 
 declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
 >IRecordResponse : IRecordResponse<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
 	sendRecord(): void;
 >sendRecord : () => void
+>           : ^^^^^^    
 
 };
 
 declare type IResponse<T> = {
 >IResponse : IResponse<T>
+>          : ^^^^^^^^^^^^
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
 >sendValue : (name: keyof GetAllPropertiesOfType<T, string>) => void
+>          : ^    ^^                                       ^^^^^    
 >name : GetPropertyNamesOfType<Required<T>, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 declare type GetPropertyNamesOfType<T, RestrictToType> = {
 >GetPropertyNamesOfType : GetPropertyNamesOfType<T, RestrictToType>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
 }[Extract<keyof T, string>];
 
 declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 >GetAllPropertiesOfType : GetAllPropertiesOfType<T, RestrictToType>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	T,
 	GetPropertyNamesOfType<Required<T>, RestrictToType>
@@ -510,34 +721,53 @@ declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 
 declare function ff(x: Foo3<string>): void;
 >ff : (x: Foo3<string>) => void
+>   : ^ ^^            ^^^^^    
 >x : { x: string; }
+>  : ^^^^^^^^^^^^^^
 
 declare function gg<T>(f: (x: Foo3<T>) => void): void;
 >gg : <T>(f: (x: Foo3<T>) => void) => void
+>   : ^ ^^ ^^                    ^^^^^    
 >f : (x: Foo3<T>) => void
+>  : ^ ^^       ^^^^^    
 >x : Foo3<T>
+>  : ^^^^^^^
 
 type Foo3<T> = T extends number ? { n: T } : { x: T };
 >Foo3 : Foo3<T>
+>     : ^^^^^^^
 >n : T
+>  : ^
 >x : T
+>  : ^
 
 gg(ff);
 >gg(ff) : void
+>       : ^^^^
 >gg : <T>(f: (x: Foo3<T>) => void) => void
->ff : (x: { x: string; }) => void
+>   : ^ ^^ ^^                    ^^^^^    
+>ff : (x: Foo3<string>) => void
+>   : ^ ^^            ^^^^^    
 
 // Repro from #41613
 
 type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } } ? true : false;
 >Wat : Wat<K>
+>    : ^^^^^^
 >x : { y: 0; z: 1; }
+>  : ^^^^^ ^^^^^ ^^^
 >y : 0
+>  : ^
 >z : 1
+>  : ^
 >x : { [P in K]: 0; }
+>  : ^^^ ^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
  
 type Huh = Wat<"y">;  // true
 >Huh : true
+>    : ^^^^
 

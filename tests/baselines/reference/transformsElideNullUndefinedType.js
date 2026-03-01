@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transformsElideNullUndefinedType.ts] ////
+
 //// [transformsElideNullUndefinedType.ts]
 var v0: null;
 var v1: undefined;
@@ -59,6 +61,7 @@ new D<null>();
 new D<undefined>();
 
 //// [transformsElideNullUndefinedType.js]
+"use strict";
 var v0;
 var v1;
 function f0() { return null; }

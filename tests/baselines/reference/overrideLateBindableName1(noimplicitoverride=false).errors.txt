@@ -1,0 +1,30 @@
+overrideLateBindableName1.ts(22,12): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'Base3'.
+
+
+==== overrideLateBindableName1.ts (1 errors) ====
+    const prop = "foo"
+    
+    class Base1 {
+      [prop]() {}
+    }
+    
+    class Derived1 extends Base1 {
+      override [prop]() {}
+    }
+    
+    class Base2 {
+      [prop]() {}
+    }
+    
+    class Derived2 extends Base2 {
+      [prop]() {}
+    }
+    
+    class Base3 {}
+    
+    class Derived3 extends Base3 {
+      override [prop]() {}
+               ~~~~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'Base3'.
+    }
+    

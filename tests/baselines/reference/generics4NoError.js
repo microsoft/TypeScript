@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics4NoError.ts] ////
+
 //// [generics4NoError.ts]
 class C<T> { private x: T; }
 interface X { f(): string; }
@@ -7,11 +9,9 @@ var b: C<Y>;
 
 
 //// [generics4NoError.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var a;
 var b;
 

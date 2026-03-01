@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/castTest.ts] ////
+
 //// [castTest.ts]
 var x : any = 0;
 var z = <number> x;
@@ -32,6 +34,7 @@ var p_cast = <Point> ({
 
 
 //// [castTest.js]
+"use strict";
 var x = 0;
 var z = x;
 var y = x + z;

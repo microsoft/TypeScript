@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty2.ts] ////
+
 //// [accessorsOverrideProperty2.ts]
 class Base {
   x = 1;
@@ -13,6 +15,7 @@ console.log(obj.x); // number
 
 
 //// [accessorsOverrideProperty2.js]
+"use strict";
 class Base {
     x = 1;
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts ===
+//// [tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts] ////
+
+=== unionThisTypeInFunctions.ts ===
 interface Real {
 >Real : Symbol(Real, Decl(unionThisTypeInFunctions.ts, 0, 0))
 

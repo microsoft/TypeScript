@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultTypeAndClass.ts] ////
+
 //// [exportDefaultTypeAndClass.ts]
 export default class Foo {}
 type Bar = {}
@@ -6,10 +8,7 @@ export default Bar
 
 //// [exportDefaultTypeAndClass.js]
 "use strict";
-exports.__esModule = true;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-exports["default"] = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
+class Foo {
+}
+exports.default = Foo;

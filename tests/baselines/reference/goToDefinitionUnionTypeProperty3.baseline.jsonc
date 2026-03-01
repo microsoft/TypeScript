@@ -1,0 +1,23 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty3.ts ===
+// interface Array<T> {
+//     <|[|specialPop|](): T|>
+// }
+// 
+// var strings: string[];
+// var numbers: number[];
+// 
+// var x = (strings || numbers)./*GOTO DEF*/specialPop()
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "specialPop",
+    "containerName": "Array",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

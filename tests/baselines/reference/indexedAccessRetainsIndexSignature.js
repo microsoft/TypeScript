@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessRetainsIndexSignature.ts] ////
+
 //// [indexedAccessRetainsIndexSignature.ts]
 type Diff<T extends keyof any, U extends keyof any> =
     ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T]
@@ -12,7 +14,4 @@ export const o: O = { b: '' }
 
 
 //// [indexedAccessRetainsIndexSignature.js]
-"use strict";
-exports.__esModule = true;
-exports.o = void 0;
-exports.o = { b: '' };
+export const o = { b: '' };

@@ -1,17 +1,28 @@
-=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts ===
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts] ////
+
+=== errorForUsingPropertyOfTypeAsType02.ts ===
 namespace Test1 {
 >Test1 : typeof Test1
+>      : ^^^^^^^^^^^^
 
     function foo<T extends { abc: number }>(x: T) {
 >foo : <T extends { abc: number; }>(x: T) => void
+>    : ^ ^^^^^^^^^                ^^ ^^ ^^^^^^^^^
 >abc : number
+>    : ^^^^^^
 >x : T
+>  : ^
 
         let a: T.abc = x.abc;
 >a : T.abc
+>  : ^^^^^
 >T : any
+>  : ^^^
 >x.abc : number
+>      : ^^^^^^
 >x : T
+>  : ^
 >abc : number
+>    : ^^^^^^
     }
 }

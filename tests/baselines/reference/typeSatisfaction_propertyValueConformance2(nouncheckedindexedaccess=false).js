@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance2.ts] ////
+
 //// [typeSatisfaction_propertyValueConformance2.ts]
 type Facts = { [key: string]: boolean };
 declare function checkTruths(x: Facts): void;
@@ -25,7 +27,8 @@ const x2 = {
 
 
 //// [typeSatisfaction_propertyValueConformance2.js]
-var x = {
+"use strict";
+const x = {
     m: true
 };
 // Should be OK
@@ -34,9 +37,9 @@ checkTruths(x);
 checkM(x);
 console.log(x.z);
 // Should be OK under --noUncheckedIndexedAccess
-var m = x.m;
+const m = x.m;
 // Should be able to detect a failure here
-var x2 = {
+const x2 = {
     m: true,
     s: "false"
 };

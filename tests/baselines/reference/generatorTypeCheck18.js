@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck18.ts] ////
+
 //// [generatorTypeCheck18.ts]
 class Foo { x: number }
 class Baz { z: number }
@@ -7,6 +9,7 @@ function* g(): IterableIterator<Foo> {
 }
 
 //// [generatorTypeCheck18.js]
+"use strict";
 class Foo {
 }
 class Baz {

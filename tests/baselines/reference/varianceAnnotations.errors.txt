@@ -1,72 +1,72 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(9,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+varianceAnnotations.ts(9,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
   Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(18,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+varianceAnnotations.ts(18,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
   Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(28,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+varianceAnnotations.ts(28,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
   Types of property 'f' are incompatible.
     Type '(x: string) => string' is not assignable to type '(x: unknown) => unknown'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(29,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+varianceAnnotations.ts(29,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
   The types returned by 'f(...)' are incompatible between these types.
     Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(33,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(34,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(35,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(35,17): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(36,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(40,17): error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
+varianceAnnotations.ts(33,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(34,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(35,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(35,17): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(36,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(40,17): error TS2636: Type 'Covariant1<super-T>' is not assignable to type 'Covariant1<sub-T>' as implied by variance annotation.
   Types of property 'x' are incompatible.
     Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(44,21): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(46,21): error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
+varianceAnnotations.ts(44,21): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(46,21): error TS2636: Type 'Contravariant2<sub-T>' is not assignable to type 'Contravariant2<super-T>' as implied by variance annotation.
   Types of property 'f' are incompatible.
     Type '(x: sub-T) => void' is not assignable to type '(x: super-T) => void'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(50,17): error TS2636: Type 'Invariant1<super-T>' is not assignable to type 'Invariant1<sub-T>' as implied by variance annotation.
+varianceAnnotations.ts(50,17): error TS2636: Type 'Invariant1<super-T>' is not assignable to type 'Invariant1<sub-T>' as implied by variance annotation.
   The types returned by 'f(...)' are incompatible between these types.
     Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(54,17): error TS2636: Type 'Invariant2<sub-T>' is not assignable to type 'Invariant2<super-T>' as implied by variance annotation.
+varianceAnnotations.ts(54,17): error TS2636: Type 'Invariant2<sub-T>' is not assignable to type 'Invariant2<super-T>' as implied by variance annotation.
   Types of property 'f' are incompatible.
     Type '(x: sub-T) => sub-T' is not assignable to type '(x: super-T) => super-T'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(60,11): error TS2636: Type 'Foo1<super-T>' is not assignable to type 'Foo1<sub-T>' as implied by variance annotation.
+varianceAnnotations.ts(60,11): error TS2636: Type 'Foo1<super-T>' is not assignable to type 'Foo1<sub-T>' as implied by variance annotation.
   Types of property 'x' are incompatible.
     Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(71,11): error TS2636: Type 'Foo2<sub-T>' is not assignable to type 'Foo2<super-T>' as implied by variance annotation.
+varianceAnnotations.ts(71,11): error TS2636: Type 'Foo2<sub-T>' is not assignable to type 'Foo2<super-T>' as implied by variance annotation.
   Types of property 'f' are incompatible.
     Type 'FooFn2<sub-T>' is not assignable to type 'FooFn2<super-T>'.
       Type 'super-T' is not assignable to type 'sub-T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(95,10): error TS1273: 'public' modifier cannot appear on a type parameter
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(96,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(96,17): error TS1030: 'in' modifier already seen.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(97,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(97,17): error TS1030: 'out' modifier already seen.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(98,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(98,14): error TS1029: 'in' modifier must precede 'out' modifier.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(100,21): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(101,21): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(104,5): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(105,5): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(116,1): error TS2322: Type 'Baz<string>' is not assignable to type 'Baz<unknown>'.
+varianceAnnotations.ts(95,10): error TS1273: 'public' modifier cannot appear on a type parameter
+varianceAnnotations.ts(96,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(96,17): error TS1030: 'in' modifier already seen.
+varianceAnnotations.ts(97,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(97,17): error TS1030: 'out' modifier already seen.
+varianceAnnotations.ts(98,10): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
+varianceAnnotations.ts(98,14): error TS1029: 'in' modifier must precede 'out' modifier.
+varianceAnnotations.ts(100,21): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+varianceAnnotations.ts(101,21): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+varianceAnnotations.ts(104,5): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+varianceAnnotations.ts(105,5): error TS1274: 'out' modifier can only appear on a type parameter of a class, interface or type alias
+varianceAnnotations.ts(116,1): error TS2322: Type 'Baz<string>' is not assignable to type 'Baz<unknown>'.
   Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(117,1): error TS2322: Type 'Baz<unknown>' is not assignable to type 'Baz<string>'.
+varianceAnnotations.ts(117,1): error TS2322: Type 'Baz<unknown>' is not assignable to type 'Baz<string>'.
   Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(136,7): error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
+varianceAnnotations.ts(136,7): error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
   Type 'unknown' is not assignable to type 'string'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ type: "PLAY"; value: number; }>' is not assignable to parameter of type 'ActionObject<{ type: "PLAY"; value: number; } | { type: "RESET"; }>'.
+varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ type: "PLAY"; value: number; }>' is not assignable to parameter of type 'ActionObject<{ type: "PLAY"; value: number; } | { type: "RESET"; }>'.
   Types of property 'exec' are incompatible.
     Type '(meta: StateNode<any, { type: "PLAY"; value: number; }>) => void' is not assignable to type '(meta: StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>) => void'.
       Types of parameters 'meta' and 'meta' are incompatible.
         Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
           Types of property '_storedEvent' are incompatible.
             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
-              Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+              Property 'value' is missing in type '{ type: "RESET"; }' but required in type '{ type: "PLAY"; value: number; }'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotations.ts (31 errors) ====
+==== varianceAnnotations.ts (31 errors) ====
     type Covariant<out T> = {
         x: T;
     }
@@ -323,7 +323,8 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotati
 !!! error TS2345:         Type 'StateNode<any, { type: "PLAY"; value: number; } | { type: "RESET"; }>' is not assignable to type 'StateNode<any, { type: "PLAY"; value: number; }>'.
 !!! error TS2345:           Types of property '_storedEvent' are incompatible.
 !!! error TS2345:             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
-!!! error TS2345:               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+!!! error TS2345:               Property 'value' is missing in type '{ type: "RESET"; }' but required in type '{ type: "PLAY"; value: number; }'.
+!!! related TS2728 varianceAnnotations.ts:158:48: 'value' is declared here.
     
     // Repros from #48618
     

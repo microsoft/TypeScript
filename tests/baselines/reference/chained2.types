@@ -1,55 +1,84 @@
+//// [tests/cases/conformance/externalModules/typeOnly/chained2.ts] ////
+
 === /a.ts ===
 class A { a!: string }
 >A : A
+>  : ^
 >a : string
+>  : ^^^^^^
 
 export type { A as default };
 >A : typeof A
+>  : ^^^^^^^^
 >default : A
+>        : ^
 
 === /b.ts ===
 import A from './a';
 >A : typeof A
+>  : ^^^^^^^^
 
 import type { default as B } from './a';
 >default : typeof A
+>        : ^^^^^^^^
 >B : A
+>  : ^
 
 export { A, B };
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A
+>  : ^^^^^^^^
 
 === /c.ts ===
 import * as types from './b';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 export { types as default };
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >default : typeof types
+>        : ^^^^^^^^^^^^
 
 === /d.ts ===
 import types from './c';
 >types : typeof types
+>      : ^^^^^^^^^^^^
 
 new types.A();
 >new types.A() : any
+>              : ^^^
 >types.A : any
+>        : ^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >A : any
+>  : ^^^
 
 new types.B();
 >new types.B() : any
+>              : ^^^
 >types.B : any
+>        : ^^^
 >types : typeof types
+>      : ^^^^^^^^^^^^
 >B : any
+>  : ^^^
 
 const a: types.A = {};
 >a : types.A
+>  : ^^^^^^^
 >types : any
+>      : ^^^
 >{} : {}
+>   : ^^
 
 const b: types.B = {};
 >b : types.A
+>  : ^^^^^^^
 >types : any
+>      : ^^^
 >{} : {}
+>   : ^^
 

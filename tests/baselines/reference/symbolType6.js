@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType6.ts] ////
+
 //// [symbolType6.ts]
 var s = Symbol.for("add");
 var a: any;
@@ -16,6 +18,7 @@ s - 0;
 "" + (s || "");
 
 //// [symbolType6.js]
+"use strict";
 var s = Symbol.for("add");
 var a;
 s + s;

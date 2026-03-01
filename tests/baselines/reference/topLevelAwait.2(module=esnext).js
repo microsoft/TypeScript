@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwait.2.ts] ////
+
 //// [topLevelAwait.2.ts]
 declare namespace foo { const await: any; }
 
@@ -6,5 +8,6 @@ import await = foo.await;
 
 
 //// [topLevelAwait.2.js]
+"use strict";
 // await allowed in import=namespace when not a module
 var await = foo.await;

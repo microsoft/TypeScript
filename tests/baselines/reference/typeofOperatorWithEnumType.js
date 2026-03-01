@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts] ////
+
 //// [typeofOperatorWithEnumType.ts]
 // typeof  operator on enum type
 
@@ -28,6 +30,7 @@ z: typeof ENUM;
 z: typeof ENUM1;
 
 //// [typeofOperatorWithEnumType.js]
+"use strict";
 // typeof  operator on enum type
 var ENUM;
 (function (ENUM) {

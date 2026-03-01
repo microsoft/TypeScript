@@ -1,19 +1,28 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES6.ts] ////
+
+=== computedPropertyNamesSourceMap2_ES6.ts ===
 var v = {
 >v : { hello(): void; readonly goodbye: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    ["hello"]() {        debugger;	},	get ["goodbye"]() {		return 0;	}} : { hello(): void; readonly goodbye: number; }
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ["hello"]() {
 >["hello"] : () => void
+>          : ^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
         debugger;
 	},
 	get ["goodbye"]() {
 >["goodbye"] : number
+>            : ^^^^^^
 >"goodbye" : "goodbye"
+>          : ^^^^^^^^^
 
 		return 0;
 >0 : 0
+>  : ^
 	}
 }

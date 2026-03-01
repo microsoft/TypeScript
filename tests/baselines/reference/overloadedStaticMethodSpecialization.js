@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadedStaticMethodSpecialization.ts] ////
+
 //// [overloadedStaticMethodSpecialization.ts]
 class A<T> {
     static B<S>(v: A<S>): A<S>;
@@ -9,11 +11,9 @@ class A<T> {
 
 
 //// [overloadedStaticMethodSpecialization.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.B = function (v) {
+"use strict";
+class A {
+    static B(v) {
         return null;
-    };
-    return A;
-}());
+    }
+}

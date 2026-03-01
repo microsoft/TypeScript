@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts] ////
+
 //// [classConstructorOverloadsAccessibility.ts]
 class A {
 	public constructor(a: boolean) // error
@@ -33,26 +35,23 @@ class D {
 }
 
 //// [classConstructorOverloadsAccessibility.js]
-var A = /** @class */ (function () {
-    function A() {
+"use strict";
+class A {
+    constructor() {
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
     }
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C() {
+}
+class C {
+    constructor() {
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    constructor() {
     }
-    return D;
-}());
+}
 
 
 //// [classConstructorOverloadsAccessibility.d.ts]

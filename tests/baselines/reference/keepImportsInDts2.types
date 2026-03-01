@@ -1,5 +1,8 @@
-=== tests/cases/compiler/folder/test.ts ===
+//// [tests/cases/compiler/keepImportsInDts2.ts] ////
+
+=== folder/test.ts ===
+
 export {};
-No type information for this code.=== tests/cases/compiler/main.ts ===
+=== main.ts ===
+
 import "./folder/test"
-No type information for this code.

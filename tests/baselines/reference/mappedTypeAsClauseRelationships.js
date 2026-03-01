@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts] ////
+
 //// [mappedTypeAsClauseRelationships.ts]
 // From original issue #45212:
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
@@ -29,13 +31,14 @@ function fun2<T>(val: T) {
 
 
 //// [mappedTypeAsClauseRelationships.js]
+"use strict";
 function fun(val) {
-    var x = val; // Ok
-    var y = val; // Error
+    let x = val; // Ok
+    let y = val; // Error
 }
 function fun2(val) {
-    var x = val; // Ok
-    var y = val; // Ok
-    var z = val; // Error
-    var w = val; // Error
+    let x = val; // Ok
+    let y = val; // Ok
+    let z = val; // Error
+    let w = val; // Error
 }

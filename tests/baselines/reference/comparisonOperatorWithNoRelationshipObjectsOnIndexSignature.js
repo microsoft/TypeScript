@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts] ////
+
 //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts]
 class Base {
     public a: string;
@@ -11,17 +13,17 @@ class C {
     public c: string;
 }
 
-var a1: { [a: string]: string };
-var b1: { [b: string]: number };
+declare var a1: { [a: string]: string };
+declare var b1: { [b: string]: number };
 
-var a2: { [index: string]: Base };
-var b2: { [index: string]: C };
+declare var a2: { [index: string]: Base };
+declare var b2: { [index: string]: C };
 
-var a3: { [index: number]: Base };
-var b3: { [index: number]: C };
+declare var a3: { [index: number]: Base };
+declare var b3: { [index: number]: C };
 
-var a4: { [index: number]: Derived };
-var b4: { [index: string]: Base };
+declare var a4: { [index: number]: Derived };
+declare var b4: { [index: string]: Base };
 
 // operator <
 var r1a1 = a1 < b1;
@@ -112,46 +114,13 @@ var r8b3 = b3 !== a3;
 var r8b4 = b4 !== a4;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Base = /** @class */ (function () {
-    function Base() {
-    }
-    return Base;
-}());
-var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Derived;
-}(Base));
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var a1;
-var b1;
-var a2;
-var b2;
-var a3;
-var b3;
-var a4;
-var b4;
+"use strict";
+class Base {
+}
+class Derived extends Base {
+}
+class C {
+}
 // operator <
 var r1a1 = a1 < b1;
 var r1a2 = a2 < b2;

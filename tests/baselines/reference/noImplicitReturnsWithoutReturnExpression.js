@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsWithoutReturnExpression.ts] ////
+
 //// [noImplicitReturnsWithoutReturnExpression.ts]
 function isMissingReturnExpression(): number {
     return;
@@ -26,6 +28,7 @@ function isMissingReturnExpression5(x) {
 
 
 //// [noImplicitReturnsWithoutReturnExpression.js]
+"use strict";
 function isMissingReturnExpression() {
     return;
 }

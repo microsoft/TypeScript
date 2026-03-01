@@ -1,4 +1,6 @@
-=== tests/cases/compiler/returnInfiniteIntersection.ts ===
+//// [tests/cases/compiler/returnInfiniteIntersection.ts] ////
+
+=== returnInfiniteIntersection.ts ===
 function recursive() {
 >recursive : Symbol(recursive, Decl(returnInfiniteIntersection.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of39.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of39.ts] ////
+
+=== for-of39.ts ===
 var map = new Map([["", true], ["", 0]]);
 >map : Symbol(map, Decl(for-of39.ts, 0, 3))
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -40,7 +40,11 @@ export function srcthing(): void {}
 import * as me from "@this/package";
 me.thing();
 export function srcthing() { }
+//// [index.js]
+export { srcthing as thing } from "./src/thing.js";
 
 
 //// [thing.d.ts]
 export declare function srcthing(): void;
+//// [index.d.ts]
+export { srcthing as thing } from "./src/thing.js";

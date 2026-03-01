@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts] ////
+
 //// [emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts]
 class B<T> {
     constructor(a: T) { }
@@ -11,6 +13,7 @@ class D extends B<number> {
 }
 
 //// [emitClassDeclarationWithExtensionAndTypeArgumentInES6.js]
+"use strict";
 class B {
     constructor(a) { }
 }

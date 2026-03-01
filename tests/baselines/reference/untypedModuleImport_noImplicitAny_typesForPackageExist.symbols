@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_noImplicitAny_typesForPackageExist.ts] ////
+
 === /a.ts ===
 import * as foo from "foo";
 >foo : Symbol(foo, Decl(a.ts, 0, 6))

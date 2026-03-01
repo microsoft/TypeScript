@@ -1,8 +1,8 @@
-tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts(8,7): error TS2559: Type 'XY' has no properties in common with type 'Z'.
-tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts(18,7): error TS2739: Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
+intersectionAsWeakTypeSource.ts(8,7): error TS2559: Type 'XY' has no properties in common with type 'Z'.
+intersectionAsWeakTypeSource.ts(18,7): error TS2739: Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
 
 
-==== tests/cases/conformance/types/intersection/intersectionAsWeakTypeSource.ts (2 errors) ====
+==== intersectionAsWeakTypeSource.ts (2 errors) ====
     interface X { x: string }
     interface Y { y: number }
     interface Z { z?: boolean }

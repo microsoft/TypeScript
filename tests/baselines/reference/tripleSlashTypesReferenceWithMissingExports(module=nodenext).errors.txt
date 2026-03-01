@@ -1,15 +1,15 @@
-tests/cases/compiler/usage.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
+usage.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
 
 
-==== tests/cases/compiler/node_modules/pkg/index.d.ts (0 errors) ====
+==== node_modules/pkg/index.d.ts (0 errors) ====
     interface GlobalThing { a: number }
-==== tests/cases/compiler/node_modules/pkg/package.json (0 errors) ====
+==== node_modules/pkg/package.json (0 errors) ====
     {
         "name": "pkg",
         "types": "index.d.ts",
         "exports": "some-other-thing.js"
     }
-==== tests/cases/compiler/usage.ts (1 errors) ====
+==== usage.ts (1 errors) ====
     /// <reference types="pkg" />
                           ~~~
 !!! error TS2688: Cannot find type definition file for 'pkg'.

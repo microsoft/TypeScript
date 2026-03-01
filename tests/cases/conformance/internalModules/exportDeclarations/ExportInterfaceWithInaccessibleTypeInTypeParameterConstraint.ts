@@ -1,4 +1,6 @@
-module A {
+// @target: es2015
+// @strict: false
+namespace A {
 
     interface Point {
         x: number;

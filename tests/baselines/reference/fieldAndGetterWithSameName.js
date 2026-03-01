@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fieldAndGetterWithSameName.ts] ////
+
 //// [fieldAndGetterWithSameName.ts]
 export class C {
     x: number;
@@ -5,19 +7,10 @@ export class C {
 }
 
 //// [fieldAndGetterWithSameName.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.C = void 0;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        Object.defineProperty(C.prototype, "x", {
-            get: function () { return 1; },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
-    exports.C = C;
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+class C {
+    get x() { return 1; }
+}
+exports.C = C;

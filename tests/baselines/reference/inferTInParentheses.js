@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTInParentheses.ts] ////
+
 //// [inferTInParentheses.ts]
 type F1 = (num: [number]) => void;
 type IsNumber<T extends number> = T;
@@ -15,3 +17,4 @@ type T8 = F1 extends (args: [...((((infer T))))]) => void ? T : never;
 type T9<T> = T extends IsNumber<((((infer N))))> ? true : false;
 
 //// [inferTInParentheses.js]
+"use strict";

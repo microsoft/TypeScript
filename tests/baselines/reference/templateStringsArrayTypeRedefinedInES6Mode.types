@@ -1,26 +1,43 @@
-=== tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts ===
+//// [tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts] ////
+
+=== templateStringsArrayTypeRedefinedInES6Mode.ts ===
 class TemplateStringsArray {
 >TemplateStringsArray : TemplateStringsArray
+>                     : ^^^^^^^^^^^^^^^^^^^^
 }
 
 function f(x: TemplateStringsArray, y: number, z: number) {
 >f : (x: TemplateStringsArray, y: number, z: number) => void
+>  : ^ ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : TemplateStringsArray
+>  : ^^^^^^^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 }
 
 f({}, 10, 10);
 >f({}, 10, 10) : void
+>              : ^^^^
 >f : (x: TemplateStringsArray, y: number, z: number) => void
+>  : ^ ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^
 >{} : {}
+>   : ^^
 >10 : 10
+>   : ^^
 >10 : 10
+>   : ^^
 
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 >f `abcdef${ 1234 }${ 5678 }ghijkl` : void
+>                                   : ^^^^
 >f : (x: TemplateStringsArray, y: number, z: number) => void
+>  : ^ ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^
 >`abcdef${ 1234 }${ 5678 }ghijkl` : string
+>                                 : ^^^^^^
 >1234 : 1234
+>     : ^^^^
 >5678 : 5678
+>     : ^^^^
 

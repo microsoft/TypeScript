@@ -1,19 +1,27 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts] ////
+
+=== classWithTwoConstructorDefinitions.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor() { } // error
     constructor(x) { } // error
 >x : any
+>  : ^^^
 }
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     constructor(x: T) { } // error
 >x : T
+>  : ^
 
     constructor(x: T, y: T) { } // error
 >x : T
+>  : ^
 >y : T
+>  : ^
 }

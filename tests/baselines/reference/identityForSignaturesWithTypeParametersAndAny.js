@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identityForSignaturesWithTypeParametersAndAny.ts] ////
+
 //// [identityForSignaturesWithTypeParametersAndAny.ts]
 var f: <T, U>(x: T, y: U) => T;
 var f: <T, U>(x: any, y: any) => any;
@@ -15,6 +17,7 @@ var j: <T, U>(x: T, y: U) => T;
 var j: <T, U>(x: any, y: any) => string;
 
 //// [identityForSignaturesWithTypeParametersAndAny.js]
+"use strict";
 var f;
 var f;
 var g;

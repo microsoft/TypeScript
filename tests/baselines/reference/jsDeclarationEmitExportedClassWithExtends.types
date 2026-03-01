@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsDeclarationEmitExportedClassWithExtends.ts] ////
+
+=== node_modules/lit/development/index.d.ts ===
+
+export * from "lit-element/lit-element.js";
+=== node_modules/lit-element/development/index.d.ts ===
+
+export * from "./lit-element.js";
+=== node_modules/lit-element/development//lit-element.d.ts ===
+export class LitElement {}
+>LitElement : LitElement
+>           : ^^^^^^^^^^
+
+=== index.js ===
+import { LitElement, LitElement as LitElement2 } from "lit";
+>LitElement : typeof LitElement
+>           : ^^^^^^^^^^^^^^^^^
+>LitElement : typeof LitElement
+>           : ^^^^^^^^^^^^^^^^^
+>LitElement2 : typeof LitElement
+>            : ^^^^^^^^^^^^^^^^^
+
+export class ElementB extends LitElement {}
+>ElementB : ElementB
+>         : ^^^^^^^^
+>LitElement : LitElement
+>           : ^^^^^^^^^^
+
+export class ElementC extends LitElement2 {}
+>ElementC : ElementC
+>         : ^^^^^^^^
+>LitElement2 : LitElement
+>            : ^^^^^^^^^^
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/numericLiteralTypes2.ts] ////
+
 //// [numericLiteralTypes2.ts]
 type A1 = 1;
 type A2 = 1.0;
@@ -140,6 +142,7 @@ function f21(x: Item) {
 }
 
 //// [numericLiteralTypes2.js]
+"use strict";
 function f1() {
     var a = 1;
     var a = 1;

@@ -1,12 +1,12 @@
-tests/cases/compiler/contextualTypeAny.ts(3,38): error TS2322: Type 'string' is not assignable to type 'number'.
+contextualTypeAny.ts(3,38): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/contextualTypeAny.ts (1 errors) ====
+==== contextualTypeAny.ts (1 errors) ====
     var x: any;
     
     var obj: { [s: string]: number } = { p: "", q: x };
                                          ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6501 tests/cases/compiler/contextualTypeAny.ts:3:12: The expected type comes from this index signature.
+!!! related TS6501 contextualTypeAny.ts:3:12: The expected type comes from this index signature.
     
     var arr: number[] = ["", x];

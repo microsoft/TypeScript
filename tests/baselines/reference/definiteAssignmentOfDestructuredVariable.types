@@ -1,37 +1,55 @@
-=== tests/cases/compiler/definiteAssignmentOfDestructuredVariable.ts ===
+//// [tests/cases/compiler/definiteAssignmentOfDestructuredVariable.ts] ////
+
+=== definiteAssignmentOfDestructuredVariable.ts ===
 // https://github.com/Microsoft/TypeScript/issues/20994
 interface Options {
     a?: number | object;
 >a : number | object | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b: () => void;
 >b : () => void
+>  : ^^^^^^    
 }
 
 class C<T extends Options> {
 >C : C<T>
+>  : ^^^^
 
     foo!: { [P in keyof T]: T[P] }
 >foo : { [P in keyof T]: T[P]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         let { a, b } = this.foo;
 >a : T["a"] | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : T["b"]
+>  : ^^^^^^
 >this.foo : { [P in keyof T]: T[P]; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >foo : { [P in keyof T]: T[P]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
         !(a && b);
 >!(a && b) : boolean
+>          : ^^^^^^^
 >(a && b) : T["b"] | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 >a && b : T["b"] | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >a : T["a"] | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : T["b"]
+>  : ^^^^^^
 
         a;
 >a : T["a"] | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsAndObjectSpread2.ts ===
+//// [tests/cases/compiler/unusedLocalsAndObjectSpread2.ts] ////
+
+=== unusedLocalsAndObjectSpread2.ts ===
 declare let props: any;
 >props : Symbol(props, Decl(unusedLocalsAndObjectSpread2.ts, 0, 11))
 

@@ -1,44 +1,71 @@
-=== tests/cases/conformance/types/intersection/intersectionOfUnionNarrowing.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionOfUnionNarrowing.ts] ////
+
+=== intersectionOfUnionNarrowing.ts ===
 interface X {
   a?: { aProp: string };
 >a : { aProp: string; } | undefined
+>  : ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >aProp : string
+>      : ^^^^^^
 
   b?: { bProp: string };
 >b : { bProp: string; } | undefined
+>  : ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >bProp : string
+>      : ^^^^^^
 }
 type AorB = { a: object; b: undefined } | { a: undefined; b: object };
->AorB : { a: object; b: undefined; } | { a: undefined; b: object; }
+>AorB : AorB
+>     : ^^^^
 >a : object
+>  : ^^^^^^
 >b : undefined
+>  : ^^^^^^^^^
 >a : undefined
+>  : ^^^^^^^^^
 >b : object
+>  : ^^^^^^
 
 declare const q: X & AorB;
 >q : X & AorB
+>  : ^^^^^^^^
 
 if (q.a !== undefined) {
 >q.a !== undefined : boolean
+>                  : ^^^^^^^
 >q.a : ({ aProp: string; } & object) | undefined
+>    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >q : X & AorB
+>  : ^^^^^^^^
 >a : ({ aProp: string; } & object) | undefined
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   q.a.aProp;
 >q.a.aProp : string
+>          : ^^^^^^
 >q.a : { aProp: string; } & object
+>    : ^^^^^^^^^      ^^^^^^^^^^^^
 >q : X & { a: object; b: undefined; }
+>  : ^^^^^^^^^      ^^^^^         ^^^
 >a : { aProp: string; } & object
+>  : ^^^^^^^^^      ^^^^^^^^^^^^
 >aProp : string
+>      : ^^^^^^
 
 } else {
   // q.b is previously incorrectly inferred as potentially undefined
   q.b.bProp;
 >q.b.bProp : string
+>          : ^^^^^^
 >q.b : { bProp: string; } & object
+>    : ^^^^^^^^^      ^^^^^^^^^^^^
 >q : X & { a: undefined; b: object; }
+>  : ^^^^^^^^^         ^^^^^      ^^^
 >b : { bProp: string; } & object
+>  : ^^^^^^^^^      ^^^^^^^^^^^^
 >bProp : string
+>      : ^^^^^^
 }
 

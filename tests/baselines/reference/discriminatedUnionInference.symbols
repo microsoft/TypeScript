@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/discriminatedUnionInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/discriminatedUnionInference.ts] ////
+
+=== discriminatedUnionInference.ts ===
 // Repro from #28862
 
 type Foo<A> = { type: "foo", (): A[] };

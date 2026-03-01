@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keyRemappingKeyofResult.ts] ////
+
 //// [keyRemappingKeyofResult.ts]
 const sym = Symbol("")
 type Orig = { [k: string]: any, str: any, [sym]: any }
@@ -67,6 +69,7 @@ function g<T>() {
     let x: Oops;
     x = sym;
     x = "str";
+    x = "whatever"; // error
 }
 
 export {};
@@ -95,5 +98,6 @@ function g() {
     let x;
     x = sym;
     x = "str";
+    x = "whatever"; // error
 }
 export {};

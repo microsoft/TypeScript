@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/nodeColonModuleResolution.ts] ////
+
+=== /a/b/node_modules/@types/node/ph.d.ts ===
+declare module 'ph' {
+>'ph' : typeof import("ph")
+>     : ^^^^^^^^^^^^^^^^^^^
+
+    namespace constants {
+>constants : typeof constants
+>          : ^^^^^^^^^^^^^^^^
+
+        const NODE_PERFORMANCE_GC_MAJOR: number;
+>NODE_PERFORMANCE_GC_MAJOR : number
+>                          : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_MINOR: number;
+>NODE_PERFORMANCE_GC_MINOR : number
+>                          : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_INCREMENTAL: number;
+>NODE_PERFORMANCE_GC_INCREMENTAL : number
+>                                : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_WEAKCB: number;
+>NODE_PERFORMANCE_GC_WEAKCB : number
+>                           : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_NO: number;
+>NODE_PERFORMANCE_GC_FLAGS_NO : number
+>                             : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED: number;
+>NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED : number
+>                                             : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_FORCED: number;
+>NODE_PERFORMANCE_GC_FLAGS_FORCED : number
+>                                 : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING: number;
+>NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING : number
+>                                                         : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE: number;
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+>                                                : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY: number;
+>NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY : number
+>                                              : ^^^^^^
+
+        const NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE: number;
+>NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE : number
+>                                        : ^^^^^^
+    }
+}
+declare module 'node:ph' {
+>'node:ph' : typeof import("node:ph")
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    export * from 'ph';
+}
+=== /a/b/main.ts ===
+import * as ph from 'node:ph'
+>ph : typeof ph
+>   : ^^^^^^^^^
+
+console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+>console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
+>                                                                          : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+>                                                             : ^^^^^^
+>ph.constants : typeof ph.constants
+>             : ^^^^^^^^^^^^^^^^^^^
+>ph : typeof ph
+>   : ^^^^^^^^^
+>constants : typeof ph.constants
+>          : ^^^^^^^^^^^^^^^^^^^
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+>                                                : ^^^^^^
+

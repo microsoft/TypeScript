@@ -1,4 +1,6 @@
-=== tests/cases/compiler/evolvingArrayTypeInAssert.ts ===
+//// [tests/cases/compiler/evolvingArrayTypeInAssert.ts] ////
+
+=== evolvingArrayTypeInAssert.ts ===
 export function unsafeCast<T>(_value: unknown): asserts _value is T { }
 >unsafeCast : Symbol(unsafeCast, Decl(evolvingArrayTypeInAssert.ts, 0, 0))
 >T : Symbol(T, Decl(evolvingArrayTypeInAssert.ts, 0, 27))

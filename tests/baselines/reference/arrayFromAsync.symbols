@@ -1,0 +1,197 @@
+//// [tests/cases/compiler/arrayFromAsync.ts] ////
+
+=== arrayFromAsync.ts ===
+export { };
+async function * asyncGen (n) {
+>asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
+>n : Symbol(n, Decl(arrayFromAsync.ts, 1, 27))
+
+    for (let i = 0; i < n; i++)
+>i : Symbol(i, Decl(arrayFromAsync.ts, 2, 12))
+>i : Symbol(i, Decl(arrayFromAsync.ts, 2, 12))
+>n : Symbol(n, Decl(arrayFromAsync.ts, 1, 27))
+>i : Symbol(i, Decl(arrayFromAsync.ts, 2, 12))
+
+      yield i * 2;
+>i : Symbol(i, Decl(arrayFromAsync.ts, 2, 12))
+  }
+
+function * genPromises (n) {
+>genPromises : Symbol(genPromises, Decl(arrayFromAsync.ts, 4, 3))
+>n : Symbol(n, Decl(arrayFromAsync.ts, 6, 24))
+
+    for (let i = 0; i < n; i++) {
+>i : Symbol(i, Decl(arrayFromAsync.ts, 7, 12))
+>i : Symbol(i, Decl(arrayFromAsync.ts, 7, 12))
+>n : Symbol(n, Decl(arrayFromAsync.ts, 6, 24))
+>i : Symbol(i, Decl(arrayFromAsync.ts, 7, 12))
+
+        yield Promise.resolve(i * 2);
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>i : Symbol(i, Decl(arrayFromAsync.ts, 7, 12))
+    }
+}
+
+const arrLike = {
+>arrLike : Symbol(arrLike, Decl(arrayFromAsync.ts, 12, 5))
+
+    0: Promise.resolve(0),
+>0 : Symbol(0, Decl(arrayFromAsync.ts, 12, 17))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    1: Promise.resolve(2),
+>1 : Symbol(1, Decl(arrayFromAsync.ts, 13, 26))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    2: Promise.resolve(4),
+>2 : Symbol(2, Decl(arrayFromAsync.ts, 14, 26))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    3: Promise.resolve(6),
+>3 : Symbol(3, Decl(arrayFromAsync.ts, 15, 26))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    length: 4,
+>length : Symbol(length, Decl(arrayFromAsync.ts, 16, 26))
+}
+
+const arr : number[] = [];
+>arr : Symbol(arr, Decl(arrayFromAsync.ts, 20, 5))
+
+for await (const v of asyncGen(4)) {
+>v : Symbol(v, Decl(arrayFromAsync.ts, 21, 16))
+>asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
+
+  arr.push(v);
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayFromAsync.ts, 20, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 21, 16))
+}
+
+const sameArr1 = await Array.fromAsync(arrLike);
+>sameArr1 : Symbol(sameArr1, Decl(arrayFromAsync.ts, 25, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>arrLike : Symbol(arrLike, Decl(arrayFromAsync.ts, 12, 5))
+
+const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
+>sameArr2 : Symbol(sameArr2, Decl(arrayFromAsync.ts, 26, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+const sameArr3 = await Array.fromAsync(genPromises(4));
+>sameArr3 : Symbol(sameArr3, Decl(arrayFromAsync.ts, 27, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>genPromises : Symbol(genPromises, Decl(arrayFromAsync.ts, 4, 3))
+
+const sameArr4 = await Array.fromAsync(asyncGen(4));
+>sameArr4 : Symbol(sameArr4, Decl(arrayFromAsync.ts, 28, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
+
+function Data (n) {}
+>Data : Symbol(Data, Decl(arrayFromAsync.ts, 28, 52), Decl(arrayFromAsync.ts, 30, 20))
+>n : Symbol(n, Decl(arrayFromAsync.ts, 30, 15))
+
+Data.fromAsync = Array.fromAsync;
+>Data.fromAsync : Symbol(Data.fromAsync, Decl(arrayFromAsync.ts, 30, 20))
+>Data : Symbol(Data, Decl(arrayFromAsync.ts, 28, 52), Decl(arrayFromAsync.ts, 30, 20))
+>fromAsync : Symbol(Data.fromAsync, Decl(arrayFromAsync.ts, 30, 20))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+
+const sameArr5 = await Data.fromAsync(asyncGen(4));
+>sameArr5 : Symbol(sameArr5, Decl(arrayFromAsync.ts, 32, 5))
+>Data.fromAsync : Symbol(Data.fromAsync, Decl(arrayFromAsync.ts, 30, 20))
+>Data : Symbol(Data, Decl(arrayFromAsync.ts, 28, 52), Decl(arrayFromAsync.ts, 30, 20))
+>fromAsync : Symbol(Data.fromAsync, Decl(arrayFromAsync.ts, 30, 20))
+>asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
+
+const mapArr1 = await Array.fromAsync(asyncGen(4), v => v ** 2);
+>mapArr1 : Symbol(mapArr1, Decl(arrayFromAsync.ts, 34, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>asyncGen : Symbol(asyncGen, Decl(arrayFromAsync.ts, 0, 11))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 34, 50))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 34, 50))
+
+const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
+>mapArr2 : Symbol(mapArr2, Decl(arrayFromAsync.ts, 35, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 35, 48))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 35, 48))
+
+const mapArr3 = await Array.fromAsync([0,2,4,6], v => v ** 2);
+>mapArr3 : Symbol(mapArr3, Decl(arrayFromAsync.ts, 36, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 36, 48))
+>v : Symbol(v, Decl(arrayFromAsync.ts, 36, 48))
+
+const err = new Error;
+>err : Symbol(err, Decl(arrayFromAsync.ts, 38, 5))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+const badIterable = { [Symbol.iterator] () { throw err; } };
+>badIterable : Symbol(badIterable, Decl(arrayFromAsync.ts, 39, 5))
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(arrayFromAsync.ts, 39, 21))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>err : Symbol(err, Decl(arrayFromAsync.ts, 38, 5))
+
+// This returns a promise that will reject with `err`.
+const badArray = await Array.fromAsync(badIterable);
+>badArray : Symbol(badArray, Decl(arrayFromAsync.ts, 41, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>badIterable : Symbol(badIterable, Decl(arrayFromAsync.ts, 39, 5))
+
+const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
+>withIndexResult : Symbol(withIndexResult, Decl(arrayFromAsync.ts, 43, 5))
+>Array.fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>fromAsync : Symbol(ArrayConstructor.fromAsync, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.esnext.array.d.ts, --, --))
+>str : Symbol(str, Decl(arrayFromAsync.ts, 43, 59))
+>index : Symbol(index, Decl(arrayFromAsync.ts, 43, 63))
+>index : Symbol(index, Decl(arrayFromAsync.ts, 43, 76))
+>str : Symbol(str, Decl(arrayFromAsync.ts, 43, 83))
+

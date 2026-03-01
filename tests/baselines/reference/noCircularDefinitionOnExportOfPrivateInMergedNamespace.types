@@ -1,17 +1,25 @@
-=== tests/cases/compiler/noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts ===
+//// [tests/cases/compiler/noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts] ////
+
+=== noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts ===
 const cat = 12;
 >cat : 12
+>    : ^^
 >12 : 12
+>   : ^^
 
 class Foo {}
 >Foo : Foo
+>    : ^^^
 
 export = Foo;
 >Foo : Foo
+>    : ^^^
 
 declare namespace Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     export { cat };
 >cat : 12
+>    : ^^
 }

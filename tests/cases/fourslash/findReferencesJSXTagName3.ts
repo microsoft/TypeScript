@@ -29,12 +29,8 @@ verify.baselineFindAllReferences(
     // div occurrences
     '1', '2', '3', '4', '5',
     // Comp occurrences
-    '6', '7', '8');
-
+    '6', '7', '8'
+);
 // For document highlights, we will just do tag matching if on a tag. Otherwise we find-all-references.
-verify.documentHighlightsOf(d0, [d0, d1, d2, d3, d4]);
-verify.rangesAreDocumentHighlights([d1, d4]);
-verify.rangesAreDocumentHighlights([d2, d3]);
-
-verify.documentHighlightsOf(c0, [c0, c1, c2]);
-verify.rangesAreDocumentHighlights([c1, c2]);
+verify.baselineDocumentHighlights(allD);
+verify.baselineDocumentHighlights(allC);

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofWithPrimitiveUnion.ts] ////
+
 //// [instanceofWithPrimitiveUnion.ts]
 function test1(x: number | string) {
     if (x instanceof Object) {
@@ -13,6 +15,7 @@ function test2(x: (number | string) | number) {
 
 
 //// [instanceofWithPrimitiveUnion.js]
+"use strict";
 function test1(x) {
     if (x instanceof Object) {
         x;

@@ -1,0 +1,173 @@
+//// [tests/cases/conformance/jsdoc/overloadTag1.ts] ////
+
+=== overloadTag1.js ===
+/**
+ * @overload
+ * @param {number} a 
+ * @param {number} b
+ * @returns {number} 
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
+export function overloaded(a,b) {
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  if (typeof a === "string" && typeof b === "string") {
+>typeof a === "string" && typeof b === "string" : boolean
+>                                               : ^^^^^^^
+>typeof a === "string" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>typeof b === "string" : boolean
+>                      : ^^^^^^^
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+    return a + b;
+>a + b : string
+>      : ^^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+
+  } else if (typeof a === "number" && typeof b === "number") {
+>typeof a === "number" && typeof b === "number" : boolean
+>                                               : ^^^^^^^
+>typeof a === "number" : boolean
+>                      : ^^^^^^^
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+>typeof b === "number" : boolean
+>                      : ^^^^^^^
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+    return a + b;
+>a + b : number
+>      : ^^^^^^
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+  }
+  throw new Error("Invalid arguments");
+>new Error("Invalid arguments") : Error
+>                               : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"Invalid arguments" : "Invalid arguments"
+>                    : ^^^^^^^^^^^^^^^^^^^
+}
+var o1 = overloaded(1,2)
+>o1 : number
+>   : ^^^^^^
+>overloaded(1,2) : number
+>                : ^^^^^^
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+var o2 = overloaded("zero", "one")
+>o2 : never
+>   : ^^^^^
+>overloaded("zero", "one") : never
+>                          : ^^^^^
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>"zero" : "zero"
+>       : ^^^^^^
+>"one" : "one"
+>      : ^^^^^
+
+var o3 = overloaded("a",false)
+>o3 : string
+>   : ^^^^^^
+>overloaded("a",false) : string
+>                      : ^^^^^^
+>overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>"a" : "a"
+>    : ^^^
+>false : false
+>      : ^^^^^
+
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
+export function uncheckedInternally(a, b) {
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+
+    return a + b;
+>a + b : any
+>      : ^^^
+>a : any
+>  : ^^^
+>b : any
+>  : ^^^
+}
+uncheckedInternally(1,2)
+>uncheckedInternally(1,2) : number
+>                         : ^^^^^^
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+uncheckedInternally("zero", "one")
+>uncheckedInternally("zero", "one") : never
+>                                   : ^^^^^
+>uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
+>                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
+>"zero" : "zero"
+>       : ^^^^^^
+>"one" : "one"
+>      : ^^^^^
+

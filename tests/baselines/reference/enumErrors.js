@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumErrors.ts] ////
+
 //// [enumErrors.ts]
 // Enum named with PredefinedTypes
 enum any { }
@@ -55,6 +57,7 @@ enum E14 { a, b: any "hello" += 1, c, d}
 
 
 //// [enumErrors.js]
+"use strict";
 // Enum named with PredefinedTypes
 var any;
 (function (any) {
@@ -92,17 +95,17 @@ var E11;
     E11[E11["B"] = new Date()] = "B";
     E11[E11["C"] = window] = "C";
     E11[E11["D"] = {}] = "D";
-    E11[E11["E"] = (function () { return 'foo'; })()] = "E";
+    E11[E11["E"] = (() => 'foo')()] = "E";
 })(E11 || (E11 = {}));
 // Enum with string valued member and computed member initializers
 var E12;
 (function (E12) {
     E12["A"] = "";
-    E12[E12["B"] = 0] = "B";
-    E12[E12["C"] = 0] = "C";
-    E12[E12["D"] = 0] = "D";
-    E12[E12["E"] = 0] = "E";
-    E12[E12["F"] = 0] = "F";
+    E12[E12["B"] = new Date()] = "B";
+    E12[E12["C"] = window] = "C";
+    E12[E12["D"] = {}] = "D";
+    E12[E12["E"] = 2] = "E";
+    E12[E12["F"] = (() => 'foo')()] = "F";
 })(E12 || (E12 = {}));
 // Enum with incorrect syntax
 var E13;

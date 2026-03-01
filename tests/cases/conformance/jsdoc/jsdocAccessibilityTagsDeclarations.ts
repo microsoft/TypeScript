@@ -1,7 +1,8 @@
+// @strict: false
 // @allowJs: true
 // @checkJs: true
 // @target: esnext
-// @out: foo.js
+// @outFile: foo.js
 // @declaration: true
 // @Filename: jsdocAccessibilityTagDeclarations.js
 class Protected {

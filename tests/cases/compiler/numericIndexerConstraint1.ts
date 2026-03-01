@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo { foo() { } }
-var x: { [index: string]: number; };
+declare var x: { [index: string]: number; };
 var result: Foo = x["one"]; // error

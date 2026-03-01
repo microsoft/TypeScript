@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts(7,5): error TS2345: Argument of type '() => (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
+parser536727.ts(7,5): error TS2345: Argument of type '() => (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
   Type '(x: string) => string' is not assignable to type 'string'.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts(8,5): error TS2345: Argument of type '() => (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
+parser536727.ts(8,5): error TS2345: Argument of type '() => (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
   Type '(x: string) => string' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts (2 errors) ====
+==== parser536727.ts (2 errors) ====
     function foo(f: (x: string) => string) {
         return f("");
     }
@@ -15,10 +15,10 @@ tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts(8,5):
         ~~~~~~~
 !!! error TS2345: Argument of type '() => (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type '(x: string) => string' is not assignable to type 'string'.
-!!! related TS6212 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts:7:5: Did you mean to call this expression?
+!!! related TS6212 parser536727.ts:7:5: Did you mean to call this expression?
     foo(x);
         ~
 !!! error TS2345: Argument of type '() => (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type '(x: string) => string' is not assignable to type 'string'.
-!!! related TS6212 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts:8:5: Did you mean to call this expression?
+!!! related TS6212 parser536727.ts:8:5: Did you mean to call this expression?
     

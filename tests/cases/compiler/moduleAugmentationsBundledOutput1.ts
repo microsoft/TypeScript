@@ -1,7 +1,8 @@
-// @target: es5
+// @strict: false
+// @target: es5, es2015
 // @module: amd
 // @declaration: true
-// @out: out.js
+// @outFile: out.js
 
 // @filename: m1.ts
 export class Cls {

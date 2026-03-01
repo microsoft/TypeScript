@@ -1,0 +1,93 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink10.ts ===
+// /**
+//  * start {@link https://vscode.dev/ | end}
+//  */
+// const a = () => 1;
+//       ^
+// | ----------------------------------------------------------------------
+// | const a: () => number
+// | start {@link https://vscode.dev/ end}
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoLink10.ts",
+      "position": 57,
+      "name": ""
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 57,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "start ",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https://vscode.dev/ end",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  }
+]

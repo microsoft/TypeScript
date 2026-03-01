@@ -1,19 +1,30 @@
-=== tests/cases/compiler/declarationEmitFBoundedTypeParams.ts ===
+//// [tests/cases/compiler/declarationEmitFBoundedTypeParams.ts] ////
+
+=== declarationEmitFBoundedTypeParams.ts ===
 // Repro from #6040
 
 function append<a, b extends a>(result: a[], value: b): a[] {
 >append : <a, b extends a>(result: a[], value: b) => a[]
+>       : ^ ^^ ^^^^^^^^^ ^^      ^^   ^^     ^^ ^^^^^   
 >result : a[]
+>       : ^^^
 >value : b
+>      : ^
 
     result.push(value);
 >result.push(value) : number
+>                   : ^^^^^^
 >result.push : (...items: a[]) => number
+>            : ^^^^     ^^^^^^^^^^      
 >result : a[]
+>       : ^^^
 >push : (...items: a[]) => number
+>     : ^^^^     ^^^^^^^^^^      
 >value : b
+>      : ^
 
     return result;
 >result : a[]
+>       : ^^^
 }
 

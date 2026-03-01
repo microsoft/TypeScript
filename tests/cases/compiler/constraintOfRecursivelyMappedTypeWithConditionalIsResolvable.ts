@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/25379
 
 interface Map<K, V> {

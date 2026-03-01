@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/extendsTag4.ts] ////
+
 //// [foo.js]
 /**
  * @constructor
@@ -12,6 +14,7 @@ class A {
 
 
 //// [foo.js]
+"use strict";
 /**
  * @constructor
  */

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-errors.ts] ////
+
 //// [constDeclarations-errors.ts]
 // error, missing intialicer
 const c1;
@@ -16,6 +18,7 @@ for(const c9; c9 < 1;) { }
 for(const c10 = 0, c11; c10 < 1;) { }
 
 //// [constDeclarations-errors.js]
+"use strict";
 // error, missing intialicer
 const c1;
 const c2;

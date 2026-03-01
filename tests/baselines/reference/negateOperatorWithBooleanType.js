@@ -1,15 +1,17 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithBooleanType.ts] ////
+
 //// [negateOperatorWithBooleanType.ts]
 // - operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
 class A {
-    public a: boolean;
+    public a!: boolean;
     static foo() { return false; }
 }
-module M {
-    export var n: boolean;
+namespace M {
+    export declare var n: boolean;
 }
 
 var objA = new A();
@@ -36,15 +38,11 @@ var ResultIsNumber7 = -A.foo();
 -M.n;
 
 //// [negateOperatorWithBooleanType.js]
-// - operator on boolean type
-var BOOLEAN;
+"use strict";
 function foo() { return true; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return false; };
-    return A;
-}());
+class A {
+    static foo() { return false; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

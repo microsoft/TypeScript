@@ -1,13 +1,13 @@
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts(2,19): error TS2533: Object is possibly 'null' or 'undefined'.
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts(3,19): error TS2533: Object is possibly 'null' or 'undefined'.
+nullishCoalescingOperator4.ts(2,19): error TS18049: 'a1' is possibly 'null' or 'undefined'.
+nullishCoalescingOperator4.ts(3,19): error TS18049: 'a1' is possibly 'null' or 'undefined'.
 
 
-==== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator4.ts (2 errors) ====
+==== nullishCoalescingOperator4.ts (2 errors) ====
     declare const a1: 'literal' | undefined | null
     const aa1 = a1 ?? a1.toLowerCase()
                       ~~
-!!! error TS2533: Object is possibly 'null' or 'undefined'.
+!!! error TS18049: 'a1' is possibly 'null' or 'undefined'.
     const aa2 = a1 || a1.toLocaleUpperCase()
                       ~~
-!!! error TS2533: Object is possibly 'null' or 'undefined'.
+!!! error TS18049: 'a1' is possibly 'null' or 'undefined'.
     

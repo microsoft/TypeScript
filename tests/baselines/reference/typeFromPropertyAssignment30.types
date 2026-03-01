@@ -1,21 +1,33 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment30.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment30.ts] ////
+
+=== typeFromPropertyAssignment30.ts ===
 interface Combo {
     (): number;
     p?: { [s: string]: number };
 >p : { [s: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 }
 const c: Combo = () => 1
 >c : Combo
+>  : ^^^^^
 >() => 1 : { (): number; p: {}; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 // should not be an expando object, but contextually typed by Combo.p
 c.p = {}
 >c.p = {} : {}
+>         : ^^
 >c.p : { [s: string]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : Combo
+>  : ^^^^^
 >p : { [s: string]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 

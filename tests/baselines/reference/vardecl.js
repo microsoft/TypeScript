@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/vardecl.ts] ////
+
 //// [vardecl.ts]
 var simpleVar;
 
@@ -59,7 +61,7 @@ var d4: {
     };
 }
 
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
     var m1;
@@ -111,6 +113,7 @@ var b = 10;
 
 
 //// [vardecl.js]
+"use strict";
 var simpleVar;
 var anotherVar;
 var varWithSimpleType;
@@ -134,18 +137,16 @@ var m2;
     var m1;
     var a2, b22 = 10, b222;
     var m3;
-    var C = /** @class */ (function () {
-        function C(b) {
+    class C {
+        constructor(b) {
             this.b = b;
         }
-        return C;
-    }());
-    var C2 = /** @class */ (function () {
-        function C2(b) {
+    }
+    class C2 {
+        constructor(b) {
             this.b = b;
         }
-        return C2;
-    }());
+    }
     m2.C2 = C2;
     var m;
     var b23;
@@ -225,7 +226,7 @@ declare var d4: {
         y: number;
     };
 };
-declare module m2 {
+declare namespace m2 {
     var a: any, b2: number, b: any;
     class C2 {
         b: any;

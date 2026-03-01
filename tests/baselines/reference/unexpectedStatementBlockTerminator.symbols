@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unexpectedStatementBlockTerminator.ts ===
+//// [tests/cases/compiler/unexpectedStatementBlockTerminator.ts] ////
+
+=== unexpectedStatementBlockTerminator.ts ===
 class Foo {}
 >Foo : Symbol(Foo, Decl(unexpectedStatementBlockTerminator.ts, 0, 0))
 

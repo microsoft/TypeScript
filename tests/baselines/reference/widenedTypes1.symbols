@@ -1,4 +1,6 @@
-=== tests/cases/compiler/widenedTypes1.ts ===
+//// [tests/cases/compiler/widenedTypes1.ts] ////
+
+=== widenedTypes1.ts ===
 var a = null;
 >a : Symbol(a, Decl(widenedTypes1.ts, 0, 3))
 

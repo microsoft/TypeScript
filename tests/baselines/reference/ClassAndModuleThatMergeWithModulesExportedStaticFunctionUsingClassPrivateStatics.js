@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts] ////
+
 //// [ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts]
 class clodule<T> {
     id: string;
@@ -6,7 +8,7 @@ class clodule<T> {
     private static sfn(id: string) { return 42; }
 }
 
-module clodule {
+namespace clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): number {
         return clodule.sfn('a');
@@ -16,12 +18,10 @@ module clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.js]
-var clodule = /** @class */ (function () {
-    function clodule() {
-    }
-    clodule.sfn = function (id) { return 42; };
-    return clodule;
-}());
+"use strict";
+class clodule {
+    static sfn(id) { return 42; }
+}
 (function (clodule) {
     // error: duplicate identifier expected
     function fn(x, y) {

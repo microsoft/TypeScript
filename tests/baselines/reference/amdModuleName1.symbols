@@ -1,4 +1,6 @@
-=== tests/cases/compiler/amdModuleName1.ts ===
+//// [tests/cases/compiler/amdModuleName1.ts] ////
+
+=== amdModuleName1.ts ===
 ///<amd-module name='NamedModule'/>
 class Foo {
 >Foo : Symbol(Foo, Decl(amdModuleName1.ts, 0, 0))

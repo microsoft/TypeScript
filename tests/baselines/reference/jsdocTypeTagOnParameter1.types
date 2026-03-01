@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagOnParameter1.ts] ////
+
+=== /index.js ===
+function repeat(
+>repeat : (message: string, times: number) => string
+>       : ^       ^^      ^^     ^^      ^^^^^^^^^^^
+
+	/** @type {string} */ message,
+>message : string
+>        : ^^^^^^
+
+	/** @type {number} */ times,
+>times : number
+>      : ^^^^^^
+
+) {
+	return Array(times).fill(message).join(` `);
+>Array(times).fill(message).join(` `) : string
+>                                     : ^^^^^^
+>Array(times).fill(message).join : (separator?: string) => string
+>                                : ^         ^^^      ^^^^^      
+>Array(times).fill(message) : any[]
+>                           : ^^^^^
+>Array(times).fill : (value: any, start?: number, end?: number) => any[]
+>                  : ^     ^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^
+>Array(times) : any[]
+>             : ^^^^^
+>Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
+>times : number
+>      : ^^^^^^
+>fill : (value: any, start?: number, end?: number) => any[]
+>     : ^     ^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>` ` : " "
+>    : ^^^
+}
+
+/** @type {Parameters<typeof repeat>[0]} */
+const message = `hello`;
+>message : string
+>        : ^^^^^^
+>`hello` : "hello"
+>        : ^^^^^^^
+
+/** @type {Parameters<typeof repeat>[1]} */
+const times = 3;
+>times : number
+>      : ^^^^^^
+>3 : 3
+>  : ^
+

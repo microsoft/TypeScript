@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectCreate-errors.ts] ////
+
 //// [objectCreate-errors.ts]
 var e1 = Object.create(1);               // Error
 var e2 = Object.create("string");        // Error
@@ -11,6 +13,7 @@ var e7 = Object.create(false, {});       // Error
 var e8 = Object.create(undefined, {});   // Error
 
 //// [objectCreate-errors.js]
+"use strict";
 var e1 = Object.create(1); // Error
 var e2 = Object.create("string"); // Error
 var e3 = Object.create(false); // Error

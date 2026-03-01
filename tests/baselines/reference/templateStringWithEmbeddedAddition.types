@@ -1,8 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedAddition.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedAddition.ts] ////
+
+=== templateStringWithEmbeddedAddition.ts ===
 var x = `abc${ 10 + 10 }def`;
 >x : string
->`abc${ 10 + 10 }def` : string
+>  : ^^^^^^
+>`abc${ 10 + 10 }def` : "abc20def"
+>                     : ^^^^^^^^^^
 >10 + 10 : number
+>        : ^^^^^^
 >10 : 10
+>   : ^^
 >10 : 10
+>   : ^^
 

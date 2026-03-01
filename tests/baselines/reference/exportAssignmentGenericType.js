@@ -14,15 +14,12 @@ var y:number = x.test;
 
 //// [foo_0.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";
-exports.__esModule = true;
-var foo = require("./foo_0");
+Object.defineProperty(exports, "__esModule", { value: true });
+const foo = require("./foo_0");
 var x = new foo();
 var y = x.test;

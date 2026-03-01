@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts ===
+//// [tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts] ////
+
+=== unusedMultipleParameters2InMethodDeclaration.ts ===
 class Dummy {
 >Dummy : Symbol(Dummy, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 0, 0))
 

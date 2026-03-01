@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/undefined/invalidUndefinedValues.ts] ////
+
 //// [invalidUndefinedValues.ts]
 var x: typeof undefined;
 
@@ -17,7 +19,7 @@ interface I { foo: string }
 var c: I;
 x = c;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 x = { f() { } }
@@ -32,6 +34,7 @@ x = E;
 x = E.A;
 
 //// [invalidUndefinedValues.js]
+"use strict";
 var x;
 x = 1;
 x = '';
@@ -39,11 +42,8 @@ x = true;
 var a;
 x = a;
 x = null;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var b;
 x = C;
 x = b;
@@ -54,7 +54,7 @@ var M;
     M.x = 1;
 })(M || (M = {}));
 x = M;
-x = { f: function () { } };
+x = { f() { } };
 function f(a) {
     x = a;
 }

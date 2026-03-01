@@ -1,7 +1,11 @@
-=== tests/cases/compiler/classOverloadForFunction2.ts ===
+//// [tests/cases/compiler/classOverloadForFunction2.ts] ////
+
+=== classOverloadForFunction2.ts ===
 function bar(): string;
 >bar : typeof bar
+>    : ^^^^^^^^^^
 
 class bar {}
 >bar : bar
+>    : ^^^
 

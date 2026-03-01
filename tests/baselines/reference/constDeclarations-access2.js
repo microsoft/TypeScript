@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-access2.ts] ////
+
 //// [constDeclarations-access2.ts]
 const x = 0
 
@@ -40,6 +42,7 @@ x.toString();
 
 
 //// [constDeclarations-access2.js]
+"use strict";
 const x = 0;
 // Errors
 x = 1;

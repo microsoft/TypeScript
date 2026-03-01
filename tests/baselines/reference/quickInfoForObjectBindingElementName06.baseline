@@ -1,0 +1,75 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForObjectBindingElementName06.ts ===
+// type Foo = {
+//     /**
+//      * Thing is a bar
+//      */
+//     isBar: boolean
+// 
+//     /**
+//      * Thing is a baz
+//      */
+//     isBaz: boolean
+// }
+// 
+// function f(): Foo {
+//     return undefined as any
+// }
+// 
+// const { isBaz: isBar } = f();
+// isBar;
+// ^^^^^
+// | ----------------------------------------------------------------------
+// | const isBar: boolean
+// | Thing is a baz
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForObjectBindingElementName06.ts",
+      "position": 217,
+      "name": ""
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 212,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "isBar",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Thing is a baz",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts ===
+//// [tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts] ////
+
+=== genericAssignmentCompatOfFunctionSignatures1.ts ===
 var x1 = function foo3<T, U extends { a: T; b: string }>(x: T, z: U) { }
 >x1 : Symbol(x1, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 3))
 >foo3 : Symbol(foo3, Decl(genericAssignmentCompatOfFunctionSignatures1.ts, 0, 8))

@@ -1,90 +1,148 @@
-=== tests/cases/compiler/keyofDoesntContainSymbols.ts ===
+//// [tests/cases/compiler/keyofDoesntContainSymbols.ts] ////
+
+=== keyofDoesntContainSymbols.ts ===
 const sym = Symbol();
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 const num = 0;
 >num : 0
+>    : ^
 >0 : 0
+>  : ^
 
 const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >{ num: 0, str: 's', [num]: num as 0, [sym]: sym } : { num: number; str: string; 0: 0; [sym]: symbol; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 >str : string
+>    : ^^^^^^
 >'s' : "s"
+>    : ^^^
 >[num] : 0
+>      : ^
 >num : 0
+>    : ^
 >num as 0 : 0
+>         : ^
 >num : 0
+>    : ^
 >[sym] : symbol
+>      : ^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 
 function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
 >obj : T
+>    : ^
 >key : K
+>    : ^
 >value : T[K]
+>      : ^^^^
 
   return obj[key] = value;
 >obj[key] = value : T[K]
+>                 : ^^^^
 >obj[key] : T[K]
+>         : ^^^^
 >obj : T
+>    : ^
 >key : K
+>    : ^
 >value : T[K]
+>      : ^^^^
 }
 
 const val = set(obj, 'str', '');
 >val : string
+>    : ^^^^^^
 >set(obj, 'str', '') : string
+>                    : ^^^^^^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
 >'' : ""
+>   : ^^
 
 // string
 const valB = set(obj, 'num', '');
 >valB : number
+>     : ^^^^^^
 >set(obj, 'num', '') : number
+>                    : ^^^^^^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >'num' : "num"
+>      : ^^^^^
 >'' : ""
+>   : ^^
 
 // Expect type error
 // Argument of type '""' is not assignable to parameter of type 'number'.
 const valC = set(obj, sym, sym);
->valC : string | number
->set(obj, sym, sym) : string | number
+>valC : symbol
+>     : ^^^^^^
+>set(obj, sym, sym) : symbol
+>                   : ^^^^^^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 >sym : unique symbol
+>    : ^^^^^^^^^^^^^
 
 // Expect type error
 // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
 const valD = set(obj, num, num);
->valD : string | number
->set(obj, num, num) : string | number
+>valD : 0
+>     : ^
+>set(obj, num, num) : 0
+>                   : ^
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^    
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >num : 0
+>    : ^
 >num : 0
+>    : ^
 
 // Expect type error
 // Argument of type '0' is not assignable to parameter of type "str" | "num"
 type KeyofObj = keyof typeof obj;
->KeyofObj : "str" | "num"
+>KeyofObj : unique symbol | 0 | "str" | "num"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
 // "str" | "num"
 type Values<T> = T[keyof T];
 >Values : Values<T>
+>       : ^^^^^^^^^
 
 type ValuesOfObj = Values<typeof obj>;
->ValuesOfObj : string | number
+>ValuesOfObj : ValuesOfObj
+>            : ^^^^^^^^^^^
 >obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 

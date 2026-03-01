@@ -1,8 +1,8 @@
-tests/cases/compiler/extendFromAny.ts(8,9): error TS2339: Property 'length' does not exist on type 'number'.
-tests/cases/compiler/extendFromAny.ts(9,10): error TS2339: Property 'length' does not exist on type 'number'.
+extendFromAny.ts(8,9): error TS2339: Property 'length' does not exist on type 'number'.
+extendFromAny.ts(9,10): error TS2339: Property 'length' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/extendFromAny.ts (2 errors) ====
+==== extendFromAny.ts (2 errors) ====
     declare var Base: any;
     class C extends Base {
         known = 1;

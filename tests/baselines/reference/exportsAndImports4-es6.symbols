@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/t3.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImports4-es6.ts] ////
+
+=== t3.ts ===
 import a = require("./t1");
 >a : Symbol(a, Decl(t3.ts, 0, 0))
 
@@ -61,7 +63,7 @@ export { a, b, c, d, e1, e2, f1, f2 };
 >f1 : Symbol(f1, Decl(t3.ts, 14, 28))
 >f2 : Symbol(f2, Decl(t3.ts, 14, 32))
 
-=== tests/cases/conformance/es6/modules/t1.ts ===
+=== t1.ts ===
+
 export default "hello";
-No type information for this code.
-No type information for this code.
+

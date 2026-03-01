@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/emitStatementsBeforeSuperCallWithDefineFields.ts] ////
+
 //// [emitStatementsBeforeSuperCallWithDefineFields.ts]
 class Base {
 }
@@ -22,6 +24,7 @@ class Test extends Base {
 
 
 //// [emitStatementsBeforeSuperCallWithDefineFields.js]
+"use strict";
 class Base {
 }
 class Sub extends Base {

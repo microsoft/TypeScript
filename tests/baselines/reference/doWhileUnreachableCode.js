@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doWhileUnreachableCode.ts] ////
+
 //// [doWhileUnreachableCode.ts]
 function test() {
     let foo = 0;
@@ -13,8 +15,9 @@ function test() {
 }
 
 //// [doWhileUnreachableCode.js]
+"use strict";
 function test() {
-    var foo = 0;
+    let foo = 0;
     testLoop: do {
         foo++;
         continue testLoop;

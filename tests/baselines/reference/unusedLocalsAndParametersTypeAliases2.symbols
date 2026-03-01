@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts ===
+//// [tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts] ////
+
+=== unusedLocalsAndParametersTypeAliases2.ts ===
 // unused
 type handler1 = () => void;
 >handler1 : Symbol(handler1, Decl(unusedLocalsAndParametersTypeAliases2.ts, 0, 0))

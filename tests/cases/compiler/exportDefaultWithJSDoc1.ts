@@ -1,14 +1,16 @@
+// @target: es2015
 
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
+
+// @Filename: a.js
 
 /**
  * A number, or a string containing a number.
  * @typedef {(number|string)} NumberLike
  */
 
-// @Filename: a.js
 /** @type {NumberLike[]} */export default ([ ]);
 
 // @Filename: b.ts

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern2.ts] ////
+
 //// [iterableArrayPattern2.ts]
 class SymbolIterator {
     next() {
@@ -15,6 +17,7 @@ class SymbolIterator {
 var [a, ...b] = new SymbolIterator;
 
 //// [iterableArrayPattern2.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

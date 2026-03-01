@@ -1,11 +1,19 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts] ////
+
+=== parserErrorRecovery_ObjectLiteral4.ts ===
 var v = { a: 1
 >v : { a: number; return: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1return; : { a: number; return: any; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 return;
 >return : any
+>       : ^^^
 > : any
+> : ^^^
 

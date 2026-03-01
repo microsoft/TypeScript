@@ -1,3 +1,4 @@
+// @target: es2015
 let cond: boolean;
 function a(x: string | number) {
     for (x = undefined; typeof x !== "number"; x = undefined) {

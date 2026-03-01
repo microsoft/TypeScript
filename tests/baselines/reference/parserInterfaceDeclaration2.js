@@ -1,5 +1,8 @@
+//// [tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts] ////
+
 //// [parserInterfaceDeclaration2.ts]
 interface I implements A {
 }
 
 //// [parserInterfaceDeclaration2.js]
+"use strict";

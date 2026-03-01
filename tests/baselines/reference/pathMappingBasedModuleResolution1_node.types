@@ -1,5 +1,9 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution1_node.ts] ////
+
 === c:/root/f1.ts ===
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

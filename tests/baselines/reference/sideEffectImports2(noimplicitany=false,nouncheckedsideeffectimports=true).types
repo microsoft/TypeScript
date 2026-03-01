@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/sideEffectImports2.ts] ////
+
+=== index.ts ===
+
+import "source-map-support/register";
+

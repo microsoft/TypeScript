@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_writeOnlyProperty.ts] ////
+
 //// [noUnusedLocals_writeOnlyProperty.ts]
 class C {
     private x;
@@ -8,11 +10,9 @@ class C {
 
 
 //// [noUnusedLocals_writeOnlyProperty.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function () {
+"use strict";
+class C {
+    m() {
         this.x = 0;
-    };
-    return C;
-}());
+    }
+}

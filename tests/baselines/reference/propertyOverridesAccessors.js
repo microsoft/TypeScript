@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts] ////
+
 //// [propertyOverridesAccessors.ts]
 class A {
     get p() { return 'oh no' }
@@ -16,6 +18,7 @@ class D extends C {
 
 
 //// [propertyOverridesAccessors.js]
+"use strict";
 class A {
     get p() { return 'oh no'; }
 }

@@ -1,13 +1,19 @@
-=== tests/cases/compiler/staticsInConstructorBodies.ts ===
+//// [tests/cases/compiler/staticsInConstructorBodies.ts] ////
+
+=== staticsInConstructorBodies.ts ===
 class C {
 >C : C
+>  : ^
 
 	constructor() {
 		static p1 = 0; // ERROR
 >p1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
 		static m1() {} // ERROR
 >m1 : () => void
+>   : ^^^^^^^^^^
 	}
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts] ////
+
 //// [nearbyIdenticalGenericLambdasAssignable.ts]
 declare const fA: <T>() => { v: T };
 const fB = <T>() => {
@@ -29,10 +31,11 @@ accL(fA); accL(fB); accL(fC);
 //             ~~ previously an error
 
 //// [nearbyIdenticalGenericLambdasAssignable.js]
-var fB = function () {
+"use strict";
+const fB = () => {
     return { v: '' };
 };
-var fC = function () {
+const fC = () => {
     return {};
 };
 // These should all be OK, every type is identical

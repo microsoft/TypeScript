@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesMethod.ts] ////
+
 //// [propertyOverridesMethod.ts]
 class A {
     m() { }
@@ -8,6 +10,7 @@ class B extends A {
 
 
 //// [propertyOverridesMethod.js]
+"use strict";
 class A {
     m() { }
 }

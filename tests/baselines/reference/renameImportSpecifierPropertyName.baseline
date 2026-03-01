@@ -1,7 +1,0 @@
-/*====== /tests/cases/fourslash/canada.ts ======*/
-
-export interface [|RENAME|] {}
-
-/*====== /tests/cases/fourslash/dry.ts ======*/
-
-import { RENAME as Ale } from './canada';

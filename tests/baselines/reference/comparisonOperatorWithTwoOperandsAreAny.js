@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTwoOperandsAreAny.ts] ////
+
 //// [comparisonOperatorWithTwoOperandsAreAny.ts]
 var a: any;
 
@@ -11,6 +13,7 @@ var r7 = a === a;
 var r8 = a !== a;
 
 //// [comparisonOperatorWithTwoOperandsAreAny.js]
+"use strict";
 var a;
 var r1 = a < a;
 var r2 = a > a;

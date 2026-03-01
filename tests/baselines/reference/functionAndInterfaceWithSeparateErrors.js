@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts] ////
+
 //// [functionAndInterfaceWithSeparateErrors.ts]
 function Foo(s: string);
 function Foo(n: number) { }
@@ -8,4 +10,5 @@ interface Foo {
 }
 
 //// [functionAndInterfaceWithSeparateErrors.js]
+"use strict";
 function Foo(n) { }

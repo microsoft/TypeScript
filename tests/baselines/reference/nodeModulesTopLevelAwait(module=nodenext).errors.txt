@@ -1,8 +1,8 @@
-tests/cases/conformance/node/subfolder/index.ts(2,11): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
-tests/cases/conformance/node/subfolder/index.ts(4,5): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
+subfolder/index.ts(2,11): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
+subfolder/index.ts(4,5): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
 
 
-==== tests/cases/conformance/node/subfolder/index.ts (2 errors) ====
+==== subfolder/index.ts (2 errors) ====
     // cjs format file
     const x = await 1;
               ~~~~~
@@ -11,18 +11,18 @@ tests/cases/conformance/node/subfolder/index.ts(4,5): error TS1309: The current 
     for await (const y of []) {}
         ~~~~~
 !!! error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     const x = await 1;
     export {x};
     for await (const y of []) {}
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }

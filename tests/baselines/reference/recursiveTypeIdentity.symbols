@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTypeIdentity.ts ===
+//// [tests/cases/compiler/recursiveTypeIdentity.ts] ////
+
+=== recursiveTypeIdentity.ts ===
 interface A {
 >A : Symbol(A, Decl(recursiveTypeIdentity.ts, 0, 0))
 

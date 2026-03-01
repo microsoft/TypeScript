@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/enumLiteralTypes1.ts ===
+//// [tests/cases/conformance/types/literal/enumLiteralTypes1.ts] ////
+
+=== enumLiteralTypes1.ts ===
 const enum Choice { Unknown, Yes, No };
 >Choice : Symbol(Choice, Decl(enumLiteralTypes1.ts, 0, 0))
 >Unknown : Symbol(Choice.Unknown, Decl(enumLiteralTypes1.ts, 0, 19))

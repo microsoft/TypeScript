@@ -1,11 +1,16 @@
-=== tests/cases/compiler/external.d.ts ===
+//// [tests/cases/compiler/importsInAmbientModules1.ts] ////
+
+=== external.d.ts ===
 export var x: number
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 declare module "M" {
 >"M" : typeof import("M")
+>    : ^^^^^^^^^^^^^^^^^^
 
     import {x} from "external"
 >x : number
+>  : ^^^^^^
 }

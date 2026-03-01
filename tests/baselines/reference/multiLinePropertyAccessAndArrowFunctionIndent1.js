@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts] ////
+
 //// [multiLinePropertyAccessAndArrowFunctionIndent1.ts]
 return this.edit(role)
     .then((role: Role) =>
@@ -6,9 +8,7 @@ return this.edit(role)
 
 
 //// [multiLinePropertyAccessAndArrowFunctionIndent1.js]
-var _this = this;
+"use strict";
 return this.edit(role)
-    .then(function (role) {
-    return _this.roleService.add(role)
-        .then(function (data) { return data.data; });
-});
+    .then((role) => this.roleService.add(role)
+    .then((data) => data.data));

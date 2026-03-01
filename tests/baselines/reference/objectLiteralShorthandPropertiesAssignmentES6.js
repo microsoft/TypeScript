@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts] ////
+
 //// [objectLiteralShorthandPropertiesAssignmentES6.ts]
 var id: number = 10000;
 var name: string = "my name";
@@ -15,6 +17,7 @@ var person3: { name: string; id: number } = bar("Hello", 5);
 
 
 //// [objectLiteralShorthandPropertiesAssignmentES6.js]
+"use strict";
 var id = 10000;
 var name = "my name";
 var person = { name, id };

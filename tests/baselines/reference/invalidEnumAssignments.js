@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts] ////
+
 //// [invalidEnumAssignments.ts]
 enum E {
     A,
@@ -23,6 +25,7 @@ function f<T>(a: T) {
 }
 
 //// [invalidEnumAssignments.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

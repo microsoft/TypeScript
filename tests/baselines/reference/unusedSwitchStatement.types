@@ -1,42 +1,60 @@
-=== tests/cases/compiler/unusedSwitchStatement.ts ===
+//// [tests/cases/compiler/unusedSwitchStatement.ts] ////
+
+=== unusedSwitchStatement.ts ===
 switch (1) {
 >1 : 1
+>  : ^
 
     case 0:
 >0 : 0
+>  : ^
 
         let x;
 >x : any
+>  : ^^^
 
         break;
     case 1:
 >1 : 1
+>  : ^
 
         const c = 1;
 >c : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     default:
         let z = 2;
 >z : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 }
 
 
 switch (2) {
 >2 : 2
+>  : ^
 
     case 0:
 >0 : 0
+>  : ^
 
         let x;
 >x : any
+>  : ^^^
 
     case 1:
 >1 : 1
+>  : ^
 
-        x++;
->x++ : number
+        x=1;
+>x=1 : 1
+>    : ^
 >x : any
+>  : ^^^
+>1 : 1
+>  : ^
 }

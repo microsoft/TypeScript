@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/moduleResolutionWithoutExtension6.ts] ////
+
 //// [bar.cts]
 // Extensionless relative path import statement in a cjs module
 // Import statements are not allowed in cjs files,

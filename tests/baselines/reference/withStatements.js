@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/withStatements/withStatements.ts] ////
+
 //// [withStatements.ts]
 var x = 12;
 with (x) {
@@ -6,6 +8,7 @@ with (x) {
 }
 
 //// [withStatements.js]
+"use strict";
 var x = 12;
 with (x) {
     name = 'twelve';

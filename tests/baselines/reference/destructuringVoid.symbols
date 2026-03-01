@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringVoid.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringVoid.ts] ////
+
+=== destructuringVoid.ts ===
 declare const v: void;
 >v : Symbol(v, Decl(destructuringVoid.ts, 0, 13))
 

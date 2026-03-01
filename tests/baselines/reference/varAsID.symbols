@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varAsID.ts ===
+//// [tests/cases/compiler/varAsID.ts] ////
+
+=== varAsID.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(varAsID.ts, 0, 0))
 

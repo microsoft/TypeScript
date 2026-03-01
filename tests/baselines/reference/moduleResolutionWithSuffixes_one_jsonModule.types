@@ -1,21 +1,34 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_jsonModule.ts] ////
+
 === /index.ts ===
 import foo from "./foo.json";
 >foo : { ios: string; }
+>    : ^^^^^^^^^^^^^^^^
 
 console.log(foo.ios);
 >console.log(foo.ios) : void
+>                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >foo.ios : string
+>        : ^^^^^^
 >foo : { ios: string; }
+>    : ^^^^^^^^^^^^^^^^
 >ios : string
+>    : ^^^^^^
 
 === /foo.ios.json ===
 {
 >{	"ios": "platform ios"} : { ios: string; }
+>                         : ^^^^^^^^^^^^^^^^
 
 	"ios": "platform ios"
 >"ios" : string
+>      : ^^^^^^
 >"platform ios" : "platform ios"
+>               : ^^^^^^^^^^^^^^
 }

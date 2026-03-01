@@ -1,40 +1,59 @@
+//// [tests/cases/conformance/typings/typingsLookup4.ts] ////
+
 === /a.ts ===
 import { j } from "jquery";
 >j : number
+>  : ^^^^^^
 
 import { k } from "kquery";
 >k : number
+>  : ^^^^^^
 
 import { l } from "lquery";
 >l : 2
+>  : ^
 
 import { m } from "mquery";
 >m : 3
+>  : ^
 
 j + k + l + m;
 >j + k + l + m : number
+>              : ^^^^^^
 >j + k + l : number
+>          : ^^^^^^
 >j + k : number
+>      : ^^^^^^
 >j : number
+>  : ^^^^^^
 >k : number
+>  : ^^^^^^
 >l : 2
+>  : ^
 >m : 3
+>  : ^
 
 === /node_modules/@types/jquery/jquery.d.ts ===
 export const j: number;
 >j : number
+>  : ^^^^^^
 
 === /node_modules/@types/kquery/kquery.d.ts ===
 export const k: number;
 >k : number
+>  : ^^^^^^
 
 === /node_modules/@types/lquery/lquery.ts ===
 export const l = 2;
 >l : 2
+>  : ^
 >2 : 2
+>  : ^
 
 === /node_modules/@types/mquery/mquery/index.tsx ===
 export const m = 3;
 >m : 3
+>  : ^
 >3 : 3
+>  : ^
 

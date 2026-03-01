@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedMultiplication.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedMultiplication.ts] ////
+
+=== templateStringWithEmbeddedMultiplication.ts ===
 var x = `abc${ 7 * 6 }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedMultiplication.ts, 0, 3))
 

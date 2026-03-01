@@ -1,13 +1,13 @@
-tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag02.ts(6,1): error TS2349: This expression is not callable.
+taggedTemplateWithConstructableTag02.ts(6,1): error TS2349: This expression is not callable.
   Type 'I' has no call signatures.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag02.ts (1 errors) ====
+==== taggedTemplateWithConstructableTag02.ts (1 errors) ====
     interface I {
         new (...args: any[]): string;
         new (): number;
     }
-    var tag: I;
+    declare var tag: I;
     tag `Hello world!`;
     ~~~
 !!! error TS2349: This expression is not callable.

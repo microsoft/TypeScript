@@ -1,4 +1,6 @@
-=== tests/cases/compiler/null.ts ===
+//// [tests/cases/compiler/null.ts] ////
+
+=== null.ts ===
 var x=null; 
 >x : Symbol(x, Decl(null.ts, 0, 3))
 

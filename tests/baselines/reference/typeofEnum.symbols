@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofEnum.ts ===
+//// [tests/cases/compiler/typeofEnum.ts] ////
+
+=== typeofEnum.ts ===
 enum E {
 >E : Symbol(E, Decl(typeofEnum.ts, 0, 0))
 

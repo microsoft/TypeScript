@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/importInTypePosition.ts] ////
+
 //// [importInTypePosition.ts]
-module A {
+namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }
     }
@@ -7,12 +9,12 @@ module A {
 }
 
 // no code gen expected
-module B {
+namespace B {
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 }
 // no code gen expected
-module C {
+namespace C {
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
     var m: typeof a;
@@ -22,15 +24,15 @@ module C {
 
 
 //// [importInTypePosition.js]
+"use strict";
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     A.Point = Point;
     A.Origin = new Point(0, 0);
 })(A || (A = {}));

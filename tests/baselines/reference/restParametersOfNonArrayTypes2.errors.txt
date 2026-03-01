@@ -1,12 +1,12 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(9,11): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(17,9): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(27,21): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(36,11): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(44,9): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts(54,21): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes2.ts(9,11): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes2.ts(17,9): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes2.ts(27,21): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes2.ts(36,11): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes2.ts(44,9): error TS1014: A rest parameter must be last in a parameter list.
+restParametersOfNonArrayTypes2.ts(54,21): error TS1014: A rest parameter must be last in a parameter list.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts (6 errors) ====
+==== restParametersOfNonArrayTypes2.ts (6 errors) ====
     // Rest parameters must be an array type if they have a type annotation, 
     // user defined subtypes of array do not count, all of these are errors
     

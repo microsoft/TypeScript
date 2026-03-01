@@ -1,9 +1,14 @@
-=== tests/cases/compiler/optionalSetterParam.ts ===
+//// [tests/cases/compiler/optionalSetterParam.ts] ////
+
+=== optionalSetterParam.ts ===
 class foo {
 >foo : foo
+>    : ^^^
 
     public set bar(param?:any) { }
 >bar : any
+>    : ^^^
 >param : any
+>      : ^^^
 }
 

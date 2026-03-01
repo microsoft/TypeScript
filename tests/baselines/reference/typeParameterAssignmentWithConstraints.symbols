@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterAssignmentWithConstraints.ts ===
+//// [tests/cases/compiler/typeParameterAssignmentWithConstraints.ts] ////
+
+=== typeParameterAssignmentWithConstraints.ts ===
 function f<A, B extends A>() {
 >f : Symbol(f, Decl(typeParameterAssignmentWithConstraints.ts, 0, 0))
 >A : Symbol(A, Decl(typeParameterAssignmentWithConstraints.ts, 0, 11))

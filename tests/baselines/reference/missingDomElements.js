@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingDomElements.ts] ////
+
 //// [missingDomElements.ts]
 interface Element {}
 interface EventTarget {}
@@ -19,6 +21,7 @@ interface Node {
 
 
 //// [missingDomElements.js]
+"use strict";
 ({}.textContent);
 ({}.textContent);
 ({}.textContent);

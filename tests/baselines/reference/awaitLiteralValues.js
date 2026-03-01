@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitLiteralValues.ts] ////
+
 //// [awaitLiteralValues.ts]
 function awaitString() {
     await 'literal';
@@ -25,6 +27,7 @@ function awaitUndefined() {
 
 
 //// [awaitLiteralValues.js]
+"use strict";
 function awaitString() {
     yield 'literal';
 }

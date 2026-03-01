@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badArraySyntax.ts] ////
+
 //// [badArraySyntax.ts]
 class Z {
  public x = "";
@@ -12,12 +14,12 @@ var a6: Z[][] = new   Z     [      ]   [  ];
 
 
 //// [badArraySyntax.js]
-var Z = /** @class */ (function () {
-    function Z() {
+"use strict";
+class Z {
+    constructor() {
         this.x = "";
     }
-    return Z;
-}());
+}
 var a1 = [];
 var a2 = new Z[];
 var a3 = new Z[]();

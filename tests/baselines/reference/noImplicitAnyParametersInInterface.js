@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInInterface.ts] ////
+
 //// [noImplicitAnyParametersInInterface.ts]
 interface I {
     // Implicit-'any' errors for first two call signatures, x1, x2, z2.
@@ -51,3 +53,4 @@ interface I {
 }
 
 //// [noImplicitAnyParametersInInterface.js]
+"use strict";

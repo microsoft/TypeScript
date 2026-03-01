@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest4.ts] ////
+
 //// [es6ClassTest4.ts]
 declare class Point
 {
@@ -11,3 +13,4 @@ declare class Point
 
 
 //// [es6ClassTest4.js]
+"use strict";

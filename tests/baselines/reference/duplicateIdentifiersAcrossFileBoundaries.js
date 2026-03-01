@@ -11,8 +11,8 @@ class Foo {
     static x: number;
 }
 
-module N {
-    export module F {
+namespace N {
+    export namespace F {
         var t;
     }
 }
@@ -24,52 +24,39 @@ function C2() { } // error -- cannot merge function with non-ambient class
 class f { } // error -- cannot merge function with non-ambient class
 var v = 3;
 
-module Foo {
+namespace Foo {
     export var x: number; // error for redeclaring var in a different parent
 }
 
-declare module N {
+declare namespace N {
     export function F(); // no error because function is ambient
 }
 
 
 //// [file1.js]
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+"use strict";
+class C1 {
+}
+class C2 {
+}
 function f() { }
 var v = 3;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var N;
 (function (N) {
-    var F;
+    let F;
     (function (F) {
         var t;
     })(F = N.F || (N.F = {}));
 })(N || (N = {}));
 //// [file2.js]
-var I = /** @class */ (function () {
-    function I() {
-    }
-    return I;
-}()); // error -- cannot merge interface with non-ambient class
+"use strict";
+class I {
+} // error -- cannot merge interface with non-ambient class
 function C2() { } // error -- cannot merge function with non-ambient class
-var f = /** @class */ (function () {
-    function f() {
-    }
-    return f;
-}()); // error -- cannot merge function with non-ambient class
+class f {
+} // error -- cannot merge function with non-ambient class
 var v = 3;
 var Foo;
 (function (Foo) {
@@ -88,8 +75,8 @@ declare var v: number;
 declare class Foo {
     static x: number;
 }
-declare module N {
-    module F {
+declare namespace N {
+    namespace F {
     }
 }
 //// [file2.d.ts]
@@ -101,9 +88,9 @@ declare function C2(): void;
 declare class f {
 }
 declare var v: number;
-declare module Foo {
+declare namespace Foo {
     var x: number;
 }
-declare module N {
+declare namespace N {
     function F(): any;
 }

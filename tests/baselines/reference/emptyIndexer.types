@@ -1,24 +1,36 @@
-=== tests/cases/compiler/emptyIndexer.ts ===
+//// [tests/cases/compiler/emptyIndexer.ts] ////
+
+=== emptyIndexer.ts ===
 interface I1 {
 	m(): number;
 >m : () => number
+>  : ^^^^^^      
 }
 
 interface I2 {
 	[s:string]: I1;
 >s : string
+>  : ^^^^^^
 }
 
 
 var x: I2;
 >x : I2
+>  : ^^
 
 var n = x[''].m(); // should not crash compiler
 >n : number
+>  : ^^^^^^
 >x[''].m() : number
+>          : ^^^^^^
 >x[''].m : () => number
+>        : ^^^^^^      
 >x[''] : I1
+>      : ^^
 >x : I2
+>  : ^^
 >'' : ""
+>   : ^^
 >m : () => number
+>  : ^^^^^^      
 

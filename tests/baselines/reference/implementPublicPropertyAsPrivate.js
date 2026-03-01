@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementPublicPropertyAsPrivate.ts] ////
+
 //// [implementPublicPropertyAsPrivate.ts]
 interface I {
     x: number;
@@ -7,9 +9,9 @@ class C implements I {
 }
 
 //// [implementPublicPropertyAsPrivate.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.x = 0; // should raise error at class decl
     }
-    return C;
-}());
+}

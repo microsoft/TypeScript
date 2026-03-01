@@ -1,3 +1,4 @@
+"use strict";
 class C {
     constructor() {
         this.foo = 10;

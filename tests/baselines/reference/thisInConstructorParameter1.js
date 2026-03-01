@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInConstructorParameter1.ts] ////
+
 //// [thisInConstructorParameter1.ts]
 class Foo {
     public y;
@@ -5,9 +7,7 @@ class Foo {
 }
 
 //// [thisInConstructorParameter1.js]
-var Foo = /** @class */ (function () {
-    function Foo(x) {
-        if (x === void 0) { x = this.y; }
-    }
-    return Foo;
-}());
+"use strict";
+class Foo {
+    constructor(x = this.y) { }
+}

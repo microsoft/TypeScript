@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts] ////
+
 //// [intersectionOfTypeVariableHasApparentSignatures.ts]
 interface Component<P> {
     props: Readonly<P> & Readonly<{ children?: {} }>;
@@ -16,10 +18,9 @@ f({
 });
 
 //// [intersectionOfTypeVariableHasApparentSignatures.js]
+"use strict";
 f({
     props: {
-        children: (function (_a) {
-            var x = _a.x;
-        })
+        children: (({ x }) => { })
     }
 });

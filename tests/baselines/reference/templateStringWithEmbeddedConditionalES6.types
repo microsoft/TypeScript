@@ -1,9 +1,17 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedConditionalES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedConditionalES6.ts] ////
+
+=== templateStringWithEmbeddedConditionalES6.ts ===
 var x = `abc${ true ? false : " " }def`;
 >x : string
+>  : ^^^^^^
 >`abc${ true ? false : " " }def` : string
+>                                : ^^^^^^
 >true ? false : " " : false | " "
+>                   : ^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 >" " : " "
+>    : ^^^
 

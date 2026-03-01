@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorCause.ts ===
+//// [tests/cases/compiler/errorCause.ts] ////
+
+=== errorCause.ts ===
 declare const a: unknown;
 >a : Symbol(a, Decl(errorCause.ts, 0, 13))
 

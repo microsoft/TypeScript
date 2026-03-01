@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callOverloads2.ts ===
+//// [tests/cases/compiler/callOverloads2.ts] ////
+
+=== callOverloads2.ts ===
 class Foo { // error
 >Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1), Decl(callOverloads2.ts, 0, 0))
 
@@ -32,7 +34,7 @@ function Goo(s:string); // error - no implementation
 declare function Gar(s:String); // expect no error
 >Gar : Symbol(Gar, Decl(callOverloads2.ts, 13, 23))
 >s : Symbol(s, Decl(callOverloads2.ts, 15, 21))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
 var f1 = new Foo("hey");
 >f1 : Symbol(f1, Decl(callOverloads2.ts, 17, 3))

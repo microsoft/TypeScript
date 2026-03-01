@@ -1,9 +1,14 @@
-=== tests/cases/conformance/es7/trailingCommasInGetter.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInGetter.ts] ////
+
+=== trailingCommasInGetter.ts ===
 class X {
 >X : X
+>  : ^
 
     get x(,) { return 0; }
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 

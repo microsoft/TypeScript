@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace9.ts] ////
+
+=== /a.ts ===
+export type A = number;
+>A : number
+>  : ^^^^^^
+
+=== /b.ts ===
+
+export type * from "./a";
+
+=== /c.ts ===
+import { A } from "./b";
+>A : 1
+>  : ^
+
+const A = 1;
+>A : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export { A };
+>A : 1
+>  : ^
+
+=== /d.ts ===
+import { A } from "./c";
+>A : 1
+>  : ^
+
+A; // Ok
+>A : 1
+>  : ^
+
+type _ = A;
+>_ : number
+>  : ^^^^^^
+
+=== /e.ts ===
+export const A = 1;
+>A : 1
+>  : ^
+>1 : 1
+>  : ^
+
+=== /f.ts ===
+
+export * from "./e";
+export type * from "./a"; // Collision error
+
+=== /g.ts ===
+import { A } from "./f";
+>A : 1
+>  : ^
+
+A;
+>A : 1
+>  : ^
+
+type _ = A; // Follow-on from collision error
+>_ : A
+>  : ^
+

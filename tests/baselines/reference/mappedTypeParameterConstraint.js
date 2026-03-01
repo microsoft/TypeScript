@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeParameterConstraint.ts] ////
+
 //// [mappedTypeParameterConstraint.ts]
 // Repro for #27596
 
@@ -8,6 +10,7 @@ function foo<U>(arg: U): MyMap<U> {
 
 
 //// [mappedTypeParameterConstraint.js]
+"use strict";
 // Repro for #27596
 function foo(arg) {
     return arg;

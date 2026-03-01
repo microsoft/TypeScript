@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType12.ts] ////
+
 //// [symbolType12.ts]
 var s = Symbol.for("assign");
 var str = "";
@@ -29,6 +31,7 @@ s |= 0;
 str += (s || str);
 
 //// [symbolType12.js]
+"use strict";
 var s = Symbol.for("assign");
 var str = "";
 s *= s;

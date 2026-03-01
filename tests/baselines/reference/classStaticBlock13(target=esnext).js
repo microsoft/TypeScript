@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock13.ts] ////
+
 //// [classStaticBlock13.ts]
 class C {
   static #x = 123;
@@ -13,6 +15,7 @@ class C {
 
 
 //// [classStaticBlock13.js]
+"use strict";
 class C {
     static #x = 123;
     static {

@@ -1,31 +1,45 @@
-=== tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts ===
+//// [tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration.ts] ////
+
+=== externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts ===
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
 import file1 = require('./externalModuleRefernceResolutionOrderInImportDeclaration_file1');
 >file1 : typeof file1
+>      : ^^^^^^^^^^^^
 
 file1.foo();
 >file1.foo() : void
+>            : ^^^^
 >file1.foo : () => void
+>          : ^^^^^^^^^^
 >file1 : typeof file1
+>      : ^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 file1.bar();
 >file1.bar() : any
+>            : ^^^
 >file1.bar : any
+>          : ^^^
 >file1 : typeof file1
+>      : ^^^^^^^^^^^^
 >bar : any
+>    : ^^^
 
 
-=== tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts ===
+=== externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts ===
 export function foo() { };
 >foo : () => void
+>    : ^^^^^^^^^^
 
-=== tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts ===
+=== externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts ===
 declare module "externalModuleRefernceResolutionOrderInImportDeclaration_file1" {
 >"externalModuleRefernceResolutionOrderInImportDeclaration_file1" : typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export function bar();
 >bar : () => any
+>    : ^^^^^^^^^
 }
 
 

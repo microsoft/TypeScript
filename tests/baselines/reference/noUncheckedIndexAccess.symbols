@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/noUncheckedIndexAccess.ts] ////
+
+=== noUncheckedIndexAccess.ts ===
+enum Meat {
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+
+    Sausage,
+>Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+
+    Bacon
+>Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+  }
+  const sausage = Meat.Sausage
+>sausage : Symbol(sausage, Decl(noUncheckedIndexAccess.ts, 4, 7))
+>Meat.Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+
+  const valueSausage = Meat[sausage]
+>valueSausage : Symbol(valueSausage, Decl(noUncheckedIndexAccess.ts, 5, 7))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>sausage : Symbol(sausage, Decl(noUncheckedIndexAccess.ts, 4, 7))
+
+  const bacon = Meat.Bacon
+>bacon : Symbol(bacon, Decl(noUncheckedIndexAccess.ts, 7, 7))
+>Meat.Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+
+  const valueBacon = Meat[bacon]
+>valueBacon : Symbol(valueBacon, Decl(noUncheckedIndexAccess.ts, 8, 7))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>bacon : Symbol(bacon, Decl(noUncheckedIndexAccess.ts, 7, 7))
+
+  const union: Meat.Bacon | Meat.Sausage = Meat.Bacon
+>union : Symbol(union, Decl(noUncheckedIndexAccess.ts, 10, 7))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>Sausage : Symbol(Meat.Sausage, Decl(noUncheckedIndexAccess.ts, 0, 11))
+>Meat.Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>Bacon : Symbol(Meat.Bacon, Decl(noUncheckedIndexAccess.ts, 1, 12))
+
+  const valueUnion = Meat[union]
+>valueUnion : Symbol(valueUnion, Decl(noUncheckedIndexAccess.ts, 11, 7))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>union : Symbol(union, Decl(noUncheckedIndexAccess.ts, 10, 7))
+
+  //Avoiding a false positive
+  const value = Meat[0]
+>value : Symbol(value, Decl(noUncheckedIndexAccess.ts, 14, 7))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+
+  const valueUndefined = "testing"
+>valueUndefined : Symbol(valueUndefined, Decl(noUncheckedIndexAccess.ts, 16, 7))
+
+  const value2 = Meat[valueUndefined]
+>value2 : Symbol(value2, Decl(noUncheckedIndexAccess.ts, 17, 7))
+>Meat : Symbol(Meat, Decl(noUncheckedIndexAccess.ts, 0, 0))
+>valueUndefined : Symbol(valueUndefined, Decl(noUncheckedIndexAccess.ts, 16, 7))
+
+  enum A {
+>A : Symbol(A, Decl(noUncheckedIndexAccess.ts, 17, 37))
+
+    a, b, c
+>a : Symbol(A.a, Decl(noUncheckedIndexAccess.ts, 19, 10))
+>b : Symbol(A.b, Decl(noUncheckedIndexAccess.ts, 20, 6))
+>c : Symbol(A.c, Decl(noUncheckedIndexAccess.ts, 20, 9))
+  }
+  enum B {
+>B : Symbol(B, Decl(noUncheckedIndexAccess.ts, 21, 3))
+
+    x, y, z
+>x : Symbol(B.x, Decl(noUncheckedIndexAccess.ts, 22, 10))
+>y : Symbol(B.y, Decl(noUncheckedIndexAccess.ts, 23, 6))
+>z : Symbol(B.z, Decl(noUncheckedIndexAccess.ts, 23, 9))
+  }
+  
+  const value3 = A[B.x];
+>value3 : Symbol(value3, Decl(noUncheckedIndexAccess.ts, 26, 7))
+>A : Symbol(A, Decl(noUncheckedIndexAccess.ts, 17, 37))
+>B.x : Symbol(B.x, Decl(noUncheckedIndexAccess.ts, 22, 10))
+>B : Symbol(B, Decl(noUncheckedIndexAccess.ts, 21, 3))
+>x : Symbol(B.x, Decl(noUncheckedIndexAccess.ts, 22, 10))
+

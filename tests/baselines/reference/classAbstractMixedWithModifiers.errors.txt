@@ -1,14 +1,14 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(6,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(8,14): error TS1029: 'public' modifier must precede 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(9,14): error TS1029: 'protected' modifier must precede 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(10,14): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(12,14): error TS1243: 'static' modifier cannot be used with 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(13,12): error TS1243: 'static' modifier cannot be used with 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(15,14): error TS1243: 'async' modifier cannot be used with 'abstract' modifier.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts(16,5): error TS1243: 'async' modifier cannot be used with 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(6,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(8,14): error TS1029: 'public' modifier must precede 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(9,14): error TS1029: 'protected' modifier must precede 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(10,14): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(12,14): error TS1243: 'static' modifier cannot be used with 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(13,12): error TS1243: 'static' modifier cannot be used with 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(15,14): error TS1243: 'async' modifier cannot be used with 'abstract' modifier.
+classAbstractMixedWithModifiers.ts(16,5): error TS1243: 'async' modifier cannot be used with 'abstract' modifier.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts (8 errors) ====
+==== classAbstractMixedWithModifiers.ts (8 errors) ====
     abstract class A {
         abstract foo_a();
     

@@ -1,51 +1,96 @@
-=== tests/cases/compiler/jsxNamespacePrefixIntrinsics.tsx ===
+//// [tests/cases/compiler/jsxNamespacePrefixIntrinsics.tsx] ////
+
+=== jsxNamespacePrefixIntrinsics.tsx ===
 declare namespace JSX {
   interface IntrinsicElements {
     "ns:element": {
 >"ns:element" : { "ns:attribute": string; }
+>             : ^^^^^^^^^^^^^^^^^^      ^^^
 
       "ns:attribute": string;
 >"ns:attribute" : string
+>               : ^^^^^^
 
     },
     "ns:NamespacedUpcaseAlsoIntrinsic": any,
 >"ns:NamespacedUpcaseAlsoIntrinsic" : any
+>                                   : ^^^
 
     "NS:NamespacedUpcaseAlsoIntrinsic": any
 >"NS:NamespacedUpcaseAlsoIntrinsic" : any
+>                                   : ^^^
   }
 }
 
 const valid = <ns:element ns:attribute="yep" />;
 >valid : any
+>      : ^^^
 ><ns:element ns:attribute="yep" /> : any
->ns:element : any
+>                                  : ^^^
+>ns : any
+>   : ^^^
+>element : any
+>        : ^^^
 >ns:attribute : string
+>             : ^^^^^^
+>ns : any
+>   : ^^^
+>attribute : any
+>          : ^^^
 
 const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
 >validUpcase1 : any
+>             : ^^^
 ><ns:NamespacedUpcaseAlsoIntrinsic /> : any
->ns:NamespacedUpcaseAlsoIntrinsic : any
+>                                     : ^^^
+>ns : any
+>   : ^^^
+>NamespacedUpcaseAlsoIntrinsic : any
+>                              : ^^^
 
 const validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;
 >validUpcase2 : any
+>             : ^^^
 ><NS:NamespacedUpcaseAlsoIntrinsic /> : any
->NS:NamespacedUpcaseAlsoIntrinsic : any
+>                                     : ^^^
+>NS : any
+>   : ^^^
+>NamespacedUpcaseAlsoIntrinsic : any
+>                              : ^^^
 
 const invalid1 = <element />;
 >invalid1 : any
+>         : ^^^
 ><element /> : any
+>            : ^^^
 >element : any
+>        : ^^^
 
 const invalid2 = <ns:element attribute="nope" />;
 >invalid2 : any
+>         : ^^^
 ><ns:element attribute="nope" /> : any
->ns:element : any
+>                                : ^^^
+>ns : any
+>   : ^^^
+>element : any
+>        : ^^^
 >attribute : string
+>          : ^^^^^^
 
 const invalid3 = <ns:element ns:invalid="nope" />;
 >invalid3 : any
+>         : ^^^
 ><ns:element ns:invalid="nope" /> : any
->ns:element : any
+>                                 : ^^^
+>ns : any
+>   : ^^^
+>element : any
+>        : ^^^
 >ns:invalid : string
+>           : ^^^^^^
+>ns : any
+>   : ^^^
+>invalid : any
+>        : ^^^
 

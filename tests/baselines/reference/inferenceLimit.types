@@ -1,71 +1,112 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/inferenceLimit.ts] ////
+
+=== file1.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 import * as MyModule from "./mymodule";
 >MyModule : typeof MyModule
+>         : ^^^^^^^^^^^^^^^
 
 export class BrokenClass {
 >BrokenClass : BrokenClass
+>            : ^^^^^^^^^^^
 
   constructor() {}
 
   public brokenMethod(field: string, value: string) {
 >brokenMethod : (field: string, value: string) => Promise<MyModule.MyModel[]>
+>             : ^     ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >field : string
+>      : ^^^^^^
 >value : string
+>      : ^^^^^^
 
   return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
 >new Promise<Array<MyModule.MyModel>>((resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    }) : Promise<MyModule.MyModel[]>
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >MyModule : any
+>         : ^^^
 >(resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    } : (resolve: (value: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void, reject: (reason?: any) => void) => Promise<void>
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                 : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^      ^^^      ^^^   ^^^^^    ^^^^^^^^^^^^^^^^^^
 >resolve : (value: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >reject : (reason?: any) => void
+>       : ^      ^^^   ^^^^^    
 
     let result: Array<MyModule.MyModel> = [];
 >result : MyModule.MyModel[]
+>       : ^^^^^^^^^^^^^^^^^^
 >MyModule : any
+>         : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     let populateItems = (order) => {
 >populateItems : (order: any) => Promise<unknown>
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    } : (order: any) => Promise<unknown>
+>                                                                                                                                                                                                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >order : any
 
       return new Promise((resolve, reject) => {
 >new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      }) : Promise<unknown>
+>                                                                                                                                                                             : ^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >(resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      } : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>                                                                                                                                                                : ^       ^^^     ^^^^^^^^^^^^^^    ^^      ^^^      ^^^   ^^^^^    ^^^^^^^^^
 >resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
 >reject : (reason?: any) => void
+>       : ^      ^^^   ^^^^^    
 
         this.doStuff(order.id)
 >this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          }) : Promise<void>
+>                                                                                                                          : ^^^^^^^^^^^^^
 >this.doStuff(order.id)          .then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                      : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.doStuff(order.id) : Promise<void>
+>                       : ^^^^^^^^^^^^^
 >this.doStuff : (id: number) => Promise<void>
+>             : ^  ^^      ^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >doStuff : (id: number) => Promise<void>
+>        : ^  ^^      ^^^^^^^^^^^^^^^^^^
 >order.id : any
 >order : any
+>      : ^^^
 >id : any
+>   : ^^^
 
           .then((items) => {
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(items) => {            order.items = items;            resolve(order);          } : (items: void) => void
+>                                                                                   : ^     ^^^^^^^^^^^^^^^
 >items : void
+>      : ^^^^
 
             order.items = items;
 >order.items = items : void
+>                    : ^^^^
 >order.items : any
 >order : any
+>      : ^^^
 >items : any
+>      : ^^^
 >items : void
+>      : ^^^^
 
             resolve(order);
 >resolve(order) : void
+>               : ^^^^
 >resolve : (value: unknown) => void
+>        : ^     ^^^^^^^^^^^^^^    
 >order : any
 
           });
@@ -74,27 +115,45 @@ export class BrokenClass {
 
     return Promise.all(result.map(populateItems))
 >Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      }) : Promise<void>
+>                                                                                                                         : ^^^^^^^^^^^^^
 >Promise.all(result.map(populateItems))      .then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                                  : ^        ^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all(result.map(populateItems)) : Promise<unknown[]>
+>                                       : ^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^                     ^^^ ^^^^^^^^^                       ^^      ^^ ^^^                                                     ^^^
 >result.map(populateItems) : Promise<unknown>[]
+>                          : ^^^^^^^^^^^^^^^^^^
 >result.map : <U>(callbackfn: (value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg?: any) => U[]
+>           : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >result : MyModule.MyModel[]
+>       : ^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >populateItems : (order: any) => Promise<unknown>
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       .then((orders: Array<MyModule.MyModel>) => {
 >then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: Array<MyModule.MyModel>) => void
+>                                                                      : ^      ^^                       ^^^^^^^^^
 >orders : MyModule.MyModel[]
+>       : ^^^^^^^^^^^^^^^^^^
 >MyModule : any
+>         : ^^^
 
         resolve(orders);
 >resolve(orders) : void
+>                : ^^^^
 >resolve : (value: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >orders : MyModule.MyModel[]
+>       : ^^^^^^^^^^^^^^^^^^
 
       });
     });
@@ -102,14 +161,17 @@ export class BrokenClass {
 
   public async doStuff(id: number) {
 >doStuff : (id: number) => Promise<void>
+>        : ^  ^^      ^^^^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 
     return;
   }
 }
 
-=== tests/cases/compiler/mymodule.ts ===
+=== mymodule.ts ===
 export interface MyModel {
     id: number;
 >id : number
+>   : ^^^^^^
 }

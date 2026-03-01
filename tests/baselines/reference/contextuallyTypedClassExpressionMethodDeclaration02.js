@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts] ////
+
 //// [contextuallyTypedClassExpressionMethodDeclaration02.ts]
 interface A {
     numProp: number;
@@ -50,35 +52,32 @@ function getFoo3(): Foo {
 }
 
 //// [contextuallyTypedClassExpressionMethodDeclaration02.js]
+"use strict";
 function getFoo1() {
-    return /** @class */ (function () {
-        function class_1() {
-        }
-        class_1.prototype.method1 = function (arg) {
+    return class {
+        method1(arg) {
             arg.numProp = 10;
-        };
-        class_1.prototype.method2 = function (arg) {
+        }
+        method2(arg) {
             arg.strProp = "hello";
-        };
-        return class_1;
-    }());
+        }
+    };
 }
 function getFoo2() {
-    return /** @class */ (function () {
-        function class_2() {
-            this.method1 = function (arg) {
+    return class {
+        constructor() {
+            this.method1 = (arg) => {
                 arg.numProp = 10;
             };
-            this.method2 = function (arg) {
+            this.method2 = (arg) => {
                 arg.strProp = "hello";
             };
         }
-        return class_2;
-    }());
+    };
 }
 function getFoo3() {
-    return /** @class */ (function () {
-        function class_3() {
+    return class {
+        constructor() {
             this.method1 = function (arg) {
                 arg.numProp = 10;
             };
@@ -86,6 +85,5 @@ function getFoo3() {
                 arg.strProp = "hello";
             };
         }
-        return class_3;
-    }());
+    };
 }

@@ -1,10 +1,12 @@
+//// [tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts] ////
+
 //// [strictModeReservedWordInModuleDeclaration.ts]
 "use strict"
-module public { }
-module private { }
-module public.whatever {
+namespace public { }
+namespace private { }
+namespace public.whatever {
 }
-module private.public.foo { }
+namespace private.public.foo { }
 
 //// [strictModeReservedWordInModuleDeclaration.js]
 "use strict";

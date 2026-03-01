@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/declFileExportImportChain2.ts] ////
 
 //// [declFileExportImportChain2_a.ts]
-module m1 {
-    export module m2 {
+namespace m1 {
+    export namespace m2 {
         export class c1 {
         }
     }
@@ -25,13 +25,10 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var m1;
     (function (m1) {
-        var m2;
+        let m2;
         (function (m2) {
-            var c1 = /** @class */ (function () {
-                function c1() {
-                }
-                return c1;
-            }());
+            class c1 {
+            }
             m2.c1 = c1;
         })(m2 = m1.m2 || (m1.m2 = {}));
     })(m1 || (m1 = {}));
@@ -45,20 +42,20 @@ define(["require", "exports", "declFileExportImportChain2_a"], function (require
 //// [declFileExportImportChain2_c.js]
 define(["require", "exports", "declFileExportImportChain2_b"], function (require, exports, b) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = b;
 });
 //// [declFileExportImportChain2_d.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
 });
 
 
 //// [declFileExportImportChain2_a.d.ts]
-declare module m1 {
-    module m2 {
+declare namespace m1 {
+    namespace m2 {
         class c1 {
         }
     }

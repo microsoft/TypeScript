@@ -1,26 +1,41 @@
-=== tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts ===
+//// [tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts] ////
+
+=== contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts ===
 function f<T>() {
 >f : <T>() => <U extends T>(u: U) => U
+>  : ^ ^^^^^^^^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 
     function g<U extends T>(u: U): U { return null }
 >g : <U extends T>(u: U) => U
+>  : ^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 >u : U
->null : null
+>  : ^
 
     return g;
 >g : <U extends T>(u: U) => U
+>  : ^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 }
 var h: <V, W>(v: V, func: (v: V) => W) => W;
 >h : <V, W>(v: V, func: (v: V) => W) => W
+>  : ^ ^^ ^^ ^^ ^^    ^^           ^^^^^ 
 >v : V
+>  : ^
 >func : (v: V) => W
+>     : ^ ^^ ^^^^^ 
 >v : V
+>  : ^
 
 var x = h("", f<string>()); // Call should succeed and x should be string. All type parameters should be instantiated to string
 >x : string
+>  : ^^^^^^
 >h("", f<string>()) : string
+>                   : ^^^^^^
 >h : <V, W>(v: V, func: (v: V) => W) => W
+>  : ^ ^^ ^^ ^^ ^^    ^^           ^^^^^ 
 >"" : ""
+>   : ^^
 >f<string>() : <U extends string>(u: U) => U
+>            : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >f : <T>() => <U extends T>(u: U) => U
+>  : ^ ^^^^^^^^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 

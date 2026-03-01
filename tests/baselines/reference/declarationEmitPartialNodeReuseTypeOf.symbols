@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/declarationEmitPartialNodeReuseTypeOf.ts] ////
+
+=== a.ts ===
+export const nImported = "nImported"
+>nImported : Symbol(nImported, Decl(a.ts, 0, 12))
+
+export const nNotImported = "nNotImported"
+>nNotImported : Symbol(nNotImported, Decl(a.ts, 1, 12))
+
+const nPrivate = "private"
+>nPrivate : Symbol(nPrivate, Decl(a.ts, 2, 5))
+
+export const o = (p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPrivate) => null! as { foo: typeof nImported, bar: typeof nPrivate, baz: typeof nNotImported }
+>o : Symbol(o, Decl(a.ts, 3, 12))
+>p1 : Symbol(p1, Decl(a.ts, 3, 18))
+>nImported : Symbol(nImported, Decl(a.ts, 0, 12))
+>p2 : Symbol(p2, Decl(a.ts, 3, 39))
+>nNotImported : Symbol(nNotImported, Decl(a.ts, 1, 12))
+>p3 : Symbol(p3, Decl(a.ts, 3, 64))
+>nPrivate : Symbol(nPrivate, Decl(a.ts, 2, 5))
+>foo : Symbol(foo, Decl(a.ts, 3, 99))
+>nImported : Symbol(nImported, Decl(a.ts, 0, 12))
+>bar : Symbol(bar, Decl(a.ts, 3, 122))
+>nPrivate : Symbol(nPrivate, Decl(a.ts, 2, 5))
+>baz : Symbol(baz, Decl(a.ts, 3, 144))
+>nNotImported : Symbol(nNotImported, Decl(a.ts, 1, 12))
+
+=== b.ts ===
+import { o, nImported } from "./a";
+>o : Symbol(o, Decl(b.ts, 0, 8))
+>nImported : Symbol(nImported, Decl(b.ts, 0, 11))
+
+export const g = o
+>g : Symbol(g, Decl(b.ts, 1, 12))
+>o : Symbol(o, Decl(b.ts, 0, 8))
+
+console.log(nImported);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>nImported : Symbol(nImported, Decl(b.ts, 0, 11))
+
+=== c.ts ===
+import * as a from "./a";
+>a : Symbol(a, Decl(c.ts, 0, 6))
+
+export const g = a.o
+>g : Symbol(g, Decl(c.ts, 1, 12))
+>a.o : Symbol(a.o, Decl(a.ts, 3, 12))
+>a : Symbol(a, Decl(c.ts, 0, 6))
+>o : Symbol(a.o, Decl(a.ts, 3, 12))
+

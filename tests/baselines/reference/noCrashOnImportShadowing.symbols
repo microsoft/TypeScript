@@ -1,8 +1,10 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/noCrashOnImportShadowing.ts] ////
+
+=== b.ts ===
 export const zzz = 123;
 >zzz : Symbol(zzz, Decl(b.ts, 0, 12))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import * as B from "./b";
 >B : Symbol(B, Decl(a.ts, 0, 6), Decl(a.ts, 0, 25))
 
@@ -26,7 +28,7 @@ B.zzz;
 export { B };
 >B : Symbol(B, Decl(a.ts, 9, 8))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { B } from "./a";
 >B : Symbol(B, Decl(index.ts, 0, 8))
 
@@ -36,6 +38,9 @@ const x: B = { x: "" };
 >x : Symbol(x, Decl(index.ts, 2, 14))
 
 B.zzz;
+>B.zzz : Symbol(OriginalB.zzz, Decl(b.ts, 0, 12))
+>B : Symbol(B, Decl(index.ts, 0, 8))
+>zzz : Symbol(OriginalB.zzz, Decl(b.ts, 0, 12))
 
 import * as OriginalB from "./b";
 >OriginalB : Symbol(OriginalB, Decl(index.ts, 5, 6))

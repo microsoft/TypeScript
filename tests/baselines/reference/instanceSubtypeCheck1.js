@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceSubtypeCheck1.ts] ////
+
 //// [instanceSubtypeCheck1.ts]
 interface A<T>
 {
@@ -10,3 +12,4 @@ interface B<T> extends A<T>
 }
 
 //// [instanceSubtypeCheck1.js]
+"use strict";

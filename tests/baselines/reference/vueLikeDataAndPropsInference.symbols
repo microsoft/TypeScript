@@ -1,4 +1,6 @@
-=== tests/cases/compiler/vueLikeDataAndPropsInference.ts ===
+//// [tests/cases/compiler/vueLikeDataAndPropsInference.ts] ////
+
+=== vueLikeDataAndPropsInference.ts ===
 interface Instance {
 >Instance : Symbol(Instance, Decl(vueLikeDataAndPropsInference.ts, 0, 0))
 
@@ -125,6 +127,8 @@ test({
 >oldVal : Symbol(oldVal, Decl(vueLikeDataAndPropsInference.ts, 40, 27))
 
             this.bar = false
+>this.bar : Symbol(bar, Decl(vueLikeDataAndPropsInference.ts, 33, 13))
+>bar : Symbol(bar, Decl(vueLikeDataAndPropsInference.ts, 33, 13))
         }
     }
 })

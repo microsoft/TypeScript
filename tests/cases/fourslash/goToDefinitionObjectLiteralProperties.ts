@@ -14,4 +14,4 @@
 ////o./*methodReference*/method;
 ////o./*es6StyleMethodReference*/es6StyleMethod;
 
-verify.goToDefinitionForMarkers("value", "getter", "setter", "method", "es6StyleMethod");
+verify.baselineGetDefinitionAtPosition("valueReference", "getterReference", "setterReference", "methodReference", "es6StyleMethodReference");

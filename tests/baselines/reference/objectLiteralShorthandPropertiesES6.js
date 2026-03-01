@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesES6.ts] ////
+
 //// [objectLiteralShorthandPropertiesES6.ts]
 var a, b, c;
 
@@ -21,6 +23,7 @@ var x3 = {
 
 
 //// [objectLiteralShorthandPropertiesES6.js]
+"use strict";
 var a, b, c;
 var x1 = {
     a

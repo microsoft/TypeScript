@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/namedTypes/genericInstantiationEquivalentToObjectLiteral.ts] ////
+
 //// [genericInstantiationEquivalentToObjectLiteral.ts]
 interface Pair<T1, T2> { first: T1; second: T2; }
 var x: Pair<string, number>
@@ -15,6 +17,7 @@ f2(x);
 f2(y);
 
 //// [genericInstantiationEquivalentToObjectLiteral.js]
+"use strict";
 var x;
 var y;
 x = y;

@@ -1,246 +1,399 @@
-=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexingResults.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexingResults.ts] ////
+
+=== numericIndexingResults.ts ===
 class C {
 >C : C
+>  : ^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     1 = '';
 >1 : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     "2" = ''
 >"2" : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r1 = c['1'];
 >r1 : string
+>   : ^^^^^^
 >c['1'] : string
+>       : ^^^^^^
 >c : C
+>  : ^
 >'1' : "1"
+>    : ^^^
 
 var r2 = c['2'];
 >r2 : string
+>   : ^^^^^^
 >c['2'] : string
+>       : ^^^^^^
 >c : C
+>  : ^
 >'2' : "2"
+>    : ^^^
 
 var r3 = c['3'];
 >r3 : string
+>   : ^^^^^^
 >c['3'] : string
+>       : ^^^^^^
 >c : C
+>  : ^
 >'3' : "3"
+>    : ^^^
 
 var r4 = c[1];
 >r4 : string
+>   : ^^^^^^
 >c[1] : string
+>     : ^^^^^^
 >c : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r5 = c[2];
 >r5 : string
+>   : ^^^^^^
 >c[2] : string
+>     : ^^^^^^
 >c : C
+>  : ^
 >2 : 2
+>  : ^
 
 var r6 = c[3];
 >r6 : string
+>   : ^^^^^^
 >c[3] : string
+>     : ^^^^^^
 >c : C
+>  : ^
 >3 : 3
+>  : ^
 
 interface I {
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     1: string;
 >1 : string
+>  : ^^^^^^
 
     "2": string;
 >"2" : string
+>    : ^^^^^^
 }
 
 var i: I
 >i : I
+>  : ^
 
 var r1 = i['1'];
 >r1 : string
+>   : ^^^^^^
 >i['1'] : string
+>       : ^^^^^^
 >i : I
+>  : ^
 >'1' : "1"
+>    : ^^^
 
 var r2 = i['2'];
 >r2 : string
+>   : ^^^^^^
 >i['2'] : string
+>       : ^^^^^^
 >i : I
+>  : ^
 >'2' : "2"
+>    : ^^^
 
 var r3 = i['3'];
 >r3 : string
+>   : ^^^^^^
 >i['3'] : string
+>       : ^^^^^^
 >i : I
+>  : ^
 >'3' : "3"
+>    : ^^^
 
 var r4 = i[1];
 >r4 : string
+>   : ^^^^^^
 >i[1] : string
+>     : ^^^^^^
 >i : I
+>  : ^
 >1 : 1
+>  : ^
 
 var r5 = i[2];
 >r5 : string
+>   : ^^^^^^
 >i[2] : string
+>     : ^^^^^^
 >i : I
+>  : ^
 >2 : 2
+>  : ^
 
 var r6 = i[3];
 >r6 : string
+>   : ^^^^^^
 >i[3] : string
+>     : ^^^^^^
 >i : I
+>  : ^
 >3 : 3
+>  : ^
 
 var a: {
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 
     [x: number]: string;
 >x : number
+>  : ^^^^^^
 
     1: string;
 >1 : string
+>  : ^^^^^^
 
     "2": string;
 >"2" : string
+>    : ^^^^^^
 }
 
 var r1 = a['1'];
 >r1 : string
+>   : ^^^^^^
 >a['1'] : string
+>       : ^^^^^^
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >'1' : "1"
+>    : ^^^
 
 var r2 = a['2'];
 >r2 : string
+>   : ^^^^^^
 >a['2'] : string
+>       : ^^^^^^
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >'2' : "2"
+>    : ^^^
 
 var r3 = a['3'];
 >r3 : string
+>   : ^^^^^^
 >a['3'] : string
+>       : ^^^^^^
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >'3' : "3"
+>    : ^^^
 
 var r4 = a[1];
 >r4 : string
+>   : ^^^^^^
 >a[1] : string
+>     : ^^^^^^
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >1 : 1
+>  : ^
 
 var r5 = a[2];
 >r5 : string
+>   : ^^^^^^
 >a[2] : string
+>     : ^^^^^^
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >2 : 2
+>  : ^
 
 var r6 = a[3];
 >r6 : string
+>   : ^^^^^^
 >a[3] : string
+>     : ^^^^^^
 >a : { [x: number]: string; 1: string; "2": string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >3 : 3
+>  : ^
 
 var b: { [x: number]: string } = { 1: '', "2": '' }
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >{ 1: '', "2": '' } : { 1: string; "2": string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >"2" : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r1a = b['1'];
 >r1a : string
+>    : ^^^^^^
 >b['1'] : string
+>       : ^^^^^^
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
+>    : ^^^
 
 var r2a = b['2'];
 >r2a : string
+>    : ^^^^^^
 >b['2'] : string
+>       : ^^^^^^
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'2' : "2"
+>    : ^^^
 
 var r3 = b['3'];
 >r3 : string
+>   : ^^^^^^
 >b['3'] : string
+>       : ^^^^^^
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'3' : "3"
+>    : ^^^
 
 var r4 = b[1];
 >r4 : string
+>   : ^^^^^^
 >b[1] : string
+>     : ^^^^^^
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 var r5 = b[2];
 >r5 : string
+>   : ^^^^^^
 >b[2] : string
+>     : ^^^^^^
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 var r6 = b[3];
 >r6 : string
+>   : ^^^^^^
 >b[3] : string
+>     : ^^^^^^
 >b : { [x: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 var b2: { [x: number]: string; 1: string; "2": string; } = { 1: '', "2": '' }
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >1 : string
+>  : ^^^^^^
 >"2" : string
+>    : ^^^^^^
 >{ 1: '', "2": '' } : { 1: string; "2": string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >"2" : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r1b = b2['1'];
 >r1b : string
+>    : ^^^^^^
 >b2['1'] : string
+>        : ^^^^^^
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >'1' : "1"
+>    : ^^^
 
 var r2b = b2['2'];
 >r2b : string
+>    : ^^^^^^
 >b2['2'] : string
+>        : ^^^^^^
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >'2' : "2"
+>    : ^^^
 
 var r3 = b2['3'];
 >r3 : string
+>   : ^^^^^^
 >b2['3'] : string
+>        : ^^^^^^
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >'3' : "3"
+>    : ^^^
 
 var r4 = b2[1];
 >r4 : string
+>   : ^^^^^^
 >b2[1] : string
+>      : ^^^^^^
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >1 : 1
+>  : ^
 
 var r5 = b2[2];
 >r5 : string
+>   : ^^^^^^
 >b2[2] : string
+>      : ^^^^^^
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >2 : 2
+>  : ^
 
 var r6 = b2[3];
 >r6 : string
+>   : ^^^^^^
 >b2[3] : string
+>      : ^^^^^^
 >b2 : { [x: number]: string; 1: string; "2": string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
 >3 : 3
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAnyES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAnyES6.ts] ////
+
+=== taggedTemplateStringsWithTagsTypedAsAnyES6.ts ===
 var f: any;
 >f : any
 
@@ -6,107 +8,161 @@ f `abc`
 >f `abc` : any
 >f : any
 >`abc` : "abc"
+>      : ^^^^^
 
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 f.g.h `abc`
 >f.g.h `abc` : any
 >f.g.h : any
 >f.g : any
+>    : ^^^
 >f : any
+>  : ^^^
 >g : any
+>  : ^^^
 >h : any
+>  : ^^^
 >`abc` : "abc"
+>      : ^^^^^
 
 f.g.h `abc${1}def${2}ghi`;
 >f.g.h `abc${1}def${2}ghi` : any
 >f.g.h : any
 >f.g : any
+>    : ^^^
 >f : any
+>  : ^^^
 >g : any
+>  : ^^^
 >h : any
+>  : ^^^
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 f `abc`.member
 >f `abc`.member : any
 >f `abc` : any
+>        : ^^^
 >f : any
 >`abc` : "abc"
+>      : ^^^^^
 >member : any
+>       : ^^^
 
 f `abc${1}def${2}ghi`.member;
 >f `abc${1}def${2}ghi`.member : any
 >f `abc${1}def${2}ghi` : any
+>                      : ^^^
 >f : any
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >member : any
+>       : ^^^
 
 f `abc`["member"];
 >f `abc`["member"] : any
 >f `abc` : any
 >f : any
 >`abc` : "abc"
+>      : ^^^^^
 >"member" : "member"
+>         : ^^^^^^^^
 
 f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : any
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"member" : "member"
+>         : ^^^^^^^^
 
 f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc`["member"].someOtherTag `abc${1}def${2}ghi` : any
 >f `abc`["member"].someOtherTag : any
 >f `abc`["member"] : any
+>                  : ^^^
 >f `abc` : any
 >f : any
 >`abc` : "abc"
+>      : ^^^^^
 >"member" : "member"
+>         : ^^^^^^^^
 >someOtherTag : any
+>             : ^^^
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi` : any
 >f `abc${1}def${2}ghi`["member"].someOtherTag : any
 >f `abc${1}def${2}ghi`["member"] : any
+>                                : ^^^
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >"member" : "member"
+>         : ^^^^^^^^
 >someOtherTag : any
+>             : ^^^
 >`abc${1}def${2}ghi` : string
+>                    : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 f.thisIsNotATag(`abc`);
 >f.thisIsNotATag(`abc`) : any
 >f.thisIsNotATag : any
 >f : any
+>  : ^^^
 >thisIsNotATag : any
+>              : ^^^
 >`abc` : "abc"
+>      : ^^^^^
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : any
 >f.thisIsNotATag : any
 >f : any
+>  : ^^^
 >thisIsNotATag : any
->`abc${1}def${2}ghi` : string
+>              : ^^^
+>`abc${1}def${2}ghi` : "abc1def2ghi"
+>                    : ^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

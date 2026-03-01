@@ -1,6 +1,9 @@
-=== tests/cases/compiler/autoAsiForStaticsInClassDeclaration.ts ===
+//// [tests/cases/compiler/autoAsiForStaticsInClassDeclaration.ts] ////
+
+=== autoAsiForStaticsInClassDeclaration.ts ===
 class C {
 >C : C
+>  : ^
 
     static x
 >x : any

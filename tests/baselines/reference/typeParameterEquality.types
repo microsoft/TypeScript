@@ -1,14 +1,21 @@
-=== tests/cases/compiler/typeParameterEquality.ts ===
+//// [tests/cases/compiler/typeParameterEquality.ts] ////
+
+=== typeParameterEquality.ts ===
 class C {
 >C : C
+>  : ^
 
     get x(): <T>(a: T) => T { return null; }
 >x : <T>(a: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >a : T
->null : null
+>  : ^
 
     set x(p: <U>(a: U) => U) {}
 >x : <T>(a: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >p : <U>(a: U) => U
+>  : ^ ^^ ^^ ^^^^^ 
 >a : U
+>  : ^
 }

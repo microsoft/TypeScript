@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/awaitUnion_es6.ts] ////
+
 //// [awaitUnion_es6.ts]
 declare let a: number | string;
 declare let b: PromiseLike<number> | PromiseLike<string>;
@@ -13,6 +15,7 @@ async function f() {
 }
 
 //// [awaitUnion_es6.js]
+"use strict";
 function f() {
     return __awaiter(this, void 0, void 0, function* () {
         let await_a = yield a;

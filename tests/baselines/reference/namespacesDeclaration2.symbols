@@ -1,15 +1,17 @@
-=== tests/cases/compiler/namespacesDeclaration2.ts ===
+//// [tests/cases/compiler/namespacesDeclaration2.ts] ////
+
+=== namespacesDeclaration2.ts ===
 namespace N {
 >N : Symbol(N, Decl(namespacesDeclaration2.ts, 0, 0))
 
     function S() {}
 >S : Symbol(S, Decl(namespacesDeclaration2.ts, 0, 13))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(namespacesDeclaration2.ts, 2, 1))
 
     function F() {}
->F : Symbol(F, Decl(namespacesDeclaration2.ts, 3, 10))
+>F : Symbol(F, Decl(namespacesDeclaration2.ts, 3, 13))
 }
 
 declare namespace ns {

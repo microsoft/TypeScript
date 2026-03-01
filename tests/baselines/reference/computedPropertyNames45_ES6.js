@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES6.ts] ////
+
 //// [computedPropertyNames45_ES6.ts]
 class Foo { x }
 class Foo2 { x; y }
@@ -13,6 +15,7 @@ class D extends C {
 }
 
 //// [computedPropertyNames45_ES6.js]
+"use strict";
 class Foo {
 }
 class Foo2 {

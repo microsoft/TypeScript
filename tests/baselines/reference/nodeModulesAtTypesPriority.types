@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/moduleResolution/nodeModulesAtTypesPriority.ts] ////
+
+=== /node_modules/@types/react/index.d.ts ===
+declare const React: any;
+>React : any
+>      : ^^^
+
+export = React;
+>React : any
+>      : ^^^
+
+=== /node_modules/@types/redux/index.d.ts ===
+export declare function createStore(): void;
+>createStore : () => void
+>            : ^^^^^^    
+
+=== /packages/a/node_modules/redux/index.d.ts ===
+export declare function createStore(): void;
+>createStore : () => void
+>            : ^^^^^^    
+
+=== /packages/a/index.ts ===
+import React from "react";
+>React : any
+>      : ^^^
+
+import { createStore } from "redux";
+>createStore : () => void
+>            : ^^^^^^    
+

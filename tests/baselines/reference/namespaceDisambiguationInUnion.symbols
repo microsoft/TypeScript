@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namespaceDisambiguationInUnion.ts ===
+//// [tests/cases/compiler/namespaceDisambiguationInUnion.ts] ////
+
+=== namespaceDisambiguationInUnion.ts ===
 namespace Foo {
 >Foo : Symbol(Foo, Decl(namespaceDisambiguationInUnion.ts, 0, 0))
 

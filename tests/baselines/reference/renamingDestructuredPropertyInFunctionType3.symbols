@@ -1,4 +1,6 @@
-=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts ===
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType3.ts] ////
+
+=== renamingDestructuredPropertyInFunctionType3.ts ===
 const sym = Symbol();
 >sym : Symbol(sym, Decl(renamingDestructuredPropertyInFunctionType3.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -110,3 +110,14 @@ function accessorNames<S extends string>(propName: S) {
 }
 
 const ns1 = accessorNames('foo');
+
+// repro from https://github.com/microsoft/TypeScript/issues/54374
+interface Foo54374 {
+  a: 1;
+  b: 2;
+}
+
+const fooConst54374: Foo54374 = {
+  a: 1,
+  b: 3
+} as const

@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/tslibMissingHelper.ts] ////
+
+=== /package1/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : () => Promise<void>
+>    : ^^^^^^             
+
+async function bar(): Promise<void> {}
+>bar : () => Promise<void>
+>    : ^^^^^^             
+
+=== /package2/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : () => Promise<void>
+>    : ^^^^^^             
+
+=== /node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : any
+>           : ^^^
+

@@ -1,11 +1,11 @@
-tests/cases/compiler/returnTypeParameter.ts(1,22): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/returnTypeParameter.ts(2,34): error TS2693: 'T' only refers to a type, but is being used as a value here.
+returnTypeParameter.ts(1,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+returnTypeParameter.ts(2,34): error TS2693: 'T' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/returnTypeParameter.ts (2 errors) ====
+==== returnTypeParameter.ts (2 errors) ====
     function f<T>(a: T): T { } // error, no return statement
                          ~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
     function f2<T>(a: T): T { return T; } // bug was that this satisfied the return statement requirement
                                      ~
 !!! error TS2693: 'T' only refers to a type, but is being used as a value here.

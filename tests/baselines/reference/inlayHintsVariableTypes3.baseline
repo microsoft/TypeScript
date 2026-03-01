@@ -1,0 +1,69 @@
+// === Inlay Hints ===
+const div = getCtor("div");
+         ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "new "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "DivElement",
+      "span": {
+        "start": 10,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsVariableTypes3.ts"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "prototype"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "DivElement",
+      "span": {
+        "start": 10,
+        "length": 10
+      },
+      "file": "/tests/cases/fourslash/inlayHintsVariableTypes3.ts"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    },
+    {
+      "text": " | "
+    },
+    {
+      "text": "undefined"
+    }
+  ],
+  "position": 260,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

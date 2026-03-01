@@ -1,11 +1,16 @@
-=== tests/cases/conformance/expressions/typeGuards/typePredicateASI.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typePredicateASI.ts] ////
+
+=== typePredicateASI.ts ===
 interface I {
     foo(callback: (a: any, b: any) => void): I
 >foo : (callback: (a: any, b: any) => void) => I
+>    : ^        ^^                        ^^^^^ 
 >callback : (a: any, b: any) => void
+>         : ^ ^^   ^^ ^^   ^^^^^    
 >a : any
 >b : any
 
     is(): boolean;
 >is : () => boolean
+>   : ^^^^^^       
 }

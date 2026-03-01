@@ -1,15 +1,22 @@
-=== tests/cases/compiler/classExpressionExtendingAbstractClass.ts ===
+//// [tests/cases/compiler/classExpressionExtendingAbstractClass.ts] ////
+
+=== classExpressionExtendingAbstractClass.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 }
 
 var C = class extends A {     // no error reported!
 >C : typeof C
+>  : ^^^^^^^^
 >class extends A {     // no error reported!} : typeof C
+>                                             : ^^^^^^^^
 >A : A
+>  : ^
 
 };
 

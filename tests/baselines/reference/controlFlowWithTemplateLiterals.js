@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts] ////
+
 //// [controlFlowWithTemplateLiterals.ts]
 declare const envVar: string | undefined;
 if (typeof envVar === `string`) {
@@ -11,9 +13,10 @@ if (`test` in obj) {
 
 
 //// [controlFlowWithTemplateLiterals.js]
-if (typeof envVar === "string") {
+"use strict";
+if (typeof envVar === `string`) {
     envVar.slice(0);
 }
-if ("test" in obj) {
+if (`test` in obj) {
     obj.test.slice(0);
 }

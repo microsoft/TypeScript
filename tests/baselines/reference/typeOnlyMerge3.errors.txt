@@ -1,0 +1,39 @@
+b.ts(1,10): error TS2440: Import declaration conflicts with local declaration of 'A'.
+c.ts(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+c.ts(3,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+c.ts(4,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+c.ts(4,1): error TS2349: This expression is not callable.
+  Type 'typeof A' has no call signatures.
+
+
+==== a.ts (0 errors) ====
+    function A() {}
+    export type { A };
+    
+==== b.ts (1 errors) ====
+    import { A } from "./a";
+             ~
+!!! error TS2440: Import declaration conflicts with local declaration of 'A'.
+    namespace A {
+      export const displayName = "A";
+    }
+    export { A };
+    
+==== c.ts (4 errors) ====
+    import { A } from "./b";
+    A;
+    ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 a.ts:2:15: 'A' was exported here.
+    A.displayName;
+    ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 a.ts:2:15: 'A' was exported here.
+    A();
+    ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 a.ts:2:15: 'A' was exported here.
+    ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'typeof A' has no call signatures.
+    

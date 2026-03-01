@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts] ////
+
 //// [implicitAnyDeclareMemberWithoutType.ts]
 // this should be an error
 interface IFace {
@@ -10,3 +12,4 @@ interface IFace {
 
 
 //// [implicitAnyDeclareMemberWithoutType.js]
+"use strict";

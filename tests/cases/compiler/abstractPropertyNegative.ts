@@ -1,4 +1,4 @@
-//@target: ES5
+//@target: ES5, ES2015
 interface A {
     prop: string;
     m(): string;
@@ -9,7 +9,7 @@ abstract class B implements A {
     abstract get readonlyProp(): string;
     abstract m(): string;
     abstract get mismatch(): string;
-    abstract set mismatch(val: number); // error, not same type
+    abstract set mismatch(val: number);
 }
 class C extends B {
     readonly ro = "readonly please";

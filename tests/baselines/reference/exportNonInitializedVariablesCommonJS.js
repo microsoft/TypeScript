@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts] ////
+
 //// [exportNonInitializedVariablesCommonJS.ts]
 var;
 let;
@@ -16,7 +18,7 @@ namespace B {
     export let x, y, z;
 }
 
-module C {
+namespace C {
     export var a = 1, b, c = 2;
     export var x, y, z;
 }
@@ -35,16 +37,13 @@ export let h1: D = new D;
 
 //// [exportNonInitializedVariablesCommonJS.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.h1 = exports.g1 = exports.f1 = exports.e1 = exports.d1 = exports.c1 = exports.b1 = exports.a1 = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 var ;
 let;
-var ;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+const ;
+class A {
+}
 var B;
 (function (B) {
     B.a = 1, B.c = 2;
@@ -58,11 +57,8 @@ exports.a1 = 1;
 exports.b1 = 1;
 exports.c1 = 'a';
 exports.d1 = 1;
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 exports.e1 = new D;
 exports.f1 = new D;
 exports.g1 = new D;

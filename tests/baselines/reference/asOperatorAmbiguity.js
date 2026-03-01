@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/asOperator/asOperatorAmbiguity.ts] ////
+
 //// [asOperatorAmbiguity.ts]
 interface A<T> { x: T; }
 interface B { m: string; }
@@ -10,6 +12,7 @@ var z = y[0].m; // z should be string
 
 
 //// [asOperatorAmbiguity.js]
+"use strict";
 // Make sure this is a type assertion to an array type, and not nested comparison operators.
 var x;
 var y = x;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/redeclareParameterInCatchBlock.ts] ////
+
 //// [redeclareParameterInCatchBlock.ts]
 try {
 
@@ -33,6 +35,7 @@ try {
 
 
 //// [redeclareParameterInCatchBlock.js]
+"use strict";
 try {
 }
 catch (e) {

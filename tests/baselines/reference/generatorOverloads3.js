@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorOverloads3.ts] ////
+
 //// [generatorOverloads3.ts]
 class C {
     *f(s: string): Iterable<any>;
@@ -6,6 +8,7 @@ class C {
 }
 
 //// [generatorOverloads3.js]
+"use strict";
 class C {
     *f(s) { }
 }

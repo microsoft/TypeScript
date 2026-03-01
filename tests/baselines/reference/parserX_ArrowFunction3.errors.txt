@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts(1,10): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts(1,12): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts(1,14): error TS1005: ';' expected.
+parserX_ArrowFunction3.ts(1,10): error TS2304: Cannot find name 'a'.
+parserX_ArrowFunction3.ts(1,12): error TS1005: ',' expected.
+parserX_ArrowFunction3.ts(1,14): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts (3 errors) ====
+==== parserX_ArrowFunction3.ts (3 errors) ====
     var v = (a): => {
              ~
 !!! error TS2304: Cannot find name 'a'.

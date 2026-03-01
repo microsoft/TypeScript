@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/fluentInterfaces.ts] ////
+
 //// [fluentInterfaces.ts]
 interface A {
     foo(): this;
@@ -13,5 +15,6 @@ var z = c.foo().bar().baz();  // Fluent pattern
 
 
 //// [fluentInterfaces.js]
+"use strict";
 var c;
 var z = c.foo().bar().baz(); // Fluent pattern

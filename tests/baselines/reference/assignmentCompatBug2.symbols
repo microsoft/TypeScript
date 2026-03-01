@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatBug2.ts ===
+//// [tests/cases/compiler/assignmentCompatBug2.ts] ////
+
+=== assignmentCompatBug2.ts ===
 var b2: { b: number;} = { a: 0 }; // error
 >b2 : Symbol(b2, Decl(assignmentCompatBug2.ts, 0, 3))
 >b : Symbol(b, Decl(assignmentCompatBug2.ts, 0, 9))

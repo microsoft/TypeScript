@@ -1,4 +1,5 @@
-// @outDir: tests/cases/compiler/testfiles
+// @target: es2015
+// @outDir: testfiles
 // @sourcemap: true
 // @useCaseSensitiveFileNames: false
 // @Filename: testFiles/app.ts

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/typedefMultipleTypeParameters.ts] ////
+
+=== a.js ===
 /**
  * @template {{ a: number, b: string }} T,U A Comment
  * @template {{ c: boolean }} V uh ... are comments even supported??
@@ -10,19 +12,26 @@
 /** @type {Everything<{ a: number, b: 'hi', c: never }, undefined, { c: true, d: 1 }, number, string>} */
 var tuvwx;
 >tuvwx : Everything<{ a: number; b: "hi"; c: never; }, undefined, { c: true; d: 1; }, number, string>
+>      : ^^^^^^^^^^^^^^^^      ^^^^^    ^^^^^     ^^^^^^^^^^^^^^^^^^^^^    ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
 /** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
 var wrong;
 >wrong : Everything<{ a: number; }, undefined, { c: 1; d: 1; }, number, string>
+>      : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
 /** @type {Everything<{ a: number  }>} */
 var insufficient;
 >insufficient : any
+>             : ^^^
 
-=== tests/cases/conformance/jsdoc/test.ts ===
+=== test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
 >actually : Everything<{ a: number; }, undefined, { c: 1; d: 1; }, number, string>
+>         : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >c : 1
+>  : ^
 >d : 1
+>  : ^
 

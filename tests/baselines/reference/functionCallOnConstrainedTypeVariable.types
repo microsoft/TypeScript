@@ -1,62 +1,97 @@
-=== tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts ===
+//// [tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts] ////
+
+=== functionCallOnConstrainedTypeVariable.ts ===
 // Repro from #20196
 
 type A = {
->A : { a: (x: number) => string; }
+>A : A
+>  : ^
 
   a: (x: number) => string
 >a : (x: number) => string
+>  : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
 };
 type B = {
->B : { a: (x: boolean) => string; }
+>B : B
+>  : ^
 
   a: (x: boolean) => string
 >a : (x: boolean) => string
+>  : ^ ^^       ^^^^^      
 >x : boolean
+>  : ^^^^^^^
 
 };
 
 function call0(p: A | B) { 
 >call0 : (p: A | B) => void
+>      : ^ ^^     ^^^^^^^^^
 >p : A | B
+>  : ^^^^^
 
   p.a("s"); // Error
 >p.a("s") : string
+>         : ^^^^^^
 >p.a : ((x: number) => string) | ((x: boolean) => string)
+>    : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >p : A | B
+>  : ^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
+>  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >"s" : "s"
+>    : ^^^
 }
 
 function callN<T extends A | B>(p: T) {
 >callN : <T extends A | B>(p: T) => void
+>      : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >p : T
+>  : ^
 
   p.a("s"); // Error
 >p.a("s") : string
+>         : ^^^^^^
 >p.a : ((x: number) => string) | ((x: boolean) => string)
+>    : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >p : A | B
+>  : ^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
+>  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >"s" : "s"
+>    : ^^^
   
   var a: T["a"] = p.a;
 >a : T["a"]
+>  : ^^^^^^
 >p.a : ((x: number) => string) | ((x: boolean) => string)
+>    : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >p : A | B
+>  : ^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
+>  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 
   a(""); // Error
 >a("") : string
+>      : ^^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
+>  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >"" : ""
+>   : ^^
 
   a("", "", "", ""); // Error
 >a("", "", "", "") : string
+>                  : ^^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
+>  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 }

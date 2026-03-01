@@ -1,53 +1,81 @@
-=== tests/cases/conformance/types/namedTypes/genericInstantiationEquivalentToObjectLiteral.ts ===
+//// [tests/cases/conformance/types/namedTypes/genericInstantiationEquivalentToObjectLiteral.ts] ////
+
+=== genericInstantiationEquivalentToObjectLiteral.ts ===
 interface Pair<T1, T2> { first: T1; second: T2; }
 >first : T1
+>      : ^^
 >second : T2
+>       : ^^
 
 var x: Pair<string, number>
 >x : Pair<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 var y: { first: string; second: number; }
 >y : { first: string; second: number; }
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >first : string
+>      : ^^^^^^
 >second : number
+>       : ^^^^^^
 
 x = y;
 >x = y : { first: string; second: number; }
+>      : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >x : Pair<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^
 >y : { first: string; second: number; }
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 
 y = x;
 >y = x : Pair<string, number>
+>      : ^^^^^^^^^^^^^^^^^^^^
 >y : { first: string; second: number; }
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 >x : Pair<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 declare function f<T, U>(x: Pair<T, U>);
 >f : <T, U>(x: Pair<T, U>) => any
+>  : ^ ^^ ^^ ^^          ^^^^^^^^
 >x : Pair<T, U>
+>  : ^^^^^^^^^^
 
 declare function f2<T, U>(x: { first: T; second: U; });
->f2 : <T, U>(x: {    first: T;    second: U;}) => any
+>f2 : <T, U>(x: { first: T; second: U; }) => any
+>   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >x : { first: T; second: U; }
+>  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 >first : T
+>      : ^
 >second : U
+>       : ^
 
 f(x);
 >f(x) : any
 >f : <T, U>(x: Pair<T, U>) => any
+>  : ^ ^^ ^^ ^^          ^^^^^^^^
 >x : Pair<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 f(y);
 >f(y) : any
 >f : <T, U>(x: Pair<T, U>) => any
+>  : ^ ^^ ^^ ^^          ^^^^^^^^
 >y : { first: string; second: number; }
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 
 f2(x);
 >f2(x) : any
 >f2 : <T, U>(x: { first: T; second: U; }) => any
+>   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >x : Pair<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 f2(y);
 >f2(y) : any
 >f2 : <T, U>(x: { first: T; second: U; }) => any
+>   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >y : { first: string; second: number; }
+>  : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 

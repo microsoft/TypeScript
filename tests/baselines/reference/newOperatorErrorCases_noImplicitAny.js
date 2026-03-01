@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts] ////
+
 //// [newOperatorErrorCases_noImplicitAny.ts]
 function fnNumber(this: void): number { return 90; }
 new fnNumber(); // Error
@@ -10,6 +12,7 @@ new functionVoidNoThis(); // Error
 
 
 //// [newOperatorErrorCases_noImplicitAny.js]
+"use strict";
 function fnNumber() { return 90; }
 new fnNumber(); // Error
 function fnVoid() { }

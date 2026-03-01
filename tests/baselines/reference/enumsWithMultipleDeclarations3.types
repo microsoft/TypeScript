@@ -1,10 +1,14 @@
-=== tests/cases/compiler/enumsWithMultipleDeclarations3.ts ===
-module E {
+//// [tests/cases/compiler/enumsWithMultipleDeclarations3.ts] ////
+
+=== enumsWithMultipleDeclarations3.ts ===
+namespace E {
 }
 
 enum E {
 >E : E
+>  : ^
 
   A
 >A : E.A
+>  : ^^^
 }

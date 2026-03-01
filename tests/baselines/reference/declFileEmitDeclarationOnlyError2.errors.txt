@@ -1,9 +1,7 @@
-error TS5053: Option 'emitDeclarationOnly' cannot be specified with option 'noEmit'.
 error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
 
 
-!!! error TS5053: Option 'emitDeclarationOnly' cannot be specified with option 'noEmit'.
 !!! error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
-==== tests/cases/compiler/hello.ts (0 errors) ====
+==== hello.ts (0 errors) ====
     var hello = "yo!";
     

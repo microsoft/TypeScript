@@ -1,6 +1,0 @@
-=== tests/cases/compiler/accessorWithoutBody1.ts ===
-var v = { get foo() }
->v : { readonly foo: any; }
->{ get foo() } : { readonly foo: any; }
->foo : any
-

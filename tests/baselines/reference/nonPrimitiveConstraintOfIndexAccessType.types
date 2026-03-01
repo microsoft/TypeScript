@@ -1,106 +1,169 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts] ////
+
+=== nonPrimitiveConstraintOfIndexAccessType.ts ===
 // test for #15371
 function f<T extends object, P extends keyof T>(s: string, tp: T[P]): void {
 >f : <T extends object, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function g<T extends null, P extends keyof T>(s: string, tp: T[P]): void {
 >g : <T extends null, P extends keyof T>(s: string, tp: T[P]) => void
->null : null
+>  : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function h<T extends undefined, P extends keyof T>(s: string, tp: T[P]): void {
 >h : <T extends undefined, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^         ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function i<T extends void, P extends keyof T>(s: string, tp: T[P]): void {
 >i : <T extends void, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function j<T extends never, P extends keyof T>(s: string, tp: T[P]): void {
 >j : <T extends never, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^     ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function k<T extends number, P extends keyof T>(s: string, tp: T[P]): void {
 >k : <T extends number, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function o<T extends string, P extends keyof T>(s: string, tp: T[P]): void {
 >o : <T extends string, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function l<T extends {}, P extends keyof T>(s: string, tp: T[P]): void {
 >l : <T extends {}, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^  ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function m<T extends { a: number }, P extends keyof T>(s: string, tp: T[P]): void {
 >m : <T extends { a: number; }, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^              ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >a : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 function n<T extends { [s: string]: number }, P extends keyof T>(s: string, tp: T[P]): void {
 >n : <T extends { [s: string]: number; }, P extends keyof T>(s: string, tp: T[P]) => void
+>  : ^ ^^^^^^^^^                        ^^ ^^^^^^^^^       ^^ ^^      ^^  ^^    ^^^^^    
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 
     tp = s;
 >tp = s : string
+>       : ^^^^^^
 >tp : T[P]
+>   : ^^^^
 >s : string
+>  : ^^^^^^
 }
 

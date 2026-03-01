@@ -1,5 +1,8 @@
+//// [tests/cases/conformance/jsdoc/jsdocFunction_missingReturn.ts] ////
+
 === /a.js ===
 /** @type {function(): number} */
 function f() {}
 >f : () => number
+>  : ^^^^^^      
 

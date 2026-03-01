@@ -1,8 +1,8 @@
-tests/cases/compiler/indexerSignatureWithRestParam.ts(2,6): error TS1017: An index signature cannot have a rest parameter.
-tests/cases/compiler/indexerSignatureWithRestParam.ts(6,6): error TS1017: An index signature cannot have a rest parameter.
+indexerSignatureWithRestParam.ts(2,6): error TS1017: An index signature cannot have a rest parameter.
+indexerSignatureWithRestParam.ts(6,6): error TS1017: An index signature cannot have a rest parameter.
 
 
-==== tests/cases/compiler/indexerSignatureWithRestParam.ts (2 errors) ====
+==== indexerSignatureWithRestParam.ts (2 errors) ====
     interface I {
         [...x]: string;
          ~~~

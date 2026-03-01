@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts] ////
+
+=== parser0_004152.ts ===
 export class Game {
 >Game : Symbol(Game, Decl(parser0_004152.ts, 0, 0))
 

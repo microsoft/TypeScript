@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts] ////
+
 //// [classStaticBlock26.ts]
 class C {
     static {
@@ -30,6 +32,7 @@ class C {
 
 
 //// [classStaticBlock26.js]
+"use strict";
 class C {
     static {
         await ; // illegal

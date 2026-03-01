@@ -1,12 +1,18 @@
-=== tests/cases/compiler/promiseEmptyTupleNoException.ts ===
+//// [tests/cases/compiler/promiseEmptyTupleNoException.ts] ////
+
+=== promiseEmptyTupleNoException.ts ===
 export async function get(): Promise<[]> {
 >get : () => Promise<[]>
+>    : ^^^^^^           
 
   let emails = [];
 >emails : any[]
+>       : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
   return emails;
 >emails : any[]
+>       : ^^^^^
 }
 

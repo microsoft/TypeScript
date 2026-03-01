@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientFunctions.ts] ////
+
 //// [noImplicitAnyParametersInAmbientFunctions.ts]
 // No implicit-'any' errors.
 declare function d_f1(): void;
@@ -44,3 +46,4 @@ declare var d_f13: (...r) => string;
 declare var d_f14: (x, ...r) => string;
 
 //// [noImplicitAnyParametersInAmbientFunctions.js]
+"use strict";

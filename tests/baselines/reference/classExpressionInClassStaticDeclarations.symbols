@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionInClassStaticDeclarations.ts ===
+//// [tests/cases/compiler/classExpressionInClassStaticDeclarations.ts] ////
+
+=== classExpressionInClassStaticDeclarations.ts ===
 class C {
 >C : Symbol(C, Decl(classExpressionInClassStaticDeclarations.ts, 0, 0))
 

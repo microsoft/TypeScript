@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/variance.ts] ////
+
 //// [variance.ts]
 // Test cases for parameter variances affected by conditional types.
 
@@ -29,18 +31,15 @@ class Bar<T extends string> {
 //// [variance.js]
 "use strict";
 // Test cases for parameter variances affected by conditional types.
-var foo = { prop: true };
-var x = foo;
-var y = foo;
-var z = x;
+const foo = { prop: true };
+const x = foo;
+const y = foo;
+const z = x;
 // Repro from #30118
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    Bar.prototype.cast = function (_name) { };
-    Bar.prototype.pushThis = function () {
+class Bar {
+    cast(_name) { }
+    pushThis() {
         Bar.instance.push(this);
-    };
-    Bar.instance = [];
-    return Bar;
-}());
+    }
+}
+Bar.instance = [];

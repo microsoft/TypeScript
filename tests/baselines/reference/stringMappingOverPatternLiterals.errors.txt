@@ -1,40 +1,45 @@
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(25,5): error TS2322: Type '`aA${string}`' is not assignable to type '"aA"'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(26,5): error TS2322: Type '`AA${Uppercase<string>}`' is not assignable to type '"AA"'.
+stringMappingOverPatternLiterals.ts(25,5): error TS2322: Type '`aA${string}`' is not assignable to type '"aA"'.
+stringMappingOverPatternLiterals.ts(26,5): error TS2322: Type '`AA${Uppercase<string>}`' is not assignable to type '"AA"'.
   Type '`AA${string}`' is not assignable to type '"AA"'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(27,5): error TS2322: Type '`aa${Lowercase<string>}`' is not assignable to type '"aa"'.
+stringMappingOverPatternLiterals.ts(27,5): error TS2322: Type '`aa${Lowercase<string>}`' is not assignable to type '"aa"'.
   Type '`aa${string}`' is not assignable to type '"aa"'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(30,5): error TS2322: Type '`AA${Uppercase<string>}`' is not assignable to type '`aA${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(31,5): error TS2322: Type '`aa${Lowercase<string>}`' is not assignable to type '`aA${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(33,5): error TS2322: Type '`aA${string}`' is not assignable to type '`AA${Uppercase<string>}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(34,5): error TS2322: Type '`aa${Lowercase<string>}`' is not assignable to type '`AA${Uppercase<string>}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(36,5): error TS2322: Type '`aA${string}`' is not assignable to type '`aa${Lowercase<string>}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(37,5): error TS2322: Type '`AA${Uppercase<string>}`' is not assignable to type '`aa${Lowercase<string>}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(51,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(52,5): error TS2322: Type 'Lowercase<string>' is not assignable to type 'Uppercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(53,5): error TS2322: Type 'string' is not assignable to type 'Lowercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(54,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Lowercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(56,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(57,5): error TS2322: Type 'string' is not assignable to type 'Lowercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(78,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
+stringMappingOverPatternLiterals.ts(30,5): error TS2322: Type '`AA${Uppercase<string>}`' is not assignable to type '`aA${string}`'.
+stringMappingOverPatternLiterals.ts(31,5): error TS2322: Type '`aa${Lowercase<string>}`' is not assignable to type '`aA${string}`'.
+stringMappingOverPatternLiterals.ts(33,5): error TS2322: Type '`aA${string}`' is not assignable to type '`AA${Uppercase<string>}`'.
+stringMappingOverPatternLiterals.ts(34,5): error TS2322: Type '`aa${Lowercase<string>}`' is not assignable to type '`AA${Uppercase<string>}`'.
+stringMappingOverPatternLiterals.ts(36,5): error TS2322: Type '`aA${string}`' is not assignable to type '`aa${Lowercase<string>}`'.
+stringMappingOverPatternLiterals.ts(37,5): error TS2322: Type '`AA${Uppercase<string>}`' is not assignable to type '`aa${Lowercase<string>}`'.
+stringMappingOverPatternLiterals.ts(51,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<string>'.
+stringMappingOverPatternLiterals.ts(52,5): error TS2322: Type 'Lowercase<string>' is not assignable to type 'Uppercase<string>'.
+stringMappingOverPatternLiterals.ts(53,5): error TS2322: Type 'string' is not assignable to type 'Lowercase<string>'.
+stringMappingOverPatternLiterals.ts(54,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Lowercase<string>'.
+stringMappingOverPatternLiterals.ts(56,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<string>'.
+stringMappingOverPatternLiterals.ts(57,5): error TS2322: Type 'string' is not assignable to type 'Lowercase<string>'.
+stringMappingOverPatternLiterals.ts(78,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
   Type 'string' is not assignable to type 'Lowercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(79,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(83,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(84,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<string>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(85,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<Lowercase<string>>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(87,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Lowercase<Uppercase<string>>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(88,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Lowercase<Uppercase<string>>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(89,5): error TS2322: Type 'Uppercase<Lowercase<string>>' is not assignable to type 'Lowercase<Uppercase<string>>'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(129,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+stringMappingOverPatternLiterals.ts(79,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
+  Type 'string' is not assignable to type 'Lowercase<string>'.
+stringMappingOverPatternLiterals.ts(83,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<string>'.
+stringMappingOverPatternLiterals.ts(84,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<string>'.
+stringMappingOverPatternLiterals.ts(85,5): error TS2322: Type 'Lowercase<Uppercase<string>>' is not assignable to type 'Uppercase<Lowercase<string>>'.
+stringMappingOverPatternLiterals.ts(87,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Lowercase<Uppercase<string>>'.
+stringMappingOverPatternLiterals.ts(88,5): error TS2322: Type 'Uppercase<string>' is not assignable to type 'Lowercase<Uppercase<string>>'.
+stringMappingOverPatternLiterals.ts(89,5): error TS2322: Type 'Uppercase<Lowercase<string>>' is not assignable to type 'Lowercase<Uppercase<string>>'.
+stringMappingOverPatternLiterals.ts(129,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
   Type 'string' is not assignable to type '`A${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(130,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(131,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(147,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+stringMappingOverPatternLiterals.ts(130,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+  Type 'string' is not assignable to type '`A${string}`'.
+stringMappingOverPatternLiterals.ts(131,5): error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+  Type 'string' is not assignable to type '`A${string}`'.
+stringMappingOverPatternLiterals.ts(147,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
   Type 'string' is not assignable to type '`a${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(148,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
-tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+stringMappingOverPatternLiterals.ts(148,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+  Type 'string' is not assignable to type '`a${string}`'.
+stringMappingOverPatternLiterals.ts(149,5): error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+  Type 'string' is not assignable to type '`a${string}`'.
 
 
-==== tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts (29 errors) ====
+==== stringMappingOverPatternLiterals.ts (29 errors) ====
     // non-template
     type A = "aA";
     type B = Uppercase<A>;
@@ -151,6 +156,7 @@ tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(149,5)
         x3 = x2;
         ~~
 !!! error TS2322: Type 'Uppercase<string>' is not assignable to type 'Uppercase<Lowercase<string>>'.
+!!! error TS2322:   Type 'string' is not assignable to type 'Lowercase<string>'.
     
         // and this should also not be equivlent to any others
         var x4: Lowercase<Uppercase<string>> = null as any;
@@ -219,9 +225,11 @@ tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(149,5)
         cap_tem_map = cap_str;
         ~~~~~~~~~~~
 !!! error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`A${string}`'.
         cap_tem_map2 = cap_str;
         ~~~~~~~~~~~~
 !!! error TS2322: Type 'Capitalize<string>' is not assignable to type '`A${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`A${string}`'.
     
         // All these are uncapitalized
         uncap_str = uncap_tem;
@@ -244,7 +252,9 @@ tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts(149,5)
         uncap_tem_map = uncap_str;
         ~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`a${string}`'.
         uncap_tem_map2 = uncap_str;
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Uncapitalize<string>' is not assignable to type '`a${string}`'.
+!!! error TS2322:   Type 'string' is not assignable to type '`a${string}`'.
     }

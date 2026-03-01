@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/number/validNumberAssignments.ts] ////
+
 //// [validNumberAssignments.ts]
 var x = 1;
 
@@ -10,6 +12,7 @@ var e = E.A;
 e = x;
 
 //// [validNumberAssignments.js]
+"use strict";
 var x = 1;
 var a = x;
 var b = x;

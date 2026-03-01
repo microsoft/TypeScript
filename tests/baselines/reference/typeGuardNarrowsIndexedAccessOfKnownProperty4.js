@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty4.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.ts]
 class Foo {
     x: number | undefined;
@@ -16,13 +18,12 @@ class Foo {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.x = 5;
         this.x; // number
         this['x']; // number
-        var key = 'x';
+        const key = 'x';
         this[key]; // number
     }
-    return Foo;
-}());
+}

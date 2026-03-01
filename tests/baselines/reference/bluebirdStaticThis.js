@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bluebirdStaticThis.ts] ////
+
 //// [bluebirdStaticThis.ts]
 // This version is reduced from the full d.ts by removing almost all the tests
 // and all the comments.
@@ -109,7 +111,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
     static filter<R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
 }
 
-export declare module Promise {
+export declare namespace Promise {
 	export interface Thenable<R> {
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>;
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>;
@@ -123,10 +125,10 @@ interface Foo {
     a: number;
     b: string;
 }
-var x: any;
-var arr: any[];
-var foo: Foo;
-var fooProm: Promise<Foo>;
+declare var x: any;
+declare var arr: any[];
+declare var foo: Foo;
+declare var fooProm: Promise<Foo>;
 
 fooProm = Promise.try(Promise, () => {
 	return foo;
@@ -139,18 +141,13 @@ fooProm = Promise.try(Promise, () => {
 }, arr, x);
 
 //// [bluebirdStaticThis.js]
-"use strict";
-exports.__esModule = true;
-var x;
-var arr;
-var foo;
-var fooProm;
-fooProm = Promise["try"](Promise, function () {
+fooProm = Promise.try(Promise, () => {
     return foo;
 });
-fooProm = Promise["try"](Promise, function () {
+fooProm = Promise.try(Promise, () => {
     return foo;
 }, arr);
-fooProm = Promise["try"](Promise, function () {
+fooProm = Promise.try(Promise, () => {
     return foo;
 }, arr, x);
+export {};

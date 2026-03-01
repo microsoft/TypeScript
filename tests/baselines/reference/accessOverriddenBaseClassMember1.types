@@ -1,57 +1,94 @@
-=== tests/cases/compiler/accessOverriddenBaseClassMember1.ts ===
+//// [tests/cases/compiler/accessOverriddenBaseClassMember1.ts] ////
+
+=== accessOverriddenBaseClassMember1.ts ===
 class Point {
 >Point : Point
+>      : ^^^^^
 
     constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     public toString() {
 >toString : () => string
+>         : ^^^^^^^^^^^^
 
         return "x=" + this.x + " y=" + this.y;
 >"x=" + this.x + " y=" + this.y : string
+>                               : ^^^^^^
 >"x=" + this.x + " y=" : string
+>                      : ^^^^^^
 >"x=" + this.x : string
+>              : ^^^^^^
 >"x=" : "x="
+>     : ^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 >" y=" : " y="
+>      : ^^^^^
 >this.y : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
     }
 }
 class ColoredPoint extends Point {
 >ColoredPoint : ColoredPoint
+>             : ^^^^^^^^^^^^
 >Point : Point
+>      : ^^^^^
 
     constructor(x: number, y: number, public color: string) {
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >color : string
+>      : ^^^^^^
 
         super(x, y);
 >super(x, y) : void
+>            : ^^^^
 >super : typeof Point
+>      : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
     public toString() {
 >toString : () => string
+>         : ^^^^^^^^^^^^
 
         return super.toString() + " color=" + this.color;
 >super.toString() + " color=" + this.color : string
+>                                          : ^^^^^^
 >super.toString() + " color=" : string
+>                             : ^^^^^^
 >super.toString() : string
+>                 : ^^^^^^
 >super.toString : () => string
+>               : ^^^^^^^^^^^^
 >super : Point
+>      : ^^^^^
 >toString : () => string
+>         : ^^^^^^^^^^^^
 >" color=" : " color="
+>          : ^^^^^^^^^
 >this.color : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >color : string
+>      : ^^^^^^
     }
 }
 

@@ -1,22 +1,24 @@
-=== tests/cases/conformance/externalModules/file1.ts ===
+//// [tests/cases/conformance/externalModules/moduleScoping.ts] ////
+
+=== file1.ts ===
 var v1 = "sausages"; // Global scope
 >v1 : Symbol(v1, Decl(file1.ts, 0, 3))
 
-=== tests/cases/conformance/externalModules/file2.ts ===
+=== file2.ts ===
 var v2 = 42; // Global scope
 >v2 : Symbol(v2, Decl(file2.ts, 0, 3))
 
 var v4 = () => 5;
 >v4 : Symbol(v4, Decl(file2.ts, 1, 3))
 
-=== tests/cases/conformance/externalModules/file3.ts ===
+=== file3.ts ===
 export var v3 = true;
 >v3 : Symbol(v3, Decl(file3.ts, 0, 10))
 
 var v2 = [1,2,3]; // Module scope. Should not appear in global scope
 >v2 : Symbol(v2, Decl(file3.ts, 1, 3))
 
-=== tests/cases/conformance/externalModules/file4.ts ===
+=== file4.ts ===
 import file3 = require('./file3');
 >file3 : Symbol(file3, Decl(file4.ts, 0, 0))
 
@@ -40,7 +42,7 @@ var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
 >b : Symbol(b, Decl(file4.ts, 4, 18))
 >NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
-=== tests/cases/conformance/externalModules/file5.ts ===
+=== file5.ts ===
 var x = v2; // Should be global v2 of type number again
 >x : Symbol(x, Decl(file5.ts, 0, 3))
 >v2 : Symbol(v2, Decl(file2.ts, 0, 3))

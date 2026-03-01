@@ -1,50 +1,70 @@
-=== tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts ===
+//// [tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts] ////
+
+=== intrinsicKeyword.ts ===
 let e1: intrinsic;
 >e1 : intrinsic
+>   : ^^^^^^^^^
 
 let e2: { intrinsic: intrinsic };
 >e2 : { intrinsic: intrinsic; }
+>   : ^^^^^^^^^^^^^         ^^^
 >intrinsic : intrinsic
+>          : ^^^^^^^^^
 
 type TE1 = (intrinsic);
 >TE1 : intrinsic
+>    : ^^^^^^^^^
 
 type TE2<intrinsic> = intrinsic;
 >TE2 : intrinsic
+>    : ^^^^^^^^^
 
 type TE3<T extends intrinsic> = T;
 >TE3 : T
+>    : ^
 
 type TE4<intrinsic extends intrinsic> = intrinsic;
 >TE4 : intrinsic
+>    : ^^^^^^^^^
 
 type TE5<intrinsic extends intrinsic> = (intrinsic);
 >TE5 : intrinsic
+>    : ^^^^^^^^^
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let intrinsic: intrinsic.intrinsic;
 >intrinsic : intrinsic.intrinsic
+>          : ^^^^^^^^^^^^^^^^^^^
 >intrinsic : any
+>          : ^^^
 }
 
 function f2(intrinsic: string) {
 >f2 : (intrinsic: string) => string
+>   : ^         ^^      ^^^^^^^^^^^
 >intrinsic : string
+>          : ^^^^^^
 
     return intrinsic;
 >intrinsic : string
+>          : ^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     type intrinsic = string;
 >intrinsic : string
+>          : ^^^^^^
 
     let s1: intrinsic = 'ok';
 >s1 : string
+>   : ^^^^^^
 >'ok' : "ok"
+>     : ^^^^
 }
 

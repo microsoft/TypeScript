@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts(6,9): error TS2448: Block-scoped variable 'f' used before its declaration.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts(7,9): error TS2448: Block-scoped variable 'f' used before its declaration.
+destructuringObjectBindingPatternAndAssignment4.ts(6,9): error TS2448: Block-scoped variable 'f' used before its declaration.
+destructuringObjectBindingPatternAndAssignment4.ts(7,9): error TS2448: Block-scoped variable 'f' used before its declaration.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts (2 errors) ====
+==== destructuringObjectBindingPatternAndAssignment4.ts (2 errors) ====
     const {
         a = 1,
         b = 2,
@@ -11,10 +11,10 @@ tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAs
         e = f, // error
             ~
 !!! error TS2448: Block-scoped variable 'f' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts:7:5: 'f' is declared here.
+!!! related TS2728 destructuringObjectBindingPatternAndAssignment4.ts:7:5: 'f' is declared here.
         f = f  // error
             ~
 !!! error TS2448: Block-scoped variable 'f' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts:7:5: 'f' is declared here.
+!!! related TS2728 destructuringObjectBindingPatternAndAssignment4.ts:7:5: 'f' is declared here.
     } = { } as any;
     

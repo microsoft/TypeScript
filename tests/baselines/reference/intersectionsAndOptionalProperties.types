@@ -1,76 +1,112 @@
-=== tests/cases/compiler/intersectionsAndOptionalProperties.ts ===
+//// [tests/cases/compiler/intersectionsAndOptionalProperties.ts] ////
+
+=== intersectionsAndOptionalProperties.ts ===
 declare let x: { a?: number, b: string };
->x : { a?: number | undefined; b: string; }
+>x : { a?: number; b: string; }
+>  : ^^^^^^      ^^^^^      ^^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 declare let y: { a: null, b: string };
 >y : { a: null; b: string; }
+>  : ^^^^^    ^^^^^      ^^^
 >a : null
->null : null
+>  : ^^^^
 >b : string
+>  : ^^^^^^
 
 declare let z: { a: null } & { b: string };
 >z : { a: null; } & { b: string; }
+>  : ^^^^^    ^^^^^^^^^^^      ^^^
 >a : null
->null : null
+>  : ^^^^
 >b : string
+>  : ^^^^^^
 
 x = y;  // Error
 >x = y : { a: null; b: string; }
->x : { a?: number | undefined; b: string; }
+>      : ^^^^^    ^^^^^      ^^^
+>x : { a?: number; b: string; }
+>  : ^^^^^^      ^^^^^      ^^^
 >y : { a: null; b: string; }
+>  : ^^^^^    ^^^^^      ^^^
 
 x = z;  // Error
 >x = z : { a: null; } & { b: string; }
->x : { a?: number | undefined; b: string; }
+>      : ^^^^^    ^^^^^^^^^^^      ^^^
+>x : { a?: number; b: string; }
+>  : ^^^^^^      ^^^^^      ^^^
 >z : { a: null; } & { b: string; }
+>  : ^^^^^    ^^^^^^^^^^^      ^^^
 
 // Repro from #36604
 
 interface To {
     field?: number;
 >field : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     anotherField: string;
 >anotherField : string
+>             : ^^^^^^
 }
 
 type From =  { field: null } & Omit<To, 'field'>;
->From : { field: null; } & Omit<To, "field">
+>From : From
+>     : ^^^^
 >field : null
->null : null
+>      : ^^^^
 
 function foo(v: From) {
 >foo : (v: From) => void
+>    : ^ ^^    ^^^^^^^^^
 >v : From
+>  : ^^^^
 
     let x: To;
 >x : To
+>  : ^^
 
     x = v;  // Error
 >x = v : From
+>      : ^^^^
 >x : To
+>  : ^^
 >v : From
+>  : ^^^^
 
     x.field = v.field; // Error
 >x.field = v.field : null
+>                  : ^^^^
 >x.field : number | undefined
+>        : ^^^^^^^^^^^^^^^^^^
 >x : To
+>  : ^^
 >field : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >v.field : null
+>        : ^^^^
 >v : From
+>  : ^^^^
 >field : null
+>      : ^^^^
 }
 
 // Repro from #38348
 
 const yy: number[] & [number, ...number[]] = [1];
 >yy : number[] & [number, ...number[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : [number]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 const xx: [number, ...number[]] = yy;
 >xx : [number, ...number[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^
 >yy : number[] & [number, ...number[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

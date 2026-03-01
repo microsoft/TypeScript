@@ -1,50 +1,75 @@
-=== tests/cases/compiler/circularContextualMappedType.ts ===
+//// [tests/cases/compiler/circularContextualMappedType.ts] ////
+
+=== circularContextualMappedType.ts ===
 type Func<T> = () => T;
 >Func : Func<T>
+>     : ^^^^^^^
 
 type Mapped<T> = { [K in keyof T]: Func<T[K]> };
 >Mapped : Mapped<T>
+>       : ^^^^^^^^^
 
 declare function reproduce(options: number): void;
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
+>          : ^^^       ^^      ^^^    ^^^ ^^       ^^         ^^^ ^^^
 >options : number
+>        : ^^^^^^
 
 declare function reproduce<T>(options: Mapped<T>): T
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
+>          : ^^^       ^^      ^^^    ^^^ ^^       ^^         ^^^ ^^^
 >options : Mapped<T>
+>        : ^^^^^^^^^
 
 reproduce({
 >reproduce({  name:   () => { return 123 }}) : { name: number; }
+>                                            : ^^^^^^^^^^^^^^^^^
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
+>          : ^^^       ^^      ^^^    ^^^ ^^       ^^         ^^^ ^^^
 >{  name:   () => { return 123 }} : { name: () => number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
   name:   () => { return 123 }
 >name : () => number
+>     : ^^^^^^^^^^^^
 >() => { return 123 } : () => number
+>                     : ^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 });
 
 reproduce({
 >reproduce({  name() { return 123 }}) : { name: number; }
+>                                     : ^^^^^^^^^^^^^^^^^
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
+>          : ^^^       ^^      ^^^    ^^^ ^^       ^^         ^^^ ^^^
 >{  name() { return 123 }} : { name(): number; }
+>                          : ^^^^^^^^^^^^^^^^^^^
 
   name() { return 123 }
 >name : () => number
+>     : ^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 });
 
 reproduce({
 >reproduce({  name: function () { return 123 }}) : { name: number; }
+>                                                : ^^^^^^^^^^^^^^^^^
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
+>          : ^^^       ^^      ^^^    ^^^ ^^       ^^         ^^^ ^^^
 >{  name: function () { return 123 }} : { name: () => number; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 
   name: function () { return 123 }
 >name : () => number
+>     : ^^^^^^^^^^^^
 >function () { return 123 } : () => number
+>                           : ^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 });
 

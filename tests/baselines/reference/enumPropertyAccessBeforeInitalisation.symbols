@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts ===
+//// [tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts] ////
+
+=== enumPropertyAccessBeforeInitalisation.ts ===
 enum E {
 >E : Symbol(E, Decl(enumPropertyAccessBeforeInitalisation.ts, 0, 0))
 

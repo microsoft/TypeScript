@@ -4,7 +4,7 @@
 // @jsx: preserve
 // @noLib: true
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -21,6 +21,4 @@
 //// var /*def*/SFCComp = SFC1 || SFC2;
 //// <[|SFC/*one*/Comp|] x />
 
-verify.goToDefinition({
-    "one": ["def", "pt1"],
-});
+verify.baselineGoToDefinition("one");

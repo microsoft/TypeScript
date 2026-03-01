@@ -1,11 +1,13 @@
-=== tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts ===
+//// [tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts] ////
+
+=== controlFlowFinallyNoCatchAssignments.ts ===
 let x: number;
 >x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
 
 x = Math.random();
 >x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 let a: number;

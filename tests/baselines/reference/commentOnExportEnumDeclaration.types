@@ -1,12 +1,18 @@
-=== tests/cases/compiler/commentOnExportEnumDeclaration.ts ===
+//// [tests/cases/compiler/commentOnExportEnumDeclaration.ts] ////
+
+=== commentOnExportEnumDeclaration.ts ===
 /**
  * comment
  */
 export enum Color {
 >Color : Color
+>      : ^^^^^
 
     r, g, b
 >r : Color.r
+>  : ^^^^^^^
 >g : Color.g
+>  : ^^^^^^^
 >b : Color.b
+>  : ^^^^^^^
 }

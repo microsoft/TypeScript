@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/betterErrorForAccidentalCall.ts] ////
+
 //// [betterErrorForAccidentalCall.ts]
 declare function foo(): string;
 
@@ -16,6 +18,7 @@ foo()
 
 
 //// [betterErrorForAccidentalCall.js]
+"use strict";
 foo()(1).toString();
 foo()(1).toString();
 foo()(1).toString();

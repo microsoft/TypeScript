@@ -1,0 +1,7 @@
+scannerES3NumericLiteral2.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+
+
+==== scannerES3NumericLiteral2.ts (1 errors) ====
+    01
+    ~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.

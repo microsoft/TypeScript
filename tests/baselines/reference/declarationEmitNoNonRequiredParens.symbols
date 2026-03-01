@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNoNonRequiredParens.ts ===
+//// [tests/cases/compiler/declarationEmitNoNonRequiredParens.ts] ////
+
+=== declarationEmitNoNonRequiredParens.ts ===
 export enum Test {
 >Test : Symbol(Test, Decl(declarationEmitNoNonRequiredParens.ts, 0, 0))
 
@@ -12,7 +14,7 @@ export type TestType = typeof Test;
 >TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
 >Test : Symbol(Test, Decl(declarationEmitNoNonRequiredParens.ts, 0, 0))
 
-export const bar = (null as TestType[Extract<keyof TestType, string>][]);
+export const bar = null! as TestType[Extract<keyof TestType, string>][] satisfies any;
 >bar : Symbol(bar, Decl(declarationEmitNoNonRequiredParens.ts, 6, 12))
 >TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
 >Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))

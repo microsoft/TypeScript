@@ -1,38 +1,59 @@
-=== tests/cases/compiler/instantiatedTypeAliasDisplay.ts ===
+//// [tests/cases/compiler/instantiatedTypeAliasDisplay.ts] ////
+
+=== instantiatedTypeAliasDisplay.ts ===
 // Repros from #12066
 
 interface X<A> {
     a: A;
 >a : A
+>  : ^
 }
 interface Y<B> {
     b: B;
 >b : B
+>  : ^
 }
 type Z<A, B> = X<A> | Y<B>;
 >Z : Z<A, B>
+>  : ^^^^^^^
 
 declare function f1<A>(): Z<A, number>;
 >f1 : <A>() => Z<A, number>
+>   : ^ ^^^^^^^            
 
 declare function f2<A, B, C, D, E>(a: A, b: B, c: C, d: D): Z<A, string[]>;
 >f2 : <A, B, C, D, E>(a: A, b: B, c: C, d: D) => Z<A, string[]>
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^              
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 >d : D
+>  : ^
 
 const x1 = f1<string>();  // Z<string, number>
 >x1 : Z<string, number>
+>   : ^^^^^^^^^^^^^^^^^
 >f1<string>() : Z<string, number>
+>             : ^^^^^^^^^^^^^^^^^
 >f1 : <A>() => Z<A, number>
+>   : ^ ^^^^^^^            
 
 const x2 = f2({}, {}, {}, {});  // Z<{}, string[]>
 >x2 : Z<{}, string[]>
+>   : ^^^^^^^^^^^^^^^
 >f2({}, {}, {}, {}) : Z<{}, string[]>
+>                   : ^^^^^^^^^^^^^^^
 >f2 : <A, B, C, D, E>(a: A, b: B, c: C, d: D) => Z<A, string[]>
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^              
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 >{} : {}
+>   : ^^
 

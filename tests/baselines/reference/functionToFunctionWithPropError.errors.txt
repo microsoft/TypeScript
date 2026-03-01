@@ -1,12 +1,12 @@
-tests/cases/compiler/functionToFunctionWithPropError.ts(4,1): error TS2741: Property 'prop' is missing in type '() => string' but required in type '{ (): string; prop: number; }'.
+functionToFunctionWithPropError.ts(4,1): error TS2741: Property 'prop' is missing in type '() => string' but required in type '{ (): string; prop: number; }'.
 
 
-==== tests/cases/compiler/functionToFunctionWithPropError.ts (1 errors) ====
+==== functionToFunctionWithPropError.ts (1 errors) ====
     declare let x: { (): string; prop: number };
     declare let y: { (): string; }
     
     x = y;
     ~
 !!! error TS2741: Property 'prop' is missing in type '() => string' but required in type '{ (): string; prop: number; }'.
-!!! related TS2728 tests/cases/compiler/functionToFunctionWithPropError.ts:1:30: 'prop' is declared here.
+!!! related TS2728 functionToFunctionWithPropError.ts:1:30: 'prop' is declared here.
     y = x;

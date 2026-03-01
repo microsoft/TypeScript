@@ -1,5 +1,5 @@
 ﻿//@target: ES6
-class StringIterator {
+class MyStringIterator {
     next() {
         return {
             value: "",
@@ -12,4 +12,4 @@ class StringIterator {
 }
 
 var v: string;
-for (v of new StringIterator) { } // Should succeed
+for (v of new MyStringIterator) { } // Should succeed

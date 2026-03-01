@@ -1,17 +1,17 @@
-tests/cases/compiler/b.ts(1,10): error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
+b.ts(1,10): error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export {}
     interface Foo {}
     interface Foo {}
     namespace Foo {}
     
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     import { Foo } from './a';
              ~~~
 !!! error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
-!!! related TS2728 tests/cases/compiler/a.ts:2:11: 'Foo' is declared here.
-!!! related TS6204 tests/cases/compiler/a.ts:3:11: and here.
-!!! related TS6204 tests/cases/compiler/a.ts:4:11: and here.
+!!! related TS2728 a.ts:2:11: 'Foo' is declared here.
+!!! related TS6204 a.ts:3:11: and here.
+!!! related TS6204 a.ts:4:11: and here.
     

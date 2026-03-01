@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts ===
+//// [tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts] ////
+
+=== globalThisBlockscopedProperties.ts ===
 var x = 1
 >x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
 
@@ -30,9 +32,9 @@ globalThis['z'] // should error, no property 'z'
 >globalThis : Symbol(globalThis)
 
 globalThis.Float64Array // ok
->globalThis.Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>globalThis.Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >globalThis : Symbol(globalThis)
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 globalThis.Infinity // ok
 >globalThis.Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))

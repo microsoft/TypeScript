@@ -1,10 +1,12 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution7.tsx] ////
+
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements { }
 }
 
-module my {
+namespace my {
     export var div: any;
 }
 // OK
@@ -12,7 +14,7 @@ module my {
 // Error
 <my.other />;
 
-module q {
+namespace q {
     import mine = my;
     // OK
     <mine.div n='x' />;
@@ -22,6 +24,7 @@ module q {
 
 
 //// [file.jsx]
+"use strict";
 var my;
 (function (my) {
 })(my || (my = {}));

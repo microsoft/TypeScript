@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts] ////
+
+=== esDecorators-classDeclaration-commonjs-classNamespaceMerge.ts ===
+declare var deco: any;
+>deco : any
+
+@deco
+>deco : any
+
+export class Example {
+>Example : Example
+>        : ^^^^^^^
+
+    static foo() {}
+>foo : () => void
+>    : ^^^^^^^^^^
+}
+
+export namespace Example {
+>Example : typeof Example
+>        : ^^^^^^^^^^^^^^
+
+    export const x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+
+Example.foo();
+>Example.foo() : void
+>              : ^^^^
+>Example.foo : () => void
+>            : ^^^^^^^^^^
+>Example : typeof Example
+>        : ^^^^^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+

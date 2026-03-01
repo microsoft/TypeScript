@@ -1,27 +1,43 @@
-=== tests/cases/compiler/example.ts ===
+//// [tests/cases/compiler/keyofModuleObjectHasCorrectKeys.ts] ////
+
+=== example.ts ===
 export default function add(a: number, b: number) {
 >add : (a: number, b: number) => number
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     return a + b;
 >a + b : number
+>      : ^^^^^^
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import * as example from './example';
 >example : typeof example
+>        : ^^^^^^^^^^^^^^
 
 declare function test<T>(object: T, method: keyof T): void;
 >test : <T>(object: T, method: keyof T) => void
+>     : ^ ^^      ^^ ^^      ^^       ^^^^^    
 >object : T
+>       : ^
 >method : keyof T
+>       : ^^^^^^^
 
 test(example, "default");
 >test(example, "default") : void
+>                         : ^^^^
 >test : <T>(object: T, method: keyof T) => void
+>     : ^ ^^      ^^ ^^      ^^       ^^^^^    
 >example : typeof example
+>        : ^^^^^^^^^^^^^^
 >"default" : "default"
+>          : ^^^^^^^^^
 

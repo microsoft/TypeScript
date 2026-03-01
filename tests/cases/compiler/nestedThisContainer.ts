@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitThis:true
 
 type Foo = any;

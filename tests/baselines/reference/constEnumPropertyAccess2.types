@@ -1,61 +1,95 @@
-=== tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts ===
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts] ////
+
+=== constEnumPropertyAccess2.ts ===
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context
 // than a property access that selects one of the enum's members
 
 const enum G {
 >G : G
+>  : ^
 
     A = 1,
->A : G
+>A : G.A
+>  : ^^^
 >1 : 1
+>  : ^
 
     B = 2,
->B : G
+>B : G.B
+>  : ^^^
 >2 : 2
+>  : ^
 
     C = A + B,
->C : G
+>C : G.C
+>  : ^^^
 >A + B : number
->A : G
->B : G
+>      : ^^^^^^
+>A : G.A
+>  : ^^^
+>B : G.B
+>  : ^^^
 
     D = A * 2
->D : G
+>D : G.B
+>  : ^^^
 >A * 2 : number
->A : G
+>      : ^^^^^^
+>A : G.A
+>  : ^^^
 >2 : 2
+>  : ^
 }
 
 // Error from referring constant enum in any other context than a property access
 var z = G;
 >z : typeof G
+>  : ^^^^^^^^
 >G : typeof G
+>  : ^^^^^^^^
 
 var z1 = G[G.A];
 >z1 : any
+>   : ^^^
 >G[G.A] : any
+>       : ^^^
 >G : typeof G
->G.A : G
+>  : ^^^^^^^^
+>G.A : G.A
+>    : ^^^
 >G : typeof G
->A : G
+>  : ^^^^^^^^
+>A : G.A
+>  : ^^^
 
 var g: G;
 >g : G
+>  : ^
 
 g = "string";
 >g = "string" : "string"
+>             : ^^^^^^^^
 >g : G
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
 function foo(x: G) { }
 >foo : (x: G) => void
+>    : ^ ^^ ^^^^^^^^^
 >x : G
+>  : ^
 
 G.B = 3;
 >G.B = 3 : 3
+>        : ^
 >G.B : any
+>    : ^^^
 >G : typeof G
+>  : ^^^^^^^^
 >B : any
+>  : ^^^
 >3 : 3
+>  : ^
 

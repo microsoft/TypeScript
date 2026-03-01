@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/discriminatedUnionWithIndexSignature.ts] ////
+
+=== discriminatedUnionWithIndexSignature.ts ===
+export interface UnionAltA {
+>UnionAltA : Symbol(UnionAltA, Decl(discriminatedUnionWithIndexSignature.ts, 0, 0))
+
+    type?: 'text';
+>type : Symbol(UnionAltA.type, Decl(discriminatedUnionWithIndexSignature.ts, 0, 28))
+}
+
+export interface UnionAltB {
+>UnionAltB : Symbol(UnionAltB, Decl(discriminatedUnionWithIndexSignature.ts, 2, 1))
+
+    type?: 'image' | 'video' | 'document';
+>type : Symbol(UnionAltB.type, Decl(discriminatedUnionWithIndexSignature.ts, 4, 28))
+}
+
+export type ValueUnion = UnionAltA | UnionAltB;
+>ValueUnion : Symbol(ValueUnion, Decl(discriminatedUnionWithIndexSignature.ts, 6, 1))
+>UnionAltA : Symbol(UnionAltA, Decl(discriminatedUnionWithIndexSignature.ts, 0, 0))
+>UnionAltB : Symbol(UnionAltB, Decl(discriminatedUnionWithIndexSignature.ts, 2, 1))
+
+export type MapOrSingleton =
+>MapOrSingleton : Symbol(MapOrSingleton, Decl(discriminatedUnionWithIndexSignature.ts, 8, 47))
+
+    | {
+        [key: string]: ValueUnion;
+>key : Symbol(key, Decl(discriminatedUnionWithIndexSignature.ts, 12, 9))
+>ValueUnion : Symbol(ValueUnion, Decl(discriminatedUnionWithIndexSignature.ts, 6, 1))
+    }
+    | ValueUnion;
+>ValueUnion : Symbol(ValueUnion, Decl(discriminatedUnionWithIndexSignature.ts, 6, 1))
+
+const withoutAsConst: MapOrSingleton = {
+>withoutAsConst : Symbol(withoutAsConst, Decl(discriminatedUnionWithIndexSignature.ts, 16, 5))
+>MapOrSingleton : Symbol(MapOrSingleton, Decl(discriminatedUnionWithIndexSignature.ts, 8, 47))
+
+    1: {
+>1 : Symbol(1, Decl(discriminatedUnionWithIndexSignature.ts, 16, 40))
+
+        type: 'text' /*as const*/,
+>type : Symbol(type, Decl(discriminatedUnionWithIndexSignature.ts, 17, 8))
+
+    },
+};
+
+const withAsConst: MapOrSingleton = {
+>withAsConst : Symbol(withAsConst, Decl(discriminatedUnionWithIndexSignature.ts, 22, 5))
+>MapOrSingleton : Symbol(MapOrSingleton, Decl(discriminatedUnionWithIndexSignature.ts, 8, 47))
+
+    1: {
+>1 : Symbol(1, Decl(discriminatedUnionWithIndexSignature.ts, 22, 37))
+
+        type: 'text' as const,
+>type : Symbol(type, Decl(discriminatedUnionWithIndexSignature.ts, 23, 8))
+>const : Symbol(const)
+
+    },
+};

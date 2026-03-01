@@ -1,107 +1,164 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers.ts] ////
+
+=== typeOfThisInStaticMembers.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(x: number) { }
 >x : number
+>  : ^^^^^^
 
     static foo: number;
 >foo : number
+>    : ^^^^^^
 
     static bar() {
 >bar : () => typeof C
+>    : ^^^^^^^^^^^^^^
 
         // type of this is the constructor function type
         var t = this;
 >t : typeof C
+>  : ^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 
         return this;
 >this : typeof C
+>     : ^^^^^^^^
     }
 }
 
 var t = C.bar();
 >t : typeof C
+>  : ^^^^^^^^
 >C.bar() : typeof C
+>        : ^^^^^^^^
 >C.bar : () => typeof C
+>      : ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >bar : () => typeof C
+>    : ^^^^^^^^^^^^^^
 
 // all ok
 var r2 = t.foo + 1;
 >r2 : number
+>   : ^^^^^^
 >t.foo + 1 : number
+>          : ^^^^^^
 >t.foo : number
+>      : ^^^^^^
 >t : typeof C
+>  : ^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 var r3 = t.bar();
 >r3 : typeof C
+>   : ^^^^^^^^
 >t.bar() : typeof C
+>        : ^^^^^^^^
 >t.bar : () => typeof C
+>      : ^^^^^^^^^^^^^^
 >t : typeof C
+>  : ^^^^^^^^
 >bar : () => typeof C
+>    : ^^^^^^^^^^^^^^
 
 var r4 = new t(1);
 >r4 : C
+>   : ^
 >new t(1) : C
+>         : ^
 >t : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     static test: number;
 >test : number
+>     : ^^^^^^
 
     constructor(x: string) { }
 >x : string
+>  : ^^^^^^
 
     static foo: string;
 >foo : string
+>    : ^^^^^^
 
     static bar() {
 >bar : () => typeof C2
+>    : ^^^^^^^^^^^^^^^
 
         // type of this is the constructor function type
         var t = this;
 >t : typeof C2
+>  : ^^^^^^^^^
 >this : typeof C2
+>     : ^^^^^^^^^
 
         return this;
 >this : typeof C2
+>     : ^^^^^^^^^
     }
 }
 
 var t2 = C2.bar();
 >t2 : typeof C2
+>   : ^^^^^^^^^
 >C2.bar() : typeof C2
+>         : ^^^^^^^^^
 >C2.bar : () => typeof C2
+>       : ^^^^^^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >bar : () => typeof C2
+>    : ^^^^^^^^^^^^^^^
 
 // all ok
 var r5 = t2.foo + 1;
 >r5 : string
+>   : ^^^^^^
 >t2.foo + 1 : string
+>           : ^^^^^^
 >t2.foo : string
+>       : ^^^^^^
 >t2 : typeof C2
+>   : ^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 var r6 = t2.bar();
 >r6 : typeof C2
+>   : ^^^^^^^^^
 >t2.bar() : typeof C2
+>         : ^^^^^^^^^
 >t2.bar : () => typeof C2
+>       : ^^^^^^^^^^^^^^^
 >t2 : typeof C2
+>   : ^^^^^^^^^
 >bar : () => typeof C2
+>    : ^^^^^^^^^^^^^^^
 
 var r7 = new t2('');
 >r7 : C2<unknown>
+>   : ^^^^^^^^^^^
 >new t2('') : C2<unknown>
+>           : ^^^^^^^^^^^
 >t2 : typeof C2
+>   : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 

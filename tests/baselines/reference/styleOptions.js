@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/styleOptions.ts] ////
+
 //// [styleOptions.ts]
 ///<style eqeqeq="on" strict="on" /> 
 
@@ -8,6 +10,7 @@ var t = x == y;
 
 
 //// [styleOptions.js]
+"use strict";
 ///<style eqeqeq="on" strict="on" /> 
 var x = 1;
 var y = 1;

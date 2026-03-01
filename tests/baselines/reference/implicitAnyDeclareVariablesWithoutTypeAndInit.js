@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts] ////
+
 //// [implicitAnyDeclareVariablesWithoutTypeAndInit.ts]
 // this should be an error
 var x;                   // no error, control flow typed
@@ -13,6 +15,7 @@ declare var bar2: any;
 var x1: any; var y1 = new x1;
 
 //// [implicitAnyDeclareVariablesWithoutTypeAndInit.js]
+"use strict";
 // this should be an error
 var x; // no error, control flow typed
 var y; // error because captured

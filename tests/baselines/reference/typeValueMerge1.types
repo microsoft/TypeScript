@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/externalModules/typeValueMerge1.ts] ////
+
+=== other.ts ===
+export type A = string;
+>A : string
+>  : ^^^^^^
+
+function A() {}
+>A : () => void
+>  : ^^^^^^^^^^
+
+export { A };
+>A : () => void
+>  : ^^^^^^^^^^
+
+export type B = string;
+>B : string
+>  : ^^^^^^
+
+var B = 10;
+>B : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+export { B };
+>B : number
+>  : ^^^^^^
+
+=== main.ts ===
+import { A, B } from "./other";
+>A : () => void
+>  : ^^^^^^^^^^
+>B : number
+>  : ^^^^^^
+
+A();
+>A() : void
+>    : ^^^^
+>A : () => void
+>  : ^^^^^^^^^^
+
+export const C = B;
+>C : number
+>  : ^^^^^^
+>B : number
+>  : ^^^^^^
+

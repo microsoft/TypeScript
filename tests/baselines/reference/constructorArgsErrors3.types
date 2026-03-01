@@ -1,9 +1,13 @@
-=== tests/cases/compiler/constructorArgsErrors3.ts ===
+//// [tests/cases/compiler/constructorArgsErrors3.ts] ////
+
+=== constructorArgsErrors3.ts ===
 class foo {
 >foo : foo
+>    : ^^^
 
     constructor (public public a: number) {
 >a : number
+>  : ^^^^^^
     }
 }
 

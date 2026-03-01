@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedLoopTypeGuards.ts] ////
+
 //// [nestedLoopTypeGuards.ts]
 // Repros from #10378
 
@@ -32,6 +34,7 @@ function f2() {
 }
 
 //// [nestedLoopTypeGuards.js]
+"use strict";
 // Repros from #10378
 function f1() {
     var a;

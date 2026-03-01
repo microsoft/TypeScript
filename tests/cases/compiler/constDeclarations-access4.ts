@@ -1,7 +1,8 @@
+// @strict: false
 // @target: ES6
 
 
-declare module M {
+declare namespace M {
     const x: number;
 }
 

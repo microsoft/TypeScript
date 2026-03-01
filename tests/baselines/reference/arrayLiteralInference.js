@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiteralInference.ts] ////
+
 //// [arrayLiteralInference.ts]
 // Repro from #31204
 

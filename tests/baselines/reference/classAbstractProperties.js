@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts] ////
+
 //// [classAbstractProperties.ts]
 abstract class A {
     abstract x : number;
@@ -14,8 +16,6 @@ abstract class A {
 }
 
 //// [classAbstractProperties.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}

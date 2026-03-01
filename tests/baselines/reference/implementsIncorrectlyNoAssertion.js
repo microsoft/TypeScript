@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementsIncorrectlyNoAssertion.ts] ////
+
 //// [implementsIncorrectlyNoAssertion.ts]
 declare class Foo {
     x: string;
@@ -13,8 +15,6 @@ class Baz implements Wrapper {
 
 
 //// [implementsIncorrectlyNoAssertion.js]
-var Baz = /** @class */ (function () {
-    function Baz() {
-    }
-    return Baz;
-}());
+"use strict";
+class Baz {
+}

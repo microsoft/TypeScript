@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInFunction.ts] ////
+
 //// [typeGuardsInFunction.ts]
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
@@ -88,6 +90,7 @@ function f4() {
 strOrNum = typeof f4() === "string" && f4(); // string | number 
 
 //// [typeGuardsInFunction.js]
+"use strict";
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 // variables in global
@@ -142,7 +145,7 @@ function f3(param) {
     // variables in function declaration
     var var2;
     // variables in function expressions
-    var r = (function (param1) {
+    var r = ((param1) => {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables from outer function declaration

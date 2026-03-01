@@ -1,156 +1,269 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts] ////
+
+=== typeFromPropertyAssignment31.ts ===
 function ExpandoMerge(n: number) {
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     return n;
 >n : number
+>  : ^^^^^^
 }
 ExpandoMerge.p1 = 111
 >ExpandoMerge.p1 = 111 : 111
+>                      : ^^^
 >ExpandoMerge.p1 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 >111 : 111
+>    : ^^^
 
 ExpandoMerge.m = function(n: number) {
 >ExpandoMerge.m = function(n: number) {    return n + 1;} : (n: number) => number
+>                                                         : ^ ^^      ^^^^^^^^^^^
 >ExpandoMerge.m : (n: number) => number
+>               : ^ ^^      ^^^^^^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     return n + 1;
 >n + 1 : number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 namespace ExpandoMerge {
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 
     export var p2 = 222;
 >p2 : number
+>   : ^^^^^^
 >222 : 222
+>    : ^^^
 }
 ExpandoMerge.p4 = 44444; // ok
 >ExpandoMerge.p4 = 44444 : 44444
+>                        : ^^^^^
 >ExpandoMerge.p4 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p4 : number
+>   : ^^^^^^
 >44444 : 44444
+>      : ^^^^^
 
 ExpandoMerge.p6 = 66666; // ok
 >ExpandoMerge.p6 = 66666 : 66666
+>                        : ^^^^^
 >ExpandoMerge.p6 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p6 : number
+>   : ^^^^^^
 >66666 : 66666
+>      : ^^^^^
 
 ExpandoMerge.p8 = false; // type error
 >ExpandoMerge.p8 = false : false
+>                        : ^^^^^
 >ExpandoMerge.p8 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p8 : number
+>   : ^^^^^^
 >false : false
+>      : ^^^^^
 
 namespace ExpandoMerge {
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 
     export var p3 = 333;
 >p3 : number
+>   : ^^^^^^
 >333 : 333
+>    : ^^^
 
     export var p4 = 4;
 >p4 : number
+>   : ^^^^^^
 >4 : 4
+>  : ^
 
     export var p5 = 5;
 >p5 : number
+>   : ^^^^^^
 >5 : 5
+>  : ^
 
     export let p6 = 6;
 >p6 : number
+>   : ^^^^^^
 >6 : 6
+>  : ^
 
     export let p7 = 7;
 >p7 : number
+>   : ^^^^^^
 >7 : 7
+>  : ^
 
     export var p8 = 6;
 >p8 : number
+>   : ^^^^^^
 >6 : 6
+>  : ^
 
     export let p9 = 7;
 >p9 : number
+>   : ^^^^^^
 >7 : 7
+>  : ^
 }
 ExpandoMerge.p5 = 555555; // ok
 >ExpandoMerge.p5 = 555555 : 555555
+>                         : ^^^^^^
 >ExpandoMerge.p5 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p5 : number
+>   : ^^^^^^
 >555555 : 555555
+>       : ^^^^^^
 
 ExpandoMerge.p7 = 777777; // ok
 >ExpandoMerge.p7 = 777777 : 777777
+>                         : ^^^^^^
 >ExpandoMerge.p7 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p7 : number
+>   : ^^^^^^
 >777777 : 777777
+>       : ^^^^^^
 
 ExpandoMerge.p9 = false; // type error
 >ExpandoMerge.p9 = false : false
+>                        : ^^^^^
 >ExpandoMerge.p9 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p9 : number
+>   : ^^^^^^
 >false : false
+>      : ^^^^^
 
 var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
 >n : number
+>  : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001) : number
+>                                                                                                                                                                                                          : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) : number
+>                                                                                                                                                                                     : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 : number
+>                                                                                                                                                                : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 : number
+>                                                                                                                                              : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 : number
+>                                                                                                                            : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 : number
+>                                                                                                          : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 : number
+>                                                                                        : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 : number
+>                                                                      : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 : number
+>                                                    : ^^^^^^
 >ExpandoMerge.p1 + ExpandoMerge.p2 : number
+>                                  : ^^^^^^
 >ExpandoMerge.p1 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p1 : number
+>   : ^^^^^^
 >ExpandoMerge.p2 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p2 : number
+>   : ^^^^^^
 >ExpandoMerge.p3 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p3 : number
+>   : ^^^^^^
 >ExpandoMerge.p4 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p4 : number
+>   : ^^^^^^
 >ExpandoMerge.p5 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p5 : number
+>   : ^^^^^^
 >ExpandoMerge.p6 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p6 : number
+>   : ^^^^^^
 >ExpandoMerge.p7 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p7 : number
+>   : ^^^^^^
 >ExpandoMerge.p8 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p8 : number
+>   : ^^^^^^
 >ExpandoMerge.p9 : number
+>                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >p9 : number
+>   : ^^^^^^
 >ExpandoMerge.m(12) : number
+>                   : ^^^^^^
 >ExpandoMerge.m : (n: number) => number
+>               : ^ ^^      ^^^^^^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >12 : 12
+>   : ^^
 >ExpandoMerge(1001) : number
+>                   : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
+>             : ^^^^^^^^^^^^^^^^^^^
 >1001 : 1001
+>     : ^^^^
 

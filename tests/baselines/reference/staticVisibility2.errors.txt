@@ -1,8 +1,8 @@
-tests/cases/compiler/staticVisibility2.ts(2,12): error TS7008: Member 'sideLength' implicitly has an 'any' type.
-tests/cases/compiler/staticVisibility2.ts(4,14): error TS2576: Property 'sideLength' does not exist on type 'Square'. Did you mean to access the static member 'Square.sideLength' instead?
+staticVisibility2.ts(2,12): error TS7008: Member 'sideLength' implicitly has an 'any' type.
+staticVisibility2.ts(4,14): error TS2576: Property 'sideLength' does not exist on type 'Square'. Did you mean to access the static member 'Square.sideLength' instead?
 
 
-==== tests/cases/compiler/staticVisibility2.ts (2 errors) ====
+==== staticVisibility2.ts (2 errors) ====
     class Square {
         static sideLength;
                ~~~~~~~~~~

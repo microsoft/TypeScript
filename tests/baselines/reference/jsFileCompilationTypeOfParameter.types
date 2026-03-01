@@ -1,5 +1,9 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationTypeOfParameter.ts] ////
+
+=== a.js ===
 function F(a: number) { }
 >F : (a: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 

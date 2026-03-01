@@ -1,68 +1,117 @@
-=== tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts ===
+//// [tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts] ////
+
+=== objectLiteralFunctionArgContextualTyping.ts ===
 interface I {
     value: string;
 >value : string
+>      : ^^^^^^
 
     toString: (t: string) => string;
 >toString : (t: string) => string
+>         : ^ ^^      ^^^^^      
 >t : string
+>  : ^^^^^^
 }
 
 function f2(args: I) { }
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >args : I
+>     : ^
 
 f2({ hello: 1 }) // error 
 >f2({ hello: 1 }) : void
+>                 : ^^^^
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >{ hello: 1 } : { hello: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >hello : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 f2({ value: '' }) // missing toString satisfied by Object's member
 >f2({ value: '' }) : void
+>                  : ^^^^
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >{ value: '' } : { value: string; }
+>              : ^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >'' : ""
+>   : ^^
 
 f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
 >f2({ value: '', what: 1 }) : void
+>                           : ^^^^
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >{ value: '', what: 1 } : { value: string; what: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >'' : ""
+>   : ^^
 >what : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 f2({ toString: (s) => s }) // error, missing property value from ArgsString
 >f2({ toString: (s) => s }) : void
+>                           : ^^^^
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >{ toString: (s) => s } : { toString: (s: string) => string; }
+>                       : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >toString : (s: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >(s) => s : (s: string) => string
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
 >f2({ toString: (s: string) => s }) : void
+>                                   : ^^^^
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >{ toString: (s: string) => s } : { toString: (s: string) => string; }
+>                               : ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >toString : (s: string) => string
+>         : ^ ^^      ^^^^^^^^^^^
 >(s: string) => s : (s: string) => string
+>                 : ^ ^^      ^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 f2({ value: '', toString: (s) => s.uhhh }) // error
 >f2({ value: '', toString: (s) => s.uhhh }) : void
+>                                           : ^^^^
 >f2 : (args: I) => void
+>   : ^    ^^ ^^^^^^^^^
 >{ value: '', toString: (s) => s.uhhh } : { value: string; toString: (s: string) => any; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >'' : ""
+>   : ^^
 >toString : (s: string) => any
+>         : ^ ^^^^^^^^^^^^^^^^
 >(s) => s.uhhh : (s: string) => any
+>              : ^ ^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.uhhh : any
+>       : ^^^
 >s : string
+>  : ^^^^^^
 >uhhh : any
+>     : ^^^
 

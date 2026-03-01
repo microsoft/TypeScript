@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorES6_4.ts] ////
+
 //// [generatorES6_4.ts]
 var v = { 
    *foo() {
@@ -6,6 +8,7 @@ var v = {
 }
 
 //// [generatorES6_4.js]
+"use strict";
 var v = {
     *foo() {
         yield 0;

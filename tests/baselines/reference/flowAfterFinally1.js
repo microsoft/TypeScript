@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/flowAfterFinally1.ts] ////
+
 //// [flowAfterFinally1.ts]
 declare function openFile(): void
 declare function closeFile(): void
@@ -14,6 +16,7 @@ try {
 result // should not error here
 
 //// [flowAfterFinally1.js]
+"use strict";
 var result;
 openFile();
 try {

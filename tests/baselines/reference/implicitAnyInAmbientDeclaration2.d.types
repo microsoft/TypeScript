@@ -1,36 +1,52 @@
-=== tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts ===
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts] ////
+
+=== implicitAnyInAmbientDeclaration2.d.ts ===
 declare function foo(x);  // this should be an error
 >foo : (x: any) => any
+>    : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 declare var bar;  // this should be be an erro
 >bar : any
+>    : ^^^
 
 declare class C {
 >C : C
+>  : ^
 
     public publicMember;  // this should be an error
 >publicMember : any
+>             : ^^^
 
     private privateMember;  // this should not be an error
 >privateMember : any
+>              : ^^^
 
     public publicFunction(x);  // this should be an error
 >publicFunction : (x: any) => any
+>               : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
     private privateFunction(privateParam);  // this should not be an error
 >privateFunction : (privateParam: any) => any
+>                : ^            ^^^^^^^^^^^^^
 >privateParam : any
+>             : ^^^
 
     private constructor(privateParam);  // this should not be an error
 >privateParam : any
+>             : ^^^
 }
 
 declare class D {
 >D : D
+>  : ^
 
     public constructor(publicConsParam, int: number);  // this should be an error
 >publicConsParam : any
+>                : ^^^
 >int : number
+>    : ^^^^^^
 }

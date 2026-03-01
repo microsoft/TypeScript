@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataConditionalType.ts] ////
+
 //// [decoratorMetadataConditionalType.ts]
 declare function d(): PropertyDecorator;
 abstract class BaseEntity<T> {
@@ -10,6 +12,7 @@ class C {
 }
 
 //// [decoratorMetadataConditionalType.js]
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19,21 +22,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var BaseEntity = /** @class */ (function () {
-    function BaseEntity() {
-    }
-    __decorate([
-        d(),
-        __metadata("design:type", Object)
-    ], BaseEntity.prototype, "attributes");
-    return BaseEntity;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    __decorate([
-        d(),
-        __metadata("design:type", Boolean)
-    ], C.prototype, "x");
-    return C;
-}());
+class BaseEntity {
+}
+__decorate([
+    d(),
+    __metadata("design:type", Object)
+], BaseEntity.prototype, "attributes", void 0);
+class C {
+}
+__decorate([
+    d(),
+    __metadata("design:type", Boolean)
+], C.prototype, "x", void 0);

@@ -1,96 +1,151 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts] ////
+
+=== typeGuardsWithAny.ts ===
 var x: any = { p: 0 };
 >x : any
+>  : ^^^
 >{ p: 0 } : { p: number; }
+>         : ^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 if (x instanceof Object) {
 >x instanceof Object : boolean
+>                    : ^^^^^^^
 >x : any
+>  : ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     x.p; // No error, type any unaffected by instanceof type guard
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 else {
     x.p; // No error, type any unaffected by instanceof type guard
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 
 if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
     x.p; // Error, type any narrowed by primitive type check
 >x.p : any
+>    : ^^^
 >x : string
+>  : ^^^^^^
 >p : any
+>  : ^^^
 }
 else {
     x.p; // No error, type unaffected in this branch
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
     x.p; // Error, type any narrowed by primitive type check
 >x.p : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 >p : any
+>  : ^^^
 }
 else {
     x.p; // No error, type unaffected in this branch
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 
 if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
+>                       : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 
     x.p; // Error, type any narrowed by primitive type check
 >x.p : any
+>    : ^^^
 >x : boolean
+>  : ^^^^^^^
 >p : any
+>  : ^^^
 }
 else {
     x.p; // No error, type unaffected in this branch
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 
 if (typeof x === "object") {
 >typeof x === "object" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >"object" : "object"
+>         : ^^^^^^^^
 
     x.p; // No error, type any only affected by primitive type check
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 else {
     x.p; // No error, type unaffected in this branch
 >x.p : any
+>    : ^^^
 >x : any
+>  : ^^^
 >p : any
+>  : ^^^
 }
 

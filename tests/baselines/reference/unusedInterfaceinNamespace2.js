@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedInterfaceinNamespace2.ts] ////
+
 //// [unusedInterfaceinNamespace2.ts]
 namespace Validation {
     interface i1 {
@@ -10,3 +12,4 @@ namespace Validation {
 }
 
 //// [unusedInterfaceinNamespace2.js]
+"use strict";

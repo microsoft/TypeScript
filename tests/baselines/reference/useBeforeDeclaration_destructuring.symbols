@@ -1,4 +1,6 @@
-=== tests/cases/compiler/useBeforeDeclaration_destructuring.ts ===
+//// [tests/cases/compiler/useBeforeDeclaration_destructuring.ts] ////
+
+=== useBeforeDeclaration_destructuring.ts ===
 a;
 >a : Symbol(a, Decl(useBeforeDeclaration_destructuring.ts, 1, 5))
 

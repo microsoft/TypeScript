@@ -1,44 +1,66 @@
-=== tests/cases/compiler/declFilePrivateMethodOverloads.ts ===
+//// [tests/cases/compiler/declFilePrivateMethodOverloads.ts] ////
+
+=== declFilePrivateMethodOverloads.ts ===
 interface IContext {
     someMethod();
 >someMethod : () => any
+>           : ^^^^^^^^^
 }
 class c1 {
 >c1 : c1
+>   : ^^
 
     private _forEachBindingContext(bindingContext: IContext, fn: (bindingContext: IContext) => void);
->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
+>                       : ^^^              ^^        ^^  ^^                                  ^^^^^^^^^                   ^^               ^^  ^^                                  ^^^^^^^^^
 >bindingContext : IContext
+>               : ^^^^^^^^
 >fn : (bindingContext: IContext) => void
+>   : ^              ^^        ^^^^^    
 >bindingContext : IContext
+>               : ^^^^^^^^
 
     private _forEachBindingContext(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
 >_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
+>                       : ^^^              ^^        ^^  ^^                                  ^^^^^^^^^                   ^^               ^^  ^^                                  ^^^^^^^^^
 >bindingContextArray : IContext[]
+>                    : ^^^^^^^^^^
 >fn : (bindingContext: IContext) => void
+>   : ^              ^^        ^^^^^    
 >bindingContext : IContext
+>               : ^^^^^^^^
 
     private _forEachBindingContext(context, fn: (bindingContext: IContext) => void): void {
->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
+>                       : ^^^              ^^        ^^  ^^                                  ^^^^^^^^^                   ^^               ^^  ^^                                  ^^^^^^^^^
 >context : any
 >fn : (bindingContext: IContext) => void
+>   : ^              ^^        ^^^^^    
 >bindingContext : IContext
+>               : ^^^^^^^^
 
         // Function here
     }
 
     private overloadWithArityDifference(bindingContext: IContext);
->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
+>                            : ^^^              ^^        ^^^^^^^^^                   ^^               ^^  ^^                                  ^^^^^^^^^
 >bindingContext : IContext
+>               : ^^^^^^^^
 
     private overloadWithArityDifference(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
 >overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
+>                            : ^^^              ^^        ^^^^^^^^^                   ^^               ^^  ^^                                  ^^^^^^^^^
 >bindingContextArray : IContext[]
+>                    : ^^^^^^^^^^
 >fn : (bindingContext: IContext) => void
+>   : ^              ^^        ^^^^^    
 >bindingContext : IContext
+>               : ^^^^^^^^
 
     private overloadWithArityDifference(context): void {
->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
+>                            : ^^^              ^^        ^^^^^^^^^                   ^^               ^^  ^^                                  ^^^^^^^^^
 >context : any
 
         // Function here
@@ -46,18 +68,22 @@ class c1 {
 }
 declare class c2 {
 >c2 : c2
+>   : ^^
 
     private overload1(context, fn);
 >overload1 : (context: any, fn: any) => any
+>          : ^       ^^^^^^^  ^^^^^^^^^^^^^
 >context : any
 >fn : any
 
     private overload2(context);
 >overload2 : { (context: any): any; (context: any, fn: any): any; }
+>          : ^^^       ^^^^^^^^^^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^
 >context : any
 
     private overload2(context, fn);
 >overload2 : { (context: any): any; (context: any, fn: any): any; }
+>          : ^^^       ^^^^^^^^^^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^
 >context : any
 >fn : any
 }

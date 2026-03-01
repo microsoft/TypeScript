@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts] ////
+
 //// [unionErrorMessageOnMatchingDiscriminant.ts]
 type A = {
     type: 'a',
@@ -25,7 +27,7 @@ const foo: Union = {
 //// [unionErrorMessageOnMatchingDiscriminant.js]
 "use strict";
 // error
-var foo = {
+const foo = {
     type: 'a',
     data: null
 };

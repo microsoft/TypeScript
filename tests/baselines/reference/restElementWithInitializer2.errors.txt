@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/destructuring/restElementWithInitializer2.ts(3,7): error TS1186: A rest element cannot have an initializer.
+restElementWithInitializer2.ts(3,7): error TS1186: A rest element cannot have an initializer.
 
 
-==== tests/cases/conformance/es6/destructuring/restElementWithInitializer2.ts (1 errors) ====
-    var a: number[];
+==== restElementWithInitializer2.ts (1 errors) ====
+    declare var a: number[];
     var x: number[];
     [...x = a] = a;  // Error, rest element cannot have initializer
           ~

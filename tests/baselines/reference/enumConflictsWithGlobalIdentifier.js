@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts] ////
+
 //// [enumConflictsWithGlobalIdentifier.ts]
 enum Position { 
     IgnoreRulesSpecific = 0,
@@ -7,6 +9,7 @@ var y = Position.IgnoreRulesSpecific;
 
 
 //// [enumConflictsWithGlobalIdentifier.js]
+"use strict";
 var Position;
 (function (Position) {
     Position[Position["IgnoreRulesSpecific"] = 0] = "IgnoreRulesSpecific";

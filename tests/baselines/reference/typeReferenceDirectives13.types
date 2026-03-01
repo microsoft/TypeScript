@@ -1,12 +1,17 @@
+//// [tests/cases/compiler/typeReferenceDirectives13.ts] ////
+
 === /app.ts ===
 /// <reference types="lib"/>
 import {$} from "./ref";
 >$ : any
+>  : ^^^
 
 export interface A {
     x: () => typeof $
 >x : () => typeof $
+>  : ^^^^^^        
 >$ : { x: number; }
+>  : ^^^^^      ^^^
 }
 
 === /ref.d.ts ===
@@ -16,5 +21,7 @@ export interface $ { x }
 === /types/lib/index.d.ts ===
 declare let $: { x: number }
 >$ : { x: number; }
+>  : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 

@@ -1,0 +1,13 @@
+// === findRenameLocations ===
+// @findInStrings: false
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/jsDocCallback.js ===
+// 
+// /**
+//  * <|@callback /*RENAME*/[|FooCallbackRENAME|]
+//  * @param {string} eventName - Rename should work
+//  |>*/
+// 
+// /** @type {[|FooCallbackRENAME|]} */
+// var t;

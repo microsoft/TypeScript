@@ -1,0 +1,18 @@
+// === getDefinitionAtPosition ===
+// === /home/src/workspaces/project/node_modules/a/src/index.ts ===
+// export class [|Foo|] {
+// }
+// 
+
+// === /home/src/workspaces/project/index.ts ===
+// import { Foo/*GOTO DEF POS*/ } from "a";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

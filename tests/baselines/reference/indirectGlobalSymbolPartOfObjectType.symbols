@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indirectGlobalSymbolPartOfObjectType.ts ===
+//// [tests/cases/compiler/indirectGlobalSymbolPartOfObjectType.ts] ////
+
+=== indirectGlobalSymbolPartOfObjectType.ts ===
 export { }
 const Symbol = globalThis.Symbol;
 >Symbol : Symbol(Symbol, Decl(indirectGlobalSymbolPartOfObjectType.ts, 1, 5))

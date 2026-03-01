@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override13.ts] ////
+
 //// [override13.ts]
 class Foo {
     property = 1
@@ -27,6 +29,7 @@ class StaticDerived extends Intermediate {
 }
 
 //// [override13.js]
+"use strict";
 class Foo {
     property = 1;
     static staticProperty = 2;

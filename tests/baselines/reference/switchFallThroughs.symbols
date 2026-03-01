@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchFallThroughs.ts ===
+//// [tests/cases/compiler/switchFallThroughs.ts] ////
+
+=== switchFallThroughs.ts ===
 function R1(index: number) {
 >R1 : Symbol(R1, Decl(switchFallThroughs.ts, 0, 0))
 >index : Symbol(index, Decl(switchFallThroughs.ts, 0, 12))

@@ -12,3 +12,22 @@ type MyCallback = (thing: string) => void;
 declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): void;
 h(v => v ? (abc) => { } : Promise.reject());
 h(async v => v ? (def) => { } : Promise.reject());
+
+// repro from #29196
+const increment: (
+  num: number,
+  str: string
+) => Promise<((s: string) => any) | string> | string = async (num, str) => {
+  return a => {
+    return a.length
+  }
+}
+
+const increment2: (
+  num: number,
+  str: string
+) => Promise<((s: string) => any) | string> = async (num, str) => {
+  return a => {
+    return a.length
+  }
+}

@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/controlFlowInitializedDestructuringVariables.ts] ////
+
+=== controlFlowInitializedDestructuringVariables.ts ===
+declare const obj: { a?: string, b?: number };
+>obj : Symbol(obj, Decl(controlFlowInitializedDestructuringVariables.ts, 0, 13))
+>a : Symbol(a, Decl(controlFlowInitializedDestructuringVariables.ts, 0, 20))
+>b : Symbol(b, Decl(controlFlowInitializedDestructuringVariables.ts, 0, 32))
+
+const {
+    a = "0",
+>a : Symbol(a, Decl(controlFlowInitializedDestructuringVariables.ts, 1, 7))
+
+    b = +a,
+>b : Symbol(b, Decl(controlFlowInitializedDestructuringVariables.ts, 2, 12))
+>a : Symbol(a, Decl(controlFlowInitializedDestructuringVariables.ts, 1, 7))
+
+} = obj;
+>obj : Symbol(obj, Decl(controlFlowInitializedDestructuringVariables.ts, 0, 13))
+

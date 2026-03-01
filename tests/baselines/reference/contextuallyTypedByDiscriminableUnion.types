@@ -1,69 +1,136 @@
-=== tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts ===
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion.ts ===
 type ADT = {
->ADT : { kind: "a"; method(x: string): number; } | { kind: "b"; method(x: number): string; }
+>ADT : ADT
+>    : ^^^
 
     kind: "a",
 >kind : "a"
+>     : ^^^
 
     method(x: string): number;
 >method : (x: string) => number
+>       : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 } | {
     kind: "b",
 >kind : "b"
+>     : ^^^
 
     method(x: number): string;
 >method : (x: number) => string
+>       : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
 };
 
 
 function invoke(item: ADT) {
 >invoke : (item: ADT) => void
+>       : ^    ^^   ^^^^^^^^^
 >item : ADT
+>     : ^^^
 
     if (item.kind === "a") {
 >item.kind === "a" : boolean
+>                  : ^^^^^^^
 >item.kind : "a" | "b"
+>          : ^^^^^^^^^
 >item : ADT
+>     : ^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
         item.method("");
 >item.method("") : number
+>                : ^^^^^^
 >item.method : (x: string) => number
+>            : ^ ^^      ^^^^^      
 >item : { kind: "a"; method(x: string): number; }
+>     : ^^^^^^^^   ^^^^^^^^^ ^^      ^^^      ^^^
 >method : (x: string) => number
+>       : ^ ^^      ^^^^^      
 >"" : ""
+>   : ^^
     }
     else {
         item.method(42);
 >item.method(42) : string
+>                : ^^^^^^
 >item.method : (x: number) => string
+>            : ^ ^^      ^^^^^      
 >item : { kind: "b"; method(x: number): string; }
+>     : ^^^^^^^^   ^^^^^^^^^ ^^      ^^^      ^^^
 >method : (x: number) => string
+>       : ^ ^^      ^^^^^      
 >42 : 42
+>   : ^^
     }
 }
 
 invoke({
 >invoke({    kind: "a",    method(a) {        return +a;    }}) : void
+>                                                               : ^^^^
 >invoke : (item: ADT) => void
+>       : ^    ^^   ^^^^^^^^^
 >{    kind: "a",    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     kind: "a",
 >kind : "a"
+>     : ^^^
 >"a" : "a"
+>    : ^^^
 
     method(a) {
 >method : (a: string) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
         return +a;
 >+a : number
+>   : ^^^^^^
 >a : string
+>  : ^^^^^^
     }
 });
+
+const kind = "a"
+>kind : "a"
+>     : ^^^
+>"a" : "a"
+>    : ^^^
+
+invoke({
+>invoke({    kind,    method(a) {        return +a;    }}) : void
+>                                                          : ^^^^
+>invoke : (item: ADT) => void
+>       : ^    ^^   ^^^^^^^^^
+>{    kind,    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+
+    kind,
+>kind : "a"
+>     : ^^^
+
+    method(a) {
+>method : (a: string) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+        return +a;
+>+a : number
+>   : ^^^^^^
+>a : string
+>  : ^^^^^^
+    }
+})
 

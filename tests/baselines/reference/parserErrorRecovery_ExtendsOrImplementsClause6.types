@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts] ////
+
+=== parserErrorRecovery_ExtendsOrImplementsClause6.ts ===
+
 interface I extends { }
-No type information for this code.

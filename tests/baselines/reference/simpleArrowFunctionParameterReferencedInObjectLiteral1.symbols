@@ -1,4 +1,6 @@
-=== tests/cases/compiler/simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
+//// [tests/cases/compiler/simpleArrowFunctionParameterReferencedInObjectLiteral1.ts] ////
+
+=== simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
 [].map(() => [].map(p => ({ X: p })));
 >[].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

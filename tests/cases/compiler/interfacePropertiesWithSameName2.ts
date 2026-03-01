@@ -1,3 +1,4 @@
+// @target: es2015
 interface Mover {
     move(): void;
     getStatus(): { speed: number; };
@@ -12,7 +13,7 @@ interface MoverShaker extends Mover, Shaker {
 }
 
 // Inside a module
-declare module MoversAndShakers {
+declare namespace MoversAndShakers {
     export class Mover {
         move(): void;
         getStatus(): { speed: number; };

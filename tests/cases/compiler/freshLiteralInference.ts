@@ -1,3 +1,4 @@
+// @target: es2015
 declare function f1<T extends "1" | "2" | "3">(x: T): T;
 
 const value = f1("1");  // regular "1"

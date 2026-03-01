@@ -2,7 +2,7 @@ error TS2318: Cannot find global type 'IterableIterator'.
 
 
 !!! error TS2318: Cannot find global type 'IterableIterator'.
-==== tests/cases/conformance/generators/generatorReturnTypeFallback.2.ts (0 errors) ====
+==== generatorReturnTypeFallback.2.ts (0 errors) ====
     // Allow generators to fallback to IterableIterator if they do not need a type for the sent value while in strictNullChecks mode.
     // Report an error if IterableIterator cannot be found.
     function* f() {

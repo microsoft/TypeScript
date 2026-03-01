@@ -1,36 +1,53 @@
-=== tests/cases/compiler/typeParameterDiamond1.ts ===
+//// [tests/cases/compiler/typeParameterDiamond1.ts] ////
+
+=== typeParameterDiamond1.ts ===
 function diamondTop<Top>() {
 >diamondTop : <Top>() => void
+>           : ^   ^^^^^^^^^^^
 
     function diamondMiddle<T extends Top, U extends Top>() {
 >diamondMiddle : <T extends Top, U extends Top>() => void
+>              : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^^^^^^^^^^
 
         function diamondBottom<Bottom extends T | U>() {
 >diamondBottom : <Bottom extends T | U>() => void
+>              : ^      ^^^^^^^^^     ^^^^^^^^^^^
 
             var top: Top;
 >top : Top
+>    : ^^^
 
             var middle: T | U;
 >middle : T | U
+>       : ^^^^^
 
             var bottom: Bottom;
 >bottom : Bottom
+>       : ^^^^^^
 
             top = middle;
 >top = middle : T | U
+>             : ^^^^^
 >top : Top
+>    : ^^^
 >middle : T | U
+>       : ^^^^^
 
             middle = bottom;
 >middle = bottom : Bottom
+>                : ^^^^^^
 >middle : T | U
+>       : ^^^^^
 >bottom : Bottom
+>       : ^^^^^^
 
             top = bottom;
 >top = bottom : Bottom
+>             : ^^^^^^
 >top : Top
+>    : ^^^
 >bottom : Bottom
+>       : ^^^^^^
         }
     }
 }

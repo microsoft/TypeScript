@@ -1,18 +1,31 @@
-=== tests/cases/compiler/contextualTypingFunctionReturningFunction2.ts ===
+//// [tests/cases/compiler/contextualTypingFunctionReturningFunction2.ts] ////
+
+=== contextualTypingFunctionReturningFunction2.ts ===
 declare function f(n: number): void;
 >f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>  : ^^^ ^^      ^^^    ^^^  ^^                           ^^^    ^^^
 >n : number
+>  : ^^^^^^
 
 declare function f(cb: () => (n: number) => number): void;
 >f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>  : ^^^ ^^      ^^^    ^^^  ^^                           ^^^    ^^^
 >cb : () => (n: number) => number
+>   : ^^^^^^                     
 >n : number
+>  : ^^^^^^
 
 f(() => n => n);
 >f(() => n => n) : void
+>                : ^^^^
 >f : { (n: number): void; (cb: () => (n: number) => number): void; }
+>  : ^^^ ^^      ^^^    ^^^  ^^                           ^^^    ^^^
 >() => n => n : () => (n: number) => number
+>             : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >n => n : (n: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 

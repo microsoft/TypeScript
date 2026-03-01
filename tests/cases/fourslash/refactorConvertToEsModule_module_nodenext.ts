@@ -2,7 +2,7 @@
 
 // @allowJs: true
 // @target: esnext
-// @module: nodenext
+// @module: node18
 
 // @Filename: /a.js
 ////module.exports = 0;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/catch.ts ===
+//// [tests/cases/compiler/catch.ts] ////
+
+=== catch.ts ===
 function f() {
 >f : Symbol(f, Decl(catch.ts, 0, 0))
 

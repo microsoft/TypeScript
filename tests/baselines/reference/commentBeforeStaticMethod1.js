@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentBeforeStaticMethod1.ts] ////
+
 //// [commentBeforeStaticMethod1.ts]
 class C {
   /**
@@ -9,14 +11,12 @@ class C {
 }
 
 //// [commentBeforeStaticMethod1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
+"use strict";
+class C {
     /**
      * Returns bar
      */
-    C.foo = function () {
+    static foo() {
         return "bar";
-    };
-    return C;
-}());
+    }
+}

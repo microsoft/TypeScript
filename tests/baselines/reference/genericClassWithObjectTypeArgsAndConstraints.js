@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithObjectTypeArgsAndConstraints.ts] ////
+
 //// [genericClassWithObjectTypeArgsAndConstraints.ts]
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
@@ -15,7 +17,7 @@ class X<T> {
     x: T;
 }
 
-module Class {
+namespace Class {
     class G<T extends { x: string }> {
         foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
             var x: T;
@@ -40,7 +42,7 @@ module Class {
     var r2 = g2.foo2(c1, c1);
 }
 
-module Interface {
+namespace Interface {
     interface G<T extends { x: string }> {
         foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
     }
@@ -61,48 +63,34 @@ module Interface {
 }
 
 //// [genericClassWithObjectTypeArgsAndConstraints.js]
+"use strict";
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
+class C {
+}
+class D {
+}
+class X {
+}
 var Class;
 (function (Class) {
-    var G = /** @class */ (function () {
-        function G() {
-        }
-        G.prototype.foo = function (t, t2) {
+    class G {
+        foo(t, t2) {
             var x;
             return x;
-        };
-        return G;
-    }());
+        }
+    }
     var c1 = new X();
     var d1 = new X();
     var g;
     var r = g.foo(c1, d1);
     var r2 = g.foo(c1, c1);
-    var G2 = /** @class */ (function () {
-        function G2() {
-        }
-        G2.prototype.foo2 = function (t, t2) {
+    class G2 {
+        foo2(t, t2) {
             var x;
             return x;
-        };
-        return G2;
-    }());
+        }
+    }
     var g2;
     var r = g2.foo2(c1, d1);
     var r2 = g2.foo2(c1, c1);

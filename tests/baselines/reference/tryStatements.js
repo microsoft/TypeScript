@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/tryStatements/tryStatements.ts] ////
+
 //// [tryStatements.ts]
 function fn() {
     try { } catch { }
@@ -19,6 +21,7 @@ function fn() {
 }
 
 //// [tryStatements.js]
+"use strict";
 function fn() {
     try { }
     catch (_a) { }

@@ -1,8 +1,8 @@
-tests/cases/compiler/inferenceFromIncompleteSource.ts(11,11): error TS2345: Argument of type '{ items: { name: string; }[]; itemKey: "name"; }' is not assignable to parameter of type 'ListProps<{ name: string; }, "name">'.
+inferenceFromIncompleteSource.ts(11,11): error TS2345: Argument of type '{ items: { name: string; }[]; itemKey: "name"; }' is not assignable to parameter of type 'ListProps<{ name: string; }, "name">'.
   Property 'prop' is missing in type '{ items: { name: string; }[]; itemKey: "name"; }' but required in type 'ListProps<{ name: string; }, "name">'.
 
 
-==== tests/cases/compiler/inferenceFromIncompleteSource.ts (1 errors) ====
+==== inferenceFromIncompleteSource.ts (1 errors) ====
     // Repro from #42030
     
     interface ListProps<T, K extends keyof T> {
@@ -17,5 +17,5 @@ tests/cases/compiler/inferenceFromIncompleteSource.ts(11,11): error TS2345: Argu
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ items: { name: string; }[]; itemKey: "name"; }' is not assignable to parameter of type 'ListProps<{ name: string; }, "name">'.
 !!! error TS2345:   Property 'prop' is missing in type '{ items: { name: string; }[]; itemKey: "name"; }' but required in type 'ListProps<{ name: string; }, "name">'.
-!!! related TS2728 tests/cases/compiler/inferenceFromIncompleteSource.ts:6:3: 'prop' is declared here.
+!!! related TS2728 inferenceFromIncompleteSource.ts:6:3: 'prop' is declared here.
     

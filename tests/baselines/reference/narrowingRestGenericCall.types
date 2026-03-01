@@ -1,42 +1,67 @@
-=== tests/cases/compiler/narrowingRestGenericCall.ts ===
+//// [tests/cases/compiler/narrowingRestGenericCall.ts] ////
+
+=== narrowingRestGenericCall.ts ===
 interface Slugs {
   foo: string;
 >foo : string
+>    : ^^^^^^
 
   bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 function call<T extends object>(obj: T, cb: (val: T) => void) {
 >call : <T extends object>(obj: T, cb: (val: T) => void) => void
+>     : ^ ^^^^^^^^^      ^^   ^^ ^^  ^^                ^^^^^^^^^
 >obj : T
+>    : ^
 >cb : (val: T) => void
+>   : ^   ^^ ^^^^^    
 >val : T
+>    : ^
 
   cb(obj);
 >cb(obj) : void
+>        : ^^^^
 >cb : (val: T) => void
+>   : ^   ^^ ^^^^^    
 >obj : T
+>    : ^
 }
 
 declare let obj: Slugs;
 >obj : Slugs
+>    : ^^^^^
 
 call(obj, ({foo, ...rest}) => {
 >call(obj, ({foo, ...rest}) => {  console.log(rest.bar);}) : void
+>                                                          : ^^^^
 >call : <T extends object>(obj: T, cb: (val: T) => void) => void
+>     : ^ ^^^^^^^^^      ^^   ^^ ^^  ^^                ^^^^^^^^^
 >obj : Slugs
+>    : ^^^^^
 >({foo, ...rest}) => {  console.log(rest.bar);} : ({ foo, ...rest }: Slugs) => void
+>                                               : ^                ^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >rest : { bar: string; }
+>     : ^^^^^^^      ^^^
 
   console.log(rest.bar);
 >console.log(rest.bar) : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >rest.bar : string
+>         : ^^^^^^
 >rest : { bar: string; }
+>     : ^^^^^^^      ^^^
 >bar : string
+>    : ^^^^^^
 
 });

@@ -1,71 +1,102 @@
-=== tests/cases/compiler/mixingApparentTypeOverrides.ts ===
+//// [tests/cases/compiler/mixingApparentTypeOverrides.ts] ////
+
+=== mixingApparentTypeOverrides.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 function Tagged<T extends Constructor<{}>>(Base: T) {
 >Tagged : <T extends Constructor<{}>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: Tagged<any>.(Anonymous class); } & T
+>       : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : T
+>     : ^
 
   return class extends Base {
 >class extends Base {    _tag: string;    constructor(...args: any[]) {      super(...args);      this._tag = "";    }  } : { new (...args: any[]): (Anonymous class); prototype: Tagged<any>.(Anonymous class); } & T
+>                                                                                                                         : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : {}
+>     : ^^
 
     _tag: string;
 >_tag : string
+>     : ^^^^^^
 
     constructor(...args: any[]) {
 >args : any[]
+>     : ^^^^^
 
       super(...args);
 >super(...args) : void
+>               : ^^^^
 >super : T
+>      : ^
 >...args : any
 >args : any[]
+>     : ^^^^^
 
       this._tag = "";
 >this._tag = "" : ""
+>               : ^^
 >this._tag : string
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >_tag : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
     }
   };
 }
 
 class A {
 >A : A
+>  : ^
 
   toString () {
 >toString : () => string
+>         : ^^^^^^^^^^^^
 
     return "class A";
 >"class A" : "class A"
+>          : ^^^^^^^^^
   }
 }
 
 class B extends Tagged(A) {
 >B : B
+>  : ^
 >Tagged(A) : Tagged<typeof A>.(Anonymous class) & A
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: Tagged<any>.(Anonymous class); } & T
+>       : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
   toString () { // Should not be an error
 >toString : () => string
+>         : ^^^^^^^^^^^^
 
     return "class B";
 >"class B" : "class B"
+>          : ^^^^^^^^^
   }
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
   toString () { // Should not be an error
 >toString : () => string
+>         : ^^^^^^^^^^^^
 
     return "class C";
 >"class C" : "class C"
+>          : ^^^^^^^^^
   }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overload2.ts ===
+//// [tests/cases/compiler/overload2.ts] ////
+
+=== overload2.ts ===
 enum A { }
 >A : Symbol(A, Decl(overload2.ts, 0, 0))
 

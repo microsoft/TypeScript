@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/overloadsWithComputedNames.ts] ////
+
+=== overloadsWithComputedNames.ts ===
+// https://github.com/microsoft/TypeScript/issues/52329
+class Person {
+>Person : Symbol(Person, Decl(overloadsWithComputedNames.ts, 0, 0))
+
+    ["B"](a: number): string;
+>["B"] : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
+>"B" : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
+>a : Symbol(a, Decl(overloadsWithComputedNames.ts, 2, 10))
+
+    ["A"](a: string|number): number | string {
+>["A"] : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
+>"A" : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
+>a : Symbol(a, Decl(overloadsWithComputedNames.ts, 3, 10))
+
+      return 0;
+    }
+}
+let p = new Person();
+>p : Symbol(p, Decl(overloadsWithComputedNames.ts, 7, 3))
+>Person : Symbol(Person, Decl(overloadsWithComputedNames.ts, 0, 0))
+
+p.A(0)
+>p.A : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
+>p : Symbol(p, Decl(overloadsWithComputedNames.ts, 7, 3))
+>A : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
+
+p.B(0)
+>p.B : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
+>p : Symbol(p, Decl(overloadsWithComputedNames.ts, 7, 3))
+>B : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
+
+// https://github.com/microsoft/TypeScript/issues/17345
+class C {
+>C : Symbol(C, Decl(overloadsWithComputedNames.ts, 9, 6))
+
+    ["foo"](): void
+>["foo"] : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
+>"foo" : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
+
+    ["bar"](): void;
+>["bar"] : Symbol(C["bar"], Decl(overloadsWithComputedNames.ts, 13, 19))
+>"bar" : Symbol(C["bar"], Decl(overloadsWithComputedNames.ts, 13, 19))
+
+    ["foo"]() {
+>["foo"] : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
+>"foo" : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
+
+        return 0;
+    }
+}
+
+declare const uniqueSym: unique symbol;
+>uniqueSym : Symbol(uniqueSym, Decl(overloadsWithComputedNames.ts, 20, 13))
+
+declare const uniqueSym2: unique symbol;
+>uniqueSym2 : Symbol(uniqueSym2, Decl(overloadsWithComputedNames.ts, 21, 13))
+
+declare const sym: symbol;
+>sym : Symbol(sym, Decl(overloadsWithComputedNames.ts, 22, 13))
+
+declare const strUnion: 'foo' | 'bar';
+>strUnion : Symbol(strUnion, Decl(overloadsWithComputedNames.ts, 24, 13))
+
+class C1 {
+>C1 : Symbol(C1, Decl(overloadsWithComputedNames.ts, 24, 38))
+
+    [sym](): void;  // should error
+>[sym] : Symbol(C1[sym], Decl(overloadsWithComputedNames.ts, 26, 10))
+>sym : Symbol(sym, Decl(overloadsWithComputedNames.ts, 22, 13))
+
+    [uniqueSym2](): void;   // should error
+>[uniqueSym2] : Symbol(C1[uniqueSym2], Decl(overloadsWithComputedNames.ts, 27, 18))
+>uniqueSym2 : Symbol(uniqueSym2, Decl(overloadsWithComputedNames.ts, 21, 13))
+
+    [uniqueSym](): void;
+>[uniqueSym] : Symbol(C1[uniqueSym], Decl(overloadsWithComputedNames.ts, 28, 25), Decl(overloadsWithComputedNames.ts, 29, 24))
+>uniqueSym : Symbol(uniqueSym, Decl(overloadsWithComputedNames.ts, 20, 13))
+
+    [uniqueSym]() { }
+>[uniqueSym] : Symbol(C1[uniqueSym], Decl(overloadsWithComputedNames.ts, 28, 25), Decl(overloadsWithComputedNames.ts, 29, 24))
+>uniqueSym : Symbol(uniqueSym, Decl(overloadsWithComputedNames.ts, 20, 13))
+}
+
+interface I1 {
+>I1 : Symbol(I1, Decl(overloadsWithComputedNames.ts, 31, 1))
+
+    [sym](): void;  // should error
+>[sym] : Symbol(I1[sym], Decl(overloadsWithComputedNames.ts, 33, 14))
+>sym : Symbol(sym, Decl(overloadsWithComputedNames.ts, 22, 13))
+
+    [uniqueSym2](): void;
+>[uniqueSym2] : Symbol(I1[uniqueSym2], Decl(overloadsWithComputedNames.ts, 34, 18))
+>uniqueSym2 : Symbol(uniqueSym2, Decl(overloadsWithComputedNames.ts, 21, 13))
+
+    [uniqueSym](): void;
+>[uniqueSym] : Symbol(I1[uniqueSym], Decl(overloadsWithComputedNames.ts, 35, 25), Decl(overloadsWithComputedNames.ts, 36, 24))
+>uniqueSym : Symbol(uniqueSym, Decl(overloadsWithComputedNames.ts, 20, 13))
+
+    [uniqueSym](): void;
+>[uniqueSym] : Symbol(I1[uniqueSym], Decl(overloadsWithComputedNames.ts, 35, 25), Decl(overloadsWithComputedNames.ts, 36, 24))
+>uniqueSym : Symbol(uniqueSym, Decl(overloadsWithComputedNames.ts, 20, 13))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(overloadsWithComputedNames.ts, 38, 1))
+
+    [strUnion](): void; // should error
+>[strUnion] : Symbol(C2[strUnion], Decl(overloadsWithComputedNames.ts, 40, 10))
+>strUnion : Symbol(strUnion, Decl(overloadsWithComputedNames.ts, 24, 13))
+
+    [strUnion]() { }
+>[strUnion] : Symbol(C2[strUnion], Decl(overloadsWithComputedNames.ts, 41, 23))
+>strUnion : Symbol(strUnion, Decl(overloadsWithComputedNames.ts, 24, 13))
+}
+
+class I2 {
+>I2 : Symbol(I2, Decl(overloadsWithComputedNames.ts, 43, 1))
+
+    [strUnion](): void; // should error
+>[strUnion] : Symbol(I2[strUnion], Decl(overloadsWithComputedNames.ts, 45, 10))
+>strUnion : Symbol(strUnion, Decl(overloadsWithComputedNames.ts, 24, 13))
+
+    [strUnion]() { }
+>[strUnion] : Symbol(I2[strUnion], Decl(overloadsWithComputedNames.ts, 46, 23))
+>strUnion : Symbol(strUnion, Decl(overloadsWithComputedNames.ts, 24, 13))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(overloadsWithComputedNames.ts, 48, 1))
+
+    [1](): void;  // should error
+>[1] : Symbol(C3[1], Decl(overloadsWithComputedNames.ts, 50, 10))
+>1 : Symbol(C3[1], Decl(overloadsWithComputedNames.ts, 50, 10))
+
+    [2](): void;
+>[2] : Symbol(C3[2], Decl(overloadsWithComputedNames.ts, 51, 16), Decl(overloadsWithComputedNames.ts, 52, 16))
+>2 : Symbol(C3[2], Decl(overloadsWithComputedNames.ts, 51, 16), Decl(overloadsWithComputedNames.ts, 52, 16))
+
+    [2]() { }
+>[2] : Symbol(C3[2], Decl(overloadsWithComputedNames.ts, 51, 16), Decl(overloadsWithComputedNames.ts, 52, 16))
+>2 : Symbol(C3[2], Decl(overloadsWithComputedNames.ts, 51, 16), Decl(overloadsWithComputedNames.ts, 52, 16))
+}
+
+interface I3 {
+>I3 : Symbol(I3, Decl(overloadsWithComputedNames.ts, 54, 1))
+
+    [1](): void;
+>[1] : Symbol(I3[1], Decl(overloadsWithComputedNames.ts, 56, 14))
+>1 : Symbol(I3[1], Decl(overloadsWithComputedNames.ts, 56, 14))
+
+    [2](): void;
+>[2] : Symbol(I3[2], Decl(overloadsWithComputedNames.ts, 57, 16), Decl(overloadsWithComputedNames.ts, 58, 16))
+>2 : Symbol(I3[2], Decl(overloadsWithComputedNames.ts, 57, 16), Decl(overloadsWithComputedNames.ts, 58, 16))
+
+    [2](): void;
+>[2] : Symbol(I3[2], Decl(overloadsWithComputedNames.ts, 57, 16), Decl(overloadsWithComputedNames.ts, 58, 16))
+>2 : Symbol(I3[2], Decl(overloadsWithComputedNames.ts, 57, 16), Decl(overloadsWithComputedNames.ts, 58, 16))
+}

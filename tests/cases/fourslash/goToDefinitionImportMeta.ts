@@ -2,7 +2,6 @@
 
 // @module: esnext
 // @Filename: foo.ts
-/////// <reference no-default-lib="true"/>
 /////// <reference path='./bar.d.ts' />
 ////import.me/*reference*/ta;
 
@@ -10,6 +9,6 @@
 ////interface ImportMeta {
 ////}
 
-verify.goToDefinition("reference", []);
+verify.baselineGoToDefinition("reference");
 
 verify.noErrors();

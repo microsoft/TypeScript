@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts] ////
+
+=== typeofThis.ts ===
 class Test {
 >Test : Symbol(Test, Decl(typeofThis.ts, 0, 0))
 
@@ -120,7 +122,7 @@ namespace Test6 {
     }
 }
 
-module Test7 {
+namespace Test7 {
 >Test7 : Symbol(Test7, Decl(typeofThis.ts, 47, 1))
 
     export let f = () => {

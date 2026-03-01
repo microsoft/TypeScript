@@ -1,543 +1,826 @@
-=== tests/cases/conformance/jsx/jsxParserRecovery.tsx ===
+//// [tests/cases/conformance/jsx/jsxUnclosedParserRecovery.ts] ////
+
+=== jsxParserRecovery.tsx ===
 // should have no errors here; all these functions should parse and resolve
 noName(); noClose(); noCloseTypeArg(); noCloseAttrs(); noCloseTypeArgAttrs(); noCloseBracket(); noCloseBracketTypeArgAttrs(); noSelfclose(); noSelfcloseTypeArgAttrs();
 >noName() : void
+>         : ^^^^
 >noName : () => void
+>       : ^^^^^^^^^^
 >noClose() : void
+>          : ^^^^
 >noClose : () => void
+>        : ^^^^^^^^^^
 >noCloseTypeArg() : void
+>                 : ^^^^
 >noCloseTypeArg : () => void
+>               : ^^^^^^^^^^
 >noCloseAttrs() : void
+>               : ^^^^
 >noCloseAttrs : () => void
+>             : ^^^^^^^^^^
 >noCloseTypeArgAttrs() : void
+>                      : ^^^^
 >noCloseTypeArgAttrs : () => void
+>                    : ^^^^^^^^^^
 >noCloseBracket() : void
+>                 : ^^^^
 >noCloseBracket : () => void
+>               : ^^^^^^^^^^
 >noCloseBracketTypeArgAttrs() : void
+>                             : ^^^^
 >noCloseBracketTypeArgAttrs : () => void
+>                           : ^^^^^^^^^^
 >noSelfclose() : void
+>              : ^^^^
 >noSelfclose : () => void
+>            : ^^^^^^^^^^
 >noSelfcloseTypeArgAttrs() : void
+>                          : ^^^^
 >noSelfcloseTypeArgAttrs : () => void
+>                        : ^^^^^^^^^^
 
 noNameTrailingTag(); noCloseTrailingTag(); noCloseTypeArgTrailingTag(); noCloseAttrsTrailingTag(); noCloseTypeArgAttrsTrailingTag(); noCloseBracketTrailingTag(); noCloseBracketTypeArgAttrsTrailingTag(); // noSelfcloseTrailingTag(); noSelfcloseTypeArgAttrsTrailingTag();
 >noNameTrailingTag() : void
+>                    : ^^^^
 >noNameTrailingTag : () => void
+>                  : ^^^^^^^^^^
 >noCloseTrailingTag() : void
+>                     : ^^^^
 >noCloseTrailingTag : () => void
+>                   : ^^^^^^^^^^
 >noCloseTypeArgTrailingTag() : void
+>                            : ^^^^
 >noCloseTypeArgTrailingTag : () => void
+>                          : ^^^^^^^^^^
 >noCloseAttrsTrailingTag() : void
+>                          : ^^^^
 >noCloseAttrsTrailingTag : () => void
+>                        : ^^^^^^^^^^
 >noCloseTypeArgAttrsTrailingTag() : void
+>                                 : ^^^^
 >noCloseTypeArgAttrsTrailingTag : () => void
+>                               : ^^^^^^^^^^
 >noCloseBracketTrailingTag() : void
+>                            : ^^^^
 >noCloseBracketTrailingTag : () => void
+>                          : ^^^^^^^^^^
 >noCloseBracketTypeArgAttrsTrailingTag() : void
+>                                        : ^^^^
 >noCloseBracketTypeArgAttrsTrailingTag : () => void
+>                                      : ^^^^^^^^^^
 
 noNameTrailingText(); noCloseTrailingText(); noCloseTypeArgTrailingText(); noCloseAttrsTrailingText(); noCloseTypeArgAttrsTrailingText(); noCloseBracketTrailingText(); noCloseBracketTypeArgAttrsTrailingText(); // noSelfcloseTrailingText(); noSelfcloseTypeArgAttrsTrailingText();
 >noNameTrailingText() : void
+>                     : ^^^^
 >noNameTrailingText : () => void
+>                   : ^^^^^^^^^^
 >noCloseTrailingText() : void
+>                      : ^^^^
 >noCloseTrailingText : () => void
+>                    : ^^^^^^^^^^
 >noCloseTypeArgTrailingText() : void
+>                             : ^^^^
 >noCloseTypeArgTrailingText : () => void
+>                           : ^^^^^^^^^^
 >noCloseAttrsTrailingText() : void
+>                           : ^^^^
 >noCloseAttrsTrailingText : () => void
+>                         : ^^^^^^^^^^
 >noCloseTypeArgAttrsTrailingText() : void
+>                                  : ^^^^
 >noCloseTypeArgAttrsTrailingText : () => void
+>                                : ^^^^^^^^^^
 >noCloseBracketTrailingText() : void
+>                             : ^^^^
 >noCloseBracketTrailingText : () => void
+>                           : ^^^^^^^^^^
 >noCloseBracketTypeArgAttrsTrailingText() : void
+>                                         : ^^^^
 >noCloseBracketTypeArgAttrsTrailingText : () => void
+>                                       : ^^^^^^^^^^
 
 function diddy() {
 >diddy : () => any
+>      : ^^^^^^^^^
 
     return null;
->null : null
 }
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <</div> : any
+>                 : ^^^
 >div : any
+>    : ^^^
 
     <
 >< : any
+>  : ^^^
 
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noName() { }
 >noName : () => void
+>       : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy</div> : any
+>                      : ^^^
 >div : any
+>    : ^^^
 
     <diddy
 ><diddy : any
+>       : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noClose() { }
 >noClose : () => void
+>        : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean></div> : any
+>                               : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean>
 ><diddy<boolean> : any
+>                : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTypeArg() { }
 >noCloseTypeArg : () => void
+>               : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy bananas="please"</div> : any
+>                                       : ^^^
 >div : any
+>    : ^^^
 
     <diddy bananas="please"
 ><diddy bananas="please" : any
+>                        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseAttrs() { }
 >noCloseAttrs : () => void
+>             : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"</div> : any
+>                                                : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please"
 ><diddy<boolean> bananas="please" : any
+>                                 : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTypeArgAttrs() { }
 >noCloseTypeArgAttrs : () => void
+>                    : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy/</div> : any
+>                       : ^^^
 >div : any
+>    : ^^^
 
     <diddy/
 ><diddy/ : any
+>        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseBracket() { }
 >noCloseBracket : () => void
+>               : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"/</div> : any
+>                                                 : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please"/
 ><diddy<boolean> bananas="please"/ : any
+>                                  : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseBracketTypeArgAttrs() { }
 >noCloseBracketTypeArgAttrs : () => void
+>                           : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy></div> : any
+>                       : ^^^
 >div : any
+>    : ^^^
 
     <diddy>
 ><diddy> : any
+>        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noSelfclose() { }
 >noSelfclose : () => void
+>            : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"></div> : any
+>                                                 : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please">
 ><diddy<boolean> bananas="please"> : any
+>                                  : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noSelfcloseTypeArgAttrs() { }
 >noSelfcloseTypeArgAttrs : () => void
+>                        : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <    <diddy/></div> : any
+>                             : ^^^
 >div : any
+>    : ^^^
 
     <
 ><    <diddy/> : any
+>              : ^^^
 
     <diddy/>
 > : any
+> : ^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noNameTrailingTag() { }
 >noNameTrailingTag : () => void
+>                  : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy    <diddy/></div> : any
+>                                  : ^^^
 >div : any
+>    : ^^^
 
     <diddy
 ><diddy    <diddy/> : any
+>                   : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     <diddy/>
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTrailingTag() { }
 >noCloseTrailingTag : () => void
+>                   : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean>    <diddy/></div> : any
+>                                           : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean>
 ><diddy<boolean> : any
+>                : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTypeArgTrailingTag() { }
 >noCloseTypeArgTrailingTag : () => void
+>                          : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy bananas="please"    <diddy/></div> : any
+>                                                   : ^^^
 >div : any
+>    : ^^^
 
     <diddy bananas="please"
 ><diddy bananas="please" : any
+>                        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseAttrsTrailingTag() { }
 >noCloseAttrsTrailingTag : () => void
+>                        : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"    <diddy/></div> : any
+>                                                            : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please"
 ><diddy<boolean> bananas="please" : any
+>                                 : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTypeArgAttrsTrailingTag() { }
 >noCloseTypeArgAttrsTrailingTag : () => void
+>                               : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy/    <diddy/></div> : any
+>                                   : ^^^
 >div : any
+>    : ^^^
 
     <diddy/
 ><diddy/ : any
+>        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseBracketTrailingTag() { }
 >noCloseBracketTrailingTag : () => void
+>                          : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"/    <diddy/></div> : any
+>                                                             : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please"/
 ><diddy<boolean> bananas="please"/ : any
+>                                  : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseBracketTypeArgAttrsTrailingTag() { }
 >noCloseBracketTypeArgAttrsTrailingTag : () => void
+>                                      : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy>    <diddy/></div> : any
+>                                   : ^^^
 >div : any
+>    : ^^^
 
     <diddy>
 ><diddy>    <diddy/> : any
+>                    : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noSelfcloseTrailingTag() { }
 >noSelfcloseTrailingTag : () => void
+>                       : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please">    <diddy/></div> : any
+>                                                             : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please">
 ><diddy<boolean> bananas="please">    <diddy/> : any
+>                                              : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     <diddy/>
 ><diddy/> : any
+>         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noSelfcloseTypeArgAttrsTrailingTag() { }
 >noSelfcloseTypeArgAttrsTrailingTag : () => void
+>                                   : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <    Cranky Wrinkly Funky</div> : any
+>                                         : ^^^
 >div : any
+>    : ^^^
 
     <
 ><    Cranky Wrinkly Funky : any
+>                          : ^^^
 
     Cranky Wrinkly Funky
 >Cranky : any
+>       : ^^^
 >Wrinkly : true
+>        : ^^^^
 >Funky : true
+>      : ^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noNameTrailingText() { }
 >noNameTrailingText : () => void
+>                   : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy    Cranky Wrinkly Funky</div> : any
+>                                              : ^^^
 >div : any
+>    : ^^^
 
     <diddy
 ><diddy    Cranky Wrinkly Funky : any
+>                               : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     Cranky Wrinkly Funky
 >Cranky : true
+>       : ^^^^
 >Wrinkly : true
+>        : ^^^^
 >Funky : true
+>      : ^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTrailingText() { }
 >noCloseTrailingText : () => void
+>                    : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean>    Cranky Wrinkly Funky</div> : any
+>                                                       : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean>
 ><diddy<boolean>    Cranky Wrinkly Funky : any
+>                                        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     Cranky Wrinkly Funky
 >Cranky : true
+>       : ^^^^
 >Wrinkly : true
+>        : ^^^^
 >Funky : true
+>      : ^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTypeArgTrailingText() { }
 >noCloseTypeArgTrailingText : () => void
+>                           : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy bananas="please"    Cranky Wrinkly Funky</div> : any
+>                                                               : ^^^
 >div : any
+>    : ^^^
 
     <diddy bananas="please"
 ><diddy bananas="please"    Cranky Wrinkly Funky : any
+>                                                : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     Cranky Wrinkly Funky
 >Cranky : true
+>       : ^^^^
 >Wrinkly : true
+>        : ^^^^
 >Funky : true
+>      : ^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseAttrsTrailingText() { }
 >noCloseAttrsTrailingText : () => void
+>                         : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"    Cranky Wrinkly Funky</div> : any
+>                                                                        : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please"
 ><diddy<boolean> bananas="please"    Cranky Wrinkly Funky : any
+>                                                         : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     Cranky Wrinkly Funky
 >Cranky : true
+>       : ^^^^
 >Wrinkly : true
+>        : ^^^^
 >Funky : true
+>      : ^^^^
 
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseTypeArgAttrsTrailingText() { }
 >noCloseTypeArgAttrsTrailingText : () => void
+>                                : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy/    Cranky Wrinkly Funky</div> : any
+>                                               : ^^^
 >div : any
+>    : ^^^
 
     <diddy/
 ><diddy/ : any
+>        : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     Cranky Wrinkly Funky
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseBracketTrailingText() { }
 >noCloseBracketTrailingText : () => void
+>                           : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please"/    Cranky Wrinkly Funky</div> : any
+>                                                                         : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please"/
 ><diddy<boolean> bananas="please"/ : any
+>                                  : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     Cranky Wrinkly Funky
 </div>;
 >div : any
+>    : ^^^
 
 function noCloseBracketTypeArgAttrsTrailingText() { }
 >noCloseBracketTypeArgAttrsTrailingText : () => void
+>                                       : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy>    Cranky Wrinkly Funky</div> : any
+>                                               : ^^^
 >div : any
+>    : ^^^
 
     <diddy>
 ><diddy>    Cranky Wrinkly Funky : any
+>                                : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 
     Cranky Wrinkly Funky
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noSelfcloseTrailingText() { }
 >noSelfcloseTrailingText : () => void
+>                        : ^^^^^^^^^^
 
 var donkey = <div>
 >donkey : any
+>       : ^^^
 ><div>    <diddy<boolean> bananas="please">    Cranky Wrinkly Funky</div> : any
+>                                                                         : ^^^
 >div : any
+>    : ^^^
 
     <diddy<boolean> bananas="please">
 ><diddy<boolean> bananas="please">    Cranky Wrinkly Funky : any
+>                                                          : ^^^
 >diddy : () => any
+>      : ^^^^^^^^^
 >bananas : string
+>        : ^^^^^^
 
     Cranky Wrinkly Funky
 </div>;
 > : any
+> : ^^^
 >div : any
+>    : ^^^
 
 function noSelfcloseTypeArgAttrsTrailingText() { }
 >noSelfcloseTypeArgAttrsTrailingText : () => void
+>                                    : ^^^^^^^^^^
 

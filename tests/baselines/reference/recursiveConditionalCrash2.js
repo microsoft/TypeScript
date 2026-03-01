@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveConditionalCrash2.ts] ////
+
 //// [recursiveConditionalCrash2.ts]
 // Simplified #43529
 
@@ -16,6 +18,5 @@ export type UseQueryOptions<T> = Expand__<T, 4, 2>
 
 
 //// [recursiveConditionalCrash2.js]
-"use strict";
 // Simplified #43529
-exports.__esModule = true;
+export {};

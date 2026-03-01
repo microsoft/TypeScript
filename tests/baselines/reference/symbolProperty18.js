@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty18.ts] ////
+
 //// [symbolProperty18.ts]
 var i = {
     [Symbol.iterator]: 0,
@@ -10,6 +12,7 @@ var str = i[Symbol.toStringTag]();
 i[Symbol.toPrimitive] = false;
 
 //// [symbolProperty18.js]
+"use strict";
 var i = {
     [Symbol.iterator]: 0,
     [Symbol.toStringTag]() { return ""; },

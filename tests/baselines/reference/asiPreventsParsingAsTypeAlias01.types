@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts ===
+//// [tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts] ////
+
+=== asiPreventsParsingAsTypeAlias01.ts ===
 var type;
 >type : any
 
@@ -9,10 +11,13 @@ var Foo;
 >Foo : any
 
 type
->type : any
+>type : undefined
+>     : ^^^^^^^^^
 
 Foo = string;
->Foo = string : any
+>Foo = string : undefined
+>             : ^^^^^^^^^
 >Foo : any
->string : any
+>string : undefined
+>       : ^^^^^^^^^
 

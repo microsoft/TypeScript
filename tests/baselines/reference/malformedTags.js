@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/malformedTags.ts] ////
+
 //// [myFile02.js]
 /**
  * Checks if `value` is classified as an `Array` object.
@@ -8,6 +10,7 @@ var isArray = Array.isArray;
 
 
 //// [myFile02.js]
+"use strict";
 /**
  * Checks if `value` is classified as an `Array` object.
  *

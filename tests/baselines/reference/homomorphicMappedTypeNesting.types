@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/homomorphicMappedTypeNesting.ts] ////
+
+=== homomorphicMappedTypeNesting.ts ===
+// Repro from #58060
+
+type Box<T extends string> = { v: T };
+>Box : Box<T>
+>    : ^^^^^^
+>v : T
+>  : ^
+
+type Test<T extends string[]> = T
+>Test : T
+>     : ^
+
+type UnboxArray<T> = {
+>UnboxArray : UnboxArray<T>
+>           : ^^^^^^^^^^^^^
+
+    [K in keyof T]: T[K] extends Box<infer R> ? R : never;
+};
+
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Identity<T>
+>         : ^^^^^^^^^^^
+
+declare function fnBad<T extends Array<Box<string>>>(...args: T): Test<Identity<UnboxArray<T>>>;
+>fnBad : <T extends Array<Box<string>>>(...args: T) => Test<Identity<UnboxArray<T>>>
+>      : ^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^                             
+>args : T
+>     : ^
+

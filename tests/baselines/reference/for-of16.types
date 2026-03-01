@@ -1,28 +1,43 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of16.ts ===
-class StringIterator {
->StringIterator : StringIterator
+//// [tests/cases/conformance/es6/for-ofStatements/for-of16.ts] ////
+
+=== for-of16.ts ===
+class MyStringIterator {
+>MyStringIterator : MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var v: string;
 >v : string
+>  : ^^^^^^
 
-for (v of new StringIterator) { } // Should fail
+for (v of new MyStringIterator) { } // Should fail
 >v : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>  : ^^^^^^
+>new MyStringIterator : MyStringIterator
+>                     : ^^^^^^^^^^^^^^^^
+>MyStringIterator : typeof MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
-for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
+for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
 >v : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>  : ^^^^^^
+>new MyStringIterator : MyStringIterator
+>                     : ^^^^^^^^^^^^^^^^
+>MyStringIterator : typeof MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,0 +1,37 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationLocal_06.ts ===
+// <|declare var [|someVar|]: string;|>
+// someVa/*GOTO IMPL*/r
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "someVar",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "var"
+   }
+  ]

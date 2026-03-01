@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/jsx/tsxFragmentPreserveEmit.tsx] ////
+
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -16,6 +18,7 @@ declare var React: any;
 <>#</>; // # would cause scanning error if not in jsxtext
 
 //// [file.jsx]
+"use strict";
 <></>; // no whitespace
 <></>; // lots of whitespace
 <></>; // comments in the tags

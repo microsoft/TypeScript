@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag4.ts] ////
+
+=== a.js ===
 /**
  * Should work for function declarations
  * @constructor
@@ -7,14 +9,20 @@
  */
 function Multimap() {
 >Multimap : typeof Multimap
+>         : ^^^^^^^^^^^^^^^
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map = {} : {}
+>               : ^^
 >this._map : { [x: string]: V; }
+>          : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_map : { [x: string]: V; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 };
 
@@ -24,22 +32,36 @@ function Multimap() {
  */
 Multimap.prototype.get = function (key) {
 >Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
+>                                                                          : ^   ^^ ^^^^^ 
 >Multimap.prototype.get : any
 >Multimap.prototype : any
+>                   : ^^^
 >Multimap : typeof Multimap
+>         : ^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >get : any
+>    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
+>                                                 : ^   ^^ ^^^^^ 
 >key : K
+>    : ^
 
     return this._map[key + ''];
 >this._map[key + ''] : V
+>                    : ^
 >this._map : { [x: string]: V; }
+>          : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_map : { [x: string]: V; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >key + '' : string
+>         : ^^^^^^
 >key : K
+>    : ^
 >'' : ""
+>   : ^^
 }
 
 /**
@@ -50,15 +72,22 @@ Multimap.prototype.get = function (key) {
  */
 var Multimap2 = function() {
 >Multimap2 : typeof Multimap2
+>          : ^^^^^^^^^^^^^^^^
 >function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap2
+>                                                                                                                      : ^^^^^^^^^^^^^^^^
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map = {} : {}
+>               : ^^
 >this._map : { [x: string]: V; }
+>          : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_map : { [x: string]: V; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 };
 
@@ -68,27 +97,43 @@ var Multimap2 = function() {
  */
 Multimap2.prototype.get = function (key) {
 >Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
+>                                                                           : ^   ^^ ^^^^^ 
 >Multimap2.prototype.get : any
 >Multimap2.prototype : any
+>                    : ^^^
 >Multimap2 : typeof Multimap2
+>          : ^^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >get : any
+>    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
+>                                                 : ^   ^^ ^^^^^ 
 >key : K
+>    : ^
 
     return this._map[key + ''];
 >this._map[key + ''] : V
+>                    : ^
 >this._map : { [x: string]: V; }
+>          : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_map : { [x: string]: V; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >key + '' : string
+>         : ^^^^^^
 >key : K
+>    : ^
 >'' : ""
+>   : ^^
 }
 
 var Ns = {};
 >Ns : typeof Ns
+>   : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /**
  * Should work for expando-namespaced initialisers too
@@ -98,18 +143,28 @@ var Ns = {};
  */
 Ns.Multimap3 = function() {
 >Ns.Multimap3 = function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap3
+>                                                                                                                                     : ^^^^^^^^^^^^^^^^
 >Ns.Multimap3 : typeof Multimap3
+>             : ^^^^^^^^^^^^^^^^
 >Ns : typeof Ns
+>   : ^^^^^^^^^
 >Multimap3 : typeof Multimap3
+>          : ^^^^^^^^^^^^^^^^
 >function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap3
+>                                                                                                                      : ^^^^^^^^^^^^^^^^
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
 >this._map = {} : {}
+>               : ^^
 >this._map : { [x: string]: V; }
+>          : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_map : { [x: string]: V; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 };
 
@@ -119,23 +174,39 @@ Ns.Multimap3 = function() {
  */
 Ns.Multimap3.prototype.get = function (key) {
 >Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
+>                                                                              : ^   ^^ ^^^^^ 
 >Ns.Multimap3.prototype.get : any
 >Ns.Multimap3.prototype : any
+>                       : ^^^
 >Ns.Multimap3 : typeof Multimap3
+>             : ^^^^^^^^^^^^^^^^
 >Ns : typeof Ns
+>   : ^^^^^^^^^
 >Multimap3 : typeof Multimap3
+>          : ^^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >get : any
+>    : ^^^
 >function (key) {    return this._map[key + ''];} : (key: K) => V
+>                                                 : ^   ^^ ^^^^^ 
 >key : K
+>    : ^
 
     return this._map[key + ''];
 >this._map[key + ''] : V
+>                    : ^
 >this._map : { [x: string]: V; }
+>          : ^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >_map : { [x: string]: V; }
+>     : ^^^^^^^^^^^^^^^^^^^
 >key + '' : string
+>         : ^^^^^^
 >key : K
+>    : ^
 >'' : ""
+>   : ^^
 }
 

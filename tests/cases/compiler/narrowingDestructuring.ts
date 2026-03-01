@@ -1,3 +1,4 @@
+// @target: es2015
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 
 function func<T extends X>(value: T) {
@@ -33,7 +34,7 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
     const [head, ...tail] = x;
-    if (x[0] === 'number') {
+    if (typeof x[0] === 'number') {
         const [head, ...tail] = x;
     }
 }

@@ -17,10 +17,10 @@
 ////[|/*aUse*/a|];
 ////[|/*bUse*/b|];
 
-verify.goToDefinition({
-    aUse: "aDef", // Namespace import isn't "skipped"
-    fUse: "fDef",
-    xUse: "xDef",
-    bUse: "bDef",
-});
+verify.baselineGoToDefinition(
+    "aUse", // Namespace import isn't "skipped"
+    "fUse",
+    "xUse",
+    "bUse",
+);
 

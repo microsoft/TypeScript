@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/libTypeScriptOverrideSimpleConfig.ts] ////
+
+=== /somepath/index.ts ===
+/// <reference lib="dom" />
+const a: ABC = { abc: "Hello" }
+>a : Symbol(a, Decl(index.ts, 1, 5))
+>ABC : Symbol(ABC, Decl(index.d.ts, 0, 0))
+>abc : Symbol(abc, Decl(index.ts, 1, 16))
+
+// This should fail because libdom has been replaced
+// by the module above ^
+window.localStorage
+
+=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
+interface ABC { abc: string }
+>ABC : Symbol(ABC, Decl(index.d.ts, 0, 0))
+>abc : Symbol(ABC.abc, Decl(index.d.ts, 0, 15))
+

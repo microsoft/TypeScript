@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unqualifiedCallToClassStatic1.ts] ////
+
 //// [unqualifiedCallToClassStatic1.ts]
 class Vector {
  static foo = () => {
@@ -7,12 +9,10 @@ class Vector {
 }
 
 //// [unqualifiedCallToClassStatic1.js]
-var Vector = /** @class */ (function () {
-    function Vector() {
-    }
-    Vector.foo = function () {
-        // 'foo' cannot be called in an unqualified manner.
-        foo();
-    };
-    return Vector;
-}());
+"use strict";
+class Vector {
+}
+Vector.foo = () => {
+    // 'foo' cannot be called in an unqualified manner.
+    foo();
+};

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override9.ts] ////
+
 //// [override9.ts]
 interface B {
     foo (): void
@@ -13,6 +15,7 @@ interface D extends B {
 
 
 //// [override9.js]
+"use strict";
 
 
 //// [override9.d.ts]

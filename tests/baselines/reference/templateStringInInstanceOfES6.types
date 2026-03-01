@@ -1,8 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringInInstanceOfES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInInstanceOfES6.ts] ////
+
+=== templateStringInInstanceOfES6.ts ===
 var x = `abc${ 0 }def` instanceof String;
 >x : boolean
+>  : ^^^^^^^
 >`abc${ 0 }def` instanceof String : boolean
->`abc${ 0 }def` : string
+>                                 : ^^^^^^^
+>`abc${ 0 }def` : "abc0def"
+>               : ^^^^^^^^^
 >0 : 0
+>  : ^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 

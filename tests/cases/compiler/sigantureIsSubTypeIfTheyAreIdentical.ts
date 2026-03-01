@@ -1,3 +1,4 @@
+// @target: es2015
 interface ICache {
     get<T>(key: string): T;
 }

@@ -1,9 +1,15 @@
-=== tests/cases/compiler/constraintsUsedInPrototypeProperty.ts ===
+//// [tests/cases/compiler/constraintsUsedInPrototypeProperty.ts] ////
+
+=== constraintsUsedInPrototypeProperty.ts ===
 class Foo<T extends number, U, V extends string> { }
 >Foo : Foo<T, U, V>
+>    : ^^^^^^^^^^^^
 
 Foo.prototype; // Foo<any, any, any>
 >Foo.prototype : Foo<any, any, any>
+>              : ^^^^^^^^^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prototype : Foo<any, any, any>
+>          : ^^^^^^^^^^^^^^^^^^
 

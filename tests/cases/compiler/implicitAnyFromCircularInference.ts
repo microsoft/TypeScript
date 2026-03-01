@@ -1,5 +1,5 @@
 // @noimplicitany: true
-// @target: es5
+// @target: es5, es2015
 
 // Error expected
 var a: typeof a;
@@ -39,7 +39,6 @@ interface A {
 function foo(x: A): string { return "abc"; }
 
 class C {
-    // Error expected
     s = foo(this);
 }
 

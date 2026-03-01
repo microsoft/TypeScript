@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithLeadingOperator.ts] ////
+
 //// [unionTypeWithLeadingOperator.ts]
 type A = | string;
 type B =
@@ -12,8 +14,7 @@ export type D =
   | /*leading2*/ 2 /*trailing2*/;
 
 //// [unionTypeWithLeadingOperator.js]
-"use strict";
-exports.__esModule = true;
+export {};
 
 
 //// [unionTypeWithLeadingOperator.d.ts]

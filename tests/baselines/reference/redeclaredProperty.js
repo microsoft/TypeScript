@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/redeclaredProperty.ts] ////
+
 //// [redeclaredProperty.ts]
 class Base {
   b = 1;
@@ -15,6 +17,7 @@ class Derived extends Base {
 
 
 //// [redeclaredProperty.js]
+"use strict";
 class Base {
     b = 1;
 }

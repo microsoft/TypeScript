@@ -1,17 +1,19 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithFunctionChildren.ts] ////
+
 //// [collisionCodeGenModuleWithFunctionChildren.ts]
-module M {
+namespace M {
     export var x = 3;
     function fn(M, p = x) { }
 }
 
-module M {
+namespace M {
     function fn2() {
         var M;
         var p = x;
     }
 }
 
-module M {
+namespace M {
     function fn3() {
         function M() {
             var p = x;
@@ -20,12 +22,11 @@ module M {
 }
 
 //// [collisionCodeGenModuleWithFunctionChildren.js]
+"use strict";
 var M;
 (function (M_1) {
     M_1.x = 3;
-    function fn(M, p) {
-        if (p === void 0) { p = M_1.x; }
-    }
+    function fn(M, p = M_1.x) { }
 })(M || (M = {}));
 (function (M_2) {
     function fn2() {

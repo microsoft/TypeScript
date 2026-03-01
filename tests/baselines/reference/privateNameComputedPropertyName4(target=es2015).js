@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName4.ts] ////
+
 //// [privateNameComputedPropertyName4.ts]
 // https://github.com/microsoft/TypeScript/issues/44113
 class C1 {
@@ -15,6 +17,7 @@ class C3 {
 
 
 //// [privateNameComputedPropertyName4.js]
+"use strict";
 var _a, _C1_qux, _b, _C2_qux, _c, _C3_qux;
 // https://github.com/microsoft/TypeScript/issues/44113
 class C1 {

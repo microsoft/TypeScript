@@ -1,8 +1,12 @@
-=== tests/cases/compiler/tryCatchFinally.ts ===
+//// [tests/cases/compiler/tryCatchFinally.ts] ////
+
+=== tryCatchFinally.ts ===
 try { } catch(e) { } finally { } 
->e : any
+>e : unknown
+>  : ^^^^^^^
 
 try {} catch(e) {}
->e : any
+>e : unknown
+>  : ^^^^^^^
 
 try {} finally {}

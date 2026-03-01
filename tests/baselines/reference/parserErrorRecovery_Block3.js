@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block3.ts] ////
+
 //// [parserErrorRecovery_Block3.ts]
 class C  {
     private a(): boolean {
@@ -7,12 +9,10 @@ class C  {
 }
 
 //// [parserErrorRecovery_Block3.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    a() {
     }
-    C.prototype.a = function () {
-    };
-    C.prototype.b = function () {
-    };
-    return C;
-}());
+    b() {
+    }
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractIdentifierNameStrict.ts] ////
+
 //// [abstractIdentifierNameStrict.ts]
 var abstract = true;
 
@@ -7,6 +9,7 @@ function foo() {
 }
 
 //// [abstractIdentifierNameStrict.js]
+"use strict";
 var abstract = true;
 function foo() {
     "use strict";

@@ -1,42 +1,68 @@
-=== tests/cases/conformance/salsa/propertyAssignmentUseParentType2.js ===
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType2.ts] ////
+
+=== propertyAssignmentUseParentType2.js ===
 /** @type {{ (): boolean; nuo: 789 }} */
 export const inlined = () => true
 >inlined : { (): boolean; nuo: 789; }
+>        : ^^^^^^       ^^^^^^^   ^^^
 >() => true : { (): boolean; nuo: 789; }
+>           : ^^^^^^       ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 inlined.nuo = 789
 >inlined.nuo = 789 : 789
+>                  : ^^^
 >inlined.nuo : 789
+>            : ^^^
 >inlined : { (): boolean; nuo: 789; }
+>        : ^^^^^^       ^^^^^^^   ^^^
 >nuo : 789
+>    : ^^^
 >789 : 789
+>    : ^^^
 
 /** @type {{ (): boolean; nuo: 789 }} */
 export const duplicated = () => true
 >duplicated : { (): boolean; nuo: 789; }
+>           : ^^^^^^       ^^^^^^^   ^^^
 >() => true : { (): boolean; nuo: 789; }
+>           : ^^^^^^       ^^^^^^^   ^^^
 >true : true
+>     : ^^^^
 
 /** @type {789} */
 duplicated.nuo = 789
 >duplicated.nuo = 789 : 789
+>                     : ^^^
 >duplicated.nuo : 789
+>               : ^^^
 >duplicated : { (): boolean; nuo: 789; }
+>           : ^^^^^^       ^^^^^^^   ^^^
 >nuo : 789
+>    : ^^^
 >789 : 789
+>    : ^^^
 
 /** @type {{ (): boolean; nuo: 789 }} */
 export const conflictingDuplicated = () => true
 >conflictingDuplicated : { (): boolean; nuo: 789; }
+>                      : ^^^^^^       ^^^^^^^   ^^^
 >() => true : { (): boolean; nuo: 1000; }
+>           : ^^^^^^       ^^^^^^^    ^^^
 >true : true
+>     : ^^^^
 
 /** @type {1000} */
 conflictingDuplicated.nuo = 789
 >conflictingDuplicated.nuo = 789 : 789
+>                                : ^^^
 >conflictingDuplicated.nuo : 789
+>                          : ^^^
 >conflictingDuplicated : { (): boolean; nuo: 789; }
+>                      : ^^^^^^       ^^^^^^^   ^^^
 >nuo : 789
+>    : ^^^
 >789 : 789
+>    : ^^^
 

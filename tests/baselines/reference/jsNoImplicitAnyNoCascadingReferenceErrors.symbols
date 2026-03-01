@@ -1,4 +1,6 @@
-=== tests/cases/compiler/somelib.d.ts ===
+//// [tests/cases/compiler/jsNoImplicitAnyNoCascadingReferenceErrors.ts] ////
+
+=== somelib.d.ts ===
 export declare class Foo<T> {
 >Foo : Symbol(Foo, Decl(somelib.d.ts, --, --))
 >T : Symbol(T, Decl(somelib.d.ts, --, --))
@@ -7,7 +9,7 @@ export declare class Foo<T> {
 >prop : Symbol(Foo.prop, Decl(somelib.d.ts, --, --))
 >T : Symbol(T, Decl(somelib.d.ts, --, --))
 }
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 import {Foo} from "./somelib";
 >Foo : Symbol(Foo, Decl(index.js, 0, 8))
 

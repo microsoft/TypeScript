@@ -1,4 +1,7 @@
+//// [tests/cases/compiler/moduleResolution_packageJson_yesAtPackageRoot_fakeScopedPackage.ts] ////
+
 === /a.ts ===
 import { x } from "foo/@bar";
 >x : any
+>  : ^^^
 

@@ -1,15 +1,27 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_vacuousIntersectionOfContextualTypes.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_vacuousIntersectionOfContextualTypes.ts] ////
+
+=== typeSatisfaction_vacuousIntersectionOfContextualTypes.ts ===
 const a: "baz" = "foo" satisfies "foo" | "bar";
 >a : "baz"
+>  : ^^^^^
 >"foo" satisfies "foo" | "bar" : "foo"
+>                              : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 const b: { xyz: "baz" } = { xyz: "foo" } satisfies { xyz: "foo" | "bar" };
 >b : { xyz: "baz"; }
+>  : ^^^^^^^     ^^^
 >xyz : "baz"
+>    : ^^^^^
 >{ xyz: "foo" } satisfies { xyz: "foo" | "bar" } : { xyz: "foo"; }
+>                                                : ^^^^^^^^^^^^^^^
 >{ xyz: "foo" } : { xyz: "foo"; }
+>               : ^^^^^^^^^^^^^^^
 >xyz : "foo"
+>    : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >xyz : "foo" | "bar"
+>    : ^^^^^^^^^^^^^
 

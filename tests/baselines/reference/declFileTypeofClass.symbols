@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeofClass.ts ===
+//// [tests/cases/compiler/declFileTypeofClass.ts] ////
+
+=== declFileTypeofClass.ts ===
 class c {
 >c : Symbol(c, Decl(declFileTypeofClass.ts, 0, 0))
 

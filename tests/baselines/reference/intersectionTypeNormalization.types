@@ -1,143 +1,201 @@
-=== tests/cases/compiler/intersectionTypeNormalization.ts ===
+//// [tests/cases/compiler/intersectionTypeNormalization.ts] ////
+
+=== intersectionTypeNormalization.ts ===
 interface A { a: string }
 >a : string
+>  : ^^^^^^
 
 interface B { b: string }
 >b : string
+>  : ^^^^^^
 
 interface C { c: string }
 >c : string
+>  : ^^^^^^
 
 interface D { d: string }
 >d : string
+>  : ^^^^^^
 
 // Identical ways of writing the same type
 type X1 = (A | B) & (C | D);
->X1 : (A | B) & (C | D)
+>X1 : X1
+>   : ^^
 
 type X2 = A & (C | D) | B & (C | D)
->X2 : (A & (C | D)) | (B & (C | D))
+>X2 : X2
+>   : ^^
 
 type X3 = A & C | A & D | B & C | B & D;
->X3 : (A & C) | (A & D) | (B & C) | (B & D)
+>X3 : X3
+>   : ^^
 
 var x: X1;
 >x : X1
+>  : ^^
 
 var x: X2;
 >x : X1
+>  : ^^
 
 var x: X3;
 >x : X1
+>  : ^^
 
 interface X { x: string }
 >x : string
+>  : ^^^^^^
 
 interface Y { y: string }
 >y : string
+>  : ^^^^^^
 
 // Identical ways of writing the same type
 type Y1 = (A | X & Y) & (C | D);
->Y1 : (A | (X & Y)) & (C | D)
+>Y1 : Y1
+>   : ^^
 
 type Y2 = A & (C | D) | X & Y & (C | D)
->Y2 : (A & (C | D)) | (X & Y & (C | D))
+>Y2 : Y2
+>   : ^^
 
 type Y3 = A & C | A & D | X & Y & C | X & Y & D;
->Y3 : (A & C) | (A & D) | (X & Y & C) | (X & Y & D)
+>Y3 : Y3
+>   : ^^
 
 var y: Y1;
 >y : Y1
+>  : ^^
 
 var y: Y2;
 >y : Y1
+>  : ^^
 
 var y: Y3;
 >y : Y1
+>  : ^^
 
 interface M { m: string }
 >m : string
+>  : ^^^^^^
 
 interface N { n: string }
 >n : string
+>  : ^^^^^^
 
 // Identical ways of writing the same type
 type Z1 = (A | X & (M | N)) & (C | D);
->Z1 : (A | (X & (M | N))) & (C | D)
+>Z1 : Z1
+>   : ^^
 
 type Z2 = A & (C | D) | X & (M | N) & (C | D)
->Z2 : (A & (C | D)) | (X & (M | N) & (C | D))
+>Z2 : Z2
+>   : ^^
 
 type Z3 = A & C | A & D | X & (M | N) & C | X & (M | N) & D;
->Z3 : (A & C) | (A & D) | (X & (M | N) & C) | (X & (M | N) & D)
+>Z3 : Z3
+>   : ^^
 
 type Z4 = A & C | A & D | X & M & C | X & N & C | X & M & D | X & N & D;
->Z4 : (A & C) | (A & D) | (X & M & C) | (X & M & D) | (X & N & C) | (X & N & D)
+>Z4 : Z4
+>   : ^^
 
 var z: Z1;
 >z : Z1
+>  : ^^
 
 var z: Z2;
 >z : Z1
+>  : ^^
 
 var z: Z3;
 >z : Z1
+>  : ^^
 
 var z: Z4;
 >z : Z1
+>  : ^^
 
 // Repro from #9919
 
 type ToString = {
->ToString : { toString(): string; }
+>ToString : ToString
+>         : ^^^^^^^^
 
     toString(): string;
 >toString : () => string
+>         : ^^^^^^      
 }
 
 type BoxedValue = { kind: 'int',    num: number }
->BoxedValue : { kind: 'int'; num: number; } | { kind: 'string'; str: string; }
+>BoxedValue : BoxedValue
+>           : ^^^^^^^^^^
 >kind : "int"
+>     : ^^^^^
 >num : number
+>    : ^^^^^^
 
                 | { kind: 'string', str: string }
 >kind : "string"
+>     : ^^^^^^^^
 >str : string
+>    : ^^^^^^
 
 type IntersectionFail = BoxedValue & ToString
->IntersectionFail : BoxedValue & ToString
+>IntersectionFail : IntersectionFail
+>                 : ^^^^^^^^^^^^^^^^
 
 type IntersectionInline = { kind: 'int',    num: number } & ToString
->IntersectionInline : ({ kind: 'int'; num: number; } & ToString) | ({ kind: 'string'; str: string; } & ToString)
+>IntersectionInline : IntersectionInline
+>                   : ^^^^^^^^^^^^^^^^^^
 >kind : "int"
+>     : ^^^^^
 >num : number
+>    : ^^^^^^
 
                         | { kind: 'string', str: string } & ToString
 >kind : "string"
+>     : ^^^^^^^^
 >str : string
+>    : ^^^^^^
 
 function getValueAsString(value: IntersectionFail): string {
 >getValueAsString : (value: IntersectionFail) => string
+>                 : ^     ^^                ^^^^^      
 >value : IntersectionFail
+>      : ^^^^^^^^^^^^^^^^
 
     if (value.kind === 'int') {
 >value.kind === 'int' : boolean
+>                     : ^^^^^^^
 >value.kind : "string" | "int"
+>           : ^^^^^^^^^^^^^^^^
 >value : IntersectionFail
+>      : ^^^^^^^^^^^^^^^^
 >kind : "string" | "int"
+>     : ^^^^^^^^^^^^^^^^
 >'int' : "int"
+>      : ^^^^^
 
         return '' + value.num;
 >'' + value.num : string
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >value.num : number
+>          : ^^^^^^
 >value : { kind: "int"; num: number; } & ToString
+>      : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
     }
     return value.str;
 >value.str : string
+>          : ^^^^^^
 >value : { kind: "string"; str: string; } & ToString
+>      : ^^^^^^^^        ^^^^^^^      ^^^^^^^^^^^^^^
 >str : string
+>    : ^^^^^^
 }
 
 // Repro from #12535
@@ -145,98 +203,131 @@ function getValueAsString(value: IntersectionFail): string {
 namespace enums {
     export const enum A {
 >A : A
+>  : ^
 
         a1,
 >a1 : A.a1
+>   : ^^^^
 
         a2,
 >a2 : A.a2
+>   : ^^^^
 
         a3,
 >a3 : A.a3
+>   : ^^^^
 
        // ... elements omitted for the sake of clarity
         a75,
 >a75 : A.a75
+>    : ^^^^^
 
         a76,
 >a76 : A.a76
+>    : ^^^^^
 
         a77,
 >a77 : A.a77
+>    : ^^^^^
     }
     export const enum B {
 >B : B
+>  : ^
 
         b1,
 >b1 : B.b1
+>   : ^^^^
 
         b2,
 >b2 : B.b2
+>   : ^^^^
 
        // ... elements omitted for the sake of clarity
         b86,
 >b86 : B.b86
+>    : ^^^^^
 
         b87,
 >b87 : B.b87
+>    : ^^^^^
     }
     export const enum C {
 >C : C
+>  : ^
 
         c1,
 >c1 : C.c1
+>   : ^^^^
 
         c2,
 >c2 : C.c2
+>   : ^^^^
 
        // ... elements omitted for the sake of clarity
         c210,
 >c210 : C.c210
+>     : ^^^^^^
 
         c211,
 >c211 : C.c211
+>     : ^^^^^^
     }
     export type Genre = A | B | C;
->Genre : A | B | C
+>Genre : Genre
+>      : ^^^^^
 }
 
 type Foo = {
->Foo : { genreId: enums.Genre; }
+>Foo : Foo
+>    : ^^^
 
     genreId: enums.Genre;
 >genreId : enums.Genre
+>        : ^^^^^^^^^^^
 >enums : any
+>      : ^^^
 
 };
 
 type Bar = {
->Bar : { genreId: enums.Genre; }
+>Bar : Bar
+>    : ^^^
 
     genreId: enums.Genre;
 >genreId : enums.Genre
+>        : ^^^^^^^^^^^
 >enums : any
+>      : ^^^
 
 };
 
 type FooBar = Foo & Bar;
->FooBar : Foo & Bar
+>FooBar : FooBar
+>       : ^^^^^^
 
 function foo(so: any) {
 >foo : (so: any) => enums.Genre
+>    : ^  ^^   ^^^^^^^^^^^^^^^^
 >so : any
 
     const val = so as FooBar;
 >val : FooBar
+>    : ^^^^^^
 >so as FooBar : FooBar
+>             : ^^^^^^
 >so : any
 
     const isGenre = val.genreId;
 >isGenre : enums.Genre
+>        : ^^^^^^^^^^^
 >val.genreId : enums.Genre
+>            : ^^^^^^^^^^^
 >val : FooBar
+>    : ^^^^^^
 >genreId : enums.Genre
+>        : ^^^^^^^^^^^
 
     return isGenre;
 >isGenre : enums.Genre
+>        : ^^^^^^^^^^^
 }

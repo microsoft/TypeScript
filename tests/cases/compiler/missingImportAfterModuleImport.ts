@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @declaration: true
 
@@ -12,7 +13,7 @@ declare module "SubModule" {
 }
 
 // @Filename: missingImportAfterModuleImport_1.ts
-///<reference path='missingImportAfterModuleImport_0.ts'/>
+///<reference path='missingImportAfterModuleImport_0.ts' preserve="true" />
 import SubModule = require('SubModule');
 class MainModule {
     // public static SubModule: SubModule;

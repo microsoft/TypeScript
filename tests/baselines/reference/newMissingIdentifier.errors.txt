@@ -1,7 +1,7 @@
-tests/cases/compiler/newMissingIdentifier.ts(1,14): error TS1109: Expression expected.
+newMissingIdentifier.ts(1,14): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/newMissingIdentifier.ts (1 errors) ====
+==== newMissingIdentifier.ts (1 errors) ====
     var x = new ();
                  ~
 !!! error TS1109: Expression expected.

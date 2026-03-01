@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts] ////
+
 //// [collisionCodeGenModuleWithAccessorChildren.ts]
-module M {
+namespace M {
     export var x = 3;
     class c {
         private y;
@@ -9,7 +11,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
     class d {
         private y;
         set Z(p) {
@@ -19,7 +21,7 @@ module M {
     }
 }
 
-module M { // Shouldnt be _M
+namespace M { // Shouldnt be _M
     class e {
         private y;
         set M(p) {
@@ -28,7 +30,7 @@ module M { // Shouldnt be _M
     }
 }
 
-module M {
+namespace M {
     class f {
         get Z() {
             var M = 10;
@@ -37,7 +39,7 @@ module M {
     }
 }
 
-module M { // Shouldnt be _M
+namespace M { // Shouldnt be _M
     class e {
         get M() {
             return x;
@@ -46,77 +48,43 @@ module M { // Shouldnt be _M
 }
 
 //// [collisionCodeGenModuleWithAccessorChildren.js]
+"use strict";
 var M;
 (function (M_1) {
     M_1.x = 3;
-    var c = /** @class */ (function () {
-        function c() {
+    class c {
+        set Z(M) {
+            this.y = M_1.x;
         }
-        Object.defineProperty(c.prototype, "Z", {
-            set: function (M) {
-                this.y = M_1.x;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return c;
-    }());
+    }
 })(M || (M = {}));
 (function (M_2) {
-    var d = /** @class */ (function () {
-        function d() {
+    class d {
+        set Z(p) {
+            var M = 10;
+            this.y = M_2.x;
         }
-        Object.defineProperty(d.prototype, "Z", {
-            set: function (p) {
-                var M = 10;
-                this.y = M_2.x;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return d;
-    }());
+    }
 })(M || (M = {}));
 (function (M) {
-    var e = /** @class */ (function () {
-        function e() {
+    class e {
+        set M(p) {
+            this.y = M.x;
         }
-        Object.defineProperty(e.prototype, "M", {
-            set: function (p) {
-                this.y = M.x;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return e;
-    }());
+    }
 })(M || (M = {}));
 (function (M_3) {
-    var f = /** @class */ (function () {
-        function f() {
+    class f {
+        get Z() {
+            var M = 10;
+            return M_3.x;
         }
-        Object.defineProperty(f.prototype, "Z", {
-            get: function () {
-                var M = 10;
-                return M_3.x;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return f;
-    }());
+    }
 })(M || (M = {}));
 (function (M) {
-    var e = /** @class */ (function () {
-        function e() {
+    class e {
+        get M() {
+            return M.x;
         }
-        Object.defineProperty(e.prototype, "M", {
-            get: function () {
-                return M.x;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return e;
-    }());
+    }
 })(M || (M = {}));

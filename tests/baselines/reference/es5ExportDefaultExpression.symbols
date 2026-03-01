@@ -1,4 +1,0 @@
-=== tests/cases/compiler/es5ExportDefaultExpression.ts ===
-export default (1 + 2);
-No type information for this code.
-No type information for this code.

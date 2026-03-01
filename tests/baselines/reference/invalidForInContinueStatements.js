@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts] ////
+
 //// [invalidForInContinueStatements.ts]
 // All errors
 
@@ -39,6 +41,7 @@ for (var x in {}) {
 }
 
 //// [invalidForInContinueStatements.js]
+"use strict";
 // All errors
 // naked continue not allowed
 continue;
@@ -47,7 +50,7 @@ ONE: for (var x in {})
     continue TWO;
 // continue from inside function
 TWO: for (var x in {}) {
-    var fn = function () {
+    var fn = () => {
         continue TWO;
     };
 }

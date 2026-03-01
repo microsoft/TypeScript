@@ -1,0 +1,31 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis3.ts ===
+// --- (line: 13) skipped ---
+//         }
+//     }
+//     function inside() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         (function (_) {
+//             this;
+//         })([|{| kind: "reference" |}this|]);
+//     }
+// }
+// 
+// --- (line: 24) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis3.ts ===
+// --- (line: 13) skipped ---
+//         }
+//     }
+//     function inside() {
+//         [|{| kind: "reference" |}this|];
+//         (function (_) {
+//             this;
+//         })(/*HIGHLIGHTS*/[|{| kind: "reference" |}this|]);
+//     }
+// }
+// 
+// --- (line: 24) skipped ---

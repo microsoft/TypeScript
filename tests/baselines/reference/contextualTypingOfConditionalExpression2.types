@@ -1,35 +1,56 @@
-=== tests/cases/compiler/contextualTypingOfConditionalExpression2.ts ===
+//// [tests/cases/compiler/contextualTypingOfConditionalExpression2.ts] ////
+
+=== contextualTypingOfConditionalExpression2.ts ===
 class A {
 >A : A
+>  : ^
 
     foo: number;
 >foo : number
+>    : ^^^^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     bar: number;
 >bar : number
+>    : ^^^^^^
 }
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     baz: number;
 >baz : number
+>    : ^^^^^^
 }
 
 var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
 >x2 : (a: A) => void
+>   : ^ ^^ ^^^^^    
 >a : A
+>  : ^
 >true ? (a: C) => a.foo : (b: number) => { } : ((a: C) => number) | ((b: number) => void)
+>                                            : ^^ ^^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >true : true
+>     : ^^^^
 >(a: C) => a.foo : (a: C) => number
+>                : ^ ^^ ^^^^^^^^^^^
 >a : C
+>  : ^
 >a.foo : number
+>      : ^^^^^^
 >a : C
+>  : ^
 >foo : number
+>    : ^^^^^^
 >(b: number) => { } : (b: number) => void
+>                   : ^ ^^      ^^^^^^^^^
 >b : number
+>  : ^^^^^^
 

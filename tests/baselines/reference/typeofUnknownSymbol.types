@@ -1,7 +1,12 @@
-=== tests/cases/compiler/typeofUnknownSymbol.ts ===
+//// [tests/cases/compiler/typeofUnknownSymbol.ts] ////
+
+=== typeofUnknownSymbol.ts ===
 // previously gave no error here
 var x = typeof whatsthis
 >x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeof whatsthis : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >whatsthis : any
+>          : ^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.ts] ////
+
 //// [elementAccessChain.ts]
 declare const o1: undefined | { b: string };
 o1?.["b"];

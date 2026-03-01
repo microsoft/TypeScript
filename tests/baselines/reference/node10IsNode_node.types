@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/moduleResolution/node10IsNode_node.ts] ////
+
+=== /node_modules/fancy-lib/index.d.ts ===
+export declare const fancy: "feast";
+>fancy : "feast"
+>      : ^^^^^^^
+
+=== /node_modules/fancy-lib/definitely-not-index.d.ts ===
+export declare const fancy: "ketchup";
+>fancy : "ketchup"
+>      : ^^^^^^^^^
+
+=== /main.ts ===
+import { fancy } from "fancy-lib";
+>fancy : "feast"
+>      : ^^^^^^^
+
+fancy;
+>fancy : "feast"
+>      : ^^^^^^^
+

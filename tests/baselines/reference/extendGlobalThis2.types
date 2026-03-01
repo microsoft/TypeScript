@@ -1,13 +1,22 @@
-=== tests/cases/compiler/extendGlobalThis2.ts ===
+//// [tests/cases/compiler/extendGlobalThis2.ts] ////
+
+=== extendGlobalThis2.ts ===
 namespace globalThis {
 >globalThis : typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^
 
     export function foo() { console.log("x"); }
 >foo : () => void
+>    : ^^^^^^^^^^
 >console.log("x") : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"x" : "x"
+>    : ^^^
 }
 

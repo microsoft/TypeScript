@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendNonClassSymbol1.ts ===
+//// [tests/cases/compiler/extendNonClassSymbol1.ts] ////
+
+=== extendNonClassSymbol1.ts ===
 class A { foo() { } }
 >A : Symbol(A, Decl(extendNonClassSymbol1.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(extendNonClassSymbol1.ts, 0, 9))

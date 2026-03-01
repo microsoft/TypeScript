@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration15_es6.ts] ////
+
 //// [asyncFunctionDeclaration15_es6.ts]
 declare class Thenable { then(): void; }
 declare let a: any;
@@ -25,6 +27,7 @@ async function fn19() { await thenable; } // error
 
 
 //// [asyncFunctionDeclaration15_es6.js]
+"use strict";
 function fn1() {
     return __awaiter(this, void 0, void 0, function* () { });
 } // valid: Promise<void>

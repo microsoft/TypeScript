@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts] ////
+
 //// [assignmentCompatWithStringIndexer.ts]
 // index signatures must be compatible in assignments
 
@@ -9,17 +11,17 @@ class A {
     [x: string]: Base;
 }
 
-var a: A;
+declare var a: A;
 
-var b: { [x: string]: Derived; }
+declare var b: { [x: string]: Derived; };
 a = b; // ok
 b = a; // error
 
-var b2: { [x: string]: Derived2; }
+declare var b2: { [x: string]: Derived2; };
 a = b2; // ok
 b2 = a; // error
 
-module Generics {
+namespace Generics {
     class A<T extends Base> {
         [x: string]: T;
     }
@@ -28,8 +30,8 @@ module Generics {
         [x: string]: Derived; // ok
     }
 
-    var b1: { [x: string]: Derived; };
-    var a1: A<Base>;
+    declare var b1: { [x: string]: Derived; };
+    declare var a1: A<Base>;
     a1 = b1; // ok
     b1 = a1; // error
 
@@ -37,7 +39,7 @@ module Generics {
         [x: string]: Derived2; // ok
     }
 
-    var b2: { [x: string]: Derived2; };
+    declare var b2: { [x: string]: Derived2; };
     a1 = b2; // ok
     b2 = a1; // error
 
@@ -53,61 +55,26 @@ module Generics {
     }
 }
 
+
 //// [assignmentCompatWithStringIndexer.js]
+"use strict";
 // index signatures must be compatible in assignments
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var a;
-var b;
+class A {
+}
 a = b; // ok
 b = a; // error
-var b2;
 a = b2; // ok
 b2 = a; // error
 var Generics;
 (function (Generics) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
-    var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(A));
-    var b1;
-    var a1;
+    class A {
+    }
+    class B extends A {
+    }
     a1 = b1; // ok
     b1 = a1; // error
-    var B2 = /** @class */ (function (_super) {
-        __extends(B2, _super);
-        function B2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B2;
-    }(A));
-    var b2;
+    class B2 extends A {
+    }
     a1 = b2; // ok
     b2 = a1; // error
     function foo() {

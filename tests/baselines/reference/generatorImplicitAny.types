@@ -1,91 +1,140 @@
-=== tests/cases/conformance/generators/generatorImplicitAny.ts ===
+//// [tests/cases/conformance/generators/generatorImplicitAny.ts] ////
+
+=== generatorImplicitAny.ts ===
 function* g() {}
 >g : () => Generator<never, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/35105
 declare function noop(): void;
 >noop : () => void
+>     : ^^^^^^    
 
 declare function f<T>(value: T): void;
 >f : <T>(value: T) => void
+>  : ^ ^^     ^^ ^^^^^    
 >value : T
+>      : ^
 
 function* g2() {
 >g2 : () => Generator<undefined, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const value = yield; // error: implicit any
 >value : any
+>      : ^^^
 >yield : any
+>      : ^^^
 }
 
 function* g3() {
 >g3 : () => Generator<undefined, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const value: string = yield; // ok, contextually typed by `value`.
 >value : string
+>      : ^^^^^^
 >yield : any
+>      : ^^^
 }
 
 function* g4() {
 >g4 : () => Generator<undefined, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield; // ok, result is unused
 >yield : any
+>      : ^^^
 
     yield, noop(); // ok, result is unused
 >yield, noop() : void
+>              : ^^^^
 >yield : any
+>      : ^^^
 >noop() : void
+>       : ^^^^
 >noop : () => void
+>     : ^^^^^^    
 
     noop(), yield, noop(); // ok, result is unused
 >noop(), yield, noop() : void
+>                      : ^^^^
 >noop(), yield : any
+>              : ^^^
 >noop() : void
+>       : ^^^^
 >noop : () => void
+>     : ^^^^^^    
 >yield : any
+>      : ^^^
 >noop() : void
+>       : ^^^^
 >noop : () => void
+>     : ^^^^^^    
 
     (yield); // ok, result is unused
 >(yield) : any
+>        : ^^^
 >yield : any
+>      : ^^^
 
     (yield, noop()), noop(); // ok, result is unused
 >(yield, noop()), noop() : void
+>                        : ^^^^
 >(yield, noop()) : void
+>                : ^^^^
 >yield, noop() : void
+>              : ^^^^
 >yield : any
+>      : ^^^
 >noop() : void
+>       : ^^^^
 >noop : () => void
+>     : ^^^^^^    
 >noop() : void
+>       : ^^^^
 >noop : () => void
+>     : ^^^^^^    
 
     for(yield; false; yield); // ok, results are unused
 >yield : any
+>      : ^^^
 >false : false
+>      : ^^^^^
 >yield : any
+>      : ^^^
 
     void (yield); // ok, results are unused
 >void (yield) : undefined
+>             : ^^^^^^^^^
 >(yield) : any
+>        : ^^^
 >yield : any
+>      : ^^^
 }
 
 function* g5() {
 >g5 : () => Generator<undefined, void, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f(yield); // error: implicit any
 >f(yield) : void
+>         : ^^^^
 >f : <T>(value: T) => void
+>  : ^ ^^     ^^ ^^^^^    
 >yield : any
+>      : ^^^
 }
 
 function* g6() {
 >g6 : () => Generator<undefined, void, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f<string>(yield); // ok, contextually typed by f<string>
 >f<string>(yield) : void
+>                 : ^^^^
 >f : <T>(value: T) => void
+>  : ^ ^^     ^^ ^^^^^    
 >yield : any
+>      : ^^^
 }

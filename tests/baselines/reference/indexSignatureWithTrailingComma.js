@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignatureWithTrailingComma.ts] ////
+
 //// [indexSignatureWithTrailingComma.ts]
 type A = {
     [key: string,]: string;
@@ -13,8 +15,6 @@ class C {
 
 
 //// [indexSignatureWithTrailingComma.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}

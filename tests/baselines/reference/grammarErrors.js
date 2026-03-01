@@ -21,14 +21,12 @@ import type Foo = ns.Foo;
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
+"use strict";
 var ns;
 (function (ns) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+    }
     ns.Foo = Foo;
 })(ns || (ns = {}));

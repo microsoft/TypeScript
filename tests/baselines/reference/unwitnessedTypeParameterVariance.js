@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unwitnessedTypeParameterVariance.ts] ////
+
 //// [unwitnessedTypeParameterVariance.ts]
 // Repros from #33872
 
@@ -25,11 +27,10 @@ b = a;
 
 
 //// [unwitnessedTypeParameterVariance.js]
-"use strict";
 // Repros from #33872
-exports.__esModule = true;
 function foo() {
-    var unk = { read: function (origin) { return unk; } };
-    var x = unk;
+    const unk = { read: (origin) => unk };
+    const x = unk;
 }
 b = a;
+export {};

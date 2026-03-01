@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getParameterNameAtPosition.ts] ////
+
 //// [getParameterNameAtPosition.ts]
 // Repro from #30171
 
@@ -13,4 +15,4 @@ cases(fn(opts => { }));
 //// [getParameterNameAtPosition.js]
 "use strict";
 // Repro from #30171
-cases(fn(function (opts) { }));
+cases(fn(opts => { }));

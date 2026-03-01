@@ -8,7 +8,7 @@
 ////    x;
 ////}
 ////
-////module M {
+////namespace M {
 ////    export interface /*definition2*/I {
 ////        y;
 ////    }
@@ -18,4 +18,4 @@
 ////
 /////*reference*/x;
 
-verify.goToType("reference", ["definition0", "definition1", "definition2"]);
+verify.baselineGoToType("reference");

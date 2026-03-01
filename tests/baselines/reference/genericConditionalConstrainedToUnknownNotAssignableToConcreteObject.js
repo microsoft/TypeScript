@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts] ////
+
 //// [genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts]
 interface A { x: number }
 
@@ -28,6 +30,7 @@ function g2<
 
 
 //// [genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.js]
+"use strict";
 function g(a2, x) {
     x = a2;
 }

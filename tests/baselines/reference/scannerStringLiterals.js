@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts] ////
+
 //// [scannerStringLiterals.ts]
 ""
 " "
@@ -12,6 +14,7 @@
 "Should error because of end of file.
 
 //// [scannerStringLiterals.js]
+"use strict";
 "";
 " ";
 "a";

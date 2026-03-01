@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDo.ts] ////
+
 //// [sourceMapValidationDo.ts]
 var i = 0;
 do
@@ -9,6 +11,7 @@ do {
 } while (i < 20);
 
 //// [sourceMapValidationDo.js]
+"use strict";
 var i = 0;
 do {
     i++;

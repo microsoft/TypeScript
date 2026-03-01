@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitPinnedCommentsOnTopOfFile.ts] ////
+
 //// [emitPinnedCommentsOnTopOfFile.ts]
 /*!
 
@@ -8,6 +10,7 @@
 var x = 10;
 
 //// [emitPinnedCommentsOnTopOfFile.js]
+"use strict";
 /*!
 
     multi line

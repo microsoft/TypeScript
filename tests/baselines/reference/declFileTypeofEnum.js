@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeofEnum.ts] ////
+
 //// [declFileTypeofEnum.ts]
 enum days {
     monday,
@@ -14,6 +16,7 @@ var daysOfMonth = days;
 var daysOfYear: typeof days;
 
 //// [declFileTypeofEnum.js]
+"use strict";
 var days;
 (function (days) {
     days[days["monday"] = 0] = "monday";

@@ -1,63 +1,89 @@
-=== tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts] ////
+
+=== mappedTypeAsClauseRelationships.ts ===
 // From original issue #45212:
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 >Methods : Methods<T>
+>        : ^^^^^^^^^^
 
 type H<T> = T[keyof Methods<T>]; // Ok
 >H : H<T>
+>  : ^^^^
 
 // `Filter<T>` only filters out some keys of `T`.
 type Filter<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 >Filter : Filter<T>
+>       : ^^^^^^^^^
 
 // `Modify<T>` might modify some keys of `T`.
 type Modify<T> = { [P in keyof T as P extends string? `bool${P}`: P]: T[P] };
 >Modify : Modify<T>
+>       : ^^^^^^^^^
 
 function fun<T>(val: T) {
 >fun : <T>(val: T) => void
+>    : ^ ^^   ^^ ^^^^^^^^^
 >val : T
+>    : ^
 
     let x: Filter<T> = val; // Ok
 >x : Filter<T>
+>  : ^^^^^^^^^
 >val : T
+>    : ^
 
     let y: Modify<T> = val; // Error
 >y : Modify<T>
+>  : ^^^^^^^^^
 >val : T
+>    : ^
 }
 
 type FilterInclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]+?: T[P] };
 >FilterInclOpt : FilterInclOpt<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type ModifyInclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]+?: T[P] };
 >ModifyInclOpt : ModifyInclOpt<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type FilterExclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]-?: T[P] };
 >FilterExclOpt : FilterExclOpt<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type ModifyExclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]-?: T[P] };
 >ModifyExclOpt : ModifyExclOpt<T>
+>              : ^^^^^^^^^^^^^^^^
 
 function fun2<T>(val: T) {
 >fun2 : <T>(val: T) => void
+>     : ^ ^^   ^^ ^^^^^^^^^
 >val : T
+>    : ^
 
     let x: FilterInclOpt<T> = val; // Ok
 >x : FilterInclOpt<T>
+>  : ^^^^^^^^^^^^^^^^
 >val : T
+>    : ^
 
     let y: ModifyInclOpt<T> = val; // Ok
 >y : ModifyInclOpt<T>
+>  : ^^^^^^^^^^^^^^^^
 >val : T
+>    : ^
 
     let z: FilterExclOpt<T> = val; // Error
 >z : FilterExclOpt<T>
+>  : ^^^^^^^^^^^^^^^^
 >val : T
+>    : ^
 
     let w: ModifyExclOpt<T> = val; // Error
 >w : ModifyExclOpt<T>
+>  : ^^^^^^^^^^^^^^^^
 >val : T
+>    : ^
 }
 
 

@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/noUsedBeforeDefinedErrorInTypeContext.ts] ////
+
+=== noUsedBeforeDefinedErrorInTypeContext.ts ===
+// https://github.com/microsoft/TypeScript/issues/8775
+
+interface IThing<T> {
+    owner: T;
+>owner : T
+>      : ^
+}
+
+var foo = {
+>foo : any
+>{    one: {} as IThing<typeof foo>,} : { one: IThing<typeof foo>; }
+>                                     : ^^^^^^^                  ^^^
+
+    one: {} as IThing<typeof foo>,
+>one : IThing<any>
+>    : ^^^^^^^^^^^
+>{} as IThing<typeof foo> : IThing<any>
+>                         : ^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>foo : any
+}
+
+let baz = {
+>baz : { two: IThing<typeof bar>; }
+>    : ^^^^^^^                  ^^^
+>{    two: {} as IThing<typeof bar>,} : { two: IThing<typeof bar>; }
+>                                     : ^^^^^^^                  ^^^
+
+    two: {} as IThing<typeof bar>,
+>two : IThing<any>
+>    : ^^^^^^^^^^^
+>{} as IThing<typeof bar> : IThing<any>
+>                         : ^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>bar : any
+}
+
+let bar = {
+>bar : any
+>{    three: {} as IThing<typeof bar>,} : { three: IThing<typeof bar>; }
+>                                       : ^^^^^^^^^                  ^^^
+
+    three: {} as IThing<typeof bar>,
+>three : IThing<any>
+>      : ^^^^^^^^^^^
+>{} as IThing<typeof bar> : IThing<any>
+>                         : ^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>bar : any
+}
+
+const qwe = {
+>qwe : any
+>{    four: {} as IThing<typeof qwe>,} : { four: IThing<typeof qwe>; }
+>                                      : ^^^^^^^^                  ^^^
+
+    four: {} as IThing<typeof qwe>,
+>four : IThing<any>
+>     : ^^^^^^^^^^^
+>{} as IThing<typeof qwe> : IThing<any>
+>                         : ^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>qwe : any
+}
+

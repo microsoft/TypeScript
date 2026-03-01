@@ -1,9 +1,0 @@
-**/node_modules/**
-/built/local/**
-/tests/**
-/lib/**
-/src/lib/*.generated.d.ts
-/scripts/*.js
-/scripts/eslint/built/**
-/internal/**
-/coverage/**

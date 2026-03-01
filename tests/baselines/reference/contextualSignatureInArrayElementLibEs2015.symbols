@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/contextualSignatureInArrayElementLibEs2015.ts] ////
+
+=== contextualSignatureInArrayElementLibEs2015.ts ===
+// See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
+
+declare function test(
+>test : Symbol(test, Decl(contextualSignatureInArrayElementLibEs2015.ts, 0, 0))
+
+  arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
+>arg : Symbol(arg, Decl(contextualSignatureInArrayElementLibEs2015.ts, 2, 22))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(contextualSignatureInArrayElementLibEs2015.ts, 3, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>arg : Symbol(arg, Decl(contextualSignatureInArrayElementLibEs2015.ts, 3, 54))
+
+): void;
+
+test([
+>test : Symbol(test, Decl(contextualSignatureInArrayElementLibEs2015.ts, 0, 0))
+
+  (arg) => {
+>arg : Symbol(arg, Decl(contextualSignatureInArrayElementLibEs2015.ts, 7, 3))
+
+    arg; // number
+>arg : Symbol(arg, Decl(contextualSignatureInArrayElementLibEs2015.ts, 7, 3))
+
+  },
+]);
+

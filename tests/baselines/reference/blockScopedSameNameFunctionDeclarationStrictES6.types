@@ -1,56 +1,86 @@
-=== tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts ===
+//// [tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts] ////
+
+=== blockScopedSameNameFunctionDeclarationStrictES6.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 function foo(a: number) {
 >foo : (a: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
     if (a === 10) {
 >a === 10 : boolean
+>         : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
         function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
         foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
         foo(10); // not ok
 >foo(10) : void
+>        : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 >10 : 10
+>   : ^^
     }
     else {
         function foo() { } 
 >foo : () => void
+>    : ^^^^^^^^^^
 
         foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
         foo(10); // not ok
 >foo(10) : void
+>        : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 >10 : 10
+>   : ^^
     }
     foo(10);
 >foo(10) : void
+>        : ^^^^
 >foo : (a: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >10 : 10
+>   : ^^
 
     foo(); // not ok
 >foo() : void
+>      : ^^^^
 >foo : (a: number) => void
+>    : ^ ^^      ^^^^^^^^^
 }
 foo(10);
 >foo(10) : void
+>        : ^^^^
 >foo : (a: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >10 : 10
+>   : ^^
 
 foo(); // not ok - needs number
 >foo() : void
+>      : ^^^^
 >foo : (a: number) => void
+>    : ^ ^^      ^^^^^^^^^
 

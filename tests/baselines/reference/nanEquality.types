@@ -1,0 +1,221 @@
+//// [tests/cases/compiler/nanEquality.ts] ////
+
+=== nanEquality.ts ===
+declare const x: number;
+>x : number
+>  : ^^^^^^
+
+if (x === NaN) {}
+>x === NaN : boolean
+>          : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN === x) {}
+>NaN === x : boolean
+>          : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+if (x == NaN) {}
+>x == NaN : boolean
+>         : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN == x) {}
+>NaN == x : boolean
+>         : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+if (x !== NaN) {}
+>x !== NaN : boolean
+>          : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN !== x) {}
+>NaN !== x : boolean
+>          : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+if (x != NaN) {}
+>x != NaN : boolean
+>         : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN != x) {}
+>NaN != x : boolean
+>         : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+if (x === ((NaN))) {}
+>x === ((NaN)) : boolean
+>              : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>((NaN)) : number
+>        : ^^^^^^
+>(NaN) : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (((NaN)) === x) {}
+>((NaN)) === x : boolean
+>              : ^^^^^^^
+>((NaN)) : number
+>        : ^^^^^^
+>(NaN) : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+if (x !== ((NaN))) {}
+>x !== ((NaN)) : boolean
+>              : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>((NaN)) : number
+>        : ^^^^^^
+>(NaN) : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (((NaN)) !== x) {}
+>((NaN)) !== x : boolean
+>              : ^^^^^^^
+>((NaN)) : number
+>        : ^^^^^^
+>(NaN) : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+if (NaN === NaN) {}
+>NaN === NaN : boolean
+>            : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN !== NaN) {}
+>NaN !== NaN : boolean
+>            : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN == NaN) {}
+>NaN == NaN : boolean
+>           : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+if (NaN != NaN) {}
+>NaN != NaN : boolean
+>           : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+// ...
+declare let y: any;
+>y : any
+>  : ^^^
+
+if (NaN === y[0][1]) {}
+>NaN === y[0][1] : boolean
+>                : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>y[0][1] : any
+>        : ^^^
+>y[0] : any
+>     : ^^^
+>y : any
+>  : ^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+
+function t1(value: number, NaN: number) {
+>t1 : (value: number, NaN: number) => boolean
+>   : ^     ^^      ^^   ^^      ^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+    return value === NaN; // ok
+>value === NaN : boolean
+>              : ^^^^^^^
+>value : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+}
+
+function t2(value: number, NaN: number) {
+>t2 : (value: number, NaN: number) => boolean
+>   : ^     ^^      ^^   ^^      ^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+    return NaN == value; // ok
+>NaN == value : boolean
+>             : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>value : number
+>      : ^^^^^^
+}
+
+function t3(NaN: number) {
+>t3 : (NaN: number) => boolean
+>   : ^   ^^      ^^^^^^^^^^^^
+>NaN : number
+>    : ^^^^^^
+
+    return NaN === NaN; // ok
+>NaN === NaN : boolean
+>            : ^^^^^^^
+>NaN : number
+>    : ^^^^^^
+>NaN : number
+>    : ^^^^^^
+}
+

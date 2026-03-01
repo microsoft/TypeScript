@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticModifierAlreadySeen.ts] ////
+
 //// [staticModifierAlreadySeen.ts]
 class C {
     static static foo = 1;
@@ -5,10 +7,10 @@ class C {
 }
 
 //// [staticModifierAlreadySeen.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.foo = 1;
     }
-    C.prototype.bar = function () { };
-    return C;
-}());
+    bar() { }
+}

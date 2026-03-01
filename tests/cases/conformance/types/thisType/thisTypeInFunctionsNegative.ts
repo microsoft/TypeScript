@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 
 class C {
@@ -103,7 +104,7 @@ let reconstructed: {
 
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
 let d = new D();
-let explicitXProperty: (this: { x: number }, m: number) => number;
+declare let explicitXProperty: (this: { x: number }, m: number) => number;
 
 // from differing object types
 c.explicitC = function(this: D, m: number) { return this.x + m };
@@ -178,3 +179,9 @@ c.explicitProperty = (this, m) => m + this.n;
 const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 const f3 = async (this: {n: number}, m: number) => m + this.n;
 const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
+
+class Derived3 extends Base2 {
+    f(this: this) {
+        super.polymorphic();
+    }
+}

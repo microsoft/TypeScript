@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames17_ES6.ts] ////
+
 //// [computedPropertyNames17_ES6.ts]
 var b: boolean;
 class C {
@@ -10,6 +12,7 @@ class C {
 }
 
 //// [computedPropertyNames17_ES6.js]
+"use strict";
 var b;
 class C {
     get [b]() { return 0; }

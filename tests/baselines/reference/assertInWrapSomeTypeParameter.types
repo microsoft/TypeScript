@@ -1,12 +1,16 @@
-=== tests/cases/compiler/assertInWrapSomeTypeParameter.ts ===
+//// [tests/cases/compiler/assertInWrapSomeTypeParameter.ts] ////
+
+=== assertInWrapSomeTypeParameter.ts ===
 class C<T extends C<T>> {
 >C : C<T>
+>  : ^^^^
 
     foo<U extends C<C<T>>(x: U) {
 >foo : <U extends C<C<T>>>(x: U) => any
+>    : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^^^
 >x : U
+>  : ^
 
         return null;
->null : null
     }
 }

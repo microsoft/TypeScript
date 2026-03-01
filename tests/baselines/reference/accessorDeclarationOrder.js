@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorDeclarationOrder.ts] ////
+
 //// [accessorDeclarationOrder.ts]
 class C1 {
     #name: string;
@@ -35,6 +37,7 @@ c2.name;
 
 
 //// [accessorDeclarationOrder.js]
+"use strict";
 class C1 {
     #name;
     get name() {

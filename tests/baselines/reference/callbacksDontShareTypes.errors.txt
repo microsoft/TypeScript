@@ -1,0 +1,45 @@
+callbacksDontShareTypes.ts(15,11): error TS2454: Variable '_' is used before being assigned.
+callbacksDontShareTypes.ts(15,17): error TS2454: Variable 'c2' is used before being assigned.
+callbacksDontShareTypes.ts(16,11): error TS2454: Variable '_' is used before being assigned.
+callbacksDontShareTypes.ts(16,17): error TS2454: Variable 'c2' is used before being assigned.
+callbacksDontShareTypes.ts(17,11): error TS2454: Variable '_' is used before being assigned.
+callbacksDontShareTypes.ts(17,33): error TS2454: Variable 'c2' is used before being assigned.
+callbacksDontShareTypes.ts(18,11): error TS2454: Variable '_' is used before being assigned.
+callbacksDontShareTypes.ts(18,33): error TS2454: Variable 'c2' is used before being assigned.
+
+
+==== callbacksDontShareTypes.ts (8 errors) ====
+    interface Collection<T> {
+        length: number;
+        add(x: T): void;
+        remove(x: T): boolean;
+    }
+    interface Combinators {
+        map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+        map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+    }
+    
+    var _: Combinators;
+    var c2: Collection<number>;
+    
+    var rf1 = (x: number) => { return x.toFixed() };
+    var r1a = _.map(c2, (x) => { return x.toFixed() });
+              ~
+!!! error TS2454: Variable '_' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.
+    var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
+              ~
+!!! error TS2454: Variable '_' is used before being assigned.
+                    ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.
+    var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
+              ~
+!!! error TS2454: Variable '_' is used before being assigned.
+                                    ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.
+    var r5b = _.map<number, string>(c2, rf1);
+              ~
+!!! error TS2454: Variable '_' is used before being assigned.
+                                    ~~
+!!! error TS2454: Variable 'c2' is used before being assigned.

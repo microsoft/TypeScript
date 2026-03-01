@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType18.ts] ////
+
 //// [symbolType18.ts]
 interface Foo { prop }
 var x: symbol | Foo;
@@ -11,6 +13,7 @@ else {
 }
 
 //// [symbolType18.js]
+"use strict";
 var x;
 x;
 if (typeof x === "object") {

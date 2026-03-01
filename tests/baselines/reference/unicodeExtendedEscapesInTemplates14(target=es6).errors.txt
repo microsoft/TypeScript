@@ -1,0 +1,9 @@
+unicodeExtendedEscapesInTemplates14.ts(2,13): error TS1125: Hexadecimal digit expected.
+
+
+==== unicodeExtendedEscapesInTemplates14.ts (1 errors) ====
+    // Shouldn't work, negatives are not allowed.
+    var x = `\u{-DDDD}`;
+                
+!!! error TS1125: Hexadecimal digit expected.
+    

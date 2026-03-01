@@ -1,9 +1,11 @@
-=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts] ////
+
+=== stringIndexerConstrainsPropertyDeclarations.ts ===
 // String indexer types constrain the types of named properties in their containing type
 
 interface MyString extends String {
 >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
     foo: number;
 >foo : Symbol(MyString.foo, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 2, 35))

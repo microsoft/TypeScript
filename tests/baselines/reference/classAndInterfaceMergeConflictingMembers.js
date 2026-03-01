@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts] ////
+
 //// [classAndInterfaceMergeConflictingMembers.ts]
 declare class C1 {
     public x : number;
@@ -24,3 +26,4 @@ interface C3 {
 }
 
 //// [classAndInterfaceMergeConflictingMembers.js]
+"use strict";

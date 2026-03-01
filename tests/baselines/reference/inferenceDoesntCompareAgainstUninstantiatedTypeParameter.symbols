@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
+//// [tests/cases/compiler/inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts] ////
+
+=== inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
 class ClassA<TEntityClass>  {
 >ClassA : Symbol(ClassA, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 0))
 >TEntityClass : Symbol(TEntityClass, Decl(inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts, 0, 13))

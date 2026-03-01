@@ -1,52 +1,78 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod3_Js.ts] ////
+
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
 	get arguments() {
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 
 		return { bar: {} };
 >{ bar: {} } : { bar: {}; }
+>            : ^^^^^^^^^^^^
 >bar : {}
+>    : ^^
 >{} : {}
+>   : ^^
 	}
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 	/**
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
 >m : (foo?: object) => void
->foo : any
+>  : ^   ^^^      ^^^^^^^^^
+>foo : object | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 		/**
 		 * @type object
 		 */
 		this.x = foo;
->this.x = foo : any
->this.x : any
+>this.x = foo : object
+>             : ^^^^^^
+>this.x : object | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
->x : any
->foo : any
+>     : ^^^^
+>x : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>foo : object
+>    : ^^^^^^
 
 		/**
 		 * @type object
 		 */
 		this.y = super.arguments.bar;
 >this.y = super.arguments.bar : {}
->this.y : any
+>                             : ^^
+>this.y : object | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
->y : any
+>     : ^^^^
+>y : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >super.arguments.bar : {}
+>                    : ^^
 >super.arguments : { bar: {}; }
+>                : ^^^^^^^^^^^^
 >super : A
+>      : ^
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 >bar : {}
+>    : ^^
 	}
 }
 

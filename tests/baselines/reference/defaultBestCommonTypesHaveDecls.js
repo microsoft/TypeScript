@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts] ////
+
 //// [defaultBestCommonTypesHaveDecls.ts]
 var obj1: {};
 obj1.length;
@@ -16,6 +18,7 @@ var elementCount2 = result.length;
 
 
 //// [defaultBestCommonTypesHaveDecls.js]
+"use strict";
 var obj1;
 obj1.length;
 var obj2;

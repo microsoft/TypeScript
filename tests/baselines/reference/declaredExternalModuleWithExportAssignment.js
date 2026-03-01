@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts] ////
+
 //// [declaredExternalModuleWithExportAssignment.ts]
 declare module 'connect' {
     interface connectModule {
@@ -19,3 +21,4 @@ declare module 'connect' {
 
 
 //// [declaredExternalModuleWithExportAssignment.js]
+"use strict";

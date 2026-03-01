@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionParameterObjectRestAndInitializers.ts] ////
+
 //// [functionParameterObjectRestAndInitializers.ts]
 // https://github.com/microsoft/TypeScript/issues/47079
 
@@ -11,6 +13,7 @@ function g({a, ...x}, b = ({a}, b = a) => {}) {
 
 
 //// [functionParameterObjectRestAndInitializers.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/47079
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};

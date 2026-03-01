@@ -146,9 +146,7 @@ verify.completions(
             "classThatStartedWritingIdentifierAfterPrivateModifier",
             "classThatStartedWritingIdentifierAfterPrivateStaticModifier",
         ],
-        unsorted: ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(
-            name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
-            ),
+        unsorted: completion.classElementKeywords,
         isNewIdentifierLocation: true,
     },
     {

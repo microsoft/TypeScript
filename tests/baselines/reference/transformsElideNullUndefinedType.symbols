@@ -1,4 +1,6 @@
-=== tests/cases/compiler/transformsElideNullUndefinedType.ts ===
+//// [tests/cases/compiler/transformsElideNullUndefinedType.ts] ////
+
+=== transformsElideNullUndefinedType.ts ===
 var v0: null;
 >v0 : Symbol(v0, Decl(transformsElideNullUndefinedType.ts, 0, 3))
 

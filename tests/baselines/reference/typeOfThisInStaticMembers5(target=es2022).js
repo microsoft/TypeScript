@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers5.ts] ////
+
 //// [typeOfThisInStaticMembers5.ts]
 class C {
     static create = () => new this("yep")
@@ -9,6 +11,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers5.js]
+"use strict";
 class C {
     foo;
     static create = () => new this("yep");

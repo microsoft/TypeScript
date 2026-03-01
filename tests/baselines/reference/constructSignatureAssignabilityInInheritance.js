@@ -1,7 +1,9 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts] ////
+
 //// [constructSignatureAssignabilityInInheritance.ts]
 // Checking basic subtype relations with construct signatures
 
-module ConstructSignature {
+namespace ConstructSignature {
     interface Base { // T
         // M's
         new (x: number): void; // BUG 842221
@@ -33,7 +35,7 @@ module ConstructSignature {
     }
 }
 
-module MemberWithConstructSignature {
+namespace MemberWithConstructSignature {
     interface Base { // T
         // M's
         a: new (x: number) => void;
@@ -41,7 +43,7 @@ module MemberWithConstructSignature {
         a3: new <T>(x: T) => void;
     }
 
-    var b: Base;
+    declare var b: Base;
     var r = new b.a(1);
 
     // S's
@@ -72,9 +74,9 @@ module MemberWithConstructSignature {
 }
 
 //// [constructSignatureAssignabilityInInheritance.js]
+"use strict";
 // Checking basic subtype relations with construct signatures
 var MemberWithConstructSignature;
 (function (MemberWithConstructSignature) {
-    var b;
     var r = new b.a(1);
 })(MemberWithConstructSignature || (MemberWithConstructSignature = {}));

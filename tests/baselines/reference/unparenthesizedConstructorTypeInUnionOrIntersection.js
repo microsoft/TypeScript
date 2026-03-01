@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts] ////
+
 //// [unparenthesizedConstructorTypeInUnionOrIntersection.ts]
 type U1 = string | new () => void;
 type U2 = string | new (foo: number) => void
@@ -27,3 +29,4 @@ type OK2 = string | (new ()=> string | number);
 
 
 //// [unparenthesizedConstructorTypeInUnionOrIntersection.js]
+"use strict";

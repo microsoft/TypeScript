@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatibilityForConstrainedTypeParameters.ts] ////
+
 //// [assignmentCompatibilityForConstrainedTypeParameters.ts]
 function foo<T extends { bar: string }>() {
   function bar<S extends T>() {
@@ -8,6 +10,7 @@ function foo<T extends { bar: string }>() {
 }
 
 //// [assignmentCompatibilityForConstrainedTypeParameters.js]
+"use strict";
 function foo() {
     function bar() {
         var x;

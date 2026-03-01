@@ -1,111 +1,178 @@
-=== tests/cases/compiler/nonInferrableTypePropagation1.ts ===
+//// [tests/cases/compiler/nonInferrableTypePropagation1.ts] ////
+
+=== nonInferrableTypePropagation1.ts ===
 type Op<I, O> = (thing: Thing<I>) => Thing<O>;
 >Op : Op<I, O>
+>   : ^^^^^^^^
 >thing : Thing<I>
+>      : ^^^^^^^^
 
 type Thing<T> = {
 >Thing : Thing<T>
+>      : ^^^^^^^^
 
     value: T;
 >value : T
+>      : ^
 
     pipe<A, B>(
 >pipe : <A, B>(opA: Op<T, A>, opB: Op<A, B>) => Thing<B>
+>     : ^ ^^ ^^   ^^        ^^   ^^        ^^^^^        
 
         opA: Op<T, A>,
 >opA : Op<T, A>
+>    : ^^^^^^^^
 
         opB: Op<A, B>,
 >opB : Op<A, B>
+>    : ^^^^^^^^
 
     ): Thing<B>;
 };
 type Box<V> = { data: V };
 >Box : Box<V>
+>    : ^^^^^^
 >data : V
+>     : ^
 
 declare const thing: Thing<number>;
 >thing : Thing<number>
+>      : ^^^^^^^^^^^^^
 
 declare function map<T, R>(project: (value: T) => R): Op<T, R>;
 >map : <T, R>(project: (value: T) => R) => Op<T, R>
+>    : ^ ^^ ^^       ^^               ^^^^^        
 >project : (value: T) => R
+>        : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 
 declare function tap<T>(next: (value: T) => void): Op<T, T>;
 >tap : <T>(next: (value: T) => void) => Op<T, T>
+>    : ^ ^^    ^^                  ^^^^^        
 >next : (value: T) => void
+>     : ^     ^^ ^^^^^    
 >value : T
+>      : ^
 
 declare function box<V>(data: V): Box<V>;
 >box : <V>(data: V) => Box<V>
+>    : ^ ^^    ^^ ^^^^^      
 >data : V
+>     : ^
 
 declare function createAndUnbox<V>(factory: () => Thing<V | Box<V>>): Thing<V>;
 >createAndUnbox : <V>(factory: () => Thing<V | Box<V>>) => Thing<V>
+>               : ^ ^^       ^^                       ^^^^^        
 >factory : () => Thing<V | Box<V>>
+>        : ^^^^^^                 
 
 declare function log(value: any): void;
 >log : (value: any) => void
+>    : ^     ^^   ^^^^^    
 >value : any
 
 const result1 = createAndUnbox(() => thing.pipe(
 >result1 : Thing<number>
+>        : ^^^^^^^^^^^^^
 >createAndUnbox(() => thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),)) : Thing<number>
+>                                                                                       : ^^^^^^^^^^^^^
 >createAndUnbox : <V>(factory: () => Thing<V | Box<V>>) => Thing<V>
+>               : ^ ^^       ^^                       ^^^^^        
 >() => thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : () => Thing<Box<number>>
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : Thing<Box<number>>
+>                                                                 : ^^^^^^^^^^^^^^^^^^
 >thing.pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
+>           : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >thing : Thing<number>
+>      : ^^^^^^^^^^^^^
 >pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
+>     : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 
     map((data) => box(data)),
 >map((data) => box(data)) : Op<number, Box<number>>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >map : <T, R>(project: (value: T) => R) => Op<T, R>
+>    : ^ ^^ ^^       ^^               ^^^^^        
 >(data) => box(data) : (data: number) => Box<number>
+>                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 >box(data) : Box<number>
+>          : ^^^^^^^^^^^
 >box : <V>(data: V) => Box<V>
+>    : ^ ^^    ^^ ^^^^^      
 >data : number
+>     : ^^^^^^
 
     tap((v) => log(v)),
 >tap((v) => log(v)) : Op<Box<number>, Box<number>>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tap : <T>(next: (value: T) => void) => Op<T, T>
+>    : ^ ^^    ^^                  ^^^^^        
 >(v) => log(v) : (v: Box<number>) => void
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >v : Box<number>
+>  : ^^^^^^^^^^^
 >log(v) : void
+>       : ^^^^
 >log : (value: any) => void
+>    : ^     ^^   ^^^^^    
 >v : Box<number>
+>  : ^^^^^^^^^^^
 
 ));
 
 const result2 = createAndUnbox(() => thing.pipe(
 >result2 : Thing<number>
+>        : ^^^^^^^^^^^^^
 >createAndUnbox(() => thing.pipe(    tap((v) => log(v)),    map((data) => box(data)),)) : Thing<number>
+>                                                                                       : ^^^^^^^^^^^^^
 >createAndUnbox : <V>(factory: () => Thing<V | Box<V>>) => Thing<V>
+>               : ^ ^^       ^^                       ^^^^^        
 >() => thing.pipe(    tap((v) => log(v)),    map((data) => box(data)),) : () => Thing<Box<number>>
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >thing.pipe(    tap((v) => log(v)),    map((data) => box(data)),) : Thing<Box<number>>
+>                                                                 : ^^^^^^^^^^^^^^^^^^
 >thing.pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
+>           : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >thing : Thing<number>
+>      : ^^^^^^^^^^^^^
 >pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
+>     : ^ ^^ ^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 
     tap((v) => log(v)),
 >tap((v) => log(v)) : Op<number, number>
+>                   : ^^^^^^^^^^^^^^^^^^
 >tap : <T>(next: (value: T) => void) => Op<T, T>
+>    : ^ ^^    ^^                  ^^^^^        
 >(v) => log(v) : (v: number) => void
+>              : ^ ^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >log(v) : void
+>       : ^^^^
 >log : (value: any) => void
+>    : ^     ^^   ^^^^^    
 >v : number
+>  : ^^^^^^
 
     map((data) => box(data)),
 >map((data) => box(data)) : Op<number, Box<number>>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >map : <T, R>(project: (value: T) => R) => Op<T, R>
+>    : ^ ^^ ^^       ^^               ^^^^^        
 >(data) => box(data) : (data: number) => Box<number>
+>                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 >box(data) : Box<number>
+>          : ^^^^^^^^^^^
 >box : <V>(data: V) => Box<V>
+>    : ^ ^^    ^^ ^^^^^      
 >data : number
+>     : ^^^^^^
 
 ));
 

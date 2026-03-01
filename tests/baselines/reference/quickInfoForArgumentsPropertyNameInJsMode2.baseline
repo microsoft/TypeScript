@@ -1,3 +1,19 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/a.js ===
+// function f(x) {
+//          ^
+// | ----------------------------------------------------------------------
+// | function f(x: any, ...args: any[]): void
+// | ----------------------------------------------------------------------
+//    arguments;
+// }
+// 
+// f('');
+// ^
+// | ----------------------------------------------------------------------
+// | function f(x: any, ...args: any[]): void
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +21,7 @@
       "position": 9,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -107,7 +123,7 @@
       "position": 33,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

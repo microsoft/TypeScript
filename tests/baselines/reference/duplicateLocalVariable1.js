@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLocalVariable1.ts] ////
+
 //// [duplicateLocalVariable1.ts]
 //import FileManager = require('filemanager');
 //import App = require('app');
@@ -30,7 +32,7 @@ export class TestRunner {
             try {
                 testResult = testcase.test();
             }
-            catch (e) {
+            catch (e: any) {
                 exception = true;
                 testResult = false;
                 if (typeof testcase.errorMessageRegEx === "string") {
@@ -347,29 +349,28 @@ export var tests: TestRunner = (function () {
 "use strict";
 //import FileManager = require('filemanager');
 //import App = require('app');
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.tests = exports.TestRunner = exports.TestCase = void 0;
 var TestFileDir = ".\\TempTestFiles";
-var TestCase = /** @class */ (function () {
-    function TestCase(name, test, errorMessageRegEx) {
+class TestCase {
+    constructor(name, test, errorMessageRegEx) {
         this.name = name;
         this.test = test;
         this.errorMessageRegEx = errorMessageRegEx;
     }
-    return TestCase;
-}());
+}
 exports.TestCase = TestCase;
-var TestRunner = /** @class */ (function () {
-    function TestRunner() {
+class TestRunner {
+    constructor() {
         this.tests = [];
     }
-    TestRunner.arrayCompare = function (arg1, arg2) {
+    static arrayCompare(arg1, arg2) {
         return (arg1.every(function (val, index) { return val === arg2[index]; }));
-    };
-    TestRunner.prototype.addTest = function (test) {
+    }
+    addTest(test) {
         this.tests.push(test);
-    };
-    TestRunner.prototype.run = function () {
+    }
+    run() {
         var success = true;
         for (var test in this.tests) {
             var exception = false;
@@ -405,9 +406,8 @@ var TestRunner = /** @class */ (function () {
         }
         else {
         }
-    };
-    return TestRunner;
-}());
+    }
+}
 exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();

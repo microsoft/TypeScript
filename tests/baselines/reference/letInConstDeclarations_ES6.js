@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letInConstDeclarations_ES6.ts] ////
+
 //// [letInConstDeclarations_ES6.ts]
 // All use of let in const declaration should be an error
 const x = 50, let = 5;
@@ -7,6 +9,7 @@ const x = 50, let = 5;
 }
 
 //// [letInConstDeclarations_ES6.js]
+"use strict";
 // All use of let in const declaration should be an error
 const x = 50, let = 5;
 {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substitutionTypeNoMergeOfAssignableType.ts] ////
+
 //// [substitutionTypeNoMergeOfAssignableType.ts]
 interface Entry {
     comment?: string;
@@ -26,8 +28,9 @@ interface Entry {
  
 
 //// [substitutionTypeNoMergeOfAssignableType.js]
+"use strict";
 function makeEntityStore(config) {
     return {};
 }
-var myTest = makeEntityStore({ test: { fields: { id: {} } } });
+const myTest = makeEntityStore({ test: { fields: { id: {} } } });
 myTest.test;

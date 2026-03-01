@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess1.ts] ////
+
 //// [superSymbolIndexedAccess1.ts]
 var symbol = Symbol.for('myThing');
 
@@ -14,6 +16,7 @@ class Bar extends Foo {
 }
 
 //// [superSymbolIndexedAccess1.js]
+"use strict";
 var symbol = Symbol.for('myThing');
 class Foo {
     [symbol]() {

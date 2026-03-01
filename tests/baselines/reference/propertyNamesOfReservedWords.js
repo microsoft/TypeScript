@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts] ////
+
 //// [propertyNamesOfReservedWords.ts]
 class C {
     abstract;
@@ -277,11 +279,9 @@ var r7 = E.abstract;
 var r8 = E.as;
 
 //// [propertyNamesOfReservedWords.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var c;
 var r1 = c.abstract;
 var r2 = c.as;

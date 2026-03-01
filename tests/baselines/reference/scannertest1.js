@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannertest1.ts] ////
+
 //// [scannertest1.ts]
 ///<reference path='References.ts' />
 
@@ -25,25 +27,23 @@ class CharacterInfo {
 
 
 //// [scannertest1.js]
+"use strict";
 ///<reference path='References.ts' />
-var CharacterInfo = /** @class */ (function () {
-    function CharacterInfo() {
-    }
-    CharacterInfo.isDecimalDigit = function (c) {
+class CharacterInfo {
+    static isDecimalDigit(c) {
         return c >= CharacterCodes._0 && c <= CharacterCodes._9;
-    };
-    CharacterInfo.isHexDigit = function (c) {
+    }
+    static isHexDigit(c) {
         return isDecimalDigit(c) ||
             (c >= CharacterCodes.A && c <= CharacterCodes.F) ||
             (c >= CharacterCodes.a && c <= CharacterCodes.f);
-    };
-    CharacterInfo.hexValue = function (c) {
+    }
+    static hexValue(c) {
         Debug.assert(isHexDigit(c));
         return isDecimalDigit(c)
             ? (c - CharacterCodes._0)
             : (c >= CharacterCodes.A && c <= CharacterCodes.F)
                 ? c - CharacterCodes.A + 10
                 : c - CharacterCodes.a + 10;
-    };
-    return CharacterInfo;
-}());
+    }
+}

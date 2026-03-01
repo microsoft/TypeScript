@@ -1,26 +1,37 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/jsxLocalNamespaceIndexSignatureNoCrash.tsx] ////
+
+=== index.tsx ===
 export class X {
 >X : X
+>  : ^
 
     static jsx() {
 >jsx : () => HTMLParagraphElement
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return document.createElement('p');
 >document.createElement('p') : HTMLParagraphElement
+>                            : ^^^^^^^^^^^^^^^^^^^^
 >document.createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>                       : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
 >document : Document
+>         : ^^^^^^^^
 >createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; }
+>              : ^^^ ^^^^^^^^^                           ^^       ^^ ^^       ^^^                      ^^^                        ^^^ ^^^^^^^^^                                     ^^       ^^ ^^       ^^^                      ^^^                                  ^^^       ^^      ^^       ^^^                      ^^^           ^^^
 >'p' : "p"
+>    : ^^^
     }
 }
 
 export namespace X {
     export namespace JSX {
         export type IntrinsicElements = {
->IntrinsicElements : { [other: string]: any; }
+>IntrinsicElements : IntrinsicElements
+>                  : ^^^^^^^^^^^^^^^^^
 
             [other: string]: any;
 >other : string
+>      : ^^^^^^
 
         };
     }
@@ -28,10 +39,13 @@ export namespace X {
 
 function A() {
 >A : () => any
+>  : ^^^^^^^^^
 
     return (<p>Hello</p>);
 >(<p>Hello</p>) : error
 ><p>Hello</p> : error
 >p : any
+>  : ^^^
 >p : any
+>  : ^^^
 }

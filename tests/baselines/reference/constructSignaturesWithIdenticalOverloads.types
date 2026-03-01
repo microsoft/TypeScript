@@ -1,133 +1,201 @@
-=== tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithIdenticalOverloads.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithIdenticalOverloads.ts] ////
+
+=== constructSignaturesWithIdenticalOverloads.ts ===
 // Duplicate overloads of construct signatures should generate errors
 
 class C {
 >C : C
+>  : ^
 
     constructor(x: number, y: string);
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     constructor(x: number, y: string); // error
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     constructor(x: number) { }
 >x : number
+>  : ^^^^^^
 }
 
 var r1 = new C(1, '');
 >r1 : C
+>   : ^
 >new C(1, '') : C
+>             : ^
 >C : typeof C
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     constructor(x: T, y: string);
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 
     constructor(x: T, y: string); // error
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 
     constructor(x: T) { }
 >x : T
+>  : ^
 }
 
 var r2 = new C2(1, '');
 >r2 : C2<number>
+>   : ^^^^^^^^^^
 >new C2(1, '') : C2<number>
+>              : ^^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 interface I {
     new (x: number, y: string): C;
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     new (x: number, y: string): C; // error
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 var i: I;
 >i : I
+>  : ^
 
 var r3 = new i(1, '');
 >r3 : C
+>   : ^
 >new i(1, '') : C
+>             : ^
 >i : I
+>  : ^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 interface I2<T> {
     new (x: T, y: string): C2<T>;
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 
     new (x: T, y: string): C2<T>; // error
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 
     new <T>(x: T, y: string): C2<T>;
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 
     new <T>(x: T, y: string): C2<T>; // error
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 }
 
 var i2: I2<number>;
 >i2 : I2<number>
+>   : ^^^^^^^^^^
 
 var r4 = new i2(1, '');
 >r4 : C2<number>
+>   : ^^^^^^^^^^
 >new i2(1, '') : C2<number>
+>              : ^^^^^^^^^^
 >i2 : I2<number>
+>   : ^^^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 var a: {
 >a : { new (x: number, y: string): C; new (x: number, y: string): C; }
+>  : ^^^^^^^ ^^      ^^ ^^      ^^^ ^^^^^^^ ^^      ^^ ^^      ^^^ ^^^
 
     new (x: number, y: string): C;
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     new (x: number, y: string): C; // error
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 var r5 = new a(1, '');
 >r5 : C
+>   : ^
 >new a(1, '') : C
+>             : ^
 >a : { new (x: number, y: string): C; new (x: number, y: string): C; }
+>  : ^^^^^^^ ^^      ^^ ^^      ^^^ ^^^^^^^ ^^      ^^ ^^      ^^^ ^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
 var b: {
 >b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>  : ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^
 
     new <T>(x: T, y: string): C2<T>;
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 
     new <T>(x: T, y: string): C2<T>; // error
 >x : T
+>  : ^
 >y : string
+>  : ^^^^^^
 }
 
 var r6 = new b(1, '');
 >r6 : C2<number>
+>   : ^^^^^^^^^^
 >new b(1, '') : C2<number>
+>             : ^^^^^^^^^^
 >b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>  : ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 

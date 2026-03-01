@@ -1,83 +1,149 @@
-=== tests/cases/compiler/genericChainedCalls.ts ===
+//// [tests/cases/compiler/genericChainedCalls.ts] ////
+
+=== genericChainedCalls.ts ===
 interface I1<T> {
     func<U>(callback: (value: T) => U): I1<T>;
 >func : <U>(callback: (value: T) => U) => I1<T>
+>     : ^ ^^        ^^               ^^^^^     
 >callback : (value: T) => U
+>         : ^     ^^ ^^^^^ 
 >value : T
+>      : ^
 }
  
 declare var v1: I1<number>;
 >v1 : I1<number>
+>   : ^^^^^^^^^^
  
 var r1 = v1.func(num => num.toString()) 
 >r1 : I1<number>
+>   : ^^^^^^^^^^
 >v1.func(num => num.toString())            .func(str => str.length) // error, number doesn't have a length           .func(num => num.toString()) : I1<number>
+>                                                                                                                                                 : ^^^^^^^^^^
 >v1.func(num => num.toString())            .func(str => str.length) // error, number doesn't have a length           .func : <U>(callback: (value: number) => U) => I1<number>
+>                                                                                                                          : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v1.func(num => num.toString())            .func(str => str.length) : I1<number>
+>                                                                   : ^^^^^^^^^^
 >v1.func(num => num.toString())            .func : <U>(callback: (value: number) => U) => I1<number>
+>                                                : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v1.func(num => num.toString()) : I1<number>
+>                               : ^^^^^^^^^^
 >v1.func : <U>(callback: (value: number) => U) => I1<number>
+>        : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v1 : I1<number>
+>   : ^^^^^^^^^^
 >func : <U>(callback: (value: number) => U) => I1<number>
+>     : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num => num.toString() : (num: number) => string
+>                      : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >num.toString() : string
+>               : ^^^^^^
 >num.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >num : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
            .func(str => str.length) // error, number doesn't have a length
 >func : <U>(callback: (value: number) => U) => I1<number>
+>     : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >str => str.length : (str: number) => any
+>                  : ^   ^^^^^^^^^^^^^^^^
 >str : number
+>    : ^^^^^^
 >str.length : any
+>           : ^^^
 >str : number
+>    : ^^^^^^
 >length : any
+>       : ^^^
 
            .func(num => num.toString())
 >func : <U>(callback: (value: number) => U) => I1<number>
+>     : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num => num.toString() : (num: number) => string
+>                      : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >num.toString() : string
+>               : ^^^^^^
 >num.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >num : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
  
 var s1 = v1.func(num => num.toString()) 
 >s1 : I1<number>
+>   : ^^^^^^^^^^
 >v1.func(num => num.toString()) : I1<number>
+>                               : ^^^^^^^^^^
 >v1.func : <U>(callback: (value: number) => U) => I1<number>
+>        : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v1 : I1<number>
+>   : ^^^^^^^^^^
 >func : <U>(callback: (value: number) => U) => I1<number>
+>     : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num => num.toString() : (num: number) => string
+>                      : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >num.toString() : string
+>               : ^^^^^^
 >num.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >num : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
 var s2 = s1.func(str => str.length) // should also error
 >s2 : I1<number>
+>   : ^^^^^^^^^^
 >s1.func(str => str.length) : I1<number>
+>                           : ^^^^^^^^^^
 >s1.func : <U>(callback: (value: number) => U) => I1<number>
+>        : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s1 : I1<number>
+>   : ^^^^^^^^^^
 >func : <U>(callback: (value: number) => U) => I1<number>
+>     : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >str => str.length : (str: number) => any
+>                  : ^   ^^^^^^^^^^^^^^^^
 >str : number
+>    : ^^^^^^
 >str.length : any
+>           : ^^^
 >str : number
+>    : ^^^^^^
 >length : any
+>       : ^^^
 
 var s3 = s2.func(num => num.toString())
 >s3 : I1<number>
+>   : ^^^^^^^^^^
 >s2.func(num => num.toString()) : I1<number>
+>                               : ^^^^^^^^^^
 >s2.func : <U>(callback: (value: number) => U) => I1<number>
+>        : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : I1<number>
+>   : ^^^^^^^^^^
 >func : <U>(callback: (value: number) => U) => I1<number>
+>     : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num => num.toString() : (num: number) => string
+>                      : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
+>    : ^^^^^^
 >num.toString() : string
+>               : ^^^^^^
 >num.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
 >num : number
+>    : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 

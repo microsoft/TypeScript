@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/libdtsFix.ts] ////
+
 //// [libdtsFix.ts]
 interface HTMLElement {
     type: string;
@@ -5,3 +7,4 @@ interface HTMLElement {
 
 
 //// [libdtsFix.js]
+"use strict";

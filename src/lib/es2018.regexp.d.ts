@@ -1,13 +1,13 @@
 interface RegExpMatchArray {
     groups?: {
-        [key: string]: string
-    }
+        [key: string]: string;
+    };
 }
 
 interface RegExpExecArray {
     groups?: {
-        [key: string]: string
-    }
+        [key: string]: string;
+    };
 }
 
 interface RegExp {

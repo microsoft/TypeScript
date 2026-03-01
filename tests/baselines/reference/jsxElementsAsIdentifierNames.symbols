@@ -1,12 +1,14 @@
-=== tests/cases/compiler/a.tsx ===
+//// [tests/cases/compiler/jsxElementsAsIdentifierNames.tsx] ////
+
+=== a.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(a.tsx, 0, 13))
 
-declare module JSX {
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(a.tsx, 0, 25))
 
     interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(a.tsx, 1, 20))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(a.tsx, 1, 23))
 
         ["package"]: any;
 >["package"] : Symbol(IntrinsicElements["package"], Decl(a.tsx, 2, 33))

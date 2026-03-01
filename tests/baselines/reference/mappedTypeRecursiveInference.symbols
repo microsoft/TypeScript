@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeRecursiveInference.ts ===
+//// [tests/cases/compiler/mappedTypeRecursiveInference.ts] ////
+
+=== mappedTypeRecursiveInference.ts ===
 interface A { a: A }
 >A : Symbol(A, Decl(mappedTypeRecursiveInference.ts, 0, 0))
 >a : Symbol(A.a, Decl(mappedTypeRecursiveInference.ts, 0, 13))
@@ -83,14 +85,14 @@ oub.b.b
 oub.b.a.n.a.n.a
 >oub : Symbol(oub, Decl(mappedTypeRecursiveInference.ts, 12, 5))
 
-let xhr: XMLHttpRequest;
->xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 3))
+declare let xhr: XMLHttpRequest;
+>xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 11))
 >XMLHttpRequest : Symbol(XMLHttpRequest, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
 const out2 = foo(xhr);
 >out2 : Symbol(out2, Decl(mappedTypeRecursiveInference.ts, 18, 5))
 >foo : Symbol(foo, Decl(mappedTypeRecursiveInference.ts, 2, 45))
->xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 3))
+>xhr : Symbol(xhr, Decl(mappedTypeRecursiveInference.ts, 17, 11))
 
 out2.responseXML
 >out2.responseXML : Symbol(responseXML, Decl(lib.dom.d.ts, --, --))

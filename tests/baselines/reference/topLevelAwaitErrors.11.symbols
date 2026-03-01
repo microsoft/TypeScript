@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/index.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.11.ts] ////
+
+=== index.ts ===
 // await disallowed in import=
 declare var require: any;
 >require : Symbol(require, Decl(index.ts, 1, 11))
@@ -6,7 +8,7 @@ declare var require: any;
 import await = require("./other");
 >await : Symbol(await, Decl(index.ts, 1, 25))
 
-=== tests/cases/conformance/externalModules/other.ts ===
+=== other.ts ===
 declare const _await: any;
 >_await : Symbol(_await, Decl(other.ts, 0, 13))
 

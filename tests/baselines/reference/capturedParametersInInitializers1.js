@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedParametersInInitializers1.ts] ////
+
 //// [capturedParametersInInitializers1.ts]
 // ok - usage is deferred
 function foo1(y = class {c = x}, x = 1) {
@@ -41,6 +43,7 @@ function foo9(y = {[z]() { return z; }}, z = 1) {
 
 
 //// [capturedParametersInInitializers1.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

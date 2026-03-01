@@ -1,31 +1,49 @@
-=== tests/cases/compiler/declarationEmitEnumReadonlyProperty.ts ===
+//// [tests/cases/compiler/declarationEmitEnumReadonlyProperty.ts] ////
+
+=== declarationEmitEnumReadonlyProperty.ts ===
 enum E {
 >E : E
+>  : ^
 
     A = 'a',
 >A : E.A
+>  : ^^^
 >'a' : "a"
+>    : ^^^
 
     B = 'b'
 >B : E.B
+>  : ^^^
 >'b' : "b"
+>    : ^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     readonly type = E.A;
 >type : E.A
+>     : ^^^
 >E.A : E.A
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E.A
+>  : ^^^
 }
 
 let x: E.A = new C().type;
 >x : E.A
+>  : ^^^
 >E : any
+>  : ^^^
 >new C().type : E.A
+>             : ^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >type : E.A
+>     : ^^^
 

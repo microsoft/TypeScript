@@ -45,29 +45,25 @@ export let shim: typeof import("./fo2") = {
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [foo2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
-var Bar = /** @class */ (function () {
-    function Bar(input) {
-    }
-    return Bar;
-}());
+class Bar {
+    constructor(input) { }
+}
 exports.Bar = Bar;
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.shim = exports.Bar2 = exports.z = exports.y = exports.x = void 0;
 exports.x = { x: 0, y: 0 };
 exports.y = { a: "", b: 0 };
 exports.z = { a: "", b: 0 };
-var Bar2 = /** @class */ (function () {
-    function Bar2(input) {
-    }
-    return Bar2;
-}());
+class Bar2 {
+    constructor(input) { }
+}
 exports.Bar2 = Bar2;
 exports.shim = {
     Bar: Bar2

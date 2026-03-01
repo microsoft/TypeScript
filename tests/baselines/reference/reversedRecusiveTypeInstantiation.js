@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reversedRecusiveTypeInstantiation.ts] ////
+
 //// [reversedRecusiveTypeInstantiation.ts]
 interface A<StringArgPos1, NumberArgPos2> {
    xPos1 : StringArgPos1
@@ -11,5 +13,6 @@ a.zPos2Pos1.xPos1 = 1
 
 
 //// [reversedRecusiveTypeInstantiation.js]
+"use strict";
 var a;
 a.zPos2Pos1.xPos1 = 1;

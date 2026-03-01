@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 // arrow
 (jake => { })("build");
@@ -14,7 +15,7 @@
 // optional parameters
 ((j?) => j + 1)(12);
 ((k?) => k + 1)();
-((l, o?) => l + o)(12); // o should be any
+((l, o?) => l + o)(12);
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');

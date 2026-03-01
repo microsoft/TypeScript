@@ -1,43 +1,61 @@
-=== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts ===
+//// [tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts] ////
+
+=== invalidImportAliasIdentifiers.ts ===
 // none of these should work, since non are actually modules
 
 var V = 12;
 >V : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
 import v = V;
 >v : any
+>  : ^^^
 >V : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 import c = C;
 >c : any
+>  : ^^^
 >C : any
+>  : ^^^
 
 enum E {
 >E : E
+>  : ^
 
     Red, Blue
 >Red : E.Red
+>    : ^^^^^
 >Blue : E.Blue
+>     : ^^^^^^
 }
 
 import e = E;
 >e : typeof E
+>  : ^^^^^^^^
 >E : E
+>  : ^
 
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 import i = I;
 >i : any
+>  : ^^^
 >I : any
+>  : ^^^
 

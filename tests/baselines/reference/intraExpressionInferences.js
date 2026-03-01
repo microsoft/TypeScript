@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts] ////
+
 //// [intraExpressionInferences.ts]
 // Repros from #47599
 
@@ -198,74 +200,203 @@ branch({
   }
 })
 
+interface Props<T> {
+  a: (x: string) => T;
+  b: (arg: T) => void;
+}
+
+declare function Foo<T>(props: Props<T>): null;
+
+Foo({
+  ...{
+    a: (x) => 10,
+    b: (arg) => {
+      arg.toString();
+    },
+  },
+});
+
+declare function nested<T>(arg: {
+  prop: {
+    produce: (arg1: number) => T;
+    consume: (arg2: T) => void;
+  };
+}): T;
+
+const resNested = nested({
+  prop: {
+    produce: (a) => [a],
+    consume: (arg) => arg.join(","),
+  },
+});
+
+declare function twoConsumers<T>(arg: {
+  a: (arg: string) => T;
+  consume1: (arg1: T) => void;
+  consume2: (arg2: T) => void;
+}): T;
+
+const resTwoConsumers = twoConsumers({
+  a: (arg) => [arg],
+  consume1: (arg1) => {},
+  consume2: (arg2) => {},
+});
+
+declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+  a: (arg: string) => T;
+  b: (arg: string) => T2;
+  consume1: (arg1: T) => void;
+  consume2: (arg2: T2) => void;
+}): [T, T2];
+
+const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
+  a: (arg) => [arg],
+  b: (arg) => Number(arg),
+  consume1: (arg1) => {},
+  consume2: (arg2) => {},
+});
+
+declare function withConditionalExpression<T, T2, T3>(arg: {
+  a: (arg1: string) => T;
+  b: (arg2: T) => T2;
+  c: (arg2: T2) => T3;
+}): [T, T2, T3];
+
+const resWithConditionalExpression = withConditionalExpression({
+  a: (arg) => [arg],
+  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,
+  c: (arg) => Boolean(arg),
+});
+
+declare function onion<T, T2, T3>(arg: {
+  a: (arg1: string) => T;
+  nested: {
+    b: (arg2: T) => T2;
+    nested2: {
+      c: (arg2: T2) => T3;
+    };
+  };
+}): [T, T2, T3];
+
+const resOnion = onion({
+  a: (arg) => [arg],
+  nested: {
+    b: (arg) => arg.join(","),
+    nested2: {
+      c: (arg) => Boolean(arg),
+    },
+  },
+});
+
+declare function onion2<T, T2, T3, T4>(arg: {
+  a: (arg1: string) => T;
+  nested: {
+    b: (arg2: T) => T2;
+    c: (arg3: T) => T3;
+    nested2: {
+      d: (arg4: T3) => T4;
+    };
+  };
+}): [T, T2, T3, T4];
+
+const resOnion2 = onion2({
+  a: (arg) => [arg],
+  nested: {
+    b: (arg) => arg.join(","),
+    c: (arg) => Number(arg),
+    nested2: {
+      d: (arg) => Boolean(arg),
+    },
+  },
+});
+
+declare function distant<T>(args: {
+  foo: {
+    bar: {
+      baz: {
+        producer: (arg: string) => T;
+      };
+    };
+  };
+  consumer: (val: T) => unknown;
+}): T;
+
+const distantRes = distant({
+  foo: {
+    bar: {
+      baz: {
+        producer: (arg) => 1,
+      },
+    },
+  },
+  consumer: (val) => {},
+});
+
 
 //// [intraExpressionInferences.js]
 "use strict";
 // Repros from #47599
 callIt({
-    produce: function () { return 0; },
-    consume: function (n) { return n.toFixed(); }
+    produce: () => 0,
+    consume: n => n.toFixed()
 });
 callIt({
-    produce: function (_a) { return 0; },
-    consume: function (n) { return n.toFixed(); }
+    produce: _a => 0,
+    consume: n => n.toFixed(),
 });
 callIt({
-    produce: function () {
+    produce() {
         return 0;
     },
-    consume: function (n) { return n.toFixed(); }
+    consume: n => n.toFixed()
 });
-callItT([function () { return 0; }, function (n) { return n.toFixed(); }]);
-callItT([function (_a) { return 0; }, function (n) { return n.toFixed(); }]);
-var inferTypeFn = function (generic) { return generic; };
-var myGeneric = inferTypeFn({
-    retrieveGeneric: function (parameter) { return 5; },
-    operateWithGeneric: function (generic) { return generic.toFixed(); }
+callItT([() => 0, n => n.toFixed()]);
+callItT([_a => 0, n => n.toFixed()]);
+const inferTypeFn = (generic) => generic;
+const myGeneric = inferTypeFn({
+    retrieveGeneric: parameter => 5,
+    operateWithGeneric: generic => generic.toFixed()
 });
 // Repro #38623
 function make(o) { }
 make({
     mutations: {
-        foo: function () { }
+        foo() { }
     },
-    action: function (a) { a.foo(); }
+    action: (a) => { a.foo(); }
+});
+foo({
+    a: () => { return 42; },
+    b(a) { },
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { }
+    b(a) { },
 });
 foo({
-    a: function () { return 42; },
-    b: function (a) { }
-});
-foo({
-    a: function () { return 42; },
-    b: function (a) { }
+    a() { return 42; },
+    b(a) { },
 });
 function test(foo) { }
 test({
-    a: function () { return 0; },
-    b: function (a) { return 'a'; },
-    c: function (b) {
-        var x = b;
+    a: () => 0,
+    b: (a) => 'a',
+    c: (b) => {
+        const x = b;
     }
 });
 test({
-    a: function () { return 0; },
-    b: function (a) { return a; },
-    c: function (b) {
-        var x = b;
+    a: () => 0,
+    b: (a) => a,
+    c: (b) => {
+        const x = b;
     }
 });
 // Repro from #41712
-var Wrapper = /** @class */ (function () {
-    function Wrapper() {
-    }
-    return Wrapper;
-}());
+class Wrapper {
+}
 createMappingComponent({
-    setup: function () {
+    setup() {
         return {
             inputs: {
                 num: new Wrapper(),
@@ -277,10 +408,10 @@ createMappingComponent({
             }
         };
     },
-    map: function (inputs) {
+    map(inputs) {
         return {
             bool: inputs.nonexistent,
-            str: inputs.num
+            str: inputs.num, // Causes error
         };
     }
 });
@@ -288,33 +419,90 @@ createMappingComponent({
 function simplified(props) { }
 function whatIWant(props) { }
 function nonObject(generator, receiver) { }
-simplified({ generator: function () { return 123; }, receiver: function (t) { return console.log(t + 2); } });
-whatIWant({ generator: function (bob) { return bob ? 1 : 2; }, receiver: function (t) { return console.log(t + 2); } });
-nonObject(function (bob) { return bob ? 1 : 2; }, function (t) { return console.log(t + 2); });
+simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) });
+whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) });
+nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2));
 function example(options) {
-    return function (params) {
-        var data = options.fetch(params, 123);
+    return (params) => {
+        const data = options.fetch(params, 123);
         return options.map(data);
     };
 }
 example({
-    fetch: function (params) { return 123; },
-    map: function (number) { return String(number); }
+    fetch: (params) => 123,
+    map: (number) => String(number)
 });
 example({
-    fetch: function (params, foo) { return 123; },
-    map: function (number) { return String(number); }
+    fetch: (params, foo) => 123,
+    map: (number) => String(number)
 });
 example({
-    fetch: function (params, foo) { return 123; },
-    map: function (number) { return String(number); }
+    fetch: (params, foo) => 123,
+    map: (number) => String(number)
 });
 branch({
     test: x,
-    "if": function (t) { return t === "a"; },
-    then: function (u) {
-        var test1 = u;
+    if: (t) => t === "a",
+    then: u => {
+        let test1 = u;
     }
+});
+Foo(Object.assign({
+    a: (x) => 10,
+    b: (arg) => {
+        arg.toString();
+    },
+}));
+const resNested = nested({
+    prop: {
+        produce: (a) => [a],
+        consume: (arg) => arg.join(","),
+    },
+});
+const resTwoConsumers = twoConsumers({
+    a: (arg) => [arg],
+    consume1: (arg1) => { },
+    consume2: (arg2) => { },
+});
+const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
+    a: (arg) => [arg],
+    b: (arg) => Number(arg),
+    consume1: (arg1) => { },
+    consume2: (arg2) => { },
+});
+const resWithConditionalExpression = withConditionalExpression({
+    a: (arg) => [arg],
+    b: Math.random() ? (arg) => "first" : (arg) => "two",
+    c: (arg) => Boolean(arg),
+});
+const resOnion = onion({
+    a: (arg) => [arg],
+    nested: {
+        b: (arg) => arg.join(","),
+        nested2: {
+            c: (arg) => Boolean(arg),
+        },
+    },
+});
+const resOnion2 = onion2({
+    a: (arg) => [arg],
+    nested: {
+        b: (arg) => arg.join(","),
+        c: (arg) => Number(arg),
+        nested2: {
+            d: (arg) => Boolean(arg),
+        },
+    },
+});
+const distantRes = distant({
+    foo: {
+        bar: {
+            baz: {
+                producer: (arg) => 1,
+            },
+        },
+    },
+    consumer: (val) => { },
 });
 
 
@@ -383,3 +571,66 @@ declare const branch: <T, U extends T>(_: {
     then: (u: U) => void;
 }) => void;
 declare const x: "a" | "b";
+interface Props<T> {
+    a: (x: string) => T;
+    b: (arg: T) => void;
+}
+declare function Foo<T>(props: Props<T>): null;
+declare function nested<T>(arg: {
+    prop: {
+        produce: (arg1: number) => T;
+        consume: (arg2: T) => void;
+    };
+}): T;
+declare const resNested: number[];
+declare function twoConsumers<T>(arg: {
+    a: (arg: string) => T;
+    consume1: (arg1: T) => void;
+    consume2: (arg2: T) => void;
+}): T;
+declare const resTwoConsumers: string[];
+declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+    a: (arg: string) => T;
+    b: (arg: string) => T2;
+    consume1: (arg1: T) => void;
+    consume2: (arg2: T2) => void;
+}): [T, T2];
+declare const resMultipleProducersBeforeConsumers: [string[], number];
+declare function withConditionalExpression<T, T2, T3>(arg: {
+    a: (arg1: string) => T;
+    b: (arg2: T) => T2;
+    c: (arg2: T2) => T3;
+}): [T, T2, T3];
+declare const resWithConditionalExpression: [string[], "first" | "two", boolean];
+declare function onion<T, T2, T3>(arg: {
+    a: (arg1: string) => T;
+    nested: {
+        b: (arg2: T) => T2;
+        nested2: {
+            c: (arg2: T2) => T3;
+        };
+    };
+}): [T, T2, T3];
+declare const resOnion: [string[], string, boolean];
+declare function onion2<T, T2, T3, T4>(arg: {
+    a: (arg1: string) => T;
+    nested: {
+        b: (arg2: T) => T2;
+        c: (arg3: T) => T3;
+        nested2: {
+            d: (arg4: T3) => T4;
+        };
+    };
+}): [T, T2, T3, T4];
+declare const resOnion2: [string[], string, number, boolean];
+declare function distant<T>(args: {
+    foo: {
+        bar: {
+            baz: {
+                producer: (arg: string) => T;
+            };
+        };
+    };
+    consumer: (val: T) => unknown;
+}): T;
+declare const distantRes: number;

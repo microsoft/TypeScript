@@ -1,32 +1,38 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
+derivedGenericClassWithAny.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedGenericClassWithAny.ts(3,18): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+derivedGenericClassWithAny.ts(5,9): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+derivedGenericClassWithAny.ts(29,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
+derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
+derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (7 errors) ====
+==== derivedGenericClassWithAny.ts (7 errors) ====
     class C<T extends number> {
         x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         get X(): T { return null; }
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                     ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         foo(): T {
             return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
         }
     }
     
     class D extends C<number> {
         x: any;
         get X(): any {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         foo(): any {
@@ -35,8 +41,6 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     
         static y: any;
         static get Y(): any {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         static bar(): any {
@@ -47,23 +51,23 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     // if D is a valid class definition than E is now not safe tranisitively through C
     class E<T extends string> extends D {
         x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         get X(): T { return ''; } // error
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                     ~~~~~~~~~~
+                     ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'T'.
 !!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
         foo(): T {
             return ''; // error
-            ~~~~~~~~~~
+            ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'T'.
 !!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
         }
     }
     
-    var c: C<number>;
-    var d: D;
-    var e: E<string>;
+    declare var c: C<number>;
+    declare var d: D;
+    declare var e: E<string>;
     
     c = d;
     c = e;

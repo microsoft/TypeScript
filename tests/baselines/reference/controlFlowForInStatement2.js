@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowForInStatement2.ts] ////
+
 //// [controlFlowForInStatement2.ts]
 const keywordA = 'a';
 const keywordB = 'b';
@@ -26,15 +28,16 @@ if ((stringB as ('a' | 'b')) in c) {
 }
 
 //// [controlFlowForInStatement2.js]
-var keywordA = 'a';
-var keywordB = 'b';
+"use strict";
+const keywordA = 'a';
+const keywordB = 'b';
 if ('a' in c) {
     c; // narrowed to `A`
 }
 if (keywordA in c) {
     c; // also narrowed to `A`
 }
-var stringB = 'b';
+let stringB = 'b';
 if (stringB in c) {
     c; // narrowed to `B`
 }

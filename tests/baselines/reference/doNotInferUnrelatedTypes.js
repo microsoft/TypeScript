@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotInferUnrelatedTypes.ts] ////
+
 //// [doNotInferUnrelatedTypes.ts]
 // #16709
 declare function dearray<T>(ara: ReadonlyArray<T>): T;
@@ -8,4 +10,5 @@ let foo: LiteralType = dearray(alt);
 
 
 //// [doNotInferUnrelatedTypes.js]
-var foo = dearray(alt);
+"use strict";
+let foo = dearray(alt);

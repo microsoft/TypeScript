@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/breakTarget5.ts] ////
+
 //// [breakTarget5.ts]
 target:
 while (true) {
@@ -9,6 +11,7 @@ while (true) {
 }
 
 //// [breakTarget5.js]
+"use strict";
 target: while (true) {
     function f() {
         while (true) {

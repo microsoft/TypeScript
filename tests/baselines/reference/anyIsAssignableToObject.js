@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyIsAssignableToObject.ts] ////
+
 //// [anyIsAssignableToObject.ts]
 interface P {
     p: {};
@@ -8,3 +10,4 @@ interface Q extends P { // Check assignability here. Any is assignable to {}
 }
 
 //// [anyIsAssignableToObject.js]
+"use strict";

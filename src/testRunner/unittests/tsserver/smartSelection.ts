@@ -1,21 +1,20 @@
-namespace ts.projectSystem {
-    function setup(fileName: string, content: string) {
-        const file: File = { path: fileName, content };
-        const host = createServerHost([file, libFile]);
-        const session = createSession(host);
-        openFilesForSession([file], session);
-        return function getSmartSelectionRange(locations: protocol.SelectionRangeRequestArgs["locations"]) {
-            return executeSessionRequest<protocol.SelectionRangeRequest, protocol.SelectionRangeResponse>(
-                session,
-                CommandNames.SelectionRange,
-                { file: fileName, locations });
-        };
-    }
+import * as ts from "../../_namespaces/ts.js";
+import {
+    baselineTsserverLogs,
+    openFilesForSession,
+    TestSession,
+} from "../helpers/tsserver.js";
+import {
+    File,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-    // More tests in fourslash/smartSelection_*
-    describe("unittests:: tsserver:: smartSelection", () => {
-        it("works for simple JavaScript", () => {
-            const getSmartSelectionRange = setup("/file.js", `
+// More tests in fourslash/smartSelection_*
+describe("unittests:: tsserver:: smartSelection::", () => {
+    it("works for simple JavaScript", () => {
+        const file: File = {
+            path: "/home/src/projects/project/file.js",
+            content: `
 class Foo {
     bar(a, b) {
         if (a === b) {
@@ -23,44 +22,20 @@ class Foo {
         }
         return false;
     }
-}`);
-
-            const locations = getSmartSelectionRange([
-                { line: 4, offset: 13 }, // a === b
-            ]);
-
-            assert.deepEqual(locations, [{
-                textSpan: { // a
-                    start: { line: 4, offset: 13 },
-                    end: { line: 4, offset: 14 } },
-                parent: {
-                    textSpan: { // a === b
-                        start: { line: 4, offset: 13 },
-                        end: { line: 4, offset: 20 } },
-                    parent: {
-                        textSpan: { // IfStatement
-                            start: { line: 4, offset: 9 },
-                            end: { line: 6, offset: 10 } },
-                        parent: {
-                            textSpan: { // SyntaxList + whitespace (body of method)
-                                start: { line: 3, offset: 16 },
-                                end: { line: 8, offset: 5 } },
-                            parent: {
-                                textSpan: { // MethodDeclaration
-                                    start: { line: 3, offset: 5 },
-                                    end: { line: 8, offset: 6 } },
-                                parent: {
-                                    textSpan: { // SyntaxList + whitespace (body of class)
-                                        start: { line: 2, offset: 12 },
-                                        end: { line: 9, offset: 1 } },
-                                    parent: {
-                                        textSpan: { // ClassDeclaration
-                                            start: { line: 2, offset: 1 },
-                                            end: { line: 9, offset: 2 } },
-                                        parent: {
-                                            textSpan: { // SourceFile (all text)
-                                                start: { line: 1, offset: 1 },
-                                                end: { line: 9, offset: 2 }, } } } } } } } } }]);
+}`,
+        };
+        const host = TestServerHost.createServerHost([file]);
+        const session = new TestSession(host);
+        openFilesForSession([file], session);
+        session.executeCommandSeq<ts.server.protocol.SelectionRangeRequest>({
+            command: ts.server.protocol.CommandTypes.SelectionRange,
+            arguments: {
+                file: file.path,
+                locations: [
+                    { line: 4, offset: 13 }, // a === b
+                ],
+            },
         });
+        baselineTsserverLogs("smartSelection", "works for simple JavaScript", session);
     });
-}
+});

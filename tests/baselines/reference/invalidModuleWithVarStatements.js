@@ -1,33 +1,36 @@
+//// [tests/cases/conformance/internalModules/moduleBody/invalidModuleWithVarStatements.ts] ////
+
 //// [invalidModuleWithVarStatements.ts]
 // All of these should be an error
 
-module Y {
+namespace Y {
     public var x: number = 0;
 }
 
-module Y2 {
+namespace Y2 {
     public function fn(x: string) { }
 }
 
-module Y4 {
+namespace Y4 {
     static var x: number = 0;
 }
 
-module YY {
+namespace YY {
     static function fn(x: string) { }
 }
 
-module YY2 {
+namespace YY2 {
     private var x: number = 0;
 }
 
 
-module YY3 {
+namespace YY3 {
     private function fn(x: string) { }
 }
 
 
 //// [invalidModuleWithVarStatements.js]
+"use strict";
 // All of these should be an error
 var Y;
 (function (Y) {
@@ -39,11 +42,11 @@ var Y2;
 })(Y2 || (Y2 = {}));
 var Y4;
 (function (Y4) {
-    var x = 0;
+    static var x = 0;
 })(Y4 || (Y4 = {}));
 var YY;
 (function (YY) {
-    function fn(x) { }
+    static function fn(x) { }
 })(YY || (YY = {}));
 var YY2;
 (function (YY2) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializationError.ts] ////
+
 //// [specializationError.ts]
 interface Promise<T> {
     then<U>(value: T): void;
@@ -11,3 +13,4 @@ interface Bar {
 
 
 //// [specializationError.js]
+"use strict";

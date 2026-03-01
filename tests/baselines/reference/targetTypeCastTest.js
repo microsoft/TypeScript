@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeCastTest.ts] ////
+
 //// [targetTypeCastTest.ts]
 declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
 
@@ -24,6 +26,7 @@ var add2: Adder2 = function(x,y) {
 function add3(x,y) {x}
 
 //// [targetTypeCastTest.js]
+"use strict";
 function Point(x, y) {
     this.x = x;
     this.y = y;

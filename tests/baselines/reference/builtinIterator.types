@@ -1,0 +1,428 @@
+//// [tests/cases/compiler/builtinIterator.ts] ////
+
+=== builtinIterator.ts ===
+const iterator = Iterator.from([0, 1, 2]);
+>iterator : IteratorObject<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from([0, 1, 2]) : IteratorObject<number, undefined, unknown>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>              : ^ ^^     ^^                                                                 ^^^^^                                     
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>     : ^ ^^     ^^                                                                 ^^^^^                                     
+>[0, 1, 2] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+const mapped = iterator.map(String);
+>mapped : IteratorObject<string, undefined, unknown>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.map(String) : IteratorObject<string, undefined, unknown>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>             : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator : IteratorObject<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const filtered = iterator.filter(x => x > 0);
+>filtered : IteratorObject<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter(x => x > 0) : IteratorObject<number, undefined, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter : { <S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined, unknown>; (predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined, unknown>; }
+>                : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator : IteratorObject<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filter : { <S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined, unknown>; (predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined, unknown>; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => x > 0 : (x: number) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x > 0 : boolean
+>      : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+function isZero(x: number): x is 0 {
+>isZero : (x: number) => x is 0
+>       : ^ ^^      ^^^^^      
+>x : number
+>  : ^^^^^^
+
+  return x === 0;
+>x === 0 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+}
+const zero = iterator.filter(isZero);
+>zero : IteratorObject<0, undefined, unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter(isZero) : IteratorObject<0, undefined, unknown>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter : { <S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined, unknown>; (predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined, unknown>; }
+>                : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator : IteratorObject<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filter : { <S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined, unknown>; (predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined, unknown>; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isZero : (x: number) => x is 0
+>       : ^ ^^      ^^^^^      
+
+const iteratorFromBare = Iterator.from({
+>iteratorFromBare : IteratorObject<string, undefined, unknown>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from({  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },}) : IteratorObject<string, undefined, unknown>
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>              : ^ ^^     ^^                                                                 ^^^^^                                     
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>     : ^ ^^     ^^                                                                 ^^^^^                                     
+>{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { done: boolean; value: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return {
+>{      done: Math.random() < .5,      value: "a string",    } : { done: boolean; value: string; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      done: Math.random() < .5,
+>done : boolean
+>     : ^^^^^^^
+>Math.random() < .5 : boolean
+>                   : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>.5 : 0.5
+>   : ^^^
+
+      value: "a string",
+>value : string
+>      : ^^^^^^
+>"a string" : "a string"
+>           : ^^^^^^^^^^
+
+    };
+  },
+});
+
+
+function* gen() {
+>gen : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  yield 0;
+>yield 0 : any
+>        : ^^^
+>0 : 0
+>  : ^
+}
+
+const mappedGen = gen().map(x => x === 0 ? "zero" : "other");
+>mappedGen : IteratorObject<"zero" | "other", undefined, unknown>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen().map(x => x === 0 ? "zero" : "other") : IteratorObject<"zero" | "other", undefined, unknown>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen().map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>          : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen() : Generator<number, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => x === 0 ? "zero" : "other" : (x: number) => "zero" | "other"
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x === 0 ? "zero" : "other" : "zero" | "other"
+>                           : ^^^^^^^^^^^^^^^^
+>x === 0 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>"zero" : "zero"
+>       : ^^^^^^
+>"other" : "other"
+>        : ^^^^^^^
+
+const mappedValues = [0, 1, 2].values().map(x => x === 0 ? "zero" : "other");
+>mappedValues : IteratorObject<"zero" | "other", undefined, unknown>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values().map(x => x === 0 ? "zero" : "other") : IteratorObject<"zero" | "other", undefined, unknown>
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values().map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>                       : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values() : ArrayIterator<number>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values : () => ArrayIterator<number>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>values : () => ArrayIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => x === 0 ? "zero" : "other" : (x: number) => "zero" | "other"
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x === 0 ? "zero" : "other" : "zero" | "other"
+>                           : ^^^^^^^^^^^^^^^^
+>x === 0 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>"zero" : "zero"
+>       : ^^^^^^
+>"other" : "other"
+>        : ^^^^^^^
+
+
+class GoodIterator extends Iterator<number> {
+>GoodIterator : GoodIterator
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { readonly done: false; readonly value: 0; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return { done: false, value: 0 } as const;
+>{ done: false, value: 0 } as const : { readonly done: false; readonly value: 0; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: false, value: 0 } : { readonly done: false; readonly value: 0; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>value : 0
+>      : ^
+>0 : 0
+>  : ^
+  }
+}
+
+// error cases
+new Iterator<number>();
+>new Iterator<number>() : any
+>                       : ^^^
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+
+class C extends Iterator<number> {}
+>C : C
+>  : ^
+>Iterator : Iterator<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// it's unfortunate that these are an error
+class BadIterator1 extends Iterator<number> {
+>BadIterator1 : BadIterator1
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { readonly done: false; readonly value: 0; } | { readonly done: true; readonly value: "a string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (Math.random() < .5) {
+>Math.random() < .5 : boolean
+>                   : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>.5 : 0.5
+>   : ^^^
+
+      return { done: false, value: 0 } as const;
+>{ done: false, value: 0 } as const : { readonly done: false; readonly value: 0; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: false, value: 0 } : { readonly done: false; readonly value: 0; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>value : 0
+>      : ^
+>0 : 0
+>  : ^
+
+    } else {
+      return { done: true, value: "a string" } as const;
+>{ done: true, value: "a string" } as const : { readonly done: true; readonly value: "a string"; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: true, value: "a string" } : { readonly done: true; readonly value: "a string"; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>value : "a string"
+>      : ^^^^^^^^^^
+>"a string" : "a string"
+>           : ^^^^^^^^^^
+    }
+  }
+}
+
+class BadIterator2 extends Iterator<number> {
+>BadIterator2 : BadIterator2
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { done: boolean; value: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return { done: false, value: 0 };
+>{ done: false, value: 0 } : { done: boolean; value: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>false : false
+>      : ^^^^^
+>value : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+  }
+}
+
+class BadIterator3 extends Iterator<number> {
+>BadIterator3 : BadIterator3
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { done: boolean; value: number; } | { done: boolean; value: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (Math.random() < .5) {
+>Math.random() < .5 : boolean
+>                   : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>.5 : 0.5
+>   : ^^^
+
+      return { done: false, value: 0 };
+>{ done: false, value: 0 } : { done: boolean; value: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>false : false
+>      : ^^^^^
+>value : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+    } else {
+      return { done: true, value: "a string" };
+>{ done: true, value: "a string" } : { done: boolean; value: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>true : true
+>     : ^^^^
+>value : string
+>      : ^^^^^^
+>"a string" : "a string"
+>           : ^^^^^^^^^^
+    }
+  }
+}
+
+declare const g1: Generator<string, number, boolean>;
+>g1 : Generator<string, number, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const iter1 = Iterator.from(g1);
+>iter1 : IteratorObject<string, undefined, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from(g1) : IteratorObject<string, undefined, unknown>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>              : ^ ^^     ^^                                                                 ^^^^^                                     
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>     : ^ ^^     ^^                                                                 ^^^^^                                     
+>g1 : Generator<string, number, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const iter2: IteratorObject<string>;
+>iter2 : IteratorObject<string, unknown, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const iter3 = iter2.flatMap(() => g1);
+>iter3 : IteratorObject<string, undefined, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iter2.flatMap(() => g1) : IteratorObject<string, undefined, unknown>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iter2.flatMap : <U>(callback: (value: string, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
+>              : ^ ^^        ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iter2 : IteratorObject<string, unknown, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flatMap : <U>(callback: (value: string, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>) => IteratorObject<U, undefined, unknown>
+>        : ^ ^^        ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => g1 : () => Generator<string, number, boolean>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g1 : Generator<string, number, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts] ////
+
 //// [privateNameAndPropertySignature.ts]
 type A = {
     #foo: string;
@@ -22,3 +24,4 @@ declare const y: [{ qux: { #quux: 3 } }];
 
 
 //// [privateNameAndPropertySignature.js]
+"use strict";

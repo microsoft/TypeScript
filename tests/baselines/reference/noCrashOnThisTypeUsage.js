@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashOnThisTypeUsage.ts] ////
+
 //// [noCrashOnThisTypeUsage.ts]
 interface IListenable {
     changeListeners: Function[] | null
@@ -25,25 +27,20 @@ export class ObservableValue<T> {
 }
 
 //// [noCrashOnThisTypeUsage.js]
-"use strict";
-exports.__esModule = true;
-exports.ObservableValue = void 0;
 function notifyListeners(listenable, change) {
 }
-var ObservableValue = /** @class */ (function () {
-    function ObservableValue(value) {
+export class ObservableValue {
+    constructor(value) {
         this.value = value;
         this.changeListeners = [];
-        var newValue = value;
-        var oldValue = null;
+        const newValue = value;
+        const oldValue = null;
         notifyListeners(this, {
             type: "update",
             object: this,
-            newValue: newValue,
-            oldValue: oldValue
+            newValue,
+            oldValue
         });
     }
-    ObservableValue.prototype.observe = function (handler, fireImmediately) { };
-    return ObservableValue;
-}());
-exports.ObservableValue = ObservableValue;
+    observe(handler, fireImmediately) { }
+}

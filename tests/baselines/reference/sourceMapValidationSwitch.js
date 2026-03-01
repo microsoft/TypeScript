@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationSwitch.ts] ////
+
 //// [sourceMapValidationSwitch.ts]
 var x = 10;
 switch (x) {
@@ -29,6 +31,7 @@ switch (x)
 }
 
 //// [sourceMapValidationSwitch.js]
+"use strict";
 var x = 10;
 switch (x) {
     case 5:

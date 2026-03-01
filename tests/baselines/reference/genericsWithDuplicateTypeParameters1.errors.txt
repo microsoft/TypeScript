@@ -1,16 +1,16 @@
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(1,15): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(2,16): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(3,12): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(4,17): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(5,18): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(8,16): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(9,10): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(10,11): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(14,22): error TS2300: Duplicate identifier 'X'.
-tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts(15,23): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(1,15): error TS2300: Duplicate identifier 'x'.
+genericsWithDuplicateTypeParameters1.ts(2,16): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(3,12): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(4,17): error TS2300: Duplicate identifier 'x'.
+genericsWithDuplicateTypeParameters1.ts(5,18): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(8,16): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(9,10): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(10,11): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(14,22): error TS2300: Duplicate identifier 'X'.
+genericsWithDuplicateTypeParameters1.ts(15,23): error TS2300: Duplicate identifier 'X'.
 
 
-==== tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts (10 errors) ====
+==== genericsWithDuplicateTypeParameters1.ts (10 errors) ====
     function f<x, x>() { }
                   ~
 !!! error TS2300: Duplicate identifier 'x'.

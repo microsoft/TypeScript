@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/isolatedModulesConstEnum.ts] ////
+
+=== /foo.d.ts ===
+declare const enum EventName {
+>EventName : Symbol(EventName, Decl(foo.d.ts, 0, 0))
+
+    FOO = 1,
+>FOO : Symbol(EventName.FOO, Decl(foo.d.ts, 0, 30))
+
+    BAR = 2
+>BAR : Symbol(EventName.BAR, Decl(foo.d.ts, 1, 12))
+}
+
+type E1 = {
+>E1 : Symbol(E1, Decl(foo.d.ts, 3, 1))
+
+    [EventName.FOO]: number;
+>[EventName.FOO] : Symbol([EventName.FOO], Decl(foo.d.ts, 5, 11))
+>EventName.FOO : Symbol(EventName.FOO, Decl(foo.d.ts, 0, 30))
+>EventName : Symbol(EventName, Decl(foo.d.ts, 0, 0))
+>FOO : Symbol(EventName.FOO, Decl(foo.d.ts, 0, 30))
+
+    [EventName.BAR]: string;
+>[EventName.BAR] : Symbol([EventName.BAR], Decl(foo.d.ts, 6, 28))
+>EventName.BAR : Symbol(EventName.BAR, Decl(foo.d.ts, 1, 12))
+>EventName : Symbol(EventName, Decl(foo.d.ts, 0, 0))
+>BAR : Symbol(EventName.BAR, Decl(foo.d.ts, 1, 12))
+
+};
+
+=== /bar.ts ===
+type E2 = {
+>E2 : Symbol(E2, Decl(bar.ts, 0, 0))
+
+    [EventName.FOO]: number;
+>[EventName.FOO] : Symbol([EventName.FOO], Decl(bar.ts, 0, 11))
+>EventName.FOO : Symbol(EventName.FOO, Decl(foo.d.ts, 0, 30))
+>EventName : Symbol(EventName, Decl(foo.d.ts, 0, 0))
+>FOO : Symbol(EventName.FOO, Decl(foo.d.ts, 0, 30))
+
+    [EventName.BAR]: string;
+>[EventName.BAR] : Symbol([EventName.BAR], Decl(bar.ts, 1, 28))
+>EventName.BAR : Symbol(EventName.BAR, Decl(foo.d.ts, 1, 12))
+>EventName : Symbol(EventName, Decl(foo.d.ts, 0, 0))
+>BAR : Symbol(EventName.BAR, Decl(foo.d.ts, 1, 12))
+
+};
+

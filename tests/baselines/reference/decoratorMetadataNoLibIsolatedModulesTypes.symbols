@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts ===
+//// [tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts] ////
+
+=== decoratorMetadataNoLibIsolatedModulesTypes.ts ===
 export class B {
 >B : Symbol(B, Decl(decoratorMetadataNoLibIsolatedModulesTypes.ts, 0, 0))
 

@@ -1,0 +1,6 @@
+{
+    "extends": "./tsconfig-base",
+    "compilerOptions": {
+        "types": ["node", "mocha", "chai"]
+    }
+}

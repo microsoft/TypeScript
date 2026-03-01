@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/variableDeclarator1.ts] ////
+
 //// [variableDeclarator1.ts]
 var a = function () {
         var c = 1;
@@ -5,6 +7,7 @@ var a = function () {
     };
 
 //// [variableDeclarator1.js]
+"use strict";
 var a = function () {
     var c = 1;
     return c;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts] ////
+
+=== parserUsingConstructorAsIdentifier.ts ===
         function define(constructor, instanceMembers, staticMembers) {
 >define : Symbol(define, Decl(parserUsingConstructorAsIdentifier.ts, 0, 0))
 >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 0, 24))

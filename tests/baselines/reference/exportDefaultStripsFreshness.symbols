@@ -1,4 +1,6 @@
-=== tests/cases/compiler/items.ts ===
+//// [tests/cases/compiler/exportDefaultStripsFreshness.ts] ////
+
+=== items.ts ===
 export default {
     foob: "a"
 >foob : Symbol(foob, Decl(items.ts, 0, 16))
@@ -10,7 +12,7 @@ export const q = {
     foob: "b"
 >foob : Symbol(foob, Decl(items.ts, 4, 18))
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import B, {q} from "./items";
 >B : Symbol(B, Decl(index.ts, 0, 6))
 >q : Symbol(q, Decl(index.ts, 0, 11))

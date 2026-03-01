@@ -1,136 +1,140 @@
-namespace ts.projectSystem {
-    describe("unittests:: tsserver:: searching for config file", () => {
-        it("should stop at projectRootPath if given", () => {
-            const f1 = {
-                path: "/a/file1.ts",
-                content: ""
-            };
-            const configFile = {
-                path: "/tsconfig.json",
-                content: "{}"
-            };
-            const host = createServerHost([f1, configFile]);
-            const service = createProjectService(host);
-            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a");
+import {
+    baselineTsserverLogs,
+    closeFilesForSession,
+    openFilesForSession,
+    TestSession,
+} from "../helpers/tsserver.js";
+import {
+    File,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-            checkNumberOfConfiguredProjects(service, 0);
-            checkNumberOfInferredProjects(service, 1);
+describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
+    it("should stop at projectRootPath if given", () => {
+        const f1 = {
+            path: "/home/src/project/project/a/file1.ts",
+            content: "",
+        };
+        const configFile = {
+            path: "/home/src/project/project/tsconfig.json",
+            content: "{}",
+        };
+        const host = TestServerHost.createServerHost([f1, configFile]);
+        const session = new TestSession(host);
+        openFilesForSession([{ file: f1, projectRootPath: "/home/src/project/project/a" }], session);
 
-            service.closeClientFile(f1.path);
-            service.openClientFile(f1.path);
-            checkNumberOfConfiguredProjects(service, 1);
-            checkNumberOfInferredProjects(service, 0);
+        closeFilesForSession([f1], session);
+        openFilesForSession([f1], session);
+        baselineTsserverLogs("configFileSearch", "should stop at projectRootPath if given", session);
+    });
+
+    it("should use projectRootPath when searching for inferred project again", () => {
+        const projectRootPath = "/home/a/b/projects/project";
+        const configFileLocation = `${projectRootPath}/src`;
+        const f1 = {
+            path: `${configFileLocation}/file1.ts`,
+            content: "",
+        };
+        const configFile = {
+            path: `${configFileLocation}/tsconfig.json`,
+            content: "{}",
+        };
+        const configFile2 = {
+            path: "/home/a/b/projects/tsconfig.json",
+            content: "{}",
+        };
+        const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
+        const session = new TestSession(host);
+        openFilesForSession([{ file: f1, projectRootPath }], session);
+
+        // Delete config file - should create inferred project and not configured project
+        host.deleteFile(configFile.path);
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", session);
+    });
+
+    it("should use projectRootPath when searching for inferred project again 2", () => {
+        const projectRootPath = "/home/a/b/projects/project";
+        const configFileLocation = `${projectRootPath}/src`;
+        const f1 = {
+            path: `${configFileLocation}/file1.ts`,
+            content: "",
+        };
+        const configFile = {
+            path: `${configFileLocation}/tsconfig.json`,
+            content: "{}",
+        };
+        const configFile2 = {
+            path: "/home/a/b/projects/tsconfig.json",
+            content: "{}",
+        };
+        const host = TestServerHost.createServerHost([f1, configFile, configFile2]);
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            useInferredProjectPerProjectRoot: true,
         });
+        openFilesForSession([{ file: f1, projectRootPath }], session);
 
-        it("should use projectRootPath when searching for inferred project again", () => {
-            const projectDir = "/a/b/projects/project";
-            const configFileLocation = `${projectDir}/src`;
-            const f1 = {
-                path: `${configFileLocation}/file1.ts`,
-                content: ""
-            };
-            const configFile = {
-                path: `${configFileLocation}/tsconfig.json`,
-                content: "{}"
-            };
-            const configFile2 = {
-                path: "/a/b/projects/tsconfig.json",
-                content: "{}"
-            };
-            const host = createServerHost([f1, libFile, configFile, configFile2]);
-            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
-            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
+        // Delete config file - should create inferred project with project root path set
+        host.deleteFile(configFile.path);
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", session);
+    });
 
-            // Delete config file - should create inferred project and not configured project
-            host.deleteFile(configFile.path);
+    describe("when the opened file is not from project root", () => {
+        const projectRoot = "/a/b/projects/project";
+        const file: File = {
+            path: `${projectRoot}/src/index.ts`,
+            content: "let y = 10",
+        };
+        const tsconfig: File = {
+            path: `${projectRoot}/tsconfig.json`,
+            content: "{}",
+        };
+        function openClientFile(files: File[]) {
+            const host = TestServerHost.createServerHost(files);
+            const session = new TestSession(host);
+            openFilesForSession([{ file, projectRootPath: "/a/b/projects/proj" }], session);
+            return { host, session };
+        }
+
+        it("tsconfig for the file exists", () => {
+            const { host, session } = openClientFile([file, tsconfig]);
+
+            host.deleteFile(tsconfig.path);
             host.runQueuedTimeoutCallbacks();
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", service);
-        });
 
-        it("should use projectRootPath when searching for inferred project again 2", () => {
-            const projectDir = "/a/b/projects/project";
-            const configFileLocation = `${projectDir}/src`;
-            const f1 = {
-                path: `${configFileLocation}/file1.ts`,
-                content: ""
-            };
-            const configFile = {
-                path: `${configFileLocation}/tsconfig.json`,
-                content: "{}"
-            };
-            const configFile2 = {
-                path: "/a/b/projects/tsconfig.json",
-                content: "{}"
-            };
-            const host = createServerHost([f1, libFile, configFile, configFile2]);
-            const service = createProjectService(host, {
-                useSingleInferredProject: true,
-                useInferredProjectPerProjectRoot: true,
-                logger: createLoggerWithInMemoryLogs(),
-            });
-            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
-
-            // Delete config file - should create inferred project with project root path set
-            host.deleteFile(configFile.path);
+            host.writeFile(tsconfig.path, tsconfig.content);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", service);
+
+            baselineTsserverLogs("configFileSearch", "tsconfig for the file exists", session);
         });
 
-        describe("when the opened file is not from project root", () => {
-            const projectRoot = "/a/b/projects/project";
-            const file: File = {
-                path: `${projectRoot}/src/index.ts`,
-                content: "let y = 10"
-            };
-            const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
-                content: "{}"
-            };
-            function openClientFile(files: File[]) {
-                const host = createServerHost(files);
-                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
-                projectService.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a/b/projects/proj");
-                return { host, projectService };
-            }
+        it("tsconfig for the file does not exist", () => {
+            const { host, session } = openClientFile([file]);
 
-            it("tsconfig for the file exists", () => {
-                const { host, projectService } = openClientFile([file, libFile, tsconfig]);
+            host.writeFile(tsconfig.path, tsconfig.content);
+            host.runQueuedTimeoutCallbacks();
 
-                host.deleteFile(tsconfig.path);
-                host.runQueuedTimeoutCallbacks();
+            host.deleteFile(tsconfig.path);
+            host.runQueuedTimeoutCallbacks();
 
-                host.writeFile(tsconfig.path, tsconfig.content);
-                host.runQueuedTimeoutCallbacks();
-
-                baselineTsserverLogs("configFileSearch", "tsconfig for the file exists", projectService);
-            });
-
-            it("tsconfig for the file does not exist", () => {
-                const { host, projectService } = openClientFile([file, libFile]);
-
-                host.writeFile(tsconfig.path, tsconfig.content);
-                host.runQueuedTimeoutCallbacks();
-
-                host.deleteFile(tsconfig.path);
-                host.runQueuedTimeoutCallbacks();
-
-                baselineTsserverLogs("configFileSearch", "tsconfig for the file does not exist", projectService);
-            });
-        });
-
-        describe("should not search and watch config files from directories that cannot be watched", () => {
-            function verifyConfigFileWatch(scenario: string, projectRootPath: string | undefined) {
-                it(scenario, () => {
-                    const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
-                    const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
-                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
-                    service.openClientFile(path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRootPath);
-                    baselineTsserverLogs("configFileSearch", scenario, service);
-                });
-            }
-            verifyConfigFileWatch("when projectRootPath is not present", /*projectRootPath*/ undefined);
-            verifyConfigFileWatch("when projectRootPath is present but file is not from project root", "/a/b");
+            baselineTsserverLogs("configFileSearch", "tsconfig for the file does not exist", session);
         });
     });
-}
+
+    describe("should not search and watch config files from directories that cannot be watched", () => {
+        function verifyConfigFileWatch(scenario: string, projectRootPath: string | undefined) {
+            it(scenario, () => {
+                const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
+                const host = TestServerHost.createServerHost([{ path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const session = new TestSession(host);
+                openFilesForSession([{ file: path, projectRootPath }], session);
+                baselineTsserverLogs("configFileSearch", scenario, session);
+            });
+        }
+        verifyConfigFileWatch("when projectRootPath is not present", /*projectRootPath*/ undefined);
+        verifyConfigFileWatch("when projectRootPath is present but file is not from project root", "/a/b");
+    });
+});

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/nestedPrototypeAssignment.ts] ////
+
+=== mod.js ===
 // #24111 -- shouldn't assert
 C.prototype = {}
 >C.prototype : Symbol(C.prototype, Decl(mod.js, 0, 0), Decl(mod.js, 2, 2))

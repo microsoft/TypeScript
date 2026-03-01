@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsx/file.tsx ===
-declare module JSX {
+//// [tests/cases/conformance/jsx/tsxPreserveEmit3.tsx] ////
+
+=== file.tsx ===
+declare namespace JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(file.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 23))
 
 	interface IntrinsicElements {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
@@ -13,11 +15,11 @@ declare module JSX {
 	}
 }
 
-=== tests/cases/conformance/jsx/test.d.ts ===
+=== test.d.ts ===
 export var React;
 >React : Symbol(React, Decl(test.d.ts, 0, 10))
 
-=== tests/cases/conformance/jsx/react-consumer.tsx ===
+=== react-consumer.tsx ===
 // This import should be elided
 import {React} from "./test";
 >React : Symbol(React, Decl(react-consumer.tsx, 1, 8))

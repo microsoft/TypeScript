@@ -1,19 +1,27 @@
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentAndDeclaration.ts] ////
+
+=== foo_0.ts ===
 export enum E1 {
 >E1 : E1
+>   : ^^
 
 	A,B,C
 >A : E1.A
+>  : ^^^^
 >B : E1.B
+>  : ^^^^
 >C : E1.C
+>  : ^^^^
 }
 
 class C1 {
 >C1 : C1
+>   : ^^
 
 }
 
 // Invalid, as there is already an exported member.
 export = C1;
 >C1 : C1
+>   : ^^
 

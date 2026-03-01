@@ -1,8 +1,8 @@
-tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts(6,11): error TS2320: Interface 'C' cannot simultaneously extend types 'A<string>' and 'A<number>'.
+multipleBaseInterfaesWithIncompatibleProperties.ts(6,11): error TS2320: Interface 'C' cannot simultaneously extend types 'A<string>' and 'A<number>'.
   Named property 'x' of types 'A<string>' and 'A<number>' are not identical.
 
 
-==== tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts (1 errors) ====
+==== multipleBaseInterfaesWithIncompatibleProperties.ts (1 errors) ====
     interface A<T>
     {
         x: T

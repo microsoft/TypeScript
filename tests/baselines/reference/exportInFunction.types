@@ -1,6 +1,9 @@
-=== tests/cases/compiler/exportInFunction.ts ===
+//// [tests/cases/compiler/exportInFunction.ts] ////
+
+=== exportInFunction.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     export = 0;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts] ////
+
 //// [staticIndexSignature4.ts]
 class B {
     static readonly [s: string]: number;
@@ -38,16 +40,10 @@ if (v === 0) {
 
 //// [staticIndexSignature4.js]
 "use strict";
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class B {
+}
+class D {
+}
 if (v === 0) {
     B.a = D.a;
     B[2] = D[2];

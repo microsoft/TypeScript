@@ -1,7 +1,7 @@
-tests/cases/compiler/forInStatement7.ts(3,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+forInStatement7.ts(3,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
 
 
-==== tests/cases/compiler/forInStatement7.ts (1 errors) ====
+==== forInStatement7.ts (1 errors) ====
     var a: number;
     var expr: any;
     for (a in expr) {

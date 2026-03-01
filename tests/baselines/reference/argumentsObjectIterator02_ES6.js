@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsObjectIterator02_ES6.ts] ////
+
 //// [argumentsObjectIterator02_ES6.ts]
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
     let blah = arguments[Symbol.iterator];
@@ -12,6 +14,7 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 
 
 //// [argumentsObjectIterator02_ES6.js]
+"use strict";
 function doubleAndReturnAsArray(x, y, z) {
     let blah = arguments[Symbol.iterator];
     let result = [];

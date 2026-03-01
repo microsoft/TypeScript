@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowBinaryAndExpression.ts] ////
+
 //// [controlFlowBinaryAndExpression.ts]
 let x: string | number | boolean;
 let cond: boolean;
@@ -11,8 +13,9 @@ x; // string | number
 
 
 //// [controlFlowBinaryAndExpression.js]
-var x;
-var cond;
+"use strict";
+let x;
+let cond;
 (x = "") && (x = 0);
 x; // string | number
 x = "";

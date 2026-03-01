@@ -1,73 +1,106 @@
-=== tests/cases/conformance/statements/returnStatements/returnStatements.ts ===
+//// [tests/cases/conformance/statements/returnStatements/returnStatements.ts] ////
+
+=== returnStatements.ts ===
 // all the following should be valid
 function fn1(): number { return 1; }
 >fn1 : () => number
+>    : ^^^^^^      
 >1 : 1
+>  : ^
 
 function fn2(): string { return ''; }
 >fn2 : () => string
+>    : ^^^^^^      
 >'' : ""
+>   : ^^
 
 function fn3(): void { return undefined; }
 >fn3 : () => void
+>    : ^^^^^^    
 >undefined : undefined
+>          : ^^^^^^^^^
 
 function fn4(): void { return; }
 >fn4 : () => void
+>    : ^^^^^^    
 
 function fn5(): boolean { return true; }
 >fn5 : () => boolean
+>    : ^^^^^^       
 >true : true
+>     : ^^^^
 
 function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
+>    : ^^^^^^    
 >new Date(12) : Date
+>             : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 
 function fn7(): any { return null; }
 >fn7 : () => any
->null : null
+>    : ^^^^^^   
 
 function fn8(): any { return; } // OK, eq. to 'return undefined'
 >fn8 : () => any
+>    : ^^^^^^   
 
 interface I { id: number }
 >id : number
+>   : ^^^^^^
 
 class C implements I {
 >C : C
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 
     dispose() {}
 >dispose : () => void
+>        : ^^^^^^^^^^
 }
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     name: string;
 >name : string
+>     : ^^^^^^
 }
 function fn10(): I { return { id: 12 }; } 
 >fn10 : () => I
+>     : ^^^^^^ 
 >{ id: 12 } : { id: number; }
+>           : ^^^^^^^^^^^^^^^
 >id : number
+>   : ^^^^^^
 >12 : 12
+>   : ^^
 
 function fn11(): I { return new C(); }
 >fn11 : () => I
+>     : ^^^^^^ 
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 function fn12(): C { return new D(); }
 >fn12 : () => C
+>     : ^^^^^^ 
 >new D() : D
+>        : ^
 >D : typeof D
+>  : ^^^^^^^^
 
 function fn13(): C { return null; }
 >fn13 : () => C
->null : null
+>     : ^^^^^^ 
 

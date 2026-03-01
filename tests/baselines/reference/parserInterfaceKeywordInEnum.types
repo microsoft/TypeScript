@@ -1,8 +1,12 @@
-=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum.ts] ////
+
+=== parserInterfaceKeywordInEnum.ts ===
 enum Bar {
 >Bar : Bar
+>    : ^^^
 
     interface,
 >interface : Bar.interface
+>          : ^^^^^^^^^^^^^
 }
 

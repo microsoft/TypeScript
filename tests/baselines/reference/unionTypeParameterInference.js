@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeParameterInference.ts] ////
+
 //// [unionTypeParameterInference.ts]
 // Regression test for #5861
 
@@ -11,6 +13,7 @@ function unlift<U>(value: U | Foo<U>): U {
 
 
 //// [unionTypeParameterInference.js]
+"use strict";
 // Regression test for #5861
 function unlift(value) {
     return lift(value).prop;

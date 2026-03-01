@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitCommentsOnlyFile.ts] ////
+
 //// [emitCommentsOnlyFile.ts]
 /**
 * @name Foo
@@ -28,6 +30,7 @@
 
 
 //// [emitCommentsOnlyFile.js]
+"use strict";
 /**
 * @name Foo
 * @class

@@ -1,7 +1,7 @@
-tests/cases/compiler/callOnClass.ts(2,9): error TS2348: Value of type 'typeof C' is not callable. Did you mean to include 'new'?
+callOnClass.ts(2,9): error TS2348: Value of type 'typeof C' is not callable. Did you mean to include 'new'?
 
 
-==== tests/cases/compiler/callOnClass.ts (1 errors) ====
+==== callOnClass.ts (1 errors) ====
     class C { }
     var c = C();
             ~~~

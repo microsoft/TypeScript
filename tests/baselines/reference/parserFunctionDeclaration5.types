@@ -1,7 +1,11 @@
-=== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts] ////
+
+=== parserFunctionDeclaration5.ts ===
 function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 
 function foo() { }
 >foo : () => any
+>    : ^^^^^^^^^
 

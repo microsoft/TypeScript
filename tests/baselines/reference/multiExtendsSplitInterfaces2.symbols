@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiExtendsSplitInterfaces2.ts ===
+//// [tests/cases/compiler/multiExtendsSplitInterfaces2.ts] ////
+
+=== multiExtendsSplitInterfaces2.ts ===
 interface A {
 >A : Symbol(A, Decl(multiExtendsSplitInterfaces2.ts, 0, 0))
 

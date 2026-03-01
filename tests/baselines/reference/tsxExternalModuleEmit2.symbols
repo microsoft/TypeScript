@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/modules.d.ts ===
+//// [tests/cases/conformance/jsx/tsxExternalModuleEmit2.tsx] ////
+
+=== modules.d.ts ===
 declare module 'mod' {
 >'mod' : Symbol("mod", Decl(modules.d.ts, 0, 0))
 
@@ -9,7 +11,7 @@ declare module 'mod' {
 >y : Symbol(y, Decl(modules.d.ts, 1, 5))
 }
 
-=== tests/cases/conformance/jsx/app.tsx ===
+=== app.tsx ===
 import Main from 'mod';
 >Main : Symbol(Main, Decl(app.tsx, 0, 6))
 

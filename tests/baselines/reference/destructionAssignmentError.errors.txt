@@ -1,10 +1,10 @@
-tests/cases/compiler/destructionAssignmentError.ts(6,3): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/destructionAssignmentError.ts(6,10): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
-tests/cases/compiler/destructionAssignmentError.ts(11,3): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/destructionAssignmentError.ts(12,1): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+destructionAssignmentError.ts(6,3): error TS2695: Left side of comma operator is unused and has no side effects.
+destructionAssignmentError.ts(6,10): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
+destructionAssignmentError.ts(11,3): error TS2695: Left side of comma operator is unused and has no side effects.
+destructionAssignmentError.ts(12,1): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
 
 
-==== tests/cases/compiler/destructionAssignmentError.ts (4 errors) ====
+==== destructionAssignmentError.ts (4 errors) ====
     declare function fn(): { a: 1, b: 2 }
     let a: number;
     let b: number;
@@ -14,7 +14,7 @@ tests/cases/compiler/destructionAssignmentError.ts(12,1): error TS2809: Declarat
       ~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
              ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
     
     ({ a, b } =
     fn());
@@ -24,4 +24,4 @@ tests/cases/compiler/destructionAssignmentError.ts(12,1): error TS2809: Declarat
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     = fn();
     ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.

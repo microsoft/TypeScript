@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingRestGenericCall.ts] ////
+
 //// [narrowingRestGenericCall.ts]
 interface Slugs {
   foo: string;
@@ -14,6 +16,7 @@ call(obj, ({foo, ...rest}) => {
 });
 
 //// [narrowingRestGenericCall.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -28,7 +31,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 function call(obj, cb) {
     cb(obj);
 }
-call(obj, function (_a) {
-    var foo = _a.foo, rest = __rest(_a, ["foo"]);
+call(obj, (_a) => {
+    var { foo } = _a, rest = __rest(_a, ["foo"]);
     console.log(rest.bar);
 });

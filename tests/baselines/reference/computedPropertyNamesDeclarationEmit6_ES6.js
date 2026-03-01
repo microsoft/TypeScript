@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit6_ES6.ts] ////
+
 //// [computedPropertyNamesDeclarationEmit6_ES6.ts]
 var v = {
   [-1]: {},
@@ -8,6 +10,7 @@ var v = {
 
 
 //// [computedPropertyNamesDeclarationEmit6_ES6.js]
+"use strict";
 var v = {
     [-1]: {},
     [+1]: {},

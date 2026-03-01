@@ -1,3 +1,25 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTagsCallback.js ===
+// /**
+//  * @callback cb
+//              ^^
+// | ----------------------------------------------------------------------
+// | type cb = (x: string) => any
+// | ----------------------------------------------------------------------
+//  * @param {string} x - x comment
+//  */
+// 
+// /**
+//  * @param {cb} bar -callback comment
+//            ^^
+// | ----------------------------------------------------------------------
+// | type cb = (x: string) => any
+// | ----------------------------------------------------------------------
+//  */
+// function foo(bar) {
+//     bar(bar);
+// }
+
 [
   {
     "marker": {
@@ -5,7 +27,7 @@
       "position": 19,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -87,7 +109,7 @@
       "position": 73,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {

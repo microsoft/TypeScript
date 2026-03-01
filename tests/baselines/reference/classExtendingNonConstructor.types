@@ -1,43 +1,66 @@
-=== tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts] ////
+
+=== classExtendingNonConstructor.ts ===
 var x: {};
 >x : {}
+>  : ^^
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     this.x = 1;
 >this.x = 1 : 1
+>           : ^
 >this.x : any
+>       : ^^^
 >this : any
+>     : ^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 class C1 extends undefined { }
 >C1 : C1
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 class C2 extends true { }
 >C2 : C2
+>   : ^^
 >true : true
+>     : ^^^^
 
 class C3 extends false { }
 >C3 : C3
+>   : ^^
 >false : false
+>      : ^^^^^
 
 class C4 extends 42 { }
 >C4 : C4
+>   : ^^
 >42 : 42
+>   : ^^
 
 class C5 extends "hello" { }
 >C5 : C5
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 class C6 extends x { }
 >C6 : C6
+>   : ^^
 >x : {}
+>  : ^^
 
 class C7 extends foo { }
 >C7 : C7
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 

@@ -1,36 +1,61 @@
-=== tests/cases/compiler/reactTagNameComponentWithPropsNoOOM2.tsx ===
+//// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM2.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 5,000
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 100,000
+
+=== reactTagNameComponentWithPropsNoOOM2.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare const Tag: keyof React.ReactHTML;
 >Tag : keyof React.ReactHTML
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 
 const classes = "";
 >classes : ""
+>        : ^^
 >"" : ""
+>   : ^^
 
 const rest: React.HTMLAttributes<HTMLElement> = {};
 >rest : React.HTMLAttributes<HTMLElement>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >{} : {}
+>   : ^^
 
 const children: any[] = [];
 >children : any[]
+>         : ^^^^^
 >[] : never[]
+>   : ^^^^^^^
 
 <Tag className={classes} {...rest}>
 ><Tag className={classes} {...rest}>{children}</Tag> : JSX.Element
+>                                                    : ^^^^^^^^^^^
 >Tag : keyof React.ReactHTML
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >className : string
+>          : ^^^^^^
 >classes : ""
+>        : ^^
 >rest : React.HTMLAttributes<HTMLElement>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 {children}
 >children : any[]
+>         : ^^^^^
 
 </Tag>
 >Tag : keyof React.ReactHTML
+>    : ^^^^^^^^^^^^^^^^^^^^^
 

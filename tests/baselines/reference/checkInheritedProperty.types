@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/checkInheritedProperty.ts] ////
+
+=== checkInheritedProperty.ts ===
+class Base {
+>Base : Base
+>     : ^^^^
+}
+
+declare const BaseFactory: new() => Base & { c: string }
+>BaseFactory : new () => Base & { c: string; }
+>            : ^^^^^^^^^^                     
+>c : string
+>  : ^^^^^^
+
+class Derived extends BaseFactory {
+>Derived : Derived
+>        : ^^^^^^^
+>BaseFactory : Base & { c: string; }
+>            : ^^^^^^^^^^^^      ^^^
+
+    a = this.b
+>a : string
+>  : ^^^^^^
+>this.b : string
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>b : string
+>  : ^^^^^^
+
+    b = "abc"
+>b : string
+>  : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+}
+

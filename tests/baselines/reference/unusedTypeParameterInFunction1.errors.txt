@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameterInFunction1.ts(1,12): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParameterInFunction1.ts(1,12): error TS6133: 'T' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameterInFunction1.ts (1 errors) ====
+==== unusedTypeParameterInFunction1.ts (1 errors) ====
     function f1<T>() {
                ~~~
 !!! error TS6133: 'T' is declared but its value is never read.

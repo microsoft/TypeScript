@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericIsNeverEmptyObject.ts ===
+//// [tests/cases/compiler/genericIsNeverEmptyObject.ts] ////
+
+=== genericIsNeverEmptyObject.ts ===
 // Repro from #29067
 
 function test<T extends { a: string }>(obj: T) {

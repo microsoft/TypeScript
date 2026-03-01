@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedBindingsReassignedInLoop5.ts ===
+//// [tests/cases/compiler/blockScopedBindingsReassignedInLoop5.ts] ////
+
+=== blockScopedBindingsReassignedInLoop5.ts ===
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : Symbol(x, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 8))
 >y : Symbol(y, Decl(blockScopedBindingsReassignedInLoop5.ts, 0, 15))

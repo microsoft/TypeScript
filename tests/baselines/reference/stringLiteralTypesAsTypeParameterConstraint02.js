@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint02.ts] ////
+
 //// [stringLiteralTypesAsTypeParameterConstraint02.ts]
 function foo<T extends "foo">(f: (x: T) => T) {
     return f;
@@ -7,11 +9,12 @@ let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 let fResult = f("foo");
 
 //// [stringLiteralTypesAsTypeParameterConstraint02.js]
+"use strict";
 function foo(f) {
     return f;
 }
-var f = foo(function (y) { return y === "foo" ? y : "foo"; });
-var fResult = f("foo");
+let f = foo((y) => y === "foo" ? y : "foo");
+let fResult = f("foo");
 
 
 //// [stringLiteralTypesAsTypeParameterConstraint02.d.ts]

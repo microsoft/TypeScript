@@ -1,72 +1,105 @@
-=== tests/cases/compiler/genericObjectSpreadResultInSwitch.ts ===
+//// [tests/cases/compiler/genericObjectSpreadResultInSwitch.ts] ////
+
+=== genericObjectSpreadResultInSwitch.ts ===
 type Params = {
->Params : { foo: string; } & ({ tag: 'a'; type: number; } | { tag: 'b'; type: string; })
+>Params : Params
+>       : ^^^^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
 } & ({ tag: 'a'; type: number } | { tag: 'b'; type: string });
 >tag : "a"
+>    : ^^^
 >type : number
+>     : ^^^^^^
 >tag : "b"
+>    : ^^^
 >type : string
+>     : ^^^^^^
 
 const getType = <P extends Params>(params: P) => {
 >getType : <P extends Params>(params: P) => Omit<P, "foo">
+>        : ^ ^^^^^^^^^      ^^      ^^ ^^^^^^^^^^^^^^^^^^^
 ><P extends Params>(params: P) => {    const {        // Omit        foo,        ...rest    } = params;    return rest;} : <P extends Params>(params: P) => Omit<P, "foo">
+>                                                                                                                        : ^ ^^^^^^^^^      ^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >params : P
+>       : ^
 
     const {
         // Omit
         foo,
 >foo : string
+>    : ^^^^^^
 
         ...rest
 >rest : Omit<P, "foo">
+>     : ^^^^^^^^^^^^^^
 
     } = params;
 >params : Params
+>       : ^^^^^^
 
     return rest;
 >rest : Omit<P, "foo">
+>     : ^^^^^^^^^^^^^^
 
 };
 
 declare const params: Params;
 >params : Params
+>       : ^^^^^^
 
 switch (params.tag) {
 >params.tag : "a" | "b"
+>           : ^^^^^^^^^
 >params : Params
+>       : ^^^^^^
 >tag : "a" | "b"
+>    : ^^^^^^^^^
 
     case 'a': {
 >'a' : "a"
+>    : ^^^
 
         // TS 4.2: number
         // TS 4.3: string | number
         const result = getType(params).type;
 >result : number
+>       : ^^^^^^
 >getType(params).type : number
+>                     : ^^^^^^
 >getType(params) : Omit<{ foo: string; } & { tag: "a"; type: number; }, "foo">
+>                : ^^^^^^^^^^^^      ^^^^^^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^
 >getType : <P extends Params>(params: P) => Omit<P, "foo">
+>        : ^ ^^^^^^^^^      ^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >params : { foo: string; } & { tag: "a"; type: number; }
+>       : ^^^^^^^      ^^^^^^^^^^^^^   ^^^^^^^^      ^^^
 >type : number
+>     : ^^^^^^
 
         break;
     }
     case 'b': {
 >'b' : "b"
+>    : ^^^
 
         // TS 4.2: string
         // TS 4.3: string | number
         const result = getType(params).type;
 >result : string
+>       : ^^^^^^
 >getType(params).type : string
+>                     : ^^^^^^
 >getType(params) : Omit<{ foo: string; } & { tag: "b"; type: string; }, "foo">
+>                : ^^^^^^^^^^^^      ^^^^^^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^
 >getType : <P extends Params>(params: P) => Omit<P, "foo">
+>        : ^ ^^^^^^^^^      ^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >params : { foo: string; } & { tag: "b"; type: string; }
+>       : ^^^^^^^      ^^^^^^^^^^^^^   ^^^^^^^^      ^^^
 >type : string
+>     : ^^^^^^
 
         break;
     }

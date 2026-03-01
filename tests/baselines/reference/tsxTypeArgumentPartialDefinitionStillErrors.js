@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxTypeArgumentPartialDefinitionStillErrors.ts] ////
+
 //// [file.tsx]
 declare namespace JSX {
     interface Element {
@@ -13,6 +15,7 @@ function SFC<T>(props: Record<string, T>) {
 
 
 //// [file.jsx]
+"use strict";
 function SFC(props) {
     return '';
 }

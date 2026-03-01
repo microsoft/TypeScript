@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithInterface.ts] ////
+
 //// [circularTypeAliasForUnionWithInterface.ts]
 var v0: T0;
 type T0 = string | I0;
@@ -31,6 +33,7 @@ interface I4 {
 
 
 //// [circularTypeAliasForUnionWithInterface.js]
+"use strict";
 var v0;
 var v1;
 var v2;

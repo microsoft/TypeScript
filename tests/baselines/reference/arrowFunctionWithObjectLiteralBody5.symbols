@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionWithObjectLiteralBody5.ts ===
+//// [tests/cases/compiler/arrowFunctionWithObjectLiteralBody5.ts] ////
+
+=== arrowFunctionWithObjectLiteralBody5.ts ===
 var a = () => <Error>{ name: "foo", message: "bar" };      
 >a : Symbol(a, Decl(arrowFunctionWithObjectLiteralBody5.ts, 0, 3))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

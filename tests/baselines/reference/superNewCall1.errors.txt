@@ -1,10 +1,10 @@
-tests/cases/compiler/superNewCall1.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
-tests/cases/compiler/superNewCall1.ts(9,13): error TS2351: This expression is not constructable.
+superNewCall1.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+superNewCall1.ts(9,13): error TS2351: This expression is not constructable.
   Type 'A<number, string>' has no construct signatures.
-tests/cases/compiler/superNewCall1.ts(9,13): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+superNewCall1.ts(9,13): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/superNewCall1.ts (3 errors) ====
+==== superNewCall1.ts (3 errors) ====
     class A<T1, T2> {
         constructor(private map: (value: T1) => T2) {
     
@@ -13,15 +13,13 @@ tests/cases/compiler/superNewCall1.ts(9,13): error TS17011: 'super' must be call
     
     class B extends A<number, string> {
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
             new super(value => String(value));
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ~~~~~
 !!! error TS2351: This expression is not constructable.
 !!! error TS2351:   Type 'A<number, string>' has no construct signatures.
                 ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
         }
-    ~~~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

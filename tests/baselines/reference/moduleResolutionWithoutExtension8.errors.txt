@@ -1,8 +1,8 @@
-/src/bar.cts(2,8): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+/src/bar.cts(2,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 
 
 ==== /src/bar.cts (1 errors) ====
     // Extensionless relative path dynamic import in a cjs module
     import("./foo").then(x => x); // should error, ask for extension
            ~~~~~~~
-!!! error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.

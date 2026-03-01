@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/circularInlineMappedGenericTupleTypeNoCrash.ts] ////
+
+=== circularInlineMappedGenericTupleTypeNoCrash.ts ===
+class Foo<Elements extends readonly unknown[]> {
+>Foo : Foo<Elements>
+>    : ^^^^^^^^^^^^^
+
+  public readonly elements: { [P in keyof Elements]: { bar: Elements[P] } };
+>elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>bar : Elements[P]
+>    : ^^^^^^^^^^^
+
+  public constructor(
+    ...elements: { [P in keyof Elements]: { bar: Elements[P] } }
+>elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>bar : Elements[P]
+>    : ^^^^^^^^^^^
+
+  ) {
+    this.elements = elements;
+>this.elements = elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>this.elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>              : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>this : this
+>     : ^^^^
+>elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+  }
+
+  public add(): Foo<[...Elements, "abc"]> {
+>add : () => Foo<[...Elements, "abc"]>
+>    : ^^^^^^                         
+
+    return new Foo<[...Elements, "abc"]>(...this.elements, { bar: "abc" });
+>new Foo<[...Elements, "abc"]>(...this.elements, { bar: "abc" }) : Foo<[...Elements, "abc"]>
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>...this.elements : { bar: unknown; }
+>                 : ^^^^^^^^^^^^^^^^^
+>this.elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>              : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>this : this
+>     : ^^^^
+>elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
+>{ bar: "abc" } : { bar: string; }
+>               : ^^^^^^^^^^^^^^^^
+>bar : string
+>    : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+  }
+}
+

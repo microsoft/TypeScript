@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerS7.2_A1.5_T2.ts] ////
+
 //// [scannerS7.2_A1.5_T2.ts]
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
@@ -25,6 +27,7 @@ if (x !== 1) {
 
 
 //// [scannerS7.2_A1.5_T2.js]
+"use strict";
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
 /**

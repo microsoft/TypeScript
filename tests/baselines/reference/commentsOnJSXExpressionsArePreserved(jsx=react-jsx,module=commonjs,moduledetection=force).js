@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx] ////
+
 //// [commentsOnJSXExpressionsArePreserved.tsx]
 // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
 namespace JSX {}
@@ -22,13 +24,10 @@ class Component {
 
 //// [commentsOnJSXExpressionsArePreserved.js]
 "use strict";
-exports.__esModule = true;
-var jsx_runtime_1 = require("react/jsx-runtime");
-var Component = /** @class */ (function () {
-    function Component() {
-    }
-    Component.prototype.render = function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("react/jsx-runtime");
+class Component {
+    render() {
         return (0, jsx_runtime_1.jsx)("div", { children: null /* preserved */ });
-    };
-    return Component;
-}());
+    }
+}

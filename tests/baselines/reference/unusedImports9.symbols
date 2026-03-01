@@ -1,8 +1,10 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/unusedImports9.ts] ////
+
+=== file2.ts ===
 import c = require('./file1')
 >c : Symbol(c, Decl(file2.ts, 0, 0))
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export class Calculator {
 >Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
 

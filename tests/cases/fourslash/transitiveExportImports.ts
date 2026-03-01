@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @module: commonjs
+
 // @Filename: a.ts
 ////[|class /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////}|]
@@ -21,8 +23,7 @@ const aRanges = [a0, a1];
 const bRanges = [b0, c2];
 const cRanges = [c0, c1];
 
-verify.baselineFindAllReferences('1', '2', '3', '4')
-
-verify.rangesAreRenameLocations(aRanges);
-verify.rangesAreRenameLocations(bRanges);
-verify.rangesAreRenameLocations(cRanges);
+verify.baselineFindAllReferences('1', '2', '3', '4');
+verify.baselineRename(aRanges);
+verify.baselineRename(bRanges);
+verify.baselineRename(cRanges);

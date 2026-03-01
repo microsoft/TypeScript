@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeEquivalence.ts] ////
+
 //// [intersectionTypeEquivalence.ts]
 interface A { a: string }
 interface B { b: string }
@@ -18,6 +20,7 @@ var z1: A & typeof bc;
 
 
 //// [intersectionTypeEquivalence.js]
+"use strict";
 // A & B is equivalent to B & A.
 var y;
 var y;

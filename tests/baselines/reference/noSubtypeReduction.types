@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/noSubtypeReduction.ts] ////
+
+=== noSubtypeReduction.ts ===
+// Repro from #53425
+
+export interface IA {
+    arr: { A: number; }[];
+>arr : { A: number; }[]
+>    : ^^^^^      ^^^^^
+>A : number
+>  : ^^^^^^
+}
+
+export interface IAB {
+    arr: { A: number; B: number; }[];
+>arr : { A: number; B: number; }[]
+>    : ^^^^^      ^^^^^      ^^^^^
+>A : number
+>  : ^^^^^^
+>B : number
+>  : ^^^^^^
+}
+
+export function F(x: IA | IAB) {
+>F : (x: IA | IAB) => void
+>  : ^ ^^        ^^^^^^^^^
+>x : IA | IAB
+>  : ^^^^^^^^
+
+    const useB = (t: number) => { };
+>useB : (t: number) => void
+>     : ^ ^^      ^^^^^^^^^
+>(t: number) => { } : (t: number) => void
+>                   : ^ ^^      ^^^^^^^^^
+>t : number
+>  : ^^^^^^
+
+    for (const el of x.arr) {
+>el : { A: number; } | { A: number; B: number; }
+>   : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+>x.arr : { A: number; }[] | { A: number; B: number; }[]
+>      : ^^^^^      ^^^^^^^^^^^^^      ^^^^^      ^^^^^
+>x : IA | IAB
+>  : ^^^^^^^^
+>arr : { A: number; }[] | { A: number; B: number; }[]
+>    : ^^^^^      ^^^^^^^^^^^^^      ^^^^^      ^^^^^
+
+        if ('A' in el) { }
+>'A' in el : boolean
+>          : ^^^^^^^
+>'A' : "A"
+>    : ^^^
+>el : { A: number; } | { A: number; B: number; }
+>   : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+
+        if ('B' in el) {
+>'B' in el : boolean
+>          : ^^^^^^^
+>'B' : "B"
+>    : ^^^
+>el : { A: number; } | { A: number; B: number; }
+>   : ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+
+            useB(el.B);
+>useB(el.B) : void
+>           : ^^^^
+>useB : (t: number) => void
+>     : ^ ^^      ^^^^^^^^^
+>el.B : number
+>     : ^^^^^^
+>el : { A: number; B: number; }
+>   : ^^^^^      ^^^^^      ^^^
+>B : number
+>  : ^^^^^^
+        }
+    }
+}
+

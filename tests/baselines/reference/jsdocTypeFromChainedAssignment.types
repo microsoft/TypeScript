@@ -1,109 +1,190 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment.ts] ////
+
+=== a.js ===
 function A () {
 >A : typeof A
+>  : ^^^^^^^^
 
     this.x = 1
 >this.x = 1 : 1
+>           : ^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
     /** @type {1} */
     this.first = this.second = 1
 >this.first = this.second = 1 : 1
+>                             : ^
 >this.first : 1
+>           : ^
 >this : this
+>     : ^^^^
 >first : 1
+>      : ^
 >this.second = 1 : 1
+>                : ^
 >this.second : 1
+>            : ^
 >this : this
+>     : ^^^^
 >second : 1
+>       : ^
 >1 : 1
+>  : ^
 }
 /** @param {number} n */
 A.prototype.y = A.prototype.z = function f(n) {
 >A.prototype.y = A.prototype.z = function f(n) {    return n + this.x} : (n: number) => number
+>                                                                      : ^ ^^      ^^^^^^^^^^^
 >A.prototype.y : any
+>              : ^^^
 >A.prototype : any
+>            : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >y : any
+>  : ^^^
 >A.prototype.z = function f(n) {    return n + this.x} : (n: number) => number
+>                                                      : ^ ^^      ^^^^^^^^^^^
 >A.prototype.z : any
+>              : ^^^
 >A.prototype : any
+>            : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >prototype : any
+>          : ^^^
 >z : any
+>  : ^^^
 >function f(n) {    return n + this.x} : (n: number) => number
+>                                      : ^ ^^      ^^^^^^^^^^^
 >f : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     return n + this.x
 >n + this.x : number
+>           : ^^^^^^
 >n : number
+>  : ^^^^^^
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 }
 /** @param {number} m */
 A.s = A.t = function g(m) {
 >A.s = A.t = function g(m) {    return m + this.x} : (m: number) => any
+>                                                  : ^ ^^      ^^^^^^^^
 >A.s : (m: number) => any
+>    : ^ ^^      ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >s : (m: number) => any
+>  : ^ ^^      ^^^^^^^^
 >A.t = function g(m) {    return m + this.x} : (m: number) => any
+>                                            : ^ ^^      ^^^^^^^^
 >A.t : (m: number) => any
+>    : ^ ^^      ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >t : (m: number) => any
+>  : ^ ^^      ^^^^^^^^
 >function g(m) {    return m + this.x} : (m: number) => any
+>                                      : ^ ^^      ^^^^^^^^
 >g : (m: number) => any
+>  : ^ ^^      ^^^^^^^^
 >m : number
+>  : ^^^^^^
 
     return m + this.x
 >m + this.x : any
+>           : ^^^
 >m : number
+>  : ^^^^^^
 >this.x : any
+>       : ^^^
 >this : typeof A
+>     : ^^^^^^^^
 >x : any
+>  : ^^^
 }
 var a = new A()
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 a.y('no') // error
 >a.y('no') : number
+>          : ^^^^^^
 >a.y : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
+>  : ^
 >y : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >'no' : "no"
+>     : ^^^^
 
 a.z('not really') // error
 >a.z('not really') : number
+>                  : ^^^^^^
 >a.z : (n: number) => number
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
+>  : ^
 >z : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >'not really' : "not really"
+>             : ^^^^^^^^^^^^
 
 A.s('still no') // error
 >A.s('still no') : any
+>                : ^^^
 >A.s : (m: number) => any
+>    : ^ ^^      ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >s : (m: number) => any
+>  : ^ ^^      ^^^^^^^^
 >'still no' : "still no"
+>           : ^^^^^^^^^^
 
 A.t('not here either') // error
 >A.t('not here either') : any
+>                       : ^^^
 >A.t : (m: number) => any
+>    : ^ ^^      ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >t : (m: number) => any
+>  : ^ ^^      ^^^^^^^^
 >'not here either' : "not here either"
+>                  : ^^^^^^^^^^^^^^^^^
 
 a.first = 10 // error: '10' isn't assignable to '1'
 >a.first = 10 : 10
+>             : ^^
 >a.first : 1
+>        : ^
 >a : A
+>  : ^
 >first : 1
+>      : ^
 >10 : 10
+>   : ^^
 

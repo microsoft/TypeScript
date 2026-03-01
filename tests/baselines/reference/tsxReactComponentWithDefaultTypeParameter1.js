@@ -1,4 +1,8 @@
+//// [tests/cases/conformance/jsx/tsxReactComponentWithDefaultTypeParameter1.tsx] ////
+
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface Prop {
@@ -14,6 +18,7 @@ let x = <MyComp a={10} b="hi" />
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
-var React = require("react");
-var x = <MyComp a={10} b="hi"/>;
+/// <reference path="/.lib/react.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
+let x = <MyComp a={10} b="hi"/>;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentInES6.ts] ////
+
 //// [emitClassDeclarationWithTypeArgumentInES6.ts]
 class B<T> {
     x: T;
@@ -15,6 +17,7 @@ class B<T> {
 }
 
 //// [emitClassDeclarationWithTypeArgumentInES6.js]
+"use strict";
 class B {
     constructor(a) { this.B = a; }
     foo() {

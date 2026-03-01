@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/createArray.ts] ////
+
 //// [createArray.ts]
 var na=new number[];
 
@@ -16,12 +18,10 @@ if (ba[14]) {
 new C[1]; // not an error
 
 //// [createArray.js]
+"use strict";
 var na = new number[];
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 new C[];
 var ba = new boolean[];
 var sa = new string[];

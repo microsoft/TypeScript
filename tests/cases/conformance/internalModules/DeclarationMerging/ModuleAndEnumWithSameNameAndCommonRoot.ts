@@ -1,4 +1,5 @@
-module enumdule {
+// @target: es2015
+namespace enumdule {
 
     export class Point {
         constructor(public x: number, public y: number) { }

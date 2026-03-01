@@ -1,20 +1,31 @@
-=== tests/cases/compiler/infinitelyGenerativeInheritance1.ts ===
+//// [tests/cases/compiler/infinitelyGenerativeInheritance1.ts] ////
+
+=== infinitelyGenerativeInheritance1.ts ===
 interface Stack<T> {
       pop(): T
 >pop : () => T
+>    : ^^^^^^ 
 
       zip<S>(a: Stack<S>): Stack<{ x: T; y: S }>
->zip : <S>(a: Stack<S>) => Stack<{    x: T;    y: S;}>
+>zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>
+>    : ^ ^^ ^^        ^^^^^                      
 >a : Stack<S>
+>  : ^^^^^^^^
 >x : T
+>  : ^
 >y : S
+>  : ^
 }
 
 interface MyStack<T> extends Stack<T> {
       zip<S>(a: Stack<S>): Stack<{ x: T; y: S }>
->zip : <S>(a: Stack<S>) => Stack<{    x: T;    y: S;}>
+>zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>
+>    : ^ ^^ ^^        ^^^^^                      
 >a : Stack<S>
+>  : ^^^^^^^^
 >x : T
+>  : ^
 >y : S
+>  : ^
 }
 

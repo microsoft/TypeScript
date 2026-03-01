@@ -1,17 +1,18 @@
-module A {
-    export module B {
-        export module C {
+// @target: es2015
+namespace A {
+    export namespace B {
+        export namespace C {
             export class Class1 {}
         }
     }
 }
 
-module D {
+namespace D {
     import inner = A.B.C; 
    
     var c1 = new inner.Class1(); 
 
-    export module E { 
+    export namespace E { 
         export class Class2 {}
     }
 }

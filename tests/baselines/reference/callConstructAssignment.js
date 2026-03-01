@@ -1,13 +1,14 @@
-//// [callConstructAssignment.ts]
-var foo:{ ( ):void; }
+//// [tests/cases/compiler/callConstructAssignment.ts] ////
 
-var bar:{ new ( ):any; }
+//// [callConstructAssignment.ts]
+declare var foo:{ ( ):void; }
+
+declare var bar:{ new ( ):any; }
 
 foo = bar; // error
 bar = foo; // error
 
 //// [callConstructAssignment.js]
-var foo;
-var bar;
+"use strict";
 foo = bar; // error
 bar = foo; // error

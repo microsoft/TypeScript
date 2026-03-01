@@ -8,9 +8,9 @@
 ////[|/*functionOverloadReference2*/functionOverload|]("123");
 ////[|/*brokenOverload*/functionOverload|]({});
 
-verify.goToDefinition({
-    functionOverloadReference1: "functionOverload1",
-    functionOverloadReference2: "functionOverload2",
-    brokenOverload: "functionOverload1",
-    functionOverload1: "functionOverloadDefinition"
-});
+verify.baselineGoToDefinition(
+    "functionOverloadReference1",
+    "functionOverloadReference2",
+    "brokenOverload",
+    "functionOverload1",
+);

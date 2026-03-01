@@ -1,33 +1,48 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts] ////
+
+=== classStaticBlock11.ts ===
 let getX;
 >getX : any
 
 class C {
 >C : C
+>  : ^
 
   #x = 1
 >#x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
   constructor(x: number) {
 >x : number
+>  : ^^^^^^
 
     this.#x = x;
 >this.#x = x : number
+>            : ^^^^^^
 >this.#x : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
   }
 
   static {
     // getX has privileged access to #x
     getX = (obj: C) => obj.#x;
 >getX = (obj: C) => obj.#x : (obj: C) => number
+>                          : ^   ^^ ^^^^^^^^^^^
 >getX : any
 >(obj: C) => obj.#x : (obj: C) => number
+>                   : ^   ^^ ^^^^^^^^^^^
 >obj : C
+>    : ^
 >obj.#x : number
+>       : ^^^^^^
 >obj : C
+>    : ^
   }
 }
 

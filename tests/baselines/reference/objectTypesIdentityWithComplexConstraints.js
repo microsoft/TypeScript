@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithComplexConstraints.ts] ////
+
 //// [objectTypesIdentityWithComplexConstraints.ts]
 interface A {
       <T extends {
@@ -15,4 +17,5 @@ function foo(x: B); // error after constraints above made illegal
 function foo(x: any) { }
 
 //// [objectTypesIdentityWithComplexConstraints.js]
+"use strict";
 function foo(x) { }

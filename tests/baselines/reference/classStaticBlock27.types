@@ -1,61 +1,101 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock27.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock27.ts] ////
+
+=== classStaticBlock27.ts ===
 // https://github.com/microsoft/TypeScript/issues/44872
 
 void class Foo {
 >void class Foo {    static prop = 1    static {        console.log(Foo.prop);        Foo.prop++;    }    static {        console.log(Foo.prop);        Foo.prop++;    }    static {        console.log(Foo.prop);        Foo.prop++;    }} : undefined
+>                                                                                                                                                                                                                                           : ^^^^^^^^^
 >class Foo {    static prop = 1    static {        console.log(Foo.prop);        Foo.prop++;    }    static {        console.log(Foo.prop);        Foo.prop++;    }    static {        console.log(Foo.prop);        Foo.prop++;    }} : typeof Foo
+>                                                                                                                                                                                                                                      : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     static prop = 1
 >prop : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
     static {
         console.log(Foo.prop);
 >console.log(Foo.prop) : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >Foo.prop : number
+>         : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
 
         Foo.prop++;
 >Foo.prop++ : number
+>           : ^^^^^^
 >Foo.prop : number
+>         : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
     }
     static {
         console.log(Foo.prop);
 >console.log(Foo.prop) : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >Foo.prop : number
+>         : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
 
         Foo.prop++;
 >Foo.prop++ : number
+>           : ^^^^^^
 >Foo.prop : number
+>         : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
     }
     static {
         console.log(Foo.prop);
 >console.log(Foo.prop) : void
+>                      : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >Foo.prop : number
+>         : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
 
         Foo.prop++;
 >Foo.prop++ : number
+>           : ^^^^^^
 >Foo.prop : number
+>         : ^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
     }
 }

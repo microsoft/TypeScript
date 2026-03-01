@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/restParamUsingMappedTypeOverUnionConstraint.ts] ////
+
+=== restParamUsingMappedTypeOverUnionConstraint.ts ===
+// repro 29919#issuecomment-470948453
+
+type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
+>HomomorphicMappedType : HomomorphicMappedType<T>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function test<T extends [number] | [string]>(
+>test : <T extends [number] | [string]>(args: T, fn: (...args: HomomorphicMappedType<T>) => void) => void
+>     : ^ ^^^^^^^^^                   ^^    ^^ ^^  ^^                                           ^^^^^    
+
+  args: T,
+>args : T
+>     : ^
+
+  fn: (...args: HomomorphicMappedType<T>) => void
+>fn : (...args: HomomorphicMappedType<T>) => void
+>   : ^^^^    ^^                        ^^^^^    
+>args : HomomorphicMappedType<T>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+): void
+

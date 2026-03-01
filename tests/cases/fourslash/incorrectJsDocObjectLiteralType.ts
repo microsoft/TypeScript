@@ -1,9 +1,11 @@
 ///<reference path="fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /a.ts
 ////
 
-verify.navigateTo({ pattern: "", expected: [] });
+verify.navigateTo({ pattern: "", fileName: "/a.ts", expected: [] });
 edit.insert("/**\n * @typedef {Object} foo\n * @property {any} [obj]\n */\nexport default function foo() {\n}");
 verify.navigateTo({
     pattern: "foo",

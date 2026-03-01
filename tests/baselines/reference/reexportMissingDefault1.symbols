@@ -1,8 +1,10 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/reexportMissingDefault1.ts] ////
+
+=== b.ts ===
 export const b = null;
 >b : Symbol(b, Decl(b.ts, 0, 12))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 export { b } from "./b";
 >b : Symbol(b, Decl(a.ts, 0, 8))
 

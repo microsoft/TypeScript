@@ -1,250 +1,396 @@
-=== tests/cases/conformance/controlFlow/controlFlowBindingElement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowBindingElement.ts] ////
+
+=== controlFlowBindingElement.ts ===
 {
     const data =  { param: 'value' };
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
 >{ param: 'value' } : { param: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >param : string
+>      : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     const {
         param = (() => { throw new Error('param is not defined') })(),
 >param : string
+>      : ^^^^^^
 >(() => { throw new Error('param is not defined') })() : never
+>                                                      : ^^^^^
 >(() => { throw new Error('param is not defined') }) : () => never
+>                                                    : ^^^^^^^^^^^
 >() => { throw new Error('param is not defined') } : () => never
+>                                                  : ^^^^^^^^^^^
 >new Error('param is not defined') : Error
+>                                  : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >'param is not defined' : "param is not defined"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
     } = data;
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
     
     console.log(param); // should not trigger 'Unreachable code detected.'    
 >console.log(param) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >param : string
+>      : ^^^^^^
 }
 
 
 {
     const data =  { param: 'value' };
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
 >{ param: 'value' } : { param: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >param : string
+>      : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     let foo: string | undefined = "";
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     const {
         param = (() => { throw new Error('param is not defined') })(),
 >param : string
+>      : ^^^^^^
 >(() => { throw new Error('param is not defined') })() : never
+>                                                      : ^^^^^
 >(() => { throw new Error('param is not defined') }) : () => never
+>                                                    : ^^^^^^^^^^^
 >() => { throw new Error('param is not defined') } : () => never
+>                                                  : ^^^^^^^^^^^
 >new Error('param is not defined') : Error
+>                                  : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >'param is not defined' : "param is not defined"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
     } = data;
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
     
     foo;  // should be string  
 >foo : string
+>    : ^^^^^^
 }
 
 {
     const data =  { param: 'value' };
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
 >{ param: 'value' } : { param: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >param : string
+>      : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     let foo: string | undefined = "";
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     const {
         param = (() => { foo = undefined })(),
 >param : string | void
+>      : ^^^^^^^^^^^^^
 >(() => { foo = undefined })() : void
+>                              : ^^^^
 >(() => { foo = undefined }) : () => void
+>                            : ^^^^^^^^^^
 >() => { foo = undefined } : () => void
+>                          : ^^^^^^^^^^
 >foo = undefined : undefined
+>                : ^^^^^^^^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     } = data;
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
     
     foo;  // should be string | undefined
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 
 {
     const data =  { param: 'value' };
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
 >{ param: 'value' } : { param: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
 >param : string
+>      : ^^^^^^
 >'value' : "value"
+>        : ^^^^^^^
 
     let foo: string | undefined = "";
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     const {
         param = (() => { return "" + 1 })(),
 >param : string
+>      : ^^^^^^
 >(() => { return "" + 1 })() : string
+>                            : ^^^^^^
 >(() => { return "" + 1 }) : () => string
+>                          : ^^^^^^^^^^^^
 >() => { return "" + 1 } : () => string
+>                        : ^^^^^^^^^^^^
 >"" + 1 : string
+>       : ^^^^^^
 >"" : ""
+>   : ^^
 >1 : 1
+>  : ^
 
     } = data;
 >data : { param: string; }
+>     : ^^^^^^^^^^^^^^^^^^
     
     foo;  // should be string
 >foo : string
+>    : ^^^^^^
 }
 
 {
     interface Window {
         window: Window;
 >window : Window
+>       : ^^^^^^
     }
 
     let foo: string | undefined;
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     let window = {} as Window;
 >window : Window
+>       : ^^^^^^
 >{} as Window : Window
+>             : ^^^^^^
 >{} : {}
+>   : ^^
 
     window.window = window;
 >window.window = window : Window
+>                       : ^^^^^^
 >window.window : Window
+>              : ^^^^^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 
     const { [(() => { foo = ""; return 'window' as const })()]:
 >(() => { foo = ""; return 'window' as const })() : "window"
+>                                                 : ^^^^^^^^
 >(() => { foo = ""; return 'window' as const }) : () => "window"
+>                                               : ^^^^^^^^^^^^^^
 >() => { foo = ""; return 'window' as const } : () => "window"
+>                                             : ^^^^^^^^^^^^^^
 >foo = "" : ""
+>         : ^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >'window' as const : "window"
+>                  : ^^^^^^^^
 >'window' : "window"
+>         : ^^^^^^^^
 
         { [(() => { return 'window' as const })()]: bar } } = window;
 >(() => { return 'window' as const })() : "window"
+>                                       : ^^^^^^^^
 >(() => { return 'window' as const }) : () => "window"
+>                                     : ^^^^^^^^^^^^^^
 >() => { return 'window' as const } : () => "window"
+>                                   : ^^^^^^^^^^^^^^
 >'window' as const : "window"
+>                  : ^^^^^^^^
 >'window' : "window"
+>         : ^^^^^^^^
 >bar : Window
+>    : ^^^^^^
 >window : Window
+>       : ^^^^^^
 
     foo;  // should be string
 >foo : string
+>    : ^^^^^^
 }
 
 {
     interface Window {
         window: Window;
 >window : Window
+>       : ^^^^^^
     }
 
     let foo: string | undefined;
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     let window = {} as Window;
 >window : Window
+>       : ^^^^^^
 >{} as Window : Window
+>             : ^^^^^^
 >{} : {}
+>   : ^^
 
     window.window = window;
 >window.window = window : Window
+>                       : ^^^^^^
 >window.window : Window
+>              : ^^^^^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 
     const { [(() => {  return 'window' as const })()]:
 >(() => {  return 'window' as const })() : "window"
+>                                        : ^^^^^^^^
 >(() => {  return 'window' as const }) : () => "window"
+>                                      : ^^^^^^^^^^^^^^
 >() => {  return 'window' as const } : () => "window"
+>                                    : ^^^^^^^^^^^^^^
 >'window' as const : "window"
+>                  : ^^^^^^^^
 >'window' : "window"
+>         : ^^^^^^^^
 
         { [(() => { foo = ""; return 'window' as const })()]: bar } } = window;
 >(() => { foo = ""; return 'window' as const })() : "window"
+>                                                 : ^^^^^^^^
 >(() => { foo = ""; return 'window' as const }) : () => "window"
+>                                               : ^^^^^^^^^^^^^^
 >() => { foo = ""; return 'window' as const } : () => "window"
+>                                             : ^^^^^^^^^^^^^^
 >foo = "" : ""
+>         : ^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >'window' as const : "window"
+>                  : ^^^^^^^^
 >'window' : "window"
+>         : ^^^^^^^^
 >bar : Window
+>    : ^^^^^^
 >window : Window
+>       : ^^^^^^
 
     foo;  // should be string
 >foo : string
+>    : ^^^^^^
 }
 
 {
     interface Window {
         window: Window;
 >window : Window
+>       : ^^^^^^
     }
 
     let foo: string | undefined;
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     let window = {} as Window;
 >window : Window
+>       : ^^^^^^
 >{} as Window : Window
+>             : ^^^^^^
 >{} : {}
+>   : ^^
 
     window.window = window;
 >window.window = window : Window
+>                       : ^^^^^^
 >window.window : Window
+>              : ^^^^^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 
     const { [(() => { return 'window' as const })()]:
 >(() => { return 'window' as const })() : "window"
+>                                       : ^^^^^^^^
 >(() => { return 'window' as const }) : () => "window"
+>                                     : ^^^^^^^^^^^^^^
 >() => { return 'window' as const } : () => "window"
+>                                   : ^^^^^^^^^^^^^^
 >'window' as const : "window"
+>                  : ^^^^^^^^
 >'window' : "window"
+>         : ^^^^^^^^
 
         { [(() => { return 'window' as const })()]: bar = (() => { foo = ""; return window; })() } } = window;
 >(() => { return 'window' as const })() : "window"
+>                                       : ^^^^^^^^
 >(() => { return 'window' as const }) : () => "window"
+>                                     : ^^^^^^^^^^^^^^
 >() => { return 'window' as const } : () => "window"
+>                                   : ^^^^^^^^^^^^^^
 >'window' as const : "window"
+>                  : ^^^^^^^^
 >'window' : "window"
+>         : ^^^^^^^^
 >bar : Window
+>    : ^^^^^^
 >(() => { foo = ""; return window; })() : Window
+>                                       : ^^^^^^
 >(() => { foo = ""; return window; }) : () => Window
+>                                     : ^^^^^^^^^^^^
 >() => { foo = ""; return window; } : () => Window
+>                                   : ^^^^^^^^^^^^
 >foo = "" : ""
+>         : ^^
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >window : Window
+>       : ^^^^^^
 >window : Window
+>       : ^^^^^^
 
     foo;  // should be string | undefined
 >foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 }
 

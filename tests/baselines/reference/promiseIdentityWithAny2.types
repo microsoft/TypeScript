@@ -1,42 +1,60 @@
-=== tests/cases/compiler/promiseIdentityWithAny2.ts ===
+//// [tests/cases/compiler/promiseIdentityWithAny2.ts] ////
+
+=== promiseIdentityWithAny2.ts ===
 export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
+>     : ^ ^^ ^^        ^^                        ^^^^^              
 >callback : (x: T) => IPromise<U, W>
+>         : ^ ^^ ^^^^^              
 >x : T
+>  : ^
 }
 interface Promise<T, V> {
     then(callback: (x: T) => Promise<any, any>): Promise<any, any>;
 >then : (callback: (x: T) => Promise<any, any>) => Promise<any, any>
+>     : ^        ^^                           ^^^^^                 
 >callback : (x: T) => Promise<any, any>
+>         : ^ ^^ ^^^^^                 
 >x : T
+>  : ^
 }
 
 // Error because type parameter arity doesn't match
 var x: IPromise<string, number>;
 >x : IPromise<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var x: Promise<string, boolean>;
 >x : IPromise<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 interface IPromise2<T, V> {
     then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise2<U, W>) => IPromise2<U, W>
+>     : ^ ^^ ^^        ^^                         ^^^^^               
 >callback : (x: T) => IPromise2<U, W>
+>         : ^ ^^ ^^^^^               
 >x : T
+>  : ^
 }
 interface Promise2<T, V> {
     then<U, W>(callback: (x: T) => Promise2<string, any>): Promise2<any, any>; // Uses string instead of any!
 >then : <U, W>(callback: (x: T) => Promise2<string, any>) => Promise2<any, any>
+>     : ^ ^^ ^^        ^^                               ^^^^^                  
 >callback : (x: T) => Promise2<string, any>
+>         : ^ ^^ ^^^^^                     
 >x : T
+>  : ^
 }
 
 // Error because string and any don't match
 var y: IPromise2<string, number>;
 >y : IPromise2<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var y: Promise2<string, boolean>;
 >y : IPromise2<string, number>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

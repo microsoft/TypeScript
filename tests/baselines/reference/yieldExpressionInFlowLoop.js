@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldExpressionInFlowLoop.ts] ////
+
 //// [yieldExpressionInFlowLoop.ts]
 function* f() {
     let result;
@@ -8,6 +10,7 @@ function* f() {
 
 
 //// [yieldExpressionInFlowLoop.js]
+"use strict";
 function* f() {
     let result;
     while (1) {

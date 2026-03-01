@@ -1,27 +1,45 @@
-=== tests/cases/compiler/propertyAccessOnObjectLiteral.ts ===
+//// [tests/cases/compiler/propertyAccessOnObjectLiteral.ts] ////
+
+=== propertyAccessOnObjectLiteral.ts ===
 class A { }
 >A : A
+>  : ^
 
 (<A>{}).toString();
 >(<A>{}).toString() : string
+>                   : ^^^^^^
 >(<A>{}).toString : () => string
+>                 : ^^^^^^      
 >(<A>{}) : A
+>        : ^
 ><A>{} : A
+>      : ^
 >{} : {}
+>   : ^^
 >toString : () => string
+>         : ^^^^^^      
 
 (() => {
 >(() => {    (<A>{}).toString();})() : void
+>                                    : ^^^^
 >(() => {    (<A>{}).toString();}) : () => void
+>                                  : ^^^^^^^^^^
 >() => {    (<A>{}).toString();} : () => void
+>                                : ^^^^^^^^^^
 
     (<A>{}).toString();
 >(<A>{}).toString() : string
+>                   : ^^^^^^
 >(<A>{}).toString : () => string
+>                 : ^^^^^^      
 >(<A>{}) : A
+>        : ^
 ><A>{} : A
+>      : ^
 >{} : {}
+>   : ^^
 >toString : () => string
+>         : ^^^^^^      
 
 })();
 

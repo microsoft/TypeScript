@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInTaggedTemplateCall.ts] ////
+
 //// [thisTypeInTaggedTemplateCall.ts]
 class Foo {
     static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
@@ -10,6 +12,7 @@ Foo.m`test`;
 
 
 //// [thisTypeInTaggedTemplateCall.js]
+"use strict";
 class Foo {
     static m(strings) {
         return new this();

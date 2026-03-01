@@ -1,27 +1,44 @@
-=== tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts ===
+//// [tests/cases/compiler/enumPropertyAccessBeforeInitalisation.ts] ////
+
+=== enumPropertyAccessBeforeInitalisation.ts ===
 enum E {
 >E : E
+>  : ^
 
     A = A,
->A : E
->A : E
+>A : E.A
+>  : ^^^
+>A : E.A
+>  : ^^^
 
     B = E.B,
->B : E
->E.B : E
+>B : E.B
+>  : ^^^
+>E.B : E.B
+>    : ^^^
 >E : typeof E
->B : E
+>  : ^^^^^^^^
+>B : E.B
+>  : ^^^
 
     C = E["C"],
->C : E
->E["C"] : E
+>C : E.C
+>  : ^^^
+>E["C"] : E.C
+>       : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >"C" : "C"
+>    : ^^^
 
     D = 1 + D
->D : E
+>D : E.D
+>  : ^^^
 >1 + D : number
+>      : ^^^^^^
 >1 : 1
->D : E
+>  : ^
+>D : E.D
+>  : ^^^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasesInSystemModule1.ts] ////
+
 //// [aliasesInSystemModule1.ts]
 import alias = require('foo');
 import cls = alias.Class;
@@ -7,7 +9,7 @@ let x = new alias.Class();
 let y = new cls();
 let z = new cls2();
 
-module M {
+namespace M {
   export import cls = alias.Class;
   let x = new alias.Class();
   let y = new cls(); 
@@ -34,9 +36,9 @@ System.register(["foo"], function (exports_1, context_1) {
             z = new cls2();
             (function (M) {
                 M.cls = alias.Class;
-                var x = new alias.Class();
-                var y = new M.cls();
-                var z = new cls2();
+                let x = new alias.Class();
+                let y = new M.cls();
+                let z = new cls2();
             })(M || (M = {}));
         }
     };

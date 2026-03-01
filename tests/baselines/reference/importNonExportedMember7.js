@@ -8,11 +8,8 @@ export = Foo;
 import { Foo } from './a';
 
 //// [a.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 export {};
 //// [b.js]
 export {};

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers4.ts] ////
+
 //// [typeOfThisInStaticMembers4.ts]
 class C {
     static a = 1;
@@ -12,6 +14,7 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers4.js]
+"use strict";
 class C {
     static a = 1;
     static b = this.a + 1;

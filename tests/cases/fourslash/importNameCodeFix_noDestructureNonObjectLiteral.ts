@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @target: es2015
 // @strict: true
 // @esModuleInterop: true

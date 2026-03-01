@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloadsOnGenericArity1.ts ===
+//// [tests/cases/compiler/functionOverloadsOnGenericArity1.ts] ////
+
+=== functionOverloadsOnGenericArity1.ts ===
 // overloading on arity not allowed
 interface C {
 >C : Symbol(C, Decl(functionOverloadsOnGenericArity1.ts, 0, 0))

@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /a.ts ===
+// <|import { [|f|] } from "foo";|>
+// /*GOTO DEF*/f();
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "f",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": true
+   }
+  ]

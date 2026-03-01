@@ -1,3 +1,58 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpTypeArguments2.ts ===
+// /** some documentation
+//  * @template T some documentation 2
+//  * @template W
+//  * @template U,V others
+//  * @param a ok
+//  * @param b not ok
+//  */
+// function f<T, U, V, W>(a: number, b: string, c: boolean): void { }
+// f<;
+//   ^
+// | ----------------------------------------------------------------------
+// | f<**T**, U, V, W>(a: number, b: string, c: boolean): void
+// | some documentation
+// | @template T some documentation 2
+// | @template W
+// | @template U, V others
+// | @param a ok
+// | @param b not ok
+// | ----------------------------------------------------------------------
+// f<number, ;
+//           ^
+// | ----------------------------------------------------------------------
+// | f<T, **U**, V, W>(a: number, b: string, c: boolean): void
+// | some documentation
+// | @template T some documentation 2
+// | @template W
+// | @template U, V others
+// | @param a ok
+// | @param b not ok
+// | ----------------------------------------------------------------------
+// f<number, string, ;
+//                   ^
+// | ----------------------------------------------------------------------
+// | f<T, U, **V**, W>(a: number, b: string, c: boolean): void
+// | some documentation
+// | @template T some documentation 2
+// | @template W
+// | @template U, V others
+// | @param a ok
+// | @param b not ok
+// | ----------------------------------------------------------------------
+// f<number, string, boolean, ;
+//                            ^
+// | ----------------------------------------------------------------------
+// | f<T, U, V, **W**>(a: number, b: string, c: boolean): void
+// | some documentation
+// | @template T some documentation 2
+// | @template W
+// | @template U, V others
+// | @param a ok
+// | @param b not ok
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +60,7 @@
       "position": 205,
       "name": "f0"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -298,7 +353,7 @@
       "position": 217,
       "name": "f1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -591,7 +646,7 @@
       "position": 237,
       "name": "f2"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,
@@ -884,7 +939,7 @@
       "position": 266,
       "name": "f3"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

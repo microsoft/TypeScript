@@ -1,4 +1,6 @@
-=== tests/cases/compiler/toStringOnPrimitives.ts ===
+//// [tests/cases/compiler/toStringOnPrimitives.ts] ////
+
+=== toStringOnPrimitives.ts ===
 true.toString()
 >true.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))

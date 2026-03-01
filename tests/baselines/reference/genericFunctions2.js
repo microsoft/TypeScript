@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctions2.ts] ////
+
 //// [genericFunctions2.ts]
 declare function map <T, U > (items: T[], f: (x: T) => U): U[];
 
@@ -7,8 +9,9 @@ var lengths = map(myItems, x => x.length);
 
 
 //// [genericFunctions2.js]
+"use strict";
 var myItems;
-var lengths = map(myItems, function (x) { return x.length; });
+var lengths = map(myItems, x => x.length);
 
 
 //// [genericFunctions2.d.ts]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorTypeWithTypeParameters.ts] ////
+
 //// [constructorTypeWithTypeParameters.ts]
 declare var X: {
     new <T>(): number;
@@ -8,6 +10,7 @@ declare var Y: {
 var anotherVar: new <T>() => number;
 
 //// [constructorTypeWithTypeParameters.js]
+"use strict";
 var anotherVar;
 
 

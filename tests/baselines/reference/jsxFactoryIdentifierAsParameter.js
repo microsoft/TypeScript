@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/jsxFactoryIdentifierAsParameter.ts] ////
+
 //// [test.tsx]
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         [s: string]: any;
     }

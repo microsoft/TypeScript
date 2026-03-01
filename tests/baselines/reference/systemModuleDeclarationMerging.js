@@ -1,12 +1,14 @@
+//// [tests/cases/compiler/systemModuleDeclarationMerging.ts] ////
+
 //// [systemModuleDeclarationMerging.ts]
 export function F() {}
-export module F { var x; }
+export namespace F { var x; }
 
 export class C {}
-export module C { var x; }
+export namespace C { var x; }
 
 export enum E {}
-export module E { var x; }
+export namespace E { var x; }
 
 //// [systemModuleDeclarationMerging.js]
 System.register([], function (exports_1, context_1) {
@@ -20,25 +22,18 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             (function (F) {
                 var x;
-            })(F || (F = {}));
-            exports_1("F", F);
-            C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
+            })(F || (exports_1("F", F = {})));
+            C = class C {
+            };
             exports_1("C", C);
             (function (C) {
                 var x;
-            })(C || (C = {}));
-            exports_1("C", C);
+            })(C || (exports_1("C", C = {})));
             (function (E) {
-            })(E || (E = {}));
-            exports_1("E", E);
+            })(E || (exports_1("E", E = {})));
             (function (E) {
                 var x;
-            })(E || (E = {}));
-            exports_1("E", E);
+            })(E || (exports_1("E", E = {})));
         }
     };
 });

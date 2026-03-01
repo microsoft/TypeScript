@@ -1,29 +1,46 @@
-=== tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx ===
+//// [tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx] ////
+
+=== errorSpanForUnclosedJsxTag.tsx ===
 declare const React: any
 >React : any
+>      : ^^^
 
 let Foo = {
 >Foo : { Bar(): void; }
+>    : ^^^^^^^^^^^^^^^^
 >{  Bar() {}} : { Bar(): void; }
+>             : ^^^^^^^^^^^^^^^^
 
   Bar() {}
 >Bar : () => void
+>    : ^^^^^^^^^^
 }
 
 let Baz = () => {}
 >Baz : () => void
+>    : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 
 let x = <    Foo.Bar >Hello
 >x : any
+>  : ^^^
 ><    Foo.Bar >Hellolet y = <   Baz >Hello : any
+>                                          : ^^^
 >Foo.Bar : () => void
+>        : ^^^^^^^^^^
 >Foo : { Bar(): void; }
+>    : ^^^^^^^^^^^^^^^^
 >Bar : () => void
+>    : ^^^^^^^^^^
 
 let y = <   Baz >Hello
 ><   Baz >Hello : any
+>               : ^^^
 >Baz : () => void
+>    : ^^^^^^^^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 

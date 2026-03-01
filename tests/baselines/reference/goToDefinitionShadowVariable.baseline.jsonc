@@ -1,0 +1,20 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionShadowVariable.ts ===
+// var shadowVariable = "foo";
+// function shadowVariableTestModule() {
+//     <|var [|shadowVariable|];|>
+//     /*GOTO DEF POS*/shadowVariable = 1;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "local var",
+    "name": "shadowVariable",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

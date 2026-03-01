@@ -1,33 +1,48 @@
-=== tests/cases/conformance/types/thisType/thisTypeErrors2.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeErrors2.ts] ////
+
+=== thisTypeErrors2.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(a: this) {
 >a : any
+>  : ^^^
     }
 }
 class Generic<T> {
 >Generic : Generic<T>
+>        : ^^^^^^^^^^
 }
 class Derived {
 >Derived : Derived
+>        : ^^^^^^^
 
     n: number;
 >n : number
+>  : ^^^^^^
 
     constructor(public host: Generic<this>) {
 >host : Generic<any>
+>     : ^^^^^^^^^^^^
 
         let self: this = this;
 >self : this
+>     : ^^^^
 >this : this
+>     : ^^^^
 
         this.n = 12;
 >this.n = 12 : 12
+>            : ^^
 >this.n : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >n : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
     }
 }
 

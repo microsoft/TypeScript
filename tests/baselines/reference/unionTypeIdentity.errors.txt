@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'string'.
-tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts(7,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'boolean'.
-tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'number'.
+unionTypeIdentity.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'string'.
+unionTypeIdentity.ts(7,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'boolean'.
+unionTypeIdentity.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'number'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts (3 errors) ====
+==== unionTypeIdentity.ts (3 errors) ====
     // Two types are considered identical when
     // they are union types with identical sets of constituent types, or
     var strOrNum: string | boolean;
@@ -12,12 +12,12 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeI
     var strOrNum: string; // error
         ~~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts:3:5: 'strOrNum' was also declared here.
+!!! related TS6203 unionTypeIdentity.ts:3:5: 'strOrNum' was also declared here.
     var strOrNum: boolean; // error
         ~~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'boolean'.
-!!! related TS6203 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts:3:5: 'strOrNum' was also declared here.
+!!! related TS6203 unionTypeIdentity.ts:3:5: 'strOrNum' was also declared here.
     var strOrNum: number; // error
         ~~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts:3:5: 'strOrNum' was also declared here.
+!!! related TS6203 unionTypeIdentity.ts:3:5: 'strOrNum' was also declared here.

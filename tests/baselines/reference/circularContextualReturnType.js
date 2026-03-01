@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularContextualReturnType.ts] ////
+
 //// [circularContextualReturnType.ts]
 // Repro from #17711
 
@@ -12,7 +14,7 @@ Object.freeze({
 "use strict";
 // Repro from #17711
 Object.freeze({
-    foo: function () {
+    foo() {
         return Object.freeze('a');
-    }
+    },
 });

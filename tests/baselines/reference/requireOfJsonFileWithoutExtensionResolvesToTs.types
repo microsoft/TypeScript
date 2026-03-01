@@ -1,53 +1,83 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithoutExtensionResolvesToTs.ts] ////
+
+=== file1.ts ===
 import c1 = require('./c'); // resolves to c.ts 
 >c1 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let x2 = c1.a;
 >x2 : boolean
+>   : ^^^^^^^
 >c1.a : boolean
+>     : ^^^^^^^
 >c1 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 import c2 = require('./c.json'); // resolves to c.json
 >c2 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (x2) {
 >x2 : boolean
+>   : ^^^^^^^
 
     let b = c2.b;
 >b : string
+>  : ^^^^^^
 >c2.b : string
+>     : ^^^^^^
 >c2 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
     let x = (c1.b === b);
 >x : boolean
+>  : ^^^^^^^
 >(c1.b === b) : boolean
+>             : ^^^^^^^
 >c1.b === b : boolean
+>           : ^^^^^^^
 >c1.b : string
+>     : ^^^^^^
 >c1 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/c.json ===
+=== c.json ===
 {
 >{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "a": true,
 >"a" : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "b": "hello"
 >"b" : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 export = { a: true, b: "hello" };
 >{ a: true, b: "hello" } : { a: boolean; b: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 >b : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

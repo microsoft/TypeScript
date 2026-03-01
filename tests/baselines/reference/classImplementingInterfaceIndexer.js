@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementingInterfaceIndexer.ts] ////
+
 //// [classImplementingInterfaceIndexer.ts]
 interface I {
     [index: string]: { prop }
@@ -7,8 +9,6 @@ class A implements I {
 }
 
 //// [classImplementingInterfaceIndexer.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}

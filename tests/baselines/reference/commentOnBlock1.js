@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnBlock1.ts] ////
+
 //// [commentOnBlock1.ts]
 // asdf
 function f() {
@@ -5,6 +7,7 @@ function f() {
 }
 
 //// [commentOnBlock1.js]
+"use strict";
 // asdf
 function f() {
     /*asdf*/ { }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments19_ES6.ts] ////
+
 //// [emitArrowFunctionWhenUsingArguments19_ES6.ts]
 function f() {
     function g() {
@@ -14,6 +16,7 @@ function f() {
 }
 
 //// [emitArrowFunctionWhenUsingArguments19_ES6.js]
+"use strict";
 function f() {
     function g() {
         var _arguments = 10; // No capture in 'g', so no conflict.

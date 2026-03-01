@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+//// [tests/cases/conformance/jsdoc/jsdocPrefixPostfixParsing.ts] ////
+
+=== prefixPostfix.js ===
 /**
  * @param {number![]} x - number[]
  * @param {!number[]} y - number[]
@@ -18,20 +20,36 @@
  */
 function f(x, y, z, a, b, c, e, f, g, h, i, j, k, l, m) {
 >f : (x: number[], y: number[], z: (number[]), a: any, b: number[] | null, c: (number[]) | null, e: (number | null)[], f: (number | null)[], g: (number | null)[], h: any, i: number[][], j: (number[] | null)[], k: any, l: number extends number ? true : false, m: [number, number?]) => void
+>  : ^ ^^        ^^ ^^        ^^ ^^          ^^ ^^^^^^^ ^^           ^^^^^^ ^^             ^^^^^^ ^^^         ^^^^^  ^^ ^^^         ^^^^^  ^^ ^^^         ^^^^^  ^^ ^^^^^^^ ^^          ^^ ^^^           ^^^^^  ^^ ^^^^^^^ ^^                                    ^^ ^^                 ^^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 >y : number[]
+>  : ^^^^^^^^
 >z : number[]
+>  : ^^^^^^^^
 >a : any
+>  : ^^^
 >b : number[] | null
+>  : ^^^^^^^^^^^^^^^
 >c : number[] | null
+>  : ^^^^^^^^^^^^^^^
 >e : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : number | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >h : any
+>  : ^^^
 >i : number[] | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^
 >j : number[] | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : any
+>  : ^^^
 >l : true
+>  : ^^^^
 >m : [number, (number | undefined)?]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

@@ -1,0 +1,66 @@
+// === goToDefinition ===
+// === /home/src/workspaces/project/scriptThing.ts ===
+// [||]console.log("woooo side effects")
+
+// === /home/src/workspaces/project/moduleThing.ts ===
+// import /*GOTO DEF*/[|"./scriptThing"|];
+// import "./stylez.css";
+// import "./foo.txt";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /home/src/workspaces/project/stylez.css ===
+// [||]div {
+//   color: magenta;
+// }
+
+// === /home/src/workspaces/project/moduleThing.ts ===
+// import "./scriptThing";
+// import /*GOTO DEF*/[|"./stylez.css"|];
+// import "./foo.txt";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /home/src/workspaces/project/foo.txt ===
+// Unavailable file content:
+// textSpan: {"start":0,"length":0}
+
+
+// === /home/src/workspaces/project/moduleThing.ts ===
+// import "./scriptThing";
+// import "./stylez.css";
+// import /*GOTO DEF*/[|"./foo.txt"|];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]

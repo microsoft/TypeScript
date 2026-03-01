@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/declarationEmitForTypesWhichNeedImportTypes.ts] ////
+
+=== b.ts ===
 export interface Named {}
 >Named : Symbol(Named, Decl(b.ts, 0, 0))
 
@@ -8,7 +10,7 @@ export function createNamed(): Named {
 
   return {};
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import { createNamed } from "./b";
 >createNamed : Symbol(createNamed, Decl(a.ts, 0, 8))
 

@@ -1,9 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringInWhile.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInWhile.ts] ////
+
+=== templateStringInWhile.ts ===
 while (`abc${0}abc`) {
->`abc${0}abc` : string
+>`abc${0}abc` : "abc0abc"
+>             : ^^^^^^^^^
 >0 : 0
+>  : ^
 
     `def${1}def`;
->`def${1}def` : string
+>`def${1}def` : "def1def"
+>             : ^^^^^^^^^
 >1 : 1
+>  : ^
 }

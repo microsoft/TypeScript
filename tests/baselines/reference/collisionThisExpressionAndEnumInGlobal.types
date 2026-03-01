@@ -1,15 +1,23 @@
-=== tests/cases/compiler/collisionThisExpressionAndEnumInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndEnumInGlobal.ts] ////
+
+=== collisionThisExpressionAndEnumInGlobal.ts ===
 enum _this { // Error
 >_this : _this
+>      : ^^^^^
 
     _thisVal1,
 >_thisVal1 : _this._thisVal1
+>          : ^^^^^^^^^^^^^^^
 
     _thisVal2,
 >_thisVal2 : _this._thisVal2
+>          : ^^^^^^^^^^^^^^^
 }
 var f = () => this;
 >f : () => typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 

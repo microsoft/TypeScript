@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/import/importTypeAmbientMissing.ts ===
+//// [tests/cases/conformance/types/import/importTypeAmbientMissing.ts] ////
+
+=== importTypeAmbientMissing.ts ===
 declare module "foo" {
 >"foo" : Symbol("foo", Decl(importTypeAmbientMissing.ts, 0, 0))
 

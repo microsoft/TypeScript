@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts ===
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts] ////
+
+=== enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts ===
 enum T1 {
 >T1 : Symbol(T1, Decl(enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts, 0, 0))
 

@@ -1,0 +1,9 @@
+// === Inlay Hints ===
+function test(x: unknown) {
+                         ^
+{
+  "text": ": x is number",
+  "position": 25,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

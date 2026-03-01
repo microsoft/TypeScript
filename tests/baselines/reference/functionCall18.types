@@ -1,16 +1,26 @@
-=== tests/cases/compiler/functionCall18.ts ===
+//// [tests/cases/compiler/functionCall18.ts] ////
+
+=== functionCall18.ts ===
 // Repro from #26835
 declare function foo<T>(a: T, b: T);
 >foo : { <T>(a: T, b: T): any; (a: {}): any; }
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^  ^^^^^^^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
 declare function foo(a: {});
 >foo : { <T>(a: T, b: T): any; (a: {}): any; }
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^  ^^^^^^^^^
 >a : {}
+>  : ^^
 
 foo<string>("hello");
 >foo<string>("hello") : any
+>                     : ^^^
 >foo : { <T>(a: T, b: T): any; (a: {}): any; }
+>    : ^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^  ^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

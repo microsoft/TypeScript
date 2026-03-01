@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts] ////
+
+=== uniqueSymbolsErrors.ts ===
 // declarations
 declare const invalidUniqueType: unique number;
 >invalidUniqueType : Symbol(invalidUniqueType, Decl(uniqueSymbolsErrors.ts, 1, 13))

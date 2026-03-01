@@ -1,4 +1,6 @@
-=== tests/cases/compiler/metadataOfStringLiteral.ts ===
+//// [tests/cases/compiler/metadataOfStringLiteral.ts] ////
+
+=== metadataOfStringLiteral.ts ===
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : Symbol(PropDeco, Decl(metadataOfStringLiteral.ts, 0, 0))
 >target : Symbol(target, Decl(metadataOfStringLiteral.ts, 0, 18))

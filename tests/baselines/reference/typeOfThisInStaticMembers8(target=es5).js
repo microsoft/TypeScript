@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts] ////
+
 //// [typeOfThisInStaticMembers8.ts]
 class C {
     static f = 1;
@@ -19,6 +21,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers8.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

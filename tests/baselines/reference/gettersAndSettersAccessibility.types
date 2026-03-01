@@ -1,13 +1,20 @@
-=== tests/cases/compiler/gettersAndSettersAccessibility.ts ===
+//// [tests/cases/compiler/gettersAndSettersAccessibility.ts] ////
+
+=== gettersAndSettersAccessibility.ts ===
 class C99 {
 >C99 : C99
+>    : ^^^
 
 	private get Baz():number { return 0; }
 >Baz : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 	public set Baz(n:number) {} // error - accessors do not agree in visibility
 >Baz : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 }
 

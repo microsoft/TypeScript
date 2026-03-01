@@ -1,0 +1,16 @@
+staticInstanceResolution3_0.ts(3,9): error TS2322: Type 'null' is not assignable to type 'Promise'.
+
+
+==== staticInstanceResolution3_1.ts (0 errors) ====
+    ///<reference path='staticInstanceResolution3_0.ts'/>
+    import WinJS = require('./staticInstanceResolution3_0');
+    WinJS.Promise.timeout(10);
+==== staticInstanceResolution3_0.ts (1 errors) ====
+    export class Promise {
+        static timeout(delay: number): Promise {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Promise'.
+        }
+    }
+    

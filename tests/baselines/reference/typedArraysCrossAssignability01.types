@@ -1,420 +1,675 @@
-=== tests/cases/compiler/typedArraysCrossAssignability01.ts ===
+//// [tests/cases/compiler/typedArraysCrossAssignability01.ts] ////
+
+=== typedArraysCrossAssignability01.ts ===
 function CheckAssignability() {
 >CheckAssignability : () => void
+>                   : ^^^^^^^^^^
 
     let arr_Int8Array           = new Int8Array(1);
->arr_Int8Array : Int8Array
->new Int8Array(1) : Int8Array
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>new Int8Array(1) : Int8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Uint8Array          = new Uint8Array(1);
->arr_Uint8Array : Uint8Array
->new Uint8Array(1) : Uint8Array
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array(1) : Uint8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Int16Array          = new Int16Array(1);
->arr_Int16Array : Int16Array
->new Int16Array(1) : Int16Array
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Int16Array(1) : Int16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Uint16Array         = new Uint16Array(1);
->arr_Uint16Array : Uint16Array
->new Uint16Array(1) : Uint16Array
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint16Array(1) : Uint16Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Int32Array          = new Int32Array(1);
->arr_Int32Array : Int32Array
->new Int32Array(1) : Int32Array
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Int32Array(1) : Int32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Uint32Array         = new Uint32Array(1);
->arr_Uint32Array : Uint32Array
->new Uint32Array(1) : Uint32Array
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint32Array(1) : Uint32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Float32Array        = new Float32Array(1);
->arr_Float32Array : Float32Array
->new Float32Array(1) : Float32Array
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float32Array(1) : Float32Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Float64Array        = new Float64Array(1);
->arr_Float64Array : Float64Array
->new Float64Array(1) : Float64Array
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float64Array(1) : Float64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let arr_Uint8ClampedArray   = new Uint8ClampedArray(1);
->arr_Uint8ClampedArray : Uint8ClampedArray
->new Uint8ClampedArray(1) : Uint8ClampedArray
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8ClampedArray(1) : Uint8ClampedArray<ArrayBuffer>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     arr_Int8Array = arr_Int8Array;
->arr_Int8Array = arr_Int8Array : Int8Array
->arr_Int8Array : Int8Array
->arr_Int8Array : Int8Array
+>arr_Int8Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Uint8Array;
->arr_Int8Array = arr_Uint8Array : Uint8Array
->arr_Int8Array : Int8Array
->arr_Uint8Array : Uint8Array
+>arr_Int8Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Int16Array;
->arr_Int8Array = arr_Int16Array : Int16Array
->arr_Int8Array : Int8Array
->arr_Int16Array : Int16Array
+>arr_Int8Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Uint16Array;
->arr_Int8Array = arr_Uint16Array : Uint16Array
->arr_Int8Array : Int8Array
->arr_Uint16Array : Uint16Array
+>arr_Int8Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Int32Array;
->arr_Int8Array = arr_Int32Array : Int32Array
->arr_Int8Array : Int8Array
->arr_Int32Array : Int32Array
+>arr_Int8Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Uint32Array;
->arr_Int8Array = arr_Uint32Array : Uint32Array
->arr_Int8Array : Int8Array
->arr_Uint32Array : Uint32Array
+>arr_Int8Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Float32Array;
->arr_Int8Array = arr_Float32Array : Float32Array
->arr_Int8Array : Int8Array
->arr_Float32Array : Float32Array
+>arr_Int8Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Float64Array;
->arr_Int8Array = arr_Float64Array : Float64Array
->arr_Int8Array : Int8Array
->arr_Float64Array : Float64Array
+>arr_Int8Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int8Array = arr_Uint8ClampedArray;
->arr_Int8Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Int8Array : Int8Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Int8Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Int8Array;
->arr_Uint8Array = arr_Int8Array : Int8Array
->arr_Uint8Array : Uint8Array
->arr_Int8Array : Int8Array
+>arr_Uint8Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Uint8Array;
->arr_Uint8Array = arr_Uint8Array : Uint8Array
->arr_Uint8Array : Uint8Array
->arr_Uint8Array : Uint8Array
+>arr_Uint8Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Int16Array;
->arr_Uint8Array = arr_Int16Array : Int16Array
->arr_Uint8Array : Uint8Array
->arr_Int16Array : Int16Array
+>arr_Uint8Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Uint16Array;
->arr_Uint8Array = arr_Uint16Array : Uint16Array
->arr_Uint8Array : Uint8Array
->arr_Uint16Array : Uint16Array
+>arr_Uint8Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Int32Array;
->arr_Uint8Array = arr_Int32Array : Int32Array
->arr_Uint8Array : Uint8Array
->arr_Int32Array : Int32Array
+>arr_Uint8Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Uint32Array;
->arr_Uint8Array = arr_Uint32Array : Uint32Array
->arr_Uint8Array : Uint8Array
->arr_Uint32Array : Uint32Array
+>arr_Uint8Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Float32Array;
->arr_Uint8Array = arr_Float32Array : Float32Array
->arr_Uint8Array : Uint8Array
->arr_Float32Array : Float32Array
+>arr_Uint8Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Float64Array;
->arr_Uint8Array = arr_Float64Array : Float64Array
->arr_Uint8Array : Uint8Array
->arr_Float64Array : Float64Array
+>arr_Uint8Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8Array = arr_Uint8ClampedArray;
->arr_Uint8Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint8Array : Uint8Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Uint8Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Int8Array;
->arr_Int16Array = arr_Int8Array : Int8Array
->arr_Int16Array : Int16Array
->arr_Int8Array : Int8Array
+>arr_Int16Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Uint8Array;
->arr_Int16Array = arr_Uint8Array : Uint8Array
->arr_Int16Array : Int16Array
->arr_Uint8Array : Uint8Array
+>arr_Int16Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Int16Array;
->arr_Int16Array = arr_Int16Array : Int16Array
->arr_Int16Array : Int16Array
->arr_Int16Array : Int16Array
+>arr_Int16Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Uint16Array;
->arr_Int16Array = arr_Uint16Array : Uint16Array
->arr_Int16Array : Int16Array
->arr_Uint16Array : Uint16Array
+>arr_Int16Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Int32Array;
->arr_Int16Array = arr_Int32Array : Int32Array
->arr_Int16Array : Int16Array
->arr_Int32Array : Int32Array
+>arr_Int16Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Uint32Array;
->arr_Int16Array = arr_Uint32Array : Uint32Array
->arr_Int16Array : Int16Array
->arr_Uint32Array : Uint32Array
+>arr_Int16Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Float32Array;
->arr_Int16Array = arr_Float32Array : Float32Array
->arr_Int16Array : Int16Array
->arr_Float32Array : Float32Array
+>arr_Int16Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Float64Array;
->arr_Int16Array = arr_Float64Array : Float64Array
->arr_Int16Array : Int16Array
->arr_Float64Array : Float64Array
+>arr_Int16Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int16Array = arr_Uint8ClampedArray;
->arr_Int16Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Int16Array : Int16Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Int16Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Int8Array;
->arr_Uint16Array = arr_Int8Array : Int8Array
->arr_Uint16Array : Uint16Array
->arr_Int8Array : Int8Array
+>arr_Uint16Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Uint8Array;
->arr_Uint16Array = arr_Uint8Array : Uint8Array
->arr_Uint16Array : Uint16Array
->arr_Uint8Array : Uint8Array
+>arr_Uint16Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Int16Array;
->arr_Uint16Array = arr_Int16Array : Int16Array
->arr_Uint16Array : Uint16Array
->arr_Int16Array : Int16Array
+>arr_Uint16Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Uint16Array;
->arr_Uint16Array = arr_Uint16Array : Uint16Array
->arr_Uint16Array : Uint16Array
->arr_Uint16Array : Uint16Array
+>arr_Uint16Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Int32Array;
->arr_Uint16Array = arr_Int32Array : Int32Array
->arr_Uint16Array : Uint16Array
->arr_Int32Array : Int32Array
+>arr_Uint16Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Uint32Array;
->arr_Uint16Array = arr_Uint32Array : Uint32Array
->arr_Uint16Array : Uint16Array
->arr_Uint32Array : Uint32Array
+>arr_Uint16Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Float32Array;
->arr_Uint16Array = arr_Float32Array : Float32Array
->arr_Uint16Array : Uint16Array
->arr_Float32Array : Float32Array
+>arr_Uint16Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Float64Array;
->arr_Uint16Array = arr_Float64Array : Float64Array
->arr_Uint16Array : Uint16Array
->arr_Float64Array : Float64Array
+>arr_Uint16Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint16Array = arr_Uint8ClampedArray;
->arr_Uint16Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint16Array : Uint16Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Uint16Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Int8Array;
->arr_Int32Array = arr_Int8Array : Int8Array
->arr_Int32Array : Int32Array
->arr_Int8Array : Int8Array
+>arr_Int32Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Uint8Array;
->arr_Int32Array = arr_Uint8Array : Uint8Array
->arr_Int32Array : Int32Array
->arr_Uint8Array : Uint8Array
+>arr_Int32Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Int16Array;
->arr_Int32Array = arr_Int16Array : Int16Array
->arr_Int32Array : Int32Array
->arr_Int16Array : Int16Array
+>arr_Int32Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Uint16Array;
->arr_Int32Array = arr_Uint16Array : Uint16Array
->arr_Int32Array : Int32Array
->arr_Uint16Array : Uint16Array
+>arr_Int32Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Int32Array;
->arr_Int32Array = arr_Int32Array : Int32Array
->arr_Int32Array : Int32Array
->arr_Int32Array : Int32Array
+>arr_Int32Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Uint32Array;
->arr_Int32Array = arr_Uint32Array : Uint32Array
->arr_Int32Array : Int32Array
->arr_Uint32Array : Uint32Array
+>arr_Int32Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Float32Array;
->arr_Int32Array = arr_Float32Array : Float32Array
->arr_Int32Array : Int32Array
->arr_Float32Array : Float32Array
+>arr_Int32Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Float64Array;
->arr_Int32Array = arr_Float64Array : Float64Array
->arr_Int32Array : Int32Array
->arr_Float64Array : Float64Array
+>arr_Int32Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Int32Array = arr_Uint8ClampedArray;
->arr_Int32Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Int32Array : Int32Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Int32Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Int8Array;
->arr_Float32Array = arr_Int8Array : Int8Array
->arr_Float32Array : Float32Array
->arr_Int8Array : Int8Array
+>arr_Float32Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Uint8Array;
->arr_Float32Array = arr_Uint8Array : Uint8Array
->arr_Float32Array : Float32Array
->arr_Uint8Array : Uint8Array
+>arr_Float32Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Int16Array;
->arr_Float32Array = arr_Int16Array : Int16Array
->arr_Float32Array : Float32Array
->arr_Int16Array : Int16Array
+>arr_Float32Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Uint16Array;
->arr_Float32Array = arr_Uint16Array : Uint16Array
->arr_Float32Array : Float32Array
->arr_Uint16Array : Uint16Array
+>arr_Float32Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Int32Array;
->arr_Float32Array = arr_Int32Array : Int32Array
->arr_Float32Array : Float32Array
->arr_Int32Array : Int32Array
+>arr_Float32Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Uint32Array;
->arr_Float32Array = arr_Uint32Array : Uint32Array
->arr_Float32Array : Float32Array
->arr_Uint32Array : Uint32Array
+>arr_Float32Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Float32Array;
->arr_Float32Array = arr_Float32Array : Float32Array
->arr_Float32Array : Float32Array
->arr_Float32Array : Float32Array
+>arr_Float32Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Float64Array;
->arr_Float32Array = arr_Float64Array : Float64Array
->arr_Float32Array : Float32Array
->arr_Float64Array : Float64Array
+>arr_Float32Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float32Array = arr_Uint8ClampedArray;
->arr_Float32Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Float32Array : Float32Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Float32Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Int8Array;
->arr_Float64Array = arr_Int8Array : Int8Array
->arr_Float64Array : Float64Array
->arr_Int8Array : Int8Array
+>arr_Float64Array = arr_Int8Array : Int8Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Uint8Array;
->arr_Float64Array = arr_Uint8Array : Uint8Array
->arr_Float64Array : Float64Array
->arr_Uint8Array : Uint8Array
+>arr_Float64Array = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Int16Array;
->arr_Float64Array = arr_Int16Array : Int16Array
->arr_Float64Array : Float64Array
->arr_Int16Array : Int16Array
+>arr_Float64Array = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Uint16Array;
->arr_Float64Array = arr_Uint16Array : Uint16Array
->arr_Float64Array : Float64Array
->arr_Uint16Array : Uint16Array
+>arr_Float64Array = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Int32Array;
->arr_Float64Array = arr_Int32Array : Int32Array
->arr_Float64Array : Float64Array
->arr_Int32Array : Int32Array
+>arr_Float64Array = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Uint32Array;
->arr_Float64Array = arr_Uint32Array : Uint32Array
->arr_Float64Array : Float64Array
->arr_Uint32Array : Uint32Array
+>arr_Float64Array = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Float32Array;
->arr_Float64Array = arr_Float32Array : Float32Array
->arr_Float64Array : Float64Array
->arr_Float32Array : Float32Array
+>arr_Float64Array = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Float64Array;
->arr_Float64Array = arr_Float64Array : Float64Array
->arr_Float64Array : Float64Array
->arr_Float64Array : Float64Array
+>arr_Float64Array = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Float64Array = arr_Uint8ClampedArray;
->arr_Float64Array = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Float64Array : Float64Array
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Float64Array = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Int8Array;
->arr_Uint8ClampedArray = arr_Int8Array : Int8Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Int8Array : Int8Array
+>arr_Uint8ClampedArray = arr_Int8Array : Int8Array<ArrayBuffer>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int8Array : Int8Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Uint8Array;
->arr_Uint8ClampedArray = arr_Uint8Array : Uint8Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint8Array : Uint8Array
+>arr_Uint8ClampedArray = arr_Uint8Array : Uint8Array<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8Array : Uint8Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Int16Array;
->arr_Uint8ClampedArray = arr_Int16Array : Int16Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Int16Array : Int16Array
+>arr_Uint8ClampedArray = arr_Int16Array : Int16Array<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int16Array : Int16Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Uint16Array;
->arr_Uint8ClampedArray = arr_Uint16Array : Uint16Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint16Array : Uint16Array
+>arr_Uint8ClampedArray = arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint16Array : Uint16Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Int32Array;
->arr_Uint8ClampedArray = arr_Int32Array : Int32Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Int32Array : Int32Array
+>arr_Uint8ClampedArray = arr_Int32Array : Int32Array<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Int32Array : Int32Array<ArrayBuffer>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Uint32Array;
->arr_Uint8ClampedArray = arr_Uint32Array : Uint32Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint32Array : Uint32Array
+>arr_Uint8ClampedArray = arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint32Array : Uint32Array<ArrayBuffer>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Float32Array;
->arr_Uint8ClampedArray = arr_Float32Array : Float32Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Float32Array : Float32Array
+>arr_Uint8ClampedArray = arr_Float32Array : Float32Array<ArrayBuffer>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float32Array : Float32Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Float64Array;
->arr_Uint8ClampedArray = arr_Float64Array : Float64Array
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Float64Array : Float64Array
+>arr_Uint8ClampedArray = arr_Float64Array : Float64Array<ArrayBuffer>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Float64Array : Float64Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     arr_Uint8ClampedArray = arr_Uint8ClampedArray;
->arr_Uint8ClampedArray = arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint8ClampedArray : Uint8ClampedArray
->arr_Uint8ClampedArray : Uint8ClampedArray
+>arr_Uint8ClampedArray = arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr_Uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
 }
 

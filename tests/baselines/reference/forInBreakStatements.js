@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts] ////
+
 //// [forInBreakStatements.ts]
 for(var x in {}) {
     break;
@@ -38,6 +40,7 @@ for (var x in {}){
 
 
 //// [forInBreakStatements.js]
+"use strict";
 for (var x in {}) {
     break;
 }

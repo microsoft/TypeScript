@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/typeTagOnPropertyAssignment.js ===
+//// [tests/cases/conformance/jsdoc/typeTagOnPropertyAssignment.ts] ////
+
+=== typeTagOnPropertyAssignment.js ===
 const o = {
 >o : Symbol(o, Decl(typeTagOnPropertyAssignment.js, 0, 5))
 

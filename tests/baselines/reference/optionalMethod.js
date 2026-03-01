@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/optionalMethod.ts] ////
+
 //// [optionalMethod.ts]
 class Base {
     method?() { }
@@ -5,6 +7,7 @@ class Base {
 
 
 //// [optionalMethod.js]
+"use strict";
 class Base {
     method() { }
 }

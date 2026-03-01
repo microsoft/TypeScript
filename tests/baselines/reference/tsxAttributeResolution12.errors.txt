@@ -1,23 +1,26 @@
-tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
-tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    declare module JSX {
+==== react.d.ts (1 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}
     	interface ElementAttributesProperty {
     		props;
+    		~~~~~
+!!! error TS7008: Member 'props' implicitly has an 'any' type.
     	}
     	interface IntrinsicAttributes {
     		ref?: string;
     	}
     }
     
-==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+==== file.tsx (2 errors) ====
     declare class Component<P, S>  {
     	constructor(props?: P, context?: any);
     	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
@@ -34,7 +37,7 @@ tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assi
     	new (props?: P, context?: any): Component<P, any>;
     }
     
-    declare module TestMod {
+    declare namespace TestMod {
     	interface TestClass extends ComponentClass<{reqd: any}> {
     	}
     	var Test: TestClass;
@@ -46,13 +49,13 @@ tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assi
               ~
 !!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
 !!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
+!!! related TS2728 file.tsx:18:46: 'reqd' is declared here.
     
     // Should error
     var t2 = <TestMod.Test />;
               ~~~~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
 !!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
+!!! related TS2728 file.tsx:18:46: 'reqd' is declared here.
     
     

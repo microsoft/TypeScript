@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/emitter/es2019/noCatchBinding/emitter.noCatchBinding.es2019.ts] ////
+
 //// [emitter.noCatchBinding.es2019.ts]
 function f() {
     try { } catch { }
@@ -9,6 +11,7 @@ function f() {
 
 
 //// [emitter.noCatchBinding.es2019.js]
+"use strict";
 function f() {
     try { }
     catch { }

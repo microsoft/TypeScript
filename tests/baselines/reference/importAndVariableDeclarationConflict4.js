@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/importAndVariableDeclarationConflict4.ts] ////
+
 //// [importAndVariableDeclarationConflict4.ts]
-module m {
+namespace m {
   export var m = '';
 }
 
@@ -8,6 +10,7 @@ import x = m.m;
 
 
 //// [importAndVariableDeclarationConflict4.js]
+"use strict";
 var m;
 (function (m_1) {
     m_1.m = '';

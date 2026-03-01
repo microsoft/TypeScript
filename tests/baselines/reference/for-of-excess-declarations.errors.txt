@@ -1,0 +1,15 @@
+for-of-excess-declarations.ts(1,15): error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
+for-of-excess-declarations.ts(1,18): error TS2304: Cannot find name 'b'.
+for-of-excess-declarations.ts(1,18): error TS2538: Type 'any' cannot be used as an index type.
+
+
+==== for-of-excess-declarations.ts (3 errors) ====
+    for (const a, { [b]: c} of [1]) {
+                  ~
+!!! error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
+                     ~
+!!! error TS2304: Cannot find name 'b'.
+                     ~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    
+    }

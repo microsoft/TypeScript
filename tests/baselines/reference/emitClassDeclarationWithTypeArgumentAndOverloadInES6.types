@@ -1,12 +1,17 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts] ////
+
+=== emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts ===
 class B<T> {
 >B : B<T>
+>  : ^^^^
 
     x: T;
 >x : T
+>  : ^
 
     B: T;
 >B : T
+>  : ^
 
     constructor(a: any)
 >a : any
@@ -14,53 +19,80 @@ class B<T> {
     constructor(a: any,b: T)
 >a : any
 >b : T
+>  : ^
 
     constructor(a: T) { this.B = a;}
 >a : T
+>  : ^
 >this.B = a : T
+>           : ^
 >this.B : T
+>       : ^
 >this : this
+>     : ^^^^
 >B : T
+>  : ^
 >a : T
+>  : ^
 
     foo(a: T)
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
+>    : ^^^ ^^ ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >a : T
+>  : ^
 
     foo(a: any)
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
+>    : ^^^ ^^ ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >a : any
 
     foo(b: string)
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
+>    : ^^^ ^^ ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
     foo(): T {
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
+>    : ^^^ ^^ ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 
         return this.x;
 >this.x : T
+>       : ^
 >this : this
+>     : ^^^^
 >x : T
+>  : ^
     }
 
     get BB(): T {
 >BB : T
+>   : ^
 
         return this.B;
 >this.B : T
+>       : ^
 >this : this
+>     : ^^^^
 >B : T
+>  : ^
     }
     set BBWith(c: T) {
 >BBWith : T
+>       : ^
 >c : T
+>  : ^
 
         this.B = c;
 >this.B = c : T
+>           : ^
 >this.B : T
+>       : ^
 >this : this
+>     : ^^^^
 >B : T
+>  : ^
 >c : T
+>  : ^
     }
 }

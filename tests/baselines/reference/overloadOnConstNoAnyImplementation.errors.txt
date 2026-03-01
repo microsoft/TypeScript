@@ -1,12 +1,12 @@
-tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(9,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+overloadOnConstNoAnyImplementation.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadOnConstNoAnyImplementation.ts(9,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts (2 errors) ====
+==== overloadOnConstNoAnyImplementation.ts (2 errors) ====
     function x1(a: number, cb: (x: 'hi') => number);
              ~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/overloadOnConstNoAnyImplementation.ts:3:10: The implementation signature is declared here.
+!!! related TS2750 overloadOnConstNoAnyImplementation.ts:3:10: The implementation signature is declared here.
     function x1(a: number, cb: (x: 'bye') => number);
     function x1(a: number, cb: (x: string) => number) {
         cb('hi');

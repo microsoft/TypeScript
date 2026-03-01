@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/newOperator/newOperatorConformance.ts ===
+//// [tests/cases/conformance/expressions/newOperator/newOperatorConformance.ts] ////
+
+=== newOperatorConformance.ts ===
 class C0 {
 >C0 : Symbol(C0, Decl(newOperatorConformance.ts, 0, 0))
 

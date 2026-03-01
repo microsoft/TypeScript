@@ -27,29 +27,26 @@ export = Adder;
 
 //// [Adder.js]
 "use strict";
-var Adder = /** @class */ (function () {
-    function Adder() {
+class Adder {
+    add(a, b) {
     }
-    Adder.prototype.add = function (a, b) {
-    };
-    return Adder;
-}());
+}
 module.exports = Adder;
 //// [Math.js]
 "use strict";
-var Adder = require("./Adder");
+const Adder = require("./Adder");
 var Math = {
     Adder: Adder
 };
 module.exports = Math;
 //// [Drawing.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Math = require("./Math/Math");
 //// [consumer.js]
 "use strict";
-exports.__esModule = true;
-var Drawing = require("./Drawing");
+Object.defineProperty(exports, "__esModule", { value: true });
+const Drawing = require("./Drawing");
 var addr = new Drawing.Math.Adder();
 
 

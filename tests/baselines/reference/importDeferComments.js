@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/importDefer/importDeferComments.ts] ////
+
+//// [a.ts]
+export {};
+
+//// [b.ts]
+/*1*/ import /*2*/ defer /*3*/ * /*4*/ as /*5*/ aNs /*6*/ from /*7*/ "a" /*8*/;
+
+
+//// [a.js]
+export {};
+//// [b.js]
+export {};

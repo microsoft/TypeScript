@@ -1,43 +1,64 @@
-=== tests/cases/compiler/circularConstraintYieldsAppropriateError.ts ===
+//// [tests/cases/compiler/circularConstraintYieldsAppropriateError.ts] ////
+
+=== circularConstraintYieldsAppropriateError.ts ===
 // https://github.com/Microsoft/TypeScript/issues/16861
 class BaseType<T> {
 >BaseType : BaseType<T>
+>         : ^^^^^^^^^^^
 
     bar: T
 >bar : T
+>    : ^
 }
 
 class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<T> {
 >NextType : NextType<C, T>
+>         : ^^^^^^^^^^^^^^
 >someProp : any
+>         : ^^^
 >BaseType : BaseType<T>
+>         : ^^^^^^^^^^^
 
     baz: string;
 >baz : string
+>    : ^^^^^^
 }
 
 class Foo extends NextType<Foo> {
 >Foo : Foo
+>    : ^^^
 >NextType : NextType<Foo, { test: true; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 
     someProp: {
 >someProp : { test: true; }
+>         : ^^^^^^^^    ^^^
 
         test: true
 >test : true
+>     : ^^^^
 >true : true
+>     : ^^^^
     }
 }
 
 const foo = new Foo();
 >foo : Foo
+>    : ^^^
 >new Foo() : Foo
+>          : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 foo.bar.test
 >foo.bar.test : true
+>             : ^^^^
 >foo.bar : { test: true; }
+>        : ^^^^^^^^    ^^^
 >foo : Foo
+>    : ^^^
 >bar : { test: true; }
+>    : ^^^^^^^^    ^^^
 >test : true
+>     : ^^^^
 

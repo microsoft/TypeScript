@@ -1,0 +1,134 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/infer.d.ts ===
+// export declare function infer(o: { m(): void } & ThisType<{ <|[|{| isWriteAccess: true |}x|]: number|> }>): void;
+
+// === /tests/cases/fourslash/a.js ===
+// import { infer } from "./infer";
+// infer({
+//     m() {
+//         <|this.[|{| isWriteAccess: true |}x|] = 1;|>
+//         this./*FIND ALL REFS*/[|x|];
+//     },
+// });
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/infer.d.ts ===
+  // export declare function infer(o: { m(): void } & ThisType<{ <|[|x|]: number|> }>): void;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/b.js ===
+// /**
+//  * @template T
+//  * @param {{m(): void} & ThisType<{<|[|x|]: number|>}>} o
+//  */
+// function infer(o) {}
+// infer({
+//     m() {
+//         <|this.[|{| isWriteAccess: true |}x|] = 2;|>
+//         this./*FIND ALL REFS*/[|x|];
+//     },
+// });
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/b.js ===
+  // /**
+  //  * @template T
+  //  * @param {{m(): void} & ThisType<{<|[|x|]: number|>}>} o
+  //  */
+  // function infer(o) {}
+  // infer({
+  //     m() {
+  //         this.x = 2;
+  //         this./*FIND ALL REFS*/x;
+  //     },
+  // });
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) x: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

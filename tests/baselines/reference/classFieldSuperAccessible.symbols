@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/classFieldSuperAccessible.ts] ////
+
+=== classFieldSuperAccessible.ts ===
+class A extends class Expr {} {
+>A : Symbol(A, Decl(classFieldSuperAccessible.ts, 0, 0))
+>Expr : Symbol(Expr, Decl(classFieldSuperAccessible.ts, 0, 15))
+
+    static {
+        console.log(super.name);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+>super : Symbol(Expr, Decl(classFieldSuperAccessible.ts, 0, 15))
+>name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
+    }
+}
+class B extends Number {
+>B : Symbol(B, Decl(classFieldSuperAccessible.ts, 4, 1))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+
+    static {
+        console.log(super.EPSILON);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super.EPSILON : Symbol(NumberConstructor.EPSILON, Decl(lib.es2015.core.d.ts, --, --))
+>super : Symbol(NumberConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>EPSILON : Symbol(NumberConstructor.EPSILON, Decl(lib.es2015.core.d.ts, --, --))
+    }
+}
+class C extends Array {
+>C : Symbol(C, Decl(classFieldSuperAccessible.ts, 9, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+
+    foo() {
+>foo : Symbol(C.foo, Decl(classFieldSuperAccessible.ts, 10, 23))
+
+        console.log(super.length);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class D {
+>D : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
+
+    accessor b = () => {}
+>b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
+}
+class E extends D {
+>E : Symbol(E, Decl(classFieldSuperAccessible.ts, 18, 1))
+>D : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
+
+    foo() {
+>foo : Symbol(E.foo, Decl(classFieldSuperAccessible.ts, 19, 19))
+
+        super.b()
+>super.b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
+>super : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
+>b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
+    }
+}
+

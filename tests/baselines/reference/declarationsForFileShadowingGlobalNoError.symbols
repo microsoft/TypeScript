@@ -1,13 +1,15 @@
-=== tests/cases/compiler/dom.ts ===
+//// [tests/cases/compiler/declarationsForFileShadowingGlobalNoError.ts] ////
+
+=== dom.ts ===
 export type DOMNode = Node;
 >DOMNode : Symbol(DOMNode, Decl(dom.ts, 0, 0))
 >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
-=== tests/cases/compiler/custom.ts ===
+=== custom.ts ===
 export type Node = {};
 >Node : Symbol(Node, Decl(custom.ts, 0, 0))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { Node } from './custom'
 >Node : Symbol(Node, Decl(index.ts, 0, 8))
 

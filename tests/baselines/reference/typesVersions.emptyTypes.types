@@ -1,9 +1,14 @@
+//// [tests/cases/conformance/moduleResolution/typesVersions.emptyTypes.ts] ////
+
 === /a/ts3.1/index.d.ts ===
 export const a = 0;
 >a : 0
+>  : ^
 >0 : 0
+>  : ^
 
 === /b/user.ts ===
 import { a } from "a";
 >a : 0
+>  : ^
 

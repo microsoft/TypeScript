@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_asConstArrays.ts] ////
+
+=== typeSatisfaction_asConstArrays.ts ===
+// with readonly array
+const arr1 = [1, 2, 3] as const satisfies readonly unknown[]
+>arr1 : readonly [1, 2, 3]
+>     : ^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const satisfies readonly unknown[] : readonly [1, 2, 3]
+>                                                : ^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const : readonly [1, 2, 3]
+>                   : ^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] : readonly [1, 2, 3]
+>          : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+// with mutable array
+const arr2 = [1, 2, 3] as const satisfies unknown[]
+>arr2 : [1, 2, 3]
+>     : ^^^^^^^^^
+>[1, 2, 3] as const satisfies unknown[] : [1, 2, 3]
+>                                       : ^^^^^^^^^
+>[1, 2, 3] as const : [1, 2, 3]
+>                   : ^^^^^^^^^
+>[1, 2, 3] : [1, 2, 3]
+>          : ^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+

@@ -1,16 +1,25 @@
-=== tests/cases/compiler/contextualSignatureInObjectFreeze.ts ===
+//// [tests/cases/compiler/contextualSignatureInObjectFreeze.ts] ////
+
+=== contextualSignatureInObjectFreeze.ts ===
 // #49101
 
 Object.freeze({
 >Object.freeze({    f: function () { }}) : Readonly<{ f: () => void; }>
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>              : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^^^^^^^^^^^^^^^
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >{    f: function () { }} : { f: () => void; }
+>                         : ^^^^^^^^^^^^^^^^^^
 
     f: function () { }
 >f : () => void
+>  : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 })
 

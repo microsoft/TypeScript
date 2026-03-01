@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArrays-es6.ts] ////
+
 //// [typedArrays-es6.ts]
 const float32Array = new Float32Array(1);
 [...float32Array];
@@ -31,6 +33,7 @@ const uint8ClampedArray = new Uint8ClampedArray(1);
 
 
 //// [typedArrays-es6.js]
+"use strict";
 const float32Array = new Float32Array(1);
 [...float32Array];
 const float64Array = new Float64Array(1);

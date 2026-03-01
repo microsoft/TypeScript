@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/salsa/constructorNameInObjectLiteralAccessor.ts] ////
+
+=== constructorNameInObjectLiteralAccessor.ts ===
+const c1 = {
+>c1 : Symbol(c1, Decl(constructorNameInObjectLiteralAccessor.ts, 0, 5))
+
+    get constructor() { return },
+>constructor : Symbol(constructor, Decl(constructorNameInObjectLiteralAccessor.ts, 0, 12), Decl(constructorNameInObjectLiteralAccessor.ts, 1, 33))
+
+    set constructor(value) {}
+>constructor : Symbol(constructor, Decl(constructorNameInObjectLiteralAccessor.ts, 0, 12), Decl(constructorNameInObjectLiteralAccessor.ts, 1, 33))
+>value : Symbol(value, Decl(constructorNameInObjectLiteralAccessor.ts, 2, 20))
+}
+

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts] ////
+
+=== covariantCallbacks.ts ===
 // Test that callback parameters are related covariantly
 
 interface P<T> {
@@ -204,4 +206,142 @@ function f14(a: AList4, b: BList4) {
 >b : Symbol(b, Decl(covariantCallbacks.ts, 66, 23))
 >a : Symbol(a, Decl(covariantCallbacks.ts, 66, 13))
 }
+
+// Repro from #51620
+
+type Bivar<T> = { set(value: T): void }
+>Bivar : Symbol(Bivar, Decl(covariantCallbacks.ts, 69, 1))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 73, 11))
+>set : Symbol(set, Decl(covariantCallbacks.ts, 73, 17))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 73, 22))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 73, 11))
+
+declare let bu: Bivar<unknown>;
+>bu : Symbol(bu, Decl(covariantCallbacks.ts, 75, 11))
+>Bivar : Symbol(Bivar, Decl(covariantCallbacks.ts, 69, 1))
+
+declare let bs: Bivar<string>;
+>bs : Symbol(bs, Decl(covariantCallbacks.ts, 76, 11))
+>Bivar : Symbol(Bivar, Decl(covariantCallbacks.ts, 69, 1))
+
+bu = bs;
+>bu : Symbol(bu, Decl(covariantCallbacks.ts, 75, 11))
+>bs : Symbol(bs, Decl(covariantCallbacks.ts, 76, 11))
+
+bs = bu;
+>bs : Symbol(bs, Decl(covariantCallbacks.ts, 76, 11))
+>bu : Symbol(bu, Decl(covariantCallbacks.ts, 75, 11))
+
+declare let bfu: Bivar<(x: unknown) => void>;
+>bfu : Symbol(bfu, Decl(covariantCallbacks.ts, 80, 11))
+>Bivar : Symbol(Bivar, Decl(covariantCallbacks.ts, 69, 1))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 80, 24))
+
+declare let bfs: Bivar<(x: string) => void>;
+>bfs : Symbol(bfs, Decl(covariantCallbacks.ts, 81, 11))
+>Bivar : Symbol(Bivar, Decl(covariantCallbacks.ts, 69, 1))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 81, 24))
+
+bfu = bfs;
+>bfu : Symbol(bfu, Decl(covariantCallbacks.ts, 80, 11))
+>bfs : Symbol(bfs, Decl(covariantCallbacks.ts, 81, 11))
+
+bfs = bfu;
+>bfs : Symbol(bfs, Decl(covariantCallbacks.ts, 81, 11))
+>bfu : Symbol(bfu, Decl(covariantCallbacks.ts, 80, 11))
+
+type Bivar1<T> = { set(value: T): void }
+>Bivar1 : Symbol(Bivar1, Decl(covariantCallbacks.ts, 83, 10))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 85, 12))
+>set : Symbol(set, Decl(covariantCallbacks.ts, 85, 18))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 85, 23))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 85, 12))
+
+type Bivar2<T> = { set(value: T): void }
+>Bivar2 : Symbol(Bivar2, Decl(covariantCallbacks.ts, 85, 40))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 86, 12))
+>set : Symbol(set, Decl(covariantCallbacks.ts, 86, 18))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 86, 23))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 86, 12))
+
+declare let b1fu: Bivar1<(x: unknown) => void>;
+>b1fu : Symbol(b1fu, Decl(covariantCallbacks.ts, 88, 11))
+>Bivar1 : Symbol(Bivar1, Decl(covariantCallbacks.ts, 83, 10))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 88, 26))
+
+declare let b2fs: Bivar2<(x: string) => void>;
+>b2fs : Symbol(b2fs, Decl(covariantCallbacks.ts, 89, 11))
+>Bivar2 : Symbol(Bivar2, Decl(covariantCallbacks.ts, 85, 40))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 89, 26))
+
+b1fu = b2fs;
+>b1fu : Symbol(b1fu, Decl(covariantCallbacks.ts, 88, 11))
+>b2fs : Symbol(b2fs, Decl(covariantCallbacks.ts, 89, 11))
+
+b2fs = b1fu;
+>b2fs : Symbol(b2fs, Decl(covariantCallbacks.ts, 89, 11))
+>b1fu : Symbol(b1fu, Decl(covariantCallbacks.ts, 88, 11))
+
+type SetLike<T> = { set(value: T): void, get(): T }
+>SetLike : Symbol(SetLike, Decl(covariantCallbacks.ts, 91, 12))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 93, 13))
+>set : Symbol(set, Decl(covariantCallbacks.ts, 93, 19))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 93, 24))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 93, 13))
+>get : Symbol(get, Decl(covariantCallbacks.ts, 93, 40))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 93, 13))
+
+declare let sx: SetLike1<(x: unknown) => void>;
+>sx : Symbol(sx, Decl(covariantCallbacks.ts, 95, 11))
+>SetLike1 : Symbol(SetLike1, Decl(covariantCallbacks.ts, 98, 8))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 95, 26))
+
+declare let sy: SetLike1<(x: string) => void>;
+>sy : Symbol(sy, Decl(covariantCallbacks.ts, 96, 11))
+>SetLike1 : Symbol(SetLike1, Decl(covariantCallbacks.ts, 98, 8))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 96, 26))
+
+sx = sy;  // Error
+>sx : Symbol(sx, Decl(covariantCallbacks.ts, 95, 11))
+>sy : Symbol(sy, Decl(covariantCallbacks.ts, 96, 11))
+
+sy = sx;
+>sy : Symbol(sy, Decl(covariantCallbacks.ts, 96, 11))
+>sx : Symbol(sx, Decl(covariantCallbacks.ts, 95, 11))
+
+type SetLike1<T> = { set(value: T): void, get(): T }
+>SetLike1 : Symbol(SetLike1, Decl(covariantCallbacks.ts, 98, 8))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 100, 14))
+>set : Symbol(set, Decl(covariantCallbacks.ts, 100, 20))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 100, 25))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 100, 14))
+>get : Symbol(get, Decl(covariantCallbacks.ts, 100, 41))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 100, 14))
+
+type SetLike2<T> = { set(value: T): void, get(): T }
+>SetLike2 : Symbol(SetLike2, Decl(covariantCallbacks.ts, 100, 52))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 101, 14))
+>set : Symbol(set, Decl(covariantCallbacks.ts, 101, 20))
+>value : Symbol(value, Decl(covariantCallbacks.ts, 101, 25))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 101, 14))
+>get : Symbol(get, Decl(covariantCallbacks.ts, 101, 41))
+>T : Symbol(T, Decl(covariantCallbacks.ts, 101, 14))
+
+declare let s1: SetLike1<(x: unknown) => void>;
+>s1 : Symbol(s1, Decl(covariantCallbacks.ts, 103, 11))
+>SetLike1 : Symbol(SetLike1, Decl(covariantCallbacks.ts, 98, 8))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 103, 26))
+
+declare let s2: SetLike2<(x: string) => void>;
+>s2 : Symbol(s2, Decl(covariantCallbacks.ts, 104, 11))
+>SetLike2 : Symbol(SetLike2, Decl(covariantCallbacks.ts, 100, 52))
+>x : Symbol(x, Decl(covariantCallbacks.ts, 104, 26))
+
+s1 = s2;  // Error
+>s1 : Symbol(s1, Decl(covariantCallbacks.ts, 103, 11))
+>s2 : Symbol(s2, Decl(covariantCallbacks.ts, 104, 11))
+
+s2 = s1;
+>s2 : Symbol(s2, Decl(covariantCallbacks.ts, 104, 11))
+>s1 : Symbol(s1, Decl(covariantCallbacks.ts, 103, 11))
 

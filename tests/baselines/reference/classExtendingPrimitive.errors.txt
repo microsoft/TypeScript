@@ -1,26 +1,32 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(3,17): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(4,18): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(5,18): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(6,18): error TS2304: Cannot find name 'Void'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(7,19): error TS1109: Expression expected.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(8,18): error TS2304: Cannot find name 'Null'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(10,18): error TS2507: Type 'undefined' is not a constructor function type.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(11,18): error TS2552: Cannot find name 'Undefined'. Did you mean 'undefined'?
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(14,18): error TS2507: Type 'typeof E' is not a constructor function type.
+classExtendingPrimitive.ts(3,17): error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(4,18): error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(5,18): error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(6,18): error TS2304: Cannot find name 'Void'.
+classExtendingPrimitive.ts(7,19): error TS1109: Expression expected.
+classExtendingPrimitive.ts(8,18): error TS2304: Cannot find name 'Null'.
+classExtendingPrimitive.ts(10,18): error TS2507: Type 'undefined' is not a constructor function type.
+classExtendingPrimitive.ts(11,18): error TS2552: Cannot find name 'Undefined'. Did you mean 'undefined'?
+classExtendingPrimitive.ts(14,18): error TS2507: Type 'typeof E' is not a constructor function type.
+classExtendingPrimitive.ts(16,26): error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(17,27): error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(18,27): error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(20,29): error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(21,29): error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(22,29): error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts (9 errors) ====
+==== classExtendingPrimitive.ts (15 errors) ====
     // classes cannot extend primitives
     
     class C extends number { }
                     ~~~~~~
-!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+!!! error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
     class C2 extends string { }
                      ~~~~~~
-!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+!!! error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
     class C3 extends boolean { }
                      ~~~~~~~
-!!! error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+!!! error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
     class C4 extends Void  { }
                      ~~~~
 !!! error TS2304: Cannot find name 'Void'.
@@ -42,3 +48,24 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
     class C8 extends E { }
                      ~
 !!! error TS2507: Type 'typeof E' is not a constructor function type.
+    
+    const C9 = class extends number { }
+                             ~~~~~~
+!!! error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
+    const C10 = class extends string { }
+                              ~~~~~~
+!!! error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
+    const C11 = class extends boolean { }
+                              ~~~~~~~
+!!! error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
+    
+    const C12 = class A extends number { }
+                                ~~~~~~
+!!! error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
+    const C13 = class B extends string { }
+                                ~~~~~~
+!!! error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
+    const C14 = class C extends boolean { }
+                                ~~~~~~~
+!!! error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
+    

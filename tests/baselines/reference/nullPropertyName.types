@@ -1,552 +1,945 @@
-=== tests/cases/conformance/declarationEmit/nullPropertyName.ts ===
+//// [tests/cases/conformance/declarationEmit/nullPropertyName.ts] ////
+
+=== nullPropertyName.ts ===
 function foo() {}
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 // properties
 foo.x = 1;
 >foo.x = 1 : 1
+>          : ^
 >foo.x : number
+>      : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.y = 1;
 >foo.y = 1 : 1
+>          : ^
 >foo.y : number
+>      : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 // keywords
 foo.break = 1;
 >foo.break = 1 : 1
+>              : ^
 >foo.break : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >break : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.case = 1;
 >foo.case = 1 : 1
+>             : ^
 >foo.case : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >case : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.catch = 1;
 >foo.catch = 1 : 1
+>              : ^
 >foo.catch : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >catch : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.class = 1;
 >foo.class = 1 : 1
+>              : ^
 >foo.class : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >class : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.const = 1;
 >foo.const = 1 : 1
+>              : ^
 >foo.const : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >const : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.continue = 1;
 >foo.continue = 1 : 1
+>                 : ^
 >foo.continue : number
+>             : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >continue : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.debugger = 1;
 >foo.debugger = 1 : 1
+>                 : ^
 >foo.debugger : number
+>             : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >debugger : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.default = 1;
 >foo.default = 1 : 1
+>                : ^
 >foo.default : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >default : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.delete = 1;
 >foo.delete = 1 : 1
+>               : ^
 >foo.delete : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >delete : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.do = 1;
 >foo.do = 1 : 1
+>           : ^
 >foo.do : number
+>       : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >do : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.else = 1;
 >foo.else = 1 : 1
+>             : ^
 >foo.else : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >else : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.enum = 1;
 >foo.enum = 1 : 1
+>             : ^
 >foo.enum : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >enum : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.export = 1;
 >foo.export = 1 : 1
+>               : ^
 >foo.export : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >export : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.extends = 1;
 >foo.extends = 1 : 1
+>                : ^
 >foo.extends : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >extends : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.false = 1;
 >foo.false = 1 : 1
+>              : ^
 >foo.false : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >false : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.finally = 1;
 >foo.finally = 1 : 1
+>                : ^
 >foo.finally : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >finally : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.for = 1;
 >foo.for = 1 : 1
+>            : ^
 >foo.for : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >for : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.function = 1;
 >foo.function = 1 : 1
+>                 : ^
 >foo.function : number
+>             : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >function : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.if = 1;
 >foo.if = 1 : 1
+>           : ^
 >foo.if : number
+>       : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >if : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.import = 1;
 >foo.import = 1 : 1
+>               : ^
 >foo.import : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >import : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.in = 1;
 >foo.in = 1 : 1
+>           : ^
 >foo.in : number
+>       : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >in : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.instanceof = 1;
 >foo.instanceof = 1 : 1
+>                   : ^
 >foo.instanceof : number
+>               : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >instanceof : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.new = 1;
 >foo.new = 1 : 1
+>            : ^
 >foo.new : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >new : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.null = 1;
 >foo.null = 1 : 1
+>             : ^
 >foo.null : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >null : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.return = 1;
 >foo.return = 1 : 1
+>               : ^
 >foo.return : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >return : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.super = 1;
 >foo.super = 1 : 1
+>              : ^
 >foo.super : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >super : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.switch = 1;
 >foo.switch = 1 : 1
+>               : ^
 >foo.switch : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >switch : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.this = 1;
 >foo.this = 1 : 1
+>             : ^
 >foo.this : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >this : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.throw = 1;
 >foo.throw = 1 : 1
+>              : ^
 >foo.throw : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >throw : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.true = 1;
 >foo.true = 1 : 1
+>             : ^
 >foo.true : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >true : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.try = 1;
 >foo.try = 1 : 1
+>            : ^
 >foo.try : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >try : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.typeof = 1;
 >foo.typeof = 1 : 1
+>               : ^
 >foo.typeof : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >typeof : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.var = 1;
 >foo.var = 1 : 1
+>            : ^
 >foo.var : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >var : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.void = 1;
 >foo.void = 1 : 1
+>             : ^
 >foo.void : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >void : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.while = 1;
 >foo.while = 1 : 1
+>              : ^
 >foo.while : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >while : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.with = 1;
 >foo.with = 1 : 1
+>             : ^
 >foo.with : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >with : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.implements = 1;
 >foo.implements = 1 : 1
+>                   : ^
 >foo.implements : number
+>               : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >implements : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.interface = 1;
 >foo.interface = 1 : 1
+>                  : ^
 >foo.interface : number
+>              : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >interface : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.let = 1;
 >foo.let = 1 : 1
+>            : ^
 >foo.let : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >let : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.package = 1;
 >foo.package = 1 : 1
+>                : ^
 >foo.package : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >package : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.private = 1;
 >foo.private = 1 : 1
+>                : ^
 >foo.private : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >private : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.protected = 1;
 >foo.protected = 1 : 1
+>                  : ^
 >foo.protected : number
+>              : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >protected : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.public = 1;
 >foo.public = 1 : 1
+>               : ^
 >foo.public : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >public : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.static = 1;
 >foo.static = 1 : 1
+>               : ^
 >foo.static : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >static : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.yield = 1;
 >foo.yield = 1 : 1
+>              : ^
 >foo.yield : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >yield : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.abstract = 1;
 >foo.abstract = 1 : 1
+>                 : ^
 >foo.abstract : number
+>             : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >abstract : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.as = 1;
 >foo.as = 1 : 1
+>           : ^
 >foo.as : number
+>       : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >as : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.asserts = 1;
 >foo.asserts = 1 : 1
+>                : ^
 >foo.asserts : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >asserts : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.any = 1;
 >foo.any = 1 : 1
+>            : ^
 >foo.any : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >any : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.async = 1;
 >foo.async = 1 : 1
+>              : ^
 >foo.async : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >async : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.await = 1;
 >foo.await = 1 : 1
+>              : ^
 >foo.await : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.boolean = 1;
 >foo.boolean = 1 : 1
+>                : ^
 >foo.boolean : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >boolean : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.constructor = 1;
 >foo.constructor = 1 : 1
+>                    : ^
 >foo.constructor : number
+>                : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >constructor : number
+>            : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.declare = 1;
 >foo.declare = 1 : 1
+>                : ^
 >foo.declare : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >declare : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.get = 1;
 >foo.get = 1 : 1
+>            : ^
 >foo.get : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >get : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.infer = 1;
 >foo.infer = 1 : 1
+>              : ^
 >foo.infer : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >infer : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.is = 1;
 >foo.is = 1 : 1
+>           : ^
 >foo.is : number
+>       : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >is : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.keyof = 1;
 >foo.keyof = 1 : 1
+>              : ^
 >foo.keyof : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >keyof : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.module = 1;
 >foo.module = 1 : 1
+>               : ^
 >foo.module : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >module : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.namespace = 1;
 >foo.namespace = 1 : 1
+>                  : ^
 >foo.namespace : number
+>              : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >namespace : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.never = 1;
 >foo.never = 1 : 1
+>              : ^
 >foo.never : number
+>          : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >never : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.readonly = 1;
 >foo.readonly = 1 : 1
+>                 : ^
 >foo.readonly : number
+>             : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >readonly : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.require = 1;
 >foo.require = 1 : 1
+>                : ^
 >foo.require : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >require : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.number = 1;
 >foo.number = 1 : 1
+>               : ^
 >foo.number : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >number : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.object = 1;
 >foo.object = 1 : 1
+>               : ^
 >foo.object : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >object : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.set = 1;
 >foo.set = 1 : 1
+>            : ^
 >foo.set : number
+>        : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >set : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.string = 1;
 >foo.string = 1 : 1
+>               : ^
 >foo.string : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >string : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.symbol = 1;
 >foo.symbol = 1 : 1
+>               : ^
 >foo.symbol : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >symbol : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.type = 1;
 >foo.type = 1 : 1
+>             : ^
 >foo.type : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >type : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.undefined = 1;
 >foo.undefined = 1 : 1
+>                  : ^
 >foo.undefined : number
+>              : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >undefined : number
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.unique = 1;
 >foo.unique = 1 : 1
+>               : ^
 >foo.unique : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >unique : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.unknown = 1;
 >foo.unknown = 1 : 1
+>                : ^
 >foo.unknown : number
+>            : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >unknown : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.from = 1;
 >foo.from = 1 : 1
+>             : ^
 >foo.from : number
+>         : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >from : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.global = 1;
 >foo.global = 1 : 1
+>               : ^
 >foo.global : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >global : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.bigint = 1;
 >foo.bigint = 1 : 1
+>               : ^
 >foo.bigint : number
+>           : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >bigint : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 foo.of = 1;
 >foo.of = 1 : 1
+>           : ^
 >foo.of : number
+>       : ^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 >of : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 

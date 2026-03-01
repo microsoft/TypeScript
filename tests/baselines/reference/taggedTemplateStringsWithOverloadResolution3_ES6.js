@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts] ////
+
 //// [taggedTemplateStringsWithOverloadResolution3_ES6.ts]
 // Ambiguous call picks the first overload in declaration order
 function fn1(strs: TemplateStringsArray, s: string): string;
@@ -73,6 +75,7 @@ fn5 `${ (n) => n.substr(0) }`;
 
 
 //// [taggedTemplateStringsWithOverloadResolution3_ES6.js]
+"use strict";
 function fn1() { return null; }
 var s = fn1 `${undefined}`;
 // No candidate overloads found

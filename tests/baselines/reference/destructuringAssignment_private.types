@@ -1,81 +1,143 @@
-=== tests/cases/compiler/destructuringAssignment_private.ts ===
+//// [tests/cases/compiler/destructuringAssignment_private.ts] ////
+
+=== destructuringAssignment_private.ts ===
 class C {
 >C : C
+>  : ^
 
     private x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     private o = [{ a: 1 }];
 >o : { a: number; }[]
+>  : ^^^^^^^^^^^^^^^^
 >[{ a: 1 }] : { a: number; }[]
+>           : ^^^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 let x: number;
 >x : number
+>  : ^^^^^^
 
 ([{ a: { x } }] = [{ a: new C() }]);
 >([{ a: { x } }] = [{ a: new C() }]) : [{ a: C; }]
+>                                    : ^^^^^^^^^^^
 >[{ a: { x } }] = [{ a: new C() }] : [{ a: C; }]
+>                                  : ^^^^^^^^^^^
 >[{ a: { x } }] : [{ a: { x: number; }; }]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { x } } : { a: { x: number; }; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ x } : { x: number; }
+>      : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >[{ a: new C() }] : [{ a: C; }]
+>                 : ^^^^^^^^^^^
 >{ a: new C() } : { a: C; }
+>               : ^^^^^^^^^
 >a : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 ({ o: [{ a: x }]} = new C());
 >({ o: [{ a: x }]} = new C()) : C
+>                             : ^
 >{ o: [{ a: x }]} = new C() : C
+>                           : ^
 >{ o: [{ a: x }]} : { o: [{ a: number; }]; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >o : [{ a: number; }]
+>  : ^^^^^^^^^^^^^^^^
 >[{ a: x }] : [{ a: number; }]
+>           : ^^^^^^^^^^^^^^^^
 >{ a: x } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 const nameX = "x";
 >nameX : "x"
+>      : ^^^
 >"x" : "x"
+>    : ^^^
 
 ([{ a: { [nameX]: x } }] = [{ a: new C() }]);
 >([{ a: { [nameX]: x } }] = [{ a: new C() }]) : [{ a: C; }]
+>                                             : ^^^^^^^^^^^
 >[{ a: { [nameX]: x } }] = [{ a: new C() }] : [{ a: C; }]
+>                                           : ^^^^^^^^^^^
 >[{ a: { [nameX]: x } }] : [{ a: { x: number; }; }]
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: { [nameX]: x } } : { a: { x: number; }; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; }
+>  : ^^^^^^^^^^^^^^
 >{ [nameX]: x } : { x: number; }
+>               : ^^^^^^^^^^^^^^
 >[nameX] : number
+>        : ^^^^^^
 >nameX : "x"
+>      : ^^^
 >x : number
+>  : ^^^^^^
 >[{ a: new C() }] : [{ a: C; }]
+>                 : ^^^^^^^^^^^
 >{ a: new C() } : { a: C; }
+>               : ^^^^^^^^^
 >a : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 const nameO = "o";
 >nameO : "o"
+>      : ^^^
 >"o" : "o"
+>    : ^^^
 
 ({ [nameO]: [{ a: x }]} = new C());
 >({ [nameO]: [{ a: x }]} = new C()) : C
+>                                   : ^
 >{ [nameO]: [{ a: x }]} = new C() : C
+>                                 : ^
 >{ [nameO]: [{ a: x }]} : { o: [{ a: number; }]; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[nameO] : [{ a: number; }]
+>        : ^^^^^^^^^^^^^^^^
 >nameO : "o"
+>      : ^^^
 >[{ a: x }] : [{ a: number; }]
+>           : ^^^^^^^^^^^^^^^^
 >{ a: x } : { a: number; }
+>         : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 

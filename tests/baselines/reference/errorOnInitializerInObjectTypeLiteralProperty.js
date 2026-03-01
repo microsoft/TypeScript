@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorOnInitializerInObjectTypeLiteralProperty.ts] ////
+
 //// [errorOnInitializerInObjectTypeLiteralProperty.ts]
 var Foo: {
     bar: number = 5;
@@ -9,5 +11,6 @@ let Bar: {
 
 
 //// [errorOnInitializerInObjectTypeLiteralProperty.js]
+"use strict";
 var Foo;
-var Bar;
+let Bar;

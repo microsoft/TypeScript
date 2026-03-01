@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts ===
+//// [tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts] ////
+
+=== declarationEmitBindingPatternWithReservedWord.ts ===
 type LocaleData = Record<string, never>
 >LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts] ////
+
+=== parserForInStatement2.ts ===
+
 for (var in X) {
-No type information for this code.}
-No type information for this code.
+}

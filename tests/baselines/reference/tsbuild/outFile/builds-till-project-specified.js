@@ -1,20 +1,6 @@
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
-//// [/src/first/first_PART1.ts]
+//// [/home/src/workspaces/solution/first/first_PART1.ts]
 interface TheFirst {
     none: any;
 }
@@ -28,16 +14,17 @@ interface NoJsForHereEither {
 console.log(s);
 
 
-//// [/src/first/first_part2.ts]
+//// [/home/src/workspaces/solution/first/first_part2.ts]
 console.log(f());
 
 
-//// [/src/first/first_part3.ts]
+//// [/home/src/workspaces/solution/first/first_part3.ts]
 function f() {
     return "JS does hoists";
 }
 
-//// [/src/first/tsconfig.json]
+
+//// [/home/src/workspaces/solution/first/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -47,19 +34,17 @@ function f() {
     "sourceMap": true,
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
-    "skipDefaultLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "files": [
     "first_PART1.ts",
     "first_part2.ts",
     "first_part3.ts"
   ],
-  "references": [
-  ]
+  "references": []
 }
 
-
-//// [/src/second/second_part1.ts]
+//// [/home/src/workspaces/solution/second/second_part1.ts]
 namespace N {
     // Comment text
 }
@@ -73,7 +58,7 @@ namespace N {
 }
 
 
-//// [/src/second/second_part2.ts]
+//// [/home/src/workspaces/solution/second/second_part2.ts]
 class C {
     doSomething() {
         console.log("something got done");
@@ -81,7 +66,7 @@ class C {
 }
 
 
-//// [/src/second/tsconfig.json]
+//// [/home/src/workspaces/solution/second/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -94,17 +79,15 @@ class C {
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
-  "references": [
-  ]
+  "references": []
 }
 
-
-//// [/src/third/third_part1.ts]
+//// [/home/src/workspaces/solution/third/third_part1.ts]
 var c = new C();
 c.doSomething();
 
 
-//// [/src/third/tsconfig.json]
+//// [/home/src/workspaces/solution/third/tsconfig.json]
 {
   "compilerOptions": {
     "target": "es5",
@@ -115,39 +98,55 @@ c.doSomething();
     "declarationMap": true,
     "declaration": true,
     "outFile": "./thirdjs/output/third-output.js",
-    "skipDefaultLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "files": [
     "third_part1.ts"
   ],
   "references": [
-    { "path": "../first", "prepend": true },
-    { "path": "../second", "prepend": true },
+    {
+      "path": "../first"
+    },
+    {
+      "path": "../second"
+    }
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-
+/home/src/tslibs/TS/Lib/tsc.js --build second/tsconfig.json
 Output::
-/lib/tsc --build /src/second/tsconfig.json
-exitCode:: ExitStatus.Success
+[96msecond/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96msecond/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m10[0m     "outFile": "../2/second-output.js",
+[7m  [0m [91m    ~~~~~~~~~[0m
 
 
-//// [/src/2/second-output.d.ts]
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-//# sourceMappingURL=second-output.d.ts.map
 
-//// [/src/2/second-output.d.ts.map]
-{"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd"}
+//// [/home/src/workspaces/solution/2/second-output.js.map]
+{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":";AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
-//// [/src/2/second-output.js]
+//// [/home/src/workspaces/solution/2/second-output.js]
+"use strict";
 var N;
 (function (N) {
     function f() {
@@ -165,38 +164,10 @@ var C = (function () {
 }());
 //# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.js.map]
-{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
+//// [/home/src/workspaces/solution/2/second-output.d.ts.map]
+{"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd"}
 
-//// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":285,"kind":"text"}],"mapHash":"9890117190-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"-23059753096-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":100,"kind":"text"}],"mapHash":"7640041563-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"7752788385-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
-
-//// [/src/2/second-output.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/2/second-output.js
-----------------------------------------------------------------------
-text: (0-285)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-======================================================================
-======================================================================
-File:: /src/2/second-output.d.ts
-----------------------------------------------------------------------
-text: (0-100)
+//// [/home/src/workspaces/solution/2/second-output.d.ts]
 declare namespace N {
 }
 declare namespace N {
@@ -204,57 +175,63 @@ declare namespace N {
 declare class C {
     doSomething(): void;
 }
+//# sourceMappingURL=second-output.d.ts.map
 
-======================================================================
+//// [/home/src/workspaces/solution/2/second-output.tsbuildinfo]
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n","3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3],"outSignature":"-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","latestChangedDtsFile":"./second-output.d.ts","version":"FakeTSVersion"}
 
-//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+//// [/home/src/workspaces/solution/2/second-output.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "../second",
-    "sourceFiles": [
-      "../second/second_part1.ts",
-      "../second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 285,
-          "kind": "text"
-        }
-      ],
-      "hash": "-23059753096-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map",
-      "mapHash": "9890117190-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 100,
-          "kind": "text"
-        }
-      ],
-      "hash": "7752788385-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map",
-      "mapHash": "7640041563-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd\"}"
-    }
+  "fileNames": [
+    "../../../tslibs/ts/lib/lib.d.ts",
+    "../second/second_part1.ts",
+    "../second/second_part2.ts"
+  ],
+  "fileInfos": {
+    "../../../tslibs/ts/lib/lib.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../second/second_part1.ts": "-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n",
+    "../second/second_part2.ts": "3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n"
   },
-  "program": {
-    "fileNames": [
-      "../second/second_part1.ts",
-      "../second/second_part2.ts"
+  "root": [
+    [
+      2,
+      "../second/second_part1.ts"
     ],
-    "fileInfos": {
-      "../second/second_part1.ts": "-21603042336-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n",
-      "../second/second_part2.ts": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"
-    },
-    "options": {
-      "composite": true,
-      "outFile": "./second-output.js"
-    },
-    "outSignature": "7003440774-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
-    "latestChangedDtsFile": "./second-output.d.ts"
+    [
+      3,
+      "../second/second_part2.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outFile": "./second-output.js",
+    "removeComments": true,
+    "skipDefaultLibCheck": true,
+    "sourceMap": true,
+    "strict": false,
+    "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../second/second_part1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../second/second_part2.ts",
+      "not cached or not changed"
+    ]
+  ],
+  "outSignature": "-2513601205-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
+  "latestChangedDtsFile": "./second-output.d.ts",
   "version": "FakeTSVersion",
-  "size": 2185
+  "size": 1214
 }
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

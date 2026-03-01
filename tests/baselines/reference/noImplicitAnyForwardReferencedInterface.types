@@ -1,6 +1,9 @@
-=== tests/cases/compiler/noImplicitAnyForwardReferencedInterface.ts ===
+//// [tests/cases/compiler/noImplicitAnyForwardReferencedInterface.ts] ////
+
+=== noImplicitAnyForwardReferencedInterface.ts ===
 declare var x: Entry;
 >x : Entry
+>  : ^^^^^
 
 interface Entry {
     // Should return error for implicit any.

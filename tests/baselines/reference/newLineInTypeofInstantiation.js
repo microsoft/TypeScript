@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newLineInTypeofInstantiation.ts] ////
+
 //// [newLineInTypeofInstantiation.ts]
 interface Example {
     (a: number): typeof a
@@ -7,3 +9,4 @@ interface Example {
 
 
 //// [newLineInTypeofInstantiation.js]
+"use strict";

@@ -51,7 +51,7 @@ class C {
     ["p"]
     zero: void
     ["one"] = {};
-    ["two"];
+    ["two"]
     ;
 }
 a;
@@ -59,7 +59,7 @@ a;
 b;
 (3)
 4;
-/ regex /;
+/ regex /
 ;
 [];
 /** blah */[0]

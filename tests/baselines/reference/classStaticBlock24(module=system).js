@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock24.ts] ////
+
 //// [classStaticBlock24.ts]
 export class C {
   static x: number;
@@ -15,13 +17,10 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
+            C = class C {
+            };
             exports_1("C", C);
-            (function () {
+            (() => {
                 C.x = 1;
             })();
         }

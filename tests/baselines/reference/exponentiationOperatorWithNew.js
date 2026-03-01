@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNew.ts] ////
+
 //// [exponentiationOperatorWithNew.ts]
 var a: any;
 var b: any;
@@ -7,6 +9,7 @@ new a ** new b ** c;
 new (a ** b ** c);
 
 //// [exponentiationOperatorWithNew.js]
+"use strict";
 var a;
 var b;
 var c;

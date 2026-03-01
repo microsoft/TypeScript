@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/erasableSyntaxOnly2.ts] ////
+
+=== index.ts ===
+let a = (<unknown function foo() {});
+>a : unknown
+>  : ^^^^^^^
+>(<unknown function foo() {}) : unknown
+>                             : ^^^^^^^
+><unknown function foo() {} : unknown
+>                           : ^^^^^^^
+>function foo() {} : () => void
+>                  : ^^^^^^^^^^
+>foo : () => void
+>    : ^^^^^^^^^^
+
+let b = <unknown 123;
+>b : unknown
+>  : ^^^^^^^
+><unknown 123 : unknown
+>             : ^^^^^^^
+>123 : 123
+>    : ^^^
+
+let c = <unknown
+>c : unknown
+>  : ^^^^^^^
+><unknown : unknown
+>         : ^^^^^^^
+> : any
+> : ^^^
+

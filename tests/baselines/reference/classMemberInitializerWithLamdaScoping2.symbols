@@ -1,8 +1,10 @@
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping2_0.ts ===
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping2.ts] ////
+
+=== classMemberInitializerWithLamdaScoping2_0.ts ===
 var field1: string;
 >field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping2_0.ts, 0, 3))
 
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping2_1.ts ===
+=== classMemberInitializerWithLamdaScoping2_1.ts ===
 declare var console: {
 >console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 0, 11))
 
@@ -24,6 +26,7 @@ class Test1 {
 >console.log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 0, 22))
 >console : Symbol(console, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 0, 11))
 >log : Symbol(log, Decl(classMemberInitializerWithLamdaScoping2_1.ts, 0, 22))
+>field1 : Symbol(field1, Decl(classMemberInitializerWithLamdaScoping2_0.ts, 0, 3))
 
                              // but since this code would be generated inside constructor, in generated js
                              // it would resolve to private field1 and thats not what user intended here. 

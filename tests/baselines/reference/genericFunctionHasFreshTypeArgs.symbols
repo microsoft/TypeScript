@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionHasFreshTypeArgs.ts ===
+//// [tests/cases/compiler/genericFunctionHasFreshTypeArgs.ts] ////
+
+=== genericFunctionHasFreshTypeArgs.ts ===
 function f(p: <T>(x: T) => void) { };
 >f : Symbol(f, Decl(genericFunctionHasFreshTypeArgs.ts, 0, 0))
 >p : Symbol(p, Decl(genericFunctionHasFreshTypeArgs.ts, 0, 11))

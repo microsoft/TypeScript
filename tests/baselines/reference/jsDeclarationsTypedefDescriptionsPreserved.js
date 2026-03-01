@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefDescriptionsPreserved.ts] ////
+
 //// [index.js]
 /**
  * Options for Foo <------------
@@ -17,6 +19,7 @@
 
 
 //// [index.js]
+"use strict";
 /**
  * Options for Foo <------------
  * @typedef {Object} FooOptions

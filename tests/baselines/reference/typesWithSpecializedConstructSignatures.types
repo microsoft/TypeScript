@@ -1,31 +1,45 @@
-=== tests/cases/conformance/types/members/typesWithSpecializedConstructSignatures.ts ===
+//// [tests/cases/conformance/types/members/typesWithSpecializedConstructSignatures.ts] ////
+
+=== typesWithSpecializedConstructSignatures.ts ===
 // basic uses of specialized signatures without errors
 
 class Base { foo: string }
 >Base : Base
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
 class Derived1 extends Base { bar: string }
 >Derived1 : Derived1
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
 class Derived2 extends Base { baz: string }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Base : Base
+>     : ^^^^
 >baz : string
+>    : ^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     constructor(x: 'hi');
 >x : "hi"
+>  : ^^^^
 
     constructor(x: 'bye');
 >x : "bye"
+>  : ^^^^^
 
     constructor(x: string);
 >x : string
+>  : ^^^^^^
 
     constructor(x) {
 >x : any
@@ -36,72 +50,108 @@ class C {
 }
 var c = new C('a');
 >c : C
+>  : ^
 >new C('a') : C
+>           : ^
 >C : typeof C
+>  : ^^^^^^^^
 >'a' : "a"
+>    : ^^^
 
 interface I {
     new(x: 'hi'): Derived1;
 >x : "hi"
+>  : ^^^^
 
     new(x: 'bye'): Derived2;
 >x : "bye"
+>  : ^^^^^
 
     new(x: string): Base;
 >x : string
+>  : ^^^^^^
 }
 var i: I;
 >i : I
+>  : ^
 
 var a: {
->a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
+>a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>  : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 
     new(x: 'hi'): Derived1;
 >x : "hi"
+>  : ^^^^
 
     new(x: 'bye'): Derived2;
 >x : "bye"
+>  : ^^^^^
 
     new(x: string): Base;
 >x : string
+>  : ^^^^^^
 
 };
 
 c = i;
 >c = i : I
+>      : ^
 >c : C
+>  : ^
 >i : I
+>  : ^
 
 c = a;
 >c = a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>      : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 >c : C
+>  : ^
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>  : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 
 i = a;
 >i = a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>      : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 >i : I
+>  : ^
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>  : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 
 a = i;
 >a = i : I
+>      : ^
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>  : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 >i : I
+>  : ^
 
 var r1 = new C('hi');
 >r1 : C
+>   : ^
 >new C('hi') : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
 var r2: Derived2 = new i('bye');
 >r2 : Derived2
+>   : ^^^^^^^^
 >new i('bye') : Derived2
+>             : ^^^^^^^^
 >i : I
+>  : ^
 >'bye' : "bye"
+>      : ^^^^^
 
 var r3: Base = new a('hm');
 >r3 : Base
+>   : ^^^^
 >new a('hm') : Base
+>            : ^^^^
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>  : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
 >'hm' : "hm"
+>     : ^^^^
 

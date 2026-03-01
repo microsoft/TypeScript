@@ -1,13 +1,19 @@
-=== tests/cases/compiler/importDeclWithExportModifier.ts ===
-module x {
+//// [tests/cases/compiler/importDeclWithExportModifier.ts] ////
+
+=== importDeclWithExportModifier.ts ===
+namespace x {
     interface c {
     }
 }
 export import a = x.c;
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 var b: a;
 >b : a
+>  : ^
 

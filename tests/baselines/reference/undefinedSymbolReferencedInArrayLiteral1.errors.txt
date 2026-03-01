@@ -1,9 +1,9 @@
-tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(1,29): error TS2304: Cannot find name 'deltaOffset'.
-tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(4,15): error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.
-tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(5,5): error TS2304: Cannot find name 'anotherNonExistingMethod'.
+undefinedSymbolReferencedInArrayLiteral1.ts(1,29): error TS2304: Cannot find name 'deltaOffset'.
+undefinedSymbolReferencedInArrayLiteral1.ts(4,15): error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.
+undefinedSymbolReferencedInArrayLiteral1.ts(5,5): error TS2304: Cannot find name 'anotherNonExistingMethod'.
 
 
-==== tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts (3 errors) ====
+==== undefinedSymbolReferencedInArrayLiteral1.ts (3 errors) ====
     var tokens = [{ startIndex: deltaOffset }];
                                 ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'deltaOffset'.

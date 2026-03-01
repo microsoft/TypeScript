@@ -1,0 +1,124 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes3.ts] ////
+
+=== genericContextualTypes3.ts ===
+type LowInfer<T> = T & {};
+>LowInfer : Symbol(LowInfer, Decl(genericContextualTypes3.ts, 0, 0))
+>T : Symbol(T, Decl(genericContextualTypes3.ts, 0, 14))
+>T : Symbol(T, Decl(genericContextualTypes3.ts, 0, 14))
+
+type PartialAssigner<TContext, TKey extends keyof TContext> = (
+>PartialAssigner : Symbol(PartialAssigner, Decl(genericContextualTypes3.ts, 0, 26))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 2, 21))
+>TKey : Symbol(TKey, Decl(genericContextualTypes3.ts, 2, 30))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 2, 21))
+
+  context: TContext
+>context : Symbol(context, Decl(genericContextualTypes3.ts, 2, 63))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 2, 21))
+
+) => TContext[TKey];
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 2, 21))
+>TKey : Symbol(TKey, Decl(genericContextualTypes3.ts, 2, 30))
+
+type PropertyAssigner<TContext> = {
+>PropertyAssigner : Symbol(PropertyAssigner, Decl(genericContextualTypes3.ts, 4, 20))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 6, 22))
+
+  [K in keyof TContext]?: PartialAssigner<TContext, K> | TContext[K];
+>K : Symbol(K, Decl(genericContextualTypes3.ts, 7, 3))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 6, 22))
+>PartialAssigner : Symbol(PartialAssigner, Decl(genericContextualTypes3.ts, 0, 26))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 6, 22))
+>K : Symbol(K, Decl(genericContextualTypes3.ts, 7, 3))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 6, 22))
+>K : Symbol(K, Decl(genericContextualTypes3.ts, 7, 3))
+
+};
+
+type Meta<TContext> = {
+>Meta : Symbol(Meta, Decl(genericContextualTypes3.ts, 8, 2))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 10, 10))
+
+  action: (ctx: TContext) => void
+>action : Symbol(action, Decl(genericContextualTypes3.ts, 10, 23))
+>ctx : Symbol(ctx, Decl(genericContextualTypes3.ts, 11, 11))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 10, 10))
+}
+
+interface AssignAction<TContext> {
+>AssignAction : Symbol(AssignAction, Decl(genericContextualTypes3.ts, 12, 1))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 14, 23))
+
+  type: "xstate.assign";
+>type : Symbol(AssignAction.type, Decl(genericContextualTypes3.ts, 14, 34))
+
+  (arg: TContext, meta: Meta<TContext>): void;
+>arg : Symbol(arg, Decl(genericContextualTypes3.ts, 16, 3))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 14, 23))
+>meta : Symbol(meta, Decl(genericContextualTypes3.ts, 16, 17))
+>Meta : Symbol(Meta, Decl(genericContextualTypes3.ts, 8, 2))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 14, 23))
+}
+
+declare function assign<TContext>(
+>assign : Symbol(assign, Decl(genericContextualTypes3.ts, 17, 1))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 19, 24))
+
+  assignment: PropertyAssigner<LowInfer<TContext>>
+>assignment : Symbol(assignment, Decl(genericContextualTypes3.ts, 19, 34))
+>PropertyAssigner : Symbol(PropertyAssigner, Decl(genericContextualTypes3.ts, 4, 20))
+>LowInfer : Symbol(LowInfer, Decl(genericContextualTypes3.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 19, 24))
+
+): AssignAction<TContext>;
+>AssignAction : Symbol(AssignAction, Decl(genericContextualTypes3.ts, 12, 1))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 19, 24))
+
+type Config<TContext> = {
+>Config : Symbol(Config, Decl(genericContextualTypes3.ts, 21, 26))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 23, 12))
+
+  context: TContext;
+>context : Symbol(context, Decl(genericContextualTypes3.ts, 23, 25))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 23, 12))
+
+  entry?: AssignAction<TContext>;
+>entry : Symbol(entry, Decl(genericContextualTypes3.ts, 24, 20))
+>AssignAction : Symbol(AssignAction, Decl(genericContextualTypes3.ts, 12, 1))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 23, 12))
+
+};
+
+declare function createMachine<TContext>(config: Config<TContext>): void;
+>createMachine : Symbol(createMachine, Decl(genericContextualTypes3.ts, 26, 2))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 28, 31))
+>config : Symbol(config, Decl(genericContextualTypes3.ts, 28, 41))
+>Config : Symbol(Config, Decl(genericContextualTypes3.ts, 21, 26))
+>TContext : Symbol(TContext, Decl(genericContextualTypes3.ts, 28, 31))
+
+createMachine<{ count: number }>({
+>createMachine : Symbol(createMachine, Decl(genericContextualTypes3.ts, 26, 2))
+>count : Symbol(count, Decl(genericContextualTypes3.ts, 30, 15))
+
+  context: {
+>context : Symbol(context, Decl(genericContextualTypes3.ts, 30, 34))
+
+    count: 0,
+>count : Symbol(count, Decl(genericContextualTypes3.ts, 31, 12))
+
+  },
+  entry: assign({
+>entry : Symbol(entry, Decl(genericContextualTypes3.ts, 33, 4))
+>assign : Symbol(assign, Decl(genericContextualTypes3.ts, 17, 1))
+
+    count: (ctx: { count: number }) => ++ctx.count,
+>count : Symbol(count, Decl(genericContextualTypes3.ts, 34, 17))
+>ctx : Symbol(ctx, Decl(genericContextualTypes3.ts, 35, 12))
+>count : Symbol(count, Decl(genericContextualTypes3.ts, 35, 18))
+>ctx.count : Symbol(count, Decl(genericContextualTypes3.ts, 35, 18))
+>ctx : Symbol(ctx, Decl(genericContextualTypes3.ts, 35, 12))
+>count : Symbol(count, Decl(genericContextualTypes3.ts, 35, 18))
+
+  }),
+});
+

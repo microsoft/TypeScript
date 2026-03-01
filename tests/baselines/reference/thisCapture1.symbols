@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisCapture1.ts ===
+//// [tests/cases/compiler/thisCapture1.ts] ////
+
+=== thisCapture1.ts ===
 class X {
 >X : Symbol(X, Decl(thisCapture1.ts, 0, 0))
 

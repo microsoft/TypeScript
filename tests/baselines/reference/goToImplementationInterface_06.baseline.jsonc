@@ -1,0 +1,50 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_06.ts ===
+// interface Fo/*GOTO IMPL*/o {
+//     new (a: number): SomeOtherType;
+// }
+// 
+// interface SomeOtherType {}
+// 
+// let x: Foo = [|{| defId: 0 |}class { constructor (a: number) {} }|];
+// let y = <Foo> [|{| defId: 1 |}class { constructor (a: number) {} }|];
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "local class",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "anonymous local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "kind": "local class",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "anonymous local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/cb.js ===
+//// [tests/cases/conformance/jsdoc/callbackTag2.ts] ////
+
+=== cb.js ===
 /** @template T
  * @callback Id
  * @param {T} t
@@ -6,14 +8,20 @@
  */
 var x = 1
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {Id<string>} I actually wanted to write `const "120"` */
 var one_twenty = s => "120";
 >one_twenty : Id<string>
+>           : ^^^^^^^^^^
 >s => "120" : (s: string) => string
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >"120" : "120"
+>      : ^^^^^
 
 /** @template S
  * @callback SharedId
@@ -22,32 +30,48 @@ var one_twenty = s => "120";
  */
 class SharedClass {
 >SharedClass : SharedClass
+>            : ^^^^^^^^^^^
 
     constructor() {
         /** @type {SharedId<S>} */
         this.id;
 >this.id : SharedId<S>
+>        : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >id : SharedId<S>
+>   : ^^^^^^^^^^^
     }
 }
 /** @type {SharedId<number>} */
 var outside = n => n + 1;
 >outside : SharedId<number>
+>        : ^^^^^^^^^^^^^^^^
 >n => n + 1 : (n: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n + 1 : number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {Final<{ fantasy }, { heroes }>} */
 var noreturn = (barts, tidus, noctis) => "cecil"
 >noreturn : Final<{ fantasy: any; }, { heroes: any; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(barts, tidus, noctis) => "cecil" : (barts: { fantasy: any; }, tidus: { heroes: any; }, noctis: { heroes: any; } & { fantasy: any; }) => "cecil" | "zidane"
+>                                  : ^     ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >barts : { fantasy: any; }
+>      : ^^^^^^^^^^^^^^^^^
 >tidus : { heroes: any; }
+>      : ^^^^^^^^^^^^^^^^
 >noctis : { heroes: any; } & { fantasy: any; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"cecil" : "cecil"
+>        : ^^^^^^^
 
 /**
  * @template V,X

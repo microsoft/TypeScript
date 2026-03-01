@@ -1,8 +1,15 @@
-=== tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts ===
+//// [tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts] ////
+
+=== overloadOnConstAsTypeAnnotation.ts ===
 var f: (x: 'hi') => number = (x: 'hi') => { return 1; };
->f : (x: 'hi') => number
+>f : (x: "hi") => number
+>  : ^ ^^    ^^^^^      
 >x : "hi"
->(x: 'hi') => { return 1; } : (x: 'hi') => number
+>  : ^^^^
+>(x: 'hi') => { return 1; } : (x: "hi") => number
+>                           : ^ ^^    ^^^^^^^^^^^
 >x : "hi"
+>  : ^^^^
 >1 : 1
+>  : ^
 

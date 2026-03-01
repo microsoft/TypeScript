@@ -1,16 +1,22 @@
-=== tests/cases/compiler/templateLiteralsAndDecoratorMetadata.ts ===
+//// [tests/cases/compiler/templateLiteralsAndDecoratorMetadata.ts] ////
+
+=== templateLiteralsAndDecoratorMetadata.ts ===
 declare var format: any;
 >format : any
 
 export class Greeter {
 >Greeter : Greeter
+>        : ^^^^^^^
 
   @format("Hello, %s")
 >format("Hello, %s") : any
 >format : any
 >"Hello, %s" : "Hello, %s"
+>            : ^^^^^^^^^^^
 
   greeting: `boss` | `employee` = `employee`;  //template literals on this line cause the issue
 >greeting : "boss" | "employee"
+>         : ^^^^^^^^^^^^^^^^^^^
 >`employee` : "employee"
+>           : ^^^^^^^^^^
 }

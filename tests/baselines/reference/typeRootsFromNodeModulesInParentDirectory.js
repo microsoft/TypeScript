@@ -12,6 +12,6 @@ x;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-var xyz_1 = require("xyz");
+Object.defineProperty(exports, "__esModule", { value: true });
+const xyz_1 = require("xyz");
 xyz_1.x;

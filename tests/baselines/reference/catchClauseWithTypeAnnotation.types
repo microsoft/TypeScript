@@ -1,151 +1,238 @@
-=== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts ===
+//// [tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts] ////
+
+=== catchClauseWithTypeAnnotation.ts ===
 type any1 = any;
 >any1 : any
+>     : ^^^
 
 type unknown1 = unknown;
 >unknown1 : unknown
+>         : ^^^^^^^
 
 function fn(x: boolean) {
 >fn : (x: boolean) => void
+>   : ^ ^^       ^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
     // no type annotation allowed other than `any` and `unknown`
     try { } catch (x) { } // should be OK
 >x : any
+>  : ^^^
 
     try { } catch (x: any) { } // should be OK
 >x : any
+>  : ^^^
 
     try { } catch (x: any1) { } // should be OK
 >x : any
+>  : ^^^
 
     try { } catch (x: unknown) { } // should be OK
 >x : unknown
+>  : ^^^^^^^
 
     try { } catch (x: unknown1) { } // should be OK
 >x : unknown
+>  : ^^^^^^^
 
     try { } catch (x) { x.foo; } // should be OK
 >x : any
+>  : ^^^
 >x.foo : any
+>      : ^^^
 >x : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
     try { } catch (x: any) { x.foo; } // should be OK
 >x : any
+>  : ^^^
 >x.foo : any
+>      : ^^^
 >x : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
     try { } catch (x: any1) { x.foo; } // should be OK
 >x : any
+>  : ^^^
 >x.foo : any
+>      : ^^^
 >x : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
     try { } catch (x: unknown) { console.log(x); } // should be OK
 >x : unknown
+>  : ^^^^^^^
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : unknown
+>  : ^^^^^^^
 
     try { } catch (x: unknown1) { console.log(x); } // should be OK
 >x : unknown
+>  : ^^^^^^^
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : unknown
+>  : ^^^^^^^
 
     try { } catch (x: unknown) { x.foo; } // error in the body
 >x : unknown
+>  : ^^^^^^^
 >x.foo : any
+>      : ^^^
 >x : unknown
+>  : ^^^^^^^
 >foo : any
+>    : ^^^
 
     try { } catch (x: unknown1) { x.foo; } // error in the body
 >x : unknown
+>  : ^^^^^^^
 >x.foo : any
+>      : ^^^
 >x : unknown
+>  : ^^^^^^^
 >foo : any
+>    : ^^^
 
     try { } catch (x: Error) { } // error in the type
 >x : any
+>  : ^^^
 
     try { } catch (x: object) { } // error in the type
 >x : any
+>  : ^^^
 
     try { console.log(); }
 >console.log() : void
+>              : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 
     // @ts-ignore
     catch (e: number) { // e should not be a `number`
 >e : any
+>  : ^^^
 
         console.log(e.toLowerCase());
 >console.log(e.toLowerCase()) : void
+>                             : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >e.toLowerCase() : any
+>                : ^^^
 >e.toLowerCase : any
+>              : ^^^
 >e : any
+>  : ^^^
 >toLowerCase : any
+>            : ^^^
     }
 
     // minor bug: shows that the `catch` argument is skipped when checking scope
     try { } catch (x) { let x: string; }
 >x : any
+>  : ^^^
 >x : string
+>  : ^^^^^^
 
     try { } catch (x) { var x: string; }
 >x : any
+>  : ^^^
 >x : boolean
+>  : ^^^^^^^
 
     try { } catch (x) { var x: boolean; }
 >x : any
+>  : ^^^
 >x : boolean
+>  : ^^^^^^^
 
     try { } catch ({ x }) { } // should be OK
 >x : any
+>  : ^^^
 
     try { } catch ({ x }: any) { x.foo; } // should be OK
 >x : any
+>  : ^^^
 >x.foo : any
+>      : ^^^
 >x : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
     try { } catch ({ x }: any1) { x.foo;} // should be OK
 >x : any
+>  : ^^^
 >x.foo : any
+>      : ^^^
 >x : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
-    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown) { console.log(x); } // error in the destructure
 >x : any
+>  : ^^^
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : any
+>  : ^^^
 
-    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown1) { console.log(x); } // error in the destructure
 >x : any
+>  : ^^^
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : any
+>  : ^^^
 
     try { } catch ({ x }: object) { } // error in the type
 >x : any
+>  : ^^^
 
     try { } catch ({ x }: Error) { } // error in the type
 >x : any
+>  : ^^^
 }
 

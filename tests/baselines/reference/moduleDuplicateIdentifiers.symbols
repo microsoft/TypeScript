@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleDuplicateIdentifiers.ts ===
+//// [tests/cases/compiler/moduleDuplicateIdentifiers.ts] ////
+
+=== moduleDuplicateIdentifiers.ts ===
 export var Foo = 2;
 >Foo : Symbol(Foo, Decl(moduleDuplicateIdentifiers.ts, 0, 10), Decl(moduleDuplicateIdentifiers.ts, 1, 10))
 

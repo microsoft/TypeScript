@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_parseConfig.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_parseConfig.ts]
@@ -42,6 +43,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
     return ts.createProgram(rootFiles, settings.options);
 }
 
+
 //// [APISample_parseConfig.js]
 "use strict";
 /*
@@ -49,30 +51,28 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
-exports.createProgram = void 0;
-var ts = require("typescript");
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createProgram = createProgram;
+const ts = require("typescript");
 function printError(error) {
     if (!error) {
         return;
     }
-    console.log("".concat(error.file && error.file.fileName, ": ").concat(error.messageText));
+    console.log(`${error.file && error.file.fileName}: ${error.messageText}`);
 }
 function createProgram(rootFiles, compilerOptionsJson) {
-    var _a = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson), config = _a.config, error = _a.error;
+    const { config, error } = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson);
     if (error) {
         printError(error);
         return undefined;
     }
-    var basePath = process.cwd();
-    var settings = ts.convertCompilerOptionsFromJson(config.config["compilerOptions"], basePath);
+    const basePath = process.cwd();
+    const settings = ts.convertCompilerOptionsFromJson(config.config["compilerOptions"], basePath);
     if (!settings.options) {
-        for (var _i = 0, _b = settings.errors; _i < _b.length; _i++) {
-            var err = _b[_i];
+        for (const err of settings.errors) {
             printError(err);
         }
         return undefined;
     }
     return ts.createProgram(rootFiles, settings.options);
 }
-exports.createProgram = createProgram;

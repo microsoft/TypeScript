@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arithmeticOnInvalidTypes2.ts] ////
+
 //// [arithmeticOnInvalidTypes2.ts]
 var obj = function f<T>(a: T, b: T) {
     var z1 = a + b;
@@ -8,6 +10,7 @@ var obj = function f<T>(a: T, b: T) {
 };
 
 //// [arithmeticOnInvalidTypes2.js]
+"use strict";
 var obj = function f(a, b) {
     var z1 = a + b;
     var z2 = a - b;

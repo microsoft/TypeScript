@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/privateConstructorFunction.ts] ////
+
 //// [privateConstructorFunction.js]
 {
     // make sure not to crash when parent's a block rather than a source file or some other
@@ -12,6 +14,7 @@
 
 
 //// [privateConstructorFunction.js]
+"use strict";
 {
     // make sure not to crash when parent's a block rather than a source file or some other
     // symbol-having node.
@@ -24,8 +27,3 @@
 
 
 //// [privateConstructorFunction.d.ts]
-/** @private */
-declare function C(): void;
-declare class C {
-    x: number;
-}

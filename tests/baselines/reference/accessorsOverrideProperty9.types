@@ -1,89 +1,119 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty9.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty9.ts] ////
+
+=== accessorsOverrideProperty9.ts ===
 // #41347, based on microsoft/rushstack
 
 // Mixin utilities
 export type Constructor<T = {}> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 export type PropertiesOf<T> = { [K in keyof T]: T[K] };
 >PropertiesOf : PropertiesOf<T>
+>             : ^^^^^^^^^^^^^^^
 
 interface IApiItemConstructor extends Constructor<ApiItem>, PropertiesOf<typeof ApiItem> {}
 >ApiItem : typeof ApiItem
+>        : ^^^^^^^^^^^^^^
 
 // Base class
 class ApiItem {
 >ApiItem : ApiItem
+>        : ^^^^^^^
 
   public get members(): ReadonlyArray<ApiItem> {
 >members : readonly ApiItem[]
+>        : ^^^^^^^^^^^^^^^^^^
 
     return [];
 >[] : never[]
+>   : ^^^^^^^
   }
 }
 
 // Normal subclass
 class ApiEnumMember extends ApiItem {
 >ApiEnumMember : ApiEnumMember
+>              : ^^^^^^^^^^^^^
 >ApiItem : ApiItem
+>        : ^^^^^^^
 }
 
 // Mixin base class
 interface ApiItemContainerMixin extends ApiItem {
   readonly members: ReadonlyArray<ApiItem>;
 >members : readonly ApiItem[]
+>        : ^^^^^^^^^^^^^^^^^^
 }
 
 function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 >ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
+>                      : ^          ^^^^^^^^^                   ^^         ^^          ^^^^^                                                            
 
   baseClass: TBaseClass
 >baseClass : TBaseClass
+>          : ^^^^^^^^^^
 
 ): TBaseClass & (new (...args: any[]) => ApiItemContainerMixin) {
 >args : any[]
+>     : ^^^^^
 
   abstract class MixedClass extends baseClass implements ApiItemContainerMixin {
 >MixedClass : MixedClass
+>           : ^^^^^^^^^^
 >baseClass : ApiItem
+>          : ^^^^^^^
 
     public constructor(...args: any[]) {
 >args : any[]
+>     : ^^^^^
 
       super(...args);
 >super(...args) : void
+>               : ^^^^
 >super : TBaseClass
+>      : ^^^^^^^^^^
 >...args : any
 >args : any[]
+>     : ^^^^^
     }
 
     public get members(): ReadonlyArray<ApiItem> {
 >members : readonly ApiItem[]
+>        : ^^^^^^^^^^^^^^^^^^
 
       return [];
 >[] : never[]
+>   : ^^^^^^^
     }
   }
 
   return MixedClass;
 >MixedClass : ((abstract new (...args: any[]) => MixedClass) & { prototype: ApiItemContainerMixin<any>.MixedClass; }) & TBaseClass
+>           : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Subclass inheriting from mixin
 export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 >ApiEnum : ApiEnum
+>        : ^^^^^^^
 >ApiItemContainerMixin(ApiItem) : ApiItem & ApiItemContainerMixin
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
+>                      : ^          ^^^^^^^^^                   ^^         ^^          ^^^^^                                                            
 >ApiItem : typeof ApiItem
+>        : ^^^^^^^^^^^^^^
 
   // This worked prior to TypeScript 4.0:
   public get members(): ReadonlyArray<ApiEnumMember> {
 >members : readonly ApiEnumMember[]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     return [];
 >[] : never[]
+>   : ^^^^^^^
   }
 }
 

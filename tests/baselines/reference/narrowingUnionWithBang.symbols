@@ -1,0 +1,237 @@
+//// [tests/cases/compiler/narrowingUnionWithBang.ts] ////
+
+=== narrowingUnionWithBang.ts ===
+type WorkingType = {
+>WorkingType : Symbol(WorkingType, Decl(narrowingUnionWithBang.ts, 0, 0))
+
+    thing?:
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+
+    { name: 'Error1', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 2, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 2, 21))
+
+    { name: 'Error2', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 3, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 3, 21))
+
+    { name: 'Error3', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 4, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 4, 21))
+
+    { name: 'Error4', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 5, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 5, 21))
+
+    { name: 'Error5', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 6, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 6, 21))
+
+    { name: 'Error6', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 7, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 7, 21))
+
+    { name: 'Error7', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 8, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 8, 21))
+
+    { name: 'Error8', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 9, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 9, 21))
+
+    { name: 'Error9', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 10, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 10, 21))
+
+    { name: 'Correct', id: string }
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 11, 5))
+>id : Symbol(id, Decl(narrowingUnionWithBang.ts, 11, 22))
+
+};
+const working: WorkingType = null as unknown as WorkingType;
+>working : Symbol(working, Decl(narrowingUnionWithBang.ts, 13, 5))
+>WorkingType : Symbol(WorkingType, Decl(narrowingUnionWithBang.ts, 0, 0))
+>WorkingType : Symbol(WorkingType, Decl(narrowingUnionWithBang.ts, 0, 0))
+
+if (working.thing!.name !== "Correct") {
+>working.thing!.name : Symbol(name, Decl(narrowingUnionWithBang.ts, 2, 5), Decl(narrowingUnionWithBang.ts, 3, 5), Decl(narrowingUnionWithBang.ts, 4, 5), Decl(narrowingUnionWithBang.ts, 5, 5), Decl(narrowingUnionWithBang.ts, 6, 5) ... and 5 more)
+>working.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+>working : Symbol(working, Decl(narrowingUnionWithBang.ts, 13, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 2, 5), Decl(narrowingUnionWithBang.ts, 3, 5), Decl(narrowingUnionWithBang.ts, 4, 5), Decl(narrowingUnionWithBang.ts, 5, 5), Decl(narrowingUnionWithBang.ts, 6, 5) ... and 5 more)
+
+    console.log(working.thing!.message)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>working.thing!.message : Symbol(message, Decl(narrowingUnionWithBang.ts, 2, 21), Decl(narrowingUnionWithBang.ts, 3, 21), Decl(narrowingUnionWithBang.ts, 4, 21), Decl(narrowingUnionWithBang.ts, 5, 21), Decl(narrowingUnionWithBang.ts, 6, 21) ... and 4 more)
+>working.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+>working : Symbol(working, Decl(narrowingUnionWithBang.ts, 13, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 2, 21), Decl(narrowingUnionWithBang.ts, 3, 21), Decl(narrowingUnionWithBang.ts, 4, 21), Decl(narrowingUnionWithBang.ts, 5, 21), Decl(narrowingUnionWithBang.ts, 6, 21) ... and 4 more)
+
+} else {
+    console.log(working.thing!.id);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>working.thing!.id : Symbol(id, Decl(narrowingUnionWithBang.ts, 11, 22))
+>working.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+>working : Symbol(working, Decl(narrowingUnionWithBang.ts, 13, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 0, 20))
+>id : Symbol(id, Decl(narrowingUnionWithBang.ts, 11, 22))
+}
+
+type BorkedType = {
+>BorkedType : Symbol(BorkedType, Decl(narrowingUnionWithBang.ts, 18, 1))
+
+    thing?:
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+
+    { name: 'Error1', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 22, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 22, 21))
+
+    { name: 'Error2', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 23, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 23, 21))
+
+    { name: 'Error3', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 24, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 24, 21))
+
+    { name: 'Error4', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 25, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 25, 21))
+
+    { name: 'Error5', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 26, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 26, 21))
+
+    { name: 'Error6', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 27, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 27, 21))
+
+    { name: 'Error7', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 28, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 28, 21))
+
+    { name: 'Error8', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 29, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 29, 21))
+
+    { name: 'Correct', id: string }
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 30, 5))
+>id : Symbol(id, Decl(narrowingUnionWithBang.ts, 30, 22))
+
+};
+const borked: BorkedType = null as unknown as BorkedType;
+>borked : Symbol(borked, Decl(narrowingUnionWithBang.ts, 32, 5))
+>BorkedType : Symbol(BorkedType, Decl(narrowingUnionWithBang.ts, 18, 1))
+>BorkedType : Symbol(BorkedType, Decl(narrowingUnionWithBang.ts, 18, 1))
+
+if (borked.thing!.name !== "Correct") {
+>borked.thing!.name : Symbol(name, Decl(narrowingUnionWithBang.ts, 22, 5), Decl(narrowingUnionWithBang.ts, 23, 5), Decl(narrowingUnionWithBang.ts, 24, 5), Decl(narrowingUnionWithBang.ts, 25, 5), Decl(narrowingUnionWithBang.ts, 26, 5) ... and 4 more)
+>borked.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+>borked : Symbol(borked, Decl(narrowingUnionWithBang.ts, 32, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 22, 5), Decl(narrowingUnionWithBang.ts, 23, 5), Decl(narrowingUnionWithBang.ts, 24, 5), Decl(narrowingUnionWithBang.ts, 25, 5), Decl(narrowingUnionWithBang.ts, 26, 5) ... and 4 more)
+
+    console.log(borked.thing!.message);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>borked.thing!.message : Symbol(message, Decl(narrowingUnionWithBang.ts, 22, 21), Decl(narrowingUnionWithBang.ts, 23, 21), Decl(narrowingUnionWithBang.ts, 24, 21), Decl(narrowingUnionWithBang.ts, 25, 21), Decl(narrowingUnionWithBang.ts, 26, 21) ... and 3 more)
+>borked.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+>borked : Symbol(borked, Decl(narrowingUnionWithBang.ts, 32, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 22, 21), Decl(narrowingUnionWithBang.ts, 23, 21), Decl(narrowingUnionWithBang.ts, 24, 21), Decl(narrowingUnionWithBang.ts, 25, 21), Decl(narrowingUnionWithBang.ts, 26, 21) ... and 3 more)
+
+} else {
+    console.log(borked.thing!.id);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>borked.thing!.id : Symbol(id, Decl(narrowingUnionWithBang.ts, 30, 22))
+>borked.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+>borked : Symbol(borked, Decl(narrowingUnionWithBang.ts, 32, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
+>id : Symbol(id, Decl(narrowingUnionWithBang.ts, 30, 22))
+}
+
+export type FixedType = {
+>FixedType : Symbol(FixedType, Decl(narrowingUnionWithBang.ts, 37, 1))
+
+    thing?:
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+
+    { name: 'Error1', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 41, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 41, 21))
+
+    { name: 'Error2', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 42, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 42, 21))
+
+    { name: 'Error3', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 43, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 43, 21))
+
+    { name: 'Error4', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 44, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 44, 21))
+
+    { name: 'Error5', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 45, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 45, 21))
+
+    { name: 'Error6', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 46, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 46, 21))
+
+    { name: 'Error7', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 47, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 47, 21))
+
+    { name: 'Error8', message: string } |
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 48, 5))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 48, 21))
+
+    { name: 'Correct', id: string }
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 49, 5))
+>id : Symbol(id, Decl(narrowingUnionWithBang.ts, 49, 22))
+
+};
+const fixed: FixedType = null as unknown as FixedType;
+>fixed : Symbol(fixed, Decl(narrowingUnionWithBang.ts, 51, 5))
+>FixedType : Symbol(FixedType, Decl(narrowingUnionWithBang.ts, 37, 1))
+>FixedType : Symbol(FixedType, Decl(narrowingUnionWithBang.ts, 37, 1))
+
+if (fixed.thing?.name !== "Correct") {
+>fixed.thing?.name : Symbol(name, Decl(narrowingUnionWithBang.ts, 41, 5), Decl(narrowingUnionWithBang.ts, 42, 5), Decl(narrowingUnionWithBang.ts, 43, 5), Decl(narrowingUnionWithBang.ts, 44, 5), Decl(narrowingUnionWithBang.ts, 45, 5) ... and 4 more)
+>fixed.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+>fixed : Symbol(fixed, Decl(narrowingUnionWithBang.ts, 51, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+>name : Symbol(name, Decl(narrowingUnionWithBang.ts, 41, 5), Decl(narrowingUnionWithBang.ts, 42, 5), Decl(narrowingUnionWithBang.ts, 43, 5), Decl(narrowingUnionWithBang.ts, 44, 5), Decl(narrowingUnionWithBang.ts, 45, 5) ... and 4 more)
+
+    console.log(fixed.thing!.message);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>fixed.thing!.message : Symbol(message, Decl(narrowingUnionWithBang.ts, 41, 21), Decl(narrowingUnionWithBang.ts, 42, 21), Decl(narrowingUnionWithBang.ts, 43, 21), Decl(narrowingUnionWithBang.ts, 44, 21), Decl(narrowingUnionWithBang.ts, 45, 21) ... and 3 more)
+>fixed.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+>fixed : Symbol(fixed, Decl(narrowingUnionWithBang.ts, 51, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+>message : Symbol(message, Decl(narrowingUnionWithBang.ts, 41, 21), Decl(narrowingUnionWithBang.ts, 42, 21), Decl(narrowingUnionWithBang.ts, 43, 21), Decl(narrowingUnionWithBang.ts, 44, 21), Decl(narrowingUnionWithBang.ts, 45, 21) ... and 3 more)
+
+} else {
+    console.log(fixed.thing.id);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>fixed.thing.id : Symbol(id, Decl(narrowingUnionWithBang.ts, 49, 22))
+>fixed.thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+>fixed : Symbol(fixed, Decl(narrowingUnionWithBang.ts, 51, 5))
+>thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 39, 25))
+>id : Symbol(id, Decl(narrowingUnionWithBang.ts, 49, 22))
+}

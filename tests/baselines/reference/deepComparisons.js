@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deepComparisons.ts] ////
+
 //// [deepComparisons.ts]
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
     let v1: Extract<T, string> = 0 as any as T;  // Error
@@ -39,16 +41,17 @@ function g() {
 
 
 //// [deepComparisons.js]
+"use strict";
 function f1() {
-    var v1 = 0; // Error
-    var v2 = 0; // Error
-    var v3 = 0; // No error
+    let v1 = 0; // Error
+    let v2 = 0; // Error
+    let v3 = 0; // No error
 }
 function f2() {
-    var x = 0; // Error, excessive stack depth
+    let x = 0; // Error, excessive stack depth
 }
 function f3() {
-    var x = 0; // No error!
+    let x = 0; // No error!
 }
 function g() {
     return f();

@@ -1,13 +1,22 @@
-=== tests/cases/conformance/salsa/privateIdentifierExpando.js ===
+//// [tests/cases/conformance/salsa/privateIdentifierExpando.ts] ////
+
+=== privateIdentifierExpando.js ===
 const x = {};
 >x : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 x.#bar.baz = 20;
 >x.#bar.baz = 20 : 20
+>                : ^^
 >x.#bar.baz : any
 >x.#bar : any
+>       : ^^^
 >x : {}
+>  : ^^
 >baz : any
+>    : ^^^
 >20 : 20
+>   : ^^
 

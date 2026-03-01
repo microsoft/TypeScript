@@ -1,11 +1,21 @@
-=== tests/cases/compiler/missingCloseBracketInArray.ts ===
+//// [tests/cases/compiler/missingCloseBracketInArray.ts] ////
+
+=== missingCloseBracketInArray.ts ===
 var alphas:string[] = alphas = ["1","2","3","4"
 >alphas : string[]
+>       : ^^^^^^^^
 >alphas = ["1","2","3","4" : string[]
+>                          : ^^^^^^^^
 >alphas : string[]
+>       : ^^^^^^^^
 >["1","2","3","4" : string[]
+>                 : ^^^^^^^^
 >"1" : "1"
+>    : ^^^
 >"2" : "2"
+>    : ^^^
 >"3" : "3"
+>    : ^^^
 >"4" : "4"
+>    : ^^^
 

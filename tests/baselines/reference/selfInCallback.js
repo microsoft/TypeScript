@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfInCallback.ts] ////
+
 //// [selfInCallback.ts]
 class C {
 	public p1 = 0;
@@ -8,14 +10,13 @@ class C {
 }
 
 //// [selfInCallback.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.p1 = 0;
     }
-    C.prototype.callback = function (cb) { cb(); };
-    C.prototype.doit = function () {
-        var _this = this;
-        this.callback(function () { _this.p1 + 1; });
-    };
-    return C;
-}());
+    callback(cb) { cb(); }
+    doit() {
+        this.callback(() => { this.p1 + 1; });
+    }
+}

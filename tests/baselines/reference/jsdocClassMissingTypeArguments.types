@@ -1,10 +1,15 @@
+//// [tests/cases/compiler/jsdocClassMissingTypeArguments.ts] ////
+
 === /a.js ===
 /** @template T */
 class C {}
 >C : C<T>
+>  : ^^^^
 
 /** @param {C} p */
 function f(p) {}
 >f : (p: C<any>) => void
+>  : ^ ^^^^^^^^^^^^^^^^^
 >p : C<any>
+>  : ^^^^^^
 

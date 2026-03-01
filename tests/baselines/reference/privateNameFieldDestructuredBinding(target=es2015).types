@@ -1,144 +1,252 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts] ////
+
+=== privateNameFieldDestructuredBinding.ts ===
 class A {
 >A : A
+>  : ^
 
     #field = 1;
 >#field : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
     otherObject = new A();
 >otherObject : A
+>            : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
     testObject() {
 >testObject : () => { x: number; y: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return { x: 10, y: 6 };
 >{ x: 10, y: 6 } : { x: number; y: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >y : number
+>  : ^^^^^^
 >6 : 6
+>  : ^
     }
     testArray() {
 >testArray : () => number[]
+>          : ^^^^^^^^^^^^^^
 
         return [10, 11];
 >[10, 11] : number[]
+>         : ^^^^^^^^
 >10 : 10
+>   : ^^
 >11 : 11
+>   : ^^
     }
     constructor() {
         let y: number;
 >y : number
+>  : ^^^^^^
 
         ({ x: this.#field, y } = this.testObject());
 >({ x: this.#field, y } = this.testObject()) : { x: number; y: number; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: this.#field, y } = this.testObject() : { x: number; y: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: this.#field, y } : { x: number; y: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >this.testObject() : { x: number; y: number; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.testObject : () => { x: number; y: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >testObject : () => { x: number; y: number; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ([this.#field, y] = this.testArray());
 >([this.#field, y] = this.testArray()) : number[]
+>                                      : ^^^^^^^^
 >[this.#field, y] = this.testArray() : number[]
+>                                    : ^^^^^^^^
 >[this.#field, y] : [number, number]
+>                 : ^^^^^^^^^^^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >y : number
+>  : ^^^^^^
 >this.testArray() : number[]
+>                 : ^^^^^^^^
 >this.testArray : () => number[]
+>               : ^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >testArray : () => number[]
+>          : ^^^^^^^^^^^^^^
 
         ({ a: this.#field, b: [this.#field] } = { a: 1, b: [2] });
 >({ a: this.#field, b: [this.#field] } = { a: 1, b: [2] }) : { a: number; b: [number]; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: this.#field, b: [this.#field] } = { a: 1, b: [2] } : { a: number; b: [number]; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: this.#field, b: [this.#field] } : { a: number; b: [number]; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >b : [number]
+>  : ^^^^^^^^
 >[this.#field] : [number]
+>              : ^^^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >{ a: 1, b: [2] } : { a: number; b: [number]; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : [number]
+>  : ^^^^^^^^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
 
         [this.#field, [this.#field]] = [1, [2]];
 >[this.#field, [this.#field]] = [1, [2]] : [number, [number]]
+>                                        : ^^^^^^^^^^^^^^^^^^
 >[this.#field, [this.#field]] : [number, [number]]
+>                             : ^^^^^^^^^^^^^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >[this.#field] : [number]
+>              : ^^^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >[1, [2]] : [number, [number]]
+>         : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
 
         ({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] });
->({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] }) : { b: []; a?: number; }
->{ a: this.#field = 1, b: [this.#field = 1] } = { b: [] } : { b: []; a?: number; }
+>({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] }) : { b: []; }
+>                                                           : ^^^^^^^^^^
+>{ a: this.#field = 1, b: [this.#field = 1] } = { b: [] } : { b: []; }
+>                                                         : ^^^^^^^^^^
 >{ a: this.#field = 1, b: [this.#field = 1] } : { a?: number; b: [number]; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >this.#field = 1 : 1
+>                : ^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >1 : 1
+>  : ^
 >b : [number]
+>  : ^^^^^^^^
 >[this.#field = 1] : [number]
+>                  : ^^^^^^^^
 >this.#field = 1 : 1
+>                : ^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >1 : 1
->{ b: [] } : { b: []; a?: number; }
+>  : ^
+>{ b: [] } : { b: []; }
+>          : ^^^^^^^^^^
 >b : []
+>  : ^^
 >[] : []
+>   : ^^
 
         [this.#field = 2] = [];
 >[this.#field = 2] = [] : []
+>                       : ^^
 >[this.#field = 2] : [number]
+>                  : ^^^^^^^^
 >this.#field = 2 : 2
+>                : ^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >2 : 2
+>  : ^
 >[] : []
+>   : ^^
 
         [this.otherObject.#field = 2] = [];
 >[this.otherObject.#field = 2] = [] : []
+>                                   : ^^
 >[this.otherObject.#field = 2] : [number]
+>                              : ^^^^^^^^
 >this.otherObject.#field = 2 : 2
+>                            : ^
 >this.otherObject.#field : number
+>                        : ^^^^^^
 >this.otherObject : A
+>                 : ^
 >this : this
+>     : ^^^^
 >otherObject : A
+>            : ^
 >2 : 2
+>  : ^
 >[] : []
+>   : ^^
     }
     static test(_a: A) {
 >test : (_a: A) => void
+>     : ^  ^^ ^^^^^^^^^
 >_a : A
+>   : ^
 
         [_a.#field] = [2];
 >[_a.#field] = [2] : [number]
+>                  : ^^^^^^^^
 >[_a.#field] : [number]
+>            : ^^^^^^^^
 >_a.#field : number
+>          : ^^^^^^
 >_a : A
+>   : ^
 >[2] : [number]
+>    : ^^^^^^^^
 >2 : 2
+>  : ^
     }
 }
 

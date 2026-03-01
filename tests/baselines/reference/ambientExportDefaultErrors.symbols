@@ -1,21 +1,24 @@
-=== tests/cases/compiler/consumer.ts ===
+//// [tests/cases/compiler/ambientExportDefaultErrors.ts] ////
+
+=== consumer.ts ===
+
 /// <reference path="./indirection.d.ts" />
-No type information for this code./// <reference path="./indirection2.d.ts" />
-No type information for this code.import "indirect";
-No type information for this code.import "foo";
-No type information for this code.import "indirect2";
-No type information for this code.import "foo2";
-No type information for this code.=== tests/cases/compiler/foo.d.ts ===
+/// <reference path="./indirection2.d.ts" />
+import "indirect";
+import "foo";
+import "indirect2";
+import "foo2";
+=== foo.d.ts ===
 export default 2 + 2;
 export as namespace Foo;
 >Foo : Symbol(Foo, Decl(foo.d.ts, 0, 21))
 
-=== tests/cases/compiler/foo2.d.ts ===
+=== foo2.d.ts ===
 export = 2 + 2;
 export as namespace Foo2;
 >Foo2 : Symbol(Foo2, Decl(foo2.d.ts, 0, 15))
 
-=== tests/cases/compiler/indirection.d.ts ===
+=== indirection.d.ts ===
 /// <reference path="./foo.d.ts" />
 declare module "indirect" {
 >"indirect" : Symbol("indirect", Decl(indirection.d.ts, 0, 0))
@@ -26,7 +29,7 @@ declare module "indirect" {
 >default : Symbol(Foo.default, Decl(foo.d.ts, 0, 0))
 }
 
-=== tests/cases/compiler/indirection2.d.ts ===
+=== indirection2.d.ts ===
 /// <reference path="./foo2.d.ts" />
 declare module "indirect2" {
 >"indirect2" : Symbol("indirect2", Decl(indirection2.d.ts, 0, 0))

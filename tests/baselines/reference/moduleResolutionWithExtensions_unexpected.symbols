@@ -1,4 +1,6 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_unexpected.ts] ////
+
 === /a.ts ===
+
 import "normalize.css";
-No type information for this code.
-No type information for this code.
+

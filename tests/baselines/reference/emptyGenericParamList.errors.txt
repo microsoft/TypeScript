@@ -1,8 +1,8 @@
-tests/cases/compiler/emptyGenericParamList.ts(2,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/compiler/emptyGenericParamList.ts(2,9): error TS1099: Type argument list cannot be empty.
+emptyGenericParamList.ts(2,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+emptyGenericParamList.ts(2,9): error TS1099: Type argument list cannot be empty.
 
 
-==== tests/cases/compiler/emptyGenericParamList.ts (2 errors) ====
+==== emptyGenericParamList.ts (2 errors) ====
     class I<T> {}
     var x: I<>;
            ~~~

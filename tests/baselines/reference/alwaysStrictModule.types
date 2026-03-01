@@ -1,12 +1,18 @@
-=== tests/cases/compiler/alwaysStrictModule.ts ===
-module M {
+//// [tests/cases/compiler/alwaysStrictModule.ts] ////
+
+=== alwaysStrictModule.ts ===
+namespace M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         var arguments = [];
 >arguments : any[]
->[] : undefined[]
+>          : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
 }

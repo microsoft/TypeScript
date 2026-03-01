@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/localTypes/localTypes4.ts] ////
+
 //// [localTypes4.ts]
 function f1() {
     // Type parameters are in scope in parameters and return types
@@ -39,6 +41,7 @@ function f4() {
 
 
 //// [localTypes4.js]
+"use strict";
 function f1() {
     // Type parameters are in scope in parameters and return types
     function f(x) {
@@ -58,11 +61,11 @@ function f3() {
     }
 }
 function f4() {
-    var v;
+    let v;
     v.x = 10;
     if (true) {
-        var v_1;
-        v_1.x = "hello";
+        let v;
+        v.x = "hello";
     }
     else {
         v.x = 20;

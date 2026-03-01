@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumInitializersWithExponents.ts] ////
+
 //// [enumInitializersWithExponents.ts]
 // Must be integer literals.
 declare enum E {
@@ -10,3 +12,4 @@ declare enum E {
 }
 
 //// [enumInitializersWithExponents.js]
+"use strict";

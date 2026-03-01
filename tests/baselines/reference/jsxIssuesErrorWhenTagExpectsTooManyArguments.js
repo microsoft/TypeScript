@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
+
 //// [jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -25,10 +27,8 @@ declare function MyTagWithOptionalNonJSXBits(props: MyProps, context: any, nonRe
 const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably questionable
 
 //// [jsxIssuesErrorWhenTagExpectsTooManyArguments.js]
-"use strict";
-/// <reference path="react16.d.ts" />
-exports.__esModule = true;
-var React = require("react");
+/// <reference path="/.lib/react16.d.ts" />
+import * as React from "react";
 function MyComp4(props, context, bad, verybad) {
     return React.createElement("div", null);
 }
@@ -38,7 +38,7 @@ function MyComp3(props, context, bad) {
 function MyComp2(props, context) {
     return React.createElement("div", null);
 }
-var a = React.createElement(MyComp4, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
-var b = React.createElement(MyComp3, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
-var c = React.createElement(MyComp2, { x: 2 }); // Should be OK, `context` is allowed, per react rules
-var d = React.createElement(MyTagWithOptionalNonJSXBits, { x: 2 }); // Technically OK, but probably questionable
+const a = React.createElement(MyComp4, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
+const b = React.createElement(MyComp3, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
+const c = React.createElement(MyComp2, { x: 2 }); // Should be OK, `context` is allowed, per react rules
+const d = React.createElement(MyTagWithOptionalNonJSXBits, { x: 2 }); // Technically OK, but probably questionable

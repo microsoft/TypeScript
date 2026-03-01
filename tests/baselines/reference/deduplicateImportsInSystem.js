@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deduplicateImportsInSystem.ts] ////
+
 //// [deduplicateImportsInSystem.ts]
 import {A} from "f1";
 import {B} from "f2";

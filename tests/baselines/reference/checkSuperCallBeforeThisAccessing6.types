@@ -1,23 +1,34 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccessing6.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing6.ts] ////
+
+=== checkSuperCallBeforeThisAccessing6.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     constructor(...arg) {
 >arg : any[]
+>    : ^^^^^
     }
 }
 class Super extends Base {
 >Super : Super
+>      : ^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor() {
         (() => this);  // No Error
 >(() => this) : () => this
+>             : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
     }
 }

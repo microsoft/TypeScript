@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessStaticMemberFromInstanceMethod01.ts] ////
+
 //// [accessStaticMemberFromInstanceMethod01.ts]
 class C {
     foo: string;
@@ -8,11 +10,9 @@ class C {
 }
 
 //// [accessStaticMemberFromInstanceMethod01.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    static bar() {
+        let k = foo;
     }
-    C.bar = function () {
-        var k = foo;
-    };
-    return C;
-}());
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocReturnTag1.ts] ////
+
 //// [returns.js]
 // @ts-check
 /**
@@ -21,7 +23,9 @@ function f2() {
     return 5 || "hello";
 }
 
+
 //// [dummy.js]
+"use strict";
 // @ts-check
 /**
  * @returns {string} This comment is not currently exposed

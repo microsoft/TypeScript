@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/parseJsxExtends1.ts] ////
+
+=== index.tsx ===
+declare const React: any;
+>React : Symbol(React, Decl(index.tsx, 0, 13))
+
+export function Foo() {
+>Foo : Symbol(Foo, Decl(index.tsx, 0, 25))
+
+    // No error; "const" is lowercase and therefore intrinsic.
+    return <const T extends/>
+>T : Symbol(T, Decl(index.tsx, 4, 17))
+>extends : Symbol(extends, Decl(index.tsx, 4, 19))
+}
+

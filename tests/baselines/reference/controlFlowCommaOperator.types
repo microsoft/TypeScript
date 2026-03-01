@@ -1,71 +1,107 @@
-=== tests/cases/conformance/controlFlow/controlFlowCommaOperator.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowCommaOperator.ts] ////
+
+=== controlFlowCommaOperator.ts ===
 function f(x: string | number | boolean) {
 >f : (x: string | number | boolean) => void
+>  : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: string | number | boolean = false;
 >y : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     let z: string | number | boolean = false;
 >z : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     if (y = "", typeof x === "string") {
 >y = "", typeof x === "string" : boolean
+>                              : ^^^^^^^
 >y = "" : ""
+>       : ^^
 >y : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         x; // string
 >x : string
+>  : ^^^^^^
 
         y; // string
 >y : string
+>  : ^^^^^^
 
         z; // boolean
 >z : false
+>  : ^^^^^
     }
     else if (z = 1, typeof x === "number") {
 >z = 1, typeof x === "number" : boolean
+>                             : ^^^^^^^
 >z = 1 : 1
+>      : ^
 >z : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
         x; // number
 >x : number
+>  : ^^^^^^
 
         y; // string
 >y : string
+>  : ^^^^^^
 
         z; // number
 >z : number
+>  : ^^^^^^
     }
     else {
         x; // boolean
 >x : boolean
+>  : ^^^^^^^
 
         y; // string
 >y : string
+>  : ^^^^^^
 
         z; // number
 >z : number
+>  : ^^^^^^
     }
     x; // string | number | boolean
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     y; // string
 >y : string
+>  : ^^^^^^
 
     z; // number | boolean
 >z : number | false
+>  : ^^^^^^^^^^^^^^
 }
 

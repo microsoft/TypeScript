@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/parameterPropertyInConstructor1.ts] ////
+
 //// [parameterPropertyInConstructor1.ts]
-declare module mod {
+declare namespace mod {
   class Customers {
     constructor(public names: string);
   }
@@ -7,3 +9,4 @@ declare module mod {
 
 
 //// [parameterPropertyInConstructor1.js]
+"use strict";

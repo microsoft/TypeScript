@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts] ////
+
 //// [indexedAccessPrivateMemberOfGenericConstraint.ts]
 class A {
   private a: number;
@@ -13,13 +15,8 @@ type Z<T extends A & B> = T["a"];
 
 
 //// [indexedAccessPrivateMemberOfGenericConstraint.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+"use strict";
+class A {
+}
+class B {
+}

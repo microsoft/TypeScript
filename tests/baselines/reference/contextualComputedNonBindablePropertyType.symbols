@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/contextualComputedNonBindablePropertyType.ts] ////
+
+=== contextualComputedNonBindablePropertyType.ts ===
+// repro #51906
+
+declare function testD(): "d";
+>testD : Symbol(testD, Decl(contextualComputedNonBindablePropertyType.ts, 0, 0))
+
+declare function forceMatch<T>(matched: {
+>forceMatch : Symbol(forceMatch, Decl(contextualComputedNonBindablePropertyType.ts, 2, 30))
+>T : Symbol(T, Decl(contextualComputedNonBindablePropertyType.ts, 4, 28))
+>matched : Symbol(matched, Decl(contextualComputedNonBindablePropertyType.ts, 4, 31))
+
+  [key in keyof T]: key;
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 5, 3))
+>T : Symbol(T, Decl(contextualComputedNonBindablePropertyType.ts, 4, 28))
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 5, 3))
+
+}): void;
+
+forceMatch({
+>forceMatch : Symbol(forceMatch, Decl(contextualComputedNonBindablePropertyType.ts, 2, 30))
+
+  [testD()]: "d",
+>[testD()] : Symbol([testD()], Decl(contextualComputedNonBindablePropertyType.ts, 8, 12))
+>testD : Symbol(testD, Decl(contextualComputedNonBindablePropertyType.ts, 0, 0))
+
+});
+
+declare function forceMatch2<T>(matched: {
+>forceMatch2 : Symbol(forceMatch2, Decl(contextualComputedNonBindablePropertyType.ts, 10, 3))
+>T : Symbol(T, Decl(contextualComputedNonBindablePropertyType.ts, 12, 29))
+>matched : Symbol(matched, Decl(contextualComputedNonBindablePropertyType.ts, 12, 32))
+
+  [key in keyof T]: ({ key }: { key: key }) => void;
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 13, 3))
+>T : Symbol(T, Decl(contextualComputedNonBindablePropertyType.ts, 12, 29))
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 13, 22))
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 13, 31))
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 13, 3))
+
+}): void;
+
+forceMatch2({
+>forceMatch2 : Symbol(forceMatch2, Decl(contextualComputedNonBindablePropertyType.ts, 10, 3))
+
+  [testD()]: ({ key }) => {},
+>[testD()] : Symbol([testD()], Decl(contextualComputedNonBindablePropertyType.ts, 16, 13))
+>testD : Symbol(testD, Decl(contextualComputedNonBindablePropertyType.ts, 0, 0))
+>key : Symbol(key, Decl(contextualComputedNonBindablePropertyType.ts, 17, 15))
+
+});
+
+// repro #52954
+
+type Original = { foo: 'expects a string literal', baz: boolean, bar: number }
+>Original : Symbol(Original, Decl(contextualComputedNonBindablePropertyType.ts, 18, 3))
+>foo : Symbol(foo, Decl(contextualComputedNonBindablePropertyType.ts, 22, 17))
+>baz : Symbol(baz, Decl(contextualComputedNonBindablePropertyType.ts, 22, 50))
+>bar : Symbol(bar, Decl(contextualComputedNonBindablePropertyType.ts, 22, 64))
+
+type Mapped = {
+>Mapped : Symbol(Mapped, Decl(contextualComputedNonBindablePropertyType.ts, 22, 78))
+
+  [prop in keyof Original]: (arg: Original[prop]) => Original[prop]
+>prop : Symbol(prop, Decl(contextualComputedNonBindablePropertyType.ts, 25, 3))
+>Original : Symbol(Original, Decl(contextualComputedNonBindablePropertyType.ts, 18, 3))
+>arg : Symbol(arg, Decl(contextualComputedNonBindablePropertyType.ts, 25, 29))
+>Original : Symbol(Original, Decl(contextualComputedNonBindablePropertyType.ts, 18, 3))
+>prop : Symbol(prop, Decl(contextualComputedNonBindablePropertyType.ts, 25, 3))
+>Original : Symbol(Original, Decl(contextualComputedNonBindablePropertyType.ts, 18, 3))
+>prop : Symbol(prop, Decl(contextualComputedNonBindablePropertyType.ts, 25, 3))
+}
+
+const propSelector =  <propName extends string>(propName: propName): propName => propName;
+>propSelector : Symbol(propSelector, Decl(contextualComputedNonBindablePropertyType.ts, 28, 5))
+>propName : Symbol(propName, Decl(contextualComputedNonBindablePropertyType.ts, 28, 23), Decl(contextualComputedNonBindablePropertyType.ts, 28, 48))
+>propName : Symbol(propName, Decl(contextualComputedNonBindablePropertyType.ts, 28, 23), Decl(contextualComputedNonBindablePropertyType.ts, 28, 48))
+>propName : Symbol(propName, Decl(contextualComputedNonBindablePropertyType.ts, 28, 23), Decl(contextualComputedNonBindablePropertyType.ts, 28, 48))
+>propName : Symbol(propName, Decl(contextualComputedNonBindablePropertyType.ts, 28, 23), Decl(contextualComputedNonBindablePropertyType.ts, 28, 48))
+>propName : Symbol(propName, Decl(contextualComputedNonBindablePropertyType.ts, 28, 23), Decl(contextualComputedNonBindablePropertyType.ts, 28, 48))
+
+const unexpectedlyFailingExample: Mapped = {
+>unexpectedlyFailingExample : Symbol(unexpectedlyFailingExample, Decl(contextualComputedNonBindablePropertyType.ts, 30, 5))
+>Mapped : Symbol(Mapped, Decl(contextualComputedNonBindablePropertyType.ts, 22, 78))
+
+  foo: (arg) => 'expects a string literal',
+>foo : Symbol(foo, Decl(contextualComputedNonBindablePropertyType.ts, 30, 44))
+>arg : Symbol(arg, Decl(contextualComputedNonBindablePropertyType.ts, 31, 8))
+
+  baz: (arg) => true,
+>baz : Symbol(baz, Decl(contextualComputedNonBindablePropertyType.ts, 31, 43))
+>arg : Symbol(arg, Decl(contextualComputedNonBindablePropertyType.ts, 32, 8))
+
+  [propSelector('bar')]: (arg) => 51345
+>[propSelector('bar')] : Symbol([propSelector('bar')], Decl(contextualComputedNonBindablePropertyType.ts, 32, 21))
+>propSelector : Symbol(propSelector, Decl(contextualComputedNonBindablePropertyType.ts, 28, 5))
+>arg : Symbol(arg, Decl(contextualComputedNonBindablePropertyType.ts, 33, 26))
+}
+

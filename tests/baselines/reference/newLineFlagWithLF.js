@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newLineFlagWithLF.ts] ////
+
 //// [newLineFlagWithLF.ts]
 var x=1;
 x=2;
@@ -5,5 +7,6 @@ x=2;
 
 
 //// [newLineFlagWithLF.js]
+"use strict";
 var x = 1;
 x = 2;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitPreComments.ts ===
+//// [tests/cases/compiler/emitPreComments.ts] ////
+
+=== emitPreComments.ts ===
 // This is pre comment
 var y = 10;
 >y : Symbol(y, Decl(emitPreComments.ts, 1, 3))

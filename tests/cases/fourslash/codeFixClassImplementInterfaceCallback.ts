@@ -49,7 +49,7 @@ interface IFoo2 {
 }
 
 class Foo2 implements IFoo2 {
-    parse(reviver: () => any): void {
+    parse(reviver: { (): any; }): void {
         throw new Error("Method not implemented.");
     }
 }
@@ -69,7 +69,7 @@ interface IFoo4 {
 }
 
 class Foo4 implements IFoo4 {
-    parse(reviver: new () => any): void {
+    parse(reviver: { new(): any; }): void {
         throw new Error("Method not implemented.");
     }
 }`});

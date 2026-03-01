@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallSpecializedToTypeArg.ts] ////
+
 //// [genericCallSpecializedToTypeArg.ts]
 function dupe<T>(x: T): T {
   return x;
@@ -10,6 +12,7 @@ function dupeAndGetDist<U>(x: U): U {
 
 
 //// [genericCallSpecializedToTypeArg.js]
+"use strict";
 function dupe(x) {
     return x;
 }

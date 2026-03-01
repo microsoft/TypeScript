@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/forContinueStatements.ts] ////
+
 //// [forContinueStatements.ts]
 for (; ;) {
     continue;
@@ -38,6 +40,7 @@ for (; ;) {
 
 
 //// [forContinueStatements.js]
+"use strict";
 for (;;) {
     continue;
 }

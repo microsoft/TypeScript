@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsBeforeFunctionExpression1.ts] ////
+
 //// [commentsBeforeFunctionExpression1.ts]
 var v = {
     f: /**own f*/ (a) => 0
@@ -5,6 +7,7 @@ var v = {
 
 
 //// [commentsBeforeFunctionExpression1.js]
+"use strict";
 var v = {
-    f: /**own f*/ function (a) { return 0; }
+    f: /**own f*/ (a) => 0
 };

@@ -1,8 +1,10 @@
+//// [tests/cases/compiler/moduleAssignmentCompat1.ts] ////
+
 //// [moduleAssignmentCompat1.ts]
-module A {
+namespace A {
     export class C { }
 }
-module B {
+namespace B {
     export class C { }
     class D { }
 }
@@ -17,28 +19,20 @@ b = a;
 
 
 //// [moduleAssignmentCompat1.js]
+"use strict";
 var A;
 (function (A) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     A.C = C;
 })(A || (A = {}));
 var B;
 (function (B) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     B.C = C;
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
 })(B || (B = {}));
 var a;
 var b;

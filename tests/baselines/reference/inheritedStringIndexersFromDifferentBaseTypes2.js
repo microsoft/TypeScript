@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts] ////
+
 //// [inheritedStringIndexersFromDifferentBaseTypes2.ts]
 // indexer in B is a subtype of indexer in A
 interface A {
@@ -25,3 +27,4 @@ interface F extends A, D {
 } // ok because we overrode D's number index signature
 
 //// [inheritedStringIndexersFromDifferentBaseTypes2.js]
+"use strict";

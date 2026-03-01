@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminableUnionWithIntersectedMembers.ts] ////
+
 //// [discriminableUnionWithIntersectedMembers.ts]
 // regression test for https://github.com/microsoft/TypeScript/issues/33243
 type X = 
@@ -15,7 +17,8 @@ type Y =
 const y: Y = 4 as any as { x: 'x' | 'y', y: number };
 
 //// [discriminableUnionWithIntersectedMembers.js]
+"use strict";
 // error
-var x = 4;
+const x = 4;
 // no  error
-var y = 4;
+const y = 4;

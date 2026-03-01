@@ -1,16 +1,22 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_threeLastIsBlank1.ts] ////
+
 === /index.ts ===
 import { ios } from "./foo";
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /foo-ios.ts ===
 export function ios() {}
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /foo__native.ts ===
 export function native() {}
 >native : () => void
+>       : ^^^^^^^^^^
 
 === /foo.ts ===
 export function base() {}
 >base : () => void
+>     : ^^^^^^^^^^
 

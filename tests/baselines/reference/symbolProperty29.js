@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty29.ts] ////
+
 //// [symbolProperty29.ts]
 class C1 {
     [Symbol.toStringTag]() {
@@ -7,6 +9,7 @@ class C1 {
 }
 
 //// [symbolProperty29.js]
+"use strict";
 class C1 {
     [Symbol.toStringTag]() {
         return { x: "" };

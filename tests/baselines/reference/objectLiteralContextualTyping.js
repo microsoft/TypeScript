@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts] ////
+
 //// [objectLiteralContextualTyping.ts]
 // In a contextually typed object literal, each property value expression is contextually typed by
 //      the type of the property with a matching name in the contextual type, if any, or otherwise
@@ -31,6 +33,7 @@ var b: {};
 
 
 //// [objectLiteralContextualTyping.js]
+"use strict";
 // In a contextually typed object literal, each property value expression is contextually typed by
 //      the type of the property with a matching name in the contextual type, if any, or otherwise
 //      for a numerically named property, the numeric index type of the contextual type, if any, or otherwise

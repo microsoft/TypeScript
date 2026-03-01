@@ -1,11 +1,17 @@
+//// [tests/cases/compiler/requireOfJsonFileNonRelativeWithoutExtensionResolvesToTs.ts] ////
+
 === /src/projects/file1.ts ===
 import f = require("f"); // should work to f.ts
 >f : 10
+>  : ^^
 
 let fnumber: number = f;
 >fnumber : number
+>        : ^^^^^^
 >f : 10
+>  : ^^
 
 === /src/node_modules/f.ts ===
+
 export = 10;
-No type information for this code.
+

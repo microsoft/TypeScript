@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterPropertyOutsideConstructor.ts ===
+//// [tests/cases/compiler/parameterPropertyOutsideConstructor.ts] ////
+
+=== parameterPropertyOutsideConstructor.ts ===
 class C {
 >C : Symbol(C, Decl(parameterPropertyOutsideConstructor.ts, 0, 0))
 

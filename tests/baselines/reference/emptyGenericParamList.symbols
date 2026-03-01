@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyGenericParamList.ts ===
+//// [tests/cases/compiler/emptyGenericParamList.ts] ////
+
+=== emptyGenericParamList.ts ===
 class I<T> {}
 >I : Symbol(I, Decl(emptyGenericParamList.ts, 0, 0))
 >T : Symbol(T, Decl(emptyGenericParamList.ts, 0, 8))

@@ -1,30 +1,48 @@
-=== tests/cases/compiler/noImplicitAnyWithOverloads.ts ===
+//// [tests/cases/compiler/noImplicitAnyWithOverloads.ts] ////
+
+=== noImplicitAnyWithOverloads.ts ===
 interface A {
     foo;
 >foo : any
+>    : ^^^
 }
 interface B { }
 
 function callb(lam: (l: A) => void);
 >callb : { (lam: (l: A) => void): any; (lam: (n: B) => void): any; }
+>      : ^^^   ^^              ^^^^^^^^^   ^^              ^^^^^^^^^
 >lam : (l: A) => void
+>    : ^ ^^ ^^^^^    
 >l : A
+>  : ^
 
 function callb(lam: (n: B) => void);
 >callb : { (lam: (l: A) => void): any; (lam: (n: B) => void): any; }
+>      : ^^^   ^^              ^^^^^^^^^   ^^              ^^^^^^^^^
 >lam : (n: B) => void
+>    : ^ ^^ ^^^^^    
 >n : B
+>  : ^
 
 function callb(a) { }
 >callb : { (lam: (l: A) => void): any; (lam: (n: B) => void): any; }
+>      : ^^^   ^^              ^^^^^^^^^   ^^              ^^^^^^^^^
 >a : any
+>  : ^^^
 
 callb((a) => { a.foo; }); // error, chose first overload
 >callb((a) => { a.foo; }) : any
+>                         : ^^^
 >callb : { (lam: (l: A) => void): any; (lam: (n: B) => void): any; }
+>      : ^^^   ^^              ^^^^^^^^^   ^^              ^^^^^^^^^
 >(a) => { a.foo; } : (a: A) => void
+>                  : ^ ^^^^^^^^^^^^
 >a : A
+>  : ^
 >a.foo : any
+>      : ^^^
 >a : A
+>  : ^
 >foo : any
+>    : ^^^
 

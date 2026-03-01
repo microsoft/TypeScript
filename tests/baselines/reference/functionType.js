@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionType.ts] ////
+
 //// [functionType.ts]
 function salt() {}
 salt.apply("hello", []);
@@ -7,6 +9,7 @@ salt.apply("hello", []);
 
 
 //// [functionType.js]
+"use strict";
 function salt() { }
 salt.apply("hello", []);
 (new Function("return 5"))();

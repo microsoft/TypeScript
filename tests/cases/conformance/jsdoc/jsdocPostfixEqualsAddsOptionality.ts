@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: a.js
 // @noEmit: true
 // @allowJs: true

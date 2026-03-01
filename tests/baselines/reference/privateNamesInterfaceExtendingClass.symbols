@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts] ////
+
+=== privateNamesInterfaceExtendingClass.ts ===
 class C {
 >C : Symbol(C, Decl(privateNamesInterfaceExtendingClass.ts, 0, 0))
 

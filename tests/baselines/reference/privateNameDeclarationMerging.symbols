@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts] ////
+
+=== privateNameDeclarationMerging.ts ===
 class D {};
 >D : Symbol(D, Decl(privateNameDeclarationMerging.ts, 0, 0))
 

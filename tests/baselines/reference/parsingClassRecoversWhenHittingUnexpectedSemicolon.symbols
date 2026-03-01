@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
+//// [tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts] ////
+
+=== parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
 class C {
 >C : Symbol(C, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 0))
 

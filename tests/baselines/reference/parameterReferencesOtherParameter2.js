@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterReferencesOtherParameter2.ts] ////
+
 //// [parameterReferencesOtherParameter2.ts]
 class Model {
     public name: string;
@@ -10,14 +12,10 @@ class UI {
 }
 
 //// [parameterReferencesOtherParameter2.js]
-var Model = /** @class */ (function () {
-    function Model() {
+"use strict";
+class Model {
+}
+class UI {
+    constructor(model, foo = model.name) {
     }
-    return Model;
-}());
-var UI = /** @class */ (function () {
-    function UI(model, foo) {
-        if (foo === void 0) { foo = model.name; }
-    }
-    return UI;
-}());
+}

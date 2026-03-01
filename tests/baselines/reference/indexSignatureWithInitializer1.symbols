@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureWithInitializer1.ts ===
+//// [tests/cases/compiler/indexSignatureWithInitializer1.ts] ////
+
+=== indexSignatureWithInitializer1.ts ===
 class C {
 >C : Symbol(C, Decl(indexSignatureWithInitializer1.ts, 0, 0))
 

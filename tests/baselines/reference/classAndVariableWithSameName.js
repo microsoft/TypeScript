@@ -1,8 +1,10 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts] ////
+
 //// [classAndVariableWithSameName.ts]
 class C { foo: string; } // error
 var C = ''; // error
 
-module M {
+namespace M {
     class D { // error
         bar: string;
     }
@@ -11,18 +13,13 @@ module M {
 }
 
 //// [classAndVariableWithSameName.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}()); // error
+"use strict";
+class C {
+} // error
 var C = ''; // error
 var M;
 (function (M) {
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
     var D = 1; // error
 })(M || (M = {}));

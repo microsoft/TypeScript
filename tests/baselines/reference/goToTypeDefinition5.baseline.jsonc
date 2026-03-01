@@ -1,0 +1,5 @@
+// === goToType ===
+// === /tests/cases/fourslash/foo.ts ===
+// let Foo: unresolved;
+// type Foo = { x: string };
+// /*GOTO TYPE*/Foo;

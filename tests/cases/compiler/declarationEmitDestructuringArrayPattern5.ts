@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 var [, , z] = [1, 2, 4];
 var [, a, , ] = [3, 4, 5];

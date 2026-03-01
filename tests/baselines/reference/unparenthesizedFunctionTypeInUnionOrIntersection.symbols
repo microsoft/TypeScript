@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
+//// [tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts] ////
+
+=== unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
 type U1 = string | () => void;
 >U1 : Symbol(U1, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 0, 0))
 

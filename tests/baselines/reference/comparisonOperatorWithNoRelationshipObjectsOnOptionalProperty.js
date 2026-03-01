@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts] ////
+
 //// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts]
 interface A1 {
     b?: number;
@@ -7,8 +9,8 @@ interface B1 {
     b?: string;
 }
 
-var a: A1;
-var b: B1;
+declare var a: A1;
+declare var b: B1;
 
 // operator <
 var ra1 = a < b;
@@ -43,8 +45,7 @@ var rh1 = a !== b;
 var rh2 = b !== a;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.js]
-var a;
-var b;
+"use strict";
 // operator <
 var ra1 = a < b;
 var ra2 = b < a;

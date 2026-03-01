@@ -1,8 +1,8 @@
-tests/cases/compiler/declareClassInterfaceImplementation.ts(5,15): error TS2420: Class 'Buffer' incorrectly implements interface 'IBuffer'.
+declareClassInterfaceImplementation.ts(5,15): error TS2420: Class 'Buffer' incorrectly implements interface 'IBuffer'.
   Index signature for type 'number' is missing in type 'Buffer'.
 
 
-==== tests/cases/compiler/declareClassInterfaceImplementation.ts (1 errors) ====
+==== declareClassInterfaceImplementation.ts (1 errors) ====
     interface IBuffer {
         [index: number]: number;
     }

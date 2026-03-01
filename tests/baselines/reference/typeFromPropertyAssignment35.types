@@ -1,57 +1,91 @@
-=== tests/cases/conformance/salsa/bug26877.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment35.ts] ////
+
+=== bug26877.js ===
 /** @param {Emu.D} x */
 function ollKorrect(x) {
 >ollKorrect : (x: D) => void
+>           : ^ ^^^^^^^^^^^^
 >x : D
+>  : ^
 
     x._model
 >x._model : number
+>         : ^^^^^^
 >x : D
+>  : ^
 >_model : number
+>       : ^^^^^^
 
     const y = new Emu.D()
 >y : D
+>  : ^
 >new Emu.D() : D
+>            : ^
 >Emu.D : typeof D
+>      : ^^^^^^^^
 >Emu : typeof Emu
+>    : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
     const z = Emu.D._wrapperInstance;
 >z : string
+>  : ^^^^^^
 >Emu.D._wrapperInstance : string
+>                       : ^^^^^^
 >Emu.D : typeof D
+>      : ^^^^^^^^
 >Emu : typeof Emu
+>    : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >_wrapperInstance : string
+>                 : ^^^^^^
 }
 Emu.D = class {
 >Emu.D = class {    constructor() {        this._model = 1    }} : typeof D
+>                                                                : ^^^^^^^^
 >Emu.D : typeof D
+>      : ^^^^^^^^
 >Emu : typeof Emu
+>    : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >class {    constructor() {        this._model = 1    }} : typeof D
+>                                                        : ^^^^^^^^
 
     constructor() {
         this._model = 1
 >this._model = 1 : 1
+>                : ^
 >this._model : any
 >this : this
+>     : ^^^^
 >_model : any
+>       : ^^^
 >1 : 1
+>  : ^
     }
 }
 
-=== tests/cases/conformance/salsa/second.js ===
+=== second.js ===
 var Emu = {}
 >Emu : typeof Emu
+>    : ^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @type {string} */
 Emu.D._wrapperInstance;
 >Emu.D._wrapperInstance : string
+>                       : ^^^^^^
 >Emu.D : typeof D
+>      : ^^^^^^^^
 >Emu : typeof Emu
+>    : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >_wrapperInstance : string
+>                 : ^^^^^^
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateGenericClassWithWrongNumberOfTypeArguments.ts] ////
+
 //// [instantiateGenericClassWithWrongNumberOfTypeArguments.ts]
 // it is always an error to provide a type argument list whose count does not match the type parameter list
 // both of these attempts to construct a type is an error
@@ -17,18 +19,13 @@ class D<T, U> {
 var d = new D<number>();
 
 //// [instantiateGenericClassWithWrongNumberOfTypeArguments.js]
+"use strict";
 // it is always an error to provide a type argument list whose count does not match the type parameter list
 // both of these attempts to construct a type is an error
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = new C();
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 // BUG 794238
 var d = new D();

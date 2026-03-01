@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts] ////
+
 //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.ts]
 // tricky interface
 interface Settable<T, V> {
@@ -26,17 +28,17 @@ let test2: Test2<number>;
 
 
 //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js]
+"use strict";
 // implement
-var Identity = /** @class */ (function () {
-    function Identity(value) {
+class Identity {
+    constructor(value) {
         this.item = value;
     }
-    Identity.prototype.set = function (value) {
+    set(value) {
         return new Identity(value);
-    };
-    return Identity;
-}());
+    }
+}
 ;
-var test1;
+let test1;
 ;
-var test2;
+let test2;

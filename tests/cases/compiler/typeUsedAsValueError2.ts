@@ -1,4 +1,5 @@
-// @module: amd
+// @target: es2015
+// @module: commonjs
 // @filename: helloInterface.ts
 interface HelloInterface {
     world: any;
@@ -14,8 +15,8 @@ namespace HelloNamespace {
 export = HelloNamespace;
 
 // @filename: world.ts
-import HelloInterface = require("helloInterface");
-import HelloNamespace = require("helloNamespace");
+import HelloInterface = require("./helloInterface");
+import HelloNamespace = require("./helloNamespace");
 
 HelloInterface.world;
 HelloNamespace.world;

@@ -1,3 +1,4 @@
+// @target: es2015
 interface Number {
     doStuff(): string;
     doOtherStuff<T>(x:T): T;

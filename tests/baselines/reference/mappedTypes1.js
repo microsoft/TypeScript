@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes1.ts] ////
+
 //// [mappedTypes1.ts]
 type Item = { a: string, b: number, c: boolean };
 
@@ -40,10 +42,11 @@ let x3 = f3();
 let x4 = f4();
 
 //// [mappedTypes1.js]
-var x1 = f1();
-var x2 = f2();
-var x3 = f3();
-var x4 = f4();
+"use strict";
+let x1 = f1();
+let x2 = f2();
+let x3 = f3();
+let x4 = f4();
 
 
 //// [mappedTypes1.d.ts]

@@ -1,26 +1,36 @@
-=== /node_modules/foo/lib/test.d.ts ===
-export declare function test(): void;
->test : () => void
+//// [tests/cases/compiler/moduleResolutionWithExtensions_withPaths.ts] ////
 
 === /relative.d.ts ===
 export declare function relative(): void;
 >relative : () => void
+>         : ^^^^^^    
 
 
 === /test.ts ===
 import { test } from "foo/test.js";
 >test : () => void
+>     : ^^^^^^    
 
 import { test as test2 } from "foo/test";
 >test : () => void
+>     : ^^^^^^    
 >test2 : () => void
+>      : ^^^^^^    
 
 import { relative } from "./relative.js";
 >relative : () => void
+>         : ^^^^^^    
 
 import { relative as relative2 } from "./relative";
 >relative : () => void
+>         : ^^^^^^    
 >relative2 : () => void
+>          : ^^^^^^    
 
 
+
+=== /node_modules/foo/lib/test.d.ts ===
+export declare function test(): void;
+>test : () => void
+>     : ^^^^^^    
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts] ////
+
+=== implicitAnyDeclareFunctionWithoutFormalType2.ts ===
 // generates function fn1(): number;
 function fn1() {
 >fn1 : Symbol(fn1, Decl(implicitAnyDeclareFunctionWithoutFormalType2.ts, 0, 0))

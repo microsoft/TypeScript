@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleResolutionWithSymlinks_withOutDir.ts] ////
 
 //// [index.ts]
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
-
 export class MyClass { private x: number; }
 
 //// [index.ts]
@@ -21,25 +19,21 @@ y = x;
 
 //// [/src/bin/library-a/index.js]
 "use strict";
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    return MyClass;
-}());
+class MyClass {
+}
 exports.MyClass = MyClass;
 //// [/src/bin/library-b/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass2 = void 0;
-var library_a_1 = require("library-a");
-exports.MyClass2 = library_a_1.MyClass;
+const library_a_1 = require("library-a");
+Object.defineProperty(exports, "MyClass2", { enumerable: true, get: function () { return library_a_1.MyClass; } });
 //// [/src/bin/app.js]
 "use strict";
-exports.__esModule = true;
-var x;
-var y;
+Object.defineProperty(exports, "__esModule", { value: true });
+let x;
+let y;
 x = y;
 y = x;

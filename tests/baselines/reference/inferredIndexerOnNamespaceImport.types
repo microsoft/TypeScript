@@ -1,26 +1,39 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/inferredIndexerOnNamespaceImport.ts] ////
+
+=== foo.ts ===
 export const x = 3;
 >x : 3
+>  : ^
 >3 : 3
+>  : ^
 
 export const y = 5;
 >y : 5
+>  : ^
 >5 : 5
+>  : ^
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 import * as foo from "./foo";
 >foo : typeof foo
+>    : ^^^^^^^^^^
 
 function f(map: { [k: string]: number }) {
 >f : (map: { [k: string]: number; }) => void
+>  : ^   ^^                        ^^^^^^^^^
 >map : { [k: string]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 
   // ...
 }
 
 f(foo);
 >f(foo) : void
+>       : ^^^^
 >f : (map: { [k: string]: number; }) => void
+>  : ^   ^^                        ^^^^^^^^^
 >foo : typeof foo
+>    : ^^^^^^^^^^
 

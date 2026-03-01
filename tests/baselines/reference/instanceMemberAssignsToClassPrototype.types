@@ -1,56 +1,95 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts] ////
+
+=== instanceMemberAssignsToClassPrototype.ts ===
 class C {
 >C : C
+>  : ^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         C.prototype.foo = () => { }
 >C.prototype.foo = () => { } : () => void
+>                            : ^^^^^^^^^^
 >C.prototype.foo : () => void
+>                : ^^^^^^^^^^
 >C.prototype : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C
+>          : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
     }
 
     bar(x: number): number {
 >bar : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
         C.prototype.bar = () => { } // error
 >C.prototype.bar = () => { } : () => void
+>                            : ^^^^^^^^^^
 >C.prototype.bar : (x: number) => number
+>                : ^ ^^      ^^^^^      
 >C.prototype : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C
+>          : ^
 >bar : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
         C.prototype.bar = (x) => x; // ok
 >C.prototype.bar = (x) => x : (x: number) => number
+>                           : ^ ^^^^^^^^^^^^^^^^^^^
 >C.prototype.bar : (x: number) => number
+>                : ^ ^^      ^^^^^      
 >C.prototype : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C
+>          : ^
 >bar : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >(x) => x : (x: number) => number
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
         C.prototype.bar = (x: number) => 1; // ok
 >C.prototype.bar = (x: number) => 1 : (x: number) => number
+>                                   : ^ ^^      ^^^^^^^^^^^
 >C.prototype.bar : (x: number) => number
+>                : ^ ^^      ^^^^^      
 >C.prototype : C
+>            : ^
 >C : typeof C
+>  : ^^^^^^^^
 >prototype : C
+>          : ^
 >bar : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >(x: number) => 1 : (x: number) => number
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }

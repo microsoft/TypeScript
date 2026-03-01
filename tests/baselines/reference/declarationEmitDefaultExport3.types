@@ -1,7 +1,11 @@
-=== tests/cases/compiler/declarationEmitDefaultExport3.ts ===
+//// [tests/cases/compiler/declarationEmitDefaultExport3.ts] ////
+
+=== declarationEmitDefaultExport3.ts ===
 export default function foo() {
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
     return ""
 >"" : ""
+>   : ^^
 }

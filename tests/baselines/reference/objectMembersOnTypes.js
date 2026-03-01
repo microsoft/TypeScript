@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectMembersOnTypes.ts] ////
+
 //// [objectMembersOnTypes.ts]
 interface I {}
 class AAA implements I { }
@@ -10,11 +12,9 @@ c.toString(); // used to be an error
 
 
 //// [objectMembersOnTypes.js]
-var AAA = /** @class */ (function () {
-    function AAA() {
-    }
-    return AAA;
-}());
+"use strict";
+class AAA {
+}
 var x;
 x.toString();
 var i;

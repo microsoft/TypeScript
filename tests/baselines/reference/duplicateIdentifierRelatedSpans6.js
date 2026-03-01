@@ -22,7 +22,8 @@ export {};
 
 
 //// [file1.js]
+"use strict";
 //// [file2.js]
 "use strict";
 /// <reference path="./file1" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

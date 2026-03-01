@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es6.ts] ////
+
+=== asyncUnParenthesizedArrowFunction_es6.ts ===
 declare function someOtherFunction(i: any): Promise<void>;
 >someOtherFunction : Symbol(someOtherFunction, Decl(asyncUnParenthesizedArrowFunction_es6.ts, 0, 0))
 >i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es6.ts, 0, 35))

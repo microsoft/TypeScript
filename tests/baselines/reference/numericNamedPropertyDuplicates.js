@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericNamedPropertyDuplicates.ts] ////
+
 //// [numericNamedPropertyDuplicates.ts]
 class C {
     1: number;
@@ -22,11 +24,9 @@ var b = {
 }
 
 //// [numericNamedPropertyDuplicates.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var a;
 var b = {
     2: 1,

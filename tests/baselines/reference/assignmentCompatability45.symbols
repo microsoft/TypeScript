@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatability45.ts ===
+//// [tests/cases/compiler/assignmentCompatability45.ts] ////
+
+=== assignmentCompatability45.ts ===
 abstract class A {}
 >A : Symbol(A, Decl(assignmentCompatability45.ts, 0, 0))
 

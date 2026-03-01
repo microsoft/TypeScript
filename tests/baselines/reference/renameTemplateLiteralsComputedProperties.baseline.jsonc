@@ -1,0 +1,690 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`/*RENAME*/[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`/*RENAME*/[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['/*RENAME*/[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o./*RENAME*/[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['/*RENAME*/[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["/*RENAME*/[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`/*RENAME*/[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj./*RENAME*/[|numRENAME|];
+// obj[`[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     <|[`[|numRENAME|]`]: number;|>
+//     ['bool']: boolean;
+// }
+// 
+// let o: Obj = {
+//     <|[`[|numRENAME|]`]: 0|>,
+//     ['bool']: true,
+// };
+// 
+// o = {
+//     <|['[|numRENAME|]']: 1|>,
+//     [`bool`]: false,
+// };
+// 
+// o.[|numRENAME|];
+// o['[|numRENAME|]'];
+// o["[|numRENAME|]"];
+// o[`[|numRENAME|]`];
+// 
+// o.bool;
+// o['bool'];
+// --- (line: 23) skipped ---
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.[|numRENAME|];
+// obj[`/*RENAME*/[|numRENAME|]`];
+// 
+// obj.bool;
+// obj[`bool`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['/*RENAME*/[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['/*RENAME*/[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`/*RENAME*/[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o./*RENAME*/[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['/*RENAME*/[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["/*RENAME*/[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`/*RENAME*/[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj./*RENAME*/[|boolRENAME|];
+// obj[`[|boolRENAME|]`];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// interface Obj {
+//     [`num`]: number;
+//     <|['[|boolRENAME|]']: boolean;|>
+// }
+// 
+// let o: Obj = {
+//     [`num`]: 0,
+//     <|['[|boolRENAME|]']: true|>,
+// };
+// 
+// o = {
+//     ['num']: 1,
+//     <|[`[|boolRENAME|]`]: false|>,
+// };
+// 
+// o.num;
+// o['num'];
+// o["num"];
+// o[`num`];
+// 
+// o.[|boolRENAME|];
+// o['[|boolRENAME|]'];
+// o["[|boolRENAME|]"];
+// o[`[|boolRENAME|]`];
+// 
+// export { o };
+
+// === /tests/cases/fourslash/b.js ===
+// import { o as obj } from './a';
+// 
+// obj.num;
+// obj[`num`];
+// 
+// obj.[|boolRENAME|];
+// obj[`/*RENAME*/[|boolRENAME|]`];

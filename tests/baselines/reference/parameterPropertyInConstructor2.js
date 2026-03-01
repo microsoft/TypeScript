@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/parameterPropertyInConstructor2.ts] ////
+
 //// [parameterPropertyInConstructor2.ts]
-module mod {
+namespace mod {
   class Customers {
     constructor(public names: string);
     constructor(public names: string, public ages: number) {
@@ -9,13 +11,13 @@ module mod {
 
 
 //// [parameterPropertyInConstructor2.js]
+"use strict";
 var mod;
 (function (mod) {
-    var Customers = /** @class */ (function () {
-        function Customers(names, ages) {
+    class Customers {
+        constructor(names, ages) {
             this.names = names;
             this.ages = ages;
         }
-        return Customers;
-    }());
+    }
 })(mod || (mod = {}));

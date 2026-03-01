@@ -1,0 +1,98 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== jsDeclarationsReactComponents1.jsx (0 errors) ====
+    /// <reference path="/.lib/react16.d.ts" preserve="true" />
+    import React from "react";
+    import PropTypes from "prop-types"
+    
+    const TabbedShowLayout = ({
+    }) => {
+        return (
+            <div />
+        );
+    };
+    
+    TabbedShowLayout.propTypes = {
+        version: PropTypes.number,
+    
+    };
+    
+    TabbedShowLayout.defaultProps = {
+        tabs: undefined
+    };
+    
+    export default TabbedShowLayout;
+    
+==== jsDeclarationsReactComponents2.jsx (0 errors) ====
+    import React from "react";
+    /**
+     * @type {React.SFC}
+     */
+    const TabbedShowLayout = () => {
+        return (
+            <div className="" key="">
+                ok
+            </div>
+        );
+    };
+    
+    TabbedShowLayout.defaultProps = {
+        tabs: "default value"
+    };
+    
+    export default TabbedShowLayout;
+    
+==== jsDeclarationsReactComponents3.jsx (0 errors) ====
+    import React from "react";
+    /**
+     * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
+     */
+    const TabbedShowLayout = () => {
+        return (
+            <div className="" key="">
+                ok
+            </div>
+        );
+    };
+    
+    TabbedShowLayout.defaultProps = {
+        tabs: "default value"
+    };
+    
+    export default TabbedShowLayout;
+    
+==== jsDeclarationsReactComponents4.jsx (0 errors) ====
+    import React from "react";
+    const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
+        return (
+            <div className={prop.className} key="">
+                ok
+            </div>
+        );
+    };
+    
+    TabbedShowLayout.defaultProps = {
+        tabs: "default value"
+    };
+    
+    export default TabbedShowLayout;
+==== jsDeclarationsReactComponents5.jsx (0 errors) ====
+    import React from 'react';
+    import PropTypes from 'prop-types';
+    
+    function Tree({ allowDropOnRoot }) {
+      return <div />
+    }
+    
+    Tree.propTypes = {
+        classes: PropTypes.object,
+    };
+    
+    Tree.defaultProps = {
+        classes: {},
+        parentSource: 'parent_id',
+    };
+    
+    export default Tree;

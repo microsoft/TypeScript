@@ -1,0 +1,17 @@
+// === goToDefinition ===
+// === /b.ts ===
+// [||]export interface A { }
+
+// === /a.js ===
+// /**
+//  * @import { A } from      [|"./b/*GOTO DEF*/"|]
+//  */
+
+  // === Details ===
+  [
+   {
+    "kind": "script",
+    "name": "./b",
+    "unverified": false
+   }
+  ]

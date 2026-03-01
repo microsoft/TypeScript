@@ -1,9 +1,11 @@
-=== tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts ===
+//// [tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts] ////
+
+=== invalidSwitchContinueStatement.ts ===
+
 // continue is not allowed in a switch statement
-No type information for this code.
-No type information for this code.switch (12) {
-No type information for this code.    case 5:
-No type information for this code.        continue;
-No type information for this code.}
-No type information for this code.
-No type information for this code.
+
+switch (12) {
+    case 5:
+        continue;
+}
+

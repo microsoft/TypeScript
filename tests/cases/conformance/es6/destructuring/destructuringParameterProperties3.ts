@@ -1,4 +1,6 @@
-﻿class C1<T, U, V> {
+﻿// @module: commonjs
+// @target: es2015
+class C1<T, U, V> {
     constructor(private k: T, private [a, b, c]: [T,U,V]) {
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;

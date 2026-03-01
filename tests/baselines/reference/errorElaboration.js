@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorElaboration.ts] ////
+
 //// [errorElaboration.ts]
 // Repro for #5712
 
@@ -9,7 +11,7 @@ interface Container<T> {
     m2: T;
 }
 declare function foo(x: () => Container<Ref<number>>): void;
-let a: () => Container<Ref<string>>;
+declare let a: () => Container<Ref<string>>;
 foo(a);
 
 // Repro for #25498
@@ -25,16 +27,13 @@ const x = ({ [foo.bar]: c }) => undefined;
 
 
 //// [errorElaboration.js]
+"use strict";
 // Repro for #5712
-var a;
 foo(a);
 // Repro for #25498
 function test() {
     return { foo: "bar" };
 }
 // Repro for #32358
-var foo = { bar: 'a' };
-var x = function (_a) {
-    var _b = foo.bar, c = _a[_b];
-    return undefined;
-};
+const foo = { bar: 'a' };
+const x = ({ [foo.bar]: c }) => undefined;

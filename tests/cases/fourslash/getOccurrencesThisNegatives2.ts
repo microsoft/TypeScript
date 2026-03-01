@@ -23,7 +23,7 @@
 ////    }
 ////}
 ////
-////module m {
+////namespace m {
 ////    function f() {
 ////        this;
 ////        this;
@@ -140,4 +140,4 @@
 ////    }
 ////}
 
-goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));
+verify.baselineDocumentHighlights(test.markers());

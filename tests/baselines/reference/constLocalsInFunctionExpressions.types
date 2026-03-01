@@ -1,121 +1,190 @@
-=== tests/cases/conformance/controlFlow/constLocalsInFunctionExpressions.ts ===
+//// [tests/cases/conformance/controlFlow/constLocalsInFunctionExpressions.ts] ////
+
+=== constLocalsInFunctionExpressions.ts ===
 declare function getStringOrNumber(): string | number;
 >getStringOrNumber : () => string | number
+>                  : ^^^^^^               
 
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     const x = getStringOrNumber();
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >getStringOrNumber() : string | number
+>                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         const f = () => x.length;
 >f : () => number
+>  : ^^^^^^^^^^^^
 >() => x.length : () => number
+>               : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     const x = getStringOrNumber();
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >getStringOrNumber() : string | number
+>                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
+>                  : ^^^^^^               
 
     if (typeof x !== "string") {
 >typeof x !== "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return;
     }
     const f = () => x.length;
 >f : () => number
+>  : ^^^^^^^^^^^^
 >() => x.length : () => number
+>               : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     const x = getStringOrNumber();
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >getStringOrNumber() : string | number
+>                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         const f = function() { return x.length; };
 >f : () => number
+>  : ^^^^^^^^^^^^
 >function() { return x.length; } : () => number
+>                                : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     const x = getStringOrNumber();
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >getStringOrNumber() : string | number
+>                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
+>                  : ^^^^^^               
 
     if (typeof x !== "string") {
 >typeof x !== "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return;
     }
     const f = function() { return x.length; };
 >f : () => number
+>  : ^^^^^^^^^^^^
 >function() { return x.length; } : () => number
+>                                : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 }
 
 function f5() {
 >f5 : () => void
+>   : ^^^^^^^^^^
 
     const x = getStringOrNumber();
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >getStringOrNumber() : string | number
+>                    : ^^^^^^^^^^^^^^^
 >getStringOrNumber : () => string | number
+>                  : ^^^^^^               
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         const f = () => () => x.length;
 >f : () => () => number
+>  : ^^^^^^^^^^^^^^^^^^
 >() => () => x.length : () => () => number
+>                     : ^^^^^^^^^^^^^^^^^^
 >() => x.length : () => number
+>               : ^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
 }

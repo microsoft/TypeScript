@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParametersNotCheckedByNoUnusedLocals.ts] ////
+
 //// [unusedTypeParametersNotCheckedByNoUnusedLocals.ts]
 function f<T>() { }
 
@@ -13,13 +15,11 @@ let l = <T>() => { };
 
 
 //// [unusedTypeParametersNotCheckedByNoUnusedLocals.js]
+"use strict";
 function f() { }
 ;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function () { };
-    return C;
-}());
+class C {
+    m() { }
+}
 ;
-var l = function () { };
+let l = () => { };

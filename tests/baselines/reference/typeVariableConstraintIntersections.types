@@ -1,0 +1,370 @@
+//// [tests/cases/compiler/typeVariableConstraintIntersections.ts] ////
+
+=== typeVariableConstraintIntersections.ts ===
+type T00<K extends "a" | "b"> = K & "a";
+>T00 : T00<K>
+>    : ^^^^^^
+
+type T01<K extends "a" | "b"> = K & "c";
+>T01 : never
+>    : ^^^^^
+
+type T02<K extends "a" | "b"> = K & string;
+>T02 : K
+>    : ^
+
+type T10<K extends string> = K & "a";
+>T10 : T10<K>
+>    : ^^^^^^
+
+type T11<K extends string> = K & "c";
+>T11 : T11<K>
+>    : ^^^^^^
+
+type T12<K extends string> = K & string;
+>T12 : K
+>    : ^
+
+type T20<K extends "a" | "b" | "c"> = K & ("a" | "b" | "c");
+>T20 : K
+>    : ^
+
+type T21<K extends "a" | "b" | "c"> = ("a" | "b" | "c") & K;
+>T21 : K
+>    : ^
+
+type T22<K extends "a" | "b" | "c"> = K & ("a" | "b");
+>T22 : T22<K>
+>    : ^^^^^^
+
+type T23<K extends "a" | "b" | "c"> = ("a" | "b") & K;
+>T23 : T23<K>
+>    : ^^^^^^
+
+type T30<K extends "a" | "b"> = K & ("a" | "b" | "c");
+>T30 : K
+>    : ^
+
+type T31<K extends "a" | "b"> = ("a" | "b" | "c") & K;
+>T31 : K
+>    : ^
+
+type T32<K extends "a" | "b"> = K & ("a" | "b");
+>T32 : K
+>    : ^
+
+type T33<K extends "a" | "b"> = ("a" | "b") & K;
+>T33 : K
+>    : ^
+
+type T40<K extends {}> = K & undefined;
+>T40 : never
+>    : ^^^^^
+
+type T41<K extends {}> = K & null;
+>T41 : never
+>    : ^^^^^
+
+type T42<K extends {}> = K & object;
+>T42 : T42<K>
+>    : ^^^^^^
+
+type T43<K extends {}> = K & {};
+>T43 : K
+>    : ^
+
+type T50<K extends "a" | 0> = K & "a";
+>T50 : T50<K>
+>    : ^^^^^^
+
+type T51<K extends "a" | 0> = K & "b";
+>T51 : never
+>    : ^^^^^
+
+type T52<K extends "a" | 0> = K & string;
+>T52 : T52<K>
+>    : ^^^^^^
+
+type T53<K extends "a" | 0> = K & 0;
+>T53 : T53<K>
+>    : ^^^^^^
+
+type T54<K extends "a" | 0> = K & 1;
+>T54 : never
+>    : ^^^^^
+
+type T55<K extends "a" | 0> = K & number;
+>T55 : T55<K>
+>    : ^^^^^^
+
+type T60<T extends "a" | "b", U extends T> = U & "a";
+>T60 : T60<T, U>
+>    : ^^^^^^^^^
+
+type T61<T extends "a" | "b", U extends T> = U & ("a" | "b");
+>T61 : U
+>    : ^
+
+type T62<T extends "a" | "b", U extends T> = U & ("a" | "b" | "c");
+>T62 : U
+>    : ^
+
+type T63<T extends "a" | "b", U extends T> = U & string;
+>T63 : U
+>    : ^
+
+type T70<T extends "a" | "b", U extends T | "c"> = U & "a";
+>T70 : T70<T, U>
+>    : ^^^^^^^^^
+
+type T71<T extends "a" | "b", U extends T | "c"> = U & ("a" | "b");
+>T71 : T71<T, U>
+>    : ^^^^^^^^^
+
+type T72<T extends "a" | "b", U extends T | "c"> = U & ("a" | "b" | "c");
+>T72 : U
+>    : ^
+
+type T73<T extends "a" | "b", U extends T | "c"> = U & string;
+>T73 : U
+>    : ^
+
+declare function isA(x: any): x is "a";
+>isA : (x: any) => x is "a"
+>    : ^ ^^   ^^^^^        
+>x : any
+
+declare function isB(x: any): x is "b";
+>isB : (x: any) => x is "b"
+>    : ^ ^^   ^^^^^        
+>x : any
+
+declare function isC(x: any): x is "c";
+>isC : (x: any) => x is "c"
+>    : ^ ^^   ^^^^^        
+>x : any
+
+function foo<K extends "a" | "b">(x: K) {
+>foo : <K extends "a" | "b">(x: K) => void
+>    : ^ ^^^^^^^^^         ^^ ^^ ^^^^^^^^^
+>x : K
+>  : ^
+
+  if (isA(x)) {
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: any) => x is "a"
+>    : ^ ^^   ^^^^^        
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    x;  // K & "a"
+>x : K & "a"
+>  : ^^^^^^^
+  }
+  if (isB(x)) {
+>isB(x) : boolean
+>       : ^^^^^^^
+>isB : (x: any) => x is "b"
+>    : ^ ^^   ^^^^^        
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    x;  // K & "b"
+>x : K & "b"
+>  : ^^^^^^^
+  }
+  if (isC(x)) {
+>isC(x) : boolean
+>       : ^^^^^^^
+>isC : (x: any) => x is "c"
+>    : ^ ^^   ^^^^^        
+>x : "a" | "b"
+>  : ^^^^^^^^^
+
+    x;  // never
+>x : never
+>  : ^^^^^
+  }
+  if (isA(x) || isB(x)) {
+>isA(x) || isB(x) : boolean
+>                 : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: any) => x is "a"
+>    : ^ ^^   ^^^^^        
+>x : "a" | "b"
+>  : ^^^^^^^^^
+>isB(x) : boolean
+>       : ^^^^^^^
+>isB : (x: any) => x is "b"
+>    : ^ ^^   ^^^^^        
+>x : "b"
+>  : ^^^
+
+    x;  // K
+>x : K
+>  : ^
+  }
+  if (!(isA(x) || isB(x))) {
+>!(isA(x) || isB(x)) : boolean
+>                    : ^^^^^^^
+>(isA(x) || isB(x)) : boolean
+>                   : ^^^^^^^
+>isA(x) || isB(x) : boolean
+>                 : ^^^^^^^
+>isA(x) : boolean
+>       : ^^^^^^^
+>isA : (x: any) => x is "a"
+>    : ^ ^^   ^^^^^        
+>x : "a" | "b"
+>  : ^^^^^^^^^
+>isB(x) : boolean
+>       : ^^^^^^^
+>isB : (x: any) => x is "b"
+>    : ^ ^^   ^^^^^        
+>x : "b"
+>  : ^^^
+
+    return;
+  }
+  x;  // K
+>x : K
+>  : ^
+}
+
+// Example from #30581
+
+type OptionOne = {
+>OptionOne : OptionOne
+>          : ^^^^^^^^^
+
+  kind: "one";
+>kind : "one"
+>     : ^^^^^
+
+  s: string;
+>s : string
+>  : ^^^^^^
+
+};
+
+type OptionTwo = {
+>OptionTwo : OptionTwo
+>          : ^^^^^^^^^
+
+  kind: "two";
+>kind : "two"
+>     : ^^^^^
+
+  x: number;
+>x : number
+>  : ^^^^^^
+
+  y: number;
+>y : number
+>  : ^^^^^^
+
+};
+
+type Options = OptionOne | OptionTwo;
+>Options : Options
+>        : ^^^^^^^
+
+type OptionHandlers = {
+>OptionHandlers : OptionHandlers
+>               : ^^^^^^^^^^^^^^
+
+  [K in Options['kind']]: (option: Options & { kind: K }) => string;
+>option : Options & { kind: K; }
+>       : ^^^^^^^^^^^^^^^^^^ ^^^
+>kind : K
+>     : ^
+}
+
+const optionHandlers: OptionHandlers = {
+>optionHandlers : OptionHandlers
+>               : ^^^^^^^^^^^^^^
+>{  "one": option => option.s,  "two": option => option.x + "," + option.y,} : { one: (option: OptionOne & { kind: "one"; }) => string; two: (option: OptionTwo & { kind: "two"; }) => string; }
+>                                                                            : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  "one": option => option.s,
+>"one" : (option: OptionOne & { kind: "one"; }) => string
+>      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>option => option.s : (option: OptionOne & { kind: "one"; }) => string
+>                   : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>option : OptionOne & { kind: "one"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>option.s : string
+>         : ^^^^^^
+>option : OptionOne & { kind: "one"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+
+  "two": option => option.x + "," + option.y,
+>"two" : (option: OptionTwo & { kind: "two"; }) => string
+>      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>option => option.x + "," + option.y : (option: OptionTwo & { kind: "two"; }) => string
+>                                    : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>option : OptionTwo & { kind: "two"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>option.x + "," + option.y : string
+>                          : ^^^^^^
+>option.x + "," : string
+>               : ^^^^^^
+>option.x : number
+>         : ^^^^^^
+>option : OptionTwo & { kind: "two"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>"," : ","
+>    : ^^^
+>option.y : number
+>         : ^^^^^^
+>option : OptionTwo & { kind: "two"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+
+};
+
+function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {
+>handleOption : <K extends Options["kind"]>(option: Options & { kind: K; }) => string
+>             : ^ ^^^^^^^^^               ^^      ^^                      ^^^^^      
+>option : Options & { kind: K; }
+>       : ^^^^^^^^^^^^^^^^^^ ^^^
+>kind : K
+>     : ^
+
+  const kind = option.kind;
+>kind : K
+>     : ^
+>option.kind : K
+>            : ^
+>option : Options & { kind: K; }
+>       : ^^^^^^^^^^^^^^^^^^ ^^^
+>kind : K
+>     : ^
+
+  const handler = optionHandlers[kind];
+>handler : OptionHandlers[K]
+>        : ^^^^^^^^^^^^^^^^^
+>optionHandlers[kind] : OptionHandlers[K]
+>                     : ^^^^^^^^^^^^^^^^^
+>optionHandlers : OptionHandlers
+>               : ^^^^^^^^^^^^^^
+>kind : K
+>     : ^
+
+  return handler(option);
+>handler(option) : string
+>                : ^^^^^^
+>handler : OptionHandlers[K]
+>        : ^^^^^^^^^^^^^^^^^
+>option : Options & { kind: K; }
+>       : ^^^^^^^^^^^^^^^^^^ ^^^
+
+};
+

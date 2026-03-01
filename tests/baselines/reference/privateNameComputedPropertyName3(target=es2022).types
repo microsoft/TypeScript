@@ -1,6 +1,9 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName3.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName3.ts] ////
+
+=== privateNameComputedPropertyName3.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     #name;
 >#name : any
@@ -12,34 +15,45 @@ class Foo {
 >this.#name = name : any
 >this.#name : any
 >this : this
+>     : ^^^^
 >name : any
     }
 
     getValue(x) {
 >getValue : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 
         const obj = this;
 >obj : this
+>    : ^^^^
 >this : this
+>     : ^^^^
 
         class Bar {
 >Bar : Bar
+>    : ^^^
 
             #y = 100;
 >#y : number
+>   : ^^^^^^
 >100 : 100
+>    : ^^^
 
             [obj.#name]() {
 >[obj.#name] : () => any
+>            : ^^^^^^^^^
 >obj.#name : any
 >obj : this
+>    : ^^^^
 
                 return x + this.#y;
 >x + this.#y : any
 >x : any
 >this.#y : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
             }
         }
 
@@ -47,22 +61,35 @@ class Foo {
 >new Bar()[obj.#name]() : error
 >new Bar()[obj.#name] : error
 >new Bar() : Bar
+>          : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >obj.#name : any
 >obj : this
+>    : ^^^^
     }
 }
 
 console.log(new Foo("NAME").getValue(100));
 >console.log(new Foo("NAME").getValue(100)) : void
+>                                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >new Foo("NAME").getValue(100) : error
 >new Foo("NAME").getValue : (x: any) => any
+>                         : ^ ^^^^^^^^^^^^^
 >new Foo("NAME") : Foo
+>                : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >"NAME" : "NAME"
+>       : ^^^^^^
 >getValue : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >100 : 100
+>    : ^^^
 

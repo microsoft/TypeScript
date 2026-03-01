@@ -1,0 +1,657 @@
+//// [tests/cases/compiler/declarationEmitUsingAlternativeContainingModules2.ts] ////
+
+=== node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.d.ts ===
+type QueryKey = ReadonlyArray<unknown>;
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 3 more)
+
+interface Register {}
+>Register : Symbol(Register, Decl(useQuery-CPqkvEsh.d.ts, 0, 39))
+
+type DefaultError = Register extends {
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+>Register : Symbol(Register, Decl(useQuery-CPqkvEsh.d.ts, 0, 39))
+
+  defaultError: infer TError;
+>defaultError : Symbol(defaultError, Decl(useQuery-CPqkvEsh.d.ts, 4, 38))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 5, 21))
+}
+  ? TError
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 5, 21))
+
+  : Error;
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+type ShouldRetryFunction<TError = DefaultError> = (
+>ShouldRetryFunction : Symbol(ShouldRetryFunction, Decl(useQuery-CPqkvEsh.d.ts, 8, 10))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 10, 25))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  failureCount: number,
+>failureCount : Symbol(failureCount, Decl(useQuery-CPqkvEsh.d.ts, 10, 51))
+
+  error: TError,
+>error : Symbol(error, Decl(useQuery-CPqkvEsh.d.ts, 11, 23))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 10, 25))
+
+) => boolean;
+type RetryValue<TError> = boolean | number | ShouldRetryFunction<TError>;
+>RetryValue : Symbol(RetryValue, Decl(useQuery-CPqkvEsh.d.ts, 13, 13))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 14, 16))
+>ShouldRetryFunction : Symbol(ShouldRetryFunction, Decl(useQuery-CPqkvEsh.d.ts, 8, 10))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 14, 16))
+
+type QueryFunctionContext<
+>QueryFunctionContext : Symbol(QueryFunctionContext, Decl(useQuery-CPqkvEsh.d.ts, 14, 73))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 16, 26))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+  TPageParam = never,
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 17, 40))
+
+> = [TPageParam] extends [never]
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 17, 40))
+
+  ? {
+      queryKey: TQueryKey;
+>queryKey : Symbol(queryKey, Decl(useQuery-CPqkvEsh.d.ts, 20, 5))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 16, 26))
+    }
+  : {
+      queryKey: TQueryKey;
+>queryKey : Symbol(queryKey, Decl(useQuery-CPqkvEsh.d.ts, 23, 5))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 16, 26))
+
+      pageParam: TPageParam;
+>pageParam : Symbol(pageParam, Decl(useQuery-CPqkvEsh.d.ts, 24, 26))
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 17, 40))
+
+    };
+
+type QueryFunction<
+>QueryFunction : Symbol(QueryFunction, Decl(useQuery-CPqkvEsh.d.ts, 26, 6))
+
+  T = unknown,
+>T : Symbol(T, Decl(useQuery-CPqkvEsh.d.ts, 28, 19))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 29, 14))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+  TPageParam = never,
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 30, 40))
+
+> = (context: QueryFunctionContext<TQueryKey, TPageParam>) => T | Promise<T>;
+>context : Symbol(context, Decl(useQuery-CPqkvEsh.d.ts, 32, 5))
+>QueryFunctionContext : Symbol(QueryFunctionContext, Decl(useQuery-CPqkvEsh.d.ts, 14, 73))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 29, 14))
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 30, 40))
+>T : Symbol(T, Decl(useQuery-CPqkvEsh.d.ts, 28, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(useQuery-CPqkvEsh.d.ts, 28, 19))
+
+interface QueryOptions<
+>QueryOptions : Symbol(QueryOptions, Decl(useQuery-CPqkvEsh.d.ts, 32, 77))
+
+  TQueryFnData = unknown,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 34, 23))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 35, 25))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  TData = TQueryFnData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 36, 24))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 34, 23))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 37, 23))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+  TPageParam = never,
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 38, 40))
+
+> {
+  retry?: RetryValue<TError>;
+>retry : Symbol(QueryOptions.retry, Decl(useQuery-CPqkvEsh.d.ts, 40, 3))
+>RetryValue : Symbol(RetryValue, Decl(useQuery-CPqkvEsh.d.ts, 13, 13))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 35, 25))
+
+  queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam>;
+>queryFn : Symbol(QueryOptions.queryFn, Decl(useQuery-CPqkvEsh.d.ts, 41, 29))
+>QueryFunction : Symbol(QueryFunction, Decl(useQuery-CPqkvEsh.d.ts, 26, 6))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 34, 23))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 37, 23))
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 38, 40))
+
+  queryKey?: TQueryKey;
+>queryKey : Symbol(QueryOptions.queryKey, Decl(useQuery-CPqkvEsh.d.ts, 42, 63))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 37, 23))
+
+  initialData?: TData;
+>initialData : Symbol(QueryOptions.initialData, Decl(useQuery-CPqkvEsh.d.ts, 43, 23))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 36, 24))
+
+  initialDataUpdatedAt?: number | (() => number | undefined);
+>initialDataUpdatedAt : Symbol(QueryOptions.initialDataUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 44, 22))
+}
+
+interface QueryObserverOptions<
+>QueryObserverOptions : Symbol(QueryObserverOptions, Decl(useQuery-CPqkvEsh.d.ts, 46, 1))
+
+  TQueryFnData = unknown,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 48, 31))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 49, 25))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  TData = TQueryFnData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 50, 24))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 48, 31))
+
+  TQueryData = TQueryFnData,
+>TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 51, 23))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 48, 31))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 52, 28))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+  TPageParam = never,
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 53, 40))
+
+> extends QueryOptions<
+>QueryOptions : Symbol(QueryOptions, Decl(useQuery-CPqkvEsh.d.ts, 32, 77))
+
+    TQueryFnData,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 48, 31))
+
+    TError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 49, 25))
+
+    TQueryData,
+>TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 51, 23))
+
+    TQueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 52, 28))
+
+    TPageParam
+>TPageParam : Symbol(TPageParam, Decl(useQuery-CPqkvEsh.d.ts, 53, 40))
+
+  > {
+  enabled?: boolean;
+>enabled : Symbol(QueryObserverOptions.enabled, Decl(useQuery-CPqkvEsh.d.ts, 61, 5))
+
+  refetchInterval?: number;
+>refetchInterval : Symbol(QueryObserverOptions.refetchInterval, Decl(useQuery-CPqkvEsh.d.ts, 62, 20))
+
+  select?: (data: TQueryData) => TData;
+>select : Symbol(QueryObserverOptions.select, Decl(useQuery-CPqkvEsh.d.ts, 63, 27))
+>data : Symbol(data, Decl(useQuery-CPqkvEsh.d.ts, 64, 12))
+>TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 51, 23))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 50, 24))
+}
+
+type UseQueryOptions<
+>UseQueryOptions : Symbol(UseQueryOptions, Decl(useQuery-CPqkvEsh.d.ts, 65, 1))
+
+  TQueryFnData = unknown,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 67, 21))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 68, 25))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  TData = TQueryFnData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 69, 24))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 67, 21))
+
+  TQueryData = TQueryFnData,
+>TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 70, 23))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 67, 21))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 71, 28))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+> = {
+  [Property in keyof QueryObserverOptions<
+>Property : Symbol(Property, Decl(useQuery-CPqkvEsh.d.ts, 74, 3))
+>QueryObserverOptions : Symbol(QueryObserverOptions, Decl(useQuery-CPqkvEsh.d.ts, 46, 1))
+
+    TQueryFnData,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 67, 21))
+
+    TError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 68, 25))
+
+    TData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 69, 24))
+
+    TQueryData,
+>TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 70, 23))
+
+    TQueryKey
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 71, 28))
+
+  >]: QueryObserverOptions<
+>QueryObserverOptions : Symbol(QueryObserverOptions, Decl(useQuery-CPqkvEsh.d.ts, 46, 1))
+
+    TQueryFnData,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 67, 21))
+
+    TError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 68, 25))
+
+    TData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 69, 24))
+
+    TQueryData,
+>TQueryData : Symbol(TQueryData, Decl(useQuery-CPqkvEsh.d.ts, 70, 23))
+
+    TQueryKey
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 71, 28))
+
+  >[Property];
+>Property : Symbol(Property, Decl(useQuery-CPqkvEsh.d.ts, 74, 3))
+
+};
+
+type UndefinedInitialQueryOptions<
+>UndefinedInitialQueryOptions : Symbol(UndefinedInitialQueryOptions, Decl(useQuery-CPqkvEsh.d.ts, 87, 2))
+
+  TQueryFnData = unknown,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 89, 34))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 90, 25))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  TData = TQueryFnData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 91, 24))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 89, 34))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 92, 23))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+> = UseQueryOptions<TQueryFnData, TError, TData, TQueryFnData, TQueryKey> & {
+>UseQueryOptions : Symbol(UseQueryOptions, Decl(useQuery-CPqkvEsh.d.ts, 65, 1))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 89, 34))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 90, 25))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 91, 24))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 89, 34))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 92, 23))
+
+  initialData?: undefined;
+>initialData : Symbol(initialData, Decl(useQuery-CPqkvEsh.d.ts, 94, 77))
+
+};
+
+interface QueryObserverBaseResult<TData = unknown, TError = DefaultError> {
+>QueryObserverBaseResult : Symbol(QueryObserverBaseResult, Decl(useQuery-CPqkvEsh.d.ts, 96, 2))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 98, 34))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 98, 50))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  data: TData | undefined;
+>data : Symbol(QueryObserverBaseResult.data, Decl(useQuery-CPqkvEsh.d.ts, 98, 75))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 98, 34))
+
+  dataUpdatedAt: number;
+>dataUpdatedAt : Symbol(QueryObserverBaseResult.dataUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 99, 26))
+
+  error: TError | null;
+>error : Symbol(QueryObserverBaseResult.error, Decl(useQuery-CPqkvEsh.d.ts, 100, 24))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 98, 50))
+
+  errorUpdatedAt: number;
+>errorUpdatedAt : Symbol(QueryObserverBaseResult.errorUpdatedAt, Decl(useQuery-CPqkvEsh.d.ts, 101, 23))
+
+  failureCount: number;
+>failureCount : Symbol(QueryObserverBaseResult.failureCount, Decl(useQuery-CPqkvEsh.d.ts, 102, 25))
+
+  failureReason: TError | null;
+>failureReason : Symbol(QueryObserverBaseResult.failureReason, Decl(useQuery-CPqkvEsh.d.ts, 103, 23))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 98, 50))
+
+  errorUpdateCount: number;
+>errorUpdateCount : Symbol(QueryObserverBaseResult.errorUpdateCount, Decl(useQuery-CPqkvEsh.d.ts, 104, 31))
+
+  isError: boolean;
+>isError : Symbol(QueryObserverBaseResult.isError, Decl(useQuery-CPqkvEsh.d.ts, 105, 27))
+
+  isFetched: boolean;
+>isFetched : Symbol(QueryObserverBaseResult.isFetched, Decl(useQuery-CPqkvEsh.d.ts, 106, 19))
+
+  isFetchedAfterMount: boolean;
+>isFetchedAfterMount : Symbol(QueryObserverBaseResult.isFetchedAfterMount, Decl(useQuery-CPqkvEsh.d.ts, 107, 21))
+
+  isFetching: boolean;
+>isFetching : Symbol(QueryObserverBaseResult.isFetching, Decl(useQuery-CPqkvEsh.d.ts, 108, 31))
+
+  isLoading: boolean;
+>isLoading : Symbol(QueryObserverBaseResult.isLoading, Decl(useQuery-CPqkvEsh.d.ts, 109, 22))
+
+  isPending: boolean;
+>isPending : Symbol(QueryObserverBaseResult.isPending, Decl(useQuery-CPqkvEsh.d.ts, 110, 21))
+
+  isLoadingError: boolean;
+>isLoadingError : Symbol(QueryObserverBaseResult.isLoadingError, Decl(useQuery-CPqkvEsh.d.ts, 111, 21))
+
+  isInitialLoading: boolean;
+>isInitialLoading : Symbol(QueryObserverBaseResult.isInitialLoading, Decl(useQuery-CPqkvEsh.d.ts, 112, 26))
+
+  isPaused: boolean;
+>isPaused : Symbol(QueryObserverBaseResult.isPaused, Decl(useQuery-CPqkvEsh.d.ts, 113, 28))
+
+  isPlaceholderData: boolean;
+>isPlaceholderData : Symbol(QueryObserverBaseResult.isPlaceholderData, Decl(useQuery-CPqkvEsh.d.ts, 114, 20))
+
+  isRefetchError: boolean;
+>isRefetchError : Symbol(QueryObserverBaseResult.isRefetchError, Decl(useQuery-CPqkvEsh.d.ts, 115, 29))
+
+  isRefetching: boolean;
+>isRefetching : Symbol(QueryObserverBaseResult.isRefetching, Decl(useQuery-CPqkvEsh.d.ts, 116, 26))
+
+  isStale: boolean;
+>isStale : Symbol(QueryObserverBaseResult.isStale, Decl(useQuery-CPqkvEsh.d.ts, 117, 24))
+
+  isSuccess: boolean;
+>isSuccess : Symbol(QueryObserverBaseResult.isSuccess, Decl(useQuery-CPqkvEsh.d.ts, 118, 19))
+}
+
+interface QueryObserverSuccessResult<TData = unknown, TError = DefaultError>
+>QueryObserverSuccessResult : Symbol(QueryObserverSuccessResult, Decl(useQuery-CPqkvEsh.d.ts, 120, 1))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 122, 37))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 122, 53))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  extends QueryObserverBaseResult<TData, TError> {
+>QueryObserverBaseResult : Symbol(QueryObserverBaseResult, Decl(useQuery-CPqkvEsh.d.ts, 96, 2))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 122, 37))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 122, 53))
+
+  data: TData;
+>data : Symbol(QueryObserverSuccessResult.data, Decl(useQuery-CPqkvEsh.d.ts, 123, 50))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 122, 37))
+
+  error: null;
+>error : Symbol(QueryObserverSuccessResult.error, Decl(useQuery-CPqkvEsh.d.ts, 124, 14))
+
+  isError: false;
+>isError : Symbol(QueryObserverSuccessResult.isError, Decl(useQuery-CPqkvEsh.d.ts, 125, 14))
+
+  isPending: false;
+>isPending : Symbol(QueryObserverSuccessResult.isPending, Decl(useQuery-CPqkvEsh.d.ts, 126, 17))
+
+  isLoadingError: false;
+>isLoadingError : Symbol(QueryObserverSuccessResult.isLoadingError, Decl(useQuery-CPqkvEsh.d.ts, 127, 19))
+
+  isRefetchError: false;
+>isRefetchError : Symbol(QueryObserverSuccessResult.isRefetchError, Decl(useQuery-CPqkvEsh.d.ts, 128, 24))
+
+  isSuccess: true;
+>isSuccess : Symbol(QueryObserverSuccessResult.isSuccess, Decl(useQuery-CPqkvEsh.d.ts, 129, 24))
+
+  status: "success";
+>status : Symbol(QueryObserverSuccessResult.status, Decl(useQuery-CPqkvEsh.d.ts, 130, 18))
+}
+
+type DefinedQueryObserverResult<
+>DefinedQueryObserverResult : Symbol(DefinedQueryObserverResult, Decl(useQuery-CPqkvEsh.d.ts, 132, 1))
+
+  TData = unknown,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 134, 32))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 135, 18))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+> = QueryObserverSuccessResult<TData, TError>;
+>QueryObserverSuccessResult : Symbol(QueryObserverSuccessResult, Decl(useQuery-CPqkvEsh.d.ts, 120, 1))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 134, 32))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 135, 18))
+
+type QueryObserverResult<
+>QueryObserverResult : Symbol(QueryObserverResult, Decl(useQuery-CPqkvEsh.d.ts, 137, 46))
+
+  TData = unknown,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 138, 25))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 139, 18))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+> = DefinedQueryObserverResult<TData, TError>;
+>DefinedQueryObserverResult : Symbol(DefinedQueryObserverResult, Decl(useQuery-CPqkvEsh.d.ts, 132, 1))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 138, 25))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 139, 18))
+
+type ToRef<T> = {
+>ToRef : Symbol(ToRef, Decl(useQuery-CPqkvEsh.d.ts, 141, 46))
+>T : Symbol(T, Decl(useQuery-CPqkvEsh.d.ts, 143, 11))
+
+  value: T;
+>value : Symbol(value, Decl(useQuery-CPqkvEsh.d.ts, 143, 17))
+>T : Symbol(T, Decl(useQuery-CPqkvEsh.d.ts, 143, 11))
+
+};
+
+type UseBaseQueryReturnType<
+>UseBaseQueryReturnType : Symbol(UseBaseQueryReturnType, Decl(useQuery-CPqkvEsh.d.ts, 145, 2))
+
+  TData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 147, 28))
+
+  TError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 148, 8))
+
+  Result = QueryObserverResult<TData, TError>,
+>Result : Symbol(Result, Decl(useQuery-CPqkvEsh.d.ts, 149, 9))
+>QueryObserverResult : Symbol(QueryObserverResult, Decl(useQuery-CPqkvEsh.d.ts, 137, 46))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 147, 28))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 148, 8))
+
+> = {
+  [K in keyof Result]: K extends
+>K : Symbol(K, Decl(useQuery-CPqkvEsh.d.ts, 152, 3))
+>Result : Symbol(Result, Decl(useQuery-CPqkvEsh.d.ts, 149, 9))
+>K : Symbol(K, Decl(useQuery-CPqkvEsh.d.ts, 152, 3))
+
+    | "fetchNextPage"
+    | "fetchPreviousPage"
+    | "refetch"
+    ? Result[K]
+>Result : Symbol(Result, Decl(useQuery-CPqkvEsh.d.ts, 149, 9))
+>K : Symbol(K, Decl(useQuery-CPqkvEsh.d.ts, 152, 3))
+
+    : ToRef<Readonly<Result>[K]>;
+>ToRef : Symbol(ToRef, Decl(useQuery-CPqkvEsh.d.ts, 141, 46))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Result : Symbol(Result, Decl(useQuery-CPqkvEsh.d.ts, 149, 9))
+>K : Symbol(K, Decl(useQuery-CPqkvEsh.d.ts, 152, 3))
+
+} & {
+  suspense: () => Promise<Result>;
+>suspense : Symbol(suspense, Decl(useQuery-CPqkvEsh.d.ts, 158, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Result : Symbol(Result, Decl(useQuery-CPqkvEsh.d.ts, 149, 9))
+
+};
+
+type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
+>UseQueryReturnType : Symbol(UseQueryReturnType, Decl(useQuery-CPqkvEsh.d.ts, 160, 2))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 162, 24))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 162, 30))
+>UseBaseQueryReturnType : Symbol(UseBaseQueryReturnType, Decl(useQuery-CPqkvEsh.d.ts, 145, 2))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 162, 24))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 162, 30))
+
+declare function useQuery<
+>useQuery : Symbol(useQuery, Decl(useQuery-CPqkvEsh.d.ts, 162, 79))
+
+  TQueryFnData = unknown,
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 164, 26))
+
+  TError = DefaultError,
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 165, 25))
+>DefaultError : Symbol(DefaultError, Decl(useQuery-CPqkvEsh.d.ts, 2, 21))
+
+  TData = TQueryFnData,
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 166, 24))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 164, 26))
+
+  TQueryKey extends QueryKey = QueryKey,
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 167, 23))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+>QueryKey : Symbol(QueryKey, Decl(useQuery-CPqkvEsh.d.ts, 0, 0))
+
+>(
+  options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+>options : Symbol(options, Decl(useQuery-CPqkvEsh.d.ts, 169, 2))
+>UndefinedInitialQueryOptions : Symbol(UndefinedInitialQueryOptions, Decl(useQuery-CPqkvEsh.d.ts, 87, 2))
+>TQueryFnData : Symbol(TQueryFnData, Decl(useQuery-CPqkvEsh.d.ts, 164, 26))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 165, 25))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 166, 24))
+>TQueryKey : Symbol(TQueryKey, Decl(useQuery-CPqkvEsh.d.ts, 167, 23))
+
+): UseQueryReturnType<TData, TError>;
+>UseQueryReturnType : Symbol(UseQueryReturnType, Decl(useQuery-CPqkvEsh.d.ts, 160, 2))
+>TData : Symbol(TData, Decl(useQuery-CPqkvEsh.d.ts, 166, 24))
+>TError : Symbol(TError, Decl(useQuery-CPqkvEsh.d.ts, 165, 25))
+
+export { type UseQueryReturnType as b, useQuery as u };
+>UseQueryReturnType : Symbol(UseQueryReturnType, Decl(useQuery-CPqkvEsh.d.ts, 160, 2))
+>b : Symbol(b, Decl(useQuery-CPqkvEsh.d.ts, 173, 8))
+>useQuery : Symbol(useQuery, Decl(useQuery-CPqkvEsh.d.ts, 162, 79))
+>u : Symbol(u, Decl(useQuery-CPqkvEsh.d.ts, 173, 38))
+
+=== node_modules/@tanstack/vue-query/build/modern/index.d.ts ===
+export { b as UseQueryReturnType, u as useQuery } from './useQuery-CPqkvEsh.js';
+>b : Symbol(b, Decl(useQuery-CPqkvEsh.d.ts, 173, 8))
+>UseQueryReturnType : Symbol(UseQueryReturnType, Decl(index.d.ts, 0, 8))
+>u : Symbol(u, Decl(useQuery-CPqkvEsh.d.ts, 173, 38))
+>useQuery : Symbol(useQuery, Decl(index.d.ts, 0, 33))
+
+=== src/index.mts ===
+import { useQuery } from '@tanstack/vue-query'
+>useQuery : Symbol(useQuery, Decl(index.mts, 0, 8))
+
+const baseUrl = 'https://api.publicapis.org/'
+>baseUrl : Symbol(baseUrl, Decl(index.mts, 2, 5))
+
+interface IEntry {
+>IEntry : Symbol(IEntry, Decl(index.mts, 2, 45))
+
+  API: string
+>API : Symbol(IEntry.API, Decl(index.mts, 4, 18))
+
+  Description: string
+>Description : Symbol(IEntry.Description, Decl(index.mts, 5, 13))
+
+  Auth: string
+>Auth : Symbol(IEntry.Auth, Decl(index.mts, 6, 21))
+
+  HTTPS: boolean
+>HTTPS : Symbol(IEntry.HTTPS, Decl(index.mts, 7, 14))
+
+  Cors: string
+>Cors : Symbol(IEntry.Cors, Decl(index.mts, 8, 16))
+
+  Link: string
+>Link : Symbol(IEntry.Link, Decl(index.mts, 9, 14))
+
+  Category: string
+>Category : Symbol(IEntry.Category, Decl(index.mts, 10, 14))
+}
+
+const testApi = {
+>testApi : Symbol(testApi, Decl(index.mts, 14, 5))
+
+  getEntries: (): Promise<IEntry[]> => {
+>getEntries : Symbol(getEntries, Decl(index.mts, 14, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IEntry : Symbol(IEntry, Decl(index.mts, 2, 45))
+
+    return fetch(baseUrl + 'entries')
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>fetch(baseUrl + 'entries')      .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
+>baseUrl : Symbol(baseUrl, Decl(index.mts, 2, 5))
+
+      .then((res) => res.json())
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>res : Symbol(res, Decl(index.mts, 17, 13))
+>res.json : Symbol(Body.json, Decl(lib.dom.d.ts, --, --))
+>res : Symbol(res, Decl(index.mts, 17, 13))
+>json : Symbol(Body.json, Decl(lib.dom.d.ts, --, --))
+
+      .then((data) => data.entries)
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(index.mts, 18, 13))
+>data : Symbol(data, Decl(index.mts, 18, 13))
+
+      .catch((err) => console.log(err))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>err : Symbol(err, Decl(index.mts, 19, 14))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>err : Symbol(err, Decl(index.mts, 19, 14))
+  }
+}
+
+const entryKeys = {
+>entryKeys : Symbol(entryKeys, Decl(index.mts, 23, 5))
+
+  all: ['entries'] as const,
+>all : Symbol(all, Decl(index.mts, 23, 19))
+>const : Symbol(const)
+
+  list: () => [...entryKeys.all, 'list'] as const
+>list : Symbol(list, Decl(index.mts, 24, 28))
+>entryKeys.all : Symbol(all, Decl(index.mts, 23, 19))
+>entryKeys : Symbol(entryKeys, Decl(index.mts, 23, 5))
+>all : Symbol(all, Decl(index.mts, 23, 19))
+>const : Symbol(const)
+}
+
+export const useEntries = () => {
+>useEntries : Symbol(useEntries, Decl(index.mts, 28, 12))
+
+  return useQuery({
+>useQuery : Symbol(useQuery, Decl(index.mts, 0, 8))
+
+    queryKey: entryKeys.list(),
+>queryKey : Symbol(queryKey, Decl(index.mts, 29, 19))
+>entryKeys.list : Symbol(list, Decl(index.mts, 24, 28))
+>entryKeys : Symbol(entryKeys, Decl(index.mts, 23, 5))
+>list : Symbol(list, Decl(index.mts, 24, 28))
+
+    queryFn: testApi.getEntries,
+>queryFn : Symbol(queryFn, Decl(index.mts, 30, 31))
+>testApi.getEntries : Symbol(getEntries, Decl(index.mts, 14, 17))
+>testApi : Symbol(testApi, Decl(index.mts, 14, 5))
+>getEntries : Symbol(getEntries, Decl(index.mts, 14, 17))
+
+    select: (data) => data.slice(0, 10)
+>select : Symbol(select, Decl(index.mts, 31, 32))
+>data : Symbol(data, Decl(index.mts, 32, 13))
+>data.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(index.mts, 32, 13))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+
+  })
+}
+

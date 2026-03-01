@@ -1,15 +1,22 @@
-=== tests/cases/compiler/autonumberingInEnums.ts ===
+//// [tests/cases/compiler/autonumberingInEnums.ts] ////
+
+=== autonumberingInEnums.ts ===
 enum Foo {
 >Foo : Foo
+>    : ^^^
 
     a = 1
 >a : Foo.a
+>  : ^^^^^
 >1 : 1
+>  : ^
 }
 
 enum Foo {
 >Foo : Foo
+>    : ^^^
 
     b // should work fine
 >b : Foo.b
+>  : ^^^^^
 }

@@ -43,7 +43,7 @@ export async function h() {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 // cjs format file
 const index_js_1 = require("../index.js");
 async function f() {
@@ -51,7 +51,6 @@ async function f() {
     const mod4 = await import("./index.js");
     (0, index_js_1.h)();
 }
-exports.f = f;
 
 
 //// [index.d.ts]

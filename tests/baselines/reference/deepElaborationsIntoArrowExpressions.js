@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts] ////
+
 //// [deepElaborationsIntoArrowExpressions.ts]
 const a: {
     y(): "a"
@@ -19,6 +21,7 @@ function foo3(): Foo[] {
 var y: Foo[] = [{a: ''}]
 
 //// [deepElaborationsIntoArrowExpressions.js]
+"use strict";
 const a = {
     y: () => "b"
 };

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/alwaysStrictModule5.ts ===
+//// [tests/cases/compiler/alwaysStrictModule5.ts] ////
+
+=== alwaysStrictModule5.ts ===
 // Targeting ES6
 export const a = 1; 
 >a : Symbol(a, Decl(alwaysStrictModule5.ts, 1, 12))

@@ -1,13 +1,16 @@
+//// [tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts] ////
+
 //// [parserExportAssignment9.ts]
 namespace Foo {
   export default foo;
 }
 
-module Bar {
+namespace Bar {
   export default bar;
 }
 
 //// [parserExportAssignment9.js]
+"use strict";
 var Foo;
 (function (Foo) {
     export default foo;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeTest1.ts] ////
+
 //// [targetTypeTest1.ts]
 declare class Point
 {
@@ -73,6 +75,7 @@ C.prototype =
 
 
 //// [targetTypeTest1.js]
+"use strict";
 // Type provided by extern declaration
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void

@@ -1,0 +1,33 @@
+// === goToType ===
+// === /tests/cases/fourslash/module2.ts ===
+// w./*GOTO TYPE*/a;
+// x;
+// y;
+// y;
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/module2.ts ===
+// w.a;
+// /*GOTO TYPE*/x;
+// y;
+// y;
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/module2.ts ===
+// w.a;
+// x;
+// /*GOTO TYPE*/y;
+// y;
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/module2.ts ===
+// w.a;
+// x;
+// y;
+// /*GOTO TYPE*/y;

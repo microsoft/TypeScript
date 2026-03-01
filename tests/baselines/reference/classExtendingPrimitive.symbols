@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts] ////
+
+=== classExtendingPrimitive.ts ===
 // classes cannot extend primitives
 
 class C extends number { }
@@ -36,4 +38,25 @@ enum E { A }
 class C8 extends E { }
 >C8 : Symbol(C8, Decl(classExtendingPrimitive.ts, 12, 12))
 >E : Symbol(E, Decl(classExtendingPrimitive.ts, 10, 30))
+
+const C9 = class extends number { }
+>C9 : Symbol(C9, Decl(classExtendingPrimitive.ts, 15, 5))
+
+const C10 = class extends string { }
+>C10 : Symbol(C10, Decl(classExtendingPrimitive.ts, 16, 5))
+
+const C11 = class extends boolean { }
+>C11 : Symbol(C11, Decl(classExtendingPrimitive.ts, 17, 5))
+
+const C12 = class A extends number { }
+>C12 : Symbol(C12, Decl(classExtendingPrimitive.ts, 19, 5))
+>A : Symbol(A, Decl(classExtendingPrimitive.ts, 19, 11))
+
+const C13 = class B extends string { }
+>C13 : Symbol(C13, Decl(classExtendingPrimitive.ts, 20, 5))
+>B : Symbol(B, Decl(classExtendingPrimitive.ts, 20, 11))
+
+const C14 = class C extends boolean { }
+>C14 : Symbol(C14, Decl(classExtendingPrimitive.ts, 21, 5))
+>C : Symbol(C, Decl(classExtendingPrimitive.ts, 21, 11))
 

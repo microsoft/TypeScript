@@ -1,45 +1,71 @@
-=== tests/cases/compiler/specializedSignatureOverloadReturnTypeWithIndexers.ts ===
+//// [tests/cases/compiler/specializedSignatureOverloadReturnTypeWithIndexers.ts] ////
+
+=== specializedSignatureOverloadReturnTypeWithIndexers.ts ===
 interface A {
     f(p: string): { [p: string]: string; };
 >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: string]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : string
+>  : ^^^^^^
 >p : string
+>  : ^^^^^^
 
     f(p: "spec"): { [p: string]: any; } // Should be ok
 >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: string]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : "spec"
+>  : ^^^^^^
 >p : string
+>  : ^^^^^^
 }
 interface B {
     f(p: string): { [p: number]: string; };
 >f : { (p: string): { [p: number]: string; }; (p: "spec"): { [p: string]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : string
+>  : ^^^^^^
 >p : number
+>  : ^^^^^^
 
     f(p: "spec"): { [p: string]: any; } // Should be ok
 >f : { (p: string): { [p: number]: string; }; (p: "spec"): { [p: string]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : "spec"
+>  : ^^^^^^
 >p : string
+>  : ^^^^^^
 }
 interface C {
     f(p: string): { [p: number]: string; };
 >f : { (p: string): { [p: number]: string; }; (p: "spec"): { [p: number]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : string
+>  : ^^^^^^
 >p : number
+>  : ^^^^^^
 
     f(p: "spec"): { [p: number]: any; } // Should be ok
 >f : { (p: string): { [p: number]: string; }; (p: "spec"): { [p: number]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : "spec"
+>  : ^^^^^^
 >p : number
+>  : ^^^^^^
 }
 interface D {
     f(p: string): { [p: string]: string; };
 >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: number]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : string
+>  : ^^^^^^
 >p : string
+>  : ^^^^^^
 
     f(p: "spec"): { [p: number]: any; } // Should be error
 >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: number]: any; }; }
+>  : ^^^ ^^      ^^^                        ^^^ ^^      ^^^                     ^^^
 >p : "spec"
+>  : ^^^^^^
 >p : number
+>  : ^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypes2.ts] ////
+
 //// [infinitelyExpandingTypes2.ts]
 interface Foo<T> {
     x: Foo<Foo<T>>;
@@ -17,6 +19,7 @@ f(v); // should not error
 
 
 //// [infinitelyExpandingTypes2.js]
+"use strict";
 function f(p) {
     console.log(p);
 }

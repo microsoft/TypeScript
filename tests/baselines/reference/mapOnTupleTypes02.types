@@ -1,19 +1,33 @@
-=== tests/cases/compiler/mapOnTupleTypes02.ts ===
+//// [tests/cases/compiler/mapOnTupleTypes02.ts] ////
+
+=== mapOnTupleTypes02.ts ===
 export type Point = [number, number];
->Point : [number, number]
+>Point : Point
+>      : ^^^^^
 
 export function increment(point: Point) {
 >increment : (point: Point) => number[]
+>          : ^     ^^     ^^^^^^^^^^^^^
 >point : Point
+>      : ^^^^^
 
   return point.map(d => d + 1);
 >point.map(d => d + 1) : number[]
+>                      : ^^^^^^^^
 >point.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>          : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >point : Point
+>      : ^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >d => d + 1 : (d: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >d + 1 : number
+>      : ^^^^^^
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

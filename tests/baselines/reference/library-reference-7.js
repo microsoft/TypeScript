@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/references/library-reference-7.ts] ////
 
 //// [index.d.ts]
-// Secondary references are possible
-
 declare var $: { foo(): void };
 
 //// [consumer.ts]
@@ -11,5 +9,6 @@ $.foo();
 
 
 //// [consumer.js]
+"use strict";
 /// <reference types="jquery" />
 $.foo();

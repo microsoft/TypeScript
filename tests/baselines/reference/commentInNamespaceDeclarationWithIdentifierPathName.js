@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentInNamespaceDeclarationWithIdentifierPathName.ts] ////
+
 //// [commentInNamespaceDeclarationWithIdentifierPathName.ts]
 namespace hello.hi.world
 {
@@ -7,6 +9,7 @@ namespace hello.hi.world
 }
 
 //// [commentInNamespaceDeclarationWithIdentifierPathName.js]
+"use strict";
 var hello;
 (function (hello) {
     var hi;

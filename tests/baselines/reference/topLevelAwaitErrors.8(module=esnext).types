@@ -1,12 +1,17 @@
-=== tests/cases/conformance/externalModules/index.ts ===
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.8.ts] ////
+
+=== index.ts ===
 // await disallowed in default import
 import await from "./other";
 >await : any
+>      : ^^^
 
-=== tests/cases/conformance/externalModules/other.ts ===
+=== other.ts ===
 declare const _await: any;
 >_await : any
+>       : ^^^
 
 export default _await;
 >_await : any
+>       : ^^^
 

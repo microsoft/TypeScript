@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget5.ts] ////
+
 //// [parser_breakTarget5.ts]
 target:
 while (true) {
@@ -9,6 +11,7 @@ while (true) {
 }
 
 //// [parser_breakTarget5.js]
+"use strict";
 target: while (true) {
     function f() {
         while (true) {

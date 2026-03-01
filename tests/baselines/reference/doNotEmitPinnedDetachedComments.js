@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitPinnedDetachedComments.ts] ////
+
 //// [doNotEmitPinnedDetachedComments.ts]
 var x = 10;
 
@@ -33,6 +35,7 @@ function foo() {
 
 
 //// [doNotEmitPinnedDetachedComments.js]
+"use strict";
 var x = 10;
 function baz() { }
 function bar() {

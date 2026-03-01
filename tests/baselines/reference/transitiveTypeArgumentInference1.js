@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transitiveTypeArgumentInference1.ts] ////
+
 //// [transitiveTypeArgumentInference1.ts]
 interface I1<T, U> {
 	m(value: T): U;
@@ -14,10 +16,10 @@ var c = new C(i);
 
 
 //// [transitiveTypeArgumentInference1.js]
+"use strict";
 var i = null;
-var C = /** @class */ (function () {
-    function C(p) {
+class C {
+    constructor(p) {
     }
-    return C;
-}());
+}
 var c = new C(i);

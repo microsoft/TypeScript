@@ -1,73 +1,111 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts] ////
+
+=== privateNameUnused.ts ===
 export class A {
 >A : A
+>  : ^
 
     #used = "used";
 >#used : string
+>      : ^^^^^^
 >"used" : "used"
+>       : ^^^^^^
 
     #unused = "unused";
 >#unused : string
+>        : ^^^^^^
 >"unused" : "unused"
+>         : ^^^^^^^^
 
     constructor () {
         console.log(this.#used);
 >console.log(this.#used) : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#used : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 export class A2 {
 >A2 : A2
+>   : ^^
 
     #used() {  };
 >#used : () => void
+>      : ^^^^^^^^^^
 
     #unused() { };
 >#unused : () => void
+>        : ^^^^^^^^^^
 
     constructor () {
         console.log(this.#used());
 >console.log(this.#used()) : void
+>                          : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#used() : void
+>             : ^^^^
 >this.#used : () => void
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 export class A3 {
 >A3 : A3
+>   : ^^
 
     get #used() { return 0 };
 >#used : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     set #used(value: number) {  };
 >#used : number
+>      : ^^^^^^
 >value : number
+>      : ^^^^^^
     
     get #unused() { return 0 };
 >#unused : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     set #unused(value: number) {  };
 >#unused : number
+>        : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     constructor () {
         console.log(this.#used);
 >console.log(this.#used) : void
+>                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#used : number
+>           : ^^^^^^
 >this : this
+>     : ^^^^
     }
 }

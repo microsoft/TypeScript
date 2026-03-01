@@ -1,168 +1,266 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesForbidenSyntax.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder/index.cts ===
+=== subfolder/index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder/index.mts ===
+=== subfolder/index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder2/index.ts ===
+=== subfolder2/index.ts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder2/index.cts ===
+=== subfolder2/index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder2/index.mts ===
+=== subfolder2/index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder2/another/index.ts ===
+=== subfolder2/another/index.ts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder2/another/index.mts ===
+=== subfolder2/another/index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/subfolder2/another/index.cts ===
+=== subfolder2/another/index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // cjs format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 ><T>() => <T><any>(void 0) : <T>() => T
+>                          : ^ ^^^^^^^ 
 ><T><any>(void 0) : T
+>                 : ^
 ><any>(void 0) : any
+>              : ^^^
 >(void 0) : undefined
+>         : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 export {x};
 >x : <T>() => T
+>  : ^ ^^^^^^^ 
 

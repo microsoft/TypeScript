@@ -1,423 +1,285 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
-// interface I</*FIND ALL REFS*/[|T|]> { a: [|T|] }
-// interface I<[|T|]> { b: [|T|] }
+// interface I</*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]> { a: [|T|] }
+// interface I<[|{| isWriteAccess: true, isDefinition: true |}T|]> { b: [|T|] }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-      "kind": "type parameter",
-      "name": "(type parameter) T in I<T>",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
+  // interface I</*FIND ALL REFS*/[|T|]> { a: T }
+  // interface I<T> { b: T }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in I<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
-// interface I<[|T|]> { a: /*FIND ALL REFS*/[|T|] }
-// interface I<[|T|]> { b: [|T|] }
+// interface I<[|{| isWriteAccess: true |}T|]> { a: /*FIND ALL REFS*/[|T|] }
+// interface I<[|{| isWriteAccess: true |}T|]> { b: [|T|] }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-      "kind": "type parameter",
-      "name": "(type parameter) T in I<T>",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
+  // interface I<[|T|]> { a: /*FIND ALL REFS*/T }
+  // interface I<T> { b: T }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in I<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
-// interface I<[|T|]> { a: [|T|] }
-// interface I</*FIND ALL REFS*/[|T|]> { b: [|T|] }
+// interface I<[|{| isWriteAccess: true, isDefinition: true |}T|]> { a: [|T|] }
+// interface I</*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]> { b: [|T|] }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-      "kind": "type parameter",
-      "name": "(type parameter) T in I<T>",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
+  // interface I<[|T|]> { a: T }
+  // interface I</*FIND ALL REFS*/T> { b: T }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in I<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
-// interface I<[|T|]> { a: [|T|] }
-// interface I<[|T|]> { b: /*FIND ALL REFS*/[|T|] }
+// interface I<[|{| isWriteAccess: true |}T|]> { a: [|T|] }
+// interface I<[|{| isWriteAccess: true |}T|]> { b: /*FIND ALL REFS*/[|T|] }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-      "kind": "type parameter",
-      "name": "(type parameter) T in I<T>",
-      "textSpan": {
-        "start": 12,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "type parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "in",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 12,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
+  // interface I<[|T|]> { a: T }
+  // interface I<T> { b: /*FIND ALL REFS*/T }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type parameter",
+    "name": "(type parameter) T in I<T>",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "type parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "in",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": "<",
+      "kind": "punctuation"
+     },
+     {
+      "text": "T",
+      "kind": "typeParameterName"
+     },
+     {
+      "text": ">",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

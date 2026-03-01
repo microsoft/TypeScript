@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionParsingGenericInObject.ts ===
+//// [tests/cases/compiler/arrowFunctionParsingGenericInObject.ts] ////
+
+=== arrowFunctionParsingGenericInObject.ts ===
 const fn1 = () => ({
 >fn1 : Symbol(fn1, Decl(arrowFunctionParsingGenericInObject.ts, 0, 5))
 

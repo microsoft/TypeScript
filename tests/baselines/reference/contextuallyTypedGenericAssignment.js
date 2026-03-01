@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedGenericAssignment.ts] ////
+
 //// [contextuallyTypedGenericAssignment.ts]
 function foo<A extends any[]>(
     arg: <T extends { a: number }>(t: T, ...rest: A) => number
@@ -6,5 +8,6 @@ function foo<A extends any[]>(
 foo((t, u: number) => t.a)
 
 //// [contextuallyTypedGenericAssignment.js]
+"use strict";
 function foo(arg) { }
-foo(function (t, u) { return t.a; });
+foo((t, u) => t.a);

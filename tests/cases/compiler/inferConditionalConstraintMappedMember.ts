@@ -1,3 +1,4 @@
+// @target: es2015
 // Return keyof type without string index signature
 type KeysWithoutStringIndex<T> =
     { [K in keyof T]: string extends K ? never : K } extends { [_ in keyof T]: infer U }

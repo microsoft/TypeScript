@@ -1,79 +1,122 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndStringIndexer.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndStringIndexer.ts] ////
+
+=== genericCallWithObjectTypeArgsAndStringIndexer.ts ===
 // Type inference infers from indexers in target type, no errors expected
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 var a: { [x: string]: Date };
 >a : { [x: string]: Date; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var r = foo(a);
 >r : { [x: string]: Date; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo(a) : { [x: string]: Date; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >a : { [x: string]: Date; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
 function other<T>(arg: T) {
 >other : <T>(arg: T) => void
+>      : ^ ^^   ^^ ^^^^^^^^^
 >arg : T
+>    : ^
 
     var b: { [x: string]: T };
 >b : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     var r2 = foo(b); // T
 >r2 : { [x: string]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T
+>       : ^^^^^^^^^^^^^^^^^^^
+>foo : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 }
 
 function other2<T extends Date>(arg: T) {
 >other2 : <T extends Date>(arg: T) => void
+>       : ^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
+>    : ^
 
     var b: { [x: string]: T };
 >b : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     var r2 = foo(b);
 >r2 : { [x: string]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T
+>       : ^^^^^^^^^^^^^^^^^^^
+>foo : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var d: Date = r2['hm']; // ok
 >d : Date
+>  : ^^^^
 >r2['hm'] : T
+>         : ^
 >r2 : { [x: string]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >'hm' : "hm"
+>     : ^^^^
 }
 
 function other3<T extends Date, U extends Date>(arg: T) {
 >other3 : <T extends Date, U extends Date>(arg: T) => void
+>       : ^ ^^^^^^^^^    ^^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
+>    : ^
 
     var b: { [x: string]: T };
 >b : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     var r2 = foo(b);
 >r2 : { [x: string]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T
+>       : ^^^^^^^^^^^^^^^^^^^
+>foo : <T_1>(x: T_1) => T_1
+>    : ^^^^^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var d: Date = r2['hm']; // ok
 >d : Date
+>  : ^^^^
 >r2['hm'] : T
+>         : ^
 >r2 : { [x: string]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >'hm' : "hm"
+>     : ^^^^
 
     // BUG 821629
     //var u: U = r2['hm']; // ok

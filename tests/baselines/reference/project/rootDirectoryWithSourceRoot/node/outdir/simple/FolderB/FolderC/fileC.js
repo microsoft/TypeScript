@@ -1,6 +1,4 @@
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 //# sourceMappingURL=fileC.js.map

@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/spuriousCircularityOnTypeImport.ts] ////
+
+=== types.ts ===
+export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
+>SelectorMap : SelectorMap<T>
+>            : ^^^^^^^^^^^^^^
+>params : unknown[]
+>       : ^^^^^^^^^
+
+    [key in keyof T]: T[key];
+};
+
+=== index.ts ===
+export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
+>SelectorMap : SelectorMap<T>
+>            : ^^^^^^^^^^^^^^
+>params : unknown[]
+>       : ^^^^^^^^^
+
+    [key in keyof T]: T[key];
+};
+
+export declare const value2: {
+>value2 : { sliceSelectors: <FuncMap extends import("./types").SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }; }
+>       : ^^^^^^^^^^^^^^^^^^                                                                                                                                        ^^^
+
+    sliceSelectors: <FuncMap extends import('./types').SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
+>sliceSelectors : <FuncMap extends import("./types").SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }
+>               : ^       ^^^^^^^^^                                      ^^                ^^       ^^^^^                                                 
+>selectorsBySlice : FuncMap
+>                 : ^^^^^^^
+
+};
+
+export declare const value3: {
+>value3 : { sliceSelectors: <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }; }
+>       : ^^^^^^^^^^^^^^^^^^                                                                                                                      ^^^
+
+    sliceSelectors: <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
+>sliceSelectors : <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }
+>               : ^       ^^^^^^^^^                    ^^                ^^       ^^^^^                                                 
+>selectorsBySlice : FuncMap
+>                 : ^^^^^^^
+
+};
+
+

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfacePropertiesWithSameName3.ts ===
+//// [tests/cases/compiler/interfacePropertiesWithSameName3.ts] ////
+
+=== interfacePropertiesWithSameName3.ts ===
 interface D { a: number; }
 >D : Symbol(D, Decl(interfacePropertiesWithSameName3.ts, 0, 0))
 >a : Symbol(D.a, Decl(interfacePropertiesWithSameName3.ts, 0, 13))

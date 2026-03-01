@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleUnderStringLiteralAssignability.ts] ////
+
 //// [doubleUnderStringLiteralAssignability.ts]
 var shouldBeOk: '__dunder' = '__dunder';
 var bad: '__dunder' = 'no_dunder';
@@ -6,6 +8,7 @@ var alsoOk: '_sunder' = '_sunder';
 
 
 //// [doubleUnderStringLiteralAssignability.js]
+"use strict";
 var shouldBeOk = '__dunder';
 var bad = 'no_dunder';
 var okok = '___thunder';

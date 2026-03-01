@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyNameEnum3.ts] ////
+
+=== type.ts ===
+export namespace Foo {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+  export enum Enum {
+>Enum : Enum
+>     : ^^^^
+
+    A = "a",
+>A : Enum.A
+>  : ^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    B = "b",
+>B : Enum.B
+>  : ^^^^^^
+>"b" : "b"
+>    : ^^^
+  }
+}
+export type Type = { x?: { [Foo.Enum]: 0 } };
+>Type : Type
+>     : ^^^^
+>x : {} | undefined
+>  : ^^^^^^^^^^^^^^
+>[Foo.Enum] : 0
+>           : ^
+>Foo.Enum : typeof Foo.Enum
+>         : ^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>Enum : typeof Foo.Enum
+>     : ^^^^^^^^^^^^^^^
+
+=== index.ts ===
+import { type Type } from "./type";
+>Type : any
+>     : ^^^
+
+export const foo = { ...({} as Type) };
+>foo : { x?: {}; }
+>    : ^^^^^^  ^^^
+>{ ...({} as Type) } : { x?: {}; }
+>                    : ^^^^^^  ^^^
+>({} as Type) : Type
+>             : ^^^^
+>{} as Type : Type
+>           : ^^^^
+>{} : {}
+>   : ^^
+

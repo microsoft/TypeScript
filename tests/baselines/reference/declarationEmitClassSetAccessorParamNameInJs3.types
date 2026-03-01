@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/declarationEmitClassSetAccessorParamNameInJs3.ts] ////
+
+=== foo.js ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    /**
+     * Bar.
+     *
+     * @param {{ prop: string | undefined }} baz Baz.
+     */
+    set bar({ prop = 'foo' }) {}
+>bar : { prop: string | undefined; }
+>    : ^^^^^^^^                  ^^^
+>prop : string
+>     : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+}
+

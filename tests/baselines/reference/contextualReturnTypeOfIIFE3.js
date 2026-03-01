@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE3.ts] ////
+
+//// [contextualReturnTypeOfIIFE3.ts]
+declare namespace app {
+  var foo: {
+    bar: {
+      someFun: (arg: number) => void;
+    };
+  };
+}
+
+app.foo.bar = (function () {
+  return { someFun(arg) {} };
+})();
+
+app.foo.bar.someFun(1);
+
+
+//// [contextualReturnTypeOfIIFE3.js]
+"use strict";
+app.foo.bar = (function () {
+    return { someFun(arg) { } };
+})();
+app.foo.bar.someFun(1);

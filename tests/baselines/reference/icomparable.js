@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/icomparable.ts] ////
+
 //// [icomparable.ts]
     interface IComparable<T> {
        compareTo(other: T);
@@ -13,5 +15,6 @@
     var x = sort(sc);
 
 //// [icomparable.js]
+"use strict";
 var sc;
 var x = sort(sc);

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxParsingError4.tsx] ////
+
 //// [a.tsx]
 declare const React: any
 declare namespace JSX {
@@ -17,5 +19,5 @@ const b = (
 
 //// [a.js]
 "use strict";
-var a = (React.createElement("public-foo", null));
-var b = (React.createElement("public", null));
+const a = (React.createElement("public-foo", null));
+const b = (React.createElement("public", null));

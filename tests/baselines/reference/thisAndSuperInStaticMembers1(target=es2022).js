@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/thisAndSuperInStaticMembers1.ts] ////
+
 //// [thisAndSuperInStaticMembers1.ts]
 declare class B {
     static a: any;
@@ -40,6 +42,7 @@ class C extends B {
 
 
 //// [thisAndSuperInStaticMembers1.js]
+"use strict";
 class C extends B {
     static x = undefined;
     static y1 = this.x;

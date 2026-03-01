@@ -1,0 +1,88 @@
+// === Linked Editing ===
+=== /incomplete.tsx ===
+function Test() {
+    return <[|/*0*/div|]>
+        <
+        <div {...{}}>
+        </[|/*0*/div|]>
+    </div>
+}
+
+=== 0 ===
+{"ranges":[{"start":30,"length":3},{"start":77,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+
+=== /incompleteMismatched.tsx ===
+function Test() {
+    return <[|/*1*/div|]>
+        <T
+        <div {...{}}>
+        </[|/*1*/div|]>
+    </div>
+}
+
+=== 1 ===
+{"ranges":[{"start":30,"length":3},{"start":78,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+
+=== /incompleteMismatched2.tsx ===
+function Test() {
+    return <[|/*2*/div|]>
+        <T
+        <div {...{}}>
+        T</[|/*2*/div|]>
+    </div>
+}
+
+=== 2 ===
+{"ranges":[{"start":30,"length":3},{"start":79,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+
+=== /incompleteMismatched3.tsx ===
+function Test() {
+    return <[|/*3*/div|]>
+        <[|/*4*/div|] {...{}}>
+        </[|/*4*/div|]>
+        <T
+    </[|/*3*/div|]>
+}
+
+=== 3 ===
+{"ranges":[{"start":30,"length":3},{"start":89,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+=== 4 ===
+{"ranges":[{"start":44,"length":3},{"start":67,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+
+=== /mismatched.tsx ===
+function Test() {
+    return <[|/*5*/div|]>
+        <T>
+        <[|/*6*/div|] {...{}}>
+        </[|/*6*/div|]>
+    </[|/*5*/div|]>
+}
+
+=== 5 ===
+{"ranges":[{"start":30,"length":3},{"start":90,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+=== 6 ===
+{"ranges":[{"start":56,"length":3},{"start":79,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+
+=== /matched.tsx ===
+function Test() {
+    return <[|/*7*/div|]>
+
+        <[|/*8*/div|] {...{}}>
+        </[|/*8*/div|]>
+    </[|/*7*/div|]>
+}
+
+=== 7 ===
+{"ranges":[{"start":30,"length":3},{"start":79,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+=== 8 ===
+{"ranges":[{"start":45,"length":3},{"start":68,"length":3}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+

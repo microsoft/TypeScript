@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ExportAssignment.ts ===
+//// [tests/cases/compiler/es6ExportAssignment.ts] ////
+
+=== es6ExportAssignment.ts ===
 var a = 10;
 >a : Symbol(a, Decl(es6ExportAssignment.ts, 0, 3))
 

@@ -1,13 +1,13 @@
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,59): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(35,5): error TS2377: Constructors for derived classes must contain a 'super' call.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,14): error TS2754: 'super' may not use type arguments.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34): error TS1034: 'super' must be followed by an argument list or member access.
+taggedTemplatesWithTypeArguments2.ts(13,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+taggedTemplatesWithTypeArguments2.ts(17,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+taggedTemplatesWithTypeArguments2.ts(17,59): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+taggedTemplatesWithTypeArguments2.ts(35,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+taggedTemplatesWithTypeArguments2.ts(36,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+taggedTemplatesWithTypeArguments2.ts(36,14): error TS2754: 'super' may not use type arguments.
+taggedTemplatesWithTypeArguments2.ts(36,34): error TS1034: 'super' must be followed by an argument list or member access.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts (7 errors) ====
+==== taggedTemplatesWithTypeArguments2.ts (7 errors) ====
     export interface SomethingTaggable {
         <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
     }
@@ -49,9 +49,9 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34
     
     class SomeDerived<T> extends SomeBase<number, string, T> {
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
             super<number, string, T> `hello world`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
                  ~~~~~~~~~~~~~~~~~~~
@@ -59,6 +59,4 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34
                                      ~~~~~~~~~~~~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
         }
-    ~~~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

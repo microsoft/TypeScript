@@ -4,13 +4,15 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/test.js",
+    "outFile": "bin/test.js",
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
     "mapRoot": "../mapFiles",
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "m1.ts",
         "test.ts"
     ],

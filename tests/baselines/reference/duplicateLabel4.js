@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLabel4.ts] ////
+
 //// [duplicateLabel4.ts]
 target:
 while (true) {
@@ -8,6 +10,7 @@ while (true) {
 }
 
 //// [duplicateLabel4.js]
+"use strict";
 target: while (true) {
 }
 target: while (true) {

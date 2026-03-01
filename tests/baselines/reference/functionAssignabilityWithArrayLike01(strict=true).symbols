@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionAssignabilityWithArrayLike01.ts ===
+//// [tests/cases/compiler/functionAssignabilityWithArrayLike01.ts] ////
+
+=== functionAssignabilityWithArrayLike01.ts ===
 function func() {}
 >func : Symbol(func, Decl(functionAssignabilityWithArrayLike01.ts, 0, 0))
 

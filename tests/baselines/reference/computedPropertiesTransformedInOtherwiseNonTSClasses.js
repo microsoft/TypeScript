@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedPropertiesTransformedInOtherwiseNonTSClasses.ts] ////
+
 //// [computedPropertiesTransformedInOtherwiseNonTSClasses.ts]
 namespace NS { 
     export const x = Symbol();
@@ -9,13 +11,11 @@ namespace NS {
 
 
 //// [computedPropertiesTransformedInOtherwiseNonTSClasses.js]
+"use strict";
 var NS;
 (function (NS) {
     NS.x = Symbol();
-    var NotTransformed = /** @class */ (function () {
-        function NotTransformed() {
-        }
-        return NotTransformed;
-    }());
+    class NotTransformed {
+    }
     NS.x;
 })(NS || (NS = {}));

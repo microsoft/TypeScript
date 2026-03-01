@@ -1,10 +1,15 @@
-=== tests/cases/conformance/jsdoc/jsdocPrivateName1.js ===
+//// [tests/cases/conformance/jsdoc/jsdocPrivateName1.ts] ////
+
+=== jsdocPrivateName1.js ===
 class A {
 >A : A
+>  : ^
 
     /** @type {boolean} some number value */
     #foo = 3 // Error because not assignable to boolean
 >#foo : boolean
+>     : ^^^^^^^
 >3 : 3
+>  : ^
 }
 

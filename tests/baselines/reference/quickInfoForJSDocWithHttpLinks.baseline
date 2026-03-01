@@ -1,3 +1,54 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js ===
+// /** @typedef {number} https://wat */
+//                       ^^^^^
+// | ----------------------------------------------------------------------
+// | type https = number
+// | ://wat
+// | ----------------------------------------------------------------------
+// 
+// /**
+// * @typedef {Object} Oops
+// * @property {number} https://wass
+//                      ^^^^^
+// | ----------------------------------------------------------------------
+// | (property) https: number
+// | ://wass
+// | ----------------------------------------------------------------------
+// */
+// 
+// 
+// /** @callback http://vad */
+//               ^^^^
+// | ----------------------------------------------------------------------
+// | type http = () => any
+// | ://vad
+// | ----------------------------------------------------------------------
+// 
+// /** @see https://hvad */
+// var see1 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var see1: boolean
+// | @see https://hvad
+// | ----------------------------------------------------------------------
+// 
+// /** @see {@link https://hva} */
+// var see2 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var see2: boolean
+// | @see {@link https://hva}
+// | ----------------------------------------------------------------------
+// 
+// /** {@link https://hvaD} */
+// var see3 = true
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var see3: boolean
+// | {@link https://hvaD}
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +56,7 @@
       "position": 22,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -56,7 +107,7 @@
       "position": 88,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -111,7 +162,7 @@
       "position": 120,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -182,7 +233,7 @@
       "position": 164,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -239,7 +290,7 @@
       "position": 213,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -286,7 +337,7 @@
               "kind": "link"
             },
             {
-              "text": "https",
+              "text": "https://hva",
               "kind": "linkName",
               "target": {
                 "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
@@ -295,10 +346,6 @@
                   "length": 30
                 }
               }
-            },
-            {
-              "text": "://hva",
-              "kind": "linkText"
             },
             {
               "text": "}",
@@ -315,7 +362,7 @@
       "position": 258,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -358,7 +405,7 @@
           "kind": "link"
         },
         {
-          "text": "https",
+          "text": "https://hvaD",
           "kind": "linkName",
           "target": {
             "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
@@ -367,10 +414,6 @@
               "length": 30
             }
           }
-        },
-        {
-          "text": "://hvaD",
-          "kind": "linkText"
         },
         {
           "text": "}",

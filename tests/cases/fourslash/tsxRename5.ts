@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //@Filename: file.tsx
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -16,4 +16,4 @@
 //// [|var [|{| "contextRangeIndex": 0 |}nn|]: string;|]
 //// var x = <MyClass name={[|nn|]}></MyClass>;
 
-verify.rangesWithSameTextAreRenameLocations("nn");
+verify.baselineRenameAtRangesWithText("nn");

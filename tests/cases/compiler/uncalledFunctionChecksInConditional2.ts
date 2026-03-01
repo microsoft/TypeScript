@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: esnext,dom
 // @strictNullChecks: true
 {
@@ -20,6 +21,17 @@
     perf &&
     perf.mark &&
     perf.measure || !!true
+  ) {
+    perf.mark("");
+  }
+
+  // With ??
+  if (
+    (
+      perf &&
+      perf.mark &&
+      perf.measure
+    ) ?? !!true
   ) {
     perf.mark("");
   }
@@ -48,3 +60,15 @@ declare let inBrowser: boolean;
     }
   }
 };
+
+let _isMobile: boolean;
+function isMobile() {
+  if (_isMobile === undefined) {
+    const isMobileMatch =
+      typeof window !== 'undefined' &&
+      window.matchMedia && // no error
+      window.matchMedia('(max-device-width: 680px)');
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+  }
+  return _isMobile;
+}

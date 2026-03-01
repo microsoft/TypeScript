@@ -1,4 +1,5 @@
-module Foo {
+// @target: es2015
+namespace Foo {
 
     class Helper {
 
@@ -11,7 +12,7 @@ module Foo {
 }
 
 
-module Foo {
+namespace Foo {
     
     // Should not be an error
     class Helper {

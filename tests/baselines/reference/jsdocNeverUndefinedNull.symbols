@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/in.js ===
+//// [tests/cases/conformance/jsdoc/jsdocNeverUndefinedNull.ts] ////
+
+=== in.js ===
 /**
  * @param {never} p1
  * @param {undefined} p2

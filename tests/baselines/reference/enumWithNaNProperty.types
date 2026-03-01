@@ -1,9 +1,14 @@
-=== tests/cases/compiler/enumWithNaNProperty.ts ===
+//// [tests/cases/compiler/enumWithNaNProperty.ts] ////
+
+=== enumWithNaNProperty.ts ===
 enum A {
 >A : A
+>  : ^
 
     NaN = 1
 >NaN : A.NaN
+>    : ^^^^^
 >1 : 1
+>  : ^
 }
 

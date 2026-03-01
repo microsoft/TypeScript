@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classFunctionMerging2.ts] ////
+
 //// [classFunctionMerging2.ts]
 declare abstract class A {
     constructor(p: number);
@@ -14,5 +16,6 @@ let b = new B("Hey")
 console.log(b.a)
 
 //// [classFunctionMerging2.js]
-var b = new B("Hey");
+"use strict";
+let b = new B("Hey");
 console.log(b.a);

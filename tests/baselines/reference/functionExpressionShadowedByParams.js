@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionExpressionShadowedByParams.ts] ////
+
 //// [functionExpressionShadowedByParams.ts]
 function b1(b1: number) {
    b1.toPrecision(2); // should not error
@@ -14,6 +16,7 @@ var x = {
 
 
 //// [functionExpressionShadowedByParams.js]
+"use strict";
 function b1(b1) {
     b1.toPrecision(2); // should not error
     b1(12); // should error

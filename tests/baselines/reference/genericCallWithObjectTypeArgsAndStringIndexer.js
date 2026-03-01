@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndStringIndexer.ts] ////
+
 //// [genericCallWithObjectTypeArgsAndStringIndexer.ts]
 // Type inference infers from indexers in target type, no errors expected
 
@@ -36,6 +38,7 @@ function other3<T extends Date, U extends Date>(arg: T) {
 //}
 
 //// [genericCallWithObjectTypeArgsAndStringIndexer.js]
+"use strict";
 // Type inference infers from indexers in target type, no errors expected
 function foo(x) {
     return x;

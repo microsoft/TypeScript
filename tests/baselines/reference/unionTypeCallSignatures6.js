@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures6.ts] ////
+
 //// [unionTypeCallSignatures6.ts]
 type A = { a: string };
 type B = { b: number };
@@ -57,6 +59,7 @@ f4(); // error
 
 
 //// [unionTypeCallSignatures6.js]
+"use strict";
 f1(); // error
 f2(); // error
 x1.f0();

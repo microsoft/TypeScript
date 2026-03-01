@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNestedGenerics.ts] ////
+
 //// [declarationEmitNestedGenerics.ts]
 function f<T>(p: T) {
     let g: <T>(x: T) => typeof p = null as any;
@@ -10,12 +12,13 @@ function g<T>(x: T) {
 }
 
 //// [declarationEmitNestedGenerics.js]
+"use strict";
 function f(p) {
-    var g = null;
+    let g = null;
     return g;
 }
 function g(x) {
-    var y = null;
+    let y = null;
     return y;
 }
 

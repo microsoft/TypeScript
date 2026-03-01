@@ -1,7 +1,9 @@
+// @target: es2015
 // @traceResolution: true
 // @noImplicitReferences: true
 // @currentDirectory: /
-// This tests that `types` references are automatically lowercased.
+// @types: *
+// This tests that `types` references are not lowercased.
 
 // @filename: /tsconfig.json
 { "files": "a.ts" }

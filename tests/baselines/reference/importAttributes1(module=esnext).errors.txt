@@ -1,0 +1,39 @@
+3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+3.ts(9,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+
+
+==== 0.ts (0 errors) ====
+    export const a = 1;
+    export const b = 2;
+    
+==== 1.ts (0 errors) ====
+    import './0' with { type: "json" }
+    import { a, b } from './0' with { "type": "json" }
+    import * as foo from './0' with { type: "json" }
+    a;
+    b;
+    foo.a;
+    foo.b;
+==== 2.ts (0 errors) ====
+    import { a, b } from './0' with {}
+    import { a as c, b as d } from './0' with { a: "a", b: "b", c: "c" }
+    a;
+    b;
+    c;
+    d;
+==== 3.ts (2 errors) ====
+    const a = import('./0')
+    const b = import('./0', { with: { type: "json" } })
+    const c = import('./0', { with: { type: "json", ttype: "typo" } })
+    const d = import('./0', { with: {} })
+    const dd = import('./0', {})
+    declare function foo(): any;
+    const e = import('./0', foo())
+    const f = import()
+              ~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+    const g = import('./0', {}, {})
+              ~~~~~~~~~~~~~~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
+    const h = import('./0', { with: { type: "json" }},)
+    

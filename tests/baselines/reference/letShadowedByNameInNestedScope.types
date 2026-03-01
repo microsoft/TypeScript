@@ -1,29 +1,44 @@
-=== tests/cases/compiler/letShadowedByNameInNestedScope.ts ===
+//// [tests/cases/compiler/letShadowedByNameInNestedScope.ts] ////
+
+=== letShadowedByNameInNestedScope.ts ===
 var x;
 >x : any
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     let x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     (function () {
 >(function () {        var _x = 1;        console.log(x);    })() : void
+>                                                                 : ^^^^
 >(function () {        var _x = 1;        console.log(x);    }) : () => void
+>                                                               : ^^^^^^^^^^
 >function () {        var _x = 1;        console.log(x);    } : () => void
+>                                                             : ^^^^^^^^^^
 
         var _x = 1;
 >_x : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
         console.log(x);
 >console.log(x) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x : number
+>  : ^^^^^^
 
     })();
 }

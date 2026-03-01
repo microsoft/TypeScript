@@ -1,69 +1,100 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAssertion.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAssertion.ts] ////
+
+=== privateNamesAssertion.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     #p1: (v: any) => asserts v is string = (v) => {
 >#p1 : (v: any) => asserts v is string
+>    : ^ ^^   ^^^^^                   
 >v : any
 >(v) => {        if (typeof v !== "string") {            throw new Error();        }    } : (v: any) => void
+>                                                                                         : ^ ^^^^^^^^^^^^^^
 >v : any
 
         if (typeof v !== "string") {
 >typeof v !== "string" : boolean
+>                      : ^^^^^^^
 >typeof v : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : any
 >"string" : "string"
+>         : ^^^^^^^^
 
             throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
         }
     }
     m1(v: unknown) {
 >m1 : (v: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >v : unknown
+>  : ^^^^^^^
 
         this.#p1(v);
 >this.#p1(v) : void
+>            : ^^^^
 >this.#p1 : (v: any) => asserts v is string
+>         : ^ ^^   ^^^^^                   
 >this : this
+>     : ^^^^
 >v : unknown
+>  : ^^^^^^^
 
         v;
 >v : string
+>  : ^^^^^^
     }
 }
 
 class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
     #p1(v: any): asserts v is string {
 >#p1 : (v: any) => asserts v is string
+>    : ^ ^^   ^^^^^                   
 >v : any
 
         if (typeof v !== "string") {
 >typeof v !== "string" : boolean
+>                      : ^^^^^^^
 >typeof v : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : any
 >"string" : "string"
+>         : ^^^^^^^^
 
             throw new Error();
 >new Error() : Error
+>            : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
         }
     }
     m1(v: unknown) {
 >m1 : (v: unknown) => void
+>   : ^ ^^       ^^^^^^^^^
 >v : unknown
+>  : ^^^^^^^
 
         this.#p1(v);
 >this.#p1(v) : void
+>            : ^^^^
 >this.#p1 : (v: any) => asserts v is string
+>         : ^ ^^   ^^^^^                   
 >this : this
+>     : ^^^^
 >v : unknown
+>  : ^^^^^^^
 
         v;
 >v : string
+>  : ^^^^^^
     }
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
+
 //// [keyofAndIndexedAccess2.ts]
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
     obj[k0] = 1;

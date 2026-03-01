@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nondistributiveConditionalTypeInfer.ts] ////
+
 //// [nondistributiveConditionalTypeInfer.ts]
 type _R<T> = [T] extends [{ _R: (_: infer R) => void }] ? R : never;
 type _E<T> = [T] extends [{ _E: () => infer E }] ? E : never;
@@ -14,3 +16,4 @@ type E = _E<Sync<number, string, void>>;
 type A = _A<Sync<number, string, void>>;
 
 //// [nondistributiveConditionalTypeInfer.js]
+"use strict";

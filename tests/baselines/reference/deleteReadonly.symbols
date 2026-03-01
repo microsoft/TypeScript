@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deleteReadonly.ts ===
+//// [tests/cases/compiler/deleteReadonly.ts] ////
+
+=== deleteReadonly.ts ===
 interface A {
 >A : Symbol(A, Decl(deleteReadonly.ts, 0, 0))
 

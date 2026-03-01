@@ -1,42 +1,69 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors2.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors2.ts] ////
+
+=== propertyOverridesAccessors2.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
   get x() { return 2; }
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
   set x(value) { console.log(`x was set to ${value}`); }
 >x : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
 >console.log(`x was set to ${value}`) : void
+>                                     : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >`x was set to ${value}` : string
+>                        : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
   x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 const obj = new Derived(); // prints 'x was set to 1'
 >obj : Derived
+>    : ^^^^^^^
 >new Derived() : Derived
+>              : ^^^^^^^
 >Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
 
 console.log(obj.x); // 2
 >console.log(obj.x) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >obj.x : number
+>      : ^^^^^^
 >obj : Derived
+>    : ^^^^^^^
 >x : number
+>  : ^^^^^^
 

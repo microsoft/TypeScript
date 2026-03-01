@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedGenerics.ts ===
+//// [tests/cases/compiler/nestedGenerics.ts] ////
+
+=== nestedGenerics.ts ===
 interface Foo<T> {
 >Foo : Symbol(Foo, Decl(nestedGenerics.ts, 0, 0))
 >T : Symbol(T, Decl(nestedGenerics.ts, 0, 14))

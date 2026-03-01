@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitIndexerContextualType.ts] ////
+
 //// [objectLitIndexerContextualType.ts]
 interface I {
     [s: string]: (s: string) => number;
@@ -24,17 +26,18 @@ y = {
 
 
 //// [objectLitIndexerContextualType.js]
+"use strict";
 var x;
 var y;
 x = {
-    s: function (t) { return t * t; }
+    s: t => t * t, // Should error
 };
 x = {
-    0: function (t) { return t * t; }
+    0: t => t * t, // Should error
 };
 y = {
-    s: function (t) { return t * t; }
+    s: t => t * t, // Should error
 };
 y = {
-    0: function (t) { return t * t; }
+    0: t => t * t, // Should error
 };

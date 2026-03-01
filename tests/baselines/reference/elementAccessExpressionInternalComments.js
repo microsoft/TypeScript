@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elementAccessExpressionInternalComments.ts] ////
+
 //// [elementAccessExpressionInternalComments.ts]
 /*0*/ Array /*1*/[ /*2*/ "toString" /*3*/ ] /*4*/; /*5*/
 
@@ -9,6 +11,7 @@
 
 
 //// [elementAccessExpressionInternalComments.js]
+"use strict";
 /*0*/ Array /*1*/[ /*2*/"toString" /*3*/] /*4*/; /*5*/
 /*0*/ Array
 // single line

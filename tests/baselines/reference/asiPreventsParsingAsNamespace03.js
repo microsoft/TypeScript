@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace03.ts] ////
+
 //// [asiPreventsParsingAsNamespace03.ts]
 var namespace: number;
 var n: string;
@@ -9,6 +11,7 @@ namespace container {
 }
 
 //// [asiPreventsParsingAsNamespace03.js]
+"use strict";
 var namespace;
 var n;
 var container;

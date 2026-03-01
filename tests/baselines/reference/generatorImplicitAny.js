@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorImplicitAny.ts] ////
+
 //// [generatorImplicitAny.ts]
 function* g() {}
 
@@ -32,6 +34,7 @@ function* g6() {
 }
 
 //// [generatorImplicitAny.js]
+"use strict";
 function* g() { }
 function* g2() {
     const value = yield; // error: implicit any

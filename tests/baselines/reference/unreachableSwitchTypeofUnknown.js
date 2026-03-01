@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unreachableSwitchTypeofUnknown.ts] ////
+
 //// [unreachable.ts]
 const unreachable = (x: unknown): number => {
     switch (typeof x) {
@@ -14,7 +16,8 @@ const unreachable = (x: unknown): number => {
 }
 
 //// [unreachable.js]
-var unreachable = function (x) {
+"use strict";
+const unreachable = (x) => {
     switch (typeof x) {
         case 'string': return 0;
         case 'number': return 0;

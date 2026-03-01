@@ -1,386 +1,586 @@
-=== tests/cases/conformance/classes/mixinAccessModifiers.ts ===
+//// [tests/cases/conformance/classes/mixinAccessModifiers.ts] ////
+
+=== mixinAccessModifiers.ts ===
 type Constructable = new (...args: any[]) => object;
->Constructable : new (...args: any[]) => object
+>Constructable : Constructable
+>              : ^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 class Private {
 >Private : Private
+>        : ^^^^^^^
 
 	constructor (...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 
 	private p: string;
 >p : string
+>  : ^^^^^^
 }
 
 class Private2 {
 >Private2 : Private2
+>         : ^^^^^^^^
 
 	constructor (...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 
 	private p: string;
 >p : string
+>  : ^^^^^^
 }
 
 class Protected {
 >Protected : Protected
+>          : ^^^^^^^^^
 
 	constructor (...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 
 	protected p: string;
 >p : string
+>  : ^^^^^^
 
 	protected static s: string;
 >s : string
+>  : ^^^^^^
 }
 
 class Protected2 {
 >Protected2 : Protected2
+>           : ^^^^^^^^^^
 
 	constructor (...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 
 	protected p: string;
 >p : string
+>  : ^^^^^^
 
 	protected static s: string;
 >s : string
+>  : ^^^^^^
 }
 
 class Public {
 >Public : Public
+>       : ^^^^^^
 
 	constructor (...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 
 	public p: string;
 >p : string
+>  : ^^^^^^
 
 	public static s: string;
 >s : string
+>  : ^^^^^^
 }
 
 class Public2 {
 >Public2 : Public2
+>        : ^^^^^^^
 
 	constructor (...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 
 	public p: string;
 >p : string
+>  : ^^^^^^
 
 	public static s: string;
 >s : string
+>  : ^^^^^^
 }
 
 function f1(x: Private & Private2) {
 >f1 : (x: Private & Private2) => void
+>   : ^ ^^                  ^^^^^^^^^
 >x : never
+>  : ^^^^^
 
 	x.p;  // Error, private constituent makes property inaccessible
 >x.p : any
+>    : ^^^
 >x : never
+>  : ^^^^^
 >p : any
+>  : ^^^
 }
 
 function f2(x: Private & Protected) {
 >f2 : (x: Private & Protected) => void
+>   : ^ ^^                   ^^^^^^^^^
 >x : never
+>  : ^^^^^
 
 	x.p;  // Error, private constituent makes property inaccessible
 >x.p : any
+>    : ^^^
 >x : never
+>  : ^^^^^
 >p : any
+>  : ^^^
 }
 
 function f3(x: Private & Public) {
 >f3 : (x: Private & Public) => void
+>   : ^ ^^                ^^^^^^^^^
 >x : never
+>  : ^^^^^
 
 	x.p;  // Error, private constituent makes property inaccessible
 >x.p : any
+>    : ^^^
 >x : never
+>  : ^^^^^
 >p : any
+>  : ^^^
 }
 
 function f4(x: Protected & Protected2) {
 >f4 : (x: Protected & Protected2) => void
+>   : ^ ^^                      ^^^^^^^^^
 >x : Protected & Protected2
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
 	x.p;  // Error, protected when all constituents are protected
 >x.p : string
+>    : ^^^^^^
 >x : Protected & Protected2
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >p : string
+>  : ^^^^^^
 }
 
 function f5(x: Protected & Public) {
 >f5 : (x: Protected & Public) => void
+>   : ^ ^^                  ^^^^^^^^^
 >x : Protected & Public
+>  : ^^^^^^^^^^^^^^^^^^
 
 	x.p;  // Ok, public if any constituent is public
 >x.p : string
+>    : ^^^^^^
 >x : Protected & Public
+>  : ^^^^^^^^^^^^^^^^^^
 >p : string
+>  : ^^^^^^
 }
 
 function f6(x: Public & Public2) {
 >f6 : (x: Public & Public2) => void
+>   : ^ ^^                ^^^^^^^^^
 >x : Public & Public2
+>  : ^^^^^^^^^^^^^^^^
 
 	x.p;  // Ok, public if any constituent is public
 >x.p : string
+>    : ^^^^^^
 >x : Public & Public2
+>  : ^^^^^^^^^^^^^^^^
 >p : string
+>  : ^^^^^^
 }
 
 declare function Mix<T, U>(c1: T, c2: U): T & U;
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >c1 : T
+>   : ^
 >c2 : U
+>   : ^
 
 // Can't derive from type with inaccessible properties
 
 class C1 extends Mix(Private, Private2) {}
 >C1 : C1
+>   : ^^
 >Mix(Private, Private2) : typeof Private & typeof Private2
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Private : typeof Private
+>        : ^^^^^^^^^^^^^^
 >Private2 : typeof Private2
+>         : ^^^^^^^^^^^^^^^
 
 class C2 extends Mix(Private, Protected) {}
 >C2 : C2
+>   : ^^
 >Mix(Private, Protected) : typeof Private & typeof Protected
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Private : typeof Private
+>        : ^^^^^^^^^^^^^^
 >Protected : typeof Protected
+>          : ^^^^^^^^^^^^^^^^
 
 class C3 extends Mix(Private, Public) {}
 >C3 : C3
+>   : ^^
 >Mix(Private, Public) : typeof Private & typeof Public
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Private : typeof Private
+>        : ^^^^^^^^^^^^^^
 >Public : typeof Public
+>       : ^^^^^^^^^^^^^
 
 class C4 extends Mix(Protected, Protected2) {
 >C4 : C4
+>   : ^^
 >Mix(Protected, Protected2) : Protected & Protected2
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Protected : typeof Protected
+>          : ^^^^^^^^^^^^^^^^
 >Protected2 : typeof Protected2
+>           : ^^^^^^^^^^^^^^^^^
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
+>  : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >c4 : C4
+>   : ^^
 >c5 : C5
+>   : ^^
 >c6 : C6
+>   : ^^
 
 		c4.p;
 >c4.p : string
+>     : ^^^^^^
 >c4 : C4
+>   : ^^
 >p : string
+>  : ^^^^^^
 
 		c5.p;
 >c5.p : string
+>     : ^^^^^^
 >c5 : C5
+>   : ^^
 >p : string
+>  : ^^^^^^
 
 		c6.p;
 >c6.p : string
+>     : ^^^^^^
 >c6 : C6
+>   : ^^
 >p : string
+>  : ^^^^^^
 	}
 	static g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
 		C4.s;
 >C4.s : string
+>     : ^^^^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		C5.s;
 >C5.s : string
+>     : ^^^^^^
 >C5 : typeof C5
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		C6.s
 >C6.s : string
+>     : ^^^^^^
 >C6 : typeof C6
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 	}
 }
 
 class C5 extends Mix(Protected, Public) {
 >C5 : C5
+>   : ^^
 >Mix(Protected, Public) : Protected & Public
+>                       : ^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Protected : typeof Protected
+>          : ^^^^^^^^^^^^^^^^
 >Public : typeof Public
+>       : ^^^^^^^^^^^^^
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
+>  : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >c4 : C4
+>   : ^^
 >c5 : C5
+>   : ^^
 >c6 : C6
+>   : ^^
 
 		c4.p;  // Error, not in class deriving from Protected2
 >c4.p : string
+>     : ^^^^^^
 >c4 : C4
+>   : ^^
 >p : string
+>  : ^^^^^^
 
 		c5.p;
 >c5.p : string
+>     : ^^^^^^
 >c5 : C5
+>   : ^^
 >p : string
+>  : ^^^^^^
 
 		c6.p;
 >c6.p : string
+>     : ^^^^^^
 >c6 : C6
+>   : ^^
 >p : string
+>  : ^^^^^^
 	}
 	static g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
 		C4.s;  // Error, not in class deriving from Protected2
 >C4.s : string
+>     : ^^^^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		C5.s;
 >C5.s : string
+>     : ^^^^^^
 >C5 : typeof C5
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		C6.s
 >C6.s : string
+>     : ^^^^^^
 >C6 : typeof C6
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 	}
 }
 
 class C6 extends Mix(Public, Public2) {
 >C6 : C6
+>   : ^^
 >Mix(Public, Public2) : Public & Public2
+>                     : ^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Public : typeof Public
+>       : ^^^^^^^^^^^^^
 >Public2 : typeof Public2
+>        : ^^^^^^^^^^^^^^
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
+>  : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >c4 : C4
+>   : ^^
 >c5 : C5
+>   : ^^
 >c6 : C6
+>   : ^^
 
 		c4.p;  // Error, not in class deriving from Protected2
 >c4.p : string
+>     : ^^^^^^
 >c4 : C4
+>   : ^^
 >p : string
+>  : ^^^^^^
 
 		c5.p;
 >c5.p : string
+>     : ^^^^^^
 >c5 : C5
+>   : ^^
 >p : string
+>  : ^^^^^^
 
 		c6.p;
 >c6.p : string
+>     : ^^^^^^
 >c6 : C6
+>   : ^^
 >p : string
+>  : ^^^^^^
 	}
 	static g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
 		C4.s;  // Error, not in class deriving from Protected2
 >C4.s : string
+>     : ^^^^^^
 >C4 : typeof C4
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		C5.s;
 >C5.s : string
+>     : ^^^^^^
 >C5 : typeof C5
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 		C6.s
 >C6.s : string
+>     : ^^^^^^
 >C6 : typeof C6
+>   : ^^^^^^^^^
 >s : string
+>  : ^^^^^^
 	}
 }
 
 class ProtectedGeneric<T> {
 >ProtectedGeneric : ProtectedGeneric<T>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
 	private privateMethod() {}
 >privateMethod : () => void
+>              : ^^^^^^^^^^
 
 	protected protectedMethod() {}
 >protectedMethod : () => void
+>                : ^^^^^^^^^^
 }
 
 class ProtectedGeneric2<T> {
 >ProtectedGeneric2 : ProtectedGeneric2<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
 	private privateMethod() {}
 >privateMethod : () => void
+>              : ^^^^^^^^^^
 
 	protected protectedMethod() {}
 >protectedMethod : () => void
+>                : ^^^^^^^^^^
 }
 
 function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 >f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
+>   : ^ ^^                                           ^^^^^^^^^
 >x : ProtectedGeneric<{}>
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
 >x.privateMethod() : void
+>                  : ^^^^
 >x.privateMethod : () => void
+>                : ^^^^^^^^^^
 >x : ProtectedGeneric<{}>
+>  : ^^^^^^^^^^^^^^^^^^^^
 >privateMethod : () => void
+>              : ^^^^^^^^^^
 
 	x.protectedMethod(); // Error, protected when all constituents are protected
 >x.protectedMethod() : void
+>                    : ^^^^
 >x.protectedMethod : () => void
+>                  : ^^^^^^^^^^
 >x : ProtectedGeneric<{}>
+>  : ^^^^^^^^^^^^^^^^^^^^
 >protectedMethod : () => void
+>                : ^^^^^^^^^^
 }
 
 function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
->f8 : (x: ProtectedGeneric<{    a: void;}> & ProtectedGeneric2<{    a: void;    b: void;}>) => void
+>f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
+>   : ^ ^^                                                                         ^^^^^^^^^
 >x : never
+>  : ^^^^^
 >a : void
+>  : ^^^^
 >a : void
+>  : ^^^^
 >b : void
+>  : ^^^^
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
 >x.privateMethod() : any
+>                  : ^^^
 >x.privateMethod : any
+>                : ^^^
 >x : never
+>  : ^^^^^
 >privateMethod : any
+>              : ^^^
 
 	x.protectedMethod(); // Error, protected when all constituents are protected
 >x.protectedMethod() : any
+>                    : ^^^
 >x.protectedMethod : any
+>                  : ^^^
 >x : never
+>  : ^^^^^
 >protectedMethod : any
+>                : ^^^
 }
 
 function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
->f9 : (x: ProtectedGeneric<{    a: void;}> & ProtectedGeneric<{    a: void;    b: void;}>) => void
+>f9 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>) => void
+>   : ^ ^^                                                                        ^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >a : void
+>  : ^^^^
 >a : void
+>  : ^^^^
 >b : void
+>  : ^^^^
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
 >x.privateMethod() : void
+>                  : ^^^^
 >x.privateMethod : (() => void) & (() => void)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >privateMethod : (() => void) & (() => void)
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	x.protectedMethod(); // Error, protected when all constituents are protected
 >x.protectedMethod() : void
+>                    : ^^^^
 >x.protectedMethod : (() => void) & (() => void)
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >protectedMethod : (() => void) & (() => void)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

@@ -1,0 +1,1279 @@
+//// [tests/cases/compiler/templateLiteralEscapeSequence.ts] ////
+
+=== templateLiteralEscapeSequence.ts ===
+declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>template : TemplateStringsArray
+>         : ^^^^^^^^^^^^^^^^^^^^
+>substitutions : any[]
+>              : ^^^^^
+
+`\u`;
+>`\u` : "\\u"
+>     : ^^^^^
+
+`\u0`;
+>`\u0` : "\\u0"
+>      : ^^^^^^
+
+`\u00`;
+>`\u00` : "\\u00"
+>       : ^^^^^^^
+
+`\u000`;
+>`\u000` : "\\u000"
+>        : ^^^^^^^^
+
+`\u0000`;
+>`\u0000` : "\0"
+>         : ^^^^
+
+`\u{}`;
+>`\u{}` : "\\u{}"
+>       : ^^^^^^^
+
+`\u{ffffff}`;
+>`\u{ffffff}` : "\\u{ffffff}"
+>             : ^^^^^^^^^^^^^
+
+`\x`;
+>`\x` : "\\x"
+>     : ^^^^^
+
+`\x0`;
+>`\x0` : "\\x0"
+>      : ^^^^^^
+
+`\x00`;
+>`\x00` : "\0"
+>       : ^^^^
+
+`${0}\u`;
+>`${0}\u` : "0\\u"
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u0`;
+>`${0}\u0` : "0\\u0"
+>          : ^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u00`;
+>`${0}\u00` : "0\\u00"
+>           : ^^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u000`;
+>`${0}\u000` : "0\\u000"
+>            : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u0000`;
+>`${0}\u0000` : "0\0"
+>             : ^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u{}`;
+>`${0}\u{}` : "0\\u{}"
+>           : ^^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u{ffffff}`;
+>`${0}\u{ffffff}` : "0\\u{ffffff}"
+>                 : ^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\x`;
+>`${0}\x` : "0\\x"
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\x0`;
+>`${0}\x0` : "0\\x0"
+>          : ^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\x00`;
+>`${0}\x00` : "0\0"
+>           : ^^^^^
+>0 : 0
+>  : ^
+
+`\u${0}`;
+>`\u${0}` : "\\u0"
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+`\u0${0}`;
+>`\u0${0}` : "\\u00"
+>          : ^^^^^^^
+>0 : 0
+>  : ^
+
+`\u00${0}`;
+>`\u00${0}` : "\\u000"
+>           : ^^^^^^^^
+>0 : 0
+>  : ^
+
+`\u000${0}`;
+>`\u000${0}` : "\\u0000"
+>            : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+`\u0000${0}`;
+>`\u0000${0}` : "\x000"
+>             : ^^^^^^^
+>0 : 0
+>  : ^
+
+`\u{}${0}`;
+>`\u{}${0}` : "\\u{}0"
+>           : ^^^^^^^^
+>0 : 0
+>  : ^
+
+`\u{ffffff}${0}`;
+>`\u{ffffff}${0}` : "\\u{ffffff}0"
+>                 : ^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+`\x${0}`;
+>`\x${0}` : "\\x0"
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+`\x0${0}`;
+>`\x0${0}` : "\\x00"
+>          : ^^^^^^^
+>0 : 0
+>  : ^
+
+`\x00${0}`;
+>`\x00${0}` : "\x000"
+>           : ^^^^^^^
+>0 : 0
+>  : ^
+
+`${0}\u${0}`;
+>`${0}\u${0}` : "0\\u0"
+>             : ^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\u0${0}`;
+>`${0}\u0${0}` : "0\\u00"
+>              : ^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\u00${0}`;
+>`${0}\u00${0}` : "0\\u000"
+>               : ^^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\u000${0}`;
+>`${0}\u000${0}` : "0\\u0000"
+>                : ^^^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\u0000${0}`;
+>`${0}\u0000${0}` : "0\x000"
+>                 : ^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\u{}${0}`;
+>`${0}\u{}${0}` : "0\\u{}0"
+>               : ^^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\u{ffffff}${0}`;
+>`${0}\u{ffffff}${0}` : "0\\u{ffffff}0"
+>                     : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\x${0}`;
+>`${0}\x${0}` : "0\\x0"
+>             : ^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\x0${0}`;
+>`${0}\x0${0}` : "0\\x00"
+>              : ^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+`${0}\x00${0}`;
+>`${0}\x00${0}` : "0\x000"
+>               : ^^^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`\u`;
+>tag`\u` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u` : "\\u"
+>     : ^^^^^
+
+tag`\u0`;
+>tag`\u0` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u0` : "\\u0"
+>      : ^^^^^^
+
+tag`\u00`;
+>tag`\u00` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u00` : "\\u00"
+>       : ^^^^^^^
+
+tag`\u000`;
+>tag`\u000` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u000` : "\\u000"
+>        : ^^^^^^^^
+
+tag`\u0000`;
+>tag`\u0000` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u0000` : "\0"
+>         : ^^^^
+
+tag`\u{}`;
+>tag`\u{}` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u{}` : "\\u{}"
+>       : ^^^^^^^
+
+tag`\u{ffffff}`;
+>tag`\u{ffffff}` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u{ffffff}` : "\\u{ffffff}"
+>             : ^^^^^^^^^^^^^
+
+tag`\x`;
+>tag`\x` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\x` : "\\x"
+>     : ^^^^^
+
+tag`\x0`;
+>tag`\x0` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\x0` : "\\x0"
+>      : ^^^^^^
+
+tag`\x00`;
+>tag`\x00` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\x00` : "\0"
+>       : ^^^^
+
+tag`${0}\u`;
+>tag`${0}\u` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u0`;
+>tag`${0}\u0` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u0` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u00`;
+>tag`${0}\u00` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u00` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u000`;
+>tag`${0}\u000` : string
+>               : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u000` : string
+>            : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u0000`;
+>tag`${0}\u0000` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u0000` : string
+>             : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u{}`;
+>tag`${0}\u{}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u{}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u{ffffff}`;
+>tag`${0}\u{ffffff}` : string
+>                    : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u{ffffff}` : string
+>                 : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\x`;
+>tag`${0}\x` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\x` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\x0`;
+>tag`${0}\x0` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\x0` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\x00`;
+>tag`${0}\x00` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\x00` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u${0}`;
+>tag`\u${0}` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u${0}` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u0${0}`;
+>tag`\u0${0}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u0${0}` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u00${0}`;
+>tag`\u00${0}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u00${0}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u000${0}`;
+>tag`\u000${0}` : string
+>               : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u000${0}` : string
+>            : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u0000${0}`;
+>tag`\u0000${0}` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u0000${0}` : string
+>             : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u{}${0}`;
+>tag`\u{}${0}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u{}${0}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\u{ffffff}${0}`;
+>tag`\u{ffffff}${0}` : string
+>                    : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\u{ffffff}${0}` : string
+>                 : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\x${0}`;
+>tag`\x${0}` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\x${0}` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\x0${0}`;
+>tag`\x0${0}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\x0${0}` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\x00${0}`;
+>tag`\x00${0}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\x00${0}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\u${0}`;
+>tag`${0}\u${0}` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u${0}` : string
+>             : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\u0${0}`;
+>tag`${0}\u0${0}` : string
+>                 : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u0${0}` : string
+>              : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\u00${0}`;
+>tag`${0}\u00${0}` : string
+>                  : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u00${0}` : string
+>               : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\u000${0}`;
+>tag`${0}\u000${0}` : string
+>                   : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u000${0}` : string
+>                : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\u0000${0}`;
+>tag`${0}\u0000${0}` : string
+>                    : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u0000${0}` : string
+>                 : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\u{}${0}`;
+>tag`${0}\u{}${0}` : string
+>                  : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u{}${0}` : string
+>               : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\u{ffffff}${0}`;
+>tag`${0}\u{ffffff}${0}` : string
+>                        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\u{ffffff}${0}` : string
+>                     : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\x${0}`;
+>tag`${0}\x${0}` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\x${0}` : string
+>             : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\x0${0}`;
+>tag`${0}\x0${0}` : string
+>                 : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\x0${0}` : string
+>              : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\x00${0}`;
+>tag`${0}\x00${0}` : string
+>                  : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\x00${0}` : string
+>               : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`0${00}`;
+>tag`0${00}` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`0${00}` : string
+>         : ^^^^^^
+>00 : 0
+>   : ^
+
+tag`0${05}`;
+>tag`0${05}` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`0${05}` : string
+>         : ^^^^^^
+>05 : 5
+>   : ^
+
+tag`0${000}`;
+>tag`0${000}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`0${000}` : string
+>          : ^^^^^^
+>000 : 0
+>    : ^
+
+tag`0${005}`;
+>tag`0${005}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`0${005}` : string
+>          : ^^^^^^
+>005 : 5
+>    : ^
+
+tag`0${055}`;
+>tag`0${055}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`0${055}` : string
+>          : ^^^^^^
+>055 : 45
+>    : ^^
+
+tag`${00}0`;
+>tag`${00}0` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${00}0` : string
+>         : ^^^^^^
+>00 : 0
+>   : ^
+
+tag`${05}0`;
+>tag`${05}0` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${05}0` : string
+>         : ^^^^^^
+>05 : 5
+>   : ^
+
+tag`${000}0`;
+>tag`${000}0` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${000}0` : string
+>          : ^^^^^^
+>000 : 0
+>    : ^
+
+tag`${005}0`;
+>tag`${005}0` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${005}0` : string
+>          : ^^^^^^
+>005 : 5
+>    : ^
+
+tag`${055}0`;
+>tag`${055}0` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${055}0` : string
+>          : ^^^^^^
+>055 : 45
+>    : ^^
+
+tag`\0`;
+>tag`\0` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0` : "\0"
+>     : ^^^^
+
+tag`\5`;
+>tag`\5` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\5` : "\\5"
+>     : ^^^^^
+
+tag`\00`;
+>tag`\00` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\00` : "\\00"
+>      : ^^^^^^
+
+tag`\05`;
+>tag`\05` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\05` : "\\05"
+>      : ^^^^^^
+
+tag`\55`;
+>tag`\55` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\55` : "\\55"
+>      : ^^^^^^
+
+tag`\000`;
+>tag`\000` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\000` : "\\000"
+>       : ^^^^^^^
+
+tag`\005`;
+>tag`\005` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\005` : "\\005"
+>       : ^^^^^^^
+
+tag`\055`;
+>tag`\055` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\055` : "\\055"
+>       : ^^^^^^^
+
+tag`${0}\0`;
+>tag`${0}\0` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\0` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\5`;
+>tag`${0}\5` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\5` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\00`;
+>tag`${0}\00` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\00` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\05`;
+>tag`${0}\05` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\05` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\55`;
+>tag`${0}\55` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\55` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\000`;
+>tag`${0}\000` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\000` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\005`;
+>tag`${0}\005` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\005` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\055`;
+>tag`${0}\055` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\055` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\0${0}`;
+>tag`\0${0}` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0${0}` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\5${0}`;
+>tag`\5${0}` : string
+>            : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\5${0}` : string
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\00${0}`;
+>tag`\00${0}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\00${0}` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\05${0}`;
+>tag`\05${0}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\05${0}` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\55${0}`;
+>tag`\55${0}` : string
+>             : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\55${0}` : string
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\000${0}`;
+>tag`\000${0}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\000${0}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\005${0}`;
+>tag`\005${0}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\005${0}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`\055${0}`;
+>tag`\055${0}` : string
+>              : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\055${0}` : string
+>           : ^^^^^^
+>0 : 0
+>  : ^
+
+tag`${0}\0${0}`;
+>tag`${0}\0${0}` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\0${0}` : string
+>             : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\5${0}`;
+>tag`${0}\5${0}` : string
+>                : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\5${0}` : string
+>             : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\00${0}`;
+>tag`${0}\00${0}` : string
+>                 : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\00${0}` : string
+>              : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\05${0}`;
+>tag`${0}\05${0}` : string
+>                 : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\05${0}` : string
+>              : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\55${0}`;
+>tag`${0}\55${0}` : string
+>                 : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\55${0}` : string
+>              : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\000${0}`;
+>tag`${0}\000${0}` : string
+>                  : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\000${0}` : string
+>               : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\005${0}`;
+>tag`${0}\005${0}` : string
+>                  : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\005${0}` : string
+>               : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`${0}\055${0}`;
+>tag`${0}\055${0}` : string
+>                  : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`${0}\055${0}` : string
+>               : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
+
+tag`\1`;
+>tag`\1` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\1` : "\\1"
+>     : ^^^^^
+
+tag`\01`;
+>tag`\01` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\01` : "\\01"
+>      : ^^^^^^
+
+tag`\001`;
+>tag`\001` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\001` : "\\001"
+>       : ^^^^^^^
+
+tag`\17`;
+>tag`\17` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\17` : "\\17"
+>      : ^^^^^^
+
+tag`\017`;
+>tag`\017` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\017` : "\\017"
+>       : ^^^^^^^
+
+tag`\0017`;
+>tag`\0017` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0017` : "\\0017"
+>        : ^^^^^^^^
+
+tag`\177`;
+>tag`\177` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\177` : "\\177"
+>       : ^^^^^^^
+
+tag`\18`;
+>tag`\18` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\18` : "\\18"
+>      : ^^^^^^
+
+tag`\018`;
+>tag`\018` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\018` : "\\018"
+>       : ^^^^^^^
+
+tag`\0018`;
+>tag`\0018` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0018` : "\\0018"
+>        : ^^^^^^^^
+
+tag`\4`;
+>tag`\4` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\4` : "\\4"
+>     : ^^^^^
+
+tag`\47`;
+>tag`\47` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\47` : "\\47"
+>      : ^^^^^^
+
+tag`\047`;
+>tag`\047` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\047` : "\\047"
+>       : ^^^^^^^
+
+tag`\0047`;
+>tag`\0047` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0047` : "\\0047"
+>        : ^^^^^^^^
+
+tag`\477`;
+>tag`\477` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\477` : "\\477"
+>       : ^^^^^^^
+
+tag`\48`;
+>tag`\48` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\48` : "\\48"
+>      : ^^^^^^
+
+tag`\048`;
+>tag`\048` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\048` : "\\048"
+>       : ^^^^^^^
+
+tag`\0048`;
+>tag`\0048` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0048` : "\\0048"
+>        : ^^^^^^^^
+
+tag`\8`;
+>tag`\8` : string
+>        : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\8` : "\\8"
+>     : ^^^^^
+
+tag`\87`;
+>tag`\87` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\87` : "\\87"
+>      : ^^^^^^
+
+tag`\087`;
+>tag`\087` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\087` : "\\087"
+>       : ^^^^^^^
+
+tag`\0087`;
+>tag`\0087` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0087` : "\\0087"
+>        : ^^^^^^^^
+
+tag`\877`;
+>tag`\877` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\877` : "\\877"
+>       : ^^^^^^^
+
+tag`\88`;
+>tag`\88` : string
+>         : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\88` : "\\88"
+>      : ^^^^^^
+
+tag`\088`;
+>tag`\088` : string
+>          : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\088` : "\\088"
+>       : ^^^^^^^
+
+tag`\0088`;
+>tag`\0088` : string
+>           : ^^^^^^
+>tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
+>    : ^        ^^                    ^^^^^             ^^     ^^^^^      
+>`\0088` : "\\0088"
+>        : ^^^^^^^^
+

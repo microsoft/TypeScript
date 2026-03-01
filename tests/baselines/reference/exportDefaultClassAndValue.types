@@ -1,11 +1,17 @@
-=== tests/cases/compiler/exportDefaultClassAndValue.ts ===
+//// [tests/cases/compiler/exportDefaultClassAndValue.ts] ////
+
+=== exportDefaultClassAndValue.ts ===
 const foo = 1
 >foo : 1
+>    : ^
 >1 : 1
+>  : ^
 
 export default foo
 >foo : 1
+>    : ^
 
 export default class Foo {}
 >Foo : foo
+>    : ^^^
 

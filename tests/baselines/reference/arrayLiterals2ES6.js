@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals2ES6.ts] ////
+
 //// [arrayLiterals2ES6.ts]
 // ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
@@ -55,6 +57,7 @@ var d8: number[][] = [[...temp1]]
 var d9 = [[...temp1], ...["hello"]];
 
 //// [arrayLiterals2ES6.js]
+"use strict";
 // ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement

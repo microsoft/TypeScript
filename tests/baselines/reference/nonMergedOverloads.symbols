@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonMergedOverloads.ts ===
+//// [tests/cases/compiler/nonMergedOverloads.ts] ////
+
+=== nonMergedOverloads.ts ===
 var f = 10;
 >f : Symbol(f, Decl(nonMergedOverloads.ts, 0, 11), Decl(nonMergedOverloads.ts, 2, 20), Decl(nonMergedOverloads.ts, 0, 3))
 

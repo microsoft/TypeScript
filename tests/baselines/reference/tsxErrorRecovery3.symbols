@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file1.tsx ===
+//// [tests/cases/conformance/jsx/tsxErrorRecovery3.tsx] ////
+
+=== file1.tsx ===
 declare namespace JSX { interface Element { } }
 >JSX : Symbol(JSX, Decl(file1.tsx, 0, 0))
 >Element : Symbol(Element, Decl(file1.tsx, 0, 23))
@@ -6,7 +8,7 @@ declare namespace JSX { interface Element { } }
 <div></div>
 <div></div>
 
-=== tests/cases/conformance/jsx/file2.tsx ===
+=== file2.tsx ===
 var x = <div></div><div></div>
 >x : Symbol(x, Decl(file2.tsx, 0, 3))
 

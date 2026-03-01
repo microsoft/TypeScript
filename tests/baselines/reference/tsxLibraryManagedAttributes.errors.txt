@@ -1,27 +1,27 @@
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(55,12): error TS2322: Type '{ foo: number; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
+tsxLibraryManagedAttributes.tsx(55,12): error TS2322: Type '{ foo: number; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
   Type '{ foo: number; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: string; }': bar, baz
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(57,41): error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
+tsxLibraryManagedAttributes.tsx(57,41): error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
   Property 'bat' does not exist on type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(59,42): error TS2322: Type 'null' is not assignable to type 'string'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(69,26): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(71,35): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(80,38): error TS2322: Type '{ foo: number; bar: string; }' is not assignable to type 'Defaultize<{}, { foo: number; }>'.
+tsxLibraryManagedAttributes.tsx(59,42): error TS2322: Type 'null' is not assignable to type 'string'.
+tsxLibraryManagedAttributes.tsx(69,26): error TS2322: Type 'string' is not assignable to type 'number'.
+tsxLibraryManagedAttributes.tsx(71,35): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
+tsxLibraryManagedAttributes.tsx(80,38): error TS2322: Type '{ foo: number; bar: string; }' is not assignable to type 'Defaultize<{}, { foo: number; }>'.
   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(81,29): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(98,12): error TS2322: Type '{ foo: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
+tsxLibraryManagedAttributes.tsx(81,29): error TS2322: Type 'string' is not assignable to type 'number'.
+tsxLibraryManagedAttributes.tsx(98,12): error TS2322: Type '{ foo: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
   Type '{ foo: string; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: number; }': bar, baz
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(100,56): error TS2322: Type '{ bar: string; baz: number; bat: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
+tsxLibraryManagedAttributes.tsx(100,56): error TS2322: Type '{ bar: string; baz: number; bat: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
   Property 'bat' does not exist on type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(102,57): error TS2322: Type 'null' is not assignable to type 'number'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(111,46): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(112,46): error TS2322: Type 'null' is not assignable to type 'string'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(113,57): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(122,58): error TS2322: Type '{ foo: string; bar: string; }' is not assignable to type 'Defaultize<FooProps, { foo: string; }>'.
+tsxLibraryManagedAttributes.tsx(102,57): error TS2322: Type 'null' is not assignable to type 'number'.
+tsxLibraryManagedAttributes.tsx(111,46): error TS2322: Type 'number' is not assignable to type 'string'.
+tsxLibraryManagedAttributes.tsx(112,46): error TS2322: Type 'null' is not assignable to type 'string'.
+tsxLibraryManagedAttributes.tsx(113,57): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
+tsxLibraryManagedAttributes.tsx(122,58): error TS2322: Type '{ foo: string; bar: string; }' is not assignable to type 'Defaultize<FooProps, { foo: string; }>'.
   Property 'bar' does not exist on type 'Defaultize<FooProps, { foo: string; }>'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS2322: Type 'number' is not assignable to type 'string'.
+tsxLibraryManagedAttributes.tsx(123,49): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx (15 errors) ====
+==== tsxLibraryManagedAttributes.tsx (15 errors) ====
     type Defaultize<TProps, TDefaults> =
         & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
         & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
@@ -101,12 +101,12 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const h = <JustPropTypes foo="no" />; // error, wrong type
                              ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:63:9: The expected type comes from property 'foo' which is declared here on type 'InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:63:9: The expected type comes from property 'foo' which is declared here on type 'InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     const i = <JustPropTypes foo={null} bar="ok" />;
     const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
                                       ~~~
 !!! error TS2322: Type 'null' is not assignable to type 'ReactNode'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:64:9: The expected type comes from property 'bar' which is declared here on type 'InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:64:9: The expected type comes from property 'bar' which is declared here on type 'InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     
     class JustDefaultProps extends ReactComponent {
         static defaultProps = {
@@ -122,7 +122,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const m = <JustDefaultProps foo="no" />; // error, wrong type
                                 ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:75:9: The expected type comes from property 'foo' which is declared here on type 'Defaultize<{}, { foo: number; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:75:9: The expected type comes from property 'foo' which is declared here on type 'Defaultize<{}, { foo: number; }>'
     
     interface FooProps {
         foo: string;
@@ -163,15 +163,15 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const u = <JustPropTypesWithSpecifiedGeneric foo={12} />; // error, wrong type
                                                  ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:84:5: The expected type comes from property 'foo' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:84:5: The expected type comes from property 'foo' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     const v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" />; // generic overrides propTypes required-ness, null isn't valid
                                                  ~~~
 !!! error TS2322: Type 'null' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:84:5: The expected type comes from property 'foo' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:84:5: The expected type comes from property 'foo' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error, bar is required
                                                             ~~~
 !!! error TS2322: Type 'null' is not assignable to type 'ReactNode'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:107:9: The expected type comes from property 'bar' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:107:9: The expected type comes from property 'bar' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     
     class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
         static defaultProps = {
@@ -187,6 +187,6 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
                                                     ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:117:9: The expected type comes from property 'foo' which is declared here on type 'Defaultize<FooProps, { foo: string; }>'
+!!! related TS6500 tsxLibraryManagedAttributes.tsx:117:9: The expected type comes from property 'foo' which is declared here on type 'Defaultize<FooProps, { foo: string; }>'
     const aa = <JustDefaultPropsWithSpecifiedGeneric />;
     

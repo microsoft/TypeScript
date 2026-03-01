@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts] ////
+
+=== avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts ===
+declare const foo: ["a", string, number] | ["b", string, boolean];
+>foo : ["a", string, number] | ["b", string, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export function test(arg: { index?: number }) {
+>test : (arg: { index?: number; }) => void
+>     : ^   ^^                   ^^^^^^^^^
+>arg : { index?: number; }
+>    : ^^^^^^^^^^      ^^^
+>index : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+
+  const { index = 0 } = arg;
+>index : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+>arg : { index?: number; }
+>    : ^^^^^^^^^^      ^^^
+
+  if (foo[index] === "a") {
+>foo[index] === "a" : boolean
+>                   : ^^^^^^^
+>foo[index] : string | number | boolean
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : ["a", string, number] | ["b", string, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    foo;
+>foo : ["a", string, number] | ["b", string, boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  }
+}
+

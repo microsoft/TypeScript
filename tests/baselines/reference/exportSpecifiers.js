@@ -21,9 +21,9 @@ export type { type something as whatever }; // Error
 
 
 //// [exports.js]
-var type = 0;
-var as = 0;
-var something = 0;
+const type = 0;
+const as = 0;
+const something = 0;
 export { type };
 //// [imports.js]
 import { type } from "./exports.js";

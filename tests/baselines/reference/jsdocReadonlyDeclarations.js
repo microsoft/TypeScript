@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.ts] ////
+
 //// [jsdocReadonlyDeclarations.js]
 class C {
     /** @readonly */
@@ -24,7 +26,9 @@ class D {
     constructor(/** @readonly */ x) {}
 }
 
+
 //// [foo.js]
+"use strict";
 class C {
     /** @readonly */
     constructor(n) {

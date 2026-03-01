@@ -1,6 +1,11 @@
-=== tests/cases/compiler/commentOnExpressionStatement1.ts ===
+//// [tests/cases/compiler/commentOnExpressionStatement1.ts] ////
+
+=== commentOnExpressionStatement1.ts ===
 1 + 1; // Comment.
 >1 + 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 

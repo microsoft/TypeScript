@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnAmbientVariable1.ts] ////
+
 //// [commentOnAmbientVariable1.ts]
 /*!=========
     Keep this pinned comment
@@ -11,6 +13,7 @@ declare var v: number;
 declare var y: number;
 
 //// [commentOnAmbientVariable1.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========

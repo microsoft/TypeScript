@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callbacksDontShareTypes.ts ===
+//// [tests/cases/compiler/callbacksDontShareTypes.ts] ////
+
+=== callbacksDontShareTypes.ts ===
 interface Collection<T> {
 >Collection : Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
 >T : Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))

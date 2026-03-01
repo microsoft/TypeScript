@@ -1,8 +1,8 @@
-tests/cases/conformance/types/rest/genericRestArity.ts(7,1): error TS2554: Expected 3 arguments, but got 1.
-tests/cases/conformance/types/rest/genericRestArity.ts(8,45): error TS2554: Expected 3 arguments, but got 8.
+genericRestArity.ts(7,1): error TS2554: Expected 3 arguments, but got 1.
+genericRestArity.ts(8,45): error TS2554: Expected 3 arguments, but got 8.
 
 
-==== tests/cases/conformance/types/rest/genericRestArity.ts (2 errors) ====
+==== genericRestArity.ts (2 errors) ====
     // Repro from #25559
     
     declare function call<TS extends unknown[]>(
@@ -10,9 +10,9 @@ tests/cases/conformance/types/rest/genericRestArity.ts(8,45): error TS2554: Expe
         ...args: TS): void;
       
     call((x: number, y: number) => x + y);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~
 !!! error TS2554: Expected 3 arguments, but got 1.
-!!! related TS6236 tests/cases/conformance/types/rest/genericRestArity.ts:5:5: Arguments for the rest parameter 'args' were not provided.
+!!! related TS6236 genericRestArity.ts:5:5: Arguments for the rest parameter 'args' were not provided.
     call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7);
                                                 ~~~~~~~~~~~~~
 !!! error TS2554: Expected 3 arguments, but got 8.

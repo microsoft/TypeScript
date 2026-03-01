@@ -1,18 +1,27 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements11.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements11.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements11.ts ===
 var v: any[];
 >v : any[]
+>  : ^^^^^
 
 function foo(a = v[0]) { }
 >foo : (a?: any) => void
+>    : ^ ^^^^^^^^^^^^^^^
 >a : any
 >v[0] : any
 >v : any[]
+>  : ^^^^^
 >0 : 0
+>  : ^
 
 function bar(a = v[0]) {
 >bar : (a?: any) => void
+>    : ^ ^^^^^^^^^^^^^^^
 >a : any
 >v[0] : any
 >v : any[]
+>  : ^^^^^
 >0 : 0
+>  : ^
 }

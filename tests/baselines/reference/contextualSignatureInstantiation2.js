@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInstantiation2.ts] ////
+
 //// [contextualSignatureInstantiation2.ts]
 // dot f g x = f(g(x))
 var dot: <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S;
@@ -6,8 +8,9 @@ var id: <T>(x:T) => T;
 var r23 = dot(id)(id);
 
 //// [contextualSignatureInstantiation2.js]
+"use strict";
 // dot f g x = f(g(x))
 var dot;
-dot = function (f) { return function (g) { return function (x) { return f(g(x)); }; }; };
+dot = (f) => (g) => (x) => f(g(x));
 var id;
 var r23 = dot(id)(id);

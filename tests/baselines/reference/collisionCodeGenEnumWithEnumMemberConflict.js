@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenEnumWithEnumMemberConflict.ts] ////
+
 //// [collisionCodeGenEnumWithEnumMemberConflict.ts]
 enum Color {
     Color,
@@ -5,6 +7,7 @@ enum Color {
 }
 
 //// [collisionCodeGenEnumWithEnumMemberConflict.js]
+"use strict";
 var Color;
 (function (Color) {
     Color[Color["Color"] = 0] = "Color";

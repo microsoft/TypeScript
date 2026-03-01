@@ -1,15 +1,19 @@
-=== tests/cases/compiler/nestedBlockScopedBindings16.ts ===
+//// [tests/cases/compiler/nestedBlockScopedBindings16.ts] ////
+
+=== nestedBlockScopedBindings16.ts ===
 var x;
 >x : any
 
 for (; false;) {
 >false : false
+>      : ^^^^^
     {
         let x;
 >x : any
 
         () => x;
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
     }
 }
@@ -19,14 +23,17 @@ var y;
 
 for (; false;) {
 >false : false
+>      : ^^^^^
     {
         let y;
 >y : any
 
         y = 1;
 >y = 1 : 1
+>      : ^
 >y : any
 >1 : 1
+>  : ^
     }
 }
 
@@ -35,18 +42,22 @@ var z0;
 
 for (; false;) {
 >false : false
+>      : ^^^^^
 
     switch (1){
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let z0;
 >z0 : any
 
             () => z0;
 >() => z0 : () => any
+>         : ^^^^^^^^^
 >z0 : any
 
             break;
@@ -58,20 +69,25 @@ var z;
 
 for (; false;) {
 >false : false
+>      : ^^^^^
 
     switch (1){
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let z;
 >z : any
 
             z = 1;
 >z = 1 : 1
+>      : ^
 >z : any
 >1 : 1
+>  : ^
 
             break;
     }

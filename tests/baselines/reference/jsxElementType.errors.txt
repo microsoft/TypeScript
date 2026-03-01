@@ -1,0 +1,222 @@
+jsxElementType.tsx(34,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(36,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(40,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(42,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(46,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(48,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(52,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(54,14): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(59,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(61,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+  Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(70,2): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
+    Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+  Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+    Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+jsxElementType.tsx(72,20): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
+    Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+      Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+  Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+    Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+      Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+jsxElementType.tsx(78,1): error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementType.tsx(79,1): error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+  Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
+    Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
+      Target signature provides too few arguments. Expected 2 or more, but got 1.
+jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
+jsxElementType.tsx(99,2): error TS2304: Cannot find name 'Unresolved'.
+jsxElementType.tsx(110,6): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; }'.
+  Property 'b' does not exist on type '{ a: string; }'.
+jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
+  Property 'b' does not exist on type '{ a: string; }'.
+
+
+==== jsxElementType.tsx (20 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    type React18ReactFragment = ReadonlyArray<React18ReactNode>;
+    type React18ReactNode =
+      | React.ReactElement<any>
+      | string
+      | number
+      | React18ReactFragment
+      | React.ReactPortal
+      | boolean
+      | null
+      | undefined
+      | Promise<React18ReactNode>;
+    
+    // // React.JSXElementConstructor but it now can return React nodes from function components.
+    type NewReactJSXElementConstructor<P> =
+      | ((props: P) => React18ReactNode)
+      | (new (props: P) => React.Component<P, any>);
+    
+    declare global {
+      namespace JSX {
+        type ElementType = string | NewReactJSXElementConstructor<any>;
+        interface IntrinsicElements {
+          ['my-custom-element']: React.DOMAttributes<unknown>;
+        }
+      }
+    }
+    
+    let Component: NewReactJSXElementConstructor<{ title: string }>;
+    
+    const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
+    Component = RenderElement;
+    <RenderElement />;
+     ~~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 jsxElementType.tsx:32:37: 'title' is declared here.
+    <RenderElement title="react" />;
+    <RenderElement excessProp />;
+                   ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    const RenderString = ({ title }: { title: string }) => title;
+    Component = RenderString;
+    <RenderString />;
+     ~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 jsxElementType.tsx:38:36: 'title' is declared here.
+    <RenderString title="react" />;
+    <RenderString excessProp />;
+                  ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    const RenderNumber = ({ title }: { title: string }) => title.length;
+    Component = RenderNumber;
+    <RenderNumber />;
+     ~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 jsxElementType.tsx:44:36: 'title' is declared here.
+    <RenderNumber title="react" />;
+    <RenderNumber excessProp />;
+                  ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    const RenderArray = ({ title }: { title: string }) => [title];
+    Component = RenderArray;
+    <RenderArray />;
+     ~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 jsxElementType.tsx:50:35: 'title' is declared here.
+    <RenderArray title="react" />;
+    <RenderArray excessProp />;
+                 ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    // React Server Component
+    const RenderPromise = async ({ title }: { title: string }) => "react";
+    Component = RenderPromise;
+    <RenderPromise />;
+     ~~~~~~~~~~~~~
+!!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+!!! related TS2728 jsxElementType.tsx:57:43: 'title' is declared here.
+    <RenderPromise title="react" />;
+    <RenderPromise excessProp />;
+                   ~~~~~~~~~~
+!!! error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+!!! error TS2322:   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
+    
+    // Class components still work
+    class RenderStringClass extends React.Component<{ title: string }> {
+      render() {
+        return this.props.title;
+      }
+    }
+    Component = RenderStringClass;
+    <RenderStringClass />;
+     ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
+!!! error TS2769:     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+!!! error TS2769:   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+!!! error TS2769:     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
+!!! related TS2728 jsxElementType.tsx:64:51: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:64:51: 'title' is declared here.
+    <RenderStringClass title="react" />;
+    <RenderStringClass excessProp />;
+                       ~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
+!!! error TS2769:     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+!!! error TS2769:       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+!!! error TS2769:   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
+!!! error TS2769:     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+!!! error TS2769:       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
+    
+    // Host element types still work
+    <div />;
+    <my-custom-element />;
+    // Undeclared host element types are still rejected
+    <boop />;
+    ~~~~~~~~
+!!! error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
+    <my-undeclared-custom-element />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
+    
+    // Highlighting various ecosystem compat issues
+    // react-native-gesture-handler
+    // https://github.com/software-mansion/react-native-gesture-handler/blob/79017e5e7cc2e82e6467851f870920ff836ee04f/src/components/GestureComponents.tsx#L139-L146
+    interface ReactNativeFlatListProps<Item> {}
+    function ReactNativeFlatList(
+      props: {},
+      ref: React.ForwardedRef<typeof ReactNativeFlatList>
+    ) {
+      return null;
+    }
+    <ReactNativeFlatList />;
+     ~~~~~~~~~~~~~~~~~~~
+!!! error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+!!! error TS2786:   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
+!!! error TS2786:     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
+!!! error TS2786:       Target signature provides too few arguments. Expected 2 or more, but got 1.
+    
+    // testing higher-order component compat
+    function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+      return <Component />;
+              ~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+    }
+    
+    <Unresolved />;
+     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Unresolved'.
+    <Unresolved foo="abc" />;
+     ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Unresolved'.
+    
+    declare global {
+        namespace JSX {
+          interface IntrinsicElements {
+              ['a:b']: { a: string };
+          }
+      }
+    }
+    
+    <a:b a="accepted" />;
+    <a:b b="rejected" />;
+         ~
+!!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322:   Property 'b' does not exist on type '{ a: string; }'.
+    <a:b a="accepted" b="rejected" />;
+                      ~
+!!! error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322:   Property 'b' does not exist on type '{ a: string; }'.
+    

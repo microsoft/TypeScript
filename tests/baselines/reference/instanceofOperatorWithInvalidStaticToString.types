@@ -1,50 +1,73 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidStaticToString.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidStaticToString.ts] ////
+
+=== instanceofOperatorWithInvalidStaticToString.ts ===
 declare class StaticToString {
 >StaticToString : StaticToString
+>               : ^^^^^^^^^^^^^^
 
     static toString(): void;
 >toString : () => void
+>         : ^^^^^^    
 }
 
 function foo(staticToString: StaticToString) {
 >foo : (staticToString: StaticToString) => boolean
+>    : ^              ^^              ^^^^^^^^^^^^
 >staticToString : StaticToString
+>               : ^^^^^^^^^^^^^^
 
     return staticToString instanceof StaticToString;
 >staticToString instanceof StaticToString : boolean
+>                                         : ^^^^^^^
 >staticToString : StaticToString
+>               : ^^^^^^^^^^^^^^
 >StaticToString : typeof StaticToString
+>               : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare class StaticToNumber {
 >StaticToNumber : StaticToNumber
+>               : ^^^^^^^^^^^^^^
 
     static toNumber(): void;
 >toNumber : () => void
+>         : ^^^^^^    
 }
 function bar(staticToNumber: StaticToNumber) {
 >bar : (staticToNumber: StaticToNumber) => boolean
+>    : ^              ^^              ^^^^^^^^^^^^
 >staticToNumber : StaticToNumber
+>               : ^^^^^^^^^^^^^^
 
     return staticToNumber instanceof StaticToNumber;
 >staticToNumber instanceof StaticToNumber : boolean
+>                                         : ^^^^^^^
 >staticToNumber : StaticToNumber
+>               : ^^^^^^^^^^^^^^
 >StaticToNumber : typeof StaticToNumber
+>               : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare class NormalToString {
 >NormalToString : NormalToString
+>               : ^^^^^^^^^^^^^^
 
     toString(): void;
 >toString : () => void
+>         : ^^^^^^    
 }
 function baz(normal: NormalToString) {
 >baz : (normal: NormalToString) => boolean
+>    : ^      ^^              ^^^^^^^^^^^^
 >normal : NormalToString
+>       : ^^^^^^^^^^^^^^
 
     return normal instanceof NormalToString;
 >normal instanceof NormalToString : boolean
+>                                 : ^^^^^^^
 >normal : NormalToString
+>       : ^^^^^^^^^^^^^^
 >NormalToString : typeof NormalToString
+>               : ^^^^^^^^^^^^^^^^^^^^^
 }
 

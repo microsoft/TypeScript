@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyNameEnum3.ts] ////
+
+=== type.ts ===
+export namespace Foo {
+>Foo : Symbol(Foo, Decl(type.ts, 0, 0))
+
+  export enum Enum {
+>Enum : Symbol(Enum, Decl(type.ts, 0, 22))
+
+    A = "a",
+>A : Symbol(Enum.A, Decl(type.ts, 1, 20))
+
+    B = "b",
+>B : Symbol(Enum.B, Decl(type.ts, 2, 12))
+  }
+}
+export type Type = { x?: { [Foo.Enum]: 0 } };
+>Type : Symbol(Type, Decl(type.ts, 5, 1))
+>x : Symbol(x, Decl(type.ts, 6, 20))
+>[Foo.Enum] : Symbol([Foo.Enum], Decl(type.ts, 6, 26))
+>Foo.Enum : Symbol(Foo.Enum, Decl(type.ts, 0, 22))
+>Foo : Symbol(Foo, Decl(type.ts, 0, 0))
+>Enum : Symbol(Foo.Enum, Decl(type.ts, 0, 22))
+
+=== index.ts ===
+import { type Type } from "./type";
+>Type : Symbol(Type, Decl(index.ts, 0, 8))
+
+export const foo = { ...({} as Type) };
+>foo : Symbol(foo, Decl(index.ts, 2, 12))
+>Type : Symbol(Type, Decl(index.ts, 0, 8))
+

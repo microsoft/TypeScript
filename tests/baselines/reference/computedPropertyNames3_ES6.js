@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES6.ts] ////
+
 //// [computedPropertyNames3_ES6.ts]
 var id;
 class C {
@@ -10,6 +12,7 @@ class C {
 }
 
 //// [computedPropertyNames3_ES6.js]
+"use strict";
 var id;
 class C {
     [0 + 1]() { }

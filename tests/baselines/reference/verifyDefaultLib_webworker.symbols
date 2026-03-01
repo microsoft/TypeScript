@@ -1,4 +1,6 @@
-=== tests/cases/compiler/verifyDefaultLib_webworker.ts ===
+//// [tests/cases/compiler/verifyDefaultLib_webworker.ts] ////
+
+=== verifyDefaultLib_webworker.ts ===
 var x: Worker;
 >x : Symbol(x, Decl(verifyDefaultLib_webworker.ts, 0, 3))
 >Worker : Symbol(Worker, Decl(lib.webworker.d.ts, --, --), Decl(lib.webworker.d.ts, --, --))

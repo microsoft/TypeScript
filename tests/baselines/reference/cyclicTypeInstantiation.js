@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cyclicTypeInstantiation.ts] ////
+
 //// [cyclicTypeInstantiation.ts]
 function foo<T>() {
     var x: {
@@ -22,6 +24,7 @@ a = b;
 
 
 //// [cyclicTypeInstantiation.js]
+"use strict";
 function foo() {
     var x;
     return x;

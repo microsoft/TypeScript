@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectIndexer.ts] ////
+
 //// [objectIndexer.ts]
 export interface Callback {
     (value: any): void;
@@ -18,11 +20,10 @@ class Emitter {
 //// [objectIndexer.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    var Emitter = /** @class */ (function () {
-        function Emitter() {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class Emitter {
+        constructor() {
             this.listeners = {};
         }
-        return Emitter;
-    }());
+    }
 });

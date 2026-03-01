@@ -1,143 +1,253 @@
-=== tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx ===
+//// [tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx] ////
+
+=== jsxChildrenGenericContextualTypes.tsx ===
 namespace JSX {
     export interface Element {}
     export interface ElementAttributesProperty { props: {}; }
 >props : {}
+>      : ^^
 
     export interface ElementChildrenAttribute { children: {}; }
 >children : {}
+>         : ^^
 
     export interface IntrinsicAttributes {}
     export interface IntrinsicElements { [key: string]: Element }
 >key : string
+>    : ^^^^^^
 }
 const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 ><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
+>                                                                  : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >p : { prop: T; children: (t: T) => T; }
+>  : ^^^^^^^^ ^^^^^^^^^^^^           ^^^
 >prop : T
+>     : ^
 >children : (t: T) => T
+>         : ^ ^^ ^^^^^ 
 >t : T
+>  : ^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >Elem({prop: {a: "x"}, children: i => ({a: "z"})}) : JSX.Element
+>                                                  : ^^^^^^^^^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >{prop: {a: "x"}, children: i => ({a: "z"})} : { prop: { a: string; }; children: (i: { a: string; }) => { a: string; }; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : { a: string; }
+>     : ^^^^^^^^^^^^^^
 >{a: "x"} : { a: string; }
+>         : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 >children : (i: { a: string; }) => { a: string; }
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i : { a: string; }
+>  : ^^^^^^^^^^^^^^
 >({a: "z"}) : { a: string; }
+>           : ^^^^^^^^^^^^^^
 >{a: "z"} : { a: string; }
+>         : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"z" : "z"
+>    : ^^^
 
 const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
 >q : JSX.Element
+>  : ^^^^^^^^^^^
 ><Elem prop={{a: "x"}} children={i => ({a: "z"})} /> : JSX.Element
+>                                                    : ^^^^^^^^^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >prop : { a: string; }
+>     : ^^^^^^^^^^^^^^
 >{a: "x"} : { a: string; }
+>         : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 >children : (i: { a: string; }) => { a: string; }
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i : { a: string; }
+>  : ^^^^^^^^^^^^^^
 >({a: "z"}) : { a: string; }
+>           : ^^^^^^^^^^^^^^
 >{a: "z"} : { a: string; }
+>         : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"z" : "z"
+>    : ^^^
 
 const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 >qq : JSX.Element
+>   : ^^^^^^^^^^^
 ><Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem> : JSX.Element
+>                                               : ^^^^^^^^^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >prop : { a: string; }
+>     : ^^^^^^^^^^^^^^
 >{a: "x"} : { a: string; }
+>         : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"x" : "x"
+>    : ^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i : { a: string; }
+>  : ^^^^^^^^^^^^^^
 >({a: "z"}) : { a: string; }
+>           : ^^^^^^^^^^^^^^
 >{a: "z"} : { a: string; }
+>         : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >"z" : "z"
+>    : ^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
+>     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 
 interface LitProps<T> { prop: T, children: (x: this) => T }
 >prop : T
+>     : ^
 >children : (x: this) => T
+>         : ^ ^^    ^^^^^ 
 >x : this
+>  : ^^^^
 
 const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 ><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => JSX.Element
+>                                                  : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >p : LitProps<T>
+>  : ^^^^^^^^^^^
 ><div></div> : JSX.Element
+>            : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 ElemLit({prop: "x", children: () => "x"});
 >ElemLit({prop: "x", children: () => "x"}) : JSX.Element
+>                                          : ^^^^^^^^^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >{prop: "x", children: () => "x"} : { prop: "x"; children: () => "x"; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : "x"
+>     : ^^^
 >"x" : "x"
+>    : ^^^
 >children : () => "x"
+>         : ^^^^^^^^^
 >() => "x" : () => "x"
+>          : ^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 
 const j = <ElemLit prop="x" children={() => "x"} />
 >j : JSX.Element
+>  : ^^^^^^^^^^^
 ><ElemLit prop="x" children={() => "x"} /> : JSX.Element
+>                                          : ^^^^^^^^^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >prop : "x"
+>     : ^^^
 >children : () => "x"
+>         : ^^^^^^^^^
 >() => "x" : () => "x"
+>          : ^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 
 const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
 >jj : JSX.Element
+>   : ^^^^^^^^^^^
 ><ElemLit prop="x">{() => "x"}</ElemLit> : JSX.Element
+>                                        : ^^^^^^^^^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >prop : "x"
+>     : ^^^
 >() => "x" : () => "x"
+>          : ^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 
 // Should error
 const arg = <ElemLit prop="x" children={p => "y"} />
 >arg : JSX.Element
+>    : ^^^^^^^^^^^
 ><ElemLit prop="x" children={p => "y"} /> : JSX.Element
+>                                         : ^^^^^^^^^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >prop : "x"
+>     : ^^^
 >children : (p: JSX.IntrinsicAttributes & LitProps<"x">) => "y"
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p => "y" : (p: JSX.IntrinsicAttributes & LitProps<"x">) => "y"
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : JSX.IntrinsicAttributes & LitProps<"x">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"y" : "y"
+>    : ^^^
 
 const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
 >argchild : JSX.Element
+>         : ^^^^^^^^^^^
 ><ElemLit prop="x">{p => "y"}</ElemLit> : JSX.Element
+>                                       : ^^^^^^^^^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >prop : "x"
+>     : ^^^
 >p => "y" : (p: JSX.IntrinsicAttributes & LitProps<"x">) => "y"
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : JSX.IntrinsicAttributes & LitProps<"x">
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"y" : "y"
+>    : ^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 
 const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
 >mismatched : JSX.Element
+>           : ^^^^^^^^^^^
 ><ElemLit prop="x">{() => 12}</ElemLit> : JSX.Element
+>                                       : ^^^^^^^^^^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 >prop : "x"
+>     : ^^^
 >() => 12 : () => number
+>         : ^^^^^^^^^^^^
 >12 : 12
+>   : ^^
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
+>        : ^ ^^^^^^^^^      ^^ ^^           ^^^^^^^^^^^^^^^^
 

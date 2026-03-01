@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfTooShortOverloads.ts ===
+//// [tests/cases/compiler/contextualTypingOfTooShortOverloads.ts] ////
+
+=== contextualTypingOfTooShortOverloads.ts ===
 // small repro from #11875
 var use: Overload;
 >use : Symbol(use, Decl(contextualTypingOfTooShortOverloads.ts, 1, 3))

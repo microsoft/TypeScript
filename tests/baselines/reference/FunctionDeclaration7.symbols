@@ -1,7 +1,9 @@
-=== tests/cases/compiler/FunctionDeclaration7.ts ===
-module M {
+//// [tests/cases/compiler/FunctionDeclaration7.ts] ////
+
+=== FunctionDeclaration7.ts ===
+namespace M {
 >M : Symbol(M, Decl(FunctionDeclaration7.ts, 0, 0))
 
    function foo();
->foo : Symbol(foo, Decl(FunctionDeclaration7.ts, 0, 10))
+>foo : Symbol(foo, Decl(FunctionDeclaration7.ts, 0, 13))
 }

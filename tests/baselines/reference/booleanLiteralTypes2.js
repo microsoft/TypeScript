@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/booleanLiteralTypes2.ts] ////
+
 //// [booleanLiteralTypes2.ts]
 type A1 = true | false;
 type A2 = false | true;
@@ -96,6 +98,7 @@ function f21(x: Item) {
 }
 
 //// [booleanLiteralTypes2.js]
+"use strict";
 function f1() {
     var a;
     var a;

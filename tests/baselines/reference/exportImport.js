@@ -17,29 +17,27 @@ export function w(): e.w { // Should be OK
 //// [w1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Widget1 = /** @class */ (function () {
-        function Widget1() {
+    class Widget1 {
+        constructor() {
             this.name = 'one';
         }
-        return Widget1;
-    }());
+    }
     return Widget1;
 });
 //// [exporter.js]
 define(["require", "exports", "./w1"], function (require, exports, w) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.w = w;
 });
 //// [consumer.js]
 define(["require", "exports", "./exporter"], function (require, exports, e) {
     "use strict";
-    exports.__esModule = true;
-    exports.w = void 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.w = w;
     function w() {
         return new e.w();
     }
-    exports.w = w;
 });
 
 

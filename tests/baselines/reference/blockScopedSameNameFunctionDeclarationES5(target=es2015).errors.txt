@@ -1,0 +1,33 @@
+blockScopedSameNameFunctionDeclarationES5.ts(5,13): error TS2554: Expected 0 arguments, but got 1.
+blockScopedSameNameFunctionDeclarationES5.ts(10,13): error TS2554: Expected 0 arguments, but got 1.
+blockScopedSameNameFunctionDeclarationES5.ts(13,5): error TS2554: Expected 1 arguments, but got 0.
+blockScopedSameNameFunctionDeclarationES5.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== blockScopedSameNameFunctionDeclarationES5.ts (4 errors) ====
+    function foo(a: number) {
+        if (a === 1) {
+            function foo() { } // duplicate function
+            foo(); 
+            foo(10); // not ok
+                ~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+        }
+        else {
+            function foo() { } // duplicate function
+            foo(); 
+            foo(10); // not ok
+                ~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+        }
+        foo(10); // not ok
+        foo(); 
+        ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 blockScopedSameNameFunctionDeclarationES5.ts:1:14: An argument for 'a' was not provided.
+    }
+    foo(10);
+    foo(); // not ok - needs number
+    ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 blockScopedSameNameFunctionDeclarationES5.ts:1:14: An argument for 'a' was not provided.

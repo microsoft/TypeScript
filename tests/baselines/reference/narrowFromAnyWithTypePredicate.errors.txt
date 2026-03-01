@@ -1,11 +1,11 @@
-tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(22,7): error TS2339: Property 'method' does not exist on type '{}'.
-tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(23,5): error TS2349: This expression is not callable.
+narrowFromAnyWithTypePredicate.ts(22,7): error TS2339: Property 'method' does not exist on type '{}'.
+narrowFromAnyWithTypePredicate.ts(23,5): error TS2349: This expression is not callable.
   Type '{}' has no call signatures.
-tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(28,7): error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
-tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
+narrowFromAnyWithTypePredicate.ts(28,7): error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
+narrowFromAnyWithTypePredicate.ts(33,7): error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
 
 
-==== tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts (4 errors) ====
+==== narrowFromAnyWithTypePredicate.ts (4 errors) ====
     declare var x: any;
     declare function isFunction(x): x is Function;
     declare function isObject(x): x is Object;
@@ -41,7 +41,7 @@ tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error
         x.mesage;
           ~~~~~~
 !!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1049:5: 'message' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'message' is declared here.
     }
     
     if (isDate(x)) {
@@ -49,6 +49,6 @@ tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error
         x.getHuors();
           ~~~~~~~~
 !!! error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
-!!! related TS2728 /.ts/lib.es5.d.ts:783:5: 'getHours' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'getHours' is declared here.
     }
     

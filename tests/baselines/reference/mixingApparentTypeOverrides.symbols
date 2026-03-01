@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mixingApparentTypeOverrides.ts ===
+//// [tests/cases/compiler/mixingApparentTypeOverrides.ts] ////
+
+=== mixingApparentTypeOverrides.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Symbol(Constructor, Decl(mixingApparentTypeOverrides.ts, 0, 0))
 >T : Symbol(T, Decl(mixingApparentTypeOverrides.ts, 0, 17))

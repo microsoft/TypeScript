@@ -1,12 +1,17 @@
-=== tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts ===
+//// [tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts] ////
+
+=== genericArrayWithoutTypeAnnotation.ts ===
 interface IFoo<T>{
 }
 class Bar {
 >Bar : Bar
+>    : ^^^
 
     public getBar(foo: IFoo[]) {
 >getBar : (foo: IFoo[]) => void
+>       : ^   ^^      ^^^^^^^^^
 >foo : any[]
+>    : ^^^^^
     }
 }
 

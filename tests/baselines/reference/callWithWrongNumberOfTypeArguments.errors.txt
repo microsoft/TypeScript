@@ -1,8 +1,8 @@
-tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(3,3): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts(5,3): error TS2558: Expected 2 type arguments, but got 3.
+callWithWrongNumberOfTypeArguments.ts(3,3): error TS2558: Expected 2 type arguments, but got 1.
+callWithWrongNumberOfTypeArguments.ts(5,3): error TS2558: Expected 2 type arguments, but got 3.
 
 
-==== tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts (2 errors) ====
+==== callWithWrongNumberOfTypeArguments.ts (2 errors) ====
     function f<T, U>() { }
     
     f<number>();

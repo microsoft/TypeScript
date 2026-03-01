@@ -1,24 +1,24 @@
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(3,20): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(4,7): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(5,10): error TS1005: '(' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(6,10): error TS1005: '(' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(7,9): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(8,10): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(9,8): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(10,10): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(12,1): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(15,5): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(15,6): error TS1005: ',' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,5): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,6): error TS1005: ',' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,12): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,5): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,6): error TS1005: ',' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,9): error TS1005: ':' expected.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(20,17): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(3,20): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(4,7): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(5,10): error TS1005: '(' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(6,10): error TS1005: '(' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(7,9): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(8,10): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(9,8): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(10,10): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(12,1): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(15,5): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(15,6): error TS1005: ',' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,5): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,6): error TS1005: ',' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,12): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,5): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,6): error TS1005: ',' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,9): error TS1005: ':' expected.
+objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(20,17): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts (18 errors) ====
+==== objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts (18 errors) ====
     // errors
     var y = {
         "stringLiteral",

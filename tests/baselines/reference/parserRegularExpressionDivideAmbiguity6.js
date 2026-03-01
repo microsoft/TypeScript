@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity6.ts] ////
+
 //// [parserRegularExpressionDivideAmbiguity6.ts]
 function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
     let r = [];
@@ -23,9 +25,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 
 
 //// [parserRegularExpressionDivideAmbiguity6.js]
+"use strict";
 function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
-    var r = [];
-    var v;
+    let r = [];
+    let v;
     r[0] = (v = a0 * a0) & 0xFFFF;
     r[1] = (v = ((v / 0x10000) | 0) + 2 * a0 * a1) & 0xFFFF;
     r[2] = (v = ((v / 0x10000) | 0) + 2 * a0 * a2 + a1 * a1) & 0xFFFF;

@@ -1,7 +1,7 @@
-tests/cases/compiler/invalidUnicodeEscapeSequance2.ts(1,8): error TS1127: Invalid character.
+invalidUnicodeEscapeSequance2.ts(1,8): error TS1127: Invalid character.
 
 
-==== tests/cases/compiler/invalidUnicodeEscapeSequance2.ts (1 errors) ====
+==== invalidUnicodeEscapeSequance2.ts (1 errors) ====
     var arg\uxxxx
            
 !!! error TS1127: Invalid character.

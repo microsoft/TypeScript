@@ -1,6 +1,11 @@
-=== tests/cases/compiler/ArrowFunctionExpression1.ts ===
+//// [tests/cases/compiler/ArrowFunctionExpression1.ts] ////
+
+=== ArrowFunctionExpression1.ts ===
 var v = (public x: string) => { };
 >v : (x: string) => void
+>  : ^ ^^      ^^^^^^^^^
 >(public x: string) => { } : (x: string) => void
+>                          : ^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 

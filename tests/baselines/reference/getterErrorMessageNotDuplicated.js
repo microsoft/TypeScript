@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getterErrorMessageNotDuplicated.ts] ////
+
 //// [getterErrorMessageNotDuplicated.ts]
 interface Thing {
     get style(): Foo;
@@ -14,3 +16,4 @@ interface Bar extends Foo {
 }
 
 //// [getterErrorMessageNotDuplicated.js]
+"use strict";

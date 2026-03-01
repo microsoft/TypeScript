@@ -1,23 +1,31 @@
-=== tests/cases/compiler/gridview.ts ===
+//// [tests/cases/compiler/reexportNameAliasedAndHoisted.ts] ////
+
+=== gridview.ts ===
 export type Sizing = any;
 >Sizing : any
 
 export const Sizing = null;
 >Sizing : any
->null : null
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 // https://github.com/microsoft/TypeScript/issues/39195
 export { Sizing as GridViewSizing } from './gridview';
 >Sizing : any
+>       : ^^^
 >GridViewSizing : any
+>               : ^^^
 
 export namespace Sizing {
 >Sizing : typeof Sizing
+>       : ^^^^^^^^^^^^^
 
     export const Distribute = { type: 'distribute' };
 >Distribute : { type: string; }
+>           : ^^^^^^^^^^^^^^^^^
 >{ type: 'distribute' } : { type: string; }
+>                       : ^^^^^^^^^^^^^^^^^
 >type : string
+>     : ^^^^^^
 >'distribute' : "distribute"
+>             : ^^^^^^^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/infinitelyExpandingTypes1.ts] ////
+
 //// [infinitelyExpandingTypes1.ts]
 interface List<T> {
     data: T;
@@ -24,6 +26,7 @@ l == l2; // should error;
 l == l; // should not error
 
 //// [infinitelyExpandingTypes1.js]
+"use strict";
 var l;
 var m;
 l == m; // should error

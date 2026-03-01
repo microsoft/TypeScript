@@ -1,12 +1,17 @@
-=== tests/cases/conformance/jsdoc/dtsEquivalent.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeDefAtStartOfFile.ts] ////
+
+=== dtsEquivalent.js ===
+
 /** @typedef {{[k: string]: any}} AnyEffect */
-No type information for this code./** @typedef {number} Third */
-No type information for this code.=== tests/cases/conformance/jsdoc/index.js ===
+/** @typedef {number} Third */
+=== index.js ===
 /** @type {AnyEffect} */
 let b;
 >b : AnyEffect
+>  : ^^^^^^^^^
 
 /** @type {Third} */
 let c;
 >c : number
+>  : ^^^^^^
 

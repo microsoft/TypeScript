@@ -1,18 +1,27 @@
-=== tests/cases/compiler/classExpressions.ts ===
+//// [tests/cases/compiler/classExpressions.ts] ////
+
+=== classExpressions.ts ===
 interface A {}
 let x = class B implements A {
 >x : typeof B
+>  : ^^^^^^^^
 >class B implements A {    prop: number;    onStart(): void {    }    func = () => {    }} : typeof B
+>                                                                                          : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
     prop: number;
 >prop : number
+>     : ^^^^^^
 
     onStart(): void {
 >onStart : () => void
+>        : ^^^^^^    
     }
     func = () => {
 >func : () => void
+>     : ^^^^^^^^^^
 >() => {    } : () => void
+>             : ^^^^^^^^^^
     }
 };

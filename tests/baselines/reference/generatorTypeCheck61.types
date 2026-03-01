@@ -1,12 +1,17 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts] ////
+
+=== generatorTypeCheck61.ts ===
 function * g() {
->g : () => Generator<number, void, unknown>
+>g : () => Generator<number, void, (target: typeof C) => void | typeof C>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     @(yield 0)
 >(yield 0) : any
 >yield 0 : any
 >0 : 0
+>  : ^
 
     class C {};
 >C : C
+>  : ^
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/primitiveTypeAsInterfaceNameGeneric.ts ===
+//// [tests/cases/compiler/primitiveTypeAsInterfaceNameGeneric.ts] ////
+
+=== primitiveTypeAsInterfaceNameGeneric.ts ===
 interface number<T> {}
 >number : Symbol(number, Decl(primitiveTypeAsInterfaceNameGeneric.ts, 0, 0))
 >T : Symbol(T, Decl(primitiveTypeAsInterfaceNameGeneric.ts, 0, 17))

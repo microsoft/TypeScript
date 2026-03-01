@@ -1,22 +1,35 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES6.ts] ////
+
+=== computedPropertyNamesContextualType10_ES6.ts ===
 interface I {
     [s: number]: boolean;
 >s : number
+>  : ^^^^^^
 }
 
 var o: I = {
 >o : I
+>  : ^
 >{    [+"foo"]: "",    [+"bar"]: 0} : { [x: number]: string | number; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [+"foo"]: "",
 >[+"foo"] : string
+>         : ^^^^^^
 >+"foo" : number
+>       : ^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 >"" : ""
+>   : ^^
 
     [+"bar"]: 0
 >[+"bar"] : number
+>         : ^^^^^^
 >+"bar" : number
+>       : ^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 >0 : 0
+>  : ^
 }

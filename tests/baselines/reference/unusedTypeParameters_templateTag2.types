@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameters_templateTag2.ts] ////
+
 === /a.js ===
 /**
  * @template T
@@ -5,13 +7,17 @@
  */
 class C1 {
 >C1 : C1<T, V>
+>   : ^^^^^^^^
 
     constructor() {
         /** @type {T} */
         this.p;
 >this.p : T
+>       : ^
 >this : this
+>     : ^^^^
 >p : T
+>  : ^
     }
 }
 
@@ -20,6 +26,7 @@ class C1 {
  */
 class C2 {
 >C2 : C2<T, V>
+>   : ^^^^^^^^
 
     constructor() { }
 }
@@ -29,12 +36,16 @@ class C2 {
  */
 class C3 {
 >C3 : C3<T, V, X>
+>   : ^^^^^^^^^^^
 
     constructor() {
         /** @type {T} */
         this.p;
 >this.p : T
+>       : ^
 >this : this
+>     : ^^^^
 >p : T
+>  : ^
     }
 }

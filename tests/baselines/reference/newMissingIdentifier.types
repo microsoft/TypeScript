@@ -1,7 +1,13 @@
-=== tests/cases/compiler/newMissingIdentifier.ts ===
+//// [tests/cases/compiler/newMissingIdentifier.ts] ////
+
+=== newMissingIdentifier.ts ===
 var x = new ();
 >x : any
+>  : ^^^
 >new () : any
+>       : ^^^
 >() : any
+>   : ^^^
 > : any
+> : ^^^
 

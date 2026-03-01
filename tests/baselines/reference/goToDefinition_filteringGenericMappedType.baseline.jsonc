@@ -1,0 +1,29 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinition_filteringGenericMappedType.ts ===
+// const obj = {
+//   <|get [|id|]() {
+//     return 1;
+//   }|>,
+//   name: "test",
+// };
+// 
+// --- (line: 8) skipped ---
+
+// --- (line: 17) skipped ---
+//   name: true,
+// });
+// 
+// obj2./*GOTO DEF*/id;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "id",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

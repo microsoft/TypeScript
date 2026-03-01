@@ -1,3 +1,90 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/jsDocTypeTag2.js ===
+// /** @type {string} */
+// var s;
+//     ^
+// | ----------------------------------------------------------------------
+// | var s: string
+// | @type {string}
+// | ----------------------------------------------------------------------
+// /** @type {number} */
+// var n;
+//     ^
+// | ----------------------------------------------------------------------
+// | var n: number
+// | @type {number}
+// | ----------------------------------------------------------------------
+// /** @type {boolean} */
+// var b;
+//     ^
+// | ----------------------------------------------------------------------
+// | var b: boolean
+// | @type {boolean}
+// | ----------------------------------------------------------------------
+// /** @type {void} */
+// var v;
+//     ^
+// | ----------------------------------------------------------------------
+// | var v: void
+// | @type {void}
+// | ----------------------------------------------------------------------
+// /** @type {undefined} */
+// var u;
+//     ^
+// | ----------------------------------------------------------------------
+// | var u: undefined
+// | @type {undefined}
+// | ----------------------------------------------------------------------
+// /** @type {null} */
+// var nl;
+//     ^^
+// | ----------------------------------------------------------------------
+// | var nl: null
+// | @type {null}
+// | ----------------------------------------------------------------------
+// /** @type {array} */
+// var a;
+//     ^
+// | ----------------------------------------------------------------------
+// | var a: array
+// | @type {array}
+// | ----------------------------------------------------------------------
+// /** @type {promise} */
+// var p;
+//     ^
+// | ----------------------------------------------------------------------
+// | var p: promise
+// | @type {promise}
+// | ----------------------------------------------------------------------
+// /** @type {?number} */
+// var nullable;
+//     ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var nullable: number | null
+// | @type {?number}
+// | ----------------------------------------------------------------------
+// /** @type {function} */
+// var func;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var func: Function
+// | @type {function}
+// | ----------------------------------------------------------------------
+// /** @type {function (number): number} */
+// var func1;
+//     ^^^^^
+// | ----------------------------------------------------------------------
+// | var func1: (arg0: number) => number
+// | @type {function (number): number}
+// | ----------------------------------------------------------------------
+// /** @type {string | number} */
+// var sOrn;
+//     ^^^^
+// | ----------------------------------------------------------------------
+// | var sOrn: string | number
+// | @type {string | number}
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +92,7 @@
       "position": 26,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -58,7 +145,7 @@
       "position": 55,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -111,7 +198,7 @@
       "position": 85,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -164,7 +251,7 @@
       "position": 112,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -217,7 +304,7 @@
       "position": 144,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -270,7 +357,7 @@
       "position": 171,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -323,7 +410,7 @@
       "position": 200,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -352,16 +439,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
+          "text": "array",
+          "kind": "text"
         }
       ],
       "documentation": [],
@@ -384,7 +463,7 @@
       "position": 230,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -413,20 +492,8 @@
           "kind": "space"
         },
         {
-          "text": "Promise",
-          "kind": "interfaceName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
+          "text": "promise",
+          "kind": "text"
         }
       ],
       "documentation": [],
@@ -449,7 +516,7 @@
       "position": 260,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -480,6 +547,22 @@
         {
           "text": "number",
           "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
+          "kind": "keyword"
         }
       ],
       "documentation": [],
@@ -502,7 +585,7 @@
       "position": 298,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -555,7 +638,7 @@
       "position": 349,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -644,7 +727,7 @@
       "position": 391,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {

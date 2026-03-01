@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes1.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes1.ts] ////
+
+=== genericContextualTypes1.ts ===
 type Box<T> = { value: T };
 >Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 0, 9))

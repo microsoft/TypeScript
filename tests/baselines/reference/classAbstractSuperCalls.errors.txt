@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(13,26): error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts(13,41): error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
+classAbstractSuperCalls.ts(13,26): error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
+classAbstractSuperCalls.ts(13,41): error TS2513: Abstract method 'foo' in class 'B' cannot be accessed via super expression.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSuperCalls.ts (2 errors) ====
+==== classAbstractSuperCalls.ts (2 errors) ====
     class A {
         foo() { return 1; }
     }

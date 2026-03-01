@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class BaseErrClass {
     constructor(t: any) { }
 }
@@ -18,7 +20,7 @@ class ClassWithInitializer extends BaseErrClass {
     }
 }
 
-module M {
+namespace M {
     //'this' in module variable
     var x = this; // Error
 }

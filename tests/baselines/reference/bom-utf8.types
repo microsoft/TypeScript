@@ -1,5 +1,9 @@
-=== tests/cases/compiler/bom-utf8.ts ===
+//// [tests/cases/compiler/bom-utf8.ts] ////
+
+=== bom-utf8.ts ===
 var x=10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

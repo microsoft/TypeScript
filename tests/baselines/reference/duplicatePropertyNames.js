@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/duplicatePropertyNames.ts] ////
+
 //// [duplicatePropertyNames.ts]
 // duplicate property names are an error in all types
 
@@ -49,20 +51,20 @@ var b = {
 
 
 //// [duplicatePropertyNames.js]
+"use strict";
 // duplicate property names are an error in all types
-var C = /** @class */ (function () {
-    function C() {
-        this.baz = function () { };
-        this.baz = function () { };
+class C {
+    constructor() {
+        this.baz = () => { };
+        this.baz = () => { };
     }
-    C.prototype.bar = function (x) { };
-    C.prototype.bar = function (x) { };
-    return C;
-}());
+    bar(x) { }
+    bar(x) { }
+}
 var a;
 var b = {
     foo: '',
     foo: '',
-    bar: function () { },
-    bar: function () { }
+    bar: () => { },
+    bar: () => { }
 };

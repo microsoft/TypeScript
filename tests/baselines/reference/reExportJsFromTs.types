@@ -1,21 +1,32 @@
+//// [tests/cases/conformance/salsa/reExportJsFromTs.ts] ////
+
 === /lib/constants.js ===
 module.exports = {
 >module.exports = {  str: 'x',} : { str: string; }
+>                               : ^^^^^^^^^^^^^^^^
 >module.exports : { str: string; }
+>               : ^^^^^^^^^^^^^^^^
 >module : { exports: { str: string; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { str: string; }
+>        : ^^^^^^^^^^^^^^^^
 >{  str: 'x',} : { str: string; }
+>              : ^^^^^^^^^^^^^^^^
 
   str: 'x',
 >str : string
+>    : ^^^^^^
 >'x' : "x"
+>    : ^^^
 
 };
 
 === /src/constants.ts ===
 import * as tsConstants from "../lib/constants";
 >tsConstants : { str: string; }
+>            : ^^^^^^^^^^^^^^^^
 
 export { tsConstants };
 >tsConstants : { str: string; }
+>            : ^^^^^^^^^^^^^^^^
 

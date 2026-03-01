@@ -1,17 +1,26 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock24.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock24.ts] ////
+
+=== classStaticBlock24.ts ===
 export class C {
 >C : C
+>  : ^
 
   static x: number;
 >x : number
+>  : ^^^^^^
 
   static {
     C.x = 1;
 >C.x = 1 : 1
+>        : ^
 >C.x : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
   }
 }
 

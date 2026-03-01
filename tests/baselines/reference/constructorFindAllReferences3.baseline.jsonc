@@ -1,65 +1,41 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/constructorFindAllReferences3.ts ===
 // export class C {
-//     /*FIND ALL REFS*/[|constructor|]() { }
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|]() { }|>
 //     public foo() { }
 // }
 // 
 // new [|C|]().foo();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/constructorFindAllReferences3.ts",
-      "kind": "class",
-      "name": "class C",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 61
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/constructorFindAllReferences3.ts",
-        "contextSpan": {
-          "start": 21,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/constructorFindAllReferences3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/constructorFindAllReferences3.ts ===
+  // <|export class [|C|] {
+  //     /*FIND ALL REFS*/constructor() { }
+  //     public foo() { }
+  // }|>
+  // 
+  // new C().foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

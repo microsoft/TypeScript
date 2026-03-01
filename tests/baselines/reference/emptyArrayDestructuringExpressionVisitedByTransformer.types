@@ -1,25 +1,47 @@
-=== tests/cases/compiler/emptyArrayDestructuringExpressionVisitedByTransformer.ts ===
+//// [tests/cases/compiler/emptyArrayDestructuringExpressionVisitedByTransformer.ts] ////
+
+=== emptyArrayDestructuringExpressionVisitedByTransformer.ts ===
 var a = [] = [1].map(_ => _);
 >a : number[]
+>  : ^^^^^^^^
 >[] = [1].map(_ => _) : number[]
+>                     : ^^^^^^^^
 >[] : []
+>   : ^^
 >[1].map(_ => _) : number[]
+>                : ^^^^^^^^
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >_ => _ : (_: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >_ : number
+>  : ^^^^^^
 >_ : number
+>  : ^^^^^^
 
 var b = [1].map(_ => _);
 >b : number[]
+>  : ^^^^^^^^
 >[1].map(_ => _) : number[]
+>                : ^^^^^^^^
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>        : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >_ => _ : (_: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >_ : number
+>  : ^^^^^^
 >_ : number
+>  : ^^^^^^
 

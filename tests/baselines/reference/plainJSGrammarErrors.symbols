@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/plainJSGrammarErrors.js ===
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
+=== plainJSGrammarErrors.js ===
 class C {
 >C : Symbol(C, Decl(plainJSGrammarErrors.js, 0, 0))
 

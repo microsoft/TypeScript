@@ -1,5 +1,0 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions04_ES6.ts ===
-var x = /\u{00000000}/g;
->x : RegExp
->/\u{00000000}/g : RegExp
-

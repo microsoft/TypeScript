@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classMemberInitializerScoping.ts ===
+//// [tests/cases/compiler/classMemberInitializerScoping.ts] ////
+
+=== classMemberInitializerScoping.ts ===
 var aaa = 1;
 >aaa : Symbol(aaa, Decl(classMemberInitializerScoping.ts, 0, 3))
 
@@ -7,6 +9,7 @@ class CCC {
 
     y: number = aaa;
 >y : Symbol(CCC.y, Decl(classMemberInitializerScoping.ts, 1, 11))
+>aaa : Symbol(aaa, Decl(classMemberInitializerScoping.ts, 0, 3))
 
     static staticY: number = aaa; // This shouldnt be error
 >staticY : Symbol(CCC.staticY, Decl(classMemberInitializerScoping.ts, 2, 20))

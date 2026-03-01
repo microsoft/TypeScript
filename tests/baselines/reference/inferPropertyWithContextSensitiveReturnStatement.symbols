@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/inferPropertyWithContextSensitiveReturnStatement.ts] ////
+
+=== inferPropertyWithContextSensitiveReturnStatement.ts ===
+// repro #50687
+
+declare function repro<T>(config: {
+>repro : Symbol(repro, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 0, 0))
+>T : Symbol(T, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 2, 23))
+>config : Symbol(config, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 2, 26))
+
+  params: T;
+>params : Symbol(params, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 2, 35))
+>T : Symbol(T, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 2, 23))
+
+  callback: () => (params: T) => number;
+>callback : Symbol(callback, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 3, 12))
+>params : Symbol(params, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 4, 19))
+>T : Symbol(T, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 2, 23))
+
+}): void;
+
+repro({
+>repro : Symbol(repro, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 0, 0))
+
+  params: 1,
+>params : Symbol(params, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 7, 7))
+
+  callback: () => { return a => a + 1 },
+>callback : Symbol(callback, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 8, 12))
+>a : Symbol(a, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 9, 26))
+>a : Symbol(a, Decl(inferPropertyWithContextSensitiveReturnStatement.ts, 9, 26))
+
+});
+

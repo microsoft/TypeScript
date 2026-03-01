@@ -1,76 +1,131 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts] ////
+
+=== objectLiteralShorthandPropertiesAssignmentES6.ts ===
 var id: number = 10000;
 >id : number
+>   : ^^^^^^
 >10000 : 10000
+>      : ^^^^^
 
 var name: string = "my name";
 >name : string
+>     : ^^^^^^
 >"my name" : "my name"
+>          : ^^^^^^^^^
 
 var person: { name: string; id: number } = { name, id };
 >person : { name: string; id: number; }
+>       : ^^^^^^^^      ^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >{ name, id } : { name: string; id: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 
 function foo(obj: { name: string }): void { };
->foo : (obj: {    name: string;}) => void
+>foo : (obj: { name: string; }) => void
+>    : ^   ^^                 ^^^^^    
 >obj : { name: string; }
+>    : ^^^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 
 function bar(name: string, id: number) { return { name, id }; }
 >bar : (name: string, id: number) => { name: string; id: number; }
+>    : ^    ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >{ name, id } : { name: string; id: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 
 function bar1(name: string, id: number) { return { name }; }
 >bar1 : (name: string, id: number) => { name: string; }
+>     : ^    ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >{ name } : { name: string; }
+>         : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 
 function baz(name: string, id: number): { name: string; id: number } { return { name, id }; }
->baz : (name: string, id: number) => {    name: string;    id: number;}
+>baz : (name: string, id: number) => { name: string; id: number; }
+>    : ^    ^^      ^^  ^^      ^^^^^                             
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >{ name, id } : { name: string; id: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 
 foo(person);
 >foo(person) : void
+>            : ^^^^
 >foo : (obj: { name: string; }) => void
+>    : ^   ^^                 ^^^^^    
 >person : { name: string; id: number; }
+>       : ^^^^^^^^      ^^^^^^      ^^^
 
 var person1 = bar("Hello", 5);
 >person1 : { name: string; id: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar("Hello", 5) : { name: string; id: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : (name: string, id: number) => { name: string; id: number; }
+>    : ^    ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 >5 : 5
+>  : ^
 
 var person2: { name: string } = bar("Hello", 5);
 >person2 : { name: string; }
+>        : ^^^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 >bar("Hello", 5) : { name: string; id: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : (name: string, id: number) => { name: string; id: number; }
+>    : ^    ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 >5 : 5
+>  : ^
 
 var person3: { name: string; id: number } = bar("Hello", 5);
 >person3 : { name: string; id: number; }
+>        : ^^^^^^^^      ^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 >id : number
+>   : ^^^^^^
 >bar("Hello", 5) : { name: string; id: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : (name: string, id: number) => { name: string; id: number; }
+>    : ^    ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 >5 : 5
+>  : ^
 

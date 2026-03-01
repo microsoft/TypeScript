@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/contravariantOnlyInferenceWithAnnotatedOptionalParameter.ts] ////
+
+=== contravariantOnlyInferenceWithAnnotatedOptionalParameter.ts ===
+// repro https://github.com/microsoft/TypeScript/issues/55394
+
+declare function filter<T>(predicate: (value: T, index: number) => boolean): T;
+>filter : <T>(predicate: (value: T, index: number) => boolean) => T
+>       : ^ ^^         ^^                                    ^^^^^ 
+>predicate : (value: T, index: number) => boolean
+>          : ^     ^^ ^^     ^^      ^^^^^       
+>value : T
+>      : ^
+>index : number
+>      : ^^^^^^
+
+const a = filter((pose?: number) => true);
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>filter((pose?: number) => true) : number | undefined
+>                                : ^^^^^^^^^^^^^^^^^^
+>filter : <T>(predicate: (value: T, index: number) => boolean) => T
+>       : ^ ^^         ^^                                    ^^^^^ 
+>(pose?: number) => true : (pose?: number) => true
+>                        : ^    ^^^      ^^^^^^^^^
+>pose : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+
+const b = filter((pose?: number, _?: number) => true);
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>filter((pose?: number, _?: number) => true) : number | undefined
+>                                            : ^^^^^^^^^^^^^^^^^^
+>filter : <T>(predicate: (value: T, index: number) => boolean) => T
+>       : ^ ^^         ^^                                    ^^^^^ 
+>(pose?: number, _?: number) => true : (pose?: number, _?: number) => true
+>                                    : ^    ^^^      ^^ ^^^      ^^^^^^^^^
+>pose : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+>_ : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>true : true
+>     : ^^^^
+

@@ -1,23 +1,23 @@
+//// [tests/cases/compiler/internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts] ////
+
 //// [internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.ts]
 class A {
     aProp: string;
 }
-module A {
+namespace A {
     export interface X { s: string }
     export var a = 10;
 }
 
-module B {
+namespace B {
     import Y = A;
 }
 
 
 //// [internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}
 (function (A) {
     A.a = 10;
 })(A || (A = {}));

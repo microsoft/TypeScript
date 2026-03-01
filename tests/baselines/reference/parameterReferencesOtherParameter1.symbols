@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterReferencesOtherParameter1.ts ===
+//// [tests/cases/compiler/parameterReferencesOtherParameter1.ts] ////
+
+=== parameterReferencesOtherParameter1.ts ===
 class Model {
 >Model : Symbol(Model, Decl(parameterReferencesOtherParameter1.ts, 0, 0))
 

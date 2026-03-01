@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
 //// [commaOperatorLeftSideUnused.ts]
 var xx: any;
 var yy: any;
@@ -40,6 +42,7 @@ xx = (!xx, 10);
 xx = (~xx, 10);
 xx = (-xx, 10);
 xx = (+xx, 10);
+xx = (0, xx)();
 
 // OK cases
 xx = (xx ? x++ : 4, 10);
@@ -51,13 +54,16 @@ xx = ((xx+= 4), xx);
 xx = (Math.pow(3, 2), 4);
 xx = (void xx, 10);
 xx = (xx as any, 100);
-
+xx = (0, xx.fn)();
+xx = (0, xx['fn'])();
+xx = (0, xx.fn)``;
 
 //// [commaOperatorLeftSideUnused.js]
+"use strict";
 var xx;
 var yy;
 function fn() {
-    var arr = [];
+    let arr = [];
     switch (arr.length) {
         // Should error
         case 0, 1:
@@ -67,19 +73,19 @@ function fn() {
     }
 }
 // Should error
-var x = Math.pow((3, 5), 2);
+let x = Math.pow((3, 5), 2);
 // Should error
-var a = [(3 + 4), ((1 + 1, 8) * 4)];
+let a = [(3 + 4), ((1 + 1, 8) * 4)];
 // Error cases
 xx = (1, 2);
 xx = ('', xx);
 xx = (/323/, 5);
-xx = ("wat", 'ok'),
+xx = (`wat`, 'ok'),
     xx = (true, false);
 xx = (false, true);
 xx = (null, xx);
 xx = (undefined, 10);
-xx = (function () { }, 'no');
+xx = (() => { }, 'no');
 xx = (function () { }, 100);
 xx = ({}, {});
 xx = (typeof xx, 'unused');
@@ -91,6 +97,7 @@ xx = (!xx, 10);
 xx = (~xx, 10);
 xx = (-xx, 10);
 xx = (+xx, 10);
+xx = (0, xx)();
 // OK cases
 xx = (xx ? x++ : 4, 10);
 xx = (--xx, 3);
@@ -101,3 +108,6 @@ xx = ((xx += 4), xx);
 xx = (Math.pow(3, 2), 4);
 xx = (void xx, 10);
 xx = (xx, 100);
+xx = (0, xx.fn)();
+xx = (0, xx['fn'])();
+xx = (0, xx.fn) ``;

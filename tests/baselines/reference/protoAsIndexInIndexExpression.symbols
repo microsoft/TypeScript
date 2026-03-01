@@ -1,4 +1,6 @@
-=== tests/cases/compiler/protoAsIndexInIndexExpression_1.ts ===
+//// [tests/cases/compiler/protoAsIndexInIndexExpression.ts] ////
+
+=== protoAsIndexInIndexExpression_1.ts ===
 ///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;
 >EntityPrototype : Symbol(EntityPrototype, Decl(protoAsIndexInIndexExpression_1.ts, 1, 3))
@@ -28,7 +30,7 @@ class C {
     "__proto__" = 0;
 >"__proto__" : Symbol(C["__proto__"], Decl(protoAsIndexInIndexExpression_1.ts, 11, 9))
 }
-=== tests/cases/compiler/protoAsIndexInIndexExpression_0.ts ===
+=== protoAsIndexInIndexExpression_0.ts ===
 export var x;
 >x : Symbol(x, Decl(protoAsIndexInIndexExpression_0.ts, 0, 10))
 

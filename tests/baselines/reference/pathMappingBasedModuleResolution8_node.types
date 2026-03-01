@@ -1,11 +1,18 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution8_node.ts] ////
+
 === c:/root/index.ts ===
 import {x} from "@speedy/folder1/testing"
 >x : number
+>  : ^^^^^^
 
 === c:/root/folder1/dist/index.ts ===
 export const x = 1 + 2;
 >x : number
+>  : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

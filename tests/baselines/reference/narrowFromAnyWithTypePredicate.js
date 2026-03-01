@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts] ////
+
 //// [narrowFromAnyWithTypePredicate.ts]
 declare var x: any;
 declare function isFunction(x): x is Function;
@@ -36,6 +38,7 @@ if (isDate(x)) {
 
 
 //// [narrowFromAnyWithTypePredicate.js]
+"use strict";
 if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
     x();
     x(1, 2, 3);

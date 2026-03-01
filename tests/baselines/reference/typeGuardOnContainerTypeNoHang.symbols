@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardOnContainerTypeNoHang.ts ===
+//// [tests/cases/compiler/typeGuardOnContainerTypeNoHang.ts] ////
+
+=== typeGuardOnContainerTypeNoHang.ts ===
 export namespace TypeGuards {
 >TypeGuards : Symbol(TypeGuards, Decl(typeGuardOnContainerTypeNoHang.ts, 0, 0))
 

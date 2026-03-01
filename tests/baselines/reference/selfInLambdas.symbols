@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfInLambdas.ts ===
+//// [tests/cases/compiler/selfInLambdas.ts] ////
+
+=== selfInLambdas.ts ===
 interface MouseEvent {
 >MouseEvent : Symbol(MouseEvent, Decl(selfInLambdas.ts, 0, 0))
 

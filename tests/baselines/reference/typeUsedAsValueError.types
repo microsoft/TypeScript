@@ -1,59 +1,87 @@
-=== tests/cases/compiler/typeUsedAsValueError.ts ===
+//// [tests/cases/compiler/typeUsedAsValueError.ts] ////
+
+=== typeUsedAsValueError.ts ===
 interface Interface {
 
 }
 
 class SomeClass {
 >SomeClass : SomeClass
+>          : ^^^^^^^^^
 
 }
 
 type TypeAliasForSomeClass = SomeClass;
 >TypeAliasForSomeClass : SomeClass
+>                      : ^^^^^^^^^
 
 type someType = { x: number };
->someType : { x: number; }
+>someType : someType
+>         : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function acceptsSomeType(a: someType) {
 >acceptsSomeType : (a: someType) => void
+>                : ^ ^^        ^^^^^^^^^
 >a : someType
+>  : ^^^^^^^^
 
 }
 
 let one = Interface;
 >one : any
+>    : ^^^
 >Interface : any
+>          : ^^^
 
 let two = InterfaceNotFound;
 >two : any
+>    : ^^^
 >InterfaceNotFound : any
+>                  : ^^^
 
 let three = TypeAliasForSomeClass;
 >three : any
+>      : ^^^
 >TypeAliasForSomeClass : any
+>                      : ^^^
 
 let four = new TypeAliasForSomeClass();
 >four : any
+>     : ^^^
 >new TypeAliasForSomeClass() : any
+>                            : ^^^
 >TypeAliasForSomeClass : any
+>                      : ^^^
 
 let five = new TypeAliasForSomeClassNotFound();
 >five : any
+>     : ^^^
 >new TypeAliasForSomeClassNotFound() : any
+>                                    : ^^^
 >TypeAliasForSomeClassNotFound : any
+>                              : ^^^
 
 let six = someType;
 >six : any
+>    : ^^^
 >someType : any
+>         : ^^^
 
 acceptsSomeType(someType);
 >acceptsSomeType(someType) : void
+>                          : ^^^^
 >acceptsSomeType : (a: someType) => void
+>                : ^ ^^        ^^^^^^^^^
 >someType : any
+>         : ^^^
 
 acceptsSomeType(someTypeNotFound);
 >acceptsSomeType(someTypeNotFound) : void
+>                                  : ^^^^
 >acceptsSomeType : (a: someType) => void
+>                : ^ ^^        ^^^^^^^^^
 >someTypeNotFound : any
+>                 : ^^^
 

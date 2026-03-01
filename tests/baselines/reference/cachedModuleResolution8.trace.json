@@ -19,6 +19,7 @@
     "File '/foo.ts' does not exist.",
     "File '/foo.tsx' does not exist.",
     "File '/foo.d.ts' does not exist.",
+    "Searching all ancestor node_modules directories for preferred extensions: Declaration.",
     "Directory '/a/b/c/d/e/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/b/c/d/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.",

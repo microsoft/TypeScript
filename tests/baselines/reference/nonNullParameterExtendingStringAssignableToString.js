@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonNullParameterExtendingStringAssignableToString.ts] ////
+
 //// [nonNullParameterExtendingStringAssignableToString.ts]
 declare function foo(p: string): void;
 
@@ -11,7 +13,7 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 //// [nonNullParameterExtendingStringAssignableToString.js]
 "use strict";
 function fn(one, two) {
-    var three = Boolean() ? one : two;
+    let three = Boolean() ? one : two;
     foo(one);
     foo(two);
     foo(three); // this line is the important one

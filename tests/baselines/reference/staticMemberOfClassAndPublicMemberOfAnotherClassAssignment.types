@@ -1,79 +1,123 @@
-=== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts ===
+//// [tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts] ////
+
+=== staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts ===
 interface A {
     prop();
 >prop : () => any
+>     : ^^^^^^^^^
 }
 class B {
 >B : B
+>  : ^
 
     public prop() { }
 >prop : () => void
+>     : ^^^^^^^^^^
 }
 class C {
 >C : C
+>  : ^
 
     public static prop() { }
 >prop : () => void
+>     : ^^^^^^^^^^
 }
 
 var a: A = new B();
 >a : A
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 a = new C(); // error prop is missing
 >a = new C() : C
+>            : ^
 >a : A
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 a = B; // error prop is missing
 >a = B : typeof B
+>      : ^^^^^^^^
 >a : A
+>  : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 a = C;
 >a = C : typeof C
+>      : ^^^^^^^^
 >a : A
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var b: B = new C(); // error prop is missing
 >b : B
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 b = B; // error prop is missing
 >b = B : typeof B
+>      : ^^^^^^^^
 >b : B
+>  : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 b = C;
 >b = C : typeof C
+>      : ^^^^^^^^
 >b : B
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 b = a;
 >b = a : A
+>      : ^
 >b : B
+>  : ^
 >a : A
+>  : ^
 
 var c: C = new B();
 >c : C
+>  : ^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 c = B;
 >c = B : typeof B
+>      : ^^^^^^^^
 >c : C
+>  : ^
 >B : typeof B
+>  : ^^^^^^^^
 
 c = C;
 >c = C : typeof C
+>      : ^^^^^^^^
 >c : C
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 c = a;
 >c = a : A
+>      : ^
 >c : C
+>  : ^
 >a : A
+>  : ^
 

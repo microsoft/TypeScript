@@ -6,12 +6,14 @@
         "subfolder/b.ts",
         "subfolder/c.ts"
     ],
-    "out": "out.js",
+    "outFile": "out.js",
     "declaration": true,
     "declarationDir": "declarations",
     "baselineCheck": true,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "subfolder/b.ts",
         "a.ts",
         "subfolder/c.ts"

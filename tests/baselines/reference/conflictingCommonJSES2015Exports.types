@@ -1,27 +1,46 @@
-=== tests/cases/conformance/salsa/bug24934.js ===
+//// [tests/cases/conformance/salsa/conflictingCommonJSES2015Exports.ts] ////
+
+=== bug24934.js ===
 export function abc(a, b, c) { return 5; }
 >abc : (a: any, b: any, c: any) => number
+>    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >5 : 5
+>  : ^
 
 module.exports = { abc };
 >module.exports = { abc } : any
+>                         : ^^^
 >module.exports : any
+>               : ^^^
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >{ abc } : { abc: (a: any, b: any, c: any) => number; }
+>        : ^^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >abc : (a: any, b: any, c: any) => number
+>    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import { abc } from './bug24934';
 >abc : (a: any, b: any, c: any) => number
+>    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 
 abc(1, 2, 3);
 >abc(1, 2, 3) : number
+>             : ^^^^^^
 >abc : (a: any, b: any, c: any) => number
+>    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

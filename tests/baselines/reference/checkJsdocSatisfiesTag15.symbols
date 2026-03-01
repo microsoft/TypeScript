@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag15.ts] ////
+
+=== /a.js ===
+/** @satisfies {(uuid: string) => void} */
+export const fn1 = uuid => {};
+>fn1 : Symbol(fn1, Decl(a.js, 1, 12))
+>uuid : Symbol(uuid, Decl(a.js, 1, 18))
+
+/** @typedef {Parameters<typeof fn1>} Foo */
+
+/** @type Foo */
+export const v1 = ['abc'];
+>v1 : Symbol(v1, Decl(a.js, 6, 12))
+
+/** @type Foo */
+export const v2 = [123]; // error
+>v2 : Symbol(v2, Decl(a.js, 8, 12))
+
+/** @satisfies {(a: string, ...args: never) => void} */
+export const fn2 = (a, b) => {};
+>fn2 : Symbol(fn2, Decl(a.js, 11, 12))
+>a : Symbol(a, Decl(a.js, 11, 20))
+>b : Symbol(b, Decl(a.js, 11, 22))
+
+/** 
+ * @satisfies {(a: string, ...args: never) => void}
+ * @param {string} a
+ */
+export const fn3 = (a, b) => {};
+>fn3 : Symbol(fn3, Decl(a.js, 17, 12))
+>a : Symbol(a, Decl(a.js, 17, 20))
+>b : Symbol(b, Decl(a.js, 17, 22))
+
+/** 
+ * @satisfies {(a: string, ...args: never) => void}
+ * @param {string} a
+ * @param {number} b
+ */
+export const fn4 = (a, b) => {};
+>fn4 : Symbol(fn4, Decl(a.js, 24, 12))
+>a : Symbol(a, Decl(a.js, 24, 20))
+>b : Symbol(b, Decl(a.js, 24, 22))
+
+/** 
+ * @satisfies {(a: string, ...args: number[]) => void}
+ * @param {string} a
+ * @param {string} b
+ */
+export const fn5 = (a, b) => {};
+>fn5 : Symbol(fn5, Decl(a.js, 31, 12))
+>a : Symbol(a, Decl(a.js, 31, 20))
+>b : Symbol(b, Decl(a.js, 31, 22))
+
+/** 
+ * @satisfies {(a: string, ...args: number[]) => void}
+ * @param {string} a
+ * @param {string | number} b
+ */
+export const fn6 = (a, b) => {};
+>fn6 : Symbol(fn6, Decl(a.js, 38, 12))
+>a : Symbol(a, Decl(a.js, 38, 20))
+>b : Symbol(b, Decl(a.js, 38, 22))
+
+/** @satisfies {(uuid: string) => void} */
+export function fn7(uuid) {}
+>fn7 : Symbol(fn7, Decl(a.js, 38, 32))
+>uuid : Symbol(uuid, Decl(a.js, 41, 20))
+

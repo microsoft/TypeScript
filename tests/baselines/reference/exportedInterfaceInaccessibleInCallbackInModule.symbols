@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportedInterfaceInaccessibleInCallbackInModule.ts ===
+//// [tests/cases/compiler/exportedInterfaceInaccessibleInCallbackInModule.ts] ////
+
+=== exportedInterfaceInaccessibleInCallbackInModule.ts ===
 export interface ProgressCallback {
 >ProgressCallback : Symbol(ProgressCallback, Decl(exportedInterfaceInaccessibleInCallbackInModule.ts, 0, 0))
 

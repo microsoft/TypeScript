@@ -1,8 +1,10 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/isolatedModulesWithDeclarationFile.ts] ////
+
+=== file1.d.ts ===
 declare function foo(): void;
 >foo : Symbol(foo, Decl(file1.d.ts, 0, 0))
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export var x;
 >x : Symbol(x, Decl(file1.ts, 0, 10))
 

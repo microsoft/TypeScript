@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stradac.ts] ////
+
 //// [stradac.ts]
 var x = 10;
 
@@ -13,6 +15,7 @@ function foo() {
 }
 
 //// [stradac.js]
+"use strict";
 var x = 10;
 // C++-style comment
 /*

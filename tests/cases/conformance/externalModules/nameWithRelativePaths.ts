@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: foo_0.ts
 export var foo = 42;
@@ -8,7 +9,7 @@ export function f(){
 }
 
 // @Filename: test/foo_2.ts
-export module M2 {
+export namespace M2 {
 	export var x = true;
 }
 

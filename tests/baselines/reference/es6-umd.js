@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6-umd.ts] ////
+
 //// [es6-umd.ts]
 class A
 {
@@ -13,6 +15,7 @@ class A
 }
 
 //// [es6-umd.js]
+"use strict";
 class A {
     constructor() {
     }

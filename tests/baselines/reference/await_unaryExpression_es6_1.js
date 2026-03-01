@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/await_unaryExpression_es6_1.ts] ////
+
 //// [await_unaryExpression_es6_1.ts]
 async function bar() {
     !await 42; // OK
@@ -20,6 +22,7 @@ async function bar4() {
 }
 
 //// [await_unaryExpression_es6_1.js]
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {

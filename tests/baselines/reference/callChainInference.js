@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChainInference.ts] ////
+
 //// [callChainInference.ts]
 // Repro from #42404
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts] ////
+
 //// [typeFromPrivatePropertyAssignment.ts]
 type Foo = { foo?: string };
 
@@ -13,6 +15,7 @@ class C {
 
 
 //// [typeFromPrivatePropertyAssignment.js]
+"use strict";
 class C {
     #a;
     #b;

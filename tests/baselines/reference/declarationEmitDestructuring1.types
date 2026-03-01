@@ -1,33 +1,59 @@
-=== tests/cases/compiler/declarationEmitDestructuring1.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuring1.ts] ////
+
+=== declarationEmitDestructuring1.ts ===
 function foo([a, b, c]: [string, string, string]): void { }
 >foo : ([a, b, c]: [string, string, string]) => void
+>    : ^         ^^                        ^^^^^    
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 function far([a, [b], [[c]]]: [number, boolean[], string[][]]): void { }
 >far : ([a, [b], [[c]]]: [number, boolean[], string[][]]) => void
+>    : ^               ^^                               ^^^^^    
 >a : number
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >c : string
+>  : ^^^^^^
 
 function bar({a1, b1, c1}: { a1: number, b1: boolean, c1: string }): void { }
->bar : ({ a1, b1, c1 }: {    a1: number;    b1: boolean;    c1: string;}) => void
+>bar : ({ a1, b1, c1 }: { a1: number; b1: boolean; c1: string; }) => void
+>    : ^              ^^                                        ^^^^^    
 >a1 : number
+>   : ^^^^^^
 >b1 : boolean
+>   : ^^^^^^^
 >c1 : string
+>   : ^^^^^^
 >a1 : number
+>   : ^^^^^^
 >b1 : boolean
+>   : ^^^^^^^
 >c1 : string
+>   : ^^^^^^
 
 function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }): void { } 
->baz : ({ a2, b2: { b1, c1 } }: {    a2: number;    b2: {        b1: boolean;        c1: string;    };}) => void
+>baz : ({ a2, b2: { b1, c1 } }: { a2: number; b2: { b1: boolean; c1: string; }; }) => void
+>    : ^                      ^^                                                 ^^^^^    
 >a2 : number
+>   : ^^^^^^
 >b2 : any
+>   : ^^^
 >b1 : boolean
+>   : ^^^^^^^
 >c1 : string
+>   : ^^^^^^
 >a2 : number
+>   : ^^^^^^
 >b2 : { b1: boolean; c1: string; }
+>   : ^^^^^^       ^^^^^^      ^^^
 >b1 : boolean
+>   : ^^^^^^^
 >c1 : string
+>   : ^^^^^^
 

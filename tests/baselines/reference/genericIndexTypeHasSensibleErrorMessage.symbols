@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericIndexTypeHasSensibleErrorMessage.ts ===
+//// [tests/cases/compiler/genericIndexTypeHasSensibleErrorMessage.ts] ////
+
+=== genericIndexTypeHasSensibleErrorMessage.ts ===
 type Wat<T extends string> = { [x: T]: string };
 >Wat : Symbol(Wat, Decl(genericIndexTypeHasSensibleErrorMessage.ts, 0, 0))
 >T : Symbol(T, Decl(genericIndexTypeHasSensibleErrorMessage.ts, 0, 9))

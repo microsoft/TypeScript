@@ -1,0 +1,37 @@
+// === goToSourceDefinition ===
+// === /home/src/workspaces/project/node_modules/foo/src/a.ts ===
+// export const [|a |]= 'a';
+
+// === /home/src/workspaces/project/b.ts ===
+// import { a } from 'foo/a';
+// a/*GOTO SOURCE DEF*/
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /home/src/workspaces/project/node_modules/foo/src/a.ts ===
+// export const [|a |]= 'a';
+
+// === /home/src/workspaces/project/b.ts ===
+// import { a } from 'foo/a';
+// [|a|]/*GOTO DEF*/
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

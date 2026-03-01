@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsAsPropertyName2.ts] ////
+
 //// [argumentsAsPropertyName2.ts]
 // target: es5
 
@@ -13,17 +15,14 @@ function foo() {
 
 
 //// [argumentsAsPropertyName2.js]
+"use strict";
 // target: es5
 function foo() {
-    var _loop_1 = function (x) {
-        var i;
+    for (let x = 0; x < 1; ++x) {
+        let i;
         [].forEach(function () { i; });
         ({ arguments: 0 });
-        ({ arguments: arguments_1 });
-        ({ arguments: arguments_1 });
-    };
-    var arguments_1 = arguments;
-    for (var x = 0; x < 1; ++x) {
-        _loop_1(x);
+        ({ arguments });
+        ({ arguments: arguments });
     }
 }

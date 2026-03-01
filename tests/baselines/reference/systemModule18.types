@@ -1,14 +1,20 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/systemModule18.ts] ////
+
+=== index.ts ===
 export import React = require("./react.js");
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
-=== tests/cases/compiler/react.ts ===
+=== react.ts ===
 export function createElement() {}
 >createElement : () => void
+>              : ^^^^^^^^^^
 
 export function lazy() {}
 >lazy : () => void
+>     : ^^^^^^^^^^
 
 export function useState() {}
 >useState : () => void
+>         : ^^^^^^^^^^
 

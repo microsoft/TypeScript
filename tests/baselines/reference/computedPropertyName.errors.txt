@@ -1,13 +1,13 @@
-tests/cases/conformance/externalModules/typeOnly/component.ts(12,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-tests/cases/conformance/externalModules/typeOnly/component.ts(16,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-tests/cases/conformance/externalModules/typeOnly/component.ts(20,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-tests/cases/conformance/externalModules/typeOnly/component.ts(24,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
+component.ts(12,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
+component.ts(16,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
+component.ts(20,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
+component.ts(24,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
 
 
-==== tests/cases/conformance/externalModules/typeOnly/framework-hooks.ts (0 errors) ====
+==== framework-hooks.ts (0 errors) ====
     export const onInit = Symbol("onInit");
     
-==== tests/cases/conformance/externalModules/typeOnly/component.ts (4 errors) ====
+==== component.ts (4 errors) ====
     import type { onInit } from "./framework-hooks";
     
     interface Component {
@@ -22,28 +22,28 @@ tests/cases/conformance/externalModules/typeOnly/component.ts(24,4): error TS136
       [onInit]: 0 // Error
        ~~~~~~
 !!! error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/component.ts:1:15: 'onInit' was imported here.
+!!! related TS1376 component.ts:1:15: 'onInit' was imported here.
     };
     
     class C {
       [onInit]: any; // Error (because class fields)
        ~~~~~~
 !!! error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/component.ts:1:15: 'onInit' was imported here.
+!!! related TS1376 component.ts:1:15: 'onInit' was imported here.
     }
     
     class D {
       [onInit] = 0; // Error
        ~~~~~~
 !!! error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/component.ts:1:15: 'onInit' was imported here.
+!!! related TS1376 component.ts:1:15: 'onInit' was imported here.
     }
     
     class E {
       [onInit]() {} // Error
        ~~~~~~
 !!! error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/component.ts:1:15: 'onInit' was imported here.
+!!! related TS1376 component.ts:1:15: 'onInit' was imported here.
     }
     
     abstract class F {

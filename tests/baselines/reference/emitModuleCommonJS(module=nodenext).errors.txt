@@ -1,0 +1,25 @@
+a.js(4,11): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+a.js(5,10): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+b.ts(3,10): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+
+
+==== a.js (2 errors) ====
+    {
+      require("" + "./foo.ts");
+      import("" + "./foo.ts");
+      require("./foo.ts");
+              ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+      import("./foo.ts");
+             ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+    }
+    
+==== b.ts (1 errors) ====
+    {
+      import("" + "./foo.ts");
+      import("./foo.ts");
+             ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+    }
+    

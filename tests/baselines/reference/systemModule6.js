@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule6.ts] ////
+
 //// [systemModule6.ts]
 export class C {}
 function foo() {
@@ -16,11 +18,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
+            C = class C {
+            };
             exports_1("C", C);
         }
     };

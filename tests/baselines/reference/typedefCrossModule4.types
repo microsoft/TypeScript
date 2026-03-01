@@ -1,15 +1,25 @@
-=== tests/cases/conformance/jsdoc/mod3.js ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule4.ts] ////
+
+=== mod3.js ===
 /** @typedef {number} Foo */
 class Bar { }
 >Bar : Bar
+>    : ^^^
 
 module.exports = { Foo: Bar };
 >module.exports = { Foo: Bar } : { Foo: typeof Bar; }
+>                              : ^^^^^^^^^^^^^^^^^^^^
 >module.exports : { Foo: typeof Bar; }
+>               : ^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { Foo: typeof Bar; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { Foo: typeof Bar; }
+>        : ^^^^^^^^^^^^^^^^^^^^
 >{ Foo: Bar } : { Foo: typeof Bar; }
+>             : ^^^^^^^^^^^^^^^^^^^^
 >Foo : typeof Bar
+>    : ^^^^^^^^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
 

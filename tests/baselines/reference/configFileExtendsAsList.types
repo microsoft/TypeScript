@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/configFileExtendsAsList.ts] ////
+
+=== /index.ts ===
+function f(x) { } // noImplicitAny error
+>f : (x: any) => void
+>  : ^ ^^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+
+let y: string;
+>y : string
+>  : ^^^^^^
+
+y.toLowerCase(); // strictNullChecks error
+>y.toLowerCase() : string
+>                : ^^^^^^
+>y.toLowerCase : () => string
+>              : ^^^^^^      
+>y : string
+>  : ^^^^^^
+>toLowerCase : () => string
+>            : ^^^^^^      
+

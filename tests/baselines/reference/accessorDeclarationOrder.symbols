@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorDeclarationOrder.ts ===
+//// [tests/cases/compiler/accessorDeclarationOrder.ts] ////
+
+=== accessorDeclarationOrder.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(accessorDeclarationOrder.ts, 0, 0))
 

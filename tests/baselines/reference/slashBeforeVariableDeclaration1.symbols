@@ -1,4 +1,6 @@
-=== tests/cases/compiler/slashBeforeVariableDeclaration1.ts ===
+//// [tests/cases/compiler/slashBeforeVariableDeclaration1.ts] ////
+
+=== slashBeforeVariableDeclaration1.ts ===
 \ declare var v;
 >v : Symbol(v, Decl(slashBeforeVariableDeclaration1.ts, 0, 13))
 

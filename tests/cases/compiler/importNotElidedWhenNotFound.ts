@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 import X from 'file';
 import Z from 'other_file';
 

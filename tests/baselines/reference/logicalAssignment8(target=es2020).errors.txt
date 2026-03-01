@@ -1,7 +1,7 @@
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts(12,5): error TS2532: Object is possibly 'undefined'.
+logicalAssignment8.ts(12,5): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts (1 errors) ====
+==== logicalAssignment8.ts (1 errors) ====
     declare const bar: { value?: number[] } | undefined
     
     function foo1(results: number[] | undefined) {

@@ -1,4 +1,7 @@
-=== tests/cases/compiler/asiAmbientFunctionDeclaration.ts ===
+//// [tests/cases/compiler/asiAmbientFunctionDeclaration.ts] ////
+
+=== asiAmbientFunctionDeclaration.ts ===
 declare function foo()
 >foo : () => any
+>    : ^^^^^^^^^
 

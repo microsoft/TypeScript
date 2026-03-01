@@ -1,4 +1,6 @@
-=== tests/cases/compiler/illegalSuperCallsInConstructor.ts ===
+//// [tests/cases/compiler/illegalSuperCallsInConstructor.ts] ////
+
+=== illegalSuperCallsInConstructor.ts ===
 class Base {
 >Base : Symbol(Base, Decl(illegalSuperCallsInConstructor.ts, 0, 0))
 

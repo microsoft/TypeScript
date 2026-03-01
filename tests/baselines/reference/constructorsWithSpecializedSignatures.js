@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorsWithSpecializedSignatures.ts] ////
+
 //// [constructorsWithSpecializedSignatures.ts]
 // errors
 declare class C {
@@ -44,15 +46,12 @@ interface I2 {
 }
 
 //// [constructorsWithSpecializedSignatures.js]
+"use strict";
 // errors
-var D = /** @class */ (function () {
-    function D(x) {
-    }
-    return D;
-}());
+class D {
+    constructor(x) { }
+}
 // overloads are ok
-var D2 = /** @class */ (function () {
-    function D2(x) {
-    } // error
-    return D2;
-}());
+class D2 {
+    constructor(x) { } // error
+}

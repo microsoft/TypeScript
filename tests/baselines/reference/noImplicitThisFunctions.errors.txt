@@ -1,11 +1,11 @@
-tests/cases/compiler/noImplicitThisFunctions.ts(13,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/noImplicitThisFunctions.ts(17,38): error TS7041: The containing arrow function captures the global value of 'this'.
-tests/cases/compiler/noImplicitThisFunctions.ts(18,22): error TS7041: The containing arrow function captures the global value of 'this'.
-tests/cases/compiler/noImplicitThisFunctions.ts(20,36): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/noImplicitThisFunctions.ts(21,50): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+noImplicitThisFunctions.ts(13,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+noImplicitThisFunctions.ts(17,38): error TS7041: The containing arrow function captures the global value of 'this'.
+noImplicitThisFunctions.ts(18,22): error TS7041: The containing arrow function captures the global value of 'this'.
+noImplicitThisFunctions.ts(20,36): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+noImplicitThisFunctions.ts(21,50): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== tests/cases/compiler/noImplicitThisFunctions.ts (5 errors) ====
+==== noImplicitThisFunctions.ts (5 errors) ====
     function f1(x) {
         // implicit any is still allowed
         return x + 1;

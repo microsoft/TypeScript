@@ -1,41 +1,64 @@
-=== tests/cases/compiler/doubleUnderscoreLabels.ts ===
+//// [tests/cases/compiler/doubleUnderscoreLabels.ts] ////
+
+=== doubleUnderscoreLabels.ts ===
 function doThing() {
 >doThing : () => void
+>        : ^^^^^^^^^^
 
     __call: while (true) {
 >__call : any
+>       : ^^^
 >true : true
+>     : ^^^^
 
         aLabel: for (let i = 0; i < 10; i++) {
 >aLabel : any
+>       : ^^^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
             if (i === 3) {
 >i === 3 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
                 break __call;
 >__call : any
+>       : ^^^
             }
             if (i === 5) {
 >i === 5 : boolean
+>        : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >5 : 5
+>  : ^
 
                 break aLabel;
 >aLabel : any
+>       : ^^^
             }
         }
     }
 }
 doThing();
 >doThing() : void
+>          : ^^^^
 >doThing : () => void
+>        : ^^^^^^^^^^
 

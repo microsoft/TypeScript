@@ -1,208 +1,328 @@
-=== tests/cases/compiler/divergentAccessorsTypes1.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes1.ts] ////
+
+=== divergentAccessorsTypes1.ts ===
 class Test1 {
 >Test1 : Test1
+>      : ^^^^^
 
     get foo(): string { return "" }
 >foo : string
+>    : ^^^^^^
 >"" : ""
+>   : ^^
 
     set foo(s: string | number) {
 >foo : string
+>    : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
         let a = s as string;
 >a : string
+>  : ^^^^^^
 >s as string : string
+>            : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
         let b = s as number;
 >b : number
+>  : ^^^^^^
 >s as number : number
+>            : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
     }
 
     get bar(): string | number { return "" }
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     set bar(s: string | number | boolean) {
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 >s : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 interface Test2 {
     get foo(): string;
 >foo : string
+>    : ^^^^^^
 
     set foo(s: string | number);
 >foo : string
+>    : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
     get bar(): string | number;
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 
     set bar(s: string | number | boolean);
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 >s : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 type Test3 = {
->Test3 : { foo: string; bar: string | number; }
+>Test3 : Test3
+>      : ^^^^^
 
     get foo(): string;
 >foo : string
+>    : ^^^^^^
 
     set foo(s: string | number);
 >foo : string
+>    : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
     get bar(): string | number;
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 
     set bar(s: string | number | boolean);
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 >s : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 {
     const t = new Test1();
 >t : Test1
+>  : ^^^^^
 >new Test1() : Test1
+>            : ^^^^^
 >Test1 : typeof Test1
+>      : ^^^^^^^^^^^^
 
     t.foo = 32;
 >t.foo = 32 : 32
+>           : ^^
 >t.foo : string | number
+>      : ^^^^^^^^^^^^^^^
 >t : Test1
+>  : ^^^^^
 >foo : string | number
+>    : ^^^^^^^^^^^^^^^
 >32 : 32
+>   : ^^
 
     let m: string = t.foo;
 >m : string
+>  : ^^^^^^
 >t.foo : string
+>      : ^^^^^^
 >t : Test1
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 
     // See how CFA interacts with out-of-type writes
     t.bar = 42;
 >t.bar = 42 : 42
+>           : ^^
 >t.bar : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Test1
+>  : ^^^^^
 >bar : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     let n: number = t.bar;
 >n : number
+>  : ^^^^^^
 >t.bar : number
+>      : ^^^^^^
 >t : Test1
+>  : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     t.bar = false;
 >t.bar = false : false
+>              : ^^^^^
 >t.bar : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Test1
+>  : ^^^^^
 >bar : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     let o = t.bar;
 >o : string | number
+>  : ^^^^^^^^^^^^^^^
 >t.bar : string | number
+>      : ^^^^^^^^^^^^^^^
 >t : Test1
+>  : ^^^^^
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 }
 
 {
     const t = {} as Test2;
 >t : Test2
+>  : ^^^^^
 >{} as Test2 : Test2
+>            : ^^^^^
 >{} : {}
+>   : ^^
 
     t.foo = 32;
 >t.foo = 32 : 32
+>           : ^^
 >t.foo : string | number
+>      : ^^^^^^^^^^^^^^^
 >t : Test2
+>  : ^^^^^
 >foo : string | number
+>    : ^^^^^^^^^^^^^^^
 >32 : 32
+>   : ^^
 
     let m: string = t.foo;
 >m : string
+>  : ^^^^^^
 >t.foo : string
+>      : ^^^^^^
 >t : Test2
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 
     // See how CFA interacts with out-of-type writes
     t.bar = 42;
 >t.bar = 42 : 42
+>           : ^^
 >t.bar : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Test2
+>  : ^^^^^
 >bar : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     let n: number = t.bar;
 >n : number
+>  : ^^^^^^
 >t.bar : number
+>      : ^^^^^^
 >t : Test2
+>  : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     t.bar = false;
 >t.bar = false : false
+>              : ^^^^^
 >t.bar : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Test2
+>  : ^^^^^
 >bar : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     let o = t.bar;
 >o : string | number
+>  : ^^^^^^^^^^^^^^^
 >t.bar : string | number
+>      : ^^^^^^^^^^^^^^^
 >t : Test2
+>  : ^^^^^
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 }
 
 {
     const t = {} as Test3;
 >t : Test3
+>  : ^^^^^
 >{} as Test3 : Test3
+>            : ^^^^^
 >{} : {}
+>   : ^^
 
     t.foo = 32;
 >t.foo = 32 : 32
+>           : ^^
 >t.foo : string | number
+>      : ^^^^^^^^^^^^^^^
 >t : Test3
+>  : ^^^^^
 >foo : string | number
+>    : ^^^^^^^^^^^^^^^
 >32 : 32
+>   : ^^
 
     let m: string = t.foo;
 >m : string
+>  : ^^^^^^
 >t.foo : string
+>      : ^^^^^^
 >t : Test3
+>  : ^^^^^
 >foo : string
+>    : ^^^^^^
 
     // See how CFA interacts with out-of-type writes
     t.bar = 42;
 >t.bar = 42 : 42
+>           : ^^
 >t.bar : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Test3
+>  : ^^^^^
 >bar : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     let n: number = t.bar;
 >n : number
+>  : ^^^^^^
 >t.bar : number
+>      : ^^^^^^
 >t : Test3
+>  : ^^^^^
 >bar : number
+>    : ^^^^^^
 
     t.bar = false;
 >t.bar = false : false
+>              : ^^^^^
 >t.bar : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Test3
+>  : ^^^^^
 >bar : string | number | boolean
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     let o = t.bar;
 >o : string | number
+>  : ^^^^^^^^^^^^^^^
 >t.bar : string | number
+>      : ^^^^^^^^^^^^^^^
 >t : Test3
+>  : ^^^^^
 >bar : string | number
+>    : ^^^^^^^^^^^^^^^
 }

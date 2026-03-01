@@ -1,14 +1,21 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface02.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface02.ts] ////
+
+=== asiPreventsParsingAsInterface02.ts ===
 function f(interface: number, I: string) {
 >f : (interface: number, I: string) => void
+>  : ^         ^^      ^^ ^^      ^^^^^^^^^
 >interface : number
+>          : ^^^^^^
 >I : string
+>  : ^^^^^^
 
     interface   // This should be the identifier 'interface'
 >interface : number
+>          : ^^^^^^
 
     I           // This should be the identifier 'I'
 >I : string
+>  : ^^^^^^
 
     {}          // This should be a block body
 }

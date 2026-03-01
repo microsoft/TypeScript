@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts ===
+//// [tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts] ////
+
+=== instanceofWithStructurallyIdenticalTypes.ts ===
 // Repro from #7271
 
 class C1 { item: string }
@@ -95,9 +97,9 @@ function foo2(x: C1 | C2 | C3): string {
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 23, 14))
 
         return x.item;
->x.item : Symbol(C1.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
+>x.item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10), Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
 >x : Symbol(x, Decl(instanceofWithStructurallyIdenticalTypes.ts, 23, 14))
->item : Symbol(C1.item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10))
+>item : Symbol(item, Decl(instanceofWithStructurallyIdenticalTypes.ts, 2, 10), Decl(instanceofWithStructurallyIdenticalTypes.ts, 4, 10))
     }
     else if (isC2(x)) {
 >isC2 : Symbol(isC2, Decl(instanceofWithStructurallyIdenticalTypes.ts, 19, 66))

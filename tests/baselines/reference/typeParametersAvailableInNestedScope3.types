@@ -1,40 +1,63 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope3.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope3.ts] ////
+
+=== typeParametersAvailableInNestedScope3.ts ===
 function foo<T>(v: T) {
->foo : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
+>foo : <T>(v: T) => { a: <T_1>(a: T_1) => T_1; b: () => T; c: <T_1>(v: T_1) => { a: <T_2>(a: T_2) => T_2; b: () => T_1; }; }
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^   ^^^^^^
 >v : T
+>  : ^
 
     function a<T>(a: T) { return a; }
 >a : <T>(a: T) => T
+>  : ^ ^^ ^^ ^^^^^^
 >a : T
+>  : ^
 >a : T
+>  : ^
 
     function b(): T { return v; }
 >b : () => T
+>  : ^^^^^^ 
 >v : T
+>  : ^
 
     function c<T>(v: T) {
->c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
+>c : <T>(v: T) => { a: <T_1>(a: T_1) => T_1; b: () => T; }
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^ ^^^
 >v : T
+>  : ^
 
         function a<T>(a: T) { return a; }
 >a : <T>(a: T) => T
+>  : ^ ^^ ^^ ^^^^^^
 >a : T
+>  : ^
 >a : T
+>  : ^
 
         function b(): T { return v; }
 >b : () => T
+>  : ^^^^^^ 
 >v : T
+>  : ^
 
         return { a, b };
->{ a, b } : { a: <T>(a: T) => T; b: () => T; }
->a : <T>(a: T) => T
+>{ a, b } : { a: <T_1>(a: T_1) => T_1; b: () => T; }
+>         : ^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^ ^^^
+>a : <T_1>(a: T_1) => T_1
+>  : ^^^^^^ ^^   ^^^^^^^^
 >b : () => T
+>  : ^^^^^^ 
     }
 
     return { a, b, c };
->{ a, b, c } : { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
->a : <T>(a: T) => T
+>{ a, b, c } : { a: <T_1>(a: T_1) => T_1; b: () => T; c: <T_1>(v: T_1) => { a: <T_2>(a: T_2) => T_2; b: () => T_1; }; }
+>            : ^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^   ^^^^^^
+>a : <T_1>(a: T_1) => T_1
+>  : ^^^^^^ ^^   ^^^^^^^^
 >b : () => T
->c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
+>  : ^^^^^^ 
+>c : <T_1>(v: T_1) => { a: <T_2>(a: T_2) => T_2; b: () => T_1; }
+>  : ^^^^^^ ^^   ^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^   ^^^
 }
 

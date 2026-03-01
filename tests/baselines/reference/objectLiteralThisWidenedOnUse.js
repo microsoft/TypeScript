@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralThisWidenedOnUse.ts] ////
+
 //// [objectLiteralThisWidenedOnUse.ts]
 interface Foo { bar: boolean; }
 
@@ -14,14 +16,15 @@ var GlobalIns = {
 };
 
 //// [objectLiteralThisWidenedOnUse.js]
+"use strict";
 var GlobalIns = {
     prop1: 1,
     prop2: 2,
     prop3: 3,
-    test: function () {
+    test() {
         this.accept_foo(this);
     },
-    accept_foo: function (foo) {
+    accept_foo(foo) {
         return !!foo && !!foo.bar;
     }
 };

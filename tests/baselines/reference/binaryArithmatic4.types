@@ -1,7 +1,9 @@
-=== tests/cases/compiler/binaryArithmatic4.ts ===
+//// [tests/cases/compiler/binaryArithmatic4.ts] ////
+
+=== binaryArithmatic4.ts ===
 var v = null | null;
 >v : number
+>  : ^^^^^^
 >null | null : number
->null : null
->null : null
+>            : ^^^^^^
 

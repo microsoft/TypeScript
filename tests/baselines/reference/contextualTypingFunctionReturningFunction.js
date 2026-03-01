@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingFunctionReturningFunction.ts] ////
+
 //// [contextualTypingFunctionReturningFunction.ts]
 interface I {
 	a(s: string): void;
@@ -13,7 +15,8 @@ f({
 
 
 //// [contextualTypingFunctionReturningFunction.js]
+"use strict";
 f({
-    a: function (s) { },
-    b: function () { return function (n) { }; }
+    a: s => { },
+    b: () => n => { },
 });

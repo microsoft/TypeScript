@@ -1,165 +1,273 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromJSConstructor.ts] ////
+
+=== a.js ===
 function Installer () {
 >Installer : typeof Installer
+>          : ^^^^^^^^^^^^^^^^
 
     // arg: number
     this.arg = 0
 >this.arg = 0 : 0
+>             : ^
 >this.arg : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >arg : any
+>    : ^^^
 >0 : 0
+>  : ^
 
     // unknown: string | boolean | null
     this.unknown = null
 >this.unknown = null : null
+>                    : ^^^^
 >this.unknown : any
+>             : ^^^
 >this : this
+>     : ^^^^
 >unknown : any
->null : null
+>        : ^^^
 
     // twice: string | undefined
     this.twice = undefined
 >this.twice = undefined : undefined
+>                       : ^^^^^^^^^
 >this.twice : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >twice : any
+>      : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     this.twice = 'hi'
 >this.twice = 'hi' : "hi"
+>                  : ^^^^
 >this.twice : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >twice : any
+>      : ^^^
 >'hi' : "hi"
+>     : ^^^^
 
     // twices: any[] | null
     this.twices = []
 >this.twices = [] : never[]
+>                 : ^^^^^^^
 >this.twices : any
+>            : ^^^
 >this : this
+>     : ^^^^
 >twices : any
+>       : ^^^
 >[] : never[]
+>   : ^^^^^^^
 
     this.twices = null
 >this.twices = null : null
+>                   : ^^^^
 >this.twices : any
+>            : ^^^
 >this : this
+>     : ^^^^
 >twices : any
->null : null
+>       : ^^^
 }
 Installer.prototype.first = function () {
 >Installer.prototype.first = function () {    this.arg = 'hi' // error    this.unknown = 'hi' // ok    this.newProperty = 1 // ok: number | boolean    this.twice = undefined // ok    this.twice = 'hi' // ok} : () => void
+>                                                                                                                                                                                                               : ^^^^^^^^^^
 >Installer.prototype.first : any
+>                          : ^^^
 >Installer.prototype : any
+>                    : ^^^
 >Installer : typeof Installer
+>          : ^^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >first : any
+>      : ^^^
 >function () {    this.arg = 'hi' // error    this.unknown = 'hi' // ok    this.newProperty = 1 // ok: number | boolean    this.twice = undefined // ok    this.twice = 'hi' // ok} : () => void
+>                                                                                                                                                                                   : ^^^^^^^^^^
 
     this.arg = 'hi' // error
 >this.arg = 'hi' : "hi"
+>                : ^^^^
 >this.arg : number
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >arg : number
+>    : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
     this.unknown = 'hi' // ok
 >this.unknown = 'hi' : "hi"
+>                    : ^^^^
 >this.unknown : string | boolean | null
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >unknown : string | boolean | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 
     this.newProperty = 1 // ok: number | boolean
 >this.newProperty = 1 : 1
+>                     : ^
 >this.newProperty : number | boolean | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >newProperty : number | boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     this.twice = undefined // ok
 >this.twice = undefined : undefined
+>                       : ^^^^^^^^^
 >this.twice : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >twice : string
+>      : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     this.twice = 'hi' // ok
 >this.twice = 'hi' : "hi"
+>                  : ^^^^
 >this.twice : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >twice : string
+>      : ^^^^^^
 >'hi' : "hi"
+>     : ^^^^
 }
 Installer.prototype.second = function () {
 >Installer.prototype.second = function () {    this.arg = false // error    this.unknown = false // ok    this.newProperty = false // ok    this.twice = null // error    this.twice = false // error    this.twices.push(1) // error: Object is possibly null    if (this.twices != null) {        this.twices.push('hi')    }} : () => void
+>                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^
 >Installer.prototype.second : any
+>                           : ^^^
 >Installer.prototype : any
+>                    : ^^^
 >Installer : typeof Installer
+>          : ^^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >second : any
+>       : ^^^
 >function () {    this.arg = false // error    this.unknown = false // ok    this.newProperty = false // ok    this.twice = null // error    this.twice = false // error    this.twices.push(1) // error: Object is possibly null    if (this.twices != null) {        this.twices.push('hi')    }} : () => void
+>                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^
 
     this.arg = false // error
 >this.arg = false : false
+>                 : ^^^^^
 >this.arg : number
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >arg : number
+>    : ^^^^^^
 >false : false
+>      : ^^^^^
 
     this.unknown = false // ok
 >this.unknown = false : false
+>                     : ^^^^^
 >this.unknown : string | boolean | null
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >unknown : string | boolean | null
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     this.newProperty = false // ok
 >this.newProperty = false : false
+>                         : ^^^^^
 >this.newProperty : number | boolean | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >newProperty : number | boolean | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
+>      : ^^^^^
 
     this.twice = null // error
 >this.twice = null : null
+>                  : ^^^^
 >this.twice : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >twice : string
->null : null
+>      : ^^^^^^
 
     this.twice = false // error
 >this.twice = false : false
+>                   : ^^^^^
 >this.twice : string
+>           : ^^^^^^
 >this : this
+>     : ^^^^
 >twice : string
+>      : ^^^^^^
 >false : false
+>      : ^^^^^
 
     this.twices.push(1) // error: Object is possibly null
 >this.twices.push(1) : number
+>                    : ^^^^^^
 >this.twices.push : (...items: any[]) => number
+>                 : ^^^^     ^^^^^^^^^^^^      
 >this.twices : any[] | null
+>            : ^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >twices : any[] | null
+>       : ^^^^^^^^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >1 : 1
+>  : ^
 
     if (this.twices != null) {
 >this.twices != null : boolean
+>                    : ^^^^^^^
 >this.twices : any[] | null
+>            : ^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >twices : any[] | null
->null : null
+>       : ^^^^^^^^^^^^
 
         this.twices.push('hi')
 >this.twices.push('hi') : number
+>                       : ^^^^^^
 >this.twices.push : (...items: any[]) => number
+>                 : ^^^^     ^^^^^^^^^^^^      
 >this.twices : any[]
+>            : ^^^^^
 >this : this
+>     : ^^^^
 >twices : any[]
+>       : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >'hi' : "hi"
+>     : ^^^^
     }
 }
 

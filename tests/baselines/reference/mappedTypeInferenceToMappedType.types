@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/mappedTypeInferenceToMappedType.ts] ////
+
+=== mappedTypeInferenceToMappedType.ts ===
+// #56133
+
+declare class Base<T> {
+>Base : Base<T>
+>     : ^^^^^^^
+
+    someProp: T;
+>someProp : T
+>         : ^
+
+    method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
+>method : <U extends unknown[]>(x: { [K in keyof U]: U[K]; }) => Base<U>
+>       : ^ ^^^^^^^^^         ^^ ^^                         ^^^^^       
+>x : { [K in keyof U]: U[K]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare class Derived<T> extends Base<T> {
+>Derived : Derived<T>
+>        : ^^^^^^^^^^
+>Base : Base<T>
+>     : ^^^^^^^
+
+    method<V extends unknown[]>(x: { [K in keyof V]: V[K] }): Base<V>;
+>method : <V extends unknown[]>(x: { [K in keyof V]: V[K]; }) => Base<V>
+>       : ^ ^^^^^^^^^         ^^ ^^                         ^^^^^       
+>x : { [K in keyof V]: V[K]; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^
+}

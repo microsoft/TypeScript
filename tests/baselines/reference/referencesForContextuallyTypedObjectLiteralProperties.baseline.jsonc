@@ -1,206 +1,86 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts ===
-// interface IFoo { /*FIND ALL REFS*/[|xy|]: number; }
+// interface IFoo { /*FIND ALL REFS*/<|[|{| isDefinition: true |}xy|]: number;|> }
 // 
 // // Assignment
-// var a1: IFoo = { [|xy|]: 0 };
-// var a2: IFoo = { [|xy|]: 0 };
+// var a1: IFoo = { <|[|{| isWriteAccess: true |}xy|]: 0|> };
+// var a2: IFoo = { <|[|{| isWriteAccess: true |}xy|]: 0|> };
 // 
 // // Function call
 // function consumer(f: IFoo) { }
-// consumer({ [|xy|]: 1 });
+// consumer({ <|[|{| isWriteAccess: true |}xy|]: 1|> });
 // 
 // // Type cast
-// var c = <IFoo>{ [|xy|]: 0 };
+// var c = <IFoo>{ <|[|{| isWriteAccess: true |}xy|]: 0|> };
 // 
 // // Array literal
-// var ar: IFoo[] = [{ [|xy|]: 1 }, { [|xy|]: 2 }];
+// var ar: IFoo[] = [{ <|[|{| isWriteAccess: true |}xy|]: 1|> }, { <|[|{| isWriteAccess: true |}xy|]: 2|> }];
 // 
 // // Nested object literal
-// var ob: { ifoo: IFoo } = { ifoo: { [|xy|]: 0 } };
+// var ob: { ifoo: IFoo } = { ifoo: { <|[|{| isWriteAccess: true |}xy|]: 0|> } };
 // 
 // // Widened type
-// var w: IFoo = { [|xy|]: undefined };
+// var w: IFoo = { <|[|{| isWriteAccess: true |}xy|]: undefined|> };
 // 
 // // Untped -- should not be included
 // var u = { xy: 0 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-      "kind": "property",
-      "name": "(property) IFoo.xy: number",
-      "textSpan": {
-        "start": 17,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "IFoo",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "xy",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 17,
-        "length": 11
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 63,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 63,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 89,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 89,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 158,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 158,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 198,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 198,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 245,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 245,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 256,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 256,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 327,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 327,
-          "length": 5
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 371,
-          "length": 2
-        },
-        "fileName": "/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts",
-        "contextSpan": {
-          "start": 371,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts ===
+  // interface IFoo { /*FIND ALL REFS*/<|[|xy|]: number;|> }
+  // 
+  // // Assignment
+  // var a1: IFoo = { xy: 0 };
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) IFoo.xy: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "IFoo",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "xy",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

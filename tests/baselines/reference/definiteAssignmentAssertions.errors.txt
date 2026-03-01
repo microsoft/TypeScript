@@ -1,20 +1,20 @@
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(5,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(20,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(21,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(22,13): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(23,5): error TS7008: Member 'd' implicitly has an 'any' type.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(23,6): error TS1264: Declarations with definite assignment assertions must also have type annotations.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(29,6): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(35,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(69,10): error TS1264: Declarations with definite assignment assertions must also have type annotations.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(70,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(71,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(77,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(80,7): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertions.ts(5,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+definiteAssignmentAssertions.ts(20,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+definiteAssignmentAssertions.ts(21,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+definiteAssignmentAssertions.ts(22,13): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertions.ts(23,5): error TS7008: Member 'd' implicitly has an 'any' type.
+definiteAssignmentAssertions.ts(23,6): error TS1264: Declarations with definite assignment assertions must also have type annotations.
+definiteAssignmentAssertions.ts(29,6): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertions.ts(35,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertions.ts(69,10): error TS1264: Declarations with definite assignment assertions must also have type annotations.
+definiteAssignmentAssertions.ts(70,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+definiteAssignmentAssertions.ts(71,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
+definiteAssignmentAssertions.ts(76,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertions.ts(77,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+definiteAssignmentAssertions.ts(80,7): error TS1255: A definite assignment assertion '!' is not permitted in this context.
 
 
-==== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts (14 errors) ====
+==== definiteAssignmentAssertions.ts (14 errors) ====
     // Suppress strict property initialization check
     
     class C1 {

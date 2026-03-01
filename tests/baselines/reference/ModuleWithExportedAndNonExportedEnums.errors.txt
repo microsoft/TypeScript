@@ -1,8 +1,8 @@
-tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts(10,11): error TS2339: Property 'Day' does not exist on type 'typeof A'.
+ModuleWithExportedAndNonExportedEnums.ts(10,11): error TS2339: Property 'Day' does not exist on type 'typeof A'.
 
 
-==== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts (1 errors) ====
-    module A {
+==== ModuleWithExportedAndNonExportedEnums.ts (1 errors) ====
+    namespace A {
         export enum Color { Red, Blue }
         enum Day { Monday, Tuesday }
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializedLambdaTypeArguments.ts ===
+//// [tests/cases/compiler/specializedLambdaTypeArguments.ts] ////
+
+=== specializedLambdaTypeArguments.ts ===
 class X<A> {
 >X : Symbol(X, Decl(specializedLambdaTypeArguments.ts, 0, 0))
 >A : Symbol(A, Decl(specializedLambdaTypeArguments.ts, 0, 8))

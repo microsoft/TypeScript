@@ -1,10 +1,10 @@
-tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts(10,11): error TS2322: Type '0 | 9' is not assignable to type '9'.
+controlFlowBindingPatternOrder.ts(10,11): error TS2322: Type '0 | 9' is not assignable to type '9'.
   Type '0' is not assignable to type '9'.
-tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts(25,11): error TS2322: Type '0 | 9 | 8' is not assignable to type '0 | 8'.
+controlFlowBindingPatternOrder.ts(25,11): error TS2322: Type '0 | 9 | 8' is not assignable to type '0 | 8'.
   Type '9' is not assignable to type '0 | 8'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts (2 errors) ====
+==== controlFlowBindingPatternOrder.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
     {
         let a: 0 | 1 = 0;

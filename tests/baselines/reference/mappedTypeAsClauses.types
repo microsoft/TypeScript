@@ -1,75 +1,117 @@
-=== tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts] ////
+
+=== mappedTypeAsClauses.ts ===
 // Mapped type 'as N' clauses
 
 type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 >Getters : Getters<T>
+>        : ^^^^^^^^^^
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
->TG1 : { getFoo: () => string; getBar: () => number; getBaz: () => { z: boolean; }; }
+>TG1 : TG1
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 >baz : { z: boolean; }
+>    : ^^^^^       ^^^
 >z : boolean
+>  : ^^^^^^^
 
 // Mapped type with 'as N' clause has no constraint on 'in T' clause
 
 type PropDef<K extends keyof any, T> = { name: K, type: T };
 >PropDef : PropDef<K, T>
+>        : ^^^^^^^^^^^^^
 >name : K
+>     : ^
 >type : T
+>     : ^
 
 type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: P['type'] };
 >TypeFromDefs : TypeFromDefs<T>
+>             : ^^^^^^^^^^^^^^^
 
 type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
->TP1 : { a: string | boolean; b: number; }
+>TP1 : TP1
+>    : ^^^
 >name : "a"
+>     : ^^^
 >type : string
+>     : ^^^^^^
 >name : "b"
+>     : ^^^
 >type : number
+>     : ^^^^^^
 >name : "a"
+>     : ^^^
 >type : boolean
+>     : ^^^^^^^
 
 // No array or tuple type mapping when 'as N' clause present
 
 type TA1 = Getters<string[]>;
->TA1 : { getConcat: () => { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }; getIndexOf: () => (searchElement: string, fromIndex?: number | undefined) => number; getLastIndexOf: () => (searchElement: string, fromIndex?: number | undefined) => number; getSlice: () => (start?: number | undefined, end?: number | undefined) => string[]; getLength: () => number; getToString: () => () => string; getToLocaleString: () => () => string; getPop: () => () => string | undefined; getPush: () => (...items: string[]) => number; getJoin: () => (separator?: string | undefined) => string; getReverse: () => () => string[]; getShift: () => () => string | undefined; getSort: () => (compareFn?: ((a: string, b: string) => number) | undefined) => string[]; getSplice: () => { (start: number, deleteCount?: number | undefined): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }; getUnshift: () => (...items: string[]) => number; getEvery: () => { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }; getSome: () => (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any) => boolean; getForEach: () => (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void; getMap: () => <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]; getFilter: () => { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }; getReduce: () => { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }; getReduceRight: () => { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }; }
+>TA1 : TA1
+>    : ^^^
 
 type TA2 = Getters<[number, boolean]>;
->TA2 : { getConcat: () => { (...items: ConcatArray<number | boolean>[]): (number | boolean)[]; (...items: (number | boolean | ConcatArray<number | boolean>)[]): (number | boolean)[]; }; getIndexOf: () => (searchElement: number | boolean, fromIndex?: number | undefined) => number; getLastIndexOf: () => (searchElement: number | boolean, fromIndex?: number | undefined) => number; getSlice: () => (start?: number | undefined, end?: number | undefined) => (number | boolean)[]; getLength: () => 2; getToString: () => () => string; getToLocaleString: () => () => string; getPop: () => () => number | boolean | undefined; getPush: () => (...items: (number | boolean)[]) => number; getJoin: () => (separator?: string | undefined) => string; getReverse: () => () => (number | boolean)[]; getShift: () => () => number | boolean | undefined; getSort: () => (compareFn?: ((a: number | boolean, b: number | boolean) => number) | undefined) => [number, boolean]; getSplice: () => { (start: number, deleteCount?: number | undefined): (number | boolean)[]; (start: number, deleteCount: number, ...items: (number | boolean)[]): (number | boolean)[]; }; getUnshift: () => (...items: (number | boolean)[]) => number; getEvery: () => { <S extends number | boolean>(predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => unknown, thisArg?: any): boolean; }; getSome: () => (predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => unknown, thisArg?: any) => boolean; getForEach: () => (callbackfn: (value: number | boolean, index: number, array: (number | boolean)[]) => void, thisArg?: any) => void; getMap: () => <U>(callbackfn: (value: number | boolean, index: number, array: (number | boolean)[]) => U, thisArg?: any) => U[]; getFilter: () => { <S extends number | boolean>(predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => unknown, thisArg?: any): (number | boolean)[]; }; getReduce: () => { (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean): number | boolean; (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean, initialValue: number | boolean): number | boolean; <U>(callbackfn: (previousValue: U, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => U, initialValue: U): U; }; getReduceRight: () => { (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean): number | boolean; (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean, initialValue: number | boolean): number | boolean; <U>(callbackfn: (previousValue: U, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => U, initialValue: U): U; }; get0: () => number; get1: () => boolean; }
+>TA2 : TA2
+>    : ^^^
 
 // Filtering using 'as N' clause
 
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 >Methods : Methods<T>
+>        : ^^^^^^^^^^
 
 type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | number }>;
 >TM1 : Methods<{ foo(): number; bar(x: string): boolean; baz: string | number; }>
+>    : ^^^^^^^^^^^^^^^^^      ^^^^^^ ^^      ^^^       ^^^^^^^               ^^^^
 >foo : () => number
+>    : ^^^^^^      
 >bar : (x: string) => boolean
+>    : ^ ^^      ^^^^^       
 >x : string
+>  : ^^^^^^
 >baz : string | number
+>    : ^^^^^^^^^^^^^^^
 
 // Mapping to multiple names using 'as N' clause
 
 type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 >DoubleProp : DoubleProp<T>
+>           : ^^^^^^^^^^^^^
 
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
->TD1 : { a1: string; a2: string; b1: number; b2: number; }
+>TD1 : TD1
+>    : ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
->TD2 : "a1" | "a2" | "b1" | "b2"
+>TD2 : "a1" | "b1" | "a2" | "b2"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
->TD3 : `${keyof U & string}1` | `${keyof U & string}2`
+type TD3<U> = keyof DoubleProp<U>; // keyof DoubleProp<U>
+>TD3 : keyof DoubleProp<U>
+>    : ^^^^^^^^^^^^^^^^^^^
+
+type TD4 = TD3<{ a: string, b: number }>;  // 'a1' | 'a2' | 'b1' | 'b2'
+>TD4 : "a1" | "b1" | "a2" | "b2"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
 
 // Repro from #40619
 
 type Lazyify<T> = {
 >Lazyify : Lazyify<T>
+>        : ^^^^^^^^^^
 
     [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 };
@@ -77,227 +119,364 @@ type Lazyify<T> = {
 interface Person {
     readonly name: string;
 >name : string
+>     : ^^^^^^
 
     age: number;
 >age : number
+>    : ^^^^^^
 
     location?: string;
 >location : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 }
 
 type LazyPerson = Lazyify<Person>;
 >LazyPerson : Lazyify<Person>
+>           : ^^^^^^^^^^^^^^^
 
 // Repro from #40833
 
 type Example = {foo: string, bar: number};
->Example : { foo: string; bar: number; }
+>Example : Example
+>        : ^^^^^^^
 >foo : string
+>    : ^^^^^^
 >bar : number
+>    : ^^^^^^
 
 type PickByValueType<T, U> = {
 >PickByValueType : PickByValueType<T, U>
+>                : ^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof T as T[K] extends U ? K : never]: T[K]
 };
 
 type T1 = PickByValueType<Example, string>;
 >T1 : PickByValueType<Example, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const e1: T1 = {
 >e1 : PickByValueType<Example, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    foo: "hello"} : { foo: string; }
+>                   : ^^^^^^^^^^^^^^^^
 
     foo: "hello"
 >foo : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 };
 type T2 = keyof T1;
 >T2 : "foo"
+>   : ^^^^^
 
 const e2: T2 = "foo";
 >e2 : "foo"
+>   : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 // Repro from #41133
 
 interface Car {
     name: string;
 >name : string
+>     : ^^^^^^
 
     seats: number;
 >seats : number
+>      : ^^^^^^
 
     engine: Engine;
 >engine : Engine
+>       : ^^^^^^
 
     wheels: Wheel[];
 >wheels : Wheel[]
+>       : ^^^^^^^
 }
 
 interface Engine {
     manufacturer: string;
 >manufacturer : string
+>             : ^^^^^^
 
     horsepower: number;
 >horsepower : number
+>           : ^^^^^^
 }
 
 interface Wheel {
     type: "summer" | "winter";
 >type : "summer" | "winter"
+>     : ^^^^^^^^^^^^^^^^^^^
 
     radius: number;
 >radius : number
+>       : ^^^^^^
 }
 
 type Primitive = string | number | boolean;
->Primitive : string | number | boolean
+>Primitive : Primitive
+>          : ^^^^^^^^^
 
 type OnlyPrimitives<T> = { [K in keyof T as T[K] extends Primitive ? K : never]: T[K] };
 >OnlyPrimitives : OnlyPrimitives<T>
+>               : ^^^^^^^^^^^^^^^^^
 
 let primitiveCar: OnlyPrimitives<Car>;  // { name: string; seats: number; }
 >primitiveCar : OnlyPrimitives<Car>
+>             : ^^^^^^^^^^^^^^^^^^^
 
 let keys: keyof OnlyPrimitives<Car>;  //  "name" | "seats"
 >keys : "name" | "seats"
+>     : ^^^^^^^^^^^^^^^^
 
 type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
 >KeysOfPrimitives : keyof OnlyPrimitives<T>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
 let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
 >carKeys : "name" | "seats"
+>        : ^^^^^^^^^^^^^^^^
 
 // Repro from #41453
 
 type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
 >Equal : Equal<A, B>
+>      : ^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
 type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
 >If : If<Cond, Then, Else>
+>   : ^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 type GetKey<S, V> = keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any };
 >GetKey : keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any; }
+>       : ^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 type GetKeyWithIf<S, V> = keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
 >GetKeyWithIf : keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any; }
+>             : ^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
 >GetObjWithIf : GetObjWithIf<S, V>
+>             : ^^^^^^^^^^^^^^^^^^
 
 type Task = {
->Task : { isDone: boolean; }
+>Task : Task
+>     : ^^^^
 
   isDone: boolean;
 >isDone : boolean
+>       : ^^^^^^^
 
 };
 
 type Schema = {
->Schema : { root: {    title: string;    task: Task;}; Task: Task; }
+>Schema : Schema
+>       : ^^^^^^
 
   root: {
 >root : { title: string; task: Task; }
+>     : ^^^^^^^^^      ^^^^^^^^    ^^^
 
     title: string;
 >title : string
+>      : ^^^^^^
 
     task: Task;
 >task : Task
+>     : ^^^^
   }
   Task: Task;
 >Task : Task
+>     : ^^^^
 
 };
 
 type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
 >Res1 : "Task"
+>     : ^^^^^^
 
 type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
 >Res2 : "Task"
+>     : ^^^^^^
 
 type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
 >Res3 : "Task"
+>     : ^^^^^^
 
 // Repro from #44019
 
 type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
 >KeysExtendedBy : keyof { [K in keyof T as U extends T[K] ? K : never]: T[K]; }
+>               : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 interface M {
     a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 }
 
 function f(x: KeysExtendedBy<M, number>) {
 >f : (x: KeysExtendedBy<M, number>) => "b"
+>  : ^ ^^                         ^^^^^^^^
 >x : "b"
+>  : ^^^
 
     return x;
 >x : "b"
+>  : ^^^
 }
 
 f("a");  // Error, should allow only "b"
 >f("a") : "b"
->f : (x: "b") => "b"
+>       : ^^^
+>f : (x: KeysExtendedBy<M, number>) => "b"
+>  : ^ ^^                         ^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
 type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
->NameMap : { a: 'x'; b: 'y'; c: 'z'; }
+>NameMap : NameMap
+>        : ^^^^^^^
 >'a' : "x"
+>    : ^^^
 >'b' : "y"
+>    : ^^^
 >'c' : "z"
+>    : ^^^
 
 // Distributive, will be simplified
 
 type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
 >TS0 : keyof { [P in keyof T as P]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
 >TS1 : keyof { [P in keyof T as Extract<P, "a" | "b" | "c">]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
 >TS2 : keyof { [P in keyof T as P & ("a" | "b" | "c")]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
 >TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
 >TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
->TS5 : NameMap[keyof T & "a"] | NameMap[keyof T & "b"] | NameMap[keyof T & "c"]
+>TS5 : keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
 >TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Non-distributive, won't be simplified
 
 type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
 >TN0 : keyof { [P in keyof T as T[P] extends number ? P : never]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
 >TN1 : keyof { [P in keyof T as number extends T[P] ? P : never]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
 >TN2 : keyof { [P in keyof T as "a" extends P ? "x" : "y"]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
 >TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
 >TN4 : keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
 >TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true; }]: string; }
+>    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
+
+// repro from https://github.com/microsoft/TypeScript/issues/55129
+type Fruit =
+>Fruit : Fruit
+>      : ^^^^^
+
+  | {
+      name: "apple";
+>name : "apple"
+>     : ^^^^^^^
+
+      color: "red";
+>color : "red"
+>      : ^^^^^
+    }
+  | {
+      name: "banana";
+>name : "banana"
+>     : ^^^^^^^^
+
+      color: "yellow";
+>color : "yellow"
+>      : ^^^^^^^^
+    }
+  | {
+      name: "orange";
+>name : "orange"
+>     : ^^^^^^^^
+
+      color: "orange";
+>color : "orange"
+>      : ^^^^^^^^
+
+    };
+type Result1<T extends {name: string | number; color: string | number }> = {
+>Result1 : Result1<T>
+>        : ^^^^^^^^^^
+>name : string | number
+>     : ^^^^^^^^^^^^^^^
+>color : string | number
+>      : ^^^^^^^^^^^^^^^
+
+  [Key in T as `${Key['name']}:${Key['color']}`]: unknown
+}; 
+type Result2<T extends {name: string | number; color: string | number }> = keyof {
+>Result2 : keyof { [Key in T as `${Key["name"]}:${Key["color"]}`]: unknown; }
+>        : ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string | number
+>     : ^^^^^^^^^^^^^^^
+>color : string | number
+>      : ^^^^^^^^^^^^^^^
+
+  [Key in T as `${Key['name']}:${Key['color']}`]: unknown
+}
+type Test1 = keyof Result1<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
+>Test1 : "apple:red" | "banana:yellow" | "orange:orange"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type Test2 = Result2<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
+>Test2 : "apple:red" | "banana:yellow" | "orange:orange"
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

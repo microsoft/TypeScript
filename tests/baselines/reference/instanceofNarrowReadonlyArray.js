@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofNarrowReadonlyArray.ts] ////
+
 //// [instanceofNarrowReadonlyArray.ts]
 // @strict
 
@@ -10,6 +12,7 @@ function narrow(x: readonly number[] | number): readonly number[] {
 }
 
 //// [instanceofNarrowReadonlyArray.js]
+"use strict";
 // @strict
 function narrow(x) {
     if (x instanceof Array) {

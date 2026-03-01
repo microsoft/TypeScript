@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts] ////
+
+=== sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts ===
 interface Robot {
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts, 0, 0))
 

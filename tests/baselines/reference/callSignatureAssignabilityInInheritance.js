@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts] ////
+
 //// [callSignatureAssignabilityInInheritance.ts]
-module CallSignature {
+namespace CallSignature {
     interface Base { // T
         // M's
         (x: number): void;
@@ -32,7 +34,7 @@ module CallSignature {
     }
 }
 
-module MemberWithCallSignature {
+namespace MemberWithCallSignature {
     interface Base { // T
         // M's
         a: (x: number) => void;
@@ -68,3 +70,4 @@ module MemberWithCallSignature {
 }
 
 //// [callSignatureAssignabilityInInheritance.js]
+"use strict";

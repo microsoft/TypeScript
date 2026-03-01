@@ -1,0 +1,45 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSatisfiesExpression1.ts ===
+// const STRINGS = {
+//     /*GOTO DEF*/<|[|{| textSpan: true |}title|]: 'A Title'|>,
+// } satisfies Record<string,string>;
+// 
+// //somewhere in app
+// STRINGS.title
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "title",
+    "containerName": "__object",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSatisfiesExpression1.ts ===
+// const STRINGS = {
+//     <|[|title|]: 'A Title'|>,
+// } satisfies Record<string,string>;
+// 
+// //somewhere in app
+// STRINGS./*GOTO DEF*/title
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "title",
+    "containerName": "__object",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

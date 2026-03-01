@@ -5,6 +5,10 @@
 ////export {};
 // @filename: /dir/tsconfig.json
 ////{
+////    "compilerOptions": {
+////        "target": "es2015",
+////        "module": "commonjs"
+////    }
 ////}
 
 

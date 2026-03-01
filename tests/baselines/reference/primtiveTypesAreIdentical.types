@@ -1,95 +1,134 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/primtiveTypesAreIdentical.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/primtiveTypesAreIdentical.ts] ////
+
+=== primtiveTypesAreIdentical.ts ===
 // primitive types are identical to themselves so these overloads will all cause errors
 
 function foo1(x: number);
 >foo1 : { (x: number): any; (x: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function foo1(x: number);
 >foo1 : { (x: number): any; (x: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 function foo1(x: any) { }
 >foo1 : { (x: number): any; (x: number): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 function foo2(x: string);
 >foo2 : { (x: string): any; (x: string): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 function foo2(x: string);
 >foo2 : { (x: string): any; (x: string): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 function foo2(x: any) { }
 >foo2 : { (x: string): any; (x: string): any; }
+>     : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 function foo3(x: boolean);
 >foo3 : { (x: boolean): any; (x: boolean): any; }
+>     : ^^^ ^^       ^^^^^^^^^ ^^       ^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
 function foo3(x: boolean);
 >foo3 : { (x: boolean): any; (x: boolean): any; }
+>     : ^^^ ^^       ^^^^^^^^^ ^^       ^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 
 function foo3(x: any) { }
 >foo3 : { (x: boolean): any; (x: boolean): any; }
+>     : ^^^ ^^       ^^^^^^^^^ ^^       ^^^^^^^^^
 >x : any
 
 function foo4(x: any);
 >foo4 : { (x: any): any; (x: any): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 
 function foo4(x: any);
 >foo4 : { (x: any): any; (x: any): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 
 function foo4(x: any) { }
 >foo4 : { (x: any): any; (x: any): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 
 function foo5(x: 'a');
->foo5 : { (x: 'a'): any; (x: "a"): any; (x: string): any; }
+>foo5 : { (x: "a"): any; (x: "a"): any; (x: string): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function foo5(x: 'a');
->foo5 : { (x: "a"): any; (x: 'a'): any; (x: string): any; }
+>foo5 : { (x: "a"): any; (x: "a"): any; (x: string): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : "a"
+>  : ^^^
 
 function foo5(x: string);
 >foo5 : { (x: "a"): any; (x: "a"): any; (x: string): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 function foo5(x: any) { }
 >foo5 : { (x: "a"): any; (x: "a"): any; (x: string): any; }
+>     : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^ ^^      ^^^^^^^^^
 >x : any
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 function foo6(x: E);
 >foo6 : { (x: E): any; (x: E): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : E
+>  : ^
 
 function foo6(x: E);
 >foo6 : { (x: E): any; (x: E): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : E
+>  : ^
 
 function foo6(x: any) { }
 >foo6 : { (x: E): any; (x: E): any; }
+>     : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
 function foo7(x: void);
 >foo7 : { (x: void): any; (x: void): any; }
+>     : ^^^ ^^    ^^^^^^^^^ ^^    ^^^^^^^^^
 >x : void
+>  : ^^^^
 
 function foo7(x: void);
 >foo7 : { (x: void): any; (x: void): any; }
+>     : ^^^ ^^    ^^^^^^^^^ ^^    ^^^^^^^^^
 >x : void
+>  : ^^^^
 
 function foo7(x: any) { }
 >foo7 : { (x: void): any; (x: void): any; }
+>     : ^^^ ^^    ^^^^^^^^^ ^^    ^^^^^^^^^
 >x : any
 

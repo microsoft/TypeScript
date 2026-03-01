@@ -1,115 +1,195 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment4.ts] ////
+
+=== a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >require('./mod1') : typeof mod1
+>                  : ^^^^^^^^^^^
 >require : (name: string) => any
+>        : ^    ^^      ^^^^^   
 >'./mod1' : "./mod1"
+>         : ^^^^^^^^
 
 mod1.justExport.toFixed()
 >mod1.justExport.toFixed() : string
+>                          : ^^^^^^
 >mod1.justExport.toFixed : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^      
 >mod1.justExport : number
+>                : ^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >justExport : number
+>           : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 mod1.bothBefore.toFixed() // error
 >mod1.bothBefore.toFixed() : any
+>                          : ^^^
 >mod1.bothBefore.toFixed : any
+>                        : ^^^
 >mod1.bothBefore : number | "string"
+>                : ^^^^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >bothBefore : number | "string"
+>           : ^^^^^^^^^^^^^^^^^
 >toFixed : any
+>        : ^^^
 
 mod1.bothAfter.toFixed()
 >mod1.bothAfter.toFixed() : any
+>                         : ^^^
 >mod1.bothAfter.toFixed : any
+>                       : ^^^
 >mod1.bothAfter : number | "string"
+>               : ^^^^^^^^^^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >bothAfter : number | "string"
+>          : ^^^^^^^^^^^^^^^^^
 >toFixed : any
+>        : ^^^
 
 mod1.justProperty.length
 >mod1.justProperty.length : number
+>                         : ^^^^^^
 >mod1.justProperty : "string"
+>                  : ^^^^^^^^
 >mod1 : typeof mod1
+>     : ^^^^^^^^^^^
 >justProperty : "string"
+>             : ^^^^^^^^
 >length : number
+>       : ^^^^^^
 
-=== tests/cases/conformance/salsa/requires.d.ts ===
+=== requires.d.ts ===
 declare var module: { exports: any };
 >module : { exports: any; }
+>       : ^^^^^^^^^^^   ^^^
 >exports : any
+>        : ^^^
 
 declare function require(name: string): any;
 >require : (name: string) => any
+>        : ^    ^^      ^^^^^   
 >name : string
+>     : ^^^^^^
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
+>                                     : ^^^^^^^^
 >module.exports.bothBefore : number | "string"
+>                          : ^^^^^^^^^^^^^^^^^
 >module.exports : typeof A
+>               : ^^^^^^^^
 >module : { exports: typeof A; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof A
+>        : ^^^^^^^^
 >bothBefore : number | "string"
+>           : ^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 A.justExport = 4
 >A.justExport = 4 : 4
+>                 : ^
 >A.justExport : number
+>             : ^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >justExport : number
+>           : ^^^^^^
 >4 : 4
+>  : ^
 
 A.bothBefore = 2
 >A.bothBefore = 2 : 2
+>                 : ^
 >A.bothBefore : number | "string"
+>             : ^^^^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >bothBefore : number | "string"
+>           : ^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 A.bothAfter = 3
 >A.bothAfter = 3 : 3
+>                : ^
 >A.bothAfter : number | "string"
+>            : ^^^^^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >bothAfter : number | "string"
+>          : ^^^^^^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
 module.exports = A
 >module.exports = A : typeof A
+>                   : ^^^^^^^^
 >module.exports : typeof A
+>               : ^^^^^^^^
 >module : { exports: typeof A; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof A
+>        : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 function A() {
 >A : typeof A
+>  : ^^^^^^^^
 
     this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
+>                                    : ^^^^^^^^
 >module.exports.bothAfter : number | "string"
+>                         : ^^^^^^^^^^^^^^^^^
 >module.exports : typeof A
+>               : ^^^^^^^^
 >module : { exports: typeof A; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof A
+>        : ^^^^^^^^
 >bothAfter : number | "string"
+>          : ^^^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
 module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
+>                                       : ^^^^^^^^
 >module.exports.justProperty : "string"
+>                            : ^^^^^^^^
 >module.exports : typeof A
+>               : ^^^^^^^^
 >module : { exports: typeof A; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof A
+>        : ^^^^^^^^
 >justProperty : "string"
+>             : ^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 

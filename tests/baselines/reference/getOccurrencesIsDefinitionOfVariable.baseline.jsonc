@@ -1,3085 +1,1143 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// /*FIND ALL REFS*/var [|x|] = 0;
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // /*FIND ALL REFS*/<|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var /*FIND ALL REFS*/[|x|] = 0;
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var /*FIND ALL REFS*/[|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = /*FIND ALL REFS*/[|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = /*FIND ALL REFS*/x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + /*FIND ALL REFS*/[|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + /*FIND ALL REFS*/x;
+  // 
+  // x = 1;
+  // x = x + x;
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// /*FIND ALL REFS*/[|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // /*FIND ALL REFS*/x = 1;
+  // x = x + x;
+  // 
+  // x == 1;
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// /*FIND ALL REFS*/[|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // /*FIND ALL REFS*/x = x + x;
+  // 
+  // x == 1;
+  // x <= 1;
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = /*FIND ALL REFS*/[|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = /*FIND ALL REFS*/[|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // x = /*FIND ALL REFS*/x + x;
+  // 
+  // x == 1;
+  // x <= 1;
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + /*FIND ALL REFS*/[|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + /*FIND ALL REFS*/[|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // x = x + /*FIND ALL REFS*/x;
+  // 
+  // x == 1;
+  // x <= 1;
+  // --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // /*FIND ALL REFS*/[|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // x = x + x;
+  // 
+  // /*FIND ALL REFS*/x == 1;
+  // x <= 1;
+  // 
+  // var preIncrement = ++x;
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // /*FIND ALL REFS*/[|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // x = x + x;
+  // 
+  // x == 1;
+  // /*FIND ALL REFS*/x <= 1;
+  // 
+  // var preIncrement = ++x;
+  // var postIncrement = x++;
+  // --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++/*FIND ALL REFS*/[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++/*FIND ALL REFS*/[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // x = 1;
+  // x = x + x;
+  // 
+  // x == 1;
+  // x <= 1;
+  // 
+  // var preIncrement = ++/*FIND ALL REFS*/x;
+  // var postIncrement = x++;
+  // var preDecrement = --x;
+  // var postDecrement = x--;
+  // --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = /*FIND ALL REFS*/[|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // --- (line: 8) skipped ---
+  // x <= 1;
+  // 
+  // var preIncrement = ++x;
+  // var postIncrement = /*FIND ALL REFS*/x++;
+  // var preDecrement = --x;
+  // var postDecrement = x--;
+  // 
+  // x += 1;
+  // x <<= 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --/*FIND ALL REFS*/[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --/*FIND ALL REFS*/[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // --- (line: 9) skipped ---
+  // 
+  // var preIncrement = ++x;
+  // var postIncrement = x++;
+  // var preDecrement = --/*FIND ALL REFS*/x;
+  // var postDecrement = x--;
+  // 
+  // x += 1;
+  // x <<= 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = /*FIND ALL REFS*/[|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// [|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // --- (line: 10) skipped ---
+  // var preIncrement = ++x;
+  // var postIncrement = x++;
+  // var preDecrement = --x;
+  // var postDecrement = /*FIND ALL REFS*/x--;
+  // 
+  // x += 1;
+  // x <<= 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// /*FIND ALL REFS*/[|x|] += 1;
-// [|x|] <<= 1;
+// /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|] += 1;
+// [|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // --- (line: 12) skipped ---
+  // var preDecrement = --x;
+  // var postDecrement = x--;
+  // 
+  // /*FIND ALL REFS*/x += 1;
+  // x <<= 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // var assignmentRightHandSide = [|x|];
 // var assignmentRightHandSide2 = 1 + [|x|];
 // 
-// [|x|] = 1;
-// [|x|] = [|x|] + [|x|];
+// [|{| isWriteAccess: true |}x|] = 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + [|x|];
 // 
 // [|x|] == 1;
 // [|x|] <= 1;
 // 
-// var preIncrement = ++[|x|];
-// var postIncrement = [|x|]++;
-// var preDecrement = --[|x|];
-// var postDecrement = [|x|]--;
+// var preIncrement = ++[|{| isWriteAccess: true |}x|];
+// var postIncrement = [|{| isWriteAccess: true |}x|]++;
+// var preDecrement = --[|{| isWriteAccess: true |}x|];
+// var postDecrement = [|{| isWriteAccess: true |}x|]--;
 // 
-// [|x|] += 1;
-// /*FIND ALL REFS*/[|x|] <<= 1;
+// [|{| isWriteAccess: true |}x|] += 1;
+// /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|] <<= 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 41,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 83,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 102,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 110,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 140,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 189,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 212,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 218,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts",
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfVariable.ts ===
+  // <|var [|x|] = 0;|>
+  // var assignmentRightHandSide = x;
+  // var assignmentRightHandSide2 = 1 + x;
+  // 
+  // --- (line: 5) skipped ---
+
+  // --- (line: 13) skipped ---
+  // var postDecrement = x--;
+  // 
+  // x += 1;
+  // /*FIND ALL REFS*/x <<= 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

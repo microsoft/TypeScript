@@ -1,54 +1,90 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints3.ts] ////
+
+=== subtypesOfTypeParameterWithConstraints3.ts ===
 // checking whether other types are subtypes of type parameters with constraints
 
 function f<T extends U, U, V>(t: T, u: U, v: V) {
 >f : <T extends U, U, V>(t: T, u: U, v: V) => void
+>  : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 >v : V
+>  : ^
 
     // ok
     var r = true ? t : u;
 >r : U
+>  : ^
 >true ? t : u : U
+>             : ^
 >true : true
+>     : ^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var r = true ? u : t;
 >r : U
+>  : ^
 >true ? u : t : U
+>             : ^
 >true : true
+>     : ^^^^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     // ok
     var r2 = true ? t : v;
 >r2 : T | V
+>   : ^^^^^
 >true ? t : v : T | V
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >t : T
+>  : ^
 >v : V
+>  : ^
 
     var r2 = true ? v : t;
 >r2 : T | V
+>   : ^^^^^
 >true ? v : t : T | V
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >v : V
+>  : ^
 >t : T
+>  : ^
 
     // ok
     var r3 = true ? v : u;
 >r3 : U | V
+>   : ^^^^^
 >true ? v : u : U | V
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >v : V
+>  : ^
 >u : U
+>  : ^
 
     var r3 = true ? u : v;
 >r3 : U | V
+>   : ^^^^^
 >true ? u : v : U | V
+>             : ^^^^^
 >true : true
+>     : ^^^^
 >u : U
+>  : ^
 >v : V
+>  : ^
 }

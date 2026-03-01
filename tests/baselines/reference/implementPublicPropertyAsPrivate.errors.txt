@@ -1,8 +1,8 @@
-tests/cases/compiler/implementPublicPropertyAsPrivate.ts(4,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
+implementPublicPropertyAsPrivate.ts(4,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'x' is private in type 'C' but not in type 'I'.
 
 
-==== tests/cases/compiler/implementPublicPropertyAsPrivate.ts (1 errors) ====
+==== implementPublicPropertyAsPrivate.ts (1 errors) ====
     interface I {
         x: number;
     }

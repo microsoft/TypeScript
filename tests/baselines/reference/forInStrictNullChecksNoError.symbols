@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forInStrictNullChecksNoError.ts ===
+//// [tests/cases/compiler/forInStrictNullChecksNoError.ts] ////
+
+=== forInStrictNullChecksNoError.ts ===
 function f(x: { [key: string]: number; } | null | undefined) {
 >f : Symbol(f, Decl(forInStrictNullChecksNoError.ts, 0, 0))
 >x : Symbol(x, Decl(forInStrictNullChecksNoError.ts, 0, 11))

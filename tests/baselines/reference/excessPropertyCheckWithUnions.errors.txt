@@ -1,37 +1,25 @@
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(10,30): error TS2322: Type '{ tag: "T"; a1: string; }' is not assignable to type 'ADT'.
-  Object literal may only specify known properties, and 'a1' does not exist in type '{ tag: "T"; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(11,21): error TS2322: Type '{ tag: "A"; d20: number; }' is not assignable to type 'ADT'.
-  Object literal may only specify known properties, and 'd20' does not exist in type '{ tag: "A"; a1: string; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(12,1): error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
+excessPropertyCheckWithUnions.ts(10,30): error TS2353: Object literal may only specify known properties, and 'a1' does not exist in type '{ tag: "T"; }'.
+excessPropertyCheckWithUnions.ts(11,21): error TS2353: Object literal may only specify known properties, and 'd20' does not exist in type '{ tag: "A"; a1: string; }'.
+excessPropertyCheckWithUnions.ts(12,1): error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
   Property 'd20' is missing in type '{ tag: "D"; }' but required in type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(33,28): error TS2322: Type '{ tag: "A"; x: string; extra: number; }' is not assignable to type 'Ambiguous'.
-  Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(34,26): error TS2322: Type '{ tag: "A"; y: number; extra: number; }' is not assignable to type 'Ambiguous'.
-  Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(39,1): error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
-  Type '{ tag: "A"; }' is not assignable to type '{ tag: "C"; }'.
-    Types of property 'tag' are incompatible.
-      Type '"A"' is not assignable to type '"C"'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(40,1): error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
-  Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "B"; z: boolean; }'.
-    Types of property 'tag' are incompatible.
-      Type '"A"' is not assignable to type '"B"'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(49,35): error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
-  Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
-  Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
+excessPropertyCheckWithUnions.ts(33,28): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
+excessPropertyCheckWithUnions.ts(34,26): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
+excessPropertyCheckWithUnions.ts(37,1): error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
+  Type '{ tag: "A"; }' is not assignable to type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
+    Property 'y' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; y: number; }'.
+excessPropertyCheckWithUnions.ts(38,19): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
+excessPropertyCheckWithUnions.ts(47,35): error TS2353: Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
+excessPropertyCheckWithUnions.ts(48,35): error TS2353: Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
+excessPropertyCheckWithUnions.ts(64,9): error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
   Types of property 'n' are incompatible.
-    Type '{ a: string; b: string; }' is not assignable to type 'AN'.
-      Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(87,5): error TS2322: Type '{ tag: "button"; type: "submit"; href: string; }' is not assignable to type 'Union'.
-  Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(108,5): error TS2322: Type 'string' is not assignable to type 'IValue'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(113,67): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Type 'string' is not assignable to type 'number'.
+    Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+excessPropertyCheckWithUnions.ts(85,5): error TS2353: Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
+excessPropertyCheckWithUnions.ts(106,5): error TS2322: Type 'string' is not assignable to type 'IValue'.
+excessPropertyCheckWithUnions.ts(111,67): error TS2322: Type 'string' is not assignable to type 'number'.
+excessPropertyCheckWithUnions.ts(112,63): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithUnions.ts (14 errors) ====
+==== excessPropertyCheckWithUnions.ts (14 errors) ====
     type ADT = {
         tag: "A",
         a1: string
@@ -42,18 +30,16 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Typ
         tag: "T",
     }
     let wrong: ADT = { tag: "T", a1: "extra" }
-                                 ~~~~~~~~~~~
-!!! error TS2322: Type '{ tag: "T"; a1: string; }' is not assignable to type 'ADT'.
-!!! error TS2322:   Object literal may only specify known properties, and 'a1' does not exist in type '{ tag: "T"; }'.
+                                 ~~
+!!! error TS2353: Object literal may only specify known properties, and 'a1' does not exist in type '{ tag: "T"; }'.
     wrong = { tag: "A", d20: 12 }
-                        ~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; d20: number; }' is not assignable to type 'ADT'.
-!!! error TS2322:   Object literal may only specify known properties, and 'd20' does not exist in type '{ tag: "A"; a1: string; }'.
+                        ~~~
+!!! error TS2353: Object literal may only specify known properties, and 'd20' does not exist in type '{ tag: "A"; a1: string; }'.
     wrong = { tag: "D" }
     ~~~~~
 !!! error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
 !!! error TS2322:   Property 'd20' is missing in type '{ tag: "D"; }' but required in type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
-!!! related TS2728 tests/cases/compiler/excessPropertyCheckWithUnions.ts:6:5: 'd20' is declared here.
+!!! related TS2728 excessPropertyCheckWithUnions.ts:6:5: 'd20' is declared here.
     
     type Ambiguous = {
         tag: "A",
@@ -75,29 +61,22 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Typ
     
     // correctly error on excess property 'extra', even when ambiguous
     amb = { tag: "A", x: "hi", extra: 12 }
-                               ~~~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; x: string; extra: number; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
+                               ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
     amb = { tag: "A", y: 12, extra: 12 }
-                             ~~~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; y: number; extra: number; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
+                             ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
     
-    // assignability errors still work.
-    // But note that the error for `z: true` is the fallback one of reporting on
-    // the last constituent since assignability error reporting can't find a single best discriminant either.
+    // assignability errors still work
     amb = { tag: "A" }
     ~~~
 !!! error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Type '{ tag: "A"; }' is not assignable to type '{ tag: "C"; }'.
-!!! error TS2322:     Types of property 'tag' are incompatible.
-!!! error TS2322:       Type '"A"' is not assignable to type '"C"'.
+!!! error TS2322:   Type '{ tag: "A"; }' is not assignable to type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
+!!! error TS2322:     Property 'y' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; y: number; }'.
+!!! related TS2728 excessPropertyCheckWithUnions.ts:19:5: 'y' is declared here.
     amb = { tag: "A", z: true }
-    ~~~
-!!! error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "B"; z: boolean; }'.
-!!! error TS2322:     Types of property 'tag' are incompatible.
-!!! error TS2322:       Type '"A"' is not assignable to type '"B"'.
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
     
     type Overlapping =
         | { a: 1, b: 1, first: string }
@@ -107,13 +86,11 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Typ
     
     // these two are still errors despite their doubled up discriminants
     over = { a: 1, b: 1, first: "ok", second: "error" }
-                                      ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
-!!! error TS2322:   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
+                                      ~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
     over = { a: 1, b: 1, first: "ok", third: "error" }
-                                      ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
-!!! error TS2322:   Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
+                                      ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
     
     // Freshness disappears after spreading a union
     declare let t0: { a: any, b: any } | { d: any, e: any }
@@ -130,11 +107,10 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Typ
         n: {
             a: "a",
             b: "b", // excess -- kind: "A"
-            ~~~~~~
+            ~
 !!! error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
 !!! error TS2322:   Types of property 'n' are incompatible.
-!!! error TS2322:     Type '{ a: string; b: string; }' is not assignable to type 'AN'.
-!!! error TS2322:       Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+!!! error TS2322:     Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
         }
     }
     const abac: AB = {
@@ -156,9 +132,8 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Typ
     
         // should have error here
         href: 'foo',
-        ~~~~~~~~~~~
-!!! error TS2322: Type '{ tag: "button"; type: "submit"; href: string; }' is not assignable to type 'Union'.
-!!! error TS2322:   Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
+        ~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'href' does not exist in type 'Button'.
     };
     
     // Repro from #34611
@@ -167,7 +142,7 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(114,63): error TS2322: Typ
       value: string
     }
     
-    interface StringKeys { 
+    interface StringKeys {
         [propertyName: string]: IValue;
     };
     

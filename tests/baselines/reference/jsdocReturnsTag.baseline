@@ -1,3 +1,25 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/dummy.js ===
+// /**
+//  * Find an item
+//  * @template T
+//  * @param {T[]} l
+//  * @param {T} x
+//  * @returns {?T}  The names of the found item(s).
+//  */
+// function find(l, x) {
+// }
+// find('');
+//        ^
+// | ----------------------------------------------------------------------
+// | find(**l: any[]**, x: any): any
+// | Find an item
+// | @template T
+// | @param l
+// | @param x
+// | @returns The names of the found item(s).
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +27,7 @@
       "position": 154,
       "name": ""
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

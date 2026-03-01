@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserSyntaxWalker.generated.ts] ////
+
 //// [parserSyntaxWalker.generated.ts]
 //declare module "fs" {
 //    export class File {
@@ -12,7 +14,7 @@
 //import fs = module("fs");
 
 
-//module TypeScriptAllInOne {
+//namespace TypeScriptAllInOne {
 //    export class Program {
 //        static Main(...args: string[]) {
 //            try {
@@ -280,6 +282,7 @@
 
 
 //// [parserSyntaxWalker.generated.js]
+"use strict";
 //declare module "fs" {
 //    export class File {
 //        constructor(filename: string);
@@ -290,7 +293,7 @@
 //    }
 //}
 //import fs = module("fs");
-//module TypeScriptAllInOne {
+//namespace TypeScriptAllInOne {
 //    export class Program {
 //        static Main(...args: string[]) {
 //            try {

@@ -1,31 +1,48 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethod.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethod.ts] ////
+
+=== privateNameStaticMethod.ts ===
 class A1 {
 >A1 : A1
+>   : ^^
 
     static #method(param: string): string {
 >#method : (param: string) => string
+>        : ^     ^^      ^^^^^      
 >param : string
+>      : ^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
     constructor() {
         A1.#method("")
 >A1.#method("") : string
+>               : ^^^^^^
 >A1.#method : (param: string) => string
+>           : ^     ^^      ^^^^^      
 >A1 : typeof A1
+>   : ^^^^^^^^^
 >"" : ""
+>   : ^^
 
         A1.#method(1) // Error
 >A1.#method(1) : string
+>              : ^^^^^^
 >A1.#method : (param: string) => string
+>           : ^     ^^      ^^^^^      
 >A1 : typeof A1
+>   : ^^^^^^^^^
 >1 : 1
+>  : ^
 
         A1.#method()  // Error 
 >A1.#method() : string
+>             : ^^^^^^
 >A1.#method : (param: string) => string
+>           : ^     ^^      ^^^^^      
 >A1 : typeof A1
+>   : ^^^^^^^^^
 
     }
 }

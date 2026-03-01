@@ -1,10 +1,10 @@
-tests/cases/compiler/genericRestTypes.ts(21,11): error TS2322: Type '(cb: (x: string, ...rest: T) => void) => void' is not assignable to type '(cb: (...args: never) => void) => void'.
+genericRestTypes.ts(21,11): error TS2322: Type '(cb: (x: string, ...rest: T) => void) => void' is not assignable to type '(cb: (...args: never) => void) => void'.
   Types of parameters 'cb' and 'cb' are incompatible.
     Types of parameters 'args' and 'x' are incompatible.
       Type '[x: string, ...rest: T]' is not assignable to type 'never'.
 
 
-==== tests/cases/compiler/genericRestTypes.ts (1 errors) ====
+==== genericRestTypes.ts (1 errors) ====
     // Repro from #25793
     
     // Gets the parameters of a function type as a tuple

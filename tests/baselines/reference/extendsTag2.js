@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/extendsTag2.ts] ////
+
 //// [foo.js]
 /**
  * @constructor
@@ -21,6 +23,7 @@ class B extends A {
 
 
 //// [foo.js]
+"use strict";
 /**
  * @constructor
  */

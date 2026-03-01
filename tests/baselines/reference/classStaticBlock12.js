@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock12.ts] ////
+
 //// [classStaticBlock12.ts]
 class C {
   static #x = 1;
@@ -9,6 +11,7 @@ class C {
 
 
 //// [classStaticBlock12.js]
+"use strict";
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
@@ -20,5 +23,5 @@ class C {
 _a = C;
 _C_x = { value: 1 };
 (() => {
-    __classPrivateFieldGet(C, _a, "f", _C_x);
+    __classPrivateFieldGet(_a, _a, "f", _C_x);
 })();

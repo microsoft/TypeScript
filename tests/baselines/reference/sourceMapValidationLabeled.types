@@ -1,8 +1,13 @@
-=== tests/cases/compiler/sourceMapValidationLabeled.ts ===
+//// [tests/cases/compiler/sourceMapValidationLabeled.ts] ////
+
+=== sourceMapValidationLabeled.ts ===
 x:
 >x : any
+>  : ^^^
 
 var b = 10;
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

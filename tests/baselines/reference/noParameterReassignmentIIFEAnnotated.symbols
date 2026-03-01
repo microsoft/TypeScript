@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/noParameterReassignmentIIFEAnnotated.ts] ////
+
+=== index.js ===
 self.importScripts = (function (importScripts) {
 >self.importScripts : Symbol(importScripts, Decl(lib.webworker.importscripts.d.ts, --, --))
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
@@ -10,9 +12,9 @@ self.importScripts = (function (importScripts) {
      */
     return function () {
         return importScripts.apply(this, arguments);
->importScripts.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>importScripts.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >importScripts : Symbol(importScripts, Decl(index.js, 0, 32))
->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
 
     };

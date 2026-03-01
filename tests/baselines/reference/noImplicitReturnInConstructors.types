@@ -1,6 +1,9 @@
-=== tests/cases/compiler/noImplicitReturnInConstructors.ts ===
+//// [tests/cases/compiler/noImplicitReturnInConstructors.ts] ////
+
+=== noImplicitReturnInConstructors.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor() {
     return;

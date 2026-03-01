@@ -1,13 +1,21 @@
-=== tests/cases/compiler/declarationEmitTypeofThisInClass.ts ===
+//// [tests/cases/compiler/declarationEmitTypeofThisInClass.ts] ////
+
+=== declarationEmitTypeofThisInClass.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     public foo!: string
 >foo : string
+>    : ^^^^^^
 
     public bar!: typeof this.foo //Public property 'bar' of exported class has or is using private name 'this'.(4031)
 >bar : string
+>    : ^^^^^^
 >this.foo : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/systemDefaultImportCallable.ts] ////
 
 //// [core-js.d.ts]
-declare module core {
+declare namespace core {
     var String: {
         repeat(text: string, count: number): string;
     };
@@ -27,7 +27,7 @@ System.register(["core-js/fn/string/repeat"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            _ = repeat_1["default"](new Date().toUTCString() + " ", 2);
+            _ = repeat_1.default(new Date().toUTCString() + " ", 2);
         }
     };
 });

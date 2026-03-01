@@ -1,186 +1,315 @@
-=== tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts] ////
+
+=== parserUsingConstructorAsIdentifier.ts ===
         function define(constructor, instanceMembers, staticMembers) {
 >define : (constructor: any, instanceMembers: any, staticMembers: any) => any
+>       : ^           ^^^^^^^               ^^^^^^^             ^^^^^^^^^^^^^
 >constructor : any
+>            : ^^^
 >instanceMembers : any
+>                : ^^^
 >staticMembers : any
+>              : ^^^
 
             constructor = constructor || function () { };
 >constructor = constructor || function () { } : any
+>                                             : ^^^
 >constructor : any
+>            : ^^^
 >constructor || function () { } : any
+>                               : ^^^
 >constructor : any
+>            : ^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
             PluginUtilities.Utilities.markSupportedForProcessing(constructor);
 >PluginUtilities.Utilities.markSupportedForProcessing(constructor) : any
+>                                                                  : ^^^
 >PluginUtilities.Utilities.markSupportedForProcessing : any
+>                                                     : ^^^
 >PluginUtilities.Utilities : any
+>                          : ^^^
 >PluginUtilities : any
+>                : ^^^
 >Utilities : any
+>          : ^^^
 >markSupportedForProcessing : any
+>                           : ^^^
 >constructor : any
+>            : ^^^
 
             if (instanceMembers) {
 >instanceMembers : any
+>                : ^^^
 
                 initializeProperties(constructor.prototype, instanceMembers);
 >initializeProperties(constructor.prototype, instanceMembers) : any
+>                                                             : ^^^
 >initializeProperties : any
+>                     : ^^^
 >constructor.prototype : any
+>                      : ^^^
 >constructor : any
+>            : ^^^
 >prototype : any
+>          : ^^^
 >instanceMembers : any
+>                : ^^^
             }
             if (staticMembers) {
 >staticMembers : any
+>              : ^^^
 
                 initializeProperties(constructor, staticMembers);
 >initializeProperties(constructor, staticMembers) : any
+>                                                 : ^^^
 >initializeProperties : any
+>                     : ^^^
 >constructor : any
+>            : ^^^
 >staticMembers : any
+>              : ^^^
             }
             return constructor;
 >constructor : any
+>            : ^^^
         }
 
         function derive(baseClass, constructor, instanceMembers, staticMembers) {
 >derive : (baseClass: any, constructor: any, instanceMembers: any, staticMembers: any) => any
+>       : ^         ^^^^^^^           ^^^^^^^               ^^^^^^^             ^^^^^^^^^^^^^
 >baseClass : any
+>          : ^^^
 >constructor : any
+>            : ^^^
 >instanceMembers : any
+>                : ^^^
 >staticMembers : any
+>              : ^^^
 
             if (baseClass) {
 >baseClass : any
+>          : ^^^
 
                 constructor = constructor || function () { };
 >constructor = constructor || function () { } : any
+>                                             : ^^^
 >constructor : any
+>            : ^^^
 >constructor || function () { } : any
+>                               : ^^^
 >constructor : any
+>            : ^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
                 var basePrototype = baseClass.prototype;
 >basePrototype : any
+>              : ^^^
 >baseClass.prototype : any
+>                    : ^^^
 >baseClass : any
+>          : ^^^
 >prototype : any
+>          : ^^^
 
                 constructor.prototype = Object.create(basePrototype);
 >constructor.prototype = Object.create(basePrototype) : any
+>                                                     : ^^^
 >constructor.prototype : any
+>                      : ^^^
 >constructor : any
+>            : ^^^
 >prototype : any
+>          : ^^^
 >Object.create(basePrototype) : any
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>                             : ^^^
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >basePrototype : any
+>              : ^^^
 
                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);
 >PluginUtilities.Utilities.markSupportedForProcessing(constructor) : any
+>                                                                  : ^^^
 >PluginUtilities.Utilities.markSupportedForProcessing : any
+>                                                     : ^^^
 >PluginUtilities.Utilities : any
+>                          : ^^^
 >PluginUtilities : any
+>                : ^^^
 >Utilities : any
+>          : ^^^
 >markSupportedForProcessing : any
+>                           : ^^^
 >constructor : any
+>            : ^^^
 
                 Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
 >Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true }) : any
+>                                                                                                                                          : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >constructor.prototype : any
+>                      : ^^^
 >constructor : any
+>            : ^^^
 >prototype : any
+>          : ^^^
 >"constructor" : "constructor"
+>              : ^^^^^^^^^^^^^
 >{ value: constructor, writable: true, configurable: true, enumerable: true } : { value: any; writable: true; configurable: true; enumerable: true; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 >constructor : any
+>            : ^^^
 >writable : true
+>         : ^^^^
 >true : true
+>     : ^^^^
 >configurable : true
+>             : ^^^^
 >true : true
+>     : ^^^^
 >enumerable : true
+>           : ^^^^
 >true : true
+>     : ^^^^
 
                 if (instanceMembers) {
 >instanceMembers : any
+>                : ^^^
 
                     initializeProperties(constructor.prototype, instanceMembers);
 >initializeProperties(constructor.prototype, instanceMembers) : any
+>                                                             : ^^^
 >initializeProperties : any
+>                     : ^^^
 >constructor.prototype : any
+>                      : ^^^
 >constructor : any
+>            : ^^^
 >prototype : any
+>          : ^^^
 >instanceMembers : any
+>                : ^^^
                 }
                 if (staticMembers) {
 >staticMembers : any
+>              : ^^^
 
                     initializeProperties(constructor, staticMembers);
 >initializeProperties(constructor, staticMembers) : any
+>                                                 : ^^^
 >initializeProperties : any
+>                     : ^^^
 >constructor : any
+>            : ^^^
 >staticMembers : any
+>              : ^^^
                 }
                 return constructor;
 >constructor : any
+>            : ^^^
 
             } else {
                 return define(constructor, instanceMembers, staticMembers);
 >define(constructor, instanceMembers, staticMembers) : any
+>                                                    : ^^^
 >define : (constructor: any, instanceMembers: any, staticMembers: any) => any
+>       : ^           ^^^^^^^               ^^^^^^^             ^^^^^^^^^^^^^
 >constructor : any
+>            : ^^^
 >instanceMembers : any
+>                : ^^^
 >staticMembers : any
+>              : ^^^
             }
         }
 
         function mix(constructor) {
 >mix : (constructor: any) => any
+>    : ^           ^^^^^^^^^^^^^
 >constructor : any
+>            : ^^^
 
             constructor = constructor || function () { };
 >constructor = constructor || function () { } : any
+>                                             : ^^^
 >constructor : any
+>            : ^^^
 >constructor || function () { } : any
+>                               : ^^^
 >constructor : any
+>            : ^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
             var i, len;
 >i : any
+>  : ^^^
 >len : any
+>    : ^^^
 
             for (i = 1, len = arguments.length; i < len; i++) {
 >i = 1, len = arguments.length : number
+>                              : ^^^^^^
 >i = 1 : 1
+>      : ^
 >i : any
+>  : ^^^
 >1 : 1
+>  : ^
 >len = arguments.length : number
+>                       : ^^^^^^
 >len : any
+>    : ^^^
 >arguments.length : number
+>                 : ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >i < len : boolean
+>        : ^^^^^^^
 >i : any
+>  : ^^^
 >len : any
+>    : ^^^
 >i++ : number
+>    : ^^^^^^
 >i : any
+>  : ^^^
 
                 initializeProperties(constructor.prototype, arguments[i]);
 >initializeProperties(constructor.prototype, arguments[i]) : any
+>                                                          : ^^^
 >initializeProperties : any
+>                     : ^^^
 >constructor.prototype : any
+>                      : ^^^
 >constructor : any
+>            : ^^^
 >prototype : any
+>          : ^^^
 >arguments[i] : any
+>             : ^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >i : any
+>  : ^^^
             }
             return constructor;
 >constructor : any
+>            : ^^^
         }

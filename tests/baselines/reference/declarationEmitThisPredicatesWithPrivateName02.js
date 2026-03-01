@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts] ////
+
 //// [declarationEmitThisPredicatesWithPrivateName02.ts]
 interface Foo {
     a: string;
@@ -14,11 +16,11 @@ export const obj = {
 
 //// [declarationEmitThisPredicatesWithPrivateName02.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 exports.obj = {
-    m: function () {
-        var dis = this;
+    m() {
+        let dis = this;
         return dis.a != null && dis.b != null && dis.c != null;
     }
 };

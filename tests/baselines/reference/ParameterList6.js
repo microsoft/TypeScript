@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ParameterList6.ts] ////
+
 //// [ParameterList6.ts]
 class C {
   constructor(C: (public A) => any) {
@@ -5,8 +7,8 @@ class C {
 }
 
 //// [ParameterList6.js]
-var C = /** @class */ (function () {
-    function C(C) {
+"use strict";
+class C {
+    constructor(C) {
     }
-    return C;
-}());
+}

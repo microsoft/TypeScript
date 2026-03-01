@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionSubtypingOfVarArgs.ts] ////
+
 //// [functionSubtypingOfVarArgs.ts]
 class EventBase {
     private _listeners = [];
@@ -15,37 +17,17 @@ class StringEvent extends EventBase { // should work
 
 
 //// [functionSubtypingOfVarArgs.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var EventBase = /** @class */ (function () {
-    function EventBase() {
+"use strict";
+class EventBase {
+    constructor() {
         this._listeners = [];
     }
-    EventBase.prototype.add = function (listener) {
+    add(listener) {
         this._listeners.push(listener);
-    };
-    return EventBase;
-}());
-var StringEvent = /** @class */ (function (_super) {
-    __extends(StringEvent, _super);
-    function StringEvent() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    StringEvent.prototype.add = function (listener) {
-        _super.prototype.add.call(this, listener);
-    };
-    return StringEvent;
-}(EventBase));
+}
+class StringEvent extends EventBase {
+    add(listener) {
+        super.add(listener);
+    }
+}

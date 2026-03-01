@@ -1,15 +1,15 @@
-tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts(13,22): error TS2339: Property 'b' does not exist on type 'typeof c'.
+internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts(13,22): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
-==== tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
-    export module a {
-        export module b {
+==== internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+    export namespace a {
+        export namespace b {
             export class c {
             }
         }
     }
     
-    export module c {
+    export namespace c {
         import b = a.b;
         export var x: b.c = new b.c();
     }

@@ -1,13 +1,23 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements10.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements10.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements10.ts ===
 function foo(a = [0]) { }
 >foo : (a?: number[]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 
 function bar(a = [0]) {
 >bar : (a?: number[]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 }

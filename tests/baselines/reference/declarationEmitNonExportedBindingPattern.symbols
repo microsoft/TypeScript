@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/declarationEmitNonExportedBindingPattern.ts] ////
+
+=== test.ts ===
 function getFoo() {
 >getFoo : Symbol(getFoo, Decl(test.ts, 0, 0))
 

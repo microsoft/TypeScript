@@ -1,0 +1,32 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationSuper_00.ts ===
+// <|class [|Foo|] {
+//     constructor() {}
+// }|>
+// 
+// class Bar extends Foo {
+//     constructor() {
+//         su/*GOTO IMPL*/per();
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

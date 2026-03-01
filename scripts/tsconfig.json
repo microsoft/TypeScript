@@ -1,15 +1,26 @@
 {
     "compilerOptions": {
+        "lib": [
+            "es2018"
+        ],
+        "module": "Node16",
+        "moduleResolution": "Node16",
+        "target": "es2018",
+        "noEmit": true,
+        // "declaration": true,
+        // "emitDeclarationOnly": true,
+
         "strict": true,
-        "removeComments": false,
-        "declaration": false,
-        "sourceMap": true,
-        "newLine": "lf",
-        "target": "es6",
-        "module": "commonjs",
-        "types": ["node"],
-        "lib": ["es6", "scripthost"],
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "allowJs": true,
+        "checkJs": true
     },
 
-    "include": ["*.ts"]
+    "include": [
+        "**/*.mjs",
+        "**/*.cjs"
+    ]
 }

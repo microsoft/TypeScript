@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts] ////
+
 //// [switchStatementsWithMultipleDefaults1.ts]
     var x = 10;
     
@@ -13,6 +15,7 @@
     }
 
 //// [switchStatementsWithMultipleDefaults1.js]
+"use strict";
 var x = 10;
 switch (x) {
     case 1:

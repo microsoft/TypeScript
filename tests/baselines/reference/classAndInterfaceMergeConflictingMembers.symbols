@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts] ////
+
+=== classAndInterfaceMergeConflictingMembers.ts ===
 declare class C1 {
 >C1 : Symbol(C1, Decl(classAndInterfaceMergeConflictingMembers.ts, 0, 0), Decl(classAndInterfaceMergeConflictingMembers.ts, 2, 1))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionDeclarationWithResolutionOfTypeNamedArguments01.ts] ////
+
 //// [functionDeclarationWithResolutionOfTypeNamedArguments01.ts]
 interface arguments {
 }
@@ -7,6 +9,7 @@ function f() {
 }
 
 //// [functionDeclarationWithResolutionOfTypeNamedArguments01.js]
+"use strict";
 function f() {
     arguments;
 }

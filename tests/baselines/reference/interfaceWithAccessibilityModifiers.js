@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts] ////
+
 //// [interfaceWithAccessibilityModifiers.ts]
 // Errors
 interface Foo {
@@ -7,3 +9,4 @@ interface Foo {
 }
 
 //// [interfaceWithAccessibilityModifiers.js]
+"use strict";

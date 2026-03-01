@@ -1,10 +1,10 @@
 // @module: amd
-// @target: ES5
+// @target: ES5, ES2015
 // @declaration: true
 // @removeComments: false
 
 /** this is multi declare module*/
-export module outerModule.InnerModule {
+export namespace outerModule.InnerModule {
     /// class b comment
     export class b {
     }

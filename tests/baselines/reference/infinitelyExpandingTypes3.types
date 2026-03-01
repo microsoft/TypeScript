@@ -1,33 +1,45 @@
-=== tests/cases/compiler/infinitelyExpandingTypes3.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypes3.ts] ////
+
+=== infinitelyExpandingTypes3.ts ===
 interface List<T> {
     data: T;
 >data : T
+>     : ^
 
     next: List<T>; // will be recursive reference when OwnerList is expanded
 >next : List<T>
+>     : ^^^^^^^
 
     owner: OwnerList<T>;
 >owner : OwnerList<T>
+>      : ^^^^^^^^^^^^
 }
 
 interface OwnerList<U> extends List<List<U>> {
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 interface OwnerList2<U> extends List<List<U>> {
     name: string;
 >name : string
+>     : ^^^^^^
 }
 
 var o1: OwnerList<number>;
 >o1 : OwnerList<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 var o2: OwnerList2<number>;
 >o2 : OwnerList2<number>
+>   : ^^^^^^^^^^^^^^^^^^
 
 o1 = o2; // should not error
 >o1 = o2 : OwnerList2<number>
+>        : ^^^^^^^^^^^^^^^^^^
 >o1 : OwnerList<number>
+>   : ^^^^^^^^^^^^^^^^^
 >o2 : OwnerList2<number>
+>   : ^^^^^^^^^^^^^^^^^^
 

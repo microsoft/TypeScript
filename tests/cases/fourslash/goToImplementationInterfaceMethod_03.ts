@@ -21,4 +21,4 @@
 //// new Bar().hel/*function_call*/lo();
 //// new Bar()["hello"]();
 
-verify.allRangesAppearInImplementationList("function_call");
+verify.baselineGoToImplementation("function_call");

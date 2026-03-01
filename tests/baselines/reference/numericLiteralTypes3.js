@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/numericLiteralTypes3.ts] ////
+
 //// [numericLiteralTypes3.ts]
 type A = 1;
 type B = 2 | 3;
@@ -101,6 +103,7 @@ function f8(x: 0 | 2 | 4) {
 }
 
 //// [numericLiteralTypes3.js]
+"use strict";
 function f1(a, b, c, d) {
     a = a;
     a = b;

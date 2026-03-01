@@ -1,34 +1,58 @@
-=== tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionAwaitOperand.ts ===
+//// [tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionAwaitOperand.ts] ////
+
+=== contextuallyTypeAsyncFunctionAwaitOperand.ts ===
 interface Obj { key: "value"; }
 >key : "value"
+>    : ^^^^^^^
 
 async function fn1(): Promise<Obj> {
 >fn1 : () => Promise<Obj>
+>    : ^^^^^^            
 
     const obj1: Obj = await { key: "value" };
 >obj1 : Obj
+>     : ^^^
 >await { key: "value" } : { key: "value"; }
+>                       : ^^^^^^^^^^^^^^^^^
 >{ key: "value" } : { key: "value"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >key : "value"
+>    : ^^^^^^^
 >"value" : "value"
+>        : ^^^^^^^
 
     const obj2: Obj = await new Promise(resolve => resolve({ key: "value" }));
 >obj2 : Obj
+>     : ^^^
 >await new Promise(resolve => resolve({ key: "value" })) : Obj
+>                                                        : ^^^
 >new Promise(resolve => resolve({ key: "value" })) : Promise<Obj>
+>                                                  : ^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >resolve => resolve({ key: "value" }) : (resolve: (value: Obj | PromiseLike<Obj>) => void) => void
+>                                     : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >resolve : (value: Obj | PromiseLike<Obj>) => void
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >resolve({ key: "value" }) : void
+>                          : ^^^^
 >resolve : (value: Obj | PromiseLike<Obj>) => void
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >{ key: "value" } : { key: "value"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >key : "value"
+>    : ^^^^^^^
 >"value" : "value"
+>        : ^^^^^^^
 
     return await { key: "value" };
 >await { key: "value" } : { key: "value"; }
+>                       : ^^^^^^^^^^^^^^^^^
 >{ key: "value" } : { key: "value"; }
+>                 : ^^^^^^^^^^^^^^^^^
 >key : "value"
+>    : ^^^^^^^
 >"value" : "value"
+>        : ^^^^^^^
 }
 

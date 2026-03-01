@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts] ////
+
 //// [privateNameFieldDestructuredBinding.ts]
 class A {
     #field = 1;
@@ -25,6 +27,7 @@ class A {
 
 
 //// [privateNameFieldDestructuredBinding.js]
+"use strict";
 class A {
     #field = 1;
     otherObject = new A();

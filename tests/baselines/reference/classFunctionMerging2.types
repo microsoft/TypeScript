@@ -1,41 +1,63 @@
-=== tests/cases/compiler/classFunctionMerging2.ts ===
+//// [tests/cases/compiler/classFunctionMerging2.ts] ////
+
+=== classFunctionMerging2.ts ===
 declare abstract class A {
 >A : A
+>  : ^
 
     constructor(p: number);
 >p : number
+>  : ^^^^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 }
 
 declare function B(p: string): B;
 >B : typeof B
+>  : ^^^^^^^^
 >p : string
+>  : ^^^^^^
 
 declare class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     constructor(p: string);
 >p : string
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 }
 
 let b = new B("Hey")
 >b : B
+>  : ^
 >new B("Hey") : B
+>             : ^
 >B : typeof B
+>  : ^^^^^^^^
 >"Hey" : "Hey"
+>      : ^^^^^
 
 console.log(b.a)
 >console.log(b.a) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >b.a : number
+>    : ^^^^^^
 >b : B
+>  : ^
 >a : number
+>  : ^^^^^^
 

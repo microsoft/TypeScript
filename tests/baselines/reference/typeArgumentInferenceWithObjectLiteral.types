@@ -1,163 +1,279 @@
-=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts] ////
+
+=== typeArgumentInferenceWithObjectLiteral.ts ===
 interface Computed<T> {
     read(): T;
 >read : () => T
+>     : ^^^^^^ 
 
     write(value: T);
 >write : (value: T) => any
+>      : ^     ^^ ^^^^^^^^
 >value : T
+>      : ^
 }
 
 function foo<T>(x: Computed<T>) { }
 >foo : <T>(x: Computed<T>) => void
+>    : ^ ^^ ^^           ^^^^^^^^^
 >x : Computed<T>
+>  : ^^^^^^^^^^^
 
 var s: string;
 >s : string
+>  : ^^^^^^
 
 // Calls below should infer string for T and then assign that type to the value parameter
 foo({
 >foo({    read: () => s,    write: value => s = value}) : void
+>                                                       : ^^^^
 >foo : <T>(x: Computed<T>) => void
+>    : ^ ^^ ^^           ^^^^^^^^^
 >{    read: () => s,    write: value => s = value} : { read: () => string; write: (value: string) => string; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 
     read: () => s,
 >read : () => string
+>     : ^^^^^^^^^^^^
 >() => s : () => string
+>        : ^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
     write: value => s = value
 >write : (value: string) => string
+>      : ^     ^^^^^^^^^^^^^^^^^^^
 >value => s = value : (value: string) => string
+>                   : ^     ^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >s = value : string
+>          : ^^^^^^
 >s : string
+>  : ^^^^^^
 >value : string
+>      : ^^^^^^
 
 });
 foo({
 >foo({    write: value => s = value,    read: () => s}) : void
+>                                                       : ^^^^
 >foo : <T>(x: Computed<T>) => void
+>    : ^ ^^ ^^           ^^^^^^^^^
 >{    write: value => s = value,    read: () => s} : { write: (value: string) => string; read: () => string; }
+>                                                  : ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     write: value => s = value,
 >write : (value: string) => string
+>      : ^     ^^^^^^^^^^^^^^^^^^^
 >value => s = value : (value: string) => string
+>                   : ^     ^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >s = value : string
+>          : ^^^^^^
 >s : string
+>  : ^^^^^^
 >value : string
+>      : ^^^^^^
 
     read: () => s
 >read : () => string
+>     : ^^^^^^^^^^^^
 >() => s : () => string
+>        : ^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 
 });
 
 enum E1 { X }
 >E1 : E1
+>   : ^^
 >X : E1.X
+>  : ^^^^
 
 enum E2 { X }
 >E2 : E2
+>   : ^^
 >X : E2.X
+>  : ^^^^
 
 // Check that we infer from both a.r and b before fixing T in a.w
 
 declare function f1<T, U>(a: { w: (x: T) => U; r: () => T; }, b: T): U;
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>   : ^ ^^ ^^ ^^                               ^^ ^^ ^^^^^ 
 >a : { w: (x: T) => U; r: () => T; }
+>  : ^^^^^           ^^^^^       ^^^
 >w : (x: T) => U
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >r : () => T
+>  : ^^^^^^ 
 >b : T
+>  : ^
 
 var v1: number;
 >v1 : number
+>   : ^^^^^^
 
 var v1 = f1({ w: x => x, r: () => 0 }, 0);
 >v1 : number
+>   : ^^^^^^
 >f1({ w: x => x, r: () => 0 }, 0) : number
+>                                 : ^^^^^^
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>   : ^ ^^ ^^ ^^                               ^^ ^^ ^^^^^ 
 >{ w: x => x, r: () => 0 } : { w: (x: number) => number; r: () => number; }
+>                          : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >w : (x: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >r : () => number
+>  : ^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var v1 = f1({ w: x => x, r: () => 0 }, E1.X);
 >v1 : number
+>   : ^^^^^^
 >f1({ w: x => x, r: () => 0 }, E1.X) : number
+>                                    : ^^^^^^
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>   : ^ ^^ ^^ ^^                               ^^ ^^ ^^^^^ 
 >{ w: x => x, r: () => 0 } : { w: (x: number) => number; r: () => number; }
+>                          : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >w : (x: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 >r : () => number
+>  : ^^^^^^^^^^^^
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >E1.X : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >X : E1
+>  : ^^
 
 var v1 = f1({ w: x => x, r: () => E1.X }, 0);
 >v1 : number
+>   : ^^^^^^
 >f1({ w: x => x, r: () => E1.X }, 0) : number
+>                                    : ^^^^^^
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>   : ^ ^^ ^^ ^^                               ^^ ^^ ^^^^^ 
 >{ w: x => x, r: () => E1.X } : { w: (x: 0) => number; r: () => E1; }
+>                             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >w : (x: 0) => number
+>  : ^ ^^^^^^^^^^^^^^
 >x => x : (x: 0) => number
+>       : ^ ^^^^^^^^^^^^^^
 >x : 0
+>  : ^
 >x : 0
+>  : ^
 >r : () => E1
+>  : ^^^^^^^^
 >() => E1.X : () => E1
+>           : ^^^^^^^^
 >E1.X : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >X : E1
+>  : ^^
 >0 : 0
+>  : ^
 
 var v2: E1;
 >v2 : E1
+>   : ^^
 
 var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
 >v2 : E1
+>   : ^^
 >f1({ w: x => x, r: () => E1.X }, E1.X) : E1
+>                                       : ^^
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>   : ^ ^^ ^^ ^^                               ^^ ^^ ^^^^^ 
 >{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1; r: () => E1; }
+>                             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >w : (x: E1.X) => E1
+>  : ^ ^^^^^^^^^^^^^
 >x => x : (x: E1.X) => E1
+>       : ^ ^^^^^^^^^^^^^
 >x : E1.X
+>  : ^^^^
 >x : E1
+>  : ^^
 >r : () => E1
+>  : ^^^^^^^^
 >() => E1.X : () => E1
+>           : ^^^^^^^^
 >E1.X : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >X : E1
+>  : ^^
 >E1.X : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >X : E1
+>  : ^^
 
 var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
 >v3 : unknown
+>   : ^^^^^^^
 >f1({ w: x => x, r: () => E1.X }, E2.X) : unknown
+>                                       : ^^^^^^^
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+>   : ^ ^^ ^^ ^^                               ^^ ^^ ^^^^^ 
 >{ w: x => x, r: () => E1.X } : { w: (x: E1) => E1; r: () => E1; }
+>                             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >w : (x: E1) => E1
+>  : ^ ^^^^^^^^^^^
 >x => x : (x: E1) => E1
+>       : ^ ^^^^^^^^^^^
 >x : E1
+>  : ^^
 >x : E1
+>  : ^^
 >r : () => E1
+>  : ^^^^^^^^
 >() => E1.X : () => E1
+>           : ^^^^^^^^
 >E1.X : E1
+>     : ^^
 >E1 : typeof E1
+>   : ^^^^^^^^^
 >X : E1
+>  : ^^
 >E2.X : E2
+>     : ^^
 >E2 : typeof E2
+>   : ^^^^^^^^^
 >X : E2
+>  : ^^
 

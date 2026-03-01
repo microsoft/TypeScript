@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @lib: es2017
 
 ////interface I<Species> {

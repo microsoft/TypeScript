@@ -1,40 +1,60 @@
-=== tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts] ////
+
+=== destructuringAssignabilityCheck.ts ===
 const [] = {}; // should be error
 >{} : {}
+>   : ^^
 
 const {} = undefined; // error correctly
 >undefined : undefined
+>          : ^^^^^^^^^
 
 (([]) => 0)({}); // should be error
 >(([]) => 0)({}) : number
+>                : ^^^^^^
 >(([]) => 0) : ([]: {}) => number
+>            : ^  ^^^^^^^^^^^^^^^
 >([]) => 0 : ([]: {}) => number
+>          : ^  ^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >{} : {}
+>   : ^^
 
 (({}) => 0)(undefined); // should be error
 >(({}) => 0)(undefined) : number
+>                       : ^^^^^^
 >(({}) => 0) : ({}: undefined) => number
+>            : ^  ^^^^^^^^^^^^^^^^^^^^^^
 >({}) => 0 : ({}: undefined) => number
+>          : ^  ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 function foo({}: undefined) {
 >foo : ({}: undefined) => number
+>    : ^  ^^         ^^^^^^^^^^^
 
     return 0
 >0 : 0
+>  : ^
 }
 function bar([]: {}) {
 >bar : ([]: {}) => number
+>    : ^  ^^  ^^^^^^^^^^^
 
     return 0
 >0 : 0
+>  : ^
 }
 
 const { }: undefined = 1
 >1 : 1
+>  : ^
 
 const []: {} = {}
 >{} : {}
+>   : ^^
 

@@ -1,49 +1,79 @@
-=== tests/cases/compiler/restElementAssignable.ts ===
+//// [tests/cases/compiler/restElementAssignable.ts] ////
+
+=== restElementAssignable.ts ===
 {
     const { ...props } = {};
 >props : {}
+>      : ^^
 >{} : {}
+>   : ^^
 
     // Use to fail
     const t1: { [x: symbol]: unknown } = props;
 >t1 : { [x: symbol]: unknown; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 >props : {}
+>      : ^^
 
     // Working equivalent
     const t2: { [x: symbol]: unknown } = {};
 >t2 : { [x: symbol]: unknown; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : symbol
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 }
 
 {
     const { ...props } = { a: 1, b: false, c: "str" };
 >props : { a: number; b: boolean; c: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: false, c: "str" } : { a: number; b: boolean; c: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : boolean
+>  : ^^^^^^^
 >false : false
+>      : ^^^^^
 >c : string
+>  : ^^^^^^
 >"str" : "str"
+>      : ^^^^^
 
     // Use to fail
     const t1: { [x: string]: number | boolean | string } = props;
 >t1 : { [x: string]: string | number | boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >props : { a: number; b: boolean; c: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Working equivalent
     const t2: { [x: string]: number | boolean | string } = { a: 1, b: false, c: "str" };;
 >t2 : { [x: string]: string | number | boolean; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >{ a: 1, b: false, c: "str" } : { a: number; b: false; c: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >c : string
+>  : ^^^^^^
 >"str" : "str"
+>      : ^^^^^
 }
 

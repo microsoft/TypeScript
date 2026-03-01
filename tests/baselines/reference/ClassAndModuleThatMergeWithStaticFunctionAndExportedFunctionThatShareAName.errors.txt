@@ -1,10 +1,10 @@
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
-tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,12): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,16): error TS2300: Duplicate identifier 'Origin'.
+ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2300: Duplicate identifier 'Origin'.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (4 errors) ====
+==== ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (4 errors) ====
     class Point {
         constructor(public x: number, public y: number) { }
     
@@ -13,14 +13,14 @@ tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMer
 !!! error TS2300: Duplicate identifier 'Origin'.
     }
     
-    module Point {
+    namespace Point {
         export function Origin() { return null; } //expected duplicate identifier error
                         ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
     }
     
     
-    module A {
+    namespace A {
         export class Point {
             constructor(public x: number, public y: number) { }
     
@@ -29,7 +29,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMer
 !!! error TS2300: Duplicate identifier 'Origin'.
         }
     
-        export module Point {
+        export namespace Point {
             export function Origin() { return ""; }//expected duplicate identifier error
                             ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.

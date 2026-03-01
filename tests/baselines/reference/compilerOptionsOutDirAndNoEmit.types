@@ -1,5 +1,8 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/compilerOptionsOutDirAndNoEmit.ts] ////
+
+=== a.ts ===
 class c {
 >c : c
+>  : ^
 }
 

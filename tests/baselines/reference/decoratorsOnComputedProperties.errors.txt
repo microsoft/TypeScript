@@ -1,87 +1,67 @@
-tests/cases/compiler/decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(21,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(22,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(23,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(27,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(28,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(29,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(30,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(35,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(36,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(37,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(38,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(39,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(40,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(52,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(53,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(54,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(55,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(56,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(57,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(62,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(63,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(64,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(65,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(70,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(71,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(72,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(73,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(74,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(75,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(88,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(89,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(90,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(92,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(93,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(94,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(98,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(99,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(100,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(101,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(106,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(107,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(108,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(110,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(111,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(112,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(124,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(125,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(126,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(128,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(129,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(131,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(135,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(136,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(137,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(138,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(143,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(144,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(145,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(147,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(148,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(150,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(162,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(163,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(164,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(166,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(167,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(169,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(173,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(174,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(175,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(176,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(181,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(182,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(183,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(184,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(185,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(186,5): error TS1206: Decorators are not valid here.
-tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(27,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(28,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(29,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(30,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(35,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(36,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(37,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(39,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(40,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(52,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(53,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(54,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(62,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(63,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(64,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(65,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(70,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(71,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(72,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(74,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(75,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(88,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(89,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(90,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(98,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(99,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(100,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(101,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(106,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(107,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(108,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(111,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(112,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(124,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(125,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(126,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(135,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(136,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(137,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(138,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(143,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(144,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(145,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(148,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(150,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(162,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(163,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(164,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(173,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(174,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(175,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(176,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(181,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+decoratorsOnComputedProperties.ts(182,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(183,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(184,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(186,5): error TS1206: Decorators are not valid here.
+decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/compiler/decoratorsOnComputedProperties.ts (81 errors) ====
+==== decoratorsOnComputedProperties.ts (61 errors) ====
     function x(o: object, k: PropertyKey) { }
     let i = 0;
     function foo(): string { return ++i + ""; }
@@ -109,14 +89,8 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
            ~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameC]: any = null;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
     }
     
     void class B {
@@ -146,8 +120,6 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
         ~
 !!! error TS1206: Decorators are not valid here.
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
         ~
 !!! error TS1206: Decorators are not valid here.
@@ -175,14 +147,8 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
            ~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameC]: any = null;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ["some" + "method"]() {}
     }
     
@@ -213,8 +179,6 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
         ~
 !!! error TS1206: Decorators are not valid here.
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
         ~
 !!! error TS1206: Decorators are not valid here.
@@ -244,14 +208,8 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ["some" + "method"]() {}
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameC]: any = null;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
     }
     
     void class F {
@@ -282,8 +240,6 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
 !!! error TS1206: Decorators are not valid here.
         ["some" + "method"]() {}
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
         ~
 !!! error TS1206: Decorators are not valid here.
@@ -312,15 +268,9 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ["some" + "method"]() {}
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ["some" + "method2"]() {}
         @x [fieldNameC]: any = null;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
     }
     
     void class H {
@@ -351,8 +301,6 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
 !!! error TS1206: Decorators are not valid here.
         ["some" + "method"]() {}
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
         ~
 !!! error TS1206: Decorators are not valid here.
@@ -382,15 +330,9 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x ["some" + "method"]() {}
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ["some" + "method2"]() {}
         @x [fieldNameC]: any = null;
-           ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
     }
     
     void class J {
@@ -423,8 +365,6 @@ tests/cases/compiler/decoratorsOnComputedProperties.ts(188,5): error TS1206: Dec
         ~
 !!! error TS1206: Decorators are not valid here.
         [fieldNameA]: any;
-        ~~~~~~~~~~~~
-!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         @x [fieldNameB]: any;
         ~
 !!! error TS1206: Decorators are not valid here.

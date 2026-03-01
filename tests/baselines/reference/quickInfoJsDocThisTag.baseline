@@ -1,0 +1,69 @@
+// === QuickInfo ===
+=== /a.ts ===
+// /** @this {number} */
+// function f() {
+//          ^
+// | ----------------------------------------------------------------------
+// | function f(): void
+// | @this 
+// | ----------------------------------------------------------------------
+//     this
+// }
+
+[
+  {
+    "marker": {
+      "fileName": "/a.ts",
+      "position": 32,
+      "name": ""
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 31,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "this"
+        }
+      ]
+    }
+  }
+]

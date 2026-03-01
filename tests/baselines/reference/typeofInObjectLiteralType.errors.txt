@@ -1,7 +1,7 @@
-tests/cases/compiler/typeofInObjectLiteralType.ts(1,31): error TS2304: Cannot find name 'b'.
+typeofInObjectLiteralType.ts(1,31): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/compiler/typeofInObjectLiteralType.ts (1 errors) ====
+==== typeofInObjectLiteralType.ts (1 errors) ====
     var a: { b: number; c: typeof b }; // Should give error for attempting to use type query on b.
                                   ~
 !!! error TS2304: Cannot find name 'b'.

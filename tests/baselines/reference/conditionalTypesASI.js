@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypesASI.ts] ////
+
 //// [conditionalTypesASI.ts]
 // Repro from #21637
 
@@ -8,6 +10,7 @@ interface JSONSchema4 {
 
 
 //// [conditionalTypesASI.js]
+"use strict";
 // Repro from #21637
 
 

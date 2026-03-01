@@ -1,55 +1,92 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts] ////
+
+=== classStaticBlock3.ts ===
 const a = 1;
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     static f1 = 1;
 >f1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     static {
         console.log(C.f1, C.f2, C.f3)
 >console.log(C.f1, C.f2, C.f3) : void
+>                              : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >C.f1 : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f1 : number
+>   : ^^^^^^
 >C.f2 : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f2 : number
+>   : ^^^^^^
 >C.f3 : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f3 : number
+>   : ^^^^^^
     }
 
     static f2 = 2;
 >f2 : number
+>   : ^^^^^^
 >2 : 2
+>  : ^
 
     static {
         console.log(C.f1, C.f2, C.f3)
 >console.log(C.f1, C.f2, C.f3) : void
+>                              : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >C.f1 : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f1 : number
+>   : ^^^^^^
 >C.f2 : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f2 : number
+>   : ^^^^^^
 >C.f3 : number
+>     : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f3 : number
+>   : ^^^^^^
     }
 
     static f3 = 3;
 >f3 : number
+>   : ^^^^^^
 >3 : 3
+>  : ^
 }
 

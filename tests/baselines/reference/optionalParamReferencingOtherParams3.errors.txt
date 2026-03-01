@@ -1,7 +1,7 @@
-tests/cases/compiler/optionalParamReferencingOtherParams3.ts(1,20): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+optionalParamReferencingOtherParams3.ts(1,20): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
 
 
-==== tests/cases/compiler/optionalParamReferencingOtherParams3.ts (1 errors) ====
+==== optionalParamReferencingOtherParams3.ts (1 errors) ====
     function right(a = b, b = a) {
                        ~
 !!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.

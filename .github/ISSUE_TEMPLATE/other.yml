@@ -1,0 +1,16 @@
+name: 'Other'
+description: 'Something not captured by any other template'
+body:
+  - type: checkboxes
+    id: acknowledgement
+    attributes:
+      label: Acknowledgement
+      options:
+        - label: I acknowledge that issues using this template may be closed without further explanation at the maintainer's discretion.
+          required: true
+  - type: textarea
+    id: contents
+    attributes:
+      label: Comment
+    validations:
+      required: true

@@ -1,150 +1,247 @@
-=== tests/cases/compiler/narrowingDestructuring.ts ===
+//// [tests/cases/compiler/narrowingDestructuring.ts] ////
+
+=== narrowingDestructuring.ts ===
 type X = { kind: "a", a: string } | { kind: "b", b: string }
->X : { kind: "a"; a: string; } | { kind: "b"; b: string; }
+>X : X
+>  : ^
 >kind : "a"
+>     : ^^^
 >a : string
+>  : ^^^^^^
 >kind : "b"
+>     : ^^^
 >b : string
+>  : ^^^^^^
 
 function func<T extends X>(value: T) {
 >func : <T extends X>(value: T) => void
+>     : ^ ^^^^^^^^^ ^^     ^^ ^^^^^^^^^
 >value : T
+>      : ^
 
     if (value.kind === "a") {
 >value.kind === "a" : boolean
+>                   : ^^^^^^^
 >value.kind : "a" | "b"
+>           : ^^^^^^^^^
 >value : X
+>      : ^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
         value.a;
 >value.a : string
+>        : ^^^^^^
 >value : { kind: "a"; a: string; }
+>      : ^^^^^^^^   ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
         const { a } = value;
 >a : string
+>  : ^^^^^^
 >value : { kind: "a"; a: string; }
+>      : ^^^^^^^^   ^^^^^      ^^^
 
     } else {
         value.b;
 >value.b : string
+>        : ^^^^^^
 >value : { kind: "b"; b: string; }
+>      : ^^^^^^^^   ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 
         const { b } = value;
 >b : string
+>  : ^^^^^^
 >value : { kind: "b"; b: string; }
+>      : ^^^^^^^^   ^^^^^      ^^^
     }
 }
 
 type Z = { kind: "f", f: { a: number, b: string, c: number } }
->Z : { kind: "f"; f: {    a: number;    b: string;    c: number;}; } | { kind: "g"; g: {    a: string;    b: number;    c: string;}; }
+>Z : Z
+>  : ^
 >kind : "f"
+>     : ^^^
 >f : { a: number; b: string; c: number; }
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
     | { kind: "g", g: { a: string, b: number, c: string }};
 >kind : "g"
+>     : ^^^
 >g : { a: string; b: number; c: string; }
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 >c : string
+>  : ^^^^^^
 
 function func2<T extends Z>(value: T) {
 >func2 : <T extends Z>(value: T) => void
+>      : ^ ^^^^^^^^^ ^^     ^^ ^^^^^^^^^
 >value : T
+>      : ^
 
     if (value.kind === "f") {
 >value.kind === "f" : boolean
+>                   : ^^^^^^^
 >value.kind : "f" | "g"
+>           : ^^^^^^^^^
 >value : Z
+>      : ^
 >kind : "f" | "g"
+>     : ^^^^^^^^^
 >"f" : "f"
+>    : ^^^
 
         const { f: f1 } = value;
 >f : any
+>  : ^^^
 >f1 : { a: number; b: string; c: number; }
+>   : ^^^^^      ^^^^^      ^^^^^      ^^^
 >value : { kind: "f"; f: { a: number; b: string; c: number; }; }
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 
         const { f: { a, ...spread } } = value;
 >f : any
+>  : ^^^
 >a : number
+>  : ^^^^^^
 >spread : { b: string; c: number; }
+>       : ^^^^^      ^^^^^      ^^^
 >value : { kind: "f"; f: { a: number; b: string; c: number; }; }
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 
         value.f;
 >value.f : { a: number; b: string; c: number; }
+>        : ^^^^^      ^^^^^      ^^^^^      ^^^
 >value : { kind: "f"; f: { a: number; b: string; c: number; }; }
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 >f : { a: number; b: string; c: number; }
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^
 
     } else {
         const { g: { c, ...spread } } = value;
 >g : any
+>  : ^^^
 >c : string
+>  : ^^^^^^
 >spread : { a: string; b: number; }
+>       : ^^^^^      ^^^^^      ^^^
 >value : { kind: "g"; g: { a: string; b: number; c: string; }; }
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 
         value.g;
 >value.g : { a: string; b: number; c: string; }
+>        : ^^^^^      ^^^^^      ^^^^^      ^^^
 >value : { kind: "g"; g: { a: string; b: number; c: string; }; }
+>      : ^^^^^^^^   ^^^^^                                    ^^^
 >g : { a: string; b: number; c: string; }
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^
     }
 }
 
 function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t: T) {
 >func3 : <T extends { kind: "a"; a: string; } | { kind: "b"; b: number; }>(t: T) => void
+>      : ^ ^^^^^^^^^                                                     ^^ ^^ ^^^^^^^^^
 >kind : "a"
+>     : ^^^
 >a : string
+>  : ^^^^^^
 >kind : "b"
+>     : ^^^
 >b : number
+>  : ^^^^^^
 >t : T
+>  : ^
 
     if (t.kind === "a") {
 >t.kind === "a" : boolean
+>               : ^^^^^^^
 >t.kind : "a" | "b"
+>       : ^^^^^^^^^
 >t : { kind: "a"; a: string; } | { kind: "b"; b: number; }
+>  : ^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^^   ^^^^^      ^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >"a" : "a"
+>    : ^^^
 
         const { kind, ...r1 } = t;
 >kind : "a"
+>     : ^^^
 >r1 : Omit<T, "kind">
+>   : ^^^^^^^^^^^^^^^
 >t : { kind: "a"; a: string; }
+>  : ^^^^^^^^   ^^^^^      ^^^
 
         const r2 = (({ kind, ...rest }) => rest)(t);
 >r2 : { a: string; }
+>   : ^^^^^      ^^^
 >(({ kind, ...rest }) => rest)(t) : { a: string; }
+>                                 : ^^^^^      ^^^
 >(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
+>                              : ^                 ^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^      ^^^
 >({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
+>                            : ^                 ^^^^^^^^^^   ^^^^^      ^^^^^^^^^^^^^      ^^^
 >kind : "a"
+>     : ^^^
 >rest : { a: string; }
+>     : ^^^^^      ^^^
 >rest : { a: string; }
+>     : ^^^^^      ^^^
 >t : { kind: "a"; a: string; }
+>  : ^^^^^^^^   ^^^^^      ^^^
     }
 }
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
 >farr : <T extends [number, string, string] | [string, number, number]>(x: T) => void
+>     : ^ ^^^^^^^^^                                                   ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     const [head, ...tail] = x;
 >head : string | number
->tail : (string | number)[]
+>     : ^^^^^^^^^^^^^^^
+>tail : [string, string] | [number, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, string, string] | [string, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    if (x[0] === 'number') {
->x[0] === 'number' : boolean
+    if (typeof x[0] === 'number') {
+>typeof x[0] === 'number' : boolean
+>                         : ^^^^^^^
+>typeof x[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x[0] : string | number
+>     : ^^^^^^^^^^^^^^^
 >x : [number, string, string] | [string, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'number' : "number"
+>         : ^^^^^^^^
 
         const [head, ...tail] = x;
->head : "number"
->tail : (string | number)[]
+>head : number
+>     : ^^^^^^
+>tail : [string, string] | [number, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, string, string] | [string, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
+

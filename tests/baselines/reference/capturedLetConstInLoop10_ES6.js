@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop10_ES6.ts] ////
+
 //// [capturedLetConstInLoop10_ES6.ts]
 class A {
     foo() {
@@ -46,6 +48,7 @@ class B {
 }
 
 //// [capturedLetConstInLoop10_ES6.js]
+"use strict";
 class A {
     foo() {
         for (let x of [0]) {

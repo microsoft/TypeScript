@@ -1,47 +1,76 @@
-=== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts] ////
+
+=== grammarAmbiguities.ts ===
 function f(n: any) { return null; }
 >f : (n: any) => any
+>  : ^ ^^   ^^^^^^^^
 >n : any
->null : null
+>  : ^^^
 
 function g<A, B>(x: any) { return null; }
 >g : <A, B>(x: any) => any
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >x : any
->null : null
+>  : ^^^
 
 interface A { }
 interface B { }
 var A, B;
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 
 f(g<A, B>(7));
 >f(g<A, B>(7)) : any
+>              : ^^^
 >f : (n: any) => any
+>  : ^ ^^   ^^^^^^^^
 >g<A, B>(7) : any
+>           : ^^^
 >g : <A, B>(x: any) => any
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >7 : 7
+>  : ^
 
 f(g < A, B > 7); // Should error
 >f(g < A, B > 7) : any
+>                : ^^^
 >f : (n: any) => any
+>  : ^ ^^   ^^^^^^^^
 >g < A : boolean
+>      : ^^^^^^^
 >g : <A, B>(x: any) => any
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >A : any
+>  : ^^^
 >B > 7 : boolean
+>      : ^^^^^^^
 >B : any
+>  : ^^^
 >7 : 7
+>  : ^
 
 f(g < A, B > +(7)); // Should error
 >f(g < A, B > +(7)) : any
+>                   : ^^^
 >f : (n: any) => any
+>  : ^ ^^   ^^^^^^^^
 >g < A : boolean
+>      : ^^^^^^^
 >g : <A, B>(x: any) => any
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >A : any
+>  : ^^^
 >B > +(7) : boolean
+>         : ^^^^^^^
 >B : any
+>  : ^^^
 >+(7) : number
+>     : ^^^^^^
 >(7) : 7
+>    : ^
 >7 : 7
+>  : ^
 
 

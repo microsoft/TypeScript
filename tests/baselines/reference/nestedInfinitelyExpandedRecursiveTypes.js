@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts] ////
+
 //// [nestedInfinitelyExpandedRecursiveTypes.ts]
 interface F<T> {
       t: G<F<() => T>>;
@@ -12,6 +14,7 @@ f = g;
 g = f;
 
 //// [nestedInfinitelyExpandedRecursiveTypes.js]
+"use strict";
 var f;
 var g;
 f = g;

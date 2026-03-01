@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/typePredicateInherit.ts] ////
+
+=== typePredicateInherit.ts ===
+interface A {
+  method1(): this is {
+>method1 : () => this is { a: 1; }
+>        : ^^^^^^                 
+
+    a: 1
+>a : 1
+>  : ^
+  }
+  method2(): boolean;
+>method2 : () => boolean
+>        : ^^^^^^       
+
+  method3(): this is {
+>method3 : () => this is { a: 1; }
+>        : ^^^^^^                 
+
+    a: 1
+>a : 1
+>  : ^
+
+  };
+}
+class B implements A {
+>B : B
+>  : ^
+
+  method1() { }      // should error
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+  method2() { }   // should error
+>method2 : () => void
+>        : ^^^^^^^^^^
+
+  method3() {   // should error
+>method3 : () => boolean
+>        : ^^^^^^^^^^^^^
+
+    return true
+>true : true
+>     : ^^^^
+  }
+}
+
+class C {
+>C : C
+>  : ^
+
+  method1(): this is {
+>method1 : () => this is { a: 1; }
+>        : ^^^^^^                 
+
+    a: 1
+>a : 1
+>  : ^
+
+  } {
+    return true;
+>true : true
+>     : ^^^^
+  }
+
+  method2(): this is {
+>method2 : () => this is { a: 1; }
+>        : ^^^^^^                 
+
+    a: 1
+>a : 1
+>  : ^
+
+  } {
+    return true;
+>true : true
+>     : ^^^^
+  }
+
+  method3(): this is {
+>method3 : () => this is { a: 1; }
+>        : ^^^^^^                 
+
+    a: 1
+>a : 1
+>  : ^
+
+  } {
+    return true;
+>true : true
+>     : ^^^^
+  }
+}
+
+class D extends C {
+>D : D
+>  : ^
+>C : C
+>  : ^
+
+  method1(): void {   // should error
+>method1 : () => void
+>        : ^^^^^^    
+  }
+
+  method2(): this is {  // should ok
+>method2 : () => this is { a: 1; }
+>        : ^^^^^^                 
+
+    a: 1
+>a : 1
+>  : ^
+
+  } {
+    return true;
+>true : true
+>     : ^^^^
+  }
+
+  method3(): boolean {  // should error
+>method3 : () => boolean
+>        : ^^^^^^       
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+}

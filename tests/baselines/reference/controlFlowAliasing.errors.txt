@@ -1,38 +1,30 @@
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(59,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+controlFlowAliasing.ts(59,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(74,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+controlFlowAliasing.ts(74,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(91,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(91,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(94,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(94,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(101,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(101,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(104,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(104,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(112,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(112,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(115,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(115,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(134,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(154,19): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(137,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+controlFlowAliasing.ts(157,19): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(154,19): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(157,19): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(219,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+controlFlowAliasing.ts(233,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(232,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(233,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2448: Block-scoped variable 'a' used before its declaration.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being assigned.
+controlFlowAliasing.ts(280,5): error TS2448: Block-scoped variable 'a' used before its declaration.
+controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being assigned.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowAliasing.ts (17 errors) ====
+==== controlFlowAliasing.ts (13 errors) ====
     // Narrowing by aliased conditional expressions
     
     function f10(x: string | number) {
@@ -190,16 +182,10 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454:
         let obj = arg;
         const isFoo = obj.kind === 'foo';
         if (isFoo) {
-            obj.foo;  // Not narrowed because obj is mutable
-                ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+            obj.foo;
         }
         else {
-            obj.bar;  // Not narrowed because obj is mutable
-                ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+            obj.bar;
         }
     }
     
@@ -288,9 +274,6 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454:
             if (thisX_isString && xIsString) {
                 let s: string;
                 s = this.x;
-                ~
-!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
                 s = x;
             }
         }
@@ -304,9 +287,6 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454:
                 // Some narrowings may be invalidated due to later assignments.
                 let s: string;
                 s = this.x;
-                ~
-!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
                 s = x;
                 ~
 !!! error TS2322: Type 'string | number' is not assignable to type 'string'.
@@ -360,9 +340,27 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454:
     if (a) { }
         ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-!!! related TS2728 tests/cases/conformance/controlFlow/controlFlowAliasing.ts:282:7: 'a' is declared here.
+!!! related TS2728 controlFlowAliasing.ts:282:7: 'a' is declared here.
         ~
 !!! error TS2454: Variable 'a' is used before being assigned.
     
     const a = obj.fn();
     
+    // repro from https://github.com/microsoft/TypeScript/issues/53267
+    class Utils {
+      static isDefined<T>(value: T): value is NonNullable<T> {
+        return value != null;
+      }
+    }
+    
+    class A53267 {
+      public readonly testNumber: number | undefined;
+    
+      foo() {
+        const isNumber = Utils.isDefined(this.testNumber);
+    
+        if (isNumber) {
+          const x: number = this.testNumber;
+        }
+      }
+    }

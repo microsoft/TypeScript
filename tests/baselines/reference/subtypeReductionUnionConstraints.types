@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/subtypeReductionUnionConstraints.ts] ////
+
+=== subtypeReductionUnionConstraints.ts ===
+// Repro from #53311
+
+type FooNode = {
+>FooNode : FooNode
+>        : ^^^^^^^
+
+    kind: 'foo';
+>kind : "foo"
+>     : ^^^^^
+
+    children: Node[];
+>children : Node[]
+>         : ^^^^^^
+
+};
+
+type BarNode = {
+>BarNode : BarNode
+>        : ^^^^^^^
+
+    kind: 'bar';
+>kind : "bar"
+>     : ^^^^^
+}
+
+type Node = FooNode | BarNode;
+>Node : Node
+>     : ^^^^
+
+type Document = {
+>Document : Document
+>         : ^^^^^^^^
+
+    kind: 'document';
+>kind : "document"
+>     : ^^^^^^^^^^
+
+    children: Node[];
+>children : Node[]
+>         : ^^^^^^
+
+};
+
+declare function isNode(node: unknown): node is Node;
+>isNode : (node: unknown) => node is Node
+>       : ^    ^^       ^^^^^            
+>node : unknown
+>     : ^^^^^^^
+
+declare function isBar(node: Node): node is BarNode;
+>isBar : (node: Node) => node is BarNode
+>      : ^    ^^    ^^^^^               
+>node : Node
+>     : ^^^^
+
+export function visitNodes<T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T): void {
+>visitNodes : <T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T) => void
+>           : ^ ^^^^^^^^^    ^^    ^^               ^^         ^^                                 ^^^^^    
+>node : Node | Document
+>     : ^^^^^^^^^^^^^^^
+>predicate : (testNode: Node) => testNode is T
+>          : ^        ^^    ^^^^^             
+>testNode : Node
+>         : ^^^^
+
+    isNode(node) && predicate(node);
+>isNode(node) && predicate(node) : boolean
+>                                : ^^^^^^^
+>isNode(node) : boolean
+>             : ^^^^^^^
+>isNode : (node: unknown) => node is Node
+>       : ^    ^^       ^^^^^            
+>node : Node | Document
+>     : ^^^^^^^^^^^^^^^
+>predicate(node) : boolean
+>                : ^^^^^^^
+>predicate : (testNode: Node) => testNode is T
+>          : ^        ^^    ^^^^^             
+>node : Node
+>     : ^^^^
+
+    if (!isNode(node) || !isBar(node)) {
+>!isNode(node) || !isBar(node) : boolean
+>                              : ^^^^^^^
+>!isNode(node) : boolean
+>              : ^^^^^^^
+>isNode(node) : boolean
+>             : ^^^^^^^
+>isNode : (node: unknown) => node is Node
+>       : ^    ^^       ^^^^^            
+>node : Node | Document
+>     : ^^^^^^^^^^^^^^^
+>!isBar(node) : boolean
+>             : ^^^^^^^
+>isBar(node) : boolean
+>            : ^^^^^^^
+>isBar : (node: Node) => node is BarNode
+>      : ^    ^^    ^^^^^               
+>node : Node
+>     : ^^^^
+
+        const nodes: Node[] = node.children;
+>nodes : Node[]
+>      : ^^^^^^
+>node.children : Node[]
+>              : ^^^^^^
+>node : FooNode | Document
+>     : ^^^^^^^^^^^^^^^^^^
+>children : Node[]
+>         : ^^^^^^
+    }
+}
+
+// Repro from #53311
+
+type A = { a: string };
+>A : A
+>  : ^
+>a : string
+>  : ^^^^^^
+
+type B = { b: string };
+>B : B
+>  : ^
+>b : string
+>  : ^^^^^^
+
+function f1<T extends A | B>(t: T, x: A | B) {
+>f1 : <T extends A | B>(t: T, x: A | B) => void
+>   : ^ ^^^^^^^^^     ^^ ^^ ^^ ^^     ^^^^^^^^^
+>t : T
+>  : ^
+>x : A | B
+>  : ^^^^^
+
+    const a = [t, x];  // (A | B)[] by subtype reduction
+>a : (A | B)[]
+>  : ^^^^^^^^^
+>[t, x] : (A | B)[]
+>       : ^^^^^^^^^
+>t : T
+>  : ^
+>x : A | B
+>  : ^^^^^
+}
+

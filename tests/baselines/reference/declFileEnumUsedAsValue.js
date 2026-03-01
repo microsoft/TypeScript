@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileEnumUsedAsValue.ts] ////
+
 //// [declFileEnumUsedAsValue.ts]
 enum e {
     a,
@@ -7,6 +9,7 @@ enum e {
 var x = e;
 
 //// [declFileEnumUsedAsValue.js]
+"use strict";
 var e;
 (function (e) {
     e[e["a"] = 0] = "a";

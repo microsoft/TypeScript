@@ -1,70 +1,111 @@
-=== tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts ===
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithStaticMembers.ts] ////
+
+=== classWithStaticMembers.ts ===
 class C {
 >C : C
+>  : ^
 
     static fn() { return this; }
 >fn : () => typeof C
+>   : ^^^^^^^^^^^^^^
 >this : typeof C
+>     : ^^^^^^^^
 
     static get x() { return 1; }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     static set x(v) { }
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
     constructor(public a: number, private b: number) { }
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
     static foo: string; 
 >foo : string
+>    : ^^^^^^
 }
 
 var r = C.fn();
 >r : typeof C
+>  : ^^^^^^^^
 >C.fn() : typeof C
+>       : ^^^^^^^^
 >C.fn : () => typeof C
+>     : ^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >fn : () => typeof C
+>   : ^^^^^^^^^^^^^^
 
 var r2 = r.x;
 >r2 : number
+>   : ^^^^^^
 >r.x : number
+>    : ^^^^^^
 >r : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var r3 = r.foo;
 >r3 : string
+>   : ^^^^^^
 >r.foo : string
+>      : ^^^^^^
 >r : typeof C
+>  : ^^^^^^^^
 >foo : string
+>    : ^^^^^^
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 var r = D.fn();
 >r : typeof C
+>  : ^^^^^^^^
 >D.fn() : typeof C
+>       : ^^^^^^^^
 >D.fn : () => typeof C
+>     : ^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >fn : () => typeof C
+>   : ^^^^^^^^^^^^^^
 
 var r2 = r.x;
 >r2 : number
+>   : ^^^^^^
 >r.x : number
+>    : ^^^^^^
 >r : typeof C
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 var r3 = r.foo;
 >r3 : string
+>   : ^^^^^^
 >r.foo : string
+>      : ^^^^^^
 >r : typeof C
+>  : ^^^^^^^^
 >foo : string
+>    : ^^^^^^
 

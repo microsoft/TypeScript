@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyAndUnknownHaveFalsyComponents.ts ===
+//// [tests/cases/compiler/anyAndUnknownHaveFalsyComponents.ts] ////
+
+=== anyAndUnknownHaveFalsyComponents.ts ===
 declare let x1: any;
 >x1 : any
 
@@ -7,6 +9,7 @@ const y1 = x1 && 3;
 >x1 && 3 : any
 >x1 : any
 >3 : 3
+>  : ^
 
 // #39113
 declare let isTreeHeader1: any;
@@ -14,23 +17,29 @@ declare let isTreeHeader1: any;
 
 function foo1() {
 >foo1 : () => any
+>     : ^^^^^^^^^
 
   return {
 >{    display: "block",    ...(isTreeHeader1 && {      display: "flex",    })  } : any
 
     display: "block",
 >display : string
+>        : ^^^^^^
 >"block" : "block"
+>        : ^^^^^^^
 
     ...(isTreeHeader1 && {
 >(isTreeHeader1 && {      display: "flex",    }) : any
 >isTreeHeader1 && {      display: "flex",    } : any
 >isTreeHeader1 : any
 >{      display: "flex",    } : { display: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^
 
       display: "flex",
 >display : string
+>        : ^^^^^^
 >"flex" : "flex"
+>       : ^^^^^^
 
     })
   };
@@ -38,36 +47,48 @@ function foo1() {
 
 declare let x2: unknown;
 >x2 : unknown
+>   : ^^^^^^^
 
 const y2 = x2 && 3;
 >y2 : unknown
+>   : ^^^^^^^
 >x2 && 3 : unknown
+>        : ^^^^^^^
 >x2 : unknown
+>   : ^^^^^^^
 >3 : 3
+>  : ^
 
 // #39113
 declare let isTreeHeader2: unknown;
 >isTreeHeader2 : unknown
+>              : ^^^^^^^
 
 function foo2() {
 >foo2 : () => any
+>     : ^^^^^^^^^
 
   return {
 >{    display: "block",    ...(isTreeHeader1 && {      display: "flex",    })  } : any
 
     display: "block",
 >display : string
+>        : ^^^^^^
 >"block" : "block"
+>        : ^^^^^^^
 
     ...(isTreeHeader1 && {
 >(isTreeHeader1 && {      display: "flex",    }) : any
 >isTreeHeader1 && {      display: "flex",    } : any
 >isTreeHeader1 : any
 >{      display: "flex",    } : { display: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^
 
       display: "flex",
 >display : string
+>        : ^^^^^^
 >"flex" : "flex"
+>       : ^^^^^^
 
     })
   };

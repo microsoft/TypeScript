@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExpressionWithStaticPropertiesES62.ts] ////
+
 //// [classExpressionWithStaticPropertiesES62.ts]
 var v = class C {
     static a = 1;
@@ -9,6 +11,7 @@ var v = class C {
  };
 
 //// [classExpressionWithStaticPropertiesES62.js]
+"use strict";
 var _a;
 var v = (_a = class C {
     },

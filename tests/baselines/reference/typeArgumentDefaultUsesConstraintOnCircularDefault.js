@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts] ////
+
 //// [typeArgumentDefaultUsesConstraintOnCircularDefault.ts]
 type Test<T extends string = T> = { value: T };  // Error
 
@@ -13,16 +15,11 @@ class C2<T extends C2<any> = any> {}
 
 
 //// [typeArgumentDefaultUsesConstraintOnCircularDefault.js]
-var zz = { foo: "abc" }; // should error on comparison with Test<string>
-var zzy = { value: {} };
+"use strict";
+let zz = { foo: "abc" }; // should error on comparison with Test<string>
+let zzy = { value: {} };
 // Simplified repro from #28873
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C1 {
+}
+class C2 {
+}

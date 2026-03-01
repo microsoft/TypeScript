@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/classthisboth.js ===
+//// [tests/cases/conformance/jsdoc/constructorTagWithThisTag.ts] ////
+
+=== classthisboth.js ===
 /**
  * @class
  * @this {{ e: number, m: number }}
@@ -6,16 +8,26 @@
  */
 function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
     this.e = this.m + 1
 >this.e = this.m + 1 : number
+>                    : ^^^^^^
 >this.e : number
+>       : ^^^^^^
 >this : { e: number; m: number; }
+>     : ^^^^^      ^^^^^      ^^^
 >e : number
+>  : ^^^^^^
 >this.m + 1 : number
+>           : ^^^^^^
 >this.m : number
+>       : ^^^^^^
 >this : { e: number; m: number; }
+>     : ^^^^^      ^^^^^      ^^^
 >m : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 

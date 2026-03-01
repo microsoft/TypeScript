@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conflictMarkerTrivia4.ts ===
+//// [tests/cases/compiler/conflictMarkerTrivia4.ts] ////
+
+=== conflictMarkerTrivia4.ts ===
 const x = <div>
 >x : Symbol(x, Decl(conflictMarkerTrivia4.ts, 0, 5))
 >div : Symbol(div)

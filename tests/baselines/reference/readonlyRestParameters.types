@@ -1,116 +1,191 @@
-=== tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts ===
+//// [tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts] ////
+
+=== readonlyRestParameters.ts ===
 function f0(a: string, b: string) {
 >f0 : (a: string, b: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     f0(a, b);
 >f0(a, b) : void
+>         : ^^^^
 >f0 : (a: string, b: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     f1(a, b);
 >f1(a, b) : void
+>         : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
     f2(a, b);
 >f2(a, b) : void
+>         : ^^^^
 >f2 : (args_0: string, args_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 }
 
 function f1(...args: readonly string[]) {
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >args : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
 
     f0(...args);  // Error
 >f0(...args) : void
+>            : ^^^^
 >f0 : (a: string, b: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
 
     f1('abc', 'def');
 >f1('abc', 'def') : void
+>                 : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 
     f1('abc', ...args);
 >f1('abc', ...args) : void
+>                   : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
 
     f1(...args);
 >f1(...args) : void
+>            : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
 }
 
 function f2(...args: readonly [string, string]) {
 >f2 : (args_0: string, args_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : readonly [string, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f0(...args);
 >f0(...args) : void
+>            : ^^^^
 >f0 : (a: string, b: string) => void
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly [string, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f1('abc', 'def');
 >f1('abc', 'def') : void
+>                 : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 
     f1('abc', ...args);
 >f1('abc', ...args) : void
+>                   : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly [string, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f1(...args);
 >f1(...args) : void
+>            : ^^^^
 >f1 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly [string, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f2('abc', 'def');
 >f2('abc', 'def') : void
+>                 : ^^^^
 >f2 : (args_0: string, args_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >'def' : "def"
+>      : ^^^^^
 
     f2('abc', ...args);  // Error
 >f2('abc', ...args) : void
+>                   : ^^^^
 >f2 : (args_0: string, args_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'abc' : "abc"
+>      : ^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly [string, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f2(...args);
 >f2(...args) : void
+>            : ^^^^
 >f2 : (args_0: string, args_1: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...args : string
+>        : ^^^^^^
 >args : readonly [string, string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f4(...args: readonly string[]) {
 >f4 : (...args: readonly string[]) => void
+>   : ^^^^    ^^                 ^^^^^^^^^
 >args : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
 
     args[0] = 'abc';  // Error
 >args[0] = 'abc' : "abc"
+>                : ^^^^^
 >args[0] : string
+>        : ^^^^^^
 >args : readonly string[]
+>     : ^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >'abc' : "abc"
+>      : ^^^^^
 }
 

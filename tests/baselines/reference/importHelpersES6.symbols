@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importHelpersES6.ts] ////
+
+=== a.ts ===
 declare var dec: any;
 >dec : Symbol(dec, Decl(a.ts, 0, 11))
 
@@ -31,7 +33,7 @@ const y = { ...o };
 >y : Symbol(y, Decl(a.ts, 8, 5))
 >o : Symbol(o, Decl(a.ts, 7, 5))
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
 >d : Symbol(d, Decl(tslib.d.ts, --, --))

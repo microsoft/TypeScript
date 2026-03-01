@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts] ////
+
 //// [invalidTaggedTemplateEscapeSequences.ts]
 function tag (str: any, ...args: any[]): any {
   return str
@@ -26,6 +28,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 
 
 //// [invalidTaggedTemplateEscapeSequences.js]
+"use strict";
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
@@ -40,7 +43,7 @@ function tag(str) {
 var a = tag(__makeTemplateObject(["123"], ["123"]));
 var b = tag(__makeTemplateObject(["123 ", ""], ["123 ", ""]), 100);
 var x = tag(__makeTemplateObject([void 0, void 0, " wonderful ", void 0], ["\\u{hello} ", " \\xtraordinary ", " wonderful ", " \\uworld"]), 100, 200, 300);
-var y = "hello} ".concat(100, " traordinary ").concat(200, " wonderful ").concat(300, " world"); // should error with NoSubstitutionTemplate
+var y = "\\u{hello} ".concat(100, " \\xtraordinary ").concat(200, " wonderful ").concat(300, " \\uworld"); // should error with NoSubstitutionTemplate
 var z = tag(__makeTemplateObject([void 0], ["\\u{hello} \\xtraordinary wonderful \\uworld"])); // should work with Tagged NoSubstitutionTemplate
 var a1 = tag(__makeTemplateObject(["", "\0"], ["", "\\0"]), 100); // \0
 var a2 = tag(__makeTemplateObject(["", void 0], ["", "\\00"]), 100); // \\00

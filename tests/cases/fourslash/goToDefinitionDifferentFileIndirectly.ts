@@ -12,7 +12,7 @@
 ////function remFn() { }
 ////class remCls { }
 ////interface remInt{}
-////module remMod { export var foo; }
+////namespace remMod { export var foo; }
 
 // @Filename: Definition.ts
 /////*remoteVariableReference*/rem2Var = 1;
@@ -21,4 +21,4 @@
 ////class rem2fooCls implements /*remoteInterfaceReference*/rem2Int { }
 ////var rem2fooVar = /*remoteModuleReference*/rem2Mod.foo;
 
-verify.goToDefinitionForMarkers("remoteVariable", "remoteFunction", "remoteClass", "remoteInterface", "remoteModule")
+verify.baselineGetDefinitionAtPosition("remoteVariableReference", "remoteFunctionReference", "remoteClassReference", "remoteInterfaceReference", "remoteModuleReference")

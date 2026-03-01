@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_referenceTypes.ts] ////
+
 === /index.ts ===
 import * as a from "a";
 >a : Symbol(a, Decl(index.ts, 0, 6))

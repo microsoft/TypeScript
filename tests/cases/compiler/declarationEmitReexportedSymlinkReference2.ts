@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: monorepo/pkg1/dist/index.d.ts
 export * from './types';
 // @filename: monorepo/pkg1/dist/types.d.ts
@@ -55,5 +56,5 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
       "declaration": true
     }
 }
-// @link: tests/cases/compiler/monorepo/pkg1 -> tests/cases/compiler/monorepo/pkg2/node_modules/@raymondfeng/pkg1
-// @link: tests/cases/compiler/monorepo/pkg2 -> tests/cases/compiler/monorepo/pkg3/node_modules/@raymondfeng/pkg2
+// @link: monorepo/pkg1 -> monorepo/pkg2/node_modules/@raymondfeng/pkg1
+// @link: monorepo/pkg2 -> monorepo/pkg3/node_modules/@raymondfeng/pkg2

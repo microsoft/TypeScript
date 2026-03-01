@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInArray_main.ts ===
+//// [tests/cases/compiler/aliasUsageInArray.ts] ////
+
+=== aliasUsageInArray_main.ts ===
 import Backbone = require("./aliasUsageInArray_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInArray_main.ts, 0, 0))
 
@@ -25,7 +27,7 @@ var xs2: typeof moduleA[] = [moduleA];
 >moduleA : Symbol(moduleA, Decl(aliasUsageInArray_main.ts, 0, 58))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInArray_main.ts, 0, 58))
 
-=== tests/cases/compiler/aliasUsageInArray_backbone.ts ===
+=== aliasUsageInArray_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
 
@@ -33,7 +35,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsageInArray_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsageInArray_moduleA.ts ===
+=== aliasUsageInArray_moduleA.ts ===
 import Backbone = require("./aliasUsageInArray_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInArray_moduleA.ts, 0, 0))
 

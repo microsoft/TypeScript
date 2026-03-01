@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements9.ts ===
 function foo(a = console.log) { }
 >foo : Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements9.ts, 0, 0))
 >a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements9.ts, 0, 13))

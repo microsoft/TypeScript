@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMethodWithTypeParameterExtendsClauseDeclFile.ts] ////
+
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.ts]
 class privateClass {
 }
@@ -23,36 +25,27 @@ export class publicClassWithWithPrivateTypeParameters {
 
 //// [staticMethodWithTypeParameterExtendsClauseDeclFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
-var privateClass = /** @class */ (function () {
-    function privateClass() {
-    }
-    return privateClass;
-}());
-var publicClass = /** @class */ (function () {
-    function publicClass() {
-    }
-    return publicClass;
-}());
+class privateClass {
+}
+class publicClass {
+}
 exports.publicClass = publicClass;
-var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
-    function publicClassWithWithPrivateTypeParameters() {
+class publicClassWithWithPrivateTypeParameters {
+    static myPrivateStaticMethod1() {
     }
-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
-    };
-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod1 = function () {
-    };
-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod2 = function () {
-    };
-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod2 = function () {
-    };
-    publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
-    };
-    publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
-    };
-    return publicClassWithWithPrivateTypeParameters;
-}());
+    myPrivateMethod1() {
+    }
+    static myPrivateStaticMethod2() {
+    }
+    myPrivateMethod2() {
+    }
+    static myPublicStaticMethod() {
+    }
+    myPublicMethod() {
+    }
+}
 exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
 
 

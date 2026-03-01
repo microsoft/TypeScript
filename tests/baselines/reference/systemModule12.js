@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule12.ts] ////
+
 //// [systemModule12.ts]
 ///<amd-module name='NamedModule'/>
 import n from 'file1'

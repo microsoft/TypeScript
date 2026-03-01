@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameBadSuper.ts] ////
+
 //// [privateNameBadSuper.ts]
 class B {};
 class A extends B {
@@ -9,6 +11,7 @@ class A extends B {
 }
 
 //// [privateNameBadSuper.js]
+"use strict";
 var _A_x;
 class B {
 }

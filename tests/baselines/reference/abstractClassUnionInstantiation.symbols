@@ -1,4 +1,6 @@
-=== tests/cases/compiler/abstractClassUnionInstantiation.ts ===
+//// [tests/cases/compiler/abstractClassUnionInstantiation.ts] ////
+
+=== abstractClassUnionInstantiation.ts ===
 class ConcreteA {}
 >ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
 

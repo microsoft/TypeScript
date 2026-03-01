@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitTargetTypeCallSite.ts] ////
+
 //// [objectLitTargetTypeCallSite.ts]
 function process( x: {a:number; b:string;}) {
 	return x.a;
@@ -6,6 +8,7 @@ function process( x: {a:number; b:string;}) {
 process({a:true,b:"y"});
 
 //// [objectLitTargetTypeCallSite.js]
+"use strict";
 function process(x) {
     return x.a;
 }

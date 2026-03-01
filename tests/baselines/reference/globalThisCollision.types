@@ -1,4 +1,7 @@
-=== tests/cases/conformance/es2019/globalThisCollision.js ===
+//// [tests/cases/conformance/es2019/globalThisCollision.ts] ////
+
+=== globalThisCollision.js ===
 var globalThis;
 >globalThis : any
+>           : ^^^
 

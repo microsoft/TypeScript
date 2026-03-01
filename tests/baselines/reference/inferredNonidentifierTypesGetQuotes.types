@@ -1,18 +1,33 @@
-=== tests/cases/compiler/inferredNonidentifierTypesGetQuotes.ts ===
+//// [tests/cases/compiler/inferredNonidentifierTypesGetQuotes.ts] ////
+
+=== inferredNonidentifierTypesGetQuotes.ts ===
 var x = [{ "a-b": "string" }, {}];
 >x : ({ "a-b": string; } | { "a-b"?: undefined; })[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ "a-b": "string" }, {}] : ({ "a-b": string; } | {})[]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "a-b": "string" } : { "a-b": string; }
+>                    : ^^^^^^^^^^^^^^^^^^
 >"a-b" : string
+>      : ^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 var y = [{ ["a-b"]: "string" }, {}];
 >y : ({ "a-b": string; } | { "a-b"?: undefined; })[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ ["a-b"]: "string" }, {}] : ({ "a-b": string; } | {})[]
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ["a-b"]: "string" } : { "a-b": string; }
+>                      : ^^^^^^^^^^^^^^^^^^
 >["a-b"] : string
+>        : ^^^^^^
 >"a-b" : "a-b"
+>      : ^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >{} : {}
+>   : ^^
 

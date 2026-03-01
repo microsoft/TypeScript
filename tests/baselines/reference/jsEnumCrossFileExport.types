@@ -1,40 +1,64 @@
-=== tests/cases/compiler/enumDef.js ===
+//// [tests/cases/compiler/jsEnumCrossFileExport.ts] ////
+
+=== enumDef.js ===
 var Host = {};
 >Host : typeof Host
+>     : ^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 Host.UserMetrics = {};
 >Host.UserMetrics = {} : typeof Host.UserMetrics
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^
 >Host.UserMetrics : typeof Host.UserMetrics
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Host : typeof Host
+>     : ^^^^^^^^^^^
 >UserMetrics : typeof Host.UserMetrics
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @enum {number} */
 Host.UserMetrics.Action = {
 >Host.UserMetrics.Action = {    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Host.UserMetrics : typeof Host.UserMetrics
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Host : typeof Host
+>     : ^^^^^^^^^^^
 >UserMetrics : typeof Host.UserMetrics
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+>                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     WindowDocked: 1,
 >WindowDocked : number
+>             : ^^^^^^
 >1 : 1
+>  : ^
 
     WindowUndocked: 2,
 >WindowUndocked : number
+>               : ^^^^^^
 >2 : 2
+>  : ^
 
     ScriptsBreakpointSet: 3,
 >ScriptsBreakpointSet : number
+>                     : ^^^^^^
 >3 : 3
+>  : ^
 
     TimelineStarted: 4,
 >TimelineStarted : number
+>                : ^^^^^^
 >4 : 4
+>  : ^
 
 };
 /**
@@ -45,51 +69,81 @@ Host.UserMetrics.Action = {
  */
 Host.UserMetrics.Blah = {
 >Host.UserMetrics.Blah = {    x: 12} : { x: number; }
+>                                    : ^^^^^^^^^^^^^^
 >Host.UserMetrics.Blah : { x: number; }
+>                      : ^^^^^^^^^^^^^^
 >Host.UserMetrics : typeof Host.UserMetrics
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Host : typeof Host
+>     : ^^^^^^^^^^^
 >UserMetrics : typeof Host.UserMetrics
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >Blah : { x: number; }
+>     : ^^^^^^^^^^^^^^
 >{    x: 12} : { x: number; }
+>            : ^^^^^^^^^^^^^^
 
     x: 12
 >x : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 }
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 var Other = {};
 >Other : typeof Other
+>      : ^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 Other.Cls = class {
 >Other.Cls = class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
+>                                                                                                                                                                         : ^^^^^^^^^^
 >Other.Cls : typeof Cls
+>          : ^^^^^^^^^^
 >Other : typeof Other
+>      : ^^^^^^^^^^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
+>                                                                                                                                                             : ^^^^^^^^^^
 
     /**
      * @param {!Host.UserMetrics.Action} p
      */
     method(p) {}
 >method : (p: Host.UserMetrics.Action) => void
+>       : ^ ^^                       ^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
     usage() {
 >usage : () => void
+>      : ^^^^^^^^^^
 
         this.method(Host.UserMetrics.Action.WindowDocked);
 >this.method(Host.UserMetrics.Action.WindowDocked) : void
->this.method : (p: number) => void
+>                                                  : ^^^^
+>this.method : (p: Host.UserMetrics.Action) => void
+>            : ^ ^^                       ^^^^^^^^^
 >this : this
->method : (p: number) => void
+>     : ^^^^
+>method : (p: Host.UserMetrics.Action) => void
+>       : ^ ^^                       ^^^^^^^^^
 >Host.UserMetrics.Action.WindowDocked : number
+>                                     : ^^^^^^
 >Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Host.UserMetrics : typeof Host.UserMetrics
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >Host : typeof Host
+>     : ^^^^^^^^^^^
 >UserMetrics : typeof Host.UserMetrics
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WindowDocked : number
+>             : ^^^^^^
     }
 }
 
@@ -98,12 +152,16 @@ Other.Cls = class {
  */
 var x = "ok";
 >x : string
+>  : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 
 /**
  * @type {Host.UserMetrics.Blah}
  */
 var y = "ok";
 >y : string
+>  : ^^^^^^
 >"ok" : "ok"
+>     : ^^^^
 

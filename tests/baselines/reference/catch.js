@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/catch.ts] ////
+
 //// [catch.ts]
 function f() {
     try {} catch(e) { }
@@ -6,6 +8,7 @@ function f() {
 
 
 //// [catch.js]
+"use strict";
 function f() {
     try { }
     catch (e) { }

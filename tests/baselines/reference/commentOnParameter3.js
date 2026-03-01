@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnParameter3.ts] ////
+
 //// [commentOnParameter3.ts]
 function commentedParameters(
 a /* parameter a */, 
@@ -6,4 +8,5 @@ b /* parameter b */,
 ) { }
 
 //// [commentOnParameter3.js]
+"use strict";
 function commentedParameters(a /* parameter a */, b /* parameter b */) { }

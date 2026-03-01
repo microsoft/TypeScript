@@ -1,39 +1,57 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of18.ts ===
-class StringIterator {
->StringIterator : StringIterator
+//// [tests/cases/conformance/es6/for-ofStatements/for-of18.ts] ////
+
+=== for-of18.ts ===
+class MyStringIterator {
+>MyStringIterator : MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^
 
     next() {
 >next : () => { value: string; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: "",            done: false        } : { value: string; done: boolean; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: "",
 >value : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var v: string;
 >v : string
+>  : ^^^^^^
 
-for (v of new StringIterator) { } // Should succeed
+for (v of new MyStringIterator) { } // Should succeed
 >v : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>  : ^^^^^^
+>new MyStringIterator : MyStringIterator
+>                     : ^^^^^^^^^^^^^^^^
+>MyStringIterator : typeof MyStringIterator
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,16 +1,18 @@
-=== tests/cases/compiler/r/node_modules/foo/node_modules/nested/index.d.ts ===
+//// [tests/cases/compiler/declarationEmitCommonJsModuleReferencedType.ts] ////
+
+=== r/node_modules/foo/node_modules/nested/index.d.ts ===
 export interface NestedProps {}
 >NestedProps : Symbol(NestedProps, Decl(index.d.ts, 0, 0))
 
-=== tests/cases/compiler/r/node_modules/foo/other/index.d.ts ===
+=== r/node_modules/foo/other/index.d.ts ===
 export interface OtherIndexProps {}
 >OtherIndexProps : Symbol(OtherIndexProps, Decl(index.d.ts, 0, 0))
 
-=== tests/cases/compiler/r/node_modules/foo/other.d.ts ===
+=== r/node_modules/foo/other.d.ts ===
 export interface OtherProps {}
 >OtherProps : Symbol(OtherProps, Decl(other.d.ts, 0, 0))
 
-=== tests/cases/compiler/r/node_modules/foo/index.d.ts ===
+=== r/node_modules/foo/index.d.ts ===
 import { OtherProps } from "./other";
 >OtherProps : Symbol(OtherProps, Decl(index.d.ts, 0, 8))
 
@@ -30,7 +32,7 @@ export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
 >OtherIndexProps : Symbol(OtherIndexProps, Decl(index.d.ts, 1, 8))
 >NestedProps : Symbol(NestedProps, Decl(index.d.ts, 2, 8))
 
-=== tests/cases/compiler/node_modules/root/index.d.ts ===
+=== node_modules/root/index.d.ts ===
 export interface RootProps {}
 >RootProps : Symbol(RootProps, Decl(index.d.ts, 0, 0))
 
@@ -38,7 +40,7 @@ export function bar(): RootProps;
 >bar : Symbol(bar, Decl(index.d.ts, 0, 29))
 >RootProps : Symbol(RootProps, Decl(index.d.ts, 0, 0))
 
-=== tests/cases/compiler/r/entry.ts ===
+=== r/entry.ts ===
 import { foo } from "foo";
 >foo : Symbol(foo, Decl(entry.ts, 0, 8))
 

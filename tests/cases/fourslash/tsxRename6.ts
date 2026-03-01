@@ -4,7 +4,7 @@
 // @jsx: preserve
 // @noLib: true
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -22,4 +22,4 @@
 //// let opt3 = [|<[|{| "contextRangeIndex": 8 |}Opt|] wrong />|];
 //// let opt4 = [|<[|{| "contextRangeIndex": 10 |}Opt|] propx={100} propString="hi" />|];
 
-verify.rangesWithSameTextAreRenameLocations("Opt");
+verify.baselineRenameAtRangesWithText("Opt");

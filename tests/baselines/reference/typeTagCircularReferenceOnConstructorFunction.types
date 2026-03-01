@@ -1,14 +1,22 @@
-=== tests/cases/conformance/jsdoc/bug27346.js ===
+//// [tests/cases/conformance/jsdoc/typeTagCircularReferenceOnConstructorFunction.ts] ////
+
+=== bug27346.js ===
 /**
  * @type {MyClass}
  */
 function MyClass() { }
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
 MyClass.prototype = {};
 >MyClass.prototype = {} : {}
+>                       : ^^
 >MyClass.prototype : {}
+>                  : ^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >prototype : {}
+>          : ^^
 >{} : {}
+>   : ^^
 

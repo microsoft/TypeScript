@@ -1,0 +1,174 @@
+//// [tests/cases/compiler/regularExpressionScanning.ts] ////
+
+=== regularExpressionScanning.ts ===
+const regexes: RegExp[] = [
+>regexes : RegExp[]
+>        : ^^^^^^^^
+>[	// Flags	/foo/visualstudiocode,	// Pattern modifiers	/(?med-ium:bar)/,	// Capturing groups	/\0/,	/\1/,	/\2/,	/(hi)\1/,	/(hi) (hello) \2/,	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,	/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,	// Quantifiers	/{}{1,2}_{3}.{4,}?(foo){008}${32,16}\b{064,128}.+&*?\???\n{,256}{\\{,/,	// Character classes	/[-A-Za-z-z-aZ-A\d_-\d-.-.\r-\n\w-\W]/,	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/,	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/u,	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v,	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/,	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/u,	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v,	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/,	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/u,	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v,	// Character escapes	/\c[\c0\ca\cQ\c\C]\c1\C/,	/\c[\c0\ca\cQ\c\C]\c1\C/u,	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v,	// Unicode sets notation	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/,	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u,	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,	/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v,	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,	/[^\q{foo|bar|baz}--\q{foo}--\q{bar}--\q{baz}][^\p{L}--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,	/[^[[\q{foo|bar|baz}]]--\q{foo}--\q{bar}--\q{baz}][^[^[^\p{L}]]--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,] : RegExp[]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^^^^^
+
+	// Flags
+	/foo/visualstudiocode,
+>/foo/visualstudiocode : RegExp
+>                      : ^^^^^^
+
+	// Pattern modifiers
+	/(?med-ium:bar)/,
+>/(?med-ium:bar)/ : RegExp
+>                 : ^^^^^^
+
+	// Capturing groups
+	/\0/,
+>/\0/ : RegExp
+>     : ^^^^^^
+
+	/\1/,
+>/\1/ : RegExp
+>     : ^^^^^^
+
+	/\2/,
+>/\2/ : RegExp
+>     : ^^^^^^
+
+	/(hi)\1/,
+>/(hi)\1/ : RegExp
+>         : ^^^^^^
+
+	/(hi) (hello) \2/,
+>/(hi) (hello) \2/ : RegExp
+>                  : ^^^^^^
+
+	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,
+>/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/ : RegExp
+>                                                          : ^^^^^^
+
+	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,
+>/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u : RegExp
+>                                                           : ^^^^^^
+
+	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
+>/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/ : RegExp
+>                                                               : ^^^^^^
+
+	/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,
+>/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/ : RegExp
+>                                                                     : ^^^^^^
+
+	// Quantifiers
+	/{}{1,2}_{3}.{4,}?(foo){008}${32,16}\b{064,128}.+&*?\???\n{,256}{\\{,/,
+>/{}{1,2}_{3}.{4,}?(foo){008}${32,16}\b{064,128}.+&*?\???\n{,256}{\\{,/ : RegExp
+>                                                                       : ^^^^^^
+
+	// Character classes
+	/[-A-Za-z-z-aZ-A\d_-\d-.-.\r-\n\w-\W]/,
+>/[-A-Za-z-z-aZ-A\d_-\d-.-.\r-\n\w-\W]/ : RegExp
+>                                       : ^^^^^^
+
+	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/,
+>/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/ : RegExp
+>                                                                       : ^^^^^^
+
+	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/u,
+>/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/u : RegExp
+>                                                                        : ^^^^^^
+
+	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v,
+>/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v : RegExp
+>                                                                        : ^^^^^^
+
+	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/,
+>/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/ : RegExp
+>                                                                  : ^^^^^^
+
+	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/u,
+>/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/u : RegExp
+>                                                                   : ^^^^^^
+
+	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v,
+>/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v : RegExp
+>                                                                   : ^^^^^^
+
+	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/,
+>/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/ : RegExp
+>                                                          : ^^^^^^
+
+	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/u,
+>/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/u : RegExp
+>                                                           : ^^^^^^
+
+	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v,
+>/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v : RegExp
+>                                                           : ^^^^^^
+
+	// Character escapes
+	/\c[\c0\ca\cQ\c\C]\c1\C/,
+>/\c[\c0\ca\cQ\c\C]\c1\C/ : RegExp
+>                         : ^^^^^^
+
+	/\c[\c0\ca\cQ\c\C]\c1\C/u,
+>/\c[\c0\ca\cQ\c\C]\c1\C/u : RegExp
+>                          : ^^^^^^
+
+	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,
+>/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/ : RegExp
+>                                              : ^^^^^^
+
+	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,
+>/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u : RegExp
+>                                               : ^^^^^^
+
+	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v,
+>/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v : RegExp
+>                                               : ^^^^^^
+
+	// Unicode sets notation
+	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/,
+>/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/ : RegExp
+>                                                                                      : ^^^^^^
+
+	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u,
+>/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u : RegExp
+>                                                                                       : ^^^^^^
+
+	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,
+>/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v : RegExp
+>                                                                                       : ^^^^^^
+
+	/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v,
+>/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v : RegExp
+>                                                                             : ^^^^^^
+
+	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,
+>/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v : RegExp
+>                                                                                   : ^^^^^^
+
+	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,
+>/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v : RegExp
+>                                                                                   : ^^^^^^
+
+	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,
+>/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v : RegExp
+>                                                                             : ^^^^^^
+
+	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,
+>/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v : RegExp
+>                                                                                               : ^^^^^^
+
+	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,
+>/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v : RegExp
+>                                                                                               : ^^^^^^
+
+	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,
+>/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v : RegExp
+>                                                                                         : ^^^^^^
+
+	/[^\q{foo|bar|baz}--\q{foo}--\q{bar}--\q{baz}][^\p{L}--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
+>/[^\q{foo|bar|baz}--\q{foo}--\q{bar}--\q{baz}][^\p{L}--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v : RegExp
+>                                                                                           : ^^^^^^
+
+	/[^[[\q{foo|bar|baz}]]--\q{foo}--\q{bar}--\q{baz}][^[^[^\p{L}]]--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
+>/[^[[\q{foo|bar|baz}]]--\q{foo}--\q{bar}--\q{baz}][^[^[^\p{L}]]--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v : RegExp
+>                                                                                                     : ^^^^^^
+
+];
+

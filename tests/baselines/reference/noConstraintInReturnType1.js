@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noConstraintInReturnType1.ts] ////
+
 //// [noConstraintInReturnType1.ts]
 class List<T extends {}> {
     static empty<T extends {}>(): List<T> { return null; }
@@ -5,12 +7,10 @@ class List<T extends {}> {
 
 
 //// [noConstraintInReturnType1.js]
-var List = /** @class */ (function () {
-    function List() {
-    }
-    List.empty = function () { return null; };
-    return List;
-}());
+"use strict";
+class List {
+    static empty() { return null; }
+}
 
 
 //// [noConstraintInReturnType1.d.ts]

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralTypeUnion.ts] ////
+
 //// [typeGuardNarrowsToLiteralTypeUnion.ts]
 declare function isFoo(value: string) : value is ("foo" | "bar");
 declare function doThis(value: "foo" | "bar"): void;
@@ -12,7 +14,8 @@ if (isFoo(value)) {
 
 
 //// [typeGuardNarrowsToLiteralTypeUnion.js]
-var value;
+"use strict";
+let value;
 if (isFoo(value)) {
     doThis(value);
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdDependencyComment2.ts] ////
+
 //// [amdDependencyComment2.ts]
 ///<amd-dependency path='bar'/>
 
@@ -8,6 +10,6 @@ m1.f();
 ///<amd-dependency path='bar'/>
 define(["require", "exports", "m2", "bar"], function (require, exports, m1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     m1.f();
 });

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx] ////
+
 //// [jsxEsprimaFbTestSuite.tsx]
 declare var React: any;
 declare var 日本語;
@@ -56,6 +58,7 @@ baz
 
 
 //// [jsxEsprimaFbTestSuite.jsx]
+"use strict";
 <a />;
 <n:a n:v/>;
 <a n:foo="bar"> {value} <b><c /></b></a>;

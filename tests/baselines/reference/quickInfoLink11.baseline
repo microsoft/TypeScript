@@ -1,0 +1,121 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink11.ts ===
+// /**
+//  * {@link https://vscode.dev}
+//  * [link text]{https://vscode.dev}
+//  * {@link https://vscode.dev|link text}
+//  * {@link https://vscode.dev link text}
+//  */
+// function f() {}
+// 
+// f();
+// ^
+// | ----------------------------------------------------------------------
+// | function f(): void
+// | {@link https://vscode.dev}
+// | [link text]{https://vscode.dev}
+// | {@link https://vscode.dev link text}
+// | {@link https://vscode.dev link text}
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoLink11.ts",
+      "position": 170,
+      "name": ""
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 170,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https://vscode.dev",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        },
+        {
+          "text": "\n[link text]{https://vscode.dev}\n",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https://vscode.dev link text",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        },
+        {
+          "text": "\n",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "https://vscode.dev link text",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  }
+]

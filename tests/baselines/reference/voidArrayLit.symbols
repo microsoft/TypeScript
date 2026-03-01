@@ -1,4 +1,6 @@
-=== tests/cases/compiler/voidArrayLit.ts ===
+//// [tests/cases/compiler/voidArrayLit.ts] ////
+
+=== voidArrayLit.ts ===
 var va = [(() => {})()]; // ok
 >va : Symbol(va, Decl(voidArrayLit.ts, 0, 3))
 

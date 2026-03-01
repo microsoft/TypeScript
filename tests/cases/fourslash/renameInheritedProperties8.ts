@@ -11,4 +11,4 @@
 //// var c: C;
 //// c.[|prop1|];
 
-verify.rangesWithSameTextAreRenameLocations("prop1");
+verify.baselineRenameAtRangesWithText("prop1");

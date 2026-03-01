@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/unusedImports7.ts] ////
+
+=== file1.ts ===
 export class Calculator {
 >Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
 
@@ -16,7 +18,7 @@ export default function test2() {
 
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as n from "./file1"
 >n : Symbol(n, Decl(file2.ts, 0, 6))
 

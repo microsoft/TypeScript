@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/staticAndNonStaticPropertiesSameName.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticAndNonStaticPropertiesSameName.ts] ////
+
+=== staticAndNonStaticPropertiesSameName.ts ===
 class C {
 >C : Symbol(C, Decl(staticAndNonStaticPropertiesSameName.ts, 0, 0))
 

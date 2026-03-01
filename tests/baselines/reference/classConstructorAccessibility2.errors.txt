@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(31,24): error TS2675: Cannot extend a class 'BaseC'. Class constructor is marked as private.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(34,28): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(35,35): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(39,10): error TS2674: Constructor of class 'BaseB' is protected and only accessible within the class declaration.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts(40,10): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+classConstructorAccessibility2.ts(31,24): error TS2675: Cannot extend a class 'BaseC'. Class constructor is marked as private.
+classConstructorAccessibility2.ts(34,28): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+classConstructorAccessibility2.ts(35,35): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
+classConstructorAccessibility2.ts(39,10): error TS2674: Constructor of class 'BaseB' is protected and only accessible within the class declaration.
+classConstructorAccessibility2.ts(40,10): error TS2673: Constructor of class 'BaseC' is private and only accessible within the class declaration.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility2.ts (5 errors) ====
+==== classConstructorAccessibility2.ts (5 errors) ====
     class BaseA {
         public constructor(public x: number) { }
         createInstance() { new BaseA(1); }

@@ -1,22 +1,12 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": true,
-        "outFile": "../../built/local/typingsInstaller.js",
         "types": [
             "node"
-        ],
-        "lib": [
-            "es6",
-            "scripthost"
         ]
     },
     "references": [
-        { "path": "../compiler", "prepend": true },
-        { "path": "../jsTyping", "prepend": true },
-        { "path": "../typingsInstallerCore", "prepend": true }
+        { "path": "../typescript" }
     ],
-    "files": [
-        "nodeTypingsInstaller.ts"
-    ]
+    "include": ["**/*"]
 }

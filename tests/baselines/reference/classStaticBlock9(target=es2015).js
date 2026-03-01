@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts] ////
+
 //// [classStaticBlock9.ts]
 class A {
     static bar = A.foo + 1
@@ -9,6 +11,7 @@ class A {
 
 
 //// [classStaticBlock9.js]
+"use strict";
 class A {
 }
 A.bar = A.foo + 1;

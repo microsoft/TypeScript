@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/objectLitArrayDeclNoNew.ts] ////
+
 //// [objectLitArrayDeclNoNew.ts]
 declare var console;
 "use strict";
-module Test {
+namespace Test {
     export interface IState {
     }
 
@@ -29,19 +31,19 @@ module Test {
 
 //// [objectLitArrayDeclNoNew.js]
 "use strict";
+"use strict";
 var Test;
 (function (Test) {
-    var Gar = /** @class */ (function () {
-        function Gar() {
+    class Gar {
+        constructor() {
             this.moo = 0;
         }
-        return Gar;
-    }());
+    }
     Test.Gar = Gar;
     function bug() {
         var state = null;
         return {
-            tokens: Gar[],
+            tokens: Gar[], //IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]
             endState: state
         };
     }

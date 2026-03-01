@@ -1,25 +1,25 @@
-tests/cases/compiler/missingFunctionImplementation.ts(2,3): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(7,3): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(15,3): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(21,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(27,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(32,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(40,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(47,10): error TS2300: Duplicate identifier 'm'.
-tests/cases/compiler/missingFunctionImplementation.ts(48,10): error TS2300: Duplicate identifier 'm'.
-tests/cases/compiler/missingFunctionImplementation.ts(48,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(51,19): error TS2300: Duplicate identifier 'm'.
-tests/cases/compiler/missingFunctionImplementation.ts(56,10): error TS2300: Duplicate identifier 'm'.
-tests/cases/compiler/missingFunctionImplementation.ts(59,19): error TS2300: Duplicate identifier 'm'.
-tests/cases/compiler/missingFunctionImplementation.ts(59,19): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(64,19): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/missingFunctionImplementation.ts(72,19): error TS2393: Duplicate function implementation.
-tests/cases/compiler/missingFunctionImplementation.ts(73,19): error TS2393: Duplicate function implementation.
-tests/cases/compiler/missingFunctionImplementation.ts(74,19): error TS2393: Duplicate function implementation.
-tests/cases/compiler/missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implementation.
+missingFunctionImplementation.ts(2,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(7,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(15,3): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(21,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(27,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(32,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(40,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(47,10): error TS2300: Duplicate identifier 'm'.
+missingFunctionImplementation.ts(48,10): error TS2300: Duplicate identifier 'm'.
+missingFunctionImplementation.ts(48,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(51,19): error TS2300: Duplicate identifier 'm'.
+missingFunctionImplementation.ts(56,10): error TS2300: Duplicate identifier 'm'.
+missingFunctionImplementation.ts(59,19): error TS2300: Duplicate identifier 'm'.
+missingFunctionImplementation.ts(59,19): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(64,19): error TS2391: Function implementation is missing or not immediately following the declaration.
+missingFunctionImplementation.ts(72,19): error TS2393: Duplicate function implementation.
+missingFunctionImplementation.ts(73,19): error TS2393: Duplicate function implementation.
+missingFunctionImplementation.ts(74,19): error TS2393: Duplicate function implementation.
+missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/compiler/missingFunctionImplementation.ts (19 errors) ====
+==== missingFunctionImplementation.ts (19 errors) ====
     export class C1 {
       m(): void;
       ~

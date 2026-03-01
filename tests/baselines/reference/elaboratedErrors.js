@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elaboratedErrors.ts] ////
+
 //// [elaboratedErrors.ts]
 interface FileSystem {
   read: number;
@@ -14,8 +16,8 @@ class WorkerFS implements FileSystem {
 
 interface Alpha { x: string; }
 interface Beta { y: number; }
-var x: Alpha;
-var y: Beta;
+declare var x: Alpha;
+declare var y: Beta;
 
 // Only one of these errors should be large
 x = y;
@@ -27,15 +29,11 @@ y = x;
 
 
 //// [elaboratedErrors.js]
+"use strict";
 function fn(s) { }
 // This should issue a large error, not a small one
-var WorkerFS = /** @class */ (function () {
-    function WorkerFS() {
-    }
-    return WorkerFS;
-}());
-var x;
-var y;
+class WorkerFS {
+}
 // Only one of these errors should be large
 x = y;
 x = y;

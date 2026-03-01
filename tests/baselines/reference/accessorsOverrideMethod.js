@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideMethod.ts] ////
+
 //// [accessorsOverrideMethod.ts]
 class A {
     m() { }
@@ -8,6 +10,7 @@ class B extends A {
 
 
 //// [accessorsOverrideMethod.js]
+"use strict";
 class A {
     m() { }
 }

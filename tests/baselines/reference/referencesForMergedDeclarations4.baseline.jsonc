@@ -1,15 +1,16 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// /*FIND ALL REFS*/class [|testClass|] {
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -19,159 +20,72 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // /*FIND ALL REFS*/<|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class /*FIND ALL REFS*/[|testClass|] {
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -181,159 +95,72 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class /*FIND ALL REFS*/[|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// /*FIND ALL REFS*/module [|testClass|] {
+// /*FIND ALL REFS*/<|module [|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -343,159 +170,74 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // /*FIND ALL REFS*/module testClass {
+  //     export interface Bar {
+  // 
+  //     }
+  // --- (line: 10) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module /*FIND ALL REFS*/[|testClass|] {
+// <|module /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -505,159 +247,74 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module /*FIND ALL REFS*/testClass {
+  //     export interface Bar {
+  // 
+  //     }
+  // --- (line: 10) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: /*FIND ALL REFS*/[|testClass|];
 // var c2: [|testClass|].Bar;
@@ -667,150 +324,81 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // 
+  //     }
+  //     export var s = 0;
+  // }
+  // 
+  // var c1: /*FIND ALL REFS*/testClass;
+  // var c2: testClass.Bar;
+  // testClass.staticMethod();
+  // testClass.prototype.method();
+  // --- (line: 17) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: /*FIND ALL REFS*/[|testClass|].Bar;
@@ -820,150 +408,83 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // 
+  //     }
+  //     export var s = 0;
+  // }
+  // 
+  // var c1: testClass;
+  // var c2: /*FIND ALL REFS*/testClass.Bar;
+  // testClass.staticMethod();
+  // testClass.prototype.method();
+  // testClass.bind(this);
+  // testClass.s;
+  // new testClass();
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -973,150 +494,82 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
 
+  // --- (line: 11) skipped ---
+  // 
+  // var c1: testClass;
+  // var c2: testClass.Bar;
+  // /*FIND ALL REFS*/testClass.staticMethod();
+  // testClass.prototype.method();
+  // testClass.bind(this);
+  // testClass.s;
+  // new testClass();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -1126,150 +579,81 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
 
+  // --- (line: 12) skipped ---
+  // var c1: testClass;
+  // var c2: testClass.Bar;
+  // testClass.staticMethod();
+  // /*FIND ALL REFS*/testClass.prototype.method();
+  // testClass.bind(this);
+  // testClass.s;
+  // new testClass();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -1279,150 +663,80 @@
 // [|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
 
+  // --- (line: 13) skipped ---
+  // var c2: testClass.Bar;
+  // testClass.staticMethod();
+  // testClass.prototype.method();
+  // /*FIND ALL REFS*/testClass.bind(this);
+  // testClass.s;
+  // new testClass();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -1432,150 +746,79 @@
 // /*FIND ALL REFS*/[|testClass|].s;
 // new [|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
 
+  // --- (line: 14) skipped ---
+  // testClass.staticMethod();
+  // testClass.prototype.method();
+  // testClass.bind(this);
+  // /*FIND ALL REFS*/testClass.s;
+  // new testClass();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
-// class [|testClass|] {
+// <|class [|{| isWriteAccess: true |}testClass|] {
 //     static staticMethod() { }
 //     method() { }
-// }
+// }|>
 // 
-// module [|testClass|] {
+// <|module [|{| isWriteAccess: true |}testClass|] {
 //     export interface Bar {
 // 
 //     }
 //     export var s = 0;
-// }
+// }|>
 // 
 // var c1: [|testClass|];
 // var c2: [|testClass|].Bar;
@@ -1585,134 +828,59 @@
 // [|testClass|].s;
 // new /*FIND ALL REFS*/[|testClass|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-      "kind": "class",
-      "name": "class testClass\nnamespace testClass",
-      "textSpan": {
-        "start": 6,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "testClass",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 66
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 66
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 76
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 154,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 188,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 214,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 244,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 266,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 283,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations4.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations4.ts ===
+  // <|class [|testClass|] {
+  //     static staticMethod() { }
+  //     method() { }
+  // }|>
+  // 
+  // module testClass {
+  //     export interface Bar {
+  // --- (line: 8) skipped ---
+
+  // --- (line: 15) skipped ---
+  // testClass.prototype.method();
+  // testClass.bind(this);
+  // testClass.s;
+  // new /*FIND ALL REFS*/testClass();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class testClass\nnamespace testClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "testClass",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

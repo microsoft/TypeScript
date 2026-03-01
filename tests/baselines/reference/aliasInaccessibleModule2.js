@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/aliasInaccessibleModule2.ts] ////
+
 //// [aliasInaccessibleModule2.ts]
-module M {
-    module N {
+namespace M {
+    namespace N {
         class C {
         }
         
@@ -10,15 +12,13 @@ module M {
 }
 
 //// [aliasInaccessibleModule2.js]
+"use strict";
 var M;
 (function (M) {
-    var N;
+    let N;
     (function (N) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
     })(N || (N = {}));
     var R = N;
     M.X = R;
@@ -26,8 +26,8 @@ var M;
 
 
 //// [aliasInaccessibleModule2.d.ts]
-declare module M {
-    module N {
+declare namespace M {
+    namespace N {
     }
     import R = N;
     export import X = R;

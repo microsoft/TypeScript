@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts] ////
+
 //// [objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.ts]
 var x = {
     x, // OK
@@ -6,7 +8,8 @@ var x = {
 
 
 //// [objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.js]
+"use strict";
 var x = {
-    x: x,
-    undefinedVariable: undefinedVariable // Error
+    x, // OK
+    undefinedVariable // Error
 };

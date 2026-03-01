@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArrays.ts] ////
+
 //// [typedArrays.ts]
 function CreateTypedArrayTypes() {
     var typedArrays = [];
@@ -165,6 +167,7 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 }
 
 //// [typedArrays.js]
+"use strict";
 function CreateTypedArrayTypes() {
     var typedArrays = [];
     typedArrays[0] = Int8Array;

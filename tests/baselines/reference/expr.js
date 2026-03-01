@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expr.ts] ////
+
 //// [expr.ts]
 interface I {
 }
@@ -7,12 +9,12 @@ enum E {
 }
 
 function f() {
-    var a: any;
+    var a!: any;
     var n=3;
     var s="";
     var b=false;
-    var i:I;
-    var e:E;
+    var i!: I;
+    var e!: E;
 
     n&&a;
     n&&s;
@@ -246,6 +248,7 @@ function f() {
 }
 
 //// [expr.js]
+"use strict";
 var E;
 (function (E) {
     E[E["Red"] = 0] = "Red";

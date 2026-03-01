@@ -1,3 +1,4 @@
+// @target: es2015
 class CBaseBase<T3> {
     constructor(x: Parameter<T3>) { }
 }

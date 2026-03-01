@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/declarationEmitObjectLiteralAccessors1.ts] ////
+
+=== declarationEmitObjectLiteralAccessors1.ts ===
+// same type accessors
+export const obj1 = {
+>obj1 : { x: string; }
+>     : ^^^^^      ^^^
+>{  /** my awesome getter (first in source order) */  get x(): string {    return "";  },  /** my awesome setter (second in source order) */  set x(a: string) {},} : { x: string; }
+>                                                                                                                                                                   : ^^^^^      ^^^
+
+  /** my awesome getter (first in source order) */
+  get x(): string {
+>x : string
+>  : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+
+  },
+  /** my awesome setter (second in source order) */
+  set x(a: string) {},
+>x : string
+>  : ^^^^^^
+>a : string
+>  : ^^^^^^
+
+};
+
+// divergent accessors
+export const obj2 = {
+>obj2 : { get x(): string; set x(a: number); }
+>     : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
+>{  /** my awesome getter */  get x(): string {    return "";  },  /** my awesome setter */  set x(a: number) {},} : { get x(): string; set x(a: number); }
+>                                                                                                                  : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
+
+  /** my awesome getter */
+  get x(): string {
+>x : string
+>  : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+
+  },
+  /** my awesome setter */
+  set x(a: number) {},
+>x : string
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+};
+
+export const obj3 = {
+>obj3 : { readonly x: string; }
+>     : ^^^^^^^^^^^^^^      ^^^
+>{  /** my awesome getter */  get x(): string {    return "";  },} : { readonly x: string; }
+>                                                                  : ^^^^^^^^^^^^^^      ^^^
+
+  /** my awesome getter */
+  get x(): string {
+>x : string
+>  : ^^^^^^
+
+    return "";
+>"" : ""
+>   : ^^
+
+  },
+};
+
+export const obj4 = {
+>obj4 : { x: number; }
+>     : ^^^^^      ^^^
+>{  /** my awesome setter */  set x(a: number) {},} : { x: number; }
+>                                                   : ^^^^^      ^^^
+
+  /** my awesome setter */
+  set x(a: number) {},
+>x : number
+>  : ^^^^^^
+>a : number
+>  : ^^^^^^
+
+};
+

@@ -1,177 +1,290 @@
-=== tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts] ////
+
+=== destructuringControlFlow.ts ===
 function f1(obj: { a?: string }) {
->f1 : (obj: {    a?: string;}) => void
->obj : { a?: string | undefined; }
+>f1 : (obj: { a?: string; }) => void
+>   : ^   ^^               ^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (obj.a) {
 >obj.a : string | undefined
->obj : { a?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         obj = {};
 >obj = {} : {}
->obj : { a?: string | undefined; }
+>         : ^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >{} : {}
+>   : ^^
 
         let a1 = obj["a"];  // string | undefined
 >a1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >obj["a"] : string | undefined
->obj : { a?: string | undefined; }
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >"a" : "a"
+>    : ^^^
 
         let a2 = obj.a;  // string | undefined
 >a2 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >obj.a : string | undefined
->obj : { a?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^
+>obj : { a?: string; }
+>    : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f2(obj: [number, string] | null[]) {
 >f2 : (obj: [number, string] | null[]) => void
+>   : ^   ^^                         ^^^^^^^^^
 >obj : [number, string] | null[]
->null : null
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let a0 = obj[0];  // number | null
 >a0 : number | null
+>   : ^^^^^^^^^^^^^
 >obj[0] : number | null
+>       : ^^^^^^^^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     let a1 = obj[1];  // string | null
 >a1 : string | null
+>   : ^^^^^^^^^^^^^
 >obj[1] : string | null
+>       : ^^^^^^^^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     let [b0, b1] = obj;
 >b0 : number | null
+>   : ^^^^^^^^^^^^^
 >b1 : string | null
+>   : ^^^^^^^^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     ([a0, a1] = obj);
 >([a0, a1] = obj) : [number, string] | null[]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[a0, a1] = obj : [number, string] | null[]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[a0, a1] : [number | null, string | null]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a0 : number | null
+>   : ^^^^^^^^^^^^^
 >a1 : string | null
+>   : ^^^^^^^^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (obj[0] && obj[1]) {
 >obj[0] && obj[1] : string | 0 | null
+>                 : ^^^^^^^^^^^^^^^^^
 >obj[0] : number | null
+>       : ^^^^^^^^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >obj[1] : string | null
+>       : ^^^^^^^^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         let c0 = obj[0];  // number
 >c0 : number
+>   : ^^^^^^
 >obj[0] : number
+>       : ^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
         let c1 = obj[1];  // string
 >c1 : string
+>   : ^^^^^^
 >obj[1] : string
+>       : ^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
         let [d0, d1] = obj;
 >d0 : number
+>   : ^^^^^^
 >d1 : string
+>   : ^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         ([c0, c1] = obj);
 >([c0, c1] = obj) : [number, string] | null[]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[c0, c1] = obj : [number, string] | null[]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[c0, c1] : [number, string]
+>         : ^^^^^^^^^^^^^^^^
 >c0 : number
+>   : ^^^^^^
 >c1 : string
+>   : ^^^^^^
 >obj : [number, string] | null[]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f3(obj: { a?: number, b?: string }) {
->f3 : (obj: {    a?: number;    b?: string;}) => void
->obj : { a?: number | undefined; b?: string | undefined; }
+>f3 : (obj: { a?: number; b?: string; }) => void
+>   : ^   ^^                           ^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     if (obj.a && obj.b) {
 >obj.a && obj.b : string | 0 | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >obj.a : number | undefined
->obj : { a?: number | undefined; b?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >obj.b : string | undefined
->obj : { a?: number | undefined; b?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 >b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
         let { a, b } = obj;  // number, string
 >a : number
+>  : ^^^^^^
 >b : string
->obj : { a?: number | undefined; b?: string | undefined; }
+>  : ^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
 
         ({ a, b } = obj);
->({ a, b } = obj) : { a?: number | undefined; b?: string | undefined; }
->{ a, b } = obj : { a?: number | undefined; b?: string | undefined; }
+>({ a, b } = obj) : { a?: number; b?: string; }
+>                 : ^^^^^^      ^^^^^^      ^^^
+>{ a, b } = obj : { a?: number; b?: string; }
+>               : ^^^^^^      ^^^^^^      ^^^
 >{ a, b } : { a: number; b: string; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
->obj : { a?: number | undefined; b?: string | undefined; }
+>  : ^^^^^^
+>obj : { a?: number; b?: string; }
+>    : ^^^^^^      ^^^^^^      ^^^
     }
 }
 
 function f4() {
 >f4 : () => void
+>   : ^^^^^^^^^^
 
     let x: boolean;
 >x : boolean
+>  : ^^^^^^^
 
     ({ x } = 0);  // Error
 >({ x } = 0) : 0
+>            : ^
 >{ x } = 0 : 0
+>          : ^
 >{ x } : { x: boolean; }
+>      : ^^^^^^^^^^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >0 : 0
+>  : ^
 
     ({ ["x"]: x } = 0);  // Error
 >({ ["x"]: x } = 0) : 0
+>                   : ^
 >{ ["x"]: x } = 0 : 0
+>                 : ^
 >{ ["x"]: x } : { x: boolean; }
+>             : ^^^^^^^^^^^^^^^
 >["x"] : boolean
+>      : ^^^^^^^
 >"x" : "x"
+>    : ^^^
 >x : boolean
+>  : ^^^^^^^
 >0 : 0
+>  : ^
 
     ({ ["x" + ""]: x } = 0);  // Errpr
 >({ ["x" + ""]: x } = 0) : 0
+>                        : ^
 >{ ["x" + ""]: x } = 0 : 0
+>                      : ^
 >{ ["x" + ""]: x } : { [x: string]: boolean; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >["x" + ""] : boolean
+>           : ^^^^^^^
 >"x" + "" : string
+>         : ^^^^^^
 >"x" : "x"
+>    : ^^^
 >"" : ""
+>   : ^^
 >x : boolean
+>  : ^^^^^^^
 >0 : 0
+>  : ^
 }
 
 // Repro from #31770
 
 type KeyValue = [string, string?];
->KeyValue : [string, (string | undefined)?]
+>KeyValue : KeyValue
+>         : ^^^^^^^^
 
 let [key, value]: KeyValue = ["foo"];
 >key : string
+>    : ^^^^^^
 >value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >["foo"] : [string]
+>        : ^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 value.toUpperCase();  // Error
 >value.toUpperCase() : any
+>                    : ^^^
 >value.toUpperCase : any
+>                  : ^^^
 >value : undefined
+>      : ^^^^^^^^^
 >toUpperCase : any
+>            : ^^^
 

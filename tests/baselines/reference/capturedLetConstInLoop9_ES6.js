@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop9_ES6.ts] ////
+
 //// [capturedLetConstInLoop9_ES6.ts]
 for (let x = 0; x < 1; ++x) {
     let x;
@@ -138,6 +140,7 @@ function foo3 () {
 }
 
 //// [capturedLetConstInLoop9_ES6.js]
+"use strict";
 for (let x = 0; x < 1; ++x) {
     let x;
     (function () { return x; });

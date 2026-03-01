@@ -1,4 +1,6 @@
-=== tests/cases/compiler/yieldExpressionInFlowLoop.ts ===
+//// [tests/cases/compiler/yieldExpressionInFlowLoop.ts] ////
+
+=== yieldExpressionInFlowLoop.ts ===
 function* f() {
 >f : Symbol(f, Decl(yieldExpressionInFlowLoop.ts, 0, 0))
 

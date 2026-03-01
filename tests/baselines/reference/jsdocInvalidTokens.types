@@ -1,4 +1,6 @@
-=== tests/cases/conformance/scanner/jsdocInvalidTokens.js ===
+//// [tests/cases/conformance/scanner/jsdocInvalidTokens.ts] ////
+
+=== jsdocInvalidTokens.js ===
 /**
  *
  * unicode-escape = "\u{abcdefghi}" -- should not have error for invalid unicode escape
@@ -9,5 +11,7 @@
  */
 var hi = 1
 >hi : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 

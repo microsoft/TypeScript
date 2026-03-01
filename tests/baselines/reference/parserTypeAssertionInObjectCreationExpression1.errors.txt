@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserTypeAssertionInObjectCreationExpression1.ts(1,5): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserTypeAssertionInObjectCreationExpression1.ts(1,6): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserTypeAssertionInObjectCreationExpression1.ts(1,8): error TS2304: Cannot find name 'Foo'.
+parserTypeAssertionInObjectCreationExpression1.ts(1,5): error TS1109: Expression expected.
+parserTypeAssertionInObjectCreationExpression1.ts(1,6): error TS2304: Cannot find name 'T'.
+parserTypeAssertionInObjectCreationExpression1.ts(1,8): error TS2304: Cannot find name 'Foo'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Expressions/parserTypeAssertionInObjectCreationExpression1.ts (3 errors) ====
+==== parserTypeAssertionInObjectCreationExpression1.ts (3 errors) ====
     new <T>Foo()
         ~
 !!! error TS1109: Expression expected.

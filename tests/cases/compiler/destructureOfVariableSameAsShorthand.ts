@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/microsoft/TypeScript/issues/38969
 interface AxiosResponse<T = never> {
     data: T;

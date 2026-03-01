@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts ===
+//// [tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts] ////
+
+=== callWithWrongNumberOfTypeArguments.ts ===
 function f<T, U>() { }
 >f : Symbol(f, Decl(callWithWrongNumberOfTypeArguments.ts, 0, 0))
 >T : Symbol(T, Decl(callWithWrongNumberOfTypeArguments.ts, 0, 11))

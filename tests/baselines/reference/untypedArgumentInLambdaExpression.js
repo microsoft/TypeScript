@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/untypedArgumentInLambdaExpression.ts] ////
+
 //// [untypedArgumentInLambdaExpression.ts]
 declare function f(fn: (a: string) => string);
  
@@ -7,6 +9,7 @@ f((input): string => {
  
 
 //// [untypedArgumentInLambdaExpression.js]
-f(function (input) {
+"use strict";
+f((input) => {
     return "." + input;
 });

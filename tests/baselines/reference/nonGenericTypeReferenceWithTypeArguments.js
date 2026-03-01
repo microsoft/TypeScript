@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts] ////
+
 //// [nonGenericTypeReferenceWithTypeArguments.ts]
 // Check that errors are reported for non-generic types with type arguments
 
@@ -24,12 +26,10 @@ function f<U>() {
 
 
 //// [nonGenericTypeReferenceWithTypeArguments.js]
+"use strict";
 // Check that errors are reported for non-generic types with type arguments
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var E;
 (function (E) {
 })(E || (E = {}));
@@ -38,12 +38,9 @@ var v2;
 var v3;
 var v4;
 function f() {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var E;
+    class C {
+    }
+    let E;
     (function (E) {
     })(E || (E = {}));
     var v1;

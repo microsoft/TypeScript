@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/hidingConstructSignatures.ts] ////
+
 //// [hidingConstructSignatures.ts]
 interface C {
     (a: string): string;
@@ -26,6 +28,7 @@ var e: E;
 new e(""); // {}
 
 //// [hidingConstructSignatures.js]
+"use strict";
 var d;
 d(""); // string
 new d(""); // should be number

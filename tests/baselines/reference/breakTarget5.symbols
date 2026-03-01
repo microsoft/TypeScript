@@ -1,4 +1,6 @@
-=== tests/cases/compiler/breakTarget5.ts ===
+//// [tests/cases/compiler/breakTarget5.ts] ////
+
+=== breakTarget5.ts ===
 target:
 while (true) {
   function f() {

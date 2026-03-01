@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty1.ts] ////
+
+=== discriminateWithOptionalProperty1.ts ===
+type Box<T> = { done?: false } | { done: true; value: T };
+>Box : Box<T>
+>    : ^^^^^^
+>done : false | undefined
+>     : ^^^^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+>done : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>value : T
+>      : ^
+
+declare const box: Box<number>;
+>box : Box<number>
+>    : ^^^^^^^^^^^
+
+if (box.done) {
+>box.done : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+>box : Box<number>
+>    : ^^^^^^^^^^^
+>done : boolean | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
+
+  box.value;
+>box.value : number
+>          : ^^^^^^
+>box : { done: true; value: number; }
+>    : ^^^^^^^^    ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+}
+

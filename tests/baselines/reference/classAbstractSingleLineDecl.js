@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractSingleLineDecl.ts] ////
+
 //// [classAbstractSingleLineDecl.ts]
 abstract class A {}
 
@@ -13,23 +15,15 @@ new B;
 new C;
 
 //// [classAbstractSingleLineDecl.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}
 abstract;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 abstract;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 new A;
 new B;
 new C;

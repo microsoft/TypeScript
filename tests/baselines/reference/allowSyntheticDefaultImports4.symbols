@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.d.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports4.ts] ////
+
+=== b.d.ts ===
 declare class Foo {
 >Foo : Symbol(Foo, Decl(b.d.ts, 0, 0))
 
@@ -8,7 +10,7 @@ declare class Foo {
 export = Foo;
 >Foo : Symbol(Foo, Decl(b.d.ts, 0, 0))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import Foo from "./b";
 >Foo : Symbol(Foo, Decl(a.ts, 0, 6))
 

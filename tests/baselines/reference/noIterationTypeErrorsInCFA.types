@@ -1,37 +1,59 @@
-=== tests/cases/compiler/noIterationTypeErrorsInCFA.ts ===
+//// [tests/cases/compiler/noIterationTypeErrorsInCFA.ts] ////
+
+=== noIterationTypeErrorsInCFA.ts ===
 interface F {
     d(): void
 >d : () => void
+>  : ^^^^^^    
 }
 export function doRemove(dds: F | F[]) {
 >doRemove : (dds: F | F[]) => F[]
+>         : ^   ^^       ^^^^^^^^
 >dds : F | F[]
+>    : ^^^^^^^
 
     if (!Array.isArray(dds)) {
 >!Array.isArray(dds) : boolean
+>                    : ^^^^^^^
 >Array.isArray(dds) : boolean
+>                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
+>        : ^   ^^   ^^^^^            
 >dds : F | F[]
+>    : ^^^^^^^
 
         dds = [dds]
 >dds = [dds] : F[]
+>            : ^^^
 >dds : F | F[]
+>    : ^^^^^^^
 >[dds] : F[]
+>      : ^^^
 >dds : F
+>    : ^
     }
     for (let n of dds) {
 >n : F
+>  : ^
 >dds : F[]
+>    : ^^^
 
         n.d()
 >n.d() : void
+>      : ^^^^
 >n.d : () => void
+>    : ^^^^^^    
 >n : F
+>  : ^
 >d : () => void
+>  : ^^^^^^    
     }
     return dds
 >dds : F[]
+>    : ^^^
 }
 

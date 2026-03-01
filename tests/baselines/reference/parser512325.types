@@ -1,16 +1,31 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512325.ts] ////
+
+=== parser512325.ts ===
 var tt = (a, (b, c)) => a+b+c;
 >tt : any
+>   : ^^^
 >(a, (b, c)) : any
+>            : ^^^
 >a, (b, c) : any
+>          : ^^^
 >a : any
+>  : ^^^
 >(b, c) : any
+>       : ^^^
 >b, c : any
+>     : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >a+b+c : any
+>      : ^^^
 >a+b : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 

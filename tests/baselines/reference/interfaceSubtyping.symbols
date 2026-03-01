@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceSubtyping.ts ===
+//// [tests/cases/compiler/interfaceSubtyping.ts] ////
+
+=== interfaceSubtyping.ts ===
 interface iface {
 >iface : Symbol(iface, Decl(interfaceSubtyping.ts, 0, 0))
 

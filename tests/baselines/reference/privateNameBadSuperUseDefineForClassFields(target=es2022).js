@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameBadSuperUseDefineForClassFields.ts] ////
+
 //// [privateNameBadSuperUseDefineForClassFields.ts]
 class B {};
 class A extends B {
@@ -10,6 +12,7 @@ class A extends B {
 
 
 //// [privateNameBadSuperUseDefineForClassFields.js]
+"use strict";
 class B {
 }
 ;

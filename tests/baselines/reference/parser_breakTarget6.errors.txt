@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget6.ts(2,3): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+parser_breakTarget6.ts(2,3): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget6.ts (1 errors) ====
+==== parser_breakTarget6.ts (1 errors) ====
     while (true) {
       break target;
       ~~~~~~~~~~~~~

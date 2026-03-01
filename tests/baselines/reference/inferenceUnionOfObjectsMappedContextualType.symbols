@@ -1,10 +1,12 @@
-=== tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts ===
+//// [tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts] ////
+
+=== inferenceUnionOfObjectsMappedContextualType.ts ===
 type Entity = {
 >Entity : Symbol(Entity, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 0, 0))
 
     someDate: Date | null;
 >someDate : Symbol(someDate, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 0, 15))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 } & ({ id: string; } | { id: number; })
 >id : Symbol(id, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 2, 6))

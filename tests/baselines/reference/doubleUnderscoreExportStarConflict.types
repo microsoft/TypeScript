@@ -1,12 +1,17 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/doubleUnderscoreExportStarConflict.ts] ////
+
+=== index.tsx ===
+
 export * from "./b";
-No type information for this code.export * from "./c";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/b.ts ===
+export * from "./c";
+
+=== b.ts ===
 export function __foo(): number | void {}
 >__foo : () => number | void
+>      : ^^^^^^             
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 export function __foo(): string | void {}
 >__foo : () => string | void
+>      : ^^^^^^             
 

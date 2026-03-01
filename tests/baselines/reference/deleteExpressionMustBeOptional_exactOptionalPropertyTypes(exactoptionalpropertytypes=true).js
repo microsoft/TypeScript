@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts] ////
+
 //// [deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts]
 interface Foo {
     a: number
@@ -54,6 +56,7 @@ delete b.b
 
 
 //// [deleteExpressionMustBeOptional_exactOptionalPropertyTypes.js]
+"use strict";
 delete f.a;
 delete f.b;
 delete f.c;

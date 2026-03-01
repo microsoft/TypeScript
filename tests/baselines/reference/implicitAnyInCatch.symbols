@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyInCatch.ts ===
+//// [tests/cases/compiler/implicitAnyInCatch.ts] ////
+
+=== implicitAnyInCatch.ts ===
 // this should not be an error
 try { } catch (error) {
 >error : Symbol(error, Decl(implicitAnyInCatch.ts, 1, 15))

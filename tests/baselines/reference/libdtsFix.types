@@ -1,6 +1,9 @@
-=== tests/cases/compiler/libdtsFix.ts ===
+//// [tests/cases/compiler/libdtsFix.ts] ////
+
+=== libdtsFix.ts ===
 interface HTMLElement {
     type: string;
 >type : string
+>     : ^^^^^^
 }
 

@@ -1,0 +1,15 @@
+1.ts(1,9): error TS2872: This kind of expression is always truthy.
+
+
+==== 0.ts (0 errors) ====
+    {
+        type Data = string | boolean;
+        let obj: Data = true;
+    }
+    export { }
+    
+==== 1.ts (1 errors) ====
+    let v = "str" || true;
+            ~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    export { v }

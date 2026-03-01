@@ -1,3 +1,33 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTags3.ts ===
+// interface Foo {
+//     /**
+//      * comment
+//      * @author Me <me@domain.tld>
+//      * @see x (the parameter)
+//      * @param {number} x - x comment
+//      * @param {number} y - y comment
+//      * @throws {Error} comment
+//      */
+//     method(x: number, y: number): void;
+// }
+// 
+// class Bar implements Foo {
+//     method(): void {
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Bar.method(): void
+// | comment
+// | @author Me <me@domain.tld>
+// | @see x (the parameter)
+// | @param x - x comment
+// | @param y - y comment
+// | @throws {Error} comment
+// | ----------------------------------------------------------------------
+//         throw new Error("Method not implemented.");
+//     }
+// }
+
 [
   {
     "marker": {
@@ -5,7 +35,7 @@
       "position": 290,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -133,7 +163,15 @@
           "name": "throws",
           "text": [
             {
-              "text": "{Error} comment",
+              "text": "{Error}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "comment",
               "kind": "text"
             }
           ]

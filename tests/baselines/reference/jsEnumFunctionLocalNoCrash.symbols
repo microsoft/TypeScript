@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/jsEnumFunctionLocalNoCrash.ts] ////
+
+=== index.js ===
 function defineCommonExtensionSymbols(apiPrivate) {
 >defineCommonExtensionSymbols : Symbol(defineCommonExtensionSymbols, Decl(index.js, 0, 0))
 >apiPrivate : Symbol(apiPrivate, Decl(index.js, 0, 38))

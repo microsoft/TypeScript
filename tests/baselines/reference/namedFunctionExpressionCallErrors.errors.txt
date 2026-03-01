@@ -1,9 +1,9 @@
-tests/cases/compiler/namedFunctionExpressionCallErrors.ts(5,1): error TS2304: Cannot find name 'foo'.
-tests/cases/compiler/namedFunctionExpressionCallErrors.ts(12,5): error TS2304: Cannot find name 'foo'.
-tests/cases/compiler/namedFunctionExpressionCallErrors.ts(16,1): error TS2304: Cannot find name 'bar'.
+namedFunctionExpressionCallErrors.ts(5,1): error TS2304: Cannot find name 'foo'.
+namedFunctionExpressionCallErrors.ts(12,5): error TS2304: Cannot find name 'foo'.
+namedFunctionExpressionCallErrors.ts(16,1): error TS2304: Cannot find name 'bar'.
 
 
-==== tests/cases/compiler/namedFunctionExpressionCallErrors.ts (3 errors) ====
+==== namedFunctionExpressionCallErrors.ts (3 errors) ====
     var recurser = function foo() {
     };
     

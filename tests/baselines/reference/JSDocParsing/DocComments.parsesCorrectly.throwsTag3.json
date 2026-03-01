@@ -1,0 +1,51 @@
+{
+    "kind": "JSDoc",
+    "pos": 0,
+    "end": 40,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocThrowsTag",
+            "pos": 8,
+            "end": 38,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "transformFlags": 0,
+                "escapedText": "throws"
+            },
+            "comment": "description",
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 16,
+                "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "type": {
+                    "kind": "TypeReference",
+                    "pos": 17,
+                    "end": 22,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 1,
+                    "typeName": {
+                        "kind": "Identifier",
+                        "pos": 17,
+                        "end": 22,
+                        "transformFlags": 0,
+                        "escapedText": "Error"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 38,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

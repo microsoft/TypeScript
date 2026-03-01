@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts] ////
+
 //// [genericCallbackInvokedInsideItsContainingFunction1.ts]
 function foo<T, U>(x:T, y:U, f: (v: T) => U) {
     var r1 = f<number>(1);
@@ -17,6 +19,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 }
 
 //// [genericCallbackInvokedInsideItsContainingFunction1.js]
+"use strict";
 function foo(x, y, f) {
     var r1 = f(1);
     var r2 = f(1);

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts] ////
+
+=== iteratorSpreadInCall4.ts ===
 function foo(s1: symbol, ...s: symbol[]) { }
 >foo : Symbol(foo, Decl(iteratorSpreadInCall4.ts, 0, 0))
 >s1 : Symbol(s1, Decl(iteratorSpreadInCall4.ts, 0, 13))

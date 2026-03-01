@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/declarationEmitMappedTypePropertyFromNumericStringKey.ts] ////
+
+=== declarationEmitMappedTypePropertyFromNumericStringKey.ts ===
+export const f = (<T>(arg: {[K in keyof T]: T[K] | string}) => arg)({'0': 0}); // Original prop uses string syntax
+>f : Symbol(f, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 12))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 19))
+>arg : Symbol(arg, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 22))
+>K : Symbol(K, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 29))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 19))
+>T : Symbol(T, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 19))
+>K : Symbol(K, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 29))
+>arg : Symbol(arg, Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 22))
+>'0' : Symbol('0', Decl(declarationEmitMappedTypePropertyFromNumericStringKey.ts, 0, 69))
+

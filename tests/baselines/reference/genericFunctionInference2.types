@@ -1,49 +1,77 @@
-=== tests/cases/compiler/genericFunctionInference2.ts ===
+//// [tests/cases/compiler/genericFunctionInference2.ts] ////
+
+=== genericFunctionInference2.ts ===
 // Repro from #30685
 
 type Reducer<S> = (state: S) => S;
 >Reducer : Reducer<S>
+>        : ^^^^^^^^^^
 >state : S
+>      : ^
 
 declare function combineReducers<S>(reducers: { [K in keyof S]: Reducer<S[K]> }): Reducer<S>;
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
+>                : ^ ^^        ^^                                  ^^^^^          
 >reducers : { [K in keyof S]: Reducer<S[K]>; }
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type MyState = { combined: { foo: number } };
->MyState : { combined: {    foo: number;}; }
+>MyState : MyState
+>        : ^^^^^^^
 >combined : { foo: number; }
+>         : ^^^^^^^      ^^^
 >foo : number
+>    : ^^^^^^
 
 declare const foo: Reducer<MyState['combined']['foo']>;
 >foo : Reducer<number>
+>    : ^^^^^^^^^^^^^^^
 
 const myReducer1: Reducer<MyState> = combineReducers({
 >myReducer1 : Reducer<MyState>
+>           : ^^^^^^^^^^^^^^^^
 >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
+>                : ^ ^^        ^^                                  ^^^^^          
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     combined: combineReducers({ foo }),
 >combined : Reducer<{ foo: number; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
+>                : ^ ^^        ^^                                  ^^^^^          
 >{ foo } : { foo: Reducer<number>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Reducer<number>
+>    : ^^^^^^^^^^^^^^^
 
 });
 
 const myReducer2 = combineReducers({
 >myReducer2 : Reducer<{ combined: { foo: number; }; }>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
+>                : ^ ^^        ^^                                  ^^^^^          
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     combined: combineReducers({ foo }),
 >combined : Reducer<{ foo: number; }>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
+>                : ^ ^^        ^^                                  ^^^^^          
 >{ foo } : { foo: Reducer<number>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Reducer<number>
+>    : ^^^^^^^^^^^^^^^
 
 });
 
@@ -51,46 +79,71 @@ const myReducer2 = combineReducers({
 
 declare function withH<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
 >withH : <T, U>(handlerCreators: HandleCreatorsFactory<T, U>) => U
+>      : ^ ^^ ^^               ^^                           ^^^^^ 
 >handlerCreators : HandleCreatorsFactory<T, U>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type Props = { out: number }
->Props : { out: number; }
+>Props : Props
+>      : ^^^^^
 >out : number
+>    : ^^^^^^
 
 type HandleCreatorsFactory<T, U> = (initialProps: T) => { [P in keyof U]: (props: T) => U[P] };
 >HandleCreatorsFactory : HandleCreatorsFactory<T, U>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >initialProps : T
+>             : ^
 >props : T
+>      : ^
 
 const enhancer4 = withH((props: Props) => ({
 >enhancer4 : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
+>          : ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >withH((props: Props) => ({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},})) : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
+>                                                                                                              : ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >withH : <T, U>(handlerCreators: HandleCreatorsFactory<T, U>) => U
+>      : ^ ^^ ^^               ^^                           ^^^^^ 
 >(props: Props) => ({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},}) : (props: Props) => { onChange: (props: Props) => (e: any) => void; onSubmit: (props: Props) => (e: any) => void; }
+>                                                                                                       : ^     ^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >props : Props
+>      : ^^^^^
 >({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},}) : { onChange: (props: Props) => (e: any) => void; onSubmit: (props: Props) => (e: any) => void; }
+>                                                                                     : ^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >{    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},} : { onChange: (props: Props) => (e: any) => void; onSubmit: (props: Props) => (e: any) => void; }
+>                                                                                   : ^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 
     onChange: (props) => (e: any) => {},
 >onChange : (props: Props) => (e: any) => void
+>         : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >(props) => (e: any) => {} : (props: Props) => (e: any) => void
+>                          : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >props : Props
+>      : ^^^^^
 >(e: any) => {} : (e: any) => void
+>               : ^ ^^   ^^^^^^^^^
 >e : any
 
     onSubmit: (props) => (e: any) => {},
 >onSubmit : (props: Props) => (e: any) => void
+>         : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >(props) => (e: any) => {} : (props: Props) => (e: any) => void
+>                          : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >props : Props
+>      : ^^^^^
 >(e: any) => {} : (e: any) => void
+>               : ^ ^^   ^^^^^^^^^
 >e : any
 
 }));
 
 enhancer4.onChange(null);
 >enhancer4.onChange(null) : void
+>                         : ^^^^
 >enhancer4.onChange : (e: any) => void
+>                   : ^ ^^   ^^^^^^^^^
 >enhancer4 : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
+>          : ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >onChange : (e: any) => void
->null : null
+>         : ^ ^^   ^^^^^^^^^
 

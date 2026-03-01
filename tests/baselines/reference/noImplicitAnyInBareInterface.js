@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyInBareInterface.ts] ////
+
 //// [noImplicitAnyInBareInterface.ts]
 interface Entry {
     // Should return error for implicit any on `new` and `foo`.
@@ -7,3 +9,4 @@ interface Entry {
 }
 
 //// [noImplicitAnyInBareInterface.js]
+"use strict";

@@ -1,303 +1,206 @@
-namespace ts.projectSystem {
-    describe("unittests:: tsserver:: rename", () => {
-        it("works with fileToRename", () => {
-            const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
-            const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import {
+    baselineTsserverLogs,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    TestSession,
+} from "../helpers/tsserver.js";
+import {
+    File,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-            const session = createSession(createServerHost([aTs, bTs]));
-            openFilesForSession([bTs], session);
+describe("unittests:: tsserver:: rename::", () => {
+    it("works with fileToRename", () => {
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export const a = 0;" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: 'import { a } from "./a";' };
 
-            // rename fails with allowRenameOfImportPath disabled
-            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
-                info: {
-                    canRename: false,
-                    localizedErrorMessage: "You cannot rename this element."
-                },
-                locs: [],
-            });
+        const host = TestServerHost.createServerHost([aTs, bTs]);
+        const session = new TestSession(host);
+        openFilesForSession([bTs], session);
 
-            // rename succeeds with allowRenameOfImportPath enabled in host
-            session.getProjectService().setHostConfiguration({ preferences: { allowRenameOfImportPath: true } });
-            const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
-                info: {
-                    canRename: true,
-                    fileToRename: aTs.path,
-                    displayName: aTs.path,
-                    fullDisplayName: aTs.path,
-                    kind: ScriptElementKind.moduleElement,
-                    kindModifiers: "",
-                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
-                },
-                locs: [{
-                    file: bTs.path,
-                    locs: [
-                        protocolRenameSpanFromSubstring({
-                            fileText: bTs.content,
-                            text: "./a",
-                            contextText: bTs.content
-                        })
-                    ]
-                }],
-            });
-
-            // rename succeeds with allowRenameOfImportPath enabled in file
-            session.getProjectService().setHostConfiguration({ preferences: { allowRenameOfImportPath: false } });
-            session.getProjectService().setHostConfiguration({ file: "/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } });
-            const response3 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response3, {
-                info: {
-                    canRename: true,
-                    fileToRename: aTs.path,
-                    displayName: aTs.path,
-                    fullDisplayName: aTs.path,
-                    kind: ScriptElementKind.moduleElement,
-                    kindModifiers: "",
-                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
-                },
-                locs: [{
-                    file: bTs.path,
-                    locs: [
-                        protocolRenameSpanFromSubstring({
-                            fileText: bTs.content,
-                            text: "./a",
-                            contextText: bTs.content
-                        })
-                    ]
-                }],
-            });
+        // rename fails with allowRenameOfImportPath disabled
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, 'a";'),
         });
 
-        it("works with prefixText and suffixText when enabled", () => {
-            const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
-            const host = createServerHost([aTs]);
-            const session = createSession(host);
-            openFilesForSession([aTs], session);
-
-            // rename with prefixText and suffixText disabled
-            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
-                info: {
-                    canRename: true,
-                    fileToRename: undefined,
-                    displayName: "x",
-                    fullDisplayName: "x",
-                    kind: ScriptElementKind.constElement,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
-                },
-                locs: [
-                    {
-                        file: aTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                contextText: "const x = 0;"
-                            }),
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                options: { index: 1 }
-                            }),
-                        ],
-                    },
-                ],
-            });
-
-            // rename with prefixText and suffixText enabled in host
-            session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: true } });
-            const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
-                info: {
-                    canRename: true,
-                    fileToRename: undefined,
-                    displayName: "x",
-                    fullDisplayName: "x",
-                    kind: ScriptElementKind.constElement,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
-                },
-                locs: [
-                    {
-                        file: aTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                contextText: "const x = 0;"
-                            }),
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                options: { index: 1 },
-                                prefixSuffixText: { prefixText: "x: " }
-                            }),
-                        ],
-                    },
-                ],
-            });
-
-            // rename with prefixText and suffixText enabled for file
-            session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: false } });
-            session.getProjectService().setHostConfiguration({ file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } });
-            const response3 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response3, {
-                info: {
-                    canRename: true,
-                    fileToRename: undefined,
-                    displayName: "x",
-                    fullDisplayName: "x",
-                    kind: ScriptElementKind.constElement,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
-                },
-                locs: [
-                    {
-                        file: aTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                contextText: "const x = 0;"
-                            }),
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                options: { index: 1 },
-                                prefixSuffixText: { prefixText: "x: " }
-                            }),
-                        ],
-                    },
-                ],
-            });
+        // rename succeeds with allowRenameOfImportPath enabled in host
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { allowRenameOfImportPath: true } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, 'a";'),
         });
 
-        it("export default anonymous function works with prefixText and suffixText when disabled", () => {
-            const aTs: File = { path: "/a.ts", content: "export default function() {}" };
-            const bTs: File = { path: "/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
-
-            const session = createSession(createServerHost([aTs, bTs]));
-            openFilesForSession([bTs], session);
-
-            session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: false } });
-            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "aTest("));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
-                info: {
-                    canRename: true,
-                    fileToRename: undefined,
-                    displayName: "aTest",
-                    fullDisplayName: "aTest",
-                    kind: ScriptElementKind.alias,
-                    kindModifiers: "export",
-                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "aTest", { index: 1 })
-                },
-                locs: [{
-                    file: bTs.path,
-                    locs: [
-                        protocolRenameSpanFromSubstring({
-                            fileText: bTs.content,
-                            text: "aTest",
-                            contextText: `import aTest from "./a";`
-                        }),
-                        protocolRenameSpanFromSubstring({
-                            fileText: bTs.content,
-                            text: "aTest",
-                            options: { index: 1 },
-                        })
-                    ]
-                }],
-            });
+        // rename succeeds with allowRenameOfImportPath enabled in file
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { allowRenameOfImportPath: false } },
         });
-
-        it("rename behavior is based on file of rename initiation", () => {
-            const aTs: File = { path: "/a.ts", content: "const x = 1; export { x };" };
-            const bTs: File = { path: "/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
-            const host = createServerHost([aTs, bTs]);
-            const session = createSession(host);
-            openFilesForSession([aTs, bTs], session);
-
-            // rename from file with prefixText and suffixText enabled
-            session.getProjectService().setHostConfiguration({ file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } });
-            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
-                info: {
-                    canRename: true,
-                    fileToRename: undefined,
-                    displayName: "x",
-                    fullDisplayName: "x",
-                    kind: ScriptElementKind.constElement,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
-                },
-                locs: [
-                    {
-                        file: aTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                contextText: "const x = 1;"
-                            }),
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                options: { index: 2 },
-                                contextText: "export { x };",
-                                prefixSuffixText: { suffixText: " as x" }
-                            }),
-                        ],
-                    },
-                ],
-            });
-
-            // rename from file with prefixText and suffixText disabled
-            const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "x"));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
-                info: {
-                    canRename: true,
-                    fileToRename: undefined,
-                    displayName: "x",
-                    fullDisplayName: "x",
-                    kind: ScriptElementKind.alias,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "x"),
-                },
-                locs: [
-                    {
-                        file: bTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring({
-                                fileText: bTs.content,
-                                text: "x",
-                                contextText: `import { x } from "./a";`
-                            }),
-                            protocolRenameSpanFromSubstring({
-                                fileText: bTs.content,
-                                text: "x",
-                                options: { index: 1 },
-                            })
-                        ]
-                    },
-                    {
-                        file: aTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                contextText: "const x = 1;"
-                            }),
-                            protocolRenameSpanFromSubstring({
-                                fileText: aTs.content,
-                                text: "x",
-                                options: { index: 2 },
-                                contextText: "export { x };",
-                            }),
-                        ],
-                    },
-                ],
-            });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { file: "/home/src/projects/project/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } },
         });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, 'a";'),
+        });
+        baselineTsserverLogs("rename", "works with fileToRename", session);
     });
-}
+
+    it("works with prefixText and suffixText when enabled", () => {
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "const x = 0; const o = { x };" };
+        const host = TestServerHost.createServerHost([aTs]);
+        const session = new TestSession(host);
+        openFilesForSession([aTs], session);
+
+        // rename with prefixText and suffixText disabled
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
+        });
+        // rename with prefixText and suffixText enabled in host
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { providePrefixAndSuffixTextForRename: true } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
+        });
+
+        // rename with prefixText and suffixText enabled for file
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { providePrefixAndSuffixTextForRename: false } },
+        });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { file: "/home/src/projects/project/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
+        });
+        baselineTsserverLogs("rename", "works with prefixText and suffixText when enabled", session);
+    });
+
+    it("export default anonymous function works with prefixText and suffixText when disabled", () => {
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export default function() {}" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import aTest from "./a"; function test() { return aTest(); }` };
+
+        const host = TestServerHost.createServerHost([aTs, bTs]);
+        const session = new TestSession(host);
+        openFilesForSession([bTs], session);
+
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { providePrefixAndSuffixTextForRename: false } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, "aTest("),
+        });
+        baselineTsserverLogs("rename", "export default anonymous function works with prefixText and suffixText when disabled", session);
+    });
+
+    it("rename behavior is based on file of rename initiation", () => {
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "const x = 1; export { x };" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
+        const host = TestServerHost.createServerHost([aTs, bTs]);
+        const session = new TestSession(host);
+        openFilesForSession([aTs, bTs], session);
+
+        // rename from file with prefixText and suffixText enabled
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { file: "/home/src/projects/project/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
+        });
+
+        // rename from file with prefixText and suffixText disabled
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, "x"),
+        });
+        baselineTsserverLogs("rename", "rename behavior is based on file of rename initiation", session);
+    });
+
+    it("with symlinks and case difference", () => {
+        const file: File = {
+            path: "C:/temp/test/project1/index.ts",
+            content: dedent`
+                export function myFunc() {
+                }
+            `,
+        };
+        const host = TestServerHost.createServerHost({
+            [file.path]: file.content,
+            "C:/temp/test/project1/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                },
+            }),
+            "C:/temp/test/project1/package.json": jsonToReadableText({
+                name: "project1",
+                version: "1.0.0",
+                main: "index.js",
+            }),
+            "C:/temp/test/project2/index.ts": dedent`
+                import { myFunc } from 'project1'
+                myFunc();
+            `,
+            "C:/temp/test/project2/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                },
+                references: [
+                    { path: "../project1" },
+                ],
+            }),
+            "C:/temp/test/tsconfig.json": jsonToReadableText({
+                references: [
+                    { path: "./project1" },
+                    { path: "./project2" },
+                ],
+                files: [],
+                include: [],
+            }),
+            "C:/temp/test/node_modules/project1": { symLink: "c:/temp/test/project1" },
+        }, { windowsStyleRoot: "C:/" });
+        const session = new TestSession(host);
+        openFilesForSession([file.path.toLowerCase()], session);
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(file, "myFunc"),
+        });
+        baselineTsserverLogs("rename", "with symlinks and case difference", session);
+    });
+
+    it("rename TS file with js extension", () => {
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: "export const a = 1;" };
+        const bTs: File = { path: "/home/src/projects/project/b.ts", content: `import * as foo from './a.js';` };
+
+        const host = TestServerHost.createServerHost([aTs, bTs]);
+        const session = new TestSession(host);
+        openFilesForSession([aTs, bTs], session);
+
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { preferences: { allowRenameOfImportPath: true } },
+        });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(bTs, "a.js"),
+        });
+        baselineTsserverLogs("rename", "rename TS file with js extension", session);
+    });
+});

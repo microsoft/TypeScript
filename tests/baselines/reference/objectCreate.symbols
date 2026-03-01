@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectCreate.ts ===
+//// [tests/cases/compiler/objectCreate.ts] ////
+
+=== objectCreate.ts ===
 declare var union: null | { a: number, b: string };
 >union : Symbol(union, Decl(objectCreate.ts, 0, 11))
 >a : Symbol(a, Decl(objectCreate.ts, 0, 27))

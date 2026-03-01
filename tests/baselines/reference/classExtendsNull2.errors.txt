@@ -1,0 +1,20 @@
+classExtendsNull2.ts(5,7): error TS2417: Class static side 'typeof C' incorrectly extends base class static side 'null'.
+classExtendsNull2.ts(7,5): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+
+
+==== classExtendsNull2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55499
+    
+    interface Base {}
+    
+    class C extends null {
+          ~
+!!! error TS2417: Class static side 'typeof C' incorrectly extends base class static side 'null'.
+      constructor() {
+        super();
+        ~~~~~~~
+!!! error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'.
+      }
+    }
+    interface C extends Base {}
+    

@@ -1,6 +1,9 @@
-=== tests/cases/compiler/concatError.ts ===
+//// [tests/cases/compiler/concatError.ts] ////
+
+=== concatError.ts ===
 var n1: number[];
 >n1 : number[]
+>   : ^^^^^^^^
 
 /*
 interface Array<T> {
@@ -10,25 +13,41 @@ interface Array<T> {
 */
 var fa: number[];
 >fa : number[]
+>   : ^^^^^^^^
 
 fa = fa.concat([0]);
 >fa = fa.concat([0]) : number[]
+>                    : ^^^^^^^^
 >fa : number[]
+>   : ^^^^^^^^
 >fa.concat([0]) : number[]
+>               : ^^^^^^^^
 >fa.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>          : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa : number[]
+>   : ^^^^^^^^
 >concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0] : number[]
+>    : ^^^^^^^^
 >0 : 0
+>  : ^
 
 fa = fa.concat(0);
 >fa = fa.concat(0) : number[]
+>                  : ^^^^^^^^
 >fa : number[]
+>   : ^^^^^^^^
 >fa.concat(0) : number[]
+>             : ^^^^^^^^
 >fa.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>          : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa : number[]
+>   : ^^^^^^^^
 >concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionRestParameterInterfaceMembers.ts] ////
+
 //// [collisionRestParameterInterfaceMembers.ts]
 // call
 interface i1 {
@@ -22,3 +24,4 @@ interface i3 {
 }
 
 //// [collisionRestParameterInterfaceMembers.js]
+"use strict";

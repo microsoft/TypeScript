@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fixingTypeParametersRepeatedly1.ts] ////
+
 //// [fixingTypeParametersRepeatedly1.ts]
 declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
 f("", x => null, x => x.toLowerCase());
@@ -8,5 +10,6 @@ declare function g();
 g("", x => null, x => x.toLowerCase());
 
 //// [fixingTypeParametersRepeatedly1.js]
-f("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
-g("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
+"use strict";
+f("", x => null, x => x.toLowerCase());
+g("", x => null, x => x.toLowerCase());

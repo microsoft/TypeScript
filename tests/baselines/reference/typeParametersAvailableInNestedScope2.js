@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope2.ts] ////
+
 //// [typeParametersAvailableInNestedScope2.ts]
 function foo<T, U>(x: T, y: U) {
     function bar<V>(z: V) {
@@ -10,6 +12,7 @@ function foo<T, U>(x: T, y: U) {
 }
 
 //// [typeParametersAvailableInNestedScope2.js]
+"use strict";
 function foo(x, y) {
     function bar(z) {
         function baz(a) {

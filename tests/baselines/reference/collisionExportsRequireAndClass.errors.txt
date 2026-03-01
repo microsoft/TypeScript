@@ -1,8 +1,10 @@
-tests/cases/compiler/collisionExportsRequireAndClass_externalmodule.ts(1,14): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-tests/cases/compiler/collisionExportsRequireAndClass_externalmodule.ts(3,14): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+collisionExportsRequireAndClass_externalmodule.ts(1,14): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+collisionExportsRequireAndClass_externalmodule.ts(3,14): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 
 
-==== tests/cases/compiler/collisionExportsRequireAndClass_externalmodule.ts (2 errors) ====
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== collisionExportsRequireAndClass_externalmodule.ts (2 errors) ====
     export class require {
                  ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
@@ -11,31 +13,31 @@ tests/cases/compiler/collisionExportsRequireAndClass_externalmodule.ts(3,14): er
                  ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     }
-    module m1 {
+    namespace m1 {
         class require {
         }
         class exports {
         }
     }
-    module m2 {
+    namespace m2 {
         export class require {
         }
         export class exports {
         }
     }
     
-==== tests/cases/compiler/collisionExportsRequireAndClass_globalFile.ts (0 errors) ====
+==== collisionExportsRequireAndClass_globalFile.ts (0 errors) ====
     class require {
     }
     class exports {
     }
-    module m3 {
+    namespace m3 {
         class require {
         }
         class exports {
         }
     }
-    module m4 {
+    namespace m4 {
         export class require {
         }
         export class exports {

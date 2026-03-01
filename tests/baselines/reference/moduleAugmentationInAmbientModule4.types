@@ -1,76 +1,106 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule4.ts] ////
+
+=== main.ts ===
 /// <reference path="O.d.ts" />
 /// <reference path="O2.d.ts" />
 
 import {Observable} from "Observable";
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 import "Map";
 let x: Observable;
 >x : Observable
+>  : ^^^^^^^^^^
 
 x.foo().x;
 >x.foo().x : number
+>          : ^^^^^^
 >x.foo() : import("M").Cls
+>        : ^^^^^^^^^^^^^^^
 >x.foo : () => import("M").Cls
+>      : ^^^^^^       ^^^  ^^^
 >x : Observable
+>  : ^^^^^^^^^^
 >foo : () => import("M").Cls
+>    : ^^^^^^       ^^^  ^^^
 >x : number
+>  : ^^^^^^
 
 x.foo2().x2;
 >x.foo2().x2 : number
+>            : ^^^^^^
 >x.foo2() : import("Map").Cls2
+>         : ^^^^^^^^^^^^^^^^^^
 >x.foo2 : () => import("Map").Cls2
+>       : ^^^^^^       ^^^^^  ^^^^
 >x : Observable
+>  : ^^^^^^^^^^
 >foo2 : () => import("Map").Cls2
+>     : ^^^^^^       ^^^^^  ^^^^
 >x2 : number
+>   : ^^^^^^
 
-=== tests/cases/compiler/O.d.ts ===
+=== O.d.ts ===
 declare module "Observable" {
 >"Observable" : typeof import("Observable")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     class Observable {}
 >Observable : Observable
+>           : ^^^^^^^^^^
 }
 
 declare module "M" {
 >"M" : typeof import("M")
+>    : ^^^^^^^^^^^^^^^^^^
 
     class Cls { x: number }
 >Cls : Cls
+>    : ^^^
 >x : number
+>  : ^^^^^^
 }
 
 declare module "Map" {
 >"Map" : typeof import("Map")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     import { Cls } from "M";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
     module "Observable" {
 >"Observable" : typeof import("Observable")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         interface Observable {
             foo(): Cls;
 >foo : () => Cls
+>    : ^^^^^^   
         }
     }
 }
 
-=== tests/cases/compiler/O2.d.ts ===
+=== O2.d.ts ===
 declare module "Map" {
 >"Map" : typeof import("Map")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     class Cls2 { x2: number }
 >Cls2 : Cls2
+>     : ^^^^
 >x2 : number
+>   : ^^^^^^
 
     module "Observable" {
 >"Observable" : typeof import("Observable")
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         interface Observable {
             foo2(): Cls2;
 >foo2 : () => Cls2
+>     : ^^^^^^    
         }
     }
 }

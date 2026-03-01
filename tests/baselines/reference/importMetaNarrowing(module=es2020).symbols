@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/importMeta/importMetaNarrowing.ts ===
+//// [tests/cases/conformance/es2019/importMeta/importMetaNarrowing.ts] ////
+
+=== importMetaNarrowing.ts ===
 declare global { interface ImportMeta {foo?: () => void} };
 >global : Symbol(global, Decl(importMetaNarrowing.ts, 0, 0))
 >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(importMetaNarrowing.ts, 0, 16))

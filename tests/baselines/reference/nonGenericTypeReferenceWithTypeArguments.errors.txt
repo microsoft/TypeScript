@@ -1,15 +1,15 @@
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(7,9): error TS2315: Type 'C' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(8,9): error TS2315: Type 'I' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(9,9): error TS2315: Type 'E' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(10,9): error TS2315: Type 'T' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(17,13): error TS2315: Type 'C' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(18,13): error TS2315: Type 'I' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(19,13): error TS2315: Type 'E' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(20,13): error TS2315: Type 'T' is not generic.
-tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(21,13): error TS2315: Type 'U' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(7,9): error TS2315: Type 'C' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(8,9): error TS2315: Type 'I' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(9,9): error TS2315: Type 'E' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(10,9): error TS2315: Type 'T' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(17,13): error TS2315: Type 'C' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(18,13): error TS2315: Type 'I' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(19,13): error TS2315: Type 'E' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(20,13): error TS2315: Type 'T' is not generic.
+nonGenericTypeReferenceWithTypeArguments.ts(21,13): error TS2315: Type 'U' is not generic.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts (9 errors) ====
+==== nonGenericTypeReferenceWithTypeArguments.ts (9 errors) ====
     // Check that errors are reported for non-generic types with type arguments
     
     class C { }

@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/largeTupleTypes.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 1,000
+Type Count: 25,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== largeTupleTypes.ts ===
+// Repro from #54491
+
+type UnshiftTuple<T extends [...any[]]> = T extends [T[0], ...infer Tail] ? Tail : never;
+>UnshiftTuple : UnshiftTuple<T>
+>             : ^^^^^^^^^^^^^^^
+
+type ExpandSmallerTuples<T extends [...any[]]> = T extends [T[0], ...infer Tail] ? T | ExpandSmallerTuples<Tail> : [];
+>ExpandSmallerTuples : ExpandSmallerTuples<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+type Shift<A extends Array<any>> = ((...args: A) => void) extends (...args: [A[0], ...infer R]) => void ? R : never;
+>Shift : Shift<A>
+>      : ^^^^^^^^
+>args : A
+>     : ^
+>args : [A[0], ...R]
+>     : ^^^^^^^^^^^^
+
+type GrowExpRev<A extends Array<any>, N extends number, P extends Array<Array<any>>> = A['length'] extends N ? A : GrowExpRev<[...A, ...P[0]][N] extends undefined ? [...A, ...P[0]] : A, N, Shift<P>>;
+>GrowExpRev : GrowExpRev<A, N, P>
+>           : ^^^^^^^^^^^^^^^^^^^
+
+type GrowExp<A extends Array<any>, N extends number, P extends Array<Array<any>>> = [...A, ...A][N] extends undefined ? GrowExp<[...A, ...A], N, [A, ...P]> : GrowExpRev<A, N, P>;
+>GrowExp : GrowExp<A, N, P>
+>        : ^^^^^^^^^^^^^^^^
+
+type Tuple<T, N extends number> = number extends N ? Array<T> : N extends 0 ? [] : N extends 1 ? [T] : GrowExp<[T], N, [[]]>;
+>Tuple : Tuple<T, N>
+>      : ^^^^^^^^^^^
+
+declare class ArrayValidator<T extends unknown[], I = T[number]> {
+>ArrayValidator : ArrayValidator<T, I>
+>               : ^^^^^^^^^^^^^^^^^^^^
+
+    lengthRange<S extends number, E extends number>(start: S, endBefore: E): ArrayValidator<Exclude<ExpandSmallerTuples<UnshiftTuple<[...Tuple<I, E>]>>, ExpandSmallerTuples<UnshiftTuple<[...Tuple<I, S>]>>>>;
+>lengthRange : <S extends number, E extends number>(start: S, endBefore: E) => ArrayValidator<Exclude<ExpandSmallerTuples<UnshiftTuple<[...Tuple<I, E>]>>, ExpandSmallerTuples<UnshiftTuple<[...Tuple<I, S>]>>>>
+>            : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^     ^^ ^^         ^^ ^^^^^                                                                                                                                 
+>start : S
+>      : ^
+>endBefore : E
+>          : ^
+}
+

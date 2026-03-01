@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts] ////
+
 //// [deleteOperatorWithEnumType.ts]
 // delete  operator on enum type
 
@@ -23,6 +25,7 @@ delete ENUM1.B;
 delete ENUM, ENUM1;
 
 //// [deleteOperatorWithEnumType.js]
+"use strict";
 // delete  operator on enum type
 var ENUM;
 (function (ENUM) {

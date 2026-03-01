@@ -1,12 +1,17 @@
-=== tests/cases/compiler/missingReturnStatement.ts ===
-module Test {
+//// [tests/cases/compiler/missingReturnStatement.ts] ////
+
+=== missingReturnStatement.ts ===
+namespace Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
     export class Bug {
 >Bug : Bug
+>    : ^^^
 
         public foo():string {
 >foo : () => string
+>    : ^^^^^^      
         }
     }    
 }

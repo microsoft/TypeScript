@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @noTypesAndSymbols: true
 // @Filename: tsconfig.json
 {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictBooleanMemberAssignability.ts] ////
+
 //// [strictBooleanMemberAssignability.ts]
 class Abc {
     def: boolean
@@ -8,9 +10,8 @@ class Abc {
 
 //// [strictBooleanMemberAssignability.js]
 "use strict";
-var Abc = /** @class */ (function () {
-    function Abc() {
+class Abc {
+    constructor() {
         this.def = true;
     }
-    return Abc;
-}());
+}

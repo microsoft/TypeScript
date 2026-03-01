@@ -1,23 +1,33 @@
-=== tests/cases/conformance/es6/Symbols/symbolType17.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType17.ts] ////
+
+=== symbolType17.ts ===
 interface Foo { prop }
 >prop : any
 
 var x: symbol | Foo;
 >x : symbol | Foo
+>  : ^^^^^^^^^^^^
 
 x;
 >x : symbol | Foo
+>  : ^^^^^^^^^^^^
 
 if (typeof x === "symbol") {
 >typeof x === "symbol" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : symbol | Foo
+>  : ^^^^^^^^^^^^
 >"symbol" : "symbol"
+>         : ^^^^^^^^
 
     x;
 >x : symbol
+>  : ^^^^^^
 }
 else {
     x;
 >x : Foo
+>  : ^^^
 }

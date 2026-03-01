@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pinnedComments1.ts] ////
+
 //// [pinnedComments1.ts]
 /*!=========
     Keep this pinned comment
@@ -10,12 +12,10 @@ class C {
 }
 
 //// [pinnedComments1.js]
+"use strict";
 /*!=========
     Keep this pinned comment
    =========
 */
-var C = (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ///////<reference path="./Bar.ts" />
 
 ////[|function [|{| "contextRangeIndex": 0 |}Bar|]() {
@@ -8,4 +10,4 @@
 ////}|]
 
 const [rDef, ...ranges] = test.ranges();
-verify.renameLocations(ranges[0], { findInStrings: true, findInComments: true, ranges });
+verify.baselineRename(ranges[0], { findInStrings: true, findInComments: true, });

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumClassification.ts] ////
+
 //// [enumClassification.ts]
 // An enum type where each member has no initializer or an initializer that specififes
 // a numeric literal, a string literal, or a single identifier naming another member in
@@ -80,6 +82,7 @@ enum E20 {
 
 
 //// [enumClassification.js]
+"use strict";
 // An enum type where each member has no initializer or an initializer that specififes
 // a numeric literal, a string literal, or a single identifier naming another member in
 // the enum type is classified as a literal enum type. An enum type that doesn't adhere

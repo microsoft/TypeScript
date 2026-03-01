@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedEnumDeclarationCodeGen.ts] ////
+
 //// [mergedEnumDeclarationCodeGen.ts]
 enum E {
     a,
@@ -8,6 +10,7 @@ enum E {
 }
 
 //// [mergedEnumDeclarationCodeGen.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

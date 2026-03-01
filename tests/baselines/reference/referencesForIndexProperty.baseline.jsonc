@@ -1,6 +1,7 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
 // class Foo {
-//     /*FIND ALL REFS*/[|property|]: number;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}property|]: number;|>
 //     method(): void { }
 // }
 // 
@@ -8,199 +9,157 @@
 // f["[|property|]"];
 // f["method"];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-      "kind": "property",
-      "name": "(property) Foo.property: number",
-      "textSpan": {
-        "start": 16,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 16,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "contextSpan": {
-          "start": 16,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
+  // class Foo {
+  //     /*FIND ALL REFS*/<|[|property|]: number;|>
+  //     method(): void { }
+  // }
+  // 
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo.property: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
 // class Foo {
 //     property: number;
-//     /*FIND ALL REFS*/[|method|](): void { }
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}method|](): void { }|>
 // }
 // 
 // var f: Foo;
 // f["property"];
 // f["[|method|]"];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-      "kind": "method",
-      "name": "(method) Foo.method(): void",
-      "textSpan": {
-        "start": 38,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 38,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "contextSpan": {
-          "start": 38,
-          "length": 18
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
+  // class Foo {
+  //     property: number;
+  //     /*FIND ALL REFS*/<|[|method|](): void { }|>
+  // }
+  // 
+  // var f: Foo;
+  // f["property"];
+  // f["method"];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo.method(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
 // class Foo {
-//     [|property|]: number;
+//     <|[|property|]: number;|>
 //     method(): void { }
 // }
 // 
@@ -208,188 +167,149 @@
 // f["/*FIND ALL REFS*/[|property|]"];
 // f["method"];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-      "kind": "property",
-      "name": "(property) Foo.property: number",
-      "textSpan": {
-        "start": 16,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 16,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 16,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "contextSpan": {
-          "start": 16,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
+  // class Foo {
+  //     <|[|property|]: number;|>
+  //     method(): void { }
+  // }
+  // 
+  // var f: Foo;
+  // f["/*FIND ALL REFS*/property"];
+  // f["method"];
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo.property: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
 // class Foo {
 //     property: number;
-//     [|method|](): void { }
+//     <|[|{| isWriteAccess: true |}method|](): void { }|>
 // }
 // 
 // var f: Foo;
 // f["property"];
 // f["/*FIND ALL REFS*/[|method|]"];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-      "kind": "method",
-      "name": "(method) Foo.method(): void",
-      "textSpan": {
-        "start": 38,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 38,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 38,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "contextSpan": {
-          "start": 38,
-          "length": 18
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 90,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForIndexProperty.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForIndexProperty.ts ===
+  // class Foo {
+  //     property: number;
+  //     <|[|method|](): void { }|>
+  // }
+  // 
+  // var f: Foo;
+  // f["property"];
+  // f["/*FIND ALL REFS*/method"];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Foo.method(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

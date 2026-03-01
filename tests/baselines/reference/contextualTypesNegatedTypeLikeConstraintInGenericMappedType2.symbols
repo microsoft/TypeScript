@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts] ////
+
+=== contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts ===
+type Tags<D extends string, P> = P extends Record<D, infer X> ? X : never;
+>Tags : Symbol(Tags, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 0))
+>D : Symbol(D, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 10))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 27))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 10))
+>X : Symbol(X, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 58))
+>X : Symbol(X, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 58))
+
+declare const typeTags: <I>() => <
+>typeTags : Symbol(typeTags, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 13))
+>I : Symbol(I, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 25))
+
+  P extends {
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 34))
+
+    readonly [Tag in Tags<"_tag", I> & string]: (
+>Tag : Symbol(Tag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 4, 14))
+>Tags : Symbol(Tags, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 0))
+>I : Symbol(I, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 25))
+
+      _: Extract<I, { readonly _tag: Tag }>,
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 4, 49))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>I : Symbol(I, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 25))
+>_tag : Symbol(_tag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 5, 21))
+>Tag : Symbol(Tag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 4, 14))
+
+    ) => any;
+  } & { readonly [Tag in Exclude<keyof P, Tags<"_tag", I>>]: never },
+>Tag : Symbol(Tag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 7, 18))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 34))
+>Tags : Symbol(Tags, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 0, 0))
+>I : Symbol(I, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 25))
+
+>(
+  fields: P,
+>fields : Symbol(fields, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 8, 2))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 34))
+
+) => unknown;
+
+type Value = { _tag: "A"; a: number } | { _tag: "B"; b: number };
+>Value : Symbol(Value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 10, 13))
+>_tag : Symbol(_tag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 14))
+>a : Symbol(a, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 25))
+>_tag : Symbol(_tag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 41))
+>b : Symbol(b, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 52))
+
+const matcher = typeTags<Value>();
+>matcher : Symbol(matcher, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 13, 5))
+>typeTags : Symbol(typeTags, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 2, 13))
+>Value : Symbol(Value, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 10, 13))
+
+matcher({
+>matcher : Symbol(matcher, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 13, 5))
+
+  A: (_) => _.a,
+>A : Symbol(A, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 15, 9))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 16, 6))
+>_.a : Symbol(a, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 25))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 16, 6))
+>a : Symbol(a, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 25))
+
+  B: (_) => "fail",
+>B : Symbol(B, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 16, 16))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 17, 6))
+
+});
+
+matcher({
+>matcher : Symbol(matcher, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 13, 5))
+
+  A: (_) => _.a,
+>A : Symbol(A, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 20, 9))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 21, 6))
+>_.a : Symbol(a, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 25))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 21, 6))
+>a : Symbol(a, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 12, 25))
+
+  B: (_) => "fail",
+>B : Symbol(B, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 21, 16))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 22, 6))
+
+  C: (_) => "fail",
+>C : Symbol(C, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 22, 19))
+>_ : Symbol(_, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts, 23, 6))
+
+});
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/functionLiterals.ts] ////
+
 //// [functionLiterals.ts]
 // PropName<TypeParamList>(ParamList):ReturnType is equivalent to PropName: { <TypeParamList>(ParamList): ReturnType }
 
@@ -58,6 +60,7 @@ c2.func5 = c2.func4;
 
 
 //// [functionLiterals.js]
+"use strict";
 // PropName<TypeParamList>(ParamList):ReturnType is equivalent to PropName: { <TypeParamList>(ParamList): ReturnType }
 var b;
 // no errors

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInArray5.ts] ////
+
 //// [iteratorSpreadInArray5.ts]
 class SymbolIterator {
     next() {
@@ -15,6 +17,7 @@ class SymbolIterator {
 var array: number[] = [0, 1, ...new SymbolIterator];
 
 //// [iteratorSpreadInArray5.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

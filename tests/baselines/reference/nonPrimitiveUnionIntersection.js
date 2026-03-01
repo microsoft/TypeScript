@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveUnionIntersection.ts] ////
+
 //// [nonPrimitiveUnionIntersection.ts]
 var a: object & string = ""; // error
 var b: object | string = ""; // ok
@@ -10,13 +12,14 @@ const bar: object & {err: string} = {bar: 'bar'}; // error
 
 
 //// [nonPrimitiveUnionIntersection.js]
+"use strict";
 var a = ""; // error
 var b = ""; // ok
 var c = 123; // error
 a = b; // error
 b = a; // ok
-var foo = { bar: 'bar' }; // ok
-var bar = { bar: 'bar' }; // error
+const foo = { bar: 'bar' }; // ok
+const bar = { bar: 'bar' }; // error
 
 
 //// [nonPrimitiveUnionIntersection.d.ts]

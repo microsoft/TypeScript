@@ -1,99 +1,165 @@
-=== tests/cases/compiler/abstractClassUnionInstantiation.ts ===
+//// [tests/cases/compiler/abstractClassUnionInstantiation.ts] ////
+
+=== abstractClassUnionInstantiation.ts ===
 class ConcreteA {}
 >ConcreteA : ConcreteA
+>          : ^^^^^^^^^
 
 class ConcreteB {}
 >ConcreteB : ConcreteB
+>          : ^^^^^^^^^
 
 abstract class AbstractA { a: string; }
 >AbstractA : AbstractA
+>          : ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 
 abstract class AbstractB { b: string; }
 >AbstractB : AbstractB
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 type Abstracts = typeof AbstractA | typeof AbstractB;
->Abstracts : typeof AbstractA | typeof AbstractB
+>Abstracts : Abstracts
+>          : ^^^^^^^^^
 >AbstractA : typeof AbstractA
+>          : ^^^^^^^^^^^^^^^^
 >AbstractB : typeof AbstractB
+>          : ^^^^^^^^^^^^^^^^
 
 type Concretes = typeof ConcreteA | typeof ConcreteB;
->Concretes : typeof ConcreteA | typeof ConcreteB
+>Concretes : Concretes
+>          : ^^^^^^^^^
 >ConcreteA : typeof ConcreteA
+>          : ^^^^^^^^^^^^^^^^
 >ConcreteB : typeof ConcreteB
+>          : ^^^^^^^^^^^^^^^^
 
 type ConcretesOrAbstracts = Concretes | Abstracts;
->ConcretesOrAbstracts : Abstracts | Concretes
+>ConcretesOrAbstracts : ConcretesOrAbstracts
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
 declare const cls1: ConcretesOrAbstracts;
 >cls1 : ConcretesOrAbstracts
+>     : ^^^^^^^^^^^^^^^^^^^^
 
 declare const cls2: Abstracts;
 >cls2 : Abstracts
+>     : ^^^^^^^^^
 
 declare const cls3: Concretes;
 >cls3 : Concretes
+>     : ^^^^^^^^^
 
 new cls1(); // should error
 >new cls1() : any
+>           : ^^^
 >cls1 : ConcretesOrAbstracts
+>     : ^^^^^^^^^^^^^^^^^^^^
 
 new cls2(); // should error
 >new cls2() : any
+>           : ^^^
 >cls2 : Abstracts
+>     : ^^^^^^^^^
 
 new cls3(); // should work
 >new cls3() : ConcreteA | ConcreteB
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >cls3 : Concretes
+>     : ^^^^^^^^^
 
 [ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
 >[ConcreteA, AbstractA, AbstractB].map(cls => new cls()) : any[]
+>                                                        : ^^^^^
 >[ConcreteA, AbstractA, AbstractB].map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
+>                                      : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[ConcreteA, AbstractA, AbstractB] : (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ConcreteA : typeof ConcreteA
+>          : ^^^^^^^^^^^^^^^^
 >AbstractA : typeof AbstractA
+>          : ^^^^^^^^^^^^^^^^
 >AbstractB : typeof AbstractB
+>          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >cls => new cls() : (cls: typeof ConcreteA | typeof AbstractA | typeof AbstractB) => any
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof ConcreteA | typeof AbstractA | typeof AbstractB
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new cls() : any
+>          : ^^^
 >cls : typeof ConcreteA | typeof AbstractA | typeof AbstractB
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [AbstractA, AbstractB, ConcreteA].map(cls => new cls()); // should error
 >[AbstractA, AbstractB, ConcreteA].map(cls => new cls()) : any[]
+>                                                        : ^^^^^
 >[AbstractA, AbstractB, ConcreteA].map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
+>                                      : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[AbstractA, AbstractB, ConcreteA] : (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AbstractA : typeof AbstractA
+>          : ^^^^^^^^^^^^^^^^
 >AbstractB : typeof AbstractB
+>          : ^^^^^^^^^^^^^^^^
 >ConcreteA : typeof ConcreteA
+>          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof ConcreteA | typeof AbstractA | typeof AbstractB, index: number, array: (typeof ConcreteA | typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >cls => new cls() : (cls: typeof ConcreteA | typeof AbstractA | typeof AbstractB) => any
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof ConcreteA | typeof AbstractA | typeof AbstractB
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new cls() : any
+>          : ^^^
 >cls : typeof ConcreteA | typeof AbstractA | typeof AbstractB
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 [ConcreteA, ConcreteB].map(cls => new cls()); // should work
 >[ConcreteA, ConcreteB].map(cls => new cls()) : ConcreteA[]
+>                                             : ^^^^^^^^^^^
 >[ConcreteA, ConcreteB].map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: (typeof ConcreteA)[]) => U, thisArg?: any) => U[]
+>                           : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[ConcreteA, ConcreteB] : (typeof ConcreteA)[]
+>                       : ^^^^^^^^^^^^^^^^^^^^
 >ConcreteA : typeof ConcreteA
+>          : ^^^^^^^^^^^^^^^^
 >ConcreteB : typeof ConcreteB
+>          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: (typeof ConcreteA)[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >cls => new cls() : (cls: typeof ConcreteA) => ConcreteA
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof ConcreteA
+>    : ^^^^^^^^^^^^^^^^
 >new cls() : ConcreteA
+>          : ^^^^^^^^^
 >cls : typeof ConcreteA
+>    : ^^^^^^^^^^^^^^^^
 
 [AbstractA, AbstractB].map(cls => new cls()); // should error
 >[AbstractA, AbstractB].map(cls => new cls()) : any[]
+>                                             : ^^^^^
 >[AbstractA, AbstractB].map : <U>(callbackfn: (value: typeof AbstractA | typeof AbstractB, index: number, array: (typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
+>                           : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[AbstractA, AbstractB] : (typeof AbstractA | typeof AbstractB)[]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AbstractA : typeof AbstractA
+>          : ^^^^^^^^^^^^^^^^
 >AbstractB : typeof AbstractB
+>          : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: typeof AbstractA | typeof AbstractB, index: number, array: (typeof AbstractA | typeof AbstractB)[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >cls => new cls() : (cls: typeof AbstractA | typeof AbstractB) => any
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cls : typeof AbstractA | typeof AbstractB
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new cls() : any
+>          : ^^^
 >cls : typeof AbstractA | typeof AbstractB
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

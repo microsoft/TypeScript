@@ -1,19 +1,28 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/thisInInstanceMemberInitializer.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/thisInInstanceMemberInitializer.ts] ////
+
+=== thisInInstanceMemberInitializer.ts ===
 class C {
 >C : C
+>  : ^
 
     x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 }
 
 class D<T> {
 >D : D<T>
+>  : ^^^^
 
     x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
     y: T;
 >y : T
+>  : ^
 }

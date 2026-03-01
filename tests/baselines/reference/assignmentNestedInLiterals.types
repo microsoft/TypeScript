@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentNestedInLiterals.ts ===
+//// [tests/cases/compiler/assignmentNestedInLiterals.ts] ////
+
+=== assignmentNestedInLiterals.ts ===
 var target, x, y;
 >target : any
 >x : any
@@ -6,14 +8,20 @@ var target, x, y;
 
 target = [x = 1, y = x];
 >target = [x = 1, y = x] : number[]
+>                        : ^^^^^^^^
 >target : any
 >[x = 1, y = x] : number[]
+>               : ^^^^^^^^
 >x = 1 : 1
+>      : ^
 >x : any
 >1 : 1
+>  : ^
 >y = x : number
+>      : ^^^^^^
 >y : any
 >x : number
+>  : ^^^^^^
 
 var aegis, a, b;
 >aegis : any
@@ -22,16 +30,24 @@ var aegis, a, b;
 
 aegis = { x: a = 1, y: b = a };
 >aegis = { x: a = 1, y: b = a } : { x: number; y: number; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >aegis : any
 >{ x: a = 1, y: b = a } : { x: number; y: number; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >a = 1 : 1
+>      : ^
 >a : any
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >b = a : number
+>      : ^^^^^^
 >b : any
 >a : number
+>  : ^^^^^^
 
 var kowloona, c, d;
 >kowloona : any
@@ -41,11 +57,16 @@ var kowloona, c, d;
 for (kowloona of [c = 1, d = c]) {
 >kowloona : any
 >[c = 1, d = c] : number[]
+>               : ^^^^^^^^
 >c = 1 : 1
+>      : ^
 >c : any
 >1 : 1
+>  : ^
 >d = c : number
+>      : ^^^^^^
 >d : any
 >c : number
+>  : ^^^^^^
 }
 

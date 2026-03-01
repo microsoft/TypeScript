@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/constEnums/importElisionConstEnumMerge1.ts] ////
+
+=== enum.ts ===
+export const enum Enum {
+>Enum : Symbol(Enum, Decl(enum.ts, 0, 0))
+
+  One = 1,
+>One : Symbol(Enum.One, Decl(enum.ts, 0, 24))
+}
+
+=== merge.ts ===
+import { Enum } from "./enum";
+>Enum : Symbol(Enum, Decl(merge.ts, 0, 8), Decl(merge.ts, 0, 30))
+
+namespace Enum {
+>Enum : Symbol(Enum, Decl(merge.ts, 0, 8), Decl(merge.ts, 0, 30))
+
+  export type Foo = number;
+>Foo : Symbol(Foo, Decl(merge.ts, 1, 16))
+}
+export { Enum };
+>Enum : Symbol(Enum, Decl(merge.ts, 4, 8))
+
+=== index.ts ===
+import { Enum } from "./merge";
+>Enum : Symbol(Enum, Decl(index.ts, 0, 8))
+
+Enum.One;
+>Enum.One : Symbol(Enum.One, Decl(enum.ts, 0, 24))
+>Enum : Symbol(Enum, Decl(index.ts, 0, 8))
+>One : Symbol(Enum.One, Decl(enum.ts, 0, 24))
+

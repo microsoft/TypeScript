@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingOfTooShortOverloads.ts] ////
+
 //// [contextualTypingOfTooShortOverloads.ts]
 // small repro from #11875
 var use: Overload;
@@ -51,9 +53,10 @@ interface NextFunction {
 
 
 //// [contextualTypingOfTooShortOverloads.js]
+"use strict";
 // small repro from #11875
 var use;
-use(function (req, res) { });
+use((req, res) => { });
 // larger repro from #11875
-var app;
-app.use(function (err, req, res, next) { return; });
+let app;
+app.use((err, req, res, next) => { return; });

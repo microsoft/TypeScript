@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedFunctionExpression.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedFunctionExpression.ts] ////
+
+=== templateStringWithEmbeddedFunctionExpression.ts ===
 var x = `abc${ function y() { return y; } }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedFunctionExpression.ts, 0, 3))
 >y : Symbol(y, Decl(templateStringWithEmbeddedFunctionExpression.ts, 0, 14))

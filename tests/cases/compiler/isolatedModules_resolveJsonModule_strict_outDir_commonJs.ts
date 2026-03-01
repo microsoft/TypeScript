@@ -1,3 +1,4 @@
+// @target: es2015
 // @isolatedModules: true
 // @resolveJsonModule: true
 // @strict: true

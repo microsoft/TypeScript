@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationWhile.ts ===
+//// [tests/cases/compiler/sourceMapValidationWhile.ts] ////
+
+=== sourceMapValidationWhile.ts ===
 var a = 10;
 >a : Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
 

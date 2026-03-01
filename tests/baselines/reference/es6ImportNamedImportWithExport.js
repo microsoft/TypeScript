@@ -41,7 +41,7 @@ export import { aaaa as bbbb } from "./server";
 
 //// [server.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.aaaa = exports.z2 = exports.z1 = exports.x1 = exports.a1 = exports.m = exports.x = exports.a = void 0;
 exports.a = 10;
 exports.x = exports.a;
@@ -53,28 +53,28 @@ exports.z2 = 10;
 exports.aaaa = 10;
 //// [client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.z2 = exports.z111 = exports.xxxx = void 0;
-var server_1 = require("./server");
+const server_1 = require("./server");
 exports.xxxx = server_1.a;
-var server_2 = require("./server");
+const server_2 = require("./server");
 exports.xxxx = server_2.a;
-var server_3 = require("./server");
+const server_3 = require("./server");
 exports.xxxx = server_3.x;
 exports.xxxx = server_3.a;
-var server_4 = require("./server");
+const server_4 = require("./server");
 exports.xxxx = server_4.x;
-var server_5 = require("./server");
+const server_5 = require("./server");
 exports.xxxx = server_5.m;
-var server_6 = require("./server");
+const server_6 = require("./server");
 exports.xxxx = server_6.a1;
 exports.xxxx = server_6.x1;
-var server_7 = require("./server");
+const server_7 = require("./server");
 exports.xxxx = server_7.a1;
 exports.xxxx = server_7.x1;
-var server_8 = require("./server");
+const server_8 = require("./server");
 exports.z111 = server_8.z1;
-var server_9 = require("./server");
+const server_9 = require("./server");
 exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
 
 

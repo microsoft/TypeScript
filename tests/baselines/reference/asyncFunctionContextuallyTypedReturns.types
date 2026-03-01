@@ -1,102 +1,262 @@
-=== tests/cases/compiler/asyncFunctionContextuallyTypedReturns.ts ===
+//// [tests/cases/compiler/asyncFunctionContextuallyTypedReturns.ts] ////
+
+=== asyncFunctionContextuallyTypedReturns.ts ===
 declare function f(cb: (v: boolean) => [0] | PromiseLike<[0]>): void;
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
+>  : ^  ^^                                      ^^^^^    
 >cb : (v: boolean) => [0] | PromiseLike<[0]>
+>   : ^ ^^       ^^^^^                      
 >v : boolean
+>  : ^^^^^^^
 
 f(v => v ? [0] : Promise.reject());
 >f(v => v ? [0] : Promise.reject()) : void
+>                                   : ^^^^
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
+>  : ^  ^^                                      ^^^^^    
 >v => v ? [0] : Promise.reject() : (v: boolean) => [0] | Promise<[0]>
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >v ? [0] : Promise.reject() : [0] | Promise<[0]>
+>                           : ^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >[0] : [0]
+>    : ^^^
 >0 : 0
+>  : ^
 >Promise.reject() : Promise<[0]>
+>                 : ^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 
 f(async v => v ? [0] : Promise.reject());
 >f(async v => v ? [0] : Promise.reject()) : void
+>                                         : ^^^^
 >f : (cb: (v: boolean) => [0] | PromiseLike<[0]>) => void
+>  : ^  ^^                                      ^^^^^    
 >async v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]>
+>                                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >v ? [0] : Promise.reject() : [0] | Promise<[0]>
+>                           : ^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >[0] : [0]
+>    : ^^^
 >0 : 0
+>  : ^
 >Promise.reject() : Promise<[0]>
+>                 : ^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 
 declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
+>  : ^  ^^                                                                          ^^^^^    
 >cb : (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">
+>   : ^ ^^       ^^^^^                                                          
 >v : boolean
+>  : ^^^^^^^
 
 g(v => v ? "contextuallyTypable" : Promise.reject());
 >g(v => v ? "contextuallyTypable" : Promise.reject()) : void
+>                                                     : ^^^^
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
+>  : ^  ^^                                                                          ^^^^^    
 >v => v ? "contextuallyTypable" : Promise.reject() : (v: boolean) => "contextuallyTypable" | Promise<"contextuallyTypable">
+>                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >v ? "contextuallyTypable" : Promise.reject() : "contextuallyTypable" | Promise<"contextuallyTypable">
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >"contextuallyTypable" : "contextuallyTypable"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject() : Promise<"contextuallyTypable">
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 
 g(async v => v ? "contextuallyTypable" : Promise.reject());
 >g(async v => v ? "contextuallyTypable" : Promise.reject()) : void
+>                                                           : ^^^^
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
+>  : ^  ^^                                                                          ^^^^^    
 >async v => v ? "contextuallyTypable" : Promise.reject() : (v: boolean) => Promise<"contextuallyTypable">
+>                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >v ? "contextuallyTypable" : Promise.reject() : "contextuallyTypable" | Promise<"contextuallyTypable">
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >"contextuallyTypable" : "contextuallyTypable"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject() : Promise<"contextuallyTypable">
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 
 type MyCallback = (thing: string) => void;
->MyCallback : (thing: string) => void
+>MyCallback : MyCallback
+>           : ^^^^^^^^^^
 >thing : string
+>      : ^^^^^^
 
 declare function h(cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>): void;
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
+>  : ^  ^^                                                    ^^^^^    
 >cb : (v: boolean) => MyCallback | PromiseLike<MyCallback>
+>   : ^ ^^       ^^^^^                                    
 >v : boolean
+>  : ^^^^^^^
 
 h(v => v ? (abc) => { } : Promise.reject());
 >h(v => v ? (abc) => { } : Promise.reject()) : void
+>                                            : ^^^^
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
+>  : ^  ^^                                                    ^^^^^    
 >v => v ? (abc) => { } : Promise.reject() : (v: boolean) => ((abc: string) => void) | Promise<MyCallback>
+>                                         : ^ ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >v ? (abc) => { } : Promise.reject() : ((abc: string) => void) | Promise<MyCallback>
+>                                    : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >(abc) => { } : (abc: string) => void
+>             : ^   ^^^^^^^^^^^^^^^^^
 >abc : string
+>    : ^^^^^^
 >Promise.reject() : Promise<MyCallback>
+>                 : ^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 
 h(async v => v ? (def) => { } : Promise.reject());
 >h(async v => v ? (def) => { } : Promise.reject()) : void
+>                                                  : ^^^^
 >h : (cb: (v: boolean) => MyCallback | PromiseLike<MyCallback>) => void
+>  : ^  ^^                                                    ^^^^^    
 >async v => v ? (def) => { } : Promise.reject() : (v: boolean) => Promise<MyCallback | ((def: string) => void)>
+>                                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >v ? (def) => { } : Promise.reject() : Promise<MyCallback> | ((def: string) => void)
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >(def) => { } : (def: string) => void
+>             : ^   ^^^^^^^^^^^^^^^^^
 >def : string
+>    : ^^^^^^
 >Promise.reject() : Promise<MyCallback>
+>                 : ^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
+>               : ^ ^^^^^^^^^^      ^^^   ^^^^^          
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
+>       : ^ ^^^^^^^^^^      ^^^   ^^^^^          
+
+// repro from #29196
+const increment: (
+>increment : (num: number, str: string) => Promise<((s: string) => any) | string> | string
+>          : ^   ^^      ^^   ^^      ^^^^^                                               
+
+  num: number,
+>num : number
+>    : ^^^^^^
+
+  str: string
+>str : string
+>    : ^^^^^^
+
+) => Promise<((s: string) => any) | string> | string = async (num, str) => {
+>s : string
+>  : ^^^^^^
+>async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<(a: string) => number>
+>                                                            : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>num : number
+>    : ^^^^^^
+>str : string
+>    : ^^^^^^
+
+  return a => {
+>a => {    return a.length  } : (a: string) => number
+>                             : ^ ^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+    return a.length
+>a.length : number
+>         : ^^^^^^
+>a : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+  }
+}
+
+const increment2: (
+>increment2 : (num: number, str: string) => Promise<((s: string) => any) | string>
+>           : ^   ^^      ^^   ^^      ^^^^^                                      
+
+  num: number,
+>num : number
+>    : ^^^^^^
+
+  str: string
+>str : string
+>    : ^^^^^^
+
+) => Promise<((s: string) => any) | string> = async (num, str) => {
+>s : string
+>  : ^^^^^^
+>async (num, str) => {  return a => {    return a.length  }} : (num: number, str: string) => Promise<(a: string) => number>
+>                                                            : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>num : number
+>    : ^^^^^^
+>str : string
+>    : ^^^^^^
+
+  return a => {
+>a => {    return a.length  } : (a: string) => number
+>                             : ^ ^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+    return a.length
+>a.length : number
+>         : ^^^^^^
+>a : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+  }
+}
 

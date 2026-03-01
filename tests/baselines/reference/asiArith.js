@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asiArith.ts] ////
+
 //// [asiArith.ts]
 var x = 1;
 
@@ -35,6 +37,7 @@ y
 
 
 //// [asiArith.js]
+"use strict";
 var x = 1;
 var y = 1;
 var z = x

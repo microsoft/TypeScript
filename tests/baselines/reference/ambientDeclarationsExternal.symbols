@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/consumer.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarationsExternal.ts] ////
+
+=== consumer.ts ===
 /// <reference path="decls.ts" />
 import imp1 = require('equ');
 >imp1 : Symbol(imp1, Decl(consumer.ts, 0, 0))
@@ -17,7 +19,7 @@ var n = imp3.x;
 var n: number;
 >n : Symbol(n, Decl(consumer.ts, 6, 3), Decl(consumer.ts, 7, 3))
 
-=== tests/cases/conformance/ambient/decls.ts ===
+=== decls.ts ===
 // Ambient external module with export assignment
 declare module 'equ' {
 >'equ' : Symbol("equ", Decl(decls.ts, 0, 0))

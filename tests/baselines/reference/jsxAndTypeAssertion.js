@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx] ////
+
 //// [jsxAndTypeAssertion.tsx]
 declare var createElement: any;
 
@@ -22,11 +24,9 @@ x = <foo>x</foo>, x = <foo/>;
 
 
 //// [jsxAndTypeAssertion.jsx]
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}());
+"use strict";
+class foo {
+}
 var x;
 x = <any> {test}: <any></any> };
 

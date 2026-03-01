@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/thisInInstanceMemberInitializer.ts] ////
+
 //// [thisInInstanceMemberInitializer.ts]
 class C {
     x = this;
@@ -9,15 +11,14 @@ class D<T> {
 }
 
 //// [thisInInstanceMemberInitializer.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.x = this;
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    constructor() {
         this.x = this;
     }
-    return D;
-}());
+}

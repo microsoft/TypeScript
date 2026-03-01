@@ -1,3 +1,4 @@
+// @target: es2015
 var x: typeof undefined;
 
 x = 1;
@@ -16,7 +17,7 @@ interface I { foo: string }
 var c: I;
 x = c;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 x = M;
 
 x = { f() { } }

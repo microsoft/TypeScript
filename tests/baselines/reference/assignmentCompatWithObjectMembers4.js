@@ -1,23 +1,25 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts] ////
+
 //// [assignmentCompatWithObjectMembers4.ts]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 
-module OnlyDerived {
+namespace OnlyDerived {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Base { baz: string; }
 
     class S { foo: Derived; }
     class T { foo: Derived2; }
-    var s: S;
-    var t: T;
+    declare var s: S;
+    declare var t: T;
 
     interface S2 { foo: Derived; }
     interface T2 { foo: Derived2; }
-    var s2: S2;
-    var t2: T2;
+    declare var s2: S2;
+    declare var t2: T2;
 
-    var a: { foo: Derived; }
-    var b: { foo: Derived2; }
+    declare var a: { foo: Derived; }
+    declare var b: { foo: Derived2; }
 
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
@@ -46,23 +48,23 @@ module OnlyDerived {
     a2 = t; // error
 }
 
-module WithBase {
+namespace WithBase {
     class Base { foo: string; }
     class Derived extends Base { bar: string; }
     class Derived2 extends Base { baz: string; }
 
     class S { foo: Base; }
     class T { foo: Derived2; }
-    var s: S;
-    var t: T;
+    declare var s: S;
+    declare var t: T;
 
     interface S2 { foo: Base; }
     interface T2 { foo: Derived2; }
-    var s2: S2;
-    var t2: T2;
+    declare var s2: S2;
+    declare var t2: T2;
 
-    var a: { foo: Base; }
-    var b: { foo: Derived2; }
+    declare var a: { foo: Base; }
+    declare var b: { foo: Derived2; }
 
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };
@@ -92,59 +94,20 @@ module WithBase {
 }
 
 //// [assignmentCompatWithObjectMembers4.js]
+"use strict";
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var OnlyDerived;
 (function (OnlyDerived) {
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
-    var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);
-        function Derived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived;
-    }(Base));
-    var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);
-        function Derived2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived2;
-    }(Base));
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
-    var s;
-    var t;
-    var s2;
-    var t2;
-    var a;
-    var b;
+    class Base {
+    }
+    class Derived extends Base {
+    }
+    class Derived2 extends Base {
+    }
+    class S {
+    }
+    class T {
+    }
     var a2 = { foo: new Derived() };
     var b2 = { foo: new Derived2() };
     s = t; // error
@@ -169,41 +132,16 @@ var OnlyDerived;
 })(OnlyDerived || (OnlyDerived = {}));
 var WithBase;
 (function (WithBase) {
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
-    var Derived = /** @class */ (function (_super) {
-        __extends(Derived, _super);
-        function Derived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived;
-    }(Base));
-    var Derived2 = /** @class */ (function (_super) {
-        __extends(Derived2, _super);
-        function Derived2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Derived2;
-    }(Base));
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
-    var s;
-    var t;
-    var s2;
-    var t2;
-    var a;
-    var b;
+    class Base {
+    }
+    class Derived extends Base {
+    }
+    class Derived2 extends Base {
+    }
+    class S {
+    }
+    class T {
+    }
     var a2 = { foo: new Base() };
     var b2 = { foo: new Derived2() };
     s = t; // ok

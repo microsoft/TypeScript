@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardTautologicalConsistiency.ts] ////
+
 //// [typeGuardTautologicalConsistiency.ts]
 let stringOrNumber: string | number;
 
@@ -13,7 +15,8 @@ if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
 
 
 //// [typeGuardTautologicalConsistiency.js]
-var stringOrNumber;
+"use strict";
+let stringOrNumber;
 if (typeof stringOrNumber === "number") {
     if (typeof stringOrNumber !== "number") {
         stringOrNumber;

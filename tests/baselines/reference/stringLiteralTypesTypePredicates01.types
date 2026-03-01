@@ -1,61 +1,95 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts] ////
+
+=== stringLiteralTypesTypePredicates01.ts ===
 type Kind = "A" | "B"
->Kind : "A" | "B"
+>Kind : Kind
+>     : ^^^^
 
 function kindIs(kind: Kind, is: "A"): kind is "A";
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >kind : Kind
+>     : ^^^^
 >is : "A"
+>   : ^^^
 
 function kindIs(kind: Kind, is: "B"): kind is "B";
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >kind : Kind
+>     : ^^^^
 >is : "B"
+>   : ^^^
 
 function kindIs(kind: Kind, is: Kind): boolean {
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >kind : Kind
+>     : ^^^^
 >is : Kind
+>   : ^^^^
 
     return kind === is;
 >kind === is : boolean
+>            : ^^^^^^^
 >kind : Kind
+>     : ^^^^
 >is : Kind
+>   : ^^^^
 }
 
 var x: Kind = undefined;
 >x : Kind
+>  : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 if (kindIs(x, "A")) {
 >kindIs(x, "A") : boolean
+>               : ^^^^^^^
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >x : Kind
+>  : ^^^^
 >"A" : "A"
+>    : ^^^
 
     let a = x;
 >a : "A"
+>  : ^^^
 >x : "A"
+>  : ^^^
 }
 else {
     let b = x;
 >b : "B"
+>  : ^^^
 >x : "B"
+>  : ^^^
 }
 
 if (!kindIs(x, "B")) {
 >!kindIs(x, "B") : boolean
+>                : ^^^^^^^
 >kindIs(x, "B") : boolean
+>               : ^^^^^^^
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
+>       : ^^^    ^^    ^^  ^^   ^^^           ^^^    ^^    ^^  ^^   ^^^           ^^^
 >x : Kind
+>  : ^^^^
 >"B" : "B"
+>    : ^^^
 
     let c = x;
 >c : "A"
+>  : ^^^
 >x : "A"
+>  : ^^^
 }
 else {
     let d = x;
 >d : "B"
+>  : ^^^
 >x : "B"
+>  : ^^^
 }

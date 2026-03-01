@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/distributiveConditionalTypeNeverIntersection1.ts] ////
+
+=== distributiveConditionalTypeNeverIntersection1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57343
+
+type IsNumber<T> = T extends number ? true : false;
+>IsNumber : IsNumber<T>
+>         : ^^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type Conflicted = { x: true } & { x: false };
+>Conflicted : never
+>           : ^^^^^
+>x : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>x : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+
+type Ex1 = IsNumber<Conflicted>; // never
+>Ex1 : never
+>    : ^^^^^
+
+type Ex2 = IsNumber<"OEEE" | Conflicted>; // false
+>Ex2 : false
+>    : ^^^^^
+
+type Ex3 = IsNumber<1 | Conflicted>; // true
+>Ex3 : true
+>    : ^^^^
+

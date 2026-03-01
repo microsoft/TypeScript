@@ -1,21 +1,45 @@
-=== tests/cases/compiler/circularBaseTypes.ts ===
+//// [tests/cases/compiler/circularBaseTypes.ts] ////
+
+=== circularBaseTypes.ts ===
 // Repro from #38098
 
 type M<T> = { value: T };
 >M : M<T>
+>  : ^^^^
 >value : T
+>      : ^
 
 interface M2 extends M<M3> {};  // Error
 type M3 = M2[keyof M2];  // Error
 >M3 : any
+>   : ^^^
 
 function f(m: M3) {
->f : (m: any) => any
+>f : (m: M3) => any
+>  : ^ ^^  ^^^^^^^^
 >m : any
+>  : ^^^
 
   return m.value;
 >m.value : any
+>        : ^^^
 >m : any
+>  : ^^^
 >value : any
+>      : ^^^
+}
+
+// Repro from #32581
+
+type X<T> = { [K in keyof T]: string } & { b: string };
+>X : X<T>
+>  : ^^^^
+>b : string
+>  : ^^^^^^
+
+interface Y extends X<Y> {
+  a: "";
+>a : ""
+>  : ^^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/methodSignaturesWithOverloads.ts] ////
+
 //// [methodSignaturesWithOverloads.ts]
 // Object type literals permit overloads with optionality but they must match
 
@@ -20,6 +22,7 @@ var c2: {
 };
 
 //// [methodSignaturesWithOverloads.js]
+"use strict";
 // Object type literals permit overloads with optionality but they must match
 var c;
 var c2;

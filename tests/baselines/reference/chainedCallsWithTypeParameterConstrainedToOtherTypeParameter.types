@@ -1,74 +1,121 @@
-=== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts ===
+//// [tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts] ////
+
+=== chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts ===
 class Chain<T extends A> {
 >Chain : Chain<T>
+>      : ^^^^^^^^
 
     constructor(public value: T) { }
 >value : T
+>      : ^
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >cb : (x: T) => S
+>   : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
         return null;
->null : null
     }
 }
 
 class A {
 >A : A
+>  : ^
 
     x;
 >x : any
+>  : ^^^
 }
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     y;
 >y : any
+>  : ^^^
 }
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     z;
 >z : any
+>  : ^^^
 }
 
 // Ok to go down the chain, but error to try to climb back up
 (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
 >(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A) : Chain<C>
+>                                                                                       : ^^^^^^^^
 >(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then : <S extends C>(cb: (x: C) => S) => Chain<S>
+>                                                                           : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B) : Chain<C>
+>                                                                      : ^^^^^^^^
 >(new Chain(new A)).then(a => new B).then(b => new C).then : <S extends C>(cb: (x: C) => S) => Chain<S>
+>                                                          : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(new A)).then(a => new B).then(b => new C) : Chain<C>
+>                                                     : ^^^^^^^^
 >(new Chain(new A)).then(a => new B).then : <S extends B>(cb: (x: B) => S) => Chain<S>
+>                                         : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(new A)).then(a => new B) : Chain<B>
+>                                    : ^^^^^^^^
 >(new Chain(new A)).then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>                        : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >(new Chain(new A)) : Chain<A>
+>                   : ^^^^^^^^
 >new Chain(new A) : Chain<A>
+>                 : ^^^^^^^^
 >Chain : typeof Chain
+>      : ^^^^^^^^^^^^
 >new A : A
+>      : ^
 >A : typeof A
+>  : ^^^^^^^^
 >then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >a => new B : (a: A) => B
+>           : ^ ^^^^^^^^^
 >a : A
+>  : ^
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 >then : <S extends B>(cb: (x: B) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >b => new C : (b: B) => C
+>           : ^ ^^^^^^^^^
 >b : B
+>  : ^
 >new C : C
+>      : ^
 >C : typeof C
+>  : ^^^^^^^^
 >then : <S extends C>(cb: (x: C) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >c => new B : (c: C) => B
+>           : ^ ^^^^^^^^^
 >c : C
+>  : ^
 >new B : B
+>      : ^
 >B : typeof B
+>  : ^^^^^^^^
 >then : <S extends C>(cb: (x: C) => S) => Chain<S>
+>     : ^ ^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >b => new A : (b: C) => A
+>           : ^ ^^^^^^^^^
 >b : C
+>  : ^
 >new A : A
+>      : ^
 >A : typeof A
+>  : ^^^^^^^^
 

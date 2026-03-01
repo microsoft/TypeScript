@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/accessorInferredReturnTypeErrorInReturnStatement.ts] ////
+
+=== accessorInferredReturnTypeErrorInReturnStatement.ts ===
+export var basePrototype = {
+>basePrototype : Symbol(basePrototype, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 0, 10))
+
+  get primaryPath() {
+>primaryPath : Symbol(primaryPath, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 0, 28))
+
+    var _this = this;
+>_this : Symbol(_this, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 2, 7))
+>this : Symbol(basePrototype, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 0, 26))
+
+    return _this.collection.schema.primaryPath;
+>_this : Symbol(_this, Decl(accessorInferredReturnTypeErrorInReturnStatement.ts, 2, 7))
+
+  },  
+};
+

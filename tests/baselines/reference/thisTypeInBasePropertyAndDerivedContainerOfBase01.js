@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInBasePropertyAndDerivedContainerOfBase01.ts] ////
+
 //// [thisTypeInBasePropertyAndDerivedContainerOfBase01.ts]
 interface BoxOfFoo<T extends Foo> {
     item: T
@@ -12,6 +14,7 @@ interface Bar extends Foo {
 }
 
 //// [thisTypeInBasePropertyAndDerivedContainerOfBase01.js]
+"use strict";
 
 
 //// [thisTypeInBasePropertyAndDerivedContainerOfBase01.d.ts]

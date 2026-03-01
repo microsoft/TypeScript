@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts] ////
+
 //// [unusedSingleParameterInMethodDeclaration.ts]
 class Dummy {
     public greeter(person: string) {
@@ -6,11 +8,9 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInMethodDeclaration.js]
-var Dummy = /** @class */ (function () {
-    function Dummy() {
-    }
-    Dummy.prototype.greeter = function (person) {
+"use strict";
+class Dummy {
+    greeter(person) {
         var unused = 20;
-    };
-    return Dummy;
-}());
+    }
+}

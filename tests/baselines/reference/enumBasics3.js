@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/enumBasics3.ts] ////
+
 //// [enumBasics3.ts]
-module M {
+namespace M {
   export namespace N {
     export enum E1 {
       a = 1,
@@ -8,7 +10,7 @@ module M {
   }
 }
 
-module M {
+namespace M {
   export namespace N {
     export enum E2 {
       b = M.N.E1.a,
@@ -19,11 +21,12 @@ module M {
 
 
 //// [enumBasics3.js]
+"use strict";
 var M;
 (function (M) {
-    var N;
+    let N;
     (function (N) {
-        var E1;
+        let E1;
         (function (E1) {
             E1[E1["a"] = 1] = "a";
             E1[E1["b"] = E1.a.a] = "b";
@@ -31,9 +34,9 @@ var M;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 (function (M) {
-    var N;
+    let N;
     (function (N) {
-        var E2;
+        let E2;
         (function (E2) {
             E2[E2["b"] = 1] = "b";
             E2[E2["c"] = M.N.E1.a.a] = "c";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteReadonly.ts] ////
+
 //// [deleteReadonly.ts]
 interface A {
   readonly b
@@ -22,6 +24,7 @@ delete ((((b['test']))));
 
 
 //// [deleteReadonly.js]
+"use strict";
 var a = {
     b: 123
 };

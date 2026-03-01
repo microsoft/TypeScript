@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override16.ts] ////
+
 //// [override16.ts]
 class A {
     foo?: string;
@@ -9,6 +11,7 @@ class B extends A {
 
 
 //// [override16.js]
+"use strict";
 class A {
     foo;
 }

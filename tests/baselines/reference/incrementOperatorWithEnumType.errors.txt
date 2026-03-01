@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(6,31): error TS2540: Cannot assign to 'B' because it is a read-only property.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(7,29): error TS2540: Cannot assign to 'B' because it is a read-only property.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(10,9): error TS2540: Cannot assign to 'B' because it is a read-only property.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(12,7): error TS2540: Cannot assign to 'B' because it is a read-only property.
+incrementOperatorWithEnumType.ts(6,31): error TS2540: Cannot assign to 'B' because it is a read-only property.
+incrementOperatorWithEnumType.ts(7,29): error TS2540: Cannot assign to 'B' because it is a read-only property.
+incrementOperatorWithEnumType.ts(10,9): error TS2540: Cannot assign to 'B' because it is a read-only property.
+incrementOperatorWithEnumType.ts(12,7): error TS2540: Cannot assign to 'B' because it is a read-only property.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts (4 errors) ====
+==== incrementOperatorWithEnumType.ts (4 errors) ====
     // ++ operator on enum type
     
     enum ENUM1 { A, B, "" };

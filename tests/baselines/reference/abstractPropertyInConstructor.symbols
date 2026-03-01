@@ -1,4 +1,6 @@
-=== tests/cases/compiler/abstractPropertyInConstructor.ts ===
+//// [tests/cases/compiler/abstractPropertyInConstructor.ts] ////
+
+=== abstractPropertyInConstructor.ts ===
 abstract class AbstractClass {
 >AbstractClass : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
 

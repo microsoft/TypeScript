@@ -1,7 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.octal.ts ===
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.octal.ts] ////
+
+=== parser.numericSeparators.octal.ts ===
+
 0o00_11;
-No type information for this code.0O0_1;
-No type information for this code.0o1100_0011;
-No type information for this code.0O0_11_0101;
-No type information for this code.
-No type information for this code.
+0O0_1;
+0o1100_0011;
+0O0_11_0101;
+

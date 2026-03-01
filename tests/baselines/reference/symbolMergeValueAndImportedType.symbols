@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/symbolMergeValueAndImportedType.ts] ////
+
+=== main.ts ===
 import { X } from "./other";
 >X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
 
@@ -11,7 +13,7 @@ console.log('X is ' + X);
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
 
-=== tests/cases/compiler/other.ts ===
+=== other.ts ===
 export type X = {};
 >X : Symbol(X, Decl(other.ts, 0, 0))
 

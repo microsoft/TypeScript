@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nativeToBoxedTypes.ts] ////
+
 //// [nativeToBoxedTypes.ts]
 var N = new Number();
 var n = 100;
@@ -16,6 +18,7 @@ var Sym: Symbol;
 sym = Sym;
 
 //// [nativeToBoxedTypes.js]
+"use strict";
 var N = new Number();
 var n = 100;
 n = N;

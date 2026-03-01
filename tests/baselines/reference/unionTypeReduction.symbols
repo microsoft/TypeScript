@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeReduction.ts ===
+//// [tests/cases/conformance/types/union/unionTypeReduction.ts] ////
+
+=== unionTypeReduction.ts ===
 interface I2 {
 >I2 : Symbol(I2, Decl(unionTypeReduction.ts, 0, 0))
 

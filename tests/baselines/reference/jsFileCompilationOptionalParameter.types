@@ -1,5 +1,9 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationOptionalParameter.ts] ////
+
+=== a.js ===
 function F(p?) { }
 >F : (p?: any) => void
+>  : ^ ^^^^^^^^^^^^^^^
 >p : any
+>  : ^^^
 

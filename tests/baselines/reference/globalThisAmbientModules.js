@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisAmbientModules.ts] ////
+
 //// [globalThisAmbientModules.ts]
 declare module "ambientModule" {
     export type typ = 1
@@ -13,8 +15,9 @@ const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 
 
 //// [globalThisAmbientModules.js]
+"use strict";
 var valueModule;
 (function (valueModule) {
     valueModule.val = 1;
 })(valueModule || (valueModule = {}));
-var bad1 = 'ambientModule';
+const bad1 = 'ambientModule';

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts] ////
+
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts]
 class C {
     const
@@ -5,9 +7,9 @@ class C {
 }
 
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.x = 10;
     }
-    return C;
-}());
+}

@@ -1,4 +1,5 @@
-﻿// @downlevelIteration: true
+﻿// @target: es2015
+// @downlevelIteration: true
 /* AssignmentPattern:
  *      ObjectAssignmentPattern
  *      ArrayAssignmentPattern

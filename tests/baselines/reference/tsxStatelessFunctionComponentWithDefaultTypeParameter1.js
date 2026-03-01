@@ -1,4 +1,8 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentWithDefaultTypeParameter1.tsx] ////
+
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
 
 interface MyComponentProp {
@@ -14,13 +18,14 @@ let i = <MyComponent values />;  // We infer type arguments here
 let i1 = <MyComponent values="Hello"/>;
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     function MyComponent(attr) {
         return <div>attr.values</div>;
     }
     // OK
-    var i = <MyComponent values/>; // We infer type arguments here
-    var i1 = <MyComponent values="Hello"/>;
+    let i = <MyComponent values/>; // We infer type arguments here
+    let i1 = <MyComponent values="Hello"/>;
 });

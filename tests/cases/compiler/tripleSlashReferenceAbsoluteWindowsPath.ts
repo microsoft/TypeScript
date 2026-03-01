@@ -1,3 +1,4 @@
+// @target: es2015
 //@Filename: C:\a\b\c.ts
 const x = 5;
 

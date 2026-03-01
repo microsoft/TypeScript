@@ -15,19 +15,21 @@ chalk
 
 
 //// [mod1.js]
-var chalk = {
+"use strict";
+const chalk = {
     grey: {}
 };
 module.exports.chalk = chalk;
 //// [main.js]
-var grey = require('./mod1').chalk.grey;
+"use strict";
+const { chalk: { grey } } = require('./mod1');
 grey;
 chalk;
 
 
 //// [mod1.d.ts]
 export namespace chalk {
-    const grey: {};
+    let grey: {};
 }
 //// [main.d.ts]
 export {};

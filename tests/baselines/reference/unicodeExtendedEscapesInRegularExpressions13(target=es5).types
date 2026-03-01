@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions13.ts] ////
+
+=== unicodeExtendedEscapesInRegularExpressions13.ts ===
+var x = /\u{DDDDD}/gu;
+>x : RegExp
+>  : ^^^^^^
+>/\u{DDDDD}/gu : RegExp
+>              : ^^^^^^
+

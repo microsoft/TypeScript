@@ -1,7 +1,9 @@
 /// <reference path="fourslash.ts"/>
 
+// @lib: es5
+
 /////// Module
-////[|{| "name": "MyShapes", "kind": "module" |}module MyShapes {
+////[|{| "name": "MyShapes", "kind": "module" |}namespace MyShapes {
 ////
 ////    // Class
 ////    [|{| "name": "MyPoint", "kind": "class", "kindModifiers": "export", "containerName": "MyShapes", "containerKind": "module" |}export class MyPoint {

@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor8.ts] ////
+
+=== autoAccessor8.ts ===
+class C1 {
+>C1 : C1
+>   : ^^
+
+    accessor a: any;
+>a : any
+
+    static accessor b: any;
+>b : any
+}
+
+declare class C2 {
+>C2 : C2
+>   : ^^
+
+    accessor a: any;
+>a : any
+
+    static accessor b: any;
+>b : any
+}
+
+function f() {
+>f : () => typeof C3
+>  : ^^^^^^^^^^^^^^^
+
+    class C3 {
+>C3 : C3
+>   : ^^
+
+        accessor a: any;
+>a : any
+
+        static accessor b: any;
+>b : any
+    }
+    return C3;
+>C3 : typeof C3
+>   : ^^^^^^^^^
+}
+

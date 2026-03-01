@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterOrderReversal.ts] ////
+
 //// [typeParameterOrderReversal.ts]
 interface X<T> {
     n: T;
@@ -14,6 +16,7 @@ tFirst(z);
 
 
 //// [typeParameterOrderReversal.js]
+"use strict";
 // Only difference here is order of type parameters
 function uFirst(x) { }
 function tFirst(x) { }

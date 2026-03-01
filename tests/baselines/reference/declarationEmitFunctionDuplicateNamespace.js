@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts] ////
+
 //// [declarationEmitFunctionDuplicateNamespace.ts]
 function f(a: 0): 0;
 function f(a: 1): 1;
@@ -9,6 +11,7 @@ f.x = 2;
 
 
 //// [declarationEmitFunctionDuplicateNamespace.js]
+"use strict";
 function f(a) {
     return a;
 }

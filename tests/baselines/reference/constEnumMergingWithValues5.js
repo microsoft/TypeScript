@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/constEnumMergingWithValues5.ts] ////
+
 //// [m1.ts]
-module foo {
+namespace foo {
     const enum E { X }
 }
 
@@ -10,7 +12,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var foo;
     (function (foo) {
-        var E;
+        let E;
         (function (E) {
             E[E["X"] = 0] = "X";
         })(E || (E = {}));

@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/importAttributes/importAttributes7.ts] ////
+
+//// [a.ts]
+export default {
+    a: "a",
+    b: "b",
+    1: "1",
+}
+
+//// [b.ts]
+import a from "./a" with { a: "a", "b": "b" };
+
+export async function f() {
+    const a = import("./a", {
+        with: { a: "a", "b": "b" },
+    });
+    a;
+}
+
+
+//// [a.js]
+export default {
+    a: "a",
+    b: "b",
+    1: "1",
+};
+//// [b.js]
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+export function f() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const a = import("./a", {
+            with: { a: "a", "b": "b" },
+        });
+        a;
+    });
+}

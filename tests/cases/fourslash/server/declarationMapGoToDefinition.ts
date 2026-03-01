@@ -1,4 +1,5 @@
 /// <reference path="../fourslash.ts" />
+// @lib: es5
 // @Filename: index.ts
 ////export class Foo {
 ////    member: string;
@@ -37,4 +38,4 @@
 ////const instance = new mod.Foo();
 ////instance.[|/*1*/methodName|]({member: 12});
 
-verify.goToDefinition("1", "2");
+verify.baselineGoToDefinition("1");

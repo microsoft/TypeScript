@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgInference.ts] ////
+
 //// [typeArgInference.ts]
 interface I {
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
@@ -16,6 +18,7 @@ var t4: { c: number; d: string };
 
 
 //// [typeArgInference.js]
+"use strict";
 var o = { a: 3, b: "test" };
 var x;
 var t1 = x.f([o], [o]);

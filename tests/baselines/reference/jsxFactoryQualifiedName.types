@@ -1,29 +1,41 @@
-=== tests/cases/compiler/Element.ts ===
+//// [tests/cases/compiler/jsxFactoryQualifiedName.ts] ////
+
+=== Element.ts ===
 declare namespace JSX {
     interface Element {
         name: string;
 >name : string
+>     : ^^^^^^
 
         isIntrinsic: boolean;
 >isIntrinsic : boolean
+>            : ^^^^^^^
 
         isCustomElement: boolean;
 >isCustomElement : boolean
+>                : ^^^^^^^
 
         toString(renderId?: number): string;
 >toString : (renderId?: number) => string
+>         : ^        ^^^      ^^^^^      
 >renderId : number
+>         : ^^^^^^
 
         bindDOM(renderId?: number): number;
 >bindDOM : (renderId?: number) => number
+>        : ^        ^^^      ^^^^^      
 >renderId : number
+>         : ^^^^^^
 
         resetComponent(): void;
 >resetComponent : () => void
+>               : ^^^^^^    
 
         instantiateComponents(renderId?: number): number;
 >instantiateComponents : (renderId?: number) => number
+>                      : ^        ^^^      ^^^^^      
 >renderId : number
+>         : ^^^^^^
 
         props: any;
 >props : any
@@ -31,96 +43,143 @@ declare namespace JSX {
 }
 export namespace Element {
 >Element : typeof Element
+>        : ^^^^^^^^^^^^^^
 
     export function isElement(el: any): el is JSX.Element {
 >isElement : (el: any) => el is JSX.Element
+>          : ^  ^^   ^^^^^                 
 >el : any
 >JSX : any
+>    : ^^^
 
         return el.markAsChildOfRootElement !== undefined;
 >el.markAsChildOfRootElement !== undefined : boolean
+>                                          : ^^^^^^^
 >el.markAsChildOfRootElement : any
 >el : any
+>   : ^^^
 >markAsChildOfRootElement : any
+>                         : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 
     export function createElement(args: any[]) {
 >createElement : (args: any[]) => {}
+>              : ^    ^^     ^^^^^^^
 >args : any[]
+>     : ^^^^^
 
         return {
 >{        } : {}
+>           : ^^
         }
     }
 }
 
 export let createElement = Element.createElement;
 >createElement : (args: any[]) => {}
+>              : ^    ^^     ^^^^^^^
 >Element.createElement : (args: any[]) => {}
+>                      : ^    ^^     ^^^^^^^
 >Element : typeof Element
+>        : ^^^^^^^^^^^^^^
 >createElement : (args: any[]) => {}
+>              : ^    ^^     ^^^^^^^
 
 function toCamelCase(text: string): string {
 >toCamelCase : (text: string) => string
+>            : ^    ^^      ^^^^^      
 >text : string
+>     : ^^^^^^
 
     return text[0].toLowerCase() + text.substring(1);
 >text[0].toLowerCase() + text.substring(1) : string
+>                                          : ^^^^^^
 >text[0].toLowerCase() : string
+>                      : ^^^^^^
 >text[0].toLowerCase : () => string
+>                    : ^^^^^^      
 >text[0] : string
+>        : ^^^^^^
 >text : string
+>     : ^^^^^^
 >0 : 0
+>  : ^
 >toLowerCase : () => string
+>            : ^^^^^^      
 >text.substring(1) : string
+>                  : ^^^^^^
 >text.substring : (start: number, end?: number) => string
+>               : ^     ^^      ^^   ^^^      ^^^^^      
 >text : string
+>     : ^^^^^^
 >substring : (start: number, end?: number) => string
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >1 : 1
+>  : ^
 }
 
-=== tests/cases/compiler/test.tsx ===
+=== test.tsx ===
 import { Element} from './Element';
 >Element : typeof Element
+>        : ^^^^^^^^^^^^^^
 
 let c: {
->c : { a?: {    b: string;}; }
+>c : { a?: { b: string; }; }
+>  : ^^^^^^              ^^^
 
 	a?: {
 >a : { b: string; }
+>  : ^^^^^      ^^^
 
 		b: string
 >b : string
+>  : ^^^^^^
 	}
 };
 
 class A {
 >A : A
+>  : ^
 
 	view() {
 >view : () => any[]
+>     : ^^^^^^^^^^^
 
 		return [
 >[			<meta content="helloworld"></meta>,			<meta content={c.a!.b}></meta>		] : any[]
+>                                                                            : ^^^^^
 
 			<meta content="helloworld"></meta>,
 ><meta content="helloworld"></meta> : error
 >meta : any
+>     : ^^^
 >content : string
+>        : ^^^^^^
 >meta : any
+>     : ^^^
 
 			<meta content={c.a!.b}></meta>
 ><meta content={c.a!.b}></meta> : error
 >meta : any
+>     : ^^^
 >content : string
+>        : ^^^^^^
 >c.a!.b : string
+>       : ^^^^^^
 >c.a! : { b: string; }
+>     : ^^^^^      ^^^
 >c.a : { b: string; }
+>    : ^^^^^      ^^^
 >c : { a?: { b: string; }; }
+>  : ^^^^^^              ^^^
 >a : { b: string; }
+>  : ^^^^^      ^^^
 >b : string
+>  : ^^^^^^
 >meta : any
+>     : ^^^
 
 		];
 	}

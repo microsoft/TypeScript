@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts] ////
+
 //// [objectTypeWithDuplicateNumericProperty.ts]
 // numeric properties must be distinct after a ToNumber operation
 // so the below are all errors
@@ -33,13 +35,11 @@ var b = {
 
 
 //// [objectTypeWithDuplicateNumericProperty.js]
+"use strict";
 // numeric properties must be distinct after a ToNumber operation
 // so the below are all errors
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 var b = {
     1: 1,

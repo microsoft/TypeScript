@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/moduleMerge.ts] ////
+
 //// [moduleMerge.ts]
 // This should not compile both B classes are in the same module this should be a collission
 
-module A
+namespace A
 {
     class B
     {
@@ -12,7 +14,7 @@ module A
     }
 }
 
-module A
+namespace A
 {
     export class B
     {
@@ -24,26 +26,21 @@ module A
 }
 
 //// [moduleMerge.js]
+"use strict";
 // This should not compile both B classes are in the same module this should be a collission
 var A;
 (function (A) {
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        B.prototype.Hello = function () {
+    class B {
+        Hello() {
             return "from private B";
-        };
-        return B;
-    }());
+        }
+    }
 })(A || (A = {}));
 (function (A) {
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        B.prototype.Hello = function () {
+    class B {
+        Hello() {
             return "from export B";
-        };
-        return B;
-    }());
+        }
+    }
     A.B = B;
 })(A || (A = {}));

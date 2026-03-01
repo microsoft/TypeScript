@@ -1,0 +1,143 @@
+a.ts(2,5): error TS1539: A 'bigint' literal cannot be used as a property name.
+a.ts(5,13): error TS1539: A 'bigint' literal cannot be used as a property name.
+a.ts(6,13): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+a.ts(7,13): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+a.ts(12,9): error TS2538: Type 'bigint' cannot be used as an index type.
+a.ts(15,13): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(2,5): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(8,5): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(15,17): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(17,3): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(18,4): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(20,7): error TS2741: Property '"3n"' is missing in type '{}' but required in type 'H'.
+g.ts(20,17): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(22,3): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(23,4): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(25,17): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(27,3): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(28,4): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(30,7): error TS2741: Property '"5n"' is missing in type '{}' but required in type 'L'.
+g.ts(30,17): error TS1539: A 'bigint' literal cannot be used as a property name.
+g.ts(31,18): error TS2322: Type 'string' is not assignable to type 'number'.
+g.ts(32,3): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(33,4): error TS2538: Type 'bigint' cannot be used as an index type.
+g.ts(35,1): error TS1434: Unexpected keyword or identifier.
+g.ts(35,2): error TS1353: A bigint literal must be an integer.
+q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
+  Type 'bigint' is not assignable to type 'string | number | symbol'.
+
+
+==== a.ts (6 errors) ====
+    // BigInt cannot be used as an object literal property
+    { ({1n: 123}); };
+        ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    
+    const bigNum: bigint = 0n;
+    const a = { 1n: 123 };
+                ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    const b = { [1n]: 456 };
+                ~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+    const c = { [bigNum]: 789 };
+                ~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+    
+    const arr = [1, 2, 3] as const;
+    const { 0: d } = arr;
+    const { "0": e } = arr;
+    const { 0n: f } = arr; // bigint should give an index error
+            ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    
+    // BigInt cannot be used as an property name
+    const x = { 0n: 123 };
+                ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    
+==== g.ts (19 errors) ====
+    interface G {
+        2n: string;
+        ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    }
+    interface H {
+        "3n": string;
+    }
+    class K {
+        4n = 0;
+        ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    }
+     
+    class L {
+        "5n" = 0;
+    }
+    
+    const g : G = { 2n: "propertyNameError2" };
+                    ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    const g2 : G = { "2n": "ok2" };
+    g[2n];
+      ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    g2[2n];
+       ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    
+    const h : H = { 3n: "propertyNameErrorAndMissingProperty3" };
+          ~
+!!! error TS2741: Property '"3n"' is missing in type '{}' but required in type 'H'.
+!!! related TS2728 g.ts:5:5: '"3n"' is declared here.
+                    ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    const h2 : H = { "3n": "ok3" };
+    h[3n];
+      ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    h2[3n];
+       ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    
+    const k : K = { 4n: "propertyNameError4" };
+                    ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    const k2 : K = { "4n": "ok4" };
+    k[4n];
+      ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    k2[4n];
+       ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    
+    const l : L = { 5n: "propertyNameErrorAndMissingProperty5" };
+          ~
+!!! error TS2741: Property '"5n"' is missing in type '{}' but required in type 'L'.
+!!! related TS2728 g.ts:12:5: '"5n"' is declared here.
+                    ~~
+!!! error TS1539: A 'bigint' literal cannot be used as a property name.
+    const l2 : L = { "5n": "ok4" };
+                     ~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 g.ts:12:5: The expected type comes from property '5n' which is declared here on type 'L'
+    l[5n];
+      ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    l2[5n];
+       ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    
+    g.2n; // not valid JS
+    ~
+!!! error TS1434: Unexpected keyword or identifier.
+     ~~~
+!!! error TS1353: A bigint literal must be an integer.
+    
+==== q.ts (1 errors) ====
+    type Q = 6n | 7n | 8n;
+    type T = { [t in  Q]: string };
+                      ~
+!!! error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'bigint' is not assignable to type 'string | number | symbol'.
+    

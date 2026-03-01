@@ -1,78 +1,77 @@
-tests/cases/conformance/types/members/indexSignatures1.ts(7,5): error TS2322: Type '{ [sym]: number; }' is not assignable to type '{ [key: symbol]: string; }'.
+indexSignatures1.ts(7,5): error TS2322: Type '{ [sym]: number; }' is not assignable to type '{ [key: symbol]: string; }'.
   Property '[sym]' is incompatible with index signature.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/members/indexSignatures1.ts(21,5): error TS2322: Type 'IY' is not assignable to type 'IX'.
+indexSignatures1.ts(21,5): error TS2322: Type 'IY' is not assignable to type 'IX'.
   Index signature for type '`a${string}`' is missing in type 'IY'.
-tests/cases/conformance/types/members/indexSignatures1.ts(42,12): error TS7053: Element implicitly has an 'any' type because expression of type '"axxxbbbyc"' can't be used to index type '{ [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }'.
+indexSignatures1.ts(42,12): error TS7053: Element implicitly has an 'any' type because expression of type '"axxxbbbyc"' can't be used to index type '{ [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }'.
   Property 'axxxbbbyc' does not exist on type '{ [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(53,9): error TS2322: Type '{ date123: string; }' is not assignable to type '{ [x: `data${string}`]: string; }'.
-  Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(70,5): error TS2374: Duplicate index signature for type 'number'.
-tests/cases/conformance/types/members/indexSignatures1.ts(71,5): error TS2374: Duplicate index signature for type 'number'.
-tests/cases/conformance/types/members/indexSignatures1.ts(71,5): error TS2374: Duplicate index signature for type 'symbol'.
-tests/cases/conformance/types/members/indexSignatures1.ts(72,5): error TS2374: Duplicate index signature for type '`foo${string}`'.
-tests/cases/conformance/types/members/indexSignatures1.ts(72,5): error TS2374: Duplicate index signature for type 'symbol'.
-tests/cases/conformance/types/members/indexSignatures1.ts(73,5): error TS2374: Duplicate index signature for type '`foo${string}`'.
-tests/cases/conformance/types/members/indexSignatures1.ts(81,5): error TS2413: '`a${string}a`' index type '"c"' is not assignable to '`${string}a`' index type '"b"'.
-tests/cases/conformance/types/members/indexSignatures1.ts(81,5): error TS2413: '`a${string}a`' index type '"c"' is not assignable to '`a${string}`' index type '"a"'.
-tests/cases/conformance/types/members/indexSignatures1.ts(87,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
-tests/cases/conformance/types/members/indexSignatures1.ts(88,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
-tests/cases/conformance/types/members/indexSignatures1.ts(89,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/conformance/types/members/indexSignatures1.ts(90,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
-tests/cases/conformance/types/members/indexSignatures1.ts(117,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I1'.
+indexSignatures1.ts(53,9): error TS2353: Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
+indexSignatures1.ts(70,5): error TS2374: Duplicate index signature for type 'number'.
+indexSignatures1.ts(71,5): error TS2374: Duplicate index signature for type 'number'.
+indexSignatures1.ts(71,5): error TS2374: Duplicate index signature for type 'symbol'.
+indexSignatures1.ts(72,5): error TS2374: Duplicate index signature for type '`foo${string}`'.
+indexSignatures1.ts(72,5): error TS2374: Duplicate index signature for type 'symbol'.
+indexSignatures1.ts(73,5): error TS2374: Duplicate index signature for type '`foo${string}`'.
+indexSignatures1.ts(81,5): error TS2413: '`a${string}a`' index type '"c"' is not assignable to '`${string}a`' index type '"b"'.
+indexSignatures1.ts(81,5): error TS2413: '`a${string}a`' index type '"c"' is not assignable to '`a${string}`' index type '"a"'.
+indexSignatures1.ts(87,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexSignatures1.ts(88,5): error TS2374: Duplicate index signature for type 'T'.
+indexSignatures1.ts(88,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexSignatures1.ts(89,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+indexSignatures1.ts(90,5): error TS2374: Duplicate index signature for type 'T'.
+indexSignatures1.ts(90,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexSignatures1.ts(117,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I1'.
   No index signature with a parameter of type 'string' was found on type 'I1'.
-tests/cases/conformance/types/members/indexSignatures1.ts(119,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type 'I1'.
-tests/cases/conformance/types/members/indexSignatures1.ts(120,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type 'I1'.
-tests/cases/conformance/types/members/indexSignatures1.ts(123,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I2'.
+indexSignatures1.ts(119,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type 'I1'.
+indexSignatures1.ts(120,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type 'I1'.
+indexSignatures1.ts(123,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I2'.
   No index signature with a parameter of type 'string' was found on type 'I2'.
-tests/cases/conformance/types/members/indexSignatures1.ts(124,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type 'I2'.
-tests/cases/conformance/types/members/indexSignatures1.ts(126,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type 'I2'.
-tests/cases/conformance/types/members/indexSignatures1.ts(129,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I3'.
+indexSignatures1.ts(124,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type 'I2'.
+indexSignatures1.ts(126,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type 'I2'.
+indexSignatures1.ts(129,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I3'.
   No index signature with a parameter of type 'string' was found on type 'I3'.
-tests/cases/conformance/types/members/indexSignatures1.ts(135,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I4'.
+indexSignatures1.ts(135,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'I4'.
   No index signature with a parameter of type 'string' was found on type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(136,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(137,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(138,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(141,1): error TS2322: Type 'I2' is not assignable to type 'I1'.
+indexSignatures1.ts(136,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type 'I4'.
+indexSignatures1.ts(137,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type 'I4'.
+indexSignatures1.ts(138,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type 'I4'.
+indexSignatures1.ts(141,1): error TS2322: Type 'I2' is not assignable to type 'I1'.
   Index signature for type 'TaggedString1' is missing in type 'I2'.
-tests/cases/conformance/types/members/indexSignatures1.ts(143,1): error TS2322: Type 'I4' is not assignable to type 'I1'.
+indexSignatures1.ts(143,1): error TS2322: Type 'I4' is not assignable to type 'I1'.
   Index signature for type 'TaggedString1' is missing in type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(145,1): error TS2322: Type 'I1' is not assignable to type 'I2'.
+indexSignatures1.ts(145,1): error TS2322: Type 'I1' is not assignable to type 'I2'.
   Index signature for type 'TaggedString2' is missing in type 'I1'.
-tests/cases/conformance/types/members/indexSignatures1.ts(147,1): error TS2322: Type 'I4' is not assignable to type 'I2'.
+indexSignatures1.ts(147,1): error TS2322: Type 'I4' is not assignable to type 'I2'.
   Index signature for type 'TaggedString2' is missing in type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(149,1): error TS2322: Type 'I1' is not assignable to type 'I3'.
+indexSignatures1.ts(149,1): error TS2322: Type 'I1' is not assignable to type 'I3'.
   Index signature for type 'TaggedString2' is missing in type 'I1'.
-tests/cases/conformance/types/members/indexSignatures1.ts(150,1): error TS2322: Type 'I2' is not assignable to type 'I3'.
+indexSignatures1.ts(150,1): error TS2322: Type 'I2' is not assignable to type 'I3'.
   Index signature for type 'TaggedString1' is missing in type 'I2'.
-tests/cases/conformance/types/members/indexSignatures1.ts(151,1): error TS2322: Type 'I4' is not assignable to type 'I3'.
+indexSignatures1.ts(151,1): error TS2322: Type 'I4' is not assignable to type 'I3'.
   Index signature for type 'TaggedString1' is missing in type 'I4'.
-tests/cases/conformance/types/members/indexSignatures1.ts(162,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: TaggedString1]: string; }'.
+indexSignatures1.ts(162,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: TaggedString1]: string; }'.
   No index signature with a parameter of type 'string' was found on type '{ [key: TaggedString1]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(164,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type '{ [key: TaggedString1]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(165,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: TaggedString1]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(168,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: TaggedString2]: string; }'.
+indexSignatures1.ts(164,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type '{ [key: TaggedString1]: string; }'.
+indexSignatures1.ts(165,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: TaggedString1]: string; }'.
+indexSignatures1.ts(168,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: TaggedString2]: string; }'.
   No index signature with a parameter of type 'string' was found on type '{ [key: TaggedString2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(169,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type '{ [key: TaggedString2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(171,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: TaggedString2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(174,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: TaggedString1]: string; [key: TaggedString2]: string; }'.
+indexSignatures1.ts(169,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type '{ [key: TaggedString2]: string; }'.
+indexSignatures1.ts(171,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: TaggedString2]: string; }'.
+indexSignatures1.ts(174,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: TaggedString1]: string; [key: TaggedString2]: string; }'.
   No index signature with a parameter of type 'string' was found on type '{ [key: TaggedString1]: string; [key: TaggedString2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(180,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
+indexSignatures1.ts(180,1): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
   No index signature with a parameter of type 'string' was found on type '{ [key: string & Tag1 & Tag2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(181,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(182,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(183,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
-tests/cases/conformance/types/members/indexSignatures1.ts(277,7): error TS2322: Type '"&"' is not assignable to type '`&:${string}`'.
-tests/cases/conformance/types/members/indexSignatures1.ts(281,35): error TS2322: Type '{ someKey: string; }' is not assignable to type 'PseudoDeclaration'.
-  Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
-tests/cases/conformance/types/members/indexSignatures1.ts(286,7): error TS2322: Type '"two"' is not assignable to type '`/${string}`'.
-tests/cases/conformance/types/members/indexSignatures1.ts(289,7): error TS2322: Type 'number' is not assignable to type 'PathsObject'.
-tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
-  Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
+indexSignatures1.ts(181,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
+indexSignatures1.ts(182,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
+indexSignatures1.ts(183,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
+indexSignatures1.ts(277,7): error TS2322: Type '"&"' is not assignable to type '`&:${string}`'.
+indexSignatures1.ts(281,35): error TS2353: Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
+indexSignatures1.ts(286,7): error TS2322: Type '"two"' is not assignable to type '`/${string}`'.
+indexSignatures1.ts(289,7): error TS2322: Type 'number' is not assignable to type 'PathsObject'.
+indexSignatures1.ts(312,43): error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
 
 
-==== tests/cases/conformance/types/members/indexSignatures1.ts (50 errors) ====
+==== indexSignatures1.ts (52 errors) ====
     // Symbol index signature checking
     
     const sym = Symbol();
@@ -136,9 +135,8 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
     
     dom = { data123: 'hello' };
     dom = { date123: 'hello' };  // Error
-            ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ date123: string; }' is not assignable to type '{ [x: `data${string}`]: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
+            ~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
     
     // Contextual typing by index signature with template literal pattern
     
@@ -192,12 +190,16 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
          ~~~
 !!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
         [key: T | number]: string;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'T'.
          ~~~
 !!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
         [key: Error]: string;  // Error
          ~~~
 !!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
         [key: T & string]: string;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'T'.
          ~~~
 !!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
     }
@@ -466,9 +468,8 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
     type PseudoDeclaration = { [key in Pseudo]: string };
     
     const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
-                                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ someKey: string; }' is not assignable to type 'PseudoDeclaration'.
-!!! error TS2322:   Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
+                                      ~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
     
     type FieldPattern = `/${string}`;
     
@@ -504,9 +505,8 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
     const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
     const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
     const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
-                                              ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
+                                              ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
     
     // Repro from #45772
     

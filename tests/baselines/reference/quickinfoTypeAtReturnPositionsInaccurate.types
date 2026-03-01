@@ -1,53 +1,76 @@
-=== tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts ===
+//// [tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts] ////
+
+=== quickinfoTypeAtReturnPositionsInaccurate.ts ===
 class NumClass<T extends number> {
 >NumClass : NumClass<T>
+>         : ^^^^^^^^^^^
 
     private value!: T;
 >value : T
+>      : ^
 
     public get(): T {
 >get : () => T
+>    : ^^^^^^ 
 
         return this.value;
 >this.value : T
+>           : ^
 >this : this
+>     : ^^^^
 >value : T
+>      : ^
     }
     public numExclusive() { }
 >numExclusive : () => void
+>             : ^^^^^^^^^^
 }
 
 class StrClass<T extends string> {
 >StrClass : StrClass<T>
+>         : ^^^^^^^^^^^
 
     private value!: T;
 >value : T
+>      : ^
 
     public get(): T {
 >get : () => T
+>    : ^^^^^^ 
 
         return this.value;
 >this.value : T
+>           : ^
 >this : this
+>     : ^^^^
 >value : T
+>      : ^
     }
     public strExclusive() { }
 >strExclusive : () => void
+>             : ^^^^^^^^^^
 }
 
 const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 ><Item extends NumClass<number> | StrClass<string>> (        item: Item    ): item is Extract<Item, NumClass<any>> => {        return (item instanceof NumClass);    } : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
+>                                                                                                                                                                      : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 
         item: Item
 >item : Item
+>     : ^^^^
 
     ): item is Extract<Item, NumClass<any>> => {
         return (item instanceof NumClass);
 >(item instanceof NumClass) : boolean
+>                           : ^^^^^^^
 >item instanceof NumClass : boolean
+>                         : ^^^^^^^
 >item : Item
+>     : ^^^^
 >NumClass : typeof NumClass
+>         : ^^^^^^^^^^^^^^^
     }
 
 /**
@@ -56,56 +79,84 @@ const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
  */
 class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass<string> }> {
 >SimpleStore : SimpleStore<Entries>
+>            : ^^^^^^^^^^^^^^^^^^^^
 >index : string
+>      : ^^^^^^
 
     private entries = { } as Entries;
 >entries : Entries
+>        : ^^^^^^^
 >{ } as Entries : Entries
+>               : ^^^^^^^
 >{ } : {}
+>    : ^^
 
     public get<EntryId extends keyof Entries>(entryId: EntryId): Entries[EntryId] {
 >get : <EntryId extends keyof Entries>(entryId: EntryId) => Entries[EntryId]
+>    : ^       ^^^^^^^^^             ^^       ^^       ^^^^^                
 >entryId : EntryId
+>        : ^^^^^^^
 
         let entry = this.entries[entryId];
 >entry : Entries[EntryId]
+>      : ^^^^^^^^^^^^^^^^
 >this.entries[entryId] : Entries[EntryId]
+>                      : ^^^^^^^^^^^^^^^^
 >this.entries : Entries
+>             : ^^^^^^^
 >this : this
+>     : ^^^^
 >entries : Entries
+>        : ^^^^^^^
 >entryId : EntryId
+>        : ^^^^^^^
 
         entry.numExclusive(); // error - expected.
 >entry.numExclusive() : any
+>                     : ^^^
 >entry.numExclusive : any
+>                   : ^^^
 >entry : NumClass<number> | StrClass<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numExclusive : any
+>             : ^^^
 
         if (isNumClass(entry)) {
 >isNumClass(entry) : boolean
+>                  : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 >entry : Entries[EntryId]
+>      : ^^^^^^^^^^^^^^^^
 
             entry.numExclusive(); // works
 >entry.numExclusive() : void
+>                     : ^^^^
 >entry.numExclusive : () => void
+>                   : ^^^^^^^^^^
 >entry : Extract<Entries[EntryId], NumClass<any>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numExclusive : () => void
+>             : ^^^^^^^^^^
 
             return entry;
 >entry : Extract<Entries[EntryId], NumClass<any>>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
 
         return entry; // type is Entries[EntryId] - all fine
 >entry : Entries[EntryId]
+>      : ^^^^^^^^^^^^^^^^
     }
 }
 
 type Slice = {
->Slice : { [index: string]: NumClass<number> | StrClass<string>; }
+>Slice : Slice
+>      : ^^^^^
 
     [index: string]: NumClass<number> | StrClass<string>
 >index : string
+>      : ^^^^^^
 }
 
 /**
@@ -117,93 +168,141 @@ type Slice = {
  */
 class ComplexStore<Slices extends { [index: string]: Slice }> {
 >ComplexStore : ComplexStore<Slices>
+>             : ^^^^^^^^^^^^^^^^^^^^
 >index : string
+>      : ^^^^^^
 
     private slices = { } as Slices;
 >slices : Slices
+>       : ^^^^^^
 >{ } as Slices : Slices
+>              : ^^^^^^
 >{ } : {}
+>    : ^^
 
     public get<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
 >get : <SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(sliceId: SliceId, sliceKey: SliceKey) => Slices[SliceId][SliceKey]
+>    : ^       ^^^^^^^^^            ^^        ^^^^^^^^^                     ^^       ^^       ^^        ^^        ^^^^^                         
 
         sliceId: SliceId, sliceKey: SliceKey
 >sliceId : SliceId
+>        : ^^^^^^^
 >sliceKey : SliceKey
+>         : ^^^^^^^^
 
     ): Slices[SliceId][SliceKey] {
         let item = this.slices[sliceId][sliceKey];
 >item : Slices[SliceId][SliceKey]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.slices[sliceId][sliceKey] : Slices[SliceId][SliceKey]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.slices[sliceId] : Slices[SliceId]
+>                     : ^^^^^^^^^^^^^^^
 >this.slices : Slices
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >slices : Slices
+>       : ^^^^^^
 >sliceId : SliceId
+>        : ^^^^^^^
 >sliceKey : SliceKey
+>         : ^^^^^^^^
 
         if (isNumClass(item)) {
 >isNumClass(item) : boolean
+>                 : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 >item : Slices[SliceId][SliceKey]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
             item.numExclusive(); // works only since version 4.2
 >item.numExclusive() : void
+>                    : ^^^^
 >item.numExclusive : () => void
+>                  : ^^^^^^^^^^
 >item : Extract<Slices[SliceId][SliceKey], NumClass<any>>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numExclusive : () => void
+>             : ^^^^^^^^^^
         }
 
         item.get();
 >item.get() : string | number
+>           : ^^^^^^^^^^^^^^^
 >item.get : (() => number) | (() => string)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : NumClass<number> | StrClass<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : (() => number) | (() => string)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         // unfortunately, doesn't work completely.
         // it seems like item's predicated type leaks outside the bracket...
         
         return item; // type is Extract ...
 >item : Slices[SliceId][SliceKey]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
     public get2<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
 >get2 : <SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(sliceId: SliceId, sliceKey: SliceKey) => Slices[SliceId][SliceKey]
+>     : ^       ^^^^^^^^^            ^^        ^^^^^^^^^                     ^^       ^^       ^^        ^^        ^^^^^                         
 
         sliceId: SliceId, sliceKey: SliceKey
 >sliceId : SliceId
+>        : ^^^^^^^
 >sliceKey : SliceKey
+>         : ^^^^^^^^
 
     ): Slices[SliceId][SliceKey] {
         let item = this.slices[sliceId][sliceKey];
 >item : Slices[SliceId][SliceKey]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.slices[sliceId][sliceKey] : Slices[SliceId][SliceKey]
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.slices[sliceId] : Slices[SliceId]
+>                     : ^^^^^^^^^^^^^^^
 >this.slices : Slices
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >slices : Slices
+>       : ^^^^^^
 >sliceId : SliceId
+>        : ^^^^^^^
 >sliceKey : SliceKey
+>         : ^^^^^^^^
 
         if (isNumClass(item)) {
 >isNumClass(item) : boolean
+>                 : ^^^^^^^
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
+>           : ^    ^^^^^^^^^                                   ^^    ^^    ^^^^^                                    
 >item : Slices[SliceId][SliceKey]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
             return item;
 >item : Extract<Slices[SliceId][SliceKey], NumClass<any>>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         // it seems like the compiler asumes the above condition is always
         // truthy
 
         item.get();
 >item.get() : string | number
+>           : ^^^^^^^^^^^^^^^
 >item.get : (() => number) | (() => string)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : NumClass<number> | StrClass<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : (() => number) | (() => string)
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return item; // type is never
 >item : Slices[SliceId][SliceKey]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -211,28 +310,44 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 interface BuilderProgram {
     getProgram(): Program;
 >getProgram : () => Program
+>           : ^^^^^^       
 }
 interface Program {
     state: any;
 >state : any
+>      : ^^^
 }
 declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
 >isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
+>                 : ^ ^^^^^^^^^              ^^       ^^           ^^^^^            
 >program : Program | T
+>        : ^^^^^^^^^^^
 
 export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >listFiles : <T extends BuilderProgram>(program: Program | T) => void
+>          : ^ ^^^^^^^^^              ^^       ^^           ^^^^^^^^^
 >program : Program | T
+>        : ^^^^^^^^^^^
 
     const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
 >x : Program
+>  : ^^^^^^^
 >isBuilderProgram(program) ? program.getProgram() : program : Program
+>                                                           : ^^^^^^^
 >isBuilderProgram(program) : boolean
->isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
+>                          : ^^^^^^^
+>isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
+>                 : ^^^^^^^^^^^^^              ^^       ^^             ^^^^^              
 >program : Program | T
+>        : ^^^^^^^^^^^
 >program.getProgram() : Program
+>                     : ^^^^^^^
 >program.getProgram : () => Program
+>                   : ^^^^^^       
 >program : T
+>        : ^
 >getProgram : () => Program
+>           : ^^^^^^       
 >program : Program
+>        : ^^^^^^^
 }

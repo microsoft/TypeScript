@@ -1,16 +1,16 @@
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(50,14): error TS2341: Property 'priv' is private and only accessible within class 'A'.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(55,14): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(58,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(58,24): error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(59,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(59,24): error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(60,9): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(60,25): error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(61,9): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
-tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(61,25): error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
+jsdocAccessibilityTag.js(50,14): error TS2341: Property 'priv' is private and only accessible within class 'A'.
+jsdocAccessibilityTag.js(55,14): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+jsdocAccessibilityTag.js(58,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.
+jsdocAccessibilityTag.js(58,24): error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
+jsdocAccessibilityTag.js(59,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.
+jsdocAccessibilityTag.js(59,24): error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
+jsdocAccessibilityTag.js(60,9): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+jsdocAccessibilityTag.js(60,25): error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
+jsdocAccessibilityTag.js(61,9): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+jsdocAccessibilityTag.js(61,25): error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
 
 
-==== tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js (10 errors) ====
+==== jsdocAccessibilityTag.js (10 errors) ====
     class A {
         /**
          * Ap docs

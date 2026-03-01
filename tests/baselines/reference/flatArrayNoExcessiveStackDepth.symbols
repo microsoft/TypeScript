@@ -1,4 +1,6 @@
-=== tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts ===
+//// [tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts] ////
+
+=== flatArrayNoExcessiveStackDepth.ts ===
 // Repro from #43493
 
 declare const foo: unknown[];
@@ -15,7 +17,7 @@ const bar = foo.flatMap(bar => bar as Foo);
 
 interface Foo extends Array<string> {}
 >Foo : Symbol(Foo, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 43))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 
 // Repros from comments in #43249
 

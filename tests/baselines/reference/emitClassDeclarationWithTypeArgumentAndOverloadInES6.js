@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts] ////
+
 //// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts]
 class B<T> {
     x: T;
@@ -23,6 +25,7 @@ class B<T> {
 }
 
 //// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.js]
+"use strict";
 class B {
     constructor(a) { this.B = a; }
     foo() {

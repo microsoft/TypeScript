@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedGenerics.ts] ////
+
 //// [nestedGenerics.ts]
 interface Foo<T> {
 	t: T;
@@ -6,4 +8,5 @@ interface Foo<T> {
 var f: Foo<Foo<number>>;
 
 //// [nestedGenerics.js]
+"use strict";
 var f;

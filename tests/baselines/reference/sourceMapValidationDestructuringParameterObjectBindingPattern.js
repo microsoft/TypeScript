@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts] ////
+
 //// [sourceMapValidationDestructuringParameterObjectBindingPattern.ts]
 interface Robot {
     name: string;
@@ -30,18 +32,16 @@ foo3({ name: "Edger", skill: "cutting edges" });
 
 
 //// [sourceMapValidationDestructuringParameterObjectBindingPattern.js]
+"use strict";
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
-function foo1(_a) {
-    var nameA = _a.name;
+function foo1({ name: nameA }) {
     console.log(nameA);
 }
-function foo2(_a) {
-    var nameB = _a.name, skillB = _a.skill;
+function foo2({ name: nameB, skill: skillB }) {
     console.log(nameB);
 }
-function foo3(_a) {
-    var name = _a.name;
+function foo3({ name }) {
     console.log(name);
 }
 foo1(robotA);

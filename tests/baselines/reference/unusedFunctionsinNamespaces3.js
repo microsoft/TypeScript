@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedFunctionsinNamespaces3.ts] ////
+
 //// [unusedFunctionsinNamespaces3.ts]
 namespace Validation {
     var function1 = function(param1:string) {
@@ -5,6 +7,7 @@ namespace Validation {
 }
 
 //// [unusedFunctionsinNamespaces3.js]
+"use strict";
 var Validation;
 (function (Validation) {
     var function1 = function (param1) {

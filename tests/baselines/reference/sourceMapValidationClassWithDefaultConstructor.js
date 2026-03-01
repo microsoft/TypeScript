@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationClassWithDefaultConstructor.ts] ////
+
 //// [sourceMapValidationClassWithDefaultConstructor.ts]
 class Greeter {
     public a = 10;
@@ -5,11 +7,11 @@ class Greeter {
 }
 
 //// [sourceMapValidationClassWithDefaultConstructor.js]
-var Greeter = /** @class */ (function () {
-    function Greeter() {
+"use strict";
+class Greeter {
+    constructor() {
         this.a = 10;
         this.nameA = "Ten";
     }
-    return Greeter;
-}());
+}
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructor.js.map

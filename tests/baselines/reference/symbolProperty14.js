@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty14.ts] ////
+
 //// [symbolProperty14.ts]
 class C {
     [Symbol.iterator]: { x; y };
@@ -17,6 +19,7 @@ var i: I;
 bar(i);
 
 //// [symbolProperty14.js]
+"use strict";
 class C {
 }
 Symbol.iterator;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperatorInTemplateString3ES6.ts] ////
+
 //// [emitExponentiationOperatorInTemplateString3ES6.ts]
 var t1 = 10;
 var t2 = 10;
@@ -28,6 +30,7 @@ var s;
 
 
 //// [emitExponentiationOperatorInTemplateString3ES6.js]
+"use strict";
 var t1 = 10;
 var t2 = 10;
 var s;

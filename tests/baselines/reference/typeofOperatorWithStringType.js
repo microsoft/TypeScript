@@ -1,6 +1,8 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts] ////
+
 //// [typeofOperatorWithStringType.ts]
 // typeof  operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
@@ -9,8 +11,8 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
-    export var n: string;
+namespace M {
+    export var n!: string;
 }
 
 var objA = new A();
@@ -45,9 +47,9 @@ typeof foo();
 typeof objA.a, M.n;
 
 // use typeof in type query
-var z: string;
-var x: string[];
-var r: () => string;
+declare var z: string;
+declare var x: string[];
+declare var r: () => string;
 z: typeof STRING;
 x: typeof STRING1;
 r: typeof foo;
@@ -58,16 +60,12 @@ z: typeof A.foo;
 z: typeof M.n;
 
 //// [typeofOperatorWithStringType.js]
-// typeof  operator on string type
-var STRING;
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -78,7 +76,7 @@ var ResultIsString2 = typeof STRING1;
 // string type literal
 var ResultIsString3 = typeof "";
 var ResultIsString4 = typeof { x: "", y: "" };
-var ResultIsString5 = typeof { x: "", y: function (s) { return s; } };
+var ResultIsString5 = typeof { x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;
@@ -96,10 +94,6 @@ typeof STRING;
 typeof STRING1;
 typeof foo();
 typeof objA.a, M.n;
-// use typeof in type query
-var z;
-var x;
-var r;
 z: typeof STRING;
 x: typeof STRING1;
 r: typeof foo;

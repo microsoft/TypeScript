@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts] ////
+
 //// [publicMemberImplementedAsPrivateInDerivedClass.ts]
 interface Qux {
  Bar: number;
@@ -8,8 +10,6 @@ class Foo implements Qux {
 
 
 //// [publicMemberImplementedAsPrivateInDerivedClass.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+"use strict";
+class Foo {
+}

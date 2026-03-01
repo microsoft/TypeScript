@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithoutResolveJsonModule.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b.json'); // error
 >b1 : Symbol(b1, Decl(file1.ts, 0, 0))
 
@@ -21,4 +23,10 @@ if (x) {
 >b1 : Symbol(b1, Decl(file1.ts, 0, 0))
 >b : Symbol(b, Decl(file1.ts, 4, 7))
 }
+
+=== b.json ===
+contents Not read
+>contents : Symbol(contents, Decl(b.json, 0, 0))
+>Not : Symbol(Not, Decl(b.json, 0, 8))
+>read : Symbol(read, Decl(b.json, 0, 12))
 

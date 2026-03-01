@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test1.d.ts ===
+//// [tests/cases/compiler/importUsedInGenericImportResolves.ts] ////
+
+=== test1.d.ts ===
 export interface T<P> {
 >T : Symbol(T, Decl(test1.d.ts, 0, 0))
 >P : Symbol(P, Decl(test1.d.ts, 0, 19))
@@ -8,12 +10,12 @@ export interface T<P> {
 >P : Symbol(P, Decl(test1.d.ts, 0, 19))
 }
 
-=== tests/cases/compiler/test2.d.ts ===
+=== test2.d.ts ===
 export declare const theme: { a: string }
 >theme : Symbol(theme, Decl(test2.d.ts, 0, 20))
 >a : Symbol(a, Decl(test2.d.ts, 0, 29))
 
-=== tests/cases/compiler/test3.ts ===
+=== test3.ts ===
 export const a: import("./test1").T<typeof import("./test2").theme> = null as any;
 >a : Symbol(a, Decl(test3.ts, 0, 12))
 >T : Symbol(T, Decl(test1.d.ts, 0, 0))

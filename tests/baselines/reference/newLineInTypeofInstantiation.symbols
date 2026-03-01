@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newLineInTypeofInstantiation.ts ===
+//// [tests/cases/compiler/newLineInTypeofInstantiation.ts] ////
+
+=== newLineInTypeofInstantiation.ts ===
 interface Example {
 >Example : Symbol(Example, Decl(newLineInTypeofInstantiation.ts, 0, 0))
 

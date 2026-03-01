@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentInferenceApparentType2.ts] ////
+
 //// [typeArgumentInferenceApparentType2.ts]
 function method<T>(iterable: Iterable<T>): T {
     function inner<U extends Iterable<T>>() {
@@ -8,6 +10,7 @@ function method<T>(iterable: Iterable<T>): T {
 }
 
 //// [typeArgumentInferenceApparentType2.js]
+"use strict";
 function method(iterable) {
     function inner() {
         var u;

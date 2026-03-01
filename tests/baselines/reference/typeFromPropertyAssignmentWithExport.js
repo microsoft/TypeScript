@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentWithExport.ts] ////
+
 //// [a.js]
 // this is a javascript file...
 
@@ -11,7 +13,7 @@ Adapter.asyncMethod = function() {}
 //// [a.js]
 "use strict";
 // this is a javascript file...
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Adapter = void 0;
 exports.Adapter = {};
 exports.Adapter.prop = {};

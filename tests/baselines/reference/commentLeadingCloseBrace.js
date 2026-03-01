@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentLeadingCloseBrace.ts] ////
+
 //// [commentLeadingCloseBrace.ts]
 declare function commentedParameters(...args): any;
 
@@ -12,6 +14,7 @@ function ifelse() {
 }
 
 //// [commentLeadingCloseBrace.js]
+"use strict";
 function ifelse() {
     if (commentedParameters(1, 2)) {
         /*comment1*/

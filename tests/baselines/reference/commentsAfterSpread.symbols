@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsAfterSpread.ts ===
+//// [tests/cases/compiler/commentsAfterSpread.ts] ////
+
+=== commentsAfterSpread.ts ===
 const identity = (a) => a;
 >identity : Symbol(identity, Decl(commentsAfterSpread.ts, 0, 5))
 >a : Symbol(a, Decl(commentsAfterSpread.ts, 0, 18))

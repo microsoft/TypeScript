@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction7_es2017.ts] ////
+
 //// [asyncArrowFunction7_es2017.ts]
 var bar = async (): Promise<void> => {
   // 'await' here is an identifier, and not an await expression.
@@ -6,6 +8,7 @@ var bar = async (): Promise<void> => {
 }
 
 //// [asyncArrowFunction7_es2017.js]
+"use strict";
 var bar = async () => {
     // 'await' here is an identifier, and not an await expression.
     var foo = async (a = await ) => {

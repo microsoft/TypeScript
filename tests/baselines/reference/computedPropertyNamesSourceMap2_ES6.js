@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES6.ts] ////
+
 //// [computedPropertyNamesSourceMap2_ES6.ts]
 var v = {
     ["hello"]() {
@@ -9,6 +11,7 @@ var v = {
 }
 
 //// [computedPropertyNamesSourceMap2_ES6.js]
+"use strict";
 var v = {
     ["hello"]() {
         debugger;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/anyPropertyAccess.ts] ////
+
 //// [anyPropertyAccess.ts]
 var x: any;
 var a = x.foo;
@@ -8,6 +10,7 @@ var e = x[0].foo;
 var f = x['0'].bar;
 
 //// [anyPropertyAccess.js]
+"use strict";
 var x;
 var a = x.foo;
 var b = x['foo'];

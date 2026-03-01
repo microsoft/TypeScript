@@ -1,15 +1,17 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts] ////
+
+=== restParametersOfNonArrayTypes2.ts ===
 // Rest parameters must be an array type if they have a type annotation, 
 // user defined subtypes of array do not count, all of these are errors
 
 interface MyThing extends Array<any> { }
 >MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 interface MyThing2<T> extends Array<T> { }
 >MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
 >T : Symbol(T, Decl(restParametersOfNonArrayTypes2.ts, 4, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(restParametersOfNonArrayTypes2.ts, 4, 19))
 
 function foo(...x: MyThing) { }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es2017/asyncArrowFunction/file.js ===
+//// [tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction_allowJs.ts] ////
+
+=== file.js ===
 // Error (good)
 /** @type {function(): string} */
 const a = () => 0
@@ -17,14 +19,22 @@ const c = async () => {
 	return 0
 }
 
+// Error (good)
+/** @type {function(): string} */
+const d = async () => {
+>d : Symbol(d, Decl(file.js, 16, 5))
+
+	return ""
+}
+
 /** @type {function(function(): string): void} */
 const f = (p) => {}
->f : Symbol(f, Decl(file.js, 15, 5))
->p : Symbol(p, Decl(file.js, 15, 11))
+>f : Symbol(f, Decl(file.js, 21, 5))
+>p : Symbol(p, Decl(file.js, 21, 11))
 
 // Error (good)
 f(async () => {
->f : Symbol(f, Decl(file.js, 15, 5))
+>f : Symbol(f, Decl(file.js, 21, 5))
 
 	return 0
 })

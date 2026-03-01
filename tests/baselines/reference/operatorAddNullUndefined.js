@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/operatorAddNullUndefined.ts] ////
+
 //// [operatorAddNullUndefined.ts]
 enum E { x }
 var x1 = null + null;
@@ -18,6 +20,7 @@ var x15 = E.x + null
 var x16 = E.x + undefined
 
 //// [operatorAddNullUndefined.js]
+"use strict";
 var E;
 (function (E) {
     E[E["x"] = 0] = "x";

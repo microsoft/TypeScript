@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts] ////
+
 //// [functionTypeArgumentAssignmentCompat.ts]
 var f : {
  <T>(x:T): T;
@@ -14,8 +16,9 @@ console.log(s);
 
 
 //// [functionTypeArgumentAssignmentCompat.js]
+"use strict";
 var f;
-var g = function () { return []; };
+var g = () => [];
 f = g;
 var s = f("str").toUpperCase();
 console.log(s);

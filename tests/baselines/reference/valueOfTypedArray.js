@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/valueOfTypedArray.ts] ////
+
 //// [valueOfTypedArray.ts]
 // All declarations should pass, as valueOf has been specialized for all TypedArrays
 const typedArray0: Int8Array = (new Int8Array()).valueOf();
@@ -13,6 +15,7 @@ const typedArray9: BigUint64Array = (new BigUint64Array()).valueOf();
 
 
 //// [valueOfTypedArray.js]
+"use strict";
 // All declarations should pass, as valueOf has been specialized for all TypedArrays
 const typedArray0 = (new Int8Array()).valueOf();
 const typedArray1 = (new Uint8Array()).valueOf();

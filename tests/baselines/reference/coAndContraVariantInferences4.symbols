@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/coAndContraVariantInferences4.ts] ////
+
+=== coAndContraVariantInferences4.ts ===
+const enum SyntaxKind {
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+
+    Modifier,
+>Modifier : Symbol(SyntaxKind.Modifier, Decl(coAndContraVariantInferences4.ts, 0, 23))
+
+    Decorator,
+>Decorator : Symbol(SyntaxKind.Decorator, Decl(coAndContraVariantInferences4.ts, 1, 13))
+}
+
+interface Node {
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+
+    kind: SyntaxKind;
+>kind : Symbol(Node.kind, Decl(coAndContraVariantInferences4.ts, 5, 16))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+}
+
+interface Modifier extends Node { kind: SyntaxKind.Modifier; }
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences4.ts, 7, 1))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+>kind : Symbol(Modifier.kind, Decl(coAndContraVariantInferences4.ts, 9, 33))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+>Modifier : Symbol(SyntaxKind.Modifier, Decl(coAndContraVariantInferences4.ts, 0, 23))
+
+interface Decorator extends Node { kind: SyntaxKind.Decorator; }
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences4.ts, 9, 62))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+>kind : Symbol(Decorator.kind, Decl(coAndContraVariantInferences4.ts, 10, 34))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences4.ts, 0, 0))
+>Decorator : Symbol(SyntaxKind.Decorator, Decl(coAndContraVariantInferences4.ts, 1, 13))
+
+declare function isModifier(node: Node): node is Modifier;
+>isModifier : Symbol(isModifier, Decl(coAndContraVariantInferences4.ts, 10, 64))
+>node : Symbol(node, Decl(coAndContraVariantInferences4.ts, 12, 28))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences4.ts, 12, 28))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences4.ts, 7, 1))
+
+declare function isDecorator(node: Node): node is Decorator;
+>isDecorator : Symbol(isDecorator, Decl(coAndContraVariantInferences4.ts, 12, 58))
+>node : Symbol(node, Decl(coAndContraVariantInferences4.ts, 13, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences4.ts, 3, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences4.ts, 13, 29))
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences4.ts, 9, 62))
+
+declare function every<T, U extends T>(array: readonly T[], callback: (element: T) => element is U): array is readonly U[];
+>every : Symbol(every, Decl(coAndContraVariantInferences4.ts, 13, 60))
+>T : Symbol(T, Decl(coAndContraVariantInferences4.ts, 15, 23))
+>U : Symbol(U, Decl(coAndContraVariantInferences4.ts, 15, 25))
+>T : Symbol(T, Decl(coAndContraVariantInferences4.ts, 15, 23))
+>array : Symbol(array, Decl(coAndContraVariantInferences4.ts, 15, 39))
+>T : Symbol(T, Decl(coAndContraVariantInferences4.ts, 15, 23))
+>callback : Symbol(callback, Decl(coAndContraVariantInferences4.ts, 15, 59))
+>element : Symbol(element, Decl(coAndContraVariantInferences4.ts, 15, 71))
+>T : Symbol(T, Decl(coAndContraVariantInferences4.ts, 15, 23))
+>element : Symbol(element, Decl(coAndContraVariantInferences4.ts, 15, 71))
+>U : Symbol(U, Decl(coAndContraVariantInferences4.ts, 15, 25))
+>array : Symbol(array, Decl(coAndContraVariantInferences4.ts, 15, 39))
+>U : Symbol(U, Decl(coAndContraVariantInferences4.ts, 15, 25))
+
+declare const modifiers: readonly Decorator[] | readonly Modifier[];
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences4.ts, 17, 13))
+>Decorator : Symbol(Decorator, Decl(coAndContraVariantInferences4.ts, 9, 62))
+>Modifier : Symbol(Modifier, Decl(coAndContraVariantInferences4.ts, 7, 1))
+
+function foo() {
+>foo : Symbol(foo, Decl(coAndContraVariantInferences4.ts, 17, 68))
+
+    every(modifiers, isModifier);
+>every : Symbol(every, Decl(coAndContraVariantInferences4.ts, 13, 60))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences4.ts, 17, 13))
+>isModifier : Symbol(isModifier, Decl(coAndContraVariantInferences4.ts, 10, 64))
+
+    every(modifiers, isDecorator);
+>every : Symbol(every, Decl(coAndContraVariantInferences4.ts, 13, 60))
+>modifiers : Symbol(modifiers, Decl(coAndContraVariantInferences4.ts, 17, 13))
+>isDecorator : Symbol(isDecorator, Decl(coAndContraVariantInferences4.ts, 12, 58))
+}
+

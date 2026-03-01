@@ -1,0 +1,41 @@
+error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+error TS5107: Option 'module=UMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+!!! error TS5107: Option 'module=UMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== /a.ts (0 errors) ====
+    export const _ = 0;
+    
+==== /b.mts (0 errors) ====
+    export const _ = 0;
+    
+==== /c.cts (0 errors) ====
+    export const _ = 0;
+    
+==== /d.js (0 errors) ====
+    export const _ = 0;
+    
+==== /e.mjs (0 errors) ====
+    export const _ = 0;
+    
+==== /f.mjs (0 errors) ====
+    export const _ = 0;
+    
+==== /g.ts (0 errors) ====
+    import {} from "./a";
+    import a = require("./a");
+    
+==== /h.mts (0 errors) ====
+    import {} from "./a";
+    import a = require("./a");
+    
+==== /i.cts (0 errors) ====
+    import {} from "./a";
+    import a = require("./a");
+    
+==== /dummy.ts (0 errors) ====
+    export {};
+    

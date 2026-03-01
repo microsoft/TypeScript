@@ -6,4 +6,4 @@
 ////let a2: A2;
 ////let a12 = { ...a1, ...a2 };
 ////a12.[|a/*3*/|];
-verify.goToDefinition('3', [ '1', '2' ]);
+verify.baselineGoToDefinition('3');

@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/jsFileCompilationFunctionOverloadSyntax.ts] ////
+
+=== a.js ===
+function foo();
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+

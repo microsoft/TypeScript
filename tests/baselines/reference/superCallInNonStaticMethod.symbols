@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallInNonStaticMethod.ts ===
+//// [tests/cases/compiler/superCallInNonStaticMethod.ts] ////
+
+=== superCallInNonStaticMethod.ts ===
 class Doing {
 >Doing : Symbol(Doing, Decl(superCallInNonStaticMethod.ts, 0, 0))
 

@@ -1,11 +1,11 @@
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(2,7): error TS2571: Object is of type 'unknown'.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(3,9): error TS2339: Property 'p1' does not exist on type 'unknown'.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2461: Type 'unknown' is not an array type.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2571: Object is of type 'unknown'.
-tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2461: Type 'unknown' is not an array type.
+bindingPatternCannotBeOnlyInferenceSource.ts(2,7): error TS2571: Object is of type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(3,9): error TS2339: Property 'p1' does not exist on type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+bindingPatternCannotBeOnlyInferenceSource.ts(4,7): error TS2571: Object is of type 'unknown'.
+bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts (5 errors) ====
+==== bindingPatternCannotBeOnlyInferenceSource.ts (5 errors) ====
     declare function f<T>(): T;
     const {} = f();       // error (only in strictNullChecks)
           ~~
@@ -15,12 +15,12 @@ tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts(5,7): error TS
 !!! error TS2339: Property 'p1' does not exist on type 'unknown'.
     const [] = f();       // error
           ~~
-!!! error TS2461: Type 'unknown' is not an array type.
+!!! error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
           ~~
 !!! error TS2571: Object is of type 'unknown'.
     const [e1, e2] = f(); // error
           ~~~~~~~~
-!!! error TS2461: Type 'unknown' is not an array type.
+!!! error TS2488: Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     
     // Repro from #43605
     type Dispatch<A = { type: any; [extraProps: string]: any }> = { <T extends A>(action: T): T };

@@ -1,127 +1,184 @@
-=== tests/cases/conformance/types/thisType/declarationFiles.ts ===
+//// [tests/cases/conformance/types/thisType/declarationFiles.ts] ////
+
+=== declarationFiles.ts ===
 class C1 {
 >C1 : C1
+>   : ^^
 
     x: this;
 >x : this
+>  : ^^^^
 
     f(x: this): this { return undefined; }
 >f : (x: this) => this
+>  : ^ ^^    ^^^^^    
 >x : this
+>  : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     constructor(x: this) { }
 >x : any
+>  : ^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     [x: string]: this;
 >x : string
+>  : ^^^^^^
 }
 
 interface Foo<T> {
     x: T;
 >x : T
+>  : ^
 
     y: this;
 >y : this
+>  : ^^^^
 }
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     a: this[];
 >a : this[]
+>  : ^^^^^^
 
     b: [this, this];
 >b : [this, this]
+>  : ^^^^^^^^^^^^
 
     c: this | Date;
 >c : this | Date
+>  : ^^^^^^^^^^^
 
     d: this & Date;
 >d : this & Date
+>  : ^^^^^^^^^^^
 
     e: (((this)));
 >e : this
+>  : ^^^^
 
     f: (x: this) => this;
 >f : (x: this) => this
+>  : ^ ^^    ^^^^^    
 >x : this
+>  : ^^^^
 
     g: new (x: this) => this;
 >g : new (x: this) => this
+>  : ^^^^^ ^^    ^^^^^    
 >x : this
+>  : ^^^^
 
     h: Foo<this>;
 >h : Foo<this>
+>  : ^^^^^^^^^
 
     i: Foo<this | (() => this)>;
 >i : Foo<this | (() => this)>
+>  : ^^^^^^^^^^^^^^^^^^    ^^
 
     j: (x: any) => x is this;
 >j : (x: any) => x is this
+>  : ^ ^^   ^^^^^         
 >x : any
+>  : ^^^
 }
 
 class C4 {
 >C4 : C4
+>   : ^^
 
     x1 = { a: this };
 >x1 : { a: this; }
+>   : ^^^^^^^^^^^^
 >{ a: this } : { a: this; }
+>            : ^^^^^^^^^^^^
 >a : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
     x2 = [this];
 >x2 : this[]
+>   : ^^^^^^
 >[this] : this[]
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 
     x3 = [{ a: this }];
 >x3 : { a: this; }[]
+>   : ^^^^^^^^^^^^^^
 >[{ a: this }] : { a: this; }[]
+>              : ^^^^^^^^^^^^^^
 >{ a: this } : { a: this; }
+>            : ^^^^^^^^^^^^
 >a : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
     x4 = () => this;
 >x4 : () => this
+>   : ^^^^^^^^^^
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
     f1() {
 >f1 : () => { a: this; }
+>   : ^^^^^^^^^^^^^^^^^^
 
         return { a: this };
 >{ a: this } : { a: this; }
+>            : ^^^^^^^^^^^^
 >a : this
+>  : ^^^^
 >this : this
+>     : ^^^^
     }
     f2() {
 >f2 : () => this[]
+>   : ^^^^^^^^^^^^
 
         return [this];
 >[this] : this[]
+>       : ^^^^^^
 >this : this
+>     : ^^^^
     }
     f3() {
 >f3 : () => { a: this; }[]
+>   : ^^^^^^^^^^^^^^^^^^^^
 
         return [{ a: this }];
 >[{ a: this }] : { a: this; }[]
+>              : ^^^^^^^^^^^^^^
 >{ a: this } : { a: this; }
+>            : ^^^^^^^^^^^^
 >a : this
+>  : ^^^^
 >this : this
+>     : ^^^^
     }
     f4() {
 >f4 : () => () => this
+>   : ^^^^^^^^^^^^^^^^
 
         return () => this;
 >() => this : () => this
+>           : ^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 

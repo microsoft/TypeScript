@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newOperator.ts] ////
+
 //// [newOperator.ts]
 interface ifc { }
 // Attempting to 'new' an interface yields poor error
@@ -46,7 +48,7 @@ new ctorUnion("");
 declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 new ctorUnion2("");
 
-module M {
+namespace M {
     export class T {
         x: number;
     }
@@ -60,6 +62,7 @@ class S {
 
 
 //// [newOperator.js]
+"use strict";
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
 // Parens are optional
@@ -85,22 +88,12 @@ new ctorUnion("");
 new ctorUnion2("");
 var M;
 (function (M) {
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class T {
+    }
     M.T = T;
 })(M || (M = {}));
-var S = /** @class */ (function () {
-    function S() {
+class S {
+    get xs() {
+        return new M.T[];
     }
-    Object.defineProperty(S.prototype, "xs", {
-        get: function () {
-            return new M.T[];
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return S;
-}());
+}

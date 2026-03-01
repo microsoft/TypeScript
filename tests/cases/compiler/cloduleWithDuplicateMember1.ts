@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     get x() { return 1; }
     static get x() {
@@ -6,10 +7,10 @@ class C {
     static foo() { }
 }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function foo() { }
     export function x() { }
 }

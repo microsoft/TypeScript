@@ -1,0 +1,12 @@
+labeledStatementDeclarationListInLoopNoCrash2.ts(3,3): error TS1344: 'A label is not allowed here.
+
+
+==== labeledStatementDeclarationListInLoopNoCrash2.ts (1 errors) ====
+    for (let x of []) {
+      var v0 = x;
+      foo: var y;
+      ~~~
+!!! error TS1344: 'A label is not allowed here.
+      (function() { return x + v0});
+    }
+    

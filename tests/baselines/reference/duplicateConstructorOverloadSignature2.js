@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateConstructorOverloadSignature2.ts] ////
+
 //// [duplicateConstructorOverloadSignature2.ts]
 class C<T> {
     constructor(x: T);
@@ -6,8 +8,7 @@ class C<T> {
 }
 
 //// [duplicateConstructorOverloadSignature2.js]
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    return C;
-}());
+"use strict";
+class C {
+    constructor(x) { }
+}

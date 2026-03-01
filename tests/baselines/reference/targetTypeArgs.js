@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeArgs.ts] ////
+
 //// [targetTypeArgs.ts]
 function foo(callback: (x: string) => void) {
     callback("hello");   
@@ -15,6 +17,7 @@ foo(function(x) { x });
 
 
 //// [targetTypeArgs.js]
+"use strict";
 function foo(callback) {
     callback("hello");
 }

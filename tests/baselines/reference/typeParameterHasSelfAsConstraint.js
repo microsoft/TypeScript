@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterHasSelfAsConstraint.ts] ////
+
 //// [typeParameterHasSelfAsConstraint.ts]
 function foo<T extends T>(x: T): number {
     return x;
@@ -6,6 +8,7 @@ function foo<T extends T>(x: T): number {
 
 
 //// [typeParameterHasSelfAsConstraint.js]
+"use strict";
 function foo(x) {
     return x;
 }

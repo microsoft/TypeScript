@@ -1,30 +1,52 @@
-=== tests/cases/conformance/es2017/useObjectValuesAndEntries4.ts ===
+//// [tests/cases/conformance/es2017/useObjectValuesAndEntries4.ts] ////
+
+=== useObjectValuesAndEntries4.ts ===
 var o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 for (var x of Object.values(o)) {
 >x : number
+>  : ^^^^^^
 >Object.values(o) : number[]
+>                 : ^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>              : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>       : ^^^ ^^ ^^                                  ^^^   ^^^ ^^  ^^^     ^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y = x;
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 var entries = Object.entries(o);
 >entries : [string, number][]
+>        : ^^^^^^^^^^^^^^^^^^
 >Object.entries(o) : [string, number][]
+>                  : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >o : { a: number; b: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

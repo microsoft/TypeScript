@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts] ////
+
 //// [uniqueSymbols.ts]
 // declarations with call initializer
 const constCall = Symbol();
@@ -268,6 +270,7 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 
 
 //// [uniqueSymbols.js]
+"use strict";
 // declarations with call initializer
 const constCall = Symbol();
 let letCall = Symbol();

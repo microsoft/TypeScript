@@ -1,62 +1,90 @@
-=== tests/cases/conformance/override/override2.ts ===
+//// [tests/cases/conformance/override/override2.ts] ////
+
+=== override2.ts ===
 abstract class AB {
 >AB : AB
+>   : ^^
 
     abstract foo(v: string): void;
 >foo : (v: string) => void
+>    : ^ ^^      ^^^^^    
 >v : string
+>  : ^^^^^^
 
     abstract bar(v: string): void;
 >bar : (v: string) => void
+>    : ^ ^^      ^^^^^    
 >v : string
+>  : ^^^^^^
 
     abstract baz(v: string): void;
 >baz : (v: string) => void
+>    : ^ ^^      ^^^^^    
 >v : string
+>  : ^^^^^^
 }
 
 abstract class AD1 extends AB {
 >AD1 : AD1
+>    : ^^^
 >AB : AB
+>   : ^^
 
 }
 
 abstract class AD2 extends AB {
 >AD2 : AD2
+>    : ^^^
 >AB : AB
+>   : ^^
 
     abstract foo(v: ''): void // need override?
->foo : (v: '') => void
+>foo : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
+>  : ^^
 }
 
 abstract class AD3 extends AB {
 >AD3 : AD3
+>    : ^^^
 >AB : AB
+>   : ^^
 
     override foo(v: ''): void { } // need override?
->foo : (v: '') => void
+>foo : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
+>  : ^^
 
     abstract bar(): void;
 >bar : () => void
+>    : ^^^^^^    
 
     baz(): void { }
 >baz : () => void
+>    : ^^^^^^    
 }
 
 class D4 extends AB {
 >D4 : D4
+>   : ^^
 >AB : AB
+>   : ^^
 
     override foo(v: ''): void {}
->foo : (v: '') => void
+>foo : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
+>  : ^^
 
     override bar(v: ''): void {}
->bar : (v: '') => void
+>bar : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
+>  : ^^
 
     baz(): void { }
 >baz : () => void
+>    : ^^^^^^    
 }

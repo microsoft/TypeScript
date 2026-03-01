@@ -1,29 +1,51 @@
-=== tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts ===
+//// [tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts] ////
+
+=== genericAssignmentCompatOfFunctionSignatures1.ts ===
 var x1 = function foo3<T, U extends { a: T; b: string }>(x: T, z: U) { }
 >x1 : <T, U extends { a: T; b: string; }>(x: T, z: U) => void
+>   : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >function foo3<T, U extends { a: T; b: string }>(x: T, z: U) { } : <T, U extends { a: T; b: string; }>(x: T, z: U) => void
+>                                                                : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >foo3 : <T, U extends { a: T; b: string; }>(x: T, z: U) => void
+>     : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 >b : string
+>  : ^^^^^^
 >x : T
+>  : ^
 >z : U
+>  : ^
 
 var x2 = function foo3<T, U extends { a: T; b: number }>(x: T, z: U) { }
 >x2 : <T, U extends { a: T; b: number; }>(x: T, z: U) => void
+>   : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >function foo3<T, U extends { a: T; b: number }>(x: T, z: U) { } : <T, U extends { a: T; b: number; }>(x: T, z: U) => void
+>                                                                : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >foo3 : <T, U extends { a: T; b: number; }>(x: T, z: U) => void
+>     : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 >b : number
+>  : ^^^^^^
 >x : T
+>  : ^
 >z : U
+>  : ^
 
 x1 = x2;
 >x1 = x2 : <T, U extends { a: T; b: number; }>(x: T, z: U) => void
+>        : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x1 : <T, U extends { a: T; b: string; }>(x: T, z: U) => void
+>   : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x2 : <T, U extends { a: T; b: number; }>(x: T, z: U) => void
+>   : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 
 x2 = x1;
 >x2 = x1 : <T, U extends { a: T; b: string; }>(x: T, z: U) => void
+>        : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x2 : <T, U extends { a: T; b: number; }>(x: T, z: U) => void
+>   : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x1 : <T, U extends { a: T; b: string; }>(x: T, z: U) => void
+>   : ^ ^^ ^^^^^^^^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^
 

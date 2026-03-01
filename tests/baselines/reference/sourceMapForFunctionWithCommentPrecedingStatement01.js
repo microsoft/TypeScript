@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapForFunctionWithCommentPrecedingStatement01.ts] ////
+
 //// [sourceMapForFunctionWithCommentPrecedingStatement01.ts]
 function P() {
     // Test this
@@ -5,6 +7,7 @@ function P() {
 }
 
 //// [sourceMapForFunctionWithCommentPrecedingStatement01.js]
+"use strict";
 function P() {
     // Test this
     var a = 1;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/methodSignatureHandledDeclarationKindForSymbol.ts] ////
+
 //// [methodSignatureHandledDeclarationKindForSymbol.ts]
 interface Foo {
     bold(): string;
@@ -10,3 +12,4 @@ interface Foo {
 
 
 //// [methodSignatureHandledDeclarationKindForSymbol.js]
+"use strict";

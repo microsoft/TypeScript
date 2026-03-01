@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxUnclosedParserRecovery.ts] ////
+
 //// [jsxParserRecovery.tsx]
 // should have no errors here; all these functions should parse and resolve
 noName(); noClose(); noCloseTypeArg(); noCloseAttrs(); noCloseTypeArgAttrs(); noCloseBracket(); noCloseBracketTypeArgAttrs(); noSelfclose(); noSelfcloseTypeArgAttrs();
@@ -139,6 +141,7 @@ function noSelfcloseTypeArgAttrsTrailingText() { }
 
 
 //// [jsxParserRecovery.jsx]
+"use strict";
 // should have no errors here; all these functions should parse and resolve
 noName();
 noClose();

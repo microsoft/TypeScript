@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadReturnTypes.ts] ////
+
 //// [overloadReturnTypes.ts]
 class Accessor {}
 
@@ -24,11 +26,9 @@ interface IFace {
 
 
 //// [overloadReturnTypes.js]
-var Accessor = /** @class */ (function () {
-    function Accessor() {
-    }
-    return Accessor;
-}());
+"use strict";
+class Accessor {
+}
 function attr(nameOrMap, value) {
     if (nameOrMap && typeof nameOrMap === "object") {
         // handle map case

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationEnums.ts] ////
+
 //// [sourceMapValidationEnums.ts]
 enum e {
     x,
@@ -14,6 +16,7 @@ enum e3 {
 }
 
 //// [sourceMapValidationEnums.js]
+"use strict";
 var e;
 (function (e) {
     e[e["x"] = 0] = "x";

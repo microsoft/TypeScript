@@ -1,8 +1,12 @@
-=== tests/cases/compiler/thisTypeAsConstraint.ts ===
+//// [tests/cases/compiler/thisTypeAsConstraint.ts] ////
+
+=== thisTypeAsConstraint.ts ===
 class C {
 >C : C
+>  : ^
 
   public m<T extends this>() {
 >m : <T extends this>() => void
+>  : ^ ^^^^^^^^^    ^^^^^^^^^^^
   }
 }

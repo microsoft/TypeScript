@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringIncludes.ts ===
+//// [tests/cases/compiler/stringIncludes.ts] ////
+
+=== stringIncludes.ts ===
 var includes: boolean;
 >includes : Symbol(includes, Decl(stringIncludes.ts, 0, 3))
 

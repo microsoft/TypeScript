@@ -1,8 +1,8 @@
-tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts(11,21): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts(11,37): error TS2353: Object literal may only specify known properties, and 'prop' does not exist in type '{ prop2: any; }'.
+destructuredLateBoundNameHasCorrectTypes.ts(11,8): error TS2339: Property 'prop2' does not exist on type '{ prop: string; }'.
+destructuredLateBoundNameHasCorrectTypes.ts(11,37): error TS2353: Object literal may only specify known properties, and 'prop' does not exist in type '{ prop2: any; }'.
 
 
-==== tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts (2 errors) ====
+==== destructuredLateBoundNameHasCorrectTypes.ts (2 errors) ====
     let { [Symbol.iterator]: destructured } = [];
     void destructured;
     
@@ -14,8 +14,8 @@ tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts(11,37): error T
     const notPresent = "prop2";
     
     let { [notPresent]: computed2 } = { prop: "b" };
-                        ~~~~~~~~~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+           ~~~~~~~~~~
+!!! error TS2339: Property 'prop2' does not exist on type '{ prop: string; }'.
                                         ~~~~
 !!! error TS2353: Object literal may only specify known properties, and 'prop' does not exist in type '{ prop2: any; }'.
     

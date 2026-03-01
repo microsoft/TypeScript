@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/discriminateWithMissingProperty.ts] ////
+
+=== discriminateWithMissingProperty.ts ===
+type Arg = {
+>Arg : Arg
+>    : ^^^
+
+    mode: "numeric",
+>mode : "numeric"
+>     : ^^^^^^^^^
+
+    data: number,
+>data : number
+>     : ^^^^^^
+
+} | {
+    mode: "alphabetic",
+>mode : "alphabetic"
+>     : ^^^^^^^^^^^^
+
+    data: string,
+>data : string
+>     : ^^^^^^
+
+} | {
+    data: string | Uint8Array;
+>data : string | Uint8Array<ArrayBuffer>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare function foo(arg: Arg): void;
+>foo : (arg: Arg) => void
+>    : ^   ^^   ^^^^^    
+>arg : Arg
+>    : ^^^
+
+foo({ mode: "numeric", data: new Uint8Array([30]) }); // Should error
+>foo({ mode: "numeric", data: new Uint8Array([30]) }) : void
+>                                                     : ^^^^
+>foo : (arg: Arg) => void
+>    : ^   ^^   ^^^^^    
+>{ mode: "numeric", data: new Uint8Array([30]) } : { mode: "numeric"; data: Uint8Array<ArrayBuffer>; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mode : "numeric"
+>     : ^^^^^^^^^
+>"numeric" : "numeric"
+>          : ^^^^^^^^^
+>data : Uint8Array<ArrayBuffer>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array([30]) : Uint8Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>[30] : number[]
+>     : ^^^^^^^^
+>30 : 30
+>   : ^^
+

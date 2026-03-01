@@ -1,2 +1,2 @@
 #!/bin/sh
-npm run gulp -- generate-diagnostics
+./node_modules/.bin/hereby generate-diagnostics || true

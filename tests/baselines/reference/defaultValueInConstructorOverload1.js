@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultValueInConstructorOverload1.ts] ////
+
 //// [defaultValueInConstructorOverload1.ts]
 class C {
     constructor(x = '');
@@ -6,9 +8,8 @@ class C {
 }
 
 //// [defaultValueInConstructorOverload1.js]
-var C = /** @class */ (function () {
-    function C(x) {
-        if (x === void 0) { x = ''; }
+"use strict";
+class C {
+    constructor(x = '') {
     }
-    return C;
-}());
+}

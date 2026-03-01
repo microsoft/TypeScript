@@ -13,14 +13,13 @@ import { foo } from './foo';
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
-exports.foo = void 0;
-function foo() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = foo;
+function foo() { }
 //// [bar.js]
 "use strict";
-exports.__esModule = true;
-var foo_1 = require("./foo");
+Object.defineProperty(exports, "__esModule", { value: true });
+const foo_1 = require("./foo");
 // These should emit identically
 foo_1.foo;
 foo_1.foo;

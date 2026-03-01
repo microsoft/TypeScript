@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts ===
+//// [tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts] ////
+
+=== nonObjectUnionNestedExcessPropertyCheck.ts ===
 interface IProps {
 >IProps : Symbol(IProps, Decl(nonObjectUnionNestedExcessPropertyCheck.ts, 0, 0))
 

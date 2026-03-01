@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceExtendsClass1.ts ===
+//// [tests/cases/compiler/interfaceExtendsClass1.ts] ////
+
+=== interfaceExtendsClass1.ts ===
 class Control {
 >Control : Symbol(Control, Decl(interfaceExtendsClass1.ts, 0, 0))
 

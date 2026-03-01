@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/backbone/index.d.ts ===
+//// [tests/cases/compiler/stackDepthLimitCastingType.ts] ////
+
+=== node_modules/backbone/index.d.ts ===
 declare global {
 >global : Symbol(global, Decl(index.d.ts, 0, 0))
 
@@ -66,7 +68,7 @@ export {
 export as namespace Backbone;
 >Backbone : Symbol(Backbone, Decl(index.d.ts, 17, 2))
 
-=== tests/cases/compiler/node_modules/backbone-fetch-cache/index.d.ts ===
+=== node_modules/backbone-fetch-cache/index.d.ts ===
 import * as Backbone from "backbone";
 >Backbone : Symbol(Backbone, Decl(index.d.ts, 0, 6))
 
@@ -87,7 +89,7 @@ export {};
 export as namespace BackboneFetchCache;
 >BackboneFetchCache : Symbol(BackboneFetchCache, Decl(index.d.ts, 6, 10))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as Backbone from "backbone";
 >Backbone : Symbol(Backbone, Decl(index.ts, 0, 6))
 

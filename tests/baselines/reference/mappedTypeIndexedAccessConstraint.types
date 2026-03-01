@@ -1,0 +1,428 @@
+//// [tests/cases/compiler/mappedTypeIndexedAccessConstraint.ts] ////
+
+=== mappedTypeIndexedAccessConstraint.ts ===
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Identity<T>
+>         : ^^^^^^^^^^^
+
+type M0 = { a: 1, b: 2 };
+>M0 : M0
+>   : ^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+type M1 = { [K in keyof Partial<M0>]: M0[K] };
+>M1 : M1
+>   : ^^
+
+type M2 = { [K in keyof Required<M1>]: M1[K] };
+>M2 : M2
+>   : ^^
+
+type M3 = { [K in keyof Identity<Partial<M0>>]: M0[K] };
+>M3 : M3
+>   : ^^
+
+function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
+>foo : <K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) => void
+>    : ^ ^^^^^^^^^        ^^  ^^     ^^  ^^     ^^  ^^     ^^^^^^^^^
+>m1 : M1[K]
+>   : ^^^^^
+>m2 : M2[K]
+>   : ^^^^^
+>m3 : M3[K]
+>   : ^^^^^
+
+    m1.toString();  // Error
+>m1.toString() : string
+>              : ^^^^^^
+>m1.toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
+>m1 : 1 | 2 | undefined
+>   : ^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+    m1?.toString();
+>m1?.toString() : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
+>m1?.toString : ((radix?: number) => string) | undefined
+>             : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
+>m1 : 1 | 2 | undefined
+>   : ^^^^^^^^^^^^^^^^^
+>toString : ((radix?: number) => string) | undefined
+>         : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
+
+    m2.toString();  // Error
+>m2.toString() : string
+>              : ^^^^^^
+>m2.toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
+>m2 : 1 | 2 | undefined
+>   : ^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+    m2?.toString();
+>m2?.toString() : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
+>m2?.toString : ((radix?: number) => string) | undefined
+>             : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
+>m2 : 1 | 2 | undefined
+>   : ^^^^^^^^^^^^^^^^^
+>toString : ((radix?: number) => string) | undefined
+>         : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
+
+    m3.toString();  // Error
+>m3.toString() : string
+>              : ^^^^^^
+>m3.toString : (radix?: number) => string
+>            : ^     ^^^      ^^^^^      
+>m3 : 1 | 2 | undefined
+>   : ^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+    m3?.toString();
+>m3?.toString() : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
+>m3?.toString : ((radix?: number) => string) | undefined
+>             : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
+>m3 : 1 | 2 | undefined
+>   : ^^^^^^^^^^^^^^^^^
+>toString : ((radix?: number) => string) | undefined
+>         : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
+}
+
+// Repro from #57487
+
+type Obj = {
+>Obj : Obj
+>    : ^^^
+
+    a: 1,
+>a : 1
+>  : ^
+
+    b: 2
+>b : 2
+>  : ^
+
+};
+
+const mapped: { [K in keyof Partial<Obj>]: Obj[K] } = {};
+>mapped : { a?: 1 | undefined; b?: 2 | undefined; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toString();  // Error
+>resolveMapped : <K extends keyof typeof mapped>(key: K) => string
+>              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^^^
+><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof typeof mapped>(key: K) => string
+>                                                                  : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^^^
+>mapped : { a?: 1 | undefined; b?: 2 | undefined; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>mapped[key].toString() : string
+>                       : ^^^^^^
+>mapped[key].toString : (radix?: number) => string
+>                     : ^     ^^^      ^^^^^      
+>mapped[key] : 1 | 2 | undefined
+>            : ^^^^^^^^^^^^^^^^^
+>mapped : { a?: 1 | undefined; b?: 2 | undefined; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+// Additional repro from #57487
+
+const arr = ["foo", "12", 42] as const;
+>arr : readonly ["foo", "12", 42]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["foo", "12", 42] as const : readonly ["foo", "12", 42]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["foo", "12", 42] : readonly ["foo", "12", 42]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>"12" : "12"
+>     : ^^^^
+>42 : 42
+>   : ^^
+
+type Mappings = { foo: boolean, "12": number, 42: string };
+>Mappings : Mappings
+>         : ^^^^^^^^
+>foo : boolean
+>    : ^^^^^^^
+>"12" : number
+>     : ^^^^^^
+>42 : string
+>   : ^^^^^^
+
+type MapperArgs<K extends (typeof arr)[number]> = {
+>MapperArgs : MapperArgs<K>
+>           : ^^^^^^^^^^^^^
+>arr : readonly ["foo", "12", 42]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    v: K,
+>v : K
+>  : ^
+
+    i: number
+>i : number
+>  : ^^^^^^
+
+};
+
+type SetOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+>SetOptional : SetOptional<T, K>
+>            : ^^^^^^^^^^^^^^^^^
+
+type PartMappings = SetOptional<Mappings, "foo">;
+>PartMappings : PartMappings
+>             : ^^^^^^^^^^^^
+
+const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K] } = {
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : MapperArgs<K>
+>  : ^^^^^^^^^^^^^
+>{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: ({ v, i }: MapperArgs<"foo">) => boolean; "12": ({ v, i }: MapperArgs<"12">) => number; 42: ({ v, i }: MapperArgs<42>) => string; }
+>                                                                                                                  : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: ({ v, i }) => v.length + i > 4,
+>foo : ({ v, i }: MapperArgs<"foo">) => boolean
+>    : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ v, i }) => v.length + i > 4 : ({ v, i }: MapperArgs<"foo">) => boolean
+>                               : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : "foo"
+>  : ^^^^^
+>i : number
+>  : ^^^^^^
+>v.length + i > 4 : boolean
+>                 : ^^^^^^^
+>v.length + i : number
+>             : ^^^^^^
+>v.length : number
+>         : ^^^^^^
+>v : "foo"
+>  : ^^^^^
+>length : number
+>       : ^^^^^^
+>i : number
+>  : ^^^^^^
+>4 : 4
+>  : ^
+
+    "12": ({ v, i }) => Number(v) + i,
+>"12" : ({ v, i }: MapperArgs<"12">) => number
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ v, i }) => Number(v) + i : ({ v, i }: MapperArgs<"12">) => number
+>                            : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : "12"
+>  : ^^^^
+>i : number
+>  : ^^^^^^
+>Number(v) + i : number
+>              : ^^^^^^
+>Number(v) : number
+>          : ^^^^^^
+>Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>v : "12"
+>  : ^^^^
+>i : number
+>  : ^^^^^^
+
+    42: ({ v, i }) => `${v}${i}`,
+>42 : ({ v, i }: MapperArgs<42>) => string
+>   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ v, i }) => `${v}${i}` : ({ v, i }: MapperArgs<42>) => string
+>                         : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v : 42
+>  : ^^
+>i : number
+>  : ^^^^^^
+>`${v}${i}` : string
+>           : ^^^^^^
+>v : 42
+>  : ^^
+>i : number
+>  : ^^^^^^
+}
+
+const resolveMapper1 = <K extends keyof typeof mapper>(
+>resolveMapper1 : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
+>               : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
+><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
+>                                                                                : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    key: K, o: MapperArgs<K>) => mapper[key](o);  // Error
+>key : K
+>    : ^
+>o : MapperArgs<K>
+>  : ^^^^^^^^^^^^^
+>mapper[key](o) : PartMappings[K]
+>               : ^^^^^^^^^^^^^^^
+>mapper[key] : ((o: MapperArgs<K>) => PartMappings[K]) | undefined
+>            : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>o : MapperArgs<K>
+>  : ^^^^^^^^^^^^^
+
+const resolveMapper2 = <K extends keyof typeof mapper>(
+>resolveMapper2 : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
+>               : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
+>                                                                                  : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    key: K, o: MapperArgs<K>) => mapper[key]?.(o)
+>key : K
+>    : ^
+>o : MapperArgs<K>
+>  : ^^^^^^^^^^^^^
+>mapper[key]?.(o) : PartMappings[K] | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper[key] : ((o: MapperArgs<K>) => PartMappings[K]) | undefined
+>            : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>o : MapperArgs<K>
+>  : ^^^^^^^^^^^^^
+
+// Repro from #57860
+
+type Obj1 = {
+>Obj1 : Obj1
+>     : ^^^^
+
+    a: string;
+>a : string
+>  : ^^^^^^
+
+    b: number;
+>b : number
+>  : ^^^^^^
+
+};
+
+type Obj2 = {
+>Obj2 : Obj2
+>     : ^^^^
+
+    b: number;
+>b : number
+>  : ^^^^^^
+
+    c: boolean;
+>c : boolean
+>  : ^^^^^^^
+
+};
+
+declare const mapIntersection: {
+>mapIntersection : { a?: number | undefined; b: number; c: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+
+    [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
+};
+
+const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
+>accessMapped : <K extends keyof Obj2>(key: K) => string
+>             : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
+><K extends keyof Obj2>(key: K) => mapIntersection[key].toString() : <K extends keyof Obj2>(key: K) => string
+>                                                                  : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
+>key : K
+>    : ^
+>mapIntersection[key].toString() : string
+>                                : ^^^^^^
+>mapIntersection[key].toString : (radix?: number) => string
+>                              : ^     ^^^      ^^^^^      
+>mapIntersection[key] : { a?: number | undefined; b: number; c: number; }[K]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>mapIntersection : { a?: number | undefined; b: number; c: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+declare const resolved: { a?: number | undefined; b: number; c: number };
+>resolved : { a?: number | undefined; b: number; c: number; }
+>         : ^^^^^^                  ^^^^^      ^^^^^      ^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>c : number
+>  : ^^^^^^
+
+const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
+>accessResolved : <K extends keyof Obj2>(key: K) => string
+>               : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
+><K extends keyof Obj2>(key: K) => resolved[key].toString() : <K extends keyof Obj2>(key: K) => string
+>                                                           : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
+>key : K
+>    : ^
+>resolved[key].toString() : string
+>                         : ^^^^^^
+>resolved[key].toString : (radix?: number) => string
+>                       : ^     ^^^      ^^^^^      
+>resolved[key] : { a?: number | undefined; b: number; c: number; }[K]
+>              : ^^^^^^                  ^^^^^      ^^^^^      ^^^^^^
+>resolved : { a?: number | undefined; b: number; c: number; }
+>         : ^^^^^^                  ^^^^^      ^^^^^      ^^^
+>key : K
+>    : ^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+
+// Additional repro from #57860
+
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    prop: string;
+>prop : string
+>     : ^^^^^^
+}
+
+function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
+>test : <K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
+>     : ^ ^^^^^^^^^         ^^   ^^                                     ^^   ^^ ^^^^^^^^^
+>obj : Pick<Required<Foo> & Partial<Foo>, K>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    obj[key].length;
+>obj[key].length : number
+>                : ^^^^^^
+>obj[key] : Pick<Required<Foo> & Partial<Foo>, K>[K]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : Pick<Required<Foo> & Partial<Foo>, K>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>length : number
+>       : ^^^^^^
+}
+

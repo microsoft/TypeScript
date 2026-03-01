@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes4.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
+
+=== templateLiteralTypes4.ts ===
 // infer from number
 type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
 >TNumber0 : Symbol(TNumber0, Decl(templateLiteralTypes4.ts, 0, 0))

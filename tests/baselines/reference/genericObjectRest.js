@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericObjectRest.ts] ////
+
 //// [genericObjectRest.ts]
 const a = 'a';
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality4.ts] ////
+
 //// [subtypingWithObjectMembersOptionality4.ts]
 // Base has required property, derived adds an optional property, no errors
 
@@ -34,6 +36,7 @@ var b: { Foo2?: Derived; }
 var r = true ? a : b; // ok
 
 //// [subtypingWithObjectMembersOptionality4.js]
+"use strict";
 // Base has required property, derived adds an optional property, no errors
 // object literal case
 var a;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts] ////
+
 //// [arrayBindingPatternOmittedExpressions.ts]
 var results: string[];
 
@@ -16,6 +18,7 @@ function f([, a, , b, , , , s, , , ] = results) {
 }
 
 //// [arrayBindingPatternOmittedExpressions.js]
+"use strict";
 var results;
 {
     let [, b, , a] = results;

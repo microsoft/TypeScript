@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts] ////
+
 //// [parserErrorRecovery_IncompleteMemberVariable2.ts]
 // Interface
 interface IPoint {
@@ -5,7 +7,7 @@ interface IPoint {
 }
 
 // Module
-module Shapes {
+namespace Shapes {
 
     // Class
     export class Point implements IPoint {
@@ -29,22 +31,22 @@ var dist = p.getDist();
 
 
 //// [parserErrorRecovery_IncompleteMemberVariable2.js]
+"use strict";
 // Module
 var Shapes;
 (function (Shapes) {
     // Class
-    var Point = /** @class */ (function () {
+    class Point {
         // Constructor
-        function Point(x, y) {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
         // Instance member
-        Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
-        // Static member
-        Point.origin = new Point(0, 0);
-        return Point;
-    }());
+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    }
+    // Static member
+    Point.origin = new Point(0, 0);
     Shapes.Point = Point;
 })(Shapes || (Shapes = {}));
 // Local variables

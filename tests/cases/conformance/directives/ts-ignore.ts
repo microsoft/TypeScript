@@ -1,3 +1,4 @@
+// @target: es2015
 // @ts-ignore with additional commenting
 var invalidCommentedFancy: number = 'nope';
 
@@ -13,3 +14,9 @@ var validCommentedPlain: string = 'nope';
 var invalidPlain: number = 'nope';
 
 var validPlain: string = 'nope';
+
+// @ts-ignore: with additional commenting
+var invalidCommentedFancy: number = 'nope';
+
+// @ts-ignore: with additional commenting
+var validCommentedFancy: string = 'nope';

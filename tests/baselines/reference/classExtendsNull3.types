@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/classExtendsNull3.ts] ////
+
+=== classExtendsNull3.ts ===
+class C1 extends null {
+>C1 : C1
+>   : ^^
+
+  static method() {
+>method : () => void
+>       : ^^^^^^^^^^
+
+    super.oops;
+>super.oops : any
+>           : ^^^
+>super : null
+>      : ^^^^
+>oops : any
+>     : ^^^
+  }
+}
+
+class C2 extends null {
+>C2 : C2
+>   : ^^
+
+  method() {
+>method : () => void
+>       : ^^^^^^^^^^
+
+    super.oops;
+>super.oops : any
+>           : ^^^
+>super : null
+>      : ^^^^
+>oops : any
+>     : ^^^
+  }
+}

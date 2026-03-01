@@ -1,0 +1,47 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionOverloadsInClass.ts ===
+// class clsInOverload {
+//     static fnOverload();
+//     static /*GOTO DEF*/fnOverload(foo: string);
+//     <|static [|fnOverload|](foo: any) { }|>
+//     public fnOverload(): any;
+//     public fnOverload(foo: string);
+//     public fnOverload(foo: any) { return "foo" }
+// --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "fnOverload",
+    "containerName": "clsInOverload",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionOverloadsInClass.ts ===
+// class clsInOverload {
+//     static fnOverload();
+//     static fnOverload(foo: string);
+//     static fnOverload(foo: any) { }
+//     public /*GOTO DEF*/fnOverload(): any;
+//     public fnOverload(foo: string);
+//     <|public [|fnOverload|](foo: any) { return "foo" }|>
+// 
+//     constructor() { }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "fnOverload",
+    "containerName": "clsInOverload",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

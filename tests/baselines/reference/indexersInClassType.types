@@ -1,49 +1,74 @@
-=== tests/cases/conformance/classes/members/classTypes/indexersInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/indexersInClassType.ts] ////
+
+=== indexersInClassType.ts ===
 class C {
 >C : C
+>  : ^
 
     [x: number]: Date;
 >x : number
+>  : ^^^^^^
 
     [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
     1: Date;
 >1 : Date
+>  : ^^^^
 
     'a': {}
 >'a' : {}
+>    : ^^
 
     fn() {
 >fn : () => this
+>   : ^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 var c = new C();
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var r = c.fn();
 >r : C
+>  : ^
 >c.fn() : C
+>       : ^
 >c.fn : () => C
+>     : ^^^^^^^
 >c : C
+>  : ^
 >fn : () => C
+>   : ^^^^^^^
 
 var r2 = r[1];
 >r2 : Date
+>   : ^^^^
 >r[1] : Date
+>     : ^^^^
 >r : C
+>  : ^
 >1 : 1
+>  : ^
 
 var r3 = r.a
 >r3 : {}
+>   : ^^
 >r.a : {}
+>    : ^^
 >r : C
+>  : ^
 >a : {}
+>  : ^^
 
 

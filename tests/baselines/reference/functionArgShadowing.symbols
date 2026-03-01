@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionArgShadowing.ts ===
+//// [tests/cases/compiler/functionArgShadowing.ts] ////
+
+=== functionArgShadowing.ts ===
 class A { foo() { } }
 >A : Symbol(A, Decl(functionArgShadowing.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(functionArgShadowing.ts, 0, 9))

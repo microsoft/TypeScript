@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters4.ts] ////
+
 //// [declarationEmitTypeAliasWithTypeParameters4.ts]
 type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>
@@ -10,6 +12,7 @@ function foo() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters4.js]
+"use strict";
 function foo() {
     return {};
 }

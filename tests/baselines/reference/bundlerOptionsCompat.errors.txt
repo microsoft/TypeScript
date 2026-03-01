@@ -1,0 +1,19 @@
+/tsconfig.json(4,25): error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+/tsconfig.json(4,25): error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
+
+
+==== /tsconfig.json (2 errors) ====
+    {
+      "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "bundler",
+                            ~~~~~~~~~
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve', 'commonjs', or 'es2015' or later.
+                            ~~~~~~~~~
+!!! error TS5109: Option 'moduleResolution' must be set to 'NodeNext' (or left unspecified) when option 'module' is set to 'NodeNext'.
+        "noEmit": true
+      }
+    }
+    
+==== /index.ts (0 errors) ====
+    

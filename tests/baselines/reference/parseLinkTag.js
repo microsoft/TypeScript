@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/parseLinkTag.ts] ////
+
 //// [parseLinkTag.ts]
 /** trailing @link tag {@link */
 var x;
@@ -8,6 +10,7 @@ function f() {
 
 
 //// [parseLinkTag.js]
+"use strict";
 /** trailing @link tag {@link */
 var x;
 /** @returns trailing @link tag {@link */

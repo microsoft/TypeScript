@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchCaseCircularRefeference.ts] ////
+
 //// [switchCaseCircularRefeference.ts]
 // Repro from #9507
 
@@ -9,6 +11,7 @@ function f(x: {a: "A", b} | {a: "C", e}) {
 }
 
 //// [switchCaseCircularRefeference.js]
+"use strict";
 // Repro from #9507
 function f(x) {
     switch (x.a) {

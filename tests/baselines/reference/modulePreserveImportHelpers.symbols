@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/modulePreserveImportHelpers.ts] ////
+
+=== /a.mts ===
+declare var dec: any
+>dec : Symbol(dec, Decl(a.mts, 0, 11))
+
+@dec()
+>dec : Symbol(dec, Decl(a.mts, 0, 11))
+
+export class A {}
+>A : Symbol(A, Decl(a.mts, 0, 20))
+
+=== /b.cts ===
+declare var dec: any
+>dec : Symbol(dec, Decl(b.cts, 0, 11))
+
+@dec()
+>dec : Symbol(dec, Decl(b.cts, 0, 11))
+
+class B {}
+>B : Symbol(B, Decl(b.cts, 0, 20))
+
+export {};
+
+=== /c.ts ===
+declare var dec: any
+>dec : Symbol(dec, Decl(c.ts, 0, 11))
+
+@dec()
+>dec : Symbol(dec, Decl(c.ts, 0, 11))
+
+export class C {}
+>C : Symbol(C, Decl(c.ts, 0, 20))
+
+=== /node_modules/tslib/tslib.d.ts ===
+export declare function __esDecorate(...args: any[]): any;
+>__esDecorate : Symbol(__esDecorate, Decl(tslib.d.ts, --, --))
+>args : Symbol(args, Decl(tslib.d.ts, --, --))
+
+export declare function __runInitializers(...args: any[]): any;
+>__runInitializers : Symbol(__runInitializers, Decl(tslib.d.ts, --, --))
+>args : Symbol(args, Decl(tslib.d.ts, --, --))
+

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateStructuralMatch.ts] ////
+
 //// [typePredicateStructuralMatch.ts]
 // Repro from #12235
 
@@ -27,6 +29,7 @@ function getResults2(value: Results | { data: Results }): Results {
 }
 
 //// [typePredicateStructuralMatch.js]
+"use strict";
 // Repro from #12235
 getResults1([]);
 getResults1({ data: [] });

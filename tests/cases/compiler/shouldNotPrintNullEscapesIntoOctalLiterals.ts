@@ -1,3 +1,4 @@
+// @target: es2015
 "use strict";
 `\x001`;
 `\u00001`;

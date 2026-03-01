@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportEqualsClassNoRedeclarationError.ts] ////
+
 //// [exportEqualsClassNoRedeclarationError.ts]
 class SomeClass {
     static get someProp(): number {

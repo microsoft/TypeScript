@@ -1,19 +1,26 @@
-=== tests/cases/conformance/es6/moduleExportsCommonjs/a.ts ===
+//// [tests/cases/conformance/es6/moduleExportsCommonjs/decoratedDefaultExportsGetExportedCommonjs.ts] ////
+
+=== a.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 @decorator
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 export default class Foo {}
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/conformance/es6/moduleExportsCommonjs/b.ts ===
+=== b.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 @decorator
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 export default class {}
 

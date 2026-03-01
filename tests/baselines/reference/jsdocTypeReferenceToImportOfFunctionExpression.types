@@ -1,58 +1,83 @@
-=== tests/cases/conformance/jsdoc/MC.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImportOfFunctionExpression.ts] ////
+
+=== MC.js ===
 const MW = require("./MW");
 >MW : typeof MW
+>   : ^^^^^^^^^
 >require("./MW") : typeof MW
+>                : ^^^^^^^^^
 >require : any
 >"./MW" : "./MW"
+>       : ^^^^^^
 
 /** @typedef {number} Meyerhauser */
 
 /** @class */
 module.exports = function MC() {
 >module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : { (): MW; new (): MC; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { (): MW; new (): MC; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (): MW; new (): MC; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (): MW; new (): MC; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
+>                                                                          : ^^^^^^^^^
 >MC : typeof MC
+>   : ^^^^^^^^^
 
     /** @type {any} */
     var x = {}
 >x : any
 >{} : {}
+>   : ^^
 
     return new MW(x);
 >new MW(x) : MW
+>          : ^^
 >MW : typeof MW
+>   : ^^^^^^^^^
 >x : any
 
 };
 
-=== tests/cases/conformance/jsdoc/MW.js ===
+=== MW.js ===
 /** @typedef {import("./MC")} MC */
 
 class MW {
 >MW : MW
+>   : ^^
 
   /**
    * @param {MC} compiler the compiler
    */
   constructor(compiler) {
 >compiler : { (): MW; new (): MC; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 
     this.compiler = compiler;
 >this.compiler = compiler : { (): MW; new (): MC; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >this.compiler : any
 >this : this
+>     : ^^^^
 >compiler : any
+>         : ^^^
 >compiler : { (): MW; new (): MC; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
   }
 }
 
 module.exports = MW;
 >module.exports = MW : typeof MW
+>                    : ^^^^^^^^^
 >module.exports : typeof MW
+>               : ^^^^^^^^^
 >module : { exports: typeof MW; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof MW
+>        : ^^^^^^^^^
 >MW : typeof MW
+>   : ^^^^^^^^^
 

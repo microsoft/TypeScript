@@ -1,0 +1,23 @@
+foo.js(12,16): error TS18048: 'b' is possibly 'undefined'.
+foo.js(12,20): error TS18048: 'c' is possibly 'undefined'.
+
+
+==== foo.js (2 errors) ====
+    /**
+     * foo
+     *
+     * @public
+     * @param {object} opts
+     * @param {number} opts.a
+     * @param {number} [opts.b]
+     * @param {number} [opts.c]
+     * @returns {number}
+     */
+    function foo({ a, b, c }) {
+        return a + b + c;
+                   ~
+!!! error TS18048: 'b' is possibly 'undefined'.
+                       ~
+!!! error TS18048: 'c' is possibly 'undefined'.
+    }
+    

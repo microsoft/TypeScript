@@ -1,11 +1,15 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit5.ts] ////
+
 === /index.ts ===
-/// <reference types="pkg" resolution-mode="import"/>
-No type information for this code./// <reference types="pkg" resolution-mode="require"/>
-No type information for this code.export interface LocalInterface extends ImportInterface, RequireInterface {}
-No type information for this code.=== /node_modules/pkg/import.d.ts ===
+
+/// <reference types="pkg" resolution-mode="import" preserve="true" />
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
+export interface LocalInterface extends ImportInterface, RequireInterface {}
+=== /node_modules/pkg/import.d.ts ===
 export {};
 declare global {
 >global : any
+>       : ^^^
 
     interface ImportInterface {}
 }
@@ -13,6 +17,7 @@ declare global {
 export {};
 declare global {
 >global : any
+>       : ^^^
 
     interface RequireInterface {}
 }

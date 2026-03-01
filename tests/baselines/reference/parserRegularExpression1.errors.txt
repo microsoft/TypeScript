@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
-
-
-==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression1.ts (1 errors) ====
-    return /(#?-?\d*\.\d\w*%?)|(@?#?[\w-?]+%?)/g;
-    ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.

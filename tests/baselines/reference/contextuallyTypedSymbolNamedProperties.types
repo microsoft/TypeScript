@@ -1,77 +1,128 @@
-=== tests/cases/compiler/contextuallyTypedSymbolNamedProperties.ts ===
+//// [tests/cases/compiler/contextuallyTypedSymbolNamedProperties.ts] ////
+
+=== contextuallyTypedSymbolNamedProperties.ts ===
 // Repros from #43628
 
 const A = Symbol("A");
 >A : unique symbol
+>  : ^^^^^^^^^^^^^
 >Symbol("A") : unique symbol
+>            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"A" : "A"
+>    : ^^^
 
 const B = Symbol("B");
 >B : unique symbol
+>  : ^^^^^^^^^^^^^
 >Symbol("B") : unique symbol
+>            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"B" : "B"
+>    : ^^^
 
 type Action =
->Action : { type: typeof A; data: string; } | { type: typeof B; data: number; }
+>Action : Action
+>       : ^^^^^^
 
     | {type: typeof A, data: string}
 >type : unique symbol
+>     : ^^^^^^^^^^^^^
 >A : unique symbol
+>  : ^^^^^^^^^^^^^
 >data : string
+>     : ^^^^^^
 
     | {type: typeof B, data: number}
 >type : unique symbol
+>     : ^^^^^^^^^^^^^
 >B : unique symbol
+>  : ^^^^^^^^^^^^^
 >data : number
+>     : ^^^^^^
 
 declare const ab: Action;
 >ab : Action
+>   : ^^^^^^
 
 declare function f<T extends { type: string | symbol }>(action: T, blah: { [K in T['type']]: (p: K) => void }): any;
 >f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void; }) => any
+>  : ^ ^^^^^^^^^                          ^^      ^^ ^^    ^^                                     ^^^^^   
 >type : string | symbol
+>     : ^^^^^^^^^^^^^^^
 >action : T
+>       : ^
 >blah : { [K in T["type"]]: (p: K) => void; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^    ^^^
 >p : K
+>  : ^
 
 f(ab, {
 >f(ab, {    [A]: ap => { ap.description },    [B]: bp => { bp.description },}) : any
 >f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void; }) => any
+>  : ^ ^^^^^^^^^                          ^^      ^^ ^^    ^^                                     ^^^^^   
 >ab : Action
+>   : ^^^^^^
 >{    [A]: ap => { ap.description },    [B]: bp => { bp.description },} : { [A]: (ap: unique symbol) => void; [B]: (bp: unique symbol) => void; }
+>                                                                       : ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [A]: ap => { ap.description },
 >[A] : (ap: unique symbol) => void
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >A : unique symbol
+>  : ^^^^^^^^^^^^^
 >ap => { ap.description } : (ap: unique symbol) => void
+>                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >ap : unique symbol
+>   : ^^^^^^^^^^^^^
 >ap.description : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 >ap : unique symbol
+>   : ^^^^^^^^^^^^^
 >description : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 
     [B]: bp => { bp.description },
 >[B] : (bp: unique symbol) => void
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >B : unique symbol
+>  : ^^^^^^^^^^^^^
 >bp => { bp.description } : (bp: unique symbol) => void
+>                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >bp : unique symbol
+>   : ^^^^^^^^^^^^^
 >bp.description : string | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 >bp : unique symbol
+>   : ^^^^^^^^^^^^^
 >description : string | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 
 })
 
 const x: { [sym: symbol]: (p: string) => void } = { [A]: s => s.length };
 >x : { [sym: symbol]: (p: string) => void; }
+>  : ^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^
 >sym : symbol
+>    : ^^^^^^
 >p : string
+>  : ^^^^^^
 >{ [A]: s => s.length } : { [A]: (s: string) => number; }
+>                       : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >[A] : (s: string) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >A : unique symbol
+>  : ^^^^^^^^^^^^^
 >s => s.length : (s: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s.length : number
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 

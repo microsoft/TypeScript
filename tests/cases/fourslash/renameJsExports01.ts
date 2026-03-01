@@ -8,5 +8,5 @@
 ////var mod = require('./a');
 ////var t = mod./*1*/[|area|](10);
 
-verify.rangesWithSameTextAreRenameLocations("area");
-verify.baselineFindAllReferences('1')
+verify.baselineFindAllReferences('1');
+verify.baselineRenameAtRangesWithText("area");

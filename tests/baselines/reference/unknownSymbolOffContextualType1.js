@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownSymbolOffContextualType1.ts] ////
+
 //// [unknownSymbolOffContextualType1.ts]
 declare var document: Document;
 interface Document {
@@ -24,6 +26,7 @@ function getMaxWidth(elementNames: string[]) {
 
 
 //// [unknownSymbolOffContextualType1.js]
+"use strict";
 function getMaxWidth(elementNames) {
     var elements = elementNames.map(function (name) {
         return document.getElementById(name);

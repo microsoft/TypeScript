@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag5.ts] ////
+
+=== /a.js ===
+/** @typedef {{ move(distance: number): void }} Movable */
+
+const car = /** @satisfies {Movable & Record<string, unknown>} */ ({
+>car : { start(): void; move(d: number): void; stop(): void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({    start() { },    move(d) {        // d should be number    },    stop() { }}) : { start(): void; move(d: number): void; stop(): void; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    start() { },    move(d) {        // d should be number    },    stop() { }} : { start(): void; move(d: number): void; stop(): void; }
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    start() { },
+>start : () => void
+>      : ^^^^^^^^^^
+
+    move(d) {
+>move : (d: number) => void
+>     : ^ ^^^^^^^^^^^^^^^^^
+>d : number
+>  : ^^^^^^
+
+        // d should be number
+    },
+    stop() { }
+>stop : () => void
+>     : ^^^^^^^^^^
+
+})
+

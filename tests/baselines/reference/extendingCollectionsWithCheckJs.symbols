@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/extendingCollectionsWithCheckJs.ts] ////
+
+=== extendingCollectionsWithCheckJs.js ===
+class MySet extends Set {
+>MySet : Symbol(MySet, Decl(extendingCollectionsWithCheckJs.js, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(SetConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+    }
+}
+
+class MyWeakSet extends WeakSet {
+>MyWeakSet : Symbol(MyWeakSet, Decl(extendingCollectionsWithCheckJs.js, 4, 1))
+>WeakSet : Symbol(WeakSet, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(WeakSetConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+    }
+}
+
+class MyMap extends Map {
+>MyMap : Symbol(MyMap, Decl(extendingCollectionsWithCheckJs.js, 10, 1))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(MapConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+    }
+}
+
+class MyWeakMap extends WeakMap {
+>MyWeakMap : Symbol(MyWeakMap, Decl(extendingCollectionsWithCheckJs.js, 16, 1))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(WeakMapConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+    }
+}
+

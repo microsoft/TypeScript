@@ -1,3 +1,4 @@
+// @target: es2015
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
@@ -17,5 +18,5 @@ switch (2) {
     case 0:
         let x;
     case 1:
-        x++;
+        x=1;
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParametersWithUnderscore.ts] ////
+
 //// [unusedTypeParametersWithUnderscore.ts]
 function f<_T, U>() { }
 
@@ -13,13 +15,11 @@ let l = <_T, U>() => { };
 
 
 //// [unusedTypeParametersWithUnderscore.js]
+"use strict";
 function f() { }
 ;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function () { };
-    return C;
-}());
+class C {
+    m() { }
+}
 ;
-var l = function () { };
+let l = () => { };

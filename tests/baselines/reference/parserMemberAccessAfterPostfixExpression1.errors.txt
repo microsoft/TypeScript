@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts(1,1): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts(1,4): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts(1,5): error TS2552: Cannot find name 'toString'. Did you mean 'String'?
+parserMemberAccessAfterPostfixExpression1.ts(1,1): error TS2304: Cannot find name 'a'.
+parserMemberAccessAfterPostfixExpression1.ts(1,4): error TS1005: ';' expected.
+parserMemberAccessAfterPostfixExpression1.ts(1,5): error TS2552: Cannot find name 'toString'. Did you mean 'String'?
 
 
-==== tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts (3 errors) ====
+==== parserMemberAccessAfterPostfixExpression1.ts (3 errors) ====
     a--.toString()
     ~
 !!! error TS2304: Cannot find name 'a'.
@@ -11,4 +11,4 @@ tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPo
 !!! error TS1005: ';' expected.
         ~~~~~~~~
 !!! error TS2552: Cannot find name 'toString'. Did you mean 'String'?
-!!! related TS2728 /.ts/lib.es5.d.ts:530:13: 'String' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'String' is declared here.

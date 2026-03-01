@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+// @strict: false
 ////var f: Function;
 ////function g() { }
 ////

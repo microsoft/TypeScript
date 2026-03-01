@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts] ////
+
 //// [controlFlowCommaExpressionAssertionMultiple.ts]
 function Narrow<T>(value: any): asserts value is T {}
 
@@ -16,6 +18,7 @@ function func2(foo: any, bar: any, baz: any) {
 
 
 //// [controlFlowCommaExpressionAssertionMultiple.js]
+"use strict";
 function Narrow(value) { }
 function func(foo, bar) {
     Narrow(foo), Narrow(bar);

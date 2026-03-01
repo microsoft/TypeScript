@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock19.ts] ////
+
 //// [classStaticBlock19.ts]
 class C {
     @decorator
@@ -8,11 +10,9 @@ class C {
 
 
 //// [classStaticBlock19.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-(function () {
+"use strict";
+class C {
+}
+(() => {
     // something
 })();

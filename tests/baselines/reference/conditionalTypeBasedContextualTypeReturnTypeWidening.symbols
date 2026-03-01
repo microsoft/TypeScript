@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeBasedContextualTypeReturnTypeWidening.ts ===
+//// [tests/cases/compiler/conditionalTypeBasedContextualTypeReturnTypeWidening.ts] ////
+
+=== conditionalTypeBasedContextualTypeReturnTypeWidening.ts ===
 declare function useState1<S>(initialState: (S extends (() => any) ? never : S) | (() => S)): S; // No args
 >useState1 : Symbol(useState1, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 0))
 >S : Symbol(S, Decl(conditionalTypeBasedContextualTypeReturnTypeWidening.ts, 0, 27))

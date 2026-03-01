@@ -1,48 +1,80 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty21.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty21.ts] ////
+
+=== symbolProperty21.ts ===
 interface I<T, U> {
     [Symbol.unscopables]: T;
 >[Symbol.unscopables] : T
+>                     : ^
 >Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 
     [Symbol.isConcatSpreadable]: U;
 >[Symbol.isConcatSpreadable] : U
+>                            : ^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 }
 
 declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
->foo : <T, U>(p: I<T, U>) => {    t: T;    u: U;}
+>foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
+>    : ^ ^^ ^^ ^^       ^^^^^               
 >p : I<T, U>
+>  : ^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
 foo({
 >foo({    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true}) : { t: boolean; u: string; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
+>    : ^ ^^ ^^ ^^       ^^^^^               
 >{    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true} : { [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.isConcatSpreadable]: "",
 >[Symbol.isConcatSpreadable] : string
+>                            : ^^^^^^
 >Symbol.isConcatSpreadable : unique symbol
+>                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
+>                   : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     [Symbol.toPrimitive]: 0,
 >[Symbol.toPrimitive] : number
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     [Symbol.unscopables]: true
 >[Symbol.unscopables] : true
+>                     : ^^^^
 >Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 });

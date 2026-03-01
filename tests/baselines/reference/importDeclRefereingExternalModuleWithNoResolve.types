@@ -1,11 +1,16 @@
-=== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts ===
+//// [tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts] ////
+
+=== importDeclRefereingExternalModuleWithNoResolve.ts ===
 import b = require("externalModule");
 >b : any
+>  : ^^^
 
 declare module "m1" {
 >"m1" : any
+>     : ^^^
 
     import im2 = require("externalModule");
 >im2 : any
+>    : ^^^
 }
 

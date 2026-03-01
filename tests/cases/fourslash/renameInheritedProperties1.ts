@@ -7,4 +7,4 @@
 //// var v: class1;
 //// v.[|propName|];
 
-verify.rangesWithSameTextAreRenameLocations("propName");
+verify.baselineRenameAtRangesWithText("propName");

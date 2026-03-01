@@ -1,7 +1,7 @@
-tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 
 
-==== tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts (1 errors) ====
+==== arrayFakeFlatNoCrashInferenceDeclarations.ts (1 errors) ====
     type BadFlatArray<Arr, Depth extends number> = {obj: {
         "done": Arr,
         "recur": Arr extends ReadonlyArray<infer InnerArr>

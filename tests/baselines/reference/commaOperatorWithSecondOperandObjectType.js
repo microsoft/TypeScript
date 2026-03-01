@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandObjectType.ts] ////
+
 //// [commaOperatorWithSecondOperandObjectType.ts]
 var ANY: any;
 var BOOLEAN: boolean;
@@ -40,16 +42,14 @@ var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 
 
 //// [commaOperatorWithSecondOperandObjectType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
-var CLASS = /** @class */ (function () {
-    function CLASS() {
-    }
-    return CLASS;
-}());
+class CLASS {
+}
 //The second operand type is Object
 ANY, OBJECT;
 BOOLEAN, OBJECT;

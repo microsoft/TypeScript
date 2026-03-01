@@ -1,29 +1,43 @@
-=== tests/cases/compiler/indexedAccessRetainsIndexSignature.ts ===
+//// [tests/cases/compiler/indexedAccessRetainsIndexSignature.ts] ////
+
+=== indexedAccessRetainsIndexSignature.ts ===
 type Diff<T extends keyof any, U extends keyof any> =
 >Diff : Diff<T, U>
+>     : ^^^^^^^^^^
 
     ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T]
 >x : string
+>  : ^^^^^^
 
 type Omit<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>
 >Omit : Omit<U, K>
+>     : ^^^^^^^^^^
 
 type Omit1<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>;
 >Omit1 : Omit1<U, K>
+>      : ^^^^^^^^^^^
 
 // is in fact an equivalent of
 
 type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
 >Omit2 : Omit2<T, K>
+>      : ^^^^^^^^^^^
 
 type O = Omit<{ a: number, b: string }, 'a'>
->O : { b: string; }
+>O : O
+>  : ^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 export const o: O = { b: '' }
 >o : O
+>  : ^
 >{ b: '' } : { b: string; }
+>          : ^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 

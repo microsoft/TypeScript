@@ -1,7 +1,7 @@
-tests/cases/compiler/duplicateLabel2.ts(3,3): error TS1114: Duplicate label 'target'.
+duplicateLabel2.ts(3,3): error TS1114: Duplicate label 'target'.
 
 
-==== tests/cases/compiler/duplicateLabel2.ts (1 errors) ====
+==== duplicateLabel2.ts (1 errors) ====
     target:
     while (true) {
       target:

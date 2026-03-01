@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardTypeOfUndefined.ts] ////
+
 //// [typeGuardTypeOfUndefined.ts]
 // undefined type guard adds no new type information
 function test1(a: any) {
@@ -186,6 +188,7 @@ function test16(a: boolean | number | void) {
 
 
 //// [typeGuardTypeOfUndefined.js]
+"use strict";
 // undefined type guard adds no new type information
 function test1(a) {
     if (typeof a !== "undefined") {

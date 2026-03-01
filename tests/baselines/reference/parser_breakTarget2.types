@@ -1,10 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget2.ts] ////
+
+=== parser_breakTarget2.ts ===
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
   break target;
 >target : any
+>       : ^^^
 }

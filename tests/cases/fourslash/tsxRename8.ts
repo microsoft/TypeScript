@@ -5,7 +5,7 @@
 // @jsx: preserve
 // @noLib: true
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -23,4 +23,4 @@
 //// let opt3 = <Opt [|wrong|] />;
 //// let opt4 = <Opt propx={100} propString="hi" />;
 
-verify.rangesAreRenameLocations();
+verify.baselineRename();

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts] ////
+
+=== interfaceWithMultipleBaseTypes2.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(interfaceWithMultipleBaseTypes2.ts, 0, 0))
 

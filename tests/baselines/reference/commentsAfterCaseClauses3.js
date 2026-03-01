@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsAfterCaseClauses3.ts] ////
+
 //// [commentsAfterCaseClauses3.ts]
 function getSecurity(level) {
     switch(level){
@@ -17,6 +19,7 @@ function getSecurity(level) {
 }
 
 //// [commentsAfterCaseClauses3.js]
+"use strict";
 function getSecurity(level) {
     switch (level) {
         case 0: /*Zero*/

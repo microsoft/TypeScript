@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts] ////
+
 //// [classAbstractMixedWithModifiers.ts]
 abstract class A {
     abstract foo_a();
@@ -19,8 +21,6 @@ abstract class A {
 
 
 //// [classAbstractMixedWithModifiers.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+"use strict";
+class A {
+}

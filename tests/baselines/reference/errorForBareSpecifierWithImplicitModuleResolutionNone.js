@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolutionNone.ts] ////
+
 //// [errorForBareSpecifierWithImplicitModuleResolutionNone.ts]
 // This would be classed as moduleResolutionKind: Classic
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInConstructor.ts] ////
+
 //// [collisionThisExpressionAndLocalVarInConstructor.ts]
 class class1 {
     constructor() {
@@ -22,27 +24,24 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInConstructor.js]
-var class1 = /** @class */ (function () {
-    function class1() {
-        var _this_1 = this;
+"use strict";
+class class1 {
+    constructor() {
         var x2 = {
-            doStuff: function (callback) { return function () {
+            doStuff: (callback) => () => {
                 var _this = 2;
-                return callback(_this_1);
-            }; }
+                return callback(this);
+            }
         };
     }
-    return class1;
-}());
-var class2 = /** @class */ (function () {
-    function class2() {
-        var _this_1 = this;
+}
+class class2 {
+    constructor() {
         var _this = 2;
         var x2 = {
-            doStuff: function (callback) { return function () {
-                return callback(_this_1);
-            }; }
+            doStuff: (callback) => () => {
+                return callback(this);
+            }
         };
     }
-    return class2;
-}());
+}

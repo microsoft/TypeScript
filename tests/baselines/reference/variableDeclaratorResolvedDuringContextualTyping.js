@@ -1,5 +1,7 @@
+//// [tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts] ////
+
 //// [variableDeclaratorResolvedDuringContextualTyping.ts]
-module WinJS {
+namespace WinJS {
     export interface ValueCallback {
         (value: any): any;
     }
@@ -64,7 +66,7 @@ module WinJS {
     }
 }
 
-module Services {
+namespace Services {
     export interface IRequestService {
         /**
          * Returns the URL that can be used to access the provided service. The optional second argument can
@@ -82,14 +84,14 @@ module Services {
     }
 }
 
-module Errors {
+namespace Errors {
     export class ConnectionError /* extends Error */ {
         constructor(request: XMLHttpRequest) {
         }
     }
 }
 
-module Files {
+namespace Files {
     export interface IUploadResult {
         stat: string;
         isNew: boolean;
@@ -126,38 +128,34 @@ class FileService {
 }
 
 //// [variableDeclaratorResolvedDuringContextualTyping.js]
+"use strict";
 var WinJS;
 (function (WinJS) {
 })(WinJS || (WinJS = {}));
 var Errors;
 (function (Errors) {
-    var ConnectionError /* extends Error */ = /** @class */ (function () {
-        function ConnectionError(request) {
+    class ConnectionError /* extends Error */ {
+        constructor(request) {
         }
-        return ConnectionError;
-    }());
+    }
     Errors.ConnectionError = ConnectionError;
 })(Errors || (Errors = {}));
-var FileService = /** @class */ (function () {
-    function FileService() {
-    }
-    FileService.prototype.uploadData = function () {
-        var _this = this;
+class FileService {
+    uploadData() {
         var path = "";
         return this.requestService.makeRequest({
             url: this.requestService.getRequestUrl('root', path),
             type: 'POST',
             headers: {},
             data: "someData"
-        }).then(function (response) {
+        }).then((response) => {
             var result = {
-                stat: _this.jsonToStat(newFilePath, "someString"),
+                stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
                 isNew: response.status === 201
             };
             return WinJS.TPromise.as(result);
-        }, function (xhr) {
+        }, (xhr) => {
             return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));
         });
-    };
-    return FileService;
-}());
+    }
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringEvaluationOrder.ts] ////
+
 //// [destructuringEvaluationOrder.ts]
 // https://github.com/microsoft/TypeScript/issues/39205
 let trace: any[] = [];
@@ -22,6 +24,7 @@ let [{ ...a }, b = a]: any[] = [{ x: 1 }]
 
 
 //// [destructuringEvaluationOrder.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)

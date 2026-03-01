@@ -1,8 +1,13 @@
-=== tests/cases/compiler/declarationEmitDefaultExport7.ts ===
+//// [tests/cases/compiler/declarationEmitDefaultExport7.ts] ////
+
+=== declarationEmitDefaultExport7.ts ===
 class A {}
 >A : A
+>  : ^
 
 export default new A();
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 

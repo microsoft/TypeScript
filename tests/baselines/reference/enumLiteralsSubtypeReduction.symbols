@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumLiteralsSubtypeReduction.ts ===
+//// [tests/cases/compiler/enumLiteralsSubtypeReduction.ts] ////
+
+=== enumLiteralsSubtypeReduction.ts ===
 enum E {
 >E : Symbol(E, Decl(enumLiteralsSubtypeReduction.ts, 0, 0))
 

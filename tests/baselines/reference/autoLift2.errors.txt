@@ -1,16 +1,16 @@
-tests/cases/compiler/autoLift2.ts(5,14): error TS2339: Property 'foo' does not exist on type 'A'.
-tests/cases/compiler/autoLift2.ts(5,17): error TS1005: ';' expected.
-tests/cases/compiler/autoLift2.ts(5,19): error TS2693: 'any' only refers to a type, but is being used as a value here.
-tests/cases/compiler/autoLift2.ts(6,14): error TS2339: Property 'bar' does not exist on type 'A'.
-tests/cases/compiler/autoLift2.ts(6,17): error TS1005: ';' expected.
-tests/cases/compiler/autoLift2.ts(6,19): error TS2693: 'any' only refers to a type, but is being used as a value here.
-tests/cases/compiler/autoLift2.ts(12,11): error TS2339: Property 'foo' does not exist on type 'A'.
-tests/cases/compiler/autoLift2.ts(14,11): error TS2339: Property 'bar' does not exist on type 'A'.
-tests/cases/compiler/autoLift2.ts(16,33): error TS2339: Property 'foo' does not exist on type 'A'.
-tests/cases/compiler/autoLift2.ts(18,33): error TS2339: Property 'bar' does not exist on type 'A'.
+autoLift2.ts(5,14): error TS2339: Property 'foo' does not exist on type 'A'.
+autoLift2.ts(5,17): error TS1005: ';' expected.
+autoLift2.ts(5,19): error TS2693: 'any' only refers to a type, but is being used as a value here.
+autoLift2.ts(6,14): error TS2339: Property 'bar' does not exist on type 'A'.
+autoLift2.ts(6,17): error TS1005: ';' expected.
+autoLift2.ts(6,19): error TS2693: 'any' only refers to a type, but is being used as a value here.
+autoLift2.ts(12,11): error TS2339: Property 'foo' does not exist on type 'A'.
+autoLift2.ts(14,11): error TS2339: Property 'bar' does not exist on type 'A'.
+autoLift2.ts(16,33): error TS2339: Property 'foo' does not exist on type 'A'.
+autoLift2.ts(18,33): error TS2339: Property 'bar' does not exist on type 'A'.
 
 
-==== tests/cases/compiler/autoLift2.ts (10 errors) ====
+==== autoLift2.ts (10 errors) ====
     class A
     
     {

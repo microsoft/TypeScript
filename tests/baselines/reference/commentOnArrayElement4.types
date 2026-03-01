@@ -1,11 +1,16 @@
-=== tests/cases/compiler/commentOnArrayElement4.ts ===
+//// [tests/cases/compiler/commentOnArrayElement4.ts] ////
+
+=== commentOnArrayElement4.ts ===
 const array = [
 >array : number[]
+>      : ^^^^^^^^
 >[    /* element 1 */    1,    /* end of element 1 */] : number[]
+>                                                      : ^^^^^^^^
 
     /* element 1 */
     1,
 >1 : 1
+>  : ^
 
     /* end of element 1 */
 ];

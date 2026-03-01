@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamterAndVariableDeclaration.ts] ////
+
 //// [optionalParamterAndVariableDeclaration.ts]
 class C {
     constructor(options?: number) {
@@ -7,9 +9,9 @@ class C {
 
 
 //// [optionalParamterAndVariableDeclaration.js]
-var C = /** @class */ (function () {
-    function C(options) {
+"use strict";
+class C {
+    constructor(options) {
         var options = (options || 0);
     }
-    return C;
-}());
+}

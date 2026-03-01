@@ -1,107 +1,158 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionGenerics.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunctionGenerics.ts] ////
+
+=== typeGuardFunctionGenerics.ts ===
 class A {
 >A : A
+>  : ^
 
     propA: number;
 >propA : number
+>      : ^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
     propB: number;
 >propB : number
+>      : ^^^^^^
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     propC: number;
 >propC : number
+>      : ^^^^^^
 }
 
 declare function isB(p1): p1 is B;
 >isB : (p1: any) => p1 is B
+>    : ^  ^^^^^^^^^^       
 >p1 : any
 
 declare function isC(p1): p1 is C;
 >isC : (p1: any) => p1 is C
+>    : ^  ^^^^^^^^^^       
 >p1 : any
 
 declare function retC(x): C; 
 >retC : (x: any) => C
+>     : ^ ^^^^^^^^^^ 
 >x : any
 
 declare function funA<T>(p1: (p1) => T): T;
 >funA : <T>(p1: (p1: any) => T) => T
+>     : ^ ^^  ^^     ^^^      ^^^^^ 
 >p1 : (p1: any) => T
+>   : ^  ^^^^^^^^^^ 
 >p1 : any
 
 declare function funB<T>(p1: (p1) => T, p2: any): p2 is T;
 >funB : <T>(p1: (p1: any) => T, p2: any) => p2 is T
+>     : ^ ^^  ^^     ^^^      ^^  ^^   ^^^^^       
 >p1 : (p1: any) => T
+>   : ^  ^^^^^^^^^^ 
 >p1 : any
 >p2 : any
 
 declare function funC<T>(p1: (p1) => p1 is T): T;
 >funC : <T>(p1: (p1: any) => p1 is T) => T
+>     : ^ ^^  ^^     ^^^            ^^^^^ 
 >p1 : (p1: any) => p1 is T
+>   : ^  ^^^^^^^^^^       
 >p1 : any
 
 declare function funD<T>(p1: (p1) => p1 is T, p2: any): p2 is T;
 >funD : <T>(p1: (p1: any) => p1 is T, p2: any) => p2 is T
+>     : ^ ^^  ^^     ^^^            ^^  ^^   ^^^^^       
 >p1 : (p1: any) => p1 is T
+>   : ^  ^^^^^^^^^^       
 >p1 : any
 >p2 : any
 
 declare function funE<T, U>(p1: (p1) => p1 is T, p2: U): T;
 >funE : <T, U>(p1: (p1: any) => p1 is T, p2: U) => T
+>     : ^ ^^ ^^  ^^     ^^^            ^^  ^^ ^^^^^ 
 >p1 : (p1: any) => p1 is T
+>   : ^  ^^^^^^^^^^       
 >p1 : any
 >p2 : U
+>   : ^
 
 let a: A;
 >a : A
+>  : ^
 
 let test1: boolean = funA(isB);
 >test1 : boolean
+>      : ^^^^^^^
 >funA(isB) : boolean
+>          : ^^^^^^^
 >funA : <T>(p1: (p1: any) => T) => T
+>     : ^ ^^  ^^     ^^^      ^^^^^ 
 >isB : (p1: any) => p1 is B
+>    : ^  ^^^^^^^^^^       
 
 if (funB(retC, a)) {
 >funB(retC, a) : boolean
+>              : ^^^^^^^
 >funB : <T>(p1: (p1: any) => T, p2: any) => p2 is T
+>     : ^ ^^  ^^     ^^^      ^^  ^^   ^^^^^       
 >retC : (x: any) => C
+>     : ^ ^^^^^^^^^^ 
 >a : A
+>  : ^
 
     a.propC;
 >a.propC : number
+>        : ^^^^^^
 >a : C
+>  : ^
 >propC : number
+>      : ^^^^^^
 }
 let test2: B = funC(isB);
 >test2 : B
+>      : ^
 >funC(isB) : B
+>          : ^
 >funC : <T>(p1: (p1: any) => p1 is T) => T
+>     : ^ ^^  ^^     ^^^            ^^^^^ 
 >isB : (p1: any) => p1 is B
+>    : ^  ^^^^^^^^^^       
 
 if (funD(isC, a)) {
 >funD(isC, a) : boolean
+>             : ^^^^^^^
 >funD : <T>(p1: (p1: any) => p1 is T, p2: any) => p2 is T
+>     : ^ ^^  ^^     ^^^            ^^  ^^   ^^^^^       
 >isC : (p1: any) => p1 is C
+>    : ^  ^^^^^^^^^^       
 >a : A
+>  : ^
 
     a.propC;
 >a.propC : number
+>        : ^^^^^^
 >a : C
+>  : ^
 >propC : number
+>      : ^^^^^^
 }
 let test3: B = funE(isB, 1);
 >test3 : B
+>      : ^
 >funE(isB, 1) : B
+>             : ^
 >funE : <T, U>(p1: (p1: any) => p1 is T, p2: U) => T
+>     : ^ ^^ ^^  ^^     ^^^            ^^  ^^ ^^^^^ 
 >isB : (p1: any) => p1 is B
+>    : ^  ^^^^^^^^^^       
 >1 : 1
+>  : ^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts] ////
+
 //// [implicitAnyDeclareMemberWithoutType2.ts]
 // this should be an error
 class C {
@@ -10,11 +12,11 @@ class C {
 
 
 //// [implicitAnyDeclareMemberWithoutType2.js]
+"use strict";
 // this should be an error
-var C = /** @class */ (function () {
-    function C(c1, c2, c3) {
+class C {
+    constructor(c1, c2, c3) {
         this.x = null; // error at "x"
     } // error at "c1, c2"
-    C.prototype.funcOfC = function (f1, f2, f3) { }; // error at "f1,f2"
-    return C;
-}());
+    funcOfC(f1, f2, f3) { } // error at "f1,f2"
+}

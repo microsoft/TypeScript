@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts] ////
+
 //// [switchBreakStatements.ts]
 switch ('') {
     case 'a':
@@ -56,6 +58,7 @@ switch ('') {
 
 
 //// [switchBreakStatements.js]
+"use strict";
 switch ('') {
     case 'a':
         break;

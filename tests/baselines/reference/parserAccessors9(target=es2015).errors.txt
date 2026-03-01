@@ -1,0 +1,7 @@
+parserAccessors9.ts(1,15): error TS1049: A 'set' accessor must have exactly one parameter.
+
+
+==== parserAccessors9.ts (1 errors) ====
+    var v = { set foo(a, b) { } }
+                  ~~~
+!!! error TS1049: A 'set' accessor must have exactly one parameter.

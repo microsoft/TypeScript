@@ -1,132 +1,217 @@
-=== tests/cases/compiler/decrementAndIncrementOperators.ts ===
+//// [tests/cases/compiler/decrementAndIncrementOperators.ts] ////
+
+=== decrementAndIncrementOperators.ts ===
 var x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 // errors
 1 ++;
 >1 ++ : number
+>     : ^^^^^^
 >1 : 1
+>  : ^
 
 (1)++;
 >(1)++ : number
+>      : ^^^^^^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 
 (1)--;
 >(1)-- : number
+>      : ^^^^^^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 
 ++(1);
 >++(1) : number
+>      : ^^^^^^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 
 --(1);
 >--(1) : number
+>      : ^^^^^^
 >(1) : 1
+>    : ^
 >1 : 1
+>  : ^
 
 (1 + 2)++;
 >(1 + 2)++ : number
+>          : ^^^^^^
 >(1 + 2) : number
+>        : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 (1 + 2)--;
 >(1 + 2)-- : number
+>          : ^^^^^^
 >(1 + 2) : number
+>        : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 ++(1 + 2);
 >++(1 + 2) : number
+>          : ^^^^^^
 >(1 + 2) : number
+>        : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 --(1 + 2);
 >--(1 + 2) : number
+>          : ^^^^^^
 >(1 + 2) : number
+>        : ^^^^^^
 >1 + 2 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 (x + x)++;
 >(x + x)++ : number
+>          : ^^^^^^
 >(x + x) : number
+>        : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 (x + x)--;
 >(x + x)-- : number
+>          : ^^^^^^
 >(x + x) : number
+>        : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 ++(x + x);
 >++(x + x) : number
+>          : ^^^^^^
 >(x + x) : number
+>        : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 --(x + x);
 >--(x + x) : number
+>          : ^^^^^^
 >(x + x) : number
+>        : ^^^^^^
 >x + x : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 //OK
 x++;
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 x--;
 >x-- : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 ++x;
 >++x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 --x;
 >--x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 (x)++;
 >(x)++ : number
+>      : ^^^^^^
 >(x) : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 --(x);
 >--(x) : number
+>      : ^^^^^^
 >(x) : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 ((x))++;
 >((x))++ : number
+>        : ^^^^^^
 >((x)) : number
+>      : ^^^^^^
 >(x) : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 ((x))--;
 >((x))-- : number
+>        : ^^^^^^
 >((x)) : number
+>      : ^^^^^^
 >(x) : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 x[x++]++;
 >x[x++]++ : number
+>         : ^^^^^^
 >x[x++] : any
+>       : ^^^
 >x : number
+>  : ^^^^^^
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 

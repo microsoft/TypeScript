@@ -1,15 +1,14 @@
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1005: ',' expected.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2339: Property 'i' does not exist on type 'string | number'.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(4,6): error TS2339: Property 'i1' does not exist on type 'string | number | {}'.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(5,12): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(5,21): error TS2353: Object literal may only specify known properties, and 'f212' does not exist in type '{ f21: any; }'.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(6,7): error TS1005: ':' expected.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(6,15): error TS1005: ':' expected.
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(7,12): error TS1005: ':' expected.
+destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1005: ',' expected.
+destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
+destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2339: Property 'i' does not exist on type 'string | number'.
+destructuringObjectBindingPatternAndAssignment3.ts(4,6): error TS2339: Property 'i1' does not exist on type 'string | number | {}'.
+destructuringObjectBindingPatternAndAssignment3.ts(5,21): error TS2353: Object literal may only specify known properties, and 'f212' does not exist in type '{ f21: any; }'.
+destructuringObjectBindingPatternAndAssignment3.ts(6,7): error TS1005: ':' expected.
+destructuringObjectBindingPatternAndAssignment3.ts(6,15): error TS1005: ':' expected.
+destructuringObjectBindingPatternAndAssignment3.ts(7,12): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts (9 errors) ====
+==== destructuringObjectBindingPatternAndAssignment3.ts (8 errors) ====
     // Error
     var {h?} = { h?: 1 };
           ~
@@ -23,8 +22,6 @@ tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAs
          ~~
 !!! error TS2339: Property 'i1' does not exist on type 'string | number | {}'.
     var { f2: {f21} = { f212: "string" } }: any = undefined;
-               ~~~
-!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
                         ~~~~
 !!! error TS2353: Object literal may only specify known properties, and 'f212' does not exist in type '{ f21: any; }'.
     var {1} = { 1 };

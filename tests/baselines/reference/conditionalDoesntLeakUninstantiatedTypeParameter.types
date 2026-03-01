@@ -1,18 +1,26 @@
-=== tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts ===
+//// [tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts] ////
+
+=== conditionalDoesntLeakUninstantiatedTypeParameter.ts ===
 interface Synthetic<A, B extends A> {}
 type SyntheticDestination<T, U> = U extends Synthetic<T, infer V> ? V : never;
 >SyntheticDestination : SyntheticDestination<T, U>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type TestSynthetic = // Resolved to T, should be `number` or an inference failure (`unknown`)
 >TestSynthetic : number
+>              : ^^^^^^
 
     SyntheticDestination<number, Synthetic<number, number>>;
 
 const y: TestSynthetic = 3; // Type '3' is not assignable to type 'T'. (shouldn't error)
 >y : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 
 const z: TestSynthetic = '3'; // Type '"3""' is not assignable to type 'T'. (should not mention T)
 >z : number
+>  : ^^^^^^
 >'3' : "3"
+>    : ^^^
 

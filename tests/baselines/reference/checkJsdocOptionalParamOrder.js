@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocOptionalParamOrder.ts] ////
+
 //// [0.js]
 // @ts-check
 /**
@@ -9,6 +11,7 @@ function foo(a, b, c) {}
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 /**
  * @param {number} a

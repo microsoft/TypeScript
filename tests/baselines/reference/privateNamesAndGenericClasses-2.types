@@ -1,89 +1,140 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts] ////
+
+=== privateNamesAndGenericClasses-2.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     #foo: T;
 >#foo : T
+>     : ^
 
     #bar(): T {
 >#bar : () => T
+>     : ^^^^^^ 
 
       return this.#foo;
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
     }
     constructor(t: T) {
 >t : T
+>  : ^
 
       this.#foo = t;
 >this.#foo = t : T
+>              : ^
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
 
       t = this.#bar();
 >t = this.#bar() : T
+>                : ^
 >t : T
+>  : ^
 >this.#bar() : T
+>            : ^
 >this.#bar : () => T
+>          : ^^^^^^ 
 >this : this
+>     : ^^^^
     }
     set baz(t: T) {
 >baz : T
+>    : ^
 >t : T
+>  : ^
 
       this.#foo = t;
 >this.#foo = t : T
+>              : ^
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
 
     }
     get baz(): T {
 >baz : T
+>    : ^
 
       return this.#foo;
 >this.#foo : T
+>          : ^
 >this : this
+>     : ^^^^
     }
 }
 
 let a = new C(3);
 >a : C<number>
+>  : ^^^^^^^^^
 >new C(3) : C<number>
+>         : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >3 : 3
+>  : ^
 
 let b = new C("hello");
 >b : C<string>
+>  : ^^^^^^^^^
 >new C("hello") : C<string>
+>               : ^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 a.baz = 5                                 // OK
 >a.baz = 5 : 5
+>          : ^
 >a.baz : number
+>      : ^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 >baz : number
+>    : ^^^^^^
 >5 : 5
+>  : ^
 
 const x: number = a.baz                   // OK
 >x : number
+>  : ^^^^^^
 >a.baz : number
+>      : ^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 >baz : number
+>    : ^^^^^^
 
 a.#foo;                                   // Error
 >a.#foo : any
+>       : ^^^
 >a : C<number>
+>  : ^^^^^^^^^
 
 a = b;                                    // Error
 >a = b : C<string>
+>      : ^^^^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 >b : C<string>
+>  : ^^^^^^^^^
 
 b = a;                                    // Error
 >b = a : C<number>
+>      : ^^^^^^^^^
 >b : C<string>
+>  : ^^^^^^^^^
 >a : C<number>
+>  : ^^^^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment8.ts] ////
+
 //// [destructuringObjectBindingPatternAndAssignment8.ts]
 const K = {
     a: "a",
@@ -10,6 +12,7 @@ console.log(aVal, bVal);
 
 
 //// [destructuringObjectBindingPatternAndAssignment8.js]
+"use strict";
 var K = {
     a: "a",
     b: "b"

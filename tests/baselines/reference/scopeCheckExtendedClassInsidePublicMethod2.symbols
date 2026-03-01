@@ -1,4 +1,6 @@
-=== tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts ===
+//// [tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts] ////
+
+=== scopeCheckExtendedClassInsidePublicMethod2.ts ===
 class C { private v; public p; static s; }
 >C : Symbol(C, Decl(scopeCheckExtendedClassInsidePublicMethod2.ts, 0, 0))
 >v : Symbol(C.v, Decl(scopeCheckExtendedClassInsidePublicMethod2.ts, 0, 9))

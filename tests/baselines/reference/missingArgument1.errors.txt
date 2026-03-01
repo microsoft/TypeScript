@@ -1,10 +1,10 @@
-tests/cases/compiler/missingArgument1.ts(1,1): error TS2304: Cannot find name 'foo'.
-tests/cases/compiler/missingArgument1.ts(1,5): error TS2304: Cannot find name 'a'.
-tests/cases/compiler/missingArgument1.ts(1,7): error TS1135: Argument expression expected.
-tests/cases/compiler/missingArgument1.ts(1,8): error TS2304: Cannot find name 'b'.
+missingArgument1.ts(1,1): error TS2304: Cannot find name 'foo'.
+missingArgument1.ts(1,5): error TS2304: Cannot find name 'a'.
+missingArgument1.ts(1,7): error TS1135: Argument expression expected.
+missingArgument1.ts(1,8): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/compiler/missingArgument1.ts (4 errors) ====
+==== missingArgument1.ts (4 errors) ====
     foo(a,,b);
     ~~~
 !!! error TS2304: Cannot find name 'foo'.

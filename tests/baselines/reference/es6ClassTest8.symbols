@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ClassTest8.ts ===
+//// [tests/cases/compiler/es6ClassTest8.ts] ////
+
+=== es6ClassTest8.ts ===
 function f1(x:any) {return x;}
 >f1 : Symbol(f1, Decl(es6ClassTest8.ts, 0, 0))
 >x : Symbol(x, Decl(es6ClassTest8.ts, 0, 12))

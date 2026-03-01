@@ -1,65 +1,90 @@
-=== tests/cases/compiler/overloadedConstructorFixesInferencesAppropriately.ts ===
+//// [tests/cases/compiler/overloadedConstructorFixesInferencesAppropriately.ts] ////
+
+=== overloadedConstructorFixesInferencesAppropriately.ts ===
 interface Box<T> {
     v: T;
 >v : T
+>  : ^
 }
 
 interface ErrorResult {
     readonly error: true
 >error : true
+>      : ^^^^
 >true : true
+>     : ^^^^
 }
 
 interface AsyncLoaderProps<TResult extends {}> {
     readonly asyncLoad: () => Box<TResult>;
 >asyncLoad : () => Box<TResult>
+>          : ^^^^^^            
 
     readonly children: (result: Exclude<TResult, ErrorResult>) => string;
 >children : (result: Exclude<TResult, ErrorResult>) => string
+>         : ^      ^^                             ^^^^^      
 >result : Exclude<TResult, ErrorResult>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class AsyncLoader<TResult extends {}> {
 >AsyncLoader : AsyncLoader<TResult>
+>            : ^^^^^^^^^^^^^^^^^^^^
 
     constructor(props: string, context: any);
 >props : string
+>      : ^^^^^^
 >context : any
 
     constructor(props: AsyncLoaderProps<TResult>);
 >props : AsyncLoaderProps<TResult>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor(...args: any[]) {}
 >args : any[]
+>     : ^^^^^
 }
 
 function load(): Box<{ success: true } | ErrorResult> {
->load : () => Box<{    success: true;} | ErrorResult>
+>load : () => Box<{ success: true; } | ErrorResult>
+>     : ^^^^^^                                     
 >success : true
+>        : ^^^^
 >true : true
+>     : ^^^^
 
     return null as any;
 >null as any : any
->null : null
 }
 
 new AsyncLoader({
 >new AsyncLoader({    asyncLoad: load,    children: result => result.success as any,}) : AsyncLoader<ErrorResult | { success: true; }>
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >AsyncLoader : typeof AsyncLoader
->{    asyncLoad: load,    children: result => result.success as any,} : { asyncLoad: () => Box<ErrorResult | { success: true; }>; children: (result: { success: true; }) => any; }
+>            : ^^^^^^^^^^^^^^^^^^
+>{    asyncLoad: load,    children: result => result.success as any,} : { asyncLoad: () => Box<{ success: true; } | ErrorResult>; children: (result: { success: true; }) => any; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^^^^^^^      ^^^^^^^^^^^^^    ^^^^^^^^   ^^^
 
     asyncLoad: load,
->asyncLoad : () => Box<ErrorResult | { success: true; }>
->load : () => Box<ErrorResult | { success: true; }>
+>asyncLoad : () => Box<{ success: true; } | ErrorResult>
+>          : ^^^^^^                                     
+>load : () => Box<{ success: true; } | ErrorResult>
+>     : ^^^^^^                                     
 
     children: result => result.success as any,
 >children : (result: { success: true; }) => any
+>         : ^      ^^^^^^^^^^^^^    ^^^^^^^^   
 >result => result.success as any : (result: { success: true; }) => any
+>                                : ^      ^^^^^^^^^^^^^    ^^^^^^^^   
 >result : { success: true; }
+>       : ^^^^^^^^^^^    ^^^
 >result.success as any : any
 >result.success : true
+>               : ^^^^
 >result : { success: true; }
+>       : ^^^^^^^^^^^    ^^^
 >success : true
+>        : ^^^^
 
 }); // should work fine
 

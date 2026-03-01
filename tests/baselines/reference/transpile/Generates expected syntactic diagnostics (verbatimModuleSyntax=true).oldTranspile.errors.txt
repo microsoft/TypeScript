@@ -1,0 +1,7 @@
+file.ts(1,1): error TS1434: Unexpected keyword or identifier.
+
+
+==== file.ts (1 errors) ====
+    a b
+    ~
+!!! error TS1434: Unexpected keyword or identifier.

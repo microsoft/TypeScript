@@ -1,0 +1,765 @@
+//// [tests/cases/compiler/narrowingPastLastAssignment.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== narrowingPastLastAssignment.ts ===
+function action(f: Function) {}
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>f : Function
+>  : ^^^^^^^^
+
+// Narrowings are preserved in closures created past last assignment
+
+function f1(x: string | number) {
+>f1 : (x: string | number) => void
+>   : ^ ^^               ^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    x = "abc";
+>x = "abc" : "abc"
+>          : ^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+    action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    action(() => { x /* number */ });
+>action(() => { x /* number */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+}
+
+// Narrowings are not preserved in inner function and class declarations (due to hoisting)
+
+function f2() {
+>f2 : () => void
+>   : ^^^^^^^^^^
+
+    let x: string | number;
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    let a = () => { x /* number */ };
+>a : () => void
+>  : ^^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+    let f = function() { x /* number */ };
+>f : () => void
+>  : ^^^^^^^^^^
+>function() { x /* number */ } : () => void
+>                              : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+    let C = class {
+>C : typeof C
+>  : ^^^^^^^^
+>class {        foo() { x /* number */ }    } : typeof C
+>                                             : ^^^^^^^^
+
+        foo() { x /* number */ }
+>foo : () => void
+>    : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+    };
+    let o = {
+>o : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
+>{        foo() { x /* number */ }    } : { foo(): void; }
+>                                       : ^^^^^^^^^^^^^^^^
+
+        foo() { x /* number */ }
+>foo : () => void
+>    : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+
+    };
+    function g() { x /* string | number */ }
+>g : () => void
+>  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    class A {
+>A : A
+>  : ^
+
+        foo() { x /* string | number */ }
+>foo : () => void
+>    : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+}
+
+// Narrowings are not preserved when assignments occur in inner functions
+
+function f3(x: string | number) {
+>f3 : (x: string | number) => void
+>   : ^ ^^               ^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    action(() => { x = "abc" });
+>action(() => { x = "abc" }) : void
+>                            : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x = "abc" } : () => void
+>                    : ^^^^^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+    x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+// Assignment effects in compoud statements extend to the entire statement
+
+function f4(cond: () => boolean) {
+>f4 : (cond: () => boolean) => void
+>   : ^    ^^             ^^^^^^^^^
+>cond : () => boolean
+>     : ^^^^^^       
+
+    let x: string | number = 0;
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    while (cond()) {
+>cond() : boolean
+>       : ^^^^^^^
+>cond : () => boolean
+>     : ^^^^^^       
+
+        x = "abc";
+>x = "abc" : "abc"
+>          : ^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+        action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+        x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+        action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+    action(() => { x /* number */ });
+>action(() => { x /* number */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+}
+
+function f5(x: string | number, cond: () => boolean) {
+>f5 : (x: string | number, cond: () => boolean) => void
+>   : ^ ^^               ^^    ^^             ^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>cond : () => boolean
+>     : ^^^^^^       
+
+    if (cond()) {
+>cond() : boolean
+>       : ^^^^^^^
+>cond : () => boolean
+>     : ^^^^^^       
+
+        x = 1;
+>x = 1 : 1
+>      : ^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+        action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+    else {
+        x = 2;
+>x = 2 : 2
+>      : ^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+
+        action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+    }
+    action(() => { x /* number */ });
+>action(() => { x /* number */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+}
+
+function f5a(cond: boolean) {
+>f5a : (cond: boolean) => void
+>    : ^    ^^       ^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+
+    if (cond) {
+>cond : boolean
+>     : ^^^^^^^
+
+        let x: number | undefined;
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+        x = 1;
+>x = 1 : 1
+>      : ^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+        action(() => { x /* number */ });
+>action(() => { x /* number */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+    }
+    else {
+        let x: number | undefined;
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+        x = 2;
+>x = 2 : 2
+>      : ^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+
+        action(() => { x /* number */ });
+>action(() => { x /* number */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+    }
+}
+
+function f5b() {
+>f5b : () => void
+>    : ^^^^^^^^^^
+
+    for (let x = 0; x < 10; x++) {
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>x < 10 : boolean
+>       : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+>x++ : number
+>    : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+        if (x === 1 || x === 2) {
+>x === 1 || x === 2 : boolean
+>                   : ^^^^^^^
+>x === 1 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>x === 2 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+            action(() => { x /* 1 | 2 */ })
+>action(() => { x /* 1 | 2 */ }) : void
+>                                : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* 1 | 2 */ } : () => void
+>                        : ^^^^^^^^^^
+>x : 1 | 2
+>  : ^^^^^
+        }
+    }
+}
+
+// Implicit any variables have a known type following last assignment
+
+function f6() {
+>f6 : () => void
+>   : ^^^^^^^^^^
+
+    let x;
+>x : any
+>  : ^^^
+
+    x = "abc";
+>x = "abc" : "abc"
+>          : ^^^^^
+>x : any
+>  : ^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+    action(() => { x });  // Error
+>action(() => { x }) : void
+>                    : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x } : () => void
+>            : ^^^^^^^^^^
+>x : any
+>  : ^^^
+
+    x = 42;
+>x = 42 : 42
+>       : ^^
+>x : any
+>  : ^^^
+>42 : 42
+>   : ^^
+
+    action(() => { x /* number */ });
+>action(() => { x /* number */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* number */ } : () => void
+>                         : ^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+}
+
+// Narrowings on catch variables are preserved past last assignment
+
+function f7() {
+>f7 : () => void
+>   : ^^^^^^^^^^
+
+    try {
+    }
+    catch (e) {
+>e : unknown
+>  : ^^^^^^^
+
+        if (e instanceof Error) {
+>e instanceof Error : boolean
+>                   : ^^^^^^^
+>e : unknown
+>  : ^^^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+
+            let f = () => { e /* Error */ }
+>f : () => void
+>  : ^^^^^^^^^^
+>() => { e /* Error */ } : () => void
+>                        : ^^^^^^^^^^
+>e : Error
+>  : ^^^^^
+        }
+    }
+}
+
+// Narrowings are not preserved for global variables
+
+let g: string | number;
+>g : string | number
+>  : ^^^^^^^^^^^^^^^
+
+g = "abc";
+>g = "abc" : "abc"
+>          : ^^^^^
+>g : string | number
+>  : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+action(() => { g /* string | number */ });
+>action(() => { g /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { g /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>g : string | number
+>  : ^^^^^^^^^^^^^^^
+
+// Narrowings are not preserved for exported namespace members
+
+namespace Foo {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+    export let x: string | number;
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    x = "abc";
+>x = "abc" : "abc"
+>          : ^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+    action(() => { x /* string | number */ });
+>action(() => { x /* string | number */ }) : void
+>                                          : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x /* string | number */ } : () => void
+>                                  : ^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    let y: string | number;
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    y = "abc";
+>y = "abc" : "abc"
+>          : ^^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+    action(() => { y /* string */ });
+>action(() => { y /* string */ }) : void
+>                                 : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { y /* string */ } : () => void
+>                         : ^^^^^^^^^^
+>y : string
+>  : ^^^^^^
+}
+
+// Repros from #35124
+
+function f10() {
+>f10 : () => (k: number) => boolean
+>    : ^^^^^^^         ^^^^^^^^^^^^
+
+    let i: number | undefined;
+>i : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    i = 0;
+>i = 0 : 0
+>      : ^
+>i : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    return (k: number) => k === i + 1;
+>(k: number) => k === i + 1 : (k: number) => boolean
+>                           : ^ ^^      ^^^^^^^^^^^^
+>k : number
+>  : ^^^^^^
+>k === i + 1 : boolean
+>            : ^^^^^^^
+>k : number
+>  : ^^^^^^
+>i + 1 : number
+>      : ^^^^^^
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+function makeAdder(n?: number) {
+>makeAdder : (n?: number) => (m: number) => number
+>          : ^ ^^^      ^^^^^^         ^^^^^^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    n ??= 0;
+>n ??= 0 : number
+>        : ^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    return (m: number) => n + m;
+>(m: number) => n + m : (m: number) => number
+>                     : ^ ^^      ^^^^^^^^^^^
+>m : number
+>  : ^^^^^^
+>n + m : number
+>      : ^^^^^^
+>n : number
+>  : ^^^^^^
+>m : number
+>  : ^^^^^^
+}
+
+function f11() {
+>f11 : () => void
+>    : ^^^^^^^^^^
+
+    let r;
+>r : any
+>  : ^^^
+
+    r = "b";
+>r = "b" : "b"
+>        : ^^^
+>r : any
+>  : ^^^
+>"b" : "b"
+>    : ^^^
+
+    () => r;
+>() => r : () => string
+>        : ^^^^^^^^^^^^
+>r : string
+>  : ^^^^^^
+}
+
+// Repro from #52104
+
+function f12() {
+>f12 : () => void
+>    : ^^^^^^^^^^
+
+    const fooMap: Map<string,Array<number>> = new Map()
+>fooMap : Map<string, number[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>new Map() : Map<any, any>
+>          : ^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+
+    const values = [1, 2, 3, 4, 5];
+>values : number[]
+>       : ^^^^^^^^
+>[1, 2, 3, 4, 5] : number[]
+>                : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
+
+    let foo = fooMap.get("a");
+>foo : number[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>fooMap.get("a") : number[] | undefined
+>                : ^^^^^^^^^^^^^^^^^^^^
+>fooMap.get : (key: string) => number[] | undefined
+>           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fooMap : Map<string, number[]>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>get : (key: string) => number[] | undefined
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    if (foo == null) {
+>foo == null : boolean
+>            : ^^^^^^^
+>foo : number[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+
+        foo = [];
+>foo = [] : never[]
+>         : ^^^^^^^
+>foo : number[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+    }
+    values.forEach(v => foo.push(v));
+>values.forEach(v => foo.push(v)) : void
+>                                 : ^^^^
+>values.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>values : number[]
+>       : ^^^^^^^^
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>v => foo.push(v) : (v: number) => number
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
+>v : number
+>  : ^^^^^^
+>foo.push(v) : number
+>            : ^^^^^^
+>foo.push : (...items: number[]) => number
+>         : ^^^^     ^^^^^^^^^^^^^^^      
+>foo : number[]
+>    : ^^^^^^^^
+>push : (...items: number[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
+>v : number
+>  : ^^^^^^
+}
+
+function f13() {
+>f13 : () => () => void
+>    : ^^^^^^^^^^^^^^^^
+
+    // Test for captured 'var' declaration (as opposed to parameters, let, const).
+    var foo: string | undefined;
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+    foo = '';
+>foo = '' : ""
+>         : ^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+    return () => {
+>() => {        foo.toLocaleLowerCase();    } : () => void
+>                                             : ^^^^^^^^^^
+
+        foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase() : string
+>                        : ^^^^^^
+>foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+    }
+}

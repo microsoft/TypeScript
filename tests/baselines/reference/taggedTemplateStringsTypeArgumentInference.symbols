@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts] ////
+
+=== taggedTemplateStringsTypeArgumentInference.ts ===
 // Generic tag with one parameter
 function noParams<T>(n: T) { }
 >noParams : Symbol(noParams, Decl(taggedTemplateStringsTypeArgumentInference.ts, 0, 0))
@@ -293,7 +295,7 @@ interface A92 {
 
     z?: Date;
 >z : Symbol(A92.z, Decl(taggedTemplateStringsTypeArgumentInference.ts, 70, 14))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
@@ -302,7 +304,7 @@ var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y:
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 43))
 >z : Symbol(z, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 49))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >x : Symbol(x, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 71))
 >y : Symbol(y, Decl(taggedTemplateStringsTypeArgumentInference.ts, 74, 77))
 

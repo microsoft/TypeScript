@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts] ////
+
 //// [externalModuleReferenceDoubleUnderscore1.ts]
 declare module 'timezonecomplete' {
     import basics = require("__timezonecomplete/basics");
@@ -17,3 +19,4 @@ declare module '__timezonecomplete/basics' {
 }
 
 //// [externalModuleReferenceDoubleUnderscore1.js]
+"use strict";

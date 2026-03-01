@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck43.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck43.ts] ////
+
+=== generatorTypeCheck43.ts ===
 function* g() {
 >g : Symbol(g, Decl(generatorTypeCheck43.ts, 0, 0))
 

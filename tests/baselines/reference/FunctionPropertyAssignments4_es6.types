@@ -1,6 +1,11 @@
-=== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments4_es6.ts ===
+//// [tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments4_es6.ts] ////
+
+=== FunctionPropertyAssignments4_es6.ts ===
 var v = { * }
 >v : { ""(): any; }
+>  : ^^^^^^^^^^^^^^
 >{ * } : { ""(): any; }
+>      : ^^^^^^^^^^^^^^
 > : () => any
+> : ^^^^^^^^^
 

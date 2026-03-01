@@ -1,14 +1,23 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty57.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty57.ts] ////
+
+=== symbolProperty57.ts ===
 var obj = {
 >obj : { [Symbol.iterator]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.iterator]: 0} : { [Symbol.iterator]: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [Symbol.iterator]: 0
 >[Symbol.iterator] : number
+>                  : ^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
 };
 
@@ -16,7 +25,10 @@ var obj = {
 obj[Symbol["nonsense"]];
 >obj[Symbol["nonsense"]] : error
 >obj : { [Symbol.iterator]: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol["nonsense"] : error
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >"nonsense" : "nonsense"
+>           : ^^^^^^^^^^
 

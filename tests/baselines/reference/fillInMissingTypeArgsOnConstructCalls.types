@@ -1,12 +1,19 @@
-=== tests/cases/compiler/fillInMissingTypeArgsOnConstructCalls.ts ===
+//// [tests/cases/compiler/fillInMissingTypeArgsOnConstructCalls.ts] ////
+
+=== fillInMissingTypeArgsOnConstructCalls.ts ===
 class A<T extends Object>{
 >A : A<T>
+>  : ^^^^
 
       list: T ;
 >list : T
+>     : ^
 }
 var a = new A();
 >a : A<Object>
+>  : ^^^^^^^^^
 >new A() : A<Object>
+>        : ^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 

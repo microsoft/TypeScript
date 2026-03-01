@@ -1,0 +1,53 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/Foo.js ===
+// class Foo {
+//    constructor() {
+//        <|this./*RENAME*/[|unionRENAME|] = 'foo';|>
+//        <|this.[|unionRENAME|] = 100;|>
+//    }
+//    method() { return this.[|unionRENAME|]; }
+// }
+// var x = new Foo();
+// x.[|unionRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/Foo.js ===
+// class Foo {
+//    constructor() {
+//        <|this.[|unionRENAME|] = 'foo';|>
+//        <|this./*RENAME*/[|unionRENAME|] = 100;|>
+//    }
+//    method() { return this.[|unionRENAME|]; }
+// }
+// var x = new Foo();
+// x.[|unionRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/Foo.js ===
+// class Foo {
+//    constructor() {
+//        <|this.[|unionRENAME|] = 'foo';|>
+//        <|this.[|unionRENAME|] = 100;|>
+//    }
+//    method() { return this./*RENAME*/[|unionRENAME|]; }
+// }
+// var x = new Foo();
+// x.[|unionRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/Foo.js ===
+// class Foo {
+//    constructor() {
+//        <|this.[|unionRENAME|] = 'foo';|>
+//        <|this.[|unionRENAME|] = 100;|>
+//    }
+//    method() { return this.[|unionRENAME|]; }
+// }
+// var x = new Foo();
+// x./*RENAME*/[|unionRENAME|];

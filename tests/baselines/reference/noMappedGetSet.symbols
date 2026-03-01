@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noMappedGetSet.ts ===
+//// [tests/cases/compiler/noMappedGetSet.ts] ////
+
+=== noMappedGetSet.ts ===
 type OH_NO = {
 >OH_NO : Symbol(OH_NO, Decl(noMappedGetSet.ts, 0, 0))
 

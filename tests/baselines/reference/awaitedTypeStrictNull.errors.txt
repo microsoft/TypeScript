@@ -1,8 +1,9 @@
-tests/cases/compiler/awaitedTypeStrictNull.ts(18,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/awaitedTypeStrictNull.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedTypeStrictNull.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedTypeStrictNull.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedTypeStrictNull.ts(29,22): error TS7010: 'then', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/compiler/awaitedTypeStrictNull.ts (2 errors) ====
+==== awaitedTypeStrictNull.ts (3 errors) ====
     type T1 = Awaited<number>;
     type T2 = Awaited<Promise<number>>;
     type T3 = Awaited<number | Promise<number>>;
@@ -19,6 +20,10 @@ tests/cases/compiler/awaitedTypeStrictNull.ts(22,12): error TS2589: Type instant
     type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
     type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
     
+    type TUndefined = Awaited<undefined>;
+    type TNull = Awaited<null>;
+    type TNullOrUndefined = Awaited<null | undefined>;
+    
     interface BadPromise { then(cb: (value: BadPromise) => void): void; }
     type T16 = Awaited<BadPromise>; // error
                ~~~~~~~~~~~~~~~~~~~
@@ -32,6 +37,8 @@ tests/cases/compiler/awaitedTypeStrictNull.ts(22,12): error TS2589: Type instant
     
     // https://github.com/microsoft/TypeScript/issues/46934
     type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7010: 'then', which lacks return-type annotation, implicitly has an 'any' return type.
     
     // https://github.com/microsoft/TypeScript/issues/33562
     type MaybePromise<T> = T | Promise<T> | PromiseLike<T>

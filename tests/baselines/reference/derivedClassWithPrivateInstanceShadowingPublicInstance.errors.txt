@@ -1,32 +1,28 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(12,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(2,12): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(12,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Property 'x' is private in type 'Derived' but not in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(18,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(19,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(22,14): error TS2339: Property 'x' does not exist on type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(23,18): error TS2339: Property 'x' does not exist on type 'typeof Derived'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(25,15): error TS2339: Property 'fn' does not exist on type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(26,18): error TS2339: Property 'fn' does not exist on type 'typeof Derived'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(28,15): error TS2339: Property 'a' does not exist on type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(29,6): error TS2339: Property 'a' does not exist on type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(31,18): error TS2339: Property 'a' does not exist on type 'typeof Derived'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(32,9): error TS2339: Property 'a' does not exist on type 'typeof Derived'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(13,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(22,14): error TS2339: Property 'x' does not exist on type 'typeof Base'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(23,18): error TS2339: Property 'x' does not exist on type 'typeof Derived'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(25,15): error TS2339: Property 'fn' does not exist on type 'typeof Base'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(26,18): error TS2339: Property 'fn' does not exist on type 'typeof Derived'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(28,15): error TS2339: Property 'a' does not exist on type 'typeof Base'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(29,6): error TS2339: Property 'a' does not exist on type 'typeof Base'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(31,18): error TS2339: Property 'a' does not exist on type 'typeof Derived'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(32,9): error TS2339: Property 'a' does not exist on type 'typeof Derived'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts (13 errors) ====
+==== derivedClassWithPrivateInstanceShadowingPublicInstance.ts (11 errors) ====
     class Base {
         public x: string;
+               ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         public fn(): string {
             return '';
         }
     
         public get a() { return 1; }
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set a(v) { }
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     // error, not a subtype
@@ -35,16 +31,14 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
 !!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
 !!! error TS2415:   Property 'x' is private in type 'Derived' but not in type 'Base'.
         private x: string; 
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         private fn(): string {
             return '';
         }
     
         private get a() { return 1; }
-                    ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         private set a(v) { }
-                    ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     var r = Base.x; // ok

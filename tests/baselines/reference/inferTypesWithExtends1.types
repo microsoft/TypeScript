@@ -1,7 +1,10 @@
-=== tests/cases/conformance/types/conditional/inferTypesWithExtends1.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypesWithExtends1.ts] ////
+
+=== inferTypesWithExtends1.ts ===
 // infer to tuple element
 type X1<T extends any[]> =
 >X1 : X1<T>
+>   : ^^^^^
 
     T extends [infer U extends string] ? ["string", U] :
     T extends [infer U extends number] ? ["number", U] :
@@ -9,90 +12,123 @@ type X1<T extends any[]> =
 
 type X1_T1 = X1<["a"]>; // ["string", "a"]
 >X1_T1 : ["string", "a"]
+>      : ^^^^^^^^^^^^^^^
 
 type X1_T2 = X1<[1]>; // ["number", 1]
 >X1_T2 : ["number", 1]
+>      : ^^^^^^^^^^^^^
 
 type X1_T3 = X1<[object]>; // never
 >X1_T3 : never
+>      : ^^^^^
 
 // infer to argument
 type X2<T extends (...args: any[]) => void> =
 >X2 : X2<T>
+>   : ^^^^^
 >args : any[]
+>     : ^^^^^
 
     T extends (a: infer U extends string) => void ? ["string", U] :
 >a : U
+>  : ^
 
     T extends (a: infer U extends number) => void ? ["number", U] :
 >a : U
+>  : ^
 
     never;
 
 type X2_T1 = X2<(a: "a") => void>; // ["string", "a"]
 >X2_T1 : ["string", "a"]
+>      : ^^^^^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 
 type X2_T2 = X2<(a: 1) => void>; // ["number", 1]
 >X2_T2 : ["number", 1]
+>      : ^^^^^^^^^^^^^
 >a : 1
+>  : ^
 
 type X2_T3 = X2<(a: object) => void>; // never
 >X2_T3 : never
+>      : ^^^^^
 >a : object
+>  : ^^^^^^
 
 // infer to return type
 type X3<T extends (...args: any[]) => any> =
 >X3 : X3<T>
+>   : ^^^^^
 >args : any[]
+>     : ^^^^^
 
     T extends (...args: any[]) => (infer U extends string) ? ["string", U] :
 >args : any[]
+>     : ^^^^^
 
     T extends (...args: any[]) => (infer U extends number) ? ["number", U] :
 >args : any[]
+>     : ^^^^^
 
     never;
 
 type X3_T1 = X3<() => "a">; // ["string", "a"]
 >X3_T1 : ["string", "a"]
+>      : ^^^^^^^^^^^^^^^
 
 type X3_T2 = X3<() => 1>; // ["number", 1]
 >X3_T2 : ["number", 1]
+>      : ^^^^^^^^^^^^^
 
 type X3_T3 = X3<() => object>; // never
 >X3_T3 : never
+>      : ^^^^^
 
 // infer to instance type
 type X4<T extends new (...args: any[]) => any> =
 >X4 : X4<T>
+>   : ^^^^^
 >args : any[]
+>     : ^^^^^
 
     T extends new (...args: any[]) => (infer U extends { a: string }) ? ["string", U] :
 >args : any[]
+>     : ^^^^^
 >a : string
+>  : ^^^^^^
 
     T extends new (...args: any[]) => (infer U extends { a: number }) ? ["number", U] :
 >args : any[]
+>     : ^^^^^
 >a : number
+>  : ^^^^^^
 
     never;
 
 type X4_T1 = X4<new () => { a: "a" }>; // ["string", { a: "a" }]
 >X4_T1 : ["string", { a: "a"; }]
+>      : ^^^^^^^^^^^^^^^^   ^^^^
 >a : "a"
+>  : ^^^
 
 type X4_T2 = X4<new () => { a: 1 }>; // ["number", { a: 1 }]
 >X4_T2 : ["number", { a: 1; }]
+>      : ^^^^^^^^^^^^^^^^ ^^^^
 >a : 1
+>  : ^
 
 type X4_T3 = X4<new () => { a: object }>; // never
 >X4_T3 : never
+>      : ^^^^^
 >a : object
+>  : ^^^^^^
 
 // infer to type argument
 type X5<T> =
 >X5 : X5<T>
+>   : ^^^^^
 
     T extends Promise<infer U extends string> ? ["string", U] :
     T extends Promise<infer U extends number> ? ["number", U] :
@@ -100,232 +136,326 @@ type X5<T> =
 
 type X5_T1 = X5<Promise<"a" | "b">>; // ["string", "a" | "b"]
 >X5_T1 : ["string", "a" | "b"]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
 type X5_T2 = X5<Promise<1 | 2>>; // ["number", 1 | 2]
 >X5_T2 : ["number", 1 | 2]
+>      : ^^^^^^^^^^^^^^^^^
 
 type X5_T3 = X5<Promise<1n | 2n>>; // never
 >X5_T3 : never
+>      : ^^^^^
 
 // infer to property type
 type X6<T> =
 >X6 : X6<T>
+>   : ^^^^^
 
     T extends { a: infer U extends string } ? ["string", U] :
 >a : U
+>  : ^
 
     T extends { a: infer U extends number } ? ["number", U] :
 >a : U
+>  : ^
 
     never;
 
 type X6_T1 = X6<{ a: "a" }>; // ["string", "a"]
 >X6_T1 : ["string", "a"]
+>      : ^^^^^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 
 type X6_T2 = X6<{ a: 1 }>; // ["number", 1]
 >X6_T2 : ["number", 1]
+>      : ^^^^^^^^^^^^^
 >a : 1
+>  : ^
 
 type X6_T3 = X6<{ a: object }>; // never
 >X6_T3 : never
+>      : ^^^^^
 >a : object
+>  : ^^^^^^
 
 // infer twice with same constraint
 type X7<T> =
 >X7 : X7<T>
+>   : ^^^^^
 
     T extends { a: infer U extends string, b: infer U extends string } ? ["string", U] :
 >a : U
+>  : ^
 >b : U
+>  : ^
 
     T extends { a: infer U extends number, b: infer U extends number } ? ["number", U] :
 >a : U
+>  : ^
 >b : U
+>  : ^
 
     never;
 
 type X7_T1 = X7<{ a: "a", b: "b" }>; // ["string", "a" | "b"]
 >X7_T1 : ["string", "a" | "b"]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >b : "b"
+>  : ^^^
 
 type X7_T2 = X7<{ a: 1, b: 2 }>; // ["number", 1 | 2]
 >X7_T2 : ["number", 1 | 2]
+>      : ^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 
 type X7_T3 = X7<{ a: object, b: object }>; // never
 >X7_T3 : never
+>      : ^^^^^
 >a : object
+>  : ^^^^^^
 >b : object
+>  : ^^^^^^
 
 type X7_T4 = X7<{ a: "a", b: 1 }>; // never
 >X7_T4 : never
+>      : ^^^^^
 >a : "a"
+>  : ^^^
 >b : 1
+>  : ^
 
 // infer twice with missing second constraint (same behavior as class/interface)
 type X8<T> =
 >X8 : X8<T>
+>   : ^^^^^
 
     T extends { a: infer U extends string, b: infer U } ? ["string", U] :
 >a : U
+>  : ^
 >b : U
+>  : ^
 
     T extends { a: infer U extends number, b: infer U } ? ["number", U] :
 >a : U
+>  : ^
 >b : U
+>  : ^
 
     never;
 
 type X8_T1 = X8<{ a: "a", b: "b" }>; // ["string", "a" | "b"]
 >X8_T1 : ["string", "a" | "b"]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >b : "b"
+>  : ^^^
 
 type X8_T2 = X8<{ a: 1, b: 2 }>; // ["number", 1 | 2]
 >X8_T2 : ["number", 1 | 2]
+>      : ^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 
 type X8_T3 = X8<{ a: object, b: object }>; // never
 >X8_T3 : never
+>      : ^^^^^
 >a : object
+>  : ^^^^^^
 >b : object
+>  : ^^^^^^
 
 type X8_T4 = X8<{ a: "a", b: 1 }>; // never
 >X8_T4 : never
+>      : ^^^^^
 >a : "a"
+>  : ^^^
 >b : 1
+>  : ^
 
 // infer twice with missing first constraint (same behavior as class/interface)
 type X9<T> =
 >X9 : X9<T>
+>   : ^^^^^
 
     T extends { a: infer U, b: infer U extends string } ? ["string", U] :
 >a : U
+>  : ^
 >b : U
+>  : ^
 
     T extends { a: infer U, b: infer U extends number } ? ["number", U] :
 >a : U
+>  : ^
 >b : U
+>  : ^
 
     never;
 
 type X9_T1 = X9<{ a: "a", b: "b" }>; // ["string", "a" | "b"]
 >X9_T1 : ["string", "a" | "b"]
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >a : "a"
+>  : ^^^
 >b : "b"
+>  : ^^^
 
 type X9_T2 = X9<{ a: 1, b: 2 }>; // ["number", 1 | 2]
 >X9_T2 : ["number", 1 | 2]
+>      : ^^^^^^^^^^^^^^^^^
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 
 type X9_T3 = X9<{ a: object, b: object }>; // never
 >X9_T3 : never
+>      : ^^^^^
 >a : object
+>  : ^^^^^^
 >b : object
+>  : ^^^^^^
 
 type X9_T4 = X9<{ a: "a", b: 1 }>; // never
 >X9_T4 : never
+>      : ^^^^^
 >a : "a"
+>  : ^^^
 >b : 1
+>  : ^
 
 // Speculative lookahead for `infer T extends U ?`
 type X10<T> = T extends (infer U extends number ? 1 : 0) ? 1 : 0; // ok, parsed as conditional
 >X10 : X10<T>
+>    : ^^^^^^
 
 type X10_Y1<T> = X10<T extends number ? 1 : 0>;
 >X10_Y1 : X10_Y1<T>
+>       : ^^^^^^^^^
 
 type X10_T1_T1 = X10_Y1<number>;
 >X10_T1_T1 : 0
+>          : ^
 
 type X11<T> = T extends ((infer U) extends number ? 1 : 0) ? 1 : 0; // ok, parsed as conditional
 >X11 : X11<T>
+>    : ^^^^^^
 
 type X12<T> = T extends (infer U extends number) ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
 >X12 : X12<T>
+>    : ^^^^^^
 
 type X13<T> = T extends infer U extends number ? 1 : 0; // ok, parsed as `infer..extends` (conditional types not allowed in 'extends type')
 >X13 : X13<T>
+>    : ^^^^^^
 
 type X14<T> = T extends keyof infer U extends number ? 1 : 0; // ok, parsed as `infer..extends` (precedence wouldn't have parsed the `?` as part of a type operator)
 >X14 : X14<T>
+>    : ^^^^^^
 
 type X15<T> = T extends { [P in infer U extends keyof T ? 1 : 0]: 1; } ? 1 : 0; // ok, parsed as conditional
 >X15 : X15<T>
+>    : ^^^^^^
 
 type X16<T> = T extends { [P in infer U extends keyof T]: 1; } ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
 >X16 : X16<T>
+>    : ^^^^^^
 
 type X17<T> = T extends { [P in keyof T as infer U extends P ? 1 : 0]: 1; } ? 1 : 0; // ok, parsed as conditional
 >X17 : X17<T>
+>    : ^^^^^^
 
 type X18<T> = T extends { [P in keyof T as infer U extends P]: 1; } ? 1 : 0; // ok, parsed as `infer..extends` (no trailing `?`)
 >X18 : X18<T>
+>    : ^^^^^^
 
 type X19<T extends string | number> = T extends (infer U extends number) ? [T, U] : never;
 >X19 : X19<T>
+>    : ^^^^^^
 
 type X19_T1 = X19<"a">; // never
 >X19_T1 : never
+>       : ^^^^^
 
 type X19_T2 = X19<1>; // [1, 1]
 >X19_T2 : [1, 1]
+>       : ^^^^^^
 
 type X19_T3 = X19<1 | "a">; // [1, 1]
 >X19_T3 : [1, 1]
+>       : ^^^^^^
 
 type X20<T> = T extends (infer U extends number) ? T extends (infer V extends U) ? [T, U, V] : never : never;
 >X20 : X20<T>
+>    : ^^^^^^
 
 type X20_T1 = X20<1 | "a">; // [1, 1, 1]
 >X20_T1 : [1, 1, 1]
+>       : ^^^^^^^^^
 
 type X21<T, N extends number> = T extends (infer U extends N) ? [T, U] : never;
 >X21 : X21<T, N>
+>    : ^^^^^^^^^
 
 type X21_T1 = X21<1, 1>; // [1, 1]
 >X21_T1 : [1, 1]
+>       : ^^^^^^
 
 type X21_T2 = X21<1 | "a", 1>; // [1, 1]
 >X21_T2 : [1, 1]
+>       : ^^^^^^
 
 type X21_T3 = X21<1 | 2, 1>; // [1, 1]
 >X21_T3 : [1, 1]
+>       : ^^^^^^
 
 type X21_T4 = X21<1 | 2, 2 | 3>; // [2, 2]
 >X21_T4 : [2, 2]
+>       : ^^^^^^
 
 type X21_T5 = X21<1 | 2, 3>; // never
 >X21_T5 : never
+>       : ^^^^^
 
 // from mongoose
 type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
 >IfEquals : IfEquals<X, Y, A, B>
+>         : ^^^^^^^^^^^^^^^^^^^^
 
 declare const x1: <T>() => (T extends infer U extends number ? 1 : 0);
->x1 : <T>() => T extends infer U extends number ? 1 : 0
+>x1 : <T>() => (T extends infer U extends number ? 1 : 0)
+>   : ^ ^^^^^^^                                          
 
 function f1() {
->f1 : () => <T>() => T extends infer U extends number ? 1 : 0
+>f1 : () => <T>() => (T extends infer U extends number ? 1 : 0)
+>   : ^^^^^^^ ^^^^^^^                                          
 
     return x1;
->x1 : <T>() => T extends infer U extends number ? 1 : 0
+>x1 : <T>() => (T extends infer U extends number ? 1 : 0)
+>   : ^ ^^^^^^^                                          
 }
 
 type ExpectNumber<T extends number> = T;
 >ExpectNumber : T
+>             : ^
 
 declare const x2: <T>() => (T extends ExpectNumber<infer U> ? 1 : 0);
->x2 : <T>() => T extends infer U extends number ? 1 : 0
+>x2 : <T>() => (T extends ExpectNumber<infer U> ? 1 : 0)
+>   : ^ ^^^^^^^                                         
 
 function f2() {
->f2 : () => <T>() => T extends infer U extends number ? 1 : 0
+>f2 : () => <T>() => (T extends ExpectNumber<infer U> ? 1 : 0)
+>   : ^^^^^^^ ^^^^^^^                                         
 
     return x2;
->x2 : <T>() => T extends infer U extends number ? 1 : 0
+>x2 : <T>() => (T extends ExpectNumber<infer U> ? 1 : 0)
+>   : ^ ^^^^^^^                                         
 }

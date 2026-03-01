@@ -1,73 +1,112 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance2.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance2.ts] ////
+
+=== typeSatisfaction_propertyValueConformance2.ts ===
 type Facts = { [key: string]: boolean };
->Facts : { [key: string]: boolean; }
+>Facts : Facts
+>      : ^^^^^
 >key : string
+>    : ^^^^^^
 
 declare function checkTruths(x: Facts): void;
 >checkTruths : (x: Facts) => void
+>            : ^ ^^     ^^^^^    
 >x : Facts
+>  : ^^^^^
 
 declare function checkM(x: { m: boolean }): void;
->checkM : (x: {    m: boolean;}) => void
+>checkM : (x: { m: boolean; }) => void
+>       : ^ ^^               ^^^^^    
 >x : { m: boolean; }
+>  : ^^^^^       ^^^
 >m : boolean
+>  : ^^^^^^^
 
 const x = {
 >x : { m: boolean; }
+>  : ^^^^^^^^^^^^^^^
 >{    m: true} : { m: boolean; }
+>              : ^^^^^^^^^^^^^^^
 
     m: true
 >m : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
 };
 
 // Should be OK
 checkTruths(x);
 >checkTruths(x) : void
+>               : ^^^^
 >checkTruths : (x: Facts) => void
+>            : ^ ^^     ^^^^^    
 >x : { m: boolean; }
+>  : ^^^^^^^^^^^^^^^
 
 // Should be OK
 checkM(x);
 >checkM(x) : void
+>          : ^^^^
 >checkM : (x: { m: boolean; }) => void
+>       : ^ ^^               ^^^^^    
 >x : { m: boolean; }
+>  : ^^^^^^^^^^^^^^^
 
 console.log(x.z);
 >console.log(x.z) : void
+>                 : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x.z : any
+>    : ^^^
 >x : { m: boolean; }
+>  : ^^^^^^^^^^^^^^^
 >z : any
+>  : ^^^
 
 // Should be OK under --noUncheckedIndexedAccess
 const m: boolean = x.m;
 >m : boolean
+>  : ^^^^^^^
 >x.m : boolean
+>    : ^^^^^^^
 >x : { m: boolean; }
+>  : ^^^^^^^^^^^^^^^
 >m : boolean
+>  : ^^^^^^^
 
 // Should be 'm'
 type M = keyof typeof x;
 >M : "m"
+>  : ^^^
 >x : { m: boolean; }
+>  : ^^^^^^^^^^^^^^^
 
 // Should be able to detect a failure here
 const x2 = {
 >x2 : { m: true; s: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    m: true,    s: "false"} satisfies Facts : { m: true; s: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    m: true,    s: "false"} : { m: true; s: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^
 
     m: true,
 >m : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
     s: "false"
 >s : string
+>  : ^^^^^^
 >"false" : "false"
+>        : ^^^^^^^
 
 } satisfies Facts;
 

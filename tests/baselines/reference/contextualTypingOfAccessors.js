@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingOfAccessors.ts] ////
+
 //// [contextualTypingOfAccessors.ts]
 // not contextually typing accessors
 
@@ -14,11 +16,12 @@ x = {
 
 
 //// [contextualTypingOfAccessors.js]
+"use strict";
 // not contextually typing accessors
 var x;
 x = {
     get foo() {
-        return function (n) { return n; };
+        return (n) => n;
     },
     set foo(x) { }
 };

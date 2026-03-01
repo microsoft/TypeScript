@@ -1,19 +1,26 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importHelpersWithImportStarAs.ts] ////
+
+=== a.ts ===
 export class A { }
 >A : A
+>  : ^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 export { a };
 >a : typeof a
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 declare module "tslib" {
 >"tslib" : typeof import("tslib")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     function __importStar(m: any): void;
 >__importStar : (m: any) => void
+>             : ^ ^^   ^^^^^    
 >m : any
 }

@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/tslibMultipleMissingHelper.ts] ////
+
+=== /package1/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : Symbol(foo, Decl(index.ts, 0, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+async function bar(): Promise<void> {}
+>bar : Symbol(bar, Decl(index.ts, 1, 38))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+=== /package1/other.ts ===
+export {};
+export async function noop(): Promise<void> {}
+>noop : Symbol(noop, Decl(other.ts, 0, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export function spread({ a, ...rest }: { a: number, b: number}) {
+>spread : Symbol(spread, Decl(other.ts, 1, 46))
+>a : Symbol(a, Decl(other.ts, 2, 24))
+>rest : Symbol(rest, Decl(other.ts, 2, 27))
+>a : Symbol(a, Decl(other.ts, 2, 40))
+>b : Symbol(b, Decl(other.ts, 2, 51))
+
+    return { c: "c", ...rest };
+>c : Symbol(c, Decl(other.ts, 3, 12))
+>rest : Symbol(rest, Decl(other.ts, 2, 27))
+}
+
+=== /package2/index.ts ===
+export {};
+async function foo(): Promise<void> {}
+>foo : Symbol(foo, Decl(index.ts, 0, 10))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+=== /package1/node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, --, --))
+
+=== /package2/node_modules/tslib/tslib.d.ts ===
+export const notAHelper: any;
+>notAHelper : Symbol(notAHelper, Decl(tslib.d.ts, --, --))
+

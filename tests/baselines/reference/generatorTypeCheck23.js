@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck23.ts] ////
+
 //// [generatorTypeCheck23.ts]
 class Foo { x: number }
 class Bar extends Foo { y: string }
@@ -12,6 +14,7 @@ function* g3() {
 }
 
 //// [generatorTypeCheck23.js]
+"use strict";
 class Foo {
 }
 class Bar extends Foo {

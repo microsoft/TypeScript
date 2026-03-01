@@ -1,120 +1,85 @@
-namespace ts {
-    describe("unittests:: FactoryAPI", () => {
-        function assertSyntaxKind(node: Node, expected: SyntaxKind) {
-            assert.strictEqual(node.kind, expected, `Actual: ${Debug.formatSyntaxKind(node.kind)} Expected: ${Debug.formatSyntaxKind(expected)}`);
-        }
-        describe("factory.createExportAssignment", () => {
-            it("parenthesizes default export if necessary", () => {
-                function checkExpression(expression: Expression) {
-                    const node = factory.createExportAssignment(
-                        /*modifiers*/ undefined,
-                        /*isExportEquals*/ false,
-                        expression,
-                    );
-                    assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);
-                }
+import * as ts from "../_namespaces/ts.js";
 
-                const clazz = factory.createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    factory.createPropertyDeclaration([factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
-                ]);
-                checkExpression(clazz);
-                checkExpression(factory.createPropertyAccessExpression(clazz, "prop"));
+describe("unittests:: FactoryAPI", () => {
+    function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
+        assert.strictEqual(node.kind, expected, `Actual: ${ts.Debug.formatSyntaxKind(node.kind)} Expected: ${ts.Debug.formatSyntaxKind(expected)}`);
+    }
+    describe("factory.createExportAssignment", () => {
+        it("parenthesizes default export if necessary", () => {
+            function checkExpression(expression: ts.Expression) {
+                const node = ts.factory.createExportAssignment(
+                    /*modifiers*/ undefined,
+                    /*isExportEquals*/ false,
+                    expression,
+                );
+                assertSyntaxKind(node.expression, ts.SyntaxKind.ParenthesizedExpression);
+            }
 
-                const func = factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, factory.createBlock([]));
-                checkExpression(func);
-                checkExpression(factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
-                checkExpression(factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, factory.createNoSubstitutionTemplateLiteral("")));
+            const clazz = ts.factory.createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                ts.factory.createPropertyDeclaration([ts.factory.createToken(ts.SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.factory.createStringLiteral("1")),
+            ]);
+            checkExpression(clazz);
+            checkExpression(ts.factory.createPropertyAccessExpression(clazz, "prop"));
 
-                checkExpression(factory.createBinaryExpression(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
-                checkExpression(factory.createCommaListExpression([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
-            });
+            const func = ts.factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, ts.factory.createBlock([]));
+            checkExpression(func);
+            checkExpression(ts.factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
+            checkExpression(ts.factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, ts.factory.createNoSubstitutionTemplateLiteral("")));
+
+            checkExpression(ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")));
+            checkExpression(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
         });
+    });
 
-        describe("factory.createArrowFunction", () => {
-            it("parenthesizes concise body if necessary", () => {
-                function checkBody(body: ConciseBody) {
-                    const node = factory.createArrowFunction(
-                        /*modifiers*/ undefined,
-                        /*typeParameters*/ undefined,
-                        [],
-                        /*type*/ undefined,
-                        /*equalsGreaterThanToken*/ undefined,
-                        body,
-                    );
-                    assertSyntaxKind(node.body, SyntaxKind.ParenthesizedExpression);
-                }
-
-                checkBody(factory.createObjectLiteralExpression());
-                checkBody(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop"));
-                checkBody(factory.createAsExpression(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop"), factory.createTypeReferenceNode("T", /*typeArguments*/ undefined)));
-                checkBody(factory.createNonNullExpression(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop")));
-                checkBody(factory.createCommaListExpression([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
-                checkBody(factory.createBinaryExpression(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
-            });
-        });
-
-        describe("createBinaryExpression", () => {
-            it("parenthesizes arrow function in RHS if necessary", () => {
-                const lhs = factory.createIdentifier("foo");
-                const rhs = factory.createArrowFunction(
+    describe("factory.createArrowFunction", () => {
+        it("parenthesizes concise body if necessary", () => {
+            function checkBody(body: ts.ConciseBody) {
+                const node = ts.factory.createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
                     [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
-                    factory.createBlock([]),
-                );
-                function checkRhs(operator: BinaryOperator, expectParens: boolean) {
-                    const node = factory.createBinaryExpression(lhs, operator, rhs);
-                    assertSyntaxKind(node.right, expectParens ? SyntaxKind.ParenthesizedExpression : SyntaxKind.ArrowFunction);
-                }
-
-                checkRhs(SyntaxKind.CommaToken, /*expectParens*/ false);
-                checkRhs(SyntaxKind.EqualsToken, /*expectParens*/ false);
-                checkRhs(SyntaxKind.PlusEqualsToken, /*expectParens*/ false);
-                checkRhs(SyntaxKind.BarBarToken, /*expectParens*/ true);
-                checkRhs(SyntaxKind.AmpersandAmpersandToken, /*expectParens*/ true);
-                checkRhs(SyntaxKind.QuestionQuestionToken, /*expectParens*/ true);
-                checkRhs(SyntaxKind.EqualsEqualsToken, /*expectParens*/ true);
-                checkRhs(SyntaxKind.BarBarEqualsToken, /*expectParens*/ false);
-                checkRhs(SyntaxKind.AmpersandAmpersandEqualsToken, /*expectParens*/ false);
-                checkRhs(SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
-            });
-        });
-
-        describe("deprecations", () => {
-            beforeEach(() => {
-                Debug.enableDeprecationWarnings = false;
-            });
-
-            afterEach(() => {
-                Debug.enableDeprecationWarnings = true;
-            });
-
-            // https://github.com/microsoft/TypeScript/issues/50259
-            it("deprecated createConstructorDeclaration overload does not throw", () => {
-                const body = factory.createBlock([]);
-                assert.doesNotThrow(() => factory.createConstructorDeclaration(
-                    /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
-                    /*parameters*/ [],
                     body,
-                ));
-            });
+                );
+                assertSyntaxKind(node.body, ts.SyntaxKind.ParenthesizedExpression);
+            }
 
-            // https://github.com/microsoft/TypeScript/issues/50259
-            it("deprecated updateConstructorDeclaration overload does not throw", () => {
-                const body = factory.createBlock([]);
-                const ctor = factory.createConstructorDeclaration(/*modifiers*/ undefined, [], body);
-                assert.doesNotThrow(() => factory.updateConstructorDeclaration(
-                    ctor,
-                    ctor.decorators,
-                    ctor.modifiers,
-                    ctor.parameters,
-                    ctor.body,
-                ));
-            });
+            checkBody(ts.factory.createObjectLiteralExpression());
+            checkBody(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"));
+            checkBody(ts.factory.createAsExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"), ts.factory.createTypeReferenceNode("T", /*typeArguments*/ undefined)));
+            checkBody(ts.factory.createNonNullExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop")));
+            checkBody(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
+            checkBody(ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")));
         });
-
     });
-}
+
+    describe("createBinaryExpression", () => {
+        it("parenthesizes arrow function in RHS if necessary", () => {
+            const lhs = ts.factory.createIdentifier("foo");
+            const rhs = ts.factory.createArrowFunction(
+                /*modifiers*/ undefined,
+                /*typeParameters*/ undefined,
+                [],
+                /*type*/ undefined,
+                /*equalsGreaterThanToken*/ undefined,
+                ts.factory.createBlock([]),
+            );
+            function checkRhs(operator: ts.BinaryOperator, expectParens: boolean) {
+                const node = ts.factory.createBinaryExpression(lhs, operator, rhs);
+                assertSyntaxKind(node.right, expectParens ? ts.SyntaxKind.ParenthesizedExpression : ts.SyntaxKind.ArrowFunction);
+            }
+
+            checkRhs(ts.SyntaxKind.CommaToken, /*expectParens*/ false);
+            checkRhs(ts.SyntaxKind.EqualsToken, /*expectParens*/ false);
+            checkRhs(ts.SyntaxKind.PlusEqualsToken, /*expectParens*/ false);
+            checkRhs(ts.SyntaxKind.BarBarToken, /*expectParens*/ true);
+            checkRhs(ts.SyntaxKind.AmpersandAmpersandToken, /*expectParens*/ true);
+            checkRhs(ts.SyntaxKind.QuestionQuestionToken, /*expectParens*/ true);
+            checkRhs(ts.SyntaxKind.EqualsEqualsToken, /*expectParens*/ true);
+            checkRhs(ts.SyntaxKind.BarBarEqualsToken, /*expectParens*/ false);
+            checkRhs(ts.SyntaxKind.AmpersandAmpersandEqualsToken, /*expectParens*/ false);
+            checkRhs(ts.SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
+        });
+    });
+});

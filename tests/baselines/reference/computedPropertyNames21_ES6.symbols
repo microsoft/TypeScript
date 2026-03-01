@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES6.ts] ////
+
+=== computedPropertyNames21_ES6.ts ===
 class C {
 >C : Symbol(C, Decl(computedPropertyNames21_ES6.ts, 0, 0))
 
@@ -9,4 +11,7 @@ class C {
     }
     [this.bar()]() { }
 >[this.bar()] : Symbol(C[this.bar()], Decl(computedPropertyNames21_ES6.ts, 3, 5))
+>this.bar : Symbol(C.bar, Decl(computedPropertyNames21_ES6.ts, 0, 9))
+>this : Symbol(C, Decl(computedPropertyNames21_ES6.ts, 0, 0))
+>bar : Symbol(C.bar, Decl(computedPropertyNames21_ES6.ts, 0, 9))
 }

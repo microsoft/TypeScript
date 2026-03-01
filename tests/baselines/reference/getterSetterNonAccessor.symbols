@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getterSetterNonAccessor.ts ===
+//// [tests/cases/compiler/getterSetterNonAccessor.ts] ////
+
+=== getterSetterNonAccessor.ts ===
 function getFunc():any{return 0;}
 >getFunc : Symbol(getFunc, Decl(getterSetterNonAccessor.ts, 0, 0))
 

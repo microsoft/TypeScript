@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts] ////
+
 //// [typeAssertionsWithUnionTypes01.ts]
 interface I1 {
     p1: number
@@ -18,6 +20,7 @@ var d = <I1>y;
 
 
 //// [typeAssertionsWithUnionTypes01.js]
+"use strict";
 var x = { p1: 10, p2: 20 };
 var y = x;
 var z = x;

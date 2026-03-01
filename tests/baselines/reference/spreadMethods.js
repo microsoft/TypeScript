@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadMethods.ts] ////
+
 //// [spreadMethods.ts]
 class K {
     p = 12;
@@ -42,6 +44,7 @@ sso.g; // ok
 
 
 //// [spreadMethods.js]
+"use strict";
 class K {
     constructor() {
         this.p = 12;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambiguousCallsWhereReturnTypesAgree.ts] ////
+
 //// [ambiguousCallsWhereReturnTypesAgree.ts]
 class TestClass {
     public bar(x: string): void;
@@ -29,24 +31,19 @@ class TestClass2 {
 
 
 //// [ambiguousCallsWhereReturnTypesAgree.js]
-var TestClass = /** @class */ (function () {
-    function TestClass() {
+"use strict";
+class TestClass {
+    bar(x) {
     }
-    TestClass.prototype.bar = function (x) {
-    };
-    TestClass.prototype.foo = function (x) {
+    foo(x) {
         this.bar(x); // should not error
-    };
-    return TestClass;
-}());
-var TestClass2 = /** @class */ (function () {
-    function TestClass2() {
     }
-    TestClass2.prototype.bar = function (x) {
+}
+class TestClass2 {
+    bar(x) {
         return 0;
-    };
-    TestClass2.prototype.foo = function (x) {
+    }
+    foo(x) {
         return this.bar(x); // should not error
-    };
-    return TestClass2;
-}());
+    }
+}

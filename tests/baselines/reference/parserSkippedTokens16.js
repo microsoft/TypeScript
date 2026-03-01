@@ -1,14 +1,17 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts] ////
+
 //// [parserSkippedTokens16.ts]
 foo(): Bar { }
 function Foo      () ¬   { }
 4+:5
-module M {
+namespace M {
 function a(
     : T) { }
 }
 var x       =
 
 //// [parserSkippedTokens16.js]
+"use strict";
 foo();
 Bar;
 { }

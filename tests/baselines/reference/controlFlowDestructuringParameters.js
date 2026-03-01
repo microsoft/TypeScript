@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowDestructuringParameters.ts] ////
+
 //// [controlFlowDestructuringParameters.ts]
 // Repro for #8376
 
@@ -8,8 +10,6 @@
 
 
 //// [controlFlowDestructuringParameters.js]
+"use strict";
 // Repro for #8376
-[{ x: 1 }].map(function (_a) {
-    var x = _a.x;
-    return x;
-});
+[{ x: 1 }].map(({ x }) => x);

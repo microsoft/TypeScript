@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypes1.ts] ////
+
 //// [literalTypes1.ts]
 let zero: 0 = 0;
 let one: 1 = 1;
@@ -89,10 +91,11 @@ function f5(x: string | number | boolean) {
 }
 
 //// [literalTypes1.js]
-var zero = 0;
-var one = 1;
-var two = 2;
-var oneOrTwo = 1;
+"use strict";
+let zero = 0;
+let one = 1;
+let two = 2;
+let oneOrTwo = 1;
 function f1(x) {
     switch (x) {
         case zero:

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/primtiveTypesAreIdentical.ts] ////
+
 //// [primtiveTypesAreIdentical.ts]
 // primitive types are identical to themselves so these overloads will all cause errors
 
@@ -32,6 +34,7 @@ function foo7(x: void);
 function foo7(x: any) { }
 
 //// [primtiveTypesAreIdentical.js]
+"use strict";
 // primitive types are identical to themselves so these overloads will all cause errors
 function foo1(x) { }
 function foo2(x) { }

@@ -1,8 +1,8 @@
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts(10,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts(10,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+logicalAssignment7.ts(10,5): error TS2532: Object is possibly 'undefined'.
+logicalAssignment7.ts(10,40): error TS2345: Argument of type '100' is not assignable to parameter of type 'never'.
 
 
-==== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts (2 errors) ====
+==== logicalAssignment7.ts (2 errors) ====
     function foo1(results: number[] | undefined, results1: number[] | undefined) {
         (results ||= results1 ||= []).push(100);
     }
@@ -16,6 +16,6 @@ tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts(10,40): e
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2532: Object is possibly 'undefined'.
                                            ~~~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '100' is not assignable to parameter of type 'never'.
     }
     

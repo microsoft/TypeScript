@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsdocParameterParsingInvalidName.ts ===
+//// [tests/cases/compiler/jsdocParameterParsingInvalidName.ts] ////
+
+=== jsdocParameterParsingInvalidName.ts ===
 class c {
 >c : Symbol(c, Decl(jsdocParameterParsingInvalidName.ts, 0, 0))
 

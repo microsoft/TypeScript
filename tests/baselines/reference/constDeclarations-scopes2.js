@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-scopes2.ts] ////
+
 //// [constDeclarations-scopes2.ts]
 // global
 const c = "string";
@@ -15,6 +17,7 @@ for (const c = 0; c < 10; n = c ) {
 
 
 //// [constDeclarations-scopes2.js]
+"use strict";
 // global
 const c = "string";
 var n;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts] ////
+
 //// [badInferenceLowerPriorityThanGoodInference.ts]
 // Repro from #13118
 
@@ -24,13 +26,14 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 
 
 //// [badInferenceLowerPriorityThanGoodInference.js]
+"use strict";
 // Repro from #13118
-var result = canYouInferThis(function () { return ({
+const result = canYouInferThis(() => ({
     a: { BLAH: 33 },
-    b: function (x) { }
-}); });
+    b: x => { }
+}));
 result.BLAH;
 // Repro from #26629
 function goofus(f) { }
-goofus(function (a) { return ({ dog: function () { return a; } }); });
-goofus(function (a) { return ({ dog: function () { return a; } }); });
+goofus((a) => ({ dog() { return a; } }));
+goofus((a) => ({ dog: function () { return a; } }));

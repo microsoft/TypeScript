@@ -16,4 +16,5 @@ interface Third extends JQueryEventObjectTest, SecondEvent {}
 
 
 //// [app.js]
+"use strict";
 ///<reference path='jquery.d.ts' />

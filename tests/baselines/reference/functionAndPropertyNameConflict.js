@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionAndPropertyNameConflict.ts] ////
+
 //// [functionAndPropertyNameConflict.ts]
 class C65 {
     public aaaaa() { }
@@ -7,16 +9,10 @@ class C65 {
 }
 
 //// [functionAndPropertyNameConflict.js]
-var C65 = /** @class */ (function () {
-    function C65() {
+"use strict";
+class C65 {
+    aaaaa() { }
+    get aaaaa() {
+        return 1;
     }
-    C65.prototype.aaaaa = function () { };
-    Object.defineProperty(C65.prototype, "aaaaa", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C65;
-}());
+}

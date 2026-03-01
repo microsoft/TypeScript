@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCloneReturnTypes2.ts] ////
+
 //// [genericCloneReturnTypes2.ts]
 class MyList<T> {
     public size: number;
@@ -16,16 +18,16 @@ var c: MyList<string> = a.clone(); // bug was there was an error on this line
 var d: MyList<number> = a.clone(); // error
 
 //// [genericCloneReturnTypes2.js]
-var MyList = /** @class */ (function () {
-    function MyList(n) {
+"use strict";
+class MyList {
+    constructor(n) {
         this.size = n;
         this.data = new Array(this.size);
     }
-    MyList.prototype.clone = function () {
+    clone() {
         return new MyList(this.size);
-    };
-    return MyList;
-}());
+    }
+}
 var a;
 var b = a.clone(); // ok
 var c = a.clone(); // bug was there was an error on this line

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateConstructSignature2.ts] ////
+
 //// [duplicateConstructSignature2.ts]
 interface I<T> {
     (x: T): number;
@@ -5,3 +7,4 @@ interface I<T> {
 }
 
 //// [duplicateConstructSignature2.js]
+"use strict";

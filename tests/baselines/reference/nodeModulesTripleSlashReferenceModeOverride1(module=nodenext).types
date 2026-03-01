@@ -1,17 +1,23 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverride1.ts] ////
+
 === /index.ts ===
 /// <reference types="pkg" />
 foo;
 >foo : any
+>    : ^^^
 
 bar; // bar should resolve while foo should not, since index.js is cjs
 >bar : number
+>    : ^^^^^^
 
 export {};
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     var bar: number;
 >bar : number
+>    : ^^^^^^
 }

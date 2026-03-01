@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 // return type of a function with multiple returns is the BCT of each return statement

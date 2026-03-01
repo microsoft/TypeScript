@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instantiateContextualTypes.ts] ////
+
 //// [instantiateContextualTypes.ts]
 // #6611
 

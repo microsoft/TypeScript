@@ -16,5 +16,4 @@
 // not JS/TS, but if we can, you should be able to jump to it.
 //// import [|/*2*/"./stylez.css"|];
 
-verify.goToDefinition("1", { marker: "1d", unverified: true });
-verify.goToDefinition("2", { marker: "2d", unverified: true });
+verify.baselineGoToDefinition("1", "2");

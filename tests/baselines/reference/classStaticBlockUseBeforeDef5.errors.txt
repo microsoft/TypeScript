@@ -1,0 +1,14 @@
+classStaticBlockUseBeforeDef5.ts(3,14): error TS2729: Property 'x' is used before its initialization.
+
+
+==== classStaticBlockUseBeforeDef5.ts (1 errors) ====
+    class C {
+        static {
+            this.x = 1;
+                 ~
+!!! error TS2729: Property 'x' is used before its initialization.
+!!! related TS2728 classStaticBlockUseBeforeDef5.ts:5:21: 'x' is declared here.
+        }
+        static accessor x;
+    }
+    

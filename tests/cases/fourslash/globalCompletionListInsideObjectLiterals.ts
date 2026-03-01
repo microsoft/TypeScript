@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
-////module ObjectLiterals {
+// @lib: es5
+
+////namespace ObjectLiterals {
 ////    interface MyPoint {
 ////        x1: number;
 ////        y1: number;

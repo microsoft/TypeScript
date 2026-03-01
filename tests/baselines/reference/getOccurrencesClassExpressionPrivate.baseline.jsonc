@@ -1,0 +1,82 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}private|] foo;
+//     [|{| kind: "none" |}private|] private;
+//     constructor([|{| kind: "none" |}private|] y: string, public x: string) {
+//     }
+//     [|{| kind: "none" |}private|] method() { }
+//     public method2() { }
+//     [|{| kind: "none" |}private|] static static() { }
+// }
+// 
+// let B = class D {
+// --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|{| kind: "none" |}private|] foo;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}private|] private;
+//     constructor([|{| kind: "none" |}private|] y: string, public x: string) {
+//     }
+//     [|{| kind: "none" |}private|] method() { }
+//     public method2() { }
+//     [|{| kind: "none" |}private|] static static() { }
+// }
+// 
+// let B = class D {
+// --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|{| kind: "none" |}private|] foo;
+//     [|{| kind: "none" |}private|] private;
+//     constructor(/*HIGHLIGHTS*/[|{| kind: "none" |}private|] y: string, public x: string) {
+//     }
+//     [|{| kind: "none" |}private|] method() { }
+//     public method2() { }
+//     [|{| kind: "none" |}private|] static static() { }
+// }
+// 
+// let B = class D {
+// --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|{| kind: "none" |}private|] foo;
+//     [|{| kind: "none" |}private|] private;
+//     constructor([|{| kind: "none" |}private|] y: string, public x: string) {
+//     }
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}private|] method() { }
+//     public method2() { }
+//     [|{| kind: "none" |}private|] static static() { }
+// }
+// 
+// let B = class D {
+// --- (line: 12) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionPrivate.ts ===
+// let A = class Foo {
+//     [|{| kind: "none" |}private|] foo;
+//     [|{| kind: "none" |}private|] private;
+//     constructor([|{| kind: "none" |}private|] y: string, public x: string) {
+//     }
+//     [|{| kind: "none" |}private|] method() { }
+//     public method2() { }
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}private|] static static() { }
+// }
+// 
+// let B = class D {
+// --- (line: 12) skipped ---

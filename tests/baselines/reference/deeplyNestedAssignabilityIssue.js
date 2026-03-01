@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedAssignabilityIssue.ts] ////
+
 //// [deeplyNestedAssignabilityIssue.ts]
 interface A {
     a: number;
@@ -31,7 +33,8 @@ const x: Large = {
 
 
 //// [deeplyNestedAssignabilityIssue.js]
-var x = {
+"use strict";
+const x = {
     something: {
         another: {
             more: {

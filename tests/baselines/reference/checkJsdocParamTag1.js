@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocParamTag1.ts] ////
+
 //// [0.js]
 // @ts-check
 /**
@@ -11,6 +13,7 @@ foo(1);
 foo(1, "hi");
 
 //// [0.js]
+"use strict";
 // @ts-check
 /**
  * @param {number=} n

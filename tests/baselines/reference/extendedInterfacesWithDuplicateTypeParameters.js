@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts] ////
+
 //// [extendedInterfacesWithDuplicateTypeParameters.ts]
 interface InterfaceWithMultipleTypars<A, A> { // should error
 	bar(): void;
@@ -12,3 +14,4 @@ interface InterfaceWithSomeTypars<C, C> { // should error
 }
 
 //// [extendedInterfacesWithDuplicateTypeParameters.js]
+"use strict";

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts] ////
+
 //// [classStaticBlock8.ts]
 function foo (v: number) {
     label: while (v) {
@@ -50,14 +52,12 @@ function foo (v: number) {
 
 
 //// [classStaticBlock8.js]
+"use strict";
 function foo(v) {
     label: while (v) {
-        var C_1 = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-        (function () {
+        class C {
+        }
+        (() => {
             if (v === 1) {
                 break label;
             }
@@ -84,12 +84,9 @@ function foo(v) {
             continue;
         }
     }
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    (function () {
+    class C {
+    }
+    (() => {
         outer: break outer; // valid
         loop: while (v) {
             if (v === 1)

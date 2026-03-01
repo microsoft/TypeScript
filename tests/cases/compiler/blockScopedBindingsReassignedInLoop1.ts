@@ -1,3 +1,4 @@
+// @target: es2015
 declare function use(n: number): void;
 (function () {
   'use strict'

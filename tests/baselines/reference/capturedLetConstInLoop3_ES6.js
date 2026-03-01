@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop3_ES6.ts] ////
+
 //// [capturedLetConstInLoop3_ES6.ts]
 ///=========let
 declare function use(a: any);
@@ -218,6 +220,7 @@ function foo8_c(x) {
 }
 
 //// [capturedLetConstInLoop3_ES6.js]
+"use strict";
 function foo0(x) {
     for (let x of []) {
         var v = x;

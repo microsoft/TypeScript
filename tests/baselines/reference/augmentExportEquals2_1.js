@@ -23,11 +23,11 @@ let a: x.A; // should not work
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    var a; // should not work
+    Object.defineProperty(exports, "__esModule", { value: true });
+    let a; // should not work
 });

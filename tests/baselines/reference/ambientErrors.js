@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientErrors.ts] ////
+
 //// [ambientErrors.ts]
 // Ambient variable with an initializer 
 declare var x = 4;
@@ -31,7 +33,7 @@ declare enum E2 {
 }
 
 // Ambient module with initializers for values, bodies for functions / classes
-declare module M1 {
+declare namespace M1 {
     var x = 3;
     function fn() { }
     class C {
@@ -44,7 +46,7 @@ declare module M1 {
 }
 
 // Ambient external module not in the global module
-module M2 {
+namespace M2 {
     declare module 'nope' { }
 }
 
@@ -60,4 +62,5 @@ declare module 'bar' {
 
 
 //// [ambientErrors.js]
+"use strict";
 ;

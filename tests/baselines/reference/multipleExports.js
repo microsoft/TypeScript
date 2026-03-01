@@ -1,11 +1,13 @@
+//// [tests/cases/compiler/multipleExports.ts] ////
+
 //// [multipleExports.ts]
-export module M {
+export namespace M {
     export var v = 0;
     export let x;
 }
 
 const x = 0;
-export module M {
+export namespace M {
     v;
     export {x};
 }
@@ -13,13 +15,13 @@ export module M {
 
 //// [multipleExports.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
 var M;
 (function (M) {
     M.v = 0;
-})(M = exports.M || (exports.M = {}));
-var x = 0;
+})(M || (exports.M = M = {}));
+const x = 0;
 (function (M) {
     M.v;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));

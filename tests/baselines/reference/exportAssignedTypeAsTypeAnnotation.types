@@ -1,17 +1,23 @@
-=== tests/cases/compiler/exportAssignedTypeAsTypeAnnotation_1.ts ===
+//// [tests/cases/compiler/exportAssignedTypeAsTypeAnnotation.ts] ////
+
+=== exportAssignedTypeAsTypeAnnotation_1.ts ===
 ///<reference path='exportAssignedTypeAsTypeAnnotation_0.ts'/>
 import test = require('exportAssignedTypeAsTypeAnnotation_0');
 >test : any
+>     : ^^^
 
 var t2: test; // should not raise a 'container type' error
 >t2 : test
+>   : ^^^^
 
-=== tests/cases/compiler/exportAssignedTypeAsTypeAnnotation_0.ts ===
+=== exportAssignedTypeAsTypeAnnotation_0.ts ===
 interface x {
     (): Date;
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 export = x;
 >x : x
+>  : ^
  

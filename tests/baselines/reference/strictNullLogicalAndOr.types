@@ -1,56 +1,96 @@
-=== tests/cases/compiler/strictNullLogicalAndOr.ts ===
+//// [tests/cases/compiler/strictNullLogicalAndOr.ts] ////
+
+=== strictNullLogicalAndOr.ts ===
 // Repro from #9113
 
 let sinOrCos = Math.random() < .5;
 >sinOrCos : boolean
+>         : ^^^^^^^
 >Math.random() < .5 : boolean
+>                   : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >.5 : 0.5
+>   : ^^^
 
 let choice = sinOrCos && Math.sin || Math.cos;
 >choice : (x: number) => number
+>       : ^ ^^      ^^^^^      
 >sinOrCos && Math.sin || Math.cos : (x: number) => number
+>                                 : ^ ^^      ^^^^^      
 >sinOrCos && Math.sin : false | ((x: number) => number)
+>                     : ^^^^^^^^^^ ^^      ^^^^^      ^
 >sinOrCos : boolean
+>         : ^^^^^^^
 >Math.sin : (x: number) => number
+>         : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >sin : (x: number) => number
+>    : ^ ^^      ^^^^^      
 >Math.cos : (x: number) => number
+>         : ^ ^^      ^^^^^      
 >Math : Math
+>     : ^^^^
 >cos : (x: number) => number
+>    : ^ ^^      ^^^^^      
 
 choice(Math.PI);
 >choice(Math.PI) : number
+>                : ^^^^^^
 >choice : (x: number) => number
+>       : ^ ^^      ^^^^^      
 >Math.PI : number
+>        : ^^^^^^
 >Math : Math
+>     : ^^^^
 >PI : number
+>   : ^^^^^^
 
 function sq(n?: number): number {
 >sq : (n?: number) => number
+>   : ^ ^^^      ^^^^^      
 >n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
   const r = n !== undefined && n*n || 0;
 >r : number
+>  : ^^^^^^
 >n !== undefined && n*n || 0 : number
+>                            : ^^^^^^
 >n !== undefined && n*n : number | false
+>                       : ^^^^^^^^^^^^^^
 >n !== undefined : boolean
+>                : ^^^^^^^
 >n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >n*n : number
+>    : ^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
   return r;
 >r : number
+>  : ^^^^^^
 }
 
 sq(3);
 >sq(3) : number
->sq : (n?: number | undefined) => number
+>      : ^^^^^^
+>sq : (n?: number) => number
+>   : ^ ^^^      ^^^^^      
 >3 : 3
+>  : ^
 

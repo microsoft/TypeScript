@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts] ////
+
+=== objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts ===
 // errors
 var y = {
 >y : Symbol(y, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 1, 3))

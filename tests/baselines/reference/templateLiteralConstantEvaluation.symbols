@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/templateLiteralConstantEvaluation.ts] ////
+
+=== templateLiteralConstantEvaluation.ts ===
+// https://github.com/microsoft/TypeScript/issues/58494
+
+function fn<T>(arg: T): T {
+>fn : Symbol(fn, Decl(templateLiteralConstantEvaluation.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralConstantEvaluation.ts, 2, 12))
+>arg : Symbol(arg, Decl(templateLiteralConstantEvaluation.ts, 2, 15))
+>T : Symbol(T, Decl(templateLiteralConstantEvaluation.ts, 2, 12))
+>T : Symbol(T, Decl(templateLiteralConstantEvaluation.ts, 2, 12))
+
+    return arg;
+>arg : Symbol(arg, Decl(templateLiteralConstantEvaluation.ts, 2, 15))
+}
+
+const a = '1';
+>a : Symbol(a, Decl(templateLiteralConstantEvaluation.ts, 6, 5))
+
+const b = a + ' 2';
+>b : Symbol(b, Decl(templateLiteralConstantEvaluation.ts, 7, 5))
+>a : Symbol(a, Decl(templateLiteralConstantEvaluation.ts, 6, 5))
+
+const c = `${b} 3`;
+>c : Symbol(c, Decl(templateLiteralConstantEvaluation.ts, 8, 5))
+>b : Symbol(b, Decl(templateLiteralConstantEvaluation.ts, 7, 5))
+
+const d = `${b} 3` as const;
+>d : Symbol(d, Decl(templateLiteralConstantEvaluation.ts, 9, 5))
+>b : Symbol(b, Decl(templateLiteralConstantEvaluation.ts, 7, 5))
+>const : Symbol(const)
+
+fn(`${b} 3`);
+>fn : Symbol(fn, Decl(templateLiteralConstantEvaluation.ts, 0, 0))
+>b : Symbol(b, Decl(templateLiteralConstantEvaluation.ts, 7, 5))
+

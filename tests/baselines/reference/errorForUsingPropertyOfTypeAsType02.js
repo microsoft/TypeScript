@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType02.ts] ////
+
 //// [errorForUsingPropertyOfTypeAsType02.ts]
 namespace Test1 {
     function foo<T extends { abc: number }>(x: T) {
@@ -6,9 +8,10 @@ namespace Test1 {
 }
 
 //// [errorForUsingPropertyOfTypeAsType02.js]
+"use strict";
 var Test1;
 (function (Test1) {
     function foo(x) {
-        var a = x.abc;
+        let a = x.abc;
     }
 })(Test1 || (Test1 = {}));

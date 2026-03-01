@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability02.ts] ////
+
 //// [stringLiteralTypesOverloadAssignability02.ts]
 function f(x: "foo"): number;
 function f(x: "foo"): number {
@@ -16,14 +18,15 @@ a = b;
 b = a;
 
 //// [stringLiteralTypesOverloadAssignability02.js]
+"use strict";
 function f(x) {
     return 0;
 }
 function g(x) {
     return 0;
 }
-var a = f;
-var b = g;
+let a = f;
+let b = g;
 a = b;
 b = a;
 

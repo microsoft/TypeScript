@@ -4,7 +4,7 @@
 // @jsx: preserve
 // @noLib: true
 
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
@@ -30,11 +30,11 @@
 //// let opt = <[|Main/*fifthTarget*/Button|] goTo="goTo" />;
 //// let opt = <[|Main/*sixthTarget*/Button|] wrong />;
 
-verify.goToDefinition({
-    firstTarget: "firstSource",
-    secondTarget: "firstSource",
-    thirdTarget: "firstSource",
-    fourthTarget: "firstSource",
-    fifthTarget: "secondSource",
-    sixthTarget: "firstSource"
-});
+verify.baselineGoToDefinition(
+    "firstTarget",
+    "secondTarget",
+    "thirdTarget",
+    "fourthTarget",
+    "fifthTarget",
+    "sixthTarget",
+);

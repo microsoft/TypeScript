@@ -1,197 +1,155 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts ===
 // interface I {
-//     /*FIND ALL REFS*/[|property1|]: number;
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}property1|]: number;|>
 //     property2: string;
 // }
 // 
 // var foo: I;
-// var { [|property1|]: {} } = foo;
+// <|var { [|property1|]: {} } = foo;|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts",
-      "kind": "property",
-      "name": "(property) I.property1: number",
-      "textSpan": {
-        "start": 18,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property1",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 18
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 81,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 28
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts ===
+  // interface I {
+  //     /*FIND ALL REFS*/<|[|property1|]: number;|>
+  //     property2: string;
+  // }
+  // 
+  // var foo: I;
+  // var { property1: {} } = foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) I.property1: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
-undefined
 
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts ===
+// --- (line: 3) skipped ---
+// }
+// 
+// var foo: I;
+// /*FIND ALL REFS*/var { property1: {} } = foo;
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts ===
 // interface I {
-//     [|property1|]: number;
+//     <|[|property1|]: number;|>
 //     property2: string;
 // }
 // 
 // var foo: I;
-// var { /*FIND ALL REFS*/[|property1|]: {} } = foo;
+// <|var { /*FIND ALL REFS*/[|property1|]: {} } = foo;|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts",
-      "kind": "property",
-      "name": "(property) I.property1: number",
-      "textSpan": {
-        "start": 18,
-        "length": 9
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property1",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 18,
-        "length": 18
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 18,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 18
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 81,
-          "length": 9
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts",
-        "contextSpan": {
-          "start": 75,
-          "length": 28
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts ===
+  // interface I {
+  //     <|[|property1|]: number;|>
+  //     property2: string;
+  // }
+  // 
+  // var foo: I;
+  // var { /*FIND ALL REFS*/property1: {} } = foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) I.property1: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

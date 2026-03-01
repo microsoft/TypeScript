@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowInstanceOfGuardPrimitives.ts] ////
+
 //// [controlFlowInstanceOfGuardPrimitives.ts]
 function distinguish(thing: string | number | Date) {
     if (thing instanceof Object) {
@@ -14,6 +16,7 @@ distinguish("beef");
 distinguish(3.14159265);
 
 //// [controlFlowInstanceOfGuardPrimitives.js]
+"use strict";
 function distinguish(thing) {
     if (thing instanceof Object) {
         console.log("Aha!! It's a Date in " + thing.getFullYear());

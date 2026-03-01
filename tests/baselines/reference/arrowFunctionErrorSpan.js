@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionErrorSpan.ts] ////
+
 //// [arrowFunctionErrorSpan.ts]
 function f(a: () => number) { }
 
@@ -55,37 +57,38 @@ f(_ => 1 +
 
 
 //// [arrowFunctionErrorSpan.js]
+"use strict";
 function f(a) { }
 // oneliner
-f(function () { });
+f(() => { });
 // multiline, body
-f(function () {
+f(() => {
 });
 // multiline 2, body
-f(function () {
+f(() => {
 });
 // multiline 3, arrow on a new line
-f(function () { });
+f(() => { });
 // multiline 4, arguments
-f(function (a, b, c, d) { });
+f((a, b, c, d) => { });
 // single line with a comment
 f(/*
-    */ function () { });
+    */ () => { });
 // multi line with a comment
 f(/*
-    */ function () { });
+    */ () => { });
 // multi line with a comment 2
 f(/*
-    */ function () {
+    */ () => {
 });
 // multi line with a comment 3
 f(// comment 1
 // comment 2
-function () {
+() => {
     // comment 4
 }
 // comment 5
 );
 // body is not a block
-f(function (_) { return 1 +
-    2; });
+f(_ => 1 +
+    2);

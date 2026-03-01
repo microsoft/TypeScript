@@ -1,16 +1,29 @@
-=== tests/cases/compiler/spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts ===
+//// [tests/cases/compiler/spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts] ////
+
+=== spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts ===
 declare const m: { [k: string]: string };
 >m : { [k: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 
 const x: { [k: string]: string } = { ...m, ["a" + "b"]: "" };
 >x : { [k: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 >{ ...m, ["a" + "b"]: "" } : { [x: string]: string; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >m : { [k: string]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >["a" + "b"] : string
+>            : ^^^^^^
 >"a" + "b" : string
+>          : ^^^^^^
 >"a" : "a"
+>    : ^^^
 >"b" : "b"
+>    : ^^^
 >"" : ""
+>   : ^^
 

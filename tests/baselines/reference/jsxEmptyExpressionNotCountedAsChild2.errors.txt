@@ -1,0 +1,38 @@
+jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
+  Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
+
+
+==== jsxEmptyExpressionNotCountedAsChild2.tsx (1 errors) ====
+    // repro from #38108
+    
+    export {}
+    
+    declare global {
+        namespace JSX {
+            type Element = any;
+            interface ElementAttributesProperty {
+                __properties__: {};
+            }
+            interface IntrinsicElements {
+                [key: string]: string;
+            }
+            interface ElementChildrenAttribute {
+                __children__: {};
+            }
+        }
+    }
+    
+    interface MockComponentInterface {
+    	new (): {
+            __properties__: { bar?: number } & { __children__: () => number };
+    	};
+    }
+    
+    declare const MockComponent: MockComponentInterface;
+    
+    <MockComponent>{}</MockComponent>; // error
+     ~~~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
+!!! error TS2322:   Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
+!!! related TS2728 jsxEmptyExpressionNotCountedAsChild2.tsx:22:46: '__children__' is declared here.
+    

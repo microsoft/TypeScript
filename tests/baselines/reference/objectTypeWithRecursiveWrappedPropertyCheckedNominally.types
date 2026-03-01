@@ -1,161 +1,248 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts] ////
+
+=== objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts ===
 // Types with infinitely expanding recursive types are type checked nominally
 
 class List<T> {
 >List : List<T>
+>     : ^^^^^^^
 
     data: T;
 >data : T
+>     : ^
 
     next: List<List<T>>;
 >next : List<List<T>>
+>     : ^^^^^^^^^^^^^
 }
 
 class MyList<T> {
 >MyList : MyList<T>
+>       : ^^^^^^^^^
 
     data: T;
 >data : T
+>     : ^
 
     next: MyList<MyList<T>>;
 >next : MyList<MyList<T>>
+>     : ^^^^^^^^^^^^^^^^^
 }
 
 var list1 = new List<number>();
 >list1 : List<number>
+>      : ^^^^^^^^^^^^
 >new List<number>() : List<number>
+>                   : ^^^^^^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 
 var list2 = new List<string>();
 >list2 : List<string>
+>      : ^^^^^^^^^^^^
 >new List<string>() : List<string>
+>                   : ^^^^^^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 
 var myList1 = new MyList<number>();
 >myList1 : MyList<number>
+>        : ^^^^^^^^^^^^^^
 >new MyList<number>() : MyList<number>
+>                     : ^^^^^^^^^^^^^^
 >MyList : typeof MyList
+>       : ^^^^^^^^^^^^^
 
 var myList2 = new MyList<string>();
 >myList2 : MyList<string>
+>        : ^^^^^^^^^^^^^^
 >new MyList<string>() : MyList<string>
+>                     : ^^^^^^^^^^^^^^
 >MyList : typeof MyList
+>       : ^^^^^^^^^^^^^
 
 list1 = myList1; // error, not nominally equal
 >list1 = myList1 : MyList<number>
+>                : ^^^^^^^^^^^^^^
 >list1 : List<number>
+>      : ^^^^^^^^^^^^
 >myList1 : MyList<number>
+>        : ^^^^^^^^^^^^^^
 
 list1 = myList2; // error, type mismatch
 >list1 = myList2 : MyList<string>
+>                : ^^^^^^^^^^^^^^
 >list1 : List<number>
+>      : ^^^^^^^^^^^^
 >myList2 : MyList<string>
+>        : ^^^^^^^^^^^^^^
 
 list2 = myList1; // error, not nominally equal
 >list2 = myList1 : MyList<number>
+>                : ^^^^^^^^^^^^^^
 >list2 : List<string>
+>      : ^^^^^^^^^^^^
 >myList1 : MyList<number>
+>        : ^^^^^^^^^^^^^^
 
 list2 = myList2; // error, type mismatch
 >list2 = myList2 : MyList<string>
+>                : ^^^^^^^^^^^^^^
 >list2 : List<string>
+>      : ^^^^^^^^^^^^
 >myList2 : MyList<string>
+>        : ^^^^^^^^^^^^^^
 
 var rList1 = new List<List<number>>();
 >rList1 : List<List<number>>
+>       : ^^^^^^^^^^^^^^^^^^
 >new List<List<number>>() : List<List<number>>
+>                         : ^^^^^^^^^^^^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 
 var rMyList1 = new List<MyList<number>>();
 >rMyList1 : List<MyList<number>>
+>         : ^^^^^^^^^^^^^^^^^^^^
 >new List<MyList<number>>() : List<MyList<number>>
+>                           : ^^^^^^^^^^^^^^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 
 rList1 = rMyList1; // error, not nominally equal
 >rList1 = rMyList1 : List<MyList<number>>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 >rList1 : List<List<number>>
+>       : ^^^^^^^^^^^^^^^^^^
 >rMyList1 : List<MyList<number>>
+>         : ^^^^^^^^^^^^^^^^^^^^
 
 function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 >foo : <T extends List<number>, U extends MyList<number>>(t: T, u: U) => void
+>    : ^ ^^^^^^^^^            ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t; // error
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     var a: List<number>;
 >a : List<number>
+>  : ^^^^^^^^^^^^
 
     var b: MyList<number>;
 >b : MyList<number>
+>  : ^^^^^^^^^^^^^^
 
     a = t; // ok
 >a = t : T
+>      : ^
 >a : List<number>
+>  : ^^^^^^^^^^^^
 >t : T
+>  : ^
 
     a = u; // error
 >a = u : U
+>      : ^
 >a : List<number>
+>  : ^^^^^^^^^^^^
 >u : U
+>  : ^
 
     b = t; // error
 >b = t : T
+>      : ^
 >b : MyList<number>
+>  : ^^^^^^^^^^^^^^
 >t : T
+>  : ^
 
     b = u; // ok
 >b = u : U
+>      : ^
 >b : MyList<number>
+>  : ^^^^^^^^^^^^^^
 >u : U
+>  : ^
 }
 
 function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 >foo2 : <T extends U, U extends MyList<number>>(t: T, u: U) => void
+>     : ^ ^^^^^^^^^ ^^ ^^^^^^^^^              ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t; // was error, ok after constraint made illegal, doesn't matter
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 
     var a: List<number>;
 >a : List<number>
+>  : ^^^^^^^^^^^^
 
     var b: MyList<number>;
 >b : MyList<number>
+>  : ^^^^^^^^^^^^^^
 
     a = t; // error
 >a = t : T
+>      : ^
 >a : List<number>
+>  : ^^^^^^^^^^^^
 >t : T
+>  : ^
 
     a = u; // error
 >a = u : U
+>      : ^
 >a : List<number>
+>  : ^^^^^^^^^^^^
 >u : U
+>  : ^
 
     b = t; // ok
 >b = t : T
+>      : ^
 >b : MyList<number>
+>  : ^^^^^^^^^^^^^^
 >t : T
+>  : ^
 
     b = u; // ok
 >b = u : U
+>      : ^
 >b : MyList<number>
+>  : ^^^^^^^^^^^^^^
 >u : U
+>  : ^
 }

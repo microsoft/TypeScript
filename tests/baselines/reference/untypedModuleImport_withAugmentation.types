@@ -1,13 +1,19 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_withAugmentation.ts] ////
+
 === /a.ts ===
 declare module "foo" {
 >"foo" : typeof import("foo")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     export const x: number;
 >x : number
+>  : ^^^^^^
 }
 import { x } from "foo";
 >x : any
+>  : ^^^
 
 x;
 >x : any
+>  : ^^^
 

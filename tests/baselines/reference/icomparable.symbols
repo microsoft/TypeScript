@@ -1,4 +1,6 @@
-=== tests/cases/compiler/icomparable.ts ===
+//// [tests/cases/compiler/icomparable.ts] ////
+
+=== icomparable.ts ===
     interface IComparable<T> {
 >IComparable : Symbol(IComparable, Decl(icomparable.ts, 0, 0))
 >T : Symbol(T, Decl(icomparable.ts, 0, 26))

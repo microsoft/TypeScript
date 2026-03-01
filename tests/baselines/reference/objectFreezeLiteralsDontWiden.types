@@ -1,32 +1,53 @@
-=== tests/cases/compiler/objectFreezeLiteralsDontWiden.ts ===
+//// [tests/cases/compiler/objectFreezeLiteralsDontWiden.ts] ////
+
+=== objectFreezeLiteralsDontWiden.ts ===
 const PUPPETEER_REVISIONS = Object.freeze({
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.freeze({  chromium: '1011831',  firefox: 'latest',}) : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>              : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^^^^^^^^^^^^^^^
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^                                                 ^^ ^^^^^^^^^                                           ^^ ^^ ^^^           ^^^ ^^ ^^ ^^^           ^^^
 >{  chromium: '1011831',  firefox: 'latest',} : { chromium: "1011831"; firefox: "latest"; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   chromium: '1011831',
 >chromium : "1011831"
+>         : ^^^^^^^^^
 >'1011831' : "1011831"
+>          : ^^^^^^^^^
 
   firefox: 'latest',
 >firefox : "latest"
+>        : ^^^^^^^^
 >'latest' : "latest"
+>         : ^^^^^^^^
 
 });
 
 let preferredRevision = PUPPETEER_REVISIONS.chromium;
 >preferredRevision : "1011831"
+>                  : ^^^^^^^^^
 >PUPPETEER_REVISIONS.chromium : "1011831"
+>                             : ^^^^^^^^^
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chromium : "1011831"
+>         : ^^^^^^^^^
 
 preferredRevision = PUPPETEER_REVISIONS.firefox;
 >preferredRevision = PUPPETEER_REVISIONS.firefox : "latest"
+>                                                : ^^^^^^^^
 >preferredRevision : "1011831"
+>                  : ^^^^^^^^^
 >PUPPETEER_REVISIONS.firefox : "latest"
+>                            : ^^^^^^^^
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >firefox : "latest"
+>        : ^^^^^^^^
 

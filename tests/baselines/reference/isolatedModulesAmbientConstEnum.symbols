@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesAmbientConstEnum.ts] ////
+
+=== file1.ts ===
 declare const enum E { X = 1}
 >E : Symbol(E, Decl(file1.ts, 0, 0))
 >X : Symbol(E.X, Decl(file1.ts, 0, 22))

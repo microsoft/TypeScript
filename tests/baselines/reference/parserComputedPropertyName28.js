@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts] ////
+
 //// [parserComputedPropertyName28.ts]
 class C {
     [e]: number = 0;
@@ -5,6 +7,7 @@ class C {
 }
 
 //// [parserComputedPropertyName28.js]
+"use strict";
 var _a;
 class C {
     constructor() {

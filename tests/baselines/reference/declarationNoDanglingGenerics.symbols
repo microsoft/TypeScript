@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationNoDanglingGenerics.ts ===
+//// [tests/cases/compiler/declarationNoDanglingGenerics.ts] ////
+
+=== declarationNoDanglingGenerics.ts ===
 const kindCache: { [kind: string]: boolean } = {};
 >kindCache : Symbol(kindCache, Decl(declarationNoDanglingGenerics.ts, 0, 5))
 >kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 0, 20))

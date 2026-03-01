@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noErrorTruncation.ts] ////
+
 //// [noErrorTruncation.ts]
 // @noErrorTruncation
 
@@ -17,5 +19,6 @@ const x: SomeLongOptionA
 
 
 //// [noErrorTruncation.js]
+"use strict";
 // @noErrorTruncation
-var x = 42;
+const x = 42;

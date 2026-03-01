@@ -1,31 +1,43 @@
+//// [tests/cases/compiler/duplicatePackage_referenceTypes.ts] ////
+
 === /index.ts ===
 import * as a from "a";
 >a : typeof a
+>  : ^^^^^^^^
 
 import { Foo } from "foo";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 let foo: Foo = a.foo;
 >foo : Foo
+>    : ^^^
 >a.foo : Foo
+>      : ^^^
 >a : typeof a
+>  : ^^^^^^^^
 >foo : Foo
+>    : ^^^
 
 === /node_modules/a/index.d.ts ===
 /// <reference types="foo" />
 import { Foo } from "foo";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export const foo: Foo;
 >foo : Foo
+>    : ^^^
 
 === /node_modules/a/node_modules/foo/index.d.ts ===
 export class Foo { private x; }
 >Foo : Foo
+>    : ^^^
 >x : any
 
 === /node_modules/@types/foo/index.d.ts ===
 export class Foo { private x; }
 >Foo : Foo
+>    : ^^^
 >x : any
 

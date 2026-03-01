@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts(1,16): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
-tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts(1,22): error TS1005: ':' expected.
+objectBindingPatternKeywordIdentifiers04.ts(1,16): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
+objectBindingPatternKeywordIdentifiers04.ts(1,22): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts (2 errors) ====
+==== objectBindingPatternKeywordIdentifiers04.ts (2 errors) ====
     var { "while": while } = { while: 1 }
                    ~~~~~
 !!! error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.

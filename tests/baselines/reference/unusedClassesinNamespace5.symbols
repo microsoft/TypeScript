@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedClassesinNamespace5.ts ===
+//// [tests/cases/compiler/unusedClassesinNamespace5.ts] ////
+
+=== unusedClassesinNamespace5.ts ===
 namespace Validation {
 >Validation : Symbol(Validation, Decl(unusedClassesinNamespace5.ts, 0, 0))
 

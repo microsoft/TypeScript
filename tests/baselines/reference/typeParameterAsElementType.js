@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterAsElementType.ts] ////
+
 //// [typeParameterAsElementType.ts]
 function fee<T>() {
     var t: T;
@@ -5,6 +7,7 @@ function fee<T>() {
 }
 
 //// [typeParameterAsElementType.js]
+"use strict";
 function fee() {
     var t;
     var arr = [t, ""];

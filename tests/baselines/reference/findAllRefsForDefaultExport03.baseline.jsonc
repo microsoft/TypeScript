@@ -1,1131 +1,727 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// /*FIND ALL REFS*/function [|f|]() {
+// /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default [|f|];
+// <|export default [|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = [|f|]();
 // 
-// namespace [|f|] {
+// <|namespace [|{| isWriteAccess: true, isDefinition: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // /*FIND ALL REFS*/<|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default f;
+  // 
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function /*FIND ALL REFS*/[|f|]() {
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default [|f|];
+// <|export default [|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = [|f|]();
 // 
-// namespace [|f|] {
+// <|namespace [|{| isWriteAccess: true, isDefinition: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function /*FIND ALL REFS*/[|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default f;
+  // 
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function [|f|]() {
+// <|function [|{| isWriteAccess: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// /*FIND ALL REFS*/export default [|f|];
+// /*FIND ALL REFS*/<|export default [|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = [|f|]();
 // 
-// namespace [|f|] {
+// <|namespace [|{| isWriteAccess: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // /*FIND ALL REFS*/export default f;
+  // 
+  // var x: typeof f;
+  // 
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function [|f|]() {
+// <|function [|{| isWriteAccess: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default /*FIND ALL REFS*/[|f|];
+// <|export default /*FIND ALL REFS*/[|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = [|f|]();
 // 
-// namespace [|f|] {
+// <|namespace [|{| isWriteAccess: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default /*FIND ALL REFS*/f;
+  // 
+  // var x: typeof f;
+  // 
+  // --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function [|f|]() {
+// <|function [|{| isWriteAccess: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default [|f|];
+// <|export default [|f|];|>
 // 
 // var x: typeof /*FIND ALL REFS*/[|f|];
 // 
 // var y = [|f|]();
 // 
-// namespace [|f|] {
+// <|namespace [|{| isWriteAccess: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default f;
+  // 
+  // var x: typeof /*FIND ALL REFS*/f;
+  // 
+  // var y = f();
+  // 
+  // --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function [|f|]() {
+// <|function [|{| isWriteAccess: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default [|f|];
+// <|export default [|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = /*FIND ALL REFS*/[|f|]();
 // 
-// namespace [|f|] {
+// <|namespace [|{| isWriteAccess: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default f;
+  // 
+  // var x: typeof f;
+  // 
+  // var y = /*FIND ALL REFS*/f();
+  // 
+  // namespace f {
+  //     var local = 100;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function [|f|]() {
+// <|function [|{| isWriteAccess: true, isDefinition: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default [|f|];
+// <|export default [|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = [|f|]();
 // 
-// /*FIND ALL REFS*/namespace [|f|] {
+// /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default f;
+  // 
+  // var x: typeof f;
+  // 
+  // var y = f();
+  // 
+  // /*FIND ALL REFS*/namespace f {
+  //     var local = 100;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
-// function [|f|]() {
+// <|function [|{| isWriteAccess: true, isDefinition: true |}f|]() {
 //     return 100;
-// }
+// }|>
 // 
-// export default [|f|];
+// <|export default [|f|];|>
 // 
 // var x: typeof [|f|];
 // 
 // var y = [|f|]();
 // 
-// namespace /*FIND ALL REFS*/[|f|] {
+// <|namespace /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|] {
 //     var local = 100;
-// }
+// }|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-      "kind": "function",
-      "name": "namespace f\nfunction f(): number",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 49,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 34,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 79,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsForDefaultExport03.ts",
-        "contextSpan": {
-          "start": 85,
-          "length": 36
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsForDefaultExport03.ts ===
+  // <|function [|f|]() {
+  //     return 100;
+  // }|>
+  // 
+  // export default f;
+  // 
+  // var x: typeof f;
+  // 
+  // var y = f();
+  // 
+  // namespace /*FIND ALL REFS*/f {
+  //     var local = 100;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace f\nfunction f(): number",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

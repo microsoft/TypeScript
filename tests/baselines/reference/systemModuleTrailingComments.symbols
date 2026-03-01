@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModuleTrailingComments.ts ===
+//// [tests/cases/compiler/systemModuleTrailingComments.ts] ////
+
+=== systemModuleTrailingComments.ts ===
 export const test = "TEST";
 >test : Symbol(test, Decl(systemModuleTrailingComments.ts, 0, 12))
 

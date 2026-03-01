@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement20.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement20.ts] ////
+
+=== parserForOfStatement20.ts ===
 for (var of = 0 in of) { }
 >of : Symbol(of, Decl(parserForOfStatement20.ts, 0, 8))
 >of : Symbol(of, Decl(parserForOfStatement20.ts, 0, 8))

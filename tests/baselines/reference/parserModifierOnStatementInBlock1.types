@@ -1,9 +1,14 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts] ////
+
+=== parserModifierOnStatementInBlock1.ts ===
 export function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
    export var x = this;
 >x : any
+>  : ^^^
 >this : any
+>     : ^^^
 }
 

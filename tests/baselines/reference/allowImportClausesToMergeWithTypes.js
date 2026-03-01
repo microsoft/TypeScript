@@ -29,23 +29,30 @@ const y: originalZZZ = x;
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.zzz = void 0;
 exports.zzz = 123;
-exports["default"] = exports.zzz;
+exports.default = exports.zzz;
 //// [a.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = void 0;
-var b_1 = require("./b");
-exports["default"] = b_1["default"];
-var x = { x: "" };
-b_1["default"];
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = void 0;
+const b_1 = __importDefault(require("./b"));
+exports.default = b_1.default;
+const x = { x: "" };
+b_1.default;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
-var x = { x: "" };
-zzz;
-var b_1 = require("./b");
-b_1["default"];
-var y = x;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const a_1 = __importDefault(require("./a"));
+const x = { x: "" };
+a_1.default;
+const b_1 = __importDefault(require("./b"));
+b_1.default;
+const y = x;

@@ -1,13 +1,16 @@
+//// [tests/cases/compiler/funduleOfFunctionWithoutReturnTypeAnnotation.ts] ////
+
 //// [funduleOfFunctionWithoutReturnTypeAnnotation.ts]
 function fn() {
     return fn.n;
 }
-module fn {
+namespace fn {
     export var n = 1;
 }
 
 
 //// [funduleOfFunctionWithoutReturnTypeAnnotation.js]
+"use strict";
 function fn() {
     return fn.n;
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnClassAccessor1.ts] ////
+
 //// [commentOnClassAccessor1.ts]
 class C {
   /**
@@ -7,16 +9,10 @@ class C {
 }
 
 //// [commentOnClassAccessor1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "bar", {
-        /**
-         * @type {number}
-         */
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+"use strict";
+class C {
+    /**
+     * @type {number}
+     */
+    get bar() { return 1; }
+}

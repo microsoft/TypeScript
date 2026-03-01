@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts] ////
+
 //// [augmentedTypeBracketNamedPropertyAccess.ts]
 interface Object {
     data: number;
@@ -14,6 +16,7 @@ var r3 = f['functionData']; // Should be string
 var r4 = f['data']; // Should be number
 
 //// [augmentedTypeBracketNamedPropertyAccess.js]
+"use strict";
 var o = {};
 var f = function () { };
 var r1 = o['data']; // Should be number

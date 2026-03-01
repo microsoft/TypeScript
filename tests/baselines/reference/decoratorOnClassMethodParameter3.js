@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter3.ts] ////
+
 //// [decoratorOnClassMethodParameter3.ts]
 // https://github.com/microsoft/TypeScript/issues/48509
 declare function dec(a: any): any;
@@ -10,6 +12,7 @@ function fn(value: Promise<number>): any {
 
 
 //// [decoratorOnClassMethodParameter3.js]
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);

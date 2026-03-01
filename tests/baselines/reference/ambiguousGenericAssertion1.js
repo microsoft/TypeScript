@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambiguousGenericAssertion1.ts] ////
+
 //// [ambiguousGenericAssertion1.ts]
 function f<T>(x: T): T { return null; }
 var r = <T>(x: T) => x;
@@ -6,8 +8,9 @@ var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operatio
 
 
 //// [ambiguousGenericAssertion1.js]
+"use strict";
 function f(x) { return null; }
-var r = function (x) { return x; };
+var r = (x) => x;
 var r2 = f; // valid
 var r3 =  << T > (x), T;
 T > f; // ambiguous, appears to the parser as a << operation

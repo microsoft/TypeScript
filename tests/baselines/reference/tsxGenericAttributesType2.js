@@ -1,4 +1,8 @@
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType2.tsx] ////
+
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
@@ -7,8 +11,9 @@ const decorator4 = function <T extends { x: number }>(Component: React.Stateless
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
-var React = require("react");
-var decorator4 = function (Component) {
-    return function (props) { return <Component {...props} y={"blah"}></Component>; };
+/// <reference path="/.lib/react.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = require("react");
+const decorator4 = function (Component) {
+    return (props) => <Component {...props} y={"blah"}></Component>;
 };

@@ -1,5 +1,7 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts ===
-module m1 {
+//// [tests/cases/compiler/collisionCodeGenModuleWithMemberVariable.ts] ////
+
+=== collisionCodeGenModuleWithMemberVariable.ts ===
+namespace m1 {
 >m1 : Symbol(m1, Decl(collisionCodeGenModuleWithMemberVariable.ts, 0, 0))
 
     export var m1 = 10;

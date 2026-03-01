@@ -1,12 +1,16 @@
-tests/cases/compiler/a.ts(1,10): error TS2305: Module '"./b"' has no exported member 'default'.
+error TS5107: Option 'allowSyntheticDefaultImports=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+a.ts(1,10): error TS2305: Module '"./b"' has no exported member 'default'.
 
 
-==== tests/cases/compiler/b.d.ts (0 errors) ====
+!!! error TS5107: Option 'allowSyntheticDefaultImports=false' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== b.d.ts (0 errors) ====
     export function foo();
     
     export function bar();
     
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     import { default as Foo } from "./b";
              ~~~~~~~
 !!! error TS2305: Module '"./b"' has no exported member 'default'.

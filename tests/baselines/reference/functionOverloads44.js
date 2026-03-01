@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads44.ts] ////
+
 //// [functionOverloads44.ts]
 interface Animal { animal }
 interface Dog extends Animal { dog }
@@ -23,12 +25,11 @@ var x2 = foo2([{a: "str"}]);
 var y2 = foo2([{a: 100}]);
 
 //// [functionOverloads44.js]
-function foo1(_a) {
-    var x = _a[0];
+"use strict";
+function foo1([x]) {
     return undefined;
 }
-function foo2(_a) {
-    var x = _a[0];
+function foo2([x]) {
     return undefined;
 }
 var x1 = foo1([{ a: "str" }]);

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalChainWithInstantiationExpression2.ts ===
+//// [tests/cases/compiler/optionalChainWithInstantiationExpression2.ts] ////
+
+=== optionalChainWithInstantiationExpression2.ts ===
 declare interface A {
 >A : Symbol(A, Decl(optionalChainWithInstantiationExpression2.ts, 0, 0))
 

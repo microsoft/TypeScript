@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/reExportGlobalDeclaration3.ts] ////
+
+=== file1.d.ts ===
 declare namespace NS1 {
 >NS1 : Symbol(NS1, Decl(file1.d.ts, 0, 0))
 
@@ -13,7 +15,7 @@ declare namespace NS2 {
 >foo : Symbol(foo, Decl(file1.d.ts, 5, 14))
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export {NS1, NS1 as NNS1};
 >NS1 : Symbol(NS1, Decl(file2.ts, 0, 8))
 >NS1 : Symbol(NS1, Decl(file1.d.ts, 0, 0))

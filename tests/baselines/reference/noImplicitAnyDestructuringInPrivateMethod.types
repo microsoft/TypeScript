@@ -1,26 +1,37 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts] ////
+
+=== noImplicitAnyDestructuringInPrivateMethod.ts ===
 type Arg = {
->Arg : { a: number; }
+>Arg : Arg
+>    : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
 };
 export class Bar {
 >Bar : Bar
+>    : ^^^
 
     private bar({ a, }: Arg): number {
 >bar : ({ a, }: Arg) => number
+>    : ^      ^^   ^^^^^      
 >a : number
+>  : ^^^^^^
 
         return a;
 >a : number
+>  : ^^^^^^
     }
 }
 export declare class Bar2 {
 >Bar2 : Bar2
+>     : ^^^^
 
     private bar({ a, });
 >bar : ({ a, }: { a: any; }) => any
+>    : ^      ^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 }

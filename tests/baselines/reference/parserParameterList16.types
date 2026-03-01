@@ -1,14 +1,23 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList16.ts] ////
+
+=== parserParameterList16.ts ===
 class C {
 >C : C
+>  : ^
 
    foo(a = 4);
 >foo : (a?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
    foo(a, b) { }
 >foo : (a?: number) => any
+>    : ^ ^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 }

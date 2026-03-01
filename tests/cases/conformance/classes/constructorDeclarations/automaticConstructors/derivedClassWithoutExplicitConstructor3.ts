@@ -1,3 +1,4 @@
+// @target: es2015
 // automatic constructors with a class hieararchy of depth > 2
 
 class Base {

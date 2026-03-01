@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadsWithinClasses.ts] ////
+
 //// [overloadsWithinClasses.ts]
 class foo {
  
@@ -24,23 +26,15 @@ class X {
 
 
 //// [overloadsWithinClasses.js]
-var foo = /** @class */ (function () {
-    function foo() {
+"use strict";
+class foo {
+    static fnOverload() { }
+    static fnOverload(foo) { } // error
+}
+class bar {
+    static fnOverload(foo) { } // no error
+}
+class X {
+    attr(first, second) {
     }
-    foo.fnOverload = function () { };
-    foo.fnOverload = function (foo) { }; // error
-    return foo;
-}());
-var bar = /** @class */ (function () {
-    function bar() {
-    }
-    bar.fnOverload = function (foo) { }; // no error
-    return bar;
-}());
-var X = /** @class */ (function () {
-    function X() {
-    }
-    X.prototype.attr = function (first, second) {
-    };
-    return X;
-}());
+}

@@ -1,59 +1,77 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteralForOverloads.ts] ////
+
+=== functionLiteralForOverloads.ts ===
 // basic uses of function literals with overloads
 
 var f: {
 >f : { (x: string): string; (x: number): number; }
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
     (x: string): string;
 >x : string
+>  : ^^^^^^
 
     (x: number): number;
 >x : number
+>  : ^^^^^^
 
 } = (x) => x;
 >(x) => x : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 
 var f2: {
 >f2 : { <T>(x: string): string; <T>(x: number): number; }
+>   : ^^^ ^^ ^^      ^^^      ^^^ ^^ ^^      ^^^      ^^^
 
     <T>(x: string): string;
 >x : string
+>  : ^^^^^^
 
     <T>(x: number): number;
 >x : number
+>  : ^^^^^^
 
 } = (x) => x;
 >(x) => x : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 
 var f3: {
 >f3 : { <T>(x: T): string; <T>(x: T): number; }
+>   : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^ ^^^      ^^^
 
     <T>(x: T): string;
 >x : T
+>  : ^
 
     <T>(x: T): number;
 >x : T
+>  : ^
 
 } = (x) => x;
 >(x) => x : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 
 var f4: {
 >f4 : { <T>(x: string): T; <T>(x: number): T; }
+>   : ^^^ ^^ ^^      ^^^ ^^^ ^^ ^^      ^^^ ^^^
 
     <T>(x: string): T;
 >x : string
+>  : ^^^^^^
 
     <T>(x: number): T;
 >x : number
+>  : ^^^^^^
 
 } = (x) => x;
 >(x) => x : (x: any) => any
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 

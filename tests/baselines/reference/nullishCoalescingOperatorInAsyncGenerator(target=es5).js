@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperatorInAsyncGenerator.ts] ////
+
 //// [nullishCoalescingOperatorInAsyncGenerator.ts]
 // https://github.com/microsoft/TypeScript/issues/37686
 async function* f(a: { b?: number }) {
@@ -9,11 +11,12 @@ async function* f(a: { b?: number }) {
 
 
 //// [nullishCoalescingOperatorInAsyncGenerator.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/37686
 function f(a) {
-    var _a;
     return __asyncGenerator(this, arguments, function f_1() {
         var c;
+        var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:

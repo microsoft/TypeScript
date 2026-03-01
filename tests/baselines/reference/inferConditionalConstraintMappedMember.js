@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferConditionalConstraintMappedMember.ts] ////
+
 //// [inferConditionalConstraintMappedMember.ts]
 // Return keyof type without string index signature
 type KeysWithoutStringIndex<T> =
@@ -14,8 +16,7 @@ export type RemoveIdxSgn<T> = Pick<T, KeysWithoutStringIndex<T>>
   //  Type 'unknown' is not assignable to type 'keyof T'.(2344)
 
 //// [inferConditionalConstraintMappedMember.js]
-"use strict";
-exports.__esModule = true;
+export {};
 // ERROR:
 // Type 'KeysWithoutStringIndex<T>' does not satisfy the constraint 'keyof T'.
 //  Type 'unknown' is not assignable to type 'keyof T'.(2344)

@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/declarationEmitLateBoundJSAssignments.ts] ////
+
+=== file.js ===
+export function foo() {}
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+
+foo.bar = 12;
+>foo.bar : Symbol(foo.bar, Decl(file.js, 0, 24))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>bar : Symbol(foo.bar, Decl(file.js, 0, 24))
+
+const _private = Symbol();
+>_private : Symbol(_private, Decl(file.js, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+foo[_private] = "ok";
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>_private : Symbol(_private, Decl(file.js, 2, 5))
+
+const strMem = "strMemName";
+>strMem : Symbol(strMem, Decl(file.js, 4, 5))
+
+foo[strMem] = "ok";
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>strMem : Symbol(strMem, Decl(file.js, 4, 5))
+
+const dashStrMem = "dashed-str-mem";
+>dashStrMem : Symbol(dashStrMem, Decl(file.js, 6, 5))
+
+foo[dashStrMem] = "ok";
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>dashStrMem : Symbol(dashStrMem, Decl(file.js, 6, 5))
+
+const numMem = 42;
+>numMem : Symbol(numMem, Decl(file.js, 8, 5))
+
+foo[numMem] = "ok";
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>numMem : Symbol(numMem, Decl(file.js, 8, 5))
+
+/** @type {string} */
+const x = foo[_private];
+>x : Symbol(x, Decl(file.js, 12, 5))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>_private : Symbol(_private, Decl(file.js, 2, 5))
+
+/** @type {string} */
+const y = foo[strMem];
+>y : Symbol(y, Decl(file.js, 14, 5))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>strMem : Symbol(strMem, Decl(file.js, 4, 5))
+
+/** @type {string} */
+const z = foo[numMem];
+>z : Symbol(z, Decl(file.js, 16, 5))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>numMem : Symbol(numMem, Decl(file.js, 8, 5))
+
+/** @type {string} */
+const a = foo[dashStrMem];
+>a : Symbol(a, Decl(file.js, 18, 5))
+>foo : Symbol(foo, Decl(file.js, 0, 0), Decl(file.js, 0, 24), Decl(file.js, 2, 26), Decl(file.js, 4, 28), Decl(file.js, 6, 36) ... and 1 more)
+>dashStrMem : Symbol(dashStrMem, Decl(file.js, 6, 5))
+

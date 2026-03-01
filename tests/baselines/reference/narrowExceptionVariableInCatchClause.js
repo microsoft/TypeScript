@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts] ////
+
 //// [narrowExceptionVariableInCatchClause.ts]
 declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
 
@@ -25,6 +27,7 @@ function tryCatch() {
 
 
 //// [narrowExceptionVariableInCatchClause.js]
+"use strict";
 function tryCatch() {
     try {
         // do stuff...

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts] ////
+
 //// [nonPrimitiveStrictNull.ts]
 var a: object
 declare var b: object | null
@@ -61,6 +63,7 @@ var u: Proxy<Blah>; // ok
 
 
 //// [nonPrimitiveStrictNull.js]
+"use strict";
 var a;
 var e;
 a.toString; // error

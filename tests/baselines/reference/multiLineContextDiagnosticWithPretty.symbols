@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts ===
+//// [tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts] ////
+
+=== multiLineContextDiagnosticWithPretty.ts ===
 const x: {c: string} = {
 >x : Symbol(x, Decl(multiLineContextDiagnosticWithPretty.ts, 0, 5))
 >c : Symbol(c, Decl(multiLineContextDiagnosticWithPretty.ts, 0, 10))

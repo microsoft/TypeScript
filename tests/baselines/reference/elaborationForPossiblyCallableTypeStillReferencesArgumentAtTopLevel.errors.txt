@@ -1,10 +1,10 @@
-tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts(3,4): error TS2345: Argument of type 'new () => number' is not assignable to parameter of type 'number'.
+elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts(3,4): error TS2345: Argument of type 'new () => number' is not assignable to parameter of type 'number'.
 
 
-==== tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts (1 errors) ====
+==== elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts (1 errors) ====
     declare var ohno: new () => number;
     declare function ff(t: number): void;
     ff(ohno)
        ~~~~
 !!! error TS2345: Argument of type 'new () => number' is not assignable to parameter of type 'number'.
-!!! related TS6213 tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts:3:4: Did you mean to use 'new' with this expression?
+!!! related TS6213 elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts:3:4: Did you mean to use 'new' with this expression?

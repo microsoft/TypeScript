@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts] ////
+
 //// [doWhileBreakStatements.ts]
 do {
     break;
@@ -39,6 +41,7 @@ do{
 
 
 //// [doWhileBreakStatements.js]
+"use strict";
 do {
     break;
 } while (true);

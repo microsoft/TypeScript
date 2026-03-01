@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/jsdoc/importTag7.ts] ////
+
+=== /types.ts ===
+export interface A {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+export interface B {
+    a: number;
+>a : number
+>  : ^^^^^^
+}
+
+=== /foo.js ===
+/**
+ * @import {
+ * A,
+ * B } from "./types"
+ */
+
+/**
+ * @param { A } a
+ * @param { B } b
+ */
+function f(a, b) {}
+>f : (a: A, b: B) => void
+>  : ^ ^^^^^ ^^^^^^^^^^^^
+>a : A
+>  : ^
+>b : B
+>  : ^
+

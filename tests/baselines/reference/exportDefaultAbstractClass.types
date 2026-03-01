@@ -1,35 +1,58 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/exportDefaultAbstractClass.ts] ////
+
+=== a.ts ===
 export default abstract class A { a: number; }
 >A : A
+>  : ^
 >a : number
+>  : ^^^^^^
 
 class B extends A {}
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 new B().a.toExponential();
 >new B().a.toExponential() : string
+>                          : ^^^^^^
 >new B().a.toExponential : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^      
 >new B().a : number
+>          : ^^^^^^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import A from './a';
 >A : typeof A
+>  : ^^^^^^^^
 
 class C extends A {}
 >C : C
+>  : ^
 >A : A
+>  : ^
 
 new C().a.toExponential();
 >new C().a.toExponential() : string
+>                          : ^^^^^^
 >new C().a.toExponential : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^      
 >new C().a : number
+>          : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 >a : number
+>  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 

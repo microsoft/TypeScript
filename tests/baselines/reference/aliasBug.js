@@ -1,9 +1,11 @@
+//// [tests/cases/compiler/aliasBug.ts] ////
+
 //// [aliasBug.ts]
-module foo {    
+namespace foo {    
     export class Provide {
     }
 
-    export module bar { export module baz {export class boo {}}}
+    export namespace bar { export namespace baz {export class boo {}}}
 }
 
 import provide = foo;
@@ -20,23 +22,18 @@ function use() {
 
 
 //// [aliasBug.js]
+"use strict";
 var foo;
 (function (foo) {
-    var Provide = /** @class */ (function () {
-        function Provide() {
-        }
-        return Provide;
-    }());
+    class Provide {
+    }
     foo.Provide = Provide;
-    var bar;
+    let bar;
     (function (bar) {
-        var baz;
+        let baz;
         (function (baz) {
-            var boo = /** @class */ (function () {
-                function boo() {
-                }
-                return boo;
-            }());
+            class boo {
+            }
             baz.boo = boo;
         })(baz = bar.baz || (bar.baz = {}));
     })(bar = foo.bar || (foo.bar = {}));

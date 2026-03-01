@@ -1,37 +1,56 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteral.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteral.ts] ////
+
+=== functionLiteral.ts ===
 // basic valid forms of function literals
 
 var x = () => 1;
 >x : () => number
+>  : ^^^^^^^^^^^^
 >() => 1 : () => number
+>        : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 var x: {
 >x : () => number
+>  : ^^^^^^^^^^^^
 
     (): number;
 }
 
 var y: { (x: string): string; };
 >y : (x: string) => string
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 var y: (x: string) => string;
 >y : (x: string) => string
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 var y2: { <T>(x: T): T; } = <T>(x: T) => x
 >y2 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 ><T>(x: T) => x : <T>(x: T) => T
+>               : ^ ^^ ^^ ^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 var z: { new (x: number): number; };
 >z : new (x: number) => number
+>  : ^^^^^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 
 var z: new (x: number) => number;
 >z : new (x: number) => number
+>  : ^^^^^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 

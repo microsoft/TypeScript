@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeOnYield2.ts ===
+//// [tests/cases/compiler/contextualTypeOnYield2.ts] ////
+
+=== contextualTypeOnYield2.ts ===
 type OrGen = () => (number | Generator<string, (arg: number) => void, undefined>);
 >OrGen : Symbol(OrGen, Decl(contextualTypeOnYield2.ts, 0, 0))
 >Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))

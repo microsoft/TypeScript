@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts] ////
+
+=== typeSatisfaction_propertyValueConformance3.ts ===
 export type Color = { r: number, g: number, b: number };
 >Color : Symbol(Color, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 0))
 >r : Symbol(r, Decl(typeSatisfaction_propertyValueConformance3.ts, 0, 21))

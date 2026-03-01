@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nullableFunctionError.ts] ////
+
 //// [nullableFunctionError.ts]
 null();
 undefined();
@@ -6,7 +8,8 @@ f();
 
 
 //// [nullableFunctionError.js]
+"use strict";
 null();
 undefined();
-var f;
+let f;
 f();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalEqualityTestingNullability.ts] ////
+
 //// [conditionalEqualityTestingNullability.ts]
 export type Equals<A1 extends any, A2 extends any> =
     (<A>() => A extends A1 ? 1 : 0) extends (<A>() => A extends A2 ? 1 : 0)
@@ -15,5 +17,4 @@ declare const b: Foo<Date | null>;
 type ShouldBe0 = Equals<typeof a, typeof b>;
 
 //// [conditionalEqualityTestingNullability.js]
-"use strict";
-exports.__esModule = true;
+export {};
