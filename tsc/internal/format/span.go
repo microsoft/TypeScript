@@ -892,7 +892,12 @@ func (w *formatSpanWorker) characterToColumn(startLinePosition int, characterInL
 }
 
 func (w *formatSpanWorker) indentationIsDifferent(indentationString string, startLinePosition int) bool {
-	return indentationString != w.sourceFile.Text()[startLinePosition:startLinePosition+len(indentationString)]
+	text := w.sourceFile.Text()
+	end := startLinePosition + len(indentationString)
+	if end > len(text) {
+		return true
+	}
+	return indentationString != text[startLinePosition:end]
 }
 
 func (w *formatSpanWorker) indentTriviaItems(trivia []TextRangeWithKind, commentIndentation int, indentNextTokenOrTrivia bool, indentSingleLine func(item TextRangeWithKind)) bool {
