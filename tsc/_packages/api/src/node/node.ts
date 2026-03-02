@@ -1,10 +1,13 @@
 import {
+    type FileReference,
     type Node,
     type NodeArray,
+    NodeFlags,
     type Path,
     type SourceFile,
     SyntaxKind,
 } from "@typescript/ast";
+import { MsgpackReader } from "./msgpack.ts";
 import {
     childProperties,
     HEADER_OFFSET_EXTENDED_DATA,
@@ -16,6 +19,7 @@ import {
     HEADER_OFFSET_PARSE_OPTIONS,
     HEADER_OFFSET_STRING_TABLE,
     HEADER_OFFSET_STRING_TABLE_OFFSETS,
+    HEADER_OFFSET_STRUCTURED_DATA,
     KIND_NODE_LIST,
     NODE_DATA_TYPE_CHILDREN,
     NODE_DATA_TYPE_EXTENDED,
@@ -61,6 +65,7 @@ const NODE_OFFSET_END = 8;
 const NODE_OFFSET_NEXT = 12;
 const NODE_OFFSET_PARENT = 16;
 const NODE_OFFSET_DATA = 20;
+const NODE_OFFSET_FLAGS = 24;
 
 export class RemoteNodeBase {
     parent: RemoteNode;
@@ -303,7 +308,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
                         return result;
                     }
                 }
-                else {
+                else if (child.kind !== SyntaxKind.JSDoc) {
                     const result = visitNode(child);
                     if (result) {
                         return result;
@@ -313,6 +318,23 @@ export class RemoteNode extends RemoteNodeBase implements Node {
             }
             while (next);
         }
+    }
+
+    get jsDoc(): readonly Node[] | undefined {
+        if (!this.hasChildren()) {
+            return undefined;
+        }
+        let result: Node[] | undefined;
+        let next = this.index + 1;
+        do {
+            const child = this.getOrCreateChildAtNodeIndex(next);
+            if (!(child instanceof RemoteNodeList) && child.kind === SyntaxKind.JSDoc) {
+                (result ??= []).push(child);
+            }
+            next = child.next;
+        }
+        while (next);
+        return result;
     }
 
     getSourceFile(): SourceFile {
@@ -814,7 +836,10 @@ export class RemoteNode extends RemoteNodeBase implements Node {
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-            case SyntaxKind.JSDocText: {
+            case SyntaxKind.JSDocText:
+            case SyntaxKind.JSDocLink:
+            case SyntaxKind.JSDocLinkCode:
+            case SyntaxKind.JSDocLinkPlain: {
                 const stringIndex = this.data & NODE_STRING_INDEX_MASK;
                 return this.getString(stringIndex);
             }
@@ -858,14 +883,81 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
+    get languageVariant(): number | undefined {
+        switch (this.kind) {
+            case SyntaxKind.SourceFile:
+                const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+                return this.view.getUint32(extendedDataOffset + 12, true);
+        }
+    }
+
+    get scriptKind(): number | undefined {
+        switch (this.kind) {
+            case SyntaxKind.SourceFile: {
+                const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+                return this.view.getUint32(extendedDataOffset + 16, true);
+            }
+        }
+    }
+
+    get referencedFiles(): readonly FileReference[] {
+        if (this.kind !== SyntaxKind.SourceFile) return [];
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const offset = this.view.getUint32(extendedDataOffset + 20, true);
+        return (this.sourceFile as RemoteSourceFile).readFileReferences(offset);
+    }
+
+    get typeReferenceDirectives(): readonly FileReference[] {
+        if (this.kind !== SyntaxKind.SourceFile) return [];
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const offset = this.view.getUint32(extendedDataOffset + 24, true);
+        return (this.sourceFile as RemoteSourceFile).readFileReferences(offset);
+    }
+
+    get libReferenceDirectives(): readonly FileReference[] {
+        if (this.kind !== SyntaxKind.SourceFile) return [];
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const offset = this.view.getUint32(extendedDataOffset + 28, true);
+        return (this.sourceFile as RemoteSourceFile).readFileReferences(offset);
+    }
+
+    get imports(): readonly Node[] {
+        if (this.kind !== SyntaxKind.SourceFile) return [];
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const offset = this.view.getUint32(extendedDataOffset + 32, true);
+        return (this.sourceFile as RemoteSourceFile).readNodeIndexArray(offset);
+    }
+
+    get moduleAugmentations(): readonly Node[] {
+        if (this.kind !== SyntaxKind.SourceFile) return [];
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const offset = this.view.getUint32(extendedDataOffset + 36, true);
+        return (this.sourceFile as RemoteSourceFile).readNodeIndexArray(offset);
+    }
+
+    get ambientModuleNames(): readonly string[] {
+        if (this.kind !== SyntaxKind.SourceFile) return [];
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const offset = this.view.getUint32(extendedDataOffset + 40, true);
+        return (this.sourceFile as RemoteSourceFile).readStringArray(offset);
+    }
+
+    get externalModuleIndicator(): Node | true | undefined {
+        if (this.kind !== SyntaxKind.SourceFile) return undefined;
+        const extendedDataOffset = this.sourceFile._offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const nodeIndex = this.view.getUint32(extendedDataOffset + 44, true);
+        if (nodeIndex === 0) return undefined;
+        if (nodeIndex === this.index) return true;
+        return (this.sourceFile as RemoteSourceFile).getOrCreateNodeAtIndex(nodeIndex) as Node;
+    }
+
+    get isDeclarationFile(): boolean {
+        return (this.flags & NodeFlags.Ambient) !== 0;
+    }
+
     // Other properties
     get flags(): number {
-        switch (this.kind) {
-            case SyntaxKind.VariableDeclarationList:
-                return this.data & (1 << 24 | 1 << 25) >> 24;
-            default:
-                return 0;
-        }
+        return this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true);
     }
 
     get phaseModifier(): SyntaxKind {
@@ -901,12 +993,15 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     }
 }
 
+const NO_STRUCTURED_DATA = 0xFFFFFFFF;
+
 export class RemoteSourceFile extends RemoteNode {
     readonly nodes: (RemoteNode | RemoteNodeList)[];
     readonly _offsetNodes: number;
     readonly _offsetStringTableOffsets: number;
     readonly _offsetStringTable: number;
     readonly _offsetExtendedData: number;
+    readonly _offsetStructuredData: number;
     readonly _decoder: TextDecoder;
 
     constructor(data: Uint8Array, decoder: TextDecoder) {
@@ -918,9 +1013,69 @@ export class RemoteSourceFile extends RemoteNode {
         this._offsetStringTableOffsets = view.getUint32(HEADER_OFFSET_STRING_TABLE_OFFSETS, true);
         this._offsetStringTable = view.getUint32(HEADER_OFFSET_STRING_TABLE, true);
         this._offsetExtendedData = view.getUint32(HEADER_OFFSET_EXTENDED_DATA, true);
+        this._offsetStructuredData = view.getUint32(HEADER_OFFSET_STRUCTURED_DATA, true);
         this._decoder = decoder;
         this.nodes = Array((view.byteLength - offsetNodes) / NODE_LEN);
         this.nodes[1] = this;
+    }
+
+    readFileReferences(structuredDataOffset: number): readonly FileReference[] {
+        if (structuredDataOffset === NO_STRUCTURED_DATA) {
+            return [];
+        }
+        const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
+        const reader = new MsgpackReader(buf, this._offsetStructuredData + structuredDataOffset);
+        const count = reader.readArrayHeader();
+        const result: FileReference[] = [];
+        for (let i = 0; i < count; i++) {
+            reader.readArrayHeader(); // 5-element tuple
+            const pos = reader.readUint();
+            const end = reader.readUint();
+            const fileName = reader.readString();
+            const resolutionMode = reader.readUint();
+            const preserve = reader.readBool();
+            result.push({ pos, end, fileName, resolutionMode, preserve });
+        }
+        return result;
+    }
+
+    readNodeIndexArray(structuredDataOffset: number): readonly Node[] {
+        if (structuredDataOffset === NO_STRUCTURED_DATA) {
+            return [];
+        }
+        const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
+        const reader = new MsgpackReader(buf, this._offsetStructuredData + structuredDataOffset);
+        const count = reader.readArrayHeader();
+        const result: Node[] = [];
+        for (let i = 0; i < count; i++) {
+            const nodeIndex = reader.readUint();
+            result.push(this.getOrCreateNodeAtIndex(nodeIndex));
+        }
+        return result;
+    }
+
+    readStringArray(structuredDataOffset: number): readonly string[] {
+        if (structuredDataOffset === NO_STRUCTURED_DATA) {
+            return [];
+        }
+        const buf = new Uint8Array(this.view.buffer, this.view.byteOffset, this.view.byteLength);
+        const reader = new MsgpackReader(buf, this._offsetStructuredData + structuredDataOffset);
+        const count = reader.readArrayHeader();
+        const result: string[] = [];
+        for (let i = 0; i < count; i++) {
+            result.push(reader.readString());
+        }
+        return result;
+    }
+
+    /** @internal */
+    getOrCreateNodeAtIndex(index: number): Node {
+        let node = this.nodes[index];
+        if (!node) {
+            node = new RemoteNode(this.view, index, this, this, this._offsetNodes);
+            this.nodes[index] = node;
+        }
+        return node as Node;
     }
 }
 

@@ -33,6 +33,10 @@
         "./utils": {
             "@typescript/source": "./src/utils.ts",
             "default": "./dist/utils.js"
+        },
+        "./scanner": {
+            "@typescript/source": "./src/scanner.ts",
+            "default": "./dist/scanner.js"
         }
     },
     "scripts": {

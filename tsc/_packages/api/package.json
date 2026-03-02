@@ -36,16 +36,17 @@
     },
     "scripts": {
         "node": "node --experimental-strip-types --no-warnings --conditions @typescript/source",
+        "generate": "npm run -w @typescript/ast generate:factory && npm run generate:enums && npm run generate:sync",
         "generate:sync": "node --experimental-strip-types --no-warnings scripts/generateSync.ts",
         "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
-        "prebuild": "npm run generate:enums && npm run generate:sync",
+        "prebuild": "npm run generate",
         "build": "tsc -b",
-        "prebuild:test": "npm run generate:enums && npm run generate:sync",
+        "prebuild:test": "npm run generate",
         "build:test": "tsc -b test",
-        "prebench": "npm run generate:enums && npm run generate:sync",
+        "prebench": "npm run generate",
         "bench": "npm run node -- test/api.bench.ts",
-        "pretest": "npm run generate:enums && npm run generate:sync",
-        "test": "npm run node -- --test ./test/**/*.test.ts"
+        "pretest": "npm run generate",
+        "test": "npm run node -- --test './test/**/*.test.ts'"
     },
     "devDependencies": {
         "tinybench": "^6.0.0"

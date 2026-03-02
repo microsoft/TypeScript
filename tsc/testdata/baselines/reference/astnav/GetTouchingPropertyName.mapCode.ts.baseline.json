@@ -1,0 +1,10040 @@
+[
+  {
+    "startPos": 0,
+    "endPos": 6,
+    "kind": "ImportKeyword",
+    "nodePos": 0,
+    "nodeEnd": 6
+  },
+  {
+    "startPos": 7,
+    "endPos": 7,
+    "kind": "OpenBraceToken",
+    "nodePos": 6,
+    "nodeEnd": 8
+  },
+  {
+    "startPos": 8,
+    "endPos": 13,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 14,
+    "endPos": 19,
+    "kind": "Identifier",
+    "nodePos": 8,
+    "nodeEnd": 19
+  },
+  {
+    "startPos": 20,
+    "endPos": 25,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 26,
+    "endPos": 38,
+    "kind": "Identifier",
+    "nodePos": 20,
+    "nodeEnd": 38
+  },
+  {
+    "startPos": 39,
+    "endPos": 44,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 45,
+    "endPos": 65,
+    "kind": "Identifier",
+    "nodePos": 39,
+    "nodeEnd": 65
+  },
+  {
+    "startPos": 66,
+    "endPos": 71,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 72,
+    "endPos": 88,
+    "kind": "Identifier",
+    "nodePos": 66,
+    "nodeEnd": 88
+  },
+  {
+    "startPos": 89,
+    "endPos": 94,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 95,
+    "endPos": 110,
+    "kind": "Identifier",
+    "nodePos": 89,
+    "nodeEnd": 110
+  },
+  {
+    "startPos": 111,
+    "endPos": 116,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 117,
+    "endPos": 121,
+    "kind": "Identifier",
+    "nodePos": 111,
+    "nodeEnd": 121
+  },
+  {
+    "startPos": 122,
+    "endPos": 127,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 128,
+    "endPos": 140,
+    "kind": "Identifier",
+    "nodePos": 122,
+    "nodeEnd": 140
+  },
+  {
+    "startPos": 141,
+    "endPos": 146,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 147,
+    "endPos": 155,
+    "kind": "Identifier",
+    "nodePos": 141,
+    "nodeEnd": 155
+  },
+  {
+    "startPos": 156,
+    "endPos": 161,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 162,
+    "endPos": 169,
+    "kind": "Identifier",
+    "nodePos": 156,
+    "nodeEnd": 169
+  },
+  {
+    "startPos": 170,
+    "endPos": 175,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 176,
+    "endPos": 183,
+    "kind": "Identifier",
+    "nodePos": 170,
+    "nodeEnd": 183
+  },
+  {
+    "startPos": 184,
+    "endPos": 189,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 190,
+    "endPos": 200,
+    "kind": "Identifier",
+    "nodePos": 184,
+    "nodeEnd": 200
+  },
+  {
+    "startPos": 201,
+    "endPos": 206,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 207,
+    "endPos": 225,
+    "kind": "Identifier",
+    "nodePos": 201,
+    "nodeEnd": 225
+  },
+  {
+    "startPos": 226,
+    "endPos": 231,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 232,
+    "endPos": 239,
+    "kind": "Identifier",
+    "nodePos": 226,
+    "nodeEnd": 239
+  },
+  {
+    "startPos": 240,
+    "endPos": 245,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 246,
+    "endPos": 260,
+    "kind": "Identifier",
+    "nodePos": 240,
+    "nodeEnd": 260
+  },
+  {
+    "startPos": 261,
+    "endPos": 266,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 267,
+    "endPos": 278,
+    "kind": "Identifier",
+    "nodePos": 261,
+    "nodeEnd": 278
+  },
+  {
+    "startPos": 279,
+    "endPos": 284,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 285,
+    "endPos": 305,
+    "kind": "Identifier",
+    "nodePos": 279,
+    "nodeEnd": 305
+  },
+  {
+    "startPos": 306,
+    "endPos": 311,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 312,
+    "endPos": 326,
+    "kind": "Identifier",
+    "nodePos": 306,
+    "nodeEnd": 326
+  },
+  {
+    "startPos": 327,
+    "endPos": 332,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 333,
+    "endPos": 346,
+    "kind": "Identifier",
+    "nodePos": 327,
+    "nodeEnd": 346
+  },
+  {
+    "startPos": 347,
+    "endPos": 352,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 353,
+    "endPos": 375,
+    "kind": "Identifier",
+    "nodePos": 347,
+    "nodeEnd": 375
+  },
+  {
+    "startPos": 376,
+    "endPos": 381,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 382,
+    "endPos": 400,
+    "kind": "Identifier",
+    "nodePos": 376,
+    "nodeEnd": 400
+  },
+  {
+    "startPos": 401,
+    "endPos": 406,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 407,
+    "endPos": 425,
+    "kind": "Identifier",
+    "nodePos": 401,
+    "nodeEnd": 425
+  },
+  {
+    "startPos": 426,
+    "endPos": 431,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 432,
+    "endPos": 444,
+    "kind": "Identifier",
+    "nodePos": 426,
+    "nodeEnd": 444
+  },
+  {
+    "startPos": 445,
+    "endPos": 450,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 451,
+    "endPos": 464,
+    "kind": "Identifier",
+    "nodePos": 445,
+    "nodeEnd": 464
+  },
+  {
+    "startPos": 465,
+    "endPos": 470,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 471,
+    "endPos": 487,
+    "kind": "Identifier",
+    "nodePos": 465,
+    "nodeEnd": 487
+  },
+  {
+    "startPos": 488,
+    "endPos": 493,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 494,
+    "endPos": 513,
+    "kind": "Identifier",
+    "nodePos": 488,
+    "nodeEnd": 513
+  },
+  {
+    "startPos": 514,
+    "endPos": 519,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 520,
+    "endPos": 527,
+    "kind": "Identifier",
+    "nodePos": 514,
+    "nodeEnd": 527
+  },
+  {
+    "startPos": 528,
+    "endPos": 533,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 534,
+    "endPos": 538,
+    "kind": "Identifier",
+    "nodePos": 528,
+    "nodeEnd": 538
+  },
+  {
+    "startPos": 539,
+    "endPos": 544,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 545,
+    "endPos": 554,
+    "kind": "Identifier",
+    "nodePos": 539,
+    "nodeEnd": 554
+  },
+  {
+    "startPos": 555,
+    "endPos": 560,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 561,
+    "endPos": 563,
+    "kind": "Identifier",
+    "nodePos": 555,
+    "nodeEnd": 563
+  },
+  {
+    "startPos": 564,
+    "endPos": 569,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 570,
+    "endPos": 574,
+    "kind": "Identifier",
+    "nodePos": 564,
+    "nodeEnd": 574
+  },
+  {
+    "startPos": 575,
+    "endPos": 580,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 581,
+    "endPos": 591,
+    "kind": "Identifier",
+    "nodePos": 575,
+    "nodeEnd": 591
+  },
+  {
+    "startPos": 592,
+    "endPos": 597,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 598,
+    "endPos": 607,
+    "kind": "Identifier",
+    "nodePos": 592,
+    "nodeEnd": 607
+  },
+  {
+    "startPos": 608,
+    "endPos": 613,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 614,
+    "endPos": 624,
+    "kind": "Identifier",
+    "nodePos": 608,
+    "nodeEnd": 624
+  },
+  {
+    "startPos": 625,
+    "endPos": 630,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 631,
+    "endPos": 642,
+    "kind": "Identifier",
+    "nodePos": 625,
+    "nodeEnd": 642
+  },
+  {
+    "startPos": 643,
+    "endPos": 648,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 649,
+    "endPos": 657,
+    "kind": "Identifier",
+    "nodePos": 643,
+    "nodeEnd": 657
+  },
+  {
+    "startPos": 658,
+    "endPos": 663,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 664,
+    "endPos": 675,
+    "kind": "Identifier",
+    "nodePos": 658,
+    "nodeEnd": 675
+  },
+  {
+    "startPos": 676,
+    "endPos": 681,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 682,
+    "endPos": 697,
+    "kind": "Identifier",
+    "nodePos": 676,
+    "nodeEnd": 697
+  },
+  {
+    "startPos": 698,
+    "endPos": 699,
+    "kind": "NamedImports",
+    "nodePos": 6,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 700,
+    "endPos": 700,
+    "kind": "CloseBraceToken",
+    "nodePos": 698,
+    "nodeEnd": 701
+  },
+  {
+    "startPos": 701,
+    "endPos": 701,
+    "kind": "ImportDeclaration",
+    "nodePos": 0,
+    "nodeEnd": 729
+  },
+  {
+    "startPos": 702,
+    "endPos": 706,
+    "kind": "FromKeyword",
+    "nodePos": 701,
+    "nodeEnd": 706
+  },
+  {
+    "startPos": 707,
+    "endPos": 728,
+    "kind": "StringLiteral",
+    "nodePos": 706,
+    "nodeEnd": 728
+  },
+  {
+    "startPos": 729,
+    "endPos": 730,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 731,
+    "endPos": 737,
+    "kind": "ImportKeyword",
+    "nodePos": 729,
+    "nodeEnd": 737
+  },
+  {
+    "startPos": 738,
+    "endPos": 738,
+    "kind": "OpenBraceToken",
+    "nodePos": 737,
+    "nodeEnd": 739
+  },
+  {
+    "startPos": 739,
+    "endPos": 739,
+    "kind": "NamedImports",
+    "nodePos": 737,
+    "nodeEnd": 755
+  },
+  {
+    "startPos": 740,
+    "endPos": 753,
+    "kind": "Identifier",
+    "nodePos": 739,
+    "nodeEnd": 753
+  },
+  {
+    "startPos": 754,
+    "endPos": 754,
+    "kind": "CloseBraceToken",
+    "nodePos": 753,
+    "nodeEnd": 755
+  },
+  {
+    "startPos": 755,
+    "endPos": 755,
+    "kind": "ImportDeclaration",
+    "nodePos": 729,
+    "nodeEnd": 780
+  },
+  {
+    "startPos": 756,
+    "endPos": 760,
+    "kind": "FromKeyword",
+    "nodePos": 755,
+    "nodeEnd": 760
+  },
+  {
+    "startPos": 761,
+    "endPos": 779,
+    "kind": "StringLiteral",
+    "nodePos": 760,
+    "nodeEnd": 779
+  },
+  {
+    "startPos": 780,
+    "endPos": 783,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 784,
+    "endPos": 787,
+    "kind": "JSDoc",
+    "nodePos": 780,
+    "nodeEnd": 800
+  },
+  {
+    "startPos": 788,
+    "endPos": 788,
+    "kind": "JSDocTag",
+    "nodePos": 788,
+    "nodeEnd": 798
+  },
+  {
+    "startPos": 789,
+    "endPos": 797,
+    "kind": "Identifier",
+    "nodePos": 789,
+    "nodeEnd": 797
+  },
+  {
+    "startPos": 798,
+    "endPos": 799,
+    "kind": "JSDoc",
+    "nodePos": 780,
+    "nodeEnd": 800
+  },
+  {
+    "startPos": 800,
+    "endPos": 801,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 802,
+    "endPos": 808,
+    "kind": "ExportKeyword",
+    "nodePos": 780,
+    "nodeEnd": 808
+  },
+  {
+    "startPos": 809,
+    "endPos": 817,
+    "kind": "FunctionKeyword",
+    "nodePos": 808,
+    "nodeEnd": 817
+  },
+  {
+    "startPos": 818,
+    "endPos": 825,
+    "kind": "Identifier",
+    "nodePos": 817,
+    "nodeEnd": 825
+  },
+  {
+    "startPos": 826,
+    "endPos": 831,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 832,
+    "endPos": 842,
+    "kind": "Identifier",
+    "nodePos": 826,
+    "nodeEnd": 842
+  },
+  {
+    "startPos": 843,
+    "endPos": 843,
+    "kind": "Parameter",
+    "nodePos": 826,
+    "nodeEnd": 854
+  },
+  {
+    "startPos": 844,
+    "endPos": 854,
+    "kind": "Identifier",
+    "nodePos": 843,
+    "nodeEnd": 854
+  },
+  {
+    "startPos": 855,
+    "endPos": 860,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 861,
+    "endPos": 869,
+    "kind": "Identifier",
+    "nodePos": 855,
+    "nodeEnd": 869
+  },
+  {
+    "startPos": 870,
+    "endPos": 870,
+    "kind": "Parameter",
+    "nodePos": 855,
+    "nodeEnd": 879
+  },
+  {
+    "startPos": 871,
+    "endPos": 877,
+    "kind": "StringKeyword",
+    "nodePos": 870,
+    "nodeEnd": 877
+  },
+  {
+    "startPos": 878,
+    "endPos": 878,
+    "kind": "CloseBracketToken",
+    "nodePos": 878,
+    "nodeEnd": 879
+  },
+  {
+    "startPos": 879,
+    "endPos": 879,
+    "kind": "CommaToken",
+    "nodePos": 879,
+    "nodeEnd": 880
+  },
+  {
+    "startPos": 880,
+    "endPos": 885,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 886,
+    "endPos": 900,
+    "kind": "Identifier",
+    "nodePos": 880,
+    "nodeEnd": 900
+  },
+  {
+    "startPos": 901,
+    "endPos": 901,
+    "kind": "Parameter",
+    "nodePos": 880,
+    "nodeEnd": 926
+  },
+  {
+    "startPos": 902,
+    "endPos": 910,
+    "kind": "Identifier",
+    "nodePos": 901,
+    "nodeEnd": 910
+  },
+  {
+    "startPos": 911,
+    "endPos": 911,
+    "kind": "CloseBracketToken",
+    "nodePos": 911,
+    "nodeEnd": 912
+  },
+  {
+    "startPos": 912,
+    "endPos": 912,
+    "kind": "OpenBracketToken",
+    "nodePos": 912,
+    "nodeEnd": 913
+  },
+  {
+    "startPos": 913,
+    "endPos": 913,
+    "kind": "CloseBracketToken",
+    "nodePos": 913,
+    "nodeEnd": 914
+  },
+  {
+    "startPos": 914,
+    "endPos": 914,
+    "kind": "UnionType",
+    "nodePos": 901,
+    "nodeEnd": 926
+  },
+  {
+    "startPos": 915,
+    "endPos": 915,
+    "kind": "BarToken",
+    "nodePos": 914,
+    "nodeEnd": 916
+  },
+  {
+    "startPos": 916,
+    "endPos": 916,
+    "kind": "UnionType",
+    "nodePos": 901,
+    "nodeEnd": 926
+  },
+  {
+    "startPos": 917,
+    "endPos": 926,
+    "kind": "UndefinedKeyword",
+    "nodePos": 916,
+    "nodeEnd": 926
+  },
+  {
+    "startPos": 927,
+    "endPos": 932,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 933,
+    "endPos": 937,
+    "kind": "Identifier",
+    "nodePos": 927,
+    "nodeEnd": 937
+  },
+  {
+    "startPos": 938,
+    "endPos": 938,
+    "kind": "Parameter",
+    "nodePos": 927,
+    "nodeEnd": 958
+  },
+  {
+    "startPos": 939,
+    "endPos": 958,
+    "kind": "Identifier",
+    "nodePos": 938,
+    "nodeEnd": 958
+  },
+  {
+    "startPos": 959,
+    "endPos": 964,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 965,
+    "endPos": 978,
+    "kind": "Identifier",
+    "nodePos": 959,
+    "nodeEnd": 978
+  },
+  {
+    "startPos": 979,
+    "endPos": 979,
+    "kind": "Parameter",
+    "nodePos": 959,
+    "nodeEnd": 1004
+  },
+  {
+    "startPos": 980,
+    "endPos": 990,
+    "kind": "Identifier",
+    "nodePos": 979,
+    "nodeEnd": 990
+  },
+  {
+    "startPos": 991,
+    "endPos": 1004,
+    "kind": "Identifier",
+    "nodePos": 991,
+    "nodeEnd": 1004
+  },
+  {
+    "startPos": 1005,
+    "endPos": 1010,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1011,
+    "endPos": 1022,
+    "kind": "Identifier",
+    "nodePos": 1005,
+    "nodeEnd": 1022
+  },
+  {
+    "startPos": 1023,
+    "endPos": 1023,
+    "kind": "Parameter",
+    "nodePos": 1005,
+    "nodeEnd": 1039
+  },
+  {
+    "startPos": 1024,
+    "endPos": 1039,
+    "kind": "Identifier",
+    "nodePos": 1023,
+    "nodeEnd": 1039
+  },
+  {
+    "startPos": 1040,
+    "endPos": 1041,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1042,
+    "endPos": 1042,
+    "kind": "CloseParenToken",
+    "nodePos": 1040,
+    "nodeEnd": 1043
+  },
+  {
+    "startPos": 1043,
+    "endPos": 1043,
+    "kind": "ColonToken",
+    "nodePos": 1043,
+    "nodeEnd": 1044
+  },
+  {
+    "startPos": 1044,
+    "endPos": 1044,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1045,
+    "endPos": 1060,
+    "kind": "Identifier",
+    "nodePos": 1044,
+    "nodeEnd": 1060
+  },
+  {
+    "startPos": 1061,
+    "endPos": 1061,
+    "kind": "CloseBracketToken",
+    "nodePos": 1061,
+    "nodeEnd": 1062
+  },
+  {
+    "startPos": 1062,
+    "endPos": 1062,
+    "kind": "FunctionDeclaration",
+    "nodePos": 780,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1063,
+    "endPos": 1063,
+    "kind": "OpenBraceToken",
+    "nodePos": 1062,
+    "nodeEnd": 1064
+  },
+  {
+    "startPos": 1064,
+    "endPos": 1069,
+    "kind": "Block",
+    "nodePos": 1062,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1070,
+    "endPos": 1076,
+    "kind": "ReturnKeyword",
+    "nodePos": 1064,
+    "nodeEnd": 1076
+  },
+  {
+    "startPos": 1077,
+    "endPos": 1088,
+    "kind": "Identifier",
+    "nodePos": 1076,
+    "nodeEnd": 1088
+  },
+  {
+    "startPos": 1089,
+    "endPos": 1102,
+    "kind": "Identifier",
+    "nodePos": 1089,
+    "nodeEnd": 1102
+  },
+  {
+    "startPos": 1103,
+    "endPos": 1107,
+    "kind": "Identifier",
+    "nodePos": 1103,
+    "nodeEnd": 1107
+  },
+  {
+    "startPos": 1108,
+    "endPos": 1117,
+    "kind": "CallExpression",
+    "nodePos": 1076,
+    "nodeEnd": 1603
+  },
+  {
+    "startPos": 1118,
+    "endPos": 1118,
+    "kind": "OpenBraceToken",
+    "nodePos": 1108,
+    "nodeEnd": 1119
+  },
+  {
+    "startPos": 1119,
+    "endPos": 1119,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 1108,
+    "nodeEnd": 1154
+  },
+  {
+    "startPos": 1120,
+    "endPos": 1124,
+    "kind": "Identifier",
+    "nodePos": 1119,
+    "nodeEnd": 1124
+  },
+  {
+    "startPos": 1125,
+    "endPos": 1125,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 1108,
+    "nodeEnd": 1154
+  },
+  {
+    "startPos": 1126,
+    "endPos": 1139,
+    "kind": "Identifier",
+    "nodePos": 1125,
+    "nodeEnd": 1139
+  },
+  {
+    "startPos": 1140,
+    "endPos": 1140,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 1108,
+    "nodeEnd": 1154
+  },
+  {
+    "startPos": 1141,
+    "endPos": 1152,
+    "kind": "Identifier",
+    "nodePos": 1140,
+    "nodeEnd": 1152
+  },
+  {
+    "startPos": 1153,
+    "endPos": 1153,
+    "kind": "CloseBraceToken",
+    "nodePos": 1152,
+    "nodeEnd": 1154
+  },
+  {
+    "startPos": 1154,
+    "endPos": 1154,
+    "kind": "CommaToken",
+    "nodePos": 1154,
+    "nodeEnd": 1155
+  },
+  {
+    "startPos": 1155,
+    "endPos": 1164,
+    "kind": "CallExpression",
+    "nodePos": 1076,
+    "nodeEnd": 1603
+  },
+  {
+    "startPos": 1165,
+    "endPos": 1178,
+    "kind": "Identifier",
+    "nodePos": 1155,
+    "nodeEnd": 1178
+  },
+  {
+    "startPos": 1179,
+    "endPos": 1180,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 1178,
+    "nodeEnd": 1181
+  },
+  {
+    "startPos": 1181,
+    "endPos": 1181,
+    "kind": "ArrowFunction",
+    "nodePos": 1155,
+    "nodeEnd": 1595
+  },
+  {
+    "startPos": 1182,
+    "endPos": 1182,
+    "kind": "OpenBraceToken",
+    "nodePos": 1181,
+    "nodeEnd": 1183
+  },
+  {
+    "startPos": 1183,
+    "endPos": 1196,
+    "kind": "Block",
+    "nodePos": 1181,
+    "nodeEnd": 1595
+  },
+  {
+    "startPos": 1197,
+    "endPos": 1202,
+    "kind": "ConstKeyword",
+    "nodePos": 1183,
+    "nodeEnd": 1202
+  },
+  {
+    "startPos": 1203,
+    "endPos": 1209,
+    "kind": "Identifier",
+    "nodePos": 1202,
+    "nodeEnd": 1209
+  },
+  {
+    "startPos": 1210,
+    "endPos": 1210,
+    "kind": "EqualsToken",
+    "nodePos": 1209,
+    "nodeEnd": 1211
+  },
+  {
+    "startPos": 1211,
+    "endPos": 1211,
+    "kind": "VariableDeclaration",
+    "nodePos": 1202,
+    "nodeEnd": 1251
+  },
+  {
+    "startPos": 1212,
+    "endPos": 1220,
+    "kind": "Identifier",
+    "nodePos": 1211,
+    "nodeEnd": 1220
+  },
+  {
+    "startPos": 1221,
+    "endPos": 1224,
+    "kind": "Identifier",
+    "nodePos": 1221,
+    "nodeEnd": 1224
+  },
+  {
+    "startPos": 1225,
+    "endPos": 1226,
+    "kind": "Identifier",
+    "nodePos": 1225,
+    "nodeEnd": 1226
+  },
+  {
+    "startPos": 1227,
+    "endPos": 1228,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 1226,
+    "nodeEnd": 1229
+  },
+  {
+    "startPos": 1229,
+    "endPos": 1229,
+    "kind": "ArrowFunction",
+    "nodePos": 1225,
+    "nodeEnd": 1250
+  },
+  {
+    "startPos": 1230,
+    "endPos": 1235,
+    "kind": "Identifier",
+    "nodePos": 1229,
+    "nodeEnd": 1235
+  },
+  {
+    "startPos": 1236,
+    "endPos": 1246,
+    "kind": "Identifier",
+    "nodePos": 1236,
+    "nodeEnd": 1246
+  },
+  {
+    "startPos": 1247,
+    "endPos": 1247,
+    "kind": "CallExpression",
+    "nodePos": 1229,
+    "nodeEnd": 1250
+  },
+  {
+    "startPos": 1248,
+    "endPos": 1249,
+    "kind": "Identifier",
+    "nodePos": 1247,
+    "nodeEnd": 1249
+  },
+  {
+    "startPos": 1250,
+    "endPos": 1250,
+    "kind": "CloseParenToken",
+    "nodePos": 1250,
+    "nodeEnd": 1251
+  },
+  {
+    "startPos": 1251,
+    "endPos": 1251,
+    "kind": "SemicolonToken",
+    "nodePos": 1251,
+    "nodeEnd": 1252
+  },
+  {
+    "startPos": 1252,
+    "endPos": 1265,
+    "kind": "Block",
+    "nodePos": 1181,
+    "nodeEnd": 1595
+  },
+  {
+    "startPos": 1266,
+    "endPos": 1271,
+    "kind": "ConstKeyword",
+    "nodePos": 1252,
+    "nodeEnd": 1271
+  },
+  {
+    "startPos": 1272,
+    "endPos": 1290,
+    "kind": "Identifier",
+    "nodePos": 1271,
+    "nodeEnd": 1290
+  },
+  {
+    "startPos": 1291,
+    "endPos": 1291,
+    "kind": "EqualsToken",
+    "nodePos": 1290,
+    "nodeEnd": 1292
+  },
+  {
+    "startPos": 1292,
+    "endPos": 1292,
+    "kind": "VariableDeclaration",
+    "nodePos": 1271,
+    "nodeEnd": 1334
+  },
+  {
+    "startPos": 1293,
+    "endPos": 1307,
+    "kind": "Identifier",
+    "nodePos": 1292,
+    "nodeEnd": 1307
+  },
+  {
+    "startPos": 1308,
+    "endPos": 1309,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 1307,
+    "nodeEnd": 1310
+  },
+  {
+    "startPos": 1310,
+    "endPos": 1310,
+    "kind": "BinaryExpression",
+    "nodePos": 1292,
+    "nodeEnd": 1334
+  },
+  {
+    "startPos": 1311,
+    "endPos": 1318,
+    "kind": "Identifier",
+    "nodePos": 1310,
+    "nodeEnd": 1318
+  },
+  {
+    "startPos": 1319,
+    "endPos": 1333,
+    "kind": "Identifier",
+    "nodePos": 1319,
+    "nodeEnd": 1333
+  },
+  {
+    "startPos": 1334,
+    "endPos": 1334,
+    "kind": "SemicolonToken",
+    "nodePos": 1334,
+    "nodeEnd": 1335
+  },
+  {
+    "startPos": 1335,
+    "endPos": 1348,
+    "kind": "Block",
+    "nodePos": 1181,
+    "nodeEnd": 1595
+  },
+  {
+    "startPos": 1349,
+    "endPos": 1352,
+    "kind": "ForKeyword",
+    "nodePos": 1335,
+    "nodeEnd": 1352
+  },
+  {
+    "startPos": 1353,
+    "endPos": 1353,
+    "kind": "OpenParenToken",
+    "nodePos": 1352,
+    "nodeEnd": 1354
+  },
+  {
+    "startPos": 1354,
+    "endPos": 1359,
+    "kind": "ConstKeyword",
+    "nodePos": 1354,
+    "nodeEnd": 1359
+  },
+  {
+    "startPos": 1360,
+    "endPos": 1365,
+    "kind": "Identifier",
+    "nodePos": 1359,
+    "nodeEnd": 1365
+  },
+  {
+    "startPos": 1366,
+    "endPos": 1368,
+    "kind": "OfKeyword",
+    "nodePos": 1365,
+    "nodeEnd": 1368
+  },
+  {
+    "startPos": 1369,
+    "endPos": 1375,
+    "kind": "Identifier",
+    "nodePos": 1368,
+    "nodeEnd": 1375
+  },
+  {
+    "startPos": 1376,
+    "endPos": 1376,
+    "kind": "ForOfStatement",
+    "nodePos": 1335,
+    "nodeEnd": 1584
+  },
+  {
+    "startPos": 1377,
+    "endPos": 1377,
+    "kind": "OpenBraceToken",
+    "nodePos": 1376,
+    "nodeEnd": 1378
+  },
+  {
+    "startPos": 1378,
+    "endPos": 1395,
+    "kind": "Block",
+    "nodePos": 1376,
+    "nodeEnd": 1584
+  },
+  {
+    "startPos": 1396,
+    "endPos": 1410,
+    "kind": "Identifier",
+    "nodePos": 1378,
+    "nodeEnd": 1410
+  },
+  {
+    "startPos": 1411,
+    "endPos": 1432,
+    "kind": "CallExpression",
+    "nodePos": 1378,
+    "nodeEnd": 1568
+  },
+  {
+    "startPos": 1433,
+    "endPos": 1443,
+    "kind": "Identifier",
+    "nodePos": 1411,
+    "nodeEnd": 1443
+  },
+  {
+    "startPos": 1444,
+    "endPos": 1465,
+    "kind": "CallExpression",
+    "nodePos": 1378,
+    "nodeEnd": 1568
+  },
+  {
+    "startPos": 1466,
+    "endPos": 1479,
+    "kind": "Identifier",
+    "nodePos": 1444,
+    "nodeEnd": 1479
+  },
+  {
+    "startPos": 1480,
+    "endPos": 1501,
+    "kind": "CallExpression",
+    "nodePos": 1378,
+    "nodeEnd": 1568
+  },
+  {
+    "startPos": 1502,
+    "endPos": 1507,
+    "kind": "Identifier",
+    "nodePos": 1480,
+    "nodeEnd": 1507
+  },
+  {
+    "startPos": 1508,
+    "endPos": 1529,
+    "kind": "CallExpression",
+    "nodePos": 1378,
+    "nodeEnd": 1568
+  },
+  {
+    "startPos": 1530,
+    "endPos": 1548,
+    "kind": "Identifier",
+    "nodePos": 1508,
+    "nodeEnd": 1548
+  },
+  {
+    "startPos": 1549,
+    "endPos": 1566,
+    "kind": "CallExpression",
+    "nodePos": 1378,
+    "nodeEnd": 1568
+  },
+  {
+    "startPos": 1567,
+    "endPos": 1567,
+    "kind": "CloseParenToken",
+    "nodePos": 1549,
+    "nodeEnd": 1568
+  },
+  {
+    "startPos": 1568,
+    "endPos": 1568,
+    "kind": "SemicolonToken",
+    "nodePos": 1568,
+    "nodeEnd": 1569
+  },
+  {
+    "startPos": 1569,
+    "endPos": 1582,
+    "kind": "Block",
+    "nodePos": 1376,
+    "nodeEnd": 1584
+  },
+  {
+    "startPos": 1583,
+    "endPos": 1583,
+    "kind": "CloseBraceToken",
+    "nodePos": 1569,
+    "nodeEnd": 1584
+  },
+  {
+    "startPos": 1584,
+    "endPos": 1593,
+    "kind": "Block",
+    "nodePos": 1181,
+    "nodeEnd": 1595
+  },
+  {
+    "startPos": 1594,
+    "endPos": 1594,
+    "kind": "CloseBraceToken",
+    "nodePos": 1584,
+    "nodeEnd": 1595
+  },
+  {
+    "startPos": 1595,
+    "endPos": 1595,
+    "kind": "CommaToken",
+    "nodePos": 1595,
+    "nodeEnd": 1596
+  },
+  {
+    "startPos": 1596,
+    "endPos": 1601,
+    "kind": "CallExpression",
+    "nodePos": 1076,
+    "nodeEnd": 1603
+  },
+  {
+    "startPos": 1602,
+    "endPos": 1602,
+    "kind": "CloseParenToken",
+    "nodePos": 1596,
+    "nodeEnd": 1603
+  },
+  {
+    "startPos": 1603,
+    "endPos": 1603,
+    "kind": "SemicolonToken",
+    "nodePos": 1603,
+    "nodeEnd": 1604
+  },
+  {
+    "startPos": 1604,
+    "endPos": 1605,
+    "kind": "Block",
+    "nodePos": 1062,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1606,
+    "endPos": 1606,
+    "kind": "CloseBraceToken",
+    "nodePos": 1604,
+    "nodeEnd": 1607
+  },
+  {
+    "startPos": 1607,
+    "endPos": 1610,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 1611,
+    "endPos": 1732,
+    "kind": "JSDoc",
+    "nodePos": 1607,
+    "nodeEnd": 1733
+  },
+  {
+    "startPos": 1733,
+    "endPos": 1734,
+    "kind": "FunctionDeclaration",
+    "nodePos": 1607,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 1735,
+    "endPos": 1743,
+    "kind": "FunctionKeyword",
+    "nodePos": 1607,
+    "nodeEnd": 1743
+  },
+  {
+    "startPos": 1744,
+    "endPos": 1749,
+    "kind": "Identifier",
+    "nodePos": 1743,
+    "nodeEnd": 1749
+  },
+  {
+    "startPos": 1750,
+    "endPos": 1760,
+    "kind": "Identifier",
+    "nodePos": 1750,
+    "nodeEnd": 1760
+  },
+  {
+    "startPos": 1761,
+    "endPos": 1761,
+    "kind": "Parameter",
+    "nodePos": 1750,
+    "nodeEnd": 1772
+  },
+  {
+    "startPos": 1762,
+    "endPos": 1772,
+    "kind": "Identifier",
+    "nodePos": 1761,
+    "nodeEnd": 1772
+  },
+  {
+    "startPos": 1773,
+    "endPos": 1773,
+    "kind": "FunctionDeclaration",
+    "nodePos": 1607,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 1774,
+    "endPos": 1781,
+    "kind": "Identifier",
+    "nodePos": 1773,
+    "nodeEnd": 1781
+  },
+  {
+    "startPos": 1782,
+    "endPos": 1782,
+    "kind": "Parameter",
+    "nodePos": 1773,
+    "nodeEnd": 1789
+  },
+  {
+    "startPos": 1783,
+    "endPos": 1789,
+    "kind": "StringKeyword",
+    "nodePos": 1782,
+    "nodeEnd": 1789
+  },
+  {
+    "startPos": 1790,
+    "endPos": 1790,
+    "kind": "ColonToken",
+    "nodePos": 1790,
+    "nodeEnd": 1791
+  },
+  {
+    "startPos": 1791,
+    "endPos": 1791,
+    "kind": "FunctionDeclaration",
+    "nodePos": 1607,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 1792,
+    "endPos": 1801,
+    "kind": "Identifier",
+    "nodePos": 1791,
+    "nodeEnd": 1801
+  },
+  {
+    "startPos": 1802,
+    "endPos": 1806,
+    "kind": "Identifier",
+    "nodePos": 1802,
+    "nodeEnd": 1806
+  },
+  {
+    "startPos": 1807,
+    "endPos": 1807,
+    "kind": "FunctionDeclaration",
+    "nodePos": 1607,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 1808,
+    "endPos": 1808,
+    "kind": "OpenBraceToken",
+    "nodePos": 1807,
+    "nodeEnd": 1809
+  },
+  {
+    "startPos": 1809,
+    "endPos": 2006,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 2007,
+    "endPos": 2012,
+    "kind": "ConstKeyword",
+    "nodePos": 1809,
+    "nodeEnd": 2012
+  },
+  {
+    "startPos": 2013,
+    "endPos": 2022,
+    "kind": "Identifier",
+    "nodePos": 2012,
+    "nodeEnd": 2022
+  },
+  {
+    "startPos": 2023,
+    "endPos": 2023,
+    "kind": "EqualsToken",
+    "nodePos": 2022,
+    "nodeEnd": 2024
+  },
+  {
+    "startPos": 2024,
+    "endPos": 2024,
+    "kind": "VariableDeclaration",
+    "nodePos": 2012,
+    "nodeEnd": 2857
+  },
+  {
+    "startPos": 2025,
+    "endPos": 2025,
+    "kind": "OpenBracketToken",
+    "nodePos": 2024,
+    "nodeEnd": 2026
+  },
+  {
+    "startPos": 2026,
+    "endPos": 2035,
+    "kind": "ArrayLiteralExpression",
+    "nodePos": 2024,
+    "nodeEnd": 2857
+  },
+  {
+    "startPos": 2036,
+    "endPos": 2036,
+    "kind": "OpenBraceToken",
+    "nodePos": 2026,
+    "nodeEnd": 2037
+  },
+  {
+    "startPos": 2037,
+    "endPos": 2050,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 2026,
+    "nodeEnd": 2403
+  },
+  {
+    "startPos": 2051,
+    "endPos": 2056,
+    "kind": "Identifier",
+    "nodePos": 2037,
+    "nodeEnd": 2056
+  },
+  {
+    "startPos": 2057,
+    "endPos": 2057,
+    "kind": "PropertyAssignment",
+    "nodePos": 2037,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2058,
+    "endPos": 2058,
+    "kind": "OpenParenToken",
+    "nodePos": 2057,
+    "nodeEnd": 2059
+  },
+  {
+    "startPos": 2059,
+    "endPos": 2059,
+    "kind": "CloseParenToken",
+    "nodePos": 2059,
+    "nodeEnd": 2060
+  },
+  {
+    "startPos": 2060,
+    "endPos": 2060,
+    "kind": "ArrowFunction",
+    "nodePos": 2057,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2061,
+    "endPos": 2062,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 2060,
+    "nodeEnd": 2063
+  },
+  {
+    "startPos": 2063,
+    "endPos": 2080,
+    "kind": "ArrowFunction",
+    "nodePos": 2057,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2081,
+    "endPos": 2097,
+    "kind": "Identifier",
+    "nodePos": 2063,
+    "nodeEnd": 2097
+  },
+  {
+    "startPos": 2098,
+    "endPos": 2119,
+    "kind": "CallExpression",
+    "nodePos": 2063,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2120,
+    "endPos": 2148,
+    "kind": "StringLiteral",
+    "nodePos": 2098,
+    "nodeEnd": 2148
+  },
+  {
+    "startPos": 2149,
+    "endPos": 2170,
+    "kind": "CallExpression",
+    "nodePos": 2063,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2171,
+    "endPos": 2178,
+    "kind": "Identifier",
+    "nodePos": 2149,
+    "nodeEnd": 2178
+  },
+  {
+    "startPos": 2179,
+    "endPos": 2200,
+    "kind": "CallExpression",
+    "nodePos": 2063,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2201,
+    "endPos": 2211,
+    "kind": "Identifier",
+    "nodePos": 2179,
+    "nodeEnd": 2211
+  },
+  {
+    "startPos": 2212,
+    "endPos": 2227,
+    "kind": "Identifier",
+    "nodePos": 2212,
+    "nodeEnd": 2227
+  },
+  {
+    "startPos": 2228,
+    "endPos": 2268,
+    "kind": "CallExpression",
+    "nodePos": 2063,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2269,
+    "endPos": 2273,
+    "kind": "TrueKeyword",
+    "nodePos": 2228,
+    "nodeEnd": 2273
+  },
+  {
+    "startPos": 2274,
+    "endPos": 2295,
+    "kind": "CallExpression",
+    "nodePos": 2063,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2296,
+    "endPos": 2306,
+    "kind": "Identifier",
+    "nodePos": 2274,
+    "nodeEnd": 2306
+  },
+  {
+    "startPos": 2307,
+    "endPos": 2317,
+    "kind": "Identifier",
+    "nodePos": 2307,
+    "nodeEnd": 2317
+  },
+  {
+    "startPos": 2318,
+    "endPos": 2335,
+    "kind": "CallExpression",
+    "nodePos": 2063,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2336,
+    "endPos": 2336,
+    "kind": "CloseParenToken",
+    "nodePos": 2318,
+    "nodeEnd": 2337
+  },
+  {
+    "startPos": 2337,
+    "endPos": 2337,
+    "kind": "CommaToken",
+    "nodePos": 2337,
+    "nodeEnd": 2338
+  },
+  {
+    "startPos": 2338,
+    "endPos": 2351,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 2026,
+    "nodeEnd": 2403
+  },
+  {
+    "startPos": 2352,
+    "endPos": 2356,
+    "kind": "Identifier",
+    "nodePos": 2338,
+    "nodeEnd": 2356
+  },
+  {
+    "startPos": 2357,
+    "endPos": 2357,
+    "kind": "PropertyAssignment",
+    "nodePos": 2338,
+    "nodeEnd": 2391
+  },
+  {
+    "startPos": 2358,
+    "endPos": 2358,
+    "kind": "OpenParenToken",
+    "nodePos": 2357,
+    "nodeEnd": 2359
+  },
+  {
+    "startPos": 2359,
+    "endPos": 2361,
+    "kind": "Identifier",
+    "nodePos": 2359,
+    "nodeEnd": 2361
+  },
+  {
+    "startPos": 2362,
+    "endPos": 2362,
+    "kind": "Parameter",
+    "nodePos": 2359,
+    "nodeEnd": 2373
+  },
+  {
+    "startPos": 2363,
+    "endPos": 2373,
+    "kind": "Identifier",
+    "nodePos": 2362,
+    "nodeEnd": 2373
+  },
+  {
+    "startPos": 2374,
+    "endPos": 2374,
+    "kind": "ArrowFunction",
+    "nodePos": 2357,
+    "nodeEnd": 2391
+  },
+  {
+    "startPos": 2375,
+    "endPos": 2376,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 2374,
+    "nodeEnd": 2377
+  },
+  {
+    "startPos": 2377,
+    "endPos": 2377,
+    "kind": "ArrowFunction",
+    "nodePos": 2357,
+    "nodeEnd": 2391
+  },
+  {
+    "startPos": 2378,
+    "endPos": 2380,
+    "kind": "Identifier",
+    "nodePos": 2377,
+    "nodeEnd": 2380
+  },
+  {
+    "startPos": 2381,
+    "endPos": 2391,
+    "kind": "Identifier",
+    "nodePos": 2381,
+    "nodeEnd": 2391
+  },
+  {
+    "startPos": 2392,
+    "endPos": 2401,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 2026,
+    "nodeEnd": 2403
+  },
+  {
+    "startPos": 2402,
+    "endPos": 2402,
+    "kind": "CloseBraceToken",
+    "nodePos": 2392,
+    "nodeEnd": 2403
+  },
+  {
+    "startPos": 2403,
+    "endPos": 2403,
+    "kind": "CommaToken",
+    "nodePos": 2403,
+    "nodeEnd": 2404
+  },
+  {
+    "startPos": 2404,
+    "endPos": 2413,
+    "kind": "ArrayLiteralExpression",
+    "nodePos": 2024,
+    "nodeEnd": 2857
+  },
+  {
+    "startPos": 2414,
+    "endPos": 2414,
+    "kind": "OpenBraceToken",
+    "nodePos": 2404,
+    "nodeEnd": 2415
+  },
+  {
+    "startPos": 2415,
+    "endPos": 2428,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 2404,
+    "nodeEnd": 2849
+  },
+  {
+    "startPos": 2429,
+    "endPos": 2434,
+    "kind": "Identifier",
+    "nodePos": 2415,
+    "nodeEnd": 2434
+  },
+  {
+    "startPos": 2435,
+    "endPos": 2435,
+    "kind": "PropertyAssignment",
+    "nodePos": 2415,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2436,
+    "endPos": 2436,
+    "kind": "OpenParenToken",
+    "nodePos": 2435,
+    "nodeEnd": 2437
+  },
+  {
+    "startPos": 2437,
+    "endPos": 2437,
+    "kind": "CloseParenToken",
+    "nodePos": 2437,
+    "nodeEnd": 2438
+  },
+  {
+    "startPos": 2438,
+    "endPos": 2438,
+    "kind": "ArrowFunction",
+    "nodePos": 2435,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2439,
+    "endPos": 2440,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 2438,
+    "nodeEnd": 2441
+  },
+  {
+    "startPos": 2441,
+    "endPos": 2458,
+    "kind": "ArrowFunction",
+    "nodePos": 2435,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2459,
+    "endPos": 2475,
+    "kind": "Identifier",
+    "nodePos": 2441,
+    "nodeEnd": 2475
+  },
+  {
+    "startPos": 2476,
+    "endPos": 2497,
+    "kind": "CallExpression",
+    "nodePos": 2441,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2498,
+    "endPos": 2532,
+    "kind": "StringLiteral",
+    "nodePos": 2476,
+    "nodeEnd": 2532
+  },
+  {
+    "startPos": 2533,
+    "endPos": 2554,
+    "kind": "CallExpression",
+    "nodePos": 2441,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2555,
+    "endPos": 2574,
+    "kind": "TemplateHead",
+    "nodePos": 2533,
+    "nodeEnd": 2575
+  },
+  {
+    "startPos": 2575,
+    "endPos": 2582,
+    "kind": "Identifier",
+    "nodePos": 2575,
+    "nodeEnd": 2582
+  },
+  {
+    "startPos": 2583,
+    "endPos": 2586,
+    "kind": "TemplateTail",
+    "nodePos": 2582,
+    "nodeEnd": 2587
+  },
+  {
+    "startPos": 2587,
+    "endPos": 2587,
+    "kind": "CommaToken",
+    "nodePos": 2587,
+    "nodeEnd": 2588
+  },
+  {
+    "startPos": 2588,
+    "endPos": 2609,
+    "kind": "CallExpression",
+    "nodePos": 2441,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2610,
+    "endPos": 2620,
+    "kind": "Identifier",
+    "nodePos": 2588,
+    "nodeEnd": 2620
+  },
+  {
+    "startPos": 2621,
+    "endPos": 2636,
+    "kind": "Identifier",
+    "nodePos": 2621,
+    "nodeEnd": 2636
+  },
+  {
+    "startPos": 2637,
+    "endPos": 2677,
+    "kind": "CallExpression",
+    "nodePos": 2441,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2678,
+    "endPos": 2682,
+    "kind": "TrueKeyword",
+    "nodePos": 2637,
+    "nodeEnd": 2682
+  },
+  {
+    "startPos": 2683,
+    "endPos": 2704,
+    "kind": "CallExpression",
+    "nodePos": 2441,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2705,
+    "endPos": 2715,
+    "kind": "Identifier",
+    "nodePos": 2683,
+    "nodeEnd": 2715
+  },
+  {
+    "startPos": 2716,
+    "endPos": 2726,
+    "kind": "Identifier",
+    "nodePos": 2716,
+    "nodeEnd": 2726
+  },
+  {
+    "startPos": 2727,
+    "endPos": 2744,
+    "kind": "CallExpression",
+    "nodePos": 2441,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2745,
+    "endPos": 2745,
+    "kind": "CloseParenToken",
+    "nodePos": 2727,
+    "nodeEnd": 2746
+  },
+  {
+    "startPos": 2746,
+    "endPos": 2746,
+    "kind": "CommaToken",
+    "nodePos": 2746,
+    "nodeEnd": 2747
+  },
+  {
+    "startPos": 2747,
+    "endPos": 2760,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 2404,
+    "nodeEnd": 2849
+  },
+  {
+    "startPos": 2761,
+    "endPos": 2765,
+    "kind": "Identifier",
+    "nodePos": 2747,
+    "nodeEnd": 2765
+  },
+  {
+    "startPos": 2766,
+    "endPos": 2766,
+    "kind": "PropertyAssignment",
+    "nodePos": 2747,
+    "nodeEnd": 2837
+  },
+  {
+    "startPos": 2767,
+    "endPos": 2767,
+    "kind": "OpenParenToken",
+    "nodePos": 2766,
+    "nodeEnd": 2768
+  },
+  {
+    "startPos": 2768,
+    "endPos": 2770,
+    "kind": "Identifier",
+    "nodePos": 2768,
+    "nodeEnd": 2770
+  },
+  {
+    "startPos": 2771,
+    "endPos": 2771,
+    "kind": "Parameter",
+    "nodePos": 2768,
+    "nodeEnd": 2782
+  },
+  {
+    "startPos": 2772,
+    "endPos": 2782,
+    "kind": "Identifier",
+    "nodePos": 2771,
+    "nodeEnd": 2782
+  },
+  {
+    "startPos": 2783,
+    "endPos": 2783,
+    "kind": "ArrowFunction",
+    "nodePos": 2766,
+    "nodeEnd": 2837
+  },
+  {
+    "startPos": 2784,
+    "endPos": 2785,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 2783,
+    "nodeEnd": 2786
+  },
+  {
+    "startPos": 2786,
+    "endPos": 2786,
+    "kind": "ArrowFunction",
+    "nodePos": 2766,
+    "nodeEnd": 2837
+  },
+  {
+    "startPos": 2787,
+    "endPos": 2787,
+    "kind": "OpenParenToken",
+    "nodePos": 2786,
+    "nodeEnd": 2788
+  },
+  {
+    "startPos": 2788,
+    "endPos": 2790,
+    "kind": "Identifier",
+    "nodePos": 2788,
+    "nodeEnd": 2790
+  },
+  {
+    "startPos": 2791,
+    "endPos": 2801,
+    "kind": "Identifier",
+    "nodePos": 2791,
+    "nodeEnd": 2801
+  },
+  {
+    "startPos": 2802,
+    "endPos": 2803,
+    "kind": "NumericLiteral",
+    "nodePos": 2802,
+    "nodeEnd": 2803
+  },
+  {
+    "startPos": 2804,
+    "endPos": 2804,
+    "kind": "AsExpression",
+    "nodePos": 2788,
+    "nodeEnd": 2828
+  },
+  {
+    "startPos": 2805,
+    "endPos": 2807,
+    "kind": "AsKeyword",
+    "nodePos": 2804,
+    "nodeEnd": 2807
+  },
+  {
+    "startPos": 2808,
+    "endPos": 2828,
+    "kind": "Identifier",
+    "nodePos": 2807,
+    "nodeEnd": 2828
+  },
+  {
+    "startPos": 2829,
+    "endPos": 2829,
+    "kind": "DotToken",
+    "nodePos": 2829,
+    "nodeEnd": 2830
+  },
+  {
+    "startPos": 2830,
+    "endPos": 2837,
+    "kind": "Identifier",
+    "nodePos": 2830,
+    "nodeEnd": 2837
+  },
+  {
+    "startPos": 2838,
+    "endPos": 2847,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 2404,
+    "nodeEnd": 2849
+  },
+  {
+    "startPos": 2848,
+    "endPos": 2848,
+    "kind": "CloseBraceToken",
+    "nodePos": 2838,
+    "nodeEnd": 2849
+  },
+  {
+    "startPos": 2849,
+    "endPos": 2849,
+    "kind": "CommaToken",
+    "nodePos": 2849,
+    "nodeEnd": 2850
+  },
+  {
+    "startPos": 2850,
+    "endPos": 2855,
+    "kind": "ArrayLiteralExpression",
+    "nodePos": 2024,
+    "nodeEnd": 2857
+  },
+  {
+    "startPos": 2856,
+    "endPos": 2856,
+    "kind": "CloseBracketToken",
+    "nodePos": 2850,
+    "nodeEnd": 2857
+  },
+  {
+    "startPos": 2857,
+    "endPos": 2857,
+    "kind": "SemicolonToken",
+    "nodePos": 2857,
+    "nodeEnd": 2858
+  },
+  {
+    "startPos": 2858,
+    "endPos": 2865,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 2866,
+    "endPos": 2871,
+    "kind": "ConstKeyword",
+    "nodePos": 2858,
+    "nodeEnd": 2871
+  },
+  {
+    "startPos": 2872,
+    "endPos": 2883,
+    "kind": "Identifier",
+    "nodePos": 2871,
+    "nodeEnd": 2883
+  },
+  {
+    "startPos": 2884,
+    "endPos": 2884,
+    "kind": "EqualsToken",
+    "nodePos": 2883,
+    "nodeEnd": 2885
+  },
+  {
+    "startPos": 2885,
+    "endPos": 2885,
+    "kind": "VariableDeclaration",
+    "nodePos": 2871,
+    "nodeEnd": 2888
+  },
+  {
+    "startPos": 2886,
+    "endPos": 2886,
+    "kind": "OpenBracketToken",
+    "nodePos": 2885,
+    "nodeEnd": 2887
+  },
+  {
+    "startPos": 2887,
+    "endPos": 2887,
+    "kind": "CloseBracketToken",
+    "nodePos": 2887,
+    "nodeEnd": 2888
+  },
+  {
+    "startPos": 2888,
+    "endPos": 2888,
+    "kind": "SemicolonToken",
+    "nodePos": 2888,
+    "nodeEnd": 2889
+  },
+  {
+    "startPos": 2889,
+    "endPos": 2894,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 2895,
+    "endPos": 2898,
+    "kind": "ForKeyword",
+    "nodePos": 2889,
+    "nodeEnd": 2898
+  },
+  {
+    "startPos": 2899,
+    "endPos": 2899,
+    "kind": "OpenParenToken",
+    "nodePos": 2898,
+    "nodeEnd": 2900
+  },
+  {
+    "startPos": 2900,
+    "endPos": 2905,
+    "kind": "ConstKeyword",
+    "nodePos": 2900,
+    "nodeEnd": 2905
+  },
+  {
+    "startPos": 2906,
+    "endPos": 2906,
+    "kind": "OpenBraceToken",
+    "nodePos": 2905,
+    "nodeEnd": 2907
+  },
+  {
+    "startPos": 2907,
+    "endPos": 2907,
+    "kind": "ObjectBindingPattern",
+    "nodePos": 2905,
+    "nodeEnd": 2921
+  },
+  {
+    "startPos": 2908,
+    "endPos": 2913,
+    "kind": "Identifier",
+    "nodePos": 2907,
+    "nodeEnd": 2913
+  },
+  {
+    "startPos": 2914,
+    "endPos": 2914,
+    "kind": "ObjectBindingPattern",
+    "nodePos": 2905,
+    "nodeEnd": 2921
+  },
+  {
+    "startPos": 2915,
+    "endPos": 2919,
+    "kind": "Identifier",
+    "nodePos": 2914,
+    "nodeEnd": 2919
+  },
+  {
+    "startPos": 2920,
+    "endPos": 2920,
+    "kind": "CloseBraceToken",
+    "nodePos": 2919,
+    "nodeEnd": 2921
+  },
+  {
+    "startPos": 2921,
+    "endPos": 2921,
+    "kind": "ForOfStatement",
+    "nodePos": 2889,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 2922,
+    "endPos": 2924,
+    "kind": "OfKeyword",
+    "nodePos": 2921,
+    "nodeEnd": 2924
+  },
+  {
+    "startPos": 2925,
+    "endPos": 2934,
+    "kind": "Identifier",
+    "nodePos": 2924,
+    "nodeEnd": 2934
+  },
+  {
+    "startPos": 2935,
+    "endPos": 2935,
+    "kind": "ForOfStatement",
+    "nodePos": 2889,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 2936,
+    "endPos": 2936,
+    "kind": "OpenBraceToken",
+    "nodePos": 2935,
+    "nodeEnd": 2937
+  },
+  {
+    "startPos": 2937,
+    "endPos": 2946,
+    "kind": "Block",
+    "nodePos": 2935,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 2947,
+    "endPos": 2952,
+    "kind": "ConstKeyword",
+    "nodePos": 2937,
+    "nodeEnd": 2952
+  },
+  {
+    "startPos": 2953,
+    "endPos": 2963,
+    "kind": "Identifier",
+    "nodePos": 2952,
+    "nodeEnd": 2963
+  },
+  {
+    "startPos": 2964,
+    "endPos": 2964,
+    "kind": "EqualsToken",
+    "nodePos": 2963,
+    "nodeEnd": 2965
+  },
+  {
+    "startPos": 2965,
+    "endPos": 2965,
+    "kind": "VariableDeclaration",
+    "nodePos": 2952,
+    "nodeEnd": 2973
+  },
+  {
+    "startPos": 2966,
+    "endPos": 2971,
+    "kind": "Identifier",
+    "nodePos": 2965,
+    "nodeEnd": 2971
+  },
+  {
+    "startPos": 2972,
+    "endPos": 2972,
+    "kind": "CloseParenToken",
+    "nodePos": 2972,
+    "nodeEnd": 2973
+  },
+  {
+    "startPos": 2973,
+    "endPos": 2973,
+    "kind": "SemicolonToken",
+    "nodePos": 2973,
+    "nodeEnd": 2974
+  },
+  {
+    "startPos": 2974,
+    "endPos": 2983,
+    "kind": "Block",
+    "nodePos": 2935,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 2984,
+    "endPos": 2989,
+    "kind": "ConstKeyword",
+    "nodePos": 2974,
+    "nodeEnd": 2989
+  },
+  {
+    "startPos": 2990,
+    "endPos": 2993,
+    "kind": "Identifier",
+    "nodePos": 2989,
+    "nodeEnd": 2993
+  },
+  {
+    "startPos": 2994,
+    "endPos": 2994,
+    "kind": "EqualsToken",
+    "nodePos": 2993,
+    "nodeEnd": 2995
+  },
+  {
+    "startPos": 2995,
+    "endPos": 2995,
+    "kind": "VariableDeclaration",
+    "nodePos": 2989,
+    "nodeEnd": 3012
+  },
+  {
+    "startPos": 2996,
+    "endPos": 3000,
+    "kind": "Identifier",
+    "nodePos": 2995,
+    "nodeEnd": 3000
+  },
+  {
+    "startPos": 3001,
+    "endPos": 3011,
+    "kind": "Identifier",
+    "nodePos": 3001,
+    "nodeEnd": 3011
+  },
+  {
+    "startPos": 3012,
+    "endPos": 3012,
+    "kind": "SemicolonToken",
+    "nodePos": 3012,
+    "nodeEnd": 3013
+  },
+  {
+    "startPos": 3013,
+    "endPos": 3022,
+    "kind": "Block",
+    "nodePos": 2935,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 3023,
+    "endPos": 3025,
+    "kind": "IfKeyword",
+    "nodePos": 3013,
+    "nodeEnd": 3025
+  },
+  {
+    "startPos": 3026,
+    "endPos": 3026,
+    "kind": "OpenParenToken",
+    "nodePos": 3025,
+    "nodeEnd": 3027
+  },
+  {
+    "startPos": 3027,
+    "endPos": 3030,
+    "kind": "Identifier",
+    "nodePos": 3027,
+    "nodeEnd": 3030
+  },
+  {
+    "startPos": 3031,
+    "endPos": 3037,
+    "kind": "Identifier",
+    "nodePos": 3031,
+    "nodeEnd": 3037
+  },
+  {
+    "startPos": 3038,
+    "endPos": 3039,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 3037,
+    "nodeEnd": 3040
+  },
+  {
+    "startPos": 3040,
+    "endPos": 3040,
+    "kind": "BinaryExpression",
+    "nodePos": 3027,
+    "nodeEnd": 3081
+  },
+  {
+    "startPos": 3041,
+    "endPos": 3051,
+    "kind": "Identifier",
+    "nodePos": 3040,
+    "nodeEnd": 3051
+  },
+  {
+    "startPos": 3052,
+    "endPos": 3068,
+    "kind": "Identifier",
+    "nodePos": 3052,
+    "nodeEnd": 3068
+  },
+  {
+    "startPos": 3069,
+    "endPos": 3075,
+    "kind": "Identifier",
+    "nodePos": 3069,
+    "nodeEnd": 3075
+  },
+  {
+    "startPos": 3076,
+    "endPos": 3078,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 3075,
+    "nodeEnd": 3079
+  },
+  {
+    "startPos": 3079,
+    "endPos": 3079,
+    "kind": "BinaryExpression",
+    "nodePos": 3040,
+    "nodeEnd": 3081
+  },
+  {
+    "startPos": 3080,
+    "endPos": 3081,
+    "kind": "NumericLiteral",
+    "nodePos": 3079,
+    "nodeEnd": 3081
+  },
+  {
+    "startPos": 3082,
+    "endPos": 3082,
+    "kind": "IfStatement",
+    "nodePos": 3013,
+    "nodeEnd": 3440
+  },
+  {
+    "startPos": 3083,
+    "endPos": 3083,
+    "kind": "OpenBraceToken",
+    "nodePos": 3082,
+    "nodeEnd": 3084
+  },
+  {
+    "startPos": 3084,
+    "endPos": 3188,
+    "kind": "Block",
+    "nodePos": 3082,
+    "nodeEnd": 3211
+  },
+  {
+    "startPos": 3189,
+    "endPos": 3195,
+    "kind": "ReturnKeyword",
+    "nodePos": 3084,
+    "nodeEnd": 3195
+  },
+  {
+    "startPos": 3196,
+    "endPos": 3199,
+    "kind": "Identifier",
+    "nodePos": 3195,
+    "nodeEnd": 3199
+  },
+  {
+    "startPos": 3200,
+    "endPos": 3209,
+    "kind": "Block",
+    "nodePos": 3082,
+    "nodeEnd": 3211
+  },
+  {
+    "startPos": 3210,
+    "endPos": 3210,
+    "kind": "CloseBraceToken",
+    "nodePos": 3200,
+    "nodeEnd": 3211
+  },
+  {
+    "startPos": 3211,
+    "endPos": 3291,
+    "kind": "IfStatement",
+    "nodePos": 3013,
+    "nodeEnd": 3440
+  },
+  {
+    "startPos": 3292,
+    "endPos": 3296,
+    "kind": "ElseKeyword",
+    "nodePos": 3211,
+    "nodeEnd": 3296
+  },
+  {
+    "startPos": 3297,
+    "endPos": 3299,
+    "kind": "IfKeyword",
+    "nodePos": 3296,
+    "nodeEnd": 3299
+  },
+  {
+    "startPos": 3300,
+    "endPos": 3300,
+    "kind": "OpenParenToken",
+    "nodePos": 3299,
+    "nodeEnd": 3301
+  },
+  {
+    "startPos": 3301,
+    "endPos": 3304,
+    "kind": "Identifier",
+    "nodePos": 3301,
+    "nodeEnd": 3304
+  },
+  {
+    "startPos": 3305,
+    "endPos": 3311,
+    "kind": "Identifier",
+    "nodePos": 3305,
+    "nodeEnd": 3311
+  },
+  {
+    "startPos": 3312,
+    "endPos": 3312,
+    "kind": "IfStatement",
+    "nodePos": 3296,
+    "nodeEnd": 3440
+  },
+  {
+    "startPos": 3313,
+    "endPos": 3313,
+    "kind": "OpenBraceToken",
+    "nodePos": 3312,
+    "nodeEnd": 3314
+  },
+  {
+    "startPos": 3314,
+    "endPos": 3384,
+    "kind": "Block",
+    "nodePos": 3312,
+    "nodeEnd": 3440
+  },
+  {
+    "startPos": 3385,
+    "endPos": 3396,
+    "kind": "Identifier",
+    "nodePos": 3314,
+    "nodeEnd": 3396
+  },
+  {
+    "startPos": 3397,
+    "endPos": 3401,
+    "kind": "Identifier",
+    "nodePos": 3397,
+    "nodeEnd": 3401
+  },
+  {
+    "startPos": 3402,
+    "endPos": 3402,
+    "kind": "OpenBraceToken",
+    "nodePos": 3402,
+    "nodeEnd": 3403
+  },
+  {
+    "startPos": 3403,
+    "endPos": 3403,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 3402,
+    "nodeEnd": 3427
+  },
+  {
+    "startPos": 3404,
+    "endPos": 3414,
+    "kind": "Identifier",
+    "nodePos": 3403,
+    "nodeEnd": 3414
+  },
+  {
+    "startPos": 3415,
+    "endPos": 3415,
+    "kind": "ObjectLiteralExpression",
+    "nodePos": 3402,
+    "nodeEnd": 3427
+  },
+  {
+    "startPos": 3416,
+    "endPos": 3420,
+    "kind": "Identifier",
+    "nodePos": 3415,
+    "nodeEnd": 3420
+  },
+  {
+    "startPos": 3421,
+    "endPos": 3421,
+    "kind": "PropertyAssignment",
+    "nodePos": 3415,
+    "nodeEnd": 3425
+  },
+  {
+    "startPos": 3422,
+    "endPos": 3425,
+    "kind": "Identifier",
+    "nodePos": 3421,
+    "nodeEnd": 3425
+  },
+  {
+    "startPos": 3426,
+    "endPos": 3426,
+    "kind": "CloseBraceToken",
+    "nodePos": 3425,
+    "nodeEnd": 3427
+  },
+  {
+    "startPos": 3427,
+    "endPos": 3427,
+    "kind": "CloseParenToken",
+    "nodePos": 3427,
+    "nodeEnd": 3428
+  },
+  {
+    "startPos": 3428,
+    "endPos": 3428,
+    "kind": "SemicolonToken",
+    "nodePos": 3428,
+    "nodeEnd": 3429
+  },
+  {
+    "startPos": 3429,
+    "endPos": 3438,
+    "kind": "Block",
+    "nodePos": 3312,
+    "nodeEnd": 3440
+  },
+  {
+    "startPos": 3439,
+    "endPos": 3439,
+    "kind": "CloseBraceToken",
+    "nodePos": 3429,
+    "nodeEnd": 3440
+  },
+  {
+    "startPos": 3440,
+    "endPos": 3445,
+    "kind": "Block",
+    "nodePos": 2935,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 3446,
+    "endPos": 3446,
+    "kind": "CloseBraceToken",
+    "nodePos": 3440,
+    "nodeEnd": 3447
+  },
+  {
+    "startPos": 3447,
+    "endPos": 3520,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 3521,
+    "endPos": 3532,
+    "kind": "Identifier",
+    "nodePos": 3447,
+    "nodeEnd": 3532
+  },
+  {
+    "startPos": 3533,
+    "endPos": 3537,
+    "kind": "Identifier",
+    "nodePos": 3533,
+    "nodeEnd": 3537
+  },
+  {
+    "startPos": 3538,
+    "endPos": 3547,
+    "kind": "CallExpression",
+    "nodePos": 3447,
+    "nodeEnd": 3667
+  },
+  {
+    "startPos": 3548,
+    "endPos": 3548,
+    "kind": "OpenParenToken",
+    "nodePos": 3538,
+    "nodeEnd": 3549
+  },
+  {
+    "startPos": 3549,
+    "endPos": 3550,
+    "kind": "Identifier",
+    "nodePos": 3549,
+    "nodeEnd": 3550
+  },
+  {
+    "startPos": 3551,
+    "endPos": 3551,
+    "kind": "ArrowFunction",
+    "nodePos": 3538,
+    "nodeEnd": 3659
+  },
+  {
+    "startPos": 3552,
+    "endPos": 3553,
+    "kind": "Identifier",
+    "nodePos": 3551,
+    "nodeEnd": 3553
+  },
+  {
+    "startPos": 3554,
+    "endPos": 3554,
+    "kind": "ArrowFunction",
+    "nodePos": 3538,
+    "nodeEnd": 3659
+  },
+  {
+    "startPos": 3555,
+    "endPos": 3556,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 3554,
+    "nodeEnd": 3557
+  },
+  {
+    "startPos": 3557,
+    "endPos": 3570,
+    "kind": "ArrowFunction",
+    "nodePos": 3538,
+    "nodeEnd": 3659
+  },
+  {
+    "startPos": 3571,
+    "endPos": 3572,
+    "kind": "Identifier",
+    "nodePos": 3557,
+    "nodeEnd": 3572
+  },
+  {
+    "startPos": 3573,
+    "endPos": 3583,
+    "kind": "Identifier",
+    "nodePos": 3573,
+    "nodeEnd": 3583
+  },
+  {
+    "startPos": 3584,
+    "endPos": 3600,
+    "kind": "Identifier",
+    "nodePos": 3584,
+    "nodeEnd": 3600
+  },
+  {
+    "startPos": 3601,
+    "endPos": 3607,
+    "kind": "Identifier",
+    "nodePos": 3601,
+    "nodeEnd": 3607
+  },
+  {
+    "startPos": 3608,
+    "endPos": 3608,
+    "kind": "MinusToken",
+    "nodePos": 3607,
+    "nodeEnd": 3609
+  },
+  {
+    "startPos": 3609,
+    "endPos": 3622,
+    "kind": "BinaryExpression",
+    "nodePos": 3557,
+    "nodeEnd": 3659
+  },
+  {
+    "startPos": 3623,
+    "endPos": 3624,
+    "kind": "Identifier",
+    "nodePos": 3609,
+    "nodeEnd": 3624
+  },
+  {
+    "startPos": 3625,
+    "endPos": 3635,
+    "kind": "Identifier",
+    "nodePos": 3625,
+    "nodeEnd": 3635
+  },
+  {
+    "startPos": 3636,
+    "endPos": 3652,
+    "kind": "Identifier",
+    "nodePos": 3636,
+    "nodeEnd": 3652
+  },
+  {
+    "startPos": 3653,
+    "endPos": 3659,
+    "kind": "Identifier",
+    "nodePos": 3653,
+    "nodeEnd": 3659
+  },
+  {
+    "startPos": 3660,
+    "endPos": 3665,
+    "kind": "CallExpression",
+    "nodePos": 3447,
+    "nodeEnd": 3667
+  },
+  {
+    "startPos": 3666,
+    "endPos": 3666,
+    "kind": "CloseParenToken",
+    "nodePos": 3660,
+    "nodeEnd": 3667
+  },
+  {
+    "startPos": 3667,
+    "endPos": 3667,
+    "kind": "SemicolonToken",
+    "nodePos": 3667,
+    "nodeEnd": 3668
+  },
+  {
+    "startPos": 3668,
+    "endPos": 3673,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 3674,
+    "endPos": 3679,
+    "kind": "ConstKeyword",
+    "nodePos": 3668,
+    "nodeEnd": 3679
+  },
+  {
+    "startPos": 3680,
+    "endPos": 3680,
+    "kind": "OpenBraceToken",
+    "nodePos": 3679,
+    "nodeEnd": 3681
+  },
+  {
+    "startPos": 3681,
+    "endPos": 3681,
+    "kind": "ObjectBindingPattern",
+    "nodePos": 3679,
+    "nodeEnd": 3688
+  },
+  {
+    "startPos": 3682,
+    "endPos": 3686,
+    "kind": "Identifier",
+    "nodePos": 3681,
+    "nodeEnd": 3686
+  },
+  {
+    "startPos": 3687,
+    "endPos": 3687,
+    "kind": "CloseBraceToken",
+    "nodePos": 3686,
+    "nodeEnd": 3688
+  },
+  {
+    "startPos": 3688,
+    "endPos": 3688,
+    "kind": "VariableDeclaration",
+    "nodePos": 3679,
+    "nodeEnd": 3705
+  },
+  {
+    "startPos": 3689,
+    "endPos": 3689,
+    "kind": "EqualsToken",
+    "nodePos": 3688,
+    "nodeEnd": 3690
+  },
+  {
+    "startPos": 3690,
+    "endPos": 3690,
+    "kind": "VariableDeclaration",
+    "nodePos": 3679,
+    "nodeEnd": 3705
+  },
+  {
+    "startPos": 3691,
+    "endPos": 3702,
+    "kind": "Identifier",
+    "nodePos": 3690,
+    "nodeEnd": 3702
+  },
+  {
+    "startPos": 3703,
+    "endPos": 3704,
+    "kind": "NumericLiteral",
+    "nodePos": 3703,
+    "nodeEnd": 3704
+  },
+  {
+    "startPos": 3705,
+    "endPos": 3705,
+    "kind": "SemicolonToken",
+    "nodePos": 3705,
+    "nodeEnd": 3706
+  },
+  {
+    "startPos": 3706,
+    "endPos": 3711,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 3712,
+    "endPos": 3718,
+    "kind": "ReturnKeyword",
+    "nodePos": 3706,
+    "nodeEnd": 3718
+  },
+  {
+    "startPos": 3719,
+    "endPos": 3723,
+    "kind": "Identifier",
+    "nodePos": 3718,
+    "nodeEnd": 3723
+  },
+  {
+    "startPos": 3724,
+    "endPos": 3725,
+    "kind": "Block",
+    "nodePos": 1807,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 3726,
+    "endPos": 3726,
+    "kind": "CloseBraceToken",
+    "nodePos": 3724,
+    "nodeEnd": 3727
+  },
+  {
+    "startPos": 3727,
+    "endPos": 3730,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 3731,
+    "endPos": 3739,
+    "kind": "FunctionKeyword",
+    "nodePos": 3727,
+    "nodeEnd": 3739
+  },
+  {
+    "startPos": 3740,
+    "endPos": 3754,
+    "kind": "Identifier",
+    "nodePos": 3739,
+    "nodeEnd": 3754
+  },
+  {
+    "startPos": 3755,
+    "endPos": 3760,
+    "kind": "FunctionDeclaration",
+    "nodePos": 3727,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3761,
+    "endPos": 3773,
+    "kind": "Identifier",
+    "nodePos": 3755,
+    "nodeEnd": 3773
+  },
+  {
+    "startPos": 3774,
+    "endPos": 3774,
+    "kind": "Parameter",
+    "nodePos": 3755,
+    "nodeEnd": 3785
+  },
+  {
+    "startPos": 3775,
+    "endPos": 3785,
+    "kind": "Identifier",
+    "nodePos": 3774,
+    "nodeEnd": 3785
+  },
+  {
+    "startPos": 3786,
+    "endPos": 3791,
+    "kind": "FunctionDeclaration",
+    "nodePos": 3727,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3792,
+    "endPos": 3805,
+    "kind": "Identifier",
+    "nodePos": 3786,
+    "nodeEnd": 3805
+  },
+  {
+    "startPos": 3806,
+    "endPos": 3806,
+    "kind": "Parameter",
+    "nodePos": 3786,
+    "nodeEnd": 3820
+  },
+  {
+    "startPos": 3807,
+    "endPos": 3820,
+    "kind": "Identifier",
+    "nodePos": 3806,
+    "nodeEnd": 3820
+  },
+  {
+    "startPos": 3821,
+    "endPos": 3826,
+    "kind": "FunctionDeclaration",
+    "nodePos": 3727,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3827,
+    "endPos": 3834,
+    "kind": "Identifier",
+    "nodePos": 3821,
+    "nodeEnd": 3834
+  },
+  {
+    "startPos": 3835,
+    "endPos": 3835,
+    "kind": "Parameter",
+    "nodePos": 3821,
+    "nodeEnd": 3851
+  },
+  {
+    "startPos": 3836,
+    "endPos": 3845,
+    "kind": "Identifier",
+    "nodePos": 3835,
+    "nodeEnd": 3845
+  },
+  {
+    "startPos": 3846,
+    "endPos": 3850,
+    "kind": "Identifier",
+    "nodePos": 3846,
+    "nodeEnd": 3850
+  },
+  {
+    "startPos": 3851,
+    "endPos": 3851,
+    "kind": "CommaToken",
+    "nodePos": 3851,
+    "nodeEnd": 3852
+  },
+  {
+    "startPos": 3852,
+    "endPos": 3857,
+    "kind": "FunctionDeclaration",
+    "nodePos": 3727,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3858,
+    "endPos": 3872,
+    "kind": "Identifier",
+    "nodePos": 3852,
+    "nodeEnd": 3872
+  },
+  {
+    "startPos": 3873,
+    "endPos": 3873,
+    "kind": "ColonToken",
+    "nodePos": 3873,
+    "nodeEnd": 3874
+  },
+  {
+    "startPos": 3874,
+    "endPos": 3874,
+    "kind": "Parameter",
+    "nodePos": 3852,
+    "nodeEnd": 3885
+  },
+  {
+    "startPos": 3875,
+    "endPos": 3883,
+    "kind": "Identifier",
+    "nodePos": 3874,
+    "nodeEnd": 3883
+  },
+  {
+    "startPos": 3884,
+    "endPos": 3884,
+    "kind": "CloseBracketToken",
+    "nodePos": 3884,
+    "nodeEnd": 3885
+  },
+  {
+    "startPos": 3885,
+    "endPos": 3885,
+    "kind": "CommaToken",
+    "nodePos": 3885,
+    "nodeEnd": 3886
+  },
+  {
+    "startPos": 3886,
+    "endPos": 3887,
+    "kind": "FunctionDeclaration",
+    "nodePos": 3727,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3888,
+    "endPos": 3888,
+    "kind": "CloseParenToken",
+    "nodePos": 3886,
+    "nodeEnd": 3889
+  },
+  {
+    "startPos": 3889,
+    "endPos": 3889,
+    "kind": "FunctionDeclaration",
+    "nodePos": 3727,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3890,
+    "endPos": 3890,
+    "kind": "OpenBraceToken",
+    "nodePos": 3889,
+    "nodeEnd": 3891
+  },
+  {
+    "startPos": 3891,
+    "endPos": 3896,
+    "kind": "Block",
+    "nodePos": 3889,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 3897,
+    "endPos": 3899,
+    "kind": "IfKeyword",
+    "nodePos": 3891,
+    "nodeEnd": 3899
+  },
+  {
+    "startPos": 3900,
+    "endPos": 3900,
+    "kind": "OpenParenToken",
+    "nodePos": 3899,
+    "nodeEnd": 3901
+  },
+  {
+    "startPos": 3901,
+    "endPos": 3915,
+    "kind": "Identifier",
+    "nodePos": 3901,
+    "nodeEnd": 3915
+  },
+  {
+    "startPos": 3916,
+    "endPos": 3923,
+    "kind": "Identifier",
+    "nodePos": 3916,
+    "nodeEnd": 3923
+  },
+  {
+    "startPos": 3924,
+    "endPos": 3925,
+    "kind": "NumericLiteral",
+    "nodePos": 3924,
+    "nodeEnd": 3925
+  },
+  {
+    "startPos": 3926,
+    "endPos": 3926,
+    "kind": "CloseParenToken",
+    "nodePos": 3926,
+    "nodeEnd": 3927
+  },
+  {
+    "startPos": 3927,
+    "endPos": 3927,
+    "kind": "BinaryExpression",
+    "nodePos": 3901,
+    "nodeEnd": 3956
+  },
+  {
+    "startPos": 3928,
+    "endPos": 3929,
+    "kind": "BarBarToken",
+    "nodePos": 3927,
+    "nodeEnd": 3930
+  },
+  {
+    "startPos": 3930,
+    "endPos": 3930,
+    "kind": "BinaryExpression",
+    "nodePos": 3901,
+    "nodeEnd": 3956
+  },
+  {
+    "startPos": 3931,
+    "endPos": 3944,
+    "kind": "Identifier",
+    "nodePos": 3930,
+    "nodeEnd": 3944
+  },
+  {
+    "startPos": 3945,
+    "endPos": 3952,
+    "kind": "Identifier",
+    "nodePos": 3945,
+    "nodeEnd": 3952
+  },
+  {
+    "startPos": 3953,
+    "endPos": 3954,
+    "kind": "NumericLiteral",
+    "nodePos": 3953,
+    "nodeEnd": 3954
+  },
+  {
+    "startPos": 3955,
+    "endPos": 3955,
+    "kind": "CloseParenToken",
+    "nodePos": 3955,
+    "nodeEnd": 3956
+  },
+  {
+    "startPos": 3956,
+    "endPos": 3956,
+    "kind": "CloseParenToken",
+    "nodePos": 3956,
+    "nodeEnd": 3957
+  },
+  {
+    "startPos": 3957,
+    "endPos": 3957,
+    "kind": "IfStatement",
+    "nodePos": 3891,
+    "nodeEnd": 4328
+  },
+  {
+    "startPos": 3958,
+    "endPos": 3958,
+    "kind": "OpenBraceToken",
+    "nodePos": 3957,
+    "nodeEnd": 3959
+  },
+  {
+    "startPos": 3959,
+    "endPos": 3968,
+    "kind": "Block",
+    "nodePos": 3957,
+    "nodeEnd": 4141
+  },
+  {
+    "startPos": 3969,
+    "endPos": 3988,
+    "kind": "Identifier",
+    "nodePos": 3959,
+    "nodeEnd": 3988
+  },
+  {
+    "startPos": 3989,
+    "endPos": 4002,
+    "kind": "CallExpression",
+    "nodePos": 3959,
+    "nodeEnd": 4133
+  },
+  {
+    "startPos": 4003,
+    "endPos": 4015,
+    "kind": "Identifier",
+    "nodePos": 3989,
+    "nodeEnd": 4015
+  },
+  {
+    "startPos": 4016,
+    "endPos": 4029,
+    "kind": "CallExpression",
+    "nodePos": 3959,
+    "nodeEnd": 4133
+  },
+  {
+    "startPos": 4030,
+    "endPos": 4043,
+    "kind": "Identifier",
+    "nodePos": 4016,
+    "nodeEnd": 4043
+  },
+  {
+    "startPos": 4044,
+    "endPos": 4057,
+    "kind": "CallExpression",
+    "nodePos": 3959,
+    "nodeEnd": 4133
+  },
+  {
+    "startPos": 4058,
+    "endPos": 4065,
+    "kind": "Identifier",
+    "nodePos": 4044,
+    "nodeEnd": 4065
+  },
+  {
+    "startPos": 4066,
+    "endPos": 4068,
+    "kind": "AsKeyword",
+    "nodePos": 4065,
+    "nodeEnd": 4068
+  },
+  {
+    "startPos": 4069,
+    "endPos": 4078,
+    "kind": "Identifier",
+    "nodePos": 4068,
+    "nodeEnd": 4078
+  },
+  {
+    "startPos": 4079,
+    "endPos": 4091,
+    "kind": "Identifier",
+    "nodePos": 4079,
+    "nodeEnd": 4091
+  },
+  {
+    "startPos": 4092,
+    "endPos": 4092,
+    "kind": "CommaToken",
+    "nodePos": 4092,
+    "nodeEnd": 4093
+  },
+  {
+    "startPos": 4093,
+    "endPos": 4106,
+    "kind": "CallExpression",
+    "nodePos": 3959,
+    "nodeEnd": 4133
+  },
+  {
+    "startPos": 4107,
+    "endPos": 4121,
+    "kind": "Identifier",
+    "nodePos": 4093,
+    "nodeEnd": 4121
+  },
+  {
+    "startPos": 4122,
+    "endPos": 4131,
+    "kind": "CallExpression",
+    "nodePos": 3959,
+    "nodeEnd": 4133
+  },
+  {
+    "startPos": 4132,
+    "endPos": 4132,
+    "kind": "CloseParenToken",
+    "nodePos": 4122,
+    "nodeEnd": 4133
+  },
+  {
+    "startPos": 4133,
+    "endPos": 4133,
+    "kind": "SemicolonToken",
+    "nodePos": 4133,
+    "nodeEnd": 4134
+  },
+  {
+    "startPos": 4134,
+    "endPos": 4139,
+    "kind": "Block",
+    "nodePos": 3957,
+    "nodeEnd": 4141
+  },
+  {
+    "startPos": 4140,
+    "endPos": 4140,
+    "kind": "CloseBraceToken",
+    "nodePos": 4134,
+    "nodeEnd": 4141
+  },
+  {
+    "startPos": 4141,
+    "endPos": 4146,
+    "kind": "IfStatement",
+    "nodePos": 3891,
+    "nodeEnd": 4328
+  },
+  {
+    "startPos": 4147,
+    "endPos": 4151,
+    "kind": "ElseKeyword",
+    "nodePos": 4141,
+    "nodeEnd": 4151
+  },
+  {
+    "startPos": 4152,
+    "endPos": 4152,
+    "kind": "OpenBraceToken",
+    "nodePos": 4151,
+    "nodeEnd": 4153
+  },
+  {
+    "startPos": 4153,
+    "endPos": 4162,
+    "kind": "Block",
+    "nodePos": 4151,
+    "nodeEnd": 4328
+  },
+  {
+    "startPos": 4163,
+    "endPos": 4178,
+    "kind": "Identifier",
+    "nodePos": 4153,
+    "nodeEnd": 4178
+  },
+  {
+    "startPos": 4179,
+    "endPos": 4192,
+    "kind": "CallExpression",
+    "nodePos": 4153,
+    "nodeEnd": 4320
+  },
+  {
+    "startPos": 4193,
+    "endPos": 4205,
+    "kind": "Identifier",
+    "nodePos": 4179,
+    "nodeEnd": 4205
+  },
+  {
+    "startPos": 4206,
+    "endPos": 4219,
+    "kind": "CallExpression",
+    "nodePos": 4153,
+    "nodeEnd": 4320
+  },
+  {
+    "startPos": 4220,
+    "endPos": 4233,
+    "kind": "Identifier",
+    "nodePos": 4206,
+    "nodeEnd": 4233
+  },
+  {
+    "startPos": 4234,
+    "endPos": 4247,
+    "kind": "CallExpression",
+    "nodePos": 4153,
+    "nodeEnd": 4320
+  },
+  {
+    "startPos": 4248,
+    "endPos": 4255,
+    "kind": "Identifier",
+    "nodePos": 4234,
+    "nodeEnd": 4255
+  },
+  {
+    "startPos": 4256,
+    "endPos": 4258,
+    "kind": "AsKeyword",
+    "nodePos": 4255,
+    "nodeEnd": 4258
+  },
+  {
+    "startPos": 4259,
+    "endPos": 4268,
+    "kind": "Identifier",
+    "nodePos": 4258,
+    "nodeEnd": 4268
+  },
+  {
+    "startPos": 4269,
+    "endPos": 4278,
+    "kind": "Identifier",
+    "nodePos": 4269,
+    "nodeEnd": 4278
+  },
+  {
+    "startPos": 4279,
+    "endPos": 4279,
+    "kind": "CommaToken",
+    "nodePos": 4279,
+    "nodeEnd": 4280
+  },
+  {
+    "startPos": 4280,
+    "endPos": 4293,
+    "kind": "CallExpression",
+    "nodePos": 4153,
+    "nodeEnd": 4320
+  },
+  {
+    "startPos": 4294,
+    "endPos": 4308,
+    "kind": "Identifier",
+    "nodePos": 4280,
+    "nodeEnd": 4308
+  },
+  {
+    "startPos": 4309,
+    "endPos": 4318,
+    "kind": "CallExpression",
+    "nodePos": 4153,
+    "nodeEnd": 4320
+  },
+  {
+    "startPos": 4319,
+    "endPos": 4319,
+    "kind": "CloseParenToken",
+    "nodePos": 4309,
+    "nodeEnd": 4320
+  },
+  {
+    "startPos": 4320,
+    "endPos": 4320,
+    "kind": "SemicolonToken",
+    "nodePos": 4320,
+    "nodeEnd": 4321
+  },
+  {
+    "startPos": 4321,
+    "endPos": 4326,
+    "kind": "Block",
+    "nodePos": 4151,
+    "nodeEnd": 4328
+  },
+  {
+    "startPos": 4327,
+    "endPos": 4327,
+    "kind": "CloseBraceToken",
+    "nodePos": 4321,
+    "nodeEnd": 4328
+  },
+  {
+    "startPos": 4328,
+    "endPos": 4329,
+    "kind": "Block",
+    "nodePos": 3889,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 4330,
+    "endPos": 4330,
+    "kind": "CloseBraceToken",
+    "nodePos": 4328,
+    "nodeEnd": 4331
+  },
+  {
+    "startPos": 4331,
+    "endPos": 4334,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 4335,
+    "endPos": 4343,
+    "kind": "FunctionKeyword",
+    "nodePos": 4331,
+    "nodeEnd": 4343
+  },
+  {
+    "startPos": 4344,
+    "endPos": 4363,
+    "kind": "Identifier",
+    "nodePos": 4343,
+    "nodeEnd": 4363
+  },
+  {
+    "startPos": 4364,
+    "endPos": 4369,
+    "kind": "FunctionDeclaration",
+    "nodePos": 4331,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4370,
+    "endPos": 4382,
+    "kind": "Identifier",
+    "nodePos": 4364,
+    "nodeEnd": 4382
+  },
+  {
+    "startPos": 4383,
+    "endPos": 4383,
+    "kind": "Parameter",
+    "nodePos": 4364,
+    "nodeEnd": 4394
+  },
+  {
+    "startPos": 4384,
+    "endPos": 4394,
+    "kind": "Identifier",
+    "nodePos": 4383,
+    "nodeEnd": 4394
+  },
+  {
+    "startPos": 4395,
+    "endPos": 4400,
+    "kind": "FunctionDeclaration",
+    "nodePos": 4331,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4401,
+    "endPos": 4414,
+    "kind": "Identifier",
+    "nodePos": 4395,
+    "nodeEnd": 4414
+  },
+  {
+    "startPos": 4415,
+    "endPos": 4415,
+    "kind": "Parameter",
+    "nodePos": 4395,
+    "nodeEnd": 4429
+  },
+  {
+    "startPos": 4416,
+    "endPos": 4429,
+    "kind": "Identifier",
+    "nodePos": 4415,
+    "nodeEnd": 4429
+  },
+  {
+    "startPos": 4430,
+    "endPos": 4435,
+    "kind": "FunctionDeclaration",
+    "nodePos": 4331,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4436,
+    "endPos": 4443,
+    "kind": "Identifier",
+    "nodePos": 4430,
+    "nodeEnd": 4443
+  },
+  {
+    "startPos": 4444,
+    "endPos": 4444,
+    "kind": "Parameter",
+    "nodePos": 4430,
+    "nodeEnd": 4493
+  },
+  {
+    "startPos": 4445,
+    "endPos": 4454,
+    "kind": "Identifier",
+    "nodePos": 4444,
+    "nodeEnd": 4454
+  },
+  {
+    "startPos": 4455,
+    "endPos": 4467,
+    "kind": "Identifier",
+    "nodePos": 4455,
+    "nodeEnd": 4467
+  },
+  {
+    "startPos": 4468,
+    "endPos": 4468,
+    "kind": "UnionType",
+    "nodePos": 4444,
+    "nodeEnd": 4493
+  },
+  {
+    "startPos": 4469,
+    "endPos": 4469,
+    "kind": "BarToken",
+    "nodePos": 4468,
+    "nodeEnd": 4470
+  },
+  {
+    "startPos": 4470,
+    "endPos": 4470,
+    "kind": "UnionType",
+    "nodePos": 4444,
+    "nodeEnd": 4493
+  },
+  {
+    "startPos": 4471,
+    "endPos": 4480,
+    "kind": "Identifier",
+    "nodePos": 4470,
+    "nodeEnd": 4480
+  },
+  {
+    "startPos": 4481,
+    "endPos": 4492,
+    "kind": "Identifier",
+    "nodePos": 4481,
+    "nodeEnd": 4492
+  },
+  {
+    "startPos": 4493,
+    "endPos": 4493,
+    "kind": "CommaToken",
+    "nodePos": 4493,
+    "nodeEnd": 4494
+  },
+  {
+    "startPos": 4494,
+    "endPos": 4499,
+    "kind": "FunctionDeclaration",
+    "nodePos": 4331,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4500,
+    "endPos": 4514,
+    "kind": "Identifier",
+    "nodePos": 4494,
+    "nodeEnd": 4514
+  },
+  {
+    "startPos": 4515,
+    "endPos": 4515,
+    "kind": "ColonToken",
+    "nodePos": 4515,
+    "nodeEnd": 4516
+  },
+  {
+    "startPos": 4516,
+    "endPos": 4516,
+    "kind": "Parameter",
+    "nodePos": 4494,
+    "nodeEnd": 4527
+  },
+  {
+    "startPos": 4517,
+    "endPos": 4525,
+    "kind": "Identifier",
+    "nodePos": 4516,
+    "nodeEnd": 4525
+  },
+  {
+    "startPos": 4526,
+    "endPos": 4526,
+    "kind": "CloseBracketToken",
+    "nodePos": 4526,
+    "nodeEnd": 4527
+  },
+  {
+    "startPos": 4527,
+    "endPos": 4527,
+    "kind": "CommaToken",
+    "nodePos": 4527,
+    "nodeEnd": 4528
+  },
+  {
+    "startPos": 4528,
+    "endPos": 4529,
+    "kind": "FunctionDeclaration",
+    "nodePos": 4331,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4530,
+    "endPos": 4530,
+    "kind": "CloseParenToken",
+    "nodePos": 4528,
+    "nodeEnd": 4531
+  },
+  {
+    "startPos": 4531,
+    "endPos": 4531,
+    "kind": "FunctionDeclaration",
+    "nodePos": 4331,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4532,
+    "endPos": 4532,
+    "kind": "OpenBraceToken",
+    "nodePos": 4531,
+    "nodeEnd": 4533
+  },
+  {
+    "startPos": 4533,
+    "endPos": 4538,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4539,
+    "endPos": 4542,
+    "kind": "LetKeyword",
+    "nodePos": 4533,
+    "nodeEnd": 4542
+  },
+  {
+    "startPos": 4543,
+    "endPos": 4559,
+    "kind": "Identifier",
+    "nodePos": 4542,
+    "nodeEnd": 4559
+  },
+  {
+    "startPos": 4560,
+    "endPos": 4565,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4566,
+    "endPos": 4568,
+    "kind": "IfKeyword",
+    "nodePos": 4560,
+    "nodeEnd": 4568
+  },
+  {
+    "startPos": 4569,
+    "endPos": 4569,
+    "kind": "OpenParenToken",
+    "nodePos": 4568,
+    "nodeEnd": 4570
+  },
+  {
+    "startPos": 4570,
+    "endPos": 4570,
+    "kind": "ExclamationToken",
+    "nodePos": 4570,
+    "nodeEnd": 4571
+  },
+  {
+    "startPos": 4571,
+    "endPos": 4585,
+    "kind": "Identifier",
+    "nodePos": 4571,
+    "nodeEnd": 4585
+  },
+  {
+    "startPos": 4586,
+    "endPos": 4587,
+    "kind": "BarBarToken",
+    "nodePos": 4585,
+    "nodeEnd": 4588
+  },
+  {
+    "startPos": 4588,
+    "endPos": 4588,
+    "kind": "BinaryExpression",
+    "nodePos": 4570,
+    "nodeEnd": 4611
+  },
+  {
+    "startPos": 4589,
+    "endPos": 4589,
+    "kind": "ExclamationToken",
+    "nodePos": 4588,
+    "nodeEnd": 4590
+  },
+  {
+    "startPos": 4590,
+    "endPos": 4604,
+    "kind": "Identifier",
+    "nodePos": 4590,
+    "nodeEnd": 4604
+  },
+  {
+    "startPos": 4605,
+    "endPos": 4611,
+    "kind": "Identifier",
+    "nodePos": 4605,
+    "nodeEnd": 4611
+  },
+  {
+    "startPos": 4612,
+    "endPos": 4612,
+    "kind": "IfStatement",
+    "nodePos": 4560,
+    "nodeEnd": 4973
+  },
+  {
+    "startPos": 4613,
+    "endPos": 4613,
+    "kind": "OpenBraceToken",
+    "nodePos": 4612,
+    "nodeEnd": 4614
+  },
+  {
+    "startPos": 4614,
+    "endPos": 4623,
+    "kind": "Block",
+    "nodePos": 4612,
+    "nodeEnd": 4721
+  },
+  {
+    "startPos": 4624,
+    "endPos": 4640,
+    "kind": "Identifier",
+    "nodePos": 4614,
+    "nodeEnd": 4640
+  },
+  {
+    "startPos": 4641,
+    "endPos": 4641,
+    "kind": "EqualsToken",
+    "nodePos": 4640,
+    "nodeEnd": 4642
+  },
+  {
+    "startPos": 4642,
+    "endPos": 4642,
+    "kind": "BinaryExpression",
+    "nodePos": 4614,
+    "nodeEnd": 4713
+  },
+  {
+    "startPos": 4643,
+    "endPos": 4647,
+    "kind": "Identifier",
+    "nodePos": 4642,
+    "nodeEnd": 4647
+  },
+  {
+    "startPos": 4648,
+    "endPos": 4660,
+    "kind": "Identifier",
+    "nodePos": 4648,
+    "nodeEnd": 4660
+  },
+  {
+    "startPos": 4661,
+    "endPos": 4671,
+    "kind": "Identifier",
+    "nodePos": 4661,
+    "nodeEnd": 4671
+  },
+  {
+    "startPos": 4672,
+    "endPos": 4672,
+    "kind": "CallExpression",
+    "nodePos": 4642,
+    "nodeEnd": 4713
+  },
+  {
+    "startPos": 4673,
+    "endPos": 4675,
+    "kind": "Identifier",
+    "nodePos": 4672,
+    "nodeEnd": 4675
+  },
+  {
+    "startPos": 4676,
+    "endPos": 4687,
+    "kind": "Identifier",
+    "nodePos": 4676,
+    "nodeEnd": 4687
+  },
+  {
+    "startPos": 4688,
+    "endPos": 4688,
+    "kind": "CallExpression",
+    "nodePos": 4672,
+    "nodeEnd": 4712
+  },
+  {
+    "startPos": 4689,
+    "endPos": 4711,
+    "kind": "Identifier",
+    "nodePos": 4688,
+    "nodeEnd": 4711
+  },
+  {
+    "startPos": 4712,
+    "endPos": 4712,
+    "kind": "CloseParenToken",
+    "nodePos": 4712,
+    "nodeEnd": 4713
+  },
+  {
+    "startPos": 4713,
+    "endPos": 4713,
+    "kind": "SemicolonToken",
+    "nodePos": 4713,
+    "nodeEnd": 4714
+  },
+  {
+    "startPos": 4714,
+    "endPos": 4719,
+    "kind": "Block",
+    "nodePos": 4612,
+    "nodeEnd": 4721
+  },
+  {
+    "startPos": 4720,
+    "endPos": 4720,
+    "kind": "CloseBraceToken",
+    "nodePos": 4714,
+    "nodeEnd": 4721
+  },
+  {
+    "startPos": 4721,
+    "endPos": 4726,
+    "kind": "IfStatement",
+    "nodePos": 4560,
+    "nodeEnd": 4973
+  },
+  {
+    "startPos": 4727,
+    "endPos": 4731,
+    "kind": "ElseKeyword",
+    "nodePos": 4721,
+    "nodeEnd": 4731
+  },
+  {
+    "startPos": 4732,
+    "endPos": 4732,
+    "kind": "OpenBraceToken",
+    "nodePos": 4731,
+    "nodeEnd": 4733
+  },
+  {
+    "startPos": 4733,
+    "endPos": 4742,
+    "kind": "Block",
+    "nodePos": 4731,
+    "nodeEnd": 4973
+  },
+  {
+    "startPos": 4743,
+    "endPos": 4759,
+    "kind": "Identifier",
+    "nodePos": 4733,
+    "nodeEnd": 4759
+  },
+  {
+    "startPos": 4760,
+    "endPos": 4760,
+    "kind": "EqualsToken",
+    "nodePos": 4759,
+    "nodeEnd": 4761
+  },
+  {
+    "startPos": 4761,
+    "endPos": 4761,
+    "kind": "BinaryExpression",
+    "nodePos": 4733,
+    "nodeEnd": 4965
+  },
+  {
+    "startPos": 4762,
+    "endPos": 4769,
+    "kind": "Identifier",
+    "nodePos": 4761,
+    "nodeEnd": 4769
+  },
+  {
+    "startPos": 4770,
+    "endPos": 4784,
+    "kind": "Identifier",
+    "nodePos": 4770,
+    "nodeEnd": 4784
+  },
+  {
+    "startPos": 4785,
+    "endPos": 4785,
+    "kind": "CallExpression",
+    "nodePos": 4761,
+    "nodeEnd": 4965
+  },
+  {
+    "startPos": 4786,
+    "endPos": 4794,
+    "kind": "Identifier",
+    "nodePos": 4785,
+    "nodeEnd": 4794
+  },
+  {
+    "startPos": 4795,
+    "endPos": 4796,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 4794,
+    "nodeEnd": 4797
+  },
+  {
+    "startPos": 4797,
+    "endPos": 4810,
+    "kind": "ArrowFunction",
+    "nodePos": 4785,
+    "nodeEnd": 4964
+  },
+  {
+    "startPos": 4811,
+    "endPos": 4823,
+    "kind": "Identifier",
+    "nodePos": 4797,
+    "nodeEnd": 4823
+  },
+  {
+    "startPos": 4824,
+    "endPos": 4841,
+    "kind": "CallExpression",
+    "nodePos": 4797,
+    "nodeEnd": 4964
+  },
+  {
+    "startPos": 4842,
+    "endPos": 4860,
+    "kind": "Identifier",
+    "nodePos": 4824,
+    "nodeEnd": 4860
+  },
+  {
+    "startPos": 4861,
+    "endPos": 4873,
+    "kind": "Identifier",
+    "nodePos": 4861,
+    "nodeEnd": 4873
+  },
+  {
+    "startPos": 4874,
+    "endPos": 4874,
+    "kind": "CallExpression",
+    "nodePos": 4824,
+    "nodeEnd": 4890
+  },
+  {
+    "startPos": 4875,
+    "endPos": 4883,
+    "kind": "Identifier",
+    "nodePos": 4874,
+    "nodeEnd": 4883
+  },
+  {
+    "startPos": 4884,
+    "endPos": 4889,
+    "kind": "Identifier",
+    "nodePos": 4884,
+    "nodeEnd": 4889
+  },
+  {
+    "startPos": 4890,
+    "endPos": 4890,
+    "kind": "CommaToken",
+    "nodePos": 4890,
+    "nodeEnd": 4891
+  },
+  {
+    "startPos": 4891,
+    "endPos": 4908,
+    "kind": "CallExpression",
+    "nodePos": 4797,
+    "nodeEnd": 4964
+  },
+  {
+    "startPos": 4909,
+    "endPos": 4911,
+    "kind": "Identifier",
+    "nodePos": 4891,
+    "nodeEnd": 4911
+  },
+  {
+    "startPos": 4912,
+    "endPos": 4923,
+    "kind": "Identifier",
+    "nodePos": 4912,
+    "nodeEnd": 4923
+  },
+  {
+    "startPos": 4924,
+    "endPos": 4924,
+    "kind": "CallExpression",
+    "nodePos": 4891,
+    "nodeEnd": 4948
+  },
+  {
+    "startPos": 4925,
+    "endPos": 4947,
+    "kind": "Identifier",
+    "nodePos": 4924,
+    "nodeEnd": 4947
+  },
+  {
+    "startPos": 4948,
+    "endPos": 4948,
+    "kind": "CommaToken",
+    "nodePos": 4948,
+    "nodeEnd": 4949
+  },
+  {
+    "startPos": 4949,
+    "endPos": 4962,
+    "kind": "CallExpression",
+    "nodePos": 4797,
+    "nodeEnd": 4964
+  },
+  {
+    "startPos": 4963,
+    "endPos": 4963,
+    "kind": "CloseParenToken",
+    "nodePos": 4949,
+    "nodeEnd": 4964
+  },
+  {
+    "startPos": 4964,
+    "endPos": 4964,
+    "kind": "CloseParenToken",
+    "nodePos": 4964,
+    "nodeEnd": 4965
+  },
+  {
+    "startPos": 4965,
+    "endPos": 4965,
+    "kind": "SemicolonToken",
+    "nodePos": 4965,
+    "nodeEnd": 4966
+  },
+  {
+    "startPos": 4966,
+    "endPos": 4971,
+    "kind": "Block",
+    "nodePos": 4731,
+    "nodeEnd": 4973
+  },
+  {
+    "startPos": 4972,
+    "endPos": 4972,
+    "kind": "CloseBraceToken",
+    "nodePos": 4966,
+    "nodeEnd": 4973
+  },
+  {
+    "startPos": 4973,
+    "endPos": 4980,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 4981,
+    "endPos": 4983,
+    "kind": "IfKeyword",
+    "nodePos": 4973,
+    "nodeEnd": 4983
+  },
+  {
+    "startPos": 4984,
+    "endPos": 4984,
+    "kind": "OpenParenToken",
+    "nodePos": 4983,
+    "nodeEnd": 4985
+  },
+  {
+    "startPos": 4985,
+    "endPos": 4985,
+    "kind": "ExclamationToken",
+    "nodePos": 4985,
+    "nodeEnd": 4986
+  },
+  {
+    "startPos": 4986,
+    "endPos": 5002,
+    "kind": "Identifier",
+    "nodePos": 4986,
+    "nodeEnd": 5002
+  },
+  {
+    "startPos": 5003,
+    "endPos": 5003,
+    "kind": "IfStatement",
+    "nodePos": 4973,
+    "nodeEnd": 5065
+  },
+  {
+    "startPos": 5004,
+    "endPos": 5004,
+    "kind": "OpenBraceToken",
+    "nodePos": 5003,
+    "nodeEnd": 5005
+  },
+  {
+    "startPos": 5005,
+    "endPos": 5050,
+    "kind": "Block",
+    "nodePos": 5003,
+    "nodeEnd": 5065
+  },
+  {
+    "startPos": 5051,
+    "endPos": 5057,
+    "kind": "ReturnKeyword",
+    "nodePos": 5005,
+    "nodeEnd": 5057
+  },
+  {
+    "startPos": 5058,
+    "endPos": 5063,
+    "kind": "Block",
+    "nodePos": 5003,
+    "nodeEnd": 5065
+  },
+  {
+    "startPos": 5064,
+    "endPos": 5064,
+    "kind": "CloseBraceToken",
+    "nodePos": 5058,
+    "nodeEnd": 5065
+  },
+  {
+    "startPos": 5065,
+    "endPos": 5072,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 5073,
+    "endPos": 5078,
+    "kind": "ConstKeyword",
+    "nodePos": 5065,
+    "nodeEnd": 5078
+  },
+  {
+    "startPos": 5079,
+    "endPos": 5089,
+    "kind": "Identifier",
+    "nodePos": 5078,
+    "nodeEnd": 5089
+  },
+  {
+    "startPos": 5090,
+    "endPos": 5090,
+    "kind": "EqualsToken",
+    "nodePos": 5089,
+    "nodeEnd": 5091
+  },
+  {
+    "startPos": 5091,
+    "endPos": 5091,
+    "kind": "VariableDeclaration",
+    "nodePos": 5078,
+    "nodeEnd": 5182
+  },
+  {
+    "startPos": 5092,
+    "endPos": 5108,
+    "kind": "Identifier",
+    "nodePos": 5091,
+    "nodeEnd": 5108
+  },
+  {
+    "startPos": 5109,
+    "endPos": 5116,
+    "kind": "Identifier",
+    "nodePos": 5109,
+    "nodeEnd": 5116
+  },
+  {
+    "startPos": 5117,
+    "endPos": 5121,
+    "kind": "Identifier",
+    "nodePos": 5117,
+    "nodeEnd": 5121
+  },
+  {
+    "startPos": 5122,
+    "endPos": 5128,
+    "kind": "Identifier",
+    "nodePos": 5122,
+    "nodeEnd": 5128
+  },
+  {
+    "startPos": 5129,
+    "endPos": 5130,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 5128,
+    "nodeEnd": 5131
+  },
+  {
+    "startPos": 5131,
+    "endPos": 5131,
+    "kind": "ArrowFunction",
+    "nodePos": 5122,
+    "nodeEnd": 5181
+  },
+  {
+    "startPos": 5132,
+    "endPos": 5139,
+    "kind": "Identifier",
+    "nodePos": 5131,
+    "nodeEnd": 5139
+  },
+  {
+    "startPos": 5140,
+    "endPos": 5144,
+    "kind": "Identifier",
+    "nodePos": 5140,
+    "nodeEnd": 5144
+  },
+  {
+    "startPos": 5145,
+    "endPos": 5151,
+    "kind": "Identifier",
+    "nodePos": 5145,
+    "nodeEnd": 5151
+  },
+  {
+    "startPos": 5152,
+    "endPos": 5153,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 5151,
+    "nodeEnd": 5154
+  },
+  {
+    "startPos": 5154,
+    "endPos": 5154,
+    "kind": "ArrowFunction",
+    "nodePos": 5145,
+    "nodeEnd": 5180
+  },
+  {
+    "startPos": 5155,
+    "endPos": 5164,
+    "kind": "Identifier",
+    "nodePos": 5154,
+    "nodeEnd": 5164
+  },
+  {
+    "startPos": 5165,
+    "endPos": 5171,
+    "kind": "Identifier",
+    "nodePos": 5165,
+    "nodeEnd": 5171
+  },
+  {
+    "startPos": 5172,
+    "endPos": 5172,
+    "kind": "CallExpression",
+    "nodePos": 5154,
+    "nodeEnd": 5180
+  },
+  {
+    "startPos": 5173,
+    "endPos": 5179,
+    "kind": "Identifier",
+    "nodePos": 5172,
+    "nodeEnd": 5179
+  },
+  {
+    "startPos": 5180,
+    "endPos": 5180,
+    "kind": "CloseParenToken",
+    "nodePos": 5180,
+    "nodeEnd": 5181
+  },
+  {
+    "startPos": 5181,
+    "endPos": 5181,
+    "kind": "CloseParenToken",
+    "nodePos": 5181,
+    "nodeEnd": 5182
+  },
+  {
+    "startPos": 5182,
+    "endPos": 5182,
+    "kind": "SemicolonToken",
+    "nodePos": 5182,
+    "nodeEnd": 5183
+  },
+  {
+    "startPos": 5183,
+    "endPos": 5188,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 5189,
+    "endPos": 5191,
+    "kind": "IfKeyword",
+    "nodePos": 5183,
+    "nodeEnd": 5191
+  },
+  {
+    "startPos": 5192,
+    "endPos": 5192,
+    "kind": "OpenParenToken",
+    "nodePos": 5191,
+    "nodeEnd": 5193
+  },
+  {
+    "startPos": 5193,
+    "endPos": 5203,
+    "kind": "Identifier",
+    "nodePos": 5193,
+    "nodeEnd": 5203
+  },
+  {
+    "startPos": 5204,
+    "endPos": 5204,
+    "kind": "IfStatement",
+    "nodePos": 5183,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5205,
+    "endPos": 5205,
+    "kind": "OpenBraceToken",
+    "nodePos": 5204,
+    "nodeEnd": 5206
+  },
+  {
+    "startPos": 5206,
+    "endPos": 5294,
+    "kind": "Block",
+    "nodePos": 5204,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5295,
+    "endPos": 5300,
+    "kind": "ConstKeyword",
+    "nodePos": 5206,
+    "nodeEnd": 5300
+  },
+  {
+    "startPos": 5301,
+    "endPos": 5310,
+    "kind": "Identifier",
+    "nodePos": 5300,
+    "nodeEnd": 5310
+  },
+  {
+    "startPos": 5311,
+    "endPos": 5311,
+    "kind": "EqualsToken",
+    "nodePos": 5310,
+    "nodeEnd": 5312
+  },
+  {
+    "startPos": 5312,
+    "endPos": 5312,
+    "kind": "VariableDeclaration",
+    "nodePos": 5300,
+    "nodeEnd": 5488
+  },
+  {
+    "startPos": 5313,
+    "endPos": 5321,
+    "kind": "Identifier",
+    "nodePos": 5312,
+    "nodeEnd": 5321
+  },
+  {
+    "startPos": 5322,
+    "endPos": 5335,
+    "kind": "CallExpression",
+    "nodePos": 5312,
+    "nodeEnd": 5487
+  },
+  {
+    "startPos": 5336,
+    "endPos": 5352,
+    "kind": "Identifier",
+    "nodePos": 5322,
+    "nodeEnd": 5352
+  },
+  {
+    "startPos": 5353,
+    "endPos": 5360,
+    "kind": "Identifier",
+    "nodePos": 5353,
+    "nodeEnd": 5360
+  },
+  {
+    "startPos": 5361,
+    "endPos": 5363,
+    "kind": "AsKeyword",
+    "nodePos": 5360,
+    "nodeEnd": 5363
+  },
+  {
+    "startPos": 5364,
+    "endPos": 5373,
+    "kind": "Identifier",
+    "nodePos": 5363,
+    "nodeEnd": 5373
+  },
+  {
+    "startPos": 5374,
+    "endPos": 5386,
+    "kind": "Identifier",
+    "nodePos": 5374,
+    "nodeEnd": 5386
+  },
+  {
+    "startPos": 5387,
+    "endPos": 5387,
+    "kind": "BarToken",
+    "nodePos": 5386,
+    "nodeEnd": 5388
+  },
+  {
+    "startPos": 5388,
+    "endPos": 5388,
+    "kind": "UnionType",
+    "nodePos": 5374,
+    "nodeEnd": 5400
+  },
+  {
+    "startPos": 5389,
+    "endPos": 5400,
+    "kind": "Identifier",
+    "nodePos": 5388,
+    "nodeEnd": 5400
+  },
+  {
+    "startPos": 5401,
+    "endPos": 5401,
+    "kind": "CommaToken",
+    "nodePos": 5401,
+    "nodeEnd": 5402
+  },
+  {
+    "startPos": 5402,
+    "endPos": 5415,
+    "kind": "CallExpression",
+    "nodePos": 5312,
+    "nodeEnd": 5487
+  },
+  {
+    "startPos": 5416,
+    "endPos": 5422,
+    "kind": "Identifier",
+    "nodePos": 5402,
+    "nodeEnd": 5422
+  },
+  {
+    "startPos": 5423,
+    "endPos": 5424,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 5422,
+    "nodeEnd": 5425
+  },
+  {
+    "startPos": 5425,
+    "endPos": 5425,
+    "kind": "ArrowFunction",
+    "nodePos": 5402,
+    "nodeEnd": 5475
+  },
+  {
+    "startPos": 5426,
+    "endPos": 5433,
+    "kind": "Identifier",
+    "nodePos": 5425,
+    "nodeEnd": 5433
+  },
+  {
+    "startPos": 5434,
+    "endPos": 5438,
+    "kind": "Identifier",
+    "nodePos": 5434,
+    "nodeEnd": 5438
+  },
+  {
+    "startPos": 5439,
+    "endPos": 5445,
+    "kind": "Identifier",
+    "nodePos": 5439,
+    "nodeEnd": 5445
+  },
+  {
+    "startPos": 5446,
+    "endPos": 5447,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 5445,
+    "nodeEnd": 5448
+  },
+  {
+    "startPos": 5448,
+    "endPos": 5448,
+    "kind": "ArrowFunction",
+    "nodePos": 5439,
+    "nodeEnd": 5474
+  },
+  {
+    "startPos": 5449,
+    "endPos": 5458,
+    "kind": "Identifier",
+    "nodePos": 5448,
+    "nodeEnd": 5458
+  },
+  {
+    "startPos": 5459,
+    "endPos": 5465,
+    "kind": "Identifier",
+    "nodePos": 5459,
+    "nodeEnd": 5465
+  },
+  {
+    "startPos": 5466,
+    "endPos": 5466,
+    "kind": "CallExpression",
+    "nodePos": 5448,
+    "nodeEnd": 5474
+  },
+  {
+    "startPos": 5467,
+    "endPos": 5473,
+    "kind": "Identifier",
+    "nodePos": 5466,
+    "nodeEnd": 5473
+  },
+  {
+    "startPos": 5474,
+    "endPos": 5474,
+    "kind": "CloseParenToken",
+    "nodePos": 5474,
+    "nodeEnd": 5475
+  },
+  {
+    "startPos": 5475,
+    "endPos": 5475,
+    "kind": "CommaToken",
+    "nodePos": 5475,
+    "nodeEnd": 5476
+  },
+  {
+    "startPos": 5476,
+    "endPos": 5485,
+    "kind": "CallExpression",
+    "nodePos": 5312,
+    "nodeEnd": 5487
+  },
+  {
+    "startPos": 5486,
+    "endPos": 5486,
+    "kind": "CloseParenToken",
+    "nodePos": 5476,
+    "nodeEnd": 5487
+  },
+  {
+    "startPos": 5487,
+    "endPos": 5487,
+    "kind": "ExclamationToken",
+    "nodePos": 5487,
+    "nodeEnd": 5488
+  },
+  {
+    "startPos": 5488,
+    "endPos": 5488,
+    "kind": "SemicolonToken",
+    "nodePos": 5488,
+    "nodeEnd": 5489
+  },
+  {
+    "startPos": 5489,
+    "endPos": 5500,
+    "kind": "Block",
+    "nodePos": 5204,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5501,
+    "endPos": 5508,
+    "kind": "Identifier",
+    "nodePos": 5489,
+    "nodeEnd": 5508
+  },
+  {
+    "startPos": 5509,
+    "endPos": 5516,
+    "kind": "Identifier",
+    "nodePos": 5509,
+    "nodeEnd": 5516
+  },
+  {
+    "startPos": 5517,
+    "endPos": 5517,
+    "kind": "CallExpression",
+    "nodePos": 5489,
+    "nodeEnd": 5527
+  },
+  {
+    "startPos": 5518,
+    "endPos": 5526,
+    "kind": "Identifier",
+    "nodePos": 5517,
+    "nodeEnd": 5526
+  },
+  {
+    "startPos": 5527,
+    "endPos": 5527,
+    "kind": "SemicolonToken",
+    "nodePos": 5527,
+    "nodeEnd": 5528
+  },
+  {
+    "startPos": 5528,
+    "endPos": 5537,
+    "kind": "Block",
+    "nodePos": 5204,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5538,
+    "endPos": 5551,
+    "kind": "Identifier",
+    "nodePos": 5528,
+    "nodeEnd": 5551
+  },
+  {
+    "startPos": 5552,
+    "endPos": 5577,
+    "kind": "Identifier",
+    "nodePos": 5552,
+    "nodeEnd": 5577
+  },
+  {
+    "startPos": 5578,
+    "endPos": 5591,
+    "kind": "CallExpression",
+    "nodePos": 5528,
+    "nodeEnd": 5687
+  },
+  {
+    "startPos": 5592,
+    "endPos": 5604,
+    "kind": "Identifier",
+    "nodePos": 5578,
+    "nodeEnd": 5604
+  },
+  {
+    "startPos": 5605,
+    "endPos": 5618,
+    "kind": "CallExpression",
+    "nodePos": 5528,
+    "nodeEnd": 5687
+  },
+  {
+    "startPos": 5619,
+    "endPos": 5629,
+    "kind": "Identifier",
+    "nodePos": 5605,
+    "nodeEnd": 5629
+  },
+  {
+    "startPos": 5630,
+    "endPos": 5643,
+    "kind": "CallExpression",
+    "nodePos": 5528,
+    "nodeEnd": 5687
+  },
+  {
+    "startPos": 5644,
+    "endPos": 5653,
+    "kind": "Identifier",
+    "nodePos": 5630,
+    "nodeEnd": 5653
+  },
+  {
+    "startPos": 5654,
+    "endPos": 5667,
+    "kind": "CallExpression",
+    "nodePos": 5528,
+    "nodeEnd": 5687
+  },
+  {
+    "startPos": 5668,
+    "endPos": 5675,
+    "kind": "Identifier",
+    "nodePos": 5654,
+    "nodeEnd": 5675
+  },
+  {
+    "startPos": 5676,
+    "endPos": 5685,
+    "kind": "CallExpression",
+    "nodePos": 5528,
+    "nodeEnd": 5687
+  },
+  {
+    "startPos": 5686,
+    "endPos": 5686,
+    "kind": "CloseParenToken",
+    "nodePos": 5676,
+    "nodeEnd": 5687
+  },
+  {
+    "startPos": 5687,
+    "endPos": 5687,
+    "kind": "SemicolonToken",
+    "nodePos": 5687,
+    "nodeEnd": 5688
+  },
+  {
+    "startPos": 5688,
+    "endPos": 5697,
+    "kind": "Block",
+    "nodePos": 5204,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5698,
+    "endPos": 5704,
+    "kind": "ReturnKeyword",
+    "nodePos": 5688,
+    "nodeEnd": 5704
+  },
+  {
+    "startPos": 5705,
+    "endPos": 5710,
+    "kind": "Block",
+    "nodePos": 5204,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5711,
+    "endPos": 5711,
+    "kind": "CloseBraceToken",
+    "nodePos": 5705,
+    "nodeEnd": 5712
+  },
+  {
+    "startPos": 5712,
+    "endPos": 5719,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 5720,
+    "endPos": 5727,
+    "kind": "Identifier",
+    "nodePos": 5712,
+    "nodeEnd": 5727
+  },
+  {
+    "startPos": 5728,
+    "endPos": 5735,
+    "kind": "Identifier",
+    "nodePos": 5728,
+    "nodeEnd": 5735
+  },
+  {
+    "startPos": 5736,
+    "endPos": 5736,
+    "kind": "CallExpression",
+    "nodePos": 5712,
+    "nodeEnd": 5746
+  },
+  {
+    "startPos": 5737,
+    "endPos": 5745,
+    "kind": "Identifier",
+    "nodePos": 5736,
+    "nodeEnd": 5745
+  },
+  {
+    "startPos": 5746,
+    "endPos": 5746,
+    "kind": "SemicolonToken",
+    "nodePos": 5746,
+    "nodeEnd": 5747
+  },
+  {
+    "startPos": 5747,
+    "endPos": 5752,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 5753,
+    "endPos": 5766,
+    "kind": "Identifier",
+    "nodePos": 5747,
+    "nodeEnd": 5766
+  },
+  {
+    "startPos": 5767,
+    "endPos": 5783,
+    "kind": "Identifier",
+    "nodePos": 5767,
+    "nodeEnd": 5783
+  },
+  {
+    "startPos": 5784,
+    "endPos": 5793,
+    "kind": "CallExpression",
+    "nodePos": 5747,
+    "nodeEnd": 5904
+  },
+  {
+    "startPos": 5794,
+    "endPos": 5806,
+    "kind": "Identifier",
+    "nodePos": 5784,
+    "nodeEnd": 5806
+  },
+  {
+    "startPos": 5807,
+    "endPos": 5816,
+    "kind": "CallExpression",
+    "nodePos": 5747,
+    "nodeEnd": 5904
+  },
+  {
+    "startPos": 5817,
+    "endPos": 5833,
+    "kind": "Identifier",
+    "nodePos": 5807,
+    "nodeEnd": 5833
+  },
+  {
+    "startPos": 5834,
+    "endPos": 5841,
+    "kind": "Identifier",
+    "nodePos": 5834,
+    "nodeEnd": 5841
+  },
+  {
+    "startPos": 5842,
+    "endPos": 5858,
+    "kind": "Identifier",
+    "nodePos": 5842,
+    "nodeEnd": 5858
+  },
+  {
+    "startPos": 5859,
+    "endPos": 5866,
+    "kind": "Identifier",
+    "nodePos": 5859,
+    "nodeEnd": 5866
+  },
+  {
+    "startPos": 5867,
+    "endPos": 5873,
+    "kind": "Identifier",
+    "nodePos": 5867,
+    "nodeEnd": 5873
+  },
+  {
+    "startPos": 5874,
+    "endPos": 5874,
+    "kind": "MinusToken",
+    "nodePos": 5873,
+    "nodeEnd": 5875
+  },
+  {
+    "startPos": 5875,
+    "endPos": 5875,
+    "kind": "BinaryExpression",
+    "nodePos": 5842,
+    "nodeEnd": 5877
+  },
+  {
+    "startPos": 5876,
+    "endPos": 5877,
+    "kind": "NumericLiteral",
+    "nodePos": 5875,
+    "nodeEnd": 5877
+  },
+  {
+    "startPos": 5878,
+    "endPos": 5878,
+    "kind": "CommaToken",
+    "nodePos": 5878,
+    "nodeEnd": 5879
+  },
+  {
+    "startPos": 5879,
+    "endPos": 5888,
+    "kind": "CallExpression",
+    "nodePos": 5747,
+    "nodeEnd": 5904
+  },
+  {
+    "startPos": 5889,
+    "endPos": 5896,
+    "kind": "Identifier",
+    "nodePos": 5879,
+    "nodeEnd": 5896
+  },
+  {
+    "startPos": 5897,
+    "endPos": 5902,
+    "kind": "CallExpression",
+    "nodePos": 5747,
+    "nodeEnd": 5904
+  },
+  {
+    "startPos": 5903,
+    "endPos": 5903,
+    "kind": "CloseParenToken",
+    "nodePos": 5897,
+    "nodeEnd": 5904
+  },
+  {
+    "startPos": 5904,
+    "endPos": 5904,
+    "kind": "SemicolonToken",
+    "nodePos": 5904,
+    "nodeEnd": 5905
+  },
+  {
+    "startPos": 5905,
+    "endPos": 5906,
+    "kind": "Block",
+    "nodePos": 4531,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 5907,
+    "endPos": 5907,
+    "kind": "CloseBraceToken",
+    "nodePos": 5905,
+    "nodeEnd": 5908
+  },
+  {
+    "startPos": 5908,
+    "endPos": 5911,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 5912,
+    "endPos": 5920,
+    "kind": "FunctionKeyword",
+    "nodePos": 5908,
+    "nodeEnd": 5920
+  },
+  {
+    "startPos": 5921,
+    "endPos": 5936,
+    "kind": "Identifier",
+    "nodePos": 5920,
+    "nodeEnd": 5936
+  },
+  {
+    "startPos": 5937,
+    "endPos": 5942,
+    "kind": "FunctionDeclaration",
+    "nodePos": 5908,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 5943,
+    "endPos": 5955,
+    "kind": "Identifier",
+    "nodePos": 5937,
+    "nodeEnd": 5955
+  },
+  {
+    "startPos": 5956,
+    "endPos": 5956,
+    "kind": "Parameter",
+    "nodePos": 5937,
+    "nodeEnd": 5967
+  },
+  {
+    "startPos": 5957,
+    "endPos": 5967,
+    "kind": "Identifier",
+    "nodePos": 5956,
+    "nodeEnd": 5967
+  },
+  {
+    "startPos": 5968,
+    "endPos": 5973,
+    "kind": "FunctionDeclaration",
+    "nodePos": 5908,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 5974,
+    "endPos": 5987,
+    "kind": "Identifier",
+    "nodePos": 5968,
+    "nodeEnd": 5987
+  },
+  {
+    "startPos": 5988,
+    "endPos": 5988,
+    "kind": "Parameter",
+    "nodePos": 5968,
+    "nodeEnd": 6002
+  },
+  {
+    "startPos": 5989,
+    "endPos": 6002,
+    "kind": "Identifier",
+    "nodePos": 5988,
+    "nodeEnd": 6002
+  },
+  {
+    "startPos": 6003,
+    "endPos": 6008,
+    "kind": "FunctionDeclaration",
+    "nodePos": 5908,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 6009,
+    "endPos": 6016,
+    "kind": "Identifier",
+    "nodePos": 6003,
+    "nodeEnd": 6016
+  },
+  {
+    "startPos": 6017,
+    "endPos": 6017,
+    "kind": "Parameter",
+    "nodePos": 6003,
+    "nodeEnd": 6038
+  },
+  {
+    "startPos": 6018,
+    "endPos": 6027,
+    "kind": "Identifier",
+    "nodePos": 6017,
+    "nodeEnd": 6027
+  },
+  {
+    "startPos": 6028,
+    "endPos": 6037,
+    "kind": "Identifier",
+    "nodePos": 6028,
+    "nodeEnd": 6037
+  },
+  {
+    "startPos": 6038,
+    "endPos": 6038,
+    "kind": "CommaToken",
+    "nodePos": 6038,
+    "nodeEnd": 6039
+  },
+  {
+    "startPos": 6039,
+    "endPos": 6044,
+    "kind": "FunctionDeclaration",
+    "nodePos": 5908,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 6045,
+    "endPos": 6059,
+    "kind": "Identifier",
+    "nodePos": 6039,
+    "nodeEnd": 6059
+  },
+  {
+    "startPos": 6060,
+    "endPos": 6060,
+    "kind": "ColonToken",
+    "nodePos": 6060,
+    "nodeEnd": 6061
+  },
+  {
+    "startPos": 6061,
+    "endPos": 6061,
+    "kind": "Parameter",
+    "nodePos": 6039,
+    "nodeEnd": 6072
+  },
+  {
+    "startPos": 6062,
+    "endPos": 6070,
+    "kind": "Identifier",
+    "nodePos": 6061,
+    "nodeEnd": 6070
+  },
+  {
+    "startPos": 6071,
+    "endPos": 6071,
+    "kind": "CloseBracketToken",
+    "nodePos": 6071,
+    "nodeEnd": 6072
+  },
+  {
+    "startPos": 6072,
+    "endPos": 6072,
+    "kind": "CommaToken",
+    "nodePos": 6072,
+    "nodeEnd": 6073
+  },
+  {
+    "startPos": 6073,
+    "endPos": 6074,
+    "kind": "FunctionDeclaration",
+    "nodePos": 5908,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 6075,
+    "endPos": 6075,
+    "kind": "CloseParenToken",
+    "nodePos": 6073,
+    "nodeEnd": 6076
+  },
+  {
+    "startPos": 6076,
+    "endPos": 6076,
+    "kind": "FunctionDeclaration",
+    "nodePos": 5908,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 6077,
+    "endPos": 6077,
+    "kind": "OpenBraceToken",
+    "nodePos": 6076,
+    "nodeEnd": 6078
+  },
+  {
+    "startPos": 6078,
+    "endPos": 6083,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 6084,
+    "endPos": 6086,
+    "kind": "IfKeyword",
+    "nodePos": 6078,
+    "nodeEnd": 6086
+  },
+  {
+    "startPos": 6087,
+    "endPos": 6087,
+    "kind": "OpenParenToken",
+    "nodePos": 6086,
+    "nodeEnd": 6088
+  },
+  {
+    "startPos": 6088,
+    "endPos": 6088,
+    "kind": "ExclamationToken",
+    "nodePos": 6088,
+    "nodeEnd": 6089
+  },
+  {
+    "startPos": 6089,
+    "endPos": 6103,
+    "kind": "Identifier",
+    "nodePos": 6089,
+    "nodeEnd": 6103
+  },
+  {
+    "startPos": 6104,
+    "endPos": 6104,
+    "kind": "QuestionDotToken",
+    "nodePos": 6103,
+    "nodeEnd": 6105
+  },
+  {
+    "startPos": 6105,
+    "endPos": 6111,
+    "kind": "Identifier",
+    "nodePos": 6105,
+    "nodeEnd": 6111
+  },
+  {
+    "startPos": 6112,
+    "endPos": 6112,
+    "kind": "IfStatement",
+    "nodePos": 6078,
+    "nodeEnd": 6287
+  },
+  {
+    "startPos": 6113,
+    "endPos": 6113,
+    "kind": "OpenBraceToken",
+    "nodePos": 6112,
+    "nodeEnd": 6114
+  },
+  {
+    "startPos": 6114,
+    "endPos": 6123,
+    "kind": "Block",
+    "nodePos": 6112,
+    "nodeEnd": 6287
+  },
+  {
+    "startPos": 6124,
+    "endPos": 6137,
+    "kind": "Identifier",
+    "nodePos": 6114,
+    "nodeEnd": 6137
+  },
+  {
+    "startPos": 6138,
+    "endPos": 6160,
+    "kind": "Identifier",
+    "nodePos": 6138,
+    "nodeEnd": 6160
+  },
+  {
+    "startPos": 6161,
+    "endPos": 6174,
+    "kind": "CallExpression",
+    "nodePos": 6114,
+    "nodeEnd": 6262
+  },
+  {
+    "startPos": 6175,
+    "endPos": 6187,
+    "kind": "Identifier",
+    "nodePos": 6161,
+    "nodeEnd": 6187
+  },
+  {
+    "startPos": 6188,
+    "endPos": 6201,
+    "kind": "CallExpression",
+    "nodePos": 6114,
+    "nodeEnd": 6262
+  },
+  {
+    "startPos": 6202,
+    "endPos": 6209,
+    "kind": "Identifier",
+    "nodePos": 6188,
+    "nodeEnd": 6209
+  },
+  {
+    "startPos": 6210,
+    "endPos": 6244,
+    "kind": "CallExpression",
+    "nodePos": 6114,
+    "nodeEnd": 6262
+  },
+  {
+    "startPos": 6245,
+    "endPos": 6250,
+    "kind": "FalseKeyword",
+    "nodePos": 6210,
+    "nodeEnd": 6250
+  },
+  {
+    "startPos": 6251,
+    "endPos": 6260,
+    "kind": "CallExpression",
+    "nodePos": 6114,
+    "nodeEnd": 6262
+  },
+  {
+    "startPos": 6261,
+    "endPos": 6261,
+    "kind": "CloseParenToken",
+    "nodePos": 6251,
+    "nodeEnd": 6262
+  },
+  {
+    "startPos": 6262,
+    "endPos": 6262,
+    "kind": "SemicolonToken",
+    "nodePos": 6262,
+    "nodeEnd": 6263
+  },
+  {
+    "startPos": 6263,
+    "endPos": 6272,
+    "kind": "Block",
+    "nodePos": 6112,
+    "nodeEnd": 6287
+  },
+  {
+    "startPos": 6273,
+    "endPos": 6279,
+    "kind": "ReturnKeyword",
+    "nodePos": 6263,
+    "nodeEnd": 6279
+  },
+  {
+    "startPos": 6280,
+    "endPos": 6285,
+    "kind": "Block",
+    "nodePos": 6112,
+    "nodeEnd": 6287
+  },
+  {
+    "startPos": 6286,
+    "endPos": 6286,
+    "kind": "CloseBraceToken",
+    "nodePos": 6280,
+    "nodeEnd": 6287
+  },
+  {
+    "startPos": 6287,
+    "endPos": 6294,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 6295,
+    "endPos": 6298,
+    "kind": "ForKeyword",
+    "nodePos": 6287,
+    "nodeEnd": 6298
+  },
+  {
+    "startPos": 6299,
+    "endPos": 6299,
+    "kind": "OpenParenToken",
+    "nodePos": 6298,
+    "nodeEnd": 6300
+  },
+  {
+    "startPos": 6300,
+    "endPos": 6305,
+    "kind": "ConstKeyword",
+    "nodePos": 6300,
+    "nodeEnd": 6305
+  },
+  {
+    "startPos": 6306,
+    "endPos": 6314,
+    "kind": "Identifier",
+    "nodePos": 6305,
+    "nodeEnd": 6314
+  },
+  {
+    "startPos": 6315,
+    "endPos": 6317,
+    "kind": "OfKeyword",
+    "nodePos": 6314,
+    "nodeEnd": 6317
+  },
+  {
+    "startPos": 6318,
+    "endPos": 6332,
+    "kind": "Identifier",
+    "nodePos": 6317,
+    "nodeEnd": 6332
+  },
+  {
+    "startPos": 6333,
+    "endPos": 6333,
+    "kind": "ForOfStatement",
+    "nodePos": 6287,
+    "nodeEnd": 7310
+  },
+  {
+    "startPos": 6334,
+    "endPos": 6334,
+    "kind": "OpenBraceToken",
+    "nodePos": 6333,
+    "nodeEnd": 6335
+  },
+  {
+    "startPos": 6335,
+    "endPos": 6344,
+    "kind": "Block",
+    "nodePos": 6333,
+    "nodeEnd": 7310
+  },
+  {
+    "startPos": 6345,
+    "endPos": 6350,
+    "kind": "ConstKeyword",
+    "nodePos": 6335,
+    "nodeEnd": 6350
+  },
+  {
+    "startPos": 6351,
+    "endPos": 6356,
+    "kind": "Identifier",
+    "nodePos": 6350,
+    "nodeEnd": 6356
+  },
+  {
+    "startPos": 6357,
+    "endPos": 6357,
+    "kind": "EqualsToken",
+    "nodePos": 6356,
+    "nodeEnd": 6358
+  },
+  {
+    "startPos": 6358,
+    "endPos": 6358,
+    "kind": "VariableDeclaration",
+    "nodePos": 6350,
+    "nodeEnd": 6660
+  },
+  {
+    "startPos": 6359,
+    "endPos": 6371,
+    "kind": "Identifier",
+    "nodePos": 6358,
+    "nodeEnd": 6371
+  },
+  {
+    "startPos": 6372,
+    "endPos": 6385,
+    "kind": "CallExpression",
+    "nodePos": 6358,
+    "nodeEnd": 6660
+  },
+  {
+    "startPos": 6386,
+    "endPos": 6404,
+    "kind": "Identifier",
+    "nodePos": 6372,
+    "nodeEnd": 6404
+  },
+  {
+    "startPos": 6405,
+    "endPos": 6417,
+    "kind": "Identifier",
+    "nodePos": 6405,
+    "nodeEnd": 6417
+  },
+  {
+    "startPos": 6418,
+    "endPos": 6418,
+    "kind": "CallExpression",
+    "nodePos": 6372,
+    "nodeEnd": 6434
+  },
+  {
+    "startPos": 6419,
+    "endPos": 6427,
+    "kind": "Identifier",
+    "nodePos": 6418,
+    "nodeEnd": 6427
+  },
+  {
+    "startPos": 6428,
+    "endPos": 6433,
+    "kind": "Identifier",
+    "nodePos": 6428,
+    "nodeEnd": 6433
+  },
+  {
+    "startPos": 6434,
+    "endPos": 6434,
+    "kind": "CommaToken",
+    "nodePos": 6434,
+    "nodeEnd": 6435
+  },
+  {
+    "startPos": 6435,
+    "endPos": 6448,
+    "kind": "CallExpression",
+    "nodePos": 6358,
+    "nodeEnd": 6660
+  },
+  {
+    "startPos": 6449,
+    "endPos": 6449,
+    "kind": "OpenParenToken",
+    "nodePos": 6435,
+    "nodeEnd": 6450
+  },
+  {
+    "startPos": 6450,
+    "endPos": 6455,
+    "kind": "Identifier",
+    "nodePos": 6450,
+    "nodeEnd": 6455
+  },
+  {
+    "startPos": 6456,
+    "endPos": 6456,
+    "kind": "ColonToken",
+    "nodePos": 6456,
+    "nodeEnd": 6457
+  },
+  {
+    "startPos": 6457,
+    "endPos": 6457,
+    "kind": "ArrowFunction",
+    "nodePos": 6435,
+    "nodeEnd": 6648
+  },
+  {
+    "startPos": 6458,
+    "endPos": 6463,
+    "kind": "Identifier",
+    "nodePos": 6457,
+    "nodeEnd": 6463
+  },
+  {
+    "startPos": 6464,
+    "endPos": 6466,
+    "kind": "IsKeyword",
+    "nodePos": 6463,
+    "nodeEnd": 6466
+  },
+  {
+    "startPos": 6467,
+    "endPos": 6472,
+    "kind": "Identifier",
+    "nodePos": 6466,
+    "nodeEnd": 6472
+  },
+  {
+    "startPos": 6473,
+    "endPos": 6473,
+    "kind": "BarToken",
+    "nodePos": 6472,
+    "nodeEnd": 6474
+  },
+  {
+    "startPos": 6474,
+    "endPos": 6474,
+    "kind": "UnionType",
+    "nodePos": 6466,
+    "nodeEnd": 6485
+  },
+  {
+    "startPos": 6475,
+    "endPos": 6485,
+    "kind": "Identifier",
+    "nodePos": 6474,
+    "nodeEnd": 6485
+  },
+  {
+    "startPos": 6486,
+    "endPos": 6487,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6485,
+    "nodeEnd": 6488
+  },
+  {
+    "startPos": 6488,
+    "endPos": 6505,
+    "kind": "ArrowFunction",
+    "nodePos": 6435,
+    "nodeEnd": 6648
+  },
+  {
+    "startPos": 6506,
+    "endPos": 6508,
+    "kind": "Identifier",
+    "nodePos": 6488,
+    "nodeEnd": 6508
+  },
+  {
+    "startPos": 6509,
+    "endPos": 6516,
+    "kind": "Identifier",
+    "nodePos": 6509,
+    "nodeEnd": 6516
+  },
+  {
+    "startPos": 6517,
+    "endPos": 6517,
+    "kind": "CallExpression",
+    "nodePos": 6488,
+    "nodeEnd": 6531
+  },
+  {
+    "startPos": 6518,
+    "endPos": 6530,
+    "kind": "Identifier",
+    "nodePos": 6517,
+    "nodeEnd": 6530
+  },
+  {
+    "startPos": 6531,
+    "endPos": 6531,
+    "kind": "OpenParenToken",
+    "nodePos": 6531,
+    "nodeEnd": 6532
+  },
+  {
+    "startPos": 6532,
+    "endPos": 6537,
+    "kind": "Identifier",
+    "nodePos": 6532,
+    "nodeEnd": 6537
+  },
+  {
+    "startPos": 6538,
+    "endPos": 6538,
+    "kind": "BinaryExpression",
+    "nodePos": 6488,
+    "nodeEnd": 6648
+  },
+  {
+    "startPos": 6539,
+    "endPos": 6540,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 6538,
+    "nodeEnd": 6541
+  },
+  {
+    "startPos": 6541,
+    "endPos": 6558,
+    "kind": "BinaryExpression",
+    "nodePos": 6488,
+    "nodeEnd": 6648
+  },
+  {
+    "startPos": 6559,
+    "endPos": 6563,
+    "kind": "Identifier",
+    "nodePos": 6541,
+    "nodeEnd": 6563
+  },
+  {
+    "startPos": 6564,
+    "endPos": 6569,
+    "kind": "Identifier",
+    "nodePos": 6564,
+    "nodeEnd": 6569
+  },
+  {
+    "startPos": 6570,
+    "endPos": 6580,
+    "kind": "Identifier",
+    "nodePos": 6570,
+    "nodeEnd": 6580
+  },
+  {
+    "startPos": 6581,
+    "endPos": 6581,
+    "kind": "CallExpression",
+    "nodePos": 6541,
+    "nodeEnd": 6648
+  },
+  {
+    "startPos": 6582,
+    "endPos": 6590,
+    "kind": "Identifier",
+    "nodePos": 6581,
+    "nodeEnd": 6590
+  },
+  {
+    "startPos": 6591,
+    "endPos": 6592,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6590,
+    "nodeEnd": 6593
+  },
+  {
+    "startPos": 6593,
+    "endPos": 6593,
+    "kind": "ArrowFunction",
+    "nodePos": 6581,
+    "nodeEnd": 6647
+  },
+  {
+    "startPos": 6594,
+    "endPos": 6601,
+    "kind": "Identifier",
+    "nodePos": 6593,
+    "nodeEnd": 6601
+  },
+  {
+    "startPos": 6602,
+    "endPos": 6606,
+    "kind": "Identifier",
+    "nodePos": 6602,
+    "nodeEnd": 6606
+  },
+  {
+    "startPos": 6607,
+    "endPos": 6614,
+    "kind": "Identifier",
+    "nodePos": 6607,
+    "nodeEnd": 6614
+  },
+  {
+    "startPos": 6615,
+    "endPos": 6616,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6614,
+    "nodeEnd": 6617
+  },
+  {
+    "startPos": 6617,
+    "endPos": 6617,
+    "kind": "ArrowFunction",
+    "nodePos": 6607,
+    "nodeEnd": 6646
+  },
+  {
+    "startPos": 6618,
+    "endPos": 6627,
+    "kind": "Identifier",
+    "nodePos": 6617,
+    "nodeEnd": 6627
+  },
+  {
+    "startPos": 6628,
+    "endPos": 6635,
+    "kind": "Identifier",
+    "nodePos": 6628,
+    "nodeEnd": 6635
+  },
+  {
+    "startPos": 6636,
+    "endPos": 6636,
+    "kind": "CallExpression",
+    "nodePos": 6617,
+    "nodeEnd": 6646
+  },
+  {
+    "startPos": 6637,
+    "endPos": 6645,
+    "kind": "Identifier",
+    "nodePos": 6636,
+    "nodeEnd": 6645
+  },
+  {
+    "startPos": 6646,
+    "endPos": 6646,
+    "kind": "CloseParenToken",
+    "nodePos": 6646,
+    "nodeEnd": 6647
+  },
+  {
+    "startPos": 6647,
+    "endPos": 6647,
+    "kind": "CloseParenToken",
+    "nodePos": 6647,
+    "nodeEnd": 6648
+  },
+  {
+    "startPos": 6648,
+    "endPos": 6648,
+    "kind": "CommaToken",
+    "nodePos": 6648,
+    "nodeEnd": 6649
+  },
+  {
+    "startPos": 6649,
+    "endPos": 6658,
+    "kind": "CallExpression",
+    "nodePos": 6358,
+    "nodeEnd": 6660
+  },
+  {
+    "startPos": 6659,
+    "endPos": 6659,
+    "kind": "CloseParenToken",
+    "nodePos": 6649,
+    "nodeEnd": 6660
+  },
+  {
+    "startPos": 6660,
+    "endPos": 6660,
+    "kind": "SemicolonToken",
+    "nodePos": 6660,
+    "nodeEnd": 6661
+  },
+  {
+    "startPos": 6661,
+    "endPos": 6670,
+    "kind": "Block",
+    "nodePos": 6333,
+    "nodeEnd": 7310
+  },
+  {
+    "startPos": 6671,
+    "endPos": 6673,
+    "kind": "IfKeyword",
+    "nodePos": 6661,
+    "nodeEnd": 6673
+  },
+  {
+    "startPos": 6674,
+    "endPos": 6674,
+    "kind": "OpenParenToken",
+    "nodePos": 6673,
+    "nodeEnd": 6675
+  },
+  {
+    "startPos": 6675,
+    "endPos": 6680,
+    "kind": "Identifier",
+    "nodePos": 6675,
+    "nodeEnd": 6680
+  },
+  {
+    "startPos": 6681,
+    "endPos": 6681,
+    "kind": "IfStatement",
+    "nodePos": 6661,
+    "nodeEnd": 7303
+  },
+  {
+    "startPos": 6682,
+    "endPos": 6682,
+    "kind": "OpenBraceToken",
+    "nodePos": 6681,
+    "nodeEnd": 6683
+  },
+  {
+    "startPos": 6683,
+    "endPos": 6696,
+    "kind": "Block",
+    "nodePos": 6681,
+    "nodeEnd": 7303
+  },
+  {
+    "startPos": 6697,
+    "endPos": 6702,
+    "kind": "ConstKeyword",
+    "nodePos": 6683,
+    "nodeEnd": 6702
+  },
+  {
+    "startPos": 6703,
+    "endPos": 6708,
+    "kind": "Identifier",
+    "nodePos": 6702,
+    "nodeEnd": 6708
+  },
+  {
+    "startPos": 6709,
+    "endPos": 6709,
+    "kind": "EqualsToken",
+    "nodePos": 6708,
+    "nodeEnd": 6710
+  },
+  {
+    "startPos": 6710,
+    "endPos": 6710,
+    "kind": "VariableDeclaration",
+    "nodePos": 6702,
+    "nodeEnd": 6785
+  },
+  {
+    "startPos": 6711,
+    "endPos": 6716,
+    "kind": "Identifier",
+    "nodePos": 6710,
+    "nodeEnd": 6716
+  },
+  {
+    "startPos": 6717,
+    "endPos": 6727,
+    "kind": "Identifier",
+    "nodePos": 6717,
+    "nodeEnd": 6727
+  },
+  {
+    "startPos": 6728,
+    "endPos": 6732,
+    "kind": "Identifier",
+    "nodePos": 6728,
+    "nodeEnd": 6732
+  },
+  {
+    "startPos": 6733,
+    "endPos": 6737,
+    "kind": "Identifier",
+    "nodePos": 6733,
+    "nodeEnd": 6737
+  },
+  {
+    "startPos": 6738,
+    "endPos": 6739,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6737,
+    "nodeEnd": 6740
+  },
+  {
+    "startPos": 6740,
+    "endPos": 6740,
+    "kind": "ArrowFunction",
+    "nodePos": 6733,
+    "nodeEnd": 6784
+  },
+  {
+    "startPos": 6741,
+    "endPos": 6748,
+    "kind": "Identifier",
+    "nodePos": 6740,
+    "nodeEnd": 6748
+  },
+  {
+    "startPos": 6749,
+    "endPos": 6753,
+    "kind": "Identifier",
+    "nodePos": 6749,
+    "nodeEnd": 6753
+  },
+  {
+    "startPos": 6754,
+    "endPos": 6758,
+    "kind": "Identifier",
+    "nodePos": 6754,
+    "nodeEnd": 6758
+  },
+  {
+    "startPos": 6759,
+    "endPos": 6760,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6758,
+    "nodeEnd": 6761
+  },
+  {
+    "startPos": 6761,
+    "endPos": 6761,
+    "kind": "ArrowFunction",
+    "nodePos": 6754,
+    "nodeEnd": 6783
+  },
+  {
+    "startPos": 6762,
+    "endPos": 6771,
+    "kind": "Identifier",
+    "nodePos": 6761,
+    "nodeEnd": 6771
+  },
+  {
+    "startPos": 6772,
+    "endPos": 6776,
+    "kind": "Identifier",
+    "nodePos": 6772,
+    "nodeEnd": 6776
+  },
+  {
+    "startPos": 6777,
+    "endPos": 6777,
+    "kind": "CallExpression",
+    "nodePos": 6761,
+    "nodeEnd": 6783
+  },
+  {
+    "startPos": 6778,
+    "endPos": 6782,
+    "kind": "Identifier",
+    "nodePos": 6777,
+    "nodeEnd": 6782
+  },
+  {
+    "startPos": 6783,
+    "endPos": 6783,
+    "kind": "CloseParenToken",
+    "nodePos": 6783,
+    "nodeEnd": 6784
+  },
+  {
+    "startPos": 6784,
+    "endPos": 6784,
+    "kind": "CloseParenToken",
+    "nodePos": 6784,
+    "nodeEnd": 6785
+  },
+  {
+    "startPos": 6785,
+    "endPos": 6785,
+    "kind": "SemicolonToken",
+    "nodePos": 6785,
+    "nodeEnd": 6786
+  },
+  {
+    "startPos": 6786,
+    "endPos": 6799,
+    "kind": "Block",
+    "nodePos": 6681,
+    "nodeEnd": 7303
+  },
+  {
+    "startPos": 6800,
+    "endPos": 6802,
+    "kind": "IfKeyword",
+    "nodePos": 6786,
+    "nodeEnd": 6802
+  },
+  {
+    "startPos": 6803,
+    "endPos": 6803,
+    "kind": "OpenParenToken",
+    "nodePos": 6802,
+    "nodeEnd": 6804
+  },
+  {
+    "startPos": 6804,
+    "endPos": 6809,
+    "kind": "Identifier",
+    "nodePos": 6804,
+    "nodeEnd": 6809
+  },
+  {
+    "startPos": 6810,
+    "endPos": 6810,
+    "kind": "IfStatement",
+    "nodePos": 6786,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 6811,
+    "endPos": 6811,
+    "kind": "OpenBraceToken",
+    "nodePos": 6810,
+    "nodeEnd": 6812
+  },
+  {
+    "startPos": 6812,
+    "endPos": 6916,
+    "kind": "Block",
+    "nodePos": 6810,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 6917,
+    "endPos": 6922,
+    "kind": "ConstKeyword",
+    "nodePos": 6812,
+    "nodeEnd": 6922
+  },
+  {
+    "startPos": 6923,
+    "endPos": 6926,
+    "kind": "Identifier",
+    "nodePos": 6922,
+    "nodeEnd": 6926
+  },
+  {
+    "startPos": 6927,
+    "endPos": 6927,
+    "kind": "EqualsToken",
+    "nodePos": 6926,
+    "nodeEnd": 6928
+  },
+  {
+    "startPos": 6928,
+    "endPos": 6928,
+    "kind": "VariableDeclaration",
+    "nodePos": 6922,
+    "nodeEnd": 7009
+  },
+  {
+    "startPos": 6929,
+    "endPos": 6937,
+    "kind": "Identifier",
+    "nodePos": 6928,
+    "nodeEnd": 6937
+  },
+  {
+    "startPos": 6938,
+    "endPos": 6943,
+    "kind": "Identifier",
+    "nodePos": 6938,
+    "nodeEnd": 6943
+  },
+  {
+    "startPos": 6944,
+    "endPos": 6954,
+    "kind": "Identifier",
+    "nodePos": 6944,
+    "nodeEnd": 6954
+  },
+  {
+    "startPos": 6955,
+    "endPos": 6955,
+    "kind": "CallExpression",
+    "nodePos": 6928,
+    "nodeEnd": 7008
+  },
+  {
+    "startPos": 6956,
+    "endPos": 6960,
+    "kind": "Identifier",
+    "nodePos": 6955,
+    "nodeEnd": 6960
+  },
+  {
+    "startPos": 6961,
+    "endPos": 6962,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6960,
+    "nodeEnd": 6963
+  },
+  {
+    "startPos": 6963,
+    "endPos": 6963,
+    "kind": "ArrowFunction",
+    "nodePos": 6955,
+    "nodeEnd": 7007
+  },
+  {
+    "startPos": 6964,
+    "endPos": 6971,
+    "kind": "Identifier",
+    "nodePos": 6963,
+    "nodeEnd": 6971
+  },
+  {
+    "startPos": 6972,
+    "endPos": 6976,
+    "kind": "Identifier",
+    "nodePos": 6972,
+    "nodeEnd": 6976
+  },
+  {
+    "startPos": 6977,
+    "endPos": 6981,
+    "kind": "Identifier",
+    "nodePos": 6977,
+    "nodeEnd": 6981
+  },
+  {
+    "startPos": 6982,
+    "endPos": 6983,
+    "kind": "EqualsGreaterThanToken",
+    "nodePos": 6981,
+    "nodeEnd": 6984
+  },
+  {
+    "startPos": 6984,
+    "endPos": 6984,
+    "kind": "ArrowFunction",
+    "nodePos": 6977,
+    "nodeEnd": 7006
+  },
+  {
+    "startPos": 6985,
+    "endPos": 6994,
+    "kind": "Identifier",
+    "nodePos": 6984,
+    "nodeEnd": 6994
+  },
+  {
+    "startPos": 6995,
+    "endPos": 6999,
+    "kind": "Identifier",
+    "nodePos": 6995,
+    "nodeEnd": 6999
+  },
+  {
+    "startPos": 7000,
+    "endPos": 7000,
+    "kind": "CallExpression",
+    "nodePos": 6984,
+    "nodeEnd": 7006
+  },
+  {
+    "startPos": 7001,
+    "endPos": 7005,
+    "kind": "Identifier",
+    "nodePos": 7000,
+    "nodeEnd": 7005
+  },
+  {
+    "startPos": 7006,
+    "endPos": 7006,
+    "kind": "CloseParenToken",
+    "nodePos": 7006,
+    "nodeEnd": 7007
+  },
+  {
+    "startPos": 7007,
+    "endPos": 7007,
+    "kind": "CloseParenToken",
+    "nodePos": 7007,
+    "nodeEnd": 7008
+  },
+  {
+    "startPos": 7008,
+    "endPos": 7008,
+    "kind": "ExclamationToken",
+    "nodePos": 7008,
+    "nodeEnd": 7009
+  },
+  {
+    "startPos": 7009,
+    "endPos": 7009,
+    "kind": "SemicolonToken",
+    "nodePos": 7009,
+    "nodeEnd": 7010
+  },
+  {
+    "startPos": 7010,
+    "endPos": 7027,
+    "kind": "Block",
+    "nodePos": 6810,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 7028,
+    "endPos": 7035,
+    "kind": "Identifier",
+    "nodePos": 7010,
+    "nodeEnd": 7035
+  },
+  {
+    "startPos": 7036,
+    "endPos": 7043,
+    "kind": "Identifier",
+    "nodePos": 7036,
+    "nodeEnd": 7043
+  },
+  {
+    "startPos": 7044,
+    "endPos": 7044,
+    "kind": "CallExpression",
+    "nodePos": 7010,
+    "nodeEnd": 7054
+  },
+  {
+    "startPos": 7045,
+    "endPos": 7053,
+    "kind": "Identifier",
+    "nodePos": 7044,
+    "nodeEnd": 7053
+  },
+  {
+    "startPos": 7054,
+    "endPos": 7054,
+    "kind": "SemicolonToken",
+    "nodePos": 7054,
+    "nodeEnd": 7055
+  },
+  {
+    "startPos": 7055,
+    "endPos": 7072,
+    "kind": "Block",
+    "nodePos": 6810,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 7073,
+    "endPos": 7086,
+    "kind": "Identifier",
+    "nodePos": 7055,
+    "nodeEnd": 7086
+  },
+  {
+    "startPos": 7087,
+    "endPos": 7112,
+    "kind": "Identifier",
+    "nodePos": 7087,
+    "nodeEnd": 7112
+  },
+  {
+    "startPos": 7113,
+    "endPos": 7134,
+    "kind": "CallExpression",
+    "nodePos": 7055,
+    "nodeEnd": 7251
+  },
+  {
+    "startPos": 7135,
+    "endPos": 7147,
+    "kind": "Identifier",
+    "nodePos": 7113,
+    "nodeEnd": 7147
+  },
+  {
+    "startPos": 7148,
+    "endPos": 7169,
+    "kind": "CallExpression",
+    "nodePos": 7055,
+    "nodeEnd": 7251
+  },
+  {
+    "startPos": 7170,
+    "endPos": 7175,
+    "kind": "Identifier",
+    "nodePos": 7148,
+    "nodeEnd": 7175
+  },
+  {
+    "startPos": 7176,
+    "endPos": 7197,
+    "kind": "CallExpression",
+    "nodePos": 7055,
+    "nodeEnd": 7251
+  },
+  {
+    "startPos": 7198,
+    "endPos": 7201,
+    "kind": "Identifier",
+    "nodePos": 7176,
+    "nodeEnd": 7201
+  },
+  {
+    "startPos": 7202,
+    "endPos": 7223,
+    "kind": "CallExpression",
+    "nodePos": 7055,
+    "nodeEnd": 7251
+  },
+  {
+    "startPos": 7224,
+    "endPos": 7231,
+    "kind": "Identifier",
+    "nodePos": 7202,
+    "nodeEnd": 7231
+  },
+  {
+    "startPos": 7232,
+    "endPos": 7249,
+    "kind": "CallExpression",
+    "nodePos": 7055,
+    "nodeEnd": 7251
+  },
+  {
+    "startPos": 7250,
+    "endPos": 7250,
+    "kind": "CloseParenToken",
+    "nodePos": 7232,
+    "nodeEnd": 7251
+  },
+  {
+    "startPos": 7251,
+    "endPos": 7251,
+    "kind": "SemicolonToken",
+    "nodePos": 7251,
+    "nodeEnd": 7252
+  },
+  {
+    "startPos": 7252,
+    "endPos": 7269,
+    "kind": "Block",
+    "nodePos": 6810,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 7270,
+    "endPos": 7276,
+    "kind": "ReturnKeyword",
+    "nodePos": 7252,
+    "nodeEnd": 7276
+  },
+  {
+    "startPos": 7277,
+    "endPos": 7290,
+    "kind": "Block",
+    "nodePos": 6810,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 7291,
+    "endPos": 7291,
+    "kind": "CloseBraceToken",
+    "nodePos": 7277,
+    "nodeEnd": 7292
+  },
+  {
+    "startPos": 7292,
+    "endPos": 7301,
+    "kind": "Block",
+    "nodePos": 6681,
+    "nodeEnd": 7303
+  },
+  {
+    "startPos": 7302,
+    "endPos": 7302,
+    "kind": "CloseBraceToken",
+    "nodePos": 7292,
+    "nodeEnd": 7303
+  },
+  {
+    "startPos": 7303,
+    "endPos": 7308,
+    "kind": "Block",
+    "nodePos": 6333,
+    "nodeEnd": 7310
+  },
+  {
+    "startPos": 7309,
+    "endPos": 7309,
+    "kind": "CloseBraceToken",
+    "nodePos": 7303,
+    "nodeEnd": 7310
+  },
+  {
+    "startPos": 7310,
+    "endPos": 7317,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 7318,
+    "endPos": 7321,
+    "kind": "LetKeyword",
+    "nodePos": 7310,
+    "nodeEnd": 7321
+  },
+  {
+    "startPos": 7322,
+    "endPos": 7337,
+    "kind": "Identifier",
+    "nodePos": 7321,
+    "nodeEnd": 7337
+  },
+  {
+    "startPos": 7338,
+    "endPos": 7338,
+    "kind": "VariableDeclaration",
+    "nodePos": 7321,
+    "nodeEnd": 7385
+  },
+  {
+    "startPos": 7339,
+    "endPos": 7348,
+    "kind": "Identifier",
+    "nodePos": 7338,
+    "nodeEnd": 7348
+  },
+  {
+    "startPos": 7349,
+    "endPos": 7358,
+    "kind": "Identifier",
+    "nodePos": 7349,
+    "nodeEnd": 7358
+  },
+  {
+    "startPos": 7359,
+    "endPos": 7359,
+    "kind": "VariableDeclaration",
+    "nodePos": 7321,
+    "nodeEnd": 7385
+  },
+  {
+    "startPos": 7360,
+    "endPos": 7360,
+    "kind": "EqualsToken",
+    "nodePos": 7359,
+    "nodeEnd": 7361
+  },
+  {
+    "startPos": 7361,
+    "endPos": 7361,
+    "kind": "VariableDeclaration",
+    "nodePos": 7321,
+    "nodeEnd": 7385
+  },
+  {
+    "startPos": 7362,
+    "endPos": 7374,
+    "kind": "Identifier",
+    "nodePos": 7361,
+    "nodeEnd": 7374
+  },
+  {
+    "startPos": 7375,
+    "endPos": 7385,
+    "kind": "Identifier",
+    "nodePos": 7375,
+    "nodeEnd": 7385
+  },
+  {
+    "startPos": 7386,
+    "endPos": 7391,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 7392,
+    "endPos": 7395,
+    "kind": "ForKeyword",
+    "nodePos": 7386,
+    "nodeEnd": 7395
+  },
+  {
+    "startPos": 7396,
+    "endPos": 7396,
+    "kind": "OpenParenToken",
+    "nodePos": 7395,
+    "nodeEnd": 7397
+  },
+  {
+    "startPos": 7397,
+    "endPos": 7402,
+    "kind": "ConstKeyword",
+    "nodePos": 7397,
+    "nodeEnd": 7402
+  },
+  {
+    "startPos": 7403,
+    "endPos": 7411,
+    "kind": "Identifier",
+    "nodePos": 7402,
+    "nodeEnd": 7411
+  },
+  {
+    "startPos": 7412,
+    "endPos": 7414,
+    "kind": "OfKeyword",
+    "nodePos": 7411,
+    "nodeEnd": 7414
+  },
+  {
+    "startPos": 7415,
+    "endPos": 7429,
+    "kind": "Identifier",
+    "nodePos": 7414,
+    "nodeEnd": 7429
+  },
+  {
+    "startPos": 7430,
+    "endPos": 7430,
+    "kind": "ForOfStatement",
+    "nodePos": 7386,
+    "nodeEnd": 7675
+  },
+  {
+    "startPos": 7431,
+    "endPos": 7431,
+    "kind": "OpenBraceToken",
+    "nodePos": 7430,
+    "nodeEnd": 7432
+  },
+  {
+    "startPos": 7432,
+    "endPos": 7441,
+    "kind": "Block",
+    "nodePos": 7430,
+    "nodeEnd": 7675
+  },
+  {
+    "startPos": 7442,
+    "endPos": 7447,
+    "kind": "ConstKeyword",
+    "nodePos": 7432,
+    "nodeEnd": 7447
+  },
+  {
+    "startPos": 7448,
+    "endPos": 7453,
+    "kind": "Identifier",
+    "nodePos": 7447,
+    "nodeEnd": 7453
+  },
+  {
+    "startPos": 7454,
+    "endPos": 7454,
+    "kind": "EqualsToken",
+    "nodePos": 7453,
+    "nodeEnd": 7455
+  },
+  {
+    "startPos": 7455,
+    "endPos": 7455,
+    "kind": "VariableDeclaration",
+    "nodePos": 7447,
+    "nodeEnd": 7565
+  },
+  {
+    "startPos": 7456,
+    "endPos": 7468,
+    "kind": "Identifier",
+    "nodePos": 7455,
+    "nodeEnd": 7468
+  },
+  {
+    "startPos": 7469,
+    "endPos": 7482,
+    "kind": "CallExpression",
+    "nodePos": 7455,
+    "nodeEnd": 7565
+  },
+  {
+    "startPos": 7483,
+    "endPos": 7501,
+    "kind": "Identifier",
+    "nodePos": 7469,
+    "nodeEnd": 7501
+  },
+  {
+    "startPos": 7502,
+    "endPos": 7514,
+    "kind": "Identifier",
+    "nodePos": 7502,
+    "nodeEnd": 7514
+  },
+  {
+    "startPos": 7515,
+    "endPos": 7515,
+    "kind": "CallExpression",
+    "nodePos": 7469,
+    "nodeEnd": 7531
+  },
+  {
+    "startPos": 7516,
+    "endPos": 7524,
+    "kind": "Identifier",
+    "nodePos": 7515,
+    "nodeEnd": 7524
+  },
+  {
+    "startPos": 7525,
+    "endPos": 7530,
+    "kind": "Identifier",
+    "nodePos": 7525,
+    "nodeEnd": 7530
+  },
+  {
+    "startPos": 7531,
+    "endPos": 7531,
+    "kind": "CommaToken",
+    "nodePos": 7531,
+    "nodeEnd": 7532
+  },
+  {
+    "startPos": 7532,
+    "endPos": 7545,
+    "kind": "CallExpression",
+    "nodePos": 7455,
+    "nodeEnd": 7565
+  },
+  {
+    "startPos": 7546,
+    "endPos": 7553,
+    "kind": "Identifier",
+    "nodePos": 7532,
+    "nodeEnd": 7553
+  },
+  {
+    "startPos": 7554,
+    "endPos": 7563,
+    "kind": "CallExpression",
+    "nodePos": 7455,
+    "nodeEnd": 7565
+  },
+  {
+    "startPos": 7564,
+    "endPos": 7564,
+    "kind": "CloseParenToken",
+    "nodePos": 7554,
+    "nodeEnd": 7565
+  },
+  {
+    "startPos": 7565,
+    "endPos": 7565,
+    "kind": "SemicolonToken",
+    "nodePos": 7565,
+    "nodeEnd": 7566
+  },
+  {
+    "startPos": 7566,
+    "endPos": 7575,
+    "kind": "Block",
+    "nodePos": 7430,
+    "nodeEnd": 7675
+  },
+  {
+    "startPos": 7576,
+    "endPos": 7578,
+    "kind": "IfKeyword",
+    "nodePos": 7566,
+    "nodeEnd": 7578
+  },
+  {
+    "startPos": 7579,
+    "endPos": 7579,
+    "kind": "OpenParenToken",
+    "nodePos": 7578,
+    "nodeEnd": 7580
+  },
+  {
+    "startPos": 7580,
+    "endPos": 7585,
+    "kind": "Identifier",
+    "nodePos": 7580,
+    "nodeEnd": 7585
+  },
+  {
+    "startPos": 7586,
+    "endPos": 7586,
+    "kind": "IfStatement",
+    "nodePos": 7566,
+    "nodeEnd": 7668
+  },
+  {
+    "startPos": 7587,
+    "endPos": 7587,
+    "kind": "OpenBraceToken",
+    "nodePos": 7586,
+    "nodeEnd": 7588
+  },
+  {
+    "startPos": 7588,
+    "endPos": 7601,
+    "kind": "Block",
+    "nodePos": 7586,
+    "nodeEnd": 7668
+  },
+  {
+    "startPos": 7602,
+    "endPos": 7617,
+    "kind": "Identifier",
+    "nodePos": 7588,
+    "nodeEnd": 7617
+  },
+  {
+    "startPos": 7618,
+    "endPos": 7618,
+    "kind": "EqualsToken",
+    "nodePos": 7617,
+    "nodeEnd": 7619
+  },
+  {
+    "startPos": 7619,
+    "endPos": 7619,
+    "kind": "BinaryExpression",
+    "nodePos": 7588,
+    "nodeEnd": 7636
+  },
+  {
+    "startPos": 7620,
+    "endPos": 7625,
+    "kind": "Identifier",
+    "nodePos": 7619,
+    "nodeEnd": 7625
+  },
+  {
+    "startPos": 7626,
+    "endPos": 7636,
+    "kind": "Identifier",
+    "nodePos": 7626,
+    "nodeEnd": 7636
+  },
+  {
+    "startPos": 7637,
+    "endPos": 7650,
+    "kind": "Block",
+    "nodePos": 7586,
+    "nodeEnd": 7668
+  },
+  {
+    "startPos": 7651,
+    "endPos": 7656,
+    "kind": "BreakKeyword",
+    "nodePos": 7637,
+    "nodeEnd": 7656
+  },
+  {
+    "startPos": 7657,
+    "endPos": 7666,
+    "kind": "Block",
+    "nodePos": 7586,
+    "nodeEnd": 7668
+  },
+  {
+    "startPos": 7667,
+    "endPos": 7667,
+    "kind": "CloseBraceToken",
+    "nodePos": 7657,
+    "nodeEnd": 7668
+  },
+  {
+    "startPos": 7668,
+    "endPos": 7673,
+    "kind": "Block",
+    "nodePos": 7430,
+    "nodeEnd": 7675
+  },
+  {
+    "startPos": 7674,
+    "endPos": 7674,
+    "kind": "CloseBraceToken",
+    "nodePos": 7668,
+    "nodeEnd": 7675
+  },
+  {
+    "startPos": 7675,
+    "endPos": 7680,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 7681,
+    "endPos": 7688,
+    "kind": "Identifier",
+    "nodePos": 7675,
+    "nodeEnd": 7688
+  },
+  {
+    "startPos": 7689,
+    "endPos": 7696,
+    "kind": "Identifier",
+    "nodePos": 7689,
+    "nodeEnd": 7696
+  },
+  {
+    "startPos": 7697,
+    "endPos": 7697,
+    "kind": "CallExpression",
+    "nodePos": 7675,
+    "nodeEnd": 7707
+  },
+  {
+    "startPos": 7698,
+    "endPos": 7706,
+    "kind": "Identifier",
+    "nodePos": 7697,
+    "nodeEnd": 7706
+  },
+  {
+    "startPos": 7707,
+    "endPos": 7707,
+    "kind": "SemicolonToken",
+    "nodePos": 7707,
+    "nodeEnd": 7708
+  },
+  {
+    "startPos": 7708,
+    "endPos": 7713,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 7714,
+    "endPos": 7727,
+    "kind": "Identifier",
+    "nodePos": 7708,
+    "nodeEnd": 7727
+  },
+  {
+    "startPos": 7728,
+    "endPos": 7744,
+    "kind": "Identifier",
+    "nodePos": 7728,
+    "nodeEnd": 7744
+  },
+  {
+    "startPos": 7745,
+    "endPos": 7754,
+    "kind": "CallExpression",
+    "nodePos": 7708,
+    "nodeEnd": 7847
+  },
+  {
+    "startPos": 7755,
+    "endPos": 7767,
+    "kind": "Identifier",
+    "nodePos": 7745,
+    "nodeEnd": 7767
+  },
+  {
+    "startPos": 7768,
+    "endPos": 7777,
+    "kind": "CallExpression",
+    "nodePos": 7708,
+    "nodeEnd": 7847
+  },
+  {
+    "startPos": 7778,
+    "endPos": 7793,
+    "kind": "Identifier",
+    "nodePos": 7768,
+    "nodeEnd": 7793
+  },
+  {
+    "startPos": 7794,
+    "endPos": 7809,
+    "kind": "Identifier",
+    "nodePos": 7794,
+    "nodeEnd": 7809
+  },
+  {
+    "startPos": 7810,
+    "endPos": 7816,
+    "kind": "Identifier",
+    "nodePos": 7810,
+    "nodeEnd": 7816
+  },
+  {
+    "startPos": 7817,
+    "endPos": 7817,
+    "kind": "MinusToken",
+    "nodePos": 7816,
+    "nodeEnd": 7818
+  },
+  {
+    "startPos": 7818,
+    "endPos": 7818,
+    "kind": "BinaryExpression",
+    "nodePos": 7794,
+    "nodeEnd": 7820
+  },
+  {
+    "startPos": 7819,
+    "endPos": 7820,
+    "kind": "NumericLiteral",
+    "nodePos": 7818,
+    "nodeEnd": 7820
+  },
+  {
+    "startPos": 7821,
+    "endPos": 7821,
+    "kind": "CommaToken",
+    "nodePos": 7821,
+    "nodeEnd": 7822
+  },
+  {
+    "startPos": 7822,
+    "endPos": 7831,
+    "kind": "CallExpression",
+    "nodePos": 7708,
+    "nodeEnd": 7847
+  },
+  {
+    "startPos": 7832,
+    "endPos": 7839,
+    "kind": "Identifier",
+    "nodePos": 7822,
+    "nodeEnd": 7839
+  },
+  {
+    "startPos": 7840,
+    "endPos": 7845,
+    "kind": "CallExpression",
+    "nodePos": 7708,
+    "nodeEnd": 7847
+  },
+  {
+    "startPos": 7846,
+    "endPos": 7846,
+    "kind": "CloseParenToken",
+    "nodePos": 7840,
+    "nodeEnd": 7847
+  },
+  {
+    "startPos": 7847,
+    "endPos": 7847,
+    "kind": "SemicolonToken",
+    "nodePos": 7847,
+    "nodeEnd": 7848
+  },
+  {
+    "startPos": 7848,
+    "endPos": 7849,
+    "kind": "Block",
+    "nodePos": 6076,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 7850,
+    "endPos": 7850,
+    "kind": "CloseBraceToken",
+    "nodePos": 7848,
+    "nodeEnd": 7851
+  },
+  {
+    "startPos": 7851,
+    "endPos": 7854,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 7855,
+    "endPos": 7863,
+    "kind": "FunctionKeyword",
+    "nodePos": 7851,
+    "nodeEnd": 7863
+  },
+  {
+    "startPos": 7864,
+    "endPos": 7873,
+    "kind": "Identifier",
+    "nodePos": 7863,
+    "nodeEnd": 7873
+  },
+  {
+    "startPos": 7874,
+    "endPos": 7875,
+    "kind": "Identifier",
+    "nodePos": 7874,
+    "nodeEnd": 7875
+  },
+  {
+    "startPos": 7876,
+    "endPos": 7876,
+    "kind": "Parameter",
+    "nodePos": 7874,
+    "nodeEnd": 7881
+  },
+  {
+    "startPos": 7877,
+    "endPos": 7881,
+    "kind": "Identifier",
+    "nodePos": 7876,
+    "nodeEnd": 7881
+  },
+  {
+    "startPos": 7882,
+    "endPos": 7882,
+    "kind": "FunctionDeclaration",
+    "nodePos": 7851,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 7883,
+    "endPos": 7884,
+    "kind": "Identifier",
+    "nodePos": 7882,
+    "nodeEnd": 7884
+  },
+  {
+    "startPos": 7885,
+    "endPos": 7885,
+    "kind": "Parameter",
+    "nodePos": 7882,
+    "nodeEnd": 7890
+  },
+  {
+    "startPos": 7886,
+    "endPos": 7890,
+    "kind": "Identifier",
+    "nodePos": 7885,
+    "nodeEnd": 7890
+  },
+  {
+    "startPos": 7891,
+    "endPos": 7891,
+    "kind": "ColonToken",
+    "nodePos": 7891,
+    "nodeEnd": 7892
+  },
+  {
+    "startPos": 7892,
+    "endPos": 7892,
+    "kind": "FunctionDeclaration",
+    "nodePos": 7851,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 7893,
+    "endPos": 7900,
+    "kind": "BooleanKeyword",
+    "nodePos": 7892,
+    "nodeEnd": 7900
+  },
+  {
+    "startPos": 7901,
+    "endPos": 7901,
+    "kind": "OpenBraceToken",
+    "nodePos": 7900,
+    "nodeEnd": 7902
+  },
+  {
+    "startPos": 7902,
+    "endPos": 7907,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 7908,
+    "endPos": 7910,
+    "kind": "IfKeyword",
+    "nodePos": 7902,
+    "nodeEnd": 7910
+  },
+  {
+    "startPos": 7911,
+    "endPos": 7911,
+    "kind": "OpenParenToken",
+    "nodePos": 7910,
+    "nodeEnd": 7912
+  },
+  {
+    "startPos": 7912,
+    "endPos": 7913,
+    "kind": "Identifier",
+    "nodePos": 7912,
+    "nodeEnd": 7913
+  },
+  {
+    "startPos": 7914,
+    "endPos": 7918,
+    "kind": "Identifier",
+    "nodePos": 7914,
+    "nodeEnd": 7918
+  },
+  {
+    "startPos": 7919,
+    "endPos": 7921,
+    "kind": "ExclamationEqualsEqualsToken",
+    "nodePos": 7918,
+    "nodeEnd": 7922
+  },
+  {
+    "startPos": 7922,
+    "endPos": 7922,
+    "kind": "BinaryExpression",
+    "nodePos": 7912,
+    "nodeEnd": 7929
+  },
+  {
+    "startPos": 7923,
+    "endPos": 7924,
+    "kind": "Identifier",
+    "nodePos": 7922,
+    "nodeEnd": 7924
+  },
+  {
+    "startPos": 7925,
+    "endPos": 7929,
+    "kind": "Identifier",
+    "nodePos": 7925,
+    "nodeEnd": 7929
+  },
+  {
+    "startPos": 7930,
+    "endPos": 7930,
+    "kind": "IfStatement",
+    "nodePos": 7902,
+    "nodeEnd": 7962
+  },
+  {
+    "startPos": 7931,
+    "endPos": 7931,
+    "kind": "OpenBraceToken",
+    "nodePos": 7930,
+    "nodeEnd": 7932
+  },
+  {
+    "startPos": 7932,
+    "endPos": 7941,
+    "kind": "Block",
+    "nodePos": 7930,
+    "nodeEnd": 7962
+  },
+  {
+    "startPos": 7942,
+    "endPos": 7948,
+    "kind": "ReturnKeyword",
+    "nodePos": 7932,
+    "nodeEnd": 7948
+  },
+  {
+    "startPos": 7949,
+    "endPos": 7954,
+    "kind": "FalseKeyword",
+    "nodePos": 7948,
+    "nodeEnd": 7954
+  },
+  {
+    "startPos": 7955,
+    "endPos": 7960,
+    "kind": "Block",
+    "nodePos": 7930,
+    "nodeEnd": 7962
+  },
+  {
+    "startPos": 7961,
+    "endPos": 7961,
+    "kind": "CloseBraceToken",
+    "nodePos": 7955,
+    "nodeEnd": 7962
+  },
+  {
+    "startPos": 7962,
+    "endPos": 7969,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 7970,
+    "endPos": 7972,
+    "kind": "IfKeyword",
+    "nodePos": 7962,
+    "nodeEnd": 7972
+  },
+  {
+    "startPos": 7973,
+    "endPos": 7973,
+    "kind": "OpenParenToken",
+    "nodePos": 7972,
+    "nodeEnd": 7974
+  },
+  {
+    "startPos": 7974,
+    "endPos": 7975,
+    "kind": "Identifier",
+    "nodePos": 7974,
+    "nodeEnd": 7975
+  },
+  {
+    "startPos": 7976,
+    "endPos": 7980,
+    "kind": "Identifier",
+    "nodePos": 7976,
+    "nodeEnd": 7980
+  },
+  {
+    "startPos": 7981,
+    "endPos": 7983,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 7980,
+    "nodeEnd": 7984
+  },
+  {
+    "startPos": 7984,
+    "endPos": 7984,
+    "kind": "BinaryExpression",
+    "nodePos": 7974,
+    "nodeEnd": 8007
+  },
+  {
+    "startPos": 7985,
+    "endPos": 7995,
+    "kind": "Identifier",
+    "nodePos": 7984,
+    "nodeEnd": 7995
+  },
+  {
+    "startPos": 7996,
+    "endPos": 8007,
+    "kind": "Identifier",
+    "nodePos": 7996,
+    "nodeEnd": 8007
+  },
+  {
+    "startPos": 8008,
+    "endPos": 8008,
+    "kind": "IfStatement",
+    "nodePos": 7962,
+    "nodeEnd": 8052
+  },
+  {
+    "startPos": 8009,
+    "endPos": 8009,
+    "kind": "OpenBraceToken",
+    "nodePos": 8008,
+    "nodeEnd": 8010
+  },
+  {
+    "startPos": 8010,
+    "endPos": 8019,
+    "kind": "Block",
+    "nodePos": 8008,
+    "nodeEnd": 8052
+  },
+  {
+    "startPos": 8020,
+    "endPos": 8026,
+    "kind": "ReturnKeyword",
+    "nodePos": 8010,
+    "nodeEnd": 8026
+  },
+  {
+    "startPos": 8027,
+    "endPos": 8028,
+    "kind": "Identifier",
+    "nodePos": 8026,
+    "nodeEnd": 8028
+  },
+  {
+    "startPos": 8029,
+    "endPos": 8033,
+    "kind": "Identifier",
+    "nodePos": 8029,
+    "nodeEnd": 8033
+  },
+  {
+    "startPos": 8034,
+    "endPos": 8036,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8033,
+    "nodeEnd": 8037
+  },
+  {
+    "startPos": 8037,
+    "endPos": 8037,
+    "kind": "BinaryExpression",
+    "nodePos": 8026,
+    "nodeEnd": 8044
+  },
+  {
+    "startPos": 8038,
+    "endPos": 8039,
+    "kind": "Identifier",
+    "nodePos": 8037,
+    "nodeEnd": 8039
+  },
+  {
+    "startPos": 8040,
+    "endPos": 8044,
+    "kind": "Identifier",
+    "nodePos": 8040,
+    "nodeEnd": 8044
+  },
+  {
+    "startPos": 8045,
+    "endPos": 8050,
+    "kind": "Block",
+    "nodePos": 8008,
+    "nodeEnd": 8052
+  },
+  {
+    "startPos": 8051,
+    "endPos": 8051,
+    "kind": "CloseBraceToken",
+    "nodePos": 8045,
+    "nodeEnd": 8052
+  },
+  {
+    "startPos": 8052,
+    "endPos": 8059,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 8060,
+    "endPos": 8062,
+    "kind": "IfKeyword",
+    "nodePos": 8052,
+    "nodeEnd": 8062
+  },
+  {
+    "startPos": 8063,
+    "endPos": 8063,
+    "kind": "OpenParenToken",
+    "nodePos": 8062,
+    "nodeEnd": 8064
+  },
+  {
+    "startPos": 8064,
+    "endPos": 8082,
+    "kind": "Identifier",
+    "nodePos": 8064,
+    "nodeEnd": 8082
+  },
+  {
+    "startPos": 8083,
+    "endPos": 8084,
+    "kind": "Identifier",
+    "nodePos": 8083,
+    "nodeEnd": 8084
+  },
+  {
+    "startPos": 8085,
+    "endPos": 8085,
+    "kind": "BinaryExpression",
+    "nodePos": 8064,
+    "nodeEnd": 8110
+  },
+  {
+    "startPos": 8086,
+    "endPos": 8087,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8085,
+    "nodeEnd": 8088
+  },
+  {
+    "startPos": 8088,
+    "endPos": 8088,
+    "kind": "BinaryExpression",
+    "nodePos": 8064,
+    "nodeEnd": 8110
+  },
+  {
+    "startPos": 8089,
+    "endPos": 8107,
+    "kind": "Identifier",
+    "nodePos": 8088,
+    "nodeEnd": 8107
+  },
+  {
+    "startPos": 8108,
+    "endPos": 8109,
+    "kind": "Identifier",
+    "nodePos": 8108,
+    "nodeEnd": 8109
+  },
+  {
+    "startPos": 8110,
+    "endPos": 8110,
+    "kind": "CloseParenToken",
+    "nodePos": 8110,
+    "nodeEnd": 8111
+  },
+  {
+    "startPos": 8111,
+    "endPos": 8111,
+    "kind": "IfStatement",
+    "nodePos": 8052,
+    "nodeEnd": 8175
+  },
+  {
+    "startPos": 8112,
+    "endPos": 8112,
+    "kind": "OpenBraceToken",
+    "nodePos": 8111,
+    "nodeEnd": 8113
+  },
+  {
+    "startPos": 8113,
+    "endPos": 8122,
+    "kind": "Block",
+    "nodePos": 8111,
+    "nodeEnd": 8175
+  },
+  {
+    "startPos": 8123,
+    "endPos": 8129,
+    "kind": "ReturnKeyword",
+    "nodePos": 8113,
+    "nodeEnd": 8129
+  },
+  {
+    "startPos": 8130,
+    "endPos": 8131,
+    "kind": "Identifier",
+    "nodePos": 8129,
+    "nodeEnd": 8131
+  },
+  {
+    "startPos": 8132,
+    "endPos": 8136,
+    "kind": "Identifier",
+    "nodePos": 8132,
+    "nodeEnd": 8136
+  },
+  {
+    "startPos": 8137,
+    "endPos": 8144,
+    "kind": "Identifier",
+    "nodePos": 8137,
+    "nodeEnd": 8144
+  },
+  {
+    "startPos": 8145,
+    "endPos": 8145,
+    "kind": "CloseParenToken",
+    "nodePos": 8145,
+    "nodeEnd": 8146
+  },
+  {
+    "startPos": 8146,
+    "endPos": 8146,
+    "kind": "BinaryExpression",
+    "nodePos": 8129,
+    "nodeEnd": 8167
+  },
+  {
+    "startPos": 8147,
+    "endPos": 8149,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8146,
+    "nodeEnd": 8150
+  },
+  {
+    "startPos": 8150,
+    "endPos": 8150,
+    "kind": "BinaryExpression",
+    "nodePos": 8129,
+    "nodeEnd": 8167
+  },
+  {
+    "startPos": 8151,
+    "endPos": 8152,
+    "kind": "Identifier",
+    "nodePos": 8150,
+    "nodeEnd": 8152
+  },
+  {
+    "startPos": 8153,
+    "endPos": 8157,
+    "kind": "Identifier",
+    "nodePos": 8153,
+    "nodeEnd": 8157
+  },
+  {
+    "startPos": 8158,
+    "endPos": 8165,
+    "kind": "Identifier",
+    "nodePos": 8158,
+    "nodeEnd": 8165
+  },
+  {
+    "startPos": 8166,
+    "endPos": 8166,
+    "kind": "CloseParenToken",
+    "nodePos": 8166,
+    "nodeEnd": 8167
+  },
+  {
+    "startPos": 8167,
+    "endPos": 8167,
+    "kind": "SemicolonToken",
+    "nodePos": 8167,
+    "nodeEnd": 8168
+  },
+  {
+    "startPos": 8168,
+    "endPos": 8173,
+    "kind": "Block",
+    "nodePos": 8111,
+    "nodeEnd": 8175
+  },
+  {
+    "startPos": 8174,
+    "endPos": 8174,
+    "kind": "CloseBraceToken",
+    "nodePos": 8168,
+    "nodeEnd": 8175
+  },
+  {
+    "startPos": 8175,
+    "endPos": 8182,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 8183,
+    "endPos": 8185,
+    "kind": "IfKeyword",
+    "nodePos": 8175,
+    "nodeEnd": 8185
+  },
+  {
+    "startPos": 8186,
+    "endPos": 8186,
+    "kind": "OpenParenToken",
+    "nodePos": 8185,
+    "nodeEnd": 8187
+  },
+  {
+    "startPos": 8187,
+    "endPos": 8200,
+    "kind": "Identifier",
+    "nodePos": 8187,
+    "nodeEnd": 8200
+  },
+  {
+    "startPos": 8201,
+    "endPos": 8202,
+    "kind": "Identifier",
+    "nodePos": 8201,
+    "nodeEnd": 8202
+  },
+  {
+    "startPos": 8203,
+    "endPos": 8203,
+    "kind": "BinaryExpression",
+    "nodePos": 8187,
+    "nodeEnd": 8223
+  },
+  {
+    "startPos": 8204,
+    "endPos": 8205,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8203,
+    "nodeEnd": 8206
+  },
+  {
+    "startPos": 8206,
+    "endPos": 8206,
+    "kind": "BinaryExpression",
+    "nodePos": 8187,
+    "nodeEnd": 8223
+  },
+  {
+    "startPos": 8207,
+    "endPos": 8220,
+    "kind": "Identifier",
+    "nodePos": 8206,
+    "nodeEnd": 8220
+  },
+  {
+    "startPos": 8221,
+    "endPos": 8222,
+    "kind": "Identifier",
+    "nodePos": 8221,
+    "nodeEnd": 8222
+  },
+  {
+    "startPos": 8223,
+    "endPos": 8223,
+    "kind": "CloseParenToken",
+    "nodePos": 8223,
+    "nodeEnd": 8224
+  },
+  {
+    "startPos": 8224,
+    "endPos": 8224,
+    "kind": "IfStatement",
+    "nodePos": 8175,
+    "nodeEnd": 8326
+  },
+  {
+    "startPos": 8225,
+    "endPos": 8225,
+    "kind": "OpenBraceToken",
+    "nodePos": 8224,
+    "nodeEnd": 8226
+  },
+  {
+    "startPos": 8226,
+    "endPos": 8235,
+    "kind": "Block",
+    "nodePos": 8224,
+    "nodeEnd": 8326
+  },
+  {
+    "startPos": 8236,
+    "endPos": 8242,
+    "kind": "ReturnKeyword",
+    "nodePos": 8226,
+    "nodeEnd": 8242
+  },
+  {
+    "startPos": 8243,
+    "endPos": 8243,
+    "kind": "OpenParenToken",
+    "nodePos": 8242,
+    "nodeEnd": 8244
+  },
+  {
+    "startPos": 8244,
+    "endPos": 8257,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8242,
+    "nodeEnd": 8318
+  },
+  {
+    "startPos": 8258,
+    "endPos": 8259,
+    "kind": "Identifier",
+    "nodePos": 8244,
+    "nodeEnd": 8259
+  },
+  {
+    "startPos": 8260,
+    "endPos": 8270,
+    "kind": "Identifier",
+    "nodePos": 8260,
+    "nodeEnd": 8270
+  },
+  {
+    "startPos": 8271,
+    "endPos": 8278,
+    "kind": "Identifier",
+    "nodePos": 8271,
+    "nodeEnd": 8278
+  },
+  {
+    "startPos": 8279,
+    "endPos": 8279,
+    "kind": "CloseParenToken",
+    "nodePos": 8279,
+    "nodeEnd": 8280
+  },
+  {
+    "startPos": 8280,
+    "endPos": 8280,
+    "kind": "BinaryExpression",
+    "nodePos": 8244,
+    "nodeEnd": 8307
+  },
+  {
+    "startPos": 8281,
+    "endPos": 8283,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8280,
+    "nodeEnd": 8284
+  },
+  {
+    "startPos": 8284,
+    "endPos": 8284,
+    "kind": "BinaryExpression",
+    "nodePos": 8244,
+    "nodeEnd": 8307
+  },
+  {
+    "startPos": 8285,
+    "endPos": 8286,
+    "kind": "Identifier",
+    "nodePos": 8284,
+    "nodeEnd": 8286
+  },
+  {
+    "startPos": 8287,
+    "endPos": 8297,
+    "kind": "Identifier",
+    "nodePos": 8287,
+    "nodeEnd": 8297
+  },
+  {
+    "startPos": 8298,
+    "endPos": 8305,
+    "kind": "Identifier",
+    "nodePos": 8298,
+    "nodeEnd": 8305
+  },
+  {
+    "startPos": 8306,
+    "endPos": 8306,
+    "kind": "CloseParenToken",
+    "nodePos": 8306,
+    "nodeEnd": 8307
+  },
+  {
+    "startPos": 8307,
+    "endPos": 8316,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8242,
+    "nodeEnd": 8318
+  },
+  {
+    "startPos": 8317,
+    "endPos": 8317,
+    "kind": "CloseParenToken",
+    "nodePos": 8307,
+    "nodeEnd": 8318
+  },
+  {
+    "startPos": 8318,
+    "endPos": 8318,
+    "kind": "SemicolonToken",
+    "nodePos": 8318,
+    "nodeEnd": 8319
+  },
+  {
+    "startPos": 8319,
+    "endPos": 8324,
+    "kind": "Block",
+    "nodePos": 8224,
+    "nodeEnd": 8326
+  },
+  {
+    "startPos": 8325,
+    "endPos": 8325,
+    "kind": "CloseBraceToken",
+    "nodePos": 8319,
+    "nodeEnd": 8326
+  },
+  {
+    "startPos": 8326,
+    "endPos": 8333,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 8334,
+    "endPos": 8336,
+    "kind": "IfKeyword",
+    "nodePos": 8326,
+    "nodeEnd": 8336
+  },
+  {
+    "startPos": 8337,
+    "endPos": 8337,
+    "kind": "OpenParenToken",
+    "nodePos": 8336,
+    "nodeEnd": 8338
+  },
+  {
+    "startPos": 8338,
+    "endPos": 8354,
+    "kind": "Identifier",
+    "nodePos": 8338,
+    "nodeEnd": 8354
+  },
+  {
+    "startPos": 8355,
+    "endPos": 8356,
+    "kind": "Identifier",
+    "nodePos": 8355,
+    "nodeEnd": 8356
+  },
+  {
+    "startPos": 8357,
+    "endPos": 8357,
+    "kind": "BinaryExpression",
+    "nodePos": 8338,
+    "nodeEnd": 8380
+  },
+  {
+    "startPos": 8358,
+    "endPos": 8359,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8357,
+    "nodeEnd": 8360
+  },
+  {
+    "startPos": 8360,
+    "endPos": 8360,
+    "kind": "BinaryExpression",
+    "nodePos": 8338,
+    "nodeEnd": 8380
+  },
+  {
+    "startPos": 8361,
+    "endPos": 8377,
+    "kind": "Identifier",
+    "nodePos": 8360,
+    "nodeEnd": 8377
+  },
+  {
+    "startPos": 8378,
+    "endPos": 8379,
+    "kind": "Identifier",
+    "nodePos": 8378,
+    "nodeEnd": 8379
+  },
+  {
+    "startPos": 8380,
+    "endPos": 8380,
+    "kind": "CloseParenToken",
+    "nodePos": 8380,
+    "nodeEnd": 8381
+  },
+  {
+    "startPos": 8381,
+    "endPos": 8381,
+    "kind": "IfStatement",
+    "nodePos": 8326,
+    "nodeEnd": 8500
+  },
+  {
+    "startPos": 8382,
+    "endPos": 8382,
+    "kind": "OpenBraceToken",
+    "nodePos": 8381,
+    "nodeEnd": 8383
+  },
+  {
+    "startPos": 8383,
+    "endPos": 8392,
+    "kind": "Block",
+    "nodePos": 8381,
+    "nodeEnd": 8500
+  },
+  {
+    "startPos": 8393,
+    "endPos": 8399,
+    "kind": "ReturnKeyword",
+    "nodePos": 8383,
+    "nodeEnd": 8399
+  },
+  {
+    "startPos": 8400,
+    "endPos": 8400,
+    "kind": "OpenParenToken",
+    "nodePos": 8399,
+    "nodeEnd": 8401
+  },
+  {
+    "startPos": 8401,
+    "endPos": 8414,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8399,
+    "nodeEnd": 8492
+  },
+  {
+    "startPos": 8415,
+    "endPos": 8416,
+    "kind": "Identifier",
+    "nodePos": 8401,
+    "nodeEnd": 8416
+  },
+  {
+    "startPos": 8417,
+    "endPos": 8427,
+    "kind": "Identifier",
+    "nodePos": 8417,
+    "nodeEnd": 8427
+  },
+  {
+    "startPos": 8428,
+    "endPos": 8435,
+    "kind": "Identifier",
+    "nodePos": 8428,
+    "nodeEnd": 8435
+  },
+  {
+    "startPos": 8436,
+    "endPos": 8436,
+    "kind": "CloseParenToken",
+    "nodePos": 8436,
+    "nodeEnd": 8437
+  },
+  {
+    "startPos": 8437,
+    "endPos": 8437,
+    "kind": "BinaryExpression",
+    "nodePos": 8401,
+    "nodeEnd": 8481
+  },
+  {
+    "startPos": 8438,
+    "endPos": 8440,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8437,
+    "nodeEnd": 8441
+  },
+  {
+    "startPos": 8441,
+    "endPos": 8458,
+    "kind": "BinaryExpression",
+    "nodePos": 8401,
+    "nodeEnd": 8481
+  },
+  {
+    "startPos": 8459,
+    "endPos": 8460,
+    "kind": "Identifier",
+    "nodePos": 8441,
+    "nodeEnd": 8460
+  },
+  {
+    "startPos": 8461,
+    "endPos": 8471,
+    "kind": "Identifier",
+    "nodePos": 8461,
+    "nodeEnd": 8471
+  },
+  {
+    "startPos": 8472,
+    "endPos": 8479,
+    "kind": "Identifier",
+    "nodePos": 8472,
+    "nodeEnd": 8479
+  },
+  {
+    "startPos": 8480,
+    "endPos": 8480,
+    "kind": "CloseParenToken",
+    "nodePos": 8480,
+    "nodeEnd": 8481
+  },
+  {
+    "startPos": 8481,
+    "endPos": 8490,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8399,
+    "nodeEnd": 8492
+  },
+  {
+    "startPos": 8491,
+    "endPos": 8491,
+    "kind": "CloseParenToken",
+    "nodePos": 8481,
+    "nodeEnd": 8492
+  },
+  {
+    "startPos": 8492,
+    "endPos": 8492,
+    "kind": "SemicolonToken",
+    "nodePos": 8492,
+    "nodeEnd": 8493
+  },
+  {
+    "startPos": 8493,
+    "endPos": 8498,
+    "kind": "Block",
+    "nodePos": 8381,
+    "nodeEnd": 8500
+  },
+  {
+    "startPos": 8499,
+    "endPos": 8499,
+    "kind": "CloseBraceToken",
+    "nodePos": 8493,
+    "nodeEnd": 8500
+  },
+  {
+    "startPos": 8500,
+    "endPos": 8507,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 8508,
+    "endPos": 8510,
+    "kind": "IfKeyword",
+    "nodePos": 8500,
+    "nodeEnd": 8510
+  },
+  {
+    "startPos": 8511,
+    "endPos": 8511,
+    "kind": "OpenParenToken",
+    "nodePos": 8510,
+    "nodeEnd": 8512
+  },
+  {
+    "startPos": 8512,
+    "endPos": 8526,
+    "kind": "Identifier",
+    "nodePos": 8512,
+    "nodeEnd": 8526
+  },
+  {
+    "startPos": 8527,
+    "endPos": 8528,
+    "kind": "Identifier",
+    "nodePos": 8527,
+    "nodeEnd": 8528
+  },
+  {
+    "startPos": 8529,
+    "endPos": 8529,
+    "kind": "BinaryExpression",
+    "nodePos": 8512,
+    "nodeEnd": 8550
+  },
+  {
+    "startPos": 8530,
+    "endPos": 8531,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8529,
+    "nodeEnd": 8532
+  },
+  {
+    "startPos": 8532,
+    "endPos": 8532,
+    "kind": "BinaryExpression",
+    "nodePos": 8512,
+    "nodeEnd": 8550
+  },
+  {
+    "startPos": 8533,
+    "endPos": 8547,
+    "kind": "Identifier",
+    "nodePos": 8532,
+    "nodeEnd": 8547
+  },
+  {
+    "startPos": 8548,
+    "endPos": 8549,
+    "kind": "Identifier",
+    "nodePos": 8548,
+    "nodeEnd": 8549
+  },
+  {
+    "startPos": 8550,
+    "endPos": 8550,
+    "kind": "CloseParenToken",
+    "nodePos": 8550,
+    "nodeEnd": 8551
+  },
+  {
+    "startPos": 8551,
+    "endPos": 8551,
+    "kind": "IfStatement",
+    "nodePos": 8500,
+    "nodeEnd": 8827
+  },
+  {
+    "startPos": 8552,
+    "endPos": 8552,
+    "kind": "OpenBraceToken",
+    "nodePos": 8551,
+    "nodeEnd": 8553
+  },
+  {
+    "startPos": 8553,
+    "endPos": 8562,
+    "kind": "Block",
+    "nodePos": 8551,
+    "nodeEnd": 8827
+  },
+  {
+    "startPos": 8563,
+    "endPos": 8569,
+    "kind": "ReturnKeyword",
+    "nodePos": 8553,
+    "nodeEnd": 8569
+  },
+  {
+    "startPos": 8570,
+    "endPos": 8570,
+    "kind": "OpenParenToken",
+    "nodePos": 8569,
+    "nodeEnd": 8571
+  },
+  {
+    "startPos": 8571,
+    "endPos": 8584,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8569,
+    "nodeEnd": 8819
+  },
+  {
+    "startPos": 8585,
+    "endPos": 8586,
+    "kind": "Identifier",
+    "nodePos": 8571,
+    "nodeEnd": 8586
+  },
+  {
+    "startPos": 8587,
+    "endPos": 8598,
+    "kind": "Identifier",
+    "nodePos": 8587,
+    "nodeEnd": 8598
+  },
+  {
+    "startPos": 8599,
+    "endPos": 8599,
+    "kind": "QuestionDotToken",
+    "nodePos": 8598,
+    "nodeEnd": 8600
+  },
+  {
+    "startPos": 8600,
+    "endPos": 8607,
+    "kind": "Identifier",
+    "nodePos": 8600,
+    "nodeEnd": 8607
+  },
+  {
+    "startPos": 8608,
+    "endPos": 8608,
+    "kind": "CloseParenToken",
+    "nodePos": 8608,
+    "nodeEnd": 8609
+  },
+  {
+    "startPos": 8609,
+    "endPos": 8609,
+    "kind": "BinaryExpression",
+    "nodePos": 8571,
+    "nodeEnd": 8655
+  },
+  {
+    "startPos": 8610,
+    "endPos": 8612,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8609,
+    "nodeEnd": 8613
+  },
+  {
+    "startPos": 8613,
+    "endPos": 8630,
+    "kind": "BinaryExpression",
+    "nodePos": 8571,
+    "nodeEnd": 8655
+  },
+  {
+    "startPos": 8631,
+    "endPos": 8632,
+    "kind": "Identifier",
+    "nodePos": 8613,
+    "nodeEnd": 8632
+  },
+  {
+    "startPos": 8633,
+    "endPos": 8644,
+    "kind": "Identifier",
+    "nodePos": 8633,
+    "nodeEnd": 8644
+  },
+  {
+    "startPos": 8645,
+    "endPos": 8645,
+    "kind": "QuestionDotToken",
+    "nodePos": 8644,
+    "nodeEnd": 8646
+  },
+  {
+    "startPos": 8646,
+    "endPos": 8653,
+    "kind": "Identifier",
+    "nodePos": 8646,
+    "nodeEnd": 8653
+  },
+  {
+    "startPos": 8654,
+    "endPos": 8654,
+    "kind": "CloseParenToken",
+    "nodePos": 8654,
+    "nodeEnd": 8655
+  },
+  {
+    "startPos": 8655,
+    "endPos": 8655,
+    "kind": "BinaryExpression",
+    "nodePos": 8571,
+    "nodeEnd": 8742
+  },
+  {
+    "startPos": 8656,
+    "endPos": 8657,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8655,
+    "nodeEnd": 8658
+  },
+  {
+    "startPos": 8658,
+    "endPos": 8671,
+    "kind": "BinaryExpression",
+    "nodePos": 8571,
+    "nodeEnd": 8742
+  },
+  {
+    "startPos": 8672,
+    "endPos": 8673,
+    "kind": "Identifier",
+    "nodePos": 8658,
+    "nodeEnd": 8673
+  },
+  {
+    "startPos": 8674,
+    "endPos": 8685,
+    "kind": "Identifier",
+    "nodePos": 8674,
+    "nodeEnd": 8685
+  },
+  {
+    "startPos": 8686,
+    "endPos": 8686,
+    "kind": "QuestionDotToken",
+    "nodePos": 8685,
+    "nodeEnd": 8687
+  },
+  {
+    "startPos": 8687,
+    "endPos": 8694,
+    "kind": "Identifier",
+    "nodePos": 8687,
+    "nodeEnd": 8694
+  },
+  {
+    "startPos": 8695,
+    "endPos": 8695,
+    "kind": "CloseParenToken",
+    "nodePos": 8695,
+    "nodeEnd": 8696
+  },
+  {
+    "startPos": 8696,
+    "endPos": 8696,
+    "kind": "BinaryExpression",
+    "nodePos": 8658,
+    "nodeEnd": 8742
+  },
+  {
+    "startPos": 8697,
+    "endPos": 8699,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8696,
+    "nodeEnd": 8700
+  },
+  {
+    "startPos": 8700,
+    "endPos": 8717,
+    "kind": "BinaryExpression",
+    "nodePos": 8658,
+    "nodeEnd": 8742
+  },
+  {
+    "startPos": 8718,
+    "endPos": 8719,
+    "kind": "Identifier",
+    "nodePos": 8700,
+    "nodeEnd": 8719
+  },
+  {
+    "startPos": 8720,
+    "endPos": 8731,
+    "kind": "Identifier",
+    "nodePos": 8720,
+    "nodeEnd": 8731
+  },
+  {
+    "startPos": 8732,
+    "endPos": 8732,
+    "kind": "QuestionDotToken",
+    "nodePos": 8731,
+    "nodeEnd": 8733
+  },
+  {
+    "startPos": 8733,
+    "endPos": 8740,
+    "kind": "Identifier",
+    "nodePos": 8733,
+    "nodeEnd": 8740
+  },
+  {
+    "startPos": 8741,
+    "endPos": 8741,
+    "kind": "CloseParenToken",
+    "nodePos": 8741,
+    "nodeEnd": 8742
+  },
+  {
+    "startPos": 8742,
+    "endPos": 8742,
+    "kind": "BinaryExpression",
+    "nodePos": 8571,
+    "nodeEnd": 8808
+  },
+  {
+    "startPos": 8743,
+    "endPos": 8744,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8742,
+    "nodeEnd": 8745
+  },
+  {
+    "startPos": 8745,
+    "endPos": 8758,
+    "kind": "BinaryExpression",
+    "nodePos": 8571,
+    "nodeEnd": 8808
+  },
+  {
+    "startPos": 8759,
+    "endPos": 8760,
+    "kind": "Identifier",
+    "nodePos": 8745,
+    "nodeEnd": 8760
+  },
+  {
+    "startPos": 8761,
+    "endPos": 8770,
+    "kind": "Identifier",
+    "nodePos": 8761,
+    "nodeEnd": 8770
+  },
+  {
+    "startPos": 8771,
+    "endPos": 8771,
+    "kind": "QuestionDotToken",
+    "nodePos": 8770,
+    "nodeEnd": 8772
+  },
+  {
+    "startPos": 8772,
+    "endPos": 8779,
+    "kind": "Identifier",
+    "nodePos": 8772,
+    "nodeEnd": 8779
+  },
+  {
+    "startPos": 8780,
+    "endPos": 8780,
+    "kind": "CloseParenToken",
+    "nodePos": 8780,
+    "nodeEnd": 8781
+  },
+  {
+    "startPos": 8781,
+    "endPos": 8781,
+    "kind": "BinaryExpression",
+    "nodePos": 8745,
+    "nodeEnd": 8808
+  },
+  {
+    "startPos": 8782,
+    "endPos": 8784,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8781,
+    "nodeEnd": 8785
+  },
+  {
+    "startPos": 8785,
+    "endPos": 8785,
+    "kind": "BinaryExpression",
+    "nodePos": 8745,
+    "nodeEnd": 8808
+  },
+  {
+    "startPos": 8786,
+    "endPos": 8787,
+    "kind": "Identifier",
+    "nodePos": 8785,
+    "nodeEnd": 8787
+  },
+  {
+    "startPos": 8788,
+    "endPos": 8797,
+    "kind": "Identifier",
+    "nodePos": 8788,
+    "nodeEnd": 8797
+  },
+  {
+    "startPos": 8798,
+    "endPos": 8798,
+    "kind": "QuestionDotToken",
+    "nodePos": 8797,
+    "nodeEnd": 8799
+  },
+  {
+    "startPos": 8799,
+    "endPos": 8806,
+    "kind": "Identifier",
+    "nodePos": 8799,
+    "nodeEnd": 8806
+  },
+  {
+    "startPos": 8807,
+    "endPos": 8807,
+    "kind": "CloseParenToken",
+    "nodePos": 8807,
+    "nodeEnd": 8808
+  },
+  {
+    "startPos": 8808,
+    "endPos": 8817,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8569,
+    "nodeEnd": 8819
+  },
+  {
+    "startPos": 8818,
+    "endPos": 8818,
+    "kind": "CloseParenToken",
+    "nodePos": 8808,
+    "nodeEnd": 8819
+  },
+  {
+    "startPos": 8819,
+    "endPos": 8819,
+    "kind": "SemicolonToken",
+    "nodePos": 8819,
+    "nodeEnd": 8820
+  },
+  {
+    "startPos": 8820,
+    "endPos": 8825,
+    "kind": "Block",
+    "nodePos": 8551,
+    "nodeEnd": 8827
+  },
+  {
+    "startPos": 8826,
+    "endPos": 8826,
+    "kind": "CloseBraceToken",
+    "nodePos": 8820,
+    "nodeEnd": 8827
+  },
+  {
+    "startPos": 8827,
+    "endPos": 8834,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 8835,
+    "endPos": 8837,
+    "kind": "IfKeyword",
+    "nodePos": 8827,
+    "nodeEnd": 8837
+  },
+  {
+    "startPos": 8838,
+    "endPos": 8838,
+    "kind": "OpenParenToken",
+    "nodePos": 8837,
+    "nodeEnd": 8839
+  },
+  {
+    "startPos": 8839,
+    "endPos": 8859,
+    "kind": "Identifier",
+    "nodePos": 8839,
+    "nodeEnd": 8859
+  },
+  {
+    "startPos": 8860,
+    "endPos": 8861,
+    "kind": "Identifier",
+    "nodePos": 8860,
+    "nodeEnd": 8861
+  },
+  {
+    "startPos": 8862,
+    "endPos": 8862,
+    "kind": "BinaryExpression",
+    "nodePos": 8839,
+    "nodeEnd": 8889
+  },
+  {
+    "startPos": 8863,
+    "endPos": 8864,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8862,
+    "nodeEnd": 8865
+  },
+  {
+    "startPos": 8865,
+    "endPos": 8865,
+    "kind": "BinaryExpression",
+    "nodePos": 8839,
+    "nodeEnd": 8889
+  },
+  {
+    "startPos": 8866,
+    "endPos": 8886,
+    "kind": "Identifier",
+    "nodePos": 8865,
+    "nodeEnd": 8886
+  },
+  {
+    "startPos": 8887,
+    "endPos": 8888,
+    "kind": "Identifier",
+    "nodePos": 8887,
+    "nodeEnd": 8888
+  },
+  {
+    "startPos": 8889,
+    "endPos": 8889,
+    "kind": "CloseParenToken",
+    "nodePos": 8889,
+    "nodeEnd": 8890
+  },
+  {
+    "startPos": 8890,
+    "endPos": 8890,
+    "kind": "IfStatement",
+    "nodePos": 8827,
+    "nodeEnd": 9094
+  },
+  {
+    "startPos": 8891,
+    "endPos": 8891,
+    "kind": "OpenBraceToken",
+    "nodePos": 8890,
+    "nodeEnd": 8892
+  },
+  {
+    "startPos": 8892,
+    "endPos": 8901,
+    "kind": "Block",
+    "nodePos": 8890,
+    "nodeEnd": 9094
+  },
+  {
+    "startPos": 8902,
+    "endPos": 8908,
+    "kind": "ReturnKeyword",
+    "nodePos": 8892,
+    "nodeEnd": 8908
+  },
+  {
+    "startPos": 8909,
+    "endPos": 8909,
+    "kind": "OpenParenToken",
+    "nodePos": 8908,
+    "nodeEnd": 8910
+  },
+  {
+    "startPos": 8910,
+    "endPos": 8923,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8908,
+    "nodeEnd": 9086
+  },
+  {
+    "startPos": 8924,
+    "endPos": 8925,
+    "kind": "Identifier",
+    "nodePos": 8910,
+    "nodeEnd": 8925
+  },
+  {
+    "startPos": 8926,
+    "endPos": 8936,
+    "kind": "Identifier",
+    "nodePos": 8926,
+    "nodeEnd": 8936
+  },
+  {
+    "startPos": 8937,
+    "endPos": 8944,
+    "kind": "Identifier",
+    "nodePos": 8937,
+    "nodeEnd": 8944
+  },
+  {
+    "startPos": 8945,
+    "endPos": 8945,
+    "kind": "CloseParenToken",
+    "nodePos": 8945,
+    "nodeEnd": 8946
+  },
+  {
+    "startPos": 8946,
+    "endPos": 8946,
+    "kind": "BinaryExpression",
+    "nodePos": 8910,
+    "nodeEnd": 8990
+  },
+  {
+    "startPos": 8947,
+    "endPos": 8949,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 8946,
+    "nodeEnd": 8950
+  },
+  {
+    "startPos": 8950,
+    "endPos": 8967,
+    "kind": "BinaryExpression",
+    "nodePos": 8910,
+    "nodeEnd": 8990
+  },
+  {
+    "startPos": 8968,
+    "endPos": 8969,
+    "kind": "Identifier",
+    "nodePos": 8950,
+    "nodeEnd": 8969
+  },
+  {
+    "startPos": 8970,
+    "endPos": 8980,
+    "kind": "Identifier",
+    "nodePos": 8970,
+    "nodeEnd": 8980
+  },
+  {
+    "startPos": 8981,
+    "endPos": 8988,
+    "kind": "Identifier",
+    "nodePos": 8981,
+    "nodeEnd": 8988
+  },
+  {
+    "startPos": 8989,
+    "endPos": 8989,
+    "kind": "CloseParenToken",
+    "nodePos": 8989,
+    "nodeEnd": 8990
+  },
+  {
+    "startPos": 8990,
+    "endPos": 8990,
+    "kind": "BinaryExpression",
+    "nodePos": 8910,
+    "nodeEnd": 9075
+  },
+  {
+    "startPos": 8991,
+    "endPos": 8992,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 8990,
+    "nodeEnd": 8993
+  },
+  {
+    "startPos": 8993,
+    "endPos": 9006,
+    "kind": "BinaryExpression",
+    "nodePos": 8910,
+    "nodeEnd": 9075
+  },
+  {
+    "startPos": 9007,
+    "endPos": 9008,
+    "kind": "Identifier",
+    "nodePos": 8993,
+    "nodeEnd": 9008
+  },
+  {
+    "startPos": 9009,
+    "endPos": 9020,
+    "kind": "Identifier",
+    "nodePos": 9009,
+    "nodeEnd": 9020
+  },
+  {
+    "startPos": 9021,
+    "endPos": 9028,
+    "kind": "Identifier",
+    "nodePos": 9021,
+    "nodeEnd": 9028
+  },
+  {
+    "startPos": 9029,
+    "endPos": 9029,
+    "kind": "CloseParenToken",
+    "nodePos": 9029,
+    "nodeEnd": 9030
+  },
+  {
+    "startPos": 9030,
+    "endPos": 9030,
+    "kind": "BinaryExpression",
+    "nodePos": 8993,
+    "nodeEnd": 9075
+  },
+  {
+    "startPos": 9031,
+    "endPos": 9033,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 9030,
+    "nodeEnd": 9034
+  },
+  {
+    "startPos": 9034,
+    "endPos": 9051,
+    "kind": "BinaryExpression",
+    "nodePos": 8993,
+    "nodeEnd": 9075
+  },
+  {
+    "startPos": 9052,
+    "endPos": 9053,
+    "kind": "Identifier",
+    "nodePos": 9034,
+    "nodeEnd": 9053
+  },
+  {
+    "startPos": 9054,
+    "endPos": 9065,
+    "kind": "Identifier",
+    "nodePos": 9054,
+    "nodeEnd": 9065
+  },
+  {
+    "startPos": 9066,
+    "endPos": 9073,
+    "kind": "Identifier",
+    "nodePos": 9066,
+    "nodeEnd": 9073
+  },
+  {
+    "startPos": 9074,
+    "endPos": 9074,
+    "kind": "CloseParenToken",
+    "nodePos": 9074,
+    "nodeEnd": 9075
+  },
+  {
+    "startPos": 9075,
+    "endPos": 9084,
+    "kind": "ParenthesizedExpression",
+    "nodePos": 8908,
+    "nodeEnd": 9086
+  },
+  {
+    "startPos": 9085,
+    "endPos": 9085,
+    "kind": "CloseParenToken",
+    "nodePos": 9075,
+    "nodeEnd": 9086
+  },
+  {
+    "startPos": 9086,
+    "endPos": 9086,
+    "kind": "SemicolonToken",
+    "nodePos": 9086,
+    "nodeEnd": 9087
+  },
+  {
+    "startPos": 9087,
+    "endPos": 9092,
+    "kind": "Block",
+    "nodePos": 8890,
+    "nodeEnd": 9094
+  },
+  {
+    "startPos": 9093,
+    "endPos": 9093,
+    "kind": "CloseBraceToken",
+    "nodePos": 9087,
+    "nodeEnd": 9094
+  },
+  {
+    "startPos": 9094,
+    "endPos": 9101,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 9102,
+    "endPos": 9104,
+    "kind": "IfKeyword",
+    "nodePos": 9094,
+    "nodeEnd": 9104
+  },
+  {
+    "startPos": 9105,
+    "endPos": 9105,
+    "kind": "OpenParenToken",
+    "nodePos": 9104,
+    "nodeEnd": 9106
+  },
+  {
+    "startPos": 9106,
+    "endPos": 9124,
+    "kind": "Identifier",
+    "nodePos": 9106,
+    "nodeEnd": 9124
+  },
+  {
+    "startPos": 9125,
+    "endPos": 9126,
+    "kind": "Identifier",
+    "nodePos": 9125,
+    "nodeEnd": 9126
+  },
+  {
+    "startPos": 9127,
+    "endPos": 9127,
+    "kind": "BinaryExpression",
+    "nodePos": 9106,
+    "nodeEnd": 9152
+  },
+  {
+    "startPos": 9128,
+    "endPos": 9129,
+    "kind": "AmpersandAmpersandToken",
+    "nodePos": 9127,
+    "nodeEnd": 9130
+  },
+  {
+    "startPos": 9130,
+    "endPos": 9130,
+    "kind": "BinaryExpression",
+    "nodePos": 9106,
+    "nodeEnd": 9152
+  },
+  {
+    "startPos": 9131,
+    "endPos": 9149,
+    "kind": "Identifier",
+    "nodePos": 9130,
+    "nodeEnd": 9149
+  },
+  {
+    "startPos": 9150,
+    "endPos": 9151,
+    "kind": "Identifier",
+    "nodePos": 9150,
+    "nodeEnd": 9151
+  },
+  {
+    "startPos": 9152,
+    "endPos": 9152,
+    "kind": "CloseParenToken",
+    "nodePos": 9152,
+    "nodeEnd": 9153
+  },
+  {
+    "startPos": 9153,
+    "endPos": 9153,
+    "kind": "IfStatement",
+    "nodePos": 9094,
+    "nodeEnd": 9425
+  },
+  {
+    "startPos": 9154,
+    "endPos": 9154,
+    "kind": "OpenBraceToken",
+    "nodePos": 9153,
+    "nodeEnd": 9155
+  },
+  {
+    "startPos": 9155,
+    "endPos": 9370,
+    "kind": "Block",
+    "nodePos": 9153,
+    "nodeEnd": 9425
+  },
+  {
+    "startPos": 9371,
+    "endPos": 9377,
+    "kind": "ReturnKeyword",
+    "nodePos": 9155,
+    "nodeEnd": 9377
+  },
+  {
+    "startPos": 9378,
+    "endPos": 9379,
+    "kind": "Identifier",
+    "nodePos": 9377,
+    "nodeEnd": 9379
+  },
+  {
+    "startPos": 9380,
+    "endPos": 9385,
+    "kind": "Identifier",
+    "nodePos": 9380,
+    "nodeEnd": 9385
+  },
+  {
+    "startPos": 9386,
+    "endPos": 9393,
+    "kind": "Identifier",
+    "nodePos": 9386,
+    "nodeEnd": 9393
+  },
+  {
+    "startPos": 9394,
+    "endPos": 9394,
+    "kind": "CloseParenToken",
+    "nodePos": 9394,
+    "nodeEnd": 9395
+  },
+  {
+    "startPos": 9395,
+    "endPos": 9395,
+    "kind": "BinaryExpression",
+    "nodePos": 9377,
+    "nodeEnd": 9417
+  },
+  {
+    "startPos": 9396,
+    "endPos": 9398,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 9395,
+    "nodeEnd": 9399
+  },
+  {
+    "startPos": 9399,
+    "endPos": 9399,
+    "kind": "BinaryExpression",
+    "nodePos": 9377,
+    "nodeEnd": 9417
+  },
+  {
+    "startPos": 9400,
+    "endPos": 9401,
+    "kind": "Identifier",
+    "nodePos": 9399,
+    "nodeEnd": 9401
+  },
+  {
+    "startPos": 9402,
+    "endPos": 9407,
+    "kind": "Identifier",
+    "nodePos": 9402,
+    "nodeEnd": 9407
+  },
+  {
+    "startPos": 9408,
+    "endPos": 9415,
+    "kind": "Identifier",
+    "nodePos": 9408,
+    "nodeEnd": 9415
+  },
+  {
+    "startPos": 9416,
+    "endPos": 9416,
+    "kind": "CloseParenToken",
+    "nodePos": 9416,
+    "nodeEnd": 9417
+  },
+  {
+    "startPos": 9417,
+    "endPos": 9417,
+    "kind": "SemicolonToken",
+    "nodePos": 9417,
+    "nodeEnd": 9418
+  },
+  {
+    "startPos": 9418,
+    "endPos": 9423,
+    "kind": "Block",
+    "nodePos": 9153,
+    "nodeEnd": 9425
+  },
+  {
+    "startPos": 9424,
+    "endPos": 9424,
+    "kind": "CloseBraceToken",
+    "nodePos": 9418,
+    "nodeEnd": 9425
+  },
+  {
+    "startPos": 9425,
+    "endPos": 9432,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 9433,
+    "endPos": 9435,
+    "kind": "IfKeyword",
+    "nodePos": 9425,
+    "nodeEnd": 9435
+  },
+  {
+    "startPos": 9436,
+    "endPos": 9436,
+    "kind": "OpenParenToken",
+    "nodePos": 9435,
+    "nodeEnd": 9437
+  },
+  {
+    "startPos": 9437,
+    "endPos": 9438,
+    "kind": "Identifier",
+    "nodePos": 9437,
+    "nodeEnd": 9438
+  },
+  {
+    "startPos": 9439,
+    "endPos": 9446,
+    "kind": "Identifier",
+    "nodePos": 9439,
+    "nodeEnd": 9446
+  },
+  {
+    "startPos": 9447,
+    "endPos": 9447,
+    "kind": "CloseParenToken",
+    "nodePos": 9447,
+    "nodeEnd": 9448
+  },
+  {
+    "startPos": 9448,
+    "endPos": 9448,
+    "kind": "BinaryExpression",
+    "nodePos": 9437,
+    "nodeEnd": 9464
+  },
+  {
+    "startPos": 9449,
+    "endPos": 9451,
+    "kind": "EqualsEqualsEqualsToken",
+    "nodePos": 9448,
+    "nodeEnd": 9452
+  },
+  {
+    "startPos": 9452,
+    "endPos": 9452,
+    "kind": "BinaryExpression",
+    "nodePos": 9437,
+    "nodeEnd": 9464
+  },
+  {
+    "startPos": 9453,
+    "endPos": 9454,
+    "kind": "Identifier",
+    "nodePos": 9452,
+    "nodeEnd": 9454
+  },
+  {
+    "startPos": 9455,
+    "endPos": 9462,
+    "kind": "Identifier",
+    "nodePos": 9455,
+    "nodeEnd": 9462
+  },
+  {
+    "startPos": 9463,
+    "endPos": 9463,
+    "kind": "CloseParenToken",
+    "nodePos": 9463,
+    "nodeEnd": 9464
+  },
+  {
+    "startPos": 9464,
+    "endPos": 9464,
+    "kind": "CloseParenToken",
+    "nodePos": 9464,
+    "nodeEnd": 9465
+  },
+  {
+    "startPos": 9465,
+    "endPos": 9465,
+    "kind": "IfStatement",
+    "nodePos": 9425,
+    "nodeEnd": 9496
+  },
+  {
+    "startPos": 9466,
+    "endPos": 9466,
+    "kind": "OpenBraceToken",
+    "nodePos": 9465,
+    "nodeEnd": 9467
+  },
+  {
+    "startPos": 9467,
+    "endPos": 9476,
+    "kind": "Block",
+    "nodePos": 9465,
+    "nodeEnd": 9496
+  },
+  {
+    "startPos": 9477,
+    "endPos": 9483,
+    "kind": "ReturnKeyword",
+    "nodePos": 9467,
+    "nodeEnd": 9483
+  },
+  {
+    "startPos": 9484,
+    "endPos": 9488,
+    "kind": "TrueKeyword",
+    "nodePos": 9483,
+    "nodeEnd": 9488
+  },
+  {
+    "startPos": 9489,
+    "endPos": 9494,
+    "kind": "Block",
+    "nodePos": 9465,
+    "nodeEnd": 9496
+  },
+  {
+    "startPos": 9495,
+    "endPos": 9495,
+    "kind": "CloseBraceToken",
+    "nodePos": 9489,
+    "nodeEnd": 9496
+  },
+  {
+    "startPos": 9496,
+    "endPos": 9503,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 9504,
+    "endPos": 9510,
+    "kind": "ReturnKeyword",
+    "nodePos": 9496,
+    "nodeEnd": 9510
+  },
+  {
+    "startPos": 9511,
+    "endPos": 9516,
+    "kind": "FalseKeyword",
+    "nodePos": 9510,
+    "nodeEnd": 9516
+  },
+  {
+    "startPos": 9517,
+    "endPos": 9518,
+    "kind": "Block",
+    "nodePos": 7900,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 9519,
+    "endPos": 9519,
+    "kind": "CloseBraceToken",
+    "nodePos": 9517,
+    "nodeEnd": 9520
+  },
+  {
+    "startPos": 9520,
+    "endPos": 9523,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 9524,
+    "endPos": 9532,
+    "kind": "FunctionKeyword",
+    "nodePos": 9520,
+    "nodeEnd": 9532
+  },
+  {
+    "startPos": 9533,
+    "endPos": 9541,
+    "kind": "Identifier",
+    "nodePos": 9532,
+    "nodeEnd": 9541
+  },
+  {
+    "startPos": 9542,
+    "endPos": 9546,
+    "kind": "Identifier",
+    "nodePos": 9542,
+    "nodeEnd": 9546
+  },
+  {
+    "startPos": 9547,
+    "endPos": 9547,
+    "kind": "Parameter",
+    "nodePos": 9542,
+    "nodeEnd": 9561
+  },
+  {
+    "startPos": 9548,
+    "endPos": 9555,
+    "kind": "Identifier",
+    "nodePos": 9547,
+    "nodeEnd": 9555
+  },
+  {
+    "startPos": 9556,
+    "endPos": 9560,
+    "kind": "Identifier",
+    "nodePos": 9556,
+    "nodeEnd": 9560
+  },
+  {
+    "startPos": 9561,
+    "endPos": 9561,
+    "kind": "CloseParenToken",
+    "nodePos": 9561,
+    "nodeEnd": 9562
+  },
+  {
+    "startPos": 9562,
+    "endPos": 9562,
+    "kind": "FunctionDeclaration",
+    "nodePos": 9520,
+    "nodeEnd": 9629
+  },
+  {
+    "startPos": 9563,
+    "endPos": 9563,
+    "kind": "OpenBraceToken",
+    "nodePos": 9562,
+    "nodeEnd": 9564
+  },
+  {
+    "startPos": 9564,
+    "endPos": 9569,
+    "kind": "Block",
+    "nodePos": 9562,
+    "nodeEnd": 9629
+  },
+  {
+    "startPos": 9570,
+    "endPos": 9588,
+    "kind": "Identifier",
+    "nodePos": 9564,
+    "nodeEnd": 9588
+  },
+  {
+    "startPos": 9589,
+    "endPos": 9593,
+    "kind": "Identifier",
+    "nodePos": 9589,
+    "nodeEnd": 9593
+  },
+  {
+    "startPos": 9594,
+    "endPos": 9594,
+    "kind": "SemicolonToken",
+    "nodePos": 9594,
+    "nodeEnd": 9595
+  },
+  {
+    "startPos": 9595,
+    "endPos": 9600,
+    "kind": "Block",
+    "nodePos": 9562,
+    "nodeEnd": 9629
+  },
+  {
+    "startPos": 9601,
+    "endPos": 9605,
+    "kind": "Identifier",
+    "nodePos": 9595,
+    "nodeEnd": 9605
+  },
+  {
+    "startPos": 9606,
+    "endPos": 9612,
+    "kind": "Identifier",
+    "nodePos": 9606,
+    "nodeEnd": 9612
+  },
+  {
+    "startPos": 9613,
+    "endPos": 9613,
+    "kind": "EqualsToken",
+    "nodePos": 9612,
+    "nodeEnd": 9614
+  },
+  {
+    "startPos": 9614,
+    "endPos": 9614,
+    "kind": "BinaryExpression",
+    "nodePos": 9595,
+    "nodeEnd": 9625
+  },
+  {
+    "startPos": 9615,
+    "endPos": 9624,
+    "kind": "Identifier",
+    "nodePos": 9614,
+    "nodeEnd": 9624
+  },
+  {
+    "startPos": 9625,
+    "endPos": 9625,
+    "kind": "SemicolonToken",
+    "nodePos": 9625,
+    "nodeEnd": 9626
+  },
+  {
+    "startPos": 9626,
+    "endPos": 9627,
+    "kind": "Block",
+    "nodePos": 9562,
+    "nodeEnd": 9629
+  },
+  {
+    "startPos": 9628,
+    "endPos": 9628,
+    "kind": "CloseBraceToken",
+    "nodePos": 9626,
+    "nodeEnd": 9629
+  },
+  {
+    "startPos": 9629,
+    "endPos": 9632,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  },
+  {
+    "startPos": 9633,
+    "endPos": 9641,
+    "kind": "FunctionKeyword",
+    "nodePos": 9629,
+    "nodeEnd": 9641
+  },
+  {
+    "startPos": 9642,
+    "endPos": 9660,
+    "kind": "Identifier",
+    "nodePos": 9641,
+    "nodeEnd": 9660
+  },
+  {
+    "startPos": 9661,
+    "endPos": 9665,
+    "kind": "Identifier",
+    "nodePos": 9661,
+    "nodeEnd": 9665
+  },
+  {
+    "startPos": 9666,
+    "endPos": 9666,
+    "kind": "Parameter",
+    "nodePos": 9661,
+    "nodeEnd": 9680
+  },
+  {
+    "startPos": 9667,
+    "endPos": 9674,
+    "kind": "Identifier",
+    "nodePos": 9666,
+    "nodeEnd": 9674
+  },
+  {
+    "startPos": 9675,
+    "endPos": 9679,
+    "kind": "Identifier",
+    "nodePos": 9675,
+    "nodeEnd": 9679
+  },
+  {
+    "startPos": 9680,
+    "endPos": 9680,
+    "kind": "CloseParenToken",
+    "nodePos": 9680,
+    "nodeEnd": 9681
+  },
+  {
+    "startPos": 9681,
+    "endPos": 9681,
+    "kind": "FunctionDeclaration",
+    "nodePos": 9629,
+    "nodeEnd": 9770
+  },
+  {
+    "startPos": 9682,
+    "endPos": 9682,
+    "kind": "OpenBraceToken",
+    "nodePos": 9681,
+    "nodeEnd": 9683
+  },
+  {
+    "startPos": 9683,
+    "endPos": 9688,
+    "kind": "Block",
+    "nodePos": 9681,
+    "nodeEnd": 9770
+  },
+  {
+    "startPos": 9689,
+    "endPos": 9693,
+    "kind": "Identifier",
+    "nodePos": 9683,
+    "nodeEnd": 9693
+  },
+  {
+    "startPos": 9694,
+    "endPos": 9697,
+    "kind": "Identifier",
+    "nodePos": 9694,
+    "nodeEnd": 9697
+  },
+  {
+    "startPos": 9698,
+    "endPos": 9698,
+    "kind": "EqualsToken",
+    "nodePos": 9697,
+    "nodeEnd": 9699
+  },
+  {
+    "startPos": 9699,
+    "endPos": 9699,
+    "kind": "BinaryExpression",
+    "nodePos": 9683,
+    "nodeEnd": 9702
+  },
+  {
+    "startPos": 9700,
+    "endPos": 9700,
+    "kind": "MinusToken",
+    "nodePos": 9699,
+    "nodeEnd": 9701
+  },
+  {
+    "startPos": 9701,
+    "endPos": 9702,
+    "kind": "NumericLiteral",
+    "nodePos": 9701,
+    "nodeEnd": 9702
+  },
+  {
+    "startPos": 9703,
+    "endPos": 9708,
+    "kind": "Block",
+    "nodePos": 9681,
+    "nodeEnd": 9770
+  },
+  {
+    "startPos": 9709,
+    "endPos": 9713,
+    "kind": "Identifier",
+    "nodePos": 9703,
+    "nodeEnd": 9713
+  },
+  {
+    "startPos": 9714,
+    "endPos": 9717,
+    "kind": "Identifier",
+    "nodePos": 9714,
+    "nodeEnd": 9717
+  },
+  {
+    "startPos": 9718,
+    "endPos": 9718,
+    "kind": "EqualsToken",
+    "nodePos": 9717,
+    "nodeEnd": 9719
+  },
+  {
+    "startPos": 9719,
+    "endPos": 9719,
+    "kind": "BinaryExpression",
+    "nodePos": 9703,
+    "nodeEnd": 9722
+  },
+  {
+    "startPos": 9720,
+    "endPos": 9720,
+    "kind": "MinusToken",
+    "nodePos": 9719,
+    "nodeEnd": 9721
+  },
+  {
+    "startPos": 9721,
+    "endPos": 9722,
+    "kind": "NumericLiteral",
+    "nodePos": 9721,
+    "nodeEnd": 9722
+  },
+  {
+    "startPos": 9723,
+    "endPos": 9728,
+    "kind": "Block",
+    "nodePos": 9681,
+    "nodeEnd": 9770
+  },
+  {
+    "startPos": 9729,
+    "endPos": 9733,
+    "kind": "Identifier",
+    "nodePos": 9723,
+    "nodeEnd": 9733
+  },
+  {
+    "startPos": 9734,
+    "endPos": 9746,
+    "kind": "Identifier",
+    "nodePos": 9734,
+    "nodeEnd": 9746
+  },
+  {
+    "startPos": 9747,
+    "endPos": 9765,
+    "kind": "Identifier",
+    "nodePos": 9747,
+    "nodeEnd": 9765
+  },
+  {
+    "startPos": 9766,
+    "endPos": 9766,
+    "kind": "SemicolonToken",
+    "nodePos": 9766,
+    "nodeEnd": 9767
+  },
+  {
+    "startPos": 9767,
+    "endPos": 9768,
+    "kind": "Block",
+    "nodePos": 9681,
+    "nodeEnd": 9770
+  },
+  {
+    "startPos": 9769,
+    "endPos": 9769,
+    "kind": "CloseBraceToken",
+    "nodePos": 9767,
+    "nodeEnd": 9770
+  },
+  {
+    "startPos": 9770,
+    "endPos": 9771,
+    "kind": "SourceFile",
+    "nodePos": 0,
+    "nodeEnd": 9772
+  }
+]

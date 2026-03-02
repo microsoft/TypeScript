@@ -239,7 +239,7 @@ export function generateSync(): void {
     }
 
     // Test files
-    for (const relPath of ["api.test.ts", "api.bench.ts"]) {
+    for (const relPath of ["api.test.ts", "api.bench.ts", "astnav.test.ts"]) {
         generatedFiles.push(generateSyncFile(
             join(TEST, "async", relPath),
             join(TEST, "sync", relPath),

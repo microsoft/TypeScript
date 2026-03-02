@@ -630,7 +630,8 @@ func (s *Session) handleGetSymbolAtPosition(ctx context.Context, params *GetSymb
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
 
-	node := astnav.GetTouchingPropertyName(sourceFile, int(params.Position))
+	positionMap := sourceFile.GetPositionMap()
+	node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(params.Position)))
 	if node == nil {
 		return nil, nil
 	}
@@ -656,9 +657,10 @@ func (s *Session) handleGetSymbolsAtPositions(ctx context.Context, params *GetSy
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
 
+	positionMap := sourceFile.GetPositionMap()
 	results := make([]*SymbolResponse, len(params.Positions))
 	for i, pos := range params.Positions {
-		node := astnav.GetTouchingPropertyName(sourceFile, int(pos))
+		node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(pos)))
 		if node == nil {
 			continue
 		}
@@ -815,7 +817,7 @@ func (s *Session) handleResolveName(ctx context.Context, params *ResolveNamePara
 		if sourceFile == nil {
 			return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, *params.File)
 		}
-		location = astnav.GetTouchingPropertyName(sourceFile, int(*params.Position))
+		location = astnav.GetTouchingPropertyName(sourceFile, sourceFile.GetPositionMap().UTF16ToUTF8(int(*params.Position)))
 	}
 
 	symbol := setup.checker.ResolveName(params.Name, location, ast.SymbolFlags(params.Meaning), params.ExcludeGlobals)
@@ -999,7 +1001,8 @@ func (s *Session) handleGetTypeAtPosition(ctx context.Context, params *GetTypeAt
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
 
-	node := astnav.GetTouchingPropertyName(sourceFile, int(params.Position))
+	positionMap := sourceFile.GetPositionMap()
+	node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(params.Position)))
 	if node == nil {
 		return nil, nil
 	}
@@ -1025,9 +1028,10 @@ func (s *Session) handleGetTypesAtPositions(ctx context.Context, params *GetType
 		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, params.File)
 	}
 
+	positionMap := sourceFile.GetPositionMap()
 	results := make([]*TypeResponse, len(params.Positions))
 	for i, pos := range params.Positions {
-		node := astnav.GetTouchingPropertyName(sourceFile, int(pos))
+		node := astnav.GetTouchingPropertyName(sourceFile, positionMap.UTF16ToUTF8(int(pos)))
 		if node == nil {
 			continue
 		}

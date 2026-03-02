@@ -214,7 +214,7 @@ function isNodeType(typeNode: ts.TypeNode): boolean {
 // Step 3: Resolve all properties for an interface (including inherited)
 // ---------------------------------------------------------------------------
 
-const EXCLUDED_PROPS = new Set(["kind", "parent", "pos", "end", "flags"]);
+const EXCLUDED_PROPS = new Set(["kind", "parent", "pos", "end", "flags", "jsDoc"]);
 
 // Per-interface property exclusions for inherited properties that are semantically
 // meaningless on certain node types (e.g. constructors don't have type parameters).
@@ -223,6 +223,7 @@ const INTERFACE_EXCLUDED_PROPS: Record<string, Set<string>> = {
     GetAccessorDeclaration: new Set(["typeParameters"]),
     SetAccessorDeclaration: new Set(["typeParameters", "type"]),
     SemicolonClassElement: new Set(["name"]),
+    SourceFile: new Set(["languageVariant", "scriptKind", "tokenCache", "isDeclarationFile", "referencedFiles", "typeReferenceDirectives", "libReferenceDirectives", "imports", "moduleAugmentations", "ambientModuleNames", "externalModuleIndicator"]),
 };
 
 function isBrandField(name: string): boolean {

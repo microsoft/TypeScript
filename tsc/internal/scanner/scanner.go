@@ -217,9 +217,10 @@ type Scanner struct {
 	scriptKind      core.ScriptKind
 	ScannerState
 
-	numberCache    map[string]string
-	hexNumberCache map[string]string
-	hexDigitCache  map[string]string
+	containsNonASCII bool
+	numberCache      map[string]string
+	hexNumberCache   map[string]string
+	hexDigitCache    map[string]string
 }
 
 func defaultScanner() Scanner {
@@ -327,6 +328,13 @@ func (scanner *Scanner) SetSkipTrivia(skip bool) {
 
 func (s *Scanner) HasUnicodeEscape() bool {
 	return s.tokenFlags&ast.TokenFlagsUnicodeEscape != 0
+}
+
+// ContainsNonASCII returns true if the scanner encountered any non-ASCII bytes
+// during scanning. This is useful for determining whether UTF-8 byte offsets
+// may differ from UTF-16 code unit offsets.
+func (s *Scanner) ContainsNonASCII() bool {
+	return s.containsNonASCII
 }
 
 func (s *Scanner) HasExtendedUnicodeEscape() bool {
@@ -439,7 +447,11 @@ func (s *Scanner) charAt(offset int) rune {
 }
 
 func (s *Scanner) charAndSize() (rune, int) {
-	return utf8.DecodeRuneInString(s.text[s.pos:])
+	r, size := utf8.DecodeRuneInString(s.text[s.pos:])
+	if size > 1 {
+		s.containsNonASCII = true
+	}
+	return r, size
 }
 
 func (s *Scanner) Scan() ast.Kind {

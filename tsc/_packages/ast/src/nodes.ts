@@ -1,4 +1,6 @@
+import type { LanguageVariant } from "#enums/languageVariant";
 import type { NodeFlags } from "#enums/nodeFlags";
+import type { ScriptKind } from "#enums/scriptKind";
 import { SyntaxKind } from "#enums/syntaxKind";
 import { TokenFlags } from "#enums/tokenFlags";
 
@@ -15,8 +17,15 @@ export interface Node extends ReadonlyTextRange {
     readonly kind: SyntaxKind;
     readonly flags: NodeFlags;
     readonly parent: Node;
+    readonly jsDoc?: readonly Node[];
     forEachChild<T>(visitor: (node: Node) => T, visitArray?: (nodes: NodeArray<Node>) => T): T | undefined;
     getSourceFile(): SourceFile;
+}
+
+export interface FileReference extends TextRange {
+    readonly fileName: string;
+    readonly resolutionMode: number; // TODO with CompilerOptions: enum type
+    readonly preserve: boolean;
 }
 
 export interface SourceFile extends Node {
@@ -26,6 +35,18 @@ export interface SourceFile extends Node {
     readonly text: string;
     readonly fileName: string;
     readonly path: Path;
+    readonly languageVariant: LanguageVariant;
+    readonly scriptKind: ScriptKind;
+    readonly isDeclarationFile: boolean;
+    readonly referencedFiles: readonly FileReference[];
+    readonly typeReferenceDirectives: readonly FileReference[];
+    readonly libReferenceDirectives: readonly FileReference[];
+    readonly imports: readonly Node[];
+    readonly moduleAugmentations: readonly Node[];
+    readonly ambientModuleNames: readonly string[];
+    readonly externalModuleIndicator: Node | true | undefined;
+    /** @internal */
+    tokenCache?: Map<string, Node>;
 }
 
 export type TriviaSyntaxKind =
@@ -133,6 +154,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.DebuggerKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
+    | SyntaxKind.DeferKeyword
     | SyntaxKind.DeleteKeyword
     | SyntaxKind.DoKeyword
     | SyntaxKind.ElseKeyword

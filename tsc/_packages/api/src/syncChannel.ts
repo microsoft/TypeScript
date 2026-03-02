@@ -40,12 +40,15 @@ interface StdinWithHandle extends Writable {
     unref: () => void;
 }
 
-// ── MessagePack format constants ────────────────────────────────────
-const MSGPACK_FIXARRAY3 = 0x93; // 3-element fixarray
-const MSGPACK_BIN8 = 0xc4;
-const MSGPACK_BIN16 = 0xc5;
-const MSGPACK_BIN32 = 0xc6;
-const MSGPACK_U8 = 0xcc; // uint8 marker
+import {
+    binHeaderSize,
+    MSGPACK_BIN16,
+    MSGPACK_BIN32,
+    MSGPACK_BIN8,
+    MSGPACK_FIXARRAY3,
+    MSGPACK_UINT8,
+    writeBinHeader,
+} from "./node/msgpack.ts";
 
 // ── MessageType constants ────────────────────────────────────────────
 // Sent by channel (parent → child)
@@ -428,7 +431,7 @@ export class SyncRpcChannel {
         if (tb <= 0x7f) {
             this._msgType = tb;
         }
-        else if (tb === MSGPACK_U8) {
+        else if (tb === MSGPACK_UINT8) {
             this._msgType = this.readByte();
         }
         else {
@@ -592,32 +595,4 @@ export class SyncRpcChannel {
             }
         }
     }
-}
-
-// ── Module-level helpers for MessagePack bin headers ────────────────
-
-/** Compute the MessagePack bin header size for a given data length. */
-function binHeaderSize(len: number): number {
-    if (len < 0x100) return 2; // BIN8: marker + 1-byte size
-    if (len < 0x10000) return 3; // BIN16: marker + 2-byte size
-    return 5; // BIN32: marker + 4-byte size
-}
-
-/** Write a MessagePack bin header into `buf` at `off`, return new offset. */
-function writeBinHeader(buf: Buffer, off: number, len: number): number {
-    if (len < 0x100) {
-        buf[off++] = MSGPACK_BIN8;
-        buf[off++] = len;
-    }
-    else if (len < 0x10000) {
-        buf[off++] = MSGPACK_BIN16;
-        buf[off++] = (len >>> 8) & 0xff;
-        buf[off++] = len & 0xff;
-    }
-    else {
-        buf[off++] = MSGPACK_BIN32;
-        buf.writeUInt32BE(len, off);
-        off += 4;
-    }
-    return off;
 }

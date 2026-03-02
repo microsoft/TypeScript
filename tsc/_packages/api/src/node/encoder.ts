@@ -4,6 +4,7 @@ import type {
     ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
+    FileReference,
     ImportAttributes,
     ImportClause,
     ImportEqualsDeclaration,
@@ -24,15 +25,27 @@ import {
     NodeFlags,
     SyntaxKind,
 } from "@typescript/ast";
+import { MsgpackWriter } from "./msgpack.ts";
 import {
     childProperties,
+    HEADER_OFFSET_EXTENDED_DATA,
+    HEADER_OFFSET_METADATA,
+    HEADER_OFFSET_NODES,
+    HEADER_OFFSET_STRING_TABLE,
+    HEADER_OFFSET_STRING_TABLE_OFFSETS,
+    HEADER_OFFSET_STRUCTURED_DATA,
     HEADER_SIZE,
     KIND_NODE_LIST,
     NODE_DATA_TYPE_CHILDREN,
     NODE_DATA_TYPE_EXTENDED,
     NODE_DATA_TYPE_STRING,
+    NODE_LEN,
     PROTOCOL_VERSION,
 } from "./protocol.ts";
+
+const NODE_FIELDS = NODE_LEN / 4;
+const NODE_FIELD_NEXT = 3;
+const NO_STRUCTURED_DATA = 0xFFFFFFFF;
 
 // String table that accumulates strings into a flat byte pool.
 class StringTable {
@@ -96,6 +109,9 @@ function getNodeDataType(kind: SyntaxKind): number {
         case SyntaxKind.RegularExpressionLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.JSDocText:
+        case SyntaxKind.JSDocLink:
+        case SyntaxKind.JSDocLinkCode:
+        case SyntaxKind.JSDocLinkPlain:
             return NODE_DATA_TYPE_STRING;
         case SyntaxKind.TemplateHead:
         case SyntaxKind.TemplateMiddle:
@@ -199,14 +215,32 @@ function recordNodeStrings(node: Node, strs: StringTable): number {
     return strs.add((node as LiteralLikeNode).text ?? "");
 }
 
-function recordExtendedData(node: Node, strs: StringTable, extendedData: number[]): number {
+function encodeFileReferences(refs: readonly FileReference[] | undefined, writer: MsgpackWriter): number {
+    if (!refs || refs.length === 0) return NO_STRUCTURED_DATA;
+    const offset = writer.finish().length;
+    writer.writeArrayHeader(refs.length);
+    for (const ref of refs) {
+        writer.writeArrayHeader(5);
+        writer.writeUint(ref.pos);
+        writer.writeUint(ref.end);
+        writer.writeString(ref.fileName);
+        writer.writeUint(ref.resolutionMode ?? 0);
+        writer.writeBool(ref.preserve ?? false);
+    }
+    return offset;
+}
+
+function recordExtendedData(node: Node, strs: StringTable, extendedData: number[], structuredWriter: MsgpackWriter): number {
     const offset = extendedData.length * 4;
     if (node.kind === SyntaxKind.SourceFile) {
         const sf = node as SourceFile;
         const textIndex = strs.add(sf.text);
         const fileNameIndex = strs.add(sf.fileName);
         const pathIndex = strs.add(sf.path);
-        extendedData.push(textIndex, fileNameIndex, pathIndex);
+        const referencedFilesOffset = encodeFileReferences(sf.referencedFiles, structuredWriter);
+        const typeRefDirectivesOffset = encodeFileReferences(sf.typeReferenceDirectives, structuredWriter);
+        const libRefDirectivesOffset = encodeFileReferences(sf.libReferenceDirectives, structuredWriter);
+        extendedData.push(textIndex, fileNameIndex, pathIndex, sf.languageVariant, sf.scriptKind, referencedFilesOffset, typeRefDirectivesOffset, libRefDirectivesOffset, NO_STRUCTURED_DATA, NO_STRUCTURED_DATA, NO_STRUCTURED_DATA, 0);
     }
     else {
         // TemplateHead, TemplateMiddle, TemplateTail
@@ -221,7 +255,7 @@ function recordExtendedData(node: Node, strs: StringTable, extendedData: number[
     return offset;
 }
 
-function getNodeData(node: Node, strs: StringTable, extendedData: number[]): number {
+function getNodeData(node: Node, strs: StringTable, extendedData: number[], structuredWriter: MsgpackWriter): number {
     const t = getNodeDataType(node.kind);
     const defined = getNodeDefinedData(node);
     switch (t) {
@@ -230,7 +264,7 @@ function getNodeData(node: Node, strs: StringTable, extendedData: number[]): num
         case NODE_DATA_TYPE_STRING:
             return t | defined | recordNodeStrings(node, strs);
         case NODE_DATA_TYPE_EXTENDED:
-            return t | defined | recordExtendedData(node, strs, extendedData);
+            return t | defined | recordExtendedData(node, strs, extendedData, structuredWriter);
         default:
             throw new Error("unreachable");
     }
@@ -328,12 +362,13 @@ export function encodeSourceFile(sourceFile: SourceFile): Uint8Array {
 export function encodeNode(node: Node): Uint8Array {
     const strs = new StringTable();
     const extendedDataValues: number[] = [];
+    const structuredWriter = new MsgpackWriter();
 
-    // We'll build an array of uint32 values for the nodes section, 6 per node
+    // We'll build an array of uint32 values for the nodes section, 7 per node
     const nodeValues: number[] = [];
 
     // Nil node (index 0)
-    nodeValues.push(0, 0, 0, 0, 0, 0);
+    nodeValues.push(0, 0, 0, 0, 0, 0, 0);
 
     let nodeCount = 0;
     let parentIndex = 0;
@@ -345,10 +380,10 @@ export function encodeNode(node: Node): Uint8Array {
 
         if (prevIndex !== 0) {
             // Set next pointer on previous sibling
-            nodeValues[prevIndex * 6 + 3] = currentIndex;
+            nodeValues[prevIndex * NODE_FIELDS + NODE_FIELD_NEXT] = currentIndex;
         }
 
-        const data = getNodeData(node, strs, extendedDataValues);
+        const data = getNodeData(node, strs, extendedDataValues, structuredWriter);
         nodeValues.push(
             node.kind,
             node.pos >= 0 ? node.pos : 0,
@@ -356,6 +391,7 @@ export function encodeNode(node: Node): Uint8Array {
             0, // next (filled in later)
             parentIndex,
             data,
+            node.flags,
         );
 
         const saveParentIndex = parentIndex;
@@ -378,7 +414,7 @@ export function encodeNode(node: Node): Uint8Array {
         const currentIndex = nodeCount;
 
         if (prevIndex !== 0) {
-            nodeValues[prevIndex * 6 + 3] = currentIndex;
+            nodeValues[prevIndex * NODE_FIELDS + NODE_FIELD_NEXT] = currentIndex;
         }
 
         nodeValues.push(
@@ -388,6 +424,7 @@ export function encodeNode(node: Node): Uint8Array {
             0, // next
             parentIndex,
             list.length, // data for NodeList is its length
+            0, // flags
         );
 
         const saveParentIndex = parentIndex;
@@ -424,7 +461,7 @@ export function encodeNode(node: Node): Uint8Array {
     // Encode root node
     nodeCount++;
     parentIndex++;
-    const rootData = getNodeData(node, strs, extendedDataValues);
+    const rootData = getNodeData(node, strs, extendedDataValues, structuredWriter);
     nodeValues.push(
         node.kind,
         node.pos >= 0 ? node.pos : 0,
@@ -432,6 +469,7 @@ export function encodeNode(node: Node): Uint8Array {
         0,
         0,
         rootData,
+        node.flags,
     );
 
     const saveParent = parentIndex;
@@ -447,6 +485,9 @@ export function encodeNode(node: Node): Uint8Array {
         extView.setUint32(i * 4, extendedDataValues[i], true);
     }
 
+    // Encode structured data section
+    const structuredDataBytes = structuredWriter.finish();
+
     // Encode string table
     const strsBytes = strs.encode();
 
@@ -461,25 +502,28 @@ export function encodeNode(node: Node): Uint8Array {
     const offsetStringTableOffsets = HEADER_SIZE;
     const offsetStringTableData = HEADER_SIZE + strs.offsetsCount() * 4;
     const offsetExtendedData = offsetStringTableData + strs.stringByteLength();
-    const offsetNodes = offsetExtendedData + extendedDataBytes.length;
+    const offsetStructuredData = offsetExtendedData + extendedDataBytes.length;
+    const offsetNodes = offsetStructuredData + structuredDataBytes.length;
 
     // Build header
     const header = new Uint8Array(HEADER_SIZE);
     const headerView = new DataView(header.buffer);
     const metadata = PROTOCOL_VERSION << 24;
-    headerView.setUint32(0, metadata, true); // metadata
+    headerView.setUint32(HEADER_OFFSET_METADATA, metadata, true);
     // bytes 4-19: hash (zero for non-SourceFile, we don't have access to xxh3 here)
     // byte 20-23: parse options (zero for non-SourceFile)
-    headerView.setUint32(24, offsetStringTableOffsets, true);
-    headerView.setUint32(28, offsetStringTableData, true);
-    headerView.setUint32(32, offsetExtendedData, true);
-    headerView.setUint32(36, offsetNodes, true);
+    headerView.setUint32(HEADER_OFFSET_STRING_TABLE_OFFSETS, offsetStringTableOffsets, true);
+    headerView.setUint32(HEADER_OFFSET_STRING_TABLE, offsetStringTableData, true);
+    headerView.setUint32(HEADER_OFFSET_EXTENDED_DATA, offsetExtendedData, true);
+    headerView.setUint32(HEADER_OFFSET_STRUCTURED_DATA, offsetStructuredData, true);
+    headerView.setUint32(HEADER_OFFSET_NODES, offsetNodes, true);
 
     // Concatenate all sections
-    const result = new Uint8Array(header.length + strsBytes.length + extendedDataBytes.length + nodesBytes.length);
+    const result = new Uint8Array(header.length + strsBytes.length + extendedDataBytes.length + structuredDataBytes.length + nodesBytes.length);
     result.set(header, 0);
     result.set(strsBytes, HEADER_SIZE);
     result.set(extendedDataBytes, offsetExtendedData);
+    result.set(structuredDataBytes, offsetStructuredData);
     result.set(nodesBytes, offsetNodes);
     return result;
 }

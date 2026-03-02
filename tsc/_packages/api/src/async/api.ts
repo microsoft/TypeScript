@@ -169,6 +169,10 @@ export class API<FromLSP extends boolean = false> {
         await this.client.close();
         this.sourceFileCache.clear();
     }
+
+    clearSourceFileCache(): void {
+        this.sourceFileCache.clear();
+    }
 }
 
 export class Snapshot {
