@@ -561,14 +561,11 @@ export const lint = task({
     description: "Runs eslint on the compiler and scripts sources.",
     run: async () => {
         const folder = ".";
-        const formatter = cmdLineOptions.ci ? "stylish" : "autolinkable-stylish";
         const args = [
             "node_modules/eslint/bin/eslint",
             "--cache",
             "--cache-location",
             `${folder}/.eslintcache`,
-            "--format",
-            formatter,
             "--report-unused-disable-directives",
             "--max-warnings",
             "0",
