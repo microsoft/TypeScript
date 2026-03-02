@@ -13,10 +13,10 @@
         "@types/which": "^3.0.4",
         "adm-zip": "^0.5.16",
         "chokidar": "^5.0.0",
-        "dprint": "^0.51.1",
+        "dprint": "^0.52.0",
         "execa": "^9.6.1",
-        "glob": "^13.0.5",
-        "hereby": "^1.11.1",
+        "glob": "^13.0.6",
+        "hereby": "^1.12.0",
         "p-limit": "^7.3.0",
         "picocolors": "^1.1.1",
         "tmp": "^0.2.5",
@@ -39,9 +39,9 @@
         "./_extension",
         "./_packages/*"
     ],
-    "packageManager": "npm@11.10.0+sha512.8bc844e37892200305b98562f13c6c10849d10b3387c8cdaeb4d1a2e32746a79063cba9dd284cf28c26a01c3bf4169b7d3b31b4a5586cc970d6749463108073c",
+    "packageManager": "npm@11.11.0+sha512.f36811c4aae1fde639527368ae44c571d050006a608d67a191f195a801a52637a312d259186254aa3a3799b05335b7390539cf28656d18f0591a1125ba35f973",
     "volta": {
         "node": "22.22.0",
-        "npm": "11.10.0"
+        "npm": "11.11.0"
     }
 }
