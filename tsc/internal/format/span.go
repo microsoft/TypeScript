@@ -821,8 +821,10 @@ func (w *formatSpanWorker) trimTrailingWhitespacesForLines(line1 int, line2 int,
 
 		whitespaceStart := w.getTrailingWhitespaceStartPosition(lineStartPosition, lineEndPosition)
 		if whitespaceStart != -1 {
-			r, _ := utf8.DecodeRuneInString(w.sourceFile.Text()[whitespaceStart-1:])
-			debug.Assert(whitespaceStart == lineStartPosition || !stringutil.IsWhiteSpaceSingleLine(r))
+			if whitespaceStart != lineStartPosition {
+				r, _ := utf8.DecodeRuneInString(w.sourceFile.Text()[whitespaceStart-1:])
+				debug.Assert(!stringutil.IsWhiteSpaceSingleLine(r))
+			}
 			w.recordDelete(whitespaceStart, lineEndPosition+1-whitespaceStart)
 		}
 	}

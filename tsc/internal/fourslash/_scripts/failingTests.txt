@@ -212,7 +212,6 @@ TestFormatConflictMarker1
 TestFormatDebuggerStatement
 TestFormatDocumentPreserveTrailingWhitespace
 TestFormatDocumentWithJSDoc
-TestFormatDocumentWithTrivia
 TestFormatDotAfterNumber
 TestFormatEmptyParamList
 TestFormatIfTryCatchBlocks
