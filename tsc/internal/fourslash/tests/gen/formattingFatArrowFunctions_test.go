@@ -8,7 +8,7 @@ import (
 )
 
 func TestFormattingFatArrowFunctions(t *testing.T) {
-	t.Skip("Flaky test: sometimes timing out")
+	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `// valid

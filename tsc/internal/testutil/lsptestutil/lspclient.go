@@ -125,24 +125,30 @@ func (c *LSPClient) NextID() int32 {
 
 // MessageRouter runs in a goroutine and routes incoming messages from the server.
 // It handles responses to client requests and server-initiated requests.
+// It continues draining the output channel until it is closed (EOF), even after
+// context cancellation, to prevent the server's writeLoop from blocking on a send.
 func (c *LSPClient) MessageRouter(ctx context.Context) error {
 	for {
-		if ctx.Err() != nil {
-			return nil
-		}
-
 		msg, err := c.outputReader.Read()
 		if err != nil {
-			if errors.Is(err, io.EOF) || ctx.Err() != nil {
+			if errors.Is(err, io.EOF) {
+				return nil
+			}
+			if ctx.Err() != nil {
 				return nil
 			}
 			return fmt.Errorf("failed to read message: %w", err)
 		}
 
+		// After context cancellation, keep draining but don't process messages.
+		if ctx.Err() != nil {
+			continue
+		}
+
 		// Validate message can be marshaled
 		if err := json.MarshalWrite(io.Discard, msg); err != nil {
 			if ctx.Err() != nil {
-				return nil
+				continue
 			}
 
 			return fmt.Errorf("failed to encode message as JSON: %w", err)

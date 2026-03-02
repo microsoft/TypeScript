@@ -48,7 +48,6 @@ exhaustiveCaseCompletions6
 exhaustiveCaseCompletions7
 exhaustiveCaseCompletions8
 formatOnEnterInComment
-formattingFatArrowFunctions
 getOutliningSpans
 importNameCodeFix_uriStyleNodeCoreModules1
 importNameCodeFixDefaultExport7
