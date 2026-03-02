@@ -1,4 +1,4 @@
-index.ts(7,1): error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
+index.ts(7,1): error TS2883: The inferred type of 'default' cannot be named without a reference to 'NonReactStatics' from 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
 
 
 ==== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts (0 errors) ====
@@ -43,5 +43,5 @@ index.ts(7,1): error TS2742: The inferred type of 'default' cannot be named with
     ~~~~~
     });
     ~~~
-!!! error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
+!!! error TS2883: The inferred type of 'default' cannot be named without a reference to 'NonReactStatics' from 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
     

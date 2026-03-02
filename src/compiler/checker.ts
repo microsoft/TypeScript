@@ -6435,7 +6435,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (name.includes("/node_modules/")) {
                         context.encounteredError = true;
                         if (context.tracker.reportLikelyUnsafeImportRequiredError) {
-                            context.tracker.reportLikelyUnsafeImportRequiredError(name);
+                            context.tracker.reportLikelyUnsafeImportRequiredError(name, nodeSymbol ? unescapeLeadingUnderscores(nodeSymbol.escapedName) : undefined);
                         }
                     }
                     if (name !== originalName) {
@@ -8090,8 +8090,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reportInaccessibleUniqueSymbolError() {
                     markError(() => oldTracker.reportInaccessibleUniqueSymbolError());
                 },
-                reportLikelyUnsafeImportRequiredError(specifier) {
-                    markError(() => oldTracker.reportLikelyUnsafeImportRequiredError(specifier));
+                reportLikelyUnsafeImportRequiredError(specifier, symbolName) {
+                    markError(() => oldTracker.reportLikelyUnsafeImportRequiredError(specifier, symbolName));
                 },
                 reportNonSerializableProperty(name) {
                     markError(() => oldTracker.reportNonSerializableProperty(name));
@@ -8717,7 +8717,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // since declaration files with these kinds of references are liable to fail when published :(
                         context.encounteredError = true;
                         if (context.tracker.reportLikelyUnsafeImportRequiredError) {
-                            context.tracker.reportLikelyUnsafeImportRequiredError(oldSpecifier);
+                            context.tracker.reportLikelyUnsafeImportRequiredError(oldSpecifier, unescapeLeadingUnderscores(symbol.escapedName));
                         }
                     }
                 }
@@ -54370,10 +54370,10 @@ class SymbolTrackerImpl implements SymbolTracker {
         }
     }
 
-    reportLikelyUnsafeImportRequiredError(specifier: string): void {
+    reportLikelyUnsafeImportRequiredError(specifier: string, symbolName: string | undefined): void {
         if (this.inner?.reportLikelyUnsafeImportRequiredError) {
             this.onDiagnosticReported();
-            this.inner.reportLikelyUnsafeImportRequiredError(specifier);
+            this.inner.reportLikelyUnsafeImportRequiredError(specifier, symbolName);
         }
     }
 

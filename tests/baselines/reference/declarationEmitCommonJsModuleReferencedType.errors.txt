@@ -1,4 +1,4 @@
-r/entry.ts(3,14): error TS2742: The inferred type of 'x' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+r/entry.ts(3,14): error TS2883: The inferred type of 'x' cannot be named without a reference to 'NestedProps' from 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
 
 
 ==== r/node_modules/foo/node_modules/nested/index.d.ts (0 errors) ====
@@ -23,6 +23,6 @@ r/entry.ts(3,14): error TS2742: The inferred type of 'x' cannot be named without
     import { bar } from "root";
     export const x = foo();
                  ~
-!!! error TS2742: The inferred type of 'x' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+!!! error TS2883: The inferred type of 'x' cannot be named without a reference to 'NestedProps' from 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
     export const y = bar();
     
