@@ -5376,7 +5376,7 @@ func (p *Printer) writeSynthesizedComment(comment SynthesizedComment) {
 
 func (p *Printer) emitLeadingComments(pos int, elided bool) bool {
 	// Emit the leading comments only if the container's pos doesn't match because the container should take care of emitting these comments
-	if p.currentSourceFile == nil || ast.PositionIsSynthesized(pos) || pos == p.containerPos {
+	if p.commentsDisabled || p.currentSourceFile == nil || ast.PositionIsSynthesized(pos) || pos == p.containerPos {
 		return false
 	}
 
@@ -5441,7 +5441,7 @@ func (p *Printer) shouldEmitNewLineBeforeLeadingCommentOfPosition(pos int, comme
 
 func (p *Printer) emitTrailingComments(pos int, commentSeparator commentSeparator) {
 	// Emit the trailing comments only if the container's end doesn't match because the container should take care of emitting these comments
-	if p.currentSourceFile == nil || p.containerEnd != -1 && (pos == p.containerEnd || pos == p.declarationListContainerEnd) {
+	if p.commentsDisabled || p.currentSourceFile == nil || p.containerEnd != -1 && (pos == p.containerEnd || pos == p.declarationListContainerEnd) {
 		return
 	}
 
