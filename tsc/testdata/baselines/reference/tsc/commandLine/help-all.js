@@ -177,7 +177,7 @@ default: false
 [94m--esModuleInterop[39m
 Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
-default: false
+default: true
 
 [94m--forceConsistentCasingInFileNames[39m
 Ensure that casing is correct in imports.

@@ -803,7 +803,7 @@ var optionsForCompiler = []*CommandLineOption{
 		ShowInSimplifiedHelpView:   true,
 		Category:                   diagnostics.Interop_Constraints,
 		Description:                diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
-		DefaultValueDescription:    false,
+		DefaultValueDescription:    true,
 	},
 	{
 		Name:                    "preserveSymlinks",

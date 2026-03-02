@@ -197,7 +197,7 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 
                   type:  boolean
 
-               default:  false
+               default:  true
 
 
 You can learn about all of the compiler options at https://aka.ms/tsc
