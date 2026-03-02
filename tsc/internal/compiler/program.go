@@ -688,6 +688,14 @@ func (p *Program) verifyCompilerOptions() {
 		createRemovedOptionDiagnostic("alwaysStrict", "false", "")
 	}
 
+	if options.ESModuleInterop.IsFalse() {
+		createRemovedOptionDiagnostic("esModuleInterop", "false", "")
+	}
+
+	if options.AllowSyntheticDefaultImports.IsFalse() {
+		createRemovedOptionDiagnostic("allowSyntheticDefaultImports", "false", "")
+	}
+
 	if options.StrictPropertyInitialization.IsTrue() && !options.GetStrictOptionValue(options.StrictNullChecks) {
 		createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks")
 	}

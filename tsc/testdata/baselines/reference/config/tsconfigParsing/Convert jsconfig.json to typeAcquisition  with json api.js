@@ -19,7 +19,6 @@ configFileName:: jsconfig.json
 CompilerOptions::
 {
   "allowJs": true,
-  "allowSyntheticDefaultImports": true,
   "noEmit": true,
   "skipLibCheck": true,
   "maxNodeModuleJsDepth": 2,

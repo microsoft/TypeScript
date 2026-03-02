@@ -866,11 +866,10 @@ func getDefaultCompilerOptions(configFileName string) *core.CompilerOptions {
 	if configFileName != "" && tspath.GetBaseFileName(configFileName) == "jsconfig.json" {
 		depth := 2
 		options = &core.CompilerOptions{
-			AllowJs:                      core.TSTrue,
-			MaxNodeModuleJsDepth:         &depth,
-			AllowSyntheticDefaultImports: core.TSTrue,
-			SkipLibCheck:                 core.TSTrue,
-			NoEmit:                       core.TSTrue,
+			AllowJs:              core.TSTrue,
+			MaxNodeModuleJsDepth: &depth,
+			SkipLibCheck:         core.TSTrue,
+			NoEmit:               core.TSTrue,
 		}
 	}
 	return options

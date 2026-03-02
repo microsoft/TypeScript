@@ -116,7 +116,6 @@ func NewInferredProject(
 			StrictNullChecks:           core.TSTrue,
 			StrictFunctionTypes:        core.TSTrue,
 			SourceMap:                  core.TSTrue,
-			ESModuleInterop:            core.TSTrue,
 			AllowNonTsExtensions:       core.TSTrue,
 			ResolveJsonModule:          core.TSTrue,
 		}

@@ -322,7 +322,7 @@ func getOrCreateExternalHelpersModuleNameIfNeeded(emitContext *printer.EmitConte
 	}
 
 	create := len(helpers) > 0 ||
-		(hasExportStarsToExportValues || compilerOptions.GetESModuleInterop() && hasImportStarOrImportDefault) &&
+		(hasExportStarsToExportValues || hasImportStarOrImportDefault) &&
 			fileModuleKind < core.ModuleKindSystem
 
 	if create {

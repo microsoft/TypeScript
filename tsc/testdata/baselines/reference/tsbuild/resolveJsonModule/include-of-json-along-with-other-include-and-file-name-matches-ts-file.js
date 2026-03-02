@@ -87,7 +87,7 @@ exports.default = index_json_1.default.hello;
 }
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"18e7247c85a6a2e7a4ec2e284716edd8-{\n    \"hello\": \"world\"\n}"},{"version":"fe545b3049ca1f2ad9aac3a6ebf9aebb-import hello from \"./index.json\"\nexport default hello.hello","signature":"a44184f4ac1ed50126ac624c885b51a8-declare const _default: string;\nexport default _default;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts"}
+{"version":"FakeTSVersion","root":[[2,3]],"fileNames":["lib.es2025.full.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"18e7247c85a6a2e7a4ec2e284716edd8-{\n    \"hello\": \"world\"\n}"},{"version":"fe545b3049ca1f2ad9aac3a6ebf9aebb-import hello from \"./index.json\"\nexport default hello.hello","signature":"a44184f4ac1ed50126ac624c885b51a8-declare const _default: string;\nexport default _default;\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"module":1,"outDir":"./","skipDefaultLibCheck":true,"allowSyntheticDefaultImports":true,"esModuleInterop":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/index.d.ts"}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -148,12 +148,12 @@ exports.default = index_json_1.default.hello;
     ]
   ],
   "options": {
-    "allowSyntheticDefaultImports": true,
     "composite": true,
-    "esModuleInterop": true,
     "module": 1,
     "outDir": "./",
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "referencedMap": {
     "../src/index.ts": [

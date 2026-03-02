@@ -690,7 +690,7 @@ func (tx *CommonJSModuleTransformer) createRequireCall(node *ast.Node /*ImportDe
 }
 
 func (tx *CommonJSModuleTransformer) getHelperExpressionForExport(node *ast.ExportDeclaration, innerExpr *ast.Expression) *ast.Expression {
-	if !tx.compilerOptions.GetESModuleInterop() || tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper != 0 {
+	if tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper != 0 {
 		return innerExpr
 	}
 	if getExportNeedsImportStarHelper(node) {
@@ -700,7 +700,7 @@ func (tx *CommonJSModuleTransformer) getHelperExpressionForExport(node *ast.Expo
 }
 
 func (tx *CommonJSModuleTransformer) getHelperExpressionForImport(node *ast.ImportDeclaration, innerExpr *ast.Expression) *ast.Expression {
-	if !tx.compilerOptions.GetESModuleInterop() || tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper != 0 {
+	if tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper != 0 {
 		return innerExpr
 	}
 	if getImportNeedsImportStarHelper(node) {
@@ -852,8 +852,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node *ast.Ex
 
 		for _, specifier := range node.ExportClause.Elements() {
 			specifierName := specifier.PropertyNameOrName()
-			exportNeedsImportDefault := tx.compilerOptions.GetESModuleInterop() &&
-				tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper == 0 &&
+			exportNeedsImportDefault := tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper == 0 &&
 				ast.ModuleExportNameIsDefault(specifierName)
 
 			var target *ast.Node
@@ -1782,17 +1781,15 @@ func (tx *CommonJSModuleTransformer) createImportCallExpressionCommonJS(arg *ast
 		requireArguments = []*ast.Expression{arg}
 	}
 
-	requireCall := tx.Factory().NewCallExpression(
-		tx.Factory().NewIdentifier("require"),
-		nil, /*questionDotToken*/
-		nil, /*typeArguments*/
-		tx.Factory().NewNodeList(requireArguments),
-		ast.NodeFlagsNone,
+	requireCall := tx.Factory().NewImportStarHelper(
+		tx.Factory().NewCallExpression(
+			tx.Factory().NewIdentifier("require"),
+			nil, /*questionDotToken*/
+			nil, /*typeArguments*/
+			tx.Factory().NewNodeList(requireArguments),
+			ast.NodeFlagsNone,
+		),
 	)
-
-	if tx.compilerOptions.GetESModuleInterop() {
-		requireCall = tx.Factory().NewImportStarHelper(requireCall)
-	}
 
 	var parameters []*ast.ParameterDeclarationNode
 	if needSyncEval {
