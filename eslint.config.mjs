@@ -37,7 +37,7 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
-    regexpPlugin.configs["flat/recommended"],
+    regexpPlugin.configs.recommended,
     {
         plugins: {
             local: {
@@ -94,6 +94,9 @@ export default tseslint.config(
             "no-cond-assign": "off",
             "no-control-regex": "off",
             "no-inner-declarations": "off",
+            "no-useless-assignment": "off",
+            "no-unassigned-vars": "off",
+            "preserve-caught-error": "off",
 
             // @typescript-eslint/eslint-plugin
             "@typescript-eslint/naming-convention": [

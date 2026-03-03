@@ -1,7 +1,7 @@
 temporal.ts(25,13): error TS2339: Property 'year' does not exist on type 'Instant'.
-temporal.ts(1502,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
-temporal.ts(1512,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
-temporal.ts(1518,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1504,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1514,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1520,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 
 
 ==== temporal.ts (4 errors) ====
@@ -1502,6 +1502,8 @@ temporal.ts(1518,8): error TS2339: Property 'month' does not exist on type 'Plai
         md = Temporal.PlainMonthDay.from({ monthCode: "M05L", day: 15, calendar: "hebrew" });
         // => 1970-02-21[u-ca=hebrew]
         md = Temporal.PlainMonthDay.from({ month: 6, day: 15, year: 5779, calendar: "hebrew" });
+        // => 1970-02-21[u-ca=hebrew]
+        md = Temporal.PlainMonthDay.from({ month: 6, day: 15, era: "am", eraYear: 5779, calendar: "hebrew" });
         // => 1970-02-21[u-ca=hebrew]
         /* WRONG */ md = Temporal.PlainMonthDay.from({ month: 6, day: 15, calendar: "hebrew" });
         // => throws (either year or monthCode is required)

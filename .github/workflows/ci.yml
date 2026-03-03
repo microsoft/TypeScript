@@ -120,7 +120,9 @@ jobs:
       - name: Tests
         id: test
         # run tests, but lint separately
-        run: npm run test -- --no-lint --bundle=${{ matrix.config.bundle }}
+        env:
+          BUNDLE: ${{ matrix.config.bundle }}
+        run: npm run test -- --no-lint --bundle="$BUNDLE"
 
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
@@ -152,7 +154,7 @@ jobs:
         run: npm test -- --no-lint --coverage
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: coverage
           path: coverage
@@ -266,10 +268,12 @@ jobs:
         id: pack
 
       - name: Smoke test
+        env:
+          PACKAGE: ${{ steps.pack.outputs.package }}
         run: |
           cd "$(mktemp -d)"
           npm init --yes
-          npm install ${{ steps.pack.outputs.package }}
+          npm install "$PACKAGE"
 
           echo "Testing tsc..."
           npx tsc --version
@@ -406,7 +410,7 @@ jobs:
 
       - name: Upload baseline diff artifact
         if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: fix_baselines.patch
           path: fix_baselines.patch

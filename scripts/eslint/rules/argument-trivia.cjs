@@ -15,7 +15,7 @@ const unset = Symbol();
  * @returns {() => T}
  */
 function memoize(fn) {
-    /** @type {T | unset} */
+    /** @type {T | typeof unset} */
     let value = unset;
     return () => {
         if (value === unset) {
@@ -43,7 +43,7 @@ module.exports = createRule({
     defaultOptions: [],
 
     create(context) {
-        const sourceCode = context.getSourceCode();
+        const sourceCode = context.sourceCode;
         const sourceCodeText = sourceCode.getText();
 
         /** @type {(name: string) => boolean} */

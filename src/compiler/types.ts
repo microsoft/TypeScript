@@ -10050,7 +10050,7 @@ export interface SymbolTracker {
     reportPrivateInBaseOfClassExpression?(propertyName: string): void;
     reportInaccessibleUniqueSymbolError?(): void;
     reportCyclicStructureError?(): void;
-    reportLikelyUnsafeImportRequiredError?(specifier: string): void;
+    reportLikelyUnsafeImportRequiredError?(specifier: string, symbolName: string | undefined): void;
     reportTruncationError?(): void;
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;

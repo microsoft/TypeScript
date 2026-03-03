@@ -6435,7 +6435,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (name.includes("/node_modules/")) {
                         context.encounteredError = true;
                         if (context.tracker.reportLikelyUnsafeImportRequiredError) {
-                            context.tracker.reportLikelyUnsafeImportRequiredError(name);
+                            context.tracker.reportLikelyUnsafeImportRequiredError(name, nodeSymbol ? unescapeLeadingUnderscores(nodeSymbol.escapedName) : undefined);
                         }
                     }
                     if (name !== originalName) {
@@ -8090,8 +8090,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reportInaccessibleUniqueSymbolError() {
                     markError(() => oldTracker.reportInaccessibleUniqueSymbolError());
                 },
-                reportLikelyUnsafeImportRequiredError(specifier) {
-                    markError(() => oldTracker.reportLikelyUnsafeImportRequiredError(specifier));
+                reportLikelyUnsafeImportRequiredError(specifier, symbolName) {
+                    markError(() => oldTracker.reportLikelyUnsafeImportRequiredError(specifier, symbolName));
                 },
                 reportNonSerializableProperty(name) {
                     markError(() => oldTracker.reportNonSerializableProperty(name));
@@ -8717,7 +8717,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // since declaration files with these kinds of references are liable to fail when published :(
                         context.encounteredError = true;
                         if (context.tracker.reportLikelyUnsafeImportRequiredError) {
-                            context.tracker.reportLikelyUnsafeImportRequiredError(oldSpecifier);
+                            context.tracker.reportLikelyUnsafeImportRequiredError(oldSpecifier, unescapeLeadingUnderscores(symbol.escapedName));
                         }
                     }
                 }
@@ -37952,6 +37952,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (importCallOptionsType !== emptyObjectType) {
                 checkTypeAssignableTo(optionsType, getNullableType(importCallOptionsType, TypeFlags.Undefined), node.arguments[1]);
             }
+            if (compilerOptions.ignoreDeprecations !== "6.0" && isObjectLiteralExpression(node.arguments[1])) {
+                for (const prop of node.arguments[1].properties) {
+                    if (isPropertyAssignment(prop) && isIdentifier(prop.name) && prop.name.escapedText === "assert") {
+                        grammarErrorOnNode(prop.name, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+                        break;
+                    }
+                }
+            }
         }
 
         // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
@@ -43020,6 +43028,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.argument);
 
         if (node.attributes) {
+            if (node.attributes.token !== SyntaxKind.WithKeyword && compilerOptions.ignoreDeprecations !== "6.0") {
+                grammarErrorOnFirstToken(node.attributes, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+            }
             getResolutionModeOverride(node.attributes, grammarErrorOnNode);
         }
         checkTypeReferenceOrImport(node);
@@ -54370,10 +54381,10 @@ class SymbolTrackerImpl implements SymbolTracker {
         }
     }
 
-    reportLikelyUnsafeImportRequiredError(specifier: string): void {
+    reportLikelyUnsafeImportRequiredError(specifier: string, symbolName: string | undefined): void {
         if (this.inner?.reportLikelyUnsafeImportRequiredError) {
             this.onDiagnosticReported();
-            this.inner.reportLikelyUnsafeImportRequiredError(specifier);
+            this.inner.reportLikelyUnsafeImportRequiredError(specifier, symbolName);
         }
     }
 

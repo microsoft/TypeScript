@@ -227,7 +227,7 @@ const unset = Symbol();
  * @returns {() => T}
  */
 export function memoize(fn) {
-    /** @type {T | unset} */
+    /** @type {T | typeof unset} */
     let value = unset;
     return () => {
         if (value === unset) {
