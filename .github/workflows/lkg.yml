@@ -21,8 +21,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          if [[ ! "${{ inputs.branch_name }}" =~ ^release- ]]; then
+      - env:
+          BRANCH_NAME: ${{ inputs.branch_name }}
+        run: |
+          if [[ ! "$BRANCH_NAME" =~ ^release- ]]; then
             echo "Branch name must start with 'release-'"
             exit 1
           fi

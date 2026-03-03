@@ -4022,6 +4022,10 @@
         "category": "Error",
         "code": 2882
     },
+    "The inferred type of '{0}' cannot be named without a reference to '{2}' from '{1}'. This is likely not portable. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2883
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

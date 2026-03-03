@@ -1498,6 +1498,8 @@
     // => 1970-02-21[u-ca=hebrew]
     md = Temporal.PlainMonthDay.from({ month: 6, day: 15, year: 5779, calendar: "hebrew" });
     // => 1970-02-21[u-ca=hebrew]
+    md = Temporal.PlainMonthDay.from({ month: 6, day: 15, era: "am", eraYear: 5779, calendar: "hebrew" });
+    // => 1970-02-21[u-ca=hebrew]
     /* WRONG */ md = Temporal.PlainMonthDay.from({ month: 6, day: 15, calendar: "hebrew" });
     // => throws (either year or monthCode is required)
     md = Temporal.PlainMonthDay.from("2019-02-20[u-ca=hebrew]");
