@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"runtime"
 	"slices"
 	"strings"
 	"sync"
@@ -37,6 +38,7 @@ const (
 	UpdateReasonRequestedLanguageServiceProjectDirty
 	UpdateReasonRequestedLoadProjectTree
 	UpdateReasonRequestedLanguageServiceWithAutoImports
+	UpdateReasonIdleCleanDiskCache
 )
 
 // SessionOptions are the immutable initialization options for a session.
@@ -126,6 +128,12 @@ type Session struct {
 	// after file watch changes and ATA updates.
 	diagnosticsRefreshCancel context.CancelFunc
 	diagnosticsRefreshMu     sync.Mutex
+
+	// idleCacheCleanTimer is a resettable timer for scheduling idle disk
+	// cache cleans. The timer resets on any file event (open, close,
+	// change, save, watch) and fires after 30 seconds of inactivity.
+	idleCacheCleanTimer *time.Timer
+	idleCacheCleanMu    sync.Mutex
 
 	// watches tracks the current watch globs and how many individual WatchedFiles
 	// are using each glob.
@@ -245,6 +253,7 @@ func (s *Session) InitializeWithUserConfig(config *lsutil.UserConfig) {
 
 func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, version int32, content string, languageKind lsproto.LanguageKind) {
 	s.cancelDiagnosticsRefresh()
+	s.scheduleIdleCacheClean()
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
 	s.pendingFileChangesMu.Lock()
@@ -268,6 +277,7 @@ func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, vers
 
 func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
 	s.cancelDiagnosticsRefresh()
+	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
 	defer s.pendingFileChangesMu.Unlock()
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
@@ -278,6 +288,7 @@ func (s *Session) DidCloseFile(ctx context.Context, uri lsproto.DocumentUri) {
 
 func (s *Session) DidChangeFile(ctx context.Context, uri lsproto.DocumentUri, version int32, changes []lsproto.TextDocumentContentChangePartialOrWholeDocument) {
 	s.cancelDiagnosticsRefresh()
+	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
 	defer s.pendingFileChangesMu.Unlock()
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
@@ -290,6 +301,7 @@ func (s *Session) DidChangeFile(ctx context.Context, uri lsproto.DocumentUri, ve
 
 func (s *Session) DidSaveFile(ctx context.Context, uri lsproto.DocumentUri) {
 	s.cancelDiagnosticsRefresh()
+	s.scheduleIdleCacheClean()
 	s.pendingFileChangesMu.Lock()
 	defer s.pendingFileChangesMu.Unlock()
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
@@ -324,6 +336,7 @@ func (s *Session) DidChangeWatchedFiles(ctx context.Context, changes []*lsproto.
 
 	// Schedule a debounced diagnostics refresh
 	s.ScheduleDiagnosticsRefresh()
+	s.scheduleIdleCacheClean()
 }
 
 func (s *Session) DidChangeCompilerOptionsForInferredProjects(ctx context.Context, options *core.CompilerOptions) {
@@ -382,6 +395,47 @@ func (s *Session) cancelDiagnosticsRefresh() {
 		s.diagnosticsRefreshCancel()
 		s.logger.Log("Canceled scheduled diagnostics refresh")
 		s.diagnosticsRefreshCancel = nil
+	}
+}
+
+const idleCacheCleanDelay = 30 * time.Second
+
+func (s *Session) scheduleIdleCacheClean() {
+	s.idleCacheCleanMu.Lock()
+	defer s.idleCacheCleanMu.Unlock()
+
+	if s.idleCacheCleanTimer != nil {
+		s.idleCacheCleanTimer.Stop()
+	}
+
+	s.idleCacheCleanTimer = time.AfterFunc(idleCacheCleanDelay, func() {
+		s.idleCacheCleanMu.Lock()
+		s.idleCacheCleanTimer = nil
+		s.idleCacheCleanMu.Unlock()
+
+		s.snapshotUpdateMu.Lock()
+		defer s.snapshotUpdateMu.Unlock()
+
+		ctx := s.backgroundCtx
+		fileChanges, overlays, ataChanges, newConfig := s.flushChanges(ctx)
+		s.UpdateSnapshot(ctx, overlays, SnapshotChange{
+			reason:         UpdateReasonIdleCleanDiskCache,
+			fileChanges:    fileChanges,
+			ataChanges:     ataChanges,
+			newConfig:      newConfig,
+			cleanDiskCache: true,
+		})
+
+		runtime.GC()
+	})
+}
+
+func (s *Session) cancelIdleCacheClean() {
+	s.idleCacheCleanMu.Lock()
+	defer s.idleCacheCleanMu.Unlock()
+	if s.idleCacheCleanTimer != nil {
+		s.idleCacheCleanTimer.Stop()
+		s.idleCacheCleanTimer = nil
 	}
 }
 
@@ -596,6 +650,7 @@ func (s *Session) UpdateSnapshot(ctx context.Context, overlays map[tspath.Path]*
 // WaitForBackgroundTasks waits for all background tasks to complete.
 // This is intended to be used only for testing purposes.
 func (s *Session) WaitForBackgroundTasks() {
+	s.cancelIdleCacheClean()
 	s.backgroundQueue.Wait()
 }
 
@@ -737,6 +792,8 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 func (s *Session) Close() {
 	// Cancel any pending diagnostics refresh
 	s.cancelDiagnosticsRefresh()
+	// Cancel any pending idle cache clean
+	s.cancelIdleCacheClean()
 	s.backgroundQueue.Close()
 }
 

@@ -212,6 +212,8 @@ type SnapshotChange struct {
 	// ataChanges contains ATA-related changes to apply to projects in the new snapshot.
 	ataChanges map[tspath.Path]*ATAStateChange
 	apiRequest *APISnapshotRequest
+	// cleanDiskCache triggers cleaning of cached disk files not referenced by any open project.
+	cleanDiskCache bool
 }
 
 // ATAStateChange represents a change to a project's ATA state.
@@ -269,6 +271,8 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 			logger.Logf("Reason: RequestedLanguageService (project dirty) - %v", getDetails())
 		case UpdateReasonRequestedLoadProjectTree:
 			logger.Logf("Reason: RequestedLoadProjectTree - %v", getDetails())
+		case UpdateReasonIdleCleanDiskCache:
+			logger.Logf("Reason: IdleCleanDiskCache")
 		}
 	}
 
@@ -349,11 +353,17 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		}
 	}
 
-	// Clean cached disk files not touched by any open project. It's not important that we do this on
-	// file open specifically, but we don't need to do it on every snapshot clone.
-	if change.fileChanges.Opened != "" || change.fileChanges.Reopened != "" {
+	// Clean cached disk files not touched by any open project on file open, close, delete,
+	// or when explicitly requested (e.g. by an idle timer).
+	shouldCleanDiskCache := change.cleanDiskCache ||
+		change.fileChanges.Opened != "" ||
+		change.fileChanges.Reopened != "" ||
+		change.fileChanges.Closed.Len() > 0 ||
+		change.fileChanges.Deleted.Len() > 0
+	if shouldCleanDiskCache {
 		// The set of seen files can change only if a program was constructed (not cloned) during this snapshot.
-		if len(projectsWithNewProgramStructure) > 0 {
+		// When cleanDiskCache is explicitly set, always attempt cleaning.
+		if len(projectsWithNewProgramStructure) > 0 || change.cleanDiskCache {
 			cleanFilesStart := time.Now()
 			removedFiles := 0
 			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
@@ -367,7 +377,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 				return true
 			})
 			if session.options.LoggingEnabled {
-				logger.Logf("Removed %d cached files in %v", removedFiles, time.Since(cleanFilesStart))
+				logger.Logf("Removed %d cached file(s) in %v", removedFiles, time.Since(cleanFilesStart))
 			}
 		}
 	}
