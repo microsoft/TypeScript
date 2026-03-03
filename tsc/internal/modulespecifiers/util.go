@@ -352,6 +352,10 @@ func GetPackageNameFromDirectory(fileOrDirectoryPath string) string {
 	}
 
 	basename := fileOrDirectoryPath[idx+len("/node_modules/"):]
+	if basename[0] == '.' {
+		return ""
+	}
+
 	nextSlash := strings.Index(basename, "/")
 	if nextSlash == -1 {
 		return basename

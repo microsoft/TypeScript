@@ -558,6 +558,75 @@ export declare const otherValue: string;`,
 	})
 }
 
+func TestHiddenDirectoriesInNodeModules(t *testing.T) {
+	t.Parallel()
+	t.Run("hidden dir resolved via import with nameless package.json", func(t *testing.T) {
+		// Simulates a layout where a symlinked package points into a hidden
+		// store directory (e.g. .store-fuse-unplugged) and the package.json
+		// in the store has no "name" or "version". When PackageId fails,
+		// collectPackageNames falls through to GetPackageNameFromDirectory,
+		// which extracts the hidden directory name from the realpath.
+		t.Parallel()
+		projectRoot := "/home/src/fuse-project"
+		storeDir := projectRoot + "/node_modules/.store-fuse-unplugged"
+		pkgStoreDir := storeDir + "/some-pkg-npm-1.0.0-abc123/package"
+
+		files := map[string]any{
+			projectRoot + "/tsconfig.json": `{
+				"compilerOptions": {
+					"module": "nodenext",
+					"target": "esnext",
+					"strict": true
+				}
+			}`,
+			projectRoot + "/package.json": `{
+				"name": "test-project",
+				"dependencies": {
+					"some-pkg": "*",
+					"real-package": "*"
+				}
+			}`,
+			projectRoot + "/index.ts": `import { something } from "some-pkg";`,
+
+			// Real package that should be indexed normally
+			projectRoot + "/node_modules/real-package/package.json": `{"name":"real-package","version":"1.0.0","types":"index.d.ts"}`,
+			projectRoot + "/node_modules/real-package/index.d.ts":   "export declare const realExport: number;\n",
+
+			// Symlink: node_modules/some-pkg -> .store-fuse-unplugged/.../package/
+			projectRoot + "/node_modules/some-pkg": vfstest.Symlink(pkgStoreDir),
+
+			// Store package with no name/version — PackageId will fail.
+			pkgStoreDir + "/package.json": `{"types":"index.d.ts"}`,
+			pkgStoreDir + "/index.d.ts":   "export declare const something: number;\n",
+
+			// Other content in the hidden store that should never be crawled
+			storeDir + "/other-pkg-npm-2.0.0-def456/package/package.json": `{"name":"other-pkg","types":"index.d.ts"}`,
+			storeDir + "/other-pkg-npm-2.0.0-def456/package/index.d.ts":   "export declare const other: string;\n",
+		}
+
+		session, _ := projecttestutil.Setup(files)
+		t.Cleanup(session.Close)
+
+		ctx := context.Background()
+		indexURI := lsproto.DocumentUri("file://" + projectRoot + "/index.ts")
+		session.DidOpenFile(ctx, indexURI, 1, files[projectRoot+"/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		_, err := session.GetLanguageServiceWithAutoImports(ctx, indexURI)
+		assert.NilError(t, err)
+
+		stats := autoImportStats(t, session)
+		nodeModulesBucket := singleBucket(t, stats.NodeModulesBuckets)
+
+		// .store-fuse-unplugged must not appear as a dependency name.
+		// If it does, extractPackages will try to process the entire hidden
+		// directory (ReadDirectory **/*), which is the CPU/memory blowup.
+		assert.Assert(t, nodeModulesBucket.DependencyNames != nil, "DependencyNames should not be nil")
+		for name := range nodeModulesBucket.DependencyNames.Keys() {
+			assert.Assert(t, name[0] != '.', "hidden directory %q should not appear as a dependency name", name)
+		}
+	})
+}
+
 const (
 	lifecycleProjectRoot = "/home/src/autoimport-lifecycle"
 	monorepoProjectRoot  = "/home/src/autoimport-monorepo"

@@ -217,6 +217,10 @@ func createCheckerPool(program checker.Program) (getChecker func() (*checker.Che
 // to the given set, canonicalizing @types package names to their base names.
 func addPackageJsonDependencies(contents *packagejson.PackageJson, deps *collections.Set[string]) {
 	contents.RangeDependencies(func(name, _, field string) bool {
+		if name == "" || name == "@types/" || name[0] == '.' {
+			// Edge cases that could make us blow up probably
+			return true
+		}
 		if field == "dependencies" || field == "peerDependencies" {
 			deps.Add(module.GetPackageNameFromTypesPackageName(name))
 		}

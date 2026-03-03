@@ -123,7 +123,9 @@ func getFixInfos(ctx context.Context, fixContext *CodeFixContext, errorCode int3
 		if err != nil {
 			return nil, err
 		}
-		info = getFixesInfoForNonUMDImport(ctx, fixContext, symbolToken, view)
+		if view != nil {
+			info = getFixesInfoForNonUMDImport(ctx, fixContext, symbolToken, view)
+		}
 	}
 
 	// Sort fixes by preference

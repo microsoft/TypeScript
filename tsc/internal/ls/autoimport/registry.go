@@ -976,7 +976,7 @@ func (b *registryBuilder) computeDependenciesForNodeModulesDirectory(change Regi
 	// If any open files are in scope of this directory but not in scope of any package.json,
 	// we need to add all packages in this node_modules directory.
 	for path := range change.OpenFiles {
-		if dirPath.ContainsPath(path) && b.getNearestAncestorDirectoryWithValidPackageJson(path) == nil {
+		if dirPath.ContainsPath(path) && b.getNearestAncestorDirectoryWithPackageJson(path) == nil {
 			return nil
 		}
 	}
@@ -1377,9 +1377,9 @@ func (b *registryBuilder) updateNodeModulesBucket(
 	return result, ctx.Err()
 }
 
-func (b *registryBuilder) getNearestAncestorDirectoryWithValidPackageJson(filePath tspath.Path) *directory {
+func (b *registryBuilder) getNearestAncestorDirectoryWithPackageJson(filePath tspath.Path) *directory {
 	return core.FirstResult(tspath.ForEachAncestorDirectoryPath(filePath.GetDirectoryPath(), func(dirPath tspath.Path) (result *directory, stop bool) {
-		if dirEntry, ok := b.directories.Get(dirPath); ok && dirEntry.Value().packageJson.Exists() && dirEntry.Value().packageJson.Contents.Parseable {
+		if dirEntry, ok := b.directories.Get(dirPath); ok && dirEntry.Value().packageJson.Exists() {
 			return dirEntry.Value(), true
 		}
 		return nil, false
