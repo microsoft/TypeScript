@@ -28,26 +28,23 @@ sourceFile:test.tsx
 2 >    ^^^^^^
 3 >          ^
 4 >           ^^^^^^^^^^^^^
-5 >                        ^^
-6 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export class AppComponent {
   >    
 2 >    render
 3 >          (
 4 >           createElement
-5 >                        ) 
 1->Emitted(5, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(5, 11) Source(8, 11) + SourceIndex(0)
 3 >Emitted(5, 12) Source(8, 12) + SourceIndex(0)
 4 >Emitted(5, 25) Source(8, 25) + SourceIndex(0)
-5 >Emitted(5, 27) Source(8, 27) + SourceIndex(0)
 ---
 >>>        return MyElement.createElement("div", null);
 1->^^^^^^^^
 2 >        ^^^^^^^
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                                   ^
-1->{
+1->) {
   >        
 2 >        return 
 3 >               <div />
@@ -61,9 +58,9 @@ sourceFile:test.tsx
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(7, 5) Source(9, 24) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(7, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}

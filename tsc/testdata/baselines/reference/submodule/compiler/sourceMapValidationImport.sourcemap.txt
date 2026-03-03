@@ -15,40 +15,41 @@ sourceFile:sourceMapValidationImport.ts
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^^^^^^^^^^->
+4 >     ^
+5 >      ^^^^^^^^^^->
 1 >
 2 >export namespace 
-3 >    m {
-  >        export class c {
-  >        }
-  >    }
+3 >    m
+4 >      {
+  >         export class c {
+  >         }
+  >     }
 1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(4, 5) Source(1, 18) + SourceIndex(0)
-3 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
+3 >Emitted(4, 6) Source(1, 19) + SourceIndex(0)
+4 >Emitted(4, 7) Source(4, 2) + SourceIndex(0)
 ---
 >>>(function (m) {
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^
+4 >            ^^->
 1->
 2 >export namespace 
 3 >           m
-4 >             
 1->Emitted(5, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(5, 12) Source(1, 18) + SourceIndex(0)
 3 >Emitted(5, 13) Source(1, 19) + SourceIndex(0)
-4 >Emitted(5, 15) Source(1, 20) + SourceIndex(0)
 ---
 >>>    class c {
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^
 3 >          ^
-1 >{
+1-> {
   >    
 2 >    export class 
 3 >          c
-1 >Emitted(6, 5) Source(2, 5) + SourceIndex(0)
+1->Emitted(6, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(6, 11) Source(2, 18) + SourceIndex(0)
 3 >Emitted(6, 12) Source(2, 19) + SourceIndex(0)
 ---
@@ -89,8 +90,8 @@ sourceFile:sourceMapValidationImport.ts
 8 >                     ^
 9 >                      ^^^^^^^^
 1->
-2 >
-  >}
+  >
+2 >}
 3 > 
 4 >   m
 5 >    
@@ -101,7 +102,7 @@ sourceFile:sourceMapValidationImport.ts
   >                          export class c {
   >                          }
   >                      }
-1->Emitted(9, 1) Source(3, 6) + SourceIndex(0)
+1->Emitted(9, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(9, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(9, 4) Source(1, 18) + SourceIndex(0)
 4 >Emitted(9, 5) Source(1, 19) + SourceIndex(0)

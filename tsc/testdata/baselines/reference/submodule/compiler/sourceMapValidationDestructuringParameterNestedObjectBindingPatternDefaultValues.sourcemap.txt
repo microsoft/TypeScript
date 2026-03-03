@@ -122,7 +122,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 31>                                                                                                                                                 ^^
 32>                                                                                                                                                   ^^^
 33>                                                                                                                                                      ^^^^^^
-34>                                                                                                                                                            ^^
 1->
   >
   >
@@ -164,7 +163,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
   >                                                                                                                                                     }
 32>                                                                                                                                                   : Robot = 
 33>                                                                                                                                                      robotA
-34>                                                                                                                                                            ) 
 1->Emitted(3, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(3, 10) Source(13, 10) + SourceIndex(0)
 3 >Emitted(3, 14) Source(13, 14) + SourceIndex(0)
@@ -198,7 +196,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 31>Emitted(3, 148) Source(19, 6) + SourceIndex(0)
 32>Emitted(3, 151) Source(19, 16) + SourceIndex(0)
 33>Emitted(3, 157) Source(19, 22) + SourceIndex(0)
-34>Emitted(3, 159) Source(19, 24) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -209,7 +206,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 6 >                ^^^^^^^^
 7 >                        ^
 8 >                         ^
-1 >{
+1 >) {
   >    
 2 >    console
 3 >           .
@@ -232,9 +229,9 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 2 >^
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >
-  >}
-1 >Emitted(5, 1) Source(20, 27) + SourceIndex(0)
+  >
+2 >}
+1 >Emitted(5, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(5, 2) Source(21, 2) + SourceIndex(0)
 ---
 >>>function foo2({ name: nameC = "name", skills: { primary: primaryB = "primary", secondary: secondaryB = "secondary" } = { primary: "SomeSkill", secondary: "someSkill" } } = robotA) {
@@ -277,7 +274,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 37>                                                                                                                                                                       ^^
 38>                                                                                                                                                                         ^^^
 39>                                                                                                                                                                            ^^^^^^
-40>                                                                                                                                                                                  ^^
 1->
   >
 2 >function 
@@ -325,7 +321,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
   >                                                                                                                                                                           }
 38>                                                                                                                                                                         : Robot = 
 39>                                                                                                                                                                            robotA
-40>                                                                                                                                                                                  ) 
 1->Emitted(6, 1) Source(22, 1) + SourceIndex(0)
 2 >Emitted(6, 10) Source(22, 10) + SourceIndex(0)
 3 >Emitted(6, 14) Source(22, 14) + SourceIndex(0)
@@ -365,7 +360,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 37>Emitted(6, 170) Source(29, 6) + SourceIndex(0)
 38>Emitted(6, 173) Source(29, 16) + SourceIndex(0)
 39>Emitted(6, 179) Source(29, 22) + SourceIndex(0)
-40>Emitted(6, 181) Source(29, 24) + SourceIndex(0)
 ---
 >>>    console.log(secondaryB);
 1 >^^^^
@@ -376,7 +370,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 6 >                ^^^^^^^^^^
 7 >                          ^
 8 >                           ^
-1 >{
+1 >) {
   >    
 2 >    console
 3 >           .
@@ -399,9 +393,9 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 2 >^
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >
-  >}
-1 >Emitted(8, 1) Source(30, 29) + SourceIndex(0)
+  >
+2 >}
+1 >Emitted(8, 1) Source(31, 1) + SourceIndex(0)
 2 >Emitted(8, 2) Source(31, 2) + SourceIndex(0)
 ---
 >>>function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" } } = robotA) {
@@ -424,7 +418,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 17>                                                                         ^^
 18>                                                                           ^^^
 19>                                                                              ^^^^^^
-20>                                                                                    ^^
 1->
   >
 2 >function 
@@ -445,7 +438,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 17>                                                                           }
 18>                                                                           : Robot = 
 19>                                                                              robotA
-20>                                                                                    ) 
 1->Emitted(9, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(9, 10) Source(32, 10) + SourceIndex(0)
 3 >Emitted(9, 14) Source(32, 14) + SourceIndex(0)
@@ -465,7 +457,6 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 17>Emitted(9, 76) Source(32, 77) + SourceIndex(0)
 18>Emitted(9, 79) Source(32, 87) + SourceIndex(0)
 19>Emitted(9, 85) Source(32, 93) + SourceIndex(0)
-20>Emitted(9, 87) Source(32, 95) + SourceIndex(0)
 ---
 >>>    console.log(skills.primary);
 1 >^^^^
@@ -478,7 +469,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 8 >                       ^^^^^^^
 9 >                              ^
 10>                               ^
-1 >{
+1 >) {
   >    
 2 >    console
 3 >           .
@@ -505,9 +496,9 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 2 >^
 3 > ^^^^^^^^^^^^^->
 1 >
-2 >
-  >}
-1 >Emitted(11, 1) Source(33, 33) + SourceIndex(0)
+  >
+2 >}
+1 >Emitted(11, 1) Source(34, 1) + SourceIndex(0)
 2 >Emitted(11, 2) Source(34, 2) + SourceIndex(0)
 ---
 >>>foo1(robotA);

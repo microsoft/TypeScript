@@ -9,11 +9,10 @@
 +11>                                        ^^
 +12>                                          ^^^
 +13>                                             ^^
-+14>                                               ^^
  1->
    >
    >
-@@= skipped -14, +16 lines =@@
+@@= skipped -14, +15 lines =@@
  8 >                      nameA
  9 >                            = 
  10>                              "<NoName>"
@@ -22,11 +21,10 @@
 +11>                                         }
 +12>                                          : Robot = 
 +13>                                             { }
-+14>                                               ) 
  1->Emitted(4, 1) Source(11, 1) + SourceIndex(0)
  2 >Emitted(4, 10) Source(11, 10) + SourceIndex(0)
  3 >Emitted(4, 14) Source(11, 14) + SourceIndex(0)
-@@= skipped -12, +14 lines =@@
+@@= skipped -12, +13 lines =@@
  8 >Emitted(4, 28) Source(11, 28) + SourceIndex(0)
  9 >Emitted(4, 31) Source(11, 31) + SourceIndex(0)
  10>Emitted(4, 41) Source(11, 41) + SourceIndex(0)
@@ -35,33 +33,10 @@
 +11>Emitted(4, 43) Source(11, 43) + SourceIndex(0)
 +12>Emitted(4, 46) Source(11, 53) + SourceIndex(0)
 +13>Emitted(4, 48) Source(11, 56) + SourceIndex(0)
-+14>Emitted(4, 50) Source(11, 58) + SourceIndex(0)
  ---
  >>>    console.log(nameA);
  1 >^^^^
-@@= skipped -12, +14 lines =@@
- 6 >                ^^^^^
- 7 >                     ^
- 8 >                      ^
--1 >) {
-+1 >{
-   >    
- 2 >    console
- 3 >           .
-@@= skipped -23, +23 lines =@@
- 2 >^
- 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
--  >
--2 >}
--1 >Emitted(6, 1) Source(13, 1) + SourceIndex(0)
-+2 >
-+  >}
-+1 >Emitted(6, 1) Source(12, 24) + SourceIndex(0)
- 2 >Emitted(6, 2) Source(13, 2) + SourceIndex(0)
- ---
- >>>function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" } = {}) {
-@@= skipped -22, +22 lines =@@
+@@= skipped -57, +58 lines =@@
  14>                                                 ^^^^^^
  15>                                                       ^^^
  16>                                                          ^^^^^^^^^
@@ -70,11 +45,10 @@
 +17>                                                                   ^^
 +18>                                                                     ^^^
 +19>                                                                        ^^
-+20>                                                                          ^^
  1->
    >
  2 >function 
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +20 lines =@@
  14>                                                 skillB
  15>                                                        = 
  16>                                                          "noSkill"
@@ -83,11 +57,10 @@
 +17>                                                                    }
 +18>                                                                     : Robot = 
 +19>                                                                        {}
-+20>                                                                          ) 
  1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
  2 >Emitted(7, 10) Source(14, 10) + SourceIndex(0)
  3 >Emitted(7, 14) Source(14, 14) + SourceIndex(0)
-@@= skipped -18, +20 lines =@@
+@@= skipped -18, +19 lines =@@
  14>Emitted(7, 56) Source(14, 56) + SourceIndex(0)
  15>Emitted(7, 59) Source(14, 59) + SourceIndex(0)
  16>Emitted(7, 68) Source(14, 68) + SourceIndex(0)
@@ -96,33 +69,10 @@
 +17>Emitted(7, 70) Source(14, 70) + SourceIndex(0)
 +18>Emitted(7, 73) Source(14, 80) + SourceIndex(0)
 +19>Emitted(7, 75) Source(14, 82) + SourceIndex(0)
-+20>Emitted(7, 77) Source(14, 84) + SourceIndex(0)
  ---
  >>>    console.log(nameB);
  1 >^^^^
-@@= skipped -12, +14 lines =@@
- 6 >                ^^^^^
- 7 >                     ^
- 8 >                      ^
--1 >) {
-+1 >{
-   >    
- 2 >    console
- 3 >           .
-@@= skipped -23, +23 lines =@@
- 2 >^
- 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
--  >
--2 >}
--1 >Emitted(9, 1) Source(16, 1) + SourceIndex(0)
-+2 >
-+  >}
-+1 >Emitted(9, 1) Source(15, 24) + SourceIndex(0)
- 2 >Emitted(9, 2) Source(16, 2) + SourceIndex(0)
- ---
- >>>function foo3({ name = "<NoName>" } = {}) {
-@@= skipped -14, +14 lines =@@
+@@= skipped -49, +50 lines =@@
  6 >                ^^^^
  7 >                    ^^^
  8 >                       ^^^^^^^^^^
@@ -131,11 +81,10 @@
 +9 >                                 ^^
 +10>                                   ^^^
 +11>                                      ^^
-+12>                                        ^^
  1->
    >
  2 >function 
-@@= skipped -11, +13 lines =@@
+@@= skipped -11, +12 lines =@@
  6 >                name
  7 >                     = 
  8 >                       "<NoName>"
@@ -144,11 +93,10 @@
 +9 >                                  }
 +10>                                   : Robot = 
 +11>                                      {}
-+12>                                        ) 
  1->Emitted(10, 1) Source(17, 1) + SourceIndex(0)
  2 >Emitted(10, 10) Source(17, 10) + SourceIndex(0)
  3 >Emitted(10, 14) Source(17, 14) + SourceIndex(0)
-@@= skipped -10, +12 lines =@@
+@@= skipped -10, +11 lines =@@
  6 >Emitted(10, 21) Source(17, 21) + SourceIndex(0)
  7 >Emitted(10, 24) Source(17, 24) + SourceIndex(0)
  8 >Emitted(10, 34) Source(17, 34) + SourceIndex(0)
@@ -157,29 +105,6 @@
 +9 >Emitted(10, 36) Source(17, 36) + SourceIndex(0)
 +10>Emitted(10, 39) Source(17, 46) + SourceIndex(0)
 +11>Emitted(10, 41) Source(17, 48) + SourceIndex(0)
-+12>Emitted(10, 43) Source(17, 50) + SourceIndex(0)
  ---
  >>>    console.log(name);
  1 >^^^^
-@@= skipped -12, +14 lines =@@
- 6 >                ^^^^
- 7 >                    ^
- 8 >                     ^
--1 >) {
-+1 >{
-   >    
- 2 >    console
- 3 >           .
-@@= skipped -23, +23 lines =@@
- 2 >^
- 3 > ^^^^^^^^^^^^^->
- 1 >
--  >
--2 >}
--1 >Emitted(12, 1) Source(19, 1) + SourceIndex(0)
-+2 >
-+  >}
-+1 >Emitted(12, 1) Source(18, 23) + SourceIndex(0)
- 2 >Emitted(12, 2) Source(19, 2) + SourceIndex(0)
- ---
- >>>foo1(robotA);

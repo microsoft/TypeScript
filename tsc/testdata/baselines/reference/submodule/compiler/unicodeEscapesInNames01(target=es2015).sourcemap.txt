@@ -245,14 +245,11 @@ sourceFile:IdentifierNameWithEscape1.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.\u0078 = 0;
 1->^^^^^^^^
@@ -262,7 +259,7 @@ sourceFile:IdentifierNameWithEscape1.ts
 5 >                   ^^^
 6 >                      ^
 7 >                       ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -283,24 +280,21 @@ sourceFile:IdentifierNameWithEscape1.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 25) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^->
+3 >           ^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.x = 42;
 1->^^^^^^^^
@@ -310,7 +304,7 @@ sourceFile:IdentifierNameWithEscape1.ts
 5 >              ^^^
 6 >                 ^^
 7 >                   ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -330,9 +324,9 @@ sourceFile:IdentifierNameWithEscape1.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 21) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -381,14 +375,11 @@ sourceFile:IdentifierNameWithEscape2.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.x\u0078 = 0;
 1->^^^^^^^^
@@ -398,7 +389,7 @@ sourceFile:IdentifierNameWithEscape2.ts
 5 >                    ^^^
 6 >                       ^
 7 >                        ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -419,24 +410,21 @@ sourceFile:IdentifierNameWithEscape2.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 26) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^^->
+3 >           ^^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.xx = 42;
 1->^^^^^^^^
@@ -446,7 +434,7 @@ sourceFile:IdentifierNameWithEscape2.ts
 5 >               ^^^
 6 >                  ^^
 7 >                    ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -466,9 +454,9 @@ sourceFile:IdentifierNameWithEscape2.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 22) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -517,14 +505,11 @@ sourceFile:IdentifierNameWithExtendedEscape1.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.\u{78} = 0;
 1->^^^^^^^^
@@ -534,7 +519,7 @@ sourceFile:IdentifierNameWithExtendedEscape1.ts
 5 >                   ^^^
 6 >                      ^
 7 >                       ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -555,24 +540,21 @@ sourceFile:IdentifierNameWithExtendedEscape1.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 25) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^->
+3 >           ^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.x = 42;
 1->^^^^^^^^
@@ -582,7 +564,7 @@ sourceFile:IdentifierNameWithExtendedEscape1.ts
 5 >              ^^^
 6 >                 ^^
 7 >                   ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -602,9 +584,9 @@ sourceFile:IdentifierNameWithExtendedEscape1.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 21) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -653,14 +635,11 @@ sourceFile:IdentifierNameWithExtendedEscape2.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.x\u{78} = 0;
 1->^^^^^^^^
@@ -670,7 +649,7 @@ sourceFile:IdentifierNameWithExtendedEscape2.ts
 5 >                    ^^^
 6 >                       ^
 7 >                        ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -691,24 +670,21 @@ sourceFile:IdentifierNameWithExtendedEscape2.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 26) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^^->
+3 >           ^^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.xx = 42;
 1->^^^^^^^^
@@ -718,7 +694,7 @@ sourceFile:IdentifierNameWithExtendedEscape2.ts
 5 >               ^^^
 6 >                  ^^
 7 >                    ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -738,9 +714,9 @@ sourceFile:IdentifierNameWithExtendedEscape2.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 22) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -789,14 +765,11 @@ sourceFile:PrivateIdentifierNameWithEscape1.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.#\u0078 = 0;
 1->^^^^^^^^
@@ -806,7 +779,7 @@ sourceFile:PrivateIdentifierNameWithEscape1.ts
 5 >                    ^^^
 6 >                       ^
 7 >                        ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -827,24 +800,21 @@ sourceFile:PrivateIdentifierNameWithEscape1.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 26) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^^->
+3 >           ^^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.#x = 42;
 1->^^^^^^^^
@@ -854,7 +824,7 @@ sourceFile:PrivateIdentifierNameWithEscape1.ts
 5 >               ^^^
 6 >                  ^^
 7 >                    ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -874,9 +844,9 @@ sourceFile:PrivateIdentifierNameWithEscape1.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 22) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -925,14 +895,11 @@ sourceFile:PrivateIdentifierNameWithEscape2.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.#x\u0078 = 0;
 1->^^^^^^^^
@@ -942,7 +909,7 @@ sourceFile:PrivateIdentifierNameWithEscape2.ts
 5 >                     ^^^
 6 >                        ^
 7 >                         ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -963,24 +930,21 @@ sourceFile:PrivateIdentifierNameWithEscape2.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 27) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^^^->
+3 >           ^^^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.#xx = 42;
 1->^^^^^^^^
@@ -990,7 +954,7 @@ sourceFile:PrivateIdentifierNameWithEscape2.ts
 5 >                ^^^
 6 >                   ^^
 7 >                     ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -1010,9 +974,9 @@ sourceFile:PrivateIdentifierNameWithEscape2.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 23) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -1061,14 +1025,11 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.#\u{78} = 0;
 1->^^^^^^^^
@@ -1078,7 +1039,7 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
 5 >                    ^^^
 6 >                       ^
 7 >                        ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -1099,24 +1060,21 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 26) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^^->
+3 >           ^^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.#x = 42;
 1->^^^^^^^^
@@ -1126,7 +1084,7 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
 5 >               ^^^
 6 >                  ^^
 7 >                    ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -1146,9 +1104,9 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 22) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}
@@ -1197,14 +1155,11 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 ---
 >>>    constructor() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >    
-2 >    constructor() 
 1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>        this.#x\u{78} = 0;
 1->^^^^^^^^
@@ -1214,7 +1169,7 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 5 >                     ^^^
 6 >                        ^
 7 >                         ^
-1->{
+1->constructor() {
   >        
 2 >        this
 3 >            .
@@ -1235,24 +1190,21 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 2 >    ^
 3 >     ^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(5, 5) Source(5, 27) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(5, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(5, 6) Source(6, 6) + SourceIndex(0)
 ---
 >>>    doThing() {
 1->^^^^
 2 >    ^^^^^^^
-3 >           ^^^
-4 >              ^^^^^^^^^->
+3 >           ^^^^^^^^^^^^->
 1->
   >
   >    
 2 >    doThing
-3 >           () 
 1->Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(6, 12) Source(8, 12) + SourceIndex(0)
-3 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>        this.#xx = 42;
 1->^^^^^^^^
@@ -1262,7 +1214,7 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 5 >                ^^^
 6 >                   ^^
 7 >                     ^
-1->{
+1->() {
   >        
 2 >        this
 3 >            .
@@ -1282,9 +1234,9 @@ sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 1 >^^^^
 2 >    ^
 1 >
-2 >    
-  >        }
-1 >Emitted(8, 5) Source(9, 23) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(8, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>}

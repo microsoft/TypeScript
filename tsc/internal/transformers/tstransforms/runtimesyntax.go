@@ -281,7 +281,11 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 	tx.EmitContext().SetOriginal(varStatement, node)
 
 	// Adjust the source map emit to match the old emitter.
-	tx.EmitContext().SetSourceMapRange(varDecls, node.Loc)
+	if ast.IsEnumDeclaration(node) {
+		tx.EmitContext().SetSourceMapRange(varDecls, node.Loc)
+	} else {
+		tx.EmitContext().SetSourceMapRange(varStatement, node.Loc)
+	}
 
 	// Trailing comments for enum declaration should be emitted after the function closure
 	// instead of the variable statement:

@@ -13,17 +13,12 @@
  2 >Emitted(7, 7) Source(12, 7) + SourceIndex(0)
  3 >Emitted(7, 10) Source(12, 10) + SourceIndex(0)
  ---
-->>>    constructor() {
 +>>>    \u{102A7};
- 1->^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1->^^^^
 +2 >    ^^^^^^^^^
 +3 >             ^
 +4 >              ^^^^^^->
- 1-> {
--  >    \u{102A7}: string;
--  >    
--1->Emitted(8, 5) Source(14, 5) + SourceIndex(0)
++1-> {
 +  >    
 +2 >    \u{102A7}
 +3 >             : string;
@@ -31,28 +26,19 @@
 +2 >Emitted(8, 14) Source(13, 14) + SourceIndex(0)
 +3 >Emitted(8, 15) Source(13, 23) + SourceIndex(0)
 +---
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^^^^^^^^^^->
+ >>>    constructor() {
+ 1->^^^^
+ 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1-> {
+-  >    \u{102A7}: string;
 +1->
-+  >    
-+2 >    constructor() 
+   >    
+-1->Emitted(8, 5) Source(14, 5) + SourceIndex(0)
 +1->Emitted(9, 5) Source(14, 5) + SourceIndex(0)
-+2 >Emitted(9, 19) Source(14, 19) + SourceIndex(0)
  ---
  >>>        this.\u{102A7} = " world";
  1->^^^^^^^^
-@@= skipped -16, +31 lines =@@
- 5 >                      ^^^
- 6 >                         ^^^^^^^^
- 7 >                                 ^
--1->constructor() {
-+1->{
-   >        
- 2 >        this
- 3 >            .
-@@= skipped -8, +8 lines =@@
+@@= skipped -24, +36 lines =@@
  5 >                       = 
  6 >                         " world"
  7 >                                 ;
@@ -73,45 +59,31 @@
  ---
  >>>    }
  1 >^^^^
- 2 >    ^
- 3 >     ^^^^^^^^^^^->
+@@= skipped -15, +15 lines =@@
  1 >
--  >    
--2 >    }
+   >    
+ 2 >    }
 -1 >Emitted(10, 5) Source(16, 5) + SourceIndex(0)
 -2 >Emitted(10, 6) Source(16, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(15, 35) + SourceIndex(0)
++1 >Emitted(11, 5) Source(16, 5) + SourceIndex(0)
 +2 >Emitted(11, 6) Source(16, 6) + SourceIndex(0)
  ---
  >>>    methodA() {
  1->^^^^
  2 >    ^^^^^^^
 -3 >           ^^^^^^^^^^^^^->
-+3 >           ^^^
-+4 >              ^^^^^^^^^^^^->
++3 >           ^^^^^^^^^^^^^^^->
  1->
    >    
  2 >    methodA
 -1->Emitted(11, 5) Source(17, 5) + SourceIndex(0)
 -2 >Emitted(11, 12) Source(17, 12) + SourceIndex(0)
-+3 >           () 
 +1->Emitted(12, 5) Source(17, 5) + SourceIndex(0)
 +2 >Emitted(12, 12) Source(17, 12) + SourceIndex(0)
-+3 >Emitted(12, 15) Source(17, 15) + SourceIndex(0)
  ---
  >>>        return this.𐊧;
  1->^^^^^^^^
-@@= skipped -35, +38 lines =@@
- 4 >                   ^
- 5 >                    ^^
- 6 >                      ^
--1->() {
-+1->{
-   >        
- 2 >        return 
- 3 >               this
+@@= skipped -27, +27 lines =@@
  4 >                   .
  5 >                    𐊧
  6 >                      ;
@@ -130,15 +102,13 @@
  ---
  >>>    }
  1 >^^^^
- 2 >    ^
+@@= skipped -13, +13 lines =@@
  1 >
--  >    
--2 >    }
+   >    
+ 2 >    }
 -1 >Emitted(13, 5) Source(19, 5) + SourceIndex(0)
 -2 >Emitted(13, 6) Source(19, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(14, 5) Source(18, 24) + SourceIndex(0)
++1 >Emitted(14, 5) Source(19, 5) + SourceIndex(0)
 +2 >Emitted(14, 6) Source(19, 6) + SourceIndex(0)
  ---
  >>>}
@@ -152,7 +122,7 @@
  ---
  >>>export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
  1->
-@@= skipped -71, +71 lines =@@
+@@= skipped -51, +51 lines =@@
  17>                                                 methodA
  18>                                                        ()
  19>                                                          ;

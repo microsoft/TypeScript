@@ -196,7 +196,7 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 //# sourceMappingURL=index.js.map
 //// [/user/username/projects/sample1/logic/index.js.map] *new* 
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,CAAC,MAAM,eAAe,CAAC;AACnC,MAAM,UAAU,eAAe,GAAG;IAC9B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAAA,CAC7B;AACD,OAAO,KAAK,GAAG,MAAM,uBAAuB,CAAC;AAC7C,MAAM,CAAC,MAAM,CAAC,GAAG,GAAG,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,CAAC,MAAM,eAAe,CAAC;AACnC,MAAM,UAAU,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AACD,OAAO,KAAK,GAAG,MAAM,uBAAuB,CAAC;AAC7C,MAAM,CAAC,MAAM,CAAC,GAAG,GAAG,CAAC"}
 //// [/user/username/projects/sample1/logic/out/decls/index.d.ts] *new* 
 export declare function getSecondsInDay(): number;
 import * as mod from '../core/anotherModule';

@@ -1554,6 +1554,7 @@ func (p *Printer) emitSignature(node *ast.Node) {
 }
 
 func (p *Printer) emitFunctionBody(body *ast.Block) {
+	p.emitContext.AddEmitFlags(body.AsNode(), EFNoSourceMap)
 	state := p.enterNode(body.AsNode())
 	p.generateNames(body.AsNode())
 
@@ -5188,7 +5189,12 @@ func (p *Printer) emitCommentsAfterNode(node *ast.Node, state *commentState) {
 }
 
 func (p *Printer) emitCommentsBeforeToken(token ast.Kind, pos int, contextNode *ast.Node, flags tokenEmitFlags) (*commentState, int) {
-	if flags&tefNoComments != 0 {
+	if flags&tefNoComments != 0 || p.commentsDisabled {
+		// Still skip trivia so that the returned pos correctly identifies the token position.
+		// This is needed for trailing source map positions (writeTokenText advances pos by token length).
+		if p.currentSourceFile != nil && !ast.PositionIsSynthesized(pos) {
+			pos = scanner.SkipTrivia(p.currentSourceFile.Text(), pos)
+		}
 		return nil, pos
 	}
 
@@ -5696,8 +5702,9 @@ func (p *Printer) emitSourceMapsBeforeNode(node *ast.Node) *sourceMapState {
 
 	if !ast.IsNotEmittedStatement(node) &&
 		emitFlags&EFNoLeadingSourceMap == 0 &&
+		p.currentSourceFile != nil &&
 		!ast.PositionIsSynthesized(loc.Pos()) {
-		p.emitSourcePos(p.sourceMapSource, scanner.SkipTrivia(p.currentSourceFile.Text(), loc.Pos())) // !!! support SourceMapRange from Strada?
+		p.emitSourcePos(p.sourceMapSource, scanner.SkipTrivia(p.currentSourceFile.Text(), loc.Pos()))
 	}
 
 	if emitFlags&EFNoNestedSourceMaps != 0 {
@@ -5724,7 +5731,7 @@ func (p *Printer) emitSourceMapsAfterNode(node *ast.Node, previousState *sourceM
 	if !ast.IsNotEmittedStatement(node) &&
 		emitFlags&EFNoTrailingSourceMap == 0 &&
 		!ast.PositionIsSynthesized(loc.End()) {
-		p.emitSourcePos(p.sourceMapSource, loc.End()) // !!! support SourceMapRange from Strada?
+		p.emitSourcePos(p.sourceMapSource, loc.End())
 	}
 }
 
@@ -5735,13 +5742,14 @@ func (p *Printer) emitSourceMapsBeforeToken(token ast.Kind, pos int, contextNode
 
 	emitFlags := p.emitContext.EmitFlags(contextNode)
 	loc, hasLoc := p.emitContext.TokenSourceMapRange(contextNode, token)
-	if emitFlags&EFNoTokenLeadingSourceMaps == 0 {
-		if hasLoc {
-			pos = loc.Pos()
-		}
-		if pos >= 0 {
-			p.emitSourcePos(p.sourceMapSource, pos) // !!! support SourceMapRange from Strada?
-		}
+	if hasLoc {
+		pos = loc.Pos()
+	}
+	if pos >= 0 && p.currentSourceFile != nil {
+		pos = scanner.SkipTrivia(p.currentSourceFile.Text(), pos)
+	}
+	if emitFlags&EFNoTokenLeadingSourceMaps == 0 && pos >= 0 {
+		p.emitSourcePos(p.sourceMapSource, pos)
 	}
 
 	state := p.sourceMapStatePool.New()
@@ -5762,7 +5770,7 @@ func (p *Printer) emitSourceMapsAfterToken(token ast.Kind, pos int, contextNode 
 			pos = loc.End()
 		}
 		if pos >= 0 {
-			p.emitSourcePos(p.sourceMapSource, pos) // !!! support SourceMapRange from Strada?
+			p.emitSourcePos(p.sourceMapSource, pos)
 		}
 	}
 }

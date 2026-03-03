@@ -51,31 +51,7 @@
  ---
  >>>    method() { }
  1->^^^^
- 2 >    ^^^^^^
--3 >          ^^^^^
--4 >               ^
-+3 >          ^^^
-+4 >             ^^
-+5 >               ^
- 1->
-   >    
- 2 >    method
--3 >          () {
--4 >               }
-+3 >          () 
-+4 >             {
-+5 >               }
- 1->Emitted(7, 5) Source(8, 5) + SourceIndex(0)
- 2 >Emitted(7, 11) Source(8, 11) + SourceIndex(0)
--3 >Emitted(7, 16) Source(8, 15) + SourceIndex(0)
--4 >Emitted(7, 17) Source(8, 16) + SourceIndex(0)
-+3 >Emitted(7, 14) Source(8, 14) + SourceIndex(0)
-+4 >Emitted(7, 16) Source(8, 15) + SourceIndex(0)
-+5 >Emitted(7, 17) Source(8, 16) + SourceIndex(0)
- ---
- >>>    @dec
- 1 >^^^^
-@@= skipped -42, +42 lines =@@
+@@= skipped -42, +39 lines =@@
  3 >Emitted(8, 9) Source(10, 9) + SourceIndex(0)
  ---
  >>>    @dec
@@ -100,55 +76,7 @@
  ---
  >>>    get x() { return 1; }
  1->^^^^^^^^
- 2 >        ^
--3 >         ^^^^^
--4 >              ^^^^^^^
--5 >                     ^
--6 >                      ^
--7 >                       ^
--8 >                        ^
-+3 >         ^^^
-+4 >            ^^
-+5 >              ^^^^^^^
-+6 >                     ^
-+7 >                      ^
-+8 >                       ^
-+9 >                        ^
- 1->
-   >    get 
- 2 >        x
--3 >         () { 
--4 >              return 
--5 >                     1
--6 >                      ;
--7 >                        
--8 >                        }
-+3 >         () 
-+4 >            { 
-+5 >              return 
-+6 >                     1
-+7 >                      ;
-+8 >                       
-+9 >                         }
- 1->Emitted(10, 9) Source(12, 9) + SourceIndex(0)
- 2 >Emitted(10, 10) Source(12, 10) + SourceIndex(0)
--3 >Emitted(10, 15) Source(12, 15) + SourceIndex(0)
--4 >Emitted(10, 22) Source(12, 22) + SourceIndex(0)
--5 >Emitted(10, 23) Source(12, 23) + SourceIndex(0)
--6 >Emitted(10, 24) Source(12, 24) + SourceIndex(0)
--7 >Emitted(10, 25) Source(12, 25) + SourceIndex(0)
--8 >Emitted(10, 26) Source(12, 26) + SourceIndex(0)
-+3 >Emitted(10, 13) Source(12, 13) + SourceIndex(0)
-+4 >Emitted(10, 15) Source(12, 15) + SourceIndex(0)
-+5 >Emitted(10, 22) Source(12, 22) + SourceIndex(0)
-+6 >Emitted(10, 23) Source(12, 23) + SourceIndex(0)
-+7 >Emitted(10, 24) Source(12, 24) + SourceIndex(0)
-+8 >Emitted(10, 25) Source(12, 24) + SourceIndex(0)
-+9 >Emitted(10, 26) Source(12, 26) + SourceIndex(0)
- ---
- >>>    @dec
- 1 >^^^^
-@@= skipped -54, +54 lines =@@
+@@= skipped -54, +51 lines =@@
  3 >Emitted(11, 9) Source(14, 9) + SourceIndex(0)
  ---
  >>>    @dec
@@ -173,37 +101,7 @@
  ---
  >>>    set x(value) { }
  1->^^^^^^^^
- 2 >        ^
- 3 >         ^
- 4 >          ^^^^^
--5 >               ^^^^
--6 >                   ^
-+5 >               ^^
-+6 >                 ^^
-+7 >                   ^
- 1->
-   >    set 
- 2 >        x
- 3 >         (
- 4 >          value: number
--5 >               ) { 
--6 >                   }
-+5 >               ) 
-+6 >                 {
-+7 >                    }
- 1->Emitted(13, 9) Source(16, 9) + SourceIndex(0)
- 2 >Emitted(13, 10) Source(16, 10) + SourceIndex(0)
- 3 >Emitted(13, 11) Source(16, 11) + SourceIndex(0)
- 4 >Emitted(13, 16) Source(16, 24) + SourceIndex(0)
--5 >Emitted(13, 20) Source(16, 28) + SourceIndex(0)
--6 >Emitted(13, 21) Source(16, 29) + SourceIndex(0)
-+5 >Emitted(13, 18) Source(16, 26) + SourceIndex(0)
-+6 >Emitted(13, 20) Source(16, 27) + SourceIndex(0)
-+7 >Emitted(13, 21) Source(16, 29) + SourceIndex(0)
- ---
- >>>    @dec
- 1 >^^^^
-@@= skipped -48, +48 lines =@@
+@@= skipped -48, +45 lines =@@
  3 >Emitted(14, 9) Source(18, 9) + SourceIndex(0)
  ---
  >>>    @dec
@@ -278,37 +176,7 @@
  ---
  >>>    static #method() { }
  1->^^^^
- 2 >    ^^^^^^
- 3 >          ^
- 4 >           ^^^^^^^
--5 >                  ^^^^^
--6 >                       ^
-+5 >                  ^^^
-+6 >                     ^^
-+7 >                       ^
- 1->
-   >    
- 2 >    static
- 3 >           
- 4 >           #method
--5 >                  () {
--6 >                       }
-+5 >                  () 
-+6 >                     {
-+7 >                       }
- 1->Emitted(22, 5) Source(28, 5) + SourceIndex(0)
- 2 >Emitted(22, 11) Source(28, 11) + SourceIndex(0)
- 3 >Emitted(22, 12) Source(28, 12) + SourceIndex(0)
- 4 >Emitted(22, 19) Source(28, 19) + SourceIndex(0)
--5 >Emitted(22, 24) Source(28, 23) + SourceIndex(0)
--6 >Emitted(22, 25) Source(28, 24) + SourceIndex(0)
-+5 >Emitted(22, 22) Source(28, 22) + SourceIndex(0)
-+6 >Emitted(22, 24) Source(28, 23) + SourceIndex(0)
-+7 >Emitted(22, 25) Source(28, 24) + SourceIndex(0)
- ---
- >>>    @dec
- 1 >^^^^
-@@= skipped -48, +48 lines =@@
+@@= skipped -48, +45 lines =@@
  3 >Emitted(23, 9) Source(30, 9) + SourceIndex(0)
  ---
  >>>    @dec
@@ -333,61 +201,7 @@
  ---
  >>>    static get #x() { return 1; }
  1->^^^^
- 2 >    ^^^^^^
- 3 >          ^^^^^
- 4 >               ^^
--5 >                 ^^^^^
--6 >                      ^^^^^^^
--7 >                             ^
--8 >                              ^
--9 >                               ^
--10>                                ^
-+5 >                 ^^^
-+6 >                    ^^
-+7 >                      ^^^^^^^
-+8 >                             ^
-+9 >                              ^
-+10>                               ^
-+11>                                ^
- 1->
-   >    
- 2 >    static
- 3 >           get 
- 4 >               #x
--5 >                 () { 
--6 >                      return 
--7 >                             1
--8 >                              ;
--9 >                                
--10>                                }
-+5 >                 () 
-+6 >                    { 
-+7 >                      return 
-+8 >                             1
-+9 >                              ;
-+10>                               
-+11>                                 }
- 1->Emitted(25, 5) Source(32, 5) + SourceIndex(0)
- 2 >Emitted(25, 11) Source(32, 11) + SourceIndex(0)
- 3 >Emitted(25, 16) Source(32, 16) + SourceIndex(0)
- 4 >Emitted(25, 18) Source(32, 18) + SourceIndex(0)
--5 >Emitted(25, 23) Source(32, 23) + SourceIndex(0)
--6 >Emitted(25, 30) Source(32, 30) + SourceIndex(0)
--7 >Emitted(25, 31) Source(32, 31) + SourceIndex(0)
--8 >Emitted(25, 32) Source(32, 32) + SourceIndex(0)
--9 >Emitted(25, 33) Source(32, 33) + SourceIndex(0)
--10>Emitted(25, 34) Source(32, 34) + SourceIndex(0)
-+5 >Emitted(25, 21) Source(32, 21) + SourceIndex(0)
-+6 >Emitted(25, 23) Source(32, 23) + SourceIndex(0)
-+7 >Emitted(25, 30) Source(32, 30) + SourceIndex(0)
-+8 >Emitted(25, 31) Source(32, 31) + SourceIndex(0)
-+9 >Emitted(25, 32) Source(32, 32) + SourceIndex(0)
-+10>Emitted(25, 33) Source(32, 32) + SourceIndex(0)
-+11>Emitted(25, 34) Source(32, 34) + SourceIndex(0)
- ---
- >>>    @dec
- 1 >^^^^
-@@= skipped -60, +60 lines =@@
+@@= skipped -60, +57 lines =@@
  3 >Emitted(26, 9) Source(34, 9) + SourceIndex(0)
  ---
  >>>    @dec
@@ -412,42 +226,7 @@
  ---
  >>>    static set #x(value) { }
  1->^^^^
-@@= skipped -19, +16 lines =@@
- 4 >               ^^
- 5 >                 ^
- 6 >                  ^^^^^
--7 >                       ^^^^
--8 >                           ^
-+7 >                       ^^
-+8 >                         ^^
-+9 >                           ^
- 1->
-   >    
- 2 >    static
-@@= skipped -9, +10 lines =@@
- 4 >               #x
- 5 >                 (
- 6 >                  value: number
--7 >                       ) { 
--8 >                           }
-+7 >                       ) 
-+8 >                         {
-+9 >                            }
- 1->Emitted(28, 5) Source(36, 5) + SourceIndex(0)
- 2 >Emitted(28, 11) Source(36, 11) + SourceIndex(0)
- 3 >Emitted(28, 16) Source(36, 16) + SourceIndex(0)
- 4 >Emitted(28, 18) Source(36, 18) + SourceIndex(0)
- 5 >Emitted(28, 19) Source(36, 19) + SourceIndex(0)
- 6 >Emitted(28, 24) Source(36, 32) + SourceIndex(0)
--7 >Emitted(28, 28) Source(36, 36) + SourceIndex(0)
--8 >Emitted(28, 29) Source(36, 37) + SourceIndex(0)
-+7 >Emitted(28, 26) Source(36, 34) + SourceIndex(0)
-+8 >Emitted(28, 28) Source(36, 35) + SourceIndex(0)
-+9 >Emitted(28, 29) Source(36, 37) + SourceIndex(0)
- ---
- >>>    @dec
- 1 >^^^^
-@@= skipped -26, +28 lines =@@
+@@= skipped -54, +51 lines =@@
  3 >Emitted(29, 9) Source(38, 9) + SourceIndex(0)
  ---
  >>>    @dec

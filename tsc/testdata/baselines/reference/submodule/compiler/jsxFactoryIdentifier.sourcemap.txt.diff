@@ -1,110 +1,6 @@
 --- old.jsxFactoryIdentifier.sourcemap.txt
 +++ new.jsxFactoryIdentifier.sourcemap.txt
-@@= skipped -14, +14 lines =@@
- 1 >
- 2 >^^^^
- 3 >    ^^^^^^^
--4 >           ^
--5 >            ^^^^^^^^^^->
-+4 >           ^^^^^^^^^^^->
- 1 >declare namespace JSX {
-   >    interface Element {
-   >        name: string;
-@@= skipped -16, +15 lines =@@
-   >}
-   >
- 2 >export namespace 
--3 >    Element
--4 >            {
--  >               export function isElement(el: any): el is JSX.Element {
--  >                   return el.markAsChildOfRootElement !== undefined;
--  >               }
--  >           
--  >               export function createElement(args: any[]) {
--  >           
--  >                   return {
--  >                   }
--  >               }
--  >           }
-+3 >    Element {
-+  >        export function isElement(el: any): el is JSX.Element {
-+  >            return el.markAsChildOfRootElement !== undefined;
-+  >        }
-+  >    
-+  >        export function createElement(args: any[]) {
-+  >    
-+  >            return {
-+  >            }
-+  >        }
-+  >    }
- 1 >Emitted(4, 1) Source(13, 1) + SourceIndex(0)
- 2 >Emitted(4, 5) Source(13, 18) + SourceIndex(0)
--3 >Emitted(4, 12) Source(13, 25) + SourceIndex(0)
--4 >Emitted(4, 13) Source(23, 2) + SourceIndex(0)
-+3 >Emitted(4, 12) Source(23, 2) + SourceIndex(0)
- ---
- >>>(function (Element) {
- 1->
- 2 >^^^^^^^^^^^
- 3 >           ^^^^^^^
--4 >                  ^^^^^^^^^^^->
-+4 >                  ^^
-+5 >                    ^^^^^^^^^->
- 1->
- 2 >export namespace 
- 3 >           Element
-+4 >                   
- 1->Emitted(5, 1) Source(13, 1) + SourceIndex(0)
- 2 >Emitted(5, 12) Source(13, 18) + SourceIndex(0)
- 3 >Emitted(5, 19) Source(13, 25) + SourceIndex(0)
-+4 >Emitted(5, 21) Source(13, 26) + SourceIndex(0)
- ---
- >>>    function isElement(el) {
- 1->^^^^
-@@= skipped -35, +36 lines =@@
- 3 >             ^^^^^^^^^
- 4 >                      ^
- 5 >                       ^^
--6 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1-> {
-+6 >                         ^^
-+7 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+1->{
-   >    
- 2 >    export function 
- 3 >             isElement
- 4 >                      (
- 5 >                       el: any
-+6 >                         ): el is JSX.Element 
- 1->Emitted(6, 5) Source(14, 5) + SourceIndex(0)
- 2 >Emitted(6, 14) Source(14, 21) + SourceIndex(0)
- 3 >Emitted(6, 23) Source(14, 30) + SourceIndex(0)
- 4 >Emitted(6, 24) Source(14, 31) + SourceIndex(0)
- 5 >Emitted(6, 26) Source(14, 38) + SourceIndex(0)
-+6 >Emitted(6, 28) Source(14, 59) + SourceIndex(0)
- ---
- >>>        return el.markAsChildOfRootElement !== undefined;
- 1->^^^^^^^^
-@@= skipped -22, +25 lines =@@
- 6 >                                          ^^^^^
- 7 >                                               ^^^^^^^^^
- 8 >                                                        ^
--1->): el is JSX.Element {
-+1->{
-   >        
- 2 >        return 
- 3 >               el
-@@= skipped -23, +23 lines =@@
- 2 >    ^
- 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
--  >    
--2 >    }
--1 >Emitted(8, 5) Source(16, 5) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(8, 5) Source(15, 58) + SourceIndex(0)
- 2 >Emitted(8, 6) Source(16, 6) + SourceIndex(0)
+@@= skipped -117, +117 lines =@@
  ---
  >>>    Element.isElement = isElement;
  1->^^^^
@@ -138,47 +34,7 @@
  ---
  >>>    function createElement(args) {
  1->^^^^
-@@= skipped -28, +31 lines =@@
- 3 >             ^^^^^^^^^^^^^
- 4 >                          ^
- 5 >                           ^^^^
-+6 >                               ^^
- 1->
-   >
-   >    
-@@= skipped -7, +8 lines =@@
- 3 >             createElement
- 4 >                          (
- 5 >                           args: any[]
-+6 >                               ) 
- 1->Emitted(10, 5) Source(18, 5) + SourceIndex(0)
- 2 >Emitted(10, 14) Source(18, 21) + SourceIndex(0)
- 3 >Emitted(10, 27) Source(18, 34) + SourceIndex(0)
- 4 >Emitted(10, 28) Source(18, 35) + SourceIndex(0)
- 5 >Emitted(10, 32) Source(18, 46) + SourceIndex(0)
-+6 >Emitted(10, 34) Source(18, 48) + SourceIndex(0)
- ---
- >>>        return {};
- 1 >^^^^^^^^
- 2 >        ^^^^^^^
- 3 >               ^^
- 4 >                 ^
--1 >) {
-+1 >{
-   >
-   >        
- 2 >        return 
-@@= skipped -28, +30 lines =@@
- 2 >    ^
- 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
--  >    
--2 >    }
--1 >Emitted(12, 5) Source(22, 5) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(12, 5) Source(21, 10) + SourceIndex(0)
- 2 >Emitted(12, 6) Source(22, 6) + SourceIndex(0)
+@@= skipped -63, +66 lines =@@
  ---
  >>>    Element.createElement = createElement;
  1->^^^^
@@ -226,10 +82,8 @@
 +8 >                                 ^^^^^^^
 +9 >                                        ^^^^^^^^
  1->
--  >
--2 >}
-+2 >
-+  >}
+   >
+ 2 >}
  3 > 
  4 >   Element
  5 >          
@@ -242,12 +96,7 @@
    >                                            export function isElement(el: any): el is JSX.Element {
    >                                                return el.markAsChildOfRootElement !== undefined;
    >                                            }
-@@= skipped -50, +57 lines =@@
-   >                                                }
-   >                                            }
-   >                                        }
--1->Emitted(14, 1) Source(23, 1) + SourceIndex(0)
-+1->Emitted(14, 1) Source(22, 6) + SourceIndex(0)
+@@= skipped -47, +54 lines =@@
  2 >Emitted(14, 2) Source(23, 2) + SourceIndex(0)
  3 >Emitted(14, 4) Source(13, 18) + SourceIndex(0)
  4 >Emitted(14, 11) Source(13, 25) + SourceIndex(0)
@@ -262,86 +111,3 @@
  ---
  >>>exports.createElement = Element.createElement;
  1 >
-@@= skipped -42, +44 lines =@@
- 3 >         ^^^^^^^^^^^
- 4 >                    ^
- 5 >                     ^^^^
--6 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+6 >                         ^^
-+7 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
-   >
-   >
-@@= skipped -8, +9 lines =@@
- 3 >         toCamelCase
- 4 >                    (
- 5 >                     text: string
-+6 >                         ): string 
- 1 >Emitted(16, 1) Source(27, 1) + SourceIndex(0)
- 2 >Emitted(16, 10) Source(27, 10) + SourceIndex(0)
- 3 >Emitted(16, 21) Source(27, 21) + SourceIndex(0)
- 4 >Emitted(16, 22) Source(27, 22) + SourceIndex(0)
- 5 >Emitted(16, 26) Source(27, 34) + SourceIndex(0)
-+6 >Emitted(16, 28) Source(27, 44) + SourceIndex(0)
- ---
- >>>    return text[0].toLowerCase() + text.substring(1);
- 1->^^^^
-@@= skipped -24, +26 lines =@@
- 15>                                                  ^
- 16>                                                   ^
- 17>                                                    ^
--1->): string {
-+1->{
-   >    
- 2 >    return 
- 3 >           text
-@@= skipped -41, +41 lines =@@
- 2 >^
- 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
--  >
--2 >}
--1 >Emitted(18, 1) Source(29, 1) + SourceIndex(0)
-+2 >
-+  >}
-+1 >Emitted(18, 1) Source(28, 54) + SourceIndex(0)
- 2 >Emitted(18, 2) Source(29, 2) + SourceIndex(0)
- ---
- >>>//# sourceMappingURL=Element.js.map===================================================================
-@@= skipped -90, +90 lines =@@
- >>>    view() {
- 1->^^^^
- 2 >    ^^^^
--3 >        ^^^^^^^^^->
-+3 >        ^^^
-+4 >           ^^^^^^->
- 1-> {
-   >	
- 2 >    view
-+3 >        () 
- 1->Emitted(7, 5) Source(10, 2) + SourceIndex(0)
- 2 >Emitted(7, 9) Source(10, 6) + SourceIndex(0)
-+3 >Emitted(7, 12) Source(10, 9) + SourceIndex(0)
- ---
- >>>        return [
- 1->^^^^^^^^
- 2 >        ^^^^^^^
- 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1->() {
-+1->{
-   >		
- 2 >        return 
- 1->Emitted(8, 9) Source(11, 3) + SourceIndex(0)
-@@= skipped -84, +87 lines =@@
- 1 >^^^^
- 2 >    ^
- 1 >
--  >	
--2 >    }
--1 >Emitted(12, 5) Source(15, 2) + SourceIndex(0)
-+2 >    
-+  >    	}
-+1 >Emitted(12, 5) Source(14, 5) + SourceIndex(0)
- 2 >Emitted(12, 6) Source(15, 3) + SourceIndex(0)
- ---
- >>>}

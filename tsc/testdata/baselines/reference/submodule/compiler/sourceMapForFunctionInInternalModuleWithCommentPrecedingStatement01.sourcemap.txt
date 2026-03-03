@@ -13,54 +13,51 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^^^^^^^^^^^->
+4 >     ^
+5 >      ^^^^^^^^^^->
 1 >
 2 >namespace 
-3 >    Q {
-  >        function P() {
-  >            // Test this
-  >            var a = 1;
-  >        }
-  >    }
+3 >    Q
+4 >      {
+  >         function P() {
+  >             // Test this
+  >             var a = 1;
+  >         }
+  >     }
 1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(1, 11) + SourceIndex(0)
-3 >Emitted(2, 6) Source(6, 2) + SourceIndex(0)
+3 >Emitted(2, 6) Source(1, 12) + SourceIndex(0)
+4 >Emitted(2, 7) Source(6, 2) + SourceIndex(0)
 ---
 >>>(function (Q) {
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^
-5 >              ^^^^^->
+4 >            ^^^^^^^->
 1->
 2 >namespace 
 3 >           Q
-4 >             
 1->Emitted(3, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(3, 12) Source(1, 11) + SourceIndex(0)
 3 >Emitted(3, 13) Source(1, 12) + SourceIndex(0)
-4 >Emitted(3, 15) Source(1, 13) + SourceIndex(0)
 ---
 >>>    function P() {
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^
-5 >                 ^^^^->
-1->{
+4 >              ^^^^^^^->
+1-> {
   >    
 2 >    function 
 3 >             P
-4 >              () 
 1->Emitted(4, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(4, 14) Source(2, 14) + SourceIndex(0)
 3 >Emitted(4, 15) Source(2, 15) + SourceIndex(0)
-4 >Emitted(4, 18) Source(2, 18) + SourceIndex(0)
 ---
 >>>        // Test this
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
-1->{
+1->() {
   >        
 2 >        // Test this
 1->Emitted(5, 9) Source(3, 9) + SourceIndex(0)
@@ -92,9 +89,9 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 2 >    ^
 3 >     ^^^^^^^^^^^^^^->
 1 >
-2 >    
-  >        }
-1 >Emitted(7, 5) Source(4, 19) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(7, 5) Source(5, 5) + SourceIndex(0)
 2 >Emitted(7, 6) Source(5, 6) + SourceIndex(0)
 ---
 >>>})(Q || (Q = {}));
@@ -107,8 +104,8 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 7 >          ^^^^^^^^
 8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
-2 >
-  >}
+  >
+2 >}
 3 > 
 4 >   Q
 5 >    
@@ -119,7 +116,7 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
   >                  var a = 1;
   >              }
   >          }
-1->Emitted(8, 1) Source(5, 6) + SourceIndex(0)
+1->Emitted(8, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(8, 2) Source(6, 2) + SourceIndex(0)
 3 >Emitted(8, 4) Source(1, 11) + SourceIndex(0)
 4 >Emitted(8, 5) Source(1, 12) + SourceIndex(0)

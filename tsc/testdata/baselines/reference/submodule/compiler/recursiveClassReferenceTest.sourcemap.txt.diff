@@ -1,409 +1,33 @@
 --- old.recursiveClassReferenceTest.sourcemap.txt
 +++ new.recursiveClassReferenceTest.sourcemap.txt
-@@= skipped -30, +30 lines =@@
- 1 >
- 2 >^^^^
- 3 >    ^^^^^^
--4 >          ^
--5 >           ^^^^^^^^^^->
-+4 >          ^^^^^^^^^^^->
- 1 >
-   >
-   >
-@@= skipped -34, +33 lines =@@
-   >
-   >
- 2 >namespace 
--3 >    Sample
--4 >          .Actions.Thing.Find {
--  >          	export class StartFindAction implements Sample.Thing.IAction {
--  >          		
--  >          		public getId() { return "yo"; }
--  >          		
--  >          		public run(Thing:Sample.Thing.ICodeThing):boolean {
--  >          
--  >          			return true;
--  >          		}
--  >          	}
--  >          }
-+3 >    Sample.Actions.Thing.Find {
-+  >    	export class StartFindAction implements Sample.Thing.IAction {
-+  >    		
-+  >    		public getId() { return "yo"; }
-+  >    		
-+  >    		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >    
-+  >    			return true;
-+  >    		}
-+  >    	}
-+  >    }
- 1 >Emitted(4, 1) Source(32, 1) + SourceIndex(0)
- 2 >Emitted(4, 5) Source(32, 11) + SourceIndex(0)
--3 >Emitted(4, 11) Source(32, 17) + SourceIndex(0)
--4 >Emitted(4, 12) Source(42, 2) + SourceIndex(0)
-+3 >Emitted(4, 11) Source(42, 2) + SourceIndex(0)
- ---
- >>>(function (Sample) {
- 1->
- 2 >^^^^^^^^^^^
- 3 >           ^^^^^^
-+4 >                 ^^
- 1->
- 2 >namespace 
- 3 >           Sample
-+4 >                 
- 1->Emitted(5, 1) Source(32, 1) + SourceIndex(0)
+@@= skipped -92, +92 lines =@@
  2 >Emitted(5, 12) Source(32, 11) + SourceIndex(0)
  3 >Emitted(5, 18) Source(32, 17) + SourceIndex(0)
-+4 >Emitted(5, 20) Source(6, 1) + SourceIndex(0)
  ---
 ->>>    var Actions;
 +>>>    let Actions;
  1 >^^^^
  2 >    ^^^^
  3 >        ^^^^^^^
--4 >               ^
--5 >                ^^^^^^^^^^->
--1 >.
-+4 >               ^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.
- 2 >    
--3 >        Actions
--4 >               .Thing.Find {
--  >               	export class StartFindAction implements Sample.Thing.IAction {
--  >               		
--  >               		public getId() { return "yo"; }
--  >               		
--  >               		public run(Thing:Sample.Thing.ICodeThing):boolean {
--  >               
--  >               			return true;
--  >               		}
--  >               	}
--  >               }
-+3 >        Actions.Thing.Find {
-+  >        	export class StartFindAction implements Sample.Thing.IAction {
-+  >        		
-+  >        		public getId() { return "yo"; }
-+  >        		
-+  >        		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >        
-+  >        			return true;
-+  >        		}
-+  >        	}
-+  >        }
- 1 >Emitted(6, 5) Source(32, 18) + SourceIndex(0)
- 2 >Emitted(6, 9) Source(32, 18) + SourceIndex(0)
--3 >Emitted(6, 16) Source(32, 25) + SourceIndex(0)
--4 >Emitted(6, 17) Source(42, 2) + SourceIndex(0)
-+3 >Emitted(6, 16) Source(42, 2) + SourceIndex(0)
- ---
- >>>    (function (Actions) {
- 1->^^^^
- 2 >    ^^^^^^^^^^^
- 3 >               ^^^^^^^
-+4 >                      ^^
- 1->
- 2 >    
- 3 >               Actions
-+4 >                      
- 1->Emitted(7, 5) Source(32, 18) + SourceIndex(0)
+@@= skipped -36, +36 lines =@@
  2 >Emitted(7, 16) Source(32, 18) + SourceIndex(0)
  3 >Emitted(7, 23) Source(32, 25) + SourceIndex(0)
-+4 >Emitted(7, 25) Source(6, 1) + SourceIndex(0)
  ---
 ->>>        var Thing;
 +>>>        let Thing;
  1 >^^^^^^^^
  2 >        ^^^^
  3 >            ^^^^^
--4 >                 ^
--5 >                  ^^^^^^^^^^^^->
--1 >.
-+4 >                 ^^^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.
- 2 >        
--3 >            Thing
--4 >                 .Find {
--  >                 	export class StartFindAction implements Sample.Thing.IAction {
--  >                 		
--  >                 		public getId() { return "yo"; }
--  >                 		
--  >                 		public run(Thing:Sample.Thing.ICodeThing):boolean {
--  >                 
--  >                 			return true;
--  >                 		}
--  >                 	}
--  >                 }
-+3 >            Thing.Find {
-+  >            	export class StartFindAction implements Sample.Thing.IAction {
-+  >            		
-+  >            		public getId() { return "yo"; }
-+  >            		
-+  >            		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >            
-+  >            			return true;
-+  >            		}
-+  >            	}
-+  >            }
- 1 >Emitted(8, 9) Source(32, 26) + SourceIndex(0)
- 2 >Emitted(8, 13) Source(32, 26) + SourceIndex(0)
--3 >Emitted(8, 18) Source(32, 31) + SourceIndex(0)
--4 >Emitted(8, 19) Source(42, 2) + SourceIndex(0)
-+3 >Emitted(8, 18) Source(42, 2) + SourceIndex(0)
- ---
- >>>        (function (Thing_1) {
- 1->^^^^^^^^
- 2 >        ^^^^^^^^^^^
- 3 >                   ^^^^^^^
-+4 >                          ^^
- 1->
- 2 >        
- 3 >                   Thing
-+4 >                          
- 1->Emitted(9, 9) Source(32, 26) + SourceIndex(0)
+@@= skipped -36, +36 lines =@@
  2 >Emitted(9, 20) Source(32, 26) + SourceIndex(0)
  3 >Emitted(9, 27) Source(32, 31) + SourceIndex(0)
-+4 >Emitted(9, 29) Source(6, 1) + SourceIndex(0)
  ---
 ->>>            var Find;
 +>>>            let Find;
  1 >^^^^^^^^^^^^
  2 >            ^^^^
  3 >                ^^^^
--4 >                    ^
--5 >                     ^^^^^^^^^^->
--1 >.
-+4 >                    ^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.Thing.
- 2 >            
--3 >                Find
--4 >                     {
--  >                    	export class StartFindAction implements Sample.Thing.IAction {
--  >                    		
--  >                    		public getId() { return "yo"; }
--  >                    		
--  >                    		public run(Thing:Sample.Thing.ICodeThing):boolean {
--  >                    
--  >                    			return true;
--  >                    		}
--  >                    	}
--  >                    }
-+3 >                Find {
-+  >                	export class StartFindAction implements Sample.Thing.IAction {
-+  >                		
-+  >                		public getId() { return "yo"; }
-+  >                		
-+  >                		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >                
-+  >                			return true;
-+  >                		}
-+  >                	}
-+  >                }
- 1 >Emitted(10, 13) Source(32, 32) + SourceIndex(0)
- 2 >Emitted(10, 17) Source(32, 32) + SourceIndex(0)
--3 >Emitted(10, 21) Source(32, 36) + SourceIndex(0)
--4 >Emitted(10, 22) Source(42, 2) + SourceIndex(0)
-+3 >Emitted(10, 21) Source(42, 2) + SourceIndex(0)
- ---
- >>>            (function (Find) {
- 1->^^^^^^^^^^^^
- 2 >            ^^^^^^^^^^^
- 3 >                       ^^^^
--4 >                           ^^^^^^^^^^^^^->
-+4 >                           ^^
-+5 >                             ^^^^^^^^^^^->
- 1->
- 2 >            
- 3 >                       Find
-+4 >                            
- 1->Emitted(11, 13) Source(32, 32) + SourceIndex(0)
- 2 >Emitted(11, 24) Source(32, 32) + SourceIndex(0)
- 3 >Emitted(11, 28) Source(32, 36) + SourceIndex(0)
-+4 >Emitted(11, 30) Source(32, 37) + SourceIndex(0)
- ---
- >>>                class StartFindAction {
- 1->^^^^^^^^^^^^^^^^
- 2 >                ^^^^^^
- 3 >                      ^^^^^^^^^^^^^^^
- 4 >                                     ^^^^^^^^->
--1-> {
-+1->{
-   >	
- 2 >                export class 
- 3 >                      StartFindAction
-@@= skipped -153, +232 lines =@@
- >>>                    getId() { return "yo"; }
- 1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^
--3 >                         ^^^^^
--4 >                              ^^^^^^^
--5 >                                     ^^^^
--6 >                                         ^
--7 >                                          ^
--8 >                                           ^
-+3 >                         ^^^
-+4 >                            ^^
-+5 >                              ^^^^^^^
-+6 >                                     ^^^^
-+7 >                                         ^
-+8 >                                          ^
-+9 >                                           ^
- 1-> implements Sample.Thing.IAction {
-   >		
-   >		public 
- 2 >                    getId
--3 >                         () { 
--4 >                              return 
--5 >                                     "yo"
--6 >                                         ;
--7 >                                           
--8 >                                           }
-+3 >                         () 
-+4 >                            { 
-+5 >                              return 
-+6 >                                     "yo"
-+7 >                                         ;
-+8 >                                          
-+9 >                                            }
- 1->Emitted(13, 21) Source(35, 10) + SourceIndex(0)
- 2 >Emitted(13, 26) Source(35, 15) + SourceIndex(0)
--3 >Emitted(13, 31) Source(35, 20) + SourceIndex(0)
--4 >Emitted(13, 38) Source(35, 27) + SourceIndex(0)
--5 >Emitted(13, 42) Source(35, 31) + SourceIndex(0)
--6 >Emitted(13, 43) Source(35, 32) + SourceIndex(0)
--7 >Emitted(13, 44) Source(35, 33) + SourceIndex(0)
--8 >Emitted(13, 45) Source(35, 34) + SourceIndex(0)
-+3 >Emitted(13, 29) Source(35, 18) + SourceIndex(0)
-+4 >Emitted(13, 31) Source(35, 20) + SourceIndex(0)
-+5 >Emitted(13, 38) Source(35, 27) + SourceIndex(0)
-+6 >Emitted(13, 42) Source(35, 31) + SourceIndex(0)
-+7 >Emitted(13, 43) Source(35, 32) + SourceIndex(0)
-+8 >Emitted(13, 44) Source(35, 32) + SourceIndex(0)
-+9 >Emitted(13, 45) Source(35, 34) + SourceIndex(0)
- ---
- >>>                    run(Thing) {
- 1 >^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^
- 3 >                       ^
- 4 >                        ^^^^^
--5 >                             ^^^^^^^^->
-+5 >                             ^^
-+6 >                               ^^^^^^->
- 1 >
-   >		
-   >		public 
- 2 >                    run
- 3 >                       (
- 4 >                        Thing:Sample.Thing.ICodeThing
-+5 >                             ):boolean 
- 1 >Emitted(14, 21) Source(37, 10) + SourceIndex(0)
- 2 >Emitted(14, 24) Source(37, 13) + SourceIndex(0)
- 3 >Emitted(14, 25) Source(37, 14) + SourceIndex(0)
- 4 >Emitted(14, 30) Source(37, 43) + SourceIndex(0)
-+5 >Emitted(14, 32) Source(37, 53) + SourceIndex(0)
- ---
- >>>                        return true;
- 1->^^^^^^^^^^^^^^^^^^^^^^^^
- 2 >                        ^^^^^^^
- 3 >                               ^^^^
- 4 >                                   ^
--1->):boolean {
-+1->{
-   >
-   >			
- 2 >                        return 
-@@= skipped -62, +68 lines =@@
- 1 >^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^
- 1 >
--  >		
--2 >                    }
--1 >Emitted(16, 21) Source(40, 3) + SourceIndex(0)
-+2 >                    
-+  >                    		}
-+1 >Emitted(16, 21) Source(39, 16) + SourceIndex(0)
- 2 >Emitted(16, 22) Source(40, 4) + SourceIndex(0)
- ---
- >>>                }
-@@= skipped -14, +14 lines =@@
+@@= skipped -129, +129 lines =@@
  ---
  >>>                Find.StartFindAction = StartFindAction;
  1->^^^^^^^^^^^^^^^^
@@ -457,10 +81,8 @@
 +10>                                               ^^^^
 +11>                                                   ^^^^^^^^
  1->
--  >
--2 >            }
-+2 >            
-+  >            }
+   >
+ 2 >            }
  3 >             
  4 >               Find
  5 >                   
@@ -477,13 +99,7 @@
    >                                                   	export class StartFindAction implements Sample.Thing.IAction {
    >                                                   		
    >                                                   		public getId() { return "yo"; }
-@@= skipped -24, +28 lines =@@
-   >                                                   		}
-   >                                                   	}
-   >                                                   }
--1->Emitted(19, 13) Source(42, 1) + SourceIndex(0)
-+1->Emitted(19, 13) Source(41, 3) + SourceIndex(0)
- 2 >Emitted(19, 14) Source(42, 2) + SourceIndex(0)
+@@= skipped -29, +33 lines =@@
  3 >Emitted(19, 16) Source(32, 32) + SourceIndex(0)
  4 >Emitted(19, 20) Source(32, 36) + SourceIndex(0)
  5 >Emitted(19, 23) Source(32, 32) + SourceIndex(0)
@@ -500,544 +116,133 @@
  ---
  >>>        })(Thing = Actions.Thing || (Actions.Thing = {}));
  1 >^^^^^^^^
- 2 >        ^
--3 >         ^^
--4 >           ^^^^^
--5 >                ^^^
+@@= skipped -11, +13 lines =@@
+ 3 >         ^^
+ 4 >           ^^^^^
+ 5 >                ^^^
 -6 >                   ^^^^^^^^^^^^^
 -7 >                                ^^^^^
 -8 >                                     ^^^^^^^^^^^^^
 -9 >                                                  ^^^^^^^^
 -10>                                                          ^->
-+3 >         
-+4 >         ^^
-+5 >           ^^^^^
-+6 >                ^^^
-+7 >                   ^^^^^^^^
-+8 >                           ^^^^^
-+9 >                                ^^^^^
-+10>                                     ^^^^^^^^
-+11>                                             ^^^^^
-+12>                                                  ^^^^^^^^
-+13>                                                          ^->
++6 >                   ^^^^^^^^
++7 >                           ^^^^^
++8 >                                ^^^^^
++9 >                                     ^^^^^^^^
++10>                                             ^^^^^
++11>                                                  ^^^^^^^^
++12>                                                          ^->
  1 >
--2 >        }
-+2 >        
-+  >        
+ 2 >        }
  3 >         
--4 >           Thing
--5 >                
+ 4 >           Thing
+ 5 >                
 -6 >                   Thing
 -7 >                                
 -8 >                                     Thing
 -9 >                                                  .Find {
-+4 >         // Scenario 1: Test reqursive function call with "this" parameter
-+  >         // Scenario 2: Test recursive function call with cast and "this" parameter
-+  >         
-+  >         
-+  >         
-+  >         declare namespace Sample.Thing {
-+  >         
-+  >         	export interface IWidget {
-+  >         		getDomNode(): any;
-+  >         		destroy();
-+  >         		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >         	}
-+  >         
-+  >         	export interface ICodeThing {
-+  >           
-+  >           		getDomNode(): Element;
-+  >         		
-+  >         		addWidget(widgetId:string, widget:IWidget);
-+  >         
-+  >         		
-+  >         		focus(); 
-+  >         		
-+  >         		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >         	}
-+  >         
-+  >         	export interface IAction {
-+  >         		run(Thing:ICodeThing):boolean;
-+  >         		getId():string;
-+  >         	}	
-+  >         }
-+  >         
-+  >         namespace Sample.Actions.
-+5 >           Thing
-+6 >                
-+7 >                   
-+8 >                           Thing
-+9 >                                
-+10>                                     
-+11>                                             Thing
-+12>                                                  .Find {
++6 >                   
++7 >                           Thing
++8 >                                
++9 >                                     
++10>                                             Thing
++11>                                                  .Find {
    >                                                  	export class StartFindAction implements Sample.Thing.IAction {
    >                                                  		
    >                                                  		public getId() { return "yo"; }
-@@= skipped -40, +80 lines =@@
-   >                                                  		}
-   >                                                  	}
-   >                                                  }
--1 >Emitted(20, 9) Source(42, 1) + SourceIndex(0)
--2 >Emitted(20, 10) Source(42, 2) + SourceIndex(0)
--3 >Emitted(20, 12) Source(32, 26) + SourceIndex(0)
--4 >Emitted(20, 17) Source(32, 31) + SourceIndex(0)
--5 >Emitted(20, 20) Source(32, 26) + SourceIndex(0)
+@@= skipped -29, +33 lines =@@
+ 3 >Emitted(20, 12) Source(32, 26) + SourceIndex(0)
+ 4 >Emitted(20, 17) Source(32, 31) + SourceIndex(0)
+ 5 >Emitted(20, 20) Source(32, 26) + SourceIndex(0)
 -6 >Emitted(20, 33) Source(32, 31) + SourceIndex(0)
 -7 >Emitted(20, 38) Source(32, 26) + SourceIndex(0)
 -8 >Emitted(20, 51) Source(32, 31) + SourceIndex(0)
 -9 >Emitted(20, 59) Source(42, 2) + SourceIndex(0)
-+1 >Emitted(20, 9) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(20, 10) Source(42, 1) + SourceIndex(0)
-+3 >Emitted(20, 10) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(20, 12) Source(32, 26) + SourceIndex(0)
-+5 >Emitted(20, 17) Source(32, 31) + SourceIndex(0)
-+6 >Emitted(20, 20) Source(32, 26) + SourceIndex(0)
-+7 >Emitted(20, 28) Source(32, 26) + SourceIndex(0)
-+8 >Emitted(20, 33) Source(32, 31) + SourceIndex(0)
-+9 >Emitted(20, 38) Source(32, 26) + SourceIndex(0)
-+10>Emitted(20, 46) Source(32, 26) + SourceIndex(0)
-+11>Emitted(20, 51) Source(32, 31) + SourceIndex(0)
-+12>Emitted(20, 59) Source(42, 2) + SourceIndex(0)
++6 >Emitted(20, 28) Source(32, 26) + SourceIndex(0)
++7 >Emitted(20, 33) Source(32, 31) + SourceIndex(0)
++8 >Emitted(20, 38) Source(32, 26) + SourceIndex(0)
++9 >Emitted(20, 46) Source(32, 26) + SourceIndex(0)
++10>Emitted(20, 51) Source(32, 31) + SourceIndex(0)
++11>Emitted(20, 59) Source(42, 2) + SourceIndex(0)
  ---
  >>>    })(Actions = Sample.Actions || (Sample.Actions = {}));
  1->^^^^
- 2 >    ^
--3 >     ^^
--4 >       ^^^^^^^
--5 >              ^^^
+@@= skipped -11, +13 lines =@@
+ 3 >     ^^
+ 4 >       ^^^^^^^
+ 5 >              ^^^
 -6 >                 ^^^^^^^^^^^^^^
 -7 >                               ^^^^^
 -8 >                                    ^^^^^^^^^^^^^^
 -9 >                                                  ^^^^^^^^
-+3 >     
-+4 >     ^^
-+5 >       ^^^^^^^
-+6 >              ^^^
-+7 >                 ^^^^^^^
-+8 >                        ^^^^^^^
-+9 >                               ^^^^^
-+10>                                    ^^^^^^^
-+11>                                           ^^^^^^^
-+12>                                                  ^^^^^^^^
++6 >                 ^^^^^^^
++7 >                        ^^^^^^^
++8 >                               ^^^^^
++9 >                                    ^^^^^^^
++10>                                           ^^^^^^^
++11>                                                  ^^^^^^^^
  1->
--2 >    }
-+2 >    
-+  >    
+ 2 >    }
  3 >     
--4 >       Actions
--5 >              
+ 4 >       Actions
+ 5 >              
 -6 >                 Actions
 -7 >                               
 -8 >                                    Actions
 -9 >                                                  .Thing.Find {
-+4 >     // Scenario 1: Test reqursive function call with "this" parameter
-+  >     // Scenario 2: Test recursive function call with cast and "this" parameter
-+  >     
-+  >     
-+  >     
-+  >     declare namespace Sample.Thing {
-+  >     
-+  >     	export interface IWidget {
-+  >     		getDomNode(): any;
-+  >     		destroy();
-+  >     		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >     	}
-+  >     
-+  >     	export interface ICodeThing {
-+  >       
-+  >       		getDomNode(): Element;
-+  >     		
-+  >     		addWidget(widgetId:string, widget:IWidget);
-+  >     
-+  >     		
-+  >     		focus(); 
-+  >     		
-+  >     		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >     	}
-+  >     
-+  >     	export interface IAction {
-+  >     		run(Thing:ICodeThing):boolean;
-+  >     		getId():string;
-+  >     	}	
-+  >     }
-+  >     
-+  >     namespace Sample.
-+5 >       Actions
-+6 >              
-+7 >                 
-+8 >                        Actions
-+9 >                               
-+10>                                    
-+11>                                           Actions
-+12>                                                  .Thing.Find {
++6 >                 
++7 >                        Actions
++8 >                               
++9 >                                    
++10>                                           Actions
++11>                                                  .Thing.Find {
    >                                                  	export class StartFindAction implements Sample.Thing.IAction {
    >                                                  		
    >                                                  		public getId() { return "yo"; }
-@@= skipped -39, +80 lines =@@
-   >                                                  		}
-   >                                                  	}
-   >                                                  }
--1->Emitted(21, 5) Source(42, 1) + SourceIndex(0)
--2 >Emitted(21, 6) Source(42, 2) + SourceIndex(0)
--3 >Emitted(21, 8) Source(32, 18) + SourceIndex(0)
--4 >Emitted(21, 15) Source(32, 25) + SourceIndex(0)
--5 >Emitted(21, 18) Source(32, 18) + SourceIndex(0)
+@@= skipped -28, +32 lines =@@
+ 3 >Emitted(21, 8) Source(32, 18) + SourceIndex(0)
+ 4 >Emitted(21, 15) Source(32, 25) + SourceIndex(0)
+ 5 >Emitted(21, 18) Source(32, 18) + SourceIndex(0)
 -6 >Emitted(21, 32) Source(32, 25) + SourceIndex(0)
 -7 >Emitted(21, 37) Source(32, 18) + SourceIndex(0)
 -8 >Emitted(21, 51) Source(32, 25) + SourceIndex(0)
 -9 >Emitted(21, 59) Source(42, 2) + SourceIndex(0)
-+1->Emitted(21, 5) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(21, 6) Source(42, 1) + SourceIndex(0)
-+3 >Emitted(21, 6) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(21, 8) Source(32, 18) + SourceIndex(0)
-+5 >Emitted(21, 15) Source(32, 25) + SourceIndex(0)
-+6 >Emitted(21, 18) Source(32, 18) + SourceIndex(0)
-+7 >Emitted(21, 25) Source(32, 18) + SourceIndex(0)
-+8 >Emitted(21, 32) Source(32, 25) + SourceIndex(0)
-+9 >Emitted(21, 37) Source(32, 18) + SourceIndex(0)
-+10>Emitted(21, 44) Source(32, 18) + SourceIndex(0)
-+11>Emitted(21, 51) Source(32, 25) + SourceIndex(0)
-+12>Emitted(21, 59) Source(42, 2) + SourceIndex(0)
++6 >Emitted(21, 25) Source(32, 18) + SourceIndex(0)
++7 >Emitted(21, 32) Source(32, 25) + SourceIndex(0)
++8 >Emitted(21, 37) Source(32, 18) + SourceIndex(0)
++9 >Emitted(21, 44) Source(32, 18) + SourceIndex(0)
++10>Emitted(21, 51) Source(32, 25) + SourceIndex(0)
++11>Emitted(21, 59) Source(42, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
- 2 >^
--3 > ^^
--4 >   ^^^^^^
--5 >         ^^^^^
--6 >              ^^^^^^
--7 >                    ^^^^^^^^
-+3 > 
-+4 > ^^
-+5 >   ^^^^^^
-+6 >         ^^^^^
-+7 >              ^^^^^^
-+8 >                    ^^^^^^^^
- 1 >
--2 >}
-+2 >
-+  >
- 3 > 
--4 >   Sample
--5 >         
--6 >              Sample
--7 >                    .Actions.Thing.Find {
-+4 > // Scenario 1: Test reqursive function call with "this" parameter
-+  > // Scenario 2: Test recursive function call with cast and "this" parameter
-+  > 
-+  > 
-+  > 
-+  > declare namespace Sample.Thing {
-+  > 
-+  > 	export interface IWidget {
-+  > 		getDomNode(): any;
-+  > 		destroy();
-+  > 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  > 	}
-+  > 
-+  > 	export interface ICodeThing {
-+  >   
-+  >   		getDomNode(): Element;
-+  > 		
-+  > 		addWidget(widgetId:string, widget:IWidget);
-+  > 
-+  > 		
-+  > 		focus(); 
-+  > 		
-+  > 		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  > 	}
-+  > 
-+  > 	export interface IAction {
-+  > 		run(Thing:ICodeThing):boolean;
-+  > 		getId():string;
-+  > 	}	
-+  > }
-+  > 
-+  > namespace 
-+5 >   Sample
-+6 >         
-+7 >              Sample
-+8 >                    .Actions.Thing.Find {
-   >                    	export class StartFindAction implements Sample.Thing.IAction {
-   >                    		
-   >                    		public getId() { return "yo"; }
-@@= skipped -35, +72 lines =@@
-   >                    		}
-   >                    	}
-   >                    }
--1 >Emitted(22, 1) Source(42, 1) + SourceIndex(0)
--2 >Emitted(22, 2) Source(42, 2) + SourceIndex(0)
--3 >Emitted(22, 4) Source(32, 11) + SourceIndex(0)
--4 >Emitted(22, 10) Source(32, 17) + SourceIndex(0)
--5 >Emitted(22, 15) Source(32, 11) + SourceIndex(0)
--6 >Emitted(22, 21) Source(32, 17) + SourceIndex(0)
--7 >Emitted(22, 29) Source(42, 2) + SourceIndex(0)
-+1 >Emitted(22, 1) Source(41, 3) + SourceIndex(0)
-+2 >Emitted(22, 2) Source(42, 1) + SourceIndex(0)
-+3 >Emitted(22, 2) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(22, 4) Source(32, 11) + SourceIndex(0)
-+5 >Emitted(22, 10) Source(32, 17) + SourceIndex(0)
-+6 >Emitted(22, 15) Source(32, 11) + SourceIndex(0)
-+7 >Emitted(22, 21) Source(32, 17) + SourceIndex(0)
-+8 >Emitted(22, 29) Source(42, 2) + SourceIndex(0)
- ---
- >>>(function (Sample) {
- 1 >
- 2 >^^^^^^^^^^^
- 3 >           ^^^^^^
-+4 >                 ^^
- 1 >
-   >
-   >
- 2 >namespace 
- 3 >           Sample
-+4 >                 
- 1 >Emitted(23, 1) Source(44, 1) + SourceIndex(0)
+@@= skipped -51, +53 lines =@@
  2 >Emitted(23, 12) Source(44, 11) + SourceIndex(0)
  3 >Emitted(23, 18) Source(44, 17) + SourceIndex(0)
-+4 >Emitted(23, 20) Source(6, 1) + SourceIndex(0)
  ---
 ->>>    var Thing;
 +>>>    let Thing;
  1 >^^^^
  2 >    ^^^^
  3 >        ^^^^^
--4 >             ^
--5 >              ^^^^^^^^^^->
--1 >.
-+4 >             ^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.Thing.Find {
-+  >	export class StartFindAction implements Sample.Thing.IAction {
-+  >		
-+  >		public getId() { return "yo"; }
-+  >		
-+  >		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >
-+  >			return true;
-+  >		}
-+  >	}
-+  >}
-+  >
-+  >namespace Sample.
- 2 >    
--3 >        Thing
--4 >             .Widgets {
--  >             	export class FindWidget implements Sample.Thing.IWidget {
--  >             
--  >             		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
--  >             			
--  >             		private domNode:any = null;
--  >             		constructor(private codeThing: Sample.Thing.ICodeThing) {
--  >             		    // scenario 1
--  >             		    codeThing.addWidget("addWidget", this);
--  >             		}
--  >             		
--  >             		public getDomNode() {
--  >             			return domNode;
--  >             		}
--  >             		
--  >             		public destroy() {
--  >             
--  >             		}
--  >             
--  >             	}
--  >             }
-+3 >        Thing.Widgets {
-+  >        	export class FindWidget implements Sample.Thing.IWidget {
-+  >        
-+  >        		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >        			
-+  >        		private domNode:any = null;
-+  >        		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >        		    // scenario 1
-+  >        		    codeThing.addWidget("addWidget", this);
-+  >        		}
-+  >        		
-+  >        		public getDomNode() {
-+  >        			return domNode;
-+  >        		}
-+  >        		
-+  >        		public destroy() {
-+  >        
-+  >        		}
-+  >        
-+  >        	}
-+  >        }
- 1 >Emitted(24, 5) Source(44, 18) + SourceIndex(0)
- 2 >Emitted(24, 9) Source(44, 18) + SourceIndex(0)
--3 >Emitted(24, 14) Source(44, 23) + SourceIndex(0)
--4 >Emitted(24, 15) Source(64, 2) + SourceIndex(0)
-+3 >Emitted(24, 14) Source(64, 2) + SourceIndex(0)
- ---
- >>>    (function (Thing) {
- 1->^^^^
- 2 >    ^^^^^^^^^^^
- 3 >               ^^^^^
--4 >                    ^->
-+4 >                    ^^
- 1->
- 2 >    
- 3 >               Thing
-+4 >                    
- 1->Emitted(25, 5) Source(44, 18) + SourceIndex(0)
+@@= skipped -47, +47 lines =@@
  2 >Emitted(25, 16) Source(44, 18) + SourceIndex(0)
  3 >Emitted(25, 21) Source(44, 23) + SourceIndex(0)
-+4 >Emitted(25, 23) Source(6, 1) + SourceIndex(0)
  ---
 ->>>        var Widgets;
--1->^^^^^^^^
 +>>>        let Widgets;
-+1 >^^^^^^^^
+ 1->^^^^^^^^
  2 >        ^^^^
  3 >            ^^^^^^^
--4 >                   ^
--5 >                    ^^^^^^^^^^->
--1->.
-+4 >                   ^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.Thing.Find {
-+  >	export class StartFindAction implements Sample.Thing.IAction {
-+  >		
-+  >		public getId() { return "yo"; }
-+  >		
-+  >		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >
-+  >			return true;
-+  >		}
-+  >	}
-+  >}
-+  >
-+  >namespace Sample.Thing.
- 2 >        
--3 >            Widgets
--4 >                    {
--  >                   	export class FindWidget implements Sample.Thing.IWidget {
--  >                   
--  >                   		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
--  >                   			
--  >                   		private domNode:any = null;
--  >                   		constructor(private codeThing: Sample.Thing.ICodeThing) {
--  >                   		    // scenario 1
--  >                   		    codeThing.addWidget("addWidget", this);
--  >                   		}
--  >                   		
--  >                   		public getDomNode() {
--  >                   			return domNode;
--  >                   		}
--  >                   		
--  >                   		public destroy() {
--  >                   
--  >                   		}
--  >                   
--  >                   	}
--  >                   }
--1->Emitted(26, 9) Source(44, 24) + SourceIndex(0)
-+3 >            Widgets {
-+  >            	export class FindWidget implements Sample.Thing.IWidget {
-+  >            
-+  >            		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >            			
-+  >            		private domNode:any = null;
-+  >            		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >            		    // scenario 1
-+  >            		    codeThing.addWidget("addWidget", this);
-+  >            		}
-+  >            		
-+  >            		public getDomNode() {
-+  >            			return domNode;
-+  >            		}
-+  >            		
-+  >            		public destroy() {
-+  >            
-+  >            		}
-+  >            
-+  >            	}
-+  >            }
-+1 >Emitted(26, 9) Source(44, 24) + SourceIndex(0)
- 2 >Emitted(26, 13) Source(44, 24) + SourceIndex(0)
--3 >Emitted(26, 20) Source(44, 31) + SourceIndex(0)
--4 >Emitted(26, 21) Source(64, 2) + SourceIndex(0)
-+3 >Emitted(26, 20) Source(64, 2) + SourceIndex(0)
- ---
- >>>        (function (Widgets) {
- 1->^^^^^^^^
- 2 >        ^^^^^^^^^^^
- 3 >                   ^^^^^^^
--4 >                          ^^^^^->
-+4 >                          ^^
-+5 >                            ^^^->
- 1->
- 2 >        
- 3 >                   Widgets
-+4 >                           
- 1->Emitted(27, 9) Source(44, 24) + SourceIndex(0)
- 2 >Emitted(27, 20) Source(44, 24) + SourceIndex(0)
- 3 >Emitted(27, 27) Source(44, 31) + SourceIndex(0)
-+4 >Emitted(27, 29) Source(44, 32) + SourceIndex(0)
- ---
- >>>            class FindWidget {
+@@= skipped -51, +51 lines =@@
  1->^^^^^^^^^^^^
  2 >            ^^^^^^
  3 >                  ^^^^^^^^^^
 -4 >                            ^^^^^^^^^^^^^^->
--1-> {
-+1->{
+ 1-> {
    >	
  2 >            export class 
- 3 >                  FindWidget
-@@= skipped -128, +206 lines =@@
+@@= skipped -9, +8 lines =@@
  2 >Emitted(28, 19) Source(45, 15) + SourceIndex(0)
  3 >Emitted(28, 29) Source(45, 25) + SourceIndex(0)
  ---
@@ -1058,31 +263,21 @@
  >>>                gar(runner) { if (true) {
  1->^^^^^^^^^^^^^^^^
  2 >                ^^^
- 3 >                   ^
- 4 >                    ^^^^^^
--5 >                          ^^^^
--6 >                              ^^^^
--7 >                                  ^^^^
--8 >                                      ^^
--9 >                                        ^
+@@= skipped -10, +24 lines =@@
+ 7 >                                  ^^^^
+ 8 >                                      ^^
+ 9 >                                        ^
 -1-> implements Sample.Thing.IWidget {
 -  >
 -  >		public 
-+5 >                          ^^
-+6 >                            ^^
-+7 >                              ^^^^
-+8 >                                  ^^^^
-+9 >                                      ^^
-+10>                                        ^
 +1->
  2 >                gar
  3 >                   (
  4 >                    runner:(widget:Sample.Thing.IWidget)=>any
--5 >                          ) { 
--6 >                              if (
--7 >                                  true
--8 >                                      ) 
--9 >                                        {
+@@= skipped -11, +9 lines =@@
+ 7 >                                  true
+ 8 >                                      ) 
+ 9 >                                        {
 -1->Emitted(29, 17) Source(47, 10) + SourceIndex(0)
 -2 >Emitted(29, 20) Source(47, 13) + SourceIndex(0)
 -3 >Emitted(29, 21) Source(47, 14) + SourceIndex(0)
@@ -1092,26 +287,19 @@
 -7 >Emitted(29, 39) Source(47, 67) + SourceIndex(0)
 -8 >Emitted(29, 41) Source(47, 69) + SourceIndex(0)
 -9 >Emitted(29, 42) Source(47, 70) + SourceIndex(0)
-+5 >                          ) 
-+6 >                            { 
-+7 >                              if (
-+8 >                                  true
-+9 >                                      ) 
-+10>                                        {
 +1->Emitted(30, 17) Source(47, 10) + SourceIndex(0)
 +2 >Emitted(30, 20) Source(47, 13) + SourceIndex(0)
 +3 >Emitted(30, 21) Source(47, 14) + SourceIndex(0)
 +4 >Emitted(30, 27) Source(47, 55) + SourceIndex(0)
-+5 >Emitted(30, 29) Source(47, 57) + SourceIndex(0)
-+6 >Emitted(30, 31) Source(47, 59) + SourceIndex(0)
-+7 >Emitted(30, 35) Source(47, 63) + SourceIndex(0)
-+8 >Emitted(30, 39) Source(47, 67) + SourceIndex(0)
-+9 >Emitted(30, 41) Source(47, 69) + SourceIndex(0)
-+10>Emitted(30, 42) Source(47, 70) + SourceIndex(0)
++5 >Emitted(30, 31) Source(47, 59) + SourceIndex(0)
++6 >Emitted(30, 35) Source(47, 63) + SourceIndex(0)
++7 >Emitted(30, 39) Source(47, 67) + SourceIndex(0)
++8 >Emitted(30, 41) Source(47, 69) + SourceIndex(0)
++9 >Emitted(30, 42) Source(47, 70) + SourceIndex(0)
  ---
  >>>                    return runner(this);
  1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -46, +61 lines =@@
+@@= skipped -25, +25 lines =@@
  5 >                                  this
  6 >                                      )
  7 >                                       ;
@@ -1172,11 +360,9 @@
  ---
  >>>                constructor(codeThing) {
  1->^^^^^^^^^^^^^^^^
- 2 >                ^^^^^^^^^^^^
+@@= skipped -29, +49 lines =@@
  3 >                            ^^^^^^^^^
--4 >                                     ^^^^^^^^^^^->
-+4 >                                     ^^
-+5 >                                       ^^^^^^^^^->
+ 4 >                                     ^^^^^^^^^^^->
  1->
 -  >			
 -  >		private domNode:any = null;
@@ -1186,11 +372,9 @@
 -1->Emitted(32, 17) Source(50, 3) + SourceIndex(0)
 -2 >Emitted(32, 29) Source(50, 23) + SourceIndex(0)
 -3 >Emitted(32, 38) Source(50, 57) + SourceIndex(0)
-+4 >                                     ) 
 +1->Emitted(34, 17) Source(50, 3) + SourceIndex(0)
 +2 >Emitted(34, 29) Source(50, 23) + SourceIndex(0)
 +3 >Emitted(34, 38) Source(50, 57) + SourceIndex(0)
-+4 >Emitted(34, 40) Source(50, 59) + SourceIndex(0)
  ---
  >>>                    this.codeThing = codeThing;
 -1->^^^^^^^^^^^^^^^^^^^^
@@ -1247,7 +431,7 @@
  ---
  >>>                    codeThing.addWidget("addWidget", this);
  1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -105, +99 lines =@@
+@@= skipped -76, +47 lines =@@
  8 >                                                     this
  9 >                                                         )
  10>                                                          ;
@@ -1274,43 +458,29 @@
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^
- 2 >                ^
- 3 >                 ^^^^^^^^^^^^^^->
+@@= skipped -18, +18 lines =@@
  1 >
--  >		
--2 >                }
+   >		
+ 2 >                }
 -1 >Emitted(37, 17) Source(53, 3) + SourceIndex(0)
 -2 >Emitted(37, 18) Source(53, 4) + SourceIndex(0)
-+2 >                
-+  >                		}
-+1 >Emitted(38, 17) Source(52, 46) + SourceIndex(0)
++1 >Emitted(38, 17) Source(53, 3) + SourceIndex(0)
 +2 >Emitted(38, 18) Source(53, 4) + SourceIndex(0)
  ---
  >>>                getDomNode() {
  1->^^^^^^^^^^^^^^^^
- 2 >                ^^^^^^^^^^
--3 >                          ^^^^^^^^^^->
-+3 >                          ^^^
-+4 >                             ^^^^^^^->
- 1->
+@@= skipped -11, +11 lines =@@
    >		
    >		public 
  2 >                getDomNode
 -1->Emitted(38, 17) Source(55, 10) + SourceIndex(0)
 -2 >Emitted(38, 27) Source(55, 20) + SourceIndex(0)
-+3 >                          () 
 +1->Emitted(39, 17) Source(55, 10) + SourceIndex(0)
 +2 >Emitted(39, 27) Source(55, 20) + SourceIndex(0)
-+3 >Emitted(39, 30) Source(55, 23) + SourceIndex(0)
  ---
  >>>                    return domNode;
  1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^^^
- 3 >                           ^^^^^^^
- 4 >                                  ^
--1->() {
-+1->{
-   >			
+@@= skipped -13, +13 lines =@@
  2 >                    return 
  3 >                           domNode
  4 >                                  ;
@@ -1325,52 +495,40 @@
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^
- 2 >                ^
- 3 >                 ^^^^^^^^^^^->
+@@= skipped -12, +12 lines =@@
  1 >
--  >		
--2 >                }
+   >		
+ 2 >                }
 -1 >Emitted(40, 17) Source(57, 3) + SourceIndex(0)
 -2 >Emitted(40, 18) Source(57, 4) + SourceIndex(0)
-+2 >                
-+  >                		}
-+1 >Emitted(41, 17) Source(56, 19) + SourceIndex(0)
++1 >Emitted(41, 17) Source(57, 3) + SourceIndex(0)
 +2 >Emitted(41, 18) Source(57, 4) + SourceIndex(0)
  ---
  >>>                destroy() {
  1->^^^^^^^^^^^^^^^^
- 2 >                ^^^^^^^
-+3 >                       ^^^
- 1->
+@@= skipped -10, +10 lines =@@
    >		
    >		public 
  2 >                destroy
 -1->Emitted(41, 17) Source(59, 10) + SourceIndex(0)
 -2 >Emitted(41, 24) Source(59, 17) + SourceIndex(0)
-+3 >                       () 
 +1->Emitted(42, 17) Source(59, 10) + SourceIndex(0)
 +2 >Emitted(42, 24) Source(59, 17) + SourceIndex(0)
-+3 >Emitted(42, 27) Source(59, 20) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^
- 2 >                ^
--1 >() {
--  >
--  >		
--2 >                }
+@@= skipped -10, +10 lines =@@
+   >
+   >		
+ 2 >                }
 -1 >Emitted(42, 17) Source(61, 3) + SourceIndex(0)
 -2 >Emitted(42, 18) Source(61, 4) + SourceIndex(0)
-+1 >{
-+2 >                
-+  >                
-+  >                		}
-+1 >Emitted(43, 17) Source(59, 21) + SourceIndex(0)
++1 >Emitted(43, 17) Source(61, 3) + SourceIndex(0)
 +2 >Emitted(43, 18) Source(61, 4) + SourceIndex(0)
  ---
  >>>            }
  1 >^^^^^^^^^^^^^
-@@= skipped -83, +89 lines =@@
+@@= skipped -9, +9 lines =@@
  1 >
    >
    >	}
@@ -1430,10 +588,8 @@
 +10>                                             ^^^^^^^
 +11>                                                    ^^^^^^^^
  1->
--  >
--2 >        }
-+2 >        
-+  >        }
+   >
+ 2 >        }
  3 >         
  4 >           Widgets
  5 >                  
@@ -1463,7 +619,7 @@
 -7 >Emitted(45, 40) Source(44, 24) + SourceIndex(0)
 -8 >Emitted(45, 53) Source(44, 31) + SourceIndex(0)
 -9 >Emitted(45, 61) Source(64, 2) + SourceIndex(0)
-+1->Emitted(46, 9) Source(63, 3) + SourceIndex(0)
++1->Emitted(46, 9) Source(64, 1) + SourceIndex(0)
 +2 >Emitted(46, 10) Source(64, 2) + SourceIndex(0)
 +3 >Emitted(46, 12) Source(44, 24) + SourceIndex(0)
 +4 >Emitted(46, 19) Source(44, 31) + SourceIndex(0)
@@ -1477,91 +633,39 @@
  ---
  >>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
  1 >^^^^
- 2 >    ^
--3 >     ^^
--4 >       ^^^^^
--5 >            ^^^
+@@= skipped -16, +18 lines =@@
+ 3 >     ^^
+ 4 >       ^^^^^
+ 5 >            ^^^
 -6 >               ^^^^^^^^^^^^
 -7 >                           ^^^^^
 -8 >                                ^^^^^^^^^^^^
 -9 >                                            ^^^^^^^^
-+3 >     
-+4 >     ^^
-+5 >       ^^^^^
-+6 >            ^^^
-+7 >               ^^^^^^^
-+8 >                      ^^^^^
-+9 >                           ^^^^^
-+10>                                ^^^^^^^
-+11>                                       ^^^^^
-+12>                                            ^^^^^^^^
++6 >               ^^^^^^^
++7 >                      ^^^^^
++8 >                           ^^^^^
++9 >                                ^^^^^^^
++10>                                       ^^^^^
++11>                                            ^^^^^^^^
  1 >
--2 >    }
-+2 >    
-+  >    
+ 2 >    }
  3 >     
--4 >       Thing
--5 >            
+ 4 >       Thing
+ 5 >            
 -6 >               Thing
 -7 >                           
 -8 >                                Thing
 -9 >                                            .Widgets {
-+4 >     // Scenario 1: Test reqursive function call with "this" parameter
-+  >     // Scenario 2: Test recursive function call with cast and "this" parameter
-+  >     
-+  >     
-+  >     
-+  >     declare namespace Sample.Thing {
-+  >     
-+  >     	export interface IWidget {
-+  >     		getDomNode(): any;
-+  >     		destroy();
-+  >     		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >     	}
-+  >     
-+  >     	export interface ICodeThing {
-+  >       
-+  >       		getDomNode(): Element;
-+  >     		
-+  >     		addWidget(widgetId:string, widget:IWidget);
-+  >     
-+  >     		
-+  >     		focus(); 
-+  >     		
-+  >     		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >     	}
-+  >     
-+  >     	export interface IAction {
-+  >     		run(Thing:ICodeThing):boolean;
-+  >     		getId():string;
-+  >     	}	
-+  >     }
-+  >     
-+  >     namespace Sample.Actions.Thing.Find {
-+  >     	export class StartFindAction implements Sample.Thing.IAction {
-+  >     		
-+  >     		public getId() { return "yo"; }
-+  >     		
-+  >     		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >     
-+  >     			return true;
-+  >     		}
-+  >     	}
-+  >     }
-+  >     
-+  >     namespace Sample.
-+5 >       Thing
-+6 >            
-+7 >               
-+8 >                      Thing
-+9 >                           
-+10>                                
-+11>                                       Thing
-+12>                                            .Widgets {
++6 >               
++7 >                      Thing
++8 >                           
++9 >                                
++10>                                       Thing
++11>                                            .Widgets {
    >                                            	export class FindWidget implements Sample.Thing.IWidget {
    >                                            
    >                                            		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-@@= skipped -49, +101 lines =@@
+@@= skipped -33, +37 lines =@@
    >                                            
    >                                            	}
    >                                            }
@@ -1574,94 +678,21 @@
 -7 >Emitted(46, 33) Source(44, 18) + SourceIndex(0)
 -8 >Emitted(46, 45) Source(44, 23) + SourceIndex(0)
 -9 >Emitted(46, 53) Source(64, 2) + SourceIndex(0)
-+1 >Emitted(47, 5) Source(63, 3) + SourceIndex(0)
-+2 >Emitted(47, 6) Source(64, 1) + SourceIndex(0)
-+3 >Emitted(47, 6) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(47, 8) Source(44, 18) + SourceIndex(0)
-+5 >Emitted(47, 13) Source(44, 23) + SourceIndex(0)
-+6 >Emitted(47, 16) Source(44, 18) + SourceIndex(0)
-+7 >Emitted(47, 23) Source(44, 18) + SourceIndex(0)
-+8 >Emitted(47, 28) Source(44, 23) + SourceIndex(0)
-+9 >Emitted(47, 33) Source(44, 18) + SourceIndex(0)
-+10>Emitted(47, 40) Source(44, 18) + SourceIndex(0)
-+11>Emitted(47, 45) Source(44, 23) + SourceIndex(0)
-+12>Emitted(47, 53) Source(64, 2) + SourceIndex(0)
++1 >Emitted(47, 5) Source(64, 1) + SourceIndex(0)
++2 >Emitted(47, 6) Source(64, 2) + SourceIndex(0)
++3 >Emitted(47, 8) Source(44, 18) + SourceIndex(0)
++4 >Emitted(47, 13) Source(44, 23) + SourceIndex(0)
++5 >Emitted(47, 16) Source(44, 18) + SourceIndex(0)
++6 >Emitted(47, 23) Source(44, 18) + SourceIndex(0)
++7 >Emitted(47, 28) Source(44, 23) + SourceIndex(0)
++8 >Emitted(47, 33) Source(44, 18) + SourceIndex(0)
++9 >Emitted(47, 40) Source(44, 18) + SourceIndex(0)
++10>Emitted(47, 45) Source(44, 23) + SourceIndex(0)
++11>Emitted(47, 53) Source(64, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
- 2 >^
--3 > ^^
--4 >   ^^^^^^
--5 >         ^^^^^
--6 >              ^^^^^^
--7 >                    ^^^^^^^^
-+3 > 
-+4 > ^^
-+5 >   ^^^^^^
-+6 >         ^^^^^
-+7 >              ^^^^^^
-+8 >                    ^^^^^^^^
- 1 >
--2 >}
-+2 >
-+  >
- 3 > 
--4 >   Sample
--5 >         
--6 >              Sample
--7 >                    .Thing.Widgets {
-+4 > // Scenario 1: Test reqursive function call with "this" parameter
-+  > // Scenario 2: Test recursive function call with cast and "this" parameter
-+  > 
-+  > 
-+  > 
-+  > declare namespace Sample.Thing {
-+  > 
-+  > 	export interface IWidget {
-+  > 		getDomNode(): any;
-+  > 		destroy();
-+  > 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  > 	}
-+  > 
-+  > 	export interface ICodeThing {
-+  >   
-+  >   		getDomNode(): Element;
-+  > 		
-+  > 		addWidget(widgetId:string, widget:IWidget);
-+  > 
-+  > 		
-+  > 		focus(); 
-+  > 		
-+  > 		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  > 	}
-+  > 
-+  > 	export interface IAction {
-+  > 		run(Thing:ICodeThing):boolean;
-+  > 		getId():string;
-+  > 	}	
-+  > }
-+  > 
-+  > namespace Sample.Actions.Thing.Find {
-+  > 	export class StartFindAction implements Sample.Thing.IAction {
-+  > 		
-+  > 		public getId() { return "yo"; }
-+  > 		
-+  > 		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  > 
-+  > 			return true;
-+  > 		}
-+  > 	}
-+  > }
-+  > 
-+  > namespace 
-+5 >   Sample
-+6 >         
-+7 >              Sample
-+8 >                    .Thing.Widgets {
-   >                    	export class FindWidget implements Sample.Thing.IWidget {
-   >                    
-   >                    		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-@@= skipped -45, +94 lines =@@
+@@= skipped -45, +47 lines =@@
    >                    
    >                    	}
    >                    }
@@ -1672,18 +703,17 @@
 -5 >Emitted(47, 15) Source(44, 11) + SourceIndex(0)
 -6 >Emitted(47, 21) Source(44, 17) + SourceIndex(0)
 -7 >Emitted(47, 29) Source(64, 2) + SourceIndex(0)
-+1 >Emitted(48, 1) Source(63, 3) + SourceIndex(0)
-+2 >Emitted(48, 2) Source(64, 1) + SourceIndex(0)
-+3 >Emitted(48, 2) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(48, 4) Source(44, 11) + SourceIndex(0)
-+5 >Emitted(48, 10) Source(44, 17) + SourceIndex(0)
-+6 >Emitted(48, 15) Source(44, 11) + SourceIndex(0)
-+7 >Emitted(48, 21) Source(44, 17) + SourceIndex(0)
-+8 >Emitted(48, 29) Source(64, 2) + SourceIndex(0)
++1 >Emitted(48, 1) Source(64, 1) + SourceIndex(0)
++2 >Emitted(48, 2) Source(64, 2) + SourceIndex(0)
++3 >Emitted(48, 4) Source(44, 11) + SourceIndex(0)
++4 >Emitted(48, 10) Source(44, 17) + SourceIndex(0)
++5 >Emitted(48, 15) Source(44, 11) + SourceIndex(0)
++6 >Emitted(48, 21) Source(44, 17) + SourceIndex(0)
++7 >Emitted(48, 29) Source(64, 2) + SourceIndex(0)
  ---
  >>>class AbstractMode {
  1 >
-@@= skipped -19, +20 lines =@@
+@@= skipped -19, +19 lines =@@
    >
  2 >class 
  3 >      AbstractMode
@@ -1696,28 +726,10 @@
  ---
  >>>    getInitialState() { return null; }
  1->^^^^
- 2 >    ^^^^^^^^^^^^^^^
--3 >                   ^^^^^
--4 >                        ^^^^^^^
--5 >                               ^^^^
--6 >                                   ^
--7 >                                    ^
--8 >                                     ^
-+3 >                   ^^^
-+4 >                      ^^
-+5 >                        ^^^^^^^
-+6 >                               ^^^^
-+7 >                                   ^
-+8 >                                    ^
-+9 >                                     ^
- 1-> implements IMode { public 
- 2 >    getInitialState
--3 >                   (): IState { 
--4 >                        return 
--5 >                               null
--6 >                                   ;
--7 >                                    
--8 >                                     }
+@@= skipped -21, +21 lines =@@
+ 6 >                                   ;
+ 7 >                                    
+ 8 >                                     }
 -1->Emitted(49, 5) Source(67, 46) + SourceIndex(0)
 -2 >Emitted(49, 20) Source(67, 61) + SourceIndex(0)
 -3 >Emitted(49, 25) Source(67, 74) + SourceIndex(0)
@@ -1726,22 +738,14 @@
 -6 >Emitted(49, 37) Source(67, 86) + SourceIndex(0)
 -7 >Emitted(49, 38) Source(67, 86) + SourceIndex(0)
 -8 >Emitted(49, 39) Source(67, 87) + SourceIndex(0)
-+3 >                   (): IState 
-+4 >                      { 
-+5 >                        return 
-+6 >                               null
-+7 >                                   ;
-+8 >                                    
-+9 >                                     }
 +1->Emitted(50, 5) Source(67, 46) + SourceIndex(0)
 +2 >Emitted(50, 20) Source(67, 61) + SourceIndex(0)
-+3 >Emitted(50, 23) Source(67, 72) + SourceIndex(0)
-+4 >Emitted(50, 25) Source(67, 74) + SourceIndex(0)
-+5 >Emitted(50, 32) Source(67, 81) + SourceIndex(0)
-+6 >Emitted(50, 36) Source(67, 85) + SourceIndex(0)
-+7 >Emitted(50, 37) Source(67, 86) + SourceIndex(0)
-+8 >Emitted(50, 38) Source(67, 86) + SourceIndex(0)
-+9 >Emitted(50, 39) Source(67, 87) + SourceIndex(0)
++3 >Emitted(50, 25) Source(67, 74) + SourceIndex(0)
++4 >Emitted(50, 32) Source(67, 81) + SourceIndex(0)
++5 >Emitted(50, 36) Source(67, 85) + SourceIndex(0)
++6 >Emitted(50, 37) Source(67, 86) + SourceIndex(0)
++7 >Emitted(50, 38) Source(67, 86) + SourceIndex(0)
++8 >Emitted(50, 39) Source(67, 87) + SourceIndex(0)
  ---
  >>>}
  1 >^
@@ -1752,505 +756,116 @@
  ---
  >>>(function (Sample) {
  1->
- 2 >^^^^^^^^^^^
- 3 >           ^^^^^^
-+4 >                 ^^
- 1->
-   >
-   >interface IState {}
-@@= skipped -52, +56 lines =@@
+@@= skipped -31, +31 lines =@@
    >
  2 >namespace 
  3 >           Sample
 -1->Emitted(51, 1) Source(76, 1) + SourceIndex(0)
 -2 >Emitted(51, 12) Source(76, 11) + SourceIndex(0)
 -3 >Emitted(51, 18) Source(76, 17) + SourceIndex(0)
-+4 >                 
 +1->Emitted(52, 1) Source(76, 1) + SourceIndex(0)
 +2 >Emitted(52, 12) Source(76, 11) + SourceIndex(0)
 +3 >Emitted(52, 18) Source(76, 17) + SourceIndex(0)
-+4 >Emitted(52, 20) Source(6, 1) + SourceIndex(0)
  ---
 ->>>    var Thing;
 +>>>    let Thing;
  1 >^^^^
  2 >    ^^^^
  3 >        ^^^^^
--4 >             ^
--5 >              ^^^^^^^^^^->
--1 >.
-+4 >             ^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.Thing.Find {
-+  >	export class StartFindAction implements Sample.Thing.IAction {
-+  >		
-+  >		public getId() { return "yo"; }
-+  >		
-+  >		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >
-+  >			return true;
-+  >		}
-+  >	}
-+  >}
-+  >
-+  >namespace Sample.Thing.Widgets {
-+  >	export class FindWidget implements Sample.Thing.IWidget {
-+  >
-+  >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >			
-+  >		private domNode:any = null;
-+  >		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >		    // scenario 1
-+  >		    codeThing.addWidget("addWidget", this);
-+  >		}
-+  >		
-+  >		public getDomNode() {
-+  >			return domNode;
-+  >		}
-+  >		
-+  >		public destroy() {
-+  >
-+  >		}
-+  >
-+  >	}
-+  >}
-+  >
-+  >interface IMode { getInitialState(): IState;} 
-+  >class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-+  >
-+  >interface IState {}
-+  >
-+  >interface Window {
-+  >    opener: Window;
-+  >}
-+  >declare var self: Window;
-+  >
-+  >namespace Sample.
- 2 >    
--3 >        Thing
--4 >             .Languages.PlainText {
--  >             	
--  >             	export class State implements IState {		
--  >                     constructor(private mode: IMode) { }
--  >             		public clone():IState {
--  >             			return this;
--  >             		}
--  >             
--  >             		public equals(other:IState):boolean {
--  >             			return this === other;
--  >             		}
--  >             		
--  >             		public getMode(): IMode { return mode; }
--  >             	}
--  >             	
--  >             	export class Mode extends AbstractMode {
--  >             
--  >             		// scenario 2
--  >             		public getInitialState(): IState {
--  >             			return new State(self);
--  >             		}
--  >             
--  >             
--  >             	}
--  >             }
+@@= skipped -38, +38 lines =@@
+   >             
+   >             	}
+   >             }
 -1 >Emitted(52, 5) Source(76, 18) + SourceIndex(0)
 -2 >Emitted(52, 9) Source(76, 18) + SourceIndex(0)
 -3 >Emitted(52, 14) Source(76, 23) + SourceIndex(0)
 -4 >Emitted(52, 15) Source(100, 2) + SourceIndex(0)
-+3 >        Thing.Languages.PlainText {
-+  >        	
-+  >        	export class State implements IState {		
-+  >                constructor(private mode: IMode) { }
-+  >        		public clone():IState {
-+  >        			return this;
-+  >        		}
-+  >        
-+  >        		public equals(other:IState):boolean {
-+  >        			return this === other;
-+  >        		}
-+  >        		
-+  >        		public getMode(): IMode { return mode; }
-+  >        	}
-+  >        	
-+  >        	export class Mode extends AbstractMode {
-+  >        
-+  >        		// scenario 2
-+  >        		public getInitialState(): IState {
-+  >        			return new State(self);
-+  >        		}
-+  >        
-+  >        
-+  >        	}
-+  >        }
 +1 >Emitted(53, 5) Source(76, 18) + SourceIndex(0)
 +2 >Emitted(53, 9) Source(76, 18) + SourceIndex(0)
-+3 >Emitted(53, 14) Source(100, 2) + SourceIndex(0)
++3 >Emitted(53, 14) Source(76, 23) + SourceIndex(0)
++4 >Emitted(53, 15) Source(100, 2) + SourceIndex(0)
  ---
  >>>    (function (Thing) {
  1->^^^^
- 2 >    ^^^^^^^^^^^
- 3 >               ^^^^^
--4 >                    ^^^->
-+4 >                    ^^
-+5 >                      ^->
+@@= skipped -13, +13 lines =@@
  1->
  2 >    
  3 >               Thing
 -1->Emitted(53, 5) Source(76, 18) + SourceIndex(0)
 -2 >Emitted(53, 16) Source(76, 18) + SourceIndex(0)
 -3 >Emitted(53, 21) Source(76, 23) + SourceIndex(0)
-+4 >                    
 +1->Emitted(54, 5) Source(76, 18) + SourceIndex(0)
 +2 >Emitted(54, 16) Source(76, 18) + SourceIndex(0)
 +3 >Emitted(54, 21) Source(76, 23) + SourceIndex(0)
-+4 >Emitted(54, 23) Source(6, 1) + SourceIndex(0)
  ---
 ->>>        var Languages;
 +>>>        let Languages;
  1->^^^^^^^^
  2 >        ^^^^
  3 >            ^^^^^^^^^
--4 >                     ^
--5 >                      ^^^^^^^^^^->
--1->.
-+4 >                     ^^^^^^^^^^^->
-+1->declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.Thing.Find {
-+  >	export class StartFindAction implements Sample.Thing.IAction {
-+  >		
-+  >		public getId() { return "yo"; }
-+  >		
-+  >		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >
-+  >			return true;
-+  >		}
-+  >	}
-+  >}
-+  >
-+  >namespace Sample.Thing.Widgets {
-+  >	export class FindWidget implements Sample.Thing.IWidget {
-+  >
-+  >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >			
-+  >		private domNode:any = null;
-+  >		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >		    // scenario 1
-+  >		    codeThing.addWidget("addWidget", this);
-+  >		}
-+  >		
-+  >		public getDomNode() {
-+  >			return domNode;
-+  >		}
-+  >		
-+  >		public destroy() {
-+  >
-+  >		}
-+  >
-+  >	}
-+  >}
-+  >
-+  >interface IMode { getInitialState(): IState;} 
-+  >class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-+  >
-+  >interface IState {}
-+  >
-+  >interface Window {
-+  >    opener: Window;
-+  >}
-+  >declare var self: Window;
-+  >
-+  >namespace Sample.Thing.
- 2 >        
--3 >            Languages
--4 >                     .PlainText {
--  >                     	
--  >                     	export class State implements IState {		
--  >                             constructor(private mode: IMode) { }
--  >                     		public clone():IState {
--  >                     			return this;
--  >                     		}
--  >                     
--  >                     		public equals(other:IState):boolean {
--  >                     			return this === other;
--  >                     		}
--  >                     		
--  >                     		public getMode(): IMode { return mode; }
--  >                     	}
--  >                     	
--  >                     	export class Mode extends AbstractMode {
--  >                     
--  >                     		// scenario 2
--  >                     		public getInitialState(): IState {
--  >                     			return new State(self);
--  >                     		}
--  >                     
--  >                     
--  >                     	}
--  >                     }
+@@= skipped -38, +38 lines =@@
+   >                     
+   >                     	}
+   >                     }
 -1->Emitted(54, 9) Source(76, 24) + SourceIndex(0)
 -2 >Emitted(54, 13) Source(76, 24) + SourceIndex(0)
 -3 >Emitted(54, 22) Source(76, 33) + SourceIndex(0)
 -4 >Emitted(54, 23) Source(100, 2) + SourceIndex(0)
-+3 >            Languages.PlainText {
-+  >            	
-+  >            	export class State implements IState {		
-+  >                    constructor(private mode: IMode) { }
-+  >            		public clone():IState {
-+  >            			return this;
-+  >            		}
-+  >            
-+  >            		public equals(other:IState):boolean {
-+  >            			return this === other;
-+  >            		}
-+  >            		
-+  >            		public getMode(): IMode { return mode; }
-+  >            	}
-+  >            	
-+  >            	export class Mode extends AbstractMode {
-+  >            
-+  >            		// scenario 2
-+  >            		public getInitialState(): IState {
-+  >            			return new State(self);
-+  >            		}
-+  >            
-+  >            
-+  >            	}
-+  >            }
 +1->Emitted(55, 9) Source(76, 24) + SourceIndex(0)
 +2 >Emitted(55, 13) Source(76, 24) + SourceIndex(0)
-+3 >Emitted(55, 22) Source(100, 2) + SourceIndex(0)
++3 >Emitted(55, 22) Source(76, 33) + SourceIndex(0)
++4 >Emitted(55, 23) Source(100, 2) + SourceIndex(0)
  ---
  >>>        (function (Languages) {
  1->^^^^^^^^
- 2 >        ^^^^^^^^^^^
- 3 >                   ^^^^^^^^^
-+4 >                            ^^
+@@= skipped -12, +12 lines =@@
  1->
  2 >        
  3 >                   Languages
 -1->Emitted(55, 9) Source(76, 24) + SourceIndex(0)
 -2 >Emitted(55, 20) Source(76, 24) + SourceIndex(0)
 -3 >Emitted(55, 29) Source(76, 33) + SourceIndex(0)
-+4 >                            
 +1->Emitted(56, 9) Source(76, 24) + SourceIndex(0)
 +2 >Emitted(56, 20) Source(76, 24) + SourceIndex(0)
 +3 >Emitted(56, 29) Source(76, 33) + SourceIndex(0)
-+4 >Emitted(56, 31) Source(6, 1) + SourceIndex(0)
  ---
 ->>>            var PlainText;
 +>>>            let PlainText;
  1 >^^^^^^^^^^^^
  2 >            ^^^^
  3 >                ^^^^^^^^^
--4 >                         ^
--5 >                          ^^^^^^^^^^->
--1 >.
-+4 >                         ^^^^^^^^^^^->
-+1 >declare namespace Sample.Thing {
-+  >
-+  >	export interface IWidget {
-+  >		getDomNode(): any;
-+  >		destroy();
-+  >		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >	}
-+  >
-+  >	export interface ICodeThing {
-+  >  
-+  >  		getDomNode(): Element;
-+  >		
-+  >		addWidget(widgetId:string, widget:IWidget);
-+  >
-+  >		
-+  >		focus(); 
-+  >		
-+  >		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >	}
-+  >
-+  >	export interface IAction {
-+  >		run(Thing:ICodeThing):boolean;
-+  >		getId():string;
-+  >	}	
-+  >}
-+  >
-+  >namespace Sample.Actions.Thing.Find {
-+  >	export class StartFindAction implements Sample.Thing.IAction {
-+  >		
-+  >		public getId() { return "yo"; }
-+  >		
-+  >		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >
-+  >			return true;
-+  >		}
-+  >	}
-+  >}
-+  >
-+  >namespace Sample.Thing.Widgets {
-+  >	export class FindWidget implements Sample.Thing.IWidget {
-+  >
-+  >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >			
-+  >		private domNode:any = null;
-+  >		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >		    // scenario 1
-+  >		    codeThing.addWidget("addWidget", this);
-+  >		}
-+  >		
-+  >		public getDomNode() {
-+  >			return domNode;
-+  >		}
-+  >		
-+  >		public destroy() {
-+  >
-+  >		}
-+  >
-+  >	}
-+  >}
-+  >
-+  >interface IMode { getInitialState(): IState;} 
-+  >class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-+  >
-+  >interface IState {}
-+  >
-+  >interface Window {
-+  >    opener: Window;
-+  >}
-+  >declare var self: Window;
-+  >
-+  >namespace Sample.Thing.Languages.
- 2 >            
--3 >                PlainText
--4 >                          {
--  >                         	
--  >                         	export class State implements IState {		
--  >                                 constructor(private mode: IMode) { }
--  >                         		public clone():IState {
--  >                         			return this;
--  >                         		}
--  >                         
--  >                         		public equals(other:IState):boolean {
--  >                         			return this === other;
--  >                         		}
--  >                         		
--  >                         		public getMode(): IMode { return mode; }
--  >                         	}
--  >                         	
--  >                         	export class Mode extends AbstractMode {
--  >                         
--  >                         		// scenario 2
--  >                         		public getInitialState(): IState {
--  >                         			return new State(self);
--  >                         		}
--  >                         
--  >                         
--  >                         	}
--  >                         }
+@@= skipped -38, +38 lines =@@
+   >                         
+   >                         	}
+   >                         }
 -1 >Emitted(56, 13) Source(76, 34) + SourceIndex(0)
 -2 >Emitted(56, 17) Source(76, 34) + SourceIndex(0)
 -3 >Emitted(56, 26) Source(76, 43) + SourceIndex(0)
 -4 >Emitted(56, 27) Source(100, 2) + SourceIndex(0)
-+3 >                PlainText {
-+  >                	
-+  >                	export class State implements IState {		
-+  >                        constructor(private mode: IMode) { }
-+  >                		public clone():IState {
-+  >                			return this;
-+  >                		}
-+  >                
-+  >                		public equals(other:IState):boolean {
-+  >                			return this === other;
-+  >                		}
-+  >                		
-+  >                		public getMode(): IMode { return mode; }
-+  >                	}
-+  >                	
-+  >                	export class Mode extends AbstractMode {
-+  >                
-+  >                		// scenario 2
-+  >                		public getInitialState(): IState {
-+  >                			return new State(self);
-+  >                		}
-+  >                
-+  >                
-+  >                	}
-+  >                }
 +1 >Emitted(57, 13) Source(76, 34) + SourceIndex(0)
 +2 >Emitted(57, 17) Source(76, 34) + SourceIndex(0)
-+3 >Emitted(57, 26) Source(100, 2) + SourceIndex(0)
++3 >Emitted(57, 26) Source(76, 43) + SourceIndex(0)
++4 >Emitted(57, 27) Source(100, 2) + SourceIndex(0)
  ---
  >>>            (function (PlainText) {
  1->^^^^^^^^^^^^
- 2 >            ^^^^^^^^^^^
- 3 >                       ^^^^^^^^^
-+4 >                                ^^
+@@= skipped -12, +12 lines =@@
  1->
  2 >            
  3 >                       PlainText
 -1->Emitted(57, 13) Source(76, 34) + SourceIndex(0)
 -2 >Emitted(57, 24) Source(76, 34) + SourceIndex(0)
 -3 >Emitted(57, 33) Source(76, 43) + SourceIndex(0)
-+4 >                                 
 +1->Emitted(58, 13) Source(76, 34) + SourceIndex(0)
 +2 >Emitted(58, 24) Source(76, 34) + SourceIndex(0)
 +3 >Emitted(58, 33) Source(76, 43) + SourceIndex(0)
-+4 >Emitted(58, 35) Source(76, 44) + SourceIndex(0)
  ---
  >>>                class State {
  1 >^^^^^^^^^^^^^^^^
  2 >                ^^^^^^
  3 >                      ^^^^^
 -4 >                           ^^^^^^^^^^^^^->
--1 > {
-+1 >{
+ 1 > {
    >	
    >	
  2 >                export class 
@@ -2276,22 +891,18 @@
  1->^^^^^^^^^^^^^^^^^^^^
  2 >                    ^^^^^^^^^^^^
  3 >                                ^^^^
--4 >                                    ^^^^^^->
+ 4 >                                    ^^^^^^->
 -1-> implements IState {		
 -  >        
-+4 >                                    ^^
-+5 >                                      ^^^^->
 +1->
  2 >                    constructor(private 
  3 >                                mode: IMode
 -1->Emitted(59, 21) Source(79, 9) + SourceIndex(0)
 -2 >Emitted(59, 33) Source(79, 29) + SourceIndex(0)
 -3 >Emitted(59, 37) Source(79, 40) + SourceIndex(0)
-+4 >                                    ) 
 +1->Emitted(61, 21) Source(79, 9) + SourceIndex(0)
 +2 >Emitted(61, 33) Source(79, 29) + SourceIndex(0)
 +3 >Emitted(61, 37) Source(79, 40) + SourceIndex(0)
-+4 >Emitted(61, 39) Source(79, 42) + SourceIndex(0)
  ---
  >>>                        this.mode = mode;
 -1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2320,38 +931,27 @@
  2 >                    ^
  3 >                     ^^^^^^^^^->
 -1 >) { 
--2 >                    }
++1 >: IMode) { 
+ 2 >                    }
 -1 >Emitted(61, 21) Source(79, 44) + SourceIndex(0)
 -2 >Emitted(61, 22) Source(79, 45) + SourceIndex(0)
-+1 >: IMode) {
-+2 >                     }
-+1 >Emitted(63, 21) Source(79, 43) + SourceIndex(0)
++1 >Emitted(63, 21) Source(79, 44) + SourceIndex(0)
 +2 >Emitted(63, 22) Source(79, 45) + SourceIndex(0)
  ---
  >>>                    clone() {
  1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^
--3 >                         ^^^^^^^^^^^^->
-+3 >                         ^^^
-+4 >                            ^^^^^^^^^->
+@@= skipped -64, +63 lines =@@
  1->
    >		public 
  2 >                    clone
 -1->Emitted(62, 21) Source(80, 10) + SourceIndex(0)
 -2 >Emitted(62, 26) Source(80, 15) + SourceIndex(0)
-+3 >                         ():IState 
 +1->Emitted(64, 21) Source(80, 10) + SourceIndex(0)
 +2 >Emitted(64, 26) Source(80, 15) + SourceIndex(0)
-+3 >Emitted(64, 29) Source(80, 25) + SourceIndex(0)
  ---
  >>>                        return this;
  1->^^^^^^^^^^^^^^^^^^^^^^^^
- 2 >                        ^^^^^^^
- 3 >                               ^^^^
- 4 >                                   ^
--1->():IState {
-+1->{
-   >			
+@@= skipped -13, +13 lines =@@
  2 >                        return 
  3 >                               this
  4 >                                   ;
@@ -2366,29 +966,18 @@
  ---
  >>>                    }
  1 >^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^
- 3 >                     ^^^^^^^^^^^^^^^->
+@@= skipped -12, +12 lines =@@
  1 >
--  >		
--2 >                    }
+   >		
+ 2 >                    }
 -1 >Emitted(64, 21) Source(82, 3) + SourceIndex(0)
 -2 >Emitted(64, 22) Source(82, 4) + SourceIndex(0)
-+2 >                    
-+  >                    		}
-+1 >Emitted(66, 21) Source(81, 16) + SourceIndex(0)
++1 >Emitted(66, 21) Source(82, 3) + SourceIndex(0)
 +2 >Emitted(66, 22) Source(82, 4) + SourceIndex(0)
  ---
  >>>                    equals(other) {
  1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^^
- 3 >                          ^
- 4 >                           ^^^^^
--5 >                                ^^^^^^^^^^^^^^^->
-+5 >                                ^^
-+6 >                                  ^^^^^^^^^^^^^->
- 1->
-   >
-   >		public 
+@@= skipped -15, +15 lines =@@
  2 >                    equals
  3 >                          (
  4 >                           other:IState
@@ -2396,24 +985,14 @@
 -2 >Emitted(65, 27) Source(84, 16) + SourceIndex(0)
 -3 >Emitted(65, 28) Source(84, 17) + SourceIndex(0)
 -4 >Emitted(65, 33) Source(84, 29) + SourceIndex(0)
-+5 >                                ):boolean 
 +1->Emitted(67, 21) Source(84, 10) + SourceIndex(0)
 +2 >Emitted(67, 27) Source(84, 16) + SourceIndex(0)
 +3 >Emitted(67, 28) Source(84, 17) + SourceIndex(0)
 +4 >Emitted(67, 33) Source(84, 29) + SourceIndex(0)
-+5 >Emitted(67, 35) Source(84, 39) + SourceIndex(0)
  ---
  >>>                        return this === other;
  1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -267, +487 lines =@@
- 4 >                                   ^^^^^
- 5 >                                        ^^^^^
- 6 >                                             ^
--1->):boolean {
-+1->{
-   >			
- 2 >                        return 
- 3 >                               this
+@@= skipped -19, +19 lines =@@
  4 >                                    === 
  5 >                                        other
  6 >                                             ;
@@ -2432,44 +1011,21 @@
  ---
  >>>                    }
  1 >^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^
- 3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+@@= skipped -14, +14 lines =@@
  1 >
--  >		
--2 >                    }
+   >		
+ 2 >                    }
 -1 >Emitted(67, 21) Source(86, 3) + SourceIndex(0)
 -2 >Emitted(67, 22) Source(86, 4) + SourceIndex(0)
-+2 >                    
-+  >                    		}
-+1 >Emitted(69, 21) Source(85, 26) + SourceIndex(0)
++1 >Emitted(69, 21) Source(86, 3) + SourceIndex(0)
 +2 >Emitted(69, 22) Source(86, 4) + SourceIndex(0)
  ---
  >>>                    getMode() { return mode; }
  1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^^^
--3 >                           ^^^^^
--4 >                                ^^^^^^^
--5 >                                       ^^^^
--6 >                                           ^
--7 >                                            ^
--8 >                                             ^
-+3 >                           ^^^
-+4 >                              ^^
-+5 >                                ^^^^^^^
-+6 >                                       ^^^^
-+7 >                                           ^
-+8 >                                            ^
-+9 >                                             ^
- 1->
-   >		
-   >		public 
- 2 >                    getMode
--3 >                           (): IMode { 
--4 >                                return 
--5 >                                       mode
--6 >                                           ;
--7 >                                             
--8 >                                             }
+@@= skipped -22, +22 lines =@@
+ 6 >                                           ;
+ 7 >                                             
+ 8 >                                             }
 -1->Emitted(68, 21) Source(88, 10) + SourceIndex(0)
 -2 >Emitted(68, 28) Source(88, 17) + SourceIndex(0)
 -3 >Emitted(68, 33) Source(88, 29) + SourceIndex(0)
@@ -2478,22 +1034,14 @@
 -6 >Emitted(68, 45) Source(88, 41) + SourceIndex(0)
 -7 >Emitted(68, 46) Source(88, 42) + SourceIndex(0)
 -8 >Emitted(68, 47) Source(88, 43) + SourceIndex(0)
-+3 >                           (): IMode 
-+4 >                              { 
-+5 >                                return 
-+6 >                                       mode
-+7 >                                           ;
-+8 >                                            
-+9 >                                              }
 +1->Emitted(70, 21) Source(88, 10) + SourceIndex(0)
 +2 >Emitted(70, 28) Source(88, 17) + SourceIndex(0)
-+3 >Emitted(70, 31) Source(88, 27) + SourceIndex(0)
-+4 >Emitted(70, 33) Source(88, 29) + SourceIndex(0)
-+5 >Emitted(70, 40) Source(88, 36) + SourceIndex(0)
-+6 >Emitted(70, 44) Source(88, 40) + SourceIndex(0)
-+7 >Emitted(70, 45) Source(88, 41) + SourceIndex(0)
-+8 >Emitted(70, 46) Source(88, 41) + SourceIndex(0)
-+9 >Emitted(70, 47) Source(88, 43) + SourceIndex(0)
++3 >Emitted(70, 33) Source(88, 29) + SourceIndex(0)
++4 >Emitted(70, 40) Source(88, 36) + SourceIndex(0)
++5 >Emitted(70, 44) Source(88, 40) + SourceIndex(0)
++6 >Emitted(70, 45) Source(88, 41) + SourceIndex(0)
++7 >Emitted(70, 46) Source(88, 42) + SourceIndex(0)
++8 >Emitted(70, 47) Source(88, 43) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^^
@@ -2523,7 +1071,7 @@
    >                                       constructor(private mode: IMode) { }
    >                               		public clone():IState {
    >                               			return this;
-@@= skipped -79, +84 lines =@@
+@@= skipped -36, +38 lines =@@
    >                               		
    >                               		public getMode(): IMode { return mode; }
    >                               	}
@@ -2569,32 +1117,18 @@
  ---
  >>>                    getInitialState() {
  1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^^^^^^^^^^^
--3 >                                   ^^^^^^^^^^^^^->
-+3 >                                   ^^^
-+4 >                                      ^^^^^^^^^^->
+@@= skipped -10, +10 lines =@@
  1->
    >		public 
  2 >                    getInitialState
 -1->Emitted(73, 21) Source(94, 10) + SourceIndex(0)
 -2 >Emitted(73, 36) Source(94, 25) + SourceIndex(0)
-+3 >                                   (): IState 
 +1->Emitted(75, 21) Source(94, 10) + SourceIndex(0)
 +2 >Emitted(75, 36) Source(94, 25) + SourceIndex(0)
-+3 >Emitted(75, 39) Source(94, 36) + SourceIndex(0)
  ---
  >>>                        return new State(self);
  1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -22, +25 lines =@@
- 6 >                                         ^^^^
- 7 >                                             ^
- 8 >                                              ^
--1->(): IState {
-+1->{
-   >			
- 2 >                        return 
- 3 >                               new 
-@@= skipped -9, +9 lines =@@
+@@= skipped -21, +21 lines =@@
  6 >                                         self
  7 >                                             )
  8 >                                              ;
@@ -2617,20 +1151,18 @@
  ---
  >>>                    }
  1 >^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^
+@@= skipped -15, +15 lines =@@
  1 >
--  >		
--2 >                    }
+   >		
+ 2 >                    }
 -1 >Emitted(75, 21) Source(96, 3) + SourceIndex(0)
 -2 >Emitted(75, 22) Source(96, 4) + SourceIndex(0)
-+2 >                    
-+  >                    		}
-+1 >Emitted(77, 21) Source(95, 27) + SourceIndex(0)
++1 >Emitted(77, 21) Source(96, 3) + SourceIndex(0)
 +2 >Emitted(77, 22) Source(96, 4) + SourceIndex(0)
  ---
  >>>                }
  1 >^^^^^^^^^^^^^^^^^
-@@= skipped -25, +25 lines =@@
+@@= skipped -10, +10 lines =@@
    >
    >
    >	}
@@ -2690,10 +1222,8 @@
 +10>                                                             ^^^^^^^^^
 +11>                                                                      ^^^^^^^^
  1->
--  >
--2 >            }
-+2 >            
-+  >            }
+   >
+ 2 >            }
  3 >             
  4 >               PlainText
  5 >                        
@@ -2723,7 +1253,7 @@
 -7 >Emitted(78, 52) Source(76, 34) + SourceIndex(0)
 -8 >Emitted(78, 71) Source(76, 43) + SourceIndex(0)
 -9 >Emitted(78, 79) Source(100, 2) + SourceIndex(0)
-+1->Emitted(80, 13) Source(99, 3) + SourceIndex(0)
++1->Emitted(80, 13) Source(100, 1) + SourceIndex(0)
 +2 >Emitted(80, 14) Source(100, 2) + SourceIndex(0)
 +3 >Emitted(80, 16) Source(76, 34) + SourceIndex(0)
 +4 >Emitted(80, 25) Source(76, 43) + SourceIndex(0)
@@ -2737,123 +1267,39 @@
  ---
  >>>        })(Languages = Thing.Languages || (Thing.Languages = {}));
  1 >^^^^^^^^
- 2 >        ^
--3 >         ^^
--4 >           ^^^^^^^^^
--5 >                    ^^^
+@@= skipped -16, +18 lines =@@
+ 3 >         ^^
+ 4 >           ^^^^^^^^^
+ 5 >                    ^^^
 -6 >                       ^^^^^^^^^^^^^^^
 -7 >                                      ^^^^^
 -8 >                                           ^^^^^^^^^^^^^^^
 -9 >                                                          ^^^^^^^^
-+3 >         
-+4 >         ^^
-+5 >           ^^^^^^^^^
-+6 >                    ^^^
-+7 >                       ^^^^^^
-+8 >                             ^^^^^^^^^
-+9 >                                      ^^^^^
-+10>                                           ^^^^^^
-+11>                                                 ^^^^^^^^^
-+12>                                                          ^^^^^^^^
++6 >                       ^^^^^^
++7 >                             ^^^^^^^^^
++8 >                                      ^^^^^
++9 >                                           ^^^^^^
++10>                                                 ^^^^^^^^^
++11>                                                          ^^^^^^^^
  1 >
--2 >        }
-+2 >        
-+  >        
+ 2 >        }
  3 >         
--4 >           Languages
--5 >                    
+ 4 >           Languages
+ 5 >                    
 -6 >                       Languages
 -7 >                                      
 -8 >                                           Languages
 -9 >                                                          .PlainText {
-+4 >         // Scenario 1: Test reqursive function call with "this" parameter
-+  >         // Scenario 2: Test recursive function call with cast and "this" parameter
-+  >         
-+  >         
-+  >         
-+  >         declare namespace Sample.Thing {
-+  >         
-+  >         	export interface IWidget {
-+  >         		getDomNode(): any;
-+  >         		destroy();
-+  >         		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >         	}
-+  >         
-+  >         	export interface ICodeThing {
-+  >           
-+  >           		getDomNode(): Element;
-+  >         		
-+  >         		addWidget(widgetId:string, widget:IWidget);
-+  >         
-+  >         		
-+  >         		focus(); 
-+  >         		
-+  >         		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >         	}
-+  >         
-+  >         	export interface IAction {
-+  >         		run(Thing:ICodeThing):boolean;
-+  >         		getId():string;
-+  >         	}	
-+  >         }
-+  >         
-+  >         namespace Sample.Actions.Thing.Find {
-+  >         	export class StartFindAction implements Sample.Thing.IAction {
-+  >         		
-+  >         		public getId() { return "yo"; }
-+  >         		
-+  >         		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >         
-+  >         			return true;
-+  >         		}
-+  >         	}
-+  >         }
-+  >         
-+  >         namespace Sample.Thing.Widgets {
-+  >         	export class FindWidget implements Sample.Thing.IWidget {
-+  >         
-+  >         		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >         			
-+  >         		private domNode:any = null;
-+  >         		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >         		    // scenario 1
-+  >         		    codeThing.addWidget("addWidget", this);
-+  >         		}
-+  >         		
-+  >         		public getDomNode() {
-+  >         			return domNode;
-+  >         		}
-+  >         		
-+  >         		public destroy() {
-+  >         
-+  >         		}
-+  >         
-+  >         	}
-+  >         }
-+  >         
-+  >         interface IMode { getInitialState(): IState;} 
-+  >         class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-+  >         
-+  >         interface IState {}
-+  >         
-+  >         interface Window {
-+  >             opener: Window;
-+  >         }
-+  >         declare var self: Window;
-+  >         
-+  >         namespace Sample.Thing.
-+5 >           Languages
-+6 >                    
-+7 >                       
-+8 >                             Languages
-+9 >                                      
-+10>                                           
-+11>                                                 Languages
-+12>                                                          .PlainText {
++6 >                       
++7 >                             Languages
++8 >                                      
++9 >                                           
++10>                                                 Languages
++11>                                                          .PlainText {
    >                                                          	
    >                                                          	export class State implements IState {		
    >                                                                  constructor(private mode: IMode) { }
-@@= skipped -53, +137 lines =@@
+@@= skipped -37, +41 lines =@@
    >                                                          
    >                                                          	}
    >                                                          }
@@ -2866,138 +1312,53 @@
 -7 >Emitted(79, 44) Source(76, 24) + SourceIndex(0)
 -8 >Emitted(79, 59) Source(76, 33) + SourceIndex(0)
 -9 >Emitted(79, 67) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(81, 9) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(81, 10) Source(100, 1) + SourceIndex(0)
-+3 >Emitted(81, 10) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(81, 12) Source(76, 24) + SourceIndex(0)
-+5 >Emitted(81, 21) Source(76, 33) + SourceIndex(0)
-+6 >Emitted(81, 24) Source(76, 24) + SourceIndex(0)
-+7 >Emitted(81, 30) Source(76, 24) + SourceIndex(0)
-+8 >Emitted(81, 39) Source(76, 33) + SourceIndex(0)
-+9 >Emitted(81, 44) Source(76, 24) + SourceIndex(0)
-+10>Emitted(81, 50) Source(76, 24) + SourceIndex(0)
-+11>Emitted(81, 59) Source(76, 33) + SourceIndex(0)
-+12>Emitted(81, 67) Source(100, 2) + SourceIndex(0)
++1 >Emitted(81, 9) Source(100, 1) + SourceIndex(0)
++2 >Emitted(81, 10) Source(100, 2) + SourceIndex(0)
++3 >Emitted(81, 12) Source(76, 24) + SourceIndex(0)
++4 >Emitted(81, 21) Source(76, 33) + SourceIndex(0)
++5 >Emitted(81, 24) Source(76, 24) + SourceIndex(0)
++6 >Emitted(81, 30) Source(76, 24) + SourceIndex(0)
++7 >Emitted(81, 39) Source(76, 33) + SourceIndex(0)
++8 >Emitted(81, 44) Source(76, 24) + SourceIndex(0)
++9 >Emitted(81, 50) Source(76, 24) + SourceIndex(0)
++10>Emitted(81, 59) Source(76, 33) + SourceIndex(0)
++11>Emitted(81, 67) Source(100, 2) + SourceIndex(0)
  ---
  >>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
  1 >^^^^
- 2 >    ^
--3 >     ^^
--4 >       ^^^^^
--5 >            ^^^
+@@= skipped -16, +18 lines =@@
+ 3 >     ^^
+ 4 >       ^^^^^
+ 5 >            ^^^
 -6 >               ^^^^^^^^^^^^
 -7 >                           ^^^^^
 -8 >                                ^^^^^^^^^^^^
 -9 >                                            ^^^^^^^^
-+3 >     
-+4 >     ^^
-+5 >       ^^^^^
-+6 >            ^^^
-+7 >               ^^^^^^^
-+8 >                      ^^^^^
-+9 >                           ^^^^^
-+10>                                ^^^^^^^
-+11>                                       ^^^^^
-+12>                                            ^^^^^^^^
++6 >               ^^^^^^^
++7 >                      ^^^^^
++8 >                           ^^^^^
++9 >                                ^^^^^^^
++10>                                       ^^^^^
++11>                                            ^^^^^^^^
  1 >
--2 >    }
-+2 >    
-+  >    
+ 2 >    }
  3 >     
--4 >       Thing
--5 >            
+ 4 >       Thing
+ 5 >            
 -6 >               Thing
 -7 >                           
 -8 >                                Thing
 -9 >                                            .Languages.PlainText {
-+4 >     // Scenario 1: Test reqursive function call with "this" parameter
-+  >     // Scenario 2: Test recursive function call with cast and "this" parameter
-+  >     
-+  >     
-+  >     
-+  >     declare namespace Sample.Thing {
-+  >     
-+  >     	export interface IWidget {
-+  >     		getDomNode(): any;
-+  >     		destroy();
-+  >     		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  >     	}
-+  >     
-+  >     	export interface ICodeThing {
-+  >       
-+  >       		getDomNode(): Element;
-+  >     		
-+  >     		addWidget(widgetId:string, widget:IWidget);
-+  >     
-+  >     		
-+  >     		focus(); 
-+  >     		
-+  >     		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  >     	}
-+  >     
-+  >     	export interface IAction {
-+  >     		run(Thing:ICodeThing):boolean;
-+  >     		getId():string;
-+  >     	}	
-+  >     }
-+  >     
-+  >     namespace Sample.Actions.Thing.Find {
-+  >     	export class StartFindAction implements Sample.Thing.IAction {
-+  >     		
-+  >     		public getId() { return "yo"; }
-+  >     		
-+  >     		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  >     
-+  >     			return true;
-+  >     		}
-+  >     	}
-+  >     }
-+  >     
-+  >     namespace Sample.Thing.Widgets {
-+  >     	export class FindWidget implements Sample.Thing.IWidget {
-+  >     
-+  >     		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >     			
-+  >     		private domNode:any = null;
-+  >     		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  >     		    // scenario 1
-+  >     		    codeThing.addWidget("addWidget", this);
-+  >     		}
-+  >     		
-+  >     		public getDomNode() {
-+  >     			return domNode;
-+  >     		}
-+  >     		
-+  >     		public destroy() {
-+  >     
-+  >     		}
-+  >     
-+  >     	}
-+  >     }
-+  >     
-+  >     interface IMode { getInitialState(): IState;} 
-+  >     class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-+  >     
-+  >     interface IState {}
-+  >     
-+  >     interface Window {
-+  >         opener: Window;
-+  >     }
-+  >     declare var self: Window;
-+  >     
-+  >     namespace Sample.
-+5 >       Thing
-+6 >            
-+7 >               
-+8 >                      Thing
-+9 >                           
-+10>                                
-+11>                                       Thing
-+12>                                            .Languages.PlainText {
++6 >               
++7 >                      Thing
++8 >                           
++9 >                                
++10>                                       Thing
++11>                                            .Languages.PlainText {
    >                                            	
    >                                            	export class State implements IState {		
    >                                                    constructor(private mode: IMode) { }
-@@= skipped -53, +138 lines =@@
+@@= skipped -37, +41 lines =@@
    >                                            
    >                                            	}
    >                                            }
@@ -3010,128 +1371,21 @@
 -7 >Emitted(80, 33) Source(76, 18) + SourceIndex(0)
 -8 >Emitted(80, 45) Source(76, 23) + SourceIndex(0)
 -9 >Emitted(80, 53) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(82, 5) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(82, 6) Source(100, 1) + SourceIndex(0)
-+3 >Emitted(82, 6) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(82, 8) Source(76, 18) + SourceIndex(0)
-+5 >Emitted(82, 13) Source(76, 23) + SourceIndex(0)
-+6 >Emitted(82, 16) Source(76, 18) + SourceIndex(0)
-+7 >Emitted(82, 23) Source(76, 18) + SourceIndex(0)
-+8 >Emitted(82, 28) Source(76, 23) + SourceIndex(0)
-+9 >Emitted(82, 33) Source(76, 18) + SourceIndex(0)
-+10>Emitted(82, 40) Source(76, 18) + SourceIndex(0)
-+11>Emitted(82, 45) Source(76, 23) + SourceIndex(0)
-+12>Emitted(82, 53) Source(100, 2) + SourceIndex(0)
++1 >Emitted(82, 5) Source(100, 1) + SourceIndex(0)
++2 >Emitted(82, 6) Source(100, 2) + SourceIndex(0)
++3 >Emitted(82, 8) Source(76, 18) + SourceIndex(0)
++4 >Emitted(82, 13) Source(76, 23) + SourceIndex(0)
++5 >Emitted(82, 16) Source(76, 18) + SourceIndex(0)
++6 >Emitted(82, 23) Source(76, 18) + SourceIndex(0)
++7 >Emitted(82, 28) Source(76, 23) + SourceIndex(0)
++8 >Emitted(82, 33) Source(76, 18) + SourceIndex(0)
++9 >Emitted(82, 40) Source(76, 18) + SourceIndex(0)
++10>Emitted(82, 45) Source(76, 23) + SourceIndex(0)
++11>Emitted(82, 53) Source(100, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
- 2 >^
--3 > ^^
--4 >   ^^^^^^
--5 >         ^^^^^
--6 >              ^^^^^^
--7 >                    ^^^^^^^^
--8 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+3 > 
-+4 > ^^
-+5 >   ^^^^^^
-+6 >         ^^^^^
-+7 >              ^^^^^^
-+8 >                    ^^^^^^^^
-+9 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
--2 >}
-+2 >
-+  >
- 3 > 
--4 >   Sample
--5 >         
--6 >              Sample
--7 >                    .Thing.Languages.PlainText {
-+4 > // Scenario 1: Test reqursive function call with "this" parameter
-+  > // Scenario 2: Test recursive function call with cast and "this" parameter
-+  > 
-+  > 
-+  > 
-+  > declare namespace Sample.Thing {
-+  > 
-+  > 	export interface IWidget {
-+  > 		getDomNode(): any;
-+  > 		destroy();
-+  > 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
-+  > 	}
-+  > 
-+  > 	export interface ICodeThing {
-+  >   
-+  >   		getDomNode(): Element;
-+  > 		
-+  > 		addWidget(widgetId:string, widget:IWidget);
-+  > 
-+  > 		
-+  > 		focus(); 
-+  > 		
-+  > 		//addWidget(widget: Sample.Thing.Widgets.IWidget);
-+  > 	}
-+  > 
-+  > 	export interface IAction {
-+  > 		run(Thing:ICodeThing):boolean;
-+  > 		getId():string;
-+  > 	}	
-+  > }
-+  > 
-+  > namespace Sample.Actions.Thing.Find {
-+  > 	export class StartFindAction implements Sample.Thing.IAction {
-+  > 		
-+  > 		public getId() { return "yo"; }
-+  > 		
-+  > 		public run(Thing:Sample.Thing.ICodeThing):boolean {
-+  > 
-+  > 			return true;
-+  > 		}
-+  > 	}
-+  > }
-+  > 
-+  > namespace Sample.Thing.Widgets {
-+  > 	export class FindWidget implements Sample.Thing.IWidget {
-+  > 
-+  > 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  > 			
-+  > 		private domNode:any = null;
-+  > 		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+  > 		    // scenario 1
-+  > 		    codeThing.addWidget("addWidget", this);
-+  > 		}
-+  > 		
-+  > 		public getDomNode() {
-+  > 			return domNode;
-+  > 		}
-+  > 		
-+  > 		public destroy() {
-+  > 
-+  > 		}
-+  > 
-+  > 	}
-+  > }
-+  > 
-+  > interface IMode { getInitialState(): IState;} 
-+  > class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-+  > 
-+  > interface IState {}
-+  > 
-+  > interface Window {
-+  >     opener: Window;
-+  > }
-+  > declare var self: Window;
-+  > 
-+  > namespace 
-+5 >   Sample
-+6 >         
-+7 >              Sample
-+8 >                    .Thing.Languages.PlainText {
-   >                    	
-   >                    	export class State implements IState {		
-   >                            constructor(private mode: IMode) { }
-@@= skipped -50, +131 lines =@@
+@@= skipped -50, +52 lines =@@
    >                    
    >                    	}
    >                    }
@@ -3142,13 +1396,12 @@
 -5 >Emitted(81, 15) Source(76, 11) + SourceIndex(0)
 -6 >Emitted(81, 21) Source(76, 17) + SourceIndex(0)
 -7 >Emitted(81, 29) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(83, 1) Source(99, 3) + SourceIndex(0)
-+2 >Emitted(83, 2) Source(100, 1) + SourceIndex(0)
-+3 >Emitted(83, 2) Source(1, 1) + SourceIndex(0)
-+4 >Emitted(83, 4) Source(76, 11) + SourceIndex(0)
-+5 >Emitted(83, 10) Source(76, 17) + SourceIndex(0)
-+6 >Emitted(83, 15) Source(76, 11) + SourceIndex(0)
-+7 >Emitted(83, 21) Source(76, 17) + SourceIndex(0)
-+8 >Emitted(83, 29) Source(100, 2) + SourceIndex(0)
++1 >Emitted(83, 1) Source(100, 1) + SourceIndex(0)
++2 >Emitted(83, 2) Source(100, 2) + SourceIndex(0)
++3 >Emitted(83, 4) Source(76, 11) + SourceIndex(0)
++4 >Emitted(83, 10) Source(76, 17) + SourceIndex(0)
++5 >Emitted(83, 15) Source(76, 11) + SourceIndex(0)
++6 >Emitted(83, 21) Source(76, 17) + SourceIndex(0)
++7 >Emitted(83, 29) Source(100, 2) + SourceIndex(0)
  ---
  >>>//# sourceMappingURL=recursiveClassReferenceTest.js.map

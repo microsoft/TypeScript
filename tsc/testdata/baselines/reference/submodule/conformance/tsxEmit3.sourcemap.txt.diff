@@ -1,95 +1,6 @@
 --- old.tsxEmit3.sourcemap.txt
 +++ new.tsxEmit3.sourcemap.txt
-@@= skipped -12, +12 lines =@@
- 1 >
- 2 >^^^^
- 3 >    ^
--4 >     ^
--5 >      ^^^^^^^^^^->
-+4 >     ^^^^^^^^^^^->
- 1 >declare namespace JSX {
-   >	interface Element { }
-   >	interface IntrinsicElements { }
-@@= skipped -9, +8 lines =@@
-   >
-   >
- 2 >namespace 
--3 >    M
--4 >      {
--  >     	export class Foo { constructor() { } }
--  >     	export namespace S {
--  >     		export class Bar { }
--  >     
--  >     		// Emit Foo
--  >     		// Foo, <Foo />;
--  >     	}
--  >     }
-+3 >    M {
-+  >    	export class Foo { constructor() { } }
-+  >    	export namespace S {
-+  >    		export class Bar { }
-+  >    
-+  >    		// Emit Foo
-+  >    		// Foo, <Foo />;
-+  >    	}
-+  >    }
- 1 >Emitted(2, 1) Source(6, 1) + SourceIndex(0)
- 2 >Emitted(2, 5) Source(6, 11) + SourceIndex(0)
--3 >Emitted(2, 6) Source(6, 12) + SourceIndex(0)
--4 >Emitted(2, 7) Source(14, 2) + SourceIndex(0)
-+3 >Emitted(2, 6) Source(14, 2) + SourceIndex(0)
- ---
- >>>(function (M) {
- 1->
- 2 >^^^^^^^^^^^
- 3 >           ^
--4 >            ^^^^->
-+4 >            ^^
-+5 >              ^^->
- 1->
- 2 >namespace 
- 3 >           M
-+4 >             
- 1->Emitted(3, 1) Source(6, 1) + SourceIndex(0)
- 2 >Emitted(3, 12) Source(6, 11) + SourceIndex(0)
- 3 >Emitted(3, 13) Source(6, 12) + SourceIndex(0)
-+4 >Emitted(3, 15) Source(6, 13) + SourceIndex(0)
- ---
- >>>    class Foo {
- 1->^^^^
- 2 >    ^^^^^^
- 3 >          ^^^
- 4 >             ^^^^^^^^^^^^^->
--1-> {
-+1->{
-   >	
- 2 >    export class 
- 3 >          Foo
-@@= skipped -42, +43 lines =@@
- ---
- >>>        constructor() { }
- 1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^^
--3 >                        ^
-+2 >        ^^^^^^^^^^^^^^
-+3 >                      ^^
-+4 >                        ^
- 1-> { 
--2 >        constructor() { 
--3 >                        }
-+2 >        constructor() 
-+3 >                      {
-+4 >                         }
- 1->Emitted(5, 9) Source(7, 21) + SourceIndex(0)
--2 >Emitted(5, 25) Source(7, 37) + SourceIndex(0)
--3 >Emitted(5, 26) Source(7, 38) + SourceIndex(0)
-+2 >Emitted(5, 23) Source(7, 35) + SourceIndex(0)
-+3 >Emitted(5, 25) Source(7, 36) + SourceIndex(0)
-+4 >Emitted(5, 26) Source(7, 38) + SourceIndex(0)
- ---
- >>>    }
- 1 >^^^^^
-@@= skipped -17, +20 lines =@@
+@@= skipped -80, +80 lines =@@
  ---
  >>>    M.Foo = Foo;
  1->^^^^
@@ -119,58 +30,6 @@
  ---
  >>>    let S;
  1 >^^^^
- 2 >    ^^^^
- 3 >        ^
--4 >         ^
--5 >          ^^^^^^^^^^->
-+4 >         ^^^^^^^^^^^->
- 1 >
-   >	
- 2 >    export namespace 
--3 >        S
--4 >          {
--  >         		export class Bar { }
--  >         
--  >         		// Emit Foo
--  >         		// Foo, <Foo />;
--  >         	}
-+3 >        S {
-+  >        		export class Bar { }
-+  >        
-+  >        		// Emit Foo
-+  >        		// Foo, <Foo />;
-+  >        	}
- 1 >Emitted(8, 5) Source(8, 2) + SourceIndex(0)
- 2 >Emitted(8, 9) Source(8, 19) + SourceIndex(0)
--3 >Emitted(8, 10) Source(8, 20) + SourceIndex(0)
--4 >Emitted(8, 11) Source(13, 3) + SourceIndex(0)
-+3 >Emitted(8, 10) Source(13, 3) + SourceIndex(0)
- ---
- >>>    (function (S) {
- 1->^^^^
- 2 >    ^^^^^^^^^^^
- 3 >               ^
--4 >                ^^^^->
-+4 >                ^^
-+5 >                  ^^->
- 1->
- 2 >    export namespace 
- 3 >               S
-+4 >                 
- 1->Emitted(9, 5) Source(8, 2) + SourceIndex(0)
- 2 >Emitted(9, 16) Source(8, 19) + SourceIndex(0)
- 3 >Emitted(9, 17) Source(8, 20) + SourceIndex(0)
-+4 >Emitted(9, 19) Source(8, 21) + SourceIndex(0)
- ---
- >>>        class Bar {
- 1->^^^^^^^^
- 2 >        ^^^^^^
- 3 >              ^^^
--1-> {
-+1->{
-   >		
- 2 >        export class 
- 3 >              Bar
 @@= skipped -65, +68 lines =@@
  ---
  >>>        S.Bar = Bar;
@@ -216,13 +75,8 @@
 +10>                     ^
 +11>                      ^^^^^^^^
  1->
--  >	
--2 >    }
-+2 >    
-+  >    
-+  >    		// Emit Foo
-+  >    		// Foo, <Foo />;
-+  >    	}
+   >	
+ 2 >    }
  3 >     
  4 >       S
  5 >        
@@ -239,11 +93,7 @@
    >                      		export class Bar { }
    >                      
    >                      		// Emit Foo
-   >                      		// Foo, <Foo />;
-   >                      	}
--1->Emitted(15, 5) Source(13, 2) + SourceIndex(0)
-+1->Emitted(15, 5) Source(9, 23) + SourceIndex(0)
- 2 >Emitted(15, 6) Source(13, 3) + SourceIndex(0)
+@@= skipped -24, +28 lines =@@
  3 >Emitted(15, 8) Source(8, 19) + SourceIndex(0)
  4 >Emitted(15, 9) Source(8, 20) + SourceIndex(0)
  5 >Emitted(15, 12) Source(8, 19) + SourceIndex(0)
@@ -260,54 +110,7 @@
  ---
  >>>})(M || (M = {}));
  1 >
-@@= skipped -38, +47 lines =@@
- 6 >         ^
- 7 >          ^^^^^^^^
- 1 >
--  >
--2 >}
-+2 >
-+  >}
- 3 > 
- 4 >   M
- 5 >    
-@@= skipped -15, +15 lines =@@
-   >          		// Foo, <Foo />;
-   >          	}
-   >          }
--1 >Emitted(16, 1) Source(14, 1) + SourceIndex(0)
-+1 >Emitted(16, 1) Source(13, 3) + SourceIndex(0)
- 2 >Emitted(16, 2) Source(14, 2) + SourceIndex(0)
- 3 >Emitted(16, 4) Source(6, 11) + SourceIndex(0)
- 4 >Emitted(16, 5) Source(6, 12) + SourceIndex(0)
-@@= skipped -12, +12 lines =@@
- 1 >
- 2 >^^^^^^^^^^^
- 3 >           ^
--4 >            ^^^^^^->
-+4 >            ^^
-+5 >              ^^^^->
- 1 >
-   >
-   >
- 2 >namespace 
- 3 >           M
-+4 >             
- 1 >Emitted(17, 1) Source(16, 1) + SourceIndex(0)
- 2 >Emitted(17, 12) Source(16, 11) + SourceIndex(0)
- 3 >Emitted(17, 13) Source(16, 12) + SourceIndex(0)
-+4 >Emitted(17, 15) Source(16, 13) + SourceIndex(0)
- ---
- >>>    // Emit M.Foo
- 1->^^^^
- 2 >    ^^^^^^^^^^^^^
- 3 >                 ^^^^^->
--1-> {
-+1->{
-   >	
- 2 >    // Emit M.Foo
- 1->Emitted(18, 5) Source(17, 2) + SourceIndex(0)
-@@= skipped -22, +25 lines =@@
+@@= skipped -63, +65 lines =@@
  ---
  >>>    M.Foo, <M.Foo />;
  1->^^^^
@@ -371,61 +174,6 @@
  ---
  >>>    let S;
  1 >^^^^
- 2 >    ^^^^
- 3 >        ^
--4 >         ^
--5 >          ^^^^^^^^^^->
-+4 >         ^^^^^^^^^^^->
- 1 >
-   >
-   >	
- 2 >    export namespace 
--3 >        S
--4 >          {
--  >         		// Emit M.Foo
--  >         		Foo, <Foo />;
--  >         
--  >         		// Emit S.Bar
--  >         		Bar, <Bar />;
--  >         	}
-+3 >        S {
-+  >        		// Emit M.Foo
-+  >        		Foo, <Foo />;
-+  >        
-+  >        		// Emit S.Bar
-+  >        		Bar, <Bar />;
-+  >        	}
- 1 >Emitted(20, 5) Source(20, 2) + SourceIndex(0)
- 2 >Emitted(20, 9) Source(20, 19) + SourceIndex(0)
--3 >Emitted(20, 10) Source(20, 20) + SourceIndex(0)
--4 >Emitted(20, 11) Source(26, 3) + SourceIndex(0)
-+3 >Emitted(20, 10) Source(26, 3) + SourceIndex(0)
- ---
- >>>    (function (S) {
- 1->^^^^
- 2 >    ^^^^^^^^^^^
- 3 >               ^
--4 >                ^^^^^^->
-+4 >                ^^
-+5 >                  ^^^^->
- 1->
- 2 >    export namespace 
- 3 >               S
-+4 >                 
- 1->Emitted(21, 5) Source(20, 2) + SourceIndex(0)
- 2 >Emitted(21, 16) Source(20, 19) + SourceIndex(0)
- 3 >Emitted(21, 17) Source(20, 20) + SourceIndex(0)
-+4 >Emitted(21, 19) Source(20, 21) + SourceIndex(0)
- ---
- >>>        // Emit M.Foo
- 1->^^^^^^^^
- 2 >        ^^^^^^^^^^^^^
- 3 >                     ^^^^^->
--1-> {
-+1->{
-   >		
- 2 >        // Emit M.Foo
- 1->Emitted(22, 9) Source(21, 3) + SourceIndex(0)
 @@= skipped -81, +75 lines =@@
  ---
  >>>        M.Foo, <M.Foo />;
@@ -571,10 +319,8 @@
 +10>                     ^
 +11>                      ^^^^^^^^
  1->
--  >	
--2 >    }
-+2 >    
-+  >    	}
+   >	
+ 2 >    }
  3 >     
  4 >       S
  5 >        
@@ -591,12 +337,7 @@
    >                      		// Emit M.Foo
    >                      		Foo, <Foo />;
    >                      
-   >                      		// Emit S.Bar
-   >                      		Bar, <Bar />;
-   >                      	}
--1->Emitted(26, 5) Source(26, 2) + SourceIndex(0)
-+1->Emitted(26, 5) Source(25, 16) + SourceIndex(0)
- 2 >Emitted(26, 6) Source(26, 3) + SourceIndex(0)
+@@= skipped -25, +29 lines =@@
  3 >Emitted(26, 8) Source(20, 19) + SourceIndex(0)
  4 >Emitted(26, 9) Source(20, 20) + SourceIndex(0)
  5 >Emitted(26, 12) Source(20, 19) + SourceIndex(0)
@@ -613,56 +354,7 @@
  ---
  >>>})(M || (M = {}));
  1 >
-@@= skipped -39, +45 lines =@@
- 6 >         ^
- 7 >          ^^^^^^^^
- 1 >
--  >
--  >
--2 >}
-+2 >
-+  >
-+  >}
- 3 > 
- 4 >   M
- 5 >    
-@@= skipped -20, +20 lines =@@
-   >          	}
-   >          
-   >          }
--1 >Emitted(27, 1) Source(28, 1) + SourceIndex(0)
-+1 >Emitted(27, 1) Source(26, 3) + SourceIndex(0)
- 2 >Emitted(27, 2) Source(28, 2) + SourceIndex(0)
- 3 >Emitted(27, 4) Source(16, 11) + SourceIndex(0)
- 4 >Emitted(27, 5) Source(16, 12) + SourceIndex(0)
-@@= skipped -12, +12 lines =@@
- 1 >
- 2 >^^^^^^^^^^^
- 3 >           ^
--4 >            ^^^^^^^^->
-+4 >            ^^
-+5 >              ^^^^^^->
- 1 >
-   >
-   >
- 2 >namespace 
- 3 >           M
-+4 >             
- 1 >Emitted(28, 1) Source(30, 1) + SourceIndex(0)
- 2 >Emitted(28, 12) Source(30, 11) + SourceIndex(0)
- 3 >Emitted(28, 13) Source(30, 12) + SourceIndex(0)
-+4 >Emitted(28, 15) Source(30, 13) + SourceIndex(0)
- ---
- >>>    // Emit M.S.Bar
- 1->^^^^
- 2 >    ^^^^^^^^^^^^^^^
- 3 >                   ^^^^^^^->
--1-> {
-+1->{
-   >	
- 2 >    // Emit M.S.Bar
- 1->Emitted(29, 5) Source(31, 2) + SourceIndex(0)
-@@= skipped -22, +25 lines =@@
+@@= skipped -68, +70 lines =@@
  ---
  >>>    M.S.Bar, <M.S.Bar />;
  1->^^^^
@@ -750,56 +442,7 @@
  ---
  >>>})(M || (M = {}));
  1 >
-@@= skipped -55, +49 lines =@@
- 6 >         ^
- 7 >          ^^^^^^^^
- 1 >
--  >
--2 >}
-+2 >
-+  >}
- 3 > 
- 4 >   M
- 5 >    
-@@= skipped -10, +10 lines =@@
-   >          	// Emit M.S.Bar
-   >          	S.Bar, <S.Bar />;
-   >          }
--1 >Emitted(31, 1) Source(33, 1) + SourceIndex(0)
-+1 >Emitted(31, 1) Source(32, 19) + SourceIndex(0)
- 2 >Emitted(31, 2) Source(33, 2) + SourceIndex(0)
- 3 >Emitted(31, 4) Source(30, 11) + SourceIndex(0)
- 4 >Emitted(31, 5) Source(30, 12) + SourceIndex(0)
-@@= skipped -12, +12 lines =@@
- 1 >
- 2 >^^^^^^^^^^^
- 3 >           ^^^
--4 >              ^^^->
-+4 >              ^^
-+5 >                ^->
- 1 >
-   >
-   >
- 2 >namespace 
- 3 >           M
-+4 >               
- 1 >Emitted(32, 1) Source(35, 1) + SourceIndex(0)
- 2 >Emitted(32, 12) Source(35, 11) + SourceIndex(0)
- 3 >Emitted(32, 15) Source(35, 12) + SourceIndex(0)
-+4 >Emitted(32, 17) Source(35, 13) + SourceIndex(0)
- ---
- >>>    var M = 100;
- 1->^^^^
-@@= skipped -18, +21 lines =@@
- 5 >            ^^^
- 6 >               ^
- 7 >                ^^^^->
--1-> {
-+1->{
-   >	
- 2 >    var 
- 3 >        M
-@@= skipped -26, +26 lines =@@
+@@= skipped -121, +115 lines =@@
  ---
  >>>    M_1.Foo, <M_1.Foo />;
  1->^^^^
@@ -863,23 +506,3 @@
  ---
  >>>})(M || (M = {}));
  1 >
-@@= skipped -44, +38 lines =@@
- 7 >          ^^^^^^^^
- 8 >                  ^^^^^^^^^^^^^^->
- 1 >
--  >
--2 >}
-+2 >
-+  >}
- 3 > 
- 4 >   M
- 5 >    
-@@= skipped -11, +11 lines =@@
-   >          	// Emit M_1.Foo
-   >          	Foo, <Foo />;
-   >          }
--1 >Emitted(36, 1) Source(39, 1) + SourceIndex(0)
-+1 >Emitted(36, 1) Source(38, 15) + SourceIndex(0)
- 2 >Emitted(36, 2) Source(39, 2) + SourceIndex(0)
- 3 >Emitted(36, 4) Source(35, 11) + SourceIndex(0)
- 4 >Emitted(36, 5) Source(35, 12) + SourceIndex(0)

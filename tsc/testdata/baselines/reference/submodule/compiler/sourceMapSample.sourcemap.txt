@@ -13,129 +13,129 @@ sourceFile:sourceMapSample.ts
 1 >
 2 >^^^^
 3 >    ^^^
-4 >       ^^^^^^^^^^^->
+4 >       ^
+5 >        ^^^^^^^^^^->
 1 >
 2 >namespace 
-3 >    Foo.Bar {
-  >        "use strict";
-  >    
-  >        class Greeter {
-  >            constructor(public greeting: string) {
-  >            }
-  >    
-  >            greet() {
-  >                return "<h1>" + this.greeting + "</h1>";
-  >            }
-  >        }
-  >    
-  >    
-  >        function foo(greeting: string): Foo.Bar.Greeter {
-  >            return new Greeter(greeting);
-  >        }
-  >    
-  >        var greeter = new Greeter("Hello, world!");
-  >        var str = greeter.greet();
-  >    
-  >        function foo2(greeting: string, ...restGreetings: string[]) {
-  >            var greeters: Greeter[] = [];
-  >            greeters[0] = new Greeter(greeting);
-  >            for (var i = 0; i < restGreetings.length; i++) {
-  >                greeters.push(new Greeter(restGreetings[i]));
-  >            }
-  >    
-  >            return greeters;
-  >        }
-  >    
-  >        var b = foo2("Hello", "World", "!");
-  >        for (var j = 0; j < b.length; j++) {
-  >            b[j].greet();
-  >        }
-  >    }
+3 >    Foo
+4 >       .Bar {
+  >           "use strict";
+  >       
+  >           class Greeter {
+  >               constructor(public greeting: string) {
+  >               }
+  >       
+  >               greet() {
+  >                   return "<h1>" + this.greeting + "</h1>";
+  >               }
+  >           }
+  >       
+  >       
+  >           function foo(greeting: string): Foo.Bar.Greeter {
+  >               return new Greeter(greeting);
+  >           }
+  >       
+  >           var greeter = new Greeter("Hello, world!");
+  >           var str = greeter.greet();
+  >       
+  >           function foo2(greeting: string, ...restGreetings: string[]) {
+  >               var greeters: Greeter[] = [];
+  >               greeters[0] = new Greeter(greeting);
+  >               for (var i = 0; i < restGreetings.length; i++) {
+  >                   greeters.push(new Greeter(restGreetings[i]));
+  >               }
+  >       
+  >               return greeters;
+  >           }
+  >       
+  >           var b = foo2("Hello", "World", "!");
+  >           for (var j = 0; j < b.length; j++) {
+  >               b[j].greet();
+  >           }
+  >       }
 1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(1, 11) + SourceIndex(0)
-3 >Emitted(2, 8) Source(35, 2) + SourceIndex(0)
+3 >Emitted(2, 8) Source(1, 14) + SourceIndex(0)
+4 >Emitted(2, 9) Source(35, 2) + SourceIndex(0)
 ---
 >>>(function (Foo) {
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^
-4 >              ^^
 1->
 2 >namespace 
 3 >           Foo
-4 >              
 1->Emitted(3, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(3, 12) Source(1, 11) + SourceIndex(0)
 3 >Emitted(3, 15) Source(1, 14) + SourceIndex(0)
-4 >Emitted(3, 17) Source(1, 1) + SourceIndex(0)
 ---
 >>>    let Bar;
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^
-4 >           ^^^^^^^^^^^->
-1 >namespace Foo.
+4 >           ^
+5 >            ^^^^^^^^^^->
+1 >.
 2 >    
-3 >        Bar {
-  >            "use strict";
-  >        
-  >            class Greeter {
-  >                constructor(public greeting: string) {
-  >                }
-  >        
-  >                greet() {
-  >                    return "<h1>" + this.greeting + "</h1>";
-  >                }
-  >            }
-  >        
-  >        
-  >            function foo(greeting: string): Foo.Bar.Greeter {
-  >                return new Greeter(greeting);
-  >            }
-  >        
-  >            var greeter = new Greeter("Hello, world!");
-  >            var str = greeter.greet();
-  >        
-  >            function foo2(greeting: string, ...restGreetings: string[]) {
-  >                var greeters: Greeter[] = [];
-  >                greeters[0] = new Greeter(greeting);
-  >                for (var i = 0; i < restGreetings.length; i++) {
-  >                    greeters.push(new Greeter(restGreetings[i]));
-  >                }
-  >        
-  >                return greeters;
-  >            }
-  >        
-  >            var b = foo2("Hello", "World", "!");
-  >            for (var j = 0; j < b.length; j++) {
-  >                b[j].greet();
-  >            }
-  >        }
+3 >        Bar
+4 >            {
+  >               "use strict";
+  >           
+  >               class Greeter {
+  >                   constructor(public greeting: string) {
+  >                   }
+  >           
+  >                   greet() {
+  >                       return "<h1>" + this.greeting + "</h1>";
+  >                   }
+  >               }
+  >           
+  >           
+  >               function foo(greeting: string): Foo.Bar.Greeter {
+  >                   return new Greeter(greeting);
+  >               }
+  >           
+  >               var greeter = new Greeter("Hello, world!");
+  >               var str = greeter.greet();
+  >           
+  >               function foo2(greeting: string, ...restGreetings: string[]) {
+  >                   var greeters: Greeter[] = [];
+  >                   greeters[0] = new Greeter(greeting);
+  >                   for (var i = 0; i < restGreetings.length; i++) {
+  >                       greeters.push(new Greeter(restGreetings[i]));
+  >                   }
+  >           
+  >                   return greeters;
+  >               }
+  >           
+  >               var b = foo2("Hello", "World", "!");
+  >               for (var j = 0; j < b.length; j++) {
+  >                   b[j].greet();
+  >               }
+  >           }
 1 >Emitted(4, 5) Source(1, 15) + SourceIndex(0)
 2 >Emitted(4, 9) Source(1, 15) + SourceIndex(0)
-3 >Emitted(4, 12) Source(35, 2) + SourceIndex(0)
+3 >Emitted(4, 12) Source(1, 18) + SourceIndex(0)
+4 >Emitted(4, 13) Source(35, 2) + SourceIndex(0)
 ---
 >>>    (function (Bar) {
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^
-4 >                  ^^
-5 >                    ^^->
+4 >                  ^^^^->
 1->
 2 >    
 3 >               Bar
-4 >                   
 1->Emitted(5, 5) Source(1, 15) + SourceIndex(0)
 2 >Emitted(5, 16) Source(1, 15) + SourceIndex(0)
 3 >Emitted(5, 19) Source(1, 18) + SourceIndex(0)
-4 >Emitted(5, 21) Source(1, 19) + SourceIndex(0)
 ---
 >>>        "use strict";
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
 3 >                    ^
 4 >                     ^^^->
-1->{
+1-> {
   >    
 2 >        "use strict"
 3 >                    ;
@@ -171,16 +171,13 @@ sourceFile:sourceMapSample.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^
 3 >                        ^^^^^^^^
-4 >                                ^^
-5 >                                  ^^^^^^^^->
+4 >                                ^^^^^^^^^^->
 1->
 2 >            constructor(public 
 3 >                        greeting: string
-4 >                                ) 
 1->Emitted(9, 13) Source(5, 9) + SourceIndex(0)
 2 >Emitted(9, 25) Source(5, 28) + SourceIndex(0)
 3 >Emitted(9, 33) Source(5, 44) + SourceIndex(0)
-4 >Emitted(9, 35) Source(5, 46) + SourceIndex(0)
 ---
 >>>                this.greeting = greeting;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -195,24 +192,21 @@ sourceFile:sourceMapSample.ts
 2 >            ^
 3 >             ^^^^^^^^^->
 1 >: string) {
-2 >            
-  >                    }
-1 >Emitted(11, 13) Source(5, 47) + SourceIndex(0)
+  >        
+2 >            }
+1 >Emitted(11, 13) Source(6, 9) + SourceIndex(0)
 2 >Emitted(11, 14) Source(6, 10) + SourceIndex(0)
 ---
 >>>            greet() {
 1->^^^^^^^^^^^^
 2 >            ^^^^^
-3 >                 ^^^
-4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >        
 2 >            greet
-3 >                 () 
 1->Emitted(12, 13) Source(8, 9) + SourceIndex(0)
 2 >Emitted(12, 18) Source(8, 14) + SourceIndex(0)
-3 >Emitted(12, 21) Source(8, 17) + SourceIndex(0)
 ---
 >>>                return "<h1>" + this.greeting + "</h1>";
 1->^^^^^^^^^^^^^^^^
@@ -225,7 +219,7 @@ sourceFile:sourceMapSample.ts
 8 >                                             ^^^
 9 >                                                ^^^^^^^
 10>                                                       ^
-1->{
+1->() {
   >            
 2 >                return 
 3 >                       "<h1>"
@@ -251,9 +245,9 @@ sourceFile:sourceMapSample.ts
 1 >^^^^^^^^^^^^
 2 >            ^
 1 >
-2 >            
-  >                    }
-1 >Emitted(14, 13) Source(9, 53) + SourceIndex(0)
+  >        
+2 >            }
+1 >Emitted(14, 13) Source(10, 9) + SourceIndex(0)
 2 >Emitted(14, 14) Source(10, 10) + SourceIndex(0)
 ---
 >>>        }
@@ -269,8 +263,7 @@ sourceFile:sourceMapSample.ts
 3 >                 ^^^
 4 >                    ^
 5 >                     ^^^^^^^^
-6 >                             ^^
-7 >                               ^^^^^^^^^^^->
+6 >                             ^^^^^^^^^^^^^->
 1->
   >
   >
@@ -279,13 +272,11 @@ sourceFile:sourceMapSample.ts
 3 >                 foo
 4 >                    (
 5 >                     greeting: string
-6 >                             ): Foo.Bar.Greeter 
 1->Emitted(16, 9) Source(14, 5) + SourceIndex(0)
 2 >Emitted(16, 18) Source(14, 14) + SourceIndex(0)
 3 >Emitted(16, 21) Source(14, 17) + SourceIndex(0)
 4 >Emitted(16, 22) Source(14, 18) + SourceIndex(0)
 5 >Emitted(16, 30) Source(14, 34) + SourceIndex(0)
-6 >Emitted(16, 32) Source(14, 53) + SourceIndex(0)
 ---
 >>>            return new Greeter(greeting);
 1->^^^^^^^^^^^^
@@ -296,7 +287,7 @@ sourceFile:sourceMapSample.ts
 6 >                               ^^^^^^^^
 7 >                                       ^
 8 >                                        ^
-1->{
+1->): Foo.Bar.Greeter {
   >        
 2 >            return 
 3 >                   new 
@@ -319,9 +310,9 @@ sourceFile:sourceMapSample.ts
 2 >        ^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >        
-  >            }
-1 >Emitted(18, 9) Source(15, 38) + SourceIndex(0)
+  >    
+2 >        }
+1 >Emitted(18, 9) Source(16, 5) + SourceIndex(0)
 2 >Emitted(18, 10) Source(16, 6) + SourceIndex(0)
 ---
 >>>        var greeter = new Greeter("Hello, world!");
@@ -398,7 +389,6 @@ sourceFile:sourceMapSample.ts
 6 >                              ^^
 7 >                                ^^^
 8 >                                   ^^^^^^^^^^^^^
-9 >                                                ^^
 1->
   >
   >    
@@ -409,7 +399,6 @@ sourceFile:sourceMapSample.ts
 6 >                              , 
 7 >                                ...
 8 >                                   restGreetings: string[]
-9 >                                                ) 
 1->Emitted(21, 9) Source(21, 5) + SourceIndex(0)
 2 >Emitted(21, 18) Source(21, 14) + SourceIndex(0)
 3 >Emitted(21, 22) Source(21, 18) + SourceIndex(0)
@@ -418,7 +407,6 @@ sourceFile:sourceMapSample.ts
 6 >Emitted(21, 33) Source(21, 37) + SourceIndex(0)
 7 >Emitted(21, 36) Source(21, 40) + SourceIndex(0)
 8 >Emitted(21, 49) Source(21, 63) + SourceIndex(0)
-9 >Emitted(21, 51) Source(21, 65) + SourceIndex(0)
 ---
 >>>            var greeters = [];
 1 >^^^^^^^^^^^^
@@ -428,7 +416,7 @@ sourceFile:sourceMapSample.ts
 5 >                           ^^
 6 >                             ^
 7 >                              ^^^^^^^^^^^^^^^^^^^->
-1 >{
+1 >) {
   >        
 2 >            var 
 3 >                greeters
@@ -616,9 +604,9 @@ sourceFile:sourceMapSample.ts
 2 >        ^
 3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >        
-  >            }
-1 >Emitted(28, 9) Source(28, 25) + SourceIndex(0)
+  >    
+2 >        }
+1 >Emitted(28, 9) Source(29, 5) + SourceIndex(0)
 2 >Emitted(28, 10) Source(29, 6) + SourceIndex(0)
 ---
 >>>        var b = foo2("Hello", "World", "!");
@@ -772,8 +760,8 @@ sourceFile:sourceMapSample.ts
 10>                             ^^^
 11>                                ^^^^^^^^
 1->
-2 >    
-  >    }
+  >
+2 >    }
 3 >     
 4 >       Bar
 5 >          
@@ -817,7 +805,7 @@ sourceFile:sourceMapSample.ts
   >                                        b[j].greet();
   >                                    }
   >                                }
-1->Emitted(33, 5) Source(34, 6) + SourceIndex(0)
+1->Emitted(33, 5) Source(35, 1) + SourceIndex(0)
 2 >Emitted(33, 6) Source(35, 2) + SourceIndex(0)
 3 >Emitted(33, 8) Source(1, 15) + SourceIndex(0)
 4 >Emitted(33, 11) Source(1, 18) + SourceIndex(0)
@@ -832,22 +820,19 @@ sourceFile:sourceMapSample.ts
 >>>})(Foo || (Foo = {}));
 1 >
 2 >^
-3 > 
-4 > ^^
-5 >   ^^^
-6 >      ^^^^^
-7 >           ^^^
-8 >              ^^^^^^^^
-9 >                      ^^^^^^^^^^^^^^^^^^^^->
+3 > ^^
+4 >   ^^^
+5 >      ^^^^^
+6 >           ^^^
+7 >              ^^^^^^^^
+8 >                      ^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >
-  >
+2 >}
 3 > 
-4 > namespace 
-5 >   Foo
-6 >      
-7 >           Foo
-8 >              .Bar {
+4 >   Foo
+5 >      
+6 >           Foo
+7 >              .Bar {
   >                  "use strict";
   >              
   >                  class Greeter {
@@ -882,13 +867,12 @@ sourceFile:sourceMapSample.ts
   >                      b[j].greet();
   >                  }
   >              }
-1 >Emitted(34, 1) Source(34, 6) + SourceIndex(0)
-2 >Emitted(34, 2) Source(35, 1) + SourceIndex(0)
-3 >Emitted(34, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(34, 4) Source(1, 11) + SourceIndex(0)
-5 >Emitted(34, 7) Source(1, 14) + SourceIndex(0)
-6 >Emitted(34, 12) Source(1, 11) + SourceIndex(0)
-7 >Emitted(34, 15) Source(1, 14) + SourceIndex(0)
-8 >Emitted(34, 23) Source(35, 2) + SourceIndex(0)
+1 >Emitted(34, 1) Source(35, 1) + SourceIndex(0)
+2 >Emitted(34, 2) Source(35, 2) + SourceIndex(0)
+3 >Emitted(34, 4) Source(1, 11) + SourceIndex(0)
+4 >Emitted(34, 7) Source(1, 14) + SourceIndex(0)
+5 >Emitted(34, 12) Source(1, 11) + SourceIndex(0)
+6 >Emitted(34, 15) Source(1, 14) + SourceIndex(0)
+7 >Emitted(34, 23) Source(35, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapSample.js.map
