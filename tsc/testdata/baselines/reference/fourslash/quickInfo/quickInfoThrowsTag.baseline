@@ -24,8 +24,7 @@
 // | ```
 // | 
 // | 
-// | *@throws* — {E}
-// | 
+// | *@throws*
 // | ----------------------------------------------------------------------
 // f2()
 // ^^
@@ -35,7 +34,7 @@
 // | ```
 // | 
 // | 
-// | *@throws* — {E} description
+// | *@throws* — description
 // | 
 // | ----------------------------------------------------------------------
 // f3()
@@ -63,7 +62,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f1(): void\n```\n\n\n*@throws* — {E}\n"
+        "value": "```tsx\nfunction f1(): void\n```\n\n\n*@throws*"
       },
       "range": {
         "start": {
@@ -90,7 +89,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nfunction f2(): void\n```\n\n\n*@throws* — {E} description\n"
+        "value": "```tsx\nfunction f2(): void\n```\n\n\n*@throws* — description\n"
       },
       "range": {
         "start": {

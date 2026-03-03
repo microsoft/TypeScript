@@ -2,6 +2,6 @@
 // === /jsdocThrowsTag_rename.ts ===
 // class /*RENAME*/[|ERENAME|] extends Error {}
 // /**
-//  * @throws {E}
+//  * @throws {[|ERENAME|]}
 //  */
 // function f() {}

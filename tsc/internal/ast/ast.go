@@ -902,6 +902,8 @@ func (n *Node) TagName() *Node {
 		return n.AsJSDocSeeTag().TagName
 	case KindJSDocSatisfiesTag:
 		return n.AsJSDocSatisfiesTag().TagName
+	case KindJSDocThrowsTag:
+		return n.AsJSDocThrowsTag().TagName
 	case KindJSDocImportTag:
 		return n.AsJSDocImportTag().TagName
 	}
@@ -987,6 +989,8 @@ func (n *Node) CommentList() *NodeList {
 		return n.AsJSDocSeeTag().Comment
 	case KindJSDocSatisfiesTag:
 		return n.AsJSDocSatisfiesTag().Comment
+	case KindJSDocThrowsTag:
+		return n.AsJSDocThrowsTag().Comment
 	case KindJSDocImportTag:
 		return n.AsJSDocImportTag().Comment
 	}
@@ -1183,6 +1187,8 @@ func (n *Node) TypeExpression() *Node {
 		return n.AsJSDocTypedefTag().TypeExpression
 	case KindJSDocSatisfiesTag:
 		return n.AsJSDocSatisfiesTag().TypeExpression
+	case KindJSDocThrowsTag:
+		return n.AsJSDocThrowsTag().TypeExpression
 	}
 	panic("Unhandled case in Node.TypeExpression: " + n.Kind.String())
 }
@@ -1929,6 +1935,10 @@ func (n *Node) AsJSDocAugmentsTag() *JSDocAugmentsTag {
 
 func (n *Node) AsJSDocSatisfiesTag() *JSDocSatisfiesTag {
 	return n.data.(*JSDocSatisfiesTag)
+}
+
+func (n *Node) AsJSDocThrowsTag() *JSDocThrowsTag {
+	return n.data.(*JSDocThrowsTag)
 }
 
 func (n *Node) AsJSDocThisTag() *JSDocThisTag {
@@ -10595,6 +10605,44 @@ func (node *JSDocSatisfiesTag) Clone(f NodeFactoryCoercible) *Node {
 
 func IsJSDocSatisfiesTag(node *Node) bool {
 	return node.Kind == KindJSDocSatisfiesTag
+}
+
+// JSDocThrowsTag
+
+type JSDocThrowsTag struct {
+	JSDocTagBase
+	TypeExpression *TypeNode
+}
+
+func (f *NodeFactory) NewJSDocThrowsTag(tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
+	data := &JSDocThrowsTag{}
+	data.TagName = tagName
+	data.TypeExpression = typeExpression
+	data.Comment = comment
+	return f.newNode(KindJSDocThrowsTag, data)
+}
+
+func (f *NodeFactory) UpdateJSDocThrowsTag(node *JSDocThrowsTag, tagName *IdentifierNode, typeExpression *TypeNode, comment *NodeList) *Node {
+	if tagName != node.TagName || typeExpression != node.TypeExpression || comment != node.Comment {
+		return updateNode(f.NewJSDocThrowsTag(tagName, typeExpression, comment), node.AsNode(), f.hooks)
+	}
+	return node.AsNode()
+}
+
+func (node *JSDocThrowsTag) ForEachChild(v Visitor) bool {
+	return visit(v, node.TagName) || visit(v, node.TypeExpression) || visitNodeList(v, node.Comment)
+}
+
+func (node *JSDocThrowsTag) VisitEachChild(v *NodeVisitor) *Node {
+	return v.Factory.UpdateJSDocThrowsTag(node, v.visitNode(node.TagName), v.visitNode(node.TypeExpression), v.visitNodes(node.Comment))
+}
+
+func (node *JSDocThrowsTag) Clone(f NodeFactoryCoercible) *Node {
+	return cloneNode(f.AsNodeFactory().NewJSDocThrowsTag(node.TagName, node.TypeExpression, node.Comment), node.AsNode(), f.AsNodeFactory().hooks)
+}
+
+func IsJSDocThrowsTag(node *Node) bool {
+	return node.Kind == KindJSDocThrowsTag
 }
 
 // JSDocThisTag

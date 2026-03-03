@@ -374,6 +374,7 @@ const (
 	KindJSDocTypedefTag
 	KindJSDocSeeTag
 	KindJSDocPropertyTag
+	KindJSDocThrowsTag
 	KindJSDocSatisfiesTag
 	KindJSDocImportTag
 	// Synthesized list

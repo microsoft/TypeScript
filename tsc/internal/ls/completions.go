@@ -5265,7 +5265,7 @@ func tryGetTypeExpressionFromTag(tag *ast.JSDocTag) *ast.Node {
 func isTagWithTypeExpression(tag *ast.JSDocTag) bool {
 	switch tag.Kind {
 	case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag, ast.KindJSDocReturnTag, ast.KindJSDocTypeTag,
-		ast.KindJSDocTypedefTag, ast.KindJSDocSatisfiesTag:
+		ast.KindJSDocTypedefTag, ast.KindJSDocThrowsTag, ast.KindJSDocSatisfiesTag:
 		return true
 	case ast.KindJSDocTemplateTag:
 		return tag.AsJSDocTemplateTag().Constraint != nil

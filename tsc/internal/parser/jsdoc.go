@@ -485,6 +485,8 @@ func (p *Parser) parseTag(tags []*ast.Node, margin int) *ast.Node {
 		tag = p.parseSatisfiesTag(start, tagName, margin, indentText)
 	case "see":
 		tag = p.parseSeeTag(start, tagName, margin, indentText)
+	case "exception", "throws":
+		tag = p.parseThrowsTag(start, tagName, margin, indentText)
 	case "import":
 		tag = p.parseImportTag(start, tagName, margin, indentText)
 	default:
@@ -859,6 +861,12 @@ func (p *Parser) parseSatisfiesTag(start int, tagName *ast.IdentifierNode, margi
 	typeExpression := p.parseJSDocTypeExpression(false)
 	comments := p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)
 	return p.finishNode(p.factory.NewJSDocSatisfiesTag(tagName, typeExpression, comments), start)
+}
+
+func (p *Parser) parseThrowsTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {
+	typeExpression := p.tryParseTypeExpression()
+	comment := p.parseTrailingTagComments(start, p.nodePos(), margin, indentText)
+	return p.finishNode(p.factory.NewJSDocThrowsTag(tagName, typeExpression, comment), start)
 }
 
 func (p *Parser) parseImportTag(start int, tagName *ast.IdentifierNode, margin int, indentText string) *ast.Node {

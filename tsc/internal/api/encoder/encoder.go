@@ -834,6 +834,9 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 	case ast.KindJSDocSatisfiesTag:
 		n := node.AsJSDocSatisfiesTag()
 		return (boolToByte(n.TagName != nil) << 0) | (boolToByte(n.TypeExpression != nil) << 1) | (boolToByte(n.Comment != nil) << 2)
+	case ast.KindJSDocThrowsTag:
+		n := node.AsJSDocThrowsTag()
+		return (boolToByte(n.TagName != nil) << 0) | (boolToByte(n.TypeExpression != nil) << 1) | (boolToByte(n.Comment != nil) << 2)
 	case ast.KindJSDocThisTag:
 		n := node.AsJSDocThisTag()
 		return (boolToByte(n.TagName != nil) << 0) | (boolToByte(n.TypeExpression != nil) << 1) | (boolToByte(n.Comment != nil) << 2)

@@ -132,6 +132,7 @@ export const childProperties: Readonly<Partial<Record<SyntaxKind, readonly strin
     [SyntaxKind.JSDocImplementsTag]: ["tagName", "class", "comment"],
     [SyntaxKind.JSDocAugmentsTag]: ["tagName", "class", "comment"],
     [SyntaxKind.JSDocSatisfiesTag]: ["tagName", "typeExpression", "comment"],
+    [SyntaxKind.JSDocThrowsTag]: ["tagName", "typeExpression", "comment"],
     [SyntaxKind.JSDocThisTag]: ["tagName", "typeExpression", "comment"],
     [SyntaxKind.JSDocImportTag]: ["tagName", "importClause", "moduleSpecifier", "attributes", "comment"],
     [SyntaxKind.JSDocCallbackTag]: ["tagName", "typeExpression", "fullName", "comment"],

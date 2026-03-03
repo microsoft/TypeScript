@@ -375,7 +375,6 @@ TestJsDocPropertyDescription9
 TestJsDocServices
 TestJsDocTagsWithHyphen
 TestJsdocTemplatePrototypeCompletions
-TestJsdocThrowsTagCompletion
 TestJsdocTypedefTag
 TestJsdocTypedefTag2
 TestJsdocTypedefTagNamespace
