@@ -594,7 +594,7 @@ func (l *LanguageService) provideSymbolsAndEntries(ctx context.Context, uri lspr
 	position := int(l.converters.LineAndCharacterToPosition(sourceFile, documentPosition))
 
 	node := astnav.GetTouchingPropertyName(sourceFile, position)
-	if isRename && !isNodeEligibleForRename(node) {
+	if isRename && !isNodeEligibleForRename(node) || implementations && ast.IsSourceFile(node) {
 		return SymbolAndEntriesData{OriginalNode: node, Position: position}, false
 	}
 
