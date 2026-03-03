@@ -24603,8 +24603,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (relation === identityRelation) {
                 return signaturesIdenticalTo(source, target, kind);
             }
-            if (target === anyFunctionType || source === anyFunctionType) {
+            // With respect to signatures, the anyFunctionType wildcard is a subtype of every other function type.
+            if (source === anyFunctionType) {
                 return Ternary.True;
+            }
+            if (target === anyFunctionType) {
+                return Ternary.False;
             }
 
             const sourceIsJSConstructor = source.symbol && isJSConstructor(source.symbol.valueDeclaration);
@@ -33925,7 +33929,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                 const childPropMap = createSymbolTable();
                 childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
-                spread = getSpreadType(spread, createAnonymousType(attributesSymbol, childPropMap, emptyArray, emptyArray, emptyArray), attributesSymbol, objectFlags, /*readonly*/ false);
+                spread = getSpreadType(spread, createAnonymousType(attributesSymbol, childPropMap, emptyArray, emptyArray, emptyArray), attributesSymbol, objectFlags | getPropagatingFlagsOfTypes(childrenTypes), /*readonly*/ false);
             }
         }
 
