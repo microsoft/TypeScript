@@ -78,6 +78,7 @@ func TestReplay(t *testing.T) {
 	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 0, 64*1024), 10*1024*1024)
 
 	if !scanner.Scan() {
 		t.Fatalf("replay file is empty")

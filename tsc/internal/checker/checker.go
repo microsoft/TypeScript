@@ -8580,6 +8580,9 @@ func (c *Checker) resolveTaggedTemplateExpression(node *ast.Node, candidatesOutA
 }
 
 func (c *Checker) resolveDecorator(node *ast.Node, candidatesOutArray *[]*Signature, checkMode CheckMode) *Signature {
+	if !ast.CanHaveDecorators(node.Parent) {
+		return c.resolveErrorCall(node)
+	}
 	funcType := c.checkExpression(node.Expression())
 	apparentType := c.getApparentType(funcType)
 	if c.isErrorType(apparentType) {
