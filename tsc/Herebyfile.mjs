@@ -60,6 +60,7 @@ const { values: rawOptions } = parseArgs({
         debug: { type: "boolean" },
         dirty: { type: "boolean" },
         release: { type: "boolean" },
+        assert: { type: "boolean" },
 
         setPrerelease: { type: "string" },
         forRelease: { type: "boolean" },
@@ -209,7 +210,7 @@ function buildTsgo(opts) {
     opts ||= {};
     const out = opts.out ?? "./built/local/";
     const env = { ...goBuildEnv, ...opts.env };
-    return $({ cancelSignal: opts.abortSignal, env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${options.debug ? goBuildTags("noembed") : goBuildTags("noembed", "noassert")} -o ${out} ./cmd/tsgo`;
+    return $({ cancelSignal: opts.abortSignal, env })`go build ${goBuildFlags} ${opts.extraFlags ?? []} ${options.debug || options.assert ? goBuildTags("noembed") : goBuildTags("noembed", "noassert")} -o ${out} ./cmd/tsgo`;
 }
 
 export const tsgoBuild = task({
