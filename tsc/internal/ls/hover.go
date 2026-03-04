@@ -165,6 +165,13 @@ func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, sy
 							b.WriteString(" ")
 							l.writeComments(&b, c, comments, isMarkdown)
 						}
+					} else if tag.Kind == ast.KindJSDocThrowsTag && tag.AsJSDocThrowsTag().TypeExpression != nil {
+						b.WriteString(" — ")
+						b.WriteString(scanner.GetTextOfNode(tag.AsJSDocThrowsTag().TypeExpression))
+						if len(comments) != 0 {
+							b.WriteString(" ")
+							l.writeComments(&b, c, comments, isMarkdown)
+						}
 					} else if len(comments) != 0 {
 						b.WriteString(" ")
 						if comments[0].Kind != ast.KindJSDocText || !strings.HasPrefix(comments[0].Text(), "-") {
