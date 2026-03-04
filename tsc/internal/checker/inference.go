@@ -186,11 +186,6 @@ func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) 
 					inference.priority = n.priority
 				}
 				if n.priority == inference.priority {
-					// Inferring A to [A[0]] is a zero information inference (it guarantees A becomes its constraint), but oft arises from generic argument list inferences
-					// By discarding it early, we can allow more fruitful results to be used instead.
-					if c.isTupleOfSelf(inference.typeParameter, candidate) {
-						return
-					}
 					// We make contravariant inferences only if we are in a pure contravariant position,
 					// i.e. only if we have not descended into a bivariant position.
 					if n.contravariant && !n.bivariant {
@@ -1551,11 +1546,6 @@ func (c *Checker) isFromInferenceBlockedSource(t *Type) bool {
 
 func (c *Checker) isSkipDirectInferenceNode(node *ast.Node) bool {
 	return c.skipDirectInferenceNodes.Has(node)
-}
-
-// Returns `true` if `type` has the shape `[T[0]]` where `T` is `typeParameter`
-func (c *Checker) isTupleOfSelf(tp *Type, t *Type) bool {
-	return isTupleType(t) && c.getTupleElementType(t, 0) == c.getIndexedAccessType(tp, c.getNumberLiteralType(0)) && c.getTypeOfPropertyOfType(t, "1") == nil
 }
 
 func newInferenceInfo(typeParameter *Type) *InferenceInfo {

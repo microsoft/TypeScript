@@ -173,12 +173,11 @@ type CachedSignatureKey struct {
 }
 
 var (
-	SignatureKeyErased         = CacheHashKey(xxh3.HashString128("-"))
-	SignatureKeyCanonical      = CacheHashKey(xxh3.HashString128("*"))
-	SignatureKeyBase           = CacheHashKey(xxh3.HashString128("#"))
-	SignatureKeyInner          = CacheHashKey(xxh3.HashString128("<"))
-	SignatureKeyOuter          = CacheHashKey(xxh3.HashString128(">"))
-	SignatureKeyImplementation = CacheHashKey(xxh3.HashString128("+"))
+	SignatureKeyErased    = CacheHashKey(xxh3.HashString128("-"))
+	SignatureKeyCanonical = CacheHashKey(xxh3.HashString128("*"))
+	SignatureKeyBase      = CacheHashKey(xxh3.HashString128("#"))
+	SignatureKeyInner     = CacheHashKey(xxh3.HashString128("<"))
+	SignatureKeyOuter     = CacheHashKey(xxh3.HashString128(">"))
 )
 
 // StringMappingKey
@@ -8866,7 +8865,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		if len(s.typeArguments) != 0 || !c.hasCorrectArity(s.node, s.args, candidate, s.signatureHelpTrailingComma) {
 			return nil
 		}
-		if !c.isSignatureApplicable(s.node, s.args, candidate, relation, CheckModeNormal, false /*reportErrors*/, nil /*inferenceContext*/, nil /*diagnosticOutput*/) {
+		if !c.isSignatureApplicable(s.node, s.args, candidate, relation, CheckModeNormal, false /*reportErrors*/, nil /*diagnosticOutput*/) {
 			s.candidatesForArgumentError = []*Signature{candidate}
 			return nil
 		}
@@ -8879,20 +8878,6 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		var checkCandidate *Signature
 		var inferenceContext *InferenceContext
 		if len(candidate.typeParameters) != 0 {
-			// If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
-			// so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-			var candidateParameterContext *ast.Node
-			typeParamDeclaration := core.FirstOrNil(candidate.typeParameters[0].symbol.Declarations)
-			if typeParamDeclaration != nil {
-				candidateParameterContext = typeParamDeclaration.Parent
-			} else if candidate.declaration != nil && ast.IsConstructorDeclaration(candidate.declaration) {
-				candidateParameterContext = candidate.declaration.Parent
-			} else {
-				candidateParameterContext = candidate.declaration
-			}
-			if candidateParameterContext != nil && ast.FindAncestor(s.node, func(a *ast.Node) bool { return a == candidateParameterContext }) != nil {
-				candidate = c.getImplementationSignature(candidate)
-			}
 			var typeArgumentTypes []*Type
 			if len(s.typeArguments) != 0 {
 				typeArgumentTypes = c.checkTypeArguments(candidate, s.typeArguments, false /*reportErrors*/, nil)
@@ -8902,9 +8887,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 				}
 			} else {
 				inferenceContext = c.newInferenceContext(candidate.typeParameters, candidate, InferenceFlagsNone /*flags*/, nil)
-				// The resulting type arguments are instantiated with the inference context mapper, as the inferred types may still contain references to the inference context's
-				//  type variables via contextual projection. These are kept generic until all inferences are locked in, so the dependencies expressed can pass constraint checks.
-				typeArgumentTypes = c.instantiateTypes(c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext), inferenceContext.nonFixingMapper)
+				typeArgumentTypes = c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode|CheckModeSkipGenericFunctions, inferenceContext)
 				if inferenceContext.flags&InferenceFlagsSkippedGenericFunction != 0 {
 					s.argCheckMode |= CheckModeSkipGenericFunctions
 				}
@@ -8923,7 +8906,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		} else {
 			checkCandidate = candidate
 		}
-		if !c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, inferenceContext, nil /*diagnosticOutput*/) {
+		if !c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
 			// Give preference to error candidates that have no rest parameters (as they are more specific)
 			s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
 			continue
@@ -8934,7 +8917,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 			// round of type inference and applicability checking for this particular candidate.
 			s.argCheckMode = CheckModeNormal
 			if inferenceContext != nil {
-				typeArgumentTypes := c.instantiateTypes(c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode, inferenceContext), inferenceContext.mapper)
+				typeArgumentTypes := c.inferTypeArguments(s.node, candidate, s.args, s.argCheckMode, inferenceContext)
 				checkCandidate = c.getSignatureInstantiation(candidate, typeArgumentTypes, ast.IsInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters)
 				// If the original signature has a generic rest type, instantiation may produce a
 				// signature with different arity and we need to perform another arity check.
@@ -8943,7 +8926,7 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 					continue
 				}
 			}
-			if !c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, inferenceContext, nil /*diagnosticOutput*/) {
+			if !c.isSignatureApplicable(s.node, s.args, checkCandidate, relation, s.argCheckMode, false /*reportErrors*/, nil /*diagnosticOutput*/) {
 				// Give preference to error candidates that have no rest parameters (as they are more specific)
 				s.candidatesForArgumentError = append(s.candidatesForArgumentError, checkCandidate)
 				continue
@@ -8953,16 +8936,6 @@ func (c *Checker) chooseOverload(s *CallState, relation *Relation) *Signature {
 		return checkCandidate
 	}
 	return nil
-}
-
-func (c *Checker) getImplementationSignature(signature *Signature) *Signature {
-	key := CachedSignatureKey{sig: signature, key: SignatureKeyImplementation}
-	if cached := c.cachedSignatures[key]; cached != nil {
-		return cached
-	}
-	result := c.instantiateSignature(signature, newTypeMapper(nil, nil))
-	c.cachedSignatures[key] = result
-	return result
 }
 
 func (c *Checker) hasCorrectArity(node *ast.Node, args []*ast.Node, signature *Signature, signatureHelpTrailingComma bool) bool {
@@ -9114,7 +9087,7 @@ func (c *Checker) checkTypeArguments(signature *Signature, typeArgumentNodes []*
 	return typeArgumentTypes
 }
 
-func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signature *Signature, relation *Relation, checkMode CheckMode, reportErrors bool, inferenceContext *InferenceContext, diagnosticOutput *[]*ast.Diagnostic) bool {
+func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signature *Signature, relation *Relation, checkMode CheckMode, reportErrors bool, diagnosticOutput *[]*ast.Diagnostic) bool {
 	if ast.IsJsxCallLike(node) {
 		return c.checkApplicableSignatureForJsxCallLikeElement(node, signature, relation, checkMode, reportErrors, diagnosticOutput)
 	}
@@ -9153,19 +9126,11 @@ func (c *Checker) isSignatureApplicable(node *ast.Node, args []*ast.Node, signat
 			// If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
 			// we obtain the regular type of any object literal arguments because we may not have inferred complete
 			// parameter types yet and therefore excess property checks may yield false positives (see #17041).
-			var regularArgType *Type
-			if checkMode&CheckModeSkipContextSensitive != 0 {
-				regularArgType = c.getRegularTypeOfObjectLiteral(argType)
-			} else {
-				regularArgType = argType
-			}
-			// If this was inferred under a given inference context, we may need to instantiate the expression type to finish resolving
-			// the type variables in the expression.
 			var checkArgType *Type
-			if inferenceContext != nil {
-				checkArgType = c.instantiateType(regularArgType, inferenceContext.nonFixingMapper)
+			if checkMode&CheckModeSkipContextSensitive != 0 {
+				checkArgType = c.getRegularTypeOfObjectLiteral(argType)
 			} else {
-				checkArgType = regularArgType
+				checkArgType = argType
 			}
 			effectiveCheckArgumentNode := c.getEffectiveCheckNode(arg)
 			if !c.checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, core.IfElse(reportErrors, effectiveCheckArgumentNode, nil), effectiveCheckArgumentNode, headMessage, diagnosticOutput) {
@@ -9520,7 +9485,7 @@ func (c *Checker) reportCallResolutionErrors(node *ast.Node, s *CallState, signa
 	case len(s.candidatesForArgumentError) != 0:
 		last := s.candidatesForArgumentError[len(s.candidatesForArgumentError)-1]
 		var diags []*ast.Diagnostic
-		c.isSignatureApplicable(s.node, s.args, last, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, nil /*inferenceContext*/, &diags)
+		c.isSignatureApplicable(s.node, s.args, last, c.assignableRelation, CheckModeNormal, true /*reportErrors*/, &diags)
 		for _, diagnostic := range diags {
 			if len(s.candidatesForArgumentError) > 1 {
 				diagnostic = ast.NewDiagnosticChain(diagnostic, diagnostics.The_last_overload_gave_the_following_error)
