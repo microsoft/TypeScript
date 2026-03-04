@@ -238,3 +238,19 @@ func (c *Checker) GetSymbolFlags(symbol *ast.Symbol) ast.SymbolFlags {
 func (c *Checker) GetBaseTypes(t *Type) []*Type {
 	return c.getBaseTypes(t)
 }
+
+func (c *Checker) GetRestTypeOfSignature(sig *Signature) *Type {
+	return c.getRestTypeOfSignature(sig)
+}
+
+func (c *Checker) GetTypeArguments(t *Type) []*Type {
+	return c.getTypeArguments(t)
+}
+
+func (c *Checker) GetIndexInfosOfType(t *Type) []*IndexInfo {
+	return c.getIndexInfosOfType(t)
+}
+
+func (c *Checker) IsContextSensitive(node *ast.Node) bool {
+	return c.isContextSensitive(node)
+}

@@ -1217,6 +1217,18 @@ func (typePredicate *TypePredicate) Type() *Type {
 	return typePredicate.t
 }
 
+func (typePredicate *TypePredicate) Kind() TypePredicateKind {
+	return typePredicate.kind
+}
+
+func (typePredicate *TypePredicate) ParameterIndex() int32 {
+	return typePredicate.parameterIndex
+}
+
+func (typePredicate *TypePredicate) ParameterName() string {
+	return typePredicate.parameterName
+}
+
 // IndexInfo
 
 type IndexInfo struct {
@@ -1225,6 +1237,18 @@ type IndexInfo struct {
 	isReadonly  bool
 	declaration *ast.Node   // IndexSignatureDeclaration
 	components  []*ast.Node // ElementWithComputedPropertyName
+}
+
+func (info *IndexInfo) KeyType() *Type {
+	return info.keyType
+}
+
+func (info *IndexInfo) ValueType() *Type {
+	return info.valueType
+}
+
+func (info *IndexInfo) IsReadonly() bool {
+	return info.isReadonly
 }
 
 /**

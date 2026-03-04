@@ -122,6 +122,23 @@ func (sd *snapshotData) resolveTypeHandle(handle Handle[checker.Type]) (*checker
 	return t, nil
 }
 
+// resolveSignatureHandle resolves a signature handle to a signature within this snapshot.
+func (sd *snapshotData) resolveSignatureHandle(handle Handle[checker.Signature]) (*checker.Signature, error) {
+	if len(handle) == 0 {
+		return nil, fmt.Errorf("%w: empty signature handle", ErrClientError)
+	}
+
+	sd.signatureRegistryMu.RLock()
+	sig, ok := sd.signatureRegistry[handle]
+	sd.signatureRegistryMu.RUnlock()
+
+	if !ok {
+		return nil, fmt.Errorf("%w: signature handle %q not found in snapshot registry", ErrClientError, handle)
+	}
+
+	return sig, nil
+}
+
 // registerSignature registers a signature in this snapshot's registry and returns the response.
 func (sd *snapshotData) registerSignature(sig *checker.Signature) *SignatureResponse {
 	if sig == nil {
@@ -383,6 +400,24 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
 	case string(MethodPrintNode):
 		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
+	case string(MethodIsContextSensitive):
+		return s.handleIsContextSensitive(ctx, parsed.(*GetContextualTypeParams))
+	case string(MethodGetReturnTypeOfSignature):
+		return s.handleGetReturnTypeOfSignature(ctx, parsed.(*CheckerSignatureParams))
+	case string(MethodGetRestTypeOfSignature):
+		return s.handleGetRestTypeOfSignature(ctx, parsed.(*CheckerSignatureParams))
+	case string(MethodGetTypePredicateOfSignature):
+		return s.handleGetTypePredicateOfSignature(ctx, parsed.(*CheckerSignatureParams))
+	case string(MethodGetBaseTypes):
+		return s.handleGetBaseTypes(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetPropertiesOfType):
+		return s.handleGetPropertiesOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetIndexInfosOfType):
+		return s.handleGetIndexInfosOfType(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetConstraintOfTypeParameter):
+		return s.handleGetConstraintOfTypeParameter(ctx, parsed.(*CheckerTypeParams))
+	case string(MethodGetTypeArguments):
+		return s.handleGetTypeArguments(ctx, parsed.(*CheckerTypeParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -1351,6 +1386,227 @@ func (s *Session) handleGetIntrinsicType(ctx context.Context, params *GetIntrins
 
 // resolveNodeHandle resolves a node handle to an AST node.
 // Node handles encode: pos.end.kind.path
+
+// handleIsContextSensitive returns whether a node is context-sensitive.
+func (s *Session) handleIsContextSensitive(ctx context.Context, params *GetContextualTypeParams) (bool, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return false, err
+	}
+	defer setup.done()
+
+	node, err := s.resolveNodeHandle(setup.program, params.Location)
+	if err != nil {
+		return false, err
+	}
+	if node == nil {
+		return false, nil
+	}
+
+	return setup.checker.IsContextSensitive(node), nil
+}
+
+// handleGetReturnTypeOfSignature returns the return type of a signature.
+func (s *Session) handleGetReturnTypeOfSignature(ctx context.Context, params *CheckerSignatureParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sig, err := setup.sd.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+
+	t := setup.checker.GetReturnTypeOfSignature(sig)
+	if t == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(t), nil
+}
+
+// handleGetRestTypeOfSignature returns the rest type of a signature.
+func (s *Session) handleGetRestTypeOfSignature(ctx context.Context, params *CheckerSignatureParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sig, err := setup.sd.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+
+	t := setup.checker.GetRestTypeOfSignature(sig)
+	if t == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(t), nil
+}
+
+// handleGetTypePredicateOfSignature returns the type predicate of a signature.
+func (s *Session) handleGetTypePredicateOfSignature(ctx context.Context, params *CheckerSignatureParams) (*TypePredicateResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	sig, err := setup.sd.resolveSignatureHandle(params.Signature)
+	if err != nil {
+		return nil, err
+	}
+
+	pred := setup.checker.GetTypePredicateOfSignature(sig)
+	if pred == nil {
+		return nil, nil
+	}
+
+	resp := &TypePredicateResponse{
+		Kind:           int32(pred.Kind()),
+		ParameterIndex: pred.ParameterIndex(),
+		ParameterName:  pred.ParameterName(),
+	}
+	if pred.Type() != nil {
+		resp.Type = setup.sd.registerType(pred.Type())
+	}
+
+	return resp, nil
+}
+
+// handleGetBaseTypes returns the base types of an interface/class type.
+func (s *Session) handleGetBaseTypes(ctx context.Context, params *CheckerTypeParams) ([]*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	baseTypes := setup.checker.GetBaseTypes(t)
+	if len(baseTypes) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*TypeResponse, len(baseTypes))
+	for i, bt := range baseTypes {
+		results[i] = setup.sd.registerType(bt)
+	}
+
+	return results, nil
+}
+
+// handleGetPropertiesOfType returns the properties of a type.
+func (s *Session) handleGetPropertiesOfType(ctx context.Context, params *CheckerTypeParams) ([]*SymbolResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	props := setup.checker.GetPropertiesOfType(t)
+	if len(props) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*SymbolResponse, len(props))
+	for i, prop := range props {
+		results[i] = setup.sd.registerSymbol(prop)
+	}
+
+	return results, nil
+}
+
+// handleGetIndexInfosOfType returns the index infos of a type.
+func (s *Session) handleGetIndexInfosOfType(ctx context.Context, params *CheckerTypeParams) ([]*IndexInfoResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	infos := setup.checker.GetIndexInfosOfType(t)
+	if len(infos) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*IndexInfoResponse, len(infos))
+	for i, info := range infos {
+		results[i] = &IndexInfoResponse{
+			KeyType:    *setup.sd.registerType(info.KeyType()),
+			ValueType:  *setup.sd.registerType(info.ValueType()),
+			IsReadonly: info.IsReadonly(),
+		}
+	}
+
+	return results, nil
+}
+
+// handleGetConstraintOfTypeParameter returns the constraint of a type parameter.
+func (s *Session) handleGetConstraintOfTypeParameter(ctx context.Context, params *CheckerTypeParams) (*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	constraint := setup.checker.GetConstraintOfTypeParameter(t)
+	if constraint == nil {
+		return nil, nil
+	}
+
+	return setup.sd.registerType(constraint), nil
+}
+
+// handleGetTypeArguments returns the type arguments of a type reference.
+func (s *Session) handleGetTypeArguments(ctx context.Context, params *CheckerTypeParams) ([]*TypeResponse, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	typeArgs := setup.checker.GetTypeArguments(t)
+	if len(typeArgs) == 0 {
+		return nil, nil
+	}
+
+	results := make([]*TypeResponse, len(typeArgs))
+	for i, ta := range typeArgs {
+		results[i] = setup.sd.registerType(ta)
+	}
+
+	return results, nil
+}
+
 func (s *Session) resolveNodeHandle(program *compiler.Program, handle Handle[ast.Node]) (*ast.Node, error) {
 	pos, end, kind, path, err := parseNodeHandle(handle)
 	if err != nil {

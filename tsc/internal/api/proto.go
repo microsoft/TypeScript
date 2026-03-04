@@ -134,6 +134,15 @@ const (
 	MethodGetTypeOfSymbolAtLocation         Method = "getTypeOfSymbolAtLocation"
 	MethodTypeToTypeNode                    Method = "typeToTypeNode"
 	MethodTypeToString                      Method = "typeToString"
+	MethodIsContextSensitive                Method = "isContextSensitive"
+	MethodGetReturnTypeOfSignature          Method = "getReturnTypeOfSignature"
+	MethodGetRestTypeOfSignature            Method = "getRestTypeOfSignature"
+	MethodGetTypePredicateOfSignature       Method = "getTypePredicateOfSignature"
+	MethodGetBaseTypes                      Method = "getBaseTypes"
+	MethodGetPropertiesOfType               Method = "getPropertiesOfType"
+	MethodGetIndexInfosOfType               Method = "getIndexInfosOfType"
+	MethodGetConstraintOfTypeParameter      Method = "getConstraintOfTypeParameter"
+	MethodGetTypeArguments                  Method = "getTypeArguments"
 
 	// Emitter methods
 	MethodPrintNode Method = "printNode"
@@ -332,6 +341,15 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetTypeOfSymbolAtLocation:         unmarshallerFor[GetTypeOfSymbolAtLocationParams],
 	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
 	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
+	MethodIsContextSensitive:                unmarshallerFor[GetContextualTypeParams],
+	MethodGetReturnTypeOfSignature:          unmarshallerFor[CheckerSignatureParams],
+	MethodGetRestTypeOfSignature:            unmarshallerFor[CheckerSignatureParams],
+	MethodGetTypePredicateOfSignature:       unmarshallerFor[CheckerSignatureParams],
+	MethodGetBaseTypes:                      unmarshallerFor[CheckerTypeParams],
+	MethodGetPropertiesOfType:               unmarshallerFor[CheckerTypeParams],
+	MethodGetIndexInfosOfType:               unmarshallerFor[CheckerTypeParams],
+	MethodGetConstraintOfTypeParameter:      unmarshallerFor[CheckerTypeParams],
+	MethodGetTypeArguments:                  unmarshallerFor[CheckerTypeParams],
 	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodGetAnyType:                        unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetStringType:                     unmarshallerFor[GetIntrinsicTypeParams],
@@ -710,6 +728,35 @@ type TypeToTypeNodeParams struct {
 // PrintNodeParams are the parameters for the printNode method.
 type PrintNodeParams struct {
 	Data string `json:"data"` // base64-encoded binary AST data
+}
+
+// CheckerTypeParams are parameters for checker methods that operate on a type.
+type CheckerTypeParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Type     Handle[checker.Type]     `json:"type"`
+}
+
+// CheckerSignatureParams are parameters for checker methods that operate on a signature.
+type CheckerSignatureParams struct {
+	Snapshot  Handle[project.Snapshot]  `json:"snapshot"`
+	Project   Handle[project.Project]   `json:"project"`
+	Signature Handle[checker.Signature] `json:"signature"`
+}
+
+// TypePredicateResponse is the response for getTypePredicateOfSignature.
+type TypePredicateResponse struct {
+	Kind           int32         `json:"kind"`
+	ParameterIndex int32         `json:"parameterIndex"`
+	ParameterName  string        `json:"parameterName,omitempty"`
+	Type           *TypeResponse `json:"type,omitempty"`
+}
+
+// IndexInfoResponse represents a single index signature.
+type IndexInfoResponse struct {
+	KeyType    TypeResponse `json:"keyType"`
+	ValueType  TypeResponse `json:"valueType"`
+	IsReadonly bool         `json:"isReadonly,omitempty"`
 }
 
 // SourceFileResponse contains the binary-encoded AST data for a source file.

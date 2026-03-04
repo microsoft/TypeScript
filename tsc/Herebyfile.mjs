@@ -313,6 +313,7 @@ const enumDefs = [
     { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
     { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
     { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
+    { name: "TypePredicateKind", goPrefix: "TypePredicateKind", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
     // @typescript/ast enums
     { name: "SyntaxKind", goPrefix: "Kind", goFile: "internal/ast/kind.go", outDir: "_packages/ast/src/enums" },
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "internal/ast/nodeflags.go", outDir: "_packages/ast/src/enums" },

@@ -166,3 +166,16 @@ export interface SignatureResponse {
     thisParameter?: string;
     target?: string;
 }
+
+export interface TypePredicateResponse {
+    kind: number;
+    parameterIndex: number;
+    parameterName?: string;
+    type?: TypeResponse;
+}
+
+export interface IndexInfoResponse {
+    keyType: TypeResponse;
+    valueType: TypeResponse;
+    isReadonly?: boolean;
+}
