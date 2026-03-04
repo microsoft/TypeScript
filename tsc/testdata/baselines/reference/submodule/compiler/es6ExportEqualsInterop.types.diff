@@ -1,0 +1,36 @@
+--- old.es6ExportEqualsInterop.types
++++ new.es6ExportEqualsInterop.types
+@@= skipped -134, +134 lines =@@
+ >y6 : { a: number; b: number; }
+
+ import * as y7 from "function";
+->y7 : () => any
++>y7 : { default: () => any; }
+
+ import * as y8 from "function-module";
+ >y8 : typeof y8
+
+ import * as y9 from "class";
+->y9 : typeof z9
++>y9 : typeof y9
+
+ import * as y0 from "class-module";
+ >y0 : typeof y0
+@@= skipped -43, +43 lines =@@
+
+ y7.a;
+ >y7.a : any
+->y7 : () => any
++>y7 : { default: () => any; }
+ >a : any
+
+ y8.a;
+@@= skipped -10, +10 lines =@@
+
+ y9.a;
+ >y9.a : any
+->y9 : typeof z9
++>y9 : typeof y9
+ >a : any
+
+ y0.a;

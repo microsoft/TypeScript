@@ -1,24 +1,15 @@
 main.ts(15,1): error TS2693: 'z1' only refers to a type, but is being used as a value here.
 main.ts(21,4): error TS2339: Property 'a' does not exist on type '() => any'.
 main.ts(23,4): error TS2339: Property 'a' does not exist on type 'typeof Foo'.
-main.ts(39,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
-main.ts(45,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
-main.ts(47,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(50,1): error TS2693: 'y1' only refers to a type, but is being used as a value here.
-main.ts(56,4): error TS2339: Property 'a' does not exist on type '() => any'.
+main.ts(56,4): error TS2339: Property 'a' does not exist on type '{ default: () => any; }'.
 main.ts(58,4): error TS2339: Property 'a' does not exist on type 'typeof Foo'.
 main.ts(62,10): error TS2305: Module '"interface"' has no exported member 'a'.
-main.ts(62,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(68,10): error TS2305: Module '"function"' has no exported member 'a'.
-main.ts(68,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(70,10): error TS2305: Module '"class"' has no exported member 'a'.
-main.ts(70,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(85,10): error TS2305: Module '"interface"' has no exported member 'a'.
-main.ts(85,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(91,10): error TS2305: Module '"function"' has no exported member 'a'.
-main.ts(91,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(93,10): error TS2305: Module '"class"' has no exported member 'a'.
-main.ts(93,25): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 main.ts(97,15): error TS2498: Module '"interface"' uses 'export =' and cannot be used with 'export *'.
 main.ts(98,15): error TS2498: Module '"variable"' uses 'export =' and cannot be used with 'export *'.
 main.ts(99,15): error TS2498: Module '"interface-variable"' uses 'export =' and cannot be used with 'export *'.
@@ -31,7 +22,7 @@ main.ts(105,15): error TS2498: Module '"class"' uses 'export =' and cannot be us
 main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
 
 
-==== main.ts (31 errors) ====
+==== main.ts (22 errors) ====
     /// <reference path="modules.d.ts"/>
     
     // import-equals
@@ -77,20 +68,14 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     
     // namespace import
     import * as y1 from "interface";
-                        ~~~~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     import * as y2 from "variable";
     import * as y3 from "interface-variable";
     import * as y4 from "module";
     import * as y5 from "interface-module";
     import * as y6 from "variable-module";
     import * as y7 from "function";
-                        ~~~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     import * as y8 from "function-module";
     import * as y9 from "class";
-                        ~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     import * as y0 from "class-module";
     
     y1.a;
@@ -103,7 +88,7 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     y6.a;
     y7.a;
        ~
-!!! error TS2339: Property 'a' does not exist on type '() => any'.
+!!! error TS2339: Property 'a' does not exist on type '{ default: () => any; }'.
     y8.a;
     y9.a;
        ~
@@ -114,8 +99,6 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     import { a as a1 } from "interface";
              ~
 !!! error TS2305: Module '"interface"' has no exported member 'a'.
-                            ~~~~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     import { a as a2 } from "variable";
     import { a as a3 } from "interface-variable";
     import { a as a4 } from "module";
@@ -124,14 +107,10 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     import { a as a7 } from "function";
              ~
 !!! error TS2305: Module '"function"' has no exported member 'a'.
-                            ~~~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     import { a as a8 } from "function-module";
     import { a as a9 } from "class";
              ~
 !!! error TS2305: Module '"class"' has no exported member 'a'.
-                            ~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     import { a as a0 } from "class-module";
     
     a1;
@@ -149,8 +128,6 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     export { a as a1 } from "interface";
              ~
 !!! error TS2305: Module '"interface"' has no exported member 'a'.
-                            ~~~~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     export { a as a2 } from "variable";
     export { a as a3 } from "interface-variable";
     export { a as a4 } from "module";
@@ -159,14 +136,10 @@ main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and canno
     export { a as a7 } from "function";
              ~
 !!! error TS2305: Module '"function"' has no exported member 'a'.
-                            ~~~~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     export { a as a8 } from "function-module";
     export { a as a9 } from "class";
              ~
 !!! error TS2305: Module '"class"' has no exported member 'a'.
-                            ~~~~~~~
-!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
     export { a as a0 } from "class-module";
     
     // export-star

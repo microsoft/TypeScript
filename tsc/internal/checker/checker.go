@@ -14239,7 +14239,7 @@ func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sou
 func (c *Checker) getTargetOfNamespaceImport(node *ast.Node) *ast.Symbol {
 	moduleSpecifier := c.getModuleSpecifierForImportOrExport(node)
 	immediate := c.resolveExternalModuleName(node, moduleSpecifier, false /*ignoreErrors*/)
-	resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier, false /*suppressInteropError*/)
+	resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier)
 	c.markSymbolOfAliasDeclarationIfTypeOnly(node, nil)
 	return resolved
 }
@@ -14248,7 +14248,7 @@ func (c *Checker) getTargetOfNamespaceExport(node *ast.Node) *ast.Symbol {
 	moduleSpecifier := c.getModuleSpecifierForImportOrExport(node)
 	if moduleSpecifier != nil {
 		immediate := c.resolveExternalModuleName(node, moduleSpecifier, false /*ignoreErrors*/)
-		resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier, false /*suppressInteropError*/)
+		resolved := c.resolveESModuleSymbol(immediate, node, moduleSpecifier)
 		c.markSymbolOfAliasDeclarationIfTypeOnly(node, nil)
 		return resolved
 	}
@@ -14293,8 +14293,7 @@ func (c *Checker) getExternalModuleMember(node *ast.Node, specifier *ast.Node, d
 		return nil
 	}
 	nameText := name.Text()
-	suppressInteropError := node.Kind == ast.KindVariableDeclaration || nameText == ast.InternalSymbolNameDefault
-	targetSymbol := c.resolveESModuleSymbol(moduleSymbol, specifier, moduleSpecifier, suppressInteropError)
+	targetSymbol := c.resolveESModuleSymbol(moduleSymbol, specifier, moduleSpecifier)
 	if targetSymbol != nil {
 		// Note: The empty string is a valid module export name:
 		//
@@ -15132,21 +15131,15 @@ func (c *Checker) resolveExternalModuleSymbol(moduleSymbol *ast.Symbol, dontReso
 	return moduleSymbol
 }
 
-// An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
-// references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
-// combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
-func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, node *ast.Node, moduleSpecifier *ast.Node, suppressInteropError bool) *ast.Symbol {
+// Resolves the given external module symbol, possibly removing call and construct signatures or creating a
+// wrapper module with a synthetic default.
+func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, node *ast.Node, moduleSpecifier *ast.Node) *ast.Symbol {
 	symbol := c.resolveExternalModuleSymbol(moduleSymbol, true /*dontResolveAlias*/)
 	if ast.IsNonLocalAlias(symbol, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace) {
 		// When the module has an export= with a pure alias, we transitively resolve and propagate any typeOnlyDeclaration
 		symbol = c.getMergedSymbol(c.resolveIndirectionAlias(c.getSymbolOfDeclaration(node), symbol))
 	}
 	if symbol != nil {
-		if !suppressInteropError && symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsVariable) == 0 && ast.GetDeclarationOfKind(symbol, ast.KindSourceFile) == nil {
-			compilerOptionName := core.IfElse(c.moduleKind >= core.ModuleKindES2015, "allowSyntheticDefaultImports", "esModuleInterop")
-			c.error(moduleSpecifier, diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, compilerOptionName)
-			return symbol
-		}
 		referenceParent := moduleSpecifier.Parent
 		var namespaceImport *ast.Node
 		if ast.IsImportDeclaration(referenceParent) {
@@ -15175,9 +15168,6 @@ func (c *Checker) resolveESModuleSymbol(moduleSymbol *ast.Symbol, node *ast.Node
 				exportModuleDotExportsSymbol = c.getExportOfModule(symbol, ast.InternalSymbolNameModuleExports, namespaceImport, true /*dontResolveAlias*/)
 			}
 			if exportModuleDotExportsSymbol != nil {
-				if !suppressInteropError && symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsVariable) == 0 {
-					c.error(moduleSpecifier, diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, "esModuleInterop")
-				}
 				if c.hasSignatures(typ) {
 					return c.cloneTypeAsModuleType(exportModuleDotExportsSymbol, typ, referenceParent)
 				}

@@ -2,7 +2,6 @@
 +++ new.jsExportMemberMergedWithModuleAugmentation.errors.txt
 @@= skipped -0, +0 lines =@@
 -/index.ts(11,7): error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
-+/index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
 +/index.ts(3,16): error TS2671: Cannot augment module './test' because it resolves to a non-module entity.
 +/index.ts(11,10): error TS2749: 'Abcde' refers to a value, but is being used as a type here. Did you mean 'typeof Abcde'?
  /test.js(3,3): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
@@ -16,7 +15,7 @@
      class Abcde {
        /** @type {string} */
        x;
-@@= skipped -10, +13 lines =@@
+@@= skipped -10, +12 lines =@@
      }
      
      module.exports = {
@@ -28,10 +27,8 @@
 +!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
      
 -==== /index.ts (1 errors) ====
-+==== /index.ts (3 errors) ====
++==== /index.ts (2 errors) ====
      import { Abcde } from "./test";
-+                          ~~~~~~~~
-+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
      
      declare module "./test" {
 +                   ~~~~~~~~
@@ -39,7 +36,7 @@
        interface Abcde { b: string }
      }
      
-@@= skipped -15, +23 lines =@@
+@@= skipped -15, +21 lines =@@
      // Bug: the type meaning from /test.js does not
      // propagate through the object literal export.
      const x: Abcde = { b: "" };
