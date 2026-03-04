@@ -186,11 +186,12 @@ func (d *DocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 			if err != nil {
 				return err
 			}
+			isURI := key.String() == "uri"
 			val, err := dec.ReadToken()
 			if err != nil {
 				return err
 			}
-			if key.String() == "uri" {
+			if isURI {
 				d.URI = lsproto.DocumentUri(val.String())
 			}
 		}
