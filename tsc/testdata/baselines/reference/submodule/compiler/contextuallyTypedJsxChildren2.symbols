@@ -1,0 +1,186 @@
+//// [tests/cases/compiler/contextuallyTypedJsxChildren2.tsx] ////
+
+=== contextuallyTypedJsxChildren2.tsx ===
+/// <reference path="react16.d.ts" />
+
+// https://github.com/microsoft/typescript-go/issues/2802
+
+import * as React from 'react';
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren2.tsx, 4, 6))
+
+declare const TestComponentWithChildren: <T, TParam>(props: {
+>TestComponentWithChildren : Symbol(TestComponentWithChildren, Decl(contextuallyTypedJsxChildren2.tsx, 6, 13))
+>T : Symbol(T, Decl(contextuallyTypedJsxChildren2.tsx, 6, 42))
+>TParam : Symbol(TParam, Decl(contextuallyTypedJsxChildren2.tsx, 6, 44))
+>props : Symbol(props, Decl(contextuallyTypedJsxChildren2.tsx, 6, 53))
+
+  state: T;
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 6, 61))
+>T : Symbol(T, Decl(contextuallyTypedJsxChildren2.tsx, 6, 42))
+
+  selector?: (state: NoInfer<T>) => TParam;
+>selector : Symbol(selector, Decl(contextuallyTypedJsxChildren2.tsx, 7, 11))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 8, 14))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(contextuallyTypedJsxChildren2.tsx, 6, 42))
+>TParam : Symbol(TParam, Decl(contextuallyTypedJsxChildren2.tsx, 6, 44))
+
+  children?: (state: NoInfer<TParam>) => React.ReactElement<any> | null;
+>children : Symbol(children, Decl(contextuallyTypedJsxChildren2.tsx, 8, 43))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 9, 14))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>TParam : Symbol(TParam, Decl(contextuallyTypedJsxChildren2.tsx, 6, 44))
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren2.tsx, 4, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+}) => React.ReactElement<any>;
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren2.tsx, 4, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+declare const TestComponentWithoutChildren: <T, TParam>(props: {
+>TestComponentWithoutChildren : Symbol(TestComponentWithoutChildren, Decl(contextuallyTypedJsxChildren2.tsx, 12, 13))
+>T : Symbol(T, Decl(contextuallyTypedJsxChildren2.tsx, 12, 45))
+>TParam : Symbol(TParam, Decl(contextuallyTypedJsxChildren2.tsx, 12, 47))
+>props : Symbol(props, Decl(contextuallyTypedJsxChildren2.tsx, 12, 56))
+
+  state: T;
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 12, 64))
+>T : Symbol(T, Decl(contextuallyTypedJsxChildren2.tsx, 12, 45))
+
+  selector?: (state: NoInfer<T>) => TParam;
+>selector : Symbol(selector, Decl(contextuallyTypedJsxChildren2.tsx, 13, 11))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 14, 14))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(contextuallyTypedJsxChildren2.tsx, 12, 45))
+>TParam : Symbol(TParam, Decl(contextuallyTypedJsxChildren2.tsx, 12, 47))
+
+  notChildren?: (state: NoInfer<TParam>) => React.ReactElement<any> | null;
+>notChildren : Symbol(notChildren, Decl(contextuallyTypedJsxChildren2.tsx, 14, 43))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 15, 17))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>TParam : Symbol(TParam, Decl(contextuallyTypedJsxChildren2.tsx, 12, 47))
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren2.tsx, 4, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+}) => React.ReactElement<any>;
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren2.tsx, 4, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+const App = () => {
+>App : Symbol(App, Decl(contextuallyTypedJsxChildren2.tsx, 18, 5))
+
+  return (
+    <>
+      <TestComponentWithChildren state={{ foo: 123 }} selector={(state) => state.foo}>
+>TestComponentWithChildren : Symbol(TestComponentWithChildren, Decl(contextuallyTypedJsxChildren2.tsx, 6, 13))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 21, 32))
+>foo : Symbol(foo, Decl(contextuallyTypedJsxChildren2.tsx, 21, 41))
+>selector : Symbol(selector, Decl(contextuallyTypedJsxChildren2.tsx, 21, 53))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 21, 65))
+>state.foo : Symbol(foo, Decl(contextuallyTypedJsxChildren2.tsx, 21, 41))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 21, 65))
+>foo : Symbol(foo, Decl(contextuallyTypedJsxChildren2.tsx, 21, 41))
+
+        {(selected) => <div>{Math.max(selected, 0)}</div>}
+>selected : Symbol(selected, Decl(contextuallyTypedJsxChildren2.tsx, 22, 10))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+>Math.max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
+>selected : Symbol(selected, Decl(contextuallyTypedJsxChildren2.tsx, 22, 10))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+
+      </TestComponentWithChildren>
+>TestComponentWithChildren : Symbol(TestComponentWithChildren, Decl(contextuallyTypedJsxChildren2.tsx, 6, 13))
+
+      <TestComponentWithoutChildren
+>TestComponentWithoutChildren : Symbol(TestComponentWithoutChildren, Decl(contextuallyTypedJsxChildren2.tsx, 12, 13))
+
+        state={{ foo: 123 }}
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 25, 35))
+>foo : Symbol(foo, Decl(contextuallyTypedJsxChildren2.tsx, 26, 16))
+
+        selector={(state) => state.foo}
+>selector : Symbol(selector, Decl(contextuallyTypedJsxChildren2.tsx, 26, 28))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 27, 19))
+>state.foo : Symbol(foo, Decl(contextuallyTypedJsxChildren2.tsx, 26, 16))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 27, 19))
+>foo : Symbol(foo, Decl(contextuallyTypedJsxChildren2.tsx, 26, 16))
+
+        notChildren={(selected) => <div>{Math.max(selected, 0)}</div>}
+>notChildren : Symbol(notChildren, Decl(contextuallyTypedJsxChildren2.tsx, 27, 39))
+>selected : Symbol(selected, Decl(contextuallyTypedJsxChildren2.tsx, 28, 22))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+>Math.max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>max : Symbol(Math.max, Decl(lib.es5.d.ts, --, --))
+>selected : Symbol(selected, Decl(contextuallyTypedJsxChildren2.tsx, 28, 22))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+
+      />
+    </>
+  );
+};
+
+// https://github.com/microsoft/typescript-go/issues/2797
+
+interface State {
+>State : Symbol(State, Decl(contextuallyTypedJsxChildren2.tsx, 32, 2))
+
+  value: boolean
+>value : Symbol(State.value, Decl(contextuallyTypedJsxChildren2.tsx, 36, 17))
+}
+
+declare const Subscribe: <TSelected = State>(props: {
+>Subscribe : Symbol(Subscribe, Decl(contextuallyTypedJsxChildren2.tsx, 40, 13))
+>TSelected : Symbol(TSelected, Decl(contextuallyTypedJsxChildren2.tsx, 40, 26))
+>State : Symbol(State, Decl(contextuallyTypedJsxChildren2.tsx, 32, 2))
+>props : Symbol(props, Decl(contextuallyTypedJsxChildren2.tsx, 40, 45))
+
+  selector?: (state: State) => TSelected
+>selector : Symbol(selector, Decl(contextuallyTypedJsxChildren2.tsx, 40, 53))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 41, 14))
+>State : Symbol(State, Decl(contextuallyTypedJsxChildren2.tsx, 32, 2))
+>TSelected : Symbol(TSelected, Decl(contextuallyTypedJsxChildren2.tsx, 40, 26))
+
+  children: (state: TSelected) => void
+>children : Symbol(children, Decl(contextuallyTypedJsxChildren2.tsx, 41, 40))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 42, 13))
+>TSelected : Symbol(TSelected, Decl(contextuallyTypedJsxChildren2.tsx, 40, 26))
+
+}) => React.ReactElement<any>
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren2.tsx, 4, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+const _result = (
+>_result : Symbol(_result, Decl(contextuallyTypedJsxChildren2.tsx, 45, 5))
+
+  <Subscribe
+>Subscribe : Symbol(Subscribe, Decl(contextuallyTypedJsxChildren2.tsx, 40, 13))
+
+    selector={(state) => {
+>selector : Symbol(selector, Decl(contextuallyTypedJsxChildren2.tsx, 46, 12))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 47, 15))
+
+      return [state.value]
+>state.value : Symbol(State.value, Decl(contextuallyTypedJsxChildren2.tsx, 36, 17))
+>state : Symbol(state, Decl(contextuallyTypedJsxChildren2.tsx, 47, 15))
+>value : Symbol(State.value, Decl(contextuallyTypedJsxChildren2.tsx, 36, 17))
+
+    }}
+  >
+    {([value = false]) => {
+>value : Symbol(value, Decl(contextuallyTypedJsxChildren2.tsx, 51, 7))
+
+      console.log(value)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(contextuallyTypedJsxChildren2.tsx, 51, 7))
+
+    }}
+  </Subscribe>
+>Subscribe : Symbol(Subscribe, Decl(contextuallyTypedJsxChildren2.tsx, 40, 13))
+
+)
+

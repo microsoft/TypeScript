@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/subtypeReductionWithAnyFunctionType.ts] ////
+
+=== subtypeReductionWithAnyFunctionType.ts ===
+// https://github.com/microsoft/typescript-go/issues/849
+
+declare function useMemo<T>(func: () => T): T;
+>useMemo : <T>(func: () => T) => T
+>func : () => T
+
+function getPredicate(alwaysTrue: boolean) {
+>getPredicate : (alwaysTrue: boolean) => (input: string) => boolean
+>alwaysTrue : boolean
+
+    const predicate: (input: string) => boolean = useMemo(() => {
+>predicate : (input: string) => boolean
+>input : string
+>useMemo(() => {        if (alwaysTrue) {            return () => true;        }        return x => x.length > 0;    }) : (x: any) => boolean
+>useMemo : <T>(func: () => T) => T
+>() => {        if (alwaysTrue) {            return () => true;        }        return x => x.length > 0;    } : () => (x: any) => boolean
+
+        if (alwaysTrue) {
+>alwaysTrue : boolean
+
+            return () => true;
+>() => true : () => true
+>true : true
+        }
+        return x => x.length > 0;
+>x => x.length > 0 : (x: any) => boolean
+>x : any
+>x.length > 0 : boolean
+>x.length : any
+>x : any
+>length : any
+>0 : 0
+
+    });
+    return predicate;
+>predicate : (input: string) => boolean
+}
+
+// https://github.com/microsoft/typescript-go/issues/1016
+
+declare function compact<T>(array: T[]): T[];
+>compact : <T>(array: T[]) => T[]
+>array : T[]
+
+declare function makeFooer(): Fooer;
+>makeFooer : () => Fooer
+
+interface Fooer {
+    foo: (v: string) => string;
+>foo : (v: string) => string
+>v : string
+}
+function f() {
+>f : () => void
+
+    const _ = compact([makeFooer(), { foo: (v) => v }]);
+>_ : Fooer[]
+>compact([makeFooer(), { foo: (v) => v }]) : Fooer[]
+>compact : <T>(array: T[]) => T[]
+>[makeFooer(), { foo: (v) => v }] : Fooer[]
+>makeFooer() : Fooer
+>makeFooer : () => Fooer
+>{ foo: (v) => v } : { foo: (v: string) => string; }
+>foo : (v: string) => string
+>(v) => v : (v: string) => string
+>v : string
+>v : string
+}
+

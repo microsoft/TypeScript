@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/declarationEmitNestedBindingPattern.ts] ////
+
+=== declarationEmitNestedBindingPattern.ts ===
+// Nested array binding pattern
+export class C1 {
+>C1 : Symbol(C1, Decl(declarationEmitNestedBindingPattern.ts, 0, 0))
+
+    constructor(public [[x]]: any[]) {}
+>x : Symbol(x, Decl(declarationEmitNestedBindingPattern.ts, 2, 25))
+}
+
+// Nested object binding pattern
+export class C2 {
+>C2 : Symbol(C2, Decl(declarationEmitNestedBindingPattern.ts, 3, 1))
+
+    constructor(public [{y}]: any[]) {}
+>y : Symbol(y, Decl(declarationEmitNestedBindingPattern.ts, 7, 25))
+}
+
+// Multiple levels of array nesting
+export class C3 {
+>C3 : Symbol(C3, Decl(declarationEmitNestedBindingPattern.ts, 8, 1))
+
+    constructor(public [[[z]]]: any[]) {}
+>z : Symbol(z, Decl(declarationEmitNestedBindingPattern.ts, 12, 26))
+}
+
+// Mixed array and object nesting
+export class C4 {
+>C4 : Symbol(C4, Decl(declarationEmitNestedBindingPattern.ts, 13, 1))
+
+    constructor(public [{a: [b]}]: any[]) {}
+>b : Symbol(b, Decl(declarationEmitNestedBindingPattern.ts, 17, 29))
+}
+
+// Object with nested array
+export class C5 {
+>C5 : Symbol(C5, Decl(declarationEmitNestedBindingPattern.ts, 18, 1))
+
+    constructor(public {prop: [c]}: any) {}
+>c : Symbol(c, Decl(declarationEmitNestedBindingPattern.ts, 22, 31))
+}
+
+// Object with multiple nested levels
+export class C6 {
+>C6 : Symbol(C6, Decl(declarationEmitNestedBindingPattern.ts, 23, 1))
+
+    constructor(public {prop: {nested: [d]}}: any) {}
+>d : Symbol(d, Decl(declarationEmitNestedBindingPattern.ts, 27, 40))
+}
+
+// Multiple parameters with nested patterns
+export class C7 {
+>C7 : Symbol(C7, Decl(declarationEmitNestedBindingPattern.ts, 28, 1))
+
+    constructor(
+        public [[e]]: any[],
+>e : Symbol(e, Decl(declarationEmitNestedBindingPattern.ts, 33, 17))
+
+        public [{f}]: any[]
+>f : Symbol(f, Decl(declarationEmitNestedBindingPattern.ts, 34, 17))
+
+    ) {}
+}
+
+// Nested pattern with rest element
+export class C8 {
+>C8 : Symbol(C8, Decl(declarationEmitNestedBindingPattern.ts, 36, 1))
+
+    constructor(public [[g, ...rest]]: any[]) {}
+>g : Symbol(g, Decl(declarationEmitNestedBindingPattern.ts, 40, 25))
+>rest : Symbol(rest, Decl(declarationEmitNestedBindingPattern.ts, 40, 27))
+}
+
+// Complex nested pattern
+export class C9 {
+>C9 : Symbol(C9, Decl(declarationEmitNestedBindingPattern.ts, 41, 1))
+
+    constructor(public [[h, i], {j, k: [l]}]: any) {}
+>h : Symbol(h, Decl(declarationEmitNestedBindingPattern.ts, 45, 25))
+>i : Symbol(i, Decl(declarationEmitNestedBindingPattern.ts, 45, 27))
+>j : Symbol(j, Decl(declarationEmitNestedBindingPattern.ts, 45, 33))
+>l : Symbol(l, Decl(declarationEmitNestedBindingPattern.ts, 45, 40))
+}
+

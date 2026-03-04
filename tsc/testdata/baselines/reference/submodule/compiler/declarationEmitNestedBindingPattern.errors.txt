@@ -1,0 +1,81 @@
+declarationEmitNestedBindingPattern.ts(3,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(8,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(13,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(18,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(23,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(28,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(34,9): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(35,9): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(41,17): error TS1187: A parameter property may not be declared using a binding pattern.
+declarationEmitNestedBindingPattern.ts(46,17): error TS1187: A parameter property may not be declared using a binding pattern.
+
+
+==== declarationEmitNestedBindingPattern.ts (10 errors) ====
+    // Nested array binding pattern
+    export class C1 {
+        constructor(public [[x]]: any[]) {}
+                    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Nested object binding pattern
+    export class C2 {
+        constructor(public [{y}]: any[]) {}
+                    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Multiple levels of array nesting
+    export class C3 {
+        constructor(public [[[z]]]: any[]) {}
+                    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Mixed array and object nesting
+    export class C4 {
+        constructor(public [{a: [b]}]: any[]) {}
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Object with nested array
+    export class C5 {
+        constructor(public {prop: [c]}: any) {}
+                    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Object with multiple nested levels
+    export class C6 {
+        constructor(public {prop: {nested: [d]}}: any) {}
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Multiple parameters with nested patterns
+    export class C7 {
+        constructor(
+            public [[e]]: any[],
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+            public [{f}]: any[]
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+        ) {}
+    }
+    
+    // Nested pattern with rest element
+    export class C8 {
+        constructor(public [[g, ...rest]]: any[]) {}
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    
+    // Complex nested pattern
+    export class C9 {
+        constructor(public [[h, i], {j, k: [l]}]: any) {}
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1187: A parameter property may not be declared using a binding pattern.
+    }
+    

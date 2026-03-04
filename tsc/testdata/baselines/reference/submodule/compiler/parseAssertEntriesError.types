@@ -4,20 +4,20 @@
 export type LocalInterface =
 >LocalInterface : any
 
-    & import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface
+    & import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234
 >"resolution-mode" : "resolution-mode"
 >"require" : "require"
->RequireInterface    & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface : number
+>RequireInterface    & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface : number
 >RequireInterface : any
 
-    & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface;
->import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface : any
->import("pkg", { assert: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
+    & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface;
+>import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface : any
+>import("pkg", { with: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
 >"pkg" : "pkg"
->{ assert: {1234, "resolution-mode": "import"} } : { assert: { 1234: any; "resolution-mode": string; }; }
->assert : { 1234: any; "resolution-mode": string; }
+>{ with: {1234, "resolution-mode": "import"} } : { with: { 1234: any; "resolution-mode": string; }; }
+>with : { 1234: any; "resolution-mode": string; }
 >{1234, "resolution-mode": "import"} : { 1234: any; "resolution-mode": string; }
 >1234 : any
 > : any
@@ -25,10 +25,10 @@ export type LocalInterface =
 >"import" : "import"
 >ImportInterface : any
 
-export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface);
+export const a = (null as any as import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface);
 >a : any
->(null as any as import("pkg", { assert: { : any
->null as any as import("pkg", { assert: { : any
+>(null as any as import("pkg", { with: { : any
+>null as any as import("pkg", { with: { : any
 >null as any : any
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234
@@ -36,10 +36,10 @@ export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode
 >"require" : "require"
 >RequireInterface : any
 
-export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface);
+export const b = (null as any as import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface);
 >b : any
->(null as any as import("pkg", { assert: { : any
->null as any as import("pkg", { assert: { : any
+>(null as any as import("pkg", { with: { : any
+>null as any as import("pkg", { with: { : any
 >null as any : any
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234

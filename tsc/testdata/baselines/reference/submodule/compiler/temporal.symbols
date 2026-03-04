@@ -5685,6 +5685,20 @@
 >calendar : Symbol(calendar, Decl(temporal.ts, 1494, 69))
 
     // => 1970-02-21[u-ca=hebrew]
+    md = Temporal.PlainMonthDay.from({ month: 6, day: 15, era: "am", eraYear: 5779, calendar: "hebrew" });
+>md : Symbol(md, Decl(temporal.ts, 1464, 7))
+>Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>month : Symbol(month, Decl(temporal.ts, 1496, 38))
+>day : Symbol(day, Decl(temporal.ts, 1496, 48))
+>era : Symbol(era, Decl(temporal.ts, 1496, 57))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 1496, 68))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1496, 83))
+
+    // => 1970-02-21[u-ca=hebrew]
     /* WRONG */ md = Temporal.PlainMonthDay.from({ month: 6, day: 15, calendar: "hebrew" });
 >md : Symbol(md, Decl(temporal.ts, 1464, 7))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5692,9 +5706,9 @@
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->month : Symbol(month, Decl(temporal.ts, 1496, 50))
->day : Symbol(day, Decl(temporal.ts, 1496, 60))
->calendar : Symbol(calendar, Decl(temporal.ts, 1496, 69))
+>month : Symbol(month, Decl(temporal.ts, 1498, 50))
+>day : Symbol(day, Decl(temporal.ts, 1498, 60))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1498, 69))
 
     // => throws (either year or monthCode is required)
     md = Temporal.PlainMonthDay.from("2019-02-20[u-ca=hebrew]");
@@ -5723,12 +5737,12 @@
 
 {
     let md: Temporal.PlainMonthDay;
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     md = Temporal.PlainMonthDay.from("08-24");
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5737,21 +5751,21 @@
 
     md.monthCode; // => 'M08'
 >md.monthCode : Symbol(Temporal.PlainMonthDay.monthCode, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >monthCode : Symbol(Temporal.PlainMonthDay.monthCode, Decl(lib.esnext.temporal.d.ts, --, --))
 
     md.day; // => 24
 >md.day : Symbol(Temporal.PlainMonthDay.day, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >day : Symbol(Temporal.PlainMonthDay.day, Decl(lib.esnext.temporal.d.ts, --, --))
 
     md.month; // => undefined
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 
     // (no `month` property; use `monthCode` instead)
 
     md = Temporal.PlainMonthDay.from("2019-02-20[u-ca=hebrew]");
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5760,23 +5774,23 @@
 
     md.monthCode; // => 'M05L'
 >md.monthCode : Symbol(Temporal.PlainMonthDay.monthCode, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >monthCode : Symbol(Temporal.PlainMonthDay.monthCode, Decl(lib.esnext.temporal.d.ts, --, --))
 
     md.day; // => 15
 >md.day : Symbol(Temporal.PlainMonthDay.day, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 >day : Symbol(Temporal.PlainMonthDay.day, Decl(lib.esnext.temporal.d.ts, --, --))
 
     md.month; // => undefined
->md : Symbol(md, Decl(temporal.ts, 1506, 7))
+>md : Symbol(md, Decl(temporal.ts, 1508, 7))
 
     // (no `month` property; use `monthCode` instead)
 }
 
 {
     const md = Temporal.PlainMonthDay.from("11-15");
->md : Symbol(md, Decl(temporal.ts, 1522, 9))
+>md : Symbol(md, Decl(temporal.ts, 1524, 9))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5786,9 +5800,9 @@
     // What's the last day of that month?
     md.with({ day: 31 }); // => 11-30
 >md.with : Symbol(Temporal.PlainMonthDay.with, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1522, 9))
+>md : Symbol(md, Decl(temporal.ts, 1524, 9))
 >with : Symbol(Temporal.PlainMonthDay.with, Decl(lib.esnext.temporal.d.ts, --, --))
->day : Symbol(day, Decl(temporal.ts, 1524, 13))
+>day : Symbol(day, Decl(temporal.ts, 1526, 13))
 
     Temporal.PlainMonthDay.from("02-01").with({ day: 31 }); // => 02-29
 >Temporal.PlainMonthDay.from("02-01").with : Symbol(Temporal.PlainMonthDay.with, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5798,12 +5812,12 @@
 >PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >with : Symbol(Temporal.PlainMonthDay.with, Decl(lib.esnext.temporal.d.ts, --, --))
->day : Symbol(day, Decl(temporal.ts, 1525, 47))
+>day : Symbol(day, Decl(temporal.ts, 1527, 47))
 }
 
 {
     const md1 = Temporal.PlainMonthDay.from("02-28");
->md1 : Symbol(md1, Decl(temporal.ts, 1529, 9))
+>md1 : Symbol(md1, Decl(temporal.ts, 1531, 9))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5811,7 +5825,7 @@
 >from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 
     const md2 = Temporal.PlainMonthDay.from("02-29");
->md2 : Symbol(md2, Decl(temporal.ts, 1530, 9))
+>md2 : Symbol(md2, Decl(temporal.ts, 1532, 9))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5820,44 +5834,44 @@
 
     md1.equals(md2); // => false
 >md1.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md1 : Symbol(md1, Decl(temporal.ts, 1529, 9))
+>md1 : Symbol(md1, Decl(temporal.ts, 1531, 9))
 >equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md2 : Symbol(md2, Decl(temporal.ts, 1530, 9))
+>md2 : Symbol(md2, Decl(temporal.ts, 1532, 9))
 
     md1.equals("02-29"); // => false
 >md1.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md1 : Symbol(md1, Decl(temporal.ts, 1529, 9))
+>md1 : Symbol(md1, Decl(temporal.ts, 1531, 9))
 >equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
 
     md1.equals({ monthCode: "M02", day: 29 }); // => false
 >md1.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md1 : Symbol(md1, Decl(temporal.ts, 1529, 9))
+>md1 : Symbol(md1, Decl(temporal.ts, 1531, 9))
 >equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->monthCode : Symbol(monthCode, Decl(temporal.ts, 1533, 16))
->day : Symbol(day, Decl(temporal.ts, 1533, 34))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 1535, 16))
+>day : Symbol(day, Decl(temporal.ts, 1535, 34))
 
     md2.equals(md2); // => true
 >md2.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md2 : Symbol(md2, Decl(temporal.ts, 1530, 9))
+>md2 : Symbol(md2, Decl(temporal.ts, 1532, 9))
 >equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md2 : Symbol(md2, Decl(temporal.ts, 1530, 9))
+>md2 : Symbol(md2, Decl(temporal.ts, 1532, 9))
 
     md2.equals("02-29"); // => true
 >md2.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md2 : Symbol(md2, Decl(temporal.ts, 1530, 9))
+>md2 : Symbol(md2, Decl(temporal.ts, 1532, 9))
 >equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
 
     md2.equals({ monthCode: "M02", day: 29 }); // => true
 >md2.equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->md2 : Symbol(md2, Decl(temporal.ts, 1530, 9))
+>md2 : Symbol(md2, Decl(temporal.ts, 1532, 9))
 >equals : Symbol(Temporal.PlainMonthDay.equals, Decl(lib.esnext.temporal.d.ts, --, --))
->monthCode : Symbol(monthCode, Decl(temporal.ts, 1536, 16))
->day : Symbol(day, Decl(temporal.ts, 1536, 34))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 1538, 16))
+>day : Symbol(day, Decl(temporal.ts, 1538, 34))
 }
 
 {
     const md = Temporal.PlainMonthDay.from("08-24");
->md : Symbol(md, Decl(temporal.ts, 1540, 9))
+>md : Symbol(md, Decl(temporal.ts, 1542, 9))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5866,13 +5880,13 @@
 
     md.toString(); // => '08-24'
 >md.toString : Symbol(Temporal.PlainMonthDay.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1540, 9))
+>md : Symbol(md, Decl(temporal.ts, 1542, 9))
 >toString : Symbol(Temporal.PlainMonthDay.toString, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
 {
     const { calendar } = new Intl.DateTimeFormat().resolvedOptions();
->calendar : Symbol(calendar, Decl(temporal.ts, 1545, 11))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1547, 11))
 >new Intl.DateTimeFormat().resolvedOptions : Symbol(Intl.DateTimeFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.esnext.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2025.intl.d.ts, --, --) ... and 1 more)
@@ -5880,53 +5894,53 @@
 >resolvedOptions : Symbol(Intl.DateTimeFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
 
     const md = Temporal.PlainMonthDay.from({ monthCode: "M08", day: 24, calendar });
->md : Symbol(md, Decl(temporal.ts, 1546, 9))
+>md : Symbol(md, Decl(temporal.ts, 1548, 9))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->monthCode : Symbol(monthCode, Decl(temporal.ts, 1546, 44))
->day : Symbol(day, Decl(temporal.ts, 1546, 62))
->calendar : Symbol(calendar, Decl(temporal.ts, 1546, 71))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 1548, 44))
+>day : Symbol(day, Decl(temporal.ts, 1548, 62))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1548, 71))
 
     md.toLocaleString(); // example output: '8/24'
 >md.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1546, 9))
+>md : Symbol(md, Decl(temporal.ts, 1548, 9))
 >toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
 
     // Same as above, but explicitly specifying the calendar:
     md.toLocaleString(undefined, { calendar }); // example output: '8/24'
 >md.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1546, 9))
+>md : Symbol(md, Decl(temporal.ts, 1548, 9))
 >toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
 >undefined : Symbol(undefined)
->calendar : Symbol(calendar, Decl(temporal.ts, 1549, 34))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1551, 34))
 
     md.toLocaleString("de-DE", { calendar }); // => '24.8.'
 >md.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1546, 9))
+>md : Symbol(md, Decl(temporal.ts, 1548, 9))
 >toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->calendar : Symbol(calendar, Decl(temporal.ts, 1551, 32))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1553, 32))
 
     md.toLocaleString("de-DE", { month: "long", day: "numeric", calendar }); // => '24. August'
 >md.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1546, 9))
+>md : Symbol(md, Decl(temporal.ts, 1548, 9))
 >toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->month : Symbol(month, Decl(temporal.ts, 1552, 32))
->day : Symbol(day, Decl(temporal.ts, 1552, 47))
->calendar : Symbol(calendar, Decl(temporal.ts, 1552, 63))
+>month : Symbol(month, Decl(temporal.ts, 1554, 32))
+>day : Symbol(day, Decl(temporal.ts, 1554, 47))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1554, 63))
 
     md.toLocaleString(`en-US-u-nu-fullwide-ca-${calendar}`); // => '８/２４'
 >md.toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1546, 9))
+>md : Symbol(md, Decl(temporal.ts, 1548, 9))
 >toLocaleString : Symbol(Temporal.PlainMonthDay.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->calendar : Symbol(calendar, Decl(temporal.ts, 1545, 11))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1547, 11))
 }
 
 {
     const md = Temporal.PlainMonthDay.from({
->md : Symbol(md, Decl(temporal.ts, 1557, 9))
+>md : Symbol(md, Decl(temporal.ts, 1559, 9))
 >Temporal.PlainMonthDay.from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainMonthDay : Symbol(Temporal.PlainMonthDay, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -5934,23 +5948,23 @@
 >from : Symbol(Temporal.PlainMonthDayConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 
         calendar: "japanese",
->calendar : Symbol(calendar, Decl(temporal.ts, 1557, 44))
+>calendar : Symbol(calendar, Decl(temporal.ts, 1559, 44))
 
         monthCode: "M01",
->monthCode : Symbol(monthCode, Decl(temporal.ts, 1558, 29))
+>monthCode : Symbol(monthCode, Decl(temporal.ts, 1560, 29))
 
         day: 1,
->day : Symbol(day, Decl(temporal.ts, 1559, 25))
+>day : Symbol(day, Decl(temporal.ts, 1561, 25))
 
     });
 
     const date = md.toPlainDate({ era: "reiwa", eraYear: 2 }); // => 2020-01-01[u-ca=japanese]
->date : Symbol(date, Decl(temporal.ts, 1563, 9))
+>date : Symbol(date, Decl(temporal.ts, 1565, 9))
 >md.toPlainDate : Symbol(Temporal.PlainMonthDay.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
->md : Symbol(md, Decl(temporal.ts, 1557, 9))
+>md : Symbol(md, Decl(temporal.ts, 1559, 9))
 >toPlainDate : Symbol(Temporal.PlainMonthDay.toPlainDate, Decl(lib.esnext.temporal.d.ts, --, --))
->era : Symbol(era, Decl(temporal.ts, 1563, 33))
->eraYear : Symbol(eraYear, Decl(temporal.ts, 1563, 47))
+>era : Symbol(era, Decl(temporal.ts, 1565, 33))
+>eraYear : Symbol(eraYear, Decl(temporal.ts, 1565, 47))
 }
 
 {
@@ -5980,29 +5994,29 @@
 
 {
     let d: Temporal.Duration;
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from({ years: 1, days: 1 }); // => P1Y1D
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->years : Symbol(years, Decl(temporal.ts, 1576, 32))
->days : Symbol(days, Decl(temporal.ts, 1576, 42))
+>years : Symbol(years, Decl(temporal.ts, 1578, 32))
+>days : Symbol(days, Decl(temporal.ts, 1578, 42))
 
     d = Temporal.Duration.from({ days: -2, hours: -12 }); // => -P2DT12H
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->days : Symbol(days, Decl(temporal.ts, 1577, 32))
->hours : Symbol(hours, Decl(temporal.ts, 1577, 42))
+>days : Symbol(days, Decl(temporal.ts, 1579, 32))
+>hours : Symbol(hours, Decl(temporal.ts, 1579, 42))
 
     Temporal.Duration.from(d) === d; // => false
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6010,11 +6024,11 @@
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 
     d = Temporal.Duration.from("P1Y1D"); // => P1Y1D
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6022,7 +6036,7 @@
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from("-P2DT12H"); // => -P2DT12H
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6030,7 +6044,7 @@
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from("P0D"); // => PT0S
->d : Symbol(d, Decl(temporal.ts, 1574, 7))
+>d : Symbol(d, Decl(temporal.ts, 1576, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6040,43 +6054,43 @@
 
 {
     const one = Temporal.Duration.from({ hours: 79, minutes: 10 });
->one : Symbol(one, Decl(temporal.ts, 1587, 9))
+>one : Symbol(one, Decl(temporal.ts, 1589, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1587, 40))
->minutes : Symbol(minutes, Decl(temporal.ts, 1587, 51))
+>hours : Symbol(hours, Decl(temporal.ts, 1589, 40))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1589, 51))
 
     const two = Temporal.Duration.from({ days: 3, hours: 7, seconds: 630 });
->two : Symbol(two, Decl(temporal.ts, 1588, 9))
+>two : Symbol(two, Decl(temporal.ts, 1590, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->days : Symbol(days, Decl(temporal.ts, 1588, 40))
->hours : Symbol(hours, Decl(temporal.ts, 1588, 49))
->seconds : Symbol(seconds, Decl(temporal.ts, 1588, 59))
+>days : Symbol(days, Decl(temporal.ts, 1590, 40))
+>hours : Symbol(hours, Decl(temporal.ts, 1590, 49))
+>seconds : Symbol(seconds, Decl(temporal.ts, 1590, 59))
 
     const three = Temporal.Duration.from({ days: 3, hours: 6, minutes: 50 });
->three : Symbol(three, Decl(temporal.ts, 1589, 9))
+>three : Symbol(three, Decl(temporal.ts, 1591, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->days : Symbol(days, Decl(temporal.ts, 1589, 42))
->hours : Symbol(hours, Decl(temporal.ts, 1589, 51))
->minutes : Symbol(minutes, Decl(temporal.ts, 1589, 61))
+>days : Symbol(days, Decl(temporal.ts, 1591, 42))
+>hours : Symbol(hours, Decl(temporal.ts, 1591, 51))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1591, 61))
 
     const sorted1 = [one, two, three].sort(Temporal.Duration.compare);
->sorted1 : Symbol(sorted1, Decl(temporal.ts, 1590, 9))
+>sorted1 : Symbol(sorted1, Decl(temporal.ts, 1592, 9))
 >[one, two, three].sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1587, 9))
->two : Symbol(two, Decl(temporal.ts, 1588, 9))
->three : Symbol(three, Decl(temporal.ts, 1589, 9))
+>one : Symbol(one, Decl(temporal.ts, 1589, 9))
+>two : Symbol(two, Decl(temporal.ts, 1590, 9))
+>three : Symbol(three, Decl(temporal.ts, 1591, 9))
 >sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >Temporal.Duration.compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6086,14 +6100,14 @@
 
     sorted1.join(" ");
 >sorted1.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->sorted1 : Symbol(sorted1, Decl(temporal.ts, 1590, 9))
+>sorted1 : Symbol(sorted1, Decl(temporal.ts, 1592, 9))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 
     // => 'P3DT6H50M PT79H10M P3DT7H630S'
 
     // Sorting relative to a date, taking DST changes into account:
     const relativeTo = Temporal.ZonedDateTime.from("2020-11-01T00:00-07:00[America/Los_Angeles]");
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1595, 9))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1597, 9))
 >Temporal.ZonedDateTime.from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.ZonedDateTime : Symbol(Temporal.ZonedDateTime, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6101,26 +6115,26 @@
 >from : Symbol(Temporal.ZonedDateTimeConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 
     const sorted2 = [one, two, three].sort((one, two) => Temporal.Duration.compare(one, two, { relativeTo }));
->sorted2 : Symbol(sorted2, Decl(temporal.ts, 1596, 9))
+>sorted2 : Symbol(sorted2, Decl(temporal.ts, 1598, 9))
 >[one, two, three].sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1587, 9))
->two : Symbol(two, Decl(temporal.ts, 1588, 9))
->three : Symbol(three, Decl(temporal.ts, 1589, 9))
+>one : Symbol(one, Decl(temporal.ts, 1589, 9))
+>two : Symbol(two, Decl(temporal.ts, 1590, 9))
+>three : Symbol(three, Decl(temporal.ts, 1591, 9))
 >sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1596, 44))
->two : Symbol(two, Decl(temporal.ts, 1596, 48))
+>one : Symbol(one, Decl(temporal.ts, 1598, 44))
+>two : Symbol(two, Decl(temporal.ts, 1598, 48))
 >Temporal.Duration.compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >compare : Symbol(Temporal.DurationConstructor.compare, Decl(lib.esnext.temporal.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1596, 44))
->two : Symbol(two, Decl(temporal.ts, 1596, 48))
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1596, 94))
+>one : Symbol(one, Decl(temporal.ts, 1598, 44))
+>two : Symbol(two, Decl(temporal.ts, 1598, 48))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1598, 94))
 
     sorted2.join(" ");
 >sorted2.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->sorted2 : Symbol(sorted2, Decl(temporal.ts, 1596, 9))
+>sorted2 : Symbol(sorted2, Decl(temporal.ts, 1598, 9))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 
     // => 'PT79H10M P3DT6H50M P3DT7H630S'
@@ -6128,7 +6142,7 @@
 
 {
     const d = Temporal.Duration.from("P1Y2M3W4DT5H6M7.987654321S");
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6137,63 +6151,63 @@
 
     d.years; // => 1
 >d.years : Symbol(Temporal.Duration.years, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >years : Symbol(Temporal.Duration.years, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.months; // => 2
 >d.months : Symbol(Temporal.Duration.months, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >months : Symbol(Temporal.Duration.months, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.weeks; // => 3
 >d.weeks : Symbol(Temporal.Duration.weeks, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >weeks : Symbol(Temporal.Duration.weeks, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.days; // => 4
 >d.days : Symbol(Temporal.Duration.days, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >days : Symbol(Temporal.Duration.days, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.hours; // => 5
 >d.hours : Symbol(Temporal.Duration.hours, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >hours : Symbol(Temporal.Duration.hours, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.minutes; // => 6
 >d.minutes : Symbol(Temporal.Duration.minutes, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >minutes : Symbol(Temporal.Duration.minutes, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.seconds; // => 7
 >d.seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.milliseconds; // => 987
 >d.milliseconds : Symbol(Temporal.Duration.milliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >milliseconds : Symbol(Temporal.Duration.milliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.microseconds; // => 654
 >d.microseconds : Symbol(Temporal.Duration.microseconds, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >microseconds : Symbol(Temporal.Duration.microseconds, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.nanoseconds; // => 321
 >d.nanoseconds : Symbol(Temporal.Duration.nanoseconds, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1602, 9))
+>d : Symbol(d, Decl(temporal.ts, 1604, 9))
 >nanoseconds : Symbol(Temporal.Duration.nanoseconds, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
 {
     let d: Temporal.Duration;
->d : Symbol(d, Decl(temporal.ts, 1616, 7))
+>d : Symbol(d, Decl(temporal.ts, 1618, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from("PT0S");
->d : Symbol(d, Decl(temporal.ts, 1616, 7))
+>d : Symbol(d, Decl(temporal.ts, 1618, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6202,74 +6216,74 @@
 
     d.blank; // => true
 >d.blank : Symbol(Temporal.Duration.blank, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1616, 7))
+>d : Symbol(d, Decl(temporal.ts, 1618, 7))
 >blank : Symbol(Temporal.Duration.blank, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from({ days: 0, hours: 0, minutes: 0 });
->d : Symbol(d, Decl(temporal.ts, 1616, 7))
+>d : Symbol(d, Decl(temporal.ts, 1618, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->days : Symbol(days, Decl(temporal.ts, 1621, 32))
->hours : Symbol(hours, Decl(temporal.ts, 1621, 41))
->minutes : Symbol(minutes, Decl(temporal.ts, 1621, 51))
+>days : Symbol(days, Decl(temporal.ts, 1623, 32))
+>hours : Symbol(hours, Decl(temporal.ts, 1623, 41))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1623, 51))
 
     d.blank; // => true
 >d.blank : Symbol(Temporal.Duration.blank, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1616, 7))
+>d : Symbol(d, Decl(temporal.ts, 1618, 7))
 >blank : Symbol(Temporal.Duration.blank, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
 {
     let duration: Temporal.Duration;
->duration : Symbol(duration, Decl(temporal.ts, 1626, 7))
+>duration : Symbol(duration, Decl(temporal.ts, 1628, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     duration = Temporal.Duration.from({ months: 50, days: 50, hours: 50, minutes: 100 });
->duration : Symbol(duration, Decl(temporal.ts, 1626, 7))
+>duration : Symbol(duration, Decl(temporal.ts, 1628, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->months : Symbol(months, Decl(temporal.ts, 1628, 39))
->days : Symbol(days, Decl(temporal.ts, 1628, 51))
->hours : Symbol(hours, Decl(temporal.ts, 1628, 61))
->minutes : Symbol(minutes, Decl(temporal.ts, 1628, 72))
+>months : Symbol(months, Decl(temporal.ts, 1630, 39))
+>days : Symbol(days, Decl(temporal.ts, 1630, 51))
+>hours : Symbol(hours, Decl(temporal.ts, 1630, 61))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1630, 72))
 
     // Perform a balance operation using additional ISO 8601 calendar rules:
     let { years, months } = duration;
->years : Symbol(years, Decl(temporal.ts, 1630, 9))
->months : Symbol(months, Decl(temporal.ts, 1630, 16))
->duration : Symbol(duration, Decl(temporal.ts, 1626, 7))
+>years : Symbol(years, Decl(temporal.ts, 1632, 9))
+>months : Symbol(months, Decl(temporal.ts, 1632, 16))
+>duration : Symbol(duration, Decl(temporal.ts, 1628, 7))
 
     years += Math.floor(months / 12);
->years : Symbol(years, Decl(temporal.ts, 1630, 9))
+>years : Symbol(years, Decl(temporal.ts, 1632, 9))
 >Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->months : Symbol(months, Decl(temporal.ts, 1630, 16))
+>months : Symbol(months, Decl(temporal.ts, 1632, 16))
 
     months %= 12;
->months : Symbol(months, Decl(temporal.ts, 1630, 16))
+>months : Symbol(months, Decl(temporal.ts, 1632, 16))
 
     duration = duration.with({ years, months });
->duration : Symbol(duration, Decl(temporal.ts, 1626, 7))
+>duration : Symbol(duration, Decl(temporal.ts, 1628, 7))
 >duration.with : Symbol(Temporal.Duration.with, Decl(lib.esnext.temporal.d.ts, --, --))
->duration : Symbol(duration, Decl(temporal.ts, 1626, 7))
+>duration : Symbol(duration, Decl(temporal.ts, 1628, 7))
 >with : Symbol(Temporal.Duration.with, Decl(lib.esnext.temporal.d.ts, --, --))
->years : Symbol(years, Decl(temporal.ts, 1633, 30))
->months : Symbol(months, Decl(temporal.ts, 1633, 37))
+>years : Symbol(years, Decl(temporal.ts, 1635, 30))
+>months : Symbol(months, Decl(temporal.ts, 1635, 37))
 
     // => P4Y2M50DT50H100M
 }
 
 {
     const hour = Temporal.Duration.from("PT1H");
->hour : Symbol(hour, Decl(temporal.ts, 1638, 9))
+>hour : Symbol(hour, Decl(temporal.ts, 1640, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6278,52 +6292,52 @@
 
     hour.add({ minutes: 30 }); // => PT1H30M
 >hour.add : Symbol(Temporal.Duration.add, Decl(lib.esnext.temporal.d.ts, --, --))
->hour : Symbol(hour, Decl(temporal.ts, 1638, 9))
+>hour : Symbol(hour, Decl(temporal.ts, 1640, 9))
 >add : Symbol(Temporal.Duration.add, Decl(lib.esnext.temporal.d.ts, --, --))
->minutes : Symbol(minutes, Decl(temporal.ts, 1639, 14))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1641, 14))
 
     // Examples of balancing:
     const one = Temporal.Duration.from({ hours: 1, minutes: 30 });
->one : Symbol(one, Decl(temporal.ts, 1642, 9))
+>one : Symbol(one, Decl(temporal.ts, 1644, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1642, 40))
->minutes : Symbol(minutes, Decl(temporal.ts, 1642, 50))
+>hours : Symbol(hours, Decl(temporal.ts, 1644, 40))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1644, 50))
 
     const two = Temporal.Duration.from({ hours: 2, minutes: 45 });
->two : Symbol(two, Decl(temporal.ts, 1643, 9))
+>two : Symbol(two, Decl(temporal.ts, 1645, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1643, 40))
->minutes : Symbol(minutes, Decl(temporal.ts, 1643, 50))
+>hours : Symbol(hours, Decl(temporal.ts, 1645, 40))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1645, 50))
 
     const result = one.add(two); // => PT4H15M
->result : Symbol(result, Decl(temporal.ts, 1644, 9))
+>result : Symbol(result, Decl(temporal.ts, 1646, 9))
 >one.add : Symbol(Temporal.Duration.add, Decl(lib.esnext.temporal.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1642, 9))
+>one : Symbol(one, Decl(temporal.ts, 1644, 9))
 >add : Symbol(Temporal.Duration.add, Decl(lib.esnext.temporal.d.ts, --, --))
->two : Symbol(two, Decl(temporal.ts, 1643, 9))
+>two : Symbol(two, Decl(temporal.ts, 1645, 9))
 
     // Example of adding calendar units
     const oneAndAHalfMonth = Temporal.Duration.from({ months: 1, days: 16 });
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1647, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1649, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->months : Symbol(months, Decl(temporal.ts, 1647, 53))
->days : Symbol(days, Decl(temporal.ts, 1647, 64))
+>months : Symbol(months, Decl(temporal.ts, 1649, 53))
+>days : Symbol(days, Decl(temporal.ts, 1649, 64))
 
     // To convert units, use arithmetic relative to a start date:
     const startDate1 = Temporal.PlainDate.from("2000-12-01");
->startDate1 : Symbol(startDate1, Decl(temporal.ts, 1650, 9))
+>startDate1 : Symbol(startDate1, Decl(temporal.ts, 1652, 9))
 >Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6334,19 +6348,19 @@
 >startDate1.add(oneAndAHalfMonth).add(oneAndAHalfMonth)        .since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate1.add(oneAndAHalfMonth).add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate1.add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate1 : Symbol(startDate1, Decl(temporal.ts, 1650, 9))
+>startDate1 : Symbol(startDate1, Decl(temporal.ts, 1652, 9))
 >add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1647, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1649, 9))
 >add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1647, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1649, 9))
 
         .since(startDate1, { largestUnit: "months" }); // => P3M4D
 >since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate1 : Symbol(startDate1, Decl(temporal.ts, 1650, 9))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1652, 28))
+>startDate1 : Symbol(startDate1, Decl(temporal.ts, 1652, 9))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1654, 28))
 
     const startDate2 = Temporal.PlainDate.from("2001-01-01");
->startDate2 : Symbol(startDate2, Decl(temporal.ts, 1654, 9))
+>startDate2 : Symbol(startDate2, Decl(temporal.ts, 1656, 9))
 >Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6357,21 +6371,21 @@
 >startDate2.add(oneAndAHalfMonth).add(oneAndAHalfMonth)        .since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate2.add(oneAndAHalfMonth).add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate2.add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate2 : Symbol(startDate2, Decl(temporal.ts, 1654, 9))
+>startDate2 : Symbol(startDate2, Decl(temporal.ts, 1656, 9))
 >add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1647, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1649, 9))
 >add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1647, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1649, 9))
 
         .since(startDate2, { largestUnit: "months" }); // => P3M1D
 >since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate2 : Symbol(startDate2, Decl(temporal.ts, 1654, 9))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1656, 28))
+>startDate2 : Symbol(startDate2, Decl(temporal.ts, 1656, 9))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1658, 28))
 }
 
 {
     const hourAndAHalf = Temporal.Duration.from("PT1H30M");
->hourAndAHalf : Symbol(hourAndAHalf, Decl(temporal.ts, 1660, 9))
+>hourAndAHalf : Symbol(hourAndAHalf, Decl(temporal.ts, 1662, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6380,67 +6394,67 @@
 
     hourAndAHalf.subtract({ hours: 1 }); // => PT30M
 >hourAndAHalf.subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->hourAndAHalf : Symbol(hourAndAHalf, Decl(temporal.ts, 1660, 9))
+>hourAndAHalf : Symbol(hourAndAHalf, Decl(temporal.ts, 1662, 9))
 >subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1661, 27))
+>hours : Symbol(hours, Decl(temporal.ts, 1663, 27))
 
     const one = Temporal.Duration.from({ minutes: 180 });
->one : Symbol(one, Decl(temporal.ts, 1663, 9))
+>one : Symbol(one, Decl(temporal.ts, 1665, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->minutes : Symbol(minutes, Decl(temporal.ts, 1663, 40))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1665, 40))
 
     const two = Temporal.Duration.from({ seconds: 30 });
->two : Symbol(two, Decl(temporal.ts, 1664, 9))
+>two : Symbol(two, Decl(temporal.ts, 1666, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->seconds : Symbol(seconds, Decl(temporal.ts, 1664, 40))
+>seconds : Symbol(seconds, Decl(temporal.ts, 1666, 40))
 
     one.subtract(two); // => PT179M30S
 >one.subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1663, 9))
+>one : Symbol(one, Decl(temporal.ts, 1665, 9))
 >subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->two : Symbol(two, Decl(temporal.ts, 1664, 9))
+>two : Symbol(two, Decl(temporal.ts, 1666, 9))
 
     one.subtract(two).round({ largestUnit: "hour" }); // => PT2H59M30S
 >one.subtract(two).round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >one.subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->one : Symbol(one, Decl(temporal.ts, 1663, 9))
+>one : Symbol(one, Decl(temporal.ts, 1665, 9))
 >subtract : Symbol(Temporal.Duration.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->two : Symbol(two, Decl(temporal.ts, 1664, 9))
+>two : Symbol(two, Decl(temporal.ts, 1666, 9))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1666, 29))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1668, 29))
 
     // Example of subtracting calendar units; cannot be subtracted using
     // subtract() because units need to be converted
     const threeMonths = Temporal.Duration.from({ months: 3 });
->threeMonths : Symbol(threeMonths, Decl(temporal.ts, 1670, 9))
+>threeMonths : Symbol(threeMonths, Decl(temporal.ts, 1672, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->months : Symbol(months, Decl(temporal.ts, 1670, 48))
+>months : Symbol(months, Decl(temporal.ts, 1672, 48))
 
     const oneAndAHalfMonth = Temporal.Duration.from({ months: 1, days: 15 });
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1671, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1673, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->months : Symbol(months, Decl(temporal.ts, 1671, 53))
->days : Symbol(days, Decl(temporal.ts, 1671, 64))
+>months : Symbol(months, Decl(temporal.ts, 1673, 53))
+>days : Symbol(days, Decl(temporal.ts, 1673, 64))
 
     // To convert units, use arithmetic relative to a start date:
     const startDate1 = Temporal.PlainDate.from("2001-01-01");
->startDate1 : Symbol(startDate1, Decl(temporal.ts, 1674, 9))
+>startDate1 : Symbol(startDate1, Decl(temporal.ts, 1676, 9))
 >Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6451,19 +6465,19 @@
 >startDate1.add(threeMonths).subtract(oneAndAHalfMonth)        .since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate1.add(threeMonths).subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate1.add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate1 : Symbol(startDate1, Decl(temporal.ts, 1674, 9))
+>startDate1 : Symbol(startDate1, Decl(temporal.ts, 1676, 9))
 >add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->threeMonths : Symbol(threeMonths, Decl(temporal.ts, 1670, 9))
+>threeMonths : Symbol(threeMonths, Decl(temporal.ts, 1672, 9))
 >subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1671, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1673, 9))
 
         .since(startDate1, { largestUnit: "months" }); // => P1M13D
 >since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate1 : Symbol(startDate1, Decl(temporal.ts, 1674, 9))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1676, 28))
+>startDate1 : Symbol(startDate1, Decl(temporal.ts, 1676, 9))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1678, 28))
 
     const startDate2 = Temporal.PlainDate.from("2001-02-01");
->startDate2 : Symbol(startDate2, Decl(temporal.ts, 1678, 9))
+>startDate2 : Symbol(startDate2, Decl(temporal.ts, 1680, 9))
 >Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6474,21 +6488,21 @@
 >startDate2.add(threeMonths).subtract(oneAndAHalfMonth)        .since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate2.add(threeMonths).subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
 >startDate2.add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate2 : Symbol(startDate2, Decl(temporal.ts, 1678, 9))
+>startDate2 : Symbol(startDate2, Decl(temporal.ts, 1680, 9))
 >add : Symbol(Temporal.PlainDate.add, Decl(lib.esnext.temporal.d.ts, --, --))
->threeMonths : Symbol(threeMonths, Decl(temporal.ts, 1670, 9))
+>threeMonths : Symbol(threeMonths, Decl(temporal.ts, 1672, 9))
 >subtract : Symbol(Temporal.PlainDate.subtract, Decl(lib.esnext.temporal.d.ts, --, --))
->oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1671, 9))
+>oneAndAHalfMonth : Symbol(oneAndAHalfMonth, Decl(temporal.ts, 1673, 9))
 
         .since(startDate2, { largestUnit: "months" }); // => P1M16D
 >since : Symbol(Temporal.PlainDate.since, Decl(lib.esnext.temporal.d.ts, --, --))
->startDate2 : Symbol(startDate2, Decl(temporal.ts, 1678, 9))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1680, 28))
+>startDate2 : Symbol(startDate2, Decl(temporal.ts, 1680, 9))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1682, 28))
 }
 
 {
     const d = Temporal.Duration.from("P1Y2M3DT4H5M6.987654321S");
->d : Symbol(d, Decl(temporal.ts, 1684, 9))
+>d : Symbol(d, Decl(temporal.ts, 1686, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6497,25 +6511,25 @@
 
     d.sign; // 1
 >d.sign : Symbol(Temporal.Duration.sign, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1684, 9))
+>d : Symbol(d, Decl(temporal.ts, 1686, 9))
 >sign : Symbol(Temporal.Duration.sign, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.negated(); // -P1Y2M3DT4H5M6.987654321S
 >d.negated : Symbol(Temporal.Duration.negated, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1684, 9))
+>d : Symbol(d, Decl(temporal.ts, 1686, 9))
 >negated : Symbol(Temporal.Duration.negated, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.negated().sign; // -1
 >d.negated().sign : Symbol(Temporal.Duration.sign, Decl(lib.esnext.temporal.d.ts, --, --))
 >d.negated : Symbol(Temporal.Duration.negated, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1684, 9))
+>d : Symbol(d, Decl(temporal.ts, 1686, 9))
 >negated : Symbol(Temporal.Duration.negated, Decl(lib.esnext.temporal.d.ts, --, --))
 >sign : Symbol(Temporal.Duration.sign, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
 {
     const d = Temporal.Duration.from("-PT8H30M");
->d : Symbol(d, Decl(temporal.ts, 1691, 9))
+>d : Symbol(d, Decl(temporal.ts, 1693, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6524,59 +6538,59 @@
 
     d.abs(); // PT8H30M
 >d.abs : Symbol(Temporal.Duration.abs, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1691, 9))
+>d : Symbol(d, Decl(temporal.ts, 1693, 9))
 >abs : Symbol(Temporal.Duration.abs, Decl(lib.esnext.temporal.d.ts, --, --))
 }
 
 {
     let d: Temporal.Duration;
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     // Balance a duration as far as possible without knowing a starting point
     d = Temporal.Duration.from({ minutes: 130 });
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->minutes : Symbol(minutes, Decl(temporal.ts, 1699, 32))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1701, 32))
 
     d.round({ largestUnit: "day" }); // => PT2H10M
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1700, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1702, 13))
 
     // Round to the nearest unit
     d = Temporal.Duration.from({ minutes: 10, seconds: 52 });
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->minutes : Symbol(minutes, Decl(temporal.ts, 1703, 32))
->seconds : Symbol(seconds, Decl(temporal.ts, 1703, 45))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1705, 32))
+>seconds : Symbol(seconds, Decl(temporal.ts, 1705, 45))
 
     d.round({ smallestUnit: "minute" }); // => PT11M
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1704, 13))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1706, 13))
 
     d.round({ smallestUnit: "minute", roundingMode: "trunc" }); // => PT10M
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1705, 13))
->roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1705, 37))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1707, 13))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1707, 37))
 
     // How many seconds in a multi-unit duration?
     d = Temporal.Duration.from("PT2H34M18S");
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6586,60 +6600,60 @@
     d.round({ largestUnit: "second" }).seconds; // => 9258
 >d.round({ largestUnit: "second" }).seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1709, 13))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1711, 13))
 >seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
 
     // Normalize, with and without taking DST into account
     d = Temporal.Duration.from({ hours: 2756 });
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1712, 32))
+>hours : Symbol(hours, Decl(temporal.ts, 1714, 32))
 
     d.round({
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         relativeTo: "2020-01-01T00:00+01:00[Europe/Rome]",
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1713, 13))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1715, 13))
 
         largestUnit: "year",
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1714, 58))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1716, 58))
 
     }); // => P114DT21H
     // (one hour longer because DST skipped an hour)
     d.round({
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         relativeTo: "2020-01-01",
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1718, 13))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1720, 13))
 
         largestUnit: "year",
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1719, 33))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1721, 33))
 
     }); // => P114DT20H
     // (one hour shorter if ignoring DST)
 
     // Normalize days into months or years
     d = Temporal.Duration.from({ days: 190 });
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->days : Symbol(days, Decl(temporal.ts, 1725, 32))
+>days : Symbol(days, Decl(temporal.ts, 1727, 32))
 
     const refDate = Temporal.PlainDate.from("2020-01-01");
->refDate : Symbol(refDate, Decl(temporal.ts, 1726, 9))
+>refDate : Symbol(refDate, Decl(temporal.ts, 1728, 9))
 >Temporal.PlainDate.from : Symbol(Temporal.PlainDateConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.PlainDate : Symbol(Temporal.PlainDate, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6648,83 +6662,83 @@
 
     d.round({ relativeTo: refDate, largestUnit: "year" }); // => P6M8D
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1727, 13))
->refDate : Symbol(refDate, Decl(temporal.ts, 1726, 9))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1727, 34))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1729, 13))
+>refDate : Symbol(refDate, Decl(temporal.ts, 1728, 9))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1729, 34))
 
     // Same, but in a different calendar system
     d.round({
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         relativeTo: refDate.withCalendar("hebrew"),
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1730, 13))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1732, 13))
 >refDate.withCalendar : Symbol(Temporal.PlainDate.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
->refDate : Symbol(refDate, Decl(temporal.ts, 1726, 9))
+>refDate : Symbol(refDate, Decl(temporal.ts, 1728, 9))
 >withCalendar : Symbol(Temporal.PlainDate.withCalendar, Decl(lib.esnext.temporal.d.ts, --, --))
 
         largestUnit: "year",
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1731, 51))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1733, 51))
 
     }); // => P6M13D
 
     // Round a duration up to the next 5-minute billing period
     d = Temporal.Duration.from({ minutes: 6 });
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->minutes : Symbol(minutes, Decl(temporal.ts, 1736, 32))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1738, 32))
 
     d.round({
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         smallestUnit: "minute",
->smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1737, 13))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1739, 13))
 
         roundingIncrement: 5,
->roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 1738, 31))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 1740, 31))
 
         roundingMode: "ceil",
->roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1739, 29))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1741, 29))
 
     }); // => PT10M
 
     // How many full 3-month quarters of this year, are in this duration?
     d = Temporal.Duration.from({ months: 10, days: 15 });
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->months : Symbol(months, Decl(temporal.ts, 1744, 32))
->days : Symbol(days, Decl(temporal.ts, 1744, 44))
+>months : Symbol(months, Decl(temporal.ts, 1746, 32))
+>days : Symbol(days, Decl(temporal.ts, 1746, 44))
 
     d = d.round({
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >d.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         smallestUnit: "month",
->smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1745, 17))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1747, 17))
 
         roundingIncrement: 3,
->roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 1746, 30))
+>roundingIncrement : Symbol(roundingIncrement, Decl(temporal.ts, 1748, 30))
 
         roundingMode: "trunc",
->roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1747, 29))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1749, 29))
 
         relativeTo: Temporal.Now.plainDateISO(),
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1748, 30))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1750, 30))
 >Temporal.Now.plainDateISO : Symbol(Temporal.Now.plainDateISO, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Now : Symbol(Temporal.Now, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6733,41 +6747,41 @@
 
     });
     const quarters = d.months / 3;
->quarters : Symbol(quarters, Decl(temporal.ts, 1751, 9))
+>quarters : Symbol(quarters, Decl(temporal.ts, 1753, 9))
 >d.months : Symbol(Temporal.Duration.months, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1696, 7))
+>d : Symbol(d, Decl(temporal.ts, 1698, 7))
 >months : Symbol(Temporal.Duration.months, Decl(lib.esnext.temporal.d.ts, --, --))
 
     quarters; // => 3
->quarters : Symbol(quarters, Decl(temporal.ts, 1751, 9))
+>quarters : Symbol(quarters, Decl(temporal.ts, 1753, 9))
 }
 
 {
     let d: Temporal.Duration;
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     // How many seconds in 130 hours and 20 minutes?
     d = Temporal.Duration.from({ hours: 130, minutes: 20 });
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1759, 32))
->minutes : Symbol(minutes, Decl(temporal.ts, 1759, 44))
+>hours : Symbol(hours, Decl(temporal.ts, 1761, 32))
+>minutes : Symbol(minutes, Decl(temporal.ts, 1761, 44))
 
     d.total({ unit: "second" }); // => 469200
 >d.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->unit : Symbol(unit, Decl(temporal.ts, 1760, 13))
+>unit : Symbol(unit, Decl(temporal.ts, 1762, 13))
 
     // How many 24-hour days is 123456789 seconds?
     d = Temporal.Duration.from("PT123456789S");
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6776,140 +6790,140 @@
 
     d.total({ unit: "day" }); // 1428.8980208333332
 >d.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->unit : Symbol(unit, Decl(temporal.ts, 1764, 13))
+>unit : Symbol(unit, Decl(temporal.ts, 1766, 13))
 
     // Find totals in months, with and without taking DST into account
     d = Temporal.Duration.from({ hours: 2756 });
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->hours : Symbol(hours, Decl(temporal.ts, 1767, 32))
+>hours : Symbol(hours, Decl(temporal.ts, 1769, 32))
 
     d.total({
 >d.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         relativeTo: "2020-01-01T00:00+01:00[Europe/Rome]",
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1768, 13))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1770, 13))
 
         unit: "month",
->unit : Symbol(unit, Decl(temporal.ts, 1769, 58))
+>unit : Symbol(unit, Decl(temporal.ts, 1771, 58))
 
     }); // => 3.7958333333333334
     d.total({
 >d.total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1756, 7))
+>d : Symbol(d, Decl(temporal.ts, 1758, 7))
 >total : Symbol(Temporal.Duration.total, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
         unit: "month",
->unit : Symbol(unit, Decl(temporal.ts, 1772, 13))
+>unit : Symbol(unit, Decl(temporal.ts, 1774, 13))
 
         relativeTo: "2020-01-01",
->relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1773, 22))
+>relativeTo : Symbol(relativeTo, Decl(temporal.ts, 1775, 22))
 
     }); // => 3.7944444444444443
 }
 
 {
     let d: Temporal.Duration;
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from({ years: 1, days: 1 });
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
->Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
->Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->years : Symbol(years, Decl(temporal.ts, 1781, 32))
->days : Symbol(days, Decl(temporal.ts, 1781, 42))
-
-    d.toString(); // => P1Y1D
->d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
->toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
-
-    d = Temporal.Duration.from({ years: -1, days: -1 });
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >years : Symbol(years, Decl(temporal.ts, 1783, 32))
->days : Symbol(days, Decl(temporal.ts, 1783, 43))
+>days : Symbol(days, Decl(temporal.ts, 1783, 42))
 
-    d.toString(); // => -P1Y1D
+    d.toString(); // => P1Y1D
 >d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
 
-    d = Temporal.Duration.from({ milliseconds: 1000 });
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+    d = Temporal.Duration.from({ years: -1, days: -1 });
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->milliseconds : Symbol(milliseconds, Decl(temporal.ts, 1785, 32))
+>years : Symbol(years, Decl(temporal.ts, 1785, 32))
+>days : Symbol(days, Decl(temporal.ts, 1785, 43))
+
+    d.toString(); // => -P1Y1D
+>d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
+>toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
+
+    d = Temporal.Duration.from({ milliseconds: 1000 });
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
+>Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
+>Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
+>from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
+>milliseconds : Symbol(milliseconds, Decl(temporal.ts, 1787, 32))
 
     d.toString(); // => PT1S
 >d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
 
     // The output format always balances units under 1 s, even if the
     // underlying Temporal.Duration object doesn't.
     const nobal = Temporal.Duration.from({ milliseconds: 3500 });
->nobal : Symbol(nobal, Decl(temporal.ts, 1790, 9))
+>nobal : Symbol(nobal, Decl(temporal.ts, 1792, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
 >Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
->milliseconds : Symbol(milliseconds, Decl(temporal.ts, 1790, 42))
+>milliseconds : Symbol(milliseconds, Decl(temporal.ts, 1792, 42))
 
     console.log(`${nobal}`, nobal.seconds, nobal.milliseconds); // => 'PT3.5S 0 3500'
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->nobal : Symbol(nobal, Decl(temporal.ts, 1790, 9))
+>nobal : Symbol(nobal, Decl(temporal.ts, 1792, 9))
 >nobal.seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
->nobal : Symbol(nobal, Decl(temporal.ts, 1790, 9))
+>nobal : Symbol(nobal, Decl(temporal.ts, 1792, 9))
 >seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
 >nobal.milliseconds : Symbol(Temporal.Duration.milliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
->nobal : Symbol(nobal, Decl(temporal.ts, 1790, 9))
+>nobal : Symbol(nobal, Decl(temporal.ts, 1792, 9))
 >milliseconds : Symbol(Temporal.Duration.milliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
 
     const bal = nobal.round({ largestUnit: "year" }); // balance through round
->bal : Symbol(bal, Decl(temporal.ts, 1792, 9))
+>bal : Symbol(bal, Decl(temporal.ts, 1794, 9))
 >nobal.round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->nobal : Symbol(nobal, Decl(temporal.ts, 1790, 9))
+>nobal : Symbol(nobal, Decl(temporal.ts, 1792, 9))
 >round : Symbol(Temporal.Duration.round, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
->largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1792, 29))
+>largestUnit : Symbol(largestUnit, Decl(temporal.ts, 1794, 29))
 
     console.log(`${bal}`, bal.seconds, bal.milliseconds); // => 'PT3.5S 3 500'
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->bal : Symbol(bal, Decl(temporal.ts, 1792, 9))
+>bal : Symbol(bal, Decl(temporal.ts, 1794, 9))
 >bal.seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
->bal : Symbol(bal, Decl(temporal.ts, 1792, 9))
+>bal : Symbol(bal, Decl(temporal.ts, 1794, 9))
 >seconds : Symbol(Temporal.Duration.seconds, Decl(lib.esnext.temporal.d.ts, --, --))
 >bal.milliseconds : Symbol(Temporal.Duration.milliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
->bal : Symbol(bal, Decl(temporal.ts, 1792, 9))
+>bal : Symbol(bal, Decl(temporal.ts, 1794, 9))
 >milliseconds : Symbol(Temporal.Duration.milliseconds, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d = Temporal.Duration.from("PT59.999999999S");
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6918,35 +6932,35 @@
 
     d.toString({ smallestUnit: "second" }); // => PT59S
 >d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1796, 16))
+>smallestUnit : Symbol(smallestUnit, Decl(temporal.ts, 1798, 16))
 
     d.toString({ fractionalSecondDigits: 0 }); // => PT59S
 >d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 1797, 16))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 1799, 16))
 
     d.toString({ fractionalSecondDigits: 4 }); // => PT59.9999S
 >d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 1798, 16))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 1800, 16))
 
     d.toString({ fractionalSecondDigits: 8, roundingMode: "halfExpand" });
 >d.toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1779, 7))
+>d : Symbol(d, Decl(temporal.ts, 1781, 7))
 >toString : Symbol(Temporal.Duration.toString, Decl(lib.esnext.temporal.d.ts, --, --))
->fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 1799, 16))
->roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1799, 43))
+>fractionalSecondDigits : Symbol(fractionalSecondDigits, Decl(temporal.ts, 1801, 16))
+>roundingMode : Symbol(roundingMode, Decl(temporal.ts, 1801, 43))
 
     // => PT60.00000000S
 }
 
 {
     const d = Temporal.Duration.from("P1DT6H30M");
->d : Symbol(d, Decl(temporal.ts, 1804, 9))
+>d : Symbol(d, Decl(temporal.ts, 1806, 9))
 >Temporal.Duration.from : Symbol(Temporal.DurationConstructor.from, Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal.Duration : Symbol(Temporal.Duration, Decl(lib.esnext.temporal.d.ts, --, --), Decl(lib.esnext.temporal.d.ts, --, --))
 >Temporal : Symbol(Temporal, Decl(lib.esnext.temporal.d.ts, --, --))
@@ -6955,20 +6969,20 @@
 
     d.toLocaleString(); // example output: '1 day 6 hours 30 minutes'
 >d.toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1804, 9))
+>d : Symbol(d, Decl(temporal.ts, 1806, 9))
 >toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.toLocaleString("de-DE"); // example output: '1 Tag 6 Stunden 30 Minuten'
 >d.toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1804, 9))
+>d : Symbol(d, Decl(temporal.ts, 1806, 9))
 >toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
 
     d.toLocaleString("en-US", { days: "short", hours: "numeric" }); // example output: '1 day 6 hours'
 >d.toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->d : Symbol(d, Decl(temporal.ts, 1804, 9))
+>d : Symbol(d, Decl(temporal.ts, 1806, 9))
 >toLocaleString : Symbol(Temporal.Duration.toLocaleString, Decl(lib.esnext.temporal.d.ts, --, --))
->days : Symbol(days, Decl(temporal.ts, 1807, 31))
->hours : Symbol(hours, Decl(temporal.ts, 1807, 46))
+>days : Symbol(days, Decl(temporal.ts, 1809, 31))
+>hours : Symbol(hours, Decl(temporal.ts, 1809, 46))
 }
 
 {

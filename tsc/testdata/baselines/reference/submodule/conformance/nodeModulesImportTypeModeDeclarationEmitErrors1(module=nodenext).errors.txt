@@ -1,5 +1,5 @@
-/index.ts(2,51): error TS1453: `resolution-mode` should be either `require` or `import`.
-/index.ts(5,78): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(2,49): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(5,76): error TS1453: `resolution-mode` should be either `require` or `import`.
 /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other.ts(3,22): error TS1005: 'with' expected.
 /other.ts(3,39): error TS1005: ';' expected.
@@ -90,15 +90,15 @@
     export interface RequireInterface {}
 ==== /index.ts (2 errors) ====
     export type LocalInterface =
-        & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
-                                                      ~~~~~~~~
+        & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
+                                                    ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
-        & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+        & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
     
-    export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
-                                                                                 ~~~~~~~~
+    export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+                                                                               ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
-    export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+    export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
 ==== /other.ts (27 errors) ====
     // missing assert:
     export type LocalInterface =

@@ -1,0 +1,10 @@
+--- old.declarationEmitUnsafeImportSymbolName.js
++++ new.declarationEmitUnsafeImportSymbolName.js
+@@= skipped -17, +17 lines =@@
+ exports.special = void 0;
+ const foo_1 = require("foo");
+ exports.special = (0, foo_1.getSpecial)();
++
++
++//// [entry.d.ts]
++export declare const special: any;

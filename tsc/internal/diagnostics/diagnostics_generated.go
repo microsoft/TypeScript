@@ -2008,6 +2008,8 @@ var This_expression_is_never_nullish = &Message{code: 2881, category: CategoryEr
 
 var Cannot_find_module_or_type_declarations_for_side_effect_import_of_0 = &Message{code: 2882, category: CategoryError, key: "Cannot_find_module_or_type_declarations_for_side_effect_import_of_0_2882", text: "Cannot find module or type declarations for side-effect import of '{0}'."}
 
+var The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_type_annotation_is_necessary = &Message{code: 2883, category: CategoryError, key: "The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_2883", text: "The inferred type of '{0}' cannot be named without a reference to '{2}' from '{1}'. This is likely not portable. A type annotation is necessary."}
+
 var Import_declaration_0_is_using_private_name_1 = &Message{code: 4000, category: CategoryError, key: "Import_declaration_0_is_using_private_name_1_4000", text: "Import declaration '{0}' is using private name '{1}'."}
 
 var Type_parameter_0_of_exported_class_has_or_is_using_private_name_1 = &Message{code: 4002, category: CategoryError, key: "Type_parameter_0_of_exported_class_has_or_is_using_private_name_1_4002", text: "Type parameter '{0}' of exported class has or is using private name '{1}'."}
@@ -6294,6 +6296,8 @@ func keyToMessage(key Key) *Message {
 		return This_expression_is_never_nullish
 	case "Cannot_find_module_or_type_declarations_for_side_effect_import_of_0_2882":
 		return Cannot_find_module_or_type_declarations_for_side_effect_import_of_0
+	case "The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_2883":
+		return The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_type_annotation_is_necessary
 	case "Import_declaration_0_is_using_private_name_1_4000":
 		return Import_declaration_0_is_using_private_name_1
 	case "Type_parameter_0_of_exported_class_has_or_is_using_private_name_1_4002":

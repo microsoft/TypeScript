@@ -1,0 +1,28 @@
+--- old.importTypeAssertionDeprecation.errors.txt
++++ new.importTypeAssertionDeprecation.errors.txt
+@@= skipped -0, +0 lines =@@
+-/main.ts(1,38): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-/main.ts(2,38): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-/main.ts(4,31): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-/main.ts(5,31): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-
+-
+-==== /types.d.ts (0 errors) ====
+-    export interface MyType { x: string }
+-    
+-==== /main.ts (4 errors) ====
+-    type A = import("./types", { assert: { "resolution-mode": "import" } }).MyType;
+-                                         ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    type B = import("./types", { assert: { "resolution-mode": "require" } }).MyType;
+-                                         ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    
+-    const a = import("./types", { assert: { "resolution-mode": "import" } });
+-                                  ~~~~~~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    const b = import("./types", { assert: { "resolution-mode": "require" } });
+-                                  ~~~~~~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+-    
++<no content>

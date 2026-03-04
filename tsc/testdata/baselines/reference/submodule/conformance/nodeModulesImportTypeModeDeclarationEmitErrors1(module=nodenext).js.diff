@@ -1,6 +1,11 @@
 --- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).js
 +++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).js
-@@= skipped -124, +124 lines =@@
+@@= skipped -120, +120 lines =@@
+
+ //// [index.d.ts]
+ export type LocalInterface = import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
+-export declare const a: import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface;
++export declare const a: import("pkg").RequireInterface;
  export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
  //// [other.d.ts]
  export type LocalInterface = import("pkg", { with: {} });
@@ -11,7 +16,7 @@
  //// [other2.d.ts]
  export type LocalInterface = import("pkg", { assert: { "bad": "require" } }).RequireInterface & import("pkg", { assert: { "bad": "import" } }).ImportInterface;
  export declare const a: import("pkg").RequireInterface;
-@@= skipped -14, +14 lines =@@
+@@= skipped -18, +18 lines =@@
  export declare const b: any;
  //// [other4.d.ts]
  export type LocalInterface = import("pkg", { with: {} });

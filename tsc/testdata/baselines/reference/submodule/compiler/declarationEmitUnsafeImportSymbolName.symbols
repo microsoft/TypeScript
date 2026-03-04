@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitUnsafeImportSymbolName.ts] ////
+
+=== r/node_modules/foo/node_modules/nested/index.d.ts ===
+export interface MySpecialType {
+>MySpecialType : Symbol(MySpecialType, Decl(index.d.ts, 0, 0))
+
+    val: string;
+>val : Symbol(MySpecialType.val, Decl(index.d.ts, 0, 32))
+}
+=== r/node_modules/foo/index.d.ts ===
+import { MySpecialType } from "nested";
+>MySpecialType : Symbol(MySpecialType, Decl(index.d.ts, 0, 8))
+
+export function getSpecial(): MySpecialType;
+>getSpecial : Symbol(getSpecial, Decl(index.d.ts, 0, 39))
+>MySpecialType : Symbol(MySpecialType, Decl(index.d.ts, 0, 8))
+
+=== r/entry.ts ===
+import { getSpecial } from "foo";
+>getSpecial : Symbol(getSpecial, Decl(entry.ts, 0, 8))
+
+export const special = getSpecial();
+>special : Symbol(special, Decl(entry.ts, 1, 12))
+>getSpecial : Symbol(getSpecial, Decl(entry.ts, 0, 8))
+

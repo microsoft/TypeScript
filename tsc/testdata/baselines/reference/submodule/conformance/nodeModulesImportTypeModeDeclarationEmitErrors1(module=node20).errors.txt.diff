@@ -1,0 +1,95 @@
+--- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node20).errors.txt
++++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node20).errors.txt
+@@= skipped -26, +26 lines =@@
+ /other.ts(7,79): error TS1434: Unexpected keyword or identifier.
+ /other.ts(7,79): error TS2304: Cannot find name 'ImportInterface'.
+ /other.ts(7,94): error TS1128: Declaration or statement expected.
+-/other2.ts(3,31): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other2.ts(3,32): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+-/other2.ts(4,31): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other2.ts(4,32): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+ /other2.ts(4,52): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+-/other2.ts(6,58): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other2.ts(6,59): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+-/other2.ts(7,58): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other2.ts(7,59): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+ /other2.ts(7,79): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+ /other3.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
+@@= skipped -44, +40 lines =@@
+ /other4.ts(10,56): error TS1005: ',' expected.
+ /other4.ts(10,57): error TS1134: Variable declaration expected.
+ /other4.ts(10,73): error TS1005: ',' expected.
+-/other5.ts(2,31): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other5.ts(2,31): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+-/other5.ts(3,31): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other5.ts(3,31): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+ /other5.ts(3,37): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+-/other5.ts(5,58): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other5.ts(5,58): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+-/other5.ts(6,58): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+ /other5.ts(6,58): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+ /other5.ts(6,64): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+
+@@= skipped -101, +97 lines =@@
+ !!! error TS2304: Cannot find name 'ImportInterface'.
+                                                                                                  ~
+ !!! error TS1128: Declaration or statement expected.
+-==== /other2.ts (10 errors) ====
++==== /other2.ts (6 errors) ====
+     // wrong assertion key
+     export type LocalInterface =
+         & import("pkg", { assert: {"bad": "require"} }).RequireInterface
+-                                  ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                    ~~~~~
+ !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
+         & import("pkg", { assert: {"bad": "import"} }).ImportInterface;
+-                                  ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                    ~~~~~
+ !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
+                                                        ~~~~~~~~~~~~~~~
+ !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+     
+     export const a = (null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface);
+-                                                             ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                                               ~~~~~
+ !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
+     export const b = (null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface);
+-                                                             ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                                               ~~~~~
+ !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
+                                                                                   ~~~~~~~~~~~~~~~
+@@= skipped -124, +116 lines =@@
+ !!! error TS1134: Variable declaration expected.
+                                                                             ~
+ !!! error TS1005: ',' expected.
+-==== /other5.ts (10 errors) ====
++==== /other5.ts (6 errors) ====
+     export type LocalInterface =
+         & import("pkg", { assert: {} }).RequireInterface
+-                                  ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                   ~~
+ !!! error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+         & import("pkg", { assert: {} }).ImportInterface;
+-                                  ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                   ~~
+ !!! error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+                                         ~~~~~~~~~~~~~~~
+ !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+     
+     export const a = (null as any as import("pkg", { assert: {} }).RequireInterface);
+-                                                             ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                                              ~~
+ !!! error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+     export const b = (null as any as import("pkg", { assert: {} }).ImportInterface);
+-                                                             ~
+-!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+                                                              ~~
+ !!! error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+                                                                    ~~~~~~~~~~~~~~~
