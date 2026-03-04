@@ -2787,20 +2787,34 @@ func GetPragmaArgument(pragma *Pragma, name string) string {
 // The variable must not be exported and must not have a type annotation, even a jsdoc one.
 // The initializer must be a call to `require` with a string literal or a string literal-like argument.
 func IsVariableDeclarationInitializedToRequire(node *Node) bool {
-	if !IsInJSFile(node) {
-		return false
-	}
 	if node.Kind == KindBindingElement {
 		node = node.Parent.Parent
+	}
+	return isVariableDeclarationInitializedWithRequireHelper(node, false /*allowAccessedRequire*/)
+}
+
+func IsVariableDeclarationInitializedToBareOrAccessedRequire(node *Node) bool {
+	return isVariableDeclarationInitializedWithRequireHelper(node, true /*allowAccessedRequire*/)
+}
+
+func isVariableDeclarationInitializedWithRequireHelper(node *Node, allowAccessedRequire bool) bool {
+	if !IsInJSFile(node) {
+		return false
 	}
 	if node.Kind != KindVariableDeclaration {
 		return false
 	}
+	initializer := node.Initializer()
+	if initializer == nil {
+		return false
+	}
+	if allowAccessedRequire {
+		initializer = GetLeftmostAccessExpression(initializer)
+	}
 
 	return node.Parent.Parent.ModifierFlags()&ModifierFlagsExport == 0 &&
-		node.Initializer() != nil &&
 		node.Type() == nil &&
-		IsRequireCall(node.Initializer(), true /*requireStringLiteralLikeArgument*/)
+		IsRequireCall(initializer, true /*requireStringLiteralLikeArgument*/)
 }
 
 func IsModuleExportsAccessExpression(node *Node) bool {
