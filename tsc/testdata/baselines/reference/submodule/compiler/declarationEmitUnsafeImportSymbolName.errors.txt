@@ -1,4 +1,4 @@
-r/entry.ts(2,14): error TS2742: The inferred type of 'special' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+r/entry.ts(2,14): error TS2883: The inferred type of 'special' cannot be named without a reference to 'MySpecialType' from 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
 
 
 ==== r/node_modules/foo/node_modules/nested/index.d.ts (0 errors) ====
@@ -12,5 +12,5 @@ r/entry.ts(2,14): error TS2742: The inferred type of 'special' cannot be named w
     import { getSpecial } from "foo";
     export const special = getSpecial();
                  ~~~~~~~
-!!! error TS2742: The inferred type of 'special' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+!!! error TS2883: The inferred type of 'special' cannot be named without a reference to 'MySpecialType' from 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
     

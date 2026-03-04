@@ -578,7 +578,7 @@ func (b *NodeBuilderImpl) symbolToTypeNode(symbol *ast.Symbol, mask ast.SymbolFl
 				// If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
 				// since declaration files with these kinds of references are liable to fail when published :(
 				b.ctx.encounteredError = true
-				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifier)
+				b.ctx.tracker.ReportLikelyUnsafeImportRequiredError(oldSpecifier, symbol.Name)
 			}
 		}
 

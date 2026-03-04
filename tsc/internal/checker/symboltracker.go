@@ -71,12 +71,12 @@ func (this *SymbolTrackerImpl) ReportCyclicStructureError() {
 	this.inner.ReportCyclicStructureError()
 }
 
-func (this *SymbolTrackerImpl) ReportLikelyUnsafeImportRequiredError(specifier string) {
+func (this *SymbolTrackerImpl) ReportLikelyUnsafeImportRequiredError(specifier string, symbolName string) {
 	this.onDiagnosticReported()
 	if this.inner == nil {
 		return
 	}
-	this.inner.ReportLikelyUnsafeImportRequiredError(specifier)
+	this.inner.ReportLikelyUnsafeImportRequiredError(specifier, symbolName)
 }
 
 func (this *SymbolTrackerImpl) ReportTruncationError() {

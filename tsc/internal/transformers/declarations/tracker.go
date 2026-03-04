@@ -67,10 +67,14 @@ func (s *SymbolTrackerImpl) ReportInferenceFallback(node *ast.Node) {
 }
 
 // ReportLikelyUnsafeImportRequiredError implements checker.SymbolTracker.
-func (s *SymbolTrackerImpl) ReportLikelyUnsafeImportRequiredError(specifier string) {
+func (s *SymbolTrackerImpl) ReportLikelyUnsafeImportRequiredError(specifier string, symbolName string) {
 	location := s.errorLocation()
 	if location != nil {
-		s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback(), specifier))
+		if symbolName != "" {
+			s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_2_from_1_This_is_likely_not_portable_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback(), specifier, symbolName))
+		} else {
+			s.state.addDiagnostic(createDiagnosticForNode(location, diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary, s.errorDeclarationNameWithFallback(), specifier))
+		}
 	}
 }
 
