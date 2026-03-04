@@ -560,22 +560,29 @@ export declare const otherValue: string;`,
 
 func TestHiddenDirectoriesInNodeModules(t *testing.T) {
 	t.Parallel()
-	t.Run("hidden dir resolved via import with nameless package.json", func(t *testing.T) {
-		// Simulates a layout where a symlinked package points into a hidden
-		// store directory (e.g. .store-fuse-unplugged) and the package.json
-		// in the store has no "name" or "version". When PackageId fails,
-		// collectPackageNames falls through to GetPackageNameFromDirectory,
-		// which extracts the hidden directory name from the realpath.
+	t.Run("deep import through subdirectory package.json in hidden store", func(t *testing.T) {
+		// Simulates a realistic scenario where:
+		// 1. A package is symlinked from node_modules into a hidden store directory
+		// 2. The user does a deep import like `import { debug } from "some-pkg/debug"`
+		// 3. The package has NO "exports" field, so resolution uses the nested
+		//    package.json at some-pkg/debug/package.json
+		// 4. That nested package.json has no "name" or "version" (just {"main":"..."}),
+		//    which is completely normal for subdirectory package.json files
+		// 5. getPackageId uses the nested package.json (not the root), fails to get
+		//    a name/version, so PackageId is empty
+		// 6. collectPackageNames falls through to GetPackageNameFromDirectory, which
+		//    extracts ".yarn-store" from the realpath after /node_modules/
+		// See https://github.com/microsoft/typescript-go/issues/2780
 		t.Parallel()
 		projectRoot := "/home/src/fuse-project"
-		storeDir := projectRoot + "/node_modules/.store-fuse-unplugged"
+		storeDir := projectRoot + "/node_modules/.yarn-store"
 		pkgStoreDir := storeDir + "/some-pkg-npm-1.0.0-abc123/package"
 
 		files := map[string]any{
 			projectRoot + "/tsconfig.json": `{
 				"compilerOptions": {
-					"module": "nodenext",
-					"target": "esnext",
+					"module": "commonjs",
+					"target": "es2020",
 					"strict": true
 				}
 			}`,
@@ -586,21 +593,30 @@ func TestHiddenDirectoriesInNodeModules(t *testing.T) {
 					"real-package": "*"
 				}
 			}`,
-			projectRoot + "/index.ts": `import { something } from "some-pkg";`,
+			// Deep import: "some-pkg/debug" — resolves through the subdirectory package.json
+			projectRoot + "/index.ts": `import { debug } from "some-pkg/debug";`,
 
 			// Real package that should be indexed normally
 			projectRoot + "/node_modules/real-package/package.json": `{"name":"real-package","version":"1.0.0","types":"index.d.ts"}`,
 			projectRoot + "/node_modules/real-package/index.d.ts":   "export declare const realExport: number;\n",
 
-			// Symlink: node_modules/some-pkg -> .store-fuse-unplugged/.../package/
+			// Symlink: node_modules/some-pkg -> .yarn-store/.../package/
 			projectRoot + "/node_modules/some-pkg": vfstest.Symlink(pkgStoreDir),
 
-			// Store package with no name/version — PackageId will fail.
-			pkgStoreDir + "/package.json": `{"types":"index.d.ts"}`,
+			// Root package.json with name+version but NO "exports" field.
+			// This is key: without exports, the resolver resolves deep imports
+			// through the subdirectory package.json, not the root.
+			pkgStoreDir + "/package.json": `{"name":"some-pkg","version":"1.0.0","types":"index.d.ts"}`,
 			pkgStoreDir + "/index.d.ts":   "export declare const something: number;\n",
+			// Subdirectory package.json for the deep import — no name or version,
+			// just a main field. This is normal for packages that expose subpaths
+			// without using the "exports" field.
+			pkgStoreDir + "/debug/package.json": `{"main":"./debug.js","types":"./debug.d.ts"}`,
+			pkgStoreDir + "/debug/debug.d.ts":   "export declare function debug(msg: string): void;\n",
+			pkgStoreDir + "/debug/debug.js":     "exports.debug = function(msg) { console.log(msg); };\n",
 
 			// Other content in the hidden store that should never be crawled
-			storeDir + "/other-pkg-npm-2.0.0-def456/package/package.json": `{"name":"other-pkg","types":"index.d.ts"}`,
+			storeDir + "/other-pkg-npm-2.0.0-def456/package/package.json": `{"name":"other-pkg","version":"1.0.0","types":"index.d.ts"}`,
 			storeDir + "/other-pkg-npm-2.0.0-def456/package/index.d.ts":   "export declare const other: string;\n",
 		}
 
@@ -617,7 +633,7 @@ func TestHiddenDirectoriesInNodeModules(t *testing.T) {
 		stats := autoImportStats(t, session)
 		nodeModulesBucket := singleBucket(t, stats.NodeModulesBuckets)
 
-		// .store-fuse-unplugged must not appear as a dependency name.
+		// .yarn-store must not appear as a dependency name.
 		// If it does, extractPackages will try to process the entire hidden
 		// directory (ReadDirectory **/*), which is the CPU/memory blowup.
 		assert.Assert(t, nodeModulesBucket.DependencyNames != nil, "DependencyNames should not be nil")
