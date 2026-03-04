@@ -6,9 +6,9 @@ const o = {};
 >o : Symbol(o, Decl(typedefModuleExportsIndirect3.js, 1, 5))
 
 module.exports = o;
->module.exports : Symbol(o, Decl(typedefModuleExportsIndirect3.js, 1, 5))
+>module.exports : Symbol(o, Decl(typedefModuleExportsIndirect3.js, 1, 13))
 >module : Symbol("./typedefModuleExportsIndirect3", Decl(typedefModuleExportsIndirect3.js, 0, 0))
->exports : Symbol(o, Decl(typedefModuleExportsIndirect3.js, 1, 5))
+>exports : Symbol(o, Decl(typedefModuleExportsIndirect3.js, 1, 13))
 >o : Symbol(o, Decl(typedefModuleExportsIndirect3.js, 1, 5))
 
 === use.js ===

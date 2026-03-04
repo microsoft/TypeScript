@@ -25,7 +25,7 @@
 ->ns : typeof ns
 +>module.exports = ns : { Foo: typeof Foo; }
 +>module.exports : { Foo: typeof Foo; }
-+>module : { readonly ns: { Foo: typeof Foo; }; }
++>module : { "export=": { Foo: typeof Foo; }; }
 +>exports : { Foo: typeof Foo; }
 +>ns : { Foo: typeof Foo; }
 

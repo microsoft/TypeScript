@@ -32,9 +32,9 @@ function Hook(handle) {
 >handle : Symbol(handle, Decl(hook.js, 6, 14))
 }
 module.exports = Hook;
->module.exports : Symbol(Hook, Decl(hook.js, 0, 0))
+>module.exports : Symbol(Hook, Decl(hook.js, 8, 1))
 >module : Symbol("./hook", Decl(hook.js, 0, 0))
->exports : Symbol(Hook, Decl(hook.js, 0, 0))
+>exports : Symbol(Hook, Decl(hook.js, 8, 1))
 >Hook : Symbol(Hook, Decl(hook.js, 0, 0))
 
 === context.js ===
@@ -103,8 +103,8 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports : Symbol(Context, Decl(context.js, 0, 0))
+>module.exports : Symbol(Context, Decl(context.js, 46, 1))
 >module : Symbol("./context", Decl(context.js, 0, 0))
->exports : Symbol(Context, Decl(context.js, 0, 0))
+>exports : Symbol(Context, Decl(context.js, 46, 1))
 >Context : Symbol(Context, Decl(context.js, 0, 0))
 

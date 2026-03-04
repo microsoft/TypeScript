@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/exportAssignmentMerging5.ts] ////
+
+=== b.js ===
+const a = require("./a");
+>a : Symbol(a, Decl(b.js, 0, 5))
+>require : Symbol(require)
+>"./a" : Symbol("./a", Decl(a.js, 0, 0))
+
+const c1 = a.a;
+>c1 : Symbol(c1, Decl(b.js, 1, 5))
+>a.a : Symbol(a, Decl(a.js, 3, 18))
+>a : Symbol(a, Decl(b.js, 0, 5))
+>a : Symbol(a, Decl(a.js, 3, 18))
+
+const c2 = a.b;
+>c2 : Symbol(c2, Decl(b.js, 2, 5))
+>a.b : Symbol(b, Decl(a.js, 3, 24))
+>a : Symbol(a, Decl(b.js, 0, 5))
+>b : Symbol(b, Decl(a.js, 3, 24))
+
+/** @type {a.Foo} */
+let v1 = { x: "test" };
+>v1 : Symbol(v1, Decl(b.js, 4, 3))
+>x : Symbol(x, Decl(b.js, 4, 10))
+
+=== a.js ===
+/**
+ * @typedef {{x: string}} Foo
+ */
+module.exports = { a: 1, b: "hello" };
+>module.exports : Symbol(export=, Decl(a.js, 0, 0))
+>module : Symbol("./a", Decl(a.js, 0, 0))
+>exports : Symbol(export=, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 3, 18))
+>b : Symbol(b, Decl(a.js, 3, 24))
+

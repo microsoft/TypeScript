@@ -15,8 +15,10 @@
 +};
 +export = _default;
  //// [index.d.ts]
- export = Container;
--declare class Container {
+-export = Container;
+ declare class Container {
 -    usage: Obj;
--}
++    constructor();
+ }
 -import Obj = require("./obj");
++export = Container;

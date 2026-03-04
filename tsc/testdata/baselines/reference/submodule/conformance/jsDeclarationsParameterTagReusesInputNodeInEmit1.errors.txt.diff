@@ -2,12 +2,11 @@
 +++ new.jsDeclarationsParameterTagReusesInputNodeInEmit1.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+base.js(11,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +file.js(1,15): error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
 +file.js(4,12): error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
 +
 +
-+==== base.js (1 errors) ====
++==== base.js (0 errors) ====
 +    class Base {
 +        constructor() {}
 +    }
@@ -19,8 +18,6 @@
 +    BaseFactory.Base = Base;
 +    
 +    module.exports = BaseFactory;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    
 +==== file.js (2 errors) ====
 +    /** @typedef {import('./base')} BaseFactory */

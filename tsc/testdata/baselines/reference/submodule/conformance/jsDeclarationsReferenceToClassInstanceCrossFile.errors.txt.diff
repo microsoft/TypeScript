@@ -4,8 +4,6 @@
 -<no content>
 +index.js(7,19): error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
 +index.js(14,18): error TS2749: 'Rectangle' refers to a value, but is being used as a type here. Did you mean 'typeof Rectangle'?
-+index.js(23,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-+rectangle.js(7,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +
 +
 +==== test.js (0 errors) ====
@@ -14,7 +12,7 @@
 +    
 +    render.addRectangle();
 +    console.log("Objects", render.objects);
-+==== rectangle.js (1 errors) ====
++==== rectangle.js (0 errors) ====
 +    class Rectangle {
 +        constructor() {
 +            console.log("I'm a rectangle!");
@@ -22,9 +20,7 @@
 +    }
 +    
 +    module.exports = { Rectangle };
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-+==== index.js (3 errors) ====
++==== index.js (2 errors) ====
 +    const {Rectangle} = require('./rectangle');
 +    
 +    class Render {
@@ -52,5 +48,3 @@
 +    }
 +    
 +    module.exports = { Render };
-+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

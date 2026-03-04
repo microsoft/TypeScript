@@ -16,7 +16,7 @@
  >module.exports = MainThreadTasks : typeof MainThreadTasks
  >module.exports : typeof MainThreadTasks
 ->module : { exports: typeof MainThreadTasks; }
-+>module : { MainThreadTasks: typeof MainThreadTasks; }
++>module : { "export=": typeof MainThreadTasks; }
  >exports : typeof MainThreadTasks
  >MainThreadTasks : typeof MainThreadTasks
 

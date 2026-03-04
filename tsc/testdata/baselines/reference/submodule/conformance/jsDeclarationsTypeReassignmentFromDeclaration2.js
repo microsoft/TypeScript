@@ -17,4 +17,5 @@ module.exports = items;
 
 
 //// [index.d.ts]
+declare const items: Item[];
 export = items;

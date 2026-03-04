@@ -49,6 +49,10 @@ module.exports.Strings = Strings;
 
 
 //// [source.d.ts]
+declare class Handler {
+    static get OPTIONS(): number;
+    process(): void;
+}
 declare namespace Handler {
     var statische: () => void;
 }

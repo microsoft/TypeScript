@@ -1,10 +1,5 @@
-mod1.js(10,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-mod1.js(10,1): error TS2300: Duplicate identifier 'export='.
 mod1.js(10,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-mod1.js(23,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-mod1.js(23,1): error TS2300: Duplicate identifier 'export='.
-mod1.js(24,5): error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
-use.js(4,12): error TS2503: Cannot find namespace 'mod'.
+use.js(6,15): error TS18048: 'mod.Baz' is possibly 'undefined'.
 
 
 ==== use.js (1 errors) ====
@@ -12,12 +7,12 @@ use.js(4,12): error TS2503: Cannot find namespace 'mod'.
     /** @type {import("./mod1.js").Baz} */
     var b;
     /** @type {mod.Baz} */
-               ~~~
-!!! error TS2503: Cannot find namespace 'mod'.
     var bb;
     var bbb = new mod.Baz();
+                  ~~~~~~~
+!!! error TS18048: 'mod.Baz' is possibly 'undefined'.
     
-==== mod1.js (6 errors) ====
+==== mod1.js (1 errors) ====
     // error
     
     /** @typedef {number} Foo */
@@ -29,17 +24,9 @@ use.js(4,12): error TS2503: Cannot find namespace 'mod'.
     /** @typedef {number} Baz */
     module.exports = {
     ~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~
         Baz: class { }
     ~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~
     }
-    ~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-    ~
-!!! error TS2300: Duplicate identifier 'export='.
     ~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     
@@ -53,16 +40,6 @@ use.js(4,12): error TS2503: Cannot find namespace 'mod'.
     
     /** @typedef {number} Quack */
     module.exports = {
-    ~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~
         Quack: 2
-    ~~~~~~~~~~~~
-    ~~~~~~~~~~~~
-        ~~~~~
-!!! error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
     }
-    ~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-    ~
-!!! error TS2300: Duplicate identifier 'export='.
     

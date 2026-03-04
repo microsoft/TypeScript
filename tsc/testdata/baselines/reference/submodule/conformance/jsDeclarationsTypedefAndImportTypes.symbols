@@ -17,9 +17,9 @@ class Conn {
 }
 
 module.exports = Conn;
->module.exports : Symbol(Conn, Decl(conn.js, 0, 0))
+>module.exports : Symbol(Conn, Decl(conn.js, 8, 1))
 >module : Symbol("./conn", Decl(conn.js, 0, 0))
->exports : Symbol(Conn, Decl(conn.js, 0, 0))
+>exports : Symbol(Conn, Decl(conn.js, 8, 1))
 >Conn : Symbol(Conn, Decl(conn.js, 0, 0))
 
 === usage.js ===

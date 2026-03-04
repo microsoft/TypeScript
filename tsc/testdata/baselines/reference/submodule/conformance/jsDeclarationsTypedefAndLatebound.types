@@ -45,7 +45,7 @@ class LazySet {
 module.exports = LazySet;
 >module.exports = LazySet : typeof LazySet
 >module.exports : typeof LazySet
->module : { LazySet: typeof LazySet; }
+>module : { "export=": typeof LazySet; }
 >exports : typeof LazySet
 >LazySet : typeof LazySet
 

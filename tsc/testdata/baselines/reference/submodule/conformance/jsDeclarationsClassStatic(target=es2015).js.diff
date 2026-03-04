@@ -5,10 +5,10 @@
 
  //// [source.d.ts]
 -export = Handler;
--declare class Handler {
--    static get OPTIONS(): number;
--    process(): void;
--}
+ declare class Handler {
+     static get OPTIONS(): number;
+     process(): void;
+ }
  declare namespace Handler {
 -    export { statische, Strings, HandlerOptions };
 -}

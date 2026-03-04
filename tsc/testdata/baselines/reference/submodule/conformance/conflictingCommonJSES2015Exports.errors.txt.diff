@@ -2,20 +2,14 @@
 +++ new.conflictingCommonJSES2015Exports.errors.txt
 @@= skipped -0, +0 lines =@@
 -bug24934.js(2,1): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
--
--
--==== bug24934.js (1 errors) ====
-+bug24934.js(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +bug24934.js(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-+
-+
-+==== bug24934.js (2 errors) ====
+
+
+ ==== bug24934.js (1 errors) ====
      export function abc(a, b, c) { return 5; }
      module.exports = { abc };
 -    ~~~~~~
 -!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-+    ~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    ~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
  ==== use.js (0 errors) ====

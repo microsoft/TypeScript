@@ -54,7 +54,7 @@ class MW {
 module.exports = MW;
 >module.exports = MW : typeof MW
 >module.exports : typeof MW
->module : { MW: typeof MW; }
+>module : { "export=": typeof MW; }
 >exports : typeof MW
 >MW : typeof MW
 

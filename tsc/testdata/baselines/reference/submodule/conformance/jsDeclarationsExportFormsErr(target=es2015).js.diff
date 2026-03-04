@@ -13,6 +13,7 @@
 +export = ns;
  //// [bin.d.ts]
 -export {};
++import * as ns from "./cls";
 +export = ns;
  //// [globalNs.d.ts]
  export * from "./cls";

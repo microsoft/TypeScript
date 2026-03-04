@@ -8,15 +8,12 @@
 +context.js(34,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +context.js(36,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +context.js(36,18): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+context.js(48,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +hook.js(2,20): error TS1340: Module './context' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./context')'?
 +hook.js(8,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+hook.js(10,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +timer.js(5,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-+timer.js(7,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +
 +
-+==== timer.js (2 errors) ====
++==== timer.js (1 errors) ====
 +    /**
 +     * @param {number} timeout
 +     */
@@ -26,9 +23,7 @@
 +!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    }
 +    module.exports = Timer;
-+    ~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-+==== hook.js (3 errors) ====
++==== hook.js (2 errors) ====
 +    /**
 +     * @typedef {(arg: import("./context")) => void} HookHandler
 +                       ~~~~~~~~~~~~~~~~~~~
@@ -43,10 +38,8 @@
 +!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +    }
 +    module.exports = Hook;
-+    ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    
-+==== context.js (7 errors) ====
++==== context.js (6 errors) ====
 +    /**
 +     * Imports
 +     *
@@ -107,6 +100,4 @@
 +        }
 +    }
 +    module.exports = Context;
-+    ~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    

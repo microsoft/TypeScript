@@ -16,9 +16,9 @@ var bb;
 
 var bbb = new mod.Baz();
 >bbb : Symbol(bbb, Decl(use.js, 5, 3))
->mod.Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
+>mod.Baz : Symbol(Baz, Decl(mod1.js, 9, 18), Decl(mod1.js, 9, 18))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
+>Baz : Symbol(Baz, Decl(mod1.js, 9, 18), Decl(mod1.js, 9, 18))
 
 === mod1.js ===
 // error
@@ -35,9 +35,9 @@ exports.Bar = class { }
 
 /** @typedef {number} Baz */
 module.exports = {
->module.exports : Symbol(export=, Decl(mod1.js, 6, 23))
+>module.exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 >module : Symbol("./mod1", Decl(mod1.js, 0, 0))
->exports : Symbol(export=, Decl(mod1.js, 6, 23))
+>exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 
     Baz: class { }
 >Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
@@ -57,9 +57,9 @@ exports.Quid = 2;
 
 /** @typedef {number} Quack */
 module.exports = {
->module.exports : Symbol(export=, Decl(mod1.js, 6, 23))
+>module.exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 >module : Symbol("./mod1", Decl(mod1.js, 0, 0))
->exports : Symbol(export=, Decl(mod1.js, 6, 23))
+>exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 
     Quack: 2
 >Quack : Symbol(Quack, Decl(mod1.js, 22, 18))

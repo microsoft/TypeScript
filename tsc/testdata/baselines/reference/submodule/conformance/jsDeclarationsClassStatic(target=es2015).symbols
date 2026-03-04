@@ -30,15 +30,15 @@ const Strings = {
 }
 
 module.exports = Handler;
->module.exports : Symbol(Handler, Decl(source.js, 0, 0))
+>module.exports : Symbol(Handler, Decl(source.js, 12, 1))
 >module : Symbol("./source", Decl(source.js, 0, 0))
->exports : Symbol(Handler, Decl(source.js, 0, 0))
+>exports : Symbol(Handler, Decl(source.js, 12, 1))
 >Handler : Symbol(Handler, Decl(source.js, 0, 0))
 
 module.exports.Strings = Strings
->module.exports : Symbol(Handler, Decl(source.js, 0, 0))
+>module.exports : Symbol(Handler, Decl(source.js, 12, 1))
 >module : Symbol("./source", Decl(source.js, 0, 0))
->exports : Symbol(Handler, Decl(source.js, 0, 0))
+>exports : Symbol(Handler, Decl(source.js, 12, 1))
 >Strings : Symbol(Strings, Decl(source.js, 9, 5))
 
 /**

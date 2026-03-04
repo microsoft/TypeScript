@@ -1,0 +1,18 @@
+a.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+==== b.js (0 errors) ====
+    const a = require("./a");
+    const c1 = a.a;
+    const c2 = a.b;
+    /** @type {a.Foo} */
+    let v1 = { x: "test" };
+    
+==== a.js (1 errors) ====
+    /**
+     * @typedef {{x: string}} Foo
+     */
+    export const x = 1; // Causes error
+    module.exports = { a: 1, b: "hello" };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

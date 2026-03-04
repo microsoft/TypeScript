@@ -254,7 +254,7 @@ func (r *EmitResolver) aliasMarkingVisitorWorker(node *ast.Node) bool {
 // Follows chains of import d = a.b.c
 func (r *EmitResolver) markLinkedAliases(node *ast.Node) {
 	var exportSymbol *ast.Symbol
-	if node.Kind != ast.KindStringLiteral && node.Parent != nil && node.Parent.Kind == ast.KindExportAssignment {
+	if node.Kind != ast.KindStringLiteral && node.Parent != nil && (ast.IsExportAssignment(node.Parent) || ast.IsJSExportAssignment(node.Parent)) {
 		exportSymbol = r.checker.resolveName(node, node.Text(), ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias /*nameNotFoundMessage*/, nil /*isUse*/, false, false)
 	} else if node.Parent.Kind == ast.KindExportSpecifier {
 		exportSymbol = r.checker.getTargetOfExportSpecifier(node.Parent, ast.SymbolFlagsValue|ast.SymbolFlagsType|ast.SymbolFlagsNamespace|ast.SymbolFlagsAlias, false)

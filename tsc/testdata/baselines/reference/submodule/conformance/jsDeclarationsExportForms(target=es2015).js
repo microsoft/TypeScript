@@ -289,6 +289,7 @@ declare const _default: {
 };
 export = _default;
 //// [cjs2.d.ts]
+declare const ns: typeof ns;
 export = ns;
 //// [cjs3.d.ts]
 declare const ns: typeof ns;
@@ -313,7 +314,7 @@ import "./bar2";
 
 
 out/cjs.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
-out/cjs2.d.ts(1,10): error TS2304: Cannot find name 'ns'.
+out/cjs2.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
 out/cjs3.d.ts(1,15): error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
 out/cjs3.d.ts(1,15): error TS2451: Cannot redeclare block-scoped variable 'ns'.
 out/cjs3.d.ts(2,20): error TS2395: Individual declarations in merged declaration 'ns' must be all exported or all local.
@@ -362,9 +363,10 @@ out/cjs4.d.ts(1,15): error TS2502: 'ns' is referenced directly or indirectly in 
     export = _default;
     
 ==== out/cjs2.d.ts (1 errors) ====
+    declare const ns: typeof ns;
+                  ~~
+!!! error TS2502: 'ns' is referenced directly or indirectly in its own type annotation.
     export = ns;
-             ~~
-!!! error TS2304: Cannot find name 'ns'.
     
 ==== out/cjs3.d.ts (5 errors) ====
     declare const ns: typeof ns;

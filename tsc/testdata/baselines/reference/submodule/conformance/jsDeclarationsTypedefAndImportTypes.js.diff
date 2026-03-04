@@ -20,15 +20,16 @@
  /**
   * @typedef {string | number} Whatever
   */
--declare class Conn {
--    item: number;
--    method(): void;
--}
++export type Whatever = string | number;
+ declare class Conn {
++    constructor();
+     item: number;
+     method(): void;
+ }
 -declare namespace Conn {
 -    export { Whatever };
 -}
 -type Whatever = string | number;
-+export type Whatever = string | number;
 +export = Conn;
  //// [usage.d.ts]
 +/**

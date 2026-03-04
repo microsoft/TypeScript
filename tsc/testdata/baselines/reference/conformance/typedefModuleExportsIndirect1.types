@@ -9,7 +9,7 @@ const dummy = 0;
 module.exports = dummy;
 >module.exports = dummy : 0
 >module.exports : 0
->module : { readonly dummy: 0; }
+>module : { "export=": 0; }
 >exports : 0
 >dummy : 0
 

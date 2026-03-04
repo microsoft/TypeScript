@@ -9,6 +9,7 @@
 -declare namespace donkey {
 -    export { funky };
 -}
++declare const donkey: (ast: any) => any;
  declare function funky(declaration: any): boolean;
 +export = donkey;
 +export declare var funky: typeof funky;

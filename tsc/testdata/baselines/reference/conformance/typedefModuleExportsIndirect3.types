@@ -9,7 +9,7 @@ const o = {};
 module.exports = o;
 >module.exports = o : {}
 >module.exports : {}
->module : { readonly o: {}; }
+>module : { "export=": {}; }
 >exports : {}
 >o : {}
 

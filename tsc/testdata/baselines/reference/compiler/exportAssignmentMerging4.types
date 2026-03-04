@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/exportAssignmentMerging4.ts] ////
+
+=== b.ts ===
+import a = require("./a");
+>a : { a: number; b: string; }
+
+const c1 = a.a;
+>c1 : number
+>a.a : number
+>a : { a: number; b: string; }
+>a : number
+
+const c2 = a.b;
+>c2 : string
+>a.b : string
+>a : { a: number; b: string; }
+>b : string
+
+let v1: a.Foo = { x: "test" };
+>v1 : a.Foo
+>a : any
+>{ x: "test" } : { x: string; }
+>x : string
+>"test" : "test"
+
+let v2: a.Bar.Baz = { y: 42 };
+>v2 : a.Bar.Baz
+>a : any
+>Bar : any
+>{ y: 42 } : { y: number; }
+>y : number
+>42 : 42
+
+=== a.ts ===
+export type Foo = { x: string };
+>Foo : Foo
+>x : string
+
+export namespace Bar {
+    export interface Baz { y: number }
+>y : number
+}
+export const x = 42; // Causes error
+>x : 42
+>42 : 42
+
+export = { a: 1, b: "hello" };
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+

@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/exportAssignmentMerging2.ts] ////
+
+=== b.ts ===
+import a = require("./a");
+>a : typeof mod
+
+const c1 = a.a;
+>c1 : 1
+>a.a : 1
+>a : typeof mod
+>a : 1
+
+const c2 = a.b;
+>c2 : "hello"
+>a.b : "hello"
+>a : typeof mod
+>b : "hello"
+
+let v1: a.Foo = { x: "test" };
+>v1 : a.Foo
+>a : any
+>{ x: "test" } : { x: string; }
+>x : string
+>"test" : "test"
+
+let v2: a.Bar.Baz = { y: 42 };
+>v2 : a.Bar.Baz
+>a : any
+>Bar : any
+>{ y: 42 } : { y: number; }
+>y : number
+>42 : 42
+
+=== a.ts ===
+export type Foo = { x: string };
+>Foo : Foo
+>x : string
+
+export namespace Bar {
+    export interface Baz { y: number }
+>y : number
+}
+namespace mod {
+>mod : typeof mod
+
+    export const a = 1;
+>a : 1
+>1 : 1
+
+    export const b = "hello";
+>b : "hello"
+>"hello" : "hello"
+}
+export = mod;
+>mod : typeof mod
+

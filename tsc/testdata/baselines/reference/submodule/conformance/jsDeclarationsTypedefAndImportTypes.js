@@ -70,6 +70,11 @@ module.exports = {
  * @typedef {string | number} Whatever
  */
 export type Whatever = string | number;
+declare class Conn {
+    constructor();
+    item: number;
+    method(): void;
+}
 export = Conn;
 //// [usage.d.ts]
 /**

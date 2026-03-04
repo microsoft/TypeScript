@@ -76,4 +76,33 @@ module.exports = j;
 
 
 //// [index.d.ts]
+declare const j: {
+    name: string;
+    version: string;
+    description: string;
+    main: string;
+    bin: {
+        cli: string;
+    };
+    engines: {
+        node: string;
+    };
+    scripts: {
+        scriptname: string;
+    };
+    devDependencies: {
+        "@ns/dep": string;
+    };
+    dependencies: {
+        dep: string;
+    };
+    repository: string;
+    keywords: string[];
+    author: string;
+    license: string;
+    homepage: string;
+    config: {
+        o: string[];
+    };
+};
 export = j;

@@ -5,7 +5,7 @@
  >module.exports = Handler : typeof Handler
  >module.exports : typeof Handler
 ->module : { exports: typeof Handler; }
-+>module : { Handler: typeof Handler; }
++>module : { "export=": typeof Handler; }
  >exports : typeof Handler
  >Handler : typeof Handler
 
@@ -15,7 +15,7 @@
 +>module.exports.Strings : any
  >module.exports : typeof Handler
 ->module : { exports: typeof Handler; }
-+>module : { Handler: typeof Handler; }
++>module : { "export=": typeof Handler; }
  >exports : typeof Handler
 ->Strings : { a: string; b: string; }
 +>Strings : any

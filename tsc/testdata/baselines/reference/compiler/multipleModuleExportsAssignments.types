@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/multipleModuleExportsAssignments.ts] ////
+
+=== y.js ===
+const x = require("./x");
+>x : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>require("./x") : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>require : any
+>"./x" : "./x"
+
+const a = x.a;
+>a : number | undefined
+>x.a : number | undefined
+>x : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>a : number | undefined
+
+const b = x.b;
+>b : string | undefined
+>x.b : string | undefined
+>x : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>b : string | undefined
+
+=== x.js ===
+if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+    module.exports = { a: 1 };
+>module.exports = { a: 1 } : { a: number; }
+>module.exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>module : { "export=": { a: number; b?: undefined; } | { a?: undefined; b: string; }; }
+>exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+}
+else {
+    module.exports = { b: "hello" };
+>module.exports = { b: "hello" } : { b: string; }
+>module.exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>module : { "export=": { a: number; b?: undefined; } | { a?: undefined; b: string; }; }
+>exports : { a: number; b?: undefined; } | { a?: undefined; b: string; }
+>{ b: "hello" } : { b: string; }
+>b : string
+>"hello" : "hello"
+}

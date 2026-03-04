@@ -871,9 +871,9 @@ func (b *Binder) bindExportAssignment(node *ast.Node) {
 		}
 		// If there is an `export default x;` alias declaration, can't `export default` anything else.
 		// (In contrast, you can still have `export default function f() {}` and `export default interface I {}`.)
-		symbol := b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, flags, ast.SymbolFlagsAll)
+		symbol := b.declareSymbol(ast.GetExports(container.Symbol()), container.Symbol(), node, flags, core.IfElse(ast.IsJSExportAssignment(node), 0, ast.SymbolFlagsAll))
 		if ast.IsJSExportAssignment(node) || node.AsExportAssignment().IsExportEquals {
-			// Will be an error later, since the module already has other exports. Just make sure this has a valueDeclaration set.
+			// Ensure export assignments have a ValueDeclaration set.
 			SetValueDeclaration(symbol, node)
 		}
 	}
@@ -1019,6 +1019,21 @@ func (b *Binder) bindDeferredExpandoAssignments() {
 		b.container = info.container
 		b.blockScopeContainer = info.blockScopeContainer
 		b.bindDeferredExpandoAssignment(info.node)
+	}
+}
+
+// If the given module symbol has an export= symbol, promote exports with a type or namespace meaning
+// from the module symbol onto the export= symbol and, if any such exports exist, mark the export=
+// symbol as a namespace module.
+func (b *Binder) bindCommonJSTypeExports(moduleSymbol *ast.Symbol) {
+	moduleExports := moduleSymbol.Exports
+	if exportEquals := moduleExports[ast.InternalSymbolNameExportEquals]; exportEquals != nil {
+		for _, symbol := range moduleExports {
+			if symbol.Name != ast.InternalSymbolNameExportEquals && symbol.Flags&(ast.SymbolFlagsType|ast.SymbolFlagsNamespace) != 0 {
+				ast.GetExports(exportEquals)[symbol.Name] = symbol
+				exportEquals.Flags |= ast.SymbolFlagsNamespaceModule
+			}
+		}
 	}
 }
 
@@ -1566,6 +1581,9 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 		b.seenThisKeyword = saveSeenThisKeyword
 	} else {
 		b.bindChildren(node)
+	}
+	if ast.IsSourceFile(node) && ast.IsExternalOrCommonJSModule(node.AsSourceFile()) || ast.IsAmbientModule(node) {
+		b.bindCommonJSTypeExports(node.Symbol())
 	}
 	b.container = saveContainer
 	b.thisContainer = saveThisContainer

@@ -1,0 +1,23 @@
+--- old.verbatimModuleSyntaxRestrictionsCJS.errors.txt
++++ new.verbatimModuleSyntaxRestrictionsCJS.errors.txt
+@@= skipped -3, +3 lines =@@
+ /main.ts(5,1): error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
+ /main.ts(8,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+ /main.ts(14,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+-/main2.ts(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+ /main4.ts(1,1): error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
+ /main5.ts(1,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+ /main6.ts(2,1): error TS1295: ECMAScript imports and exports cannot be written in a CommonJS file under 'verbatimModuleSyntax'. Adjust the 'type' field in the nearest 'package.json' to make this file an ECMAScript module, or adjust your 'verbatimModuleSyntax', 'module', and 'moduleResolution' settings in TypeScript.
+@@= skipped -49, +48 lines =@@
+     }
+     export default interface Default {} // sketchy, but ok
+     
+-==== /main2.ts (1 errors) ====
++==== /main2.ts (0 errors) ====
+     export interface I {}
+     export = { x: 1 };
+-    ~~~~~~~~~~~~~~~~~~
+-!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+     
+ ==== /main3.ts (0 errors) ====
+     namespace ns {

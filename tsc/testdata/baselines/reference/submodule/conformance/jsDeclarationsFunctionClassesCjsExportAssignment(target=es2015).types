@@ -43,7 +43,7 @@ function Hook(handle) {
 module.exports = Hook;
 >module.exports = Hook : (handle: HookHandler) => void
 >module.exports : (handle: HookHandler) => void
->module : { Hook(handle: HookHandler): void; }
+>module : { "export=": (handle: HookHandler) => void; }
 >exports : (handle: HookHandler) => void
 >Hook : (handle: HookHandler) => void
 
@@ -133,7 +133,7 @@ Context.prototype = {
 module.exports = Context;
 >module.exports = Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("./hook").HookHandler | undefined): State; }; }
 >module.exports : { (input: Input): any; prototype: { construct(input: Input, handle?: import("./hook").HookHandler | undefined): State; }; }
->module : { Context: { (input: Input): any; prototype: { construct(input: Input, handle?: import("./hook").HookHandler | undefined): State; }; }; }
+>module : { "export=": { (input: Input): any; prototype: { construct(input: Input, handle?: import("./hook").HookHandler | undefined): State; }; }; }
 >exports : { (input: Input): any; prototype: { construct(input: Input, handle?: import("./hook").HookHandler | undefined): State; }; }
 >Context : { (input: Input): any; prototype: { construct(input: Input, handle?: import("./hook").HookHandler | undefined): State; }; }
 
