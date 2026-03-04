@@ -1,3 +1,7 @@
+#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+
+// Usage: node --experimental-strip-types --no-warnings convertFourslash.mts [inputFileList]
+
 import * as cp from "child_process";
 import * as fs from "fs";
 import * as path from "path";

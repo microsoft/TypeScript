@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --experimental-strip-types
+
+// Usage: node --experimental-strip-types generate.mts
 
 import cp from "node:child_process";
 import fs from "node:fs";

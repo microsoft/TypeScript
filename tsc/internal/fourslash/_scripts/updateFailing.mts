@@ -1,3 +1,7 @@
+#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+
+// Usage: node --experimental-strip-types --no-warnings updateFailing.mts
+
 import * as cp from "child_process";
 import * as fs from "fs";
 import path from "path";

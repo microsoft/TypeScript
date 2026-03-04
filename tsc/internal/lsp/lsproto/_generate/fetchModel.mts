@@ -1,3 +1,7 @@
+#!/usr/bin/env -S node --experimental-strip-types
+
+// Usage: node --experimental-strip-types fetchModel.mts
+
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";

@@ -1,3 +1,7 @@
+#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+
+// Usage: node --experimental-strip-types --no-warnings makeManual.mts <testName> [...testNames]
+
 import * as fs from "fs";
 import * as path from "path";
 
