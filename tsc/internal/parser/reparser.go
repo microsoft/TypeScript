@@ -470,7 +470,7 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 					newParams[i+1] = param
 				}
 
-				fun.FunctionLikeData().Parameters = p.newNodeList(thisParam.Loc, newParams)
+				fun.FunctionLikeData().Parameters = p.newNodeList(fun.ParameterList().Loc, newParams)
 				p.finishMutatedNode(fun)
 			}
 		}
