@@ -14,9 +14,8 @@ import (
 )
 
 type symbolExtractor struct {
-	nodeModulesDirectory tspath.Path
-	packageName          string
-	stats                *extractorStats
+	packageName string
+	stats       *extractorStats
 
 	localNameResolver *binder.NameResolver
 	checker           *checker.Checker
@@ -58,11 +57,10 @@ func (l *checkerLease) TryChecker() *checker.Checker {
 	return nil
 }
 
-func newSymbolExtractor(nodeModulesDirectory tspath.Path, packageName string, checker *checker.Checker, toPath func(string) tspath.Path, realpath func(string) string) *symbolExtractor {
+func newSymbolExtractor(packageName string, checker *checker.Checker, toPath func(string) tspath.Path, realpath func(string) string) *symbolExtractor {
 	return &symbolExtractor{
-		nodeModulesDirectory: nodeModulesDirectory,
-		packageName:          packageName,
-		checker:              checker,
+		packageName: packageName,
+		checker:     checker,
 		localNameResolver: &binder.NameResolver{
 			CompilerOptions: core.EmptyCompilerOptions,
 		},
@@ -72,9 +70,9 @@ func newSymbolExtractor(nodeModulesDirectory tspath.Path, packageName string, ch
 	}
 }
 
-func (b *registryBuilder) newExportExtractor(nodeModulesDirectory tspath.Path, packageName string, checker *checker.Checker, moduleResolver *module.Resolver, realpath func(string) string) *exportExtractor {
+func (b *registryBuilder) newExportExtractor(packageName string, checker *checker.Checker, moduleResolver *module.Resolver, realpath func(string) string) *exportExtractor {
 	return &exportExtractor{
-		symbolExtractor: newSymbolExtractor(nodeModulesDirectory, packageName, checker, b.base.toPath, realpath),
+		symbolExtractor: newSymbolExtractor(packageName, checker, b.base.toPath, realpath),
 		moduleResolver:  moduleResolver,
 	}
 }
@@ -258,12 +256,11 @@ func (e *symbolExtractor) createExport(symbol *ast.Symbol, moduleID ModuleID, mo
 			ExportName: symbol.Name,
 			ModuleID:   moduleID,
 		},
-		ModuleFileName:       moduleFileName,
-		Syntax:               syntax,
-		Flags:                symbol.CombinedLocalAndExportSymbolFlags(),
-		Path:                 file.Path(),
-		NodeModulesDirectory: e.nodeModulesDirectory,
-		PackageName:          e.packageName,
+		ModuleFileName: moduleFileName,
+		Syntax:         syntax,
+		Flags:          symbol.CombinedLocalAndExportSymbolFlags(),
+		Path:           file.Path(),
+		PackageName:    e.packageName,
 	}
 
 	if syntax == ExportSyntaxUMD {

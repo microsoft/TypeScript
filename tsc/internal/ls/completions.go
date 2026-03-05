@@ -4311,10 +4311,10 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 		"",             /*filterText*/
 		SortTextLocationPriority,
 		lsutil.ScriptElementKindClassElement,
-		collections.Set[lsutil.ScriptElementKindModifier]{}, /*kindModifiers*/
-		nil, /*replacementSpan*/
-		nil, /*commitCharacters*/
-		nil, /*labelDetails*/
+		lsutil.ScriptElementKindModifierNone, /*kindModifiers*/
+		nil,                                  /*replacementSpan*/
+		nil,                                  /*commitCharacters*/
+		nil,                                  /*labelDetails*/
 		file,
 		position,
 		true,  /*isMemberCompletion*/
@@ -4349,7 +4349,7 @@ func (l *LanguageService) createLSPCompletionItem(
 	filterText string,
 	sortText SortText,
 	elementKind lsutil.ScriptElementKind,
-	kindModifiers collections.Set[lsutil.ScriptElementKindModifier],
+	kindModifiers lsutil.ScriptElementKindModifier,
 	replacementSpan *lsproto.Range,
 	commitCharacters *[]string,
 	labelDetails *lsproto.CompletionItemLabelDetails,
@@ -4395,7 +4395,7 @@ func (l *LanguageService) createLSPCompletionItem(
 	// Adjustements based on kind modifiers.
 	var tags *[]lsproto.CompletionItemTag
 	// Copied from vscode ts extension: `MyCompletionItem.constructor`.
-	if kindModifiers.Has(lsutil.ScriptElementKindModifierOptional) {
+	if kindModifiers&lsutil.ScriptElementKindModifierOptional != 0 {
 		if insertText == "" {
 			insertText = name
 		}
@@ -4404,7 +4404,7 @@ func (l *LanguageService) createLSPCompletionItem(
 		}
 		name = name + "?"
 	}
-	if kindModifiers.Has(lsutil.ScriptElementKindModifierDeprecated) {
+	if kindModifiers&lsutil.ScriptElementKindModifierDeprecated != 0 {
 		tags = &[]lsproto.CompletionItemTag{lsproto.CompletionItemTagDeprecated}
 	}
 
@@ -4486,10 +4486,10 @@ func (l *LanguageService) getLabelStatementCompletions(
 					"", /*filterText*/
 					SortTextLocationPriority,
 					lsutil.ScriptElementKindLabel,
-					collections.Set[lsutil.ScriptElementKindModifier]{}, /*kindModifiers*/
-					nil, /*replacementSpan*/
-					nil, /*commitCharacters*/
-					nil, /*labelDetails*/
+					lsutil.ScriptElementKindModifierNone, /*kindModifiers*/
+					nil,                                  /*replacementSpan*/
+					nil,                                  /*commitCharacters*/
+					nil,                                  /*labelDetails*/
 					file,
 					position,
 					false, /*isMemberCompletion*/

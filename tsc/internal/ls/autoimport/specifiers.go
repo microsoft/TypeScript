@@ -19,8 +19,8 @@ func (v *View) GetModuleSpecifier(
 		return string(export.ModuleID), modulespecifiers.ResultKindAmbient
 	}
 
-	if export.NodeModulesDirectory != "" {
-		if entrypoints, ok := v.registry.nodeModules[export.NodeModulesDirectory].Entrypoints[export.Path]; ok {
+	if export.PackageName != "" {
+		if entrypoints, ok := v.registry.entrypoints[export.Path]; ok {
 			for _, entrypoint := range entrypoints {
 				if entrypoint.IncludeConditions.IsSubsetOf(v.conditions) && !v.conditions.Intersects(entrypoint.ExcludeConditions) {
 					specifier := modulespecifiers.ProcessEntrypointEnding(
@@ -42,7 +42,7 @@ func (v *View) GetModuleSpecifier(
 	}
 
 	cache := v.registry.specifierCache[v.importingFile.Path()]
-	if export.NodeModulesDirectory == "" {
+	if export.PackageName == "" {
 		if specifier, ok := cache.Load(export.Path); ok {
 			if specifier == "" {
 				return "", modulespecifiers.ResultKindNone

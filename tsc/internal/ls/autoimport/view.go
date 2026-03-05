@@ -205,14 +205,15 @@ outer:
 					grouped[key] = slices.Replace(existing, i, i+1, &Export{
 						ExportID:                   e.ExportID,
 						ModuleFileName:             e.ModuleFileName,
+						PackageName:                e.PackageName,
+						IsTypeOnly:                 e.IsTypeOnly || ex.IsTypeOnly,
 						Syntax:                     min(e.Syntax, ex.Syntax),
 						Flags:                      e.Flags | ex.Flags,
 						ScriptElementKind:          min(e.ScriptElementKind, ex.ScriptElementKind),
-						ScriptElementKindModifiers: *e.ScriptElementKindModifiers.UnionedWith(&ex.ScriptElementKindModifiers),
+						ScriptElementKindModifiers: e.ScriptElementKindModifiers | ex.ScriptElementKindModifiers,
 						localName:                  e.localName,
 						Target:                     e.Target,
 						Path:                       e.Path,
-						NodeModulesDirectory:       e.NodeModulesDirectory,
 					})
 					continue outer
 				}

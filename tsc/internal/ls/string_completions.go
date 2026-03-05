@@ -155,7 +155,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 				"", /*filterText*/
 				SortTextLocationPriority,
 				lsutil.ScriptElementKindString,
-				collections.Set[lsutil.ScriptElementKindModifier]{},
+				lsutil.ScriptElementKindModifierNone,
 				l.getReplacementRangeForContextToken(file, contextToken, position),
 				nil, /*commitCharacters*/
 				nil, /*labelDetails*/
@@ -213,7 +213,7 @@ func (l *LanguageService) convertPathCompletions(
 			"", /*filterText*/
 			SortTextLocationPriority,
 			pathCompletion.kind,
-			*collections.NewSetFromItems(kindModifiersFromExtension(pathCompletion.extension)),
+			kindModifiersFromExtension(pathCompletion.extension),
 			replacementSpan,
 			nil, /*commitCharacters*/
 			nil, /*labelDetails*/
