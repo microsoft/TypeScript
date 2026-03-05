@@ -380,7 +380,11 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 			continue
 		}
 		column++
-		previousCharacter = currentCharacter
+		if i >= lastNormalCharPosition {
+			previousCharacter = currentCharacter
+		} else {
+			previousCharacter = utf8.RuneError // reset to avoid accidentally reusing marker delimiters as part of other markers
+		}
 	}
 
 	// Add the remaining text
