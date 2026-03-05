@@ -24,17 +24,14 @@ class E {
 //// [propertyAndAccessorWithSameName.js]
 "use strict";
 class C {
-    x;
     get x() {
         return 1;
     }
 }
 class D {
-    x;
     set x(v) { } // error
 }
 class E {
-    x;
     get x() {
         return 1;
     }

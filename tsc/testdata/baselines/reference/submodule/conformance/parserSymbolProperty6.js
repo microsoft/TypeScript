@@ -7,6 +7,10 @@ class C {
 
 //// [parserSymbolProperty6.js]
 "use strict";
+var _a;
 class C {
-    [Symbol.toStringTag] = "";
+    constructor() {
+        this[_a] = "";
+    }
 }
+_a = Symbol.toStringTag;

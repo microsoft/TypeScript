@@ -15,8 +15,6 @@ export class C {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 class C {
-    @dec
-    x;
     constructor(
     @dec
     x) { }

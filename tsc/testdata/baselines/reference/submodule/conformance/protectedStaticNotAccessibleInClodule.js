@@ -17,8 +17,6 @@ namespace C {
 "use strict";
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 class C {
-    static foo;
-    static bar;
 }
 (function (C) {
     C.f = C.foo; // OK

@@ -61,7 +61,7 @@ class C2 extends C1 {
 }
 accessor class C3 {
 }
-var E1;
+accessor var E1;
 (function (E1) {
 })(E1 || (E1 = {}));
 accessor var V1;

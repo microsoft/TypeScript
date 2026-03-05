@@ -46,7 +46,6 @@ void M.n;
 var BOOLEAN;
 function foo() { return true; }
 class A {
-    a;
     static foo() { return false; }
 }
 var M;

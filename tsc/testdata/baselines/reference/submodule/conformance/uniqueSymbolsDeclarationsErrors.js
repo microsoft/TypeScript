@@ -88,8 +88,6 @@ function funcInferredReturnType(obj) {
     return obj;
 }
 class ClassWithPrivateNamedProperties {
-    [s];
-    static [s];
 }
 exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;
 class ClassWithPrivateNamedMethods {

@@ -23,5 +23,4 @@ class C1 {
 }
 // interface + class
 class C2 {
-    a;
 }

@@ -8,31 +8,3 @@
  public;
  class NonPublicClass {
      s() {
-     }
- }
- class NonPublicClass2 {
-+    public;
-     nonPublicFunction() {
-     }
- }
-@@= skipped -15, +17 lines =@@
-     }
- }
- class NonPrivateClass2 {
-+    private;
-     nonPrivateFunction() {
-     }
- }
-@@= skipped -9, +10 lines =@@
-     }
- }
- class NonProtectedClass2 {
-+    protected;
-     nonProtectedFunction() {
-     }
- }
- class ClassWithThreeMembers {
-+    public;
-+    private;
-+    protected;
- }

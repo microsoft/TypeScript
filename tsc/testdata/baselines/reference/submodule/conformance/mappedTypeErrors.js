@@ -213,7 +213,6 @@ setState(foo, foo);
 setState(foo, { a: undefined }); // Error
 setState(foo, { c: true }); // Error
 class C {
-    state;
     constructor(initialState) {
         this.state = initialState;
     }

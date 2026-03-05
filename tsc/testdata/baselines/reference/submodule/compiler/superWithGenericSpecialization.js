@@ -19,10 +19,8 @@ var r2: number = d.y;
 //// [superWithGenericSpecialization.js]
 "use strict";
 class C {
-    x;
 }
 class D extends C {
-    y;
     constructor() {
         super(); // uses the type parameter type of the base class, ie string
     }

@@ -18,7 +18,6 @@ const { p: p3 } = new C();
 const nameN = "n";
 const { [nameN]: n } = ab;
 class C {
-    p;
 }
 const nameP = "p";
 const { "p": p0 } = new C();

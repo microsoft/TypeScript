@@ -1,9 +1,0 @@
---- old.ClassDeclarationWithInvalidConstOnPropertyDeclaration.js
-+++ new.ClassDeclarationWithInvalidConstOnPropertyDeclaration.js
-@@= skipped -7, +7 lines =@@
- //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
- "use strict";
- class AtomicNumbers {
-+    static H = 1;
- }
--AtomicNumbers.H = 1;

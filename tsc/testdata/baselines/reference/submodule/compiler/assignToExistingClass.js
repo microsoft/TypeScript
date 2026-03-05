@@ -22,7 +22,6 @@ namespace Test {
 var Test;
 (function (Test) {
     class Mocked {
-        myProp;
     }
     class Tester {
         willThrowError() {

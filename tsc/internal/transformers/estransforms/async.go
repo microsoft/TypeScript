@@ -471,6 +471,16 @@ func (tx *asyncTransformer) visitFunctionExpression(node *ast.Node) *ast.Node {
 // This function will be called when one of the following conditions are met:
 // - The node is marked async
 func (tx *asyncTransformer) visitArrowFunction(node *ast.Node) *ast.Node {
+	// `arguments` in class static blocks is always an error, but we preserve Strada's emit
+	// behavior for baseline compatibility. In Strada, checker-based `isArgumentsLocalBinding`
+	// returns false for `arguments` in static blocks (since the binding doesn't exist due to
+	// the error), so the async transform leaves them untouched.
+	if tx.EmitContext().EmitFlags(node)&printer.EFNoLexicalArguments != 0 {
+		savedLexicalArguments := tx.lexicalArguments
+		tx.lexicalArguments = lexicalArgumentsInfo{}
+		defer func() { tx.lexicalArguments = savedLexicalArguments }()
+	}
+
 	decl := node.AsArrowFunction()
 	functionFlags := ast.GetFunctionFlags(node)
 

@@ -76,10 +76,8 @@ export class CC extends Y {
 // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
 export class M {
-    field;
 }
 export class N extends M {
-    other;
 }
 export class O {
 }

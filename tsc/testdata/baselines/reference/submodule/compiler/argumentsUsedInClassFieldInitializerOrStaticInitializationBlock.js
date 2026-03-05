@@ -119,45 +119,59 @@ function D7() {
 "use strict";
 function A() {
     return class T {
-        a = arguments;
+        constructor() {
+            this.a = arguments;
+        }
     };
 }
 function A1() {
     return new class T {
-        a = arguments;
+        constructor() {
+            this.a = arguments;
+        }
     };
 }
 function B() {
     return class T {
-        a = { b: arguments };
+        constructor() {
+            this.a = { b: arguments };
+        }
     };
 }
 function B1() {
     return new class T {
-        a = { b: arguments };
+        constructor() {
+            this.a = { b: arguments };
+        }
     };
 }
 function C() {
     return class T {
-        a = function () { arguments; };
+        constructor() {
+            this.a = function () { arguments; };
+        }
     };
 }
 function D() {
     return class T {
-        a = () => arguments; // should error
+        constructor() {
+            this.a = () => arguments; // should error
+        }
     };
 }
 function D1() {
     return class T {
-        a = () => {
-            arguments; // should error
-            const b = () => {
-                return arguments; // should error
+        constructor() {
+            this.a = () => {
+                arguments; // should error
+                const b = () => {
+                    return arguments; // should error
+                };
+                function f() {
+                    return arguments; // ok
+                }
             };
-            function f() {
-                return arguments; // ok
-            }
-        };
+        }
     };
 }
 function D2() {
@@ -180,32 +194,40 @@ function D2() {
     };
 }
 function D3() {
-    return class T {
-        static {
+    var _a;
+    return _a = class T {
+        },
+        (() => {
             arguments; // should error
             while (1) {
                 arguments; // should error
             }
-        }
-    };
+        })(),
+        _a;
 }
 function D4() {
-    return class T {
-        static {
+    var _a;
+    return _a = class T {
+        },
+        (() => {
             function f() {
                 arguments; // ok
             }
-        }
-    };
+        })(),
+        _a;
 }
 function D5() {
     return class T {
-        a = (() => { return arguments; })(); // should error
+        constructor() {
+            this.a = (() => { return arguments; })(); // should error
+        }
     };
 }
 function D6() {
     return class T {
-        a = (x = arguments) => { }; // should error
+        constructor() {
+            this.a = (x = arguments) => { }; // should error
+        }
     };
 }
 function D7() {

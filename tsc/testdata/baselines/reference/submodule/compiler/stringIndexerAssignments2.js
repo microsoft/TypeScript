@@ -25,14 +25,10 @@ x = b;
 //// [stringIndexerAssignments2.js]
 "use strict";
 class C1 {
-    one;
 }
 class C2 {
-    one;
 }
 class C3 {
-    one;
-    two;
 }
 x = a;
 x = b;

@@ -61,7 +61,6 @@ function f2(v) {
     }
 }
 class E {
-    x;
 }
 function f3(v) {
     if (v instanceof E) {

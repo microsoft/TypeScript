@@ -601,8 +601,10 @@ var TypeScript;
     // This is helpful as our tree don't have parents.
     //
     class AstPath {
-        asts = [];
-        top = -1;
+        constructor() {
+            this.asts = [];
+            this.top = -1;
+        }
         static reverseIndexOf(items, index) {
             return (items === null || items.length <= index) ? null : items[items.length - index - 1];
         }
@@ -951,7 +953,9 @@ var TypeScript;
     }
     TypeScript.isValidAstNode = isValidAstNode;
     class AstPathContext {
-        path = new TypeScript.AstPath();
+        constructor() {
+            this.path = new TypeScript.AstPath();
+        }
     }
     TypeScript.AstPathContext = AstPathContext;
     let GetAstPathOptions;

@@ -24,9 +24,9 @@ exports.Y = exports.A = void 0;
 class X {
 }
 class A {
-    static X = X;
 }
 exports.A = A;
+A.X = X;
 class Y {
 }
 exports.Y = Y;

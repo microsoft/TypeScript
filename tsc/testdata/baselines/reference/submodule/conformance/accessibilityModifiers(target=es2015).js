@@ -50,37 +50,30 @@ class E {
 "use strict";
 // No errors
 class C {
-    static privateProperty;
     static privateMethod() { }
     static get privateGetter() { return 0; }
     static set privateSetter(a) { }
-    static protectedProperty;
     static protectedMethod() { }
     static get protectedGetter() { return 0; }
     static set protectedSetter(a) { }
-    static publicProperty;
     static publicMethod() { }
     static get publicGetter() { return 0; }
     static set publicSetter(a) { }
 }
 // Errors, accessibility modifiers must precede static
 class D {
-    static privateProperty;
     static privateMethod() { }
     static get privateGetter() { return 0; }
     static set privateSetter(a) { }
-    static protectedProperty;
     static protectedMethod() { }
     static get protectedGetter() { return 0; }
     static set protectedSetter(a) { }
-    static publicProperty;
     static publicMethod() { }
     static get publicGetter() { return 0; }
     static set publicSetter(a) { }
 }
 // Errors, multiple accessibility modifier
 class E {
-    property;
     method() { }
     get getter() { return 0; }
     set setter(a) { }

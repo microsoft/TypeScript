@@ -389,10 +389,8 @@ function test3<T extends any[] | Record<string, any>>(obj: T) {
 //// [inKeywordTypeguard.js]
 "use strict";
 class A {
-    a;
 }
 class B {
-    b;
 }
 function negativeClassesTest(x) {
     if ("a" in x) {
@@ -411,10 +409,8 @@ function positiveClassesTest(x) {
     }
 }
 class AWithOptionalProp {
-    a;
 }
 class BWithOptionalProp {
-    b;
 }
 function positiveTestClassesWithOptionalProperties(x) {
     if ("a" in x) {
@@ -449,10 +445,8 @@ function negativeTestClassesWithMemberMissingInBothClasses(x) {
     }
 }
 class C {
-    a;
 }
 class D {
-    a;
 }
 function negativeMultipleClassesTest(x) {
     if ("a" in x) {
@@ -463,7 +457,6 @@ function negativeMultipleClassesTest(x) {
     }
 }
 class ClassWithUnionProp {
-    prop;
 }
 function negativePropTest(x) {
     if ("a" in x.prop) {
@@ -474,7 +467,6 @@ function negativePropTest(x) {
     }
 }
 class NegativeClassTest {
-    prop;
     inThis() {
         if ("a" in this.prop) {
             let z = this.prop.b;
@@ -485,7 +477,6 @@ class NegativeClassTest {
     }
 }
 class UnreachableCodeDetection {
-    a;
     inThis() {
         if ("a" in this) {
         }

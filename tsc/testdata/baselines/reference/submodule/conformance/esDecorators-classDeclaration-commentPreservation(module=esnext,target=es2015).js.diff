@@ -1,8 +1,10 @@
 --- old.esDecorators-classDeclaration-commentPreservation(module=esnext,target=es2015).js
 +++ new.esDecorators-classDeclaration-commentPreservation(module=esnext,target=es2015).js
-@@= skipped -121, +121 lines =@@
+@@= skipped -120, +120 lines =@@
+
  //// [file1.js]
  "use strict";
++var _a, _C_method, _C_x_get, _C_x_set, _C_y, _C_z_get, _C_z_set, _C_z_accessor_storage, _C_z_1_accessor_storage;
  /*1*/
 -let C = (() => {
 -    var _C_method_get, _C_x_get, _C_x_set, _C_y, _C_z_accessor_storage, _C_z_get, _C_z_set, _C_z_1_accessor_storage;
@@ -84,51 +86,7 @@
 -        C = _classThis = _classDescriptor.value;
 -        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
 -    })();
-+@dec
-+@dec
-+/*3*/
-+class C {
-+    /*4*/
-+    @dec
-+    @dec
-+    /*6*/
-+    method() { }
-+    /*7*/
-+    @dec
-+    @dec
-+    /*9*/
-+    get x() { return 1; }
-+    /*10*/
-+    @dec
-+    @dec
-+    /*12*/
-+    set x(value) { }
-+    /*13*/
-+    @dec
-+    @dec
-+    /*15*/
-+    y = 1;
-+    /*16*/
-+    @dec
-+    @dec
-+    /*18*/
-+    accessor z = 1;
-+    /*19*/
-+    @dec
-+    @dec
-+    /*21*/
-+    static #method() { }
-+    /*22*/
-+    @dec
-+    @dec
-+    /*24*/
-+    static get #x() { return 1; }
-+    /*25*/
-+    @dec
-+    @dec
-+    /*27*/
-+    static set #x(value) { }
-     /*28*/
+-    /*28*/
 -    _C_y = { value: (__runInitializers(_classThis, _staticExtraInitializers), __runInitializers(_classThis, _static_private_y_initializers, 1)) };
 -    _C_z_accessor_storage = { value: (__runInitializers(_classThis, _static_private_y_extraInitializers), __runInitializers(_classThis, _static_private_z_initializers, 1)) };
 -    (() => {
@@ -137,16 +95,31 @@
 -    })();
 -    return C = _classThis;
 -})();
-+    @dec
-+    @dec
-+    /*30*/
-+    static #y = 1;
-+    /*31*/
-+    @dec
-+    @dec
++/*3*/
++class C {
++    constructor() {
++        /*13*/
++        this.y = 1;
++        _C_z_1_accessor_storage = { value: 1 };
++    }
++    /*4*/
++    /*6*/
++    method() { }
++    /*7*/
++    get x() { return 1; }
++    /*10*/
++    set x(value) { }
++    #z_accessor_storage = 1;
++    /*16*/
++    get z() { return __classPrivateFieldGet(this, _a, "f", _C_z_1_accessor_storage); }
++    set z(value) { __classPrivateFieldSet(this, _a, value, "f", _C_z_1_accessor_storage); }
 +    /*33*/
-+    static accessor #z = 1;
++    static #z_1_accessor_storage = 1;
 +}
++_a = C, _C_z_accessor_storage = new WeakMap(), _C_method = function _C_method() { }, _C_x_get = function _C_x_get() { return 1; }, _C_x_set = function _C_x_set(value) { }, _C_z_get = function _C_z_get() { return __classPrivateFieldGet(_a, _a, "f", _C_z_1_accessor_storage); }, _C_z_set = function _C_z_set(value) { __classPrivateFieldSet(_a, _a, value, "f", _C_z_1_accessor_storage); };
++/*28*/
++_C_y = { value: 1 };
++_C_z_1_accessor_storage = { value: 1 };
  //// [file2.js]
  /*34*/
 -let D = (() => {

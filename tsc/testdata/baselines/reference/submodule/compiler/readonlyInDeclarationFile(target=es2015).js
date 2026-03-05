@@ -58,9 +58,6 @@ function g() {
 //// [readonlyInDeclarationFile.js]
 "use strict";
 class C {
-    a1;
-    a2;
-    a3;
     get b1() { return 1; }
     get b2() { return 1; }
     get b3() { return 1; }
@@ -70,9 +67,6 @@ class C {
     set c2(value) { }
     get c3() { return 1; }
     set c3(value) { }
-    static s1;
-    static s2;
-    static s3;
     static get t1() { return 1; }
     static get t2() { return 1; }
     static get t3() { return 1; }

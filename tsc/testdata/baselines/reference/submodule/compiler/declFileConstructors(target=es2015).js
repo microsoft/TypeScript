@@ -127,28 +127,24 @@ class ConstructorWithOverloads {
 }
 exports.ConstructorWithOverloads = ConstructorWithOverloads;
 class ConstructorWithPublicParameterProperty {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 exports.ConstructorWithPublicParameterProperty = ConstructorWithPublicParameterProperty;
 class ConstructorWithPrivateParameterProperty {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 exports.ConstructorWithPrivateParameterProperty = ConstructorWithPrivateParameterProperty;
 class ConstructorWithOptionalParameterProperty {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
 class ConstructorWithParameterInitializer {
-    x;
     constructor(x = "hello") {
         this.x = x;
     }
@@ -179,25 +175,21 @@ class GlobalConstructorWithOverloads {
     }
 }
 class GlobalConstructorWithPublicParameterProperty {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 class GlobalConstructorWithPrivateParameterProperty {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 class GlobalConstructorWithOptionalParameterProperty {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 class GlobalConstructorWithParameterInitializer {
-    x;
     constructor(x = "hello") {
         this.x = x;
     }

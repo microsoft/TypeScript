@@ -51,10 +51,8 @@ foo(() => { }, 1);
 foo(1, () => { });
 function foo2(x) { return x; }
 class C {
-    foo;
 }
 class C2 {
-    foo;
 }
 var r = foo2(new Function());
 var r2 = foo2((x) => x);

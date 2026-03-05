@@ -16,7 +16,9 @@ var a = new TypeScript2.MemberNameArray()
 var TypeScript2;
 (function (TypeScript2) {
     class MemberName {
-        prefix = "";
+        constructor() {
+            this.prefix = "";
+        }
     }
     TypeScript2.MemberName = MemberName;
     class MemberNameArray extends MemberName {

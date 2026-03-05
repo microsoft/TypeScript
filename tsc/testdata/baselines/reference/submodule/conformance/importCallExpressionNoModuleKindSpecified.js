@@ -86,7 +86,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 class C {
-    myModule = Promise.resolve().then(() => __importStar(require("./0")));
+    constructor() {
+        this.myModule = Promise.resolve().then(() => __importStar(require("./0")));
+    }
     method() {
         const loadAsync = Promise.resolve().then(() => __importStar(require("./0")));
         this.myModule.then(Zero => {

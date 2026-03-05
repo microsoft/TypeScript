@@ -106,17 +106,12 @@ new fn5((n) => n.blah); // Error
 //// [overloadResolutionClassConstructors.js]
 "use strict";
 class SomeBase {
-    n;
-    s;
 }
 class SomeDerived1 extends SomeBase {
-    m;
 }
 class SomeDerived2 extends SomeBase {
-    m;
 }
 class SomeDerived3 extends SomeBase {
-    m;
 }
 // Ambiguous call picks the first overload in declaration order
 class fn1 {

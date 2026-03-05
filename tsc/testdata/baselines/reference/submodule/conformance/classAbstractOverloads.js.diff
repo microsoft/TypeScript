@@ -1,8 +1,0 @@
---- old.classAbstractOverloads.js
-+++ new.classAbstractOverloads.js
-@@= skipped -31, +31 lines =@@
-     baz() { }
- }
- class B {
-+    x;
- }

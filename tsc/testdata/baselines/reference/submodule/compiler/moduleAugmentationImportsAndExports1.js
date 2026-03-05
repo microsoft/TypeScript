@@ -38,7 +38,6 @@ exports.A = A;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 class B {
-    n;
 }
 exports.B = B;
 //// [f3.js]

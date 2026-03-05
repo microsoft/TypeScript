@@ -18,7 +18,6 @@ export class ExportedClass2 {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportedClass2 = exports.ExportedClass1 = void 0;
 class ExportedClass1 {
-    data;
     constructor(data) {
         this.data = data;
     }

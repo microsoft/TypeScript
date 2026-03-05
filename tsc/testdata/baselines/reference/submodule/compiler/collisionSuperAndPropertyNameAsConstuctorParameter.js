@@ -42,7 +42,6 @@ class b1 extends a {
     }
 }
 class b2 extends a {
-    _super;
     constructor(_super) {
         super();
         this._super = _super;
@@ -54,7 +53,6 @@ class b3 extends a {
     }
 }
 class b4 extends a {
-    _super;
     constructor(_super) {
         super();
         this._super = _super;

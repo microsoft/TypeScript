@@ -21,7 +21,6 @@ export declare const AConstructor: typeof A; // Ok
 //// [a.js]
 "use strict";
 class A {
-    a;
 }
 module.exports = A;
 //// [b.js]

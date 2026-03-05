@@ -20,10 +20,8 @@ class D {
 //// [esDecorators-classDeclaration-fields-staticPrivate.js]
 "use strict";
 class C {
-    @dec
     static #field1 = 0;
 }
-@dec
 class D {
     static #field1 = 0;
     static {

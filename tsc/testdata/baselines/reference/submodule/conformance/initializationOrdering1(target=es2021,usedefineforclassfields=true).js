@@ -24,11 +24,20 @@ class Helper {
     }
 }
 export class Broken {
-    facade;
     constructor(facade) {
-        this.facade = facade;
+        Object.defineProperty(this, "facade", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: facade
+        });
+        Object.defineProperty(this, "bug", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: this.facade.create()
+        });
         console.log(this.bug);
     }
-    bug = this.facade.create();
 }
 new Broken(new Helper);

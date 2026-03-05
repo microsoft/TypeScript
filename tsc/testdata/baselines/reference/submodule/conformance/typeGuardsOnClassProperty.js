@@ -37,7 +37,6 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 // Note that the class's property must be copied to a local variable for
 // the type guard to have an effect
 class D {
-    data;
     getData() {
         var data = this.data;
         return typeof data === "string" ? data : data.join(" ");

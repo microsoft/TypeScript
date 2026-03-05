@@ -105,16 +105,12 @@ b18 = a18; // ok
 "use strict";
 // checking assignment compatibility relations for function types. All of these are valid.
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Derived {
-    baz;
 }
 class OtherDerived extends Base {
-    bing;
 }
 a = b; // ok
 b = a; // ok

@@ -10,11 +10,9 @@
  (function (M) {
      // variable
      M.M_V = 0;
-@@= skipped -20, +21 lines =@@
-     let M_E;
-     (function (M_E) {
+@@= skipped -22, +23 lines =@@
      })(M_E = M.M_E || (M.M_E = {}));
--    // alias
+     // alias
      M.M_A = M_M;
 +    // Reexports
 +    export { M_V as v };

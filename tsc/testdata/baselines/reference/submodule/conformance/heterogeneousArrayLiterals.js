@@ -151,13 +151,10 @@ var l = [() => 1, () => null]; // { (): any }[]
 var m = [() => 1, () => '', () => null]; // { (): any }[]
 var n = [[() => 1], [() => '']]; // {}[]
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Base {
-    baz;
 }
 var base;
 var derived;

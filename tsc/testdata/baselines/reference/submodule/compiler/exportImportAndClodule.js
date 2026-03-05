@@ -26,7 +26,6 @@ var p: M.D.Point;
 var K;
 (function (K) {
     class L {
-        name;
         constructor(name) {
             this.name = name;
         }

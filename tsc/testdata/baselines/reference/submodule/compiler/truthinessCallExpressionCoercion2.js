@@ -324,7 +324,6 @@ function checksPropertyAccess() {
     }
 }
 class Foo {
-    optional;
     required() {
         return true;
     }

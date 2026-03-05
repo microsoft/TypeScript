@@ -138,31 +138,21 @@ function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>
 "use strict";
 class Private {
     constructor(...args) { }
-    p;
 }
 class Private2 {
     constructor(...args) { }
-    p;
 }
 class Protected {
     constructor(...args) { }
-    p;
-    static s;
 }
 class Protected2 {
     constructor(...args) { }
-    p;
-    static s;
 }
 class Public {
     constructor(...args) { }
-    p;
-    static s;
 }
 class Public2 {
     constructor(...args) { }
-    p;
-    static s;
 }
 function f1(x) {
     x.p; // Error, private constituent makes property inaccessible

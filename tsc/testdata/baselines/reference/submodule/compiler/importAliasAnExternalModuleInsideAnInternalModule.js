@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
 var m_private;
 (function (m_private) {
-    m_private.C = r;
-    m_private. // no error
-    C.m.foo();
+    //import r2 = require('m'); // would be error
+    m_private.C = r; // no error
+    m_private.C.m.foo();
 })(m_private || (m_private = {}));

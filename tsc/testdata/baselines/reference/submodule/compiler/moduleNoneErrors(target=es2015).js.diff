@@ -9,6 +9,5 @@
 -exports.Foo = void 0;
 -class Foo {
 +export class Foo {
-+    foo;
  }
 -exports.Foo = Foo;

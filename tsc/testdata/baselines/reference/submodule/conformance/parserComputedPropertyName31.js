@@ -10,7 +10,4 @@ class C {
 //// [parserComputedPropertyName31.js]
 "use strict";
 class C {
-    // yes ASI
-    [e];
-    [e2];
 }

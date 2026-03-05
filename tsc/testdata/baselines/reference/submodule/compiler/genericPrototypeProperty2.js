@@ -20,14 +20,10 @@ class MyEventWrapper extends BaseEventWrapper {
 //// [genericPrototypeProperty2.js]
 "use strict";
 class BaseEvent {
-    target;
 }
 class MyEvent extends BaseEvent {
-    target;
 }
 class BaseEventWrapper {
-    t;
 }
 class MyEventWrapper extends BaseEventWrapper {
-    t; // any satisfies constraint and passes assignability check between 'target' properties
 }

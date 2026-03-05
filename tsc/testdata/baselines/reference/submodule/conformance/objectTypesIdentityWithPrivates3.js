@@ -30,18 +30,14 @@ var c3: C3<T2>;
 //// [objectTypesIdentityWithPrivates3.js]
 "use strict";
 class C1 {
-    x;
 }
 class C2 extends C1 {
-    y;
 }
 var c1;
 c1; // Should succeed (private x originates in the same declaration)
 class C3 {
-    x; // This T is the difference between C3 and C1
 }
 class C4 extends C3 {
-    y;
 }
 var c3;
 c3; // Should fail (private x originates in the same declaration, but different types)

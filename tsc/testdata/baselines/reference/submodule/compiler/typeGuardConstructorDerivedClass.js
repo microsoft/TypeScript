@@ -72,10 +72,8 @@ if (let4.constructor === C8) {
 "use strict";
 // Derived class with different structures
 class C1 {
-    property1;
 }
 class C2 extends C1 {
-    property2;
 }
 if (var1.constructor === C1) {
     var1; // never
@@ -98,10 +96,8 @@ if (var2.constructor === C4) {
 }
 // Disjointly structured classes
 class C5 {
-    property1;
 }
 class C6 {
-    property2;
 }
 if (let3.constructor === C5) {
     let3; // never
@@ -111,10 +107,8 @@ if (let3.constructor === C6) {
 }
 // Classes with the same structure
 class C7 {
-    property1;
 }
 class C8 {
-    property1;
 }
 if (let4.constructor === C7) {
     let4; // never

@@ -48,12 +48,8 @@ function other<T extends List<U>, U>() {
 //// [recursiveTypesUsedAsFunctionParameters.js]
 "use strict";
 class List {
-    data;
-    next;
 }
 class MyList {
-    data;
-    next;
 }
 function foo(x) {
 }

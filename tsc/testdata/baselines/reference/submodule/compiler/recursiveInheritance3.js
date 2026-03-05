@@ -13,6 +13,8 @@ interface I extends C {
 //// [recursiveInheritance3.js]
 "use strict";
 class C {
+    constructor() {
+        this.x = 1;
+    }
     foo(x) { return x; }
-    x = 1;
 }

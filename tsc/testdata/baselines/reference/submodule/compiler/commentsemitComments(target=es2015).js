@@ -104,9 +104,9 @@ fooVar();
 class c {
     /** constructor comment*/
     constructor() {
+        /** property comment */
+        this.b = 10;
     }
-    /** property comment */
-    b = 10;
     /** function comment */
     myFoo() {
         return this.b;
@@ -133,7 +133,6 @@ var m1;
 (function (m1) {
     /** class b */
     class b {
-        x;
         constructor(x) {
             this.x = x;
         }

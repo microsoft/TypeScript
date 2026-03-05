@@ -1,9 +1,0 @@
---- old.fillInMissingTypeArgsOnConstructCalls.js
-+++ new.fillInMissingTypeArgsOnConstructCalls.js
-@@= skipped -9, +9 lines =@@
- //// [fillInMissingTypeArgsOnConstructCalls.js]
- "use strict";
- class A {
-+    list;
- }
- var a = new A();

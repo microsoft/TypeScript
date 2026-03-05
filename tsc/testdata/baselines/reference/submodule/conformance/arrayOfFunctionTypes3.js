@@ -34,7 +34,6 @@ var r7 = r6(''); // any not string
 var x = [() => 1, () => { }];
 var r2 = x[0]();
 class C {
-    foo;
 }
 var y = [C, C];
 var r3 = new y[0]();

@@ -31,7 +31,6 @@ export function classExtender(superClass, _instanceModifier) {
     };
 }
 class MyClass {
-    x;
 }
 export function classExtender2(superClass, _instanceModifier) {
     return class decoratorFunc extends superClass {

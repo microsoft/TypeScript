@@ -33,7 +33,6 @@ var x = <MyComponent bar='world' />;
 class MyComponent {
     render() {
     }
-    props;
 }
 // Should be an OK
 var x = <MyComponent bar='world'/>;

@@ -39,23 +39,21 @@ class Baad extends Good {
 //// [inheritance.js]
 "use strict";
 class B1 {
-    x;
 }
 class B2 {
-    x;
 }
 class D1 extends B1 {
 }
 class D2 extends B2 {
 }
 class N {
-    y;
 }
 class ND extends N {
-    y;
 }
 class Good {
-    f = function () { return 0; };
+    constructor() {
+        this.f = function () { return 0; };
+    }
     g() { return 0; }
 }
 class Baad extends Good {

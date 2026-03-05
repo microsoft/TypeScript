@@ -11,7 +11,6 @@ class C<T> {
 //// [declFileForTypeParameters.js]
 "use strict";
 class C {
-    x;
     foo(a) {
         return this.x;
     }

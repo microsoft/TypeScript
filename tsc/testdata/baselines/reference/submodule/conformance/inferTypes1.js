@@ -195,12 +195,16 @@ function f1(s) {
     return { a: 1, b: s };
 }
 class C {
-    x = 0;
-    y = 0;
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+    }
 }
 class Abstract {
-    x = 0;
-    y = 0;
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+    }
 }
 const z1 = ex.customClass;
 const z2 = ex.obj.nested.attr;

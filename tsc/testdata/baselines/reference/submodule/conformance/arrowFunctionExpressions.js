@@ -128,8 +128,10 @@ var p10 = ([{ value, done }]) => { };
 // Arrow function used in class member initializer
 // Arrow function used in class member function
 class MyClass {
-    m = (n) => n + 1;
-    p = (n) => n && this;
+    constructor() {
+        this.m = (n) => n + 1;
+        this.p = (n) => n && this;
+    }
     fn() {
         var m = (n) => n + 1;
         var p = (n) => n && this;

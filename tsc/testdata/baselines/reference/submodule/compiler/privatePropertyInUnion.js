@@ -20,5 +20,4 @@ type __ValueDescriptorType<T extends string | object> = T extends ISyncableObjec
 "use strict";
 // Repro from #38236
 class SyncableObject {
-    foo;
 }

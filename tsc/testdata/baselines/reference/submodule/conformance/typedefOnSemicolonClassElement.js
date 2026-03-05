@@ -11,10 +11,12 @@ export class Preferences {
 
 //// [typedefOnSemicolonClassElement.js]
 export class Preferences {
+    constructor() {
+        /** @type {A} */
+        this.a = 'ok';
+    }
     /** @typedef {string} A */
     ;
-    /** @type {A} */
-    a = 'ok';
 }
 
 

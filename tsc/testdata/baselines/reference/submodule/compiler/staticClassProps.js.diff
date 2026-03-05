@@ -1,9 +1,0 @@
---- old.staticClassProps.js
-+++ new.staticClassProps.js
-@@= skipped -14, +14 lines =@@
- class C {
-     foo() {
-     }
-+    static z = 1;
- }
--C.z = 1;

@@ -21,8 +21,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 const dec = (obj, prop) => undefined;
 class Foo {
-    foo;
-    bar;
 }
 __decorate([
     dec,

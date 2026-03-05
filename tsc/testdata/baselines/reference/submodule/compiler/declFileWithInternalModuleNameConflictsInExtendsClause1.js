@@ -16,11 +16,11 @@ namespace X.A.B.C {
 "use strict";
 var X;
 (function (X) {
-    let A;
+    var A;
     (function (A) {
-        let B;
+        var B;
         (function (B) {
-            let C;
+            var C;
             (function (C) {
                 class W {
                 }

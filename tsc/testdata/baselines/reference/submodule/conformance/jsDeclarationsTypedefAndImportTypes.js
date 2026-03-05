@@ -40,8 +40,9 @@ module.exports = {
  * @typedef {string | number} Whatever
  */
 class Conn {
-    constructor() { }
-    item = 3;
+    constructor() {
+        this.item = 3;
+    }
     method() { }
 }
 module.exports = Conn;

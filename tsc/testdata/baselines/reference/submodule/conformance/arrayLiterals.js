@@ -49,7 +49,6 @@ var stringArr = ['', ""];
 var numberArr = [0, 0.0, 0x00, 1e1];
 var boolArr = [false, true, false, true];
 class C {
-    p;
 }
 var classArr = [new C(), new C()];
 var classTypeArray = [C, C, C];
@@ -59,14 +58,11 @@ var context1 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 class Base {
-    p;
 }
 class Derived1 extends Base {
-    m;
 }
 ;
 class Derived2 extends Base {
-    n;
 }
 ;
 var context3 = [new Derived1(), new Derived2()];

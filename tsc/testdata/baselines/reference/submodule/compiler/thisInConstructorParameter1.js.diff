@@ -1,9 +1,0 @@
---- old.thisInConstructorParameter1.js
-+++ new.thisInConstructorParameter1.js
-@@= skipped -8, +8 lines =@@
- //// [thisInConstructorParameter1.js]
- "use strict";
- class Foo {
-+    y;
-     constructor(x = this.y) { }
- }

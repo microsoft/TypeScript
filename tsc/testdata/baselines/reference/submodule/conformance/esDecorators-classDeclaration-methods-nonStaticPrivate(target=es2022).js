@@ -11,6 +11,5 @@ class C {
 //// [esDecorators-classDeclaration-methods-nonStaticPrivate.js]
 "use strict";
 class C {
-    @dec
     #method1() { }
 }

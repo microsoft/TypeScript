@@ -18,7 +18,6 @@ class A {
 "use strict";
 // Repro from #8923
 class A {
-    static _a;
     get a() {
         if (A._a) {
             return A._a; // is possibly null or undefined.

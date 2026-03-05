@@ -45,11 +45,13 @@ export const obj = {
     }
 };
 export class cl2 {
-    p = {
-        m: async () => {
-            const req = await import('./test'); // FOUR
-        }
-    };
+    constructor() {
+        this.p = {
+            m: async () => {
+                const req = await import('./test'); // FOUR
+            }
+        };
+    }
 }
 export const l = async () => {
     const req = await import('./test'); // FIVE

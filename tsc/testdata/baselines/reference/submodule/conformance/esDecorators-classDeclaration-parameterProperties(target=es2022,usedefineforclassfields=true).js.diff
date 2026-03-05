@@ -27,7 +27,6 @@
 +    constructor(message) {
 +        this.message = message;
 +    }
-+    @bound
 +    speak() {
 +    }
 +}

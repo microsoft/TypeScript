@@ -20,14 +20,10 @@ class Derived2 extends Base2 {
 //// [derivedClassOverridesPrivates.js]
 "use strict";
 class Base {
-    x;
 }
 class Derived extends Base {
-    x; // error
 }
 class Base2 {
-    static y;
 }
 class Derived2 extends Base2 {
-    static y; // error
 }

@@ -41,13 +41,10 @@ var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
 //// [typeGuardOfFormIsType.js]
 "use strict";
 class C1 {
-    p1;
 }
 class C2 {
-    p2;
 }
 class D1 extends C1 {
-    p3;
 }
 var str;
 var num;

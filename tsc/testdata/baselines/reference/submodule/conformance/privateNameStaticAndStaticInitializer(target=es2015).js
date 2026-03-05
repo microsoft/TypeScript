@@ -10,7 +10,9 @@ class A {
 
 //// [privateNameStaticAndStaticInitializer.js]
 "use strict";
+var _a, _A_foo, _A_prop;
 class A {
-    static #foo = 1;
-    static #prop = 2;
 }
+_a = A;
+_A_foo = { value: 1 };
+_A_prop = { value: 2 };

@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/classExpressionWithComputedPropertyInLoop.ts] ////
+
+=== classExpressionWithComputedPropertyInLoop.ts ===
+// Class expression in a loop with a computed property name on an instance field.
+// The class temp variable should be block-scoped (let) to ensure each iteration
+// gets its own binding, matching the behavior when BlockScopedBindingInLoop is set.
+
+const array: any[] = [];
+>array : Symbol(array, Decl(classExpressionWithComputedPropertyInLoop.ts, 4, 5))
+
+const key = "myKey";
+>key : Symbol(key, Decl(classExpressionWithComputedPropertyInLoop.ts, 5, 5))
+
+for (let i = 0; i < 3; i++) {
+>i : Symbol(i, Decl(classExpressionWithComputedPropertyInLoop.ts, 6, 8))
+>i : Symbol(i, Decl(classExpressionWithComputedPropertyInLoop.ts, 6, 8))
+>i : Symbol(i, Decl(classExpressionWithComputedPropertyInLoop.ts, 6, 8))
+
+    array.push(class C {
+>array.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(classExpressionWithComputedPropertyInLoop.ts, 4, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(classExpressionWithComputedPropertyInLoop.ts, 7, 15))
+
+        [key] = i;
+>[key] : Symbol(C[key], Decl(classExpressionWithComputedPropertyInLoop.ts, 7, 24))
+>key : Symbol(key, Decl(classExpressionWithComputedPropertyInLoop.ts, 5, 5))
+>i : Symbol(i, Decl(classExpressionWithComputedPropertyInLoop.ts, 6, 8))
+
+        #field = i;
+>#field : Symbol(C.#field, Decl(classExpressionWithComputedPropertyInLoop.ts, 8, 18))
+>i : Symbol(i, Decl(classExpressionWithComputedPropertyInLoop.ts, 6, 8))
+
+    });
+}
+

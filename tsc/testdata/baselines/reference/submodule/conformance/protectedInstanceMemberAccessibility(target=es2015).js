@@ -49,13 +49,11 @@ class C extends A {
 //// [protectedInstanceMemberAccessibility.js]
 "use strict";
 class A {
-    x;
     f() {
         return "hello";
     }
 }
 class B extends A {
-    y;
     g() {
         var t1 = this.x;
         var t2 = this.f();
@@ -83,5 +81,4 @@ class B extends A {
     }
 }
 class C extends A {
-    z;
 }

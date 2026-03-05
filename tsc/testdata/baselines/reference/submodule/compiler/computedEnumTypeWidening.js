@@ -135,10 +135,12 @@ const c2 = E.B;
 let v1 = E.B;
 let v2 = E.B;
 class C {
-    p1 = E.B;
-    p2 = E.B;
-    p3 = E.B;
-    p4 = E.B;
+    constructor() {
+        this.p1 = E.B;
+        this.p2 = E.B;
+        this.p3 = E.B;
+        this.p4 = E.B;
+    }
 }
 // Repro from #52531
 var MyEnum;

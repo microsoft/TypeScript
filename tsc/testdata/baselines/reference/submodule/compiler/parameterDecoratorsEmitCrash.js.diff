@@ -60,8 +60,6 @@
 -        _a;
 -})();
 +class C {
-+    @dec
-+    x;
 +    constructor(
 +    @dec
 +    x) { }

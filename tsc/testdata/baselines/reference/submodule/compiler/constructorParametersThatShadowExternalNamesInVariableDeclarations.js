@@ -19,13 +19,13 @@ class B {
 "use strict";
 var x = 1;
 class A {
-    a = x;
     constructor(x) {
+        this.a = x;
     }
 }
 class B {
-    a = x;
     constructor() {
+        this.a = x;
         var x = "";
     }
 }

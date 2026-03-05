@@ -9,12 +9,3 @@
          2 * x;
          let X;
          (function (X) {
-@@= skipped -14, +16 lines =@@
-     })(N = M.N || (M.N = {}));
- })(M || (M = {}));
- (function (M) {
--    var N;
-+    let N;
-     (function (N) {
-         let X;
-         (function (X) {

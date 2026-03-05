@@ -13,16 +13,16 @@ export default class {
 
 
 //// [usingDeclarationsWithESClassDecorators.4.js]
+var _a;
 var before, _default;
 export { _default as default };
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    _default = 
-    @dec
-    class {
-        static { __setFunctionName(this, "default"); }
-    };
+    _default = (_a = class {
+        },
+        __setFunctionName(_a, "default"),
+        _a);
 }
 catch (e_1) {
     env_1.error = e_1;

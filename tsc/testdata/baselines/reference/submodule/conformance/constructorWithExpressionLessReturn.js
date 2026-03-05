@@ -34,20 +34,17 @@ class C {
     }
 }
 class D {
-    x;
     constructor() {
         return;
     }
 }
 class E {
-    x;
     constructor(x) {
         this.x = x;
         return;
     }
 }
 class F {
-    x;
     constructor(x) {
         this.x = x;
         return;

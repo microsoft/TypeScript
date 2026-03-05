@@ -15,7 +15,9 @@ var a: D = foo("hi", []);
 //// [crashInsourcePropertyIsRelatableToTargetProperty.js]
 "use strict";
 class C {
-    x = 1;
+    constructor() {
+        this.x = 1;
+    }
 }
 class D extends C {
 }

@@ -27,14 +27,13 @@ class Base {
     constructor(a) { }
 }
 class Foo extends Base {
-    x;
     constructor() {
         super(this); // error: "super" has to be called before "this" accessing
     }
 }
 class Foo2 extends Base {
-    x = 0;
     constructor() {
         super(this); // error
+        this.x = 0;
     }
 }

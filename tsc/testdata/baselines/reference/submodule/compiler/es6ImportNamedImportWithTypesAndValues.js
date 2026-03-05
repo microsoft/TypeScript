@@ -24,11 +24,15 @@ export var cVal = new C();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C2 = exports.C = void 0;
 class C {
-    prop = "hello";
+    constructor() {
+        this.prop = "hello";
+    }
 }
 exports.C = C;
 class C2 {
-    prop2 = "world";
+    constructor() {
+        this.prop2 = "world";
+    }
 }
 exports.C2 = C2;
 //// [client.js]

@@ -86,10 +86,8 @@ interface T {
 //// [indexerConstraints2.js]
 "use strict";
 class A {
-    a;
 }
 class B extends A {
-    b;
 }
 // Inheritance
 class F {

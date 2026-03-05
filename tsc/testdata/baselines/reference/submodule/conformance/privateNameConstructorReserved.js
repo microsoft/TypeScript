@@ -8,6 +8,11 @@ class A {
 
 //// [privateNameConstructorReserved.js]
 "use strict";
+var _A_instances, _A_constructor;
 class A {
+    constructor() {
+        _A_instances.add(this);
+    }
     #constructor() { } // Error: `#constructor` is a reserved word.
 }
+_A_instances = new WeakSet();

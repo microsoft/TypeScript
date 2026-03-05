@@ -31,12 +31,16 @@ c = d;
 //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
 "use strict";
 class A {
-    x = 'A';
-    y = 0;
+    constructor() {
+        this.x = 'A';
+        this.y = 0;
+    }
 }
 class B {
-    x = 'B';
-    z = true;
+    constructor() {
+        this.x = 'B';
+        this.z = true;
+    }
 }
 b = a; // should be no error
 c = d;

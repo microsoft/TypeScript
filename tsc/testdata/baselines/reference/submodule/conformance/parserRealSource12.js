@@ -540,9 +540,11 @@ namespace TypeScript {
 var TypeScript;
 (function (TypeScript) {
     class AstWalkOptions {
-        goChildren = true;
-        goNextSibling = true;
-        reverseSiblings = false; // visit siblings in reverse execution order
+        constructor() {
+            this.goChildren = true;
+            this.goNextSibling = true;
+            this.reverseSiblings = false; // visit siblings in reverse execution order
+        }
         stopWalk(stop = true) {
             this.goChildren = !stop;
             this.goNextSibling = !stop;
@@ -550,11 +552,6 @@ var TypeScript;
     }
     TypeScript.AstWalkOptions = AstWalkOptions;
     class AstWalker {
-        childrenWalkers;
-        pre;
-        post;
-        options;
-        state;
         constructor(childrenWalkers, pre, post, options, state) {
             this.childrenWalkers = childrenWalkers;
             this.pre = pre;
@@ -591,8 +588,8 @@ var TypeScript;
         }
     }
     class AstWalkerFactory {
-        childrenWalkers = [];
         constructor() {
+            this.childrenWalkers = [];
             this.initChildrenWalkers();
         }
         walk(ast, pre, post, options, state) {

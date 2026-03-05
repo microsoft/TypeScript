@@ -44,15 +44,13 @@ var a: { id: string };
 "use strict";
 var X;
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
         class Point {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
             }
-            x;
-            y;
         }
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
@@ -61,7 +59,7 @@ var X;
 "use strict";
 var X;
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
         let Point;
         (function (Point) {
@@ -77,7 +75,6 @@ var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 //// [simple.js]
 "use strict";
 class A {
-    id;
 }
 (function (A) {
     A.Instance = new A();

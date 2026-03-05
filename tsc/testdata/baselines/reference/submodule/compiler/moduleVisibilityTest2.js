@@ -97,15 +97,17 @@ var M;
     var x = 5;
     var y = x + x;
     class B {
-        b = 0;
+        constructor() {
+            this.b = 0;
+        }
     }
     class C {
         someMethodThatCallsAnOuterMethod() { return OuterInnerAlias.someExportedOuterInnerFunc(); }
         someMethodThatCallsAnInnerMethod() { return InnerMod.someExportedInnerFunc(); }
         someMethodThatCallsAnOuterInnerMethod() { return OuterMod.someExportedOuterFunc(); }
         someMethod() { return 0; }
-        someProp = 1;
         constructor() {
+            this.someProp = 1;
             function someInnerFunc() { return 2; }
             var someInnerVar = 3;
         }

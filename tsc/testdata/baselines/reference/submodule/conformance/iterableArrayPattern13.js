@@ -22,10 +22,8 @@ fun(new FooIterator);
 //// [iterableArrayPattern13.js]
 "use strict";
 class Bar {
-    x;
 }
 class Foo extends Bar {
-    y;
 }
 class FooIterator {
     next() {

@@ -154,13 +154,10 @@ var r8b6 = b6 !== a6;
 //// [comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js]
 "use strict";
 class Base {
-    a;
 }
 class Derived extends Base {
-    b;
 }
 class C {
-    c;
 }
 var a1;
 var b1;

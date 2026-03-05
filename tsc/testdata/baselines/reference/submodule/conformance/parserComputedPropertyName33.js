@@ -9,8 +9,12 @@ class C {
 
 //// [parserComputedPropertyName33.js]
 "use strict";
+var _a;
 class C {
-    // No ASI
-    [e] = 0[e2]();
+    constructor() {
+        // No ASI
+        this[_a] = 0[e2]();
+    }
 }
+_a = e;
 { }

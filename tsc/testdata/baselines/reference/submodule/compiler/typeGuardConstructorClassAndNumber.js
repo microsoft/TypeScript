@@ -136,7 +136,6 @@ function foo(instance: Function | object) {
 "use strict";
 // Typical case
 class C1 {
-    property1;
 }
 if (var1.constructor == C1) {
     var1; // C1

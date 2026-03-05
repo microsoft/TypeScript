@@ -33,15 +33,15 @@ class D extends C {
 "use strict";
 // accessing any protected outside the class is an error
 class C {
-    x;
-    a = '';
-    b = '';
+    constructor() {
+        this.a = '';
+        this.b = '';
+        this.d = () => '';
+    }
     c() { return ''; }
-    d = () => '';
-    static e;
     static f() { return ''; }
-    static g = () => '';
 }
+C.g = () => '';
 class D extends C {
     method() {
         // No errors

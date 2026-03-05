@@ -43,11 +43,9 @@ class C {
 "use strict";
 // no errors
 class C {
-    x;
     get y() { return this.x; }
     set y(x) { this.y = this.x; }
     foo() { return this.foo; }
-    static x;
     static get y() { return this.x; }
     static set y(x) { this.y = this.x; }
     static foo() { return this.foo; }

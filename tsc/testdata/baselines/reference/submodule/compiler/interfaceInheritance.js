@@ -45,7 +45,6 @@ i5 = i4; // should be an error
 //// [interfaceInheritance.js]
 "use strict";
 class C1 {
-    i2P1;
 }
 var i1;
 i1 = i2;

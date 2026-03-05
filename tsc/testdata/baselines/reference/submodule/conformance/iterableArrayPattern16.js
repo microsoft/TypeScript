@@ -36,10 +36,8 @@ class FooIteratorIterator {
 function fun(...[a, b]) { }
 fun(...new FooIteratorIterator);
 class Bar {
-    x;
 }
 class Foo extends Bar {
-    y;
 }
 class FooIterator {
     next() {

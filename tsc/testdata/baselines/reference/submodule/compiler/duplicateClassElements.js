@@ -49,13 +49,10 @@ class a {
 //// [duplicateClassElements.js]
 "use strict";
 class a {
-    a;
-    a;
     b() {
     }
     b() {
     }
-    x;
     get x() {
         return 10;
     }
@@ -78,7 +75,6 @@ class a {
     }
     set x2(_x) {
     }
-    x2;
     get z2() {
         return "Hello";
     }

@@ -12,7 +12,9 @@ var X = { 0b11: '', 3: '' };
 //// [duplicateIdentifierDifferentSpelling.js]
 "use strict";
 class A {
-    0b11 = '';
-    3 = '';
+    constructor() {
+        this[0b11] = '';
+        this[3] = '';
+    }
 }
 var X = { 0b11: '', 3: '' };

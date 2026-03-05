@@ -239,6 +239,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
+var _a;
 var d1, a, C1, C2, C3, N;
 function f() {
     const env_18 = { stack: [], error: void 0, hasError: false };
@@ -316,92 +317,94 @@ try {
             __disposeResources(env_22);
         }
     };
-    C1 = class C1 {
-        a = () => {
-            const env_23 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d7 = __addDisposableResource(env_23, { [Symbol.dispose]() { } }, false);
+    C1 = (_a = class C1 {
+            constructor() {
+                this.a = () => {
+                    const env_24 = { stack: [], error: void 0, hasError: false };
+                    try {
+                        const d7 = __addDisposableResource(env_24, { [Symbol.dispose]() { } }, false);
+                    }
+                    catch (e_24) {
+                        env_24.error = e_24;
+                        env_24.hasError = true;
+                    }
+                    finally {
+                        __disposeResources(env_24);
+                    }
+                };
+                const env_23 = { stack: [], error: void 0, hasError: false };
+                try {
+                    const d8 = __addDisposableResource(env_23, { [Symbol.dispose]() { } }, false);
+                }
+                catch (e_23) {
+                    env_23.error = e_23;
+                    env_23.hasError = true;
+                }
+                finally {
+                    __disposeResources(env_23);
+                }
             }
-            catch (e_23) {
-                env_23.error = e_23;
-                env_23.hasError = true;
+            m() {
+                const env_25 = { stack: [], error: void 0, hasError: false };
+                try {
+                    const d10 = __addDisposableResource(env_25, { [Symbol.dispose]() { } }, false);
+                }
+                catch (e_25) {
+                    env_25.error = e_25;
+                    env_25.hasError = true;
+                }
+                finally {
+                    __disposeResources(env_25);
+                }
             }
-            finally {
-                __disposeResources(env_23);
+            get x() {
+                const env_26 = { stack: [], error: void 0, hasError: false };
+                try {
+                    const d11 = __addDisposableResource(env_26, { [Symbol.dispose]() { } }, false);
+                    return 0;
+                }
+                catch (e_26) {
+                    env_26.error = e_26;
+                    env_26.hasError = true;
+                }
+                finally {
+                    __disposeResources(env_26);
+                }
             }
-        };
-        constructor() {
-            const env_24 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d8 = __addDisposableResource(env_24, { [Symbol.dispose]() { } }, false);
+            set x(v) {
+                const env_27 = { stack: [], error: void 0, hasError: false };
+                try {
+                    const d12 = __addDisposableResource(env_27, { [Symbol.dispose]() { } }, false);
+                }
+                catch (e_27) {
+                    env_27.error = e_27;
+                    env_27.hasError = true;
+                }
+                finally {
+                    __disposeResources(env_27);
+                }
             }
-            catch (e_24) {
-                env_24.error = e_24;
-                env_24.hasError = true;
+            am() {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const env_28 = { stack: [], error: void 0, hasError: false };
+                    try {
+                        const d13 = __addDisposableResource(env_28, { [Symbol.dispose]() { } }, false);
+                        yield null;
+                    }
+                    catch (e_28) {
+                        env_28.error = e_28;
+                        env_28.hasError = true;
+                    }
+                    finally {
+                        __disposeResources(env_28);
+                    }
+                });
             }
-            finally {
-                __disposeResources(env_24);
-            }
-        }
-        static {
-            const env_25 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d9 = __addDisposableResource(env_25, { [Symbol.dispose]() { } }, false);
-            }
-            catch (e_25) {
-                env_25.error = e_25;
-                env_25.hasError = true;
-            }
-            finally {
-                __disposeResources(env_25);
-            }
-        }
-        m() {
-            const env_26 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d10 = __addDisposableResource(env_26, { [Symbol.dispose]() { } }, false);
-            }
-            catch (e_26) {
-                env_26.error = e_26;
-                env_26.hasError = true;
-            }
-            finally {
-                __disposeResources(env_26);
-            }
-        }
-        get x() {
-            const env_27 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d11 = __addDisposableResource(env_27, { [Symbol.dispose]() { } }, false);
-                return 0;
-            }
-            catch (e_27) {
-                env_27.error = e_27;
-                env_27.hasError = true;
-            }
-            finally {
-                __disposeResources(env_27);
-            }
-        }
-        set x(v) {
-            const env_28 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d12 = __addDisposableResource(env_28, { [Symbol.dispose]() { } }, false);
-            }
-            catch (e_28) {
-                env_28.error = e_28;
-                env_28.hasError = true;
-            }
-            finally {
-                __disposeResources(env_28);
-            }
-        }
-        am() {
-            return __awaiter(this, void 0, void 0, function* () {
+            *g() {
                 const env_29 = { stack: [], error: void 0, hasError: false };
                 try {
-                    const d13 = __addDisposableResource(env_29, { [Symbol.dispose]() { } }, false);
-                    yield null;
+                    const d14 = __addDisposableResource(env_29, { [Symbol.dispose]() { } }, false);
+                    yield;
                 }
                 catch (e_29) {
                     env_29.error = e_29;
@@ -410,40 +413,39 @@ try {
                 finally {
                     __disposeResources(env_29);
                 }
-            });
-        }
-        *g() {
-            const env_30 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d14 = __addDisposableResource(env_30, { [Symbol.dispose]() { } }, false);
-                yield;
             }
-            catch (e_30) {
-                env_30.error = e_30;
-                env_30.hasError = true;
+            ag() {
+                return __asyncGenerator(this, arguments, function* ag_2() {
+                    const env_30 = { stack: [], error: void 0, hasError: false };
+                    try {
+                        const d15 = __addDisposableResource(env_30, { [Symbol.dispose]() { } }, false);
+                        yield yield __await(void 0);
+                        yield __await(null);
+                    }
+                    catch (e_30) {
+                        env_30.error = e_30;
+                        env_30.hasError = true;
+                    }
+                    finally {
+                        __disposeResources(env_30);
+                    }
+                });
+            }
+        },
+        (() => {
+            const env_31 = { stack: [], error: void 0, hasError: false };
+            try {
+                const d9 = __addDisposableResource(env_31, { [Symbol.dispose]() { } }, false);
+            }
+            catch (e_31) {
+                env_31.error = e_31;
+                env_31.hasError = true;
             }
             finally {
-                __disposeResources(env_30);
+                __disposeResources(env_31);
             }
-        }
-        ag() {
-            return __asyncGenerator(this, arguments, function* ag_2() {
-                const env_31 = { stack: [], error: void 0, hasError: false };
-                try {
-                    const d15 = __addDisposableResource(env_31, { [Symbol.dispose]() { } }, false);
-                    yield yield __await(void 0);
-                    yield __await(null);
-                }
-                catch (e_31) {
-                    env_31.error = e_31;
-                    env_31.hasError = true;
-                }
-                finally {
-                    __disposeResources(env_31);
-                }
-            });
-        }
-    };
+        })(),
+        _a);
     C2 = class C2 extends C1 {
         constructor() {
             const env_32 = { stack: [], error: void 0, hasError: false };
@@ -461,12 +463,12 @@ try {
         }
     };
     C3 = class C3 extends C1 {
-        y = 1;
         constructor() {
             const env_33 = { stack: [], error: void 0, hasError: false };
             try {
                 const d17 = __addDisposableResource(env_33, { [Symbol.dispose]() { } }, false);
                 super();
+                this.y = 1;
             }
             catch (e_33) {
                 env_33.error = e_33;
@@ -589,7 +591,7 @@ try {
             __disposeResources(env_8);
         }
     }
-    catch (_a) {
+    catch (_b) {
         const env_9 = { stack: [], error: void 0, hasError: false };
         try {
             const d26 = __addDisposableResource(env_9, { [Symbol.dispose]() { } }, false);

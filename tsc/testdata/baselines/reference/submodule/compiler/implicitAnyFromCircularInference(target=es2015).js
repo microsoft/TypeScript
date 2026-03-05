@@ -77,7 +77,9 @@ function h() {
 }
 function foo(x) { return "abc"; }
 class C {
-    s = foo(this);
+    constructor() {
+        this.s = foo(this);
+    }
 }
 class D {
     // Error expected

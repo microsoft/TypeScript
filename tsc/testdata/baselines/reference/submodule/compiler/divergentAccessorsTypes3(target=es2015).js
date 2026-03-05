@@ -52,7 +52,6 @@ class One {
     set prop1(s) { }
     get prop2() { return ""; }
     set prop2(s) { }
-    prop3;
     get prop4() { return ""; }
     set prop4(s) { }
 }

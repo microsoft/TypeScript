@@ -35,10 +35,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 var x; // Should be error (mod1.Foo !== mod2.Foo)
 class Foo1 {
-    n;
 }
 class Foo2 {
-    n;
 }
 var y;
 var y;

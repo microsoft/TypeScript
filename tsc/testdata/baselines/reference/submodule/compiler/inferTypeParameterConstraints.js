@@ -50,6 +50,9 @@ class BaseClass {
     }
 }
 class Klass extends BaseClass {
-    child = true;
+    constructor() {
+        super(...arguments);
+        this.child = true;
+    }
 }
 m.child; // ok

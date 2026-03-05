@@ -77,16 +77,12 @@ else {
 //    it is a subtype of the type of x, or
 //  - when false, has no effect on the type of x.
 class C1 {
-    p1;
 }
 class C2 {
-    p2;
 }
 class D1 extends C1 {
-    p3;
 }
 class C3 {
-    p4;
 }
 var str;
 var num;

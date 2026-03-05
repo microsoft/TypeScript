@@ -1,14 +1,6 @@
 --- old.erasableSyntaxOnly.js
 +++ new.erasableSyntaxOnly.js
-@@= skipped -113, +113 lines =@@
- //// [index.js]
- "use strict";
- class MyClassErr {
-+    foo;
-     // No parameter properties
-     constructor(foo) {
-         this.foo = foo;
-@@= skipped -47, +48 lines =@@
+@@= skipped -160, +160 lines =@@
  // at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
  ({ foo() { } }.foo());
  // at the start of an ExpressionStatement if followed by function keyword

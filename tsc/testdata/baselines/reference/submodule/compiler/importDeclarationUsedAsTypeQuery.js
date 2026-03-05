@@ -16,7 +16,6 @@ export var x: typeof a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 class B {
-    id;
 }
 exports.B = B;
 //// [importDeclarationUsedAsTypeQuery_1.js]

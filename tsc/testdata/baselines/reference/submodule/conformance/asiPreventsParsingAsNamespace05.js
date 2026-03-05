@@ -16,7 +16,7 @@ a.b.c
 let namespace = 10;
 var a;
 (function (a) {
-    let b;
+    var b;
     (function (b) {
         b.c = 20;
     })(b = a.b || (a.b = {}));

@@ -27,7 +27,6 @@ X.A.r; // Error
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 class A {
-    static r;
 }
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
@@ -54,7 +53,6 @@ exports.A = void 0;
 __exportStar(require("./exportStarFromEmptyModule_module2"), exports);
 __exportStar(require("./exportStarFromEmptyModule_module1"), exports);
 class A {
-    static q;
 }
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]

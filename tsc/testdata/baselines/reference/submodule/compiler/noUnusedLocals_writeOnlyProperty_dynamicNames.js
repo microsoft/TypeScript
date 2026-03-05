@@ -18,8 +18,6 @@ class C {
 const x = Symbol("x");
 const y = Symbol("y");
 class C {
-    [x];
-    [y];
     m() {
         this[x] = 0; // write-only
         this[y];

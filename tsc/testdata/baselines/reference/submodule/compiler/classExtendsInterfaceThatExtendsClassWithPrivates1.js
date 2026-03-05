@@ -19,11 +19,15 @@ class D2 implements I {
 //// [classExtendsInterfaceThatExtendsClassWithPrivates1.js]
 "use strict";
 class C {
+    constructor() {
+        this.x = 1;
+    }
     foo(x) { return x; }
-    x = 1;
 }
 class D2 {
+    constructor() {
+        this.x = 3;
+    }
     foo(x) { return x; }
-    x = 3;
     other(x) { return x; }
 }

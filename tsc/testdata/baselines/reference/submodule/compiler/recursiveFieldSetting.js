@@ -24,18 +24,19 @@ class Recursive3 {
 "use strict";
 // #32721
 class Recursive1 {
-    parent;
     constructor(parent) {
         this.parent = parent;
+        this.depth = this.parent ? this.parent.depth + 1 : 0;
     }
-    depth = this.parent ? this.parent.depth + 1 : 0;
 }
 class Recursive2 {
-    parent;
-    depth = this.parent.depth;
+    constructor() {
+        this.depth = this.parent.depth;
+    }
 }
 class Recursive3 {
-    parent;
-    depth = this.parent.alpha;
-    alpha = 0;
+    constructor() {
+        this.depth = this.parent.alpha;
+        this.alpha = 0;
+    }
 }

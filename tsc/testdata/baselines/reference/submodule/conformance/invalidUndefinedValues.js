@@ -43,7 +43,6 @@ var a;
 x = a;
 x = null;
 class C {
-    foo;
 }
 var b;
 x = C;

@@ -54,12 +54,12 @@ var b = {
 "use strict";
 // duplicate property names are an error in all types
 class C {
-    foo;
-    foo;
+    constructor() {
+        this.baz = () => { };
+        this.baz = () => { };
+    }
     bar(x) { }
     bar(x) { }
-    baz = () => { };
-    baz = () => { };
 }
 var a;
 var b = {

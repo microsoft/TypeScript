@@ -11,10 +11,8 @@ function* g() {
 //// [generatorTypeCheck53.js]
 "use strict";
 class Foo {
-    x;
 }
 class Baz {
-    z;
 }
 function* g() {
     yield new Foo;

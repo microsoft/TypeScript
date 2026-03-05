@@ -1,29 +1,24 @@
 --- old.jsDeclarationsDefault(target=es2015).js
 +++ new.jsDeclarationsDefault(target=es2015).js
-@@= skipped -57, +57 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -58, +58 lines =@@
  exports.Bar = exports.X = void 0;
  class Foo {
--    constructor() {
+     constructor() {
 -        this.a = (null);
--    }
-+    a = /** @type {Foo} */ null;
++        this.a = null;
+     }
  }
  exports.default = Foo;
- exports.Bar = Foo;
-@@= skipped -16, +14 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- const index3_1 = __importDefault(require("./index3"));
+@@= skipped -17, +17 lines =@@
  class Bar extends index3_1.default {
--    constructor() {
--        super(...arguments);
+     constructor() {
+         super(...arguments);
 -        this.x = (null);
--    }
-+    x = /** @type {Bar} */ null;
++        this.x = null;
+     }
  }
  exports.default = Bar;
- //// [index5.js]
-@@= skipped -27, +24 lines =@@
+@@= skipped -25, +25 lines =@@
 
 
  //// [index1.d.ts]

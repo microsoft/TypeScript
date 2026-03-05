@@ -487,6 +487,7 @@ var m2;
     var m1_im4_private_v2_private = new m1_im4_private.c1();
     var m1_im4_private_v3_private = m1_im4_private.f1;
     var m1_im4_private_v4_private = m1_im4_private.f1();
+    // Parse error to export module
     m2.m1_im1_public = m2_M1_public;
     m2.m1_im2_public = m2_M2_private;
     export import m1_im3_public = require("m2_M3_public");

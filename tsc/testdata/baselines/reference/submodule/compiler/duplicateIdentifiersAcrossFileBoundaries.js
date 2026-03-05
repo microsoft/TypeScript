@@ -42,7 +42,6 @@ class C2 {
 function f() { }
 var v = 3;
 class Foo {
-    static x;
 }
 var N;
 (function (N) {

@@ -106,14 +106,12 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 
 //// [quickinfoTypeAtReturnPositionsInaccurate.js]
 class NumClass {
-    value;
     get() {
         return this.value;
     }
     numExclusive() { }
 }
 class StrClass {
-    value;
     get() {
         return this.value;
     }
@@ -127,7 +125,9 @@ const isNumClass = (item) => {
  * versions.
  */
 class SimpleStore {
-    entries = {};
+    constructor() {
+        this.entries = {};
+    }
     get(entryId) {
         let entry = this.entries[entryId];
         entry.numExclusive(); // error - expected.
@@ -146,7 +146,9 @@ class SimpleStore {
  * scope.
  */
 class ComplexStore {
-    slices = {};
+    constructor() {
+        this.slices = {};
+    }
     get(sliceId, sliceKey) {
         let item = this.slices[sliceId][sliceKey];
         if (isNumClass(item)) {

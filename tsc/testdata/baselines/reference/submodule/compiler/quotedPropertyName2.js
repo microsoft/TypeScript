@@ -8,5 +8,5 @@ class Test1 {
 //// [quotedPropertyName2.js]
 "use strict";
 class Test1 {
-    static "prop1" = 0;
 }
+Test1["prop1"] = 0;

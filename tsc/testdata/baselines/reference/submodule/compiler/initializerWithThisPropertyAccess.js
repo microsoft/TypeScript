@@ -38,31 +38,35 @@ class Bar {
 //// [initializerWithThisPropertyAccess.js]
 "use strict";
 class A {
-    a;
-    b = this.a; // Error
-    c = () => this.a;
-    d = (new A()).a;
     constructor() {
+        this.b = this.a; // Error
+        this.c = () => this.a;
+        this.d = (new A()).a;
         this.a = 1;
     }
 }
 class B extends A {
-    x = this.a;
+    constructor() {
+        super(...arguments);
+        this.x = this.a;
+    }
 }
 class C {
-    a;
-    b = this.a;
+    constructor() {
+        this.b = this.a;
+    }
 }
 // Repro from #37979
 class Foo {
-    bar;
-    barProp = this.bar.prop;
     constructor() {
+        this.barProp = this.bar.prop;
         this.bar = new Bar();
     }
 }
 class Bar {
-    prop = false;
+    constructor() {
+        this.prop = false;
+    }
 }
 
 

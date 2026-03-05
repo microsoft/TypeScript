@@ -71,7 +71,9 @@ func (tx *ESModuleTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 	externalHelpersImportDeclaration := createExternalHelpersImportDeclarationIfNeeded(tx.EmitContext(), result, tx.compilerOptions, tx.getEmitModuleFormatOfFile(node), false /*hasExportStarsToExportValues*/, false /*hasImportStar*/, false /*hasImportDefault*/)
 	if externalHelpersImportDeclaration != nil || tx.importRequireStatements != nil {
 		prologue, rest := tx.Factory().SplitStandardPrologue(result.Statements.Nodes)
+		custom, rest := tx.Factory().SplitCustomPrologue(rest)
 		statements := slices.Clone(prologue)
+		statements = append(statements, custom...)
 		if externalHelpersImportDeclaration != nil {
 			statements = append(statements, externalHelpersImportDeclaration)
 		}

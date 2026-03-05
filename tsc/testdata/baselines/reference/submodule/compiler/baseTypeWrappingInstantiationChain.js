@@ -40,7 +40,6 @@ class Parameter {
     method(t) { }
 }
 class Wrapper {
-    property;
 }
 class C extends CBase {
     works() {

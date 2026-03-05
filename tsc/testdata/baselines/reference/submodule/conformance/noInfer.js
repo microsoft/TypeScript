@@ -105,8 +105,6 @@ doWork(comp, { foo: 42 }); // ok
 doWork(comp, {}); // error
 const mutate1 = mutate((a, b) => b);
 class OkClass {
-    clazz;
-    _value;
     constructor(clazz, _value) {
         this.clazz = clazz;
         this._value = _value;
@@ -116,8 +114,6 @@ class OkClass {
     }
 }
 class OkClass2 {
-    clazz;
-    _value;
     constructor(clazz, _value) {
         this.clazz = clazz;
         this._value = _value;

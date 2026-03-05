@@ -58,7 +58,6 @@ var ANY1;
 var ANY2 = ["", ""];
 var obj = { x: 1, y: null };
 class A {
-    a;
 }
 var M;
 (function (M) {

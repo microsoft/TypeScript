@@ -50,36 +50,21 @@ class C {
 
 //// [esDecorators-emitDecoratorMetadata.js]
 "use strict";
-@dec
 class C {
     constructor(x) { }
-    @dec
     method(x) { }
-    @dec
     set x(x) { }
-    @dec
     y;
-    @dec
     static method(x) { }
-    @dec
     static set x(x) { }
-    @dec
     static y;
 }
-(
-@dec
-class C {
+(class C {
     constructor(x) { }
-    @dec
     method(x) { }
-    @dec
     set x(x) { }
-    @dec
     y;
-    @dec
     static method(x) { }
-    @dec
     static set x(x) { }
-    @dec
     static y;
 });

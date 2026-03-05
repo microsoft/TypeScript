@@ -11,7 +11,6 @@ export class C {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 class C {
-    x;
     get x() { return 1; }
 }
 exports.C = C;

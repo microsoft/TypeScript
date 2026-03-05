@@ -41,7 +41,6 @@ var E;
 })(E || (E = {}));
 var e = x;
 class C {
-    foo;
 }
 var f = x;
 var g = x;

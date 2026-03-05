@@ -31,7 +31,6 @@ class C<T extends Foo, U extends Foo> {
 "use strict";
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 class Foo {
-    foo;
 }
 function foo(t, u) {
     var a;
@@ -44,10 +43,10 @@ function foo(t, u) {
     u = t; // error
 }
 class C {
-    t;
-    u;
-    r = () => {
-        this.t = this.u; // error
-        this.u = this.t; // error
-    };
+    constructor() {
+        this.r = () => {
+            this.t = this.u; // error
+            this.u = this.t; // error
+        };
+    }
 }

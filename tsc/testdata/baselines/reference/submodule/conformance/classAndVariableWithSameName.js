@@ -15,13 +15,11 @@ namespace M {
 //// [classAndVariableWithSameName.js]
 "use strict";
 class C {
-    foo;
 } // error
 var C = ''; // error
 var M;
 (function (M) {
     class D {
-        bar;
     }
     var D = 1; // error
 })(M || (M = {}));

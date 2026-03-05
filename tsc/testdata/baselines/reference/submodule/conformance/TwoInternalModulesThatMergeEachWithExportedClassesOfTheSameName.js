@@ -39,27 +39,22 @@ namespace X {
 var A;
 (function (A) {
     class Point {
-        x;
-        y;
     }
     A.Point = Point;
 })(A || (A = {}));
 (function (A) {
     // expected error
     class Point {
-        origin;
-        angle;
     }
     A.Point = Point;
 })(A || (A = {}));
 var X;
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
-        let Z;
+        var Z;
         (function (Z) {
             class Line {
-                length;
             }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
@@ -72,7 +67,6 @@ var X;
         (function (Z) {
             // expected error
             class Line {
-                name;
             }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));

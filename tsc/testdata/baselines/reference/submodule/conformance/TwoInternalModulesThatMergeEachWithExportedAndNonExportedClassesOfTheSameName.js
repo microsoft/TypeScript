@@ -47,8 +47,6 @@ var l: X.Y.Z.Line;
 var A;
 (function (A) {
     class Point {
-        x;
-        y;
     }
     A.Point = Point;
 })(A || (A = {}));
@@ -64,12 +62,11 @@ var p;
 var p;
 var X;
 (function (X) {
-    let Y;
+    var Y;
     (function (Y) {
-        let Z;
+        var Z;
         (function (Z) {
             class Line {
-                length;
             }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
@@ -81,7 +78,6 @@ var X;
         let Z;
         (function (Z) {
             class Line {
-                name;
             }
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));

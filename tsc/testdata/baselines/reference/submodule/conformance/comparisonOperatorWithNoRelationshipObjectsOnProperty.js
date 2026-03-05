@@ -81,16 +81,12 @@ var r8b2 = b2 !== a2;
 //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.js]
 "use strict";
 class A1 {
-    a;
 }
 class B1 {
-    a;
 }
 class A2 {
-    a;
 }
 class B2 {
-    a;
 }
 // operator <
 var r1a1 = a1 < b1;

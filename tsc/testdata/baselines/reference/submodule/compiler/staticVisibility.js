@@ -41,8 +41,6 @@ static set Bar(bar:string) {barback = bar;} // not ok
 //// [staticVisibility.js]
 "use strict";
 class C1 {
-    p;
-    static s;
     constructor() {
         var v = 0;
         s = 1; // should be error
@@ -57,7 +55,9 @@ class C1 {
     }
 }
 class C2 {
-    barback = "";
+    constructor() {
+        this.barback = "";
+    }
     static get Bar() { return "bar"; } // ok
     static set Bar(bar) { barback = bar; } // not ok
 }

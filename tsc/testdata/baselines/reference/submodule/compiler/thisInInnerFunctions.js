@@ -22,7 +22,9 @@ function test() {
 //// [thisInInnerFunctions.js]
 "use strict";
 class Foo {
-    x = "hello";
+    constructor() {
+        this.x = "hello";
+    }
     bar() {
         function inner() {
             this.y = "hi"; // 'this' should be not type to 'Foo' either

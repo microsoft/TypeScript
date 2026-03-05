@@ -26,9 +26,6 @@ export function foo1(
 
 //// [verbatim-declarations-parameters.js]
 export class Foo {
-    reuseTypeNode;
-    reuseTypeNode2;
-    resolveType;
     constructor(
     // Type node is accurate, preserve
     reuseTypeNode, reuseTypeNode2, 

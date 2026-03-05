@@ -20,7 +20,9 @@ var q = "s"[0];
 //// [defaultIndexProps2.js]
 "use strict";
 class Foo {
-    v = "Yo";
+    constructor() {
+        this.v = "Yo";
+    }
 }
 var f = new Foo();
 // WScript.Echo(f[0]);

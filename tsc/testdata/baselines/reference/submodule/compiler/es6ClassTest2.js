@@ -163,16 +163,14 @@ var ccwc = new ChildClassWithoutConstructor(1, "s");
 //// [es6ClassTest2.js]
 "use strict";
 class BasicMonster {
-    name;
-    health;
     constructor(name, health) {
         this.name = name;
         this.health = health;
+        this.isAlive = true;
     }
     attack(target) {
         // WScript.Echo("Attacks " + target);
     }
-    isAlive = true;
 }
 var m1 = new BasicMonster("1", 100);
 var m2 = new BasicMonster("2", 100);
@@ -180,8 +178,6 @@ m1.attack(m2);
 m1.health = 0;
 console.log(m5.isAlive.toString());
 class GetSetMonster {
-    name;
-    _health;
     constructor(name, _health) {
         this.name = name;
         this._health = _health;
@@ -209,16 +205,14 @@ m3.attack(m4);
 m3.health = 0;
 var x = m5.isAlive.toString();
 class OverloadedMonster {
-    name;
-    health;
     constructor(name, health) {
         this.name = name;
         this.health = health;
+        this.isAlive = true;
     }
     attack(target) {
         //WScript.Echo("Attacks " + target);
     }
-    isAlive = true;
 }
 var m5 = new OverloadedMonster("1");
 var m6 = new OverloadedMonster("2");
@@ -231,9 +225,10 @@ class SplatMonster {
 }
 function foo() { return true; }
 class PrototypeMonster {
-    age = 1;
-    name;
-    b = foo();
+    constructor() {
+        this.age = 1;
+        this.b = foo();
+    }
 }
 class SuperParent {
     constructor(a) {
@@ -255,16 +250,13 @@ class SuperChild extends SuperParent {
     }
 }
 class Statics {
-    static foo = 1;
-    static bar;
     static baz() {
         return "";
     }
 }
+Statics.foo = 1;
 var stat = new Statics();
 class ImplementsInterface {
-    x;
-    z;
     constructor() {
         this.x = 1;
         this.z = "foo";
@@ -273,17 +265,12 @@ class ImplementsInterface {
 class Visibility {
     foo() { }
     bar() { }
-    x;
-    y;
-    z;
     constructor() {
         this.x = 1;
         this.y = 2;
     }
 }
 class BaseClassWithConstructor {
-    x;
-    s;
     constructor(x, s) {
         this.x = x;
         this.s = s;

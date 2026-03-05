@@ -247,22 +247,24 @@ function f3() {
     let x8 = c8;
 }
 class C1 {
-    x1 = 1;
-    x2 = -123;
-    x3 = 3 + 4;
-    x4 = "abc";
-    x5 = "";
-    x6 = "abc" + "def";
-    x7 = true;
-    x8 = E.A;
-    c1 = 1;
-    c2 = -123;
-    c3 = 3 + 4;
-    c4 = "abc";
-    c5 = "";
-    c6 = "abc" + "def";
-    c7 = true;
-    c8 = E.A;
+    constructor() {
+        this.x1 = 1;
+        this.x2 = -123;
+        this.x3 = 3 + 4;
+        this.x4 = "abc";
+        this.x5 = "";
+        this.x6 = "abc" + "def";
+        this.x7 = true;
+        this.x8 = E.A;
+        this.c1 = 1;
+        this.c2 = -123;
+        this.c3 = 3 + 4;
+        this.c4 = "abc";
+        this.c5 = "";
+        this.c6 = "abc" + "def";
+        this.c7 = true;
+        this.c8 = E.A;
+    }
 }
 function f4() {
     const c1 = { a: 1, b: "foo" };

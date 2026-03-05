@@ -21,7 +21,10 @@ export class Text extends React.Component<{}, {}> {
 //// [app.jsx]
 import * as React from 'react';
 export class Text extends React.Component {
-    _tagName = 'div';
+    constructor() {
+        super(...arguments);
+        this._tagName = 'div';
+    }
     render() {
         return (<this._tagName />);
     }

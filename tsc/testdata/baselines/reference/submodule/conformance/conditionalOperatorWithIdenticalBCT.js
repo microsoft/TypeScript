@@ -53,17 +53,12 @@ var result11: any = true ? 1 : 'string';
 "use strict";
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 class X {
-    propertyX;
-    propertyX1;
-    propertyX2;
 }
 ;
 class A extends X {
-    propertyA;
 }
 ;
 class B extends X {
-    propertyB;
 }
 ;
 var x;

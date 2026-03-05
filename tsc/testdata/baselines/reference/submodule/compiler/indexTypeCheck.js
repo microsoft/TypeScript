@@ -77,7 +77,9 @@ s[{}]; // ok
 yellow[blue]; // error
 x[0];
 class Benchmark {
-    results = {};
+    constructor() {
+        this.results = {};
+    }
     addTimingFor(name, timing) {
         this.results[name] = this.results[name];
     }

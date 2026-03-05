@@ -15,7 +15,9 @@ for (let i = 0; i < 10; ++i) {
 const arr = [];
 for (let i = 0; i < 10; ++i) {
     class C {
-        prop = i;
+        constructor() {
+            this.prop = i;
+        }
     }
     arr.push(C);
 }

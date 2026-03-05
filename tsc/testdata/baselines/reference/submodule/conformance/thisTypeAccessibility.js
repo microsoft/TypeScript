@@ -67,20 +67,16 @@ function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
 //// [thisTypeAccessibility.js]
 "use strict";
 class MyClass {
-    p = 123;
-    pp = 123;
-    ppp = 123;
-    static sp = 123;
-    static spp = 123;
-    static sppp = 123;
+    constructor() {
+        this.p = 123;
+        this.pp = 123;
+        this.ppp = 123;
+    }
 }
+MyClass.sp = 123;
+MyClass.spp = 123;
+MyClass.sppp = 123;
 class MyGenericClass {
-    p;
-    pp;
-    ppp;
-    static sp;
-    static spp;
-    static sppp;
 }
 MyClass.prototype.extension1 = function (p) {
     this.p = p;

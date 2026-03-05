@@ -56,16 +56,18 @@ if (typeof x === "string") {
 "use strict";
 // classes
 class C {
-    fooBack = "";
-    static barBack = "";
-    bazBack = "";
+    constructor() {
+        this.fooBack = "";
+        this.bazBack = "";
+        this.get = function () { }; // ok
+        this.set = function () { }; // ok
+    }
     get Foo() { return this.fooBack; } // ok
     set Foo(foo) { this.fooBack = foo; } // ok
     static get Bar() { return C.barBack; } // ok
     static set Bar(bar) { C.barBack = bar; } // ok
-    get = function () { }; // ok
-    set = function () { }; // ok
 }
+C.barBack = "";
 var c = new C();
 var foo = c.Foo;
 c.Foo = "foov";

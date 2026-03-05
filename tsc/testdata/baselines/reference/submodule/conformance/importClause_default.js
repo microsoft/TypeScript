@@ -14,7 +14,6 @@ let b = { A };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class A {
-    a;
 }
 exports.default = A;
 //// [b.js]

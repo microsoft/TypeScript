@@ -46,8 +46,6 @@ var line = Geometry.Lines.Line;
 var B;
 (function (B) {
     class Line {
-        start;
-        end;
         constructor(start, end) {
             this.start = start;
             this.end = end;

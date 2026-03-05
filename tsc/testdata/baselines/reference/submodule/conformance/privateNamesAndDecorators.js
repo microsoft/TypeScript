@@ -13,7 +13,11 @@ class A {
 
 //// [privateNamesAndDecorators.js]
 "use strict";
+var _A_instances, _A_foo, _A_bar;
 class A {
-    #foo = 1;
-    #bar() { }
+    constructor() {
+        _A_instances.add(this);
+        _A_foo.set(this, 1);
+    }
 }
+_A_foo = new WeakMap(), _A_instances = new WeakSet(), _A_bar = function _A_bar() { };

@@ -19,8 +19,10 @@ const nameO = "o";
 //// [destructuringAssignment_private.js]
 "use strict";
 class C {
-    x = 0;
-    o = [{ a: 1 }];
+    constructor() {
+        this.x = 0;
+        this.o = [{ a: 1 }];
+    }
 }
 let x;
 ([{ a: { x } }] = [{ a: new C() }]);

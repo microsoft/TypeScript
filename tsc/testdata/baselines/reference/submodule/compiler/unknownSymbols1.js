@@ -44,8 +44,6 @@ function foo2() {
 }
 var z = x; // should be an error
 class C {
-    foo;
-    bar;
 }
 class C2 {
 }

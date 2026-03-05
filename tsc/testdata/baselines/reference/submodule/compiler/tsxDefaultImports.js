@@ -21,8 +21,8 @@ var SomeEnum;
     SomeEnum[SomeEnum["one"] = 0] = "one";
 })(SomeEnum || (SomeEnum = {}));
 class SomeClass {
-    static E = SomeEnum;
 }
+SomeClass.E = SomeEnum;
 exports.default = SomeClass;
 //// [b.js]
 "use strict";

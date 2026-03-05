@@ -11,7 +11,7 @@ function* g() {
 "use strict";
 function* g() {
     class C {
-        static x = yield 0;
     }
+    C.x = yield 0;
     ;
 }

@@ -72,7 +72,6 @@ objA.a++, M.n++;
 var STRING1 = ["", ""];
 function foo() { return ""; }
 class A {
-    a;
     static foo() { return ""; }
 }
 var M;

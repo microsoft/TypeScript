@@ -58,43 +58,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 class C {
-    static {
-        yield 1;
-        yield 1;
-        return 1;
-    }
 }
+(() => {
+    yield 1;
+    yield 1;
+    return 1;
+})();
 function f1() {
     return __awaiter(this, void 0, void 0, function* () {
         class C {
-            static {
-                yield 1;
-                function ff() {
-                    return __awaiter(this, void 0, void 0, function* () {
-                        yield 1;
-                    });
-                }
-            }
         }
+        (() => {
+            yield 1;
+            function ff() {
+                return __awaiter(this, void 0, void 0, function* () {
+                    yield 1;
+                });
+            }
+        })();
     });
 }
 function* f2() {
     class C {
-        static {
-            yield 1;
-            function* ff() {
-                yield 1;
-            }
-        }
     }
+    (() => {
+        yield 1;
+        function* ff() {
+            yield 1;
+        }
+    })();
 }
 function f3() {
     class C {
-        static {
-            return 1;
-            function ff() {
-                return 1;
-            }
-        }
     }
+    (() => {
+        return 1;
+        function ff() {
+            return 1;
+        }
+    })();
 }

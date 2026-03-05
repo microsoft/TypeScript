@@ -1,14 +1,6 @@
 --- old.spreadObjectOrFalsy.js
 +++ new.spreadObjectOrFalsy.js
-@@= skipped -78, +78 lines =@@
-     return Object.assign({}, z);
- }
- class Foo {
-+    data;
-     bar() {
-         if (this.hasData()) {
-             this.data.toLocaleLowerCase();
-@@= skipped -13, +14 lines =@@
+@@= skipped -91, +91 lines =@@
 
  //// [spreadObjectOrFalsy.d.ts]
  declare function f1<T>(a: T & undefined): any;

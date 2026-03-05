@@ -140,10 +140,8 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 class A {
-    foo;
 }
 class A2 {
-    foo;
 }
 var E2;
 (function (E2) {
@@ -154,7 +152,6 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 class c {
-    baz;
 }
 (function (c) {
     c.bar = 1;

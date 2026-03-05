@@ -28,23 +28,41 @@ class Test extends Base {
 class Base {
 }
 class Sub extends Base {
-    p;
     // @ts-ignore
     constructor(p) {
         console.log('hi');
         super();
-        this.p = p;
+        Object.defineProperty(this, "p", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: p
+        });
+        Object.defineProperty(this, "field", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 0
+        });
     }
-    field = 0;
 }
 class Test extends Base {
-    p;
-    prop;
     // @ts-ignore
     constructor(p) {
         1;
         super();
-        this.p = p;
+        Object.defineProperty(this, "p", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: p
+        });
+        Object.defineProperty(this, "prop", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         this.prop = 1;
     }
 }

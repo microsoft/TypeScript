@@ -6,5 +6,7 @@ class foo { public bar:{id:number;} = { }; }
 //// [contextualTyping5.js]
 "use strict";
 class foo {
-    bar = {};
+    constructor() {
+        this.bar = {};
+    }
 }

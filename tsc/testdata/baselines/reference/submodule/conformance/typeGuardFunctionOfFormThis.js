@@ -195,12 +195,14 @@ else {
     holder2.a;
 }
 class ArrowGuard {
-    isElite = () => {
-        return this instanceof ArrowElite;
-    };
-    isMedic = () => {
-        return this instanceof ArrowMedic;
-    };
+    constructor() {
+        this.isElite = () => {
+            return this instanceof ArrowElite;
+        };
+        this.isMedic = () => {
+            return this instanceof ArrowMedic;
+        };
+    }
 }
 class ArrowElite extends ArrowGuard {
     defend() { }

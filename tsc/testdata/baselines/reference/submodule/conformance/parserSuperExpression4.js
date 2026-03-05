@@ -24,7 +24,7 @@ class C {
 }
 var M1;
 (function (M1) {
-    let M2;
+    var M2;
     (function (M2) {
         class C {
             foo() {

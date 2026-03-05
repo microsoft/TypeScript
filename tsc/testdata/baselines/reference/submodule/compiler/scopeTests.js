@@ -16,13 +16,8 @@ class D extends C {
 //// [scopeTests.js]
 "use strict";
 class C {
-    v;
-    p;
-    static s;
 }
 class D extends C {
-    v;
-    p;
     constructor() {
         super();
         this.v = 1;

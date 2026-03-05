@@ -8,5 +8,4 @@ export class Logger {
 
 //// [parser509546.js]
 export class Logger {
-    public;
 }

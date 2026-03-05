@@ -13,5 +13,5 @@ class C {
 //// [indexSignatureWithInitializer.js]
 "use strict";
 class C {
-    [x = 0];
 }
+x = 0;

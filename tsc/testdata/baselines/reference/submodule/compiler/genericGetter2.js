@@ -15,7 +15,6 @@ class C<T> {
 class A {
 }
 class C {
-    data;
     get x() {
         return this.data;
     }

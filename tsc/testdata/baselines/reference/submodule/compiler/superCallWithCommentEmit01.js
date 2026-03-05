@@ -15,7 +15,6 @@ class B extends A {
 //// [superCallWithCommentEmit01.js]
 "use strict";
 class A {
-    text;
     constructor(text) {
         this.text = text;
     }

@@ -121,13 +121,11 @@ var i1;
 var r9 = true ? i1 : null;
 var r9 = true ? null : i1;
 class C1 {
-    foo;
 }
 var c1;
 var r10 = true ? c1 : null;
 var r10 = true ? null : c1;
 class C2 {
-    foo;
 }
 var c2;
 var r12 = true ? c2 : null;
@@ -148,7 +146,6 @@ var af;
 var r15 = true ? af : null;
 var r15 = true ? null : af;
 class c {
-    baz;
 }
 (function (c) {
     c.bar = 1;

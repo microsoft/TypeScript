@@ -10,6 +10,8 @@ class A {
 //// [unusedTypeParameterInMethod5.js]
 "use strict";
 class A {
-    f1 = function () {
-    };
+    constructor() {
+        this.f1 = function () {
+        };
+    }
 }

@@ -78,10 +78,13 @@ class OtherDerived extends OtherBase {
 
 //// [errorSuperCalls.js]
 "use strict";
+var _a;
 //super call in class constructor with no base type
 class NoBase {
     constructor() {
         super();
+        //super call in class member initializer with no base type
+        this.p = super();
     }
     //super call in class member function with no base type
     fn() {
@@ -95,14 +98,10 @@ class NoBase {
     set foo(v) {
         super();
     }
-    //super call in class member initializer with no base type
-    p = super();
     //super call in static class member function with no base type
     static fn() {
         super();
     }
-    //super call in static class member initializer with no base type
-    static k = super();
     //super call in static class accessor (get and set) with no base type
     static get q() {
         super();
@@ -112,8 +111,10 @@ class NoBase {
         super();
     }
 }
+_a = NoBase;
+//super call in static class member initializer with no base type
+NoBase.k = super();
 class Base {
-    n;
 }
 class Derived extends Base {
     //super call with type arguments 
@@ -123,11 +124,13 @@ class Derived extends Base {
     }
 }
 class OtherBase {
-    n;
 }
 class OtherDerived extends OtherBase {
-    //super call in class member initializer of derived type
-    t = super();
+    constructor() {
+        super(...arguments);
+        //super call in class member initializer of derived type
+        this.t = super();
+    }
     fn() {
         //super call in class member function of derived type
         super();

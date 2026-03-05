@@ -20,10 +20,6 @@ var genericX = genericC;
 //// [declFileTypeofClass.js]
 "use strict";
 class c {
-    static x;
-    static y;
-    x3;
-    y3;
 }
 var x;
 var y = c;

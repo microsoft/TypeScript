@@ -1,9 +1,0 @@
---- old.unusedTypeParameterInLambda3.js
-+++ new.unusedTypeParameterInLambda3.js
-@@= skipped -10, +10 lines =@@
- //// [unusedTypeParameterInLambda3.js]
- "use strict";
- class A {
-+    x;
- }
- var y;

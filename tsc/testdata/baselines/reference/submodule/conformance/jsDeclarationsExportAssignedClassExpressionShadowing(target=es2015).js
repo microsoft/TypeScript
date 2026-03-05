@@ -18,10 +18,14 @@ module.exports.Another = Q;
 //// [index.js]
 "use strict";
 class A {
-    member = new Q();
+    constructor() {
+        this.member = new Q();
+    }
 }
 class Q {
-    x = 42;
+    constructor() {
+        this.x = 42;
+    }
 }
 module.exports = class Q {
     constructor() {

@@ -25,11 +25,9 @@ class Z implements I {
 //// [genericImplements.js]
 "use strict";
 class A {
-    a;
 }
 ;
 class B {
-    b;
 }
 ;
 // OK

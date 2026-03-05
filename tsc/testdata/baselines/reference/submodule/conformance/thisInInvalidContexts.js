@@ -51,17 +51,16 @@ class BaseErrClass {
     constructor(t) { }
 }
 class ClassWithNoInitializer extends BaseErrClass {
-    t;
     //'this' in optional super call
     constructor() {
         super(this); // Error
     }
 }
 class ClassWithInitializer extends BaseErrClass {
-    t = 4;
     //'this' in required super call
     constructor() {
         super(this); // Error
+        this.t = 4;
     }
 }
 var M;

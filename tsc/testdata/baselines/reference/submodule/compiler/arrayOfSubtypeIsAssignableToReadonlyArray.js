@@ -24,13 +24,10 @@ rrb = cra; // error: 'A' is not assignable to 'B'
 //// [arrayOfSubtypeIsAssignableToReadonlyArray.js]
 "use strict";
 class A {
-    a;
 }
 class B extends A {
-    b;
 }
 class C extends Array {
-    c;
 }
 rra = ara;
 rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>

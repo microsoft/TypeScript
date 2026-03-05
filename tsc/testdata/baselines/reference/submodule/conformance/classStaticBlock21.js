@@ -12,8 +12,8 @@ class C {
 //// [classStaticBlock21.js]
 "use strict";
 class C {
-    /* jsdocs */
-    static {
-        // something
-    }
 }
+/* jsdocs */
+(() => {
+    // something
+})();

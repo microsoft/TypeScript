@@ -21,9 +21,11 @@ class E {
 //// [gettersAndSettersErrors.js]
 "use strict";
 class C {
+    constructor() {
+        this.Foo = 0; // error - duplicate identifier Foo - confirmed
+    }
     get Foo() { return "foo"; } // ok
     set Foo(foo) { } // ok
-    Foo = 0; // error - duplicate identifier Foo - confirmed
     get Goo(v) { return null; } // error - getters must not have a parameter
     set Goo(v) { } // error - setters must not specify a return type
 }

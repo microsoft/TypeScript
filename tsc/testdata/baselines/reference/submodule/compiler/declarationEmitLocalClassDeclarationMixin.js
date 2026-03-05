@@ -38,19 +38,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilteredThing = exports.Mixed = exports.Unmixed = void 0;
 function mixin(Base) {
     class PrivateMixed extends Base {
-        bar = 2;
+        constructor() {
+            super(...arguments);
+            this.bar = 2;
+        }
     }
     return PrivateMixed;
 }
 class Unmixed {
-    foo = 1;
+    constructor() {
+        this.foo = 1;
+    }
 }
 exports.Unmixed = Unmixed;
 exports.Mixed = mixin(Unmixed);
 function Filter(ctor) {
     class FilterMixin extends ctor {
-        // other concrete methods, fields, constructor
-        thing = 12;
+        constructor() {
+            super(...arguments);
+            // other concrete methods, fields, constructor
+            this.thing = 12;
+        }
     }
     return FilterMixin;
 }

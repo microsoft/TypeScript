@@ -97,13 +97,10 @@ namespace SourceHasOptional {
 // M is optional and S contains no property with the same name as M
 // N is optional and T contains no property with the same name as N
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Derived {
-    baz;
 }
 var TargetHasOptional;
 (function (TargetHasOptional) {

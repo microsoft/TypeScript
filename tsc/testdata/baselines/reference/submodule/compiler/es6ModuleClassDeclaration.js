@@ -117,11 +117,9 @@ namespace m2 {
 //// [es6ModuleClassDeclaration.js]
 export class c {
     constructor() {
+        this.x = 10;
+        this.y = 30;
     }
-    x = 10;
-    y = 30;
-    static k = 20;
-    static l = 30;
     method1() {
     }
     method2() {
@@ -131,13 +129,13 @@ export class c {
     static method4() {
     }
 }
+c.k = 20;
+c.l = 30;
 class c2 {
     constructor() {
+        this.x = 10;
+        this.y = 30;
     }
-    x = 10;
-    y = 30;
-    static k = 20;
-    static l = 30;
     method1() {
     }
     method2() {
@@ -147,6 +145,8 @@ class c2 {
     static method4() {
     }
 }
+c2.k = 20;
+c2.l = 30;
 new c();
 new c2();
 export { m1 };
@@ -154,11 +154,9 @@ var m1;
 (function (m1) {
     class c3 {
         constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        x = 10;
-        y = 30;
-        static k = 20;
-        static l = 30;
         method1() {
         }
         method2() {
@@ -168,14 +166,14 @@ var m1;
         static method4() {
         }
     }
+    c3.k = 20;
+    c3.l = 30;
     m1.c3 = c3;
     class c4 {
         constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        x = 10;
-        y = 30;
-        static k = 20;
-        static l = 30;
         method1() {
         }
         method2() {
@@ -185,6 +183,8 @@ var m1;
         static method4() {
         }
     }
+    c4.k = 20;
+    c4.l = 30;
     new c();
     new c2();
     new c3();
@@ -194,11 +194,9 @@ var m2;
 (function (m2) {
     class c3 {
         constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        x = 10;
-        y = 30;
-        static k = 20;
-        static l = 30;
         method1() {
         }
         method2() {
@@ -208,14 +206,14 @@ var m2;
         static method4() {
         }
     }
+    c3.k = 20;
+    c3.l = 30;
     m2.c3 = c3;
     class c4 {
         constructor() {
+            this.x = 10;
+            this.y = 30;
         }
-        x = 10;
-        y = 30;
-        static k = 20;
-        static l = 30;
         method1() {
         }
         method2() {
@@ -225,6 +223,8 @@ var m2;
         static method4() {
         }
     }
+    c4.k = 20;
+    c4.l = 30;
     new c();
     new c2();
     new c3();

@@ -28,8 +28,6 @@ class Point3D extends Point {
 //// [autolift4.js]
 "use strict";
 class Point {
-    x;
-    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -37,10 +35,9 @@ class Point {
     getDist() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
-    static origin = new Point(0, 0);
 }
+Point.origin = new Point(0, 0);
 class Point3D extends Point {
-    z;
     constructor(x, y, z, m) {
         super(x, y);
         this.z = z;

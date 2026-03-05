@@ -55,9 +55,6 @@ const d = new tag `${"hello"} ${"world"}`(100, 200);
  */
 const e = new tag `hello`();
 class SomeBase {
-    a;
-    b;
-    c;
 }
 class SomeDerived extends SomeBase {
     constructor() {

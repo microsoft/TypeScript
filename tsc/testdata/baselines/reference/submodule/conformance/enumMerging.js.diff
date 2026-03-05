@@ -27,12 +27,3 @@
      })(EComp2 = M2.EComp2 || (M2.EComp2 = {}));
      var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
  })(M2 || (M2 = {}));
-@@= skipped -46, +52 lines =@@
- })(M5 || (M5 = {}));
- var M6;
- (function (M6) {
--    var A;
-+    let A;
-     (function (A) {
-         let Color;
-         (function (Color) {

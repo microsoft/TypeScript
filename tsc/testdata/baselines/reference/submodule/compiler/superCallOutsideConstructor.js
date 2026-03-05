@@ -30,9 +30,9 @@ class C {
     foo() { }
 }
 class D extends C {
-    x = super();
     constructor() {
         super();
+        this.x = super();
         var y = () => {
             super();
         };

@@ -17,11 +17,9 @@ namespace M {
 //// [classAndInterfaceWithSameName.js]
 "use strict";
 class C {
-    foo;
 }
 var M;
 (function (M) {
     class D {
-        bar;
     }
 })(M || (M = {}));

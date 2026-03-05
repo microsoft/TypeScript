@@ -35,7 +35,6 @@ var d = x;
 var e = x;
 e = x; // should work
 class C {
-    foo;
 }
 var f;
 f = x;

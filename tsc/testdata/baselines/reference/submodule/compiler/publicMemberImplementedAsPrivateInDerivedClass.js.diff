@@ -1,8 +1,0 @@
---- old.publicMemberImplementedAsPrivateInDerivedClass.js
-+++ new.publicMemberImplementedAsPrivateInDerivedClass.js
-@@= skipped -11, +11 lines =@@
- //// [publicMemberImplementedAsPrivateInDerivedClass.js]
- "use strict";
- class Foo {
-+    Bar;
- }

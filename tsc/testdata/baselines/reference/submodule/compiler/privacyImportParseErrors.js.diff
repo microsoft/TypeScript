@@ -41,11 +41,8 @@
      m2.m1_im4_private_v1_public = m1_im4_private.c1;
      m2.m1_im4_private_v2_public = new m1_im4_private.c1();
      m2.m1_im4_private_v3_public = m1_im4_private.f1;
-@@= skipped -8, +9 lines =@@
-     var m1_im4_private_v2_private = new m1_im4_private.c1();
-     var m1_im4_private_v3_private = m1_im4_private.f1;
-     var m1_im4_private_v4_private = m1_im4_private.f1();
--    // Parse error to export module
+@@= skipped -11, +12 lines =@@
+     // Parse error to export module
      m2.m1_im1_public = m2_M1_public;
      m2.m1_im2_public = m2_M2_private;
 +    export import m1_im3_public = require("m2_M3_public");
@@ -53,7 +50,7 @@
  })(m2 || (m2 = {}));
  var glo_M1_public;
  (function (glo_M1_public) {
-@@= skipped -68, +69 lines =@@
+@@= skipped -65, +67 lines =@@
  exports.glo_im3_public = require("glo_M2_public");
  exports.glo_im4_public = require("glo_M4_private");
  (function (m2_1) {

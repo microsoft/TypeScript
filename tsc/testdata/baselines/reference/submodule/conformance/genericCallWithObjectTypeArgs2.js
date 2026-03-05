@@ -37,13 +37,10 @@ var r4 = f2(i); // Base => Derived
 //// [genericCallWithObjectTypeArgs2.js]
 "use strict";
 class Base {
-    x;
 }
 class Derived extends Base {
-    y;
 }
 class Derived2 extends Base {
-    z;
 }
 // returns {}[]
 function f(a) {

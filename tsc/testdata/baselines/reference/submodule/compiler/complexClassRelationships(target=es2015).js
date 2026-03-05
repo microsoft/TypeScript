@@ -64,7 +64,6 @@ class BaseCollection {
     }
 }
 class Base {
-    ownerCollection;
 }
 class Thing {
     get Components() { return null; }

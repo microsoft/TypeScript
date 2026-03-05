@@ -1,11 +1,6 @@
 --- old.privacyLocalInternalReferenceImportWithExport.js
 +++ new.privacyLocalInternalReferenceImportWithExport.js
-@@= skipped -205, +205 lines =@@
- })(m_public || (exports.m_public = m_public = {}));
- var import_public;
- (function (import_public) {
--    // Privacy errors - importing private elements
-     import_public.im_public_c_private = m_private.c_private;
+@@= skipped -210, +210 lines =@@
      import_public.im_public_e_private = m_private.e_private;
      import_public.im_public_f_private = m_private.f_private;
      import_public.im_public_v_private = m_private.v_private;
@@ -15,12 +10,7 @@
      // Usage of privacy error imports
      var privateUse_im_public_c_private = new import_public.im_public_c_private();
      import_public.publicUse_im_public_c_private = new import_public.im_public_c_private();
-@@= skipped -19, +20 lines =@@
-     var privateUse_im_public_mi_private = new import_public.im_public_mi_private.c();
-     import_public.publicUse_im_public_mi_private = new import_public.im_public_mi_private.c();
-     var privateUse_im_public_mu_private;
--    // No Privacy errors - importing public elements
-     import_public.im_public_c_public = m_public.c_public;
+@@= skipped -19, +21 lines =@@
      import_public.im_public_e_public = m_public.e_public;
      import_public.im_public_f_public = m_public.f_public;
      import_public.im_public_v_public = m_public.v_public;
@@ -30,12 +20,7 @@
      // Usage of above
      var privateUse_im_public_c_public = new import_public.im_public_c_public();
      import_public.publicUse_im_public_c_public = new import_public.im_public_c_public();
-@@= skipped -22, +23 lines =@@
- })(import_public || (exports.import_public = import_public = {}));
- var import_private;
- (function (import_private) {
--    // No Privacy errors - importing private elements
-     import_private.im_private_c_private = m_private.c_private;
+@@= skipped -22, +24 lines =@@
      import_private.im_private_e_private = m_private.e_private;
      import_private.im_private_f_private = m_private.f_private;
      import_private.im_private_v_private = m_private.v_private;
@@ -45,12 +30,7 @@
      // Usage of above decls
      var privateUse_im_private_c_private = new import_private.im_private_c_private();
      import_private.publicUse_im_private_c_private = new import_private.im_private_c_private();
-@@= skipped -19, +20 lines =@@
-     var privateUse_im_private_mi_private = new import_private.im_private_mi_private.c();
-     import_private.publicUse_im_private_mi_private = new import_private.im_private_mi_private.c();
-     var privateUse_im_private_mu_private;
--    // No privacy Error - importing public elements
-     import_private.im_private_c_public = m_public.c_public;
+@@= skipped -19, +21 lines =@@
      import_private.im_private_e_public = m_public.e_public;
      import_private.im_private_f_public = m_public.f_public;
      import_private.im_private_v_public = m_public.v_public;

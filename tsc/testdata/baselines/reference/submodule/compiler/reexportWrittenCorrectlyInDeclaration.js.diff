@@ -12,12 +12,3 @@
  Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { return ThingB_1.ThingB; } });
  //// [Test.js]
  "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Test = void 0;
- class Test {
--    constructor() {
--        this.method = (input) => { };
--    }
-+    method = (input) => { };
- }
- exports.Test = Test;

@@ -15,7 +15,6 @@ namespace A {
 var A;
 (function (A) {
     class C {
-        d;
         constructor(d) {
             this.d = d;
         }

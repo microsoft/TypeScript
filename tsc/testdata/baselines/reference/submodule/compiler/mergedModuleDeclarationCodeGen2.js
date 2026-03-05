@@ -14,9 +14,9 @@ namespace my.data {
 "use strict";
 var my;
 (function (my) {
-    let data;
+    var data;
     (function (data) {
-        let foo;
+        var foo;
         (function (foo) {
             function buz() { }
             foo.buz = buz;
@@ -24,7 +24,7 @@ var my;
     })(data = my.data || (my.data = {}));
 })(my || (my = {}));
 (function (my_1) {
-    let data;
+    var data;
     (function (data_1) {
         function data(my) {
             data_1.foo.buz();

@@ -140,8 +140,8 @@ function func4() {
         console.log(ClassA.Value);
     }
     class ClassA {
-        static Value = 1234;
     }
+    ClassA.Value = 1234;
 }
 function func5() {
     aFunc();
@@ -162,7 +162,9 @@ function func5() {
         Bar[Bar["A"] = 0] = "A";
     })(Bar || (Bar = {}));
     class Foo {
-        x = 1234;
+        constructor() {
+            this.x = 1234;
+        }
     }
     let Baz;
     (function (Baz) {

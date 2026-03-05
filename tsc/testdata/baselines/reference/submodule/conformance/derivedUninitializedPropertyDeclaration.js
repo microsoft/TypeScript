@@ -87,11 +87,12 @@ class M extends L {
 //// [derivedUninitializedPropertyDeclaration.js]
 "use strict";
 class A {
-    property = 'x';
+    constructor() {
+        this.property = 'x';
+    }
     m() { return 1; }
 }
 class B extends A {
-    property; // error
 }
 class BD extends A {
 }
@@ -103,18 +104,14 @@ class BOther extends A {
 class U {
 }
 class C {
-    p;
 }
 class D extends C {
-    p; // error
 }
 class DD extends C {
 }
 class F extends E {
-    p1;
 }
 class G extends E {
-    p1;
     constructor() {
         super();
         this.p1 = 'z';
@@ -123,15 +120,14 @@ class G extends E {
 class H extends E {
 }
 class J {
-    r = 5;
+    constructor() {
+        this.r = 5;
+    }
 }
 class K extends J {
-    q; // ok, extends a property from an interface
-    r; // error, from class
 }
 // #35327
 class L {
-    a;
     constructor(arg) {
         this.a = arg;
     }

@@ -41,7 +41,6 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 //// [typeInferenceLiteralUnion.js]
 // Not very useful, but meets Numeric
 class NumCoercible {
-    a;
     constructor(a) {
         this.a = a;
     }

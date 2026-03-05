@@ -22,11 +22,9 @@ const d = { types };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = exports.B = exports.A = void 0;
 class A {
-    a;
 }
 exports.A = A;
 class B {
-    b;
 }
 exports.B = B;
 exports.Value = {};

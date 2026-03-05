@@ -13,12 +13,10 @@ namespace M {
 //// [classExtendsShadowedConstructorFunction.js]
 "use strict";
 class C {
-    foo;
 }
 var M;
 (function (M) {
     var C = 1;
     class D extends C {
-        bar;
     }
 })(M || (M = {}));

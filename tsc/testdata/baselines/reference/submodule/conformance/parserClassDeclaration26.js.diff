@@ -1,9 +1,0 @@
---- old.parserClassDeclaration26.js
-+++ new.parserClassDeclaration26.js
-@@= skipped -8, +8 lines =@@
- //// [parserClassDeclaration26.js]
- "use strict";
- class C {
-+    var;
-+    public;
- }

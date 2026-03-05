@@ -29,18 +29,12 @@ class Bar4 implements I { // error
 //// [implementingAnInterfaceExtendingClassWithPrivates.js]
 "use strict";
 class Foo {
-    x;
 }
 class Bar {
 }
 class Bar2 {
-    y;
 }
 class Bar3 {
-    x;
-    y;
 }
 class Bar4 {
-    x;
-    y;
 }

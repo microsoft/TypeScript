@@ -28,21 +28,29 @@ class Foo {
 
 //// [privateNameFieldParenthesisLeftAssignment.js]
 "use strict";
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _Foo_p;
 class Foo {
-    #p;
     constructor(value) {
-        this.#p = value;
+        _Foo_p.set(this, void 0);
+        __classPrivateFieldSet(this, _Foo_p, value, "f");
     }
     t1(p) {
-        this.#p = p;
+        __classPrivateFieldSet(this, _Foo_p, p, "f");
     }
     t2(p) {
-        this.#p = p;
+        __classPrivateFieldSet(this, _Foo_p, p, "f");
     }
     t3(p) {
-        (this.#p) = p;
+        __classPrivateFieldSet(this, _Foo_p, p, "f");
     }
     t4(p) {
-        (((this.#p))) = p;
+        __classPrivateFieldSet(this, _Foo_p, p, "f");
     }
 }
+_Foo_p = new WeakMap();

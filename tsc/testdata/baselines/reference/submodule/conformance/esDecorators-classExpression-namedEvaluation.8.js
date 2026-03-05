@@ -27,6 +27,5 @@ class {
 // 16.2.3.7 RS: Evaluation
 //   ExportDeclaration : `export` `default` AssignmentExpression `;` 
 export default (class {
-    @dec
     y;
 });

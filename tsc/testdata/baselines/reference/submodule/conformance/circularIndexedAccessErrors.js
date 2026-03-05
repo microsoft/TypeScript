@@ -45,12 +45,8 @@ function foo<T extends Foo | T["hello"]>() {
 "use strict";
 let x2x = x2.x;
 class C1 {
-    x; // Error
 }
 class C2 {
-    x;
-    y;
-    z;
 }
 function foo() {
 }

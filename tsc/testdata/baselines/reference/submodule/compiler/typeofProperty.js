@@ -52,18 +52,12 @@ var x2: typeof viInstance.x; // x2: string
 //// [typeofProperty.js]
 "use strict";
 class C1 {
-    a;
-    b; // Should yield error (a is not a value)
 }
 class C2 {
-    c; // Should yield error (d is not a value)
-    d;
 }
 class C3 {
-    e; // Should yield error (e is not a value)
 }
 class ValidClass {
-    x;
 }
 var vcInstance = new ValidClass();
 var viInstance = vcInstance;

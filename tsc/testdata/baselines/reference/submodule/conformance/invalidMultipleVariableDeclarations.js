@@ -58,22 +58,15 @@ var m = M.A;
 //// [invalidMultipleVariableDeclarations.js]
 "use strict";
 class C {
-    id;
-    valid;
 }
 class C2 extends C {
-    name;
 }
 class D {
-    source;
-    recurse;
-    wrapped;
 }
 function F(x) { return 42; }
 var M;
 (function (M) {
     class A {
-        name;
     }
     M.A = A;
     function F2(x) { return x.toString(); }

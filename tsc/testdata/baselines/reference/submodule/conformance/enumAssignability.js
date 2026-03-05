@@ -79,7 +79,6 @@ var Others;
 (function (Others) {
     var a = e; // ok
     class C {
-        foo;
     }
     var ac;
     var ai;

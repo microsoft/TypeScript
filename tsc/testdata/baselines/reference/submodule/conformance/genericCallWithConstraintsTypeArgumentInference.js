@@ -113,13 +113,10 @@ var r11 = i.foo8(); // Base
 "use strict";
 // Basic type inference with generic calls and constraints, no errors expected
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Derived {
-    baz;
 }
 var b;
 var d1;
@@ -143,8 +140,6 @@ function foo2c() {
 var r3 = foo2b(d1); // Base
 var r3b = foo2c(); // Base
 class C {
-    t;
-    u;
     constructor(t, u) {
         this.t = t;
         this.u = u;

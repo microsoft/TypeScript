@@ -11,6 +11,6 @@ const obj = {
 //// [privateNameInObjectLiteral-2.js]
 "use strict";
 const obj = {
-    #foo() {
+    () {
     }
 };

@@ -91,18 +91,13 @@ throw new D<number>();
 "use strict";
 // all legal
 class C {
-    id;
 }
 class D {
-    source;
-    recurse;
-    wrapped;
 }
 function F(x) { return 42; }
 var M;
 (function (M) {
     class A {
-        name;
     }
     M.A = A;
     function F2(x) { return x.toString(); }

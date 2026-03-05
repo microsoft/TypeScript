@@ -22,8 +22,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var C_1;
 let C = C_1 = class C {
     static x() { return C_1.y; }
-    static y = 1;
 };
+C.y = 1;
 C = C_1 = __decorate([
     dec
 ], C);

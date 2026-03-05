@@ -67,7 +67,6 @@ var g = x;
 var g2 = E.A;
 g2 = x;
 class C {
-    foo;
 }
 var h = x;
 var i = x;

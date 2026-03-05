@@ -18,10 +18,12 @@ class MyDerived extends MyBase {
 //// [superAccess.js]
 "use strict";
 class MyBase {
-    static S1 = 5;
-    S2 = "test";
-    f = () => 5;
+    constructor() {
+        this.S2 = "test";
+        this.f = () => 5;
+    }
 }
+MyBase.S1 = 5;
 class MyDerived extends MyBase {
     foo() {
         var l3 = super.S1; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword

@@ -116,13 +116,10 @@ var r8b4 = b4 !== a4;
 //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js]
 "use strict";
 class Base {
-    a;
 }
 class Derived extends Base {
-    b;
 }
 class C {
-    c;
 }
 // operator <
 var r1a1 = a1 < b1;

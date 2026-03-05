@@ -118,14 +118,11 @@ var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
     class Base {
-        foo;
     }
     // sources
     class D {
-        foo;
     }
     class E {
-        foo;
     }
     a = b;
     a = i;
@@ -152,14 +149,11 @@ var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
     class Base {
-        foo;
     }
     // sources
     class D {
-        foo;
     }
     class E {
-        foo;
     }
     a = b; // error
     a = i; // error

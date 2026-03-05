@@ -20,10 +20,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Testing123 = void 0;
 let Testing123 = class Testing123 {
-    static prop0;
-    static prop1 = Testing123.prop0;
 };
 exports.Testing123 = Testing123;
+Testing123.prop1 = Testing123.prop0;
 exports.Testing123 = Testing123 = __decorate([
     Something({ v: () => Testing123 })
 ], Testing123);

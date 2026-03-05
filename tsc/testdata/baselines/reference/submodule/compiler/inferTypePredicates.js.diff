@@ -21,19 +21,7 @@
      .map(x => x % 2 === 0 ? x * x : null)
      .filter(x => x !== null);
  function isNonNull(x) {
-@@= skipped -149, +146 lines =@@
-     }
- }
- class C2 extends C1 {
--    constructor() {
--        super(...arguments);
--        this.z = 0;
--    }
-+    z = 0;
- }
- if (c.isC2()) {
-     let c2 = c; // should error
-@@= skipped -155, +152 lines =@@
+@@= skipped -304, +301 lines =@@
  declare let snd: string | number | Date;
  declare function isNumberWithThis(this: Date, x: number | string): x is number;
  declare function narrowFromAny(x: any): x is number;

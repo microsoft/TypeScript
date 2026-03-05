@@ -143,6 +143,10 @@ func IsAssignmentOperator(token Kind) bool {
 	return token >= KindFirstAssignment && token <= KindLastAssignment
 }
 
+func IsCompoundAssignment(token Kind) bool {
+	return token >= KindFirstCompoundAssignment && token <= KindLastCompoundAssignment
+}
+
 func IsAssignmentExpression(node *Node, excludeCompoundAssignment bool) bool {
 	if node.Kind == KindBinaryExpression {
 		expr := node.AsBinaryExpression()
@@ -165,6 +169,32 @@ func IsDestructuringAssignment(node *Node) bool {
 		return kind == KindObjectLiteralExpression || kind == KindArrayLiteralExpression
 	}
 	return false
+}
+
+func IsObjectBindingOrAssignmentElement(node *Node) bool {
+	switch node.Kind {
+	case KindBindingElement,
+		KindPropertyAssignment,
+		KindShorthandPropertyAssignment,
+		KindSpreadAssignment:
+		return true
+	}
+	return false
+}
+
+func IsArrayBindingOrAssignmentElement(node *Node) bool {
+	switch node.Kind {
+	case KindBindingElement,
+		KindOmittedExpression,
+		KindSpreadElement,
+		KindArrayLiteralExpression,
+		KindObjectLiteralExpression,
+		KindIdentifier,
+		KindPropertyAccessExpression,
+		KindElementAccessExpression:
+		return true
+	}
+	return IsAssignmentExpression(node, true /*excludeCompoundAssignment*/)
 }
 
 // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
@@ -417,7 +447,7 @@ func isLeftHandSideExpressionKind(kind Kind) bool {
 
 // Determines whether a node is a LeftHandSideExpression based only on its kind.
 func IsLeftHandSideExpression(node *Node) bool {
-	return isLeftHandSideExpressionKind(node.Kind)
+	return isLeftHandSideExpressionKind(SkipPartiallyEmittedExpressions(node).Kind)
 }
 
 func isUnaryExpressionKind(kind Kind) bool {
@@ -436,7 +466,7 @@ func isUnaryExpressionKind(kind Kind) bool {
 
 // Determines whether a node is a UnaryExpression based only on its kind.
 func IsUnaryExpression(node *Node) bool {
-	return isUnaryExpressionKind(node.Kind)
+	return isUnaryExpressionKind(SkipPartiallyEmittedExpressions(node).Kind)
 }
 
 func isExpressionKind(kind Kind) bool {
@@ -458,7 +488,7 @@ func isExpressionKind(kind Kind) bool {
 
 // Determines whether a node is an expression based only on its kind.
 func IsExpression(node *Node) bool {
-	return isExpressionKind(node.Kind)
+	return isExpressionKind(SkipPartiallyEmittedExpressions(node).Kind)
 }
 
 func IsCommaExpression(node *Node) bool {

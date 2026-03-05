@@ -47,7 +47,6 @@ class Foo2 {
     }
 }
 class Foo3 {
-    _this;
     constructor(_this) {
         this._this = _this;
         var lambda = () => {
@@ -63,7 +62,6 @@ class Foo4 {
     }
 }
 class Foo5 {
-    _this;
     constructor(_this) {
         this._this = _this;
         var lambda = () => {

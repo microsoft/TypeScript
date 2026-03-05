@@ -30,10 +30,8 @@ class ConcreteA {
 class ConcreteB {
 }
 class AbstractA {
-    a;
 }
 class AbstractB {
-    b;
 }
 new cls1(); // should error
 new cls2(); // should error

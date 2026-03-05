@@ -17,10 +17,14 @@ class  bigClass {
 //// [es6ClassTest5.js]
 "use strict";
 class C1T5 {
-    foo = (i) => {
-        return i;
-    };
+    constructor() {
+        this.foo = (i) => {
+            return i;
+        };
+    }
 }
 class bigClass {
-    break = 1;
+    constructor() {
+        this.break = 1;
+    }
 }

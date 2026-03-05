@@ -27,24 +27,23 @@ var e51 = t5[2]; // {}
 //// [bestCommonTypeOfTuple2.js]
 "use strict";
 class C {
-    c;
 }
 class D {
-    d;
 }
 class E {
-    e;
 }
 class F extends C {
-    f;
 }
 class C1 {
-    i = "foo";
-    c;
+    constructor() {
+        this.i = "foo";
+    }
 }
 class D1 extends C1 {
-    i = "bar";
-    d;
+    constructor() {
+        super(...arguments);
+        this.i = "bar";
+    }
 }
 var e11 = t1[4]; // base
 var e21 = t2[4]; // {}

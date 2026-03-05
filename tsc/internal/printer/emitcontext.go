@@ -635,6 +635,10 @@ func (c *EmitContext) AssignedName(node *ast.Node) *ast.Expression {
 	return c.assignedName[node]
 }
 
+func (c *EmitContext) TextSource(node *ast.StringLiteralNode) *ast.Node {
+	return c.textSource[node]
+}
+
 func (c *EmitContext) SetAssignedName(node *ast.Node, name *ast.Expression) {
 	if c.assignedName == nil {
 		c.assignedName = make(map[*ast.Node]*ast.Expression)
@@ -898,7 +902,7 @@ func (c *EmitContext) VisitFunctionBody(node *ast.BlockOrExpression, visitor *as
 
 	if !ast.IsBlock(updated) {
 		statements := c.MergeEnvironment([]*ast.Statement{c.Factory.NewReturnStatement(updated)}, declarations)
-		return c.Factory.NewBlock(c.Factory.NewNodeList(statements), true /*multiLine*/)
+		return c.Factory.NewBlock(c.Factory.NewNodeList(statements), false /*multiLine*/)
 	}
 
 	return c.Factory.UpdateBlock(

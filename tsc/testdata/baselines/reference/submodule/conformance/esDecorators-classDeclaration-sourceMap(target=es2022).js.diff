@@ -140,39 +140,21 @@
 -    };
 -    return C = _classThis;
 -})();
-+@dec
-+@dec
 +class C {
-+    @dec
-+    @dec
 +    method() { }
-+    @dec
-+    @dec
 +    get x() { return 1; }
-+    @dec
-+    @dec
 +    set x(value) { }
-+    @dec
-+    @dec
 +    y = 1;
-+    @dec
-+    @dec
-+    accessor z = 1;
-+    @dec
-+    @dec
++    #z_accessor_storage = 1;
++    get z() { return this.#z_accessor_storage; }
++    set z(value) { this.#z_accessor_storage = value; }
 +    static #method() { }
-+    @dec
-+    @dec
 +    static get #x() { return 1; }
-+    @dec
-+    @dec
 +    static set #x(value) { }
-+    @dec
-+    @dec
 +    static #y = 1;
-+    @dec
-+    @dec
-+    static accessor #z = 1;
++    static #z_1_accessor_storage = 1;
++    static get #z() { return C.#z_1_accessor_storage; }
++    static set #z(value) { C.#z_1_accessor_storage = value; }
 +}
  //# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
 

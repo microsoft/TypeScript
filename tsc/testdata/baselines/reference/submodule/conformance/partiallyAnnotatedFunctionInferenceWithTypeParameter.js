@@ -39,10 +39,8 @@ testRest((t2, ...t3: D[]) => {})
 //// [partiallyAnnotatedFunctionInferenceWithTypeParameter.js]
 "use strict";
 class C {
-    test;
 }
 class D extends C {
-    test2;
 }
 // exactly
 test((t1, t2) => { t2.test2; });

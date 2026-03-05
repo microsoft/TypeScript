@@ -60,7 +60,6 @@ var x;
     x_1.x = 10;
 })(x || (x = {}));
 class y {
-    y;
 }
 module.exports = x;
 //// [foo4.js]

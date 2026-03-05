@@ -38,7 +38,6 @@ function foo(x, y) {
     return new C();
 }
 class C {
-    x;
 }
 //function foo<T, U extends T>(x: T, y: U) {
 //    foo<U, U>(y, y);

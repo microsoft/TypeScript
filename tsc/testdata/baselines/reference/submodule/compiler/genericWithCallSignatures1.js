@@ -24,7 +24,6 @@ class MyClass {
 "use strict";
 ///<reference path="genericWithCallSignatures_0.ts"/>
 class MyClass {
-    callableThing;
     myMethod() {
         var x = this.callableThing();
     }

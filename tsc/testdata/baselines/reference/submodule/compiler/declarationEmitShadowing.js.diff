@@ -1,21 +1,6 @@
 --- old.declarationEmitShadowing.js
 +++ new.declarationEmitShadowing.js
-@@= skipped -19, +19 lines =@@
- exports.A = void 0;
- exports.needsRenameForShadowing = needsRenameForShadowing;
- class A {
--    constructor() {
--        this.ShadowedButDoesNotRequireRenaming = () => {
--            return null;
--        };
--    }
-+    ShadowedButDoesNotRequireRenaming = () => {
-+        return null;
-+    };
- }
- exports.A = A;
- function needsRenameForShadowing() {
-@@= skipped -17, +15 lines =@@
+@@= skipped -36, +36 lines =@@
  export declare class A<T = any> {
      readonly ShadowedButDoesNotRequireRenaming: <T_1>() => T_1;
  }

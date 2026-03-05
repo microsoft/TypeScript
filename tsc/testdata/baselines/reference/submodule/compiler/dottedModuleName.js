@@ -43,7 +43,7 @@ var M;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 (function (M) {
-    let N;
+    var N;
     (function (N) {
         let X;
         (function (X) {

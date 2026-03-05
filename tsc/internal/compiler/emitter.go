@@ -124,7 +124,6 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 		}
 	}
 
-	// !!! transform legacy decorator syntax
 	if options.GetJSXTransformEnabled() {
 		tx = append(tx, jsxtransforms.NewJSXTransformer(&opts))
 	}

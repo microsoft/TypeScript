@@ -40,7 +40,9 @@ var r12 = b[1];
 //// [stringIndexingResults.js]
 "use strict";
 class C {
-    y = '';
+    constructor() {
+        this.y = '';
+    }
 }
 var c;
 var r1 = c['y'];

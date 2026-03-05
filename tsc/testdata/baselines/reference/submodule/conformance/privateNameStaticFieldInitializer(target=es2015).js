@@ -9,7 +9,9 @@ class A {
 
 //// [privateNameStaticFieldInitializer.js]
 "use strict";
+var _a, _A_field, _A_uninitialized;
 class A {
-    static #field = 10;
-    static #uninitialized;
 }
+_a = A;
+_A_field = { value: 10 };
+_A_uninitialized = { value: void 0 };

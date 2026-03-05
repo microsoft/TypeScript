@@ -24,7 +24,6 @@ i = f;
 //// [interfaceExtendingClass.js]
 "use strict";
 class Foo {
-    x;
     y() { }
     get Z() {
         return 1;

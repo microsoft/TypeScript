@@ -318,12 +318,13 @@ async function* asyncGenFuncYieldLetCall() { yield letCall; }
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
 class C {
-    static readonlyStaticCall = Symbol();
-    static readonlyStaticType;
-    static readonlyStaticTypeAndCall = Symbol();
-    static readwriteStaticCall = Symbol();
-    readonlyCall = Symbol();
-    readwriteCall = Symbol();
+    constructor() {
+        this.readonlyCall = Symbol();
+        this.readwriteCall = Symbol();
+    }
+    static { this.readonlyStaticCall = Symbol(); }
+    static { this.readonlyStaticTypeAndCall = Symbol(); }
+    static { this.readwriteStaticCall = Symbol(); }
 }
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
@@ -373,18 +374,20 @@ const o2 = {
 };
 // property initializers
 class C0 {
-    static a = s;
-    static b = N.s;
-    static c = N["s"];
-    static d = s;
-    static e = N.s;
-    static f = N["s"];
-    a = s;
-    b = N.s;
-    c = N["s"];
-    d = s;
-    e = N.s;
-    f = N["s"];
+    constructor() {
+        this.a = s;
+        this.b = N.s;
+        this.c = N["s"];
+        this.d = s;
+        this.e = N.s;
+        this.f = N["s"];
+    }
+    static { this.a = s; }
+    static { this.b = N.s; }
+    static { this.c = N["s"]; }
+    static { this.d = s; }
+    static { this.e = N.s; }
+    static { this.f = N["s"]; }
     method1() { return s; }
     async method2() { return s; }
     async *method3() { yield s; }
@@ -417,10 +420,7 @@ Math.random() * 2 ? N["s"] : "a";
     [N.s]: "b",
 });
 class C1 {
-    static [s];
-    static [N.s];
-    [s];
-    [N.s];
+    static { N.s, N.s; }
 }
 const o3 = {
     method1() {

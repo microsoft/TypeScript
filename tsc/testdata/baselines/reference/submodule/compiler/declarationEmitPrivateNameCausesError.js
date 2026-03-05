@@ -17,9 +17,15 @@ exports.ignoreExtraVariables = ignoreExtraVariables;
 const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 //This is exported
 function ignoreExtraVariables(ctor) {
-    return class extends ctor {
-        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used
-    };
+    var _a, _b;
+    return _b = class extends ctor {
+            constructor() {
+                super(...arguments);
+                this[_a] = true; //An unexported constant is used
+            }
+        },
+        _a = IGNORE_EXTRA_VARIABLES,
+        _b;
 }
 
 

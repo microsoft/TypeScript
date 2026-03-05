@@ -37,12 +37,14 @@ export function backup() { return "backup"; }
 //// [2.js]
 "use strict";
 class C {
-    myModule = import("./0");
+    constructor() {
+        this.myModule = import("./0");
+    }
     method() {
         const loadAsync = import("./0");
         this.myModule.then(Zero => {
             console.log(Zero.foo());
-        }, async err => {
+        }, async (err) => {
             console.log(err);
             let one = await import("./1");
             console.log(one.backup());

@@ -12,7 +12,6 @@ class greeter<typeparameter1, typeparameter2> {
 //// [unusedTypeParameters2.js]
 "use strict";
 class greeter {
-    x;
     function1() {
         this.x;
     }

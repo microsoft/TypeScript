@@ -9,8 +9,11 @@ export default class C {
 
 
 //// [esnextmodulekindWithES5Target2.js]
-export default class C {
-    static s = 0;
-    p = 1;
+class C {
+    constructor() {
+        this.p = 1;
+    }
     method() { }
 }
+C.s = 0;
+export default C;

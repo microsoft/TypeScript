@@ -45,7 +45,6 @@
 +class {
 +};
 +x = class {
-+    @dec
 +    y;
 +};
  // 13.15.2 RS: Evaluation
@@ -91,7 +90,6 @@
 +class {
 +};
 +x &&= class {
-+    @dec
 +    y;
 +};
  // 13.15.2 RS: Evaluation
@@ -137,7 +135,6 @@
 +class {
 +};
 +x ||= class {
-+    @dec
 +    y;
 +};
  // 13.15.2 RS: Evaluation
@@ -183,6 +180,5 @@
 +class {
 +};
 +x ??= class {
-+    @dec
 +    y;
 +};

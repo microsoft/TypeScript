@@ -89,7 +89,6 @@ declare namespace AmbientMod {
 //// [es6ClassTest.js]
 "use strict";
 class Bar {
-    goo;
     prop1(x) {
         return x;
     }
@@ -97,23 +96,19 @@ class Bar {
 }
 // new-style class
 class Foo extends Bar {
-    y;
-    z;
-    foo;
-    gar = 0;
-    zoo = "zoo";
-    x;
     bar() { return 0; }
     boo(x) { return x; }
-    static statVal = 0;
     constructor(x, y, z = 0) {
         super(x);
         this.y = y;
         this.z = z;
+        this.gar = 0;
+        this.zoo = "zoo";
         this.x = x;
         this.gar = 5;
     }
 }
+Foo.statVal = 0;
 var f = new Foo();
 //class GetSetMonster {
 //  // attack(target) {

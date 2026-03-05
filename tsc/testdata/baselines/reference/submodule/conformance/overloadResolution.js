@@ -99,17 +99,12 @@ var s = fn5((n) => n.substr(0));
 //// [overloadResolution.js]
 "use strict";
 class SomeBase {
-    n;
-    s;
 }
 class SomeDerived1 extends SomeBase {
-    m;
 }
 class SomeDerived2 extends SomeBase {
-    m;
 }
 class SomeDerived3 extends SomeBase {
-    m;
 }
 function fn1() { return null; }
 var s = fn1(undefined);

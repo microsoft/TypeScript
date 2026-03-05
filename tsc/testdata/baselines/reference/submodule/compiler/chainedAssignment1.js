@@ -27,23 +27,16 @@ c2 = c3; // Error TS111: Cannot convert Z to Y
 //// [chainedAssignment1.js]
 "use strict";
 class X {
-    z;
     constructor(z) {
         this.z = z;
     }
-    a;
 }
 class Y {
-    z;
     constructor(z) {
         this.z = z;
     }
-    a;
-    b;
 }
 class Z {
-    z;
-    c;
 }
 var c1 = new X(3);
 var c2 = new Y(5);

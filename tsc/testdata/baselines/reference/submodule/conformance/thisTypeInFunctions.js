@@ -200,10 +200,8 @@ function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; }
 "use strict";
 // body checking
 class B {
-    n;
 }
 class C {
-    n;
     explicitThis(m) {
         return this.n + m;
     }
@@ -312,22 +310,17 @@ c.explicitC = function (m) { return this.n + m; };
 c.explicitVoid = n => n;
 // class-based assignability
 class Base1 {
-    x;
     polymorphic() { return this.x; }
     explicit() { return this.x; }
     static explicitStatic() { return this.y; }
-    static y;
 }
 class Derived1 extends Base1 {
-    y;
 }
 class Base2 {
-    y;
     polymorphic() { return this.y; }
     explicit() { return this.x; }
 }
 class Derived2 extends Base2 {
-    x;
 }
 let b1 = new Base1();
 let b2 = new Base2();

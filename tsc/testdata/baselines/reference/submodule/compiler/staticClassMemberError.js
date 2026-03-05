@@ -17,11 +17,9 @@ class Foo {
 //// [staticClassMemberError.js]
 "use strict";
 class C {
-    static s;
     a() {
         s = 1;
     }
 }
 class Foo {
-    static bar;
 }

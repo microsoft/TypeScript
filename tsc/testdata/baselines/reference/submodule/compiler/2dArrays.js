@@ -22,11 +22,15 @@ class Board {
 class Cell {
 }
 class Ship {
-    isSunk = false;
+    constructor() {
+        this.isSunk = false;
+    }
 }
 class Board {
-    ships = [];
-    cells = [];
+    constructor() {
+        this.ships = [];
+        this.cells = [];
+    }
     allShipsSunk() {
         return this.ships.every(function (val) { return val.isSunk; });
     }

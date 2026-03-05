@@ -98,14 +98,11 @@ var i4 = new c4();
 var i4_c = c4;
 /** Class with statics*/
 class c5 {
-    static s1;
 }
 var i5 = new c5();
 var i5_c = c5;
 /// class with statics and constructor
 class c6 {
-    /// s1 comment
-    static s1; /// s1 comment2
     /// constructor comment
     constructor() {
     }
@@ -114,8 +111,6 @@ var i6 = new c6();
 var i6_c = c6;
 // class with statics and constructor
 class c7 {
-    // s1 comment
-    static s1;
     // constructor comment
     constructor() {
     }
@@ -125,8 +120,6 @@ var i7_c = c7;
 /** class with statics and constructor
  */
 class c8 {
-    /** s1 comment */
-    static s1; /** s1 comment2 */
     /** constructor comment
     */
     constructor() {

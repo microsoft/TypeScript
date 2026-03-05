@@ -52,7 +52,7 @@ namespace TypeScript.Syntax {
 "use strict";
 var TypeScript;
 (function (TypeScript) {
-    let Parser;
+    var Parser;
     (function (Parser) {
         class SyntaxCursor {
             currentNode() {
@@ -89,7 +89,7 @@ var TypeScript;
     TypeScript.SyntaxNode = SyntaxNode;
 })(TypeScript || (TypeScript = {}));
 (function (TypeScript) {
-    let Syntax;
+    var Syntax;
     (function (Syntax) {
         function childIndex() { }
         Syntax.childIndex = childIndex;

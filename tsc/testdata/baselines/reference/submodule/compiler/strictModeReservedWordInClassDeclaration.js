@@ -39,7 +39,6 @@ class Foo {
     banana(x) { }
 }
 class C {
-    public;
     constructor(public, let) {
         this.public = public;
     }

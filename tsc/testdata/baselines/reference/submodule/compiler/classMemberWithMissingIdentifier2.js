@@ -8,7 +8,6 @@ class C {
 //// [classMemberWithMissingIdentifier2.js]
 "use strict";
 class C {
-    ;
 }
 {
     [name, string];

@@ -46,6 +46,5 @@
 -    };
 -})();
 +module.exports = class {
-+    @dec
 +    y;
 +};

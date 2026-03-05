@@ -23,10 +23,8 @@ abstract;
 class NonAbstractClass {
 }
 class C2 {
-    abstract;
     nonAbstractFunction() {
     }
 }
 class C3 {
-    abstract;
 }

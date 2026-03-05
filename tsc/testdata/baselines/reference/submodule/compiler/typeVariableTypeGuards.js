@@ -96,7 +96,6 @@ function f6<T extends string | (new () => {})>(a: T) {
 "use strict";
 // Repro from #14091
 class A {
-    props;
     constructor(props) {
         this.props = props;
     }
@@ -105,7 +104,6 @@ class A {
     }
 }
 class Monkey {
-    a;
     constructor(a) {
         this.a = a;
     }

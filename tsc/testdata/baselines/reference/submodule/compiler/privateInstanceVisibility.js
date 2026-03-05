@@ -45,7 +45,6 @@ class C {
 var Test;
 (function (Test) {
     class Example {
-        someNumber;
         doSomething() {
             var that = this;
             function innerFunction() {
@@ -56,7 +55,6 @@ var Test;
     Test.Example = Example;
 })(Test || (Test = {}));
 class C {
-    x;
     getX() { return this.x; }
     clone(other) {
         this.x = other.x;

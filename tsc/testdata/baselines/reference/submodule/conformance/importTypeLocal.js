@@ -50,7 +50,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
 class Bar {
-    item;
     constructor(input) { }
 }
 exports.Bar = Bar;
@@ -61,7 +60,6 @@ exports.shim = exports.Bar2 = exports.y = exports.x = void 0;
 exports.x = { x: 0, y: 0 };
 exports.y = { a: "", b: 0 };
 class Bar2 {
-    item;
     constructor(input) { }
 }
 exports.Bar2 = Bar2;

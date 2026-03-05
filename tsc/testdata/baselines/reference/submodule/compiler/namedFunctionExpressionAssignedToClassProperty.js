@@ -19,8 +19,8 @@ class Foo{
 //// [namedFunctionExpressionAssignedToClassProperty.js]
 "use strict";
 class Foo {
-    a = function bar() {
-    }; // this shouldn't crash the compiler...
     constructor() {
+        this.a = function bar() {
+        }; // this shouldn't crash the compiler...
     }
 }

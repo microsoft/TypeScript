@@ -1,9 +1,0 @@
---- old.staticMemberAccessOffDerivedType1.js
-+++ new.staticMemberAccessOffDerivedType1.js
-@@= skipped -18, +18 lines =@@
-     }
- }
- class P extends SomeBase {
-+    static SomeNumber = P.GetNumber();
- }
--P.SomeNumber = P.GetNumber();

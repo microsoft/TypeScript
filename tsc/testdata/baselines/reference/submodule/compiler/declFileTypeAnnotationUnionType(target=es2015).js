@@ -26,21 +26,17 @@ var y = new g<string>() || new m.g<number>() || (() => new c());
 //// [declFileTypeAnnotationUnionType.js]
 "use strict";
 class c {
-    p;
 }
 var m;
 (function (m) {
     class c {
-        q;
     }
     m.c = c;
     class g {
-        r;
     }
     m.g = g;
 })(m || (m = {}));
 class g {
-    s;
 }
 // Just the name
 var k = new c() || new m.c();

@@ -21,9 +21,10 @@ var M;
     class Foo {
     }
     class Gar {
-        fa;
-        x = 10;
-        y = 10;
+        constructor() {
+            this.x = 10;
+            this.y = 10;
+        }
         m() {
             this.fa = new Array(this.x * this.y);
         }

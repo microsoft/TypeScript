@@ -7748,7 +7748,7 @@ func (node *AwaitExpression) Clone(f NodeFactoryCoercible) *Node {
 
 func (node *AwaitExpression) computeSubtreeFacts() SubtreeFacts {
 	// await in an ES2018 async generator must use `yield __await(expr)`
-	return propagateSubtreeFacts(node.Expression) | SubtreeContainsAwait | SubtreeContainsForAwaitOrAsyncGenerator
+	return propagateSubtreeFacts(node.Expression) | SubtreeContainsAwait | SubtreeContainsAnyAwait | SubtreeContainsForAwaitOrAsyncGenerator
 }
 
 func IsAwaitExpression(node *Node) bool {

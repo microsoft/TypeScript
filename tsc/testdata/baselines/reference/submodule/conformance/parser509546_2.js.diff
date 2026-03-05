@@ -1,8 +1,0 @@
---- old.parser509546_2.js
-+++ new.parser509546_2.js
-@@= skipped -10, +10 lines =@@
- //// [parser509546_2.js]
- "use strict";
- export class Logger {
-+    public;
- }

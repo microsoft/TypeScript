@@ -56,10 +56,8 @@ function f1() {
     a = { x: 1, z: 3 }; // error
 }
 class Animal {
-    a;
 }
 class Giraffe extends Animal {
-    g;
 }
 function f2() {
     var a = new Animal();

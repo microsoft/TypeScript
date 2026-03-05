@@ -95,7 +95,6 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 class T {
-    prop;
 }
 x.prop;
 // @param type has no effect.

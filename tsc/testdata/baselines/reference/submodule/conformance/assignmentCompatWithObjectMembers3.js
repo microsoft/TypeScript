@@ -49,10 +49,8 @@ a2 = t;
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // additional optional properties do not cause errors
 class S {
-    foo;
 }
 class T {
-    foo;
 }
 var s;
 var t;

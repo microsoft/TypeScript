@@ -36,20 +36,12 @@ var r2 = a.w; // error
 //// [mergedInterfacesWithInheritedPrivates2.js]
 "use strict";
 class C {
-    x;
 }
 class C2 {
-    w;
 }
 class D extends C {
-    w;
-    y;
-    z;
 }
 class E extends C2 {
-    w;
-    y;
-    z;
 }
 var r = a.x; // error
 var r2 = a.w; // error

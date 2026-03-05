@@ -230,9 +230,11 @@ var x: B = { };
 "use strict";
 // CONTEXT: Class property declaration
 class C1T5 {
-    foo = function (i) {
-        return i;
-    };
+    constructor() {
+        this.foo = function (i) {
+            return i;
+        };
+    }
 }
 // CONTEXT: Namespace property declaration
 var C2T5;
@@ -266,7 +268,6 @@ var c3t14 = ({
 });
 // CONTEXT: Class property assignment
 class C4T5 {
-    foo;
     constructor() {
         this.foo = function (i, s) {
             return s;

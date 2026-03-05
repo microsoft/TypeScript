@@ -38,7 +38,6 @@ var widenArray = [null, undefined]; // error at "widenArray"
 var emptyArray = [];
 // these should not be error
 class AnimalObj {
-    x;
 }
 var foo = 5;
 var bar = "Hello World";

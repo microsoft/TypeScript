@@ -9,5 +9,7 @@ class C {
 //// [numericMethodName1.js]
 "use strict";
 class C {
-    1 = 2;
+    constructor() {
+        this[1] = 2;
+    }
 }

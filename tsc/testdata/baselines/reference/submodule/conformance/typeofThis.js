@@ -148,15 +148,15 @@ class Tests12 {
 //// [typeofThis.js]
 "use strict";
 class Test {
-    data = {};
     constructor() {
+        this.data = {};
         var copy = {};
     }
 }
 class Test1 {
-    data = { foo: '' };
-    ['this'] = '';
     constructor() {
+        this.data = { foo: '' };
+        this['this'] = '';
         var copy = { foo: '' };
         var foo = '';
         var self = this;
@@ -174,11 +174,13 @@ function Test4() {
     let x = 1;
 }
 class Test5 {
-    no = 1;
-    f = () => {
-        // should not capture this.
-        let x = 1;
-    };
+    constructor() {
+        this.no = 1;
+        this.f = () => {
+            // should not capture this.
+            let x = 1;
+        };
+    }
 }
 var Test6;
 (function (Test6) {
@@ -196,8 +198,10 @@ const Test8 = () => {
     let x = 1;
 };
 class Test9 {
-    no = 0;
-    this = 0;
+    constructor() {
+        this.no = 0;
+        this.this = 0;
+    }
     f() {
         if (this instanceof Test9D1) {
             const d1 = this;
@@ -224,7 +228,6 @@ class Test9D2 {
     f2() { }
 }
 class Test10 {
-    a;
     foo() {
         let a = undefined;
         if (this.a) {
@@ -237,7 +240,6 @@ class Test10 {
     }
 }
 class Test11 {
-    this;
     foo() {
         const o = this;
         let bar = {};

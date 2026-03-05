@@ -15,11 +15,16 @@ class C {
 
 //// [esDecorators-classDeclaration-classThisReference.js]
 "use strict";
-@dec
+var _a, _C_a_accessor_storage;
 class C {
-    static { this; }
-    static x = this;
-    static accessor a = this;
+    static get a() { return __classPrivateFieldGet(_a, _a, "f", _C_a_accessor_storage); }
+    static set a(value) { __classPrivateFieldSet(_a, _a, value, "f", _C_a_accessor_storage); }
     static m() { this; }
     static get g() { return this; }
 }
+_a = C;
+(() => {
+    _a;
+})();
+C.x = _a;
+_C_a_accessor_storage = { value: _a };

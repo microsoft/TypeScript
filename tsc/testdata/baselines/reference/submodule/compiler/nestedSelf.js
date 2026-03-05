@@ -15,7 +15,9 @@ namespace M {
 var M;
 (function (M) {
     class C {
-        n = 42;
+        constructor() {
+            this.n = 42;
+        }
         foo() { [1, 2, 3].map((x) => { return this.n * x; }); }
     }
     M.C = C;

@@ -79,7 +79,6 @@ while (j < 0) {
     throw j;
 }
 class C {
-    value;
     biz() {
         throw this.value;
     }

@@ -28,9 +28,7 @@ interface C {
 "use strict";
 // OK
 class A {
-    y;
 }
 // Not OK
 class C {
-    y;
 }

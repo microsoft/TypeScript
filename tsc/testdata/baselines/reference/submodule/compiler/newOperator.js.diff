@@ -9,11 +9,3 @@
  // Can be an expression
  new String;
  new union;
-@@= skipped -9, +9 lines =@@
- var M;
- (function (M) {
-     class T {
-+        x;
-     }
-     M.T = T;
- })(M || (M = {}));

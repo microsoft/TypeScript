@@ -48,7 +48,6 @@ var r = foo({});
 var a = {};
 var r = foo({});
 class C {
-    x;
     constructor(x) {
         this.x = x;
     }
@@ -61,7 +60,6 @@ var r = foo2({});
 var a = {};
 var r = foo2({});
 class C2 {
-    x;
     constructor(x) {
         this.x = x;
     }

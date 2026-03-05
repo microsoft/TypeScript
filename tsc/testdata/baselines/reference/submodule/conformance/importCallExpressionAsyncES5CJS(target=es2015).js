@@ -96,11 +96,13 @@ exports.obj = {
     })
 };
 class cl2 {
-    p = {
-        m: () => __awaiter(this, void 0, void 0, function* () {
-            const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FOUR
-        })
-    };
+    constructor() {
+        this.p = {
+            m: () => __awaiter(this, void 0, void 0, function* () {
+                const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FOUR
+            })
+        };
+    }
 }
 exports.cl2 = cl2;
 const l = () => __awaiter(void 0, void 0, void 0, function* () {

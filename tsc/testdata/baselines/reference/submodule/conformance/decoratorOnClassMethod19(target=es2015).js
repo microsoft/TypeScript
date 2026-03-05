@@ -32,27 +32,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
+var _C1_x, _C2_x;
 class C1 {
-    #x;
+    constructor() {
+        _C1_x.set(this, void 0);
+    }
     y() { }
-    static {
-        __decorate([
-            decorator((x) => x.#x),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", []),
-            __metadata("design:returntype", void 0)
-        ], C1.prototype, "y", null);
-    }
 }
+_C1_x = new WeakMap();
+(() => {
+    __decorate([
+        decorator((x) => __classPrivateFieldGet(x, _C1_x, "f")),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], C1.prototype, "y", null);
+})();
 class C2 {
-    #x;
-    y(p) { }
-    static {
-        __decorate([
-            __param(0, decorator((x) => x.#x)),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object]),
-            __metadata("design:returntype", void 0)
-        ], C2.prototype, "y", null);
+    constructor() {
+        _C2_x.set(this, void 0);
     }
+    y(p) { }
 }
+_C2_x = new WeakMap();
+(() => {
+    __decorate([
+        __param(0, decorator((x) => __classPrivateFieldGet(x, _C2_x, "f"))),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], C2.prototype, "y", null);
+})();

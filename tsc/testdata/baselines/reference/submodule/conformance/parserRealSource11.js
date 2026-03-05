@@ -2374,22 +2374,23 @@ namespace TypeScript {
 var TypeScript;
 (function (TypeScript) {
     class ASTSpan {
-        minChar = -1; // -1 = "undefined" or "compiler generated"
-        limChar = -1; // -1 = "undefined" or "compiler generated"   
+        constructor() {
+            this.minChar = -1; // -1 = "undefined" or "compiler generated"
+            this.limChar = -1; // -1 = "undefined" or "compiler generated"   
+        }
     }
     TypeScript.ASTSpan = ASTSpan;
     class AST extends ASTSpan {
-        nodeType;
-        type = null;
-        flags = ASTFlags.Writeable;
-        // REVIEW: for diagnostic purposes
-        passCreated = CompilerDiagnostics.analysisPass;
-        preComments = null;
-        postComments = null;
-        isParenthesized = false;
         constructor(nodeType) {
             super();
             this.nodeType = nodeType;
+            this.type = null;
+            this.flags = ASTFlags.Writeable;
+            // REVIEW: for diagnostic purposes
+            this.passCreated = CompilerDiagnostics.analysisPass;
+            this.preComments = null;
+            this.postComments = null;
+            this.isParenthesized = false;
         }
         isExpression() { return false; }
         isStatementOrExpression() { return false; }
@@ -2542,10 +2543,10 @@ var TypeScript;
     }
     TypeScript.IncompleteAST = IncompleteAST;
     class ASTList extends AST {
-        enclosingScope = null;
-        members = new AST[];
         constructor() {
             super(NodeType.List);
+            this.enclosingScope = null;
+            this.members = new AST[];
         }
         addToControlFlow(context) {
             var len = this.members.length;
@@ -2595,11 +2596,6 @@ var TypeScript;
     }
     TypeScript.ASTList = ASTList;
     class Identifier extends AST {
-        actualText;
-        hasEscapeSequence;
-        sym = null;
-        cloId = -1;
-        text;
         // 'actualText' is the text that the user has entered for the identifier. the text might 
         // include any Unicode escape sequences (e.g.: \u0041 for 'A'). 'text', however, contains 
         // the resolved value of any escape sequences in the actual text; so in the previous 
@@ -2616,6 +2612,8 @@ var TypeScript;
             super(NodeType.Name);
             this.actualText = actualText;
             this.hasEscapeSequence = hasEscapeSequence;
+            this.sym = null;
+            this.cloId = -1;
             this.setText(actualText, hasEscapeSequence);
         }
         setText(actualText, hasEscapeSequence) {
@@ -2664,7 +2662,6 @@ var TypeScript;
     }
     TypeScript.MissingIdentifier = MissingIdentifier;
     class Label extends AST {
-        id;
         constructor(id) {
             super(NodeType.Label);
             this.id = id;
@@ -2695,12 +2692,11 @@ var TypeScript;
     }
     TypeScript.Expression = Expression;
     class UnaryExpression extends Expression {
-        operand;
-        targetType = null; // Target type for an object literal (null if no target type)
-        castTerm = null;
         constructor(nodeType, operand) {
             super(nodeType);
             this.operand = operand;
+            this.targetType = null; // Target type for an object literal (null if no target type)
+            this.castTerm = null;
         }
         addToControlFlow(context) {
             super.addToControlFlow(context);
@@ -2838,15 +2834,13 @@ var TypeScript;
     }
     TypeScript.UnaryExpression = UnaryExpression;
     class CallExpression extends Expression {
-        target;
-        arguments;
         constructor(nodeType, target, arguments) {
             super(nodeType);
             this.target = target;
             this.arguments = arguments;
+            this.signature = null;
             this.minChar = this.target.minChar;
         }
-        signature = null;
         typeCheck(typeFlow) {
             if (this.nodeType == NodeType.New) {
                 return typeFlow.typeCheckNew(this);
@@ -2870,8 +2864,6 @@ var TypeScript;
     }
     TypeScript.CallExpression = CallExpression;
     class BinaryExpression extends Expression {
-        operand1;
-        operand2;
         constructor(nodeType, operand1, operand2) {
             super(nodeType);
             this.operand1 = operand1;
@@ -3022,9 +3014,6 @@ var TypeScript;
     }
     TypeScript.BinaryExpression = BinaryExpression;
     class ConditionalExpression extends Expression {
-        operand1;
-        operand2;
-        operand3;
         constructor(operand1, operand2, operand3) {
             super(NodeType.ConditionalExpression);
             this.operand1 = operand1;
@@ -3048,14 +3037,12 @@ var TypeScript;
     }
     TypeScript.ConditionalExpression = ConditionalExpression;
     class NumberLiteral extends Expression {
-        value;
-        hasEmptyFraction;
         constructor(value, hasEmptyFraction) {
             super(NodeType.NumberLit);
             this.value = value;
             this.hasEmptyFraction = hasEmptyFraction;
+            this.isNegativeZero = false;
         }
-        isNegativeZero = false;
         typeCheck(typeFlow) {
             this.type = typeFlow.doubleType;
             return this;
@@ -3089,7 +3076,6 @@ var TypeScript;
     }
     TypeScript.NumberLiteral = NumberLiteral;
     class RegexLiteral extends Expression {
-        regex;
         constructor(regex) {
             super(NodeType.Regex);
             this.regex = regex;
@@ -3108,7 +3094,6 @@ var TypeScript;
     }
     TypeScript.RegexLiteral = RegexLiteral;
     class StringLiteral extends Expression {
-        text;
         constructor(text) {
             super(NodeType.QString);
             this.text = text;
@@ -3139,15 +3124,13 @@ var TypeScript;
     }
     TypeScript.ModuleElement = ModuleElement;
     class ImportDeclaration extends ModuleElement {
-        id;
-        alias;
         isStatementOrExpression() { return true; }
-        varFlags = VarFlags.None;
-        isDynamicImport = false;
         constructor(id, alias) {
             super(NodeType.ImportDeclaration);
             this.id = id;
             this.alias = alias;
+            this.varFlags = VarFlags.None;
+            this.isDynamicImport = false;
         }
         emit(emitter, tokenId, startLine) {
             var mod = this.alias.type;
@@ -3197,16 +3180,14 @@ var TypeScript;
     }
     TypeScript.ImportDeclaration = ImportDeclaration;
     class BoundDecl extends AST {
-        id;
-        nestingLevel;
-        init = null;
-        typeExpr = null;
-        varFlags = VarFlags.None;
-        sym = null;
         constructor(id, nodeType, nestingLevel) {
             super(nodeType);
             this.id = id;
             this.nestingLevel = nestingLevel;
+            this.init = null;
+            this.typeExpr = null;
+            this.varFlags = VarFlags.None;
+            this.sym = null;
         }
         isStatementOrExpression() { return true; }
         isPrivate() { return hasFlag(this.varFlags, VarFlags.Private); }
@@ -3238,13 +3219,13 @@ var TypeScript;
     class ArgDecl extends BoundDecl {
         constructor(id) {
             super(id, NodeType.ArgDecl, 0);
+            this.isOptional = false;
+            this.parameterPropertySym = null;
         }
-        isOptional = false;
         isOptionalArg() { return this.isOptional || this.init; }
         treeViewLabel() {
             return "arg: " + this.id.actualText;
         }
-        parameterPropertySym = null;
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -3256,38 +3237,6 @@ var TypeScript;
     TypeScript.ArgDecl = ArgDecl;
     var internalId = 0;
     class FuncDecl extends AST {
-        name;
-        bod;
-        isConstructor;
-        arguments;
-        vars;
-        scopes;
-        statics;
-        hint = null;
-        fncFlags = FncFlags.None;
-        returnTypeAnnotation = null;
-        symbols;
-        variableArgList = false;
-        signature;
-        envids;
-        jumpRefs = null;
-        internalNameCache = null;
-        tmp1Declared = false;
-        enclosingFnc = null;
-        freeVariables = [];
-        unitIndex = -1;
-        classDecl = null;
-        boundToProperty = null;
-        isOverload = false;
-        innerStaticFuncs = [];
-        isTargetTypedAsMethod = false;
-        isInlineCallLiteral = false;
-        accessorSymbol = null;
-        leftCurlyCount = 0;
-        rightCurlyCount = 0;
-        returnStatementsWithExpressions = [];
-        scopeType = null; // Type of the FuncDecl, before target typing
-        endingToken = null;
         constructor(name, bod, isConstructor, arguments, vars, scopes, statics, nodeType) {
             super(nodeType);
             this.name = name;
@@ -3297,6 +3246,28 @@ var TypeScript;
             this.vars = vars;
             this.scopes = scopes;
             this.statics = statics;
+            this.hint = null;
+            this.fncFlags = FncFlags.None;
+            this.returnTypeAnnotation = null;
+            this.variableArgList = false;
+            this.jumpRefs = null;
+            this.internalNameCache = null;
+            this.tmp1Declared = false;
+            this.enclosingFnc = null;
+            this.freeVariables = [];
+            this.unitIndex = -1;
+            this.classDecl = null;
+            this.boundToProperty = null;
+            this.isOverload = false;
+            this.innerStaticFuncs = [];
+            this.isTargetTypedAsMethod = false;
+            this.isInlineCallLiteral = false;
+            this.accessorSymbol = null;
+            this.leftCurlyCount = 0;
+            this.rightCurlyCount = 0;
+            this.returnStatementsWithExpressions = [];
+            this.scopeType = null; // Type of the FuncDecl, before target typing
+            this.endingToken = null;
         }
         internalName() {
             if (this.internalNameCache == null) {
@@ -3394,9 +3365,6 @@ var TypeScript;
     }
     TypeScript.FuncDecl = FuncDecl;
     class LocationInfo {
-        filename;
-        lineMap;
-        unitIndex;
         constructor(filename, lineMap, unitIndex) {
             this.filename = filename;
             this.lineMap = lineMap;
@@ -3406,23 +3374,21 @@ var TypeScript;
     TypeScript.LocationInfo = LocationInfo;
     TypeScript.unknownLocationInfo = new LocationInfo("unknown", null, -1);
     class Script extends FuncDecl {
-        locationInfo = null;
-        referencedFiles = [];
-        requiresGlobal = false;
-        requiresInherits = false;
-        isResident = false;
-        isDeclareFile = false;
-        hasBeenTypeChecked = false;
-        topLevelMod = null;
-        leftCurlyCount = 0;
-        rightCurlyCount = 0;
-        vars;
-        scopes;
-        // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
-        containsUnicodeChar = false;
-        containsUnicodeCharInComment = false;
         constructor(vars, scopes) {
             super(new Identifier("script"), null, false, null, vars, scopes, null, NodeType.Script);
+            this.locationInfo = null;
+            this.referencedFiles = [];
+            this.requiresGlobal = false;
+            this.requiresInherits = false;
+            this.isResident = false;
+            this.isDeclareFile = false;
+            this.hasBeenTypeChecked = false;
+            this.topLevelMod = null;
+            this.leftCurlyCount = 0;
+            this.rightCurlyCount = 0;
+            // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
+            this.containsUnicodeChar = false;
+            this.containsUnicodeCharInComment = false;
             this.vars = vars;
             this.scopes = scopes;
         }
@@ -3475,31 +3441,24 @@ var TypeScript;
     }
     TypeScript.Script = Script;
     class NamedDeclaration extends ModuleElement {
-        name;
-        members;
-        leftCurlyCount = 0;
-        rightCurlyCount = 0;
         constructor(nodeType, name, members) {
             super(nodeType);
             this.name = name;
             this.members = members;
+            this.leftCurlyCount = 0;
+            this.rightCurlyCount = 0;
         }
     }
     TypeScript.NamedDeclaration = NamedDeclaration;
     class ModuleDeclaration extends NamedDeclaration {
-        endingToken;
-        modFlags = ModuleFlags.ShouldEmitModuleDecl;
-        mod;
-        prettyName;
-        amdDependencies = [];
-        vars;
-        scopes;
-        // Remember if the module contains Unicode chars, that is needed for dynamic module as we will generate a file for each.
-        containsUnicodeChar = false;
-        containsUnicodeCharInComment = false;
         constructor(name, members, vars, scopes, endingToken) {
             super(NodeType.ModuleDeclaration, name, members);
             this.endingToken = endingToken;
+            this.modFlags = ModuleFlags.ShouldEmitModuleDecl;
+            this.amdDependencies = [];
+            // Remember if the module contains Unicode chars, that is needed for dynamic module as we will generate a file for each.
+            this.containsUnicodeChar = false;
+            this.containsUnicodeCharInComment = false;
             this.vars = vars;
             this.scopes = scopes;
             this.prettyName = this.name.actualText;
@@ -3525,13 +3484,11 @@ var TypeScript;
     }
     TypeScript.ModuleDeclaration = ModuleDeclaration;
     class TypeDeclaration extends NamedDeclaration {
-        extendsList;
-        implementsList;
-        varFlags = VarFlags.None;
         constructor(nodeType, name, extendsList, implementsList, members) {
             super(nodeType, name, members);
             this.extendsList = extendsList;
             this.implementsList = implementsList;
+            this.varFlags = VarFlags.None;
         }
         isExported() {
             return hasFlag(this.varFlags, VarFlags.Exported);
@@ -3542,12 +3499,12 @@ var TypeScript;
     }
     TypeScript.TypeDeclaration = TypeDeclaration;
     class ClassDeclaration extends TypeDeclaration {
-        knownMemberNames = {};
-        constructorDecl = null;
-        constructorNestingLevel = 0;
-        endingToken = null;
         constructor(name, members, extendsList, implementsList) {
             super(NodeType.ClassDeclaration, name, extendsList, implementsList, members);
+            this.knownMemberNames = {};
+            this.constructorDecl = null;
+            this.constructorNestingLevel = 0;
+            this.endingToken = null;
         }
         typeCheck(typeFlow) {
             return typeFlow.typeCheckClass(this);
@@ -3583,8 +3540,6 @@ var TypeScript;
     }
     TypeScript.Statement = Statement;
     class LabeledStatement extends Statement {
-        labels;
-        stmt;
         constructor(labels, stmt) {
             super(NodeType.LabeledStatement);
             this.labels = labels;
@@ -3617,8 +3572,6 @@ var TypeScript;
     }
     TypeScript.LabeledStatement = LabeledStatement;
     class Block extends Statement {
-        statements;
-        isStatementBlock;
         constructor(statements, isStatementBlock) {
             super(NodeType.Block);
             this.statements = statements;
@@ -3672,11 +3625,11 @@ var TypeScript;
     }
     TypeScript.Block = Block;
     class Jump extends Statement {
-        target = null;
         hasExplicitTarget() { return (this.target); }
-        resolvedTarget = null;
         constructor(nodeType) {
             super(nodeType);
+            this.target = null;
+            this.resolvedTarget = null;
         }
         setResolvedTarget(parser, stmt) {
             if (stmt.isLoop()) {
@@ -3721,11 +3674,10 @@ var TypeScript;
     }
     TypeScript.Jump = Jump;
     class WhileStatement extends Statement {
-        cond;
-        body = null;
         constructor(cond) {
             super(NodeType.While);
             this.cond = cond;
+            this.body = null;
         }
         isLoop() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -3772,12 +3724,12 @@ var TypeScript;
     }
     TypeScript.WhileStatement = WhileStatement;
     class DoWhileStatement extends Statement {
-        body = null;
-        whileAST = null;
-        cond = null;
         isLoop() { return true; }
         constructor() {
             super(NodeType.DoWhile);
+            this.body = null;
+            this.whileAST = null;
+            this.cond = null;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3826,13 +3778,11 @@ var TypeScript;
     }
     TypeScript.DoWhileStatement = DoWhileStatement;
     class IfStatement extends Statement {
-        cond;
-        thenBod;
-        elseBod = null;
-        statement = new ASTSpan();
         constructor(cond) {
             super(NodeType.If);
             this.cond = cond;
+            this.elseBod = null;
+            this.statement = new ASTSpan();
         }
         isCompoundStatement() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -3904,9 +3854,9 @@ var TypeScript;
     }
     TypeScript.IfStatement = IfStatement;
     class ReturnStatement extends Statement {
-        returnExpression = null;
         constructor() {
             super(NodeType.Return);
+            this.returnExpression = null;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3939,18 +3889,15 @@ var TypeScript;
     }
     TypeScript.EndCode = EndCode;
     class ForInStatement extends Statement {
-        lval;
-        obj;
         constructor(lval, obj) {
             super(NodeType.ForIn);
             this.lval = lval;
             this.obj = obj;
+            this.statement = new ASTSpan();
             if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
                 this.lval.varFlags |= VarFlags.AutoInit;
             }
         }
-        statement = new ASTSpan();
-        body;
         isLoop() { return true; }
         isFiltered() {
             if (this.body) {
@@ -4055,10 +4002,6 @@ var TypeScript;
     }
     TypeScript.ForInStatement = ForInStatement;
     class ForStatement extends Statement {
-        init;
-        cond;
-        body;
-        incr;
         constructor(init) {
             super(NodeType.For);
             this.init = init;
@@ -4148,13 +4091,11 @@ var TypeScript;
     }
     TypeScript.ForStatement = ForStatement;
     class WithStatement extends Statement {
-        expr;
-        body;
         isCompoundStatement() { return true; }
-        withSym = null;
         constructor(expr) {
             super(NodeType.With);
             this.expr = expr;
+            this.withSym = null;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4174,13 +4115,11 @@ var TypeScript;
     }
     TypeScript.WithStatement = WithStatement;
     class SwitchStatement extends Statement {
-        val;
-        caseList;
-        defaultCase = null;
-        statement = new ASTSpan();
         constructor(val) {
             super(NodeType.Switch);
             this.val = val;
+            this.defaultCase = null;
+            this.statement = new ASTSpan();
         }
         isCompoundStatement() { return true; }
         emit(emitter, tokenId, startLine) {
@@ -4246,10 +4185,9 @@ var TypeScript;
     }
     TypeScript.SwitchStatement = SwitchStatement;
     class CaseStatement extends Statement {
-        expr = null;
-        body;
         constructor() {
             super(NodeType.Case);
+            this.expr = null;
         }
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4298,8 +4236,6 @@ var TypeScript;
     }
     TypeScript.CaseStatement = CaseStatement;
     class TypeReference extends AST {
-        term;
-        arrayCount;
         constructor(term, arrayCount) {
             super(NodeType.TypeRef);
             this.term = term;
@@ -4328,8 +4264,6 @@ var TypeScript;
     }
     TypeScript.TypeReference = TypeReference;
     class TryFinally extends Statement {
-        tryNode;
-        finallyNode;
         constructor(tryNode, finallyNode) {
             super(NodeType.TryFinally);
             this.tryNode = tryNode;
@@ -4373,8 +4307,6 @@ var TypeScript;
     }
     TypeScript.TryFinally = TryFinally;
     class TryCatch extends Statement {
-        tryNode;
-        catchNode;
         constructor(tryNode, catchNode) {
             super(NodeType.TryCatch);
             this.tryNode = tryNode;
@@ -4423,7 +4355,6 @@ var TypeScript;
     }
     TypeScript.TryCatch = TryCatch;
     class Try extends Statement {
-        body;
         constructor(body) {
             super(NodeType.Try);
             this.body = body;
@@ -4450,18 +4381,16 @@ var TypeScript;
     }
     TypeScript.Try = Try;
     class Catch extends Statement {
-        param;
-        body;
         constructor(param, body) {
             super(NodeType.Catch);
             this.param = param;
             this.body = body;
+            this.statement = new ASTSpan();
+            this.containedScope = null;
             if (this.param) {
                 this.param.varFlags |= VarFlags.AutoInit;
             }
         }
-        statement = new ASTSpan();
-        containedScope = null;
         emit(emitter, tokenId, startLine) {
             emitter.emitParensAndCommentsInPlace(this, true);
             emitter.recordSourceMappingStart(this);
@@ -4523,7 +4452,6 @@ var TypeScript;
     }
     TypeScript.Catch = Catch;
     class Finally extends Statement {
-        body;
         constructor(body) {
             super(NodeType.Finally);
             this.body = body;
@@ -4550,15 +4478,12 @@ var TypeScript;
     }
     TypeScript.Finally = Finally;
     class Comment extends AST {
-        content;
-        isBlockComment;
-        endsLine;
-        text = null;
         constructor(content, isBlockComment, endsLine) {
             super(NodeType.Comment);
             this.content = content;
             this.isBlockComment = isBlockComment;
             this.endsLine = endsLine;
+            this.text = null;
         }
         getText() {
             if (this.text == null) {

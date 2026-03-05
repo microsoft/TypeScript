@@ -16,9 +16,6 @@ class B {
 "use strict";
 var array1 = [1, 2];
 class B {
-    test;
-    test1;
-    test2;
     method() {
         () => [this.test, this.test1, this.test2] = array1; // even though there is a compiler error, we should still emit lexical capture for "this" 
     }

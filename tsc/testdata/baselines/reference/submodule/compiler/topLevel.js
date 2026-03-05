@@ -32,8 +32,6 @@ result+=(M.origin.move(1,1));
 //// [topLevel.js]
 "use strict";
 class Point {
-    x;
-    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;

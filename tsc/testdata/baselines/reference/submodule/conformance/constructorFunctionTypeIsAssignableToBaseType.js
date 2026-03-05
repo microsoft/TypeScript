@@ -24,13 +24,8 @@ class Derived2 extends Base {
 //// [constructorFunctionTypeIsAssignableToBaseType.js]
 "use strict";
 class Base {
-    static foo;
 }
 class Derived extends Base {
-    // ok
-    static foo;
 }
 class Derived2 extends Base {
-    // ok, use assignability here
-    static foo;
 }

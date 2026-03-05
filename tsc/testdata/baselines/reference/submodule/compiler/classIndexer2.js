@@ -12,8 +12,6 @@ class C123 {
 //// [classIndexer2.js]
 "use strict";
 class C123 {
-    x;
-    y;
     constructor() {
     }
 }

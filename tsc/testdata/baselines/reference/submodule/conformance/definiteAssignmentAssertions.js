@@ -88,22 +88,19 @@ declare namespace foo {
 "use strict";
 // Suppress strict property initialization check
 class C1 {
-    a;
-    b; // Error
 }
 // Suppress definite assignment check in constructor
 class C2 {
-    a;
     constructor() {
         let x = this.a;
     }
 }
 // Definite assignment assertion requires type annotation, no initializer, no static modifier
 class C3 {
-    a = 1;
-    b = 1;
-    static c;
-    d;
+    constructor() {
+        this.a = 1;
+        this.b = 1;
+    }
 }
 // Definite assignment assertion not permitted on abstract property
 class C5 {

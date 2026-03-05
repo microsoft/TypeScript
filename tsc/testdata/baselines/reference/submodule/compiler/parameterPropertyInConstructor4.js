@@ -9,7 +9,6 @@ export class C {
 
 //// [parameterPropertyInConstructor4.js]
 export class C {
-    a;
     constructor(a = [], b) {
         this.a = a;
     }

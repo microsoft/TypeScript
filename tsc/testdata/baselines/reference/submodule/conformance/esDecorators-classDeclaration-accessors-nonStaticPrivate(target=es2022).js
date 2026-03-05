@@ -12,8 +12,6 @@ class C {
 //// [esDecorators-classDeclaration-accessors-nonStaticPrivate.js]
 "use strict";
 class C {
-    @dec(1)
     get #method1() { return 0; }
-    @dec(2)
     set #method1(value) { }
 }

@@ -44,7 +44,6 @@ class C {
     }
 }
 class D {
-    x;
     foo() {
         var r = this;
     }
@@ -53,7 +52,6 @@ class D {
     }
 }
 class E {
-    x;
     foo() {
         var r = this;
     }

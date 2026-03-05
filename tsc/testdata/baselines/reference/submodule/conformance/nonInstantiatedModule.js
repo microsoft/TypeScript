@@ -77,7 +77,6 @@ var p2;
 var M3;
 (function (M3) {
     class Utils {
-        name;
     }
     M3.Utils = Utils;
 })(M3 || (M3 = {}));

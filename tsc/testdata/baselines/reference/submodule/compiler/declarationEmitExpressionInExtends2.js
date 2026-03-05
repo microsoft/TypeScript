@@ -16,8 +16,6 @@ class MyClass extends getClass(2) <string, number> {
 //// [declarationEmitExpressionInExtends2.js]
 "use strict";
 class C {
-    x;
-    y;
 }
 function getClass(c) {
     return C;

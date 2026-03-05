@@ -1,8 +1,0 @@
---- old.unusedTypeParameters9.js
-+++ new.unusedTypeParameters9.js
-@@= skipped -22, +22 lines =@@
- }
- // interface + class
- class C2 {
-+    a;
- }

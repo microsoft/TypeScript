@@ -58,12 +58,8 @@ function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 "use strict";
 // Types with infinitely expanding recursive types are type checked nominally
 class List {
-    data;
-    next;
 }
 class MyList {
-    data;
-    next;
 }
 var list1 = new List();
 var list2 = new List();

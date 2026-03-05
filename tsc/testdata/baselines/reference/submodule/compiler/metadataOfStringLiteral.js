@@ -21,7 +21,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 function PropDeco(target, propKey) { }
 class Foo {
-    foo;
 }
 __decorate([
     PropDeco,

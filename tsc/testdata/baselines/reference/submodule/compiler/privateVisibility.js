@@ -31,10 +31,12 @@ c.priv; // should not work
 //// [privateVisibility.js]
 "use strict";
 class Foo {
+    constructor() {
+        this.pubProp = 0;
+        this.privProp = 0;
+    }
     pubMeth() { this.privMeth(); }
     privMeth() { }
-    pubProp = 0;
-    privProp = 0;
 }
 var f = new Foo();
 f.privMeth(); // should not work
@@ -44,8 +46,10 @@ f.pubProp; // should work
 var M;
 (function (M) {
     class C {
-        pub = 0;
-        priv = 1;
+        constructor() {
+            this.pub = 0;
+            this.priv = 1;
+        }
     }
     M.C = C;
     M.V = 0;

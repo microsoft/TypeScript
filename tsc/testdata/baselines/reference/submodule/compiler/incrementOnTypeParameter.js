@@ -14,7 +14,6 @@ class C<T> {
 //// [incrementOnTypeParameter.js]
 "use strict";
 class C {
-    a;
     foo() {
         this.a++;
         for (var i = this.a, j = 0; j < 10; i++) {

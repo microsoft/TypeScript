@@ -38,13 +38,11 @@ if (a.stringOrUndefined) {
 "use strict";
 // Repro from #36709
 class A {
-    stringOrUndefined;
     constructor(stringOrUndefined) {
         this.stringOrUndefined = stringOrUndefined;
     }
 }
 class B {
-    str;
     constructor(str) {
         this.str = str;
     }

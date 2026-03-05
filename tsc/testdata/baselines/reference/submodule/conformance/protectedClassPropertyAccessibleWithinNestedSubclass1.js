@@ -119,7 +119,6 @@ d4.x;                   // Error, neither within their declaring class nor class
 //// [protectedClassPropertyAccessibleWithinNestedSubclass1.js]
 "use strict";
 class Base {
-    x;
     method() {
         class A {
             methoda() {
@@ -174,7 +173,6 @@ class Derived2 extends Base {
     }
 }
 class Derived3 extends Derived1 {
-    x;
     method3() {
         class D {
             method3d() {

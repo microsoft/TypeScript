@@ -82,7 +82,6 @@ var B;
 var X;
 (function (X) {
     class Y {
-        name;
     }
     X.Y = Y;
 })(X || (X = {}));

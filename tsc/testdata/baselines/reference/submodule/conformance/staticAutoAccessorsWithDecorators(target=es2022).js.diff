@@ -71,10 +71,12 @@
 -    };
 -})();
 +class A {
++    static #x_accessor_storage = 1;
 +    // uses class reference
-+    @((t, c) => { })
-+    static accessor x = 1;
++    static get x() { return A.#x_accessor_storage; }
++    static set x(value) { A.#x_accessor_storage = value; }
++    #y_accessor_storage = 2;
 +    // uses 'this'
-+    @((t, c) => { })
-+    accessor y = 2;
++    get y() { return this.#y_accessor_storage; }
++    set y(value) { this.#y_accessor_storage = value; }
 +}

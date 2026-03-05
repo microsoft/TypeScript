@@ -56,13 +56,10 @@ var z3: { id: number }[] =
 //// [arrayLiteralTypeInference.js]
 "use strict";
 class Action {
-    id;
 }
 class ActionA extends Action {
-    value;
 }
 class ActionB extends Action {
-    trueNess;
 }
 var x1 = [
     { id: 2, trueness: false },

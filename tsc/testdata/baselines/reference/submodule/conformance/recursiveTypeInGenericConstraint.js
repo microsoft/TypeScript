@@ -18,12 +18,9 @@ var c1 = new Foo<D<string>>(); // ok, circularity in assignment compat check cau
 //// [recursiveTypeInGenericConstraint.js]
 "use strict";
 class G {
-    x; // infinitely expanding type reference
 }
 class Foo {
-    bar;
 }
 class D {
-    x;
 }
 var c1 = new Foo(); // ok, circularity in assignment compat check causes success

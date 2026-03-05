@@ -22,8 +22,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // https://github.com/Microsoft/TypeScript/issues/24722
 class A {
-    b = (...args) => __awaiter(this, void 0, void 0, function* () {
-        yield Promise.resolve();
-        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
-    });
+    constructor() {
+        this.b = (...args) => __awaiter(this, void 0, void 0, function* () {
+            yield Promise.resolve();
+            const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
+        });
+    }
 }

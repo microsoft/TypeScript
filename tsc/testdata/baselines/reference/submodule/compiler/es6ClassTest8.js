@@ -54,9 +54,6 @@ class C {
     }
 }
 class Vector {
-    x;
-    y;
-    z;
     static norm(v) { return null; }
     static minus(v1, v2) { return null; }
     static times(v1, v2) { return null; }
@@ -69,10 +66,6 @@ class Vector {
     static dot(v1, v2) { return null; }
 }
 class Camera {
-    pos;
-    forward;
-    right;
-    up;
     constructor(pos, lookAt) {
         this.pos = pos;
         var down = new Vector(0.0, -1.0, 0.0);

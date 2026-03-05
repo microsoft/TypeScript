@@ -38,25 +38,21 @@ c = Baz;
 //// [classConstructorAccessibility3.js]
 "use strict";
 class Foo {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 class Bar {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 class Baz {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 class Qux {
-    x;
     constructor(x) {
         this.x = x;
     }

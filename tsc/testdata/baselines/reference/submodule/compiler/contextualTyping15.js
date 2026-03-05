@@ -6,5 +6,7 @@ class foo { public bar: { (): number; (i: number): number; } = function() { retu
 //// [contextualTyping15.js]
 "use strict";
 class foo {
-    bar = function () { return 1; };
+    constructor() {
+        this.bar = function () { return 1; };
+    }
 }

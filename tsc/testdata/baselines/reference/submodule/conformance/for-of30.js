@@ -21,13 +21,15 @@ for (var v of new MyStringIterator) { }
 //// [for-of30.js]
 "use strict";
 class MyStringIterator {
+    constructor() {
+        this.return = 0;
+    }
     next() {
         return {
             done: false,
             value: ""
         };
     }
-    return = 0;
     [Symbol.iterator]() {
         return this;
     }

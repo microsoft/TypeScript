@@ -23,15 +23,13 @@ class Greeter {
 //// [sourceMapValidationClass.js]
 "use strict";
 class Greeter {
-    greeting;
     constructor(greeting, ...b) {
         this.greeting = greeting;
+        this.x1 = 10;
     }
     greet() {
         return "<h1>" + this.greeting + "</h1>";
     }
-    x;
-    x1 = 10;
     fn() {
         return this.greeting;
     }

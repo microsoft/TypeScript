@@ -47,7 +47,6 @@ var ResultIsNumber12 = +STRING.charAt(0);
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {
-    a;
     static foo() { return ""; }
 }
 var M;

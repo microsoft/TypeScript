@@ -188,6 +188,12 @@ var farrow = (a) => {
 farrow(2);
 let prop1;
 class C {
+    constructor() {
+        // in a property initalizer
+        this.p = defered(() => {
+            prop1;
+        });
+    }
     // Method declaration paramter
     method(a) {
         defered(() => {
@@ -200,14 +206,16 @@ class C {
             v;
         });
     }
-    // in a property initalizer
-    p = defered(() => {
-        prop1;
-    });
 }
 new C();
 let prop2;
 var E = class {
+    constructor() {
+        // in a property initalizer
+        this.p = defered(() => {
+            prop2;
+        });
+    }
     // Method declaration paramter
     method(a) {
         defered(() => {
@@ -220,10 +228,6 @@ var E = class {
             v;
         });
     }
-    // in a property initalizer
-    p = defered(() => {
-        prop2;
-    });
 };
 new E();
 var o = {

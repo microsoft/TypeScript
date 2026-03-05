@@ -81,31 +81,32 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
+var _a, _b, _c, _d;
 var C1, C2, C3, C4;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
-    C1 = __addDisposableResource(env_1, class {
-        static { __setFunctionName(this, "C1"); }
-        static [Symbol.dispose]() { }
-    }, false);
-    C2 = __addDisposableResource(env_1, class {
-        static { __setFunctionName(this, "C2"); }
-        static x = 1;
-        static [Symbol.dispose]() { }
-    }, false);
-    C3 = __addDisposableResource(env_1, 
-    @dec
-    class {
-        static { __setFunctionName(this, "C3"); }
-        static [Symbol.dispose]() { }
-    }, false);
-    C4 = __addDisposableResource(env_1, 
-    @dec
-    class {
-        static { __setFunctionName(this, "C4"); }
-        static x = 1;
-        static [Symbol.dispose]() { }
-    }, false);
+    C1 = __addDisposableResource(env_1, (_a = class {
+            static [Symbol.dispose]() { }
+        },
+        __setFunctionName(_a, "C1"),
+        _a), false);
+    C2 = __addDisposableResource(env_1, (_b = class {
+            static [Symbol.dispose]() { }
+        },
+        __setFunctionName(_b, "C2"),
+        _b.x = 1,
+        _b), false);
+    C3 = __addDisposableResource(env_1, (_c = class {
+            static [Symbol.dispose]() { }
+        },
+        __setFunctionName(_c, "C3"),
+        _c), false);
+    C4 = __addDisposableResource(env_1, (_d = class {
+            static [Symbol.dispose]() { }
+        },
+        __setFunctionName(_d, "C4"),
+        _d.x = 1,
+        _d), false);
 }
 catch (e_1) {
     env_1.error = e_1;

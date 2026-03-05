@@ -24,7 +24,6 @@ var x = {
 "use strict";
 // nested classes are not allowed
 class C {
-    x;
 }
 class C2 {
 }

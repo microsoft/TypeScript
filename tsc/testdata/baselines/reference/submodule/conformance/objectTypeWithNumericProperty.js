@@ -49,8 +49,6 @@ var r4 = b['1.1'];
 "use strict";
 // no errors here
 class C {
-    1;
-    1.1;
 }
 var c;
 var r1 = c[1];

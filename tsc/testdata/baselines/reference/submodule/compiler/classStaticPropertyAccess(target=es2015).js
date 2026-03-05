@@ -21,10 +21,10 @@ A.a
 "use strict";
 class A {
     static "\""() { }
-    static x = 1;
-    static y = 1;
-    static _b = 2;
 }
+A.x = 1;
+A.y = 1;
+A._b = 2;
 const a = new A();
 a["\""]; // Error
 a['y']; // Error

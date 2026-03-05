@@ -13,9 +13,9 @@ namespace a.e.f {
 "use strict";
 var a;
 (function (a) {
-    let b;
+    var b;
     (function (b) {
-        let c;
+        var c;
         (function (c) {
         })(c = b.c || (b.c = {}));
     })(b = a.b || (a.b = {}));

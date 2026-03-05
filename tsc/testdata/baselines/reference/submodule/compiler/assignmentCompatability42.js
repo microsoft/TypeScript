@@ -23,8 +23,6 @@ var __test1__;
 var __test2__;
 (function (__test2__) {
     class classWithPublicPrivate {
-        one;
-        two;
         constructor(one, two) {
             this.one = one;
             this.two = two;

@@ -46,7 +46,6 @@ var E;
 })(E || (E = {}));
 E.A = null; // error
 class C {
-    foo;
 }
 var f;
 f = null; // ok

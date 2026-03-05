@@ -44,7 +44,6 @@ class a {
     }
     pgF() { }
     ;
-    pv;
     get d() {
         return 30;
     }
@@ -58,7 +57,6 @@ class a {
     static get p3() {
         return "string";
     }
-    pv3;
     foo(ns) {
         return ns.toString();
     }

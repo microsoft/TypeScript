@@ -55,7 +55,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // ok - usage is deferred
 function foo1(y = class {
-    c = x;
+    constructor() {
+        this.c = x;
+    }
 }, x = 1) {
     new y().c;
 }

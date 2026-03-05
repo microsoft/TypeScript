@@ -54,10 +54,12 @@ var y = x;
 var r2 = y();
 var r3 = c(); // should be an error
 class C {
-    prototype = null;
-    length = 1;
-    arguments = null;
-    caller = () => { };
+    constructor() {
+        this.prototype = null;
+        this.length = 1;
+        this.arguments = null;
+        this.caller = () => { };
+    }
 }
 var r4 = c2(); // should be an error
 class C2 extends Function {

@@ -20,10 +20,8 @@ x.x = r;
 //// [getAndSetNotIdenticalType3.js]
 "use strict";
 class A {
-    foo;
 }
 class C {
-    data;
     get x() {
         return this.data;
     }

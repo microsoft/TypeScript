@@ -9,5 +9,4 @@ class C {
 //// [numericIndexerConstraint.js]
 "use strict";
 class C {
-    0;
 }

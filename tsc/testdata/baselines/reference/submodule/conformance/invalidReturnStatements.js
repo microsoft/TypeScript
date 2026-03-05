@@ -31,11 +31,9 @@ function fn3() { }
 function fn4() { }
 function fn7() { } // should be valid: any includes void
 class C {
-    id;
     dispose() { }
 }
 class D extends C {
-    name;
 }
 function fn10() { return { id: 12 }; }
 function fn11() { return new C(); }

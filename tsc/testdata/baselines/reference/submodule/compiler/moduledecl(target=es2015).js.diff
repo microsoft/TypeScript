@@ -1,13 +1,8 @@
 --- old.moduledecl(target=es2015).js
 +++ new.moduledecl(target=es2015).js
-@@= skipped -242, +242 lines =@@
-     function f2(ns) {
+@@= skipped -243, +243 lines =@@
      }
      class c1 {
-+        a;
-+        b;
-+        static s1;
-+        static s2;
      }
 +    var m2 = a;
 +    var m3 = b;
@@ -18,26 +13,7 @@
  })(m0 || (m0 = {}));
  var m1;
  (function (m1) {
-@@= skipped -11, +21 lines =@@
-     }
-     m1.f2 = f2;
-     class c1 {
-+        n;
-+        n2;
-+        n3;
-+        n4;
-+        a;
-+        b;
-+        static s1;
-+        static s2;
-         d() {
-             return "Hello";
-         }
-+        e;
-         constructor(n, n2, n3, n4) {
-             this.n = n;
-             this.n2 = n2;
-@@= skipped -11, +20 lines =@@
+@@= skipped -21, +27 lines =@@
          }
      }
      m1.c1 = c1;

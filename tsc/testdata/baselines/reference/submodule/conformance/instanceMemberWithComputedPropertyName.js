@@ -14,10 +14,12 @@ class C {
 //// [instanceMemberWithComputedPropertyName.js]
 // https://github.com/microsoft/TypeScript/issues/30953
 "use strict";
+var _a;
 const x = 1;
 class C {
-    [x] = true;
     constructor() {
+        this[_a] = true;
         const { a, b } = { a: 1, b: 2 };
     }
 }
+_a = x;

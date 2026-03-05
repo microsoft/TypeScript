@@ -24,8 +24,6 @@ var xx = new a(null, 7, new B());
 class B {
 }
 class a {
-    x;
-    y;
     constructor(x, y, z) {
         this.x = x;
         this.y = y;

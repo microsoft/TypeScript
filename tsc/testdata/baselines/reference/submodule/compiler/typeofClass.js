@@ -16,8 +16,6 @@ k2.bar;
 //// [typeofClass.js]
 "use strict";
 class K {
-    foo;
-    static bar;
 }
 k1.foo;
 k1.bar;

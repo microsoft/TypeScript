@@ -330,6 +330,13 @@ func (options *CompilerOptions) GetEmitStandardClassFields() bool {
 	return options.UseDefineForClassFields != TSFalse && options.GetEmitScriptTarget() >= ScriptTargetES2022
 }
 
+func (options *CompilerOptions) GetUseDefineForClassFields() bool {
+	if options.UseDefineForClassFields == TSUnknown {
+		return options.GetEmitScriptTarget() >= ScriptTargetES2022
+	}
+	return options.UseDefineForClassFields == TSTrue
+}
+
 func (options *CompilerOptions) GetEmitDeclarations() bool {
 	return options.Declaration.IsTrue() || options.Composite.IsTrue()
 }

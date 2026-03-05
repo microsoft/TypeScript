@@ -14,17 +14,17 @@ export default class {
 
 //// [usingDeclarationsWithESClassDecorators.4.js]
 "use strict";
+var _a;
 var before, _default;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    exports.default = _default = 
-    @dec
-    class {
-        static { __setFunctionName(this, "default"); }
-    };
+    exports.default = _default = (_a = class {
+        },
+        __setFunctionName(_a, "default"),
+        _a);
 }
 catch (e_1) {
     env_1.error = e_1;

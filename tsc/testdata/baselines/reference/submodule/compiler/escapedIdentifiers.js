@@ -150,10 +150,8 @@ moduleType2.baz2 = 3;
 moduleType\u0032.baz2 = 3;
 // classes
 class classType1 {
-    foo1;
 }
 class classType\u0032 {
-    foo2;
 }
 var classType1Object1 = new classType1();
 classType1Object1.foo1 = 2;
@@ -182,10 +180,6 @@ class testClass {
 }
 // constructors
 class constructorTestClass {
-    arg1;
-    arg2;
-    arg3;
-    arg4;
     constructor(arg1, arg\u0032, arg\u0033, arg4) {
         this.arg1 = arg1;
         this.arg2 = arg2;

@@ -36,7 +36,6 @@ export const bar = Cls.bar();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cls = void 0;
 class Cls {
-    x;
 }
 exports.Cls = Cls;
 //// [mod1.js]

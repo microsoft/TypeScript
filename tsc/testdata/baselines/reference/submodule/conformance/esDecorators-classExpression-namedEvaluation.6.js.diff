@@ -45,6 +45,5 @@
 +    class {
 +    } } = obj);
 +({ y: x = class {
-+        @dec
 +        y;
 +    } } = obj);

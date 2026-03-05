@@ -30,15 +30,10 @@ var as = [list, myDerivedList]; // List<number>[]
 //// [arrayLiteralsWithRecursiveGenerics.js]
 "use strict";
 class List {
-    data;
-    next;
 }
 class DerivedList extends List {
-    foo;
 }
 class MyList {
-    data;
-    next;
 }
 var list;
 var list2;

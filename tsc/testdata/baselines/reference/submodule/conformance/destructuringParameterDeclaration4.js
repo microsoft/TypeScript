@@ -57,7 +57,6 @@ a5([1, 2]); // Error, parameter type is [any, any, [[any]]]
 a6([1, 2, "string"]); // Error, parameter type is number[]
 var temp = [1, 2, 3];
 class C {
-    temp;
     constructor(...temp) {
         this.temp = temp;
     } // Error, rest parameter can't have properties

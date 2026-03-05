@@ -89,10 +89,8 @@ switch (x) {
 }
 // basic assignable check, rest covered in tests for 'assignment compatibility'
 class C {
-    id;
 }
 class D extends C {
-    name;
 }
 switch (new C()) {
     case new D():

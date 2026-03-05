@@ -61,11 +61,15 @@ const copiedFromGetterUnannotated = {
     set x(n) { this.n = n; }
 };
 class Explicit {
-    n = 17;
+    constructor() {
+        this.n = 17;
+    }
     get x() { return this.n; }
     set x(n) { this.n = n; }
 }
 class Contextual {
-    n = 21;
+    constructor() {
+        this.n = 21;
+    }
     get x() { return this.n; } // inside a class, so already correct
 }

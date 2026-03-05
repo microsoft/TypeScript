@@ -25,9 +25,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="/.lib/react.d.ts" />
 const React = require("react");
 class TestObject {
-    a = '';
-    b = 1;
-    c = () => { };
+    constructor() {
+        this.a = '';
+        this.b = 1;
+        this.c = () => { };
+    }
 }
 function Test(props) { return React.createElement(React.Fragment, null); }
 const model = new TestObject();

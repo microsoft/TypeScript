@@ -29,20 +29,20 @@ function awaitUndefined() {
 //// [awaitLiteralValues.js]
 "use strict";
 function awaitString() {
-    await 'literal';
+    yield 'literal';
 }
 function awaitNumber() {
-    await 1;
+    yield 1;
 }
 function awaitTrue() {
-    await true;
+    yield true;
 }
 function awaitFalse() {
-    await false;
+    yield false;
 }
 function awaitNull() {
-    await null;
+    yield null;
 }
 function awaitUndefined() {
-    await undefined;
+    yield undefined;
 }

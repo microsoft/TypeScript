@@ -34,8 +34,6 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 var num;
 var strOrNum;
 class C1 {
-    pp1;
-    pp2;
     // Inside public accessor getter
     get pp3() {
         return strOrNum;

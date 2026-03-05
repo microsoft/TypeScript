@@ -15,9 +15,9 @@ namespace A.B.C {
 "use strict";
 var A;
 (function (A) {
-    let B;
+    var B;
     (function (B) {
-        let C;
+        var C;
         (function (C) {
             class W {
             }

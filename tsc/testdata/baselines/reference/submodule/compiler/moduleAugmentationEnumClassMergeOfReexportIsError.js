@@ -23,7 +23,6 @@ declare const f: ns.Foo; //is this the enum or the class? should be an error.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 class Foo {
-    member;
 }
 exports.Foo = Foo;
 //// [reexport.js]

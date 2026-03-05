@@ -50,10 +50,8 @@
 -    return D = _classThis;
 -})();
 +class C {
-+    @dec
 +    static #field1 = 0;
 +}
-+@dec
 +class D {
 +    static #field1 = 0;
 +    static {

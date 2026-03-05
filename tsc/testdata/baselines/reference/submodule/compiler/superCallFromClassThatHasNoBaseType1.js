@@ -14,7 +14,6 @@ class B {
 //// [superCallFromClassThatHasNoBaseType1.js]
 "use strict";
 class A {
-    map;
     constructor(map) {
         this.map = map;
     }

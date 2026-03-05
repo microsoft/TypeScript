@@ -21,7 +21,6 @@ zz.x;
 //// [exportAssignClassAndModule_0.js]
 "use strict";
 class Foo {
-    x;
 }
 module.exports = Foo;
 //// [exportAssignClassAndModule_1.js]

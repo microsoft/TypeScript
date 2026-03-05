@@ -11,6 +11,7 @@ class C {
 //// [esDecorators-classDeclaration-fields-nonStaticPrivateAccessor.js]
 "use strict";
 class C {
-    @dec
-    accessor #field1 = 0;
+    #field1_accessor_storage = 0;
+    get #field1() { return this.#field1_accessor_storage; }
+    set #field1(value) { this.#field1_accessor_storage = value; }
 }

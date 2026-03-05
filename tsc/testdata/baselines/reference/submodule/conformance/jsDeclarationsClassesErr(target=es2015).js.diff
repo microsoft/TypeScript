@@ -1,17 +1,6 @@
 --- old.jsDeclarationsClassesErr(target=es2015).js
 +++ new.jsDeclarationsClassesErr(target=es2015).js
-@@= skipped -75, +75 lines =@@
- // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
- // but we should be able to synthesize declarations from the symbols regardless
- export class M {
-+    field;
- }
- export class N extends M {
-+    other;
- }
- export class O {
- }
-@@= skipped -36, +38 lines =@@
+@@= skipped -111, +111 lines =@@
 
 
  //// [index.d.ts]

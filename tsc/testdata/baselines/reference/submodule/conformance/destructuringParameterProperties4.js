@@ -31,7 +31,6 @@ class C2 extends C1<number, string, boolean> {
 //// [destructuringParameterProperties4.js]
 "use strict";
 class C1 {
-    k;
     constructor(k, [a, b, c]) {
         this.k = k;
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {

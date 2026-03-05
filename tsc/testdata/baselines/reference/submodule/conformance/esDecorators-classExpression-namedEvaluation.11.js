@@ -22,7 +22,6 @@ declare let dec: any;
 class {
 });
 (class {
-    @dec
     y;
 });
 // No NamedEvaluation, class name
@@ -31,6 +30,5 @@ class {
 class C {
 });
 (class C {
-    @dec
     y;
 });

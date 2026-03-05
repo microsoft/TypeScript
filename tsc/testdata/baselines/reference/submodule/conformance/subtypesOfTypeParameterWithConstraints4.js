@@ -84,7 +84,6 @@ class D9<T extends Foo, U extends Foo, V> extends B1<U> {
 "use strict";
 // checking whether other types are subtypes of type parameters with constraints
 class Foo {
-    foo;
 }
 function f(t, u, v) {
     // ok
@@ -107,32 +106,22 @@ function f(t, u, v) {
     var r6 = true ? new Foo() : v;
 }
 class B1 {
-    foo;
 }
 class D1 extends B1 {
-    foo; // ok
 }
 class D2 extends B1 {
-    foo; // ok
 }
 class D3 extends B1 {
-    foo; // error
 }
 class D4 extends B1 {
-    foo; // ok
 }
 class D5 extends B1 {
-    foo; // error
 }
 class D6 extends B1 {
-    foo; // error
 }
 class D7 extends B1 {
-    foo; // error
 }
 class D8 extends B1 {
-    foo; // ok
 }
 class D9 extends B1 {
-    foo; // error
 }

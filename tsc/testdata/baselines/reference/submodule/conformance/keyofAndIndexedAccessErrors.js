@@ -175,10 +175,6 @@ class Test<T extends Record<string, number>> {
 //// [keyofAndIndexedAccessErrors.js]
 "use strict";
 class Shape {
-    name;
-    width;
-    height;
-    visible;
 }
 function getProperty(obj, key) {
     return obj[key];
@@ -254,7 +250,6 @@ function f31() {
 }
 // Repro from #51069
 class Test {
-    testy;
     constructor(t) {
         this.testy = t;
     }

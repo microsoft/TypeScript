@@ -25,7 +25,10 @@
 -        })(),
 -        _a;
 -})();
++var _C_instances, _C_method1;
 +class C {
-+    @dec
-+    #method1() { }
++    constructor() {
++        _C_instances.add(this);
++    }
 +}
++_C_instances = new WeakSet(), _C_method1 = function _C_method1() { };

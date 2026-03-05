@@ -14,12 +14,11 @@ class C {
 
 //// [esDecorators-classDeclaration-fields-static.js]
 "use strict";
+var _a;
 const field3 = "field3";
 class C {
-    @dec(1)
-    static field1 = 1;
-    @dec(2)
-    static ["field2"] = 2;
-    @dec(3)
-    static [field3] = 3;
 }
+_a = field3;
+C.field1 = 1;
+C["field2"] = 2;
+C[_a] = 3;

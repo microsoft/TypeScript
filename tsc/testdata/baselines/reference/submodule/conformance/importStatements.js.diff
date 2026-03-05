@@ -1,15 +1,6 @@
 --- old.importStatements.js
 +++ new.importStatements.js
-@@= skipped -40, +40 lines =@@
- var A;
- (function (A) {
-     class Point {
-+        x;
-+        y;
-         constructor(x, y) {
-             this.x = x;
-             this.y = y;
-@@= skipped -11, +13 lines =@@
+@@= skipped -51, +51 lines =@@
  // no code gen expected
  var C;
  (function (C) {

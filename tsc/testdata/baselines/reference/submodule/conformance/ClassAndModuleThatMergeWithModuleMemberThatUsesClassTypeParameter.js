@@ -55,36 +55,25 @@ namespace clodule4 {
 "use strict";
 // all expected to be errors
 class clodule1 {
-    id;
-    value;
 }
 (function (clodule1) {
     function f(x) { }
 })(clodule1 || (clodule1 = {}));
 class clodule2 {
-    id;
-    value;
 }
 (function (clodule2) {
     var x;
     class D {
-        id;
-        value;
     }
 })(clodule2 || (clodule2 = {}));
 class clodule3 {
-    id;
-    value;
 }
 (function (clodule3) {
     clodule3.y = { id: T };
 })(clodule3 || (clodule3 = {}));
 class clodule4 {
-    id;
-    value;
 }
 (function (clodule4) {
     class D {
-        name;
     }
 })(clodule4 || (clodule4 = {}));

@@ -8,10 +8,7 @@
  })(B || (B = {}));
  var X;
  (function (X) {
-     class Y {
-+        name;
-     }
-     X.Y = Y;
+@@= skipped -9, +10 lines =@@
  })(X || (X = {}));
  var Z;
  (function (Z) {
@@ -24,7 +21,7 @@
  })(b || (b = {}));
  //
  var q;
-@@= skipped -25, +29 lines =@@
+@@= skipped -16, +18 lines =@@
  })(r || (r = {}));
  var s;
  (function (s) {

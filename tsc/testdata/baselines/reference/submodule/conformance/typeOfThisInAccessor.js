@@ -46,7 +46,6 @@ class C {
     }
 }
 class D {
-    a;
     get x() {
         var r = this; // D<T>
         return 1;

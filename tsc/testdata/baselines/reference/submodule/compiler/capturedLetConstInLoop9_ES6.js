@@ -237,7 +237,6 @@ function foo2() {
     }
 }
 class C {
-    N;
     constructor(N) {
         this.N = N;
     }

@@ -26,16 +26,12 @@ p = c;
 //// [unionTypeWithRecursiveSubtypeReduction2.js]
 "use strict";
 class Module {
-    members;
 }
 class Namespace {
-    members;
 }
 class Class {
-    parent;
 }
 class Property {
-    parent;
 }
 c = p;
 p = c;

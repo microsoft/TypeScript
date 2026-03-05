@@ -1,16 +1,6 @@
 --- old.constructorWithIncompleteTypeAnnotation.js
 +++ new.constructorWithIncompleteTypeAnnotation.js
-@@= skipped -287, +287 lines =@@
- var TypeScriptAllInOne;
- (function (TypeScriptAllInOne) {
-     class Program {
--        constructor() {
--            this.case = bfs.STATEMENTS(4);
--        }
-         static Main(...args) {
-             try {
-                 var bfs = new BasicFeatures();
-@@= skipped -10, +7 lines =@@
+@@= skipped -297, +297 lines =@@
                  retValue = bfs.VARIABLES();
                  if (retValue != 0)
                       ^= {
@@ -19,31 +9,3 @@
                      };
              }
              finally {
-             }
-         }
-+        case = bfs.STATEMENTS(4);
-         if(retValue) { }
-     }
-     TypeScriptAllInOne.Program = Program;
-@@= skipped -178, +179 lines =@@
-     }
- }
- class CLASS {
--    constructor() {
--        this.d = () => { yield 0; };
--    }
-+    d = () => { yield 0; };
-     get Property() { return 0; }
-     Member() {
-         return 0;
-@@= skipped -34, +32 lines =@@
-     }
- }
- class Overloading {
--    constructor() {
--        this.otherValue = 42;
--    }
-+    otherValue = 42;
- }
- Overloads(value, string);
- Overloads();

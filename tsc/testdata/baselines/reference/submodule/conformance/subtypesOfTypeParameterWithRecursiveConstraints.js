@@ -163,7 +163,6 @@ namespace M2 {
 "use strict";
 // checking whether other types are subtypes of type parameters with constraints
 class Foo {
-    foo;
 }
 function f(t, u, v) {
     // ok
@@ -206,66 +205,46 @@ function f(t, u, v) {
 var M1;
 (function (M1) {
     class Base {
-        foo;
     }
     class D1 extends Base {
-        foo;
     }
     class D2 extends Base {
-        foo;
     }
     class D3 extends Base {
-        foo;
     }
     class D4 extends Base {
-        foo;
     }
     class D5 extends Base {
-        foo;
     }
     class D6 extends Base {
-        foo;
     }
     class D7 extends Base {
-        foo;
     }
     class D8 extends Base {
-        foo;
     }
     class D9 extends Base {
-        foo;
     }
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
     class Base2 {
-        foo;
     }
     class D1 extends Base2 {
-        foo;
     }
     class D2 extends Base2 {
-        foo;
     }
     class D3 extends Base2 {
-        foo;
     }
     class D4 extends Base2 {
-        foo;
     }
     class D5 extends Base2 {
-        foo;
     }
     class D6 extends Base2 {
-        foo;
     }
     class D7 extends Base2 {
-        foo;
     }
     class D8 extends Base2 {
-        foo;
     }
     class D9 extends Base2 {
-        foo;
     }
 })(M2 || (M2 = {}));

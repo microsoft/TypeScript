@@ -16,7 +16,6 @@ class Chain2<T extends { length: number }> {
 "use strict";
 // same example but with constraints on each type parameter
 class Chain2 {
-    value;
     constructor(value) {
         this.value = value;
     }

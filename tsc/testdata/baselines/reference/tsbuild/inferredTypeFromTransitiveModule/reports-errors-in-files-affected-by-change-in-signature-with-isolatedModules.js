@@ -115,7 +115,6 @@ export declare class LazyAction<TAction extends (...args: any[]) => any, TModule
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LazyAction = exports.LazyModule = void 0;
 class LazyModule {
-    importCallback;
     constructor(importCallback) {
         this.importCallback = importCallback;
     }

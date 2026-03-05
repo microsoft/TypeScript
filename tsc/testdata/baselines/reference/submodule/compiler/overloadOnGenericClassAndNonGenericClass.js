@@ -21,22 +21,16 @@ var t3: A; // should not error
 //// [overloadOnGenericClassAndNonGenericClass.js]
 "use strict";
 class A {
-    a;
 }
 class B {
-    b;
 }
 class C {
-    c;
 }
 class X {
-    x;
 }
 class X1 {
-    x;
 }
 class X2 {
-    x;
 }
 function f(a) {
 }

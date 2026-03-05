@@ -29,16 +29,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 export class C {
-    static s = 0;
-    p = 1;
+    constructor() {
+        this.p = 1;
+    }
     method() { }
 }
+C.s = 0;
 export { C as C2 };
 let D = class D {
-    static s = 0;
-    p = 1;
+    constructor() {
+        this.p = 1;
+    }
     method() { }
 };
+D.s = 0;
 D = __decorate([
     foo
 ], D);

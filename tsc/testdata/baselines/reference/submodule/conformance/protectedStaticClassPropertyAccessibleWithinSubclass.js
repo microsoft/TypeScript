@@ -48,7 +48,6 @@ Derived3.x;     // Error, neither within their declaring class nor classes deriv
 //// [protectedStaticClassPropertyAccessibleWithinSubclass.js]
 "use strict";
 class Base {
-    static x;
     static staticMethod() {
         Base.x; // OK, accessed within their declaring class
         Derived1.x; // OK, accessed within their declaring class
@@ -73,7 +72,6 @@ class Derived2 extends Base {
     }
 }
 class Derived3 extends Derived1 {
-    static x;
     static staticMethod3() {
         Base.x; // OK, accessed within a class derived from their declaring class
         Derived1.x; // OK, accessed within a class derived from their declaring class

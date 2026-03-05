@@ -33,23 +33,30 @@ test.tags();
 
 //// [emitClassExpressionInDeclarationFile2.js]
 "use strict";
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = exports.FooItem = exports.noPrivates = void 0;
 exports.WithTags = WithTags;
-var noPrivates = class {
-    static getTags() { }
-    tags() { }
-    static ps = -1;
-    p = 12;
-}
-// altered repro from #15066 to add private property
-;
-exports.noPrivates = noPrivates;
+exports.noPrivates = (_a = class {
+        constructor() {
+            this.p = 12;
+        }
+        static getTags() { }
+        tags() { }
+    },
+    __setFunctionName(_a, "noPrivates"),
+    _a.ps = -1,
+    _a);
 // altered repro from #15066 to add private property
 class FooItem {
+    constructor() {
+        this.property = "capitalism";
+    }
     foo() { }
-    name;
-    property = "capitalism";
 }
 exports.FooItem = FooItem;
 function WithTags(Base) {

@@ -31,31 +31,26 @@ class F<T> {
 "use strict";
 // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
 class C {
-    a = x; // error
-    b; // error
-    constructor(x) { }
+    constructor(x) {
+        this.a = x; // error
+    }
 }
 class D {
-    x;
-    a = x; // error
-    b; // error
     constructor(x) {
         this.x = x;
+        this.a = x; // error
     }
 }
 class E {
-    x;
-    a = this.x; // ok
-    b; // ok
     constructor(x) {
         this.x = x;
+        this.a = this.x; // ok
     }
 }
 class F {
-    x;
-    a = this.x; // ok
-    b = x; // error
     constructor(x) {
         this.x = x;
+        this.a = this.x; // ok
+        this.b = x; // error
     }
 }

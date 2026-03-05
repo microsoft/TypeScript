@@ -16,6 +16,6 @@ var NS;
 (function (NS) {
     NS.x = Symbol();
     class NotTransformed {
-        [NS.x];
     }
+    NS.x;
 })(NS || (NS = {}));

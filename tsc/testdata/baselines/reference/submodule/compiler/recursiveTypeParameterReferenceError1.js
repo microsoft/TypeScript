@@ -26,7 +26,6 @@ class X {
 var f;
 var r = f.z;
 class C2 {
-    x;
 }
 var f2;
 var r2 = f2.ofC4;

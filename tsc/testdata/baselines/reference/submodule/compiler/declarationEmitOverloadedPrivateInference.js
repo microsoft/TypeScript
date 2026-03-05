@@ -34,13 +34,15 @@ function oneArg(input) {
     return null;
 }
 class Wrapper {
+    constructor() {
+        this.Proxies = {
+            Failure: this.proxy(noArgs, true),
+            Success: this.proxy(oneArg),
+        };
+    }
     proxy(fn) {
         return null;
     }
-    Proxies = {
-        Failure: this.proxy(noArgs, true),
-        Success: this.proxy(oneArg),
-    };
 }
 exports.Wrapper = Wrapper;
 

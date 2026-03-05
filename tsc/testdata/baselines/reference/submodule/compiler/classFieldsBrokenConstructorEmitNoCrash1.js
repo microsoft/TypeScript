@@ -10,5 +10,7 @@ class Test {
 //// [classFieldsBrokenConstructorEmitNoCrash1.js]
 "use strict";
 class Test {
-    prop = 42;
+    constructor() {
+        this.prop = 42;
+    }
 }

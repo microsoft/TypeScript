@@ -497,7 +497,6 @@ function f33(obj) {
     }
 }
 class C10 {
-    x;
     constructor(x) {
         this.x = x;
         const thisX_isString = typeof this.x === 'string';
@@ -510,7 +509,6 @@ class C10 {
     }
 }
 class C11 {
-    x;
     constructor(x) {
         this.x = x;
         const thisX_isString = typeof this.x === 'string';
@@ -564,7 +562,6 @@ class Utils {
     }
 }
 class A53267 {
-    testNumber;
     foo() {
         const isNumber = Utils.isDefined(this.testNumber);
         if (isNumber) {

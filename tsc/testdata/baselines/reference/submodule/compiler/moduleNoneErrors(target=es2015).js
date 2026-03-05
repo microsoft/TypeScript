@@ -8,5 +8,4 @@ export class Foo {
 
 //// [a.js]
 export class Foo {
-    foo;
 }

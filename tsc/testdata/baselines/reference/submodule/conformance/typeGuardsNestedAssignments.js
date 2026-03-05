@@ -50,7 +50,9 @@ while ((match = re.exec("xxx")) != null) {
 //// [typeGuardsNestedAssignments.js]
 "use strict";
 class Foo {
-    x = "";
+    constructor() {
+        this.x = "";
+    }
 }
 function f1() {
     let foo;

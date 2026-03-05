@@ -24,5 +24,4 @@ class a {
     }
 }
 class b extends a {
-    static x;
 }

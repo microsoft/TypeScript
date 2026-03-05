@@ -1,9 +1,0 @@
---- old.implementsIncorrectlyNoAssertion.js
-+++ new.implementsIncorrectlyNoAssertion.js
-@@= skipped -16, +16 lines =@@
- //// [implementsIncorrectlyNoAssertion.js]
- "use strict";
- class Baz {
-+    x;
-+    y;
- }

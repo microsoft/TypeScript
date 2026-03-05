@@ -70,12 +70,9 @@ export class MyServer extends Server<MyInfo> {} // not assignable error at `MyIn
 
 //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.js]
 class Left {
-    value;
-    _tag = 'Left';
-    _A;
-    _L;
     constructor(value) {
         this.value = value;
+        this._tag = 'Left';
     }
     /** The given function is applied if this is a `Right` */
     map(f) {
@@ -86,12 +83,9 @@ class Left {
     }
 }
 class Right {
-    value;
-    _tag = 'Right';
-    _A;
-    _L;
     constructor(value) {
         this.value = value;
+        this._tag = 'Right';
     }
     map(f) {
         return new Right(f(this.value));
@@ -101,13 +95,6 @@ class Right {
     }
 }
 class Type {
-    name;
-    is;
-    validate;
-    encode;
-    _A;
-    _O;
-    _I;
     constructor(
     /** a unique name for this codec */
     name, 

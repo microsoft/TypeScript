@@ -45,13 +45,10 @@ class C8 extends C7 implements i2{
 //// [interfaceImplementation8.js]
 "use strict";
 class C1 {
-    name;
 }
 class C2 {
-    name;
 }
 class C3 {
-    name;
 }
 class C4 extends C1 {
 }
@@ -60,8 +57,6 @@ class C5 extends C2 {
 class C6 extends C3 {
 }
 class C7 {
-    name;
 }
 class C8 extends C7 {
-    age;
 }

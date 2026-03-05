@@ -28,18 +28,17 @@ class Q extends P {
 
 //// [superAccess2.js]
 "use strict";
+var _a, _b;
 class P {
     x() { }
     static y() { }
 }
-class Q extends P {
-    z;
-    xx = super.;
-    static yy = super.; // error for static initializer accessing super
+class Q extends (_b = P) {
     // Super is not allowed in constructor args
     constructor(z = super., zz = super., zzz = () => super.) {
         super();
         this.z = z;
+        this.xx = super.;
     }
     foo(zz = super.) {
         super.x();
@@ -50,3 +49,5 @@ class Q extends P {
         super.y();
     }
 }
+_a = Q;
+Q.yy = Reflect.get(_b, "", _a); // error for static initializer accessing super

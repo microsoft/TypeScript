@@ -1,16 +1,6 @@
 --- old.symbolDeclarationEmit12.js
 +++ new.symbolDeclarationEmit12.js
-@@= skipped -18, +18 lines =@@
- var M;
- (function (M) {
-     class C {
--        [(Symbol.iterator, Symbol.toPrimitive)](x) { }
-+        [Symbol.iterator];
-+        [Symbol.toPrimitive](x) { }
-         [Symbol.isConcatSpreadable]() {
-             return undefined;
-         }
-@@= skipped -17, +18 lines =@@
+@@= skipped -35, +35 lines =@@
      }
      export class C {
          [Symbol.iterator]: I;

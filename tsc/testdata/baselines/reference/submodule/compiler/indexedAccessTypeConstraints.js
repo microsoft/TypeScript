@@ -40,7 +40,6 @@ function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 //// [indexedAccessTypeConstraints.js]
 // Repro from #14557
 class Parent {
-    data;
     constructor(data) {
         this.data = data;
     }

@@ -27,13 +27,11 @@ export = Road;
 //// [arrayOfExportedClass_0.js]
 "use strict";
 class Car {
-    foo;
 }
 module.exports = Car;
 //// [arrayOfExportedClass_1.js]
 "use strict";
 class Road {
-    cars;
     AddCars(cars) {
         this.cars = cars;
     }

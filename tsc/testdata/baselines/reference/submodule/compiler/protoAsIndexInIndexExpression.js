@@ -36,5 +36,7 @@ var o = {
     "__proto__": 0
 };
 class C {
-    "__proto__" = 0;
+    constructor() {
+        this["__proto__"] = 0;
+    }
 }

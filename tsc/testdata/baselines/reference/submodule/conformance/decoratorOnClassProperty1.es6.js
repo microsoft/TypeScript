@@ -15,7 +15,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 export default class default_1 {
-    prop;
 }
 __decorate([
     dec

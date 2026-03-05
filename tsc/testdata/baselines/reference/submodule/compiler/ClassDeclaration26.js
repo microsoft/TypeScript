@@ -10,8 +10,9 @@ class C {
 //// [ClassDeclaration26.js]
 "use strict";
 class C {
-    var;
-    export foo = 10;
+    constructor() {
+        this.foo = 10;
+    }
 }
 var constructor;
 () => { };

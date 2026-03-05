@@ -42,7 +42,6 @@ function someDecorator(target) {
     return target;
 }
 let MyClass = class MyClass {
-    db;
     constructor(db) {
         this.db = db;
         this.db.doSomething();

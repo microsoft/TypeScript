@@ -14,7 +14,6 @@ interface A {
 //// [file1.js]
 "use strict";
 class A {
-    _f;
     getF() { return this._f; }
 }
 //// [file2.js]

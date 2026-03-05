@@ -14,5 +14,5 @@ class Test {
 // https://github.com/Microsoft/TypeScript/issues/16924
 // Should capture `this`
 class Test {
-    static member = (x) => __awaiter(this, void 0, void 0, function* () { });
 }
+Test.member = (x) => __awaiter(void 0, void 0, void 0, function* () { });

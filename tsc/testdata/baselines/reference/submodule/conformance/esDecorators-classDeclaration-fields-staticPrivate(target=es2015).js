@@ -19,15 +19,16 @@ class D {
 
 //// [esDecorators-classDeclaration-fields-staticPrivate.js]
 "use strict";
+var _a, _C_field1, _b, _D_field1;
 class C {
-    @dec
-    static #field1 = 0;
 }
-@dec
+_a = C;
+_C_field1 = { value: 0 };
 class D {
-    static #field1 = 0;
-    static {
-        this.#field1;
-        this.#field1 = 1;
-    }
 }
+_b = D;
+_D_field1 = { value: 0 };
+(() => {
+    __classPrivateFieldGet(_b, _b, "f", _D_field1);
+    __classPrivateFieldSet(_b, _b, 1, "f", _D_field1);
+})();

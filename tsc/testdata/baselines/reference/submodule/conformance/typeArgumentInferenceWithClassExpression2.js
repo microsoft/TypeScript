@@ -10,12 +10,13 @@ foo(class { static prop = "hello" }).length;
 
 //// [typeArgumentInferenceWithClassExpression2.js]
 "use strict";
+var _a;
 function foo(x = class {
-    prop;
 }) {
     return undefined;
 }
 // Should not infer string because it is a static property
-foo(class {
-    static prop = "hello";
-}).length;
+foo((_a = class {
+    },
+    _a.prop = "hello",
+    _a)).length;

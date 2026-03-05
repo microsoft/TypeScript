@@ -45,8 +45,10 @@ class D extends C {
 //// [typeRelationships.js]
 "use strict";
 class C {
-    self = this;
-    c = new C();
+    constructor() {
+        this.self = this;
+        this.c = new C();
+    }
     foo() {
         return this;
     }
@@ -65,10 +67,13 @@ class C {
     }
 }
 class D extends C {
-    self1 = this;
-    self2 = this.self;
-    self3 = this.foo();
-    d = new D();
+    constructor() {
+        super(...arguments);
+        this.self1 = this;
+        this.self2 = this.self;
+        this.self3 = this.foo();
+        this.d = new D();
+    }
     bar() {
         this.self = this.self1;
         this.self = this.self2;

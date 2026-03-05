@@ -21,7 +21,6 @@ class Base {
     constructor(c) { }
 }
 class D extends Base {
-    _t;
     constructor() {
         let x = {
             k: super(undefined),

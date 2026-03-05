@@ -12,7 +12,6 @@ var y = v1.x; // should be 'string'
 //// [genericClasses1.js]
 "use strict";
 class C {
-    x;
 }
 var v1 = new C();
 var y = v1.x; // should be 'string'

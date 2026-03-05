@@ -19,6 +19,5 @@ declare namespace exports {
 "use strict";
 exports.Sub = void 0;
 class Sub {
-    instance;
 }
 module.exports = exports;

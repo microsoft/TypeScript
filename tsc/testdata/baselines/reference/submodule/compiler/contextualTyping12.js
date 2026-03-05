@@ -6,5 +6,7 @@ class foo { public bar:{id:number;}[] = [{id:1}, {id:2, name:"foo"}]; }
 //// [contextualTyping12.js]
 "use strict";
 class foo {
-    bar = [{ id: 1 }, { id: 2, name: "foo" }];
+    constructor() {
+        this.bar = [{ id: 1 }, { id: 2, name: "foo" }];
+    }
 }

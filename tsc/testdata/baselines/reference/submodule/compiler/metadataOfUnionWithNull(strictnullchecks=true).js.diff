@@ -1,25 +1,6 @@
 --- old.metadataOfUnionWithNull(strictnullchecks=true).js
 +++ new.metadataOfUnionWithNull(strictnullchecks=true).js
-@@= skipped -58, +58 lines =@@
- class A {
- }
- class B {
-+    x;
-+    y;
-+    z;
-+    a;
-+    b;
-+    c;
-+    d;
-+    e;
-+    f;
-+    g;
-+    h;
-+    j;
- }
- __decorate([
-     PropDeco,
-@@= skipped -11, +23 lines =@@
+@@= skipped -69, +69 lines =@@
  ], B.prototype, "y", void 0);
  __decorate([
      PropDeco,

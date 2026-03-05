@@ -65,7 +65,6 @@ var B;
     // re-opened module with colliding name
     // this should add an underscore.
     class B {
-        name;
     }
 })(B || (B = {}));
 var X;
@@ -84,7 +83,7 @@ var X;
 })(X || (X = {}));
 var Y;
 (function (Y_2) {
-    let Y;
+    var Y;
     (function (Y_3) {
         let Y;
         (function (Y) {

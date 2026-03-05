@@ -763,16 +763,6 @@ namespace Formatting {
 var Formatting;
 (function (Formatting) {
     class Indenter {
-        logger;
-        tree;
-        snapshot;
-        languageHostIndentation;
-        editorOptions;
-        firstToken;
-        smartIndent;
-        indentationBag;
-        scriptBlockBeginLineNumber;
-        offsetIndentationDeltas;
         constructor(logger, tree, snapshot, languageHostIndentation, editorOptions, firstToken, smartIndent) {
             this.logger = logger;
             this.tree = tree;

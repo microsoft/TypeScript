@@ -26,6 +26,8 @@ class C {
     b;
     static accessor;
     c;
-    accessor accessor;
+    #accessor_accessor_storage;
+    get accessor() { return this.#accessor_accessor_storage; }
+    set accessor(value) { this.#accessor_accessor_storage = value; }
     d;
 }

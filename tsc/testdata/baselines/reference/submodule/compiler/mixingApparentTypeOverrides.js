@@ -34,7 +34,6 @@ class C extends A {
 "use strict";
 function Tagged(Base) {
     return class extends Base {
-        _tag;
         constructor(...args) {
             super(...args);
             this._tag = "";

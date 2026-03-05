@@ -26,8 +26,6 @@ namespace A {
 var A;
 (function (A) {
     class Point2d {
-        x;
-        y;
         constructor(x, y) {
             this.x = x;
             this.y = y;

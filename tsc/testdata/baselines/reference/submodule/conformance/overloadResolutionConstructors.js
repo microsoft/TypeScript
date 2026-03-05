@@ -107,17 +107,12 @@ var s = new fn5((n) => n.substr(0));
 //// [overloadResolutionConstructors.js]
 "use strict";
 class SomeBase {
-    n;
-    s;
 }
 class SomeDerived1 extends SomeBase {
-    m;
 }
 class SomeDerived2 extends SomeBase {
-    m;
 }
 class SomeDerived3 extends SomeBase {
-    m;
 }
 // Ambiguous call picks the first overload in declaration order
 var s = new fn1(undefined);

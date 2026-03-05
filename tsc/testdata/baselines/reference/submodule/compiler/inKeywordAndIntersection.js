@@ -35,10 +35,14 @@ if (instance instanceof ClassOne) {
 //// [inKeywordAndIntersection.js]
 "use strict";
 class A {
-    a = 0;
+    constructor() {
+        this.a = 0;
+    }
 }
 class B {
-    b = 0;
+    constructor() {
+        this.b = 0;
+    }
 }
 function f10(obj) {
     if (obj instanceof Object) {

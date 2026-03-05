@@ -16,7 +16,6 @@ new C().a.toExponential();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class A {
-    a;
 }
 exports.default = A;
 class B extends A {

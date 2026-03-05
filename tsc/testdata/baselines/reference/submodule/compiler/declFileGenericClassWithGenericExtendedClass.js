@@ -21,7 +21,6 @@ class Base {
 class Derived extends Base {
 }
 class Baz {
-    derived;
 }
 
 

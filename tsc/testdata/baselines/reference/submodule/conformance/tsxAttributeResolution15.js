@@ -28,7 +28,6 @@ class BigGreeter extends React.Component {
     render() {
         return <div>Default hi</div>;
     }
-    greeting;
 }
 // Error
 let a = <BigGreeter prop1="hello"/>;

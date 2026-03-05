@@ -47,7 +47,6 @@
 -        };
 -    })()] = obj;
 +    const [x = class {
-+        @dec
 +        y;
 +    }] = obj;
  }
@@ -139,7 +138,6 @@
 +}
 +{
 +    const { x = class {
-+        @dec
 +        y;
 +    } } = obj;
 +}
@@ -151,7 +149,6 @@
 +}
 +{
 +    const { y: x = class {
-+        @dec
 +        y;
 +    } } = obj;
  }

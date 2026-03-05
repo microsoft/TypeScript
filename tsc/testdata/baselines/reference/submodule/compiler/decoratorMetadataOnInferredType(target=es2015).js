@@ -28,7 +28,9 @@ class A {
 function decorator(target, propertyKey) {
 }
 class B {
-    x = new A();
+    constructor() {
+        this.x = new A();
+    }
 }
 exports.B = B;
 __decorate([

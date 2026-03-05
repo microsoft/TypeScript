@@ -26,13 +26,10 @@ var r2 = foo(c1, c1); // ok
 //// [genericCallWithObjectTypeArgs.js]
 "use strict";
 class C {
-    x;
 }
 class D {
-    x;
 }
 class X {
-    x;
 }
 function foo(t, t2) {
     var x;

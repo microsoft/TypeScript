@@ -41,7 +41,6 @@ function g(p1: I, p2: Partial<I>): I {
 
 //// [conditionalTypeRelaxingConstraintAssignability.js]
 export class Elem {
-    children_;
     constructor(children_) {
         this.children_ = children_;
     }

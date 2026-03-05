@@ -52,9 +52,7 @@ class C3 extends Base {
 //// [esDecorators-classExpression-classSuper.5.js]
 "use strict";
 const x = "x";
-(
-@dec
-class C1 extends Base {
+(class C1 extends Base {
     static a = super.x;
     static b = super.x = 1;
     static c = super.x += 1;
@@ -65,9 +63,7 @@ class C1 extends Base {
     static h = ({ x: super.x } = { x: 1 });
     static i = [super.x] = [1];
 });
-(
-@dec
-class C2 extends Base {
+(class C2 extends Base {
     static a = super["x"];
     static b = super["x"] = 1;
     static c = super["x"] += 1;
@@ -78,9 +74,7 @@ class C2 extends Base {
     static h = ({ x: super["x"] } = { x: 1 });
     static i = [super["x"]] = [1];
 });
-(
-@dec
-class C3 extends Base {
+(class C3 extends Base {
     static a = super[x];
     static b = super[x] = 1;
     static c = super[x] += 1;

@@ -31,7 +31,6 @@ class N2 {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 class Model {
-    someData;
 }
 exports.Model = Model;
 //// [aliasUsageInIndexerOfClass_moduleA.js]
@@ -47,8 +46,9 @@ exports.VisualizationModel = VisualizationModel;
 Object.defineProperty(exports, "__esModule", { value: true });
 const moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
 class N {
-    x = moduleA;
+    constructor() {
+        this.x = moduleA;
+    }
 }
 class N2 {
-    x;
 }

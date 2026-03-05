@@ -93,13 +93,12 @@ class Foo2 extends Foo {
     }
     set z(_super) {
     }
-    prop3;
-    prop4 = {
-        doStuff: (_super) => {
-        }
-    };
     constructor(_super) {
         super();
+        this.prop4 = {
+            doStuff: (_super) => {
+            }
+        };
     }
 }
 class Foo4 extends Foo {

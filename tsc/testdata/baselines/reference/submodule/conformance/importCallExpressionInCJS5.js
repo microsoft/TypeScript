@@ -93,12 +93,14 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
 class C {
-    myModule = Promise.resolve().then(() => __importStar(require("./0")));
+    constructor() {
+        this.myModule = Promise.resolve().then(() => __importStar(require("./0")));
+    }
     method() {
         const loadAsync = Promise.resolve().then(() => __importStar(require("./0")));
         this.myModule.then(Zero => {
             console.log(Zero.foo());
-        }, async err => {
+        }, async (err) => {
             console.log(err);
             let one = await Promise.resolve().then(() => __importStar(require("./1")));
             console.log(one.backup());
@@ -106,12 +108,14 @@ class C {
     }
 }
 class D {
-    myModule = Promise.resolve().then(() => __importStar(require("./0")));
+    constructor() {
+        this.myModule = Promise.resolve().then(() => __importStar(require("./0")));
+    }
     method() {
         const loadAsync = Promise.resolve().then(() => __importStar(require("./0")));
         this.myModule.then(Zero => {
             console.log(Zero.foo());
-        }, async err => {
+        }, async (err) => {
             console.log(err);
             let one = await Promise.resolve().then(() => __importStar(require("./1")));
             console.log(one.backup());

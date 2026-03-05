@@ -68,47 +68,47 @@ class Ds extends A {
 class A {
 }
 class B extends A {
-    s = 9;
     constructor() {
         "use strict"; // No error
         super();
+        this.s = 9;
     }
 }
 class C extends A {
-    s = 9;
     constructor() {
         super(); // No error
+        this.s = 9;
         "use strict";
     }
 }
 class D extends A {
-    s = 9;
     constructor() {
         var x = 1; // No error
         var y = this.s; // Error
         super();
+        this.s = 9;
         "use strict";
     }
 }
 class Bs extends A {
-    static s = 9;
     constructor() {
         "use strict"; // No error
         super();
     }
 }
+Bs.s = 9;
 class Cs extends A {
-    static s = 9;
     constructor() {
         super(); // No error
         "use strict";
     }
 }
+Cs.s = 9;
 class Ds extends A {
-    static s = 9;
     constructor() {
         var x = 1; // no Error
         super();
         "use strict";
     }
 }
+Ds.s = 9;

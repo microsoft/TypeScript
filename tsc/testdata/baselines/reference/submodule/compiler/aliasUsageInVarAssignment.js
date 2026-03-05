@@ -25,7 +25,6 @@ var m: typeof moduleA = i;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 class Model {
-    someData;
 }
 exports.Model = Model;
 //// [aliasUsageInVarAssignment_moduleA.js]

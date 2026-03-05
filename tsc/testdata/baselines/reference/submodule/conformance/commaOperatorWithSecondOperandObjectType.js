@@ -49,7 +49,6 @@ var NUMBER;
 var STRING;
 var OBJECT;
 class CLASS {
-    num;
 }
 //The second operand type is Object
 ANY, OBJECT;

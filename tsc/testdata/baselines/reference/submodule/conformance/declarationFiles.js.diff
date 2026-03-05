@@ -1,46 +1,9 @@
 --- old.declarationFiles.js
 +++ new.declarationFiles.js
-@@= skipped -51, +51 lines =@@
- //// [declarationFiles.js]
- "use strict";
- class C1 {
-+    x;
-     f(x) { return undefined; }
-     constructor(x) { }
- }
- class C2 {
- }
- class C3 {
-+    a;
-+    b;
-+    c;
-+    d;
-+    e;
-+    f;
-+    g;
-+    h;
-+    i;
-+    j;
- }
- class C4 {
--    constructor() {
--        this.x1 = { a: this };
--        this.x2 = [this];
--        this.x3 = [{ a: this }];
--        this.x4 = () => this;
--    }
-+    x1 = { a: this };
-+    x2 = [this];
-+    x3 = [{ a: this }];
-+    x4 = () => this;
-     f1() {
-         return { a: this };
-     }
-@@= skipped -26, +35 lines =@@
-     f4() {
+@@= skipped -78, +78 lines =@@
          return () => this;
      }
-+}
+ }
 +
 +
 +//// [declarationFiles.d.ts]
@@ -77,4 +40,4 @@
 +    f2(): this[];
 +    f3(): any;
 +    f4(): () => this;
- }
++}

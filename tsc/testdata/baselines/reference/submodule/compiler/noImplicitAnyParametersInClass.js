@@ -96,6 +96,32 @@ class C {
 //// [noImplicitAnyParametersInClass.js]
 "use strict";
 class C {
+    constructor() {
+        // No implicit-'any' errors.
+        this.pub_f9 = () => "";
+        // Implicit-'any' errors for x.
+        this.pub_f10 = (x) => "";
+        // Implicit-'any' errors for x, y, and z.
+        this.pub_f11 = (x, y, z) => "";
+        // Implicit-'any' errors for x and z.
+        this.pub_f12 = (x, y, z) => "";
+        // Implicit-'any[]' error for r.
+        this.pub_f13 = (...r) => "";
+        // Implicit-'any'/'any[]' errors for x, r.
+        this.pub_f14 = (x, ...r) => "";
+        // No implicit-'any' errors.
+        this.priv_f9 = () => "";
+        // Implicit-'any' errors for x.
+        this.priv_f10 = (x) => "";
+        // Implicit-'any' errors for x, y, and z.
+        this.priv_f11 = (x, y, z) => "";
+        // Implicit-'any' errors for x and z.
+        this.priv_f12 = (x, y, z) => "";
+        // Implicit-'any[]' error for r.
+        this.priv_f13 = (...r) => "";
+        // Implicit-'any'/'any[]' errors for x, r.
+        this.priv_f14 = (x, ...r) => "";
+    }
     // No implicit-'any' errors.
     pub_f1() { }
     // Implicit-'any' errors for x.
@@ -111,18 +137,6 @@ class C {
     // Implicit-'any'/'any[]' errors for x, r.
     pub_f7(x, ...r) { }
     pub_f8(x3, y3) { }
-    // No implicit-'any' errors.
-    pub_f9 = () => "";
-    // Implicit-'any' errors for x.
-    pub_f10 = (x) => "";
-    // Implicit-'any' errors for x, y, and z.
-    pub_f11 = (x, y, z) => "";
-    // Implicit-'any' errors for x and z.
-    pub_f12 = (x, y, z) => "";
-    // Implicit-'any[]' error for r.
-    pub_f13 = (...r) => "";
-    // Implicit-'any'/'any[]' errors for x, r.
-    pub_f14 = (x, ...r) => "";
     ///////////////////////////////////////////
     // No implicit-'any' errors.
     priv_f1() { }
@@ -139,16 +153,4 @@ class C {
     // Implicit-'any'/'any[]' errors for x, r.
     priv_f7(x, ...r) { }
     priv_f8(x3, y3) { }
-    // No implicit-'any' errors.
-    priv_f9 = () => "";
-    // Implicit-'any' errors for x.
-    priv_f10 = (x) => "";
-    // Implicit-'any' errors for x, y, and z.
-    priv_f11 = (x, y, z) => "";
-    // Implicit-'any' errors for x and z.
-    priv_f12 = (x, y, z) => "";
-    // Implicit-'any[]' error for r.
-    priv_f13 = (...r) => "";
-    // Implicit-'any'/'any[]' errors for x, r.
-    priv_f14 = (x, ...r) => "";
 }

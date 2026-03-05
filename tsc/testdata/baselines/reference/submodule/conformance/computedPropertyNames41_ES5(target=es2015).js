@@ -14,11 +14,8 @@ class C {
 //// [computedPropertyNames41_ES5.js]
 "use strict";
 class Foo {
-    x;
 }
 class Foo2 {
-    x;
-    y;
 }
 class C {
     // Computed properties

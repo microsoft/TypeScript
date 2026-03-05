@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.X = void 0;
 exports.y = y;
 class X {
-    a;
     constructor(a) {
         this.a = a;
     }

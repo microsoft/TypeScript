@@ -16,10 +16,11 @@ class C {
 
 //// [privateNamesAndIndexedAccess.js]
 "use strict";
+var _C_bar;
 class C {
-    foo = 3;
-    #bar = 3;
     constructor() {
+        this.foo = 3;
+        _C_bar.set(this, 3);
         const ok = 3;
         // not supported yet, could support in future:
         const badForNow, #bar;
@@ -28,3 +29,4 @@ class C {
         const badAlways = 3; // Error
     }
 }
+_C_bar = new WeakMap();

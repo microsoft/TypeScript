@@ -41,7 +41,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const service_1 = __importDefault(require("./service"));
 let MyComponent = class MyComponent {
-    Service;
     constructor(Service) {
         this.Service = Service;
     }

@@ -35,13 +35,12 @@ class OtherDerived extends OtherBase {
 //// [superCalls.js]
 "use strict";
 class Base {
-    x = 43;
     constructor(n) {
+        this.x = 43;
     }
 }
 function v() { }
 class Derived extends Base {
-    q;
     //super call in class constructor of derived type
     constructor(q) {
         super('');

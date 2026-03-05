@@ -46,25 +46,21 @@ class C {
     }
 }
 class D {
-    x;
     constructor() {
         return 1; // error
     }
 }
 class E {
-    x;
     constructor() {
         return { x: 1 };
     }
 }
 class F {
-    x;
     constructor() {
         return { x: 1 }; // error
     }
 }
 class G {
-    x;
     constructor() {
         return { x: null };
     }

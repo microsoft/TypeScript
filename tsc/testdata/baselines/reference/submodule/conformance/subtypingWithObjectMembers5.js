@@ -72,25 +72,19 @@ namespace Optional {
 var NotOptional;
 (function (NotOptional) {
     class B {
-        fooo; // error
     }
     class B2 {
-        2; // error
     }
     class B3 {
-        '1.0'; // error
     }
 })(NotOptional || (NotOptional = {}));
 // same cases as above but with optional
 var Optional;
 (function (Optional) {
     class B {
-        fooo; // weak type error
     }
     class B2 {
-        2; // weak type error
     }
     class B3 {
-        '1.0'; // weak type error
     }
 })(Optional || (Optional = {}));

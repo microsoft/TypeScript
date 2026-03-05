@@ -9,7 +9,6 @@
 
 //// [parserClass2.js]
 export class LoggerAdapter {
-    logger;
     constructor(logger) {
         this.logger = logger;
         this._information = this.logger.information();

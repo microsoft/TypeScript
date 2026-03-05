@@ -20,8 +20,6 @@ class ColoredPoint extends Point {
 //// [accessOverriddenBaseClassMember1.js]
 "use strict";
 class Point {
-    x;
-    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -31,7 +29,6 @@ class Point {
     }
 }
 class ColoredPoint extends Point {
-    color;
     constructor(x, y, color) {
         super(x, y);
         this.color = color;

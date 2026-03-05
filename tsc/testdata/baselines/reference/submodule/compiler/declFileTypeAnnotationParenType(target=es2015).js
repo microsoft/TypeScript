@@ -14,7 +14,6 @@ var l = (() => new c()) || "";
 //// [declFileTypeAnnotationParenType.js]
 "use strict";
 class c {
-    p;
 }
 var x = [() => new c()];
 var y = [() => new c()];

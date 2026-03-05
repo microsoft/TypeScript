@@ -53,17 +53,12 @@ interface I31<T> extends T { x: string }
 //// [interfaceExtendsObjectIntersectionErrors.js]
 "use strict";
 class C1 extends Constructor() {
-    a;
 }
 class C2 extends Constructor() {
-    b;
 }
 class C3 extends Constructor() {
-    length;
 }
 class C4 extends Constructor() {
-    0;
 }
 class C5 extends Constructor() {
-    c;
 }

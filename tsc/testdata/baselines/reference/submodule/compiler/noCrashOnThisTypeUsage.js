@@ -30,9 +30,9 @@ export class ObservableValue<T> {
 function notifyListeners(listenable, change) {
 }
 export class ObservableValue {
-    value;
     constructor(value) {
         this.value = value;
+        this.changeListeners = [];
         const newValue = value;
         const oldValue = null;
         notifyListeners(this, {
@@ -42,6 +42,5 @@ export class ObservableValue {
             oldValue
         });
     }
-    changeListeners = [];
     observe(handler, fireImmediately) { }
 }

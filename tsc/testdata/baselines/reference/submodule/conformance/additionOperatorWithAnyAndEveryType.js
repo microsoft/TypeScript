@@ -45,7 +45,6 @@ var r20 = a + ((a: string) => { return a });
 "use strict";
 function foo() { }
 class C {
-    a;
     static foo() { }
 }
 var E;

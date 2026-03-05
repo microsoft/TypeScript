@@ -38,10 +38,8 @@ namespace Generic {
 var NonGeneric;
 (function (NonGeneric) {
     class C {
-        foo;
     }
     class D extends C {
-        bar;
     }
     var r = C.prototype;
     r.foo;
@@ -51,12 +49,8 @@ var NonGeneric;
 var Generic;
 (function (Generic) {
     class C {
-        foo;
-        bar;
     }
     class D extends C {
-        baz;
-        bing;
     }
     var r = C.prototype; // C<any, any>
     var ra = r.foo; // any

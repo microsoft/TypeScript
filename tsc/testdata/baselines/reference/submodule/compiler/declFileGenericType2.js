@@ -48,9 +48,9 @@ namespace templa.dom.mvc.composite {
 // Module
 var templa;
 (function (templa) {
-    let dom;
+    var dom;
     (function (dom) {
-        let mvc;
+        var mvc;
         (function (mvc) {
             class AbstractElementController extends templa.mvc.AbstractController {
                 constructor() {
@@ -63,14 +63,13 @@ var templa;
 })(templa || (templa = {}));
 // Module
 (function (templa) {
-    let dom;
+    var dom;
     (function (dom) {
-        let mvc;
+        var mvc;
         (function (mvc) {
-            let composite;
+            var composite;
             (function (composite) {
                 class AbstractCompositeElementController extends templa.dom.mvc.AbstractElementController {
-                    _controllers;
                     constructor() {
                         super();
                         this._controllers = [];

@@ -22,10 +22,8 @@ var a: Bar, b: string[];
 //// [iterableArrayPattern7.js]
 "use strict";
 class Bar {
-    x;
 }
 class Foo extends Bar {
-    y;
 }
 class FooIterator {
     next() {

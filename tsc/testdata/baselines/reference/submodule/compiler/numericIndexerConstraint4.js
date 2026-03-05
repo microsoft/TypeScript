@@ -17,9 +17,7 @@ var x: {
 //// [numericIndexerConstraint4.js]
 "use strict";
 class A {
-    foo;
 }
 class B extends A {
-    bar;
 }
 var x = { 0: new B() };

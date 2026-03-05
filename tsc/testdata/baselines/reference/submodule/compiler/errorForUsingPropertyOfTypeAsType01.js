@@ -56,7 +56,6 @@ var Test1;
 var Test2;
 (function (Test2) {
     class Foo {
-        bar;
     }
     Test2.Foo = Foo;
     var x = "";

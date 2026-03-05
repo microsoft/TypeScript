@@ -15,10 +15,6 @@ var r2: typeof c;
 //// [typeofClassWithPrivates.js]
 "use strict";
 class C {
-    a;
-    static b;
-    x;
-    static y;
 }
 var c;
 var r;

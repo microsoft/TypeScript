@@ -60,7 +60,6 @@ var f4 = <U extends T, T>(x: V, y: X) => { // error
 // Type parameters are in scope in their own and other type parameter lists
 // Some negative cases
 class C {
-    z; // error
     foo(x) {
         var r;
         return x;

@@ -61,8 +61,10 @@ var r6 = b2[3];
 //// [numericIndexingResults.js]
 "use strict";
 class C {
-    1 = '';
-    "2" = '';
+    constructor() {
+        this[1] = '';
+        this["2"] = '';
+    }
 }
 var c;
 var r1 = c['1'];

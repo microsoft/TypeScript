@@ -843,10 +843,9 @@ namespace TypeScript {
 var TypeScript;
 (function (TypeScript) {
     class Continuation {
-        normalBlock;
-        exceptionBlock = -1;
         constructor(normalBlock) {
             this.normalBlock = normalBlock;
+            this.exceptionBlock = -1;
         }
     }
     TypeScript.Continuation = Continuation;

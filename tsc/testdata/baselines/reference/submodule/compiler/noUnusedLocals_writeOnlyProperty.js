@@ -12,7 +12,6 @@ class C {
 //// [noUnusedLocals_writeOnlyProperty.js]
 "use strict";
 class C {
-    x;
     m() {
         this.x = 0;
     }

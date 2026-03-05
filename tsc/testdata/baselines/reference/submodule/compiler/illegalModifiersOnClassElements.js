@@ -9,5 +9,7 @@ class C {
 //// [illegalModifiersOnClassElements.js]
 "use strict";
 class C {
-    export bar = 1;
+    constructor() {
+        this.bar = 1;
+    }
 }

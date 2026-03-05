@@ -21,11 +21,8 @@ class Derived2 extends Derived1 {
 var x;
 var y;
 class Base {
-    a;
 }
 class Derived1 extends Base {
-    a;
 }
 class Derived2 extends Derived1 {
-    a; // Error, parent was public
 }

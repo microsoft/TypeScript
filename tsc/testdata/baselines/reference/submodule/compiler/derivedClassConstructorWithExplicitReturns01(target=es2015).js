@@ -38,9 +38,9 @@ class D extends C {
 //// [derivedClassConstructorWithExplicitReturns01.js]
 "use strict";
 class C {
-    cProp = 10;
     foo() { return "this never gets used."; }
     constructor(value) {
+        this.cProp = 10;
         return {
             cProp: value,
             foo() {
@@ -50,9 +50,9 @@ class C {
     }
 }
 class D extends C {
-    dProp = () => this;
     constructor(a = 100) {
         super(a);
+        this.dProp = () => this;
         if (Math.random() < 0.5) {
             "You win!";
             return {

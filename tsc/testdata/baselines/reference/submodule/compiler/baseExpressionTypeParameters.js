@@ -20,7 +20,6 @@ class Spec extends Gen<string> {}
 // Repro from #17829
 function base() {
     class Base {
-        static prop;
     }
     return Base;
 }

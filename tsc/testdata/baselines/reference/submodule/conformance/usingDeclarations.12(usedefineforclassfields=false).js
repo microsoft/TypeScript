@@ -71,11 +71,11 @@ class C1 {
     constructor() { }
 }
 class C2 extends C1 {
-    y = 1;
     constructor() {
         const env_1 = { stack: [], error: void 0, hasError: false };
         try {
             super();
+            this.y = 1;
             const d17 = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);
         }
         catch (e_1) {

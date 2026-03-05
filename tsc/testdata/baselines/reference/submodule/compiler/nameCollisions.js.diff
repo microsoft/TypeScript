@@ -7,7 +7,4 @@
 -    let x;
      (function (x) {
          class Bar {
-+            test;
          }
-         x.Bar = Bar;
-     })(x || (x = {}));

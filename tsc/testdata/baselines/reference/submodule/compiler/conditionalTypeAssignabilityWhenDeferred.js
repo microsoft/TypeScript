@@ -167,7 +167,6 @@ function testAssignabilityToConditionalType() {
     const o6 = o;
 }
 class Foo2 {
-    prop;
     method() {
         set(this, "prop", "hi"); // <-- type error
     }

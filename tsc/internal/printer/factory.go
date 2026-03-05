@@ -659,8 +659,139 @@ func (f *NodeFactory) NewDisposeResourcesHelper(envBinding *ast.Expression) *ast
 	)
 }
 
-// !!! Class Fields Helpers
-// !!! ES2018 Helpers
+// Class Fields Helpers
+
+type PrivateIdentifierKind string
+
+const (
+	PrivateIdentifierKindField         PrivateIdentifierKind = "f"
+	PrivateIdentifierKindMethod        PrivateIdentifierKind = "m"
+	PrivateIdentifierKindAccessor      PrivateIdentifierKind = "a"
+	PrivateIdentifierKindUntransformed PrivateIdentifierKind = "untransformed"
+)
+
+func (f *NodeFactory) NewClassPrivateFieldGetHelper(receiver *ast.Expression, state *ast.IdentifierNode, kind PrivateIdentifierKind, fn *ast.IdentifierNode) *ast.Expression {
+	f.emitContext.RequestEmitHelper(classPrivateFieldGetHelper)
+	var args []*ast.Node
+	if fn == nil {
+		args = []*ast.Node{receiver, state, f.NewStringLiteral(string(kind), ast.TokenFlagsNone)}
+	} else {
+		args = []*ast.Node{receiver, state, f.NewStringLiteral(string(kind), ast.TokenFlagsNone), fn}
+	}
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__classPrivateFieldGet"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList(args),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewClassPrivateFieldSetHelper(receiver *ast.Expression, state *ast.IdentifierNode, value *ast.Expression, kind PrivateIdentifierKind, fn *ast.IdentifierNode) *ast.Expression {
+	f.emitContext.RequestEmitHelper(classPrivateFieldSetHelper)
+	var args []*ast.Node
+	if fn == nil {
+		args = []*ast.Node{receiver, state, value, f.NewStringLiteral(string(kind), ast.TokenFlagsNone)}
+	} else {
+		args = []*ast.Node{receiver, state, value, f.NewStringLiteral(string(kind), ast.TokenFlagsNone), fn}
+	}
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__classPrivateFieldSet"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList(args),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewClassPrivateFieldInHelper(state *ast.IdentifierNode, receiver *ast.Expression) *ast.Expression {
+	f.emitContext.RequestEmitHelper(classPrivateFieldInHelper)
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__classPrivateFieldIn"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{state, receiver}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// Creates `Object.defineProperty(target, name, descriptor)`.
+func (f *NodeFactory) NewObjectDefinePropertyCall(target *ast.Expression, name *ast.Expression, descriptor *ast.Expression) *ast.Expression {
+	return f.NewCallExpression(
+		f.NewPropertyAccessExpression(
+			f.NewIdentifier("Object"),
+			nil,
+			f.NewIdentifier("defineProperty"),
+			ast.NodeFlagsNone,
+		),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{target, name, descriptor}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// Creates `Reflect.get(target, propertyKey, receiver)`.
+func (f *NodeFactory) NewReflectGetCall(target *ast.Expression, propertyKey *ast.Expression, receiver *ast.Expression) *ast.Expression {
+	return f.NewCallExpression(
+		f.NewPropertyAccessExpression(
+			f.NewIdentifier("Reflect"),
+			nil,
+			f.NewIdentifier("get"),
+			ast.NodeFlagsNone,
+		),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{target, propertyKey, receiver}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// Creates `Reflect.set(target, propertyKey, value, receiver)`.
+func (f *NodeFactory) NewReflectSetCall(target *ast.Expression, propertyKey *ast.Expression, value *ast.Expression, receiver *ast.Expression) *ast.Expression {
+	return f.NewCallExpression(
+		f.NewPropertyAccessExpression(
+			f.NewIdentifier("Reflect"),
+			nil,
+			f.NewIdentifier("set"),
+			ast.NodeFlagsNone,
+		),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{target, propertyKey, value, receiver}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// Creates `target.bind(thisArg, ...args)`.
+func (f *NodeFactory) NewFunctionBindCall(target *ast.Expression, thisArg *ast.Expression, argumentsList []*ast.Node) *ast.Expression {
+	args := make([]*ast.Node, 0, 1+len(argumentsList))
+	args = append(args, thisArg)
+	args = append(args, argumentsList...)
+	return f.NewMethodCall(target, f.NewIdentifier("bind"), args)
+}
+
+// Creates `(() => { ...statements })()` — an immediately invoked arrow function.
+func (f *NodeFactory) NewImmediatelyInvokedArrowFunction(statements []*ast.Statement) *ast.Expression {
+	arrow := f.NewArrowFunction(
+		nil,                          /*modifiers*/
+		nil,                          /*typeParameters*/
+		f.NewNodeList([]*ast.Node{}), /*parameters*/
+		nil,                          /*returnType*/
+		nil,                          /*fullSignature*/
+		f.NewToken(ast.KindEqualsGreaterThanToken), /*equalsGreaterThanToken*/
+		f.NewBlock(f.NewNodeList(statements), true),
+	)
+	return f.NewCallExpression(
+		f.NewParenthesizedExpression(arrow),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Node{}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// ES2018 Helpers
 // Chains a sequence of expressions using the __assign helper or Object.assign if available in the target
 func (f *NodeFactory) NewAssignHelper(attributesSegments []*ast.Expression, scriptTarget core.ScriptTarget) *ast.Expression {
 	return f.NewCallExpression(f.NewPropertyAccessExpression(f.NewIdentifier("Object"), nil, f.NewIdentifier("assign"), ast.NodeFlagsNone), nil, nil, f.NewNodeList(attributesSegments), ast.NodeFlagsNone)
@@ -903,6 +1034,30 @@ func (f *NodeFactory) NewExportStarHelper(moduleExpression *ast.Expression, expo
 		nil, /*questionDotToken*/
 		nil, /*typeArguments*/
 		f.NewNodeList([]*ast.Expression{moduleExpression, exportsExpression}),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewAssignmentTargetWrapper(paramName *ast.IdentifierNode, expression *ast.Expression) *ast.Node {
+	setAccessor := f.NewSetAccessorDeclaration(
+		nil, /*modifiers*/
+		f.NewIdentifier("value"),
+		nil, /*typeParameters*/
+		f.NewNodeList([]*ast.Node{
+			f.NewParameterDeclaration(nil, nil, paramName, nil, nil, nil),
+		}),
+		nil, /*returnType*/
+		nil, /*fullSignature*/
+		f.NewBlock(f.NewNodeList([]*ast.Node{
+			f.NewExpressionStatement(expression),
+		}), false),
+	)
+	objLiteral := f.NewObjectLiteralExpression(f.NewNodeList([]*ast.Node{setAccessor}), false)
+	// Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
+	return f.NewPropertyAccessExpression(
+		f.NewParenthesizedExpression(objLiteral),
+		nil, /*questionDotToken*/
+		f.NewIdentifier("value"),
 		ast.NodeFlagsNone,
 	)
 }

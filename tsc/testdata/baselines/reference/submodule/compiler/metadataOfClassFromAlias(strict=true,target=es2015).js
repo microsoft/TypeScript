@@ -28,7 +28,6 @@ export class ClassB {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SomeClass = void 0;
 class SomeClass {
-    field;
 }
 exports.SomeClass = SomeClass;
 //// [testA.js]
@@ -49,7 +48,6 @@ function annotation() {
     return (target) => { };
 }
 class ClassA {
-    aaa;
 }
 exports.ClassA = ClassA;
 __decorate([
@@ -73,7 +71,6 @@ function annotation() {
     return (target) => { };
 }
 class ClassB {
-    bbb;
 }
 exports.ClassB = ClassB;
 __decorate([

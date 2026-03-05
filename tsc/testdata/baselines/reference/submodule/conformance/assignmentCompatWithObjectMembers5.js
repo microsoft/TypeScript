@@ -19,7 +19,6 @@ i = c; // error
 //// [assignmentCompatWithObjectMembers5.js]
 "use strict";
 class C {
-    foo;
 }
 c = i; // error
 i = c; // error

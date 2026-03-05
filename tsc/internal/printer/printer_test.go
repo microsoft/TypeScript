@@ -94,7 +94,7 @@ func TestEmit(t *testing.T) {
 		{title: "ArrowFunction#2", input: `()=>{}`, output: `() => { };`},
 		{title: "ArrowFunction#3", input: `(a)=>{}`, output: `(a) => { };`},
 		{title: "ArrowFunction#4", input: `<T>(a)=>{}`, output: `<T>(a) => { };`},
-		{title: "ArrowFunction#5", input: `async a=>{}`, output: `async a => { };`},
+		{title: "ArrowFunction#5", input: `async a=>{}`, output: `async (a) => { };`},
 		{title: "ArrowFunction#6", input: `async()=>{}`, output: `async () => { };`},
 		{title: "ArrowFunction#7", input: `async<T>()=>{}`, output: `async <T>() => { };`},
 		{title: "ArrowFunction#8", input: `():T=>{}`, output: `(): T => { };`},

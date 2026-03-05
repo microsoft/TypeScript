@@ -48,7 +48,6 @@ var a3 = <div id={thing}/>;
 var e1 = <imag src="bar.jpg"/>;
 // A custom type
 class MyClass {
-    props;
 }
 // Let's use it
 // TODO: Error on missing 'reqd'

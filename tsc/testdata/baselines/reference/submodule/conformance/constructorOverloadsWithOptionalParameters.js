@@ -18,12 +18,10 @@ class D<T> {
 //// [constructorOverloadsWithOptionalParameters.js]
 "use strict";
 class C {
-    foo;
     constructor() {
     }
 }
 class D {
-    foo;
     constructor() {
     }
 }

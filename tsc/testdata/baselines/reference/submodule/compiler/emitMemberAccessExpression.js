@@ -29,9 +29,9 @@ namespace Microsoft.PeopleAtWork.Model {
 "use strict";
 var Microsoft;
 (function (Microsoft) {
-    let PeopleAtWork;
+    var PeopleAtWork;
     (function (PeopleAtWork) {
-        let Model;
+        var Model;
         (function (Model) {
             class _Person {
                 populate(raw) {
@@ -51,9 +51,9 @@ var Microsoft;
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 var Microsoft;
 (function (Microsoft) {
-    let PeopleAtWork;
+    var PeopleAtWork;
     (function (PeopleAtWork) {
-        let Model;
+        var Model;
         (function (Model) {
             class KnockoutExtentions {
             }

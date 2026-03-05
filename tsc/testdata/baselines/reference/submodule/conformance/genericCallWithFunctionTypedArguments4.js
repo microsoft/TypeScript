@@ -28,10 +28,8 @@ var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates a
 "use strict";
 // No inference is made from function typed arguments which have multiple call signatures
 class C {
-    foo;
 }
 class D {
-    bar;
 }
 var a;
 function foo4(cb) {

@@ -20,12 +20,14 @@ class D {
 //// [esDecorators-classDeclaration-fields-staticPrivateAccessor.js]
 "use strict";
 class C {
-    @dec
-    static accessor #field1 = 0;
+    static #field1_accessor_storage = 0;
+    static get #field1() { return C.#field1_accessor_storage; }
+    static set #field1(value) { C.#field1_accessor_storage = value; }
 }
-@dec
 class D {
-    static accessor #field1 = 0;
+    static #field1_accessor_storage = 0;
+    static get #field1() { return D.#field1_accessor_storage; }
+    static set #field1(value) { D.#field1_accessor_storage = value; }
     static {
         this.#field1;
         this.#field1 = 1;

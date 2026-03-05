@@ -58,9 +58,14 @@ class C1 {
 // If there are other field initializers to transform, we must transform auto-accessors so that we can preserve
 // initialization order:
 class C2 {
-    x = 1;
-    accessor y = 2;
-    z = 3;
+    constructor() {
+        this.x = 1;
+        this.#y_accessor_storage = 2;
+        this.z = 3;
+    }
+    #y_accessor_storage;
+    get y() { return this.#y_accessor_storage; }
+    set y(value) { this.#y_accessor_storage = value; }
 }
 // Private field initializers also do not use Set semantics, so they do not force an auto-accessor transformation:
 class C3 {
@@ -70,14 +75,23 @@ class C3 {
 // However, we still need to hoist private field initializers to the constructor if we need to preserve initialization
 // order:
 class C4 {
-    x = 1;
-    #y = 2;
-    z = 3;
+    constructor() {
+        this.x = 1;
+        this.#y = 2;
+        this.z = 3;
+    }
+    #y;
 }
 class C5 {
-    #x = 1;
-    accessor y = 2;
-    z = 3;
+    constructor() {
+        this.#x = 1;
+        this.#y_accessor_storage = 2;
+        this.z = 3;
+    }
+    #x;
+    #y_accessor_storage;
+    get y() { return this.#y_accessor_storage; }
+    set y(value) { this.#y_accessor_storage = value; }
 }
 // Static accessors aren't affected:
 class C6 {
@@ -85,7 +99,7 @@ class C6 {
 }
 // Static accessors aren't affected:
 class C7 {
-    static x = 1;
+    static { this.x = 1; }
     static accessor y = 2;
-    static z = 3;
+    static { this.z = 3; }
 }

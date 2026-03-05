@@ -40,7 +40,6 @@ var r4: string = o2[''];
 var o = {};
 var r = o['']; // should be Object
 class C {
-    foo;
 }
 var r2 = c[''];
 var r3 = i[''];

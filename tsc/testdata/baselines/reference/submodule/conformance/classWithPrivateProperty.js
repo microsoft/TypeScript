@@ -28,15 +28,15 @@ var r8: string = C.g();
 "use strict";
 // accessing any private outside the class is an error
 class C {
-    x;
-    a = '';
-    b = '';
+    constructor() {
+        this.a = '';
+        this.b = '';
+        this.d = () => '';
+    }
     c() { return ''; }
-    d = () => '';
-    static e;
     static f() { return ''; }
-    static g = () => '';
 }
+C.g = () => '';
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

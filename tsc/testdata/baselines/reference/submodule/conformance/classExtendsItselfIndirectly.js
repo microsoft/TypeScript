@@ -16,20 +16,14 @@ class E2<T> extends D2<T> { baz: T; }
 //// [classExtendsItselfIndirectly.js]
 "use strict";
 class C extends E {
-    foo;
 } // error
 class D extends C {
-    bar;
 }
 class E extends D {
-    baz;
 }
 class C2 extends E2 {
-    foo;
 } // error
 class D2 extends C2 {
-    bar;
 }
 class E2 extends D2 {
-    baz;
 }

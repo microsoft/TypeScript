@@ -58,14 +58,10 @@ interface I9<T> extends A {
 // same as subtypingWithCallSignatures4 but using class type parameters instead of generic signatures
 // all are errors
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Derived {
-    baz;
 }
 class OtherDerived extends Base {
-    bing;
 }

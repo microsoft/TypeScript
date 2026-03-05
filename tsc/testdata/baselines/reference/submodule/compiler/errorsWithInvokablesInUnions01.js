@@ -24,5 +24,4 @@ export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 //// [errorsWithInvokablesInUnions01.js]
 export let blah = (x) => { };
 export let ctor = class {
-    someUnaccountedProp;
 };

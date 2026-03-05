@@ -9,6 +9,4 @@ class C {
 //// [propertyNamedPrototype.js]
 "use strict";
 class C {
-    prototype; // ok
-    static prototype; // error
 }

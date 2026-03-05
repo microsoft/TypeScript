@@ -5,4 +5,4 @@ var v = { set foo(a) }
 
 //// [accessorWithoutBody2.js]
 "use strict";
-var v = {};
+var v = { set foo(a) { } };

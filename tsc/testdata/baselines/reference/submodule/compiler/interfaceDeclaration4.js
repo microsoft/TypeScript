@@ -53,11 +53,9 @@ var Foo;
     Foo.C1 = C1;
 })(Foo || (Foo = {}));
 class C1 {
-    item;
 }
 // Err - not implemented item
 class C2 {
-    token;
 }
 class C3 {
 }

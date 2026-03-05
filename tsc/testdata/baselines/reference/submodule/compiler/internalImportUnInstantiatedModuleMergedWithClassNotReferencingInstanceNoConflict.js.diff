@@ -1,8 +1,0 @@
---- old.internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.js
-+++ new.internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.js
-@@= skipped -15, +15 lines =@@
- //// [internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.js]
- "use strict";
- class A {
-+    aProp;
- }

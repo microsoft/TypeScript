@@ -1,38 +1,7 @@
 --- old.jsDeclarationsClasses(target=es2015).js
 +++ new.jsDeclarationsClasses(target=es2015).js
-@@= skipped -203, +203 lines =@@
- }
- exports.A = A;
- class B {
-+    static cat = "cat";
- }
- exports.B = B;
--B.cat = "cat";
- class C {
-+    static Cls = class {
-+    };
- }
- exports.C = C;
--C.Cls = class {
--};
- class D {
+@@= skipped -226, +226 lines =@@
      /**
-      * @param {number} a
-@@= skipped -21, +21 lines =@@
-  */
- class E {
-     /**
-+     * @type {T & U}
-+     */
-+    field;
-+    // @readonly is currently unsupported, it seems - included here just in case that changes
-+    /**
-+     * @type {T & U}
-+     * @readonly
-+     */
-+    readonlyField;
-+    initializedField = 12;
-+    /**
       * @return {U}
       */
 -    get f1() { return /** @type {*} */ (null); }
@@ -40,7 +9,7 @@
      /**
       * @param {U} _p
       */
-@@= skipped -10, +21 lines =@@
+@@= skipped -8, +8 lines =@@
      /**
       * @return {U}
       */
@@ -49,46 +18,7 @@
      /**
       * @param {U} _p
       */
-@@= skipped -9, +9 lines =@@
-      * @param {T} a
-      * @param {U} b
-      */
--    constructor(a, b) {
--        this.initializedField = 12;
--    }
-+    constructor(a, b) { }
-+    /**
-+     * @type {string}
-+     */
-+    static staticField;
-+    // @readonly is currently unsupported, it seems - included here just in case that changes
-+    /**
-+     * @type {string}
-+     * @readonly
-+     */
-+    static staticReadonlyField;
-+    static staticInitializedField = 12;
-     /**
-      * @return {string}
-      */
-@@= skipped -21, +30 lines =@@
-     static set s3(_p) { }
- }
- exports.E = E;
--E.staticInitializedField = 12;
- /**
-  * @template T,U
-  */
- class F {
-     /**
-+     * @type {T & U}
-+     */
-+    field;
-+    /**
-      * @param {T} a
-      * @param {U} b
-      */
-@@= skipped -78, +81 lines =@@
+@@= skipped -108, +108 lines =@@
      }
  }
  exports.O = O;

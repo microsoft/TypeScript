@@ -40,11 +40,13 @@ class MyDerived extends MyBase {
 //// [superElementAccess.js]
 "use strict";
 class MyBase {
+    constructor() {
+        this.m2 = function () { };
+        this.d1 = 42;
+        this.d2 = 42;
+    }
     m1(a) { return a; }
     p1() { }
-    m2 = function () { };
-    d1 = 42;
-    d2 = 42;
     get value() { return 0; }
     set value(v) { }
 }

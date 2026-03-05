@@ -42,8 +42,6 @@ class E extends C {
 //// [protectedClassPropertyAccessibleWithinNestedSubclass.js]
 "use strict";
 class B {
-    x;
-    static x;
 }
 class C extends B {
     get y() { return this.x; }
@@ -71,5 +69,4 @@ class C extends B {
     }
 }
 class E extends C {
-    z;
 }

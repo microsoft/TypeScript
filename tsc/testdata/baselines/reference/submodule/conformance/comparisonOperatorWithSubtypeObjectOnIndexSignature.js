@@ -112,10 +112,8 @@ var r8b1 = b4 !== a4;
 //// [comparisonOperatorWithSubtypeObjectOnIndexSignature.js]
 "use strict";
 class Base {
-    a;
 }
 class Derived extends Base {
-    b;
 }
 var a1;
 var b1;

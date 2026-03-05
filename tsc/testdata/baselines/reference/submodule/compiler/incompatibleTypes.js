@@ -90,10 +90,8 @@ class C2 {
     }
 }
 class C3 {
-    p1;
 }
 class C4 {
-    p1;
 }
 function if1(a) { }
 var c1;

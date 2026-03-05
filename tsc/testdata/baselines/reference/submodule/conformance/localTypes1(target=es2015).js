@@ -152,7 +152,6 @@ function f1() {
         E[E["C"] = 2] = "C";
     })(E || (E = {}));
     class C {
-        x;
     }
     let a = [new C()];
     a[0].x = E.B;
@@ -167,7 +166,6 @@ function f2() {
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         class C {
-            x;
         }
         let a = [new C()];
         a[0].x = E.B;
@@ -185,7 +183,6 @@ function f3(b) {
         })(E || (E = {}));
         if (b) {
             class C {
-                x;
             }
             let a = [new C()];
             a[0].x = E.B;
@@ -193,7 +190,6 @@ function f3(b) {
         }
         else {
             class A {
-                x;
             }
             let c = [new A()];
             c[0].x = E.B;
@@ -210,7 +206,6 @@ function f5() {
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         class C {
-            x;
         }
         return new C();
     };
@@ -222,7 +217,6 @@ function f5() {
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         class C {
-            x;
         }
         return new C();
     };
@@ -236,7 +230,6 @@ class A {
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         class C {
-            x;
         }
     }
     m() {
@@ -247,7 +240,6 @@ class A {
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         class C {
-            x;
         }
         return new C();
     }
@@ -259,22 +251,18 @@ class A {
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         class C {
-            x;
         }
         return new C();
     }
 }
 function f6() {
     class A {
-        a;
     }
     function g() {
         class B extends A {
-            b;
         }
         function h() {
             class C extends B {
-                c;
             }
             var x = new C();
             x.a = "a";

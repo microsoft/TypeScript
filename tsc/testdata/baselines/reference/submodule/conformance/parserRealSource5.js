@@ -77,15 +77,13 @@ var TypeScript;
 (function (TypeScript) {
     // TODO: refactor indent logic for use in emit
     class PrintContext {
-        outfile;
-        parser;
-        builder = "";
-        indent1 = "  ";
-        indentStrings = [];
-        indentAmt = 0;
         constructor(outfile, parser) {
             this.outfile = outfile;
             this.parser = parser;
+            this.builder = "";
+            this.indent1 = "  ";
+            this.indentStrings = [];
+            this.indentAmt = 0;
         }
         increaseIndent() {
             this.indentAmt++;

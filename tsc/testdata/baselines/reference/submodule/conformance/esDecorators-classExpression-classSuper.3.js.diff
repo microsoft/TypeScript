@@ -54,9 +54,7 @@
 -    };
 -    return C = _classThis;
 -})());
-+(
-+@dec
-+class C extends Base {
++(class C extends Base {
 +    static {
 +        super.x;
 +        super.x = 1;

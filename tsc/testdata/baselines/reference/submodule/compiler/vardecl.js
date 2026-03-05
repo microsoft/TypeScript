@@ -138,13 +138,11 @@ var m2;
     var a2, b22 = 10, b222;
     var m3;
     class C {
-        b;
         constructor(b) {
             this.b = b;
         }
     }
     class C2 {
-        b;
         constructor(b) {
             this.b = b;
         }

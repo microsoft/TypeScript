@@ -77,8 +77,6 @@ var A;
 (function (A) {
     A.x = 'hello world';
     class Point {
-        x;
-        y;
         constructor(x, y) {
             this.x = x;
             this.y = y;
@@ -102,8 +100,6 @@ var X;
     X.Y = Y;
     (function (Y) {
         class Point {
-            x;
-            y;
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
@@ -114,6 +110,7 @@ var X;
 })(X || (X = {}));
 var Z;
 (function (Z) {
+    // 'y' should be a fundule here
     Z.y = X.Y;
 })(Z || (Z = {}));
 var m = Z.y();
@@ -121,7 +118,6 @@ var n = new Z.y.Point(0, 0);
 var K;
 (function (K) {
     class L {
-        name;
         constructor(name) {
             this.name = name;
         }

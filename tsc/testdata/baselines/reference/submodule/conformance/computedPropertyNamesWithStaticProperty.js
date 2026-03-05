@@ -26,8 +26,8 @@ class C1 {
 
 //// [computedPropertyNamesWithStaticProperty.js]
 "use strict";
+var _a;
 class C1 {
-    static staticProp = 10;
     get [C1.staticProp]() {
         return "hello";
     }
@@ -36,13 +36,15 @@ class C1 {
     }
     [C1.staticProp]() { }
 }
-(class C2 {
-    static staticProp = 10;
-    get [C2.staticProp]() {
-        return "hello";
-    }
-    set [C2.staticProp](x) {
-        var y = x;
-    }
-    [C2.staticProp]() { }
-});
+C1.staticProp = 10;
+(_a = class C2 {
+        get [C2.staticProp]() {
+            return "hello";
+        }
+        set [C2.staticProp](x) {
+            var y = x;
+        }
+        [C2.staticProp]() { }
+    },
+    _a.staticProp = 10,
+    _a);

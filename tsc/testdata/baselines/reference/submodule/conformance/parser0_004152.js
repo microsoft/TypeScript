@@ -8,22 +8,8 @@ export class Game {
 
 //// [parser0_004152.js]
 export class Game {
-    position = new DisplayPosition([]);
-    3;
-    3;
-    3;
-    3;
-    3;
-    0;
-    3;
-    3;
-    3;
-    3;
-    3;
-    3;
-    0;
-    NoMove;
-    0;
+    constructor() {
+        this.position = new DisplayPosition([]);
+    }
     ;
-    prevConfig;
 }

@@ -20,16 +20,18 @@ class C extends B {
 
 //// [classStaticBlock5.js]
 "use strict";
+var _a, _b;
 class B {
-    static a = 1;
-    static b = 2;
 }
-class C extends B {
-    static b = 3;
-    static c = super.a;
-    static {
-        this.b;
-        super.b;
-        super.a;
-    }
+B.a = 1;
+B.b = 2;
+class C extends (_b = B) {
 }
+_a = C;
+C.b = 3;
+C.c = Reflect.get(_b, "a", _a);
+(() => {
+    _a.b;
+    Reflect.get(_b, "b", _a);
+    Reflect.get(_b, "a", _a);
+})();

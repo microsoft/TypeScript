@@ -229,7 +229,6 @@
 +    class {
 +    } });
 +({ x: class {
-+        @dec
 +        y;
 +    } });
 +({ "x": 
@@ -237,7 +236,6 @@
 +    class {
 +    } });
 +({ "x": class {
-+        @dec
 +        y;
 +    } });
 +({ 0: 
@@ -245,7 +243,6 @@
 +    class {
 +    } });
 +({ 0: class {
-+        @dec
 +        y;
 +    } });
 +({ ["x"]: 
@@ -253,7 +250,6 @@
 +    class {
 +    } });
 +({ ["x"]: class {
-+        @dec
 +        y;
 +    } });
 +({ [0]: 
@@ -261,7 +257,6 @@
 +    class {
 +    } });
 +({ [0]: class {
-+        @dec
 +        y;
 +    } });
 +({ [f()]: 
@@ -269,7 +264,6 @@
 +    class {
 +    } });
 +({ [f()]: class {
-+        @dec
 +        y;
 +    } });
  // __proto__ setters do not perform NamedEvaluation

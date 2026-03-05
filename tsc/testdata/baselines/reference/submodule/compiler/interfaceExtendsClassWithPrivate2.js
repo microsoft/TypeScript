@@ -28,19 +28,27 @@ class D2 extends C implements I { // error
 //// [interfaceExtendsClassWithPrivate2.js]
 "use strict";
 class C {
+    constructor() {
+        this.x = 1;
+    }
     foo(x) { return x; }
-    x = 1;
 }
 class D extends C {
+    constructor() {
+        super(...arguments);
+        this.x = 2;
+        this.y = 3;
+    }
     foo(x) { return x; }
-    x = 2;
-    y = 3;
     other(x) { return x; }
     bar() { }
 }
 class D2 extends C {
+    constructor() {
+        super(...arguments);
+        this.x = "";
+    }
     foo(x) { return x; }
-    x = "";
     other(x) { return x; }
     bar() { }
 }

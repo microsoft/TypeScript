@@ -28,12 +28,12 @@ class A {
 }
 // https://github.com/Microsoft/TypeScript/issues/16417
 let B = B_1 = class B extends A {
-    static x = 1;
-    static y = B_1.x;
     m() {
         return B_1.x;
     }
 };
+B.x = 1;
+B.y = B_1.x;
 B = B_1 = __decorate([
     dec
 ], B);

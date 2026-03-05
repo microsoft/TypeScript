@@ -31,10 +31,11 @@ class Widget<TValue> {
 //// [infinitelyExpandingOverloads.js]
 "use strict";
 class Validator2 {
-    _subscription;
 }
 class ViewModel {
-    validationPlacements = new Array();
+    constructor() {
+        this.validationPlacements = new Array();
+    }
 }
 class Widget {
     constructor(viewModelType) {

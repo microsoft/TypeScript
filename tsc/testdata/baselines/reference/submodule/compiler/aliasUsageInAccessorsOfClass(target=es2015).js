@@ -32,7 +32,6 @@ class C2 {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 class Model {
-    someData;
 }
 exports.Model = Model;
 //// [aliasUsage1_moduleA.js]
@@ -48,7 +47,6 @@ exports.VisualizationModel = VisualizationModel;
 Object.defineProperty(exports, "__esModule", { value: true });
 const moduleA = require("./aliasUsage1_moduleA");
 class C2 {
-    x;
     get A() {
         return this.x;
     }

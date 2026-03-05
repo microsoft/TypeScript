@@ -44,7 +44,6 @@ function foo6(x: any): any { }
 "use strict";
 // object types are identical structurally
 class C {
-    foo;
 }
 class D extends C {
 }

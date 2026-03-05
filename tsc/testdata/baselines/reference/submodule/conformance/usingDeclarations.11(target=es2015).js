@@ -125,12 +125,12 @@ class C2 extends A {
     }
 }
 class C3 extends A {
-    y = 1;
     constructor() {
         const env_3 = { stack: [], error: void 0, hasError: false };
         try {
             const x = __addDisposableResource(env_3, null, false);
             super();
+            this.y = 1;
         }
         catch (e_3) {
             env_3.error = e_3;
@@ -142,7 +142,6 @@ class C3 extends A {
     }
 }
 class C4 extends A {
-    y;
     constructor(y) {
         const env_4 = { stack: [], error: void 0, hasError: false };
         try {
@@ -160,14 +159,13 @@ class C4 extends A {
     }
 }
 class C5 extends A {
-    y;
-    z = 1;
     constructor(y) {
         const env_5 = { stack: [], error: void 0, hasError: false };
         try {
             const x = __addDisposableResource(env_5, null, false);
             super();
             this.y = y;
+            this.z = 1;
         }
         catch (e_5) {
             env_5.error = e_5;

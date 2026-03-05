@@ -8,7 +8,6 @@ class C {
 //// [restParamModifier2.js]
 "use strict";
 class C {
-    rest;
     constructor(...rest) {
         this.rest = rest;
     }

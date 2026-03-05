@@ -60,7 +60,9 @@ var o = {
     }
 };
 class X {
-    value = "value";
+    constructor() {
+        this.value = "value";
+    }
     foo() {
         var outer = () => {
             var x = this.value;

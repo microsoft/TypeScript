@@ -53,9 +53,6 @@ function PropDeco(target, propKey) { }
 class A {
 }
 class B {
-    x;
-    y;
-    z;
 }
 __decorate([
     PropDeco,
@@ -77,10 +74,6 @@ var E;
     E[E["D"] = 3] = "D";
 })(E || (E = {}));
 class D {
-    a;
-    b;
-    c;
-    d;
 }
 __decorate([
     PropDeco,

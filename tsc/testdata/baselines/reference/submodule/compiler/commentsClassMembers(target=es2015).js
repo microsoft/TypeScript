@@ -223,8 +223,6 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 "use strict";
 /** This is comment for c1*/
 class c1 {
-    /** p1 is property of c1*/
-    p1;
     /** sum with property*/
     p2(/** number to add*/ b) {
         return this.p1 + b;
@@ -237,8 +235,6 @@ class c1 {
     set p3(/** this is value*/ value) {
         this.p1 = this.p2(value);
     } // trailing comment Setter
-    /** pp1 is property of c1*/
-    pp1;
     /** sum with property*/
     pp2(/** number to add*/ b) {
         return this.p1 + b;
@@ -254,8 +250,6 @@ class c1 {
     /** Constructor method*/
     constructor() {
     }
-    /** s1 is static property of c1*/
-    static s1;
     /** static sum with property*/
     static s2(/** number to add*/ b) {
         return c1.s1 + b;
@@ -268,7 +262,6 @@ class c1 {
     static set s3(/** this is value*/ value) {
         c1.s1 = c1.s2(value);
     } /*trailing comment 2 */ /*setter*/
-    nc_p1;
     nc_p2(b) {
         return this.nc_p1 + b;
     }
@@ -278,7 +271,6 @@ class c1 {
     set nc_p3(value) {
         this.nc_p1 = this.nc_p2(value);
     }
-    nc_pp1;
     nc_pp2(b) {
         return this.nc_pp1 + b;
     }
@@ -288,7 +280,6 @@ class c1 {
     set nc_pp3(value) {
         this.nc_pp1 = this.nc_pp2(value);
     }
-    static nc_s1;
     static nc_s2(b) {
         return c1.nc_s1 + b;
     }
@@ -298,8 +289,6 @@ class c1 {
     static set nc_s3(value) {
         c1.nc_s1 = c1.nc_s2(value);
     }
-    // p1 is property of c1
-    a_p1;
     // sum with property
     a_p2(b) {
         return this.a_p1 + b;
@@ -312,8 +301,6 @@ class c1 {
     set a_p3(value) {
         this.a_p1 = this.a_p2(value);
     }
-    // pp1 is property of c1
-    a_pp1;
     // sum with property
     a_pp2(b) {
         return this.a_p1 + b;
@@ -326,8 +313,6 @@ class c1 {
     set a_pp3(value) {
         this.a_pp1 = this.a_pp2(value);
     }
-    // s1 is static property of c1
-    static a_s1;
     // static sum with property
     static a_s2(b) {
         return c1.a_s1 + b;
@@ -340,8 +325,6 @@ class c1 {
     static set a_s3(value) {
         c1.a_s1 = c1.a_s2(value);
     }
-    /** p1 is property of c1 */
-    b_p1;
     /** sum with property */
     b_p2(b) {
         return this.b_p1 + b;
@@ -354,8 +337,6 @@ class c1 {
     set b_p3(value) {
         this.b_p1 = this.b_p2(value);
     }
-    /** pp1 is property of c1 */
-    b_pp1;
     /** sum with property */
     b_pp2(b) {
         return this.b_p1 + b;
@@ -368,8 +349,6 @@ class c1 {
     set b_pp3(value) {
         this.b_pp1 = this.b_pp2(value);
     }
-    /** s1 is static property of c1 */
-    static b_s1;
     /** static sum with property */
     static b_s2(b) {
         return c1.b_s1 + b;
@@ -409,7 +388,10 @@ var i1_s_ncprop = c1.nc_s3;
 c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
 class cProperties {
-    val;
+    constructor() {
+        this.x = 10; /*trailing comment for property*/
+        this.y = 10; // trailing comment of // style
+    }
     /** getter only property*/
     get p1() {
         return this.val;
@@ -424,8 +406,6 @@ class cProperties {
     set nc_p2(value) {
         this.val = value;
     } /* trailing comment of setter only*/
-    x = 10; /*trailing comment for property*/
-    y = 10; // trailing comment of // style
 }
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;

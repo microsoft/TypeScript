@@ -16,11 +16,11 @@ let Foo = class {
 "use strict";
 let Foo = class {
     constructor() {
+        this.bar = 0;
+        this.inc = () => {
+            this.bar++;
+        };
         this.bar++;
     }
-    bar = 0;
-    inc = () => {
-        this.bar++;
-    };
     m() { return this.bar; }
 };

@@ -1,28 +1,6 @@
 --- old.jsDeclarationsComputedNames(target=es2015).js
 +++ new.jsDeclarationsComputedNames(target=es2015).js
-@@= skipped -41, +41 lines =@@
- };
- //// [index2.js]
- "use strict";
--var _a, _b;
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.MyClass = void 0;
- const TopLevelSym = Symbol();
- const InnerSym = Symbol();
- class MyClass {
-+    static [TopLevelSym] = 12;
-+    [InnerSym] = "ok";
-     /**
-      * @param {typeof TopLevelSym | typeof InnerSym} _p
-      */
-     constructor(_p = InnerSym) {
--        this[_b] = "ok";
-         // switch on _p
-     }
- }
- exports.MyClass = MyClass;
--_a = TopLevelSym, _b = InnerSym;
--MyClass[_a] = 12;
+@@= skipped -61, +61 lines =@@
 
 
  //// [index.d.ts]
@@ -33,7 +11,7 @@
      [TopLevelSym](x?: number): number;
      items: {
          [InnerSym]: (arg?: {
-@@= skipped -28, +28 lines =@@
+@@= skipped -8, +10 lines =@@
          }) => number;
      };
  };
@@ -47,15 +25,12 @@
 +declare const InnerSym: unique symbol;
 +export declare class MyClass {
      static [TopLevelSym]: number;
--    /**
--     * @param {typeof TopLevelSym | typeof InnerSym} _p
--     */
--    constructor(_p?: typeof TopLevelSym | typeof InnerSym);
-     [InnerSym]: string;
-+    /**
-+     * @param {typeof TopLevelSym | typeof InnerSym} _p
-+     */
-+    constructor(_p?: typeof TopLevelSym | typeof InnerSym);
++    [InnerSym]: string;
+     /**
+      * @param {typeof TopLevelSym | typeof InnerSym} _p
+      */
+     constructor(_p?: typeof TopLevelSym | typeof InnerSym);
+-    [InnerSym]: string;
  }
 -declare const InnerSym: unique symbol;
 -declare const TopLevelSym: unique symbol;

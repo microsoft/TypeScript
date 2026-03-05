@@ -39,28 +39,31 @@ class C {
 
 //// [esDecorators-classDeclaration-outerThisReference.js]
 "use strict";
+var _a, _b, _C_a;
 // `this` should point to the outer `this` in both cases.
-@dec(this)
 class A {
-    @dec(this)
-    b = 2;
+    constructor() {
+        this.b = 2;
+    }
 }
 // `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
 // property names.
-@dec(this)
 class B {
-    // @ts-ignore
-    [f(this)] = 1;
-    @dec(this)
-    b = 2;
-    // @ts-ignore
-    [f(this)] = 3;
+    constructor() {
+        // @ts-ignore
+        this[_a] = 1;
+        this.b = 2;
+        // @ts-ignore
+        this[_b] = 3;
+    }
 }
+_a = f(this), _b = f(this);
 // The `this` transformation should ensure that decorators inside the class body have privileged access to
 // private names.
-@dec(this)
 class C {
-    #a = 1;
-    @dec(this, (x) => x.#a)
-    b = 2;
+    constructor() {
+        _C_a.set(this, 1);
+        this.b = 2;
+    }
 }
+_C_a = new WeakMap();

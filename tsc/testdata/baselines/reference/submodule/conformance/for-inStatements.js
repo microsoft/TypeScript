@@ -133,7 +133,6 @@ for (var x in i[42]) { }
 var M;
 (function (M) {
     class X {
-        name;
     }
     M.X = X;
 })(M || (M = {}));

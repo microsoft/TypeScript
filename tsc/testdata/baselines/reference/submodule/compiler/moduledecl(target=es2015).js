@@ -243,10 +243,6 @@ var m0;
     function f2(ns) {
     }
     class c1 {
-        a;
-        b;
-        static s1;
-        static s2;
     }
     var m2 = a;
     var m3 = b;
@@ -264,18 +260,9 @@ var m1;
     }
     m1.f2 = f2;
     class c1 {
-        n;
-        n2;
-        n3;
-        n4;
-        a;
-        b;
-        static s1;
-        static s2;
         d() {
             return "Hello";
         }
-        e;
         constructor(n, n2, n3, n4) {
             this.n = n;
             this.n2 = n2;

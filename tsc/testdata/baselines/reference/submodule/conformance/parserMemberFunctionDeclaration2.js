@@ -8,6 +8,5 @@ class C {
 //// [parserMemberFunctionDeclaration2.js]
 "use strict";
 class C {
-    static static;
     Foo() { }
 }

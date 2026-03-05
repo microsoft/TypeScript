@@ -1,8 +1,0 @@
---- old.privatePropertyInUnion.js
-+++ new.privatePropertyInUnion.js
-@@= skipped -19, +19 lines =@@
- "use strict";
- // Repro from #38236
- class SyncableObject {
-+    foo;
- }

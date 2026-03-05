@@ -37,7 +37,6 @@ namespace M {
 var M;
 (function (M) {
     class C {
-        x;
         constructor(x) {
             this.x = x;
         }

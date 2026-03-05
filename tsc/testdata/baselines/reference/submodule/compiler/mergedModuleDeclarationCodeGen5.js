@@ -24,9 +24,9 @@ namespace M.buz.plop {
 "use strict";
 var M;
 (function (M_1) {
-    let buz;
+    var buz;
     (function (buz) {
-        let plop;
+        var plop;
         (function (plop) {
             function doom() { }
             plop.doom = doom;
@@ -36,9 +36,9 @@ var M;
     })(buz = M_1.buz || (M_1.buz = {}));
 })(M || (M = {}));
 (function (M) {
-    let buz;
+    var buz;
     (function (buz_1) {
-        let plop;
+        var plop;
         (function (plop_1) {
             function gunk() { }
             function buz() { }

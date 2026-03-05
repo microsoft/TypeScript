@@ -48,7 +48,6 @@ let shim: typeof import("foo2") = {
 const x = { x: 0, y: 0 };
 let y = { a: "", b: 0 };
 class Bar2 {
-    item;
     constructor(input) { }
 }
 let shim = {

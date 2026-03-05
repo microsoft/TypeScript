@@ -11,5 +11,4 @@ export class Logger {
 //// [parser509546_2.js]
 "use strict";
 export class Logger {
-    public;
 }

@@ -631,14 +631,6 @@ var TypeScript;
         Reservation[Reservation["TypeScriptAndJSFutureStrict"] = 12] = "TypeScriptAndJSFutureStrict";
     })(Reservation = TypeScript.Reservation || (TypeScript.Reservation = {}));
     class TokenInfo {
-        tokenId;
-        reservation;
-        binopPrecedence;
-        binopNodeType;
-        unopPrecedence;
-        unopNodeType;
-        text;
-        ers;
         constructor(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers) {
             this.tokenId = tokenId;
             this.reservation = reservation;
@@ -789,9 +781,6 @@ var TypeScript;
         TokenClass[TokenClass["Literal"] = 6] = "Literal";
     })(TokenClass = TypeScript.TokenClass || (TypeScript.TokenClass = {}));
     class SavedToken {
-        tok;
-        minChar;
-        limChar;
         constructor(tok, minChar, limChar) {
             this.tok = tok;
             this.minChar = minChar;
@@ -800,7 +789,6 @@ var TypeScript;
     }
     TypeScript.SavedToken = SavedToken;
     class Token {
-        tokenId;
         constructor(tokenId) {
             this.tokenId = tokenId;
         }
@@ -831,8 +819,6 @@ var TypeScript;
     }
     TypeScript.Token = Token;
     class NumberLiteralToken extends Token {
-        value;
-        hasEmptyFraction;
         constructor(value, hasEmptyFraction) {
             super(TokenID.NumberLiteral);
             this.value = value;
@@ -847,7 +833,6 @@ var TypeScript;
     }
     TypeScript.NumberLiteralToken = NumberLiteralToken;
     class StringLiteralToken extends Token {
-        value;
         constructor(value) {
             super(TokenID.StringLiteral);
             this.value = value;
@@ -861,8 +846,6 @@ var TypeScript;
     }
     TypeScript.StringLiteralToken = StringLiteralToken;
     class IdentifierToken extends Token {
-        value;
-        hasEscapeSequence;
         constructor(value, hasEscapeSequence) {
             super(TokenID.Identifier);
             this.value = value;
@@ -877,7 +860,6 @@ var TypeScript;
     }
     TypeScript.IdentifierToken = IdentifierToken;
     class WhitespaceToken extends Token {
-        value;
         constructor(tokenId, value) {
             super(tokenId);
             this.value = value;
@@ -891,11 +873,6 @@ var TypeScript;
     }
     TypeScript.WhitespaceToken = WhitespaceToken;
     class CommentToken extends Token {
-        value;
-        isBlock;
-        startPos;
-        line;
-        endsLine;
         constructor(tokenID, value, isBlock, startPos, line, endsLine) {
             super(tokenID);
             this.value = value;
@@ -913,7 +890,6 @@ var TypeScript;
     }
     TypeScript.CommentToken = CommentToken;
     class RegularExpressionLiteralToken extends Token {
-        regex;
         constructor(regex) {
             super(TokenID.RegularExpressionLiteral);
             this.regex = regex;

@@ -52,7 +52,9 @@ FunctionComponent.useThis = function () {
     return <this type="foo"/>;
 };
 class ClassComponent {
-    type = 'string';
+    constructor() {
+        this.type = 'string';
+    }
 }
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 const elem1 = <FunctionComponent type="abc"/>;

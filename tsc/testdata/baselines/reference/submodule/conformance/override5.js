@@ -61,21 +61,14 @@ class ADD extends AD {
 //// [override5.js]
 "use strict";
 class B {
-    p1 = 1;
-    p2 = 2;
-    p3 = 3;
-    p4 = 4;
-    oop;
-    pp;
-    op;
+    constructor() {
+        this.p1 = 1;
+        this.p2 = 2;
+        this.p3 = 3;
+        this.p4 = 4;
+    }
 }
 class D extends B {
-    p3;
-    p4;
-    static sp;
-    oop;
-    pp;
-    op;
     constructor() {
         super();
     }

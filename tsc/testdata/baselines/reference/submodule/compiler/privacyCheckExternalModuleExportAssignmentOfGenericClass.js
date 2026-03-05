@@ -16,7 +16,6 @@ interface Bar {
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.js]
 "use strict";
 class Foo {
-    a;
     constructor(a) {
         this.a = a;
     }

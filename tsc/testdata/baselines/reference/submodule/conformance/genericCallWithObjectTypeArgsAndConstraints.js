@@ -40,14 +40,10 @@ var r2 = foo2(c1, c1);
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
 class C {
-    x;
 }
 class D {
-    x;
-    y;
 }
 class X {
-    x;
 }
 function foo(t, t2) {
     var x;

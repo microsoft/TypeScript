@@ -416,77 +416,76 @@ class Base {
     receivesAnything(param) { }
 }
 class Derived1 extends Base {
-    prop = true;
     constructor() {
         super.receivesAnything();
         super();
+        this.prop = true;
     }
 }
 class Derived2 extends Base {
-    prop = true;
     constructor() {
         super.receivesAnything(this);
         super();
+        this.prop = true;
     }
 }
 class Derived3 extends Base {
-    prop = true;
     constructor() {
         super.receivesAnything();
         super(this);
+        this.prop = true;
     }
 }
 class Derived4 extends Base {
-    prop = true;
     constructor() {
         super.receivesAnything(this);
         super(this);
+        this.prop = true;
     }
 }
 class Derived5 extends Base {
-    prop = true;
     constructor() {
         super();
+        this.prop = true;
         super.receivesAnything();
     }
 }
 class Derived6 extends Base {
-    prop = true;
     constructor() {
         super(this);
+        this.prop = true;
         super.receivesAnything();
     }
 }
 class Derived7 extends Base {
-    prop = true;
     constructor() {
         super();
+        this.prop = true;
         super.receivesAnything(this);
     }
 }
 class Derived8 extends Base {
-    prop = true;
     constructor() {
         super(this);
+        this.prop = true;
         super.receivesAnything(this);
     }
 }
 class DerivedWithArrowFunction extends Base {
-    prop = true;
     constructor() {
         (() => this)();
         super();
+        this.prop = true;
     }
 }
 class DerivedWithArrowFunctionParameter extends Base {
-    prop = true;
     constructor() {
         const lambda = (param = this) => { };
         super();
+        this.prop = true;
     }
 }
 class DerivedWithDecoratorOnClass extends Base {
-    prop = true;
     constructor() {
         let InnerClass = class InnerClass {
         };
@@ -494,10 +493,10 @@ class DerivedWithDecoratorOnClass extends Base {
             decorate(this)
         ], InnerClass);
         super();
+        this.prop = true;
     }
 }
 class DerivedWithDecoratorOnClassMethod extends Base {
-    prop = true;
     constructor() {
         class InnerClass {
             innerMethod() { }
@@ -506,143 +505,145 @@ class DerivedWithDecoratorOnClassMethod extends Base {
             decorate(this)
         ], InnerClass.prototype, "innerMethod", null);
         super();
+        this.prop = true;
     }
 }
 class DerivedWithDecoratorOnClassProperty extends Base {
-    prop = true;
     constructor() {
         class InnerClass {
-            innerProp = true;
+            constructor() {
+                this.innerProp = true;
+            }
         }
         __decorate([
             decorate(this)
         ], InnerClass.prototype, "innerProp", void 0);
         super();
+        this.prop = true;
     }
 }
 class DerivedWithFunctionDeclaration extends Base {
-    prop = true;
     constructor() {
         function declaration() {
             return this;
         }
         super();
+        this.prop = true;
     }
 }
 class DerivedWithFunctionDeclarationAndThisParam extends Base {
-    prop = true;
     constructor() {
         function declaration(param = this) {
             return param;
         }
         super();
+        this.prop = true;
     }
 }
 class DerivedWithFunctionExpression extends Base {
-    prop = true;
     constructor() {
         (function () {
             return this;
         })();
         super();
+        this.prop = true;
     }
 }
 class DerivedWithParenthesis extends Base {
-    prop = true;
     constructor() {
         (super());
+        this.prop = true;
     }
 }
 class DerivedWithParenthesisAfterStatement extends Base {
-    prop = true;
     constructor() {
         this.prop;
         (super());
+        this.prop = true;
     }
 }
 class DerivedWithParenthesisBeforeStatement extends Base {
-    prop = true;
     constructor() {
         (super());
+        this.prop = true;
         this.prop;
     }
 }
 class DerivedWithClassDeclaration extends Base {
-    prop = true;
     constructor() {
         class InnerClass {
             method() {
                 return this;
             }
-            property = 7;
             constructor() {
+                this.property = 7;
                 this.property;
                 this.method();
             }
         }
         super();
+        this.prop = true;
     }
 }
 class DerivedWithClassDeclarationExtendingMember extends Base {
-    memberClass = class {
-    };
     constructor() {
         class InnerClass extends this.memberClass {
             method() {
                 return this;
             }
-            property = 7;
             constructor() {
                 super();
+                this.property = 7;
                 this.property;
                 this.method();
             }
         }
         super();
+        this.memberClass = class {
+        };
     }
 }
 class DerivedWithClassExpression extends Base {
-    prop = true;
     constructor() {
         console.log(class {
             method() {
                 return this;
             }
-            property = 7;
             constructor() {
+                this.property = 7;
                 this.property;
                 this.method();
             }
         });
         super();
+        this.prop = true;
     }
 }
 class DerivedWithClassExpressionExtendingMember extends Base {
-    memberClass = class {
-    };
     constructor() {
         console.log(class extends this.memberClass {
         });
         super();
+        this.memberClass = class {
+        };
     }
 }
 class DerivedWithDerivedClassExpression extends Base {
-    prop = true;
     constructor() {
         console.log(class extends Base {
             constructor() {
                 super();
+                this.bar = () => this;
             }
             foo() {
                 return this;
             }
-            bar = () => this;
         });
         super();
+        this.prop = true;
     }
 }
 class DerivedWithNewDerivedClassExpression extends Base {
-    prop = true;
     constructor() {
         console.log(new class extends Base {
             constructor() {
@@ -650,10 +651,10 @@ class DerivedWithNewDerivedClassExpression extends Base {
             }
         }());
         super();
+        this.prop = true;
     }
 }
 class DerivedWithObjectAccessors extends Base {
-    prop = true;
     constructor() {
         const obj = {
             get prop() {
@@ -664,10 +665,10 @@ class DerivedWithObjectAccessors extends Base {
             }
         };
         super();
+        this.prop = true;
     }
 }
 class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
-    propName = "prop";
     constructor() {
         const obj = {
             _prop: "prop",
@@ -679,10 +680,10 @@ class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
             }
         };
         super();
+        this.propName = "prop";
     }
 }
 class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
-    propName = "prop";
     constructor() {
         const obj = {
             _prop: "prop",
@@ -694,28 +695,28 @@ class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
             }
         };
         super();
+        this.propName = "prop";
     }
 }
 class DerivedWithObjectComputedPropertyBody extends Base {
-    propName = "prop";
     constructor() {
         const obj = {
             prop: this.propName,
         };
         super();
+        this.propName = "prop";
     }
 }
 class DerivedWithObjectComputedPropertyName extends Base {
-    propName = "prop";
     constructor() {
         const obj = {
             [this.propName]: true,
         };
         super();
+        this.propName = "prop";
     }
 }
 class DerivedWithObjectMethod extends Base {
-    prop = true;
     constructor() {
         const obj = {
             getProp() {
@@ -723,63 +724,64 @@ class DerivedWithObjectMethod extends Base {
             },
         };
         super();
+        this.prop = true;
     }
 }
 let a, b;
 const DerivedWithLoops = [
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             for (super();;) { }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             for (a; super();) { }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             for (a; b; super()) { }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             for (;; super()) {
                 break;
             }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             for (const x of super()) { }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             while (super()) { }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             do { } while (super());
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             if (super()) { }
         }
     },
     class extends Base {
-        prop = true;
         constructor() {
+            this.prop = true;
             switch (super()) {
             }
         }

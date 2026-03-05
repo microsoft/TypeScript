@@ -1,24 +1,6 @@
 --- old.inlineJsxFactoryDeclarationsLocalTypes.js
 +++ new.inlineJsxFactoryDeclarationsLocalTypes.js
-@@= skipped -101, +101 lines =@@
-     ...this.props.children);
- exports.MySFC = MySFC;
- class MyClass {
-+    props;
-+    __predomBrand;
-     constructor(props) {
-         this.props = props;
-     }
-@@= skipped -67, +69 lines =@@
-     props.x + props.y,
-     props.children);
- class DOMClass {
-+    props;
-+    __domBrand;
-     constructor(props) {
-         this.props = props;
-     }
-@@= skipped -22, +24 lines =@@
+@@= skipped -190, +190 lines =@@
      (0, renderer_1.dom)(component_1.MyClass, { x: 3, y: 4 }),
      (0, renderer_1.dom)(component_1.MyClass, { x: 5, y: 6 }));
  // Should fail, nondom isn't allowed as children of dom

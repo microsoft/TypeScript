@@ -35,13 +35,10 @@ function foo5<T, U>(t: T, u: U): Object {
 var a;
 var b;
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Base {
-    baz;
 }
 var base;
 var derived;

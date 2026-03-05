@@ -37,6 +37,6 @@ const s3 = "x";
 const s4 = "x";
 const s5 = "x";
 class Cls2 {
-    static b = "b";
 }
+Cls2.b = "b";
 const obj2 = { d: 'd' };

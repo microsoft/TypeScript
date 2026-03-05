@@ -64,39 +64,28 @@ exports.M2 = void 0;
 var M1;
 (function (M1) {
     class C1 {
-        item;
     }
     class C2 {
-        item;
     }
     class C3 {
-        item;
     }
     class C4 {
-        item;
     }
     class C5 {
-        item;
     }
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
     class C1 {
-        item;
     }
     class C2 {
-        item;
     }
     class C3 {
-        item;
     }
 })(M2 || (exports.M2 = M2 = {}));
 class C1 {
-    item;
 }
 class C2 {
-    item;
 }
 class C3 {
-    item;
 }

@@ -37,9 +37,9 @@ const y = foo;
 const z = x;
 // Repro from #30118
 class Bar {
-    static instance = [];
     cast(_name) { }
     pushThis() {
         Bar.instance.push(this);
     }
 }
+Bar.instance = [];

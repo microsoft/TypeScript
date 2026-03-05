@@ -27,28 +27,24 @@ namespace A {
 //// [ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.js]
 "use strict";
 class Point {
-    x;
-    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    static Origin = { x: 0, y: 0 };
 }
+Point.Origin = { x: 0, y: 0 };
 (function (Point) {
     var Origin = ""; // not an error, since not exported
 })(Point || (Point = {}));
 var A;
 (function (A) {
     class Point {
-        x;
-        y;
         constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        static Origin = { x: 0, y: 0 };
     }
+    Point.Origin = { x: 0, y: 0 };
     A.Point = Point;
     (function (Point) {
         var Origin = ""; // not an error since not exported

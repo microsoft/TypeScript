@@ -48,9 +48,7 @@ class C extends Base {
 //// [esDecorators-classExpression-classSuper.3.js]
 "use strict";
 const x = "x";
-(
-@dec
-class C extends Base {
+(class C extends Base {
     static {
         super.x;
         super.x = 1;

@@ -60,8 +60,6 @@ var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Co
 //// [objectCreationOfElementAccessExpression.js]
 "use strict";
 class Food {
-    name;
-    amount;
     constructor(name) {
         this.name = name;
         this.amount = 100;
@@ -78,23 +76,18 @@ class Food {
     }
 }
 class MonsterFood extends Food {
-    flavor;
     constructor(name, flavor) {
         super(name);
         this.flavor = flavor;
     }
 }
 class IceCream extends MonsterFood {
-    flavor;
-    isDairyFree;
     constructor(flavor) {
         super("Ice Cream", flavor);
         this.flavor = flavor;
     }
 }
 class Cookie extends MonsterFood {
-    flavor;
-    isGlutenFree;
     constructor(flavor, isGlutenFree) {
         super("Cookie", flavor);
         this.flavor = flavor;
@@ -102,22 +95,18 @@ class Cookie extends MonsterFood {
     }
 }
 class PetFood extends Food {
-    whereToBuy;
     constructor(name, whereToBuy) {
         super(name);
         this.whereToBuy = whereToBuy;
     }
 }
 class ExpensiveOrganicDogFood extends PetFood {
-    whereToBuy;
     constructor(whereToBuy) {
         super("Origen", whereToBuy);
         this.whereToBuy = whereToBuy;
     }
 }
 class ExpensiveOrganicCatFood extends PetFood {
-    whereToBuy;
-    containsFish;
     constructor(whereToBuy, containsFish) {
         super("Nature's Logic", whereToBuy);
         this.whereToBuy = whereToBuy;

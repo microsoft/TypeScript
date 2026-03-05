@@ -85,7 +85,9 @@ export class BarIncorrectlyWorks extends Foo {
 
 //// [checkSuperCallBeforeThisAccess.js]
 class A {
-    x = 1;
+    constructor() {
+        this.x = 1;
+    }
 }
 class C1 extends A {
     constructor(n) {

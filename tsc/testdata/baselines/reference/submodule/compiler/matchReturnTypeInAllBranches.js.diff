@@ -1,18 +1,6 @@
 --- old.matchReturnTypeInAllBranches.js
 +++ new.matchReturnTypeInAllBranches.js
-@@= skipped -40, +40 lines =@@
- "use strict";
- // Represents a monster who enjoys ice cream
- class IceCreamMonster {
-+    iceCreamFlavor;
-+    iceCreamRemaining;
-+    wantsSprinkles;
-+    soundsWhenEating;
-+    name;
-     constructor(iceCreamFlavor, wantsSprinkles, soundsWhenEating, name) {
-         this.iceCreamFlavor = iceCreamFlavor;
-         this.iceCreamRemaining = 100;
-@@= skipped -8, +13 lines =@@
+@@= skipped -48, +48 lines =@@
          this.name = name;
      }
      /**

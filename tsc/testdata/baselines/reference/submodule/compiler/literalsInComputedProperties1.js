@@ -69,10 +69,6 @@ y[2].toExponential();
 y[3].toExponential();
 y[4].toExponential();
 class C {
-    1;
-    [2];
-    "3";
-    ["4"];
 }
 z[1].toExponential();
 z[2].toExponential();

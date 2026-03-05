@@ -11,9 +11,13 @@ const c: C = a;
 
 //// [privateNamesUnique-4.js]
 "use strict";
+var _C_something;
 class A1 {
 }
 class C {
-    #something;
+    constructor() {
+        _C_something.set(this, void 0);
+    }
 }
+_C_something = new WeakMap();
 const c = a;

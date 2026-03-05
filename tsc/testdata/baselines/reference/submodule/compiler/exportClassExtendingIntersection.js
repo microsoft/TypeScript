@@ -40,7 +40,6 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyBaseClass = void 0;
 class MyBaseClass {
-    baseProperty;
     constructor(value) { }
 }
 exports.MyBaseClass = MyBaseClass;
@@ -50,7 +49,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyMixin = MyMixin;
 function MyMixin(base) {
     return class extends base {
-        mixinProperty;
     };
 }
 //// [FinalClass.js]
@@ -60,7 +58,6 @@ exports.MyExtendedClass = void 0;
 const BaseClass_1 = require("./BaseClass");
 const MixinClass_1 = require("./MixinClass");
 class MyExtendedClass extends (0, MixinClass_1.MyMixin)(BaseClass_1.MyBaseClass) {
-    extendedClassProperty;
 }
 exports.MyExtendedClass = MyExtendedClass;
 //// [Main.js]

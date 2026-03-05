@@ -11,8 +11,8 @@ void def;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class C {
-    static x = 0;
 }
+C.x = 0;
 ;
 exports.default = C.x;
 //// [usage.js]

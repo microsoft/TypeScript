@@ -1,14 +1,6 @@
 --- old.declarationEmitPromise.js
 +++ new.declarationEmitPromise.js
-@@= skipped -38, +38 lines =@@
- exports.runSampleWorks = runSampleWorks;
- exports.runSampleBreaks = runSampleBreaks;
- class bluebird {
-+    static all;
- }
- exports.bluebird = bluebird;
- function runSampleWorks(a, b, c, d, e) {
-@@= skipped -24, +25 lines =@@
+@@= skipped -62, +62 lines =@@
  export declare class bluebird<T> {
      static all: Array<bluebird<any>>;
  }

@@ -49,7 +49,7 @@ var M;
     })(E = M.E || (M.E = {}));
 })(M || (M = {}));
 (function (M) {
-    let P;
+    var P;
     (function (P) {
         class C {
             static f() { }

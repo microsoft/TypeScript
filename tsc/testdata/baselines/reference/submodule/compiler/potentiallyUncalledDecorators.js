@@ -88,20 +88,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 class FooComponent {
-    foo;
 }
 __decorate([
     Input
 ], FooComponent.prototype, "foo", void 0);
 class Person {
-    person;
-    any;
 }
 __decorate([
     tracked
 ], Person.prototype, "person", void 0);
 class MultiplyByTwo {
-    args;
     get multiplied() {
         return this.args.number * 2;
     }
@@ -110,7 +106,6 @@ __decorate([
     tracked('args')
 ], MultiplyByTwo.prototype, "multiplied", null);
 let A = class A {
-    foo;
     bar() { }
 };
 __decorate([
@@ -123,7 +118,6 @@ A = __decorate([
     noArgs
 ], A);
 let B = class B {
-    foo;
     bar() { }
 };
 __decorate([
@@ -136,7 +130,6 @@ B = __decorate([
     allRest
 ], B);
 let C = class C {
-    foo;
     bar() { }
 };
 __decorate([
@@ -149,7 +142,6 @@ C = __decorate([
     oneOptional
 ], C);
 let D = class D {
-    foo;
     bar() { }
 };
 __decorate([
@@ -162,7 +154,6 @@ D = __decorate([
     twoOptional
 ], D);
 let E = class E {
-    foo;
     bar() { }
 };
 __decorate([
@@ -175,7 +166,6 @@ E = __decorate([
     threeOptional
 ], E);
 let F = class F {
-    foo;
     bar() { }
 };
 __decorate([
@@ -188,7 +178,6 @@ F = __decorate([
     oneOptionalWithRest
 ], F);
 let G = class G {
-    foo;
     bar() { }
 };
 __decorate([

@@ -18,10 +18,17 @@ const b: A2 = new B();
 //// [privateNamesUnique-5.js]
 "use strict";
 // same as privateNamesUnique-1, but with an interface
+var _A_foo, _B_foo;
 class A {
-    #foo;
+    constructor() {
+        _A_foo.set(this, void 0);
+    }
 }
+_A_foo = new WeakMap();
 class B {
-    #foo;
+    constructor() {
+        _B_foo.set(this, void 0);
+    }
 }
+_B_foo = new WeakMap();
 const b = new B();

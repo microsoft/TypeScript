@@ -109,8 +109,8 @@ var m;
 (function (m) {
     class City {
         constructor(x, thing = () => 100) {
+            this.m = () => 2 * 2 * 2;
         }
-        m = () => 2 * 2 * 2;
     }
     let Enum;
     (function (Enum) {

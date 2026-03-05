@@ -63,13 +63,10 @@ fn1(fn2(4)); // Error
 var a = "" + 4;
 var s = "" + 4;
 class SomeBase {
-    p;
 }
 class SomeDerived extends SomeBase {
-    x;
 }
 class SomeOther {
-    q;
 }
 // Type assertion should check for assignability in either direction
 var someBase = new SomeBase();

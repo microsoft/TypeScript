@@ -42,12 +42,10 @@ module.exports = x;
 //// [foo2.js]
 "use strict";
 class C1 {
-    m1;
 }
 module.exports = C1;
 //// [foo3.js]
 "use strict";
 class C1 {
-    m1;
 }
 module.exports = C1;

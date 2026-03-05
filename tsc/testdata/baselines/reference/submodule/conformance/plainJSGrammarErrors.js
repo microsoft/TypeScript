@@ -242,6 +242,8 @@ class C {
     export cantExportProperty = 1;
     export cantExportMethod() {
     }
+    // accessor mistakes
+    get incorporeal() { }
     get parametric(n) { return 1; }
     set invariant() { }
     set binary(fst, snd) { }

@@ -18,7 +18,6 @@ foo("IN " + thingy.me + "!");
 //// [unusedImportDeclaration_testerB.js]
 "use strict";
 class TesterB {
-    me;
 }
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]

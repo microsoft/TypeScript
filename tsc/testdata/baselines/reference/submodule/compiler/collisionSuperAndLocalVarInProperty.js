@@ -23,18 +23,23 @@ class b extends Foo {
 "use strict";
 var _super = 10; // No Error
 class Foo {
-    prop1 = {
-        doStuff: () => {
-            var _super = 10; // No error
-        }
-    };
-    _super = 10; // No error
+    constructor() {
+        this.prop1 = {
+            doStuff: () => {
+                var _super = 10; // No error
+            }
+        };
+        this._super = 10; // No error
+    }
 }
 class b extends Foo {
-    prop2 = {
-        doStuff: () => {
-            var _super = 10; // Should be error 
-        }
-    };
-    _super = 10; // No error
+    constructor() {
+        super(...arguments);
+        this.prop2 = {
+            doStuff: () => {
+                var _super = 10; // Should be error 
+            }
+        };
+        this._super = 10; // No error
+    }
 }

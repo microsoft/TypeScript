@@ -35,7 +35,6 @@ from(new MyObservable(42))
 //// [symbolProperty61.js]
 const observable = Symbol.obs;
 export class MyObservable {
-    _val;
     constructor(_val) {
         this._val = _val;
     }

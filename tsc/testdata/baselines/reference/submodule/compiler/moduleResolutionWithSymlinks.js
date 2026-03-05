@@ -41,7 +41,6 @@ tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
 class MyClass {
-    x;
 }
 exports.MyClass = MyClass;
 //// [/src/library-b/index.js]

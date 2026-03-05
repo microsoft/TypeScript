@@ -12,11 +12,15 @@ function g() {
 //// [modifierOnClassExpressionMemberInFunction.js]
 "use strict";
 function g() {
-    var x = class C {
-        prop1 = 1;
-        foo() { }
-        static prop2 = 43;
-    };
+    var _a;
+    var x = (_a = class C {
+            constructor() {
+                this.prop1 = 1;
+            }
+            foo() { }
+        },
+        _a.prop2 = 43,
+        _a);
 }
 
 

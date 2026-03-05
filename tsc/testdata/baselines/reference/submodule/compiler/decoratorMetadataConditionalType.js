@@ -23,14 +23,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 class BaseEntity {
-    attributes;
 }
 __decorate([
     d(),
     __metadata("design:type", Object)
 ], BaseEntity.prototype, "attributes", void 0);
 class C {
-    x;
 }
 __decorate([
     d(),

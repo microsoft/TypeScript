@@ -83,24 +83,16 @@ var rh4 = b2 !== a2;
 //// [comparisonOperatorWithSubtypeObjectOnProperty.js]
 "use strict";
 class Base {
-    a;
 }
 class Derived extends Base {
-    b;
 }
 class A1 {
-    a;
-    b;
 }
 class B1 {
-    a;
-    b;
 }
 class A2 {
-    a;
 }
 class B2 extends A2 {
-    b;
 }
 var a1;
 var a2;

@@ -1,9 +1,0 @@
---- old.indexWithoutParamType2.js
-+++ new.indexWithoutParamType2.js
-@@= skipped -8, +8 lines =@@
- //// [indexWithoutParamType2.js]
- "use strict";
- class C {
-+    // Used to be indexer, now it is a computed property
-+    [x];
- }

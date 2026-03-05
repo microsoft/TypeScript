@@ -54,7 +54,7 @@ sourceFile:sourceMap-Comments.ts
 2 >Emitted(3, 12) Source(1, 11) + SourceIndex(0)
 3 >Emitted(3, 15) Source(1, 14) + SourceIndex(0)
 ---
->>>    let tools;
+>>>    var tools;
 1->^^^^
 2 >    ^^^^
 3 >        ^^^^^

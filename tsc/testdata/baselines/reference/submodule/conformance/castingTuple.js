@@ -39,22 +39,20 @@ t4[2] = 10;
 //// [castingTuple.js]
 "use strict";
 class A {
-    a = 10;
+    constructor() {
+        this.a = 10;
+    }
 }
 class C {
-    c;
 }
 ;
 class D {
-    d;
 }
 ;
 class E extends A {
-    e;
 }
 ;
 class F extends A {
-    f;
 }
 ;
 var E1;

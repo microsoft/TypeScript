@@ -49,7 +49,6 @@ exports.circularReference = class C {
 // repro from #15066
 class FooItem {
     foo() { }
-    name;
 }
 exports.FooItem = FooItem;
 function WithTags(Base) {

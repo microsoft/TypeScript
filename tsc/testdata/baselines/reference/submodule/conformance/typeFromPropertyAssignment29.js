@@ -151,7 +151,9 @@ ExpandoExpr2.m = function (n) {
 var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length;
 // Should not work in typescript -- classes already have statics
 class ExpandoClass {
-    n = 1001;
+    constructor() {
+        this.n = 1001;
+    }
 }
 ExpandoClass.prop = 2;
 ExpandoClass.m = function (n) {
@@ -160,7 +162,9 @@ ExpandoClass.m = function (n) {
 var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n;
 // Class expressions shouldn't work in typescript either
 var ExpandoExpr3 = class {
-    n = 10001;
+    constructor() {
+        this.n = 10001;
+    }
 };
 ExpandoExpr3.prop = 3;
 ExpandoExpr3.m = function (n) {

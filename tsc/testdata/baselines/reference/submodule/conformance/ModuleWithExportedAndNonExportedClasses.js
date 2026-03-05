@@ -40,22 +40,14 @@ var ag2 = new A.A2<string, number>();
 var A;
 (function (A_1) {
     class A {
-        id;
-        name;
     }
     A_1.A = A;
     class AG {
-        id;
-        name;
     }
     A_1.AG = AG;
     class A2 {
-        id;
-        name;
     }
     class AG2 {
-        id;
-        name;
     }
 })(A || (A = {}));
 // no errors expected, these are all exported

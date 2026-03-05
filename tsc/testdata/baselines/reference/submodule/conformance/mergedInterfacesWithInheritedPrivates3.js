@@ -43,21 +43,15 @@ namespace M {
 //// [mergedInterfacesWithInheritedPrivates3.js]
 "use strict";
 class C {
-    x;
 }
 class C2 {
-    x;
 }
 class D extends C {
-    y;
-    z;
 }
 var M;
 (function (M) {
     class C {
-        x;
     }
     class C2 {
-        x;
     }
 })(M || (M = {}));

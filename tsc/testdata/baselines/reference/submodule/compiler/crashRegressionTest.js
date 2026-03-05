@@ -31,13 +31,12 @@ namespace MsPortal.Util.TemplateEngine {
 "use strict";
 var MsPortal;
 (function (MsPortal) {
-    let Util;
+    var Util;
     (function (Util) {
-        let TemplateEngine;
+        var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
             class StringTemplate {
-                _templateStorage;
                 constructor(templateStorage) {
                     this._templateStorage = templateStorage;
                 }
@@ -46,8 +45,10 @@ var MsPortal;
                 }
             }
             class TemplateStorage {
-                templateSources = {};
-                templateData = {};
+                constructor() {
+                    this.templateSources = {};
+                    this.templateData = {};
+                }
             }
             TemplateEngine.TemplateStorage = TemplateStorage;
         })(TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {}));

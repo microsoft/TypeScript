@@ -24,11 +24,10 @@ class Helper {
     }
 }
 export class Broken {
-    facade;
     constructor(facade) {
         this.facade = facade;
+        this.bug = this.facade.create();
         console.log(this.bug);
     }
-    bug = this.facade.create();
 }
 new Broken(new Helper);

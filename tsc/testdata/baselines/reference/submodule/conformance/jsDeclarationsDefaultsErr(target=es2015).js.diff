@@ -1,20 +1,6 @@
 --- old.jsDeclarationsDefaultsErr(target=es2015).js
 +++ new.jsDeclarationsDefaultsErr(target=es2015).js
-@@= skipped -31, +31 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- // merge type alias and alias (should error, see #32367)
- class Cls {
--    constructor() {
--        this.x = 12;
--    }
-+    x = 12;
-+    static y = "ok";
- }
--Cls.y = "ok";
- exports.default = Cls;
- /**
-  * @typedef {string | number} default
-@@= skipped -33, +31 lines =@@
+@@= skipped -64, +64 lines =@@
 
 
  //// [index1.d.ts]

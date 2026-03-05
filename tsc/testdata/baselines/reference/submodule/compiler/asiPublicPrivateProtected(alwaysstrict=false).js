@@ -50,7 +50,6 @@ class NonPublicClass {
     }
 }
 class NonPublicClass2 {
-    public;
     nonPublicFunction() {
     }
 }
@@ -60,7 +59,6 @@ class NonPrivateClass {
     }
 }
 class NonPrivateClass2 {
-    private;
     nonPrivateFunction() {
     }
 }
@@ -70,12 +68,8 @@ class NonProtectedClass {
     }
 }
 class NonProtectedClass2 {
-    protected;
     nonProtectedFunction() {
     }
 }
 class ClassWithThreeMembers {
-    public;
-    private;
-    protected;
 }

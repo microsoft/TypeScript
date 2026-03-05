@@ -20,7 +20,5 @@ class C4 implements I1 {
 //// [interfaceImplementation3.js]
 "use strict";
 class C4 {
-    iObj;
-    iNum;
     iFn() { }
 }

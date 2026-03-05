@@ -25,6 +25,5 @@ var Validation;
     }
     Validation.c2 = c2;
     class c3 {
-        x;
     }
 })(Validation || (Validation = {}));

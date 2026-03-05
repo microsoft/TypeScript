@@ -9,5 +9,4 @@ class C {
 //// [parserIsClassMemberStart.js]
 "use strict";
 class C {
-    type;
 }

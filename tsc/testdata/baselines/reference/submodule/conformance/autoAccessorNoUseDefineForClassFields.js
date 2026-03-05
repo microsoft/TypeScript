@@ -64,12 +64,22 @@ class C4 {
 //// [file5.js]
 "use strict";
 class C5 {
-    x = 0;
-    accessor #x = 1;
+    constructor() {
+        this.x = 0;
+        this.#x_accessor_storage = 1;
+    }
+    #x_accessor_storage;
+    get #x() { return this.#x_accessor_storage; }
+    set #x(value) { this.#x_accessor_storage = value; }
 }
 //// [file6.js]
 "use strict";
 class C6 {
-    accessor #x = 0;
-    x = 1;
+    constructor() {
+        this.#x_accessor_storage = 0;
+        this.x = 1;
+    }
+    #x_accessor_storage;
+    get #x() { return this.#x_accessor_storage; }
+    set #x(value) { this.#x_accessor_storage = value; }
 }

@@ -1,19 +1,6 @@
 --- old.varianceAnnotations.js
 +++ new.varianceAnnotations.js
-@@= skipped -185, +185 lines =@@
- super_invariant = sub_invariant; // Error
- sub_invariant = super_invariant; // Error
- class C {
--    constructor() {
--        this.a = 0; // Error
--        this.b = 0; // Error
--    }
-+    in a = 0; // Error
-+    out b = 0; // Error
- }
- baz1 = baz2; // Error
- baz2 = baz1; // Error
-@@= skipped -135, +133 lines =@@
+@@= skipped -320, +320 lines =@@
  }>;
  declare let Anon: {
      new <out T>(): {

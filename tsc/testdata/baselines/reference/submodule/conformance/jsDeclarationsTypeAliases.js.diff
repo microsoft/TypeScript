@@ -1,24 +1,6 @@
 --- old.jsDeclarationsTypeAliases.js
 +++ new.jsDeclarationsTypeAliases.js
-@@= skipped -88, +88 lines =@@
-     return { x: "" + x };
- }
- class ExportedThing {
--    constructor() {
--        this.z = "ok";
--    }
-+    z = "ok";
- }
- module.exports = {
-     doTheThing,
-     ExportedThing,
- };
- class LocalThing {
--    constructor() {
--        this.y = "ok";
--    }
-+    y = "ok";
- }
+@@= skipped -104, +104 lines =@@
 
 
  //// [index.d.ts]
@@ -60,7 +42,7 @@
  //// [mixed.d.ts]
  export type SomeType = {
      x: string;
-@@= skipped -39, +52 lines =@@
+@@= skipped -23, +40 lines =@@
   * @param {number} x
   * @returns {SomeType}
   */

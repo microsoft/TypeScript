@@ -53,16 +53,12 @@ v15.member;
 //// [unionTypePropertyAccessibility.js]
 "use strict";
 class Default {
-    member;
 }
 class Public {
-    member;
 }
 class Protected {
-    member;
 }
 class Private {
-    member;
 }
 v1.member;
 v2.member;

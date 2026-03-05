@@ -38,7 +38,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 let MyComponent = class MyComponent {
-    Service;
     constructor(Service) {
         this.Service = Service;
     }

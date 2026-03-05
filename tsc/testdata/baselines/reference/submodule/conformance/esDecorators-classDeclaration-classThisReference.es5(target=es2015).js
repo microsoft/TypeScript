@@ -14,10 +14,13 @@ class C {
 
 //// [esDecorators-classDeclaration-classThisReference.es5.js]
 "use strict";
-@dec
+var _a;
 class C {
-    static { this; }
-    static x = this;
     static m() { this; }
     static get g() { return this; }
 }
+_a = C;
+(() => {
+    _a;
+})();
+C.x = _a;

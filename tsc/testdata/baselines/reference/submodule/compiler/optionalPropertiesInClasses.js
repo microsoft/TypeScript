@@ -22,12 +22,8 @@ class C3 implements ifoo {
 //// [optionalPropertiesInClasses.js]
 "use strict";
 class C1 {
-    y;
 }
 class C2 {
-    x;
 }
 class C3 {
-    x;
-    y;
 }

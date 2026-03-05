@@ -1,18 +1,6 @@
 --- old.typedefOnSemicolonClassElement.js
 +++ new.typedefOnSemicolonClassElement.js
-@@= skipped -10, +10 lines =@@
-
- //// [typedefOnSemicolonClassElement.js]
- export class Preferences {
--    constructor() {
--        /** @type {A} */
--        this.a = 'ok';
--    }
-     /** @typedef {string} A */
-     ;
-+    /** @type {A} */
-+    a = 'ok';
- }
+@@= skipped -20, +20 lines =@@
 
 
  //// [typedefOnSemicolonClassElement.d.ts]

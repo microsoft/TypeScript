@@ -17,8 +17,8 @@ class Greeter {
 "use strict";
 class Greeter {
     constructor(message) {
+        this.messageHandler = (message) => {
+            console.log(message); // This shouldnt be error
+        };
     }
-    messageHandler = (message) => {
-        console.log(message); // This shouldnt be error
-    };
 }

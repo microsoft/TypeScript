@@ -45,9 +45,6 @@ namespace Generic {
 var NonGeneric;
 (function (NonGeneric) {
     class C {
-        a;
-        b;
-        x;
         get y() {
             return 1;
         }
@@ -68,9 +65,6 @@ var NonGeneric;
 var Generic;
 (function (Generic) {
     class C {
-        a;
-        b;
-        x;
         get y() {
             return null;
         }

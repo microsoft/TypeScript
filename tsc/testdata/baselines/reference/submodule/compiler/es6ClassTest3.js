@@ -25,9 +25,6 @@ var M;
         ;
         bar() { }
         ;
-        x;
-        y;
-        z;
         constructor() {
             this.x = 1;
             this.y = 2;

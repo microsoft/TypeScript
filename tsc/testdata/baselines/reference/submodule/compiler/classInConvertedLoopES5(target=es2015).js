@@ -16,8 +16,10 @@ for (const row of ['1', '2', '3', '4', '5']) {
 const classesByRow = {};
 for (const row of ['1', '2', '3', '4', '5']) {
     class RowClass {
-        row = row;
-        static factory = () => new RowClass();
+        constructor() {
+            this.row = row;
+        }
     }
+    RowClass.factory = () => new RowClass();
     classesByRow[row] = RowClass;
 }

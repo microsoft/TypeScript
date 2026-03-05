@@ -29,7 +29,6 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 class Model {
-    someData;
 }
 exports.Model = Model;
 //// [aliasUsageInOrExpression_moduleA.js]

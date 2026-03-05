@@ -40,7 +40,6 @@ x =
 class {
 };
 x = class {
-    @dec
     y;
 };
 // 13.15.2 RS: Evaluation
@@ -50,7 +49,6 @@ x &&=
 class {
 };
 x &&= class {
-    @dec
     y;
 };
 // 13.15.2 RS: Evaluation
@@ -60,7 +58,6 @@ x ||=
 class {
 };
 x ||= class {
-    @dec
     y;
 };
 // 13.15.2 RS: Evaluation
@@ -70,6 +67,5 @@ x ??=
 class {
 };
 x ??= class {
-    @dec
     y;
 };

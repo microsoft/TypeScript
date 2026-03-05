@@ -7,7 +7,6 @@ class D implements C extends C { }
 //// [implementClausePrecedingExtends.js]
 "use strict";
 class C {
-    foo;
 }
 class D extends C {
 }

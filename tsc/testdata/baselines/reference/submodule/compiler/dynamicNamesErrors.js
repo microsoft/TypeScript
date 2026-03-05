@@ -74,11 +74,9 @@ const y = Symbol();
 const z = Symbol();
 const w = Symbol();
 class ClassMemberVisibility {
-    static [x];
     static [y]() { return 0; }
     static get [z]() { return 0; }
     static set [w](value) { }
-    [x];
     [y]() { return 0; }
     get [z]() { return 0; }
     set [w](value) { }

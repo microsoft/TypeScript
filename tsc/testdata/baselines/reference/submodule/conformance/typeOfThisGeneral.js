@@ -182,9 +182,12 @@ this.spaaaaace = 4;
 //// [typeOfThisGeneral.js]
 "use strict";
 class MyTestClass {
-    canary;
-    static staticCanary;
     constructor() {
+        this.someFunc = () => {
+            //type of 'this' in member variable initializer is the class instance type
+            var t = this;
+            var t;
+        };
         //type of 'this' in constructor body is the class instance type
         var p = this.canary;
         var p;
@@ -209,11 +212,6 @@ class MyTestClass {
         p = v;
         v = p;
     }
-    someFunc = () => {
-        //type of 'this' in member variable initializer is the class instance type
-        var t = this;
-        var t;
-    };
     //type of 'this' in static function param list is constructor function type
     static staticFn(t = this) {
         var t;
@@ -242,9 +240,12 @@ class MyTestClass {
     }
 }
 class MyGenericTestClass {
-    canary;
-    static staticCanary;
     constructor() {
+        this.someFunc = () => {
+            //type of 'this' in member variable initializer is the class instance type
+            var t = this;
+            var t;
+        };
         //type of 'this' in constructor body is the class instance type
         var p = this.canary;
         var p;
@@ -269,11 +270,6 @@ class MyGenericTestClass {
         p = v;
         v = p;
     }
-    someFunc = () => {
-        //type of 'this' in member variable initializer is the class instance type
-        var t = this;
-        var t;
-    };
     //type of 'this' in static function param list is constructor function type
     static staticFn(t = this) {
         var t;

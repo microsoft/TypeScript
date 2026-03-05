@@ -49,7 +49,7 @@ namespace M
 "use strict";
 var A;
 (function (A) {
-    let B;
+    var B;
     (function (B) {
         B.x = 1;
     })(B = A.B || (A.B = {}));
@@ -64,9 +64,9 @@ var AA;
 var tmpOK = AA.B.x;
 var tmpError = A.B.x;
 (function (A) {
-    let B;
+    var B;
     (function (B) {
-        let C;
+        var C;
         (function (C) {
             C.x = 1;
         })(C = B.C || (B.C = {}));

@@ -124,7 +124,9 @@ class C2 {
     set await(value) { }
 }
 class C3 {
-    await = 1;
+    constructor() {
+        this.await = 1;
+    }
 }
 ({
     await() { }

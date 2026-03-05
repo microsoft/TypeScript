@@ -145,7 +145,7 @@ var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
 var m2;
 (function (m2) {
-    let m3;
+    var m3;
     (function (m3) {
         /** Exported class comment*/
         class c {
@@ -157,9 +157,9 @@ new m2.m3.c();
 /** module comment of m3.m4.m5*/
 var m3;
 (function (m3) {
-    let m4;
+    var m4;
     (function (m4) {
-        let m5;
+        var m5;
         (function (m5) {
             /** Exported class comment*/
             class c {
@@ -172,9 +172,9 @@ new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 var m4;
 (function (m4) {
-    let m5;
+    var m5;
     (function (m5) {
-        let m6;
+        var m6;
         (function (m6) {
             let m7;
             (function (m7) {
@@ -190,9 +190,9 @@ new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/
 var m5;
 (function (m5) {
-    let m6;
+    var m6;
     (function (m6) {
-        let m7;
+        var m7;
         (function (m7) {
             /** module m8 comment*/
             let m8;
@@ -208,7 +208,7 @@ var m5;
 new m5.m6.m7.m8.c();
 var m6;
 (function (m6) {
-    let m7;
+    var m7;
     (function (m7) {
         let m8;
         (function (m8) {
@@ -222,7 +222,7 @@ var m6;
 new m6.m7.m8.c();
 var m7;
 (function (m7) {
-    let m8;
+    var m8;
     (function (m8) {
         /** module m9 comment*/
         let m9;

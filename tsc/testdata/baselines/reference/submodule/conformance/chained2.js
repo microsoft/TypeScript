@@ -25,7 +25,6 @@ const b: types.B = {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class A {
-    a;
 }
 //// [b.js]
 "use strict";

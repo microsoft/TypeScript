@@ -1,52 +1,6 @@
 --- old.thisTypeInFunctionsNegative.js
 +++ new.thisTypeInFunctionsNegative.js
-@@= skipped -198, +198 lines =@@
-     });
- };
- class C {
-+    n;
-     explicitThis(m) {
-         return this.n + m;
-     }
-@@= skipped -17, +18 lines =@@
-     }
- }
- class D {
-+    x;
-     explicitThis(m) {
-         return this.x + m;
-     }
-@@= skipped -78, +79 lines =@@
- c.explicitVoid = d.explicitThis;
- /// class-based polymorphic assignability (with inheritance!) ///
- class Base1 {
-+    x;
-     polymorphic() { return this.x; }
-     explicit() { return this.x; }
-     static explicitStatic() { return this.x; }
- }
- class Derived1 extends Base1 {
-+    y;
- }
- class Base2 {
-+    y;
-     polymorphic() { return this.y; }
-     explicit() { return this.x; }
- }
- class Derived2 extends Base2 {
-+    x;
- }
- let b1 = new Base1();
- let d1 = new Derived1();
-@@= skipped -25, +29 lines =@@
- let voidThis = new VoidThis();
- ///// syntax-ish errors /////
- class ThisConstructor {
-+    n;
-     constructor(n) {
-         this.n = n;
-     }
-@@= skipped -11, +12 lines =@@
+@@= skipped -329, +329 lines =@@
  function restParam(...) { return this.n; }
  function optional() { return this.n; }
  function decorated() { return this.n; }

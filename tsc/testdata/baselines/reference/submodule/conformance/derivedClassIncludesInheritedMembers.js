@@ -45,11 +45,9 @@ var r8 = d2[1];
 //// [derivedClassIncludesInheritedMembers.js]
 "use strict";
 class Base {
-    a;
     b() { }
     get c() { return ''; }
     set c(v) { }
-    static r;
     static s() { }
     static get t() { return ''; }
     static set t(v) { }

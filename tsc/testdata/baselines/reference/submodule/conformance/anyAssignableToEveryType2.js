@@ -136,10 +136,8 @@ interface I20 {
 "use strict";
 // any is not a subtype of any other types, but is assignable, all the below should work
 class A {
-    foo;
 }
 class A2 {
-    foo;
 }
 var E;
 (function (E) {
@@ -150,7 +148,6 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 class c {
-    baz;
 }
 (function (c) {
     c.bar = 1;

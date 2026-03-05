@@ -42,7 +42,6 @@ class Item<data> extends BaseClass {
 class Base {
 }
 export class C2 extends Base {
-    T;
     constructor(T) {
         super();
         // Should not error
@@ -55,15 +54,17 @@ export class C2 extends Base {
 class Leg {
 }
 class Foo extends Leg {
-    t = {};
-    // should allow this access since t was declared as a property on Foo
-    foo = this.t;
+    constructor() {
+        super(...arguments);
+        this.t = {};
+        // should allow this access since t was declared as a property on Foo
+        this.foo = this.t;
+    }
 }
 // via #56661
 class BaseClass {
 }
 class Item extends BaseClass {
-    data;
     getData() {
         // should OK
         return this.data;

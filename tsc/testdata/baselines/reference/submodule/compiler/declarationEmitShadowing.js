@@ -20,9 +20,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 exports.needsRenameForShadowing = needsRenameForShadowing;
 class A {
-    ShadowedButDoesNotRequireRenaming = () => {
-        return null;
-    };
+    constructor() {
+        this.ShadowedButDoesNotRequireRenaming = () => {
+            return null;
+        };
+    }
 }
 exports.A = A;
 function needsRenameForShadowing() {

@@ -24,14 +24,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 class Foo {
+    constructor() {
+        this.b = () => __awaiter(this, void 0, void 0, function* () {
+            yield Promise.resolve(1);
+        });
+    }
     a() {
         return __awaiter(this, void 0, void 0, function* () {
             yield Promise.resolve(1);
         });
     }
-    b = () => __awaiter(this, void 0, void 0, function* () {
-        yield Promise.resolve(1);
-    });
 }
 
 

@@ -44,8 +44,6 @@ var Shapes;
 (function (Shapes) {
     // Class
     class Point {
-        x;
-        y;
         // Constructor
         constructor(x, y) {
             this.x = x;
@@ -53,9 +51,9 @@ var Shapes;
         }
         // Instance member
         getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
-        // Static member
-        static origin = new Point(0, 0);
     }
+    // Static member
+    Point.origin = new Point(0, 0);
     Shapes.Point = Point;
     // Variable comment after class
     var a = 10;

@@ -21,13 +21,10 @@ var r2 = D;
 //// [classWithNoConstructorOrBaseClass.js]
 "use strict";
 class C {
-    x;
 }
 var c = new C();
 var r = C;
 class D {
-    x;
-    y;
 }
 var d = new D();
 var d2 = new D();

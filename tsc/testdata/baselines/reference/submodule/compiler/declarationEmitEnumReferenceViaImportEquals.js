@@ -47,7 +47,9 @@ exports.Test = void 0;
 const translation_1 = require("./translation");
 var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
 class Test {
-    TranslationKeyEnum = TranslationKeyEnum;
+    constructor() {
+        this.TranslationKeyEnum = TranslationKeyEnum;
+    }
     print() {
         console.log(TranslationKeyEnum.Translation1);
     }

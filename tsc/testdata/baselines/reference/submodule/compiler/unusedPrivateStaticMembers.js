@@ -54,13 +54,13 @@ class Test1 {
     }
 }
 class Test2 {
-    static p1 = 0;
+    static { this.p1 = 0; }
     static test() {
         Test2.p1;
     }
 }
 class Test3 {
-    static p1 = 0;
+    static { this.p1 = 0; }
     static m1() { }
 }
 class Test4 {
@@ -78,7 +78,7 @@ class Test5 {
     }
 }
 class Test6 {
-    static p1 = 0;
+    static { this.p1 = 0; }
     static test() {
         Test6["p1"];
     }

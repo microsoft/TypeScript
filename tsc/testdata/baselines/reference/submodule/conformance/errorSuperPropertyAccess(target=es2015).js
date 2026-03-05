@@ -137,6 +137,8 @@ var obj = { n: super.wat, p: super.foo() };
 //super property access in instance member accessor(get and set) of class with no base type
 class NoBase {
     constructor() {
+        this.m = super.prototype;
+        this.n = super.hasOwnProperty('');
         var a = super.prototype;
         var b = super.hasOwnProperty('');
     }
@@ -144,8 +146,6 @@ class NoBase {
         var a = super.prototype;
         var b = super.hasOwnProperty('');
     }
-    m = super.prototype;
-    n = super.hasOwnProperty('');
     //super static property access in static member function of class with no base type
     //super static property access in static member accessor(get and set) of class with no base type
     static static1() {
@@ -160,15 +160,17 @@ class NoBase {
     }
 }
 class SomeBase {
+    constructor() {
+        this.privateMember = 0;
+        this.publicMember = 0;
+    }
     privateFunc() { }
-    privateMember = 0;
     publicFunc() { }
-    publicMember = 0;
     static privateStaticFunc() { }
-    static privateStaticMember = 0;
     static publicStaticFunc() { }
-    static publicStaticMember = 0;
 }
+SomeBase.privateStaticMember = 0;
+SomeBase.publicStaticMember = 0;
 //super.publicInstanceMemberNotFunction in constructor of derived class
 //super.publicInstanceMemberNotFunction in instance member function of derived class
 //super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class

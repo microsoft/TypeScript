@@ -1,24 +1,6 @@
 --- old.declarationEmitNameConflicts.js
 +++ new.declarationEmitNameConflicts.js
-@@= skipped -81, +81 lines =@@
-     M.d = im;
- })(M || (exports.M = M = {}));
- (function (M) {
--    var P;
-+    let P;
-     (function (P) {
-         function f() { }
-         P.f = f;
-@@= skipped -22, +22 lines =@@
-     })(P = M.P || (M.P = {}));
- })(M || (exports.M = M = {}));
- (function (M) {
--    var Q;
-+    let Q;
-     (function (Q) {
-         function f() { }
-         Q.f = f;
-@@= skipped -52, +52 lines =@@
+@@= skipped -155, +155 lines =@@
      var a: typeof M.f;
      var b: typeof M.C;
      var c: typeof M.N;

@@ -18,13 +18,11 @@ d.p;  // public, OK
 //// [classConstructorParametersAccessibility3.js]
 "use strict";
 class Base {
-    p;
     constructor(p) {
         this.p = p;
     }
 }
 class Derived extends Base {
-    p;
     constructor(p) {
         super(p);
         this.p = p;

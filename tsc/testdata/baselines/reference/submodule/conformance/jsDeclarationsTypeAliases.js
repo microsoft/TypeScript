@@ -89,14 +89,18 @@ function doTheThing(x) {
     return { x: "" + x };
 }
 class ExportedThing {
-    z = "ok";
+    constructor() {
+        this.z = "ok";
+    }
 }
 module.exports = {
     doTheThing,
     ExportedThing,
 };
 class LocalThing {
-    y = "ok";
+    constructor() {
+        this.y = "ok";
+    }
 }
 
 

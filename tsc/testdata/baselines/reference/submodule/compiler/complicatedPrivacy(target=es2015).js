@@ -151,7 +151,6 @@ var m1;
     class C1 {
     }
     class C5 {
-        x;
     }
     m1.C5 = C5;
 })(m1 || (m1 = {}));

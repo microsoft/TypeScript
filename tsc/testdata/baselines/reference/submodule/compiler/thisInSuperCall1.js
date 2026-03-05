@@ -18,7 +18,6 @@ class Base {
     constructor(a) { }
 }
 class Foo extends Base {
-    x;
     constructor(x) {
         super(this);
         this.x = x;

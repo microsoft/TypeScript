@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/classExpressionWithComputedPropertyInLoop.ts] ////
+
+=== classExpressionWithComputedPropertyInLoop.ts ===
+// Class expression in a loop with a computed property name on an instance field.
+// The class temp variable should be block-scoped (let) to ensure each iteration
+// gets its own binding, matching the behavior when BlockScopedBindingInLoop is set.
+
+const array: any[] = [];
+>array : any[]
+>[] : never[]
+
+const key = "myKey";
+>key : "myKey"
+>"myKey" : "myKey"
+
+for (let i = 0; i < 3; i++) {
+>i : number
+>0 : 0
+>i < 3 : boolean
+>i : number
+>3 : 3
+>i++ : number
+>i : number
+
+    array.push(class C {
+>array.push(class C {        [key] = i;        #field = i;    }) : number
+>array.push : (...items: any[]) => number
+>array : any[]
+>push : (...items: any[]) => number
+>class C {        [key] = i;        #field = i;    } : typeof C
+>C : typeof C
+
+        [key] = i;
+>[key] : number
+>key : "myKey"
+>i : number
+
+        #field = i;
+>#field : number
+>i : number
+
+    });
+}
+

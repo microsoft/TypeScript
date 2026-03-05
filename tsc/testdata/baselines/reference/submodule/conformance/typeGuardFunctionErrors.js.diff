@@ -1,17 +1,6 @@
 --- old.typeGuardFunctionErrors.js
 +++ new.typeGuardFunctionErrors.js
-@@= skipped -171, +171 lines =@@
- //// [typeGuardFunctionErrors.js]
- "use strict";
- class A {
-+    propA;
- }
- class B {
-+    propB;
- }
- class C extends A {
-+    propC;
- }
+@@= skipped -179, +179 lines =@@
  function hasANonBooleanReturnStatement(x) {
      return '';
  }
@@ -19,7 +8,7 @@
  is;
  A;
  {
-@@= skipped -66, +70 lines =@@
+@@= skipped -58, +59 lines =@@
  var b1, is, A;
  function b2(a, is, A) { }
  ;

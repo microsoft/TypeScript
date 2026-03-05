@@ -9,6 +9,4 @@ class C {
 //// [parserClassDeclaration26.js]
 "use strict";
 class C {
-    var;
-    public;
 }

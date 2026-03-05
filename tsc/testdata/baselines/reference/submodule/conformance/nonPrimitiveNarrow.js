@@ -28,7 +28,6 @@ if (typeof b === 'object') {
 //// [nonPrimitiveNarrow.js]
 "use strict";
 class Narrow {
-    narrowed;
 }
 if (a instanceof Narrow) {
     a.narrowed; // ok

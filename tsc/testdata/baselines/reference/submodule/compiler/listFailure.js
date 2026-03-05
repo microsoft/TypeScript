@@ -48,7 +48,9 @@ namespace Editor {
 var Editor;
 (function (Editor) {
     class Buffer {
-        lines = ListMakeHead();
+        constructor() {
+            this.lines = ListMakeHead();
+        }
         addLine(lineText) {
             var line = new Line();
             var lineEntry = this.lines.add(line);
@@ -69,7 +71,6 @@ var Editor;
     }
     Editor.ListMakeEntry = ListMakeEntry;
     class List {
-        next;
         add(data) {
             this.next = ListMakeEntry(data);
             return this.next;

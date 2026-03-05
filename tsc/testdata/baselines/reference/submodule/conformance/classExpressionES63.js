@@ -11,11 +11,19 @@ c.c;
 //// [classExpressionES63.js]
 "use strict";
 let C = class extends class extends class {
-    a = 1;
+    constructor() {
+        this.a = 1;
+    }
 } {
-    b = 2;
+    constructor() {
+        super(...arguments);
+        this.b = 2;
+    }
 } {
-    c = 3;
+    constructor() {
+        super(...arguments);
+        this.c = 3;
+    }
 };
 let c = new C();
 c.a;

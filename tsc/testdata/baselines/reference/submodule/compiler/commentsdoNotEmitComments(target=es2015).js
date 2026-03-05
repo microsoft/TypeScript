@@ -104,8 +104,8 @@ foo(50);
 fooVar();
 class c {
     constructor() {
+        this.b = 10;
     }
-    b = 10;
     myFoo() {
         return this.b;
     }
@@ -124,7 +124,6 @@ var i1_i;
 var m1;
 (function (m1) {
     class b {
-        x;
         constructor(x) {
             this.x = x;
         }

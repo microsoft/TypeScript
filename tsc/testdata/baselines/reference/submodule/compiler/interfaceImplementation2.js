@@ -18,7 +18,4 @@ class C3 implements I1 {
 //// [interfaceImplementation2.js]
 "use strict";
 class C3 {
-    iObj;
-    iNum;
-    iAny;
 }

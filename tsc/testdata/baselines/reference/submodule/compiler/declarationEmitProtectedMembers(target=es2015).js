@@ -55,13 +55,11 @@ class C4 {
 "use strict";
 // Class with protected members
 class C1 {
-    x;
     f() {
         return this.x;
     }
     set accessor(a) { }
     get accessor() { return 0; }
-    static sx;
     static sf() {
         return this.sx;
     }
@@ -79,8 +77,6 @@ class C2 extends C1 {
 }
 // Derived class making protected members public
 class C3 extends C2 {
-    x;
-    static sx;
     f() {
         return super.f();
     }
@@ -91,8 +87,6 @@ class C3 extends C2 {
 }
 // Protected properties in constructors
 class C4 {
-    a;
-    b;
     constructor(a, b) {
         this.a = a;
         this.b = b;

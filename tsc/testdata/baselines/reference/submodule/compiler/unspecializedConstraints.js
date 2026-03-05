@@ -221,9 +221,6 @@ var ts;
         }
     }
     class Property extends Symbol {
-        name;
-        type;
-        flags;
         constructor(name, type, flags) {
             super();
             this.name = name;
@@ -242,9 +239,6 @@ var ts;
         PropertyFlags[PropertyFlags["Private"] = 2] = "Private";
     })(PropertyFlags || (PropertyFlags = {}));
     class Signature extends Symbol {
-        typeParameters;
-        parameters;
-        returnType;
         constructor(typeParameters, parameters, returnType) {
             super();
             this.typeParameters = typeParameters;
@@ -263,9 +257,6 @@ var ts;
         }
     }
     class Parameter extends Symbol {
-        name;
-        type;
-        flags;
         constructor(name, type, flags) {
             super();
             this.name = name;

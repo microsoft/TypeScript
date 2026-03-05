@@ -19,7 +19,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var _a;
 export class B {
-    member;
 }
 __decorate([
     Decorate,

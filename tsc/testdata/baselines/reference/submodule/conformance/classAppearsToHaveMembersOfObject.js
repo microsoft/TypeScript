@@ -13,7 +13,6 @@ var o2: {} = c;
 //// [classAppearsToHaveMembersOfObject.js]
 "use strict";
 class C {
-    foo;
 }
 var c;
 var r = c.toString();

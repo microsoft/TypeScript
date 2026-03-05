@@ -23,8 +23,6 @@ class Vec2_T<A>
 "use strict";
 // once caused stack overflow
 class Vec2_T {
-    x;
-    y;
     constructor(x, y) {
         this.x = x;
         this.y = y;

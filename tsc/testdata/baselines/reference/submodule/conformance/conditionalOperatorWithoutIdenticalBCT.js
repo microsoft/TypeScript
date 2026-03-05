@@ -29,17 +29,12 @@ var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.p
 "use strict";
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 class X {
-    propertyX;
-    propertyX1;
-    propertyX2;
 }
 ;
 class A extends X {
-    propertyA;
 }
 ;
 class B extends X {
-    propertyB;
 }
 ;
 // No errors anymore, uses union types

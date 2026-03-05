@@ -40,10 +40,6 @@ namespace Editor {
 var Editor;
 (function (Editor) {
     class List {
-        isHead;
-        data;
-        next;
-        prev;
         constructor(isHead, data) {
             this.isHead = isHead;
             this.data = data;

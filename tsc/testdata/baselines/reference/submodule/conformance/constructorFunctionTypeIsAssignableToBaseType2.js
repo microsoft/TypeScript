@@ -38,19 +38,15 @@ class Derived2 extends Base {
 "use strict";
 // the constructor function itself does not need to be a subtype of the base type constructor function
 class Base {
-    static foo;
     constructor(x) {
     }
 }
 class Derived extends Base {
-    // ok
-    static foo;
     constructor(x) {
         super(x);
     }
 }
 class Derived2 extends Base {
-    static foo;
     // ok, not enforcing assignability relation on this
     constructor(x) {
         super(x);

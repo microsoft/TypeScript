@@ -120,15 +120,11 @@ namespace Errors {
 var Errors;
 (function (Errors) {
     class Base {
-        foo;
     }
     class Derived extends Base {
-        bar;
     }
     class Derived2 extends Derived {
-        baz;
     }
     class OtherDerived extends Base {
-        bing;
     }
 })(Errors || (Errors = {}));

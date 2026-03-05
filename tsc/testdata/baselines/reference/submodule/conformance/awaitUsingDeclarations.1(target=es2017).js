@@ -231,21 +231,23 @@ try {
         }
     };
     C1 = class C1 {
-        a = async () => {
-            const env_21 = { stack: [], error: void 0, hasError: false };
-            try {
-                const d7 = __addDisposableResource(env_21, { async [Symbol.asyncDispose]() { } }, true);
-            }
-            catch (e_21) {
-                env_21.error = e_21;
-                env_21.hasError = true;
-            }
-            finally {
-                const result_21 = __disposeResources(env_21);
-                if (result_21)
-                    await result_21;
-            }
-        };
+        constructor() {
+            this.a = async () => {
+                const env_21 = { stack: [], error: void 0, hasError: false };
+                try {
+                    const d7 = __addDisposableResource(env_21, { async [Symbol.asyncDispose]() { } }, true);
+                }
+                catch (e_21) {
+                    env_21.error = e_21;
+                    env_21.hasError = true;
+                }
+                finally {
+                    const result_21 = __disposeResources(env_21);
+                    if (result_21)
+                        await result_21;
+                }
+            };
+        }
         async am() {
             const env_22 = { stack: [], error: void 0, hasError: false };
             try {

@@ -11,16 +11,7 @@
      x = 1;
      y() {
          return 12;
-@@= skipped -12, +12 lines =@@
-     export cantExportProperty = 1;
-     export cantExportMethod() {
-     }
--    // accessor mistakes
--    get incorporeal() { }
-     get parametric(n) { return 1; }
-     set invariant() { }
-     set binary(fst, snd) { }
-@@= skipped -25, +23 lines =@@
+@@= skipped -37, +37 lines =@@
  export static var staticExport = 1;
  function staticParam(static x = 1) { return x; }
  async export function oorder(x = 1) { return x; }

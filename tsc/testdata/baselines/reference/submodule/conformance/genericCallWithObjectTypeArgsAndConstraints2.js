@@ -45,10 +45,8 @@ var r7 = f3(null, x => x); // any
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
 class Base {
-    x;
 }
 class Derived extends Base {
-    y;
 }
 function f(x) {
     var r;

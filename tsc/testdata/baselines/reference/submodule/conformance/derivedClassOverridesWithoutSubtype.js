@@ -28,14 +28,10 @@ class Derived2 extends Base2 {
 //// [derivedClassOverridesWithoutSubtype.js]
 "use strict";
 class Base {
-    x;
 }
 class Derived extends Base {
-    x;
 }
 class Base2 {
-    static y;
 }
 class Derived2 extends Base2 {
-    static y;
 }

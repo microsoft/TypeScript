@@ -116,16 +116,12 @@ undefined === function () {
     var x = 4;
 };
 class Base {
-    x;
 }
 class AnotherClass {
-    y;
 }
 class Derived1 extends Base {
-    m;
 }
 class Derived2 extends Base {
-    n;
 }
 function f8() {
     return new Derived1();

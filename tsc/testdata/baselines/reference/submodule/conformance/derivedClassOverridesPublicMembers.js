@@ -69,29 +69,21 @@ var r8 = d2[1];
 var x;
 var y;
 class Base {
-    a;
     b(a) { }
     get c() { return x; }
     set c(v) { }
-    d;
-    static r;
     static s(a) { }
     static get t() { return x; }
     static set t(v) { }
-    static u;
     constructor(a) { }
 }
 class Derived extends Base {
-    a;
     b(a) { }
     get c() { return y; }
     set c(v) { }
-    d;
-    static r;
     static s(a) { }
     static get t() { return y; }
     static set t(a) { }
-    static u;
     constructor(a) { super(x); }
 }
 var d = new Derived(y);

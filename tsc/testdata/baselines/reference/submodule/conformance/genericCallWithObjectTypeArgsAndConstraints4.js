@@ -39,11 +39,8 @@ function other<T, U extends T>() {
 "use strict";
 // Generic call with constraints infering type parameter from object member properties
 class C {
-    x;
 }
 class D {
-    x;
-    y;
 }
 function foo(t, t2) {
     return (x) => t2;

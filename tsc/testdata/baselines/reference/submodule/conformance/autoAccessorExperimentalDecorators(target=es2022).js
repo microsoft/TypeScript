@@ -29,8 +29,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 class C1 {
-    accessor a;
-    static accessor b;
+    #a_accessor_storage;
+    get a() { return this.#a_accessor_storage; }
+    set a(value) { this.#a_accessor_storage = value; }
+    static #b_accessor_storage;
+    static get b() { return C1.#b_accessor_storage; }
+    static set b(value) { C1.#b_accessor_storage = value; }
 }
 __decorate([
     dec
@@ -39,6 +43,10 @@ __decorate([
     dec
 ], C1, "b", null);
 class C2 {
-    accessor #a;
-    static accessor #b;
+    #a_accessor_storage;
+    get #a() { return this.#a_accessor_storage; }
+    set #a(value) { this.#a_accessor_storage = value; }
+    static #b_accessor_storage;
+    static get #b() { return C2.#b_accessor_storage; }
+    static set #b(value) { C2.#b_accessor_storage = value; }
 }

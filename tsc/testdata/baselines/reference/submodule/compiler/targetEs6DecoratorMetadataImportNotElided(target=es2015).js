@@ -32,7 +32,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Input, TemplateRef } from './deps';
 export class MyComponent {
-    _ref;
     get ref() { return this._ref; }
     set ref(value) { this._ref = value; }
 }

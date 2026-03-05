@@ -28,10 +28,12 @@ class C extends B {
 class B {
 }
 class C extends B {
+    constructor() {
+        super(...arguments);
+        this.raw = "edge";
+        this.ro = "readonly please";
+    }
     get prop() { return "foo"; }
     set prop(v) { }
-    raw = "edge";
-    ro = "readonly please";
-    readonlyProp;
     m() { }
 }

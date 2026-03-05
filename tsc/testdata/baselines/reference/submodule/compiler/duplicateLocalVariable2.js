@@ -39,9 +39,6 @@ export var tests: TestRunner = (function () {
 
 //// [duplicateLocalVariable2.js]
 export class TestCase {
-    name;
-    test;
-    errorMessageRegEx;
     constructor(name, test, errorMessageRegEx) {
         this.name = name;
         this.test = test;

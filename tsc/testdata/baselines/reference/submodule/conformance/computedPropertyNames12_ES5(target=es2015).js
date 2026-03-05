@@ -20,19 +20,16 @@ class C {
 
 //// [computedPropertyNames12_ES5.js]
 "use strict";
+var _a, _b, _c;
 var s;
 var n;
 var a;
 class C {
-    [s];
-    [n] = n;
-    static [s + s];
-    [s + n] = 2;
-    [+s];
-    static [""];
-    [0];
-    [a];
-    static [true];
-    [`hello bye`] = 0;
-    static [`hello ${a} bye`] = 0;
+    constructor() {
+        this[_a] = n;
+        this[_b] = 2;
+        this[`hello bye`] = 0;
+    }
 }
+_a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
+C[_c] = 0;

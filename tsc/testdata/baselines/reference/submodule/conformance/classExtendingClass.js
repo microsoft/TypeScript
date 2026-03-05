@@ -36,12 +36,10 @@ var r8 = D2.other(1);
 //// [classExtendingClass.js]
 "use strict";
 class C {
-    foo;
     thing() { }
     static other() { }
 }
 class D extends C {
-    bar;
 }
 var d;
 var r = d.foo;
@@ -49,12 +47,10 @@ var r2 = d.bar;
 var r3 = d.thing();
 var r4 = D.other();
 class C2 {
-    foo;
     thing(x) { }
     static other(x) { }
 }
 class D2 extends C2 {
-    bar;
 }
 var d2;
 var r5 = d2.foo;

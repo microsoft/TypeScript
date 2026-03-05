@@ -224,28 +224,16 @@ class c6 extends c5 {
 //// [parserAstSpans1.js]
 "use strict";
 class c1 {
-    i1_p1;
     i1_f1() {
     }
-    i1_l1;
-    i1_nc_p1;
     i1_nc_f1() {
     }
-    i1_nc_l1;
-    /** c1_p1*/
-    p1;
     /** c1_f1*/
     f1() {
     }
-    /** c1_l1*/
-    l1;
-    /** c1_nc_p1*/
-    nc_p1;
     /** c1_nc_f1*/
     nc_f1() {
     }
-    /** c1_nc_l1*/
-    nc_l1;
 }
 var i1_i;
 i1_i.i1_f1();
@@ -276,8 +264,6 @@ i1_i.i1_nc_l1();
 i1_i.l1();
 i1_i.nc_l1();
 class c2 {
-    /** c2 c2_p1*/
-    c2_p1;
     /** c2 c2_f1*/
     c2_f1() {
     }
@@ -285,14 +271,11 @@ class c2 {
     get c2_prop() {
         return 10;
     }
-    c2_nc_p1;
     c2_nc_f1() {
     }
     get c2_nc_prop() {
         return 10;
     }
-    /** c2 p1*/
-    p1;
     /** c2 f1*/
     f1() {
     }
@@ -300,7 +283,6 @@ class c2 {
     get prop() {
         return 10;
     }
-    nc_p1;
     nc_f1() {
     }
     get nc_prop() {
@@ -316,8 +298,6 @@ class c3 extends c2 {
         super(10);
         this.p1 = super.c2_p1;
     }
-    /** c3 p1*/
-    p1;
     /** c3 f1*/
     f1() {
     }
@@ -325,7 +305,6 @@ class c3 extends c2 {
     get prop() {
         return 10;
     }
-    nc_p1;
     nc_f1() {
     }
     get nc_prop() {
@@ -381,10 +360,8 @@ i2_i.l1();
 i2_i.nc_l1();
 /**c5 class*/
 class c5 {
-    b;
 }
 class c6 extends c5 {
-    d;
     constructor() {
         super();
         this.d = super.b;

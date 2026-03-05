@@ -284,9 +284,6 @@ function f28(x) {
 }
 // Class properties of type unknown don't need definite assignment
 class C1 {
-    a; // Error
-    b;
-    c;
 }
 // Type parameter with explicit 'unknown' constraint not assignable to '{}'
 function f30(t, u) {

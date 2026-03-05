@@ -1,33 +1,6 @@
 --- old.recursiveClassReferenceTest.sourcemap.txt
 +++ new.recursiveClassReferenceTest.sourcemap.txt
-@@= skipped -92, +92 lines =@@
- 2 >Emitted(5, 12) Source(32, 11) + SourceIndex(0)
- 3 >Emitted(5, 18) Source(32, 17) + SourceIndex(0)
- ---
-->>>    var Actions;
-+>>>    let Actions;
- 1 >^^^^
- 2 >    ^^^^
- 3 >        ^^^^^^^
-@@= skipped -36, +36 lines =@@
- 2 >Emitted(7, 16) Source(32, 18) + SourceIndex(0)
- 3 >Emitted(7, 23) Source(32, 25) + SourceIndex(0)
- ---
-->>>        var Thing;
-+>>>        let Thing;
- 1 >^^^^^^^^
- 2 >        ^^^^
- 3 >            ^^^^^
-@@= skipped -36, +36 lines =@@
- 2 >Emitted(9, 20) Source(32, 26) + SourceIndex(0)
- 3 >Emitted(9, 27) Source(32, 31) + SourceIndex(0)
- ---
-->>>            var Find;
-+>>>            let Find;
- 1 >^^^^^^^^^^^^
- 2 >            ^^^^
- 3 >                ^^^^
-@@= skipped -129, +129 lines =@@
+@@= skipped -293, +293 lines =@@
  ---
  >>>                Find.StartFindAction = StartFindAction;
  1->^^^^^^^^^^^^^^^^
@@ -216,324 +189,7 @@
  ---
  >>>})(Sample || (Sample = {}));
  1 >
-@@= skipped -51, +53 lines =@@
- 2 >Emitted(23, 12) Source(44, 11) + SourceIndex(0)
- 3 >Emitted(23, 18) Source(44, 17) + SourceIndex(0)
- ---
-->>>    var Thing;
-+>>>    let Thing;
- 1 >^^^^
- 2 >    ^^^^
- 3 >        ^^^^^
-@@= skipped -47, +47 lines =@@
- 2 >Emitted(25, 16) Source(44, 18) + SourceIndex(0)
- 3 >Emitted(25, 21) Source(44, 23) + SourceIndex(0)
- ---
-->>>        var Widgets;
-+>>>        let Widgets;
- 1->^^^^^^^^
- 2 >        ^^^^
- 3 >            ^^^^^^^
-@@= skipped -51, +51 lines =@@
- 1->^^^^^^^^^^^^
- 2 >            ^^^^^^
- 3 >                  ^^^^^^^^^^
--4 >                            ^^^^^^^^^^^^^^->
- 1-> {
-   >	
- 2 >            export class 
-@@= skipped -9, +8 lines =@@
- 2 >Emitted(28, 19) Source(45, 15) + SourceIndex(0)
- 3 >Emitted(28, 29) Source(45, 25) + SourceIndex(0)
- ---
-+>>>                codeThing;
-+1 >^^^^^^^^^^^^^^^^
-+2 >                ^^^^^^^^^
-+3 >                         ^^^^^^^^^^^^^^^^^->
-+1 > implements Sample.Thing.IWidget {
-+  >
-+  >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-+  >			
-+  >		private domNode:any = null;
-+  >		constructor(private 
-+2 >                codeThing
-+1 >Emitted(29, 17) Source(50, 23) + SourceIndex(0)
-+2 >Emitted(29, 26) Source(50, 32) + SourceIndex(0)
-+---
- >>>                gar(runner) { if (true) {
- 1->^^^^^^^^^^^^^^^^
- 2 >                ^^^
-@@= skipped -10, +24 lines =@@
- 7 >                                  ^^^^
- 8 >                                      ^^
- 9 >                                        ^
--1-> implements Sample.Thing.IWidget {
--  >
--  >		public 
-+1->
- 2 >                gar
- 3 >                   (
- 4 >                    runner:(widget:Sample.Thing.IWidget)=>any
-@@= skipped -11, +9 lines =@@
- 7 >                                  true
- 8 >                                      ) 
- 9 >                                        {
--1->Emitted(29, 17) Source(47, 10) + SourceIndex(0)
--2 >Emitted(29, 20) Source(47, 13) + SourceIndex(0)
--3 >Emitted(29, 21) Source(47, 14) + SourceIndex(0)
--4 >Emitted(29, 27) Source(47, 55) + SourceIndex(0)
--5 >Emitted(29, 31) Source(47, 59) + SourceIndex(0)
--6 >Emitted(29, 35) Source(47, 63) + SourceIndex(0)
--7 >Emitted(29, 39) Source(47, 67) + SourceIndex(0)
--8 >Emitted(29, 41) Source(47, 69) + SourceIndex(0)
--9 >Emitted(29, 42) Source(47, 70) + SourceIndex(0)
-+1->Emitted(30, 17) Source(47, 10) + SourceIndex(0)
-+2 >Emitted(30, 20) Source(47, 13) + SourceIndex(0)
-+3 >Emitted(30, 21) Source(47, 14) + SourceIndex(0)
-+4 >Emitted(30, 27) Source(47, 55) + SourceIndex(0)
-+5 >Emitted(30, 31) Source(47, 59) + SourceIndex(0)
-+6 >Emitted(30, 35) Source(47, 63) + SourceIndex(0)
-+7 >Emitted(30, 39) Source(47, 67) + SourceIndex(0)
-+8 >Emitted(30, 41) Source(47, 69) + SourceIndex(0)
-+9 >Emitted(30, 42) Source(47, 70) + SourceIndex(0)
- ---
- >>>                    return runner(this);
- 1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -25, +25 lines =@@
- 5 >                                  this
- 6 >                                      )
- 7 >                                       ;
--1 >Emitted(30, 21) Source(47, 70) + SourceIndex(0)
--2 >Emitted(30, 28) Source(47, 77) + SourceIndex(0)
--3 >Emitted(30, 34) Source(47, 83) + SourceIndex(0)
--4 >Emitted(30, 35) Source(47, 84) + SourceIndex(0)
--5 >Emitted(30, 39) Source(47, 88) + SourceIndex(0)
--6 >Emitted(30, 40) Source(47, 89) + SourceIndex(0)
--7 >Emitted(30, 41) Source(47, 90) + SourceIndex(0)
-+1 >Emitted(31, 21) Source(47, 70) + SourceIndex(0)
-+2 >Emitted(31, 28) Source(47, 77) + SourceIndex(0)
-+3 >Emitted(31, 34) Source(47, 83) + SourceIndex(0)
-+4 >Emitted(31, 35) Source(47, 84) + SourceIndex(0)
-+5 >Emitted(31, 39) Source(47, 88) + SourceIndex(0)
-+6 >Emitted(31, 40) Source(47, 89) + SourceIndex(0)
-+7 >Emitted(31, 41) Source(47, 90) + SourceIndex(0)
- ---
- >>>                } }
- 1 >^^^^^^^^^^^^^^^^
- 2 >                ^
- 3 >                 ^
- 4 >                  ^
--5 >                   ^^^^^^^^^^^^^^^^^^^^^^->
-+5 >                   ^^^^^^^^^^^^^->
- 1 >
- 2 >                }
- 3 >                 
- 4 >                  }
--1 >Emitted(31, 17) Source(47, 90) + SourceIndex(0)
--2 >Emitted(31, 18) Source(47, 91) + SourceIndex(0)
--3 >Emitted(31, 19) Source(47, 91) + SourceIndex(0)
--4 >Emitted(31, 20) Source(47, 92) + SourceIndex(0)
-+1 >Emitted(32, 17) Source(47, 90) + SourceIndex(0)
-+2 >Emitted(32, 18) Source(47, 91) + SourceIndex(0)
-+3 >Emitted(32, 19) Source(47, 91) + SourceIndex(0)
-+4 >Emitted(32, 20) Source(47, 92) + SourceIndex(0)
-+---
-+>>>                domNode = null;
-+1->^^^^^^^^^^^^^^^^
-+2 >                ^^^^^^^
-+3 >                       ^^^
-+4 >                          ^^^^
-+5 >                              ^
-+6 >                               ^^^^^^^^^^->
-+1->
-+  >			
-+  >		private 
-+2 >                domNode
-+3 >                       :any = 
-+4 >                          null
-+5 >                              ;
-+1->Emitted(33, 17) Source(49, 11) + SourceIndex(0)
-+2 >Emitted(33, 24) Source(49, 18) + SourceIndex(0)
-+3 >Emitted(33, 27) Source(49, 25) + SourceIndex(0)
-+4 >Emitted(33, 31) Source(49, 29) + SourceIndex(0)
-+5 >Emitted(33, 32) Source(49, 30) + SourceIndex(0)
- ---
- >>>                constructor(codeThing) {
- 1->^^^^^^^^^^^^^^^^
-@@= skipped -29, +49 lines =@@
- 3 >                            ^^^^^^^^^
- 4 >                                     ^^^^^^^^^^^->
- 1->
--  >			
--  >		private domNode:any = null;
-   >		
- 2 >                constructor(private 
- 3 >                            codeThing: Sample.Thing.ICodeThing
--1->Emitted(32, 17) Source(50, 3) + SourceIndex(0)
--2 >Emitted(32, 29) Source(50, 23) + SourceIndex(0)
--3 >Emitted(32, 38) Source(50, 57) + SourceIndex(0)
-+1->Emitted(34, 17) Source(50, 3) + SourceIndex(0)
-+2 >Emitted(34, 29) Source(50, 23) + SourceIndex(0)
-+3 >Emitted(34, 38) Source(50, 57) + SourceIndex(0)
- ---
- >>>                    this.codeThing = codeThing;
--1->^^^^^^^^^^^^^^^^^^^^
--2 >                    ^^^^^^^^^^^^^^
--3 >                                  ^^^
--4 >                                     ^^^^^^^^^
--5 >                                              ^
-+1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+2 >                                     ^^^^^^^^^
- 1->
--2 >                    codeThing
--3 >                                  
--4 >                                     codeThing
--5 >                                              : Sample.Thing.ICodeThing
--1->Emitted(33, 21) Source(50, 23) + SourceIndex(0)
--2 >Emitted(33, 35) Source(50, 32) + SourceIndex(0)
--3 >Emitted(33, 38) Source(50, 23) + SourceIndex(0)
--4 >Emitted(33, 47) Source(50, 32) + SourceIndex(0)
--5 >Emitted(33, 48) Source(50, 57) + SourceIndex(0)
-----
-->>>                    this.domNode = null;
--1 >^^^^^^^^^^^^^^^^^^^^
--2 >                    ^^^^^^^^^^^^
--3 >                                ^^^
--4 >                                   ^^^^
--5 >                                       ^
--1 >
--2 >                    domNode
--3 >                                :any = 
--4 >                                   null
--5 >                                       ;
--1 >Emitted(34, 21) Source(49, 11) + SourceIndex(0)
--2 >Emitted(34, 33) Source(49, 18) + SourceIndex(0)
--3 >Emitted(34, 36) Source(49, 25) + SourceIndex(0)
--4 >Emitted(34, 40) Source(49, 29) + SourceIndex(0)
--5 >Emitted(34, 41) Source(49, 30) + SourceIndex(0)
-+2 >                                     codeThing
-+1->Emitted(35, 38) Source(50, 23) + SourceIndex(0)
-+2 >Emitted(35, 47) Source(50, 32) + SourceIndex(0)
- ---
- >>>                    // scenario 1
- 1 >^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^^^^^^^^^
- 3 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
--  >		constructor(private codeThing: Sample.Thing.ICodeThing) {
-+1 >: Sample.Thing.ICodeThing) {
-   >		    
- 2 >                    // scenario 1
--1 >Emitted(35, 21) Source(51, 7) + SourceIndex(0)
--2 >Emitted(35, 34) Source(51, 20) + SourceIndex(0)
-+1 >Emitted(36, 21) Source(51, 7) + SourceIndex(0)
-+2 >Emitted(36, 34) Source(51, 20) + SourceIndex(0)
- ---
- >>>                    codeThing.addWidget("addWidget", this);
- 1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -76, +47 lines =@@
- 8 >                                                     this
- 9 >                                                         )
- 10>                                                          ;
--1->Emitted(36, 21) Source(52, 7) + SourceIndex(0)
--2 >Emitted(36, 30) Source(52, 16) + SourceIndex(0)
--3 >Emitted(36, 31) Source(52, 17) + SourceIndex(0)
--4 >Emitted(36, 40) Source(52, 26) + SourceIndex(0)
--5 >Emitted(36, 41) Source(52, 27) + SourceIndex(0)
--6 >Emitted(36, 52) Source(52, 38) + SourceIndex(0)
--7 >Emitted(36, 54) Source(52, 40) + SourceIndex(0)
--8 >Emitted(36, 58) Source(52, 44) + SourceIndex(0)
--9 >Emitted(36, 59) Source(52, 45) + SourceIndex(0)
--10>Emitted(36, 60) Source(52, 46) + SourceIndex(0)
-+1->Emitted(37, 21) Source(52, 7) + SourceIndex(0)
-+2 >Emitted(37, 30) Source(52, 16) + SourceIndex(0)
-+3 >Emitted(37, 31) Source(52, 17) + SourceIndex(0)
-+4 >Emitted(37, 40) Source(52, 26) + SourceIndex(0)
-+5 >Emitted(37, 41) Source(52, 27) + SourceIndex(0)
-+6 >Emitted(37, 52) Source(52, 38) + SourceIndex(0)
-+7 >Emitted(37, 54) Source(52, 40) + SourceIndex(0)
-+8 >Emitted(37, 58) Source(52, 44) + SourceIndex(0)
-+9 >Emitted(37, 59) Source(52, 45) + SourceIndex(0)
-+10>Emitted(37, 60) Source(52, 46) + SourceIndex(0)
- ---
- >>>                }
- 1 >^^^^^^^^^^^^^^^^
-@@= skipped -18, +18 lines =@@
- 1 >
-   >		
- 2 >                }
--1 >Emitted(37, 17) Source(53, 3) + SourceIndex(0)
--2 >Emitted(37, 18) Source(53, 4) + SourceIndex(0)
-+1 >Emitted(38, 17) Source(53, 3) + SourceIndex(0)
-+2 >Emitted(38, 18) Source(53, 4) + SourceIndex(0)
- ---
- >>>                getDomNode() {
- 1->^^^^^^^^^^^^^^^^
-@@= skipped -11, +11 lines =@@
-   >		
-   >		public 
- 2 >                getDomNode
--1->Emitted(38, 17) Source(55, 10) + SourceIndex(0)
--2 >Emitted(38, 27) Source(55, 20) + SourceIndex(0)
-+1->Emitted(39, 17) Source(55, 10) + SourceIndex(0)
-+2 >Emitted(39, 27) Source(55, 20) + SourceIndex(0)
- ---
- >>>                    return domNode;
- 1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -13, +13 lines =@@
- 2 >                    return 
- 3 >                           domNode
- 4 >                                  ;
--1->Emitted(39, 21) Source(56, 4) + SourceIndex(0)
--2 >Emitted(39, 28) Source(56, 11) + SourceIndex(0)
--3 >Emitted(39, 35) Source(56, 18) + SourceIndex(0)
--4 >Emitted(39, 36) Source(56, 19) + SourceIndex(0)
-+1->Emitted(40, 21) Source(56, 4) + SourceIndex(0)
-+2 >Emitted(40, 28) Source(56, 11) + SourceIndex(0)
-+3 >Emitted(40, 35) Source(56, 18) + SourceIndex(0)
-+4 >Emitted(40, 36) Source(56, 19) + SourceIndex(0)
- ---
- >>>                }
- 1 >^^^^^^^^^^^^^^^^
-@@= skipped -12, +12 lines =@@
- 1 >
-   >		
- 2 >                }
--1 >Emitted(40, 17) Source(57, 3) + SourceIndex(0)
--2 >Emitted(40, 18) Source(57, 4) + SourceIndex(0)
-+1 >Emitted(41, 17) Source(57, 3) + SourceIndex(0)
-+2 >Emitted(41, 18) Source(57, 4) + SourceIndex(0)
- ---
- >>>                destroy() {
- 1->^^^^^^^^^^^^^^^^
-@@= skipped -10, +10 lines =@@
-   >		
-   >		public 
- 2 >                destroy
--1->Emitted(41, 17) Source(59, 10) + SourceIndex(0)
--2 >Emitted(41, 24) Source(59, 17) + SourceIndex(0)
-+1->Emitted(42, 17) Source(59, 10) + SourceIndex(0)
-+2 >Emitted(42, 24) Source(59, 17) + SourceIndex(0)
- ---
- >>>                }
- 1 >^^^^^^^^^^^^^^^^
-@@= skipped -10, +10 lines =@@
-   >
-   >		
- 2 >                }
--1 >Emitted(42, 17) Source(61, 3) + SourceIndex(0)
--2 >Emitted(42, 18) Source(61, 4) + SourceIndex(0)
-+1 >Emitted(43, 17) Source(61, 3) + SourceIndex(0)
-+2 >Emitted(43, 18) Source(61, 4) + SourceIndex(0)
- ---
- >>>            }
- 1 >^^^^^^^^^^^^^
-@@= skipped -9, +9 lines =@@
- 1 >
-   >
-   >	}
--1 >Emitted(43, 14) Source(63, 3) + SourceIndex(0)
-+1 >Emitted(44, 14) Source(63, 3) + SourceIndex(0)
+@@= skipped -396, +398 lines =@@
  ---
  >>>            Widgets.FindWidget = FindWidget;
  1->^^^^^^^^^^^^
@@ -555,21 +211,20 @@
    >                              
    >                              		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
    >                              			
-@@= skipped -29, +31 lines =@@
+@@= skipped -25, +27 lines =@@
    >                              		}
    >                              
    >                              	}
 -4 >                                           
--1->Emitted(44, 13) Source(45, 15) + SourceIndex(0)
++5 >                                           
+ 1->Emitted(44, 13) Source(45, 15) + SourceIndex(0)
 -2 >Emitted(44, 31) Source(45, 25) + SourceIndex(0)
 -3 >Emitted(44, 44) Source(63, 3) + SourceIndex(0)
 -4 >Emitted(44, 45) Source(63, 3) + SourceIndex(0)
-+5 >                                           
-+1->Emitted(45, 13) Source(45, 15) + SourceIndex(0)
-+2 >Emitted(45, 21) Source(45, 15) + SourceIndex(0)
-+3 >Emitted(45, 31) Source(45, 25) + SourceIndex(0)
-+4 >Emitted(45, 44) Source(63, 3) + SourceIndex(0)
-+5 >Emitted(45, 45) Source(63, 3) + SourceIndex(0)
++2 >Emitted(44, 21) Source(45, 15) + SourceIndex(0)
++3 >Emitted(44, 31) Source(45, 25) + SourceIndex(0)
++4 >Emitted(44, 44) Source(63, 3) + SourceIndex(0)
++5 >Emitted(44, 45) Source(63, 3) + SourceIndex(0)
  ---
  >>>        })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
  1->^^^^^^^^
@@ -606,34 +261,24 @@
    >                                                    	export class FindWidget implements Sample.Thing.IWidget {
    >                                                    
    >                                                    		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-@@= skipped -34, +38 lines =@@
-   >                                                    
-   >                                                    	}
-   >                                                    }
--1->Emitted(45, 9) Source(64, 1) + SourceIndex(0)
--2 >Emitted(45, 10) Source(64, 2) + SourceIndex(0)
--3 >Emitted(45, 12) Source(44, 24) + SourceIndex(0)
--4 >Emitted(45, 19) Source(44, 31) + SourceIndex(0)
--5 >Emitted(45, 22) Source(44, 24) + SourceIndex(0)
+@@= skipped -39, +43 lines =@@
+ 3 >Emitted(45, 12) Source(44, 24) + SourceIndex(0)
+ 4 >Emitted(45, 19) Source(44, 31) + SourceIndex(0)
+ 5 >Emitted(45, 22) Source(44, 24) + SourceIndex(0)
 -6 >Emitted(45, 35) Source(44, 31) + SourceIndex(0)
 -7 >Emitted(45, 40) Source(44, 24) + SourceIndex(0)
 -8 >Emitted(45, 53) Source(44, 31) + SourceIndex(0)
 -9 >Emitted(45, 61) Source(64, 2) + SourceIndex(0)
-+1->Emitted(46, 9) Source(64, 1) + SourceIndex(0)
-+2 >Emitted(46, 10) Source(64, 2) + SourceIndex(0)
-+3 >Emitted(46, 12) Source(44, 24) + SourceIndex(0)
-+4 >Emitted(46, 19) Source(44, 31) + SourceIndex(0)
-+5 >Emitted(46, 22) Source(44, 24) + SourceIndex(0)
-+6 >Emitted(46, 28) Source(44, 24) + SourceIndex(0)
-+7 >Emitted(46, 35) Source(44, 31) + SourceIndex(0)
-+8 >Emitted(46, 40) Source(44, 24) + SourceIndex(0)
-+9 >Emitted(46, 46) Source(44, 24) + SourceIndex(0)
-+10>Emitted(46, 53) Source(44, 31) + SourceIndex(0)
-+11>Emitted(46, 61) Source(64, 2) + SourceIndex(0)
++6 >Emitted(45, 28) Source(44, 24) + SourceIndex(0)
++7 >Emitted(45, 35) Source(44, 31) + SourceIndex(0)
++8 >Emitted(45, 40) Source(44, 24) + SourceIndex(0)
++9 >Emitted(45, 46) Source(44, 24) + SourceIndex(0)
++10>Emitted(45, 53) Source(44, 31) + SourceIndex(0)
++11>Emitted(45, 61) Source(64, 2) + SourceIndex(0)
  ---
  >>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
  1 >^^^^
-@@= skipped -16, +18 lines =@@
+@@= skipped -11, +13 lines =@@
  3 >     ^^
  4 >       ^^^^^
  5 >            ^^^
@@ -665,244 +310,25 @@
    >                                            	export class FindWidget implements Sample.Thing.IWidget {
    >                                            
    >                                            		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-@@= skipped -33, +37 lines =@@
-   >                                            
-   >                                            	}
-   >                                            }
--1 >Emitted(46, 5) Source(64, 1) + SourceIndex(0)
--2 >Emitted(46, 6) Source(64, 2) + SourceIndex(0)
--3 >Emitted(46, 8) Source(44, 18) + SourceIndex(0)
--4 >Emitted(46, 13) Source(44, 23) + SourceIndex(0)
--5 >Emitted(46, 16) Source(44, 18) + SourceIndex(0)
+@@= skipped -38, +42 lines =@@
+ 3 >Emitted(46, 8) Source(44, 18) + SourceIndex(0)
+ 4 >Emitted(46, 13) Source(44, 23) + SourceIndex(0)
+ 5 >Emitted(46, 16) Source(44, 18) + SourceIndex(0)
 -6 >Emitted(46, 28) Source(44, 23) + SourceIndex(0)
 -7 >Emitted(46, 33) Source(44, 18) + SourceIndex(0)
 -8 >Emitted(46, 45) Source(44, 23) + SourceIndex(0)
 -9 >Emitted(46, 53) Source(64, 2) + SourceIndex(0)
-+1 >Emitted(47, 5) Source(64, 1) + SourceIndex(0)
-+2 >Emitted(47, 6) Source(64, 2) + SourceIndex(0)
-+3 >Emitted(47, 8) Source(44, 18) + SourceIndex(0)
-+4 >Emitted(47, 13) Source(44, 23) + SourceIndex(0)
-+5 >Emitted(47, 16) Source(44, 18) + SourceIndex(0)
-+6 >Emitted(47, 23) Source(44, 18) + SourceIndex(0)
-+7 >Emitted(47, 28) Source(44, 23) + SourceIndex(0)
-+8 >Emitted(47, 33) Source(44, 18) + SourceIndex(0)
-+9 >Emitted(47, 40) Source(44, 18) + SourceIndex(0)
-+10>Emitted(47, 45) Source(44, 23) + SourceIndex(0)
-+11>Emitted(47, 53) Source(64, 2) + SourceIndex(0)
++6 >Emitted(46, 23) Source(44, 18) + SourceIndex(0)
++7 >Emitted(46, 28) Source(44, 23) + SourceIndex(0)
++8 >Emitted(46, 33) Source(44, 18) + SourceIndex(0)
++9 >Emitted(46, 40) Source(44, 18) + SourceIndex(0)
++10>Emitted(46, 45) Source(44, 23) + SourceIndex(0)
++11>Emitted(46, 53) Source(64, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
-@@= skipped -45, +47 lines =@@
-   >                    
-   >                    	}
-   >                    }
--1 >Emitted(47, 1) Source(64, 1) + SourceIndex(0)
--2 >Emitted(47, 2) Source(64, 2) + SourceIndex(0)
--3 >Emitted(47, 4) Source(44, 11) + SourceIndex(0)
--4 >Emitted(47, 10) Source(44, 17) + SourceIndex(0)
--5 >Emitted(47, 15) Source(44, 11) + SourceIndex(0)
--6 >Emitted(47, 21) Source(44, 17) + SourceIndex(0)
--7 >Emitted(47, 29) Source(64, 2) + SourceIndex(0)
-+1 >Emitted(48, 1) Source(64, 1) + SourceIndex(0)
-+2 >Emitted(48, 2) Source(64, 2) + SourceIndex(0)
-+3 >Emitted(48, 4) Source(44, 11) + SourceIndex(0)
-+4 >Emitted(48, 10) Source(44, 17) + SourceIndex(0)
-+5 >Emitted(48, 15) Source(44, 11) + SourceIndex(0)
-+6 >Emitted(48, 21) Source(44, 17) + SourceIndex(0)
-+7 >Emitted(48, 29) Source(64, 2) + SourceIndex(0)
- ---
- >>>class AbstractMode {
- 1 >
-@@= skipped -19, +19 lines =@@
-   >
- 2 >class 
- 3 >      AbstractMode
--1 >Emitted(48, 1) Source(67, 1) + SourceIndex(0)
--2 >Emitted(48, 7) Source(67, 7) + SourceIndex(0)
--3 >Emitted(48, 19) Source(67, 19) + SourceIndex(0)
-+1 >Emitted(49, 1) Source(67, 1) + SourceIndex(0)
-+2 >Emitted(49, 7) Source(67, 7) + SourceIndex(0)
-+3 >Emitted(49, 19) Source(67, 19) + SourceIndex(0)
- ---
- >>>    getInitialState() { return null; }
- 1->^^^^
-@@= skipped -21, +21 lines =@@
- 6 >                                   ;
- 7 >                                    
- 8 >                                     }
--1->Emitted(49, 5) Source(67, 46) + SourceIndex(0)
--2 >Emitted(49, 20) Source(67, 61) + SourceIndex(0)
--3 >Emitted(49, 25) Source(67, 74) + SourceIndex(0)
--4 >Emitted(49, 32) Source(67, 81) + SourceIndex(0)
--5 >Emitted(49, 36) Source(67, 85) + SourceIndex(0)
--6 >Emitted(49, 37) Source(67, 86) + SourceIndex(0)
--7 >Emitted(49, 38) Source(67, 86) + SourceIndex(0)
--8 >Emitted(49, 39) Source(67, 87) + SourceIndex(0)
-+1->Emitted(50, 5) Source(67, 46) + SourceIndex(0)
-+2 >Emitted(50, 20) Source(67, 61) + SourceIndex(0)
-+3 >Emitted(50, 25) Source(67, 74) + SourceIndex(0)
-+4 >Emitted(50, 32) Source(67, 81) + SourceIndex(0)
-+5 >Emitted(50, 36) Source(67, 85) + SourceIndex(0)
-+6 >Emitted(50, 37) Source(67, 86) + SourceIndex(0)
-+7 >Emitted(50, 38) Source(67, 86) + SourceIndex(0)
-+8 >Emitted(50, 39) Source(67, 87) + SourceIndex(0)
- ---
- >>>}
- 1 >^
- 2 > ^^^^^^^^^^^^^^^^^^^^->
- 1 > }
--1 >Emitted(50, 2) Source(67, 89) + SourceIndex(0)
-+1 >Emitted(51, 2) Source(67, 89) + SourceIndex(0)
- ---
- >>>(function (Sample) {
- 1->
-@@= skipped -31, +31 lines =@@
-   >
- 2 >namespace 
- 3 >           Sample
--1->Emitted(51, 1) Source(76, 1) + SourceIndex(0)
--2 >Emitted(51, 12) Source(76, 11) + SourceIndex(0)
--3 >Emitted(51, 18) Source(76, 17) + SourceIndex(0)
-+1->Emitted(52, 1) Source(76, 1) + SourceIndex(0)
-+2 >Emitted(52, 12) Source(76, 11) + SourceIndex(0)
-+3 >Emitted(52, 18) Source(76, 17) + SourceIndex(0)
- ---
-->>>    var Thing;
-+>>>    let Thing;
- 1 >^^^^
- 2 >    ^^^^
- 3 >        ^^^^^
-@@= skipped -38, +38 lines =@@
-   >             
-   >             	}
-   >             }
--1 >Emitted(52, 5) Source(76, 18) + SourceIndex(0)
--2 >Emitted(52, 9) Source(76, 18) + SourceIndex(0)
--3 >Emitted(52, 14) Source(76, 23) + SourceIndex(0)
--4 >Emitted(52, 15) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(53, 5) Source(76, 18) + SourceIndex(0)
-+2 >Emitted(53, 9) Source(76, 18) + SourceIndex(0)
-+3 >Emitted(53, 14) Source(76, 23) + SourceIndex(0)
-+4 >Emitted(53, 15) Source(100, 2) + SourceIndex(0)
- ---
- >>>    (function (Thing) {
- 1->^^^^
-@@= skipped -13, +13 lines =@@
- 1->
- 2 >    
- 3 >               Thing
--1->Emitted(53, 5) Source(76, 18) + SourceIndex(0)
--2 >Emitted(53, 16) Source(76, 18) + SourceIndex(0)
--3 >Emitted(53, 21) Source(76, 23) + SourceIndex(0)
-+1->Emitted(54, 5) Source(76, 18) + SourceIndex(0)
-+2 >Emitted(54, 16) Source(76, 18) + SourceIndex(0)
-+3 >Emitted(54, 21) Source(76, 23) + SourceIndex(0)
- ---
-->>>        var Languages;
-+>>>        let Languages;
- 1->^^^^^^^^
- 2 >        ^^^^
- 3 >            ^^^^^^^^^
-@@= skipped -38, +38 lines =@@
-   >                     
-   >                     	}
-   >                     }
--1->Emitted(54, 9) Source(76, 24) + SourceIndex(0)
--2 >Emitted(54, 13) Source(76, 24) + SourceIndex(0)
--3 >Emitted(54, 22) Source(76, 33) + SourceIndex(0)
--4 >Emitted(54, 23) Source(100, 2) + SourceIndex(0)
-+1->Emitted(55, 9) Source(76, 24) + SourceIndex(0)
-+2 >Emitted(55, 13) Source(76, 24) + SourceIndex(0)
-+3 >Emitted(55, 22) Source(76, 33) + SourceIndex(0)
-+4 >Emitted(55, 23) Source(100, 2) + SourceIndex(0)
- ---
- >>>        (function (Languages) {
- 1->^^^^^^^^
-@@= skipped -12, +12 lines =@@
- 1->
- 2 >        
- 3 >                   Languages
--1->Emitted(55, 9) Source(76, 24) + SourceIndex(0)
--2 >Emitted(55, 20) Source(76, 24) + SourceIndex(0)
--3 >Emitted(55, 29) Source(76, 33) + SourceIndex(0)
-+1->Emitted(56, 9) Source(76, 24) + SourceIndex(0)
-+2 >Emitted(56, 20) Source(76, 24) + SourceIndex(0)
-+3 >Emitted(56, 29) Source(76, 33) + SourceIndex(0)
- ---
-->>>            var PlainText;
-+>>>            let PlainText;
- 1 >^^^^^^^^^^^^
- 2 >            ^^^^
- 3 >                ^^^^^^^^^
-@@= skipped -38, +38 lines =@@
-   >                         
-   >                         	}
-   >                         }
--1 >Emitted(56, 13) Source(76, 34) + SourceIndex(0)
--2 >Emitted(56, 17) Source(76, 34) + SourceIndex(0)
--3 >Emitted(56, 26) Source(76, 43) + SourceIndex(0)
--4 >Emitted(56, 27) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(57, 13) Source(76, 34) + SourceIndex(0)
-+2 >Emitted(57, 17) Source(76, 34) + SourceIndex(0)
-+3 >Emitted(57, 26) Source(76, 43) + SourceIndex(0)
-+4 >Emitted(57, 27) Source(100, 2) + SourceIndex(0)
- ---
- >>>            (function (PlainText) {
- 1->^^^^^^^^^^^^
-@@= skipped -12, +12 lines =@@
- 1->
- 2 >            
- 3 >                       PlainText
--1->Emitted(57, 13) Source(76, 34) + SourceIndex(0)
--2 >Emitted(57, 24) Source(76, 34) + SourceIndex(0)
--3 >Emitted(57, 33) Source(76, 43) + SourceIndex(0)
-+1->Emitted(58, 13) Source(76, 34) + SourceIndex(0)
-+2 >Emitted(58, 24) Source(76, 34) + SourceIndex(0)
-+3 >Emitted(58, 33) Source(76, 43) + SourceIndex(0)
- ---
- >>>                class State {
- 1 >^^^^^^^^^^^^^^^^
- 2 >                ^^^^^^
- 3 >                      ^^^^^
--4 >                           ^^^^^^^^^^^^^->
- 1 > {
-   >	
-   >	
- 2 >                export class 
- 3 >                      State
--1 >Emitted(58, 17) Source(78, 2) + SourceIndex(0)
--2 >Emitted(58, 23) Source(78, 15) + SourceIndex(0)
--3 >Emitted(58, 28) Source(78, 20) + SourceIndex(0)
-+1 >Emitted(59, 17) Source(78, 2) + SourceIndex(0)
-+2 >Emitted(59, 23) Source(78, 15) + SourceIndex(0)
-+3 >Emitted(59, 28) Source(78, 20) + SourceIndex(0)
-+---
-+>>>                    mode;
-+1 >^^^^^^^^^^^^^^^^^^^^
-+2 >                    ^^^^
-+3 >                        ^^^^^^^^^^^^^^^^->
-+1 > implements IState {		
-+  >        constructor(private 
-+2 >                    mode
-+1 >Emitted(60, 21) Source(79, 29) + SourceIndex(0)
-+2 >Emitted(60, 25) Source(79, 33) + SourceIndex(0)
- ---
- >>>                    constructor(mode) {
- 1->^^^^^^^^^^^^^^^^^^^^
- 2 >                    ^^^^^^^^^^^^
- 3 >                                ^^^^
- 4 >                                    ^^^^^^->
--1-> implements IState {		
--  >        
-+1->
- 2 >                    constructor(private 
- 3 >                                mode: IMode
--1->Emitted(59, 21) Source(79, 9) + SourceIndex(0)
--2 >Emitted(59, 33) Source(79, 29) + SourceIndex(0)
--3 >Emitted(59, 37) Source(79, 40) + SourceIndex(0)
-+1->Emitted(61, 21) Source(79, 9) + SourceIndex(0)
-+2 >Emitted(61, 33) Source(79, 29) + SourceIndex(0)
-+3 >Emitted(61, 37) Source(79, 40) + SourceIndex(0)
+@@= skipped -294, +296 lines =@@
+ 3 >Emitted(59, 37) Source(79, 40) + SourceIndex(0)
  ---
  >>>                        this.mode = mode;
 -1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -923,8 +349,8 @@
 -4 >Emitted(60, 41) Source(79, 33) + SourceIndex(0)
 -5 >Emitted(60, 42) Source(79, 40) + SourceIndex(0)
 +2 >                                    mode
-+1->Emitted(62, 37) Source(79, 29) + SourceIndex(0)
-+2 >Emitted(62, 41) Source(79, 33) + SourceIndex(0)
++1->Emitted(60, 37) Source(79, 29) + SourceIndex(0)
++2 >Emitted(60, 41) Source(79, 33) + SourceIndex(0)
  ---
  >>>                    }
  1 >^^^^^^^^^^^^^^^^^^^^
@@ -933,123 +359,9 @@
 -1 >) { 
 +1 >: IMode) { 
  2 >                    }
--1 >Emitted(61, 21) Source(79, 44) + SourceIndex(0)
--2 >Emitted(61, 22) Source(79, 45) + SourceIndex(0)
-+1 >Emitted(63, 21) Source(79, 44) + SourceIndex(0)
-+2 >Emitted(63, 22) Source(79, 45) + SourceIndex(0)
- ---
- >>>                    clone() {
- 1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -64, +63 lines =@@
- 1->
-   >		public 
- 2 >                    clone
--1->Emitted(62, 21) Source(80, 10) + SourceIndex(0)
--2 >Emitted(62, 26) Source(80, 15) + SourceIndex(0)
-+1->Emitted(64, 21) Source(80, 10) + SourceIndex(0)
-+2 >Emitted(64, 26) Source(80, 15) + SourceIndex(0)
- ---
- >>>                        return this;
- 1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -13, +13 lines =@@
- 2 >                        return 
- 3 >                               this
- 4 >                                   ;
--1->Emitted(63, 25) Source(81, 4) + SourceIndex(0)
--2 >Emitted(63, 32) Source(81, 11) + SourceIndex(0)
--3 >Emitted(63, 36) Source(81, 15) + SourceIndex(0)
--4 >Emitted(63, 37) Source(81, 16) + SourceIndex(0)
-+1->Emitted(65, 25) Source(81, 4) + SourceIndex(0)
-+2 >Emitted(65, 32) Source(81, 11) + SourceIndex(0)
-+3 >Emitted(65, 36) Source(81, 15) + SourceIndex(0)
-+4 >Emitted(65, 37) Source(81, 16) + SourceIndex(0)
- ---
- >>>                    }
- 1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -12, +12 lines =@@
- 1 >
-   >		
- 2 >                    }
--1 >Emitted(64, 21) Source(82, 3) + SourceIndex(0)
--2 >Emitted(64, 22) Source(82, 4) + SourceIndex(0)
-+1 >Emitted(66, 21) Source(82, 3) + SourceIndex(0)
-+2 >Emitted(66, 22) Source(82, 4) + SourceIndex(0)
- ---
- >>>                    equals(other) {
- 1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -15, +15 lines =@@
- 2 >                    equals
- 3 >                          (
- 4 >                           other:IState
--1->Emitted(65, 21) Source(84, 10) + SourceIndex(0)
--2 >Emitted(65, 27) Source(84, 16) + SourceIndex(0)
--3 >Emitted(65, 28) Source(84, 17) + SourceIndex(0)
--4 >Emitted(65, 33) Source(84, 29) + SourceIndex(0)
-+1->Emitted(67, 21) Source(84, 10) + SourceIndex(0)
-+2 >Emitted(67, 27) Source(84, 16) + SourceIndex(0)
-+3 >Emitted(67, 28) Source(84, 17) + SourceIndex(0)
-+4 >Emitted(67, 33) Source(84, 29) + SourceIndex(0)
- ---
- >>>                        return this === other;
- 1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -19, +19 lines =@@
- 4 >                                    === 
- 5 >                                        other
- 6 >                                             ;
--1->Emitted(66, 25) Source(85, 4) + SourceIndex(0)
--2 >Emitted(66, 32) Source(85, 11) + SourceIndex(0)
--3 >Emitted(66, 36) Source(85, 15) + SourceIndex(0)
--4 >Emitted(66, 41) Source(85, 20) + SourceIndex(0)
--5 >Emitted(66, 46) Source(85, 25) + SourceIndex(0)
--6 >Emitted(66, 47) Source(85, 26) + SourceIndex(0)
-+1->Emitted(68, 25) Source(85, 4) + SourceIndex(0)
-+2 >Emitted(68, 32) Source(85, 11) + SourceIndex(0)
-+3 >Emitted(68, 36) Source(85, 15) + SourceIndex(0)
-+4 >Emitted(68, 41) Source(85, 20) + SourceIndex(0)
-+5 >Emitted(68, 46) Source(85, 25) + SourceIndex(0)
-+6 >Emitted(68, 47) Source(85, 26) + SourceIndex(0)
- ---
- >>>                    }
- 1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -14, +14 lines =@@
- 1 >
-   >		
- 2 >                    }
--1 >Emitted(67, 21) Source(86, 3) + SourceIndex(0)
--2 >Emitted(67, 22) Source(86, 4) + SourceIndex(0)
-+1 >Emitted(69, 21) Source(86, 3) + SourceIndex(0)
-+2 >Emitted(69, 22) Source(86, 4) + SourceIndex(0)
- ---
- >>>                    getMode() { return mode; }
- 1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -22, +22 lines =@@
- 6 >                                           ;
- 7 >                                             
- 8 >                                             }
--1->Emitted(68, 21) Source(88, 10) + SourceIndex(0)
--2 >Emitted(68, 28) Source(88, 17) + SourceIndex(0)
--3 >Emitted(68, 33) Source(88, 29) + SourceIndex(0)
--4 >Emitted(68, 40) Source(88, 36) + SourceIndex(0)
--5 >Emitted(68, 44) Source(88, 40) + SourceIndex(0)
--6 >Emitted(68, 45) Source(88, 41) + SourceIndex(0)
--7 >Emitted(68, 46) Source(88, 42) + SourceIndex(0)
--8 >Emitted(68, 47) Source(88, 43) + SourceIndex(0)
-+1->Emitted(70, 21) Source(88, 10) + SourceIndex(0)
-+2 >Emitted(70, 28) Source(88, 17) + SourceIndex(0)
-+3 >Emitted(70, 33) Source(88, 29) + SourceIndex(0)
-+4 >Emitted(70, 40) Source(88, 36) + SourceIndex(0)
-+5 >Emitted(70, 44) Source(88, 40) + SourceIndex(0)
-+6 >Emitted(70, 45) Source(88, 41) + SourceIndex(0)
-+7 >Emitted(70, 46) Source(88, 42) + SourceIndex(0)
-+8 >Emitted(70, 47) Source(88, 43) + SourceIndex(0)
- ---
- >>>                }
- 1 >^^^^^^^^^^^^^^^^^
- 2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
-   >	}
--1 >Emitted(69, 18) Source(89, 3) + SourceIndex(0)
-+1 >Emitted(71, 18) Source(89, 3) + SourceIndex(0)
+ 1 >Emitted(61, 21) Source(79, 44) + SourceIndex(0)
+ 2 >Emitted(61, 22) Source(79, 45) + SourceIndex(0)
+@@= skipped -145, +136 lines =@@
  ---
  >>>                PlainText.State = State;
  1->^^^^^^^^^^^^^^^^
@@ -1071,103 +383,24 @@
    >                                       constructor(private mode: IMode) { }
    >                               		public clone():IState {
    >                               			return this;
-@@= skipped -36, +38 lines =@@
+@@= skipped -18, +20 lines =@@
    >                               		
    >                               		public getMode(): IMode { return mode; }
    >                               	}
 -4 >                                       
--1->Emitted(70, 17) Source(78, 15) + SourceIndex(0)
++5 >                                       
+ 1->Emitted(70, 17) Source(78, 15) + SourceIndex(0)
 -2 >Emitted(70, 32) Source(78, 20) + SourceIndex(0)
 -3 >Emitted(70, 40) Source(89, 3) + SourceIndex(0)
 -4 >Emitted(70, 41) Source(89, 3) + SourceIndex(0)
-+5 >                                       
-+1->Emitted(72, 17) Source(78, 15) + SourceIndex(0)
-+2 >Emitted(72, 27) Source(78, 15) + SourceIndex(0)
-+3 >Emitted(72, 32) Source(78, 20) + SourceIndex(0)
-+4 >Emitted(72, 40) Source(89, 3) + SourceIndex(0)
-+5 >Emitted(72, 41) Source(89, 3) + SourceIndex(0)
++2 >Emitted(70, 27) Source(78, 15) + SourceIndex(0)
++3 >Emitted(70, 32) Source(78, 20) + SourceIndex(0)
++4 >Emitted(70, 40) Source(89, 3) + SourceIndex(0)
++5 >Emitted(70, 41) Source(89, 3) + SourceIndex(0)
  ---
  >>>                class Mode extends AbstractMode {
  1->^^^^^^^^^^^^^^^^
-@@= skipped -19, +20 lines =@@
- 3 >                      Mode 
- 4 >                          extends 
- 5 >                                   AbstractMode
--1->Emitted(71, 17) Source(91, 2) + SourceIndex(0)
--2 >Emitted(71, 23) Source(91, 15) + SourceIndex(0)
--3 >Emitted(71, 27) Source(91, 20) + SourceIndex(0)
--4 >Emitted(71, 36) Source(91, 28) + SourceIndex(0)
--5 >Emitted(71, 48) Source(91, 40) + SourceIndex(0)
-+1->Emitted(73, 17) Source(91, 2) + SourceIndex(0)
-+2 >Emitted(73, 23) Source(91, 15) + SourceIndex(0)
-+3 >Emitted(73, 27) Source(91, 20) + SourceIndex(0)
-+4 >Emitted(73, 36) Source(91, 28) + SourceIndex(0)
-+5 >Emitted(73, 48) Source(91, 40) + SourceIndex(0)
- ---
- >>>                    // scenario 2
- 1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -14, +14 lines =@@
-   >
-   >		
- 2 >                    // scenario 2
--1 >Emitted(72, 21) Source(93, 3) + SourceIndex(0)
--2 >Emitted(72, 34) Source(93, 16) + SourceIndex(0)
-+1 >Emitted(74, 21) Source(93, 3) + SourceIndex(0)
-+2 >Emitted(74, 34) Source(93, 16) + SourceIndex(0)
- ---
- >>>                    getInitialState() {
- 1->^^^^^^^^^^^^^^^^^^^^
-@@= skipped -10, +10 lines =@@
- 1->
-   >		public 
- 2 >                    getInitialState
--1->Emitted(73, 21) Source(94, 10) + SourceIndex(0)
--2 >Emitted(73, 36) Source(94, 25) + SourceIndex(0)
-+1->Emitted(75, 21) Source(94, 10) + SourceIndex(0)
-+2 >Emitted(75, 36) Source(94, 25) + SourceIndex(0)
- ---
- >>>                        return new State(self);
- 1->^^^^^^^^^^^^^^^^^^^^^^^^
-@@= skipped -21, +21 lines =@@
- 6 >                                         self
- 7 >                                             )
- 8 >                                              ;
--1->Emitted(74, 25) Source(95, 4) + SourceIndex(0)
--2 >Emitted(74, 32) Source(95, 11) + SourceIndex(0)
--3 >Emitted(74, 36) Source(95, 15) + SourceIndex(0)
--4 >Emitted(74, 41) Source(95, 20) + SourceIndex(0)
--5 >Emitted(74, 42) Source(95, 21) + SourceIndex(0)
--6 >Emitted(74, 46) Source(95, 25) + SourceIndex(0)
--7 >Emitted(74, 47) Source(95, 26) + SourceIndex(0)
--8 >Emitted(74, 48) Source(95, 27) + SourceIndex(0)
-+1->Emitted(76, 25) Source(95, 4) + SourceIndex(0)
-+2 >Emitted(76, 32) Source(95, 11) + SourceIndex(0)
-+3 >Emitted(76, 36) Source(95, 15) + SourceIndex(0)
-+4 >Emitted(76, 41) Source(95, 20) + SourceIndex(0)
-+5 >Emitted(76, 42) Source(95, 21) + SourceIndex(0)
-+6 >Emitted(76, 46) Source(95, 25) + SourceIndex(0)
-+7 >Emitted(76, 47) Source(95, 26) + SourceIndex(0)
-+8 >Emitted(76, 48) Source(95, 27) + SourceIndex(0)
- ---
- >>>                    }
- 1 >^^^^^^^^^^^^^^^^^^^^
-@@= skipped -15, +15 lines =@@
- 1 >
-   >		
- 2 >                    }
--1 >Emitted(75, 21) Source(96, 3) + SourceIndex(0)
--2 >Emitted(75, 22) Source(96, 4) + SourceIndex(0)
-+1 >Emitted(77, 21) Source(96, 3) + SourceIndex(0)
-+2 >Emitted(77, 22) Source(96, 4) + SourceIndex(0)
- ---
- >>>                }
- 1 >^^^^^^^^^^^^^^^^^
-@@= skipped -10, +10 lines =@@
-   >
-   >
-   >	}
--1 >Emitted(76, 18) Source(99, 3) + SourceIndex(0)
-+1 >Emitted(78, 18) Source(99, 3) + SourceIndex(0)
+@@= skipped -93, +94 lines =@@
  ---
  >>>                PlainText.Mode = Mode;
  1->^^^^^^^^^^^^^^^^
@@ -1189,21 +422,20 @@
    >                              
    >                              		// scenario 2
    >                              		public getInitialState(): IState {
-@@= skipped -19, +21 lines =@@
+@@= skipped -15, +17 lines =@@
    >                              
    >                              
    >                              	}
 -4 >                                     
--1->Emitted(77, 17) Source(91, 15) + SourceIndex(0)
++5 >                                     
+ 1->Emitted(77, 17) Source(91, 15) + SourceIndex(0)
 -2 >Emitted(77, 31) Source(91, 19) + SourceIndex(0)
 -3 >Emitted(77, 38) Source(99, 3) + SourceIndex(0)
 -4 >Emitted(77, 39) Source(99, 3) + SourceIndex(0)
-+5 >                                     
-+1->Emitted(79, 17) Source(91, 15) + SourceIndex(0)
-+2 >Emitted(79, 27) Source(91, 15) + SourceIndex(0)
-+3 >Emitted(79, 31) Source(91, 19) + SourceIndex(0)
-+4 >Emitted(79, 38) Source(99, 3) + SourceIndex(0)
-+5 >Emitted(79, 39) Source(99, 3) + SourceIndex(0)
++2 >Emitted(77, 27) Source(91, 15) + SourceIndex(0)
++3 >Emitted(77, 31) Source(91, 19) + SourceIndex(0)
++4 >Emitted(77, 38) Source(99, 3) + SourceIndex(0)
++5 >Emitted(77, 39) Source(99, 3) + SourceIndex(0)
  ---
  >>>            })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
  1->^^^^^^^^^^^^
@@ -1240,34 +472,24 @@
    >                                                                      	
    >                                                                      	export class State implements IState {		
    >                                                                              constructor(private mode: IMode) { }
-@@= skipped -38, +42 lines =@@
-   >                                                                      
-   >                                                                      	}
-   >                                                                      }
--1->Emitted(78, 13) Source(100, 1) + SourceIndex(0)
--2 >Emitted(78, 14) Source(100, 2) + SourceIndex(0)
--3 >Emitted(78, 16) Source(76, 34) + SourceIndex(0)
--4 >Emitted(78, 25) Source(76, 43) + SourceIndex(0)
--5 >Emitted(78, 28) Source(76, 34) + SourceIndex(0)
+@@= skipped -43, +47 lines =@@
+ 3 >Emitted(78, 16) Source(76, 34) + SourceIndex(0)
+ 4 >Emitted(78, 25) Source(76, 43) + SourceIndex(0)
+ 5 >Emitted(78, 28) Source(76, 34) + SourceIndex(0)
 -6 >Emitted(78, 47) Source(76, 43) + SourceIndex(0)
 -7 >Emitted(78, 52) Source(76, 34) + SourceIndex(0)
 -8 >Emitted(78, 71) Source(76, 43) + SourceIndex(0)
 -9 >Emitted(78, 79) Source(100, 2) + SourceIndex(0)
-+1->Emitted(80, 13) Source(100, 1) + SourceIndex(0)
-+2 >Emitted(80, 14) Source(100, 2) + SourceIndex(0)
-+3 >Emitted(80, 16) Source(76, 34) + SourceIndex(0)
-+4 >Emitted(80, 25) Source(76, 43) + SourceIndex(0)
-+5 >Emitted(80, 28) Source(76, 34) + SourceIndex(0)
-+6 >Emitted(80, 38) Source(76, 34) + SourceIndex(0)
-+7 >Emitted(80, 47) Source(76, 43) + SourceIndex(0)
-+8 >Emitted(80, 52) Source(76, 34) + SourceIndex(0)
-+9 >Emitted(80, 62) Source(76, 34) + SourceIndex(0)
-+10>Emitted(80, 71) Source(76, 43) + SourceIndex(0)
-+11>Emitted(80, 79) Source(100, 2) + SourceIndex(0)
++6 >Emitted(78, 38) Source(76, 34) + SourceIndex(0)
++7 >Emitted(78, 47) Source(76, 43) + SourceIndex(0)
++8 >Emitted(78, 52) Source(76, 34) + SourceIndex(0)
++9 >Emitted(78, 62) Source(76, 34) + SourceIndex(0)
++10>Emitted(78, 71) Source(76, 43) + SourceIndex(0)
++11>Emitted(78, 79) Source(100, 2) + SourceIndex(0)
  ---
  >>>        })(Languages = Thing.Languages || (Thing.Languages = {}));
  1 >^^^^^^^^
-@@= skipped -16, +18 lines =@@
+@@= skipped -11, +13 lines =@@
  3 >         ^^
  4 >           ^^^^^^^^^
  5 >                    ^^^
@@ -1299,34 +521,24 @@
    >                                                          	
    >                                                          	export class State implements IState {		
    >                                                                  constructor(private mode: IMode) { }
-@@= skipped -37, +41 lines =@@
-   >                                                          
-   >                                                          	}
-   >                                                          }
--1 >Emitted(79, 9) Source(100, 1) + SourceIndex(0)
--2 >Emitted(79, 10) Source(100, 2) + SourceIndex(0)
--3 >Emitted(79, 12) Source(76, 24) + SourceIndex(0)
--4 >Emitted(79, 21) Source(76, 33) + SourceIndex(0)
--5 >Emitted(79, 24) Source(76, 24) + SourceIndex(0)
+@@= skipped -42, +46 lines =@@
+ 3 >Emitted(79, 12) Source(76, 24) + SourceIndex(0)
+ 4 >Emitted(79, 21) Source(76, 33) + SourceIndex(0)
+ 5 >Emitted(79, 24) Source(76, 24) + SourceIndex(0)
 -6 >Emitted(79, 39) Source(76, 33) + SourceIndex(0)
 -7 >Emitted(79, 44) Source(76, 24) + SourceIndex(0)
 -8 >Emitted(79, 59) Source(76, 33) + SourceIndex(0)
 -9 >Emitted(79, 67) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(81, 9) Source(100, 1) + SourceIndex(0)
-+2 >Emitted(81, 10) Source(100, 2) + SourceIndex(0)
-+3 >Emitted(81, 12) Source(76, 24) + SourceIndex(0)
-+4 >Emitted(81, 21) Source(76, 33) + SourceIndex(0)
-+5 >Emitted(81, 24) Source(76, 24) + SourceIndex(0)
-+6 >Emitted(81, 30) Source(76, 24) + SourceIndex(0)
-+7 >Emitted(81, 39) Source(76, 33) + SourceIndex(0)
-+8 >Emitted(81, 44) Source(76, 24) + SourceIndex(0)
-+9 >Emitted(81, 50) Source(76, 24) + SourceIndex(0)
-+10>Emitted(81, 59) Source(76, 33) + SourceIndex(0)
-+11>Emitted(81, 67) Source(100, 2) + SourceIndex(0)
++6 >Emitted(79, 30) Source(76, 24) + SourceIndex(0)
++7 >Emitted(79, 39) Source(76, 33) + SourceIndex(0)
++8 >Emitted(79, 44) Source(76, 24) + SourceIndex(0)
++9 >Emitted(79, 50) Source(76, 24) + SourceIndex(0)
++10>Emitted(79, 59) Source(76, 33) + SourceIndex(0)
++11>Emitted(79, 67) Source(100, 2) + SourceIndex(0)
  ---
  >>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
  1 >^^^^
-@@= skipped -16, +18 lines =@@
+@@= skipped -11, +13 lines =@@
  3 >     ^^
  4 >       ^^^^^
  5 >            ^^^
@@ -1358,50 +570,20 @@
    >                                            	
    >                                            	export class State implements IState {		
    >                                                    constructor(private mode: IMode) { }
-@@= skipped -37, +41 lines =@@
-   >                                            
-   >                                            	}
-   >                                            }
--1 >Emitted(80, 5) Source(100, 1) + SourceIndex(0)
--2 >Emitted(80, 6) Source(100, 2) + SourceIndex(0)
--3 >Emitted(80, 8) Source(76, 18) + SourceIndex(0)
--4 >Emitted(80, 13) Source(76, 23) + SourceIndex(0)
--5 >Emitted(80, 16) Source(76, 18) + SourceIndex(0)
+@@= skipped -42, +46 lines =@@
+ 3 >Emitted(80, 8) Source(76, 18) + SourceIndex(0)
+ 4 >Emitted(80, 13) Source(76, 23) + SourceIndex(0)
+ 5 >Emitted(80, 16) Source(76, 18) + SourceIndex(0)
 -6 >Emitted(80, 28) Source(76, 23) + SourceIndex(0)
 -7 >Emitted(80, 33) Source(76, 18) + SourceIndex(0)
 -8 >Emitted(80, 45) Source(76, 23) + SourceIndex(0)
 -9 >Emitted(80, 53) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(82, 5) Source(100, 1) + SourceIndex(0)
-+2 >Emitted(82, 6) Source(100, 2) + SourceIndex(0)
-+3 >Emitted(82, 8) Source(76, 18) + SourceIndex(0)
-+4 >Emitted(82, 13) Source(76, 23) + SourceIndex(0)
-+5 >Emitted(82, 16) Source(76, 18) + SourceIndex(0)
-+6 >Emitted(82, 23) Source(76, 18) + SourceIndex(0)
-+7 >Emitted(82, 28) Source(76, 23) + SourceIndex(0)
-+8 >Emitted(82, 33) Source(76, 18) + SourceIndex(0)
-+9 >Emitted(82, 40) Source(76, 18) + SourceIndex(0)
-+10>Emitted(82, 45) Source(76, 23) + SourceIndex(0)
-+11>Emitted(82, 53) Source(100, 2) + SourceIndex(0)
++6 >Emitted(80, 23) Source(76, 18) + SourceIndex(0)
++7 >Emitted(80, 28) Source(76, 23) + SourceIndex(0)
++8 >Emitted(80, 33) Source(76, 18) + SourceIndex(0)
++9 >Emitted(80, 40) Source(76, 18) + SourceIndex(0)
++10>Emitted(80, 45) Source(76, 23) + SourceIndex(0)
++11>Emitted(80, 53) Source(100, 2) + SourceIndex(0)
  ---
  >>>})(Sample || (Sample = {}));
  1 >
-@@= skipped -50, +52 lines =@@
-   >                    
-   >                    	}
-   >                    }
--1 >Emitted(81, 1) Source(100, 1) + SourceIndex(0)
--2 >Emitted(81, 2) Source(100, 2) + SourceIndex(0)
--3 >Emitted(81, 4) Source(76, 11) + SourceIndex(0)
--4 >Emitted(81, 10) Source(76, 17) + SourceIndex(0)
--5 >Emitted(81, 15) Source(76, 11) + SourceIndex(0)
--6 >Emitted(81, 21) Source(76, 17) + SourceIndex(0)
--7 >Emitted(81, 29) Source(100, 2) + SourceIndex(0)
-+1 >Emitted(83, 1) Source(100, 1) + SourceIndex(0)
-+2 >Emitted(83, 2) Source(100, 2) + SourceIndex(0)
-+3 >Emitted(83, 4) Source(76, 11) + SourceIndex(0)
-+4 >Emitted(83, 10) Source(76, 17) + SourceIndex(0)
-+5 >Emitted(83, 15) Source(76, 11) + SourceIndex(0)
-+6 >Emitted(83, 21) Source(76, 17) + SourceIndex(0)
-+7 >Emitted(83, 29) Source(100, 2) + SourceIndex(0)
- ---
- >>>//# sourceMappingURL=recursiveClassReferenceTest.js.map

@@ -33,18 +33,13 @@ e2 = e1;
 "use strict";
 // from spec
 class Employee {
-    name;
-    address;
-    retired = false;
-    manager = null;
-    reports = [];
+    constructor() {
+        this.retired = false;
+        this.manager = null;
+        this.reports = [];
+    }
 }
 class Employee2 {
-    name;
-    address;
-    retired;
-    manager;
-    reports;
     constructor() {
         this.retired = false;
         this.manager = null;

@@ -14,10 +14,9 @@ new D(7); // ok
 //// [literalTypesWidenInParameterPosition.js]
 "use strict";
 class D {
-    widen;
-    noWiden = 1;
     constructor(widen = 2) {
         this.widen = widen;
+        this.noWiden = 1;
         this.noWiden = 5; // error
         this.widen = 6; // ok
     }

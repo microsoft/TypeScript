@@ -46,7 +46,6 @@ class MyDerived extends MyBase {
 var d = new MyDerived();
 var f3 = d.value;
 class A {
-    _property;
     get property() { return this._property; }
     set property(value) { this._property = value; }
 }

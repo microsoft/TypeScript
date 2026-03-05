@@ -15,13 +15,10 @@ var g3: () => Iterable<Foo> = function* () {
 //// [generatorTypeCheck25.js]
 "use strict";
 class Foo {
-    x;
 }
 class Bar extends Foo {
-    y;
 }
 class Baz {
-    z;
 }
 var g3 = function* () {
     yield;

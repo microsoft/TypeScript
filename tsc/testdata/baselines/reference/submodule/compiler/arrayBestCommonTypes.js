@@ -156,15 +156,10 @@ var EmptyTypes;
 var NonEmptyTypes;
 (function (NonEmptyTypes) {
     class base {
-        x;
-        y;
     }
     class base2 {
-        x;
-        z;
     }
     class derived extends base {
-        a;
     }
     class f {
         voidIfAny(x, y = false) { return null; }

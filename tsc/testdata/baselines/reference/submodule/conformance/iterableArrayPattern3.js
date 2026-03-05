@@ -22,10 +22,8 @@ var a: Bar, b: Bar;
 //// [iterableArrayPattern3.js]
 "use strict";
 class Bar {
-    x;
 }
 class Foo extends Bar {
-    y;
 }
 class FooIterator {
     next() {

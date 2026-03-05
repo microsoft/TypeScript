@@ -7,5 +7,5 @@ class foo { constructor() { static f = 3; } }
 "use strict";
 class foo {
     constructor() { }
-    static f = 3;
 }
+foo.f = 3;

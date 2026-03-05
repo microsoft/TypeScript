@@ -2294,22 +2294,18 @@ var Harness;
     }
     Harness.emitLog = emitLog;
     class Runnable {
-        description;
-        block;
         constructor(description, block) {
             this.description = description;
             this.block = block;
+            // The error, if any, that occurred when running 'block'
+            this.error = null;
+            // Whether or not this object has any failures (including in its descendants)
+            this.passed = null;
+            // A list of bugs impacting this object
+            this.bugs = [];
+            // A list of all our child Runnables
+            this.children = [];
         }
-        // The current stack of Runnable objects
-        static currentStack = [];
-        // The error, if any, that occurred when running 'block'
-        error = null;
-        // Whether or not this object has any failures (including in its descendants)
-        passed = null;
-        // A list of bugs impacting this object
-        bugs = [];
-        // A list of all our child Runnables
-        children = [];
         addChild(child) {
             this.children.push(child);
         }
@@ -2349,7 +2345,6 @@ var Harness;
         runChild(index, done) {
             return this.call(((done) => this.children[index].run(done)), done);
         }
-        static errorHandlerStack = [];
         static pushGlobalErrorHandler(done) {
             errorHandlerStack.push(function (e) {
                 done(e);
@@ -2367,10 +2362,11 @@ var Harness;
             }
         }
     }
+    // The current stack of Runnable objects
+    Runnable.currentStack = [];
+    Runnable.errorHandlerStack = [];
     Harness.Runnable = Runnable;
     class TestCase extends Runnable {
-        description;
-        block;
         constructor(description, block) {
             super(description, block);
             this.description = description;
@@ -2403,8 +2399,6 @@ var Harness;
     }
     Harness.TestCase = TestCase;
     class Scenario extends Runnable {
-        description;
-        block;
         constructor(description, block) {
             super(description, block);
             this.description = description;
@@ -2505,8 +2499,9 @@ var Harness;
             }
         })(Clock = Perf.Clock || (Perf.Clock = {}));
         class Timer {
-            startTime;
-            time = 0;
+            constructor() {
+                this.time = 0;
+            }
             start() {
                 this.time = 0;
                 this.startTime = Clock.now();
@@ -2518,7 +2513,9 @@ var Harness;
         }
         Perf.Timer = Timer;
         class Dataset {
-            data = [];
+            constructor() {
+                this.data = [];
+            }
             add(value) {
                 this.data.push(value);
             }
@@ -2559,14 +2556,16 @@ var Harness;
         Perf.Dataset = Dataset;
         // Base benchmark class with some defaults.
         class Benchmark {
-            iterations = 10;
-            description = "";
+            constructor() {
+                this.iterations = 10;
+                this.description = "";
+                this.results = {};
+            }
             bench(subBench) { }
             before() { }
             beforeEach() { }
             after() { }
             afterEach() { }
-            results = {};
             addTimingFor(name, timing) {
                 this.results[name] = this.results[name] || new Dataset();
                 this.results[name].add(timing);
@@ -2627,8 +2626,10 @@ var Harness;
          *  TypeScript compiler to fill with source code or errors.
          */
         class WriterAggregator {
-            lines = [];
-            currentLine = "";
+            constructor() {
+                this.lines = [];
+                this.currentLine = "";
+            }
             Write(str) {
                 this.currentLine += str;
             }
@@ -2650,7 +2651,9 @@ var Harness;
         Compiler.WriterAggregator = WriterAggregator;
         /** Mimics having multiple files, later concatenated to a single file. */
         class EmitterIOHost {
-            fileCollection = {};
+            constructor() {
+                this.fileCollection = {};
+            }
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
             createFile(s, useUTF8) {
                 if (this.fileCollection[s]) {
@@ -2728,9 +2731,6 @@ var Harness;
         Compiler.compile = compile;
         // Types
         class Type {
-            type;
-            code;
-            identifier;
             constructor(type, code, identifier) {
                 this.type = type;
                 this.code = code;
@@ -2847,10 +2847,6 @@ var Harness;
         }
         Compiler.Type = Type;
         class TypeFactory {
-            any;
-            number;
-            string;
-            boolean;
             constructor() {
                 this.any = this.get('var x : any', 'x');
                 this.number = this.get('var x : number', 'x');
@@ -3052,10 +3048,6 @@ var Harness;
         Compiler.generateDeclFile = generateDeclFile;
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
         class CompilerResult {
-            fileResults;
-            scripts;
-            code;
-            errors;
             /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
             constructor(fileResults, errorLines, scripts) {
                 this.fileResults = fileResults;
@@ -3091,10 +3083,6 @@ var Harness;
         Compiler.CompilerResult = CompilerResult;
         // Compiler Error.
         class CompilerError {
-            file;
-            line;
-            column;
-            message;
             constructor(file, line, column, message) {
                 this.file = file;
                 this.line = line;
@@ -3384,17 +3372,12 @@ var Harness;
         TestCaseParser.makeUnitsFromTest = makeUnitsFromTest;
     })(TestCaseParser = Harness.TestCaseParser || (Harness.TestCaseParser = {}));
     class ScriptInfo {
-        name;
-        content;
-        isResident;
-        maxScriptVersions;
-        version;
-        editRanges = [];
         constructor(name, content, isResident, maxScriptVersions) {
             this.name = name;
             this.content = content;
             this.isResident = isResident;
             this.maxScriptVersions = maxScriptVersions;
+            this.editRanges = [];
             this.version = 1;
         }
         updateContent(content, isResident) {
@@ -3439,9 +3422,11 @@ var Harness;
     }
     Harness.ScriptInfo = ScriptInfo;
     class TypeScriptLS {
-        ls = null;
-        scripts = [];
-        maxScriptVersions = 100;
+        constructor() {
+            this.ls = null;
+            this.scripts = [];
+            this.maxScriptVersions = 100;
+        }
         addDefaultLibrary() {
             this.addScript("lib.d.ts", Harness.Compiler.libText, true);
         }

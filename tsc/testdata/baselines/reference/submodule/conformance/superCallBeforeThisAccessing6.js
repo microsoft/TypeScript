@@ -18,7 +18,6 @@ class Base {
     constructor(c) { }
 }
 class D extends Base {
-    _t;
     constructor() {
         super(this);
     }

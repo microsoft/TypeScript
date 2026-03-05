@@ -4,6 +4,7 @@
 
  //// [usingDeclarationsWithESClassDecorators.4.js]
  "use strict";
++var _a;
 +var before, _default;
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.default = void 0;
@@ -28,11 +29,10 @@
 -        })();
 -        return default_1 = _classThis;
 -    })();
-+    exports.default = _default = 
-+    @dec
-+    class {
-+        static { __setFunctionName(this, "default"); }
-+    };
++    exports.default = _default = (_a = class {
++        },
++        __setFunctionName(_a, "default"),
++        _a);
  }
  catch (e_1) {
      env_1.error = e_1;

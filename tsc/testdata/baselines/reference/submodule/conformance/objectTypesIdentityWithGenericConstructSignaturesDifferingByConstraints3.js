@@ -103,10 +103,8 @@ function foo14(x: any) { }
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
 class One {
-    foo;
 }
 class Two {
-    foo;
 }
 class B {
     constructor(x, y) { return null; }

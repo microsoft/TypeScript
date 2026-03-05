@@ -14,14 +14,17 @@ class A {
 
 //// [privateNameDeclaration.js]
 "use strict";
+var _A_foo, _A_bar;
 class A {
-    #foo;
-    #bar = 6;
-    baz;
-    qux = 6;
+    constructor() {
+        _A_foo.set(this, void 0);
+        _A_bar.set(this, 6);
+        this.qux = 6;
+    }
     quux() {
     }
 }
+_A_foo = new WeakMap(), _A_bar = new WeakMap();
 
 
 //// [privateNameDeclaration.d.ts]

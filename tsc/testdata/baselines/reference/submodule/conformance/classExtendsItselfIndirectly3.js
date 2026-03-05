@@ -21,30 +21,24 @@ class E2<T> extends D2<T> { baz: T; }
 //// [classExtendsItselfIndirectly_file1.js]
 "use strict";
 class C extends E {
-    foo;
 } // error
 //// [classExtendsItselfIndirectly_file2.js]
 "use strict";
 class D extends C {
-    bar;
 }
 //// [classExtendsItselfIndirectly_file3.js]
 "use strict";
 class E extends D {
-    baz;
 }
 //// [classExtendsItselfIndirectly_file4.js]
 "use strict";
 class C2 extends E2 {
-    foo;
 } // error
 //// [classExtendsItselfIndirectly_file5.js]
 "use strict";
 class D2 extends C2 {
-    bar;
 }
 //// [classExtendsItselfIndirectly_file6.js]
 "use strict";
 class E2 extends D2 {
-    baz;
 }

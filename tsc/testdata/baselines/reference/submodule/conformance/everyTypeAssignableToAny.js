@@ -66,7 +66,6 @@ function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 "use strict";
 var a;
 class C {
-    foo;
 }
 var ac;
 var ai;

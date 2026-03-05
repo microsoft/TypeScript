@@ -99,7 +99,6 @@ var E;
     function fn() { }
     E.fn = fn;
     class C {
-        name;
     }
     E.C = C;
     let M;
@@ -117,7 +116,6 @@ var F;
     })(Color || (Color = {}));
     function fn() { }
     class C {
-        name;
     }
     let M;
     (function (M) {

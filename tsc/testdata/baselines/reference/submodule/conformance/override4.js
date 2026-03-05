@@ -29,24 +29,23 @@ class DD extends B {
 //// [override4.js]
 "use strict";
 class B {
-    p1 = 1;
-    p2 = 1;
-    p3;
-    p4;
+    constructor() {
+        this.p1 = 1;
+        this.p2 = 1;
+    }
     foo(v) { }
     fooo(v) { }
 }
 class D extends B {
-    p1 = 2;
-    p2 = 3;
-    p3;
-    p4;
+    constructor() {
+        super(...arguments);
+        this.p1 = 2;
+        this.p2 = 3;
+    }
     foo(v) { }
     fooo(v) { }
 }
 class DD extends B {
-    foo;
-    fooo;
 }
 
 

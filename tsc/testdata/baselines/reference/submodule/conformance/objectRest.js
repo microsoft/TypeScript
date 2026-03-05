@@ -78,14 +78,10 @@ var _h = complex.x, { ka } = _h, nested = __rest(_h, ["ka"]), { y: other } = com
 var _j = { x: 1, y: 2 }, { x } = _j, fresh = __rest(_j, ["x"]);
 (_b = { x: 1, y: 2 }, { x } = _b, fresh = __rest(_b, ["x"]));
 class Removable {
-    x;
-    y;
     set z(value) { }
     get both() { return 12; }
     set both(value) { }
     m() { }
-    removed;
-    remainder;
 }
 var removable = new Removable();
 var { removed } = removable, removableRest = __rest(removable, ["removed"]);

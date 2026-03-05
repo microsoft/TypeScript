@@ -9,8 +9,6 @@ class Foo {
 //// [parameterPropertyReferencingOtherParameter.js]
 "use strict";
 class Foo {
-    x;
-    y;
     constructor(x, y = x) {
         this.x = x;
         this.y = y;

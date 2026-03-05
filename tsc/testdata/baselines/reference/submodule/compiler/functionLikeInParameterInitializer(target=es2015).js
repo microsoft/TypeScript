@@ -36,7 +36,9 @@ export function baz2(func = function () { return foo; }) {
 }
 // error
 export function baz3(func = class {
-    x = foo;
+    constructor() {
+        this.x = foo;
+    }
 }) {
     let foo = "in";
 }

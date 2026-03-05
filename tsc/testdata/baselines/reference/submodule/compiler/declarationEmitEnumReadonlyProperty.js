@@ -20,7 +20,9 @@ var E;
     E["B"] = "b";
 })(E || (E = {}));
 class C {
-    type = E.A;
+    constructor() {
+        this.type = E.A;
+    }
 }
 let x = new C().type;
 

@@ -17,11 +17,8 @@ class D extends C {
 //// [computedPropertyNames43_ES6.js]
 "use strict";
 class Foo {
-    x;
 }
 class Foo2 {
-    x;
-    y;
 }
 class C {
 }

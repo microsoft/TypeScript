@@ -199,27 +199,16 @@ var r8b7 = b6 !== a6;
 //// [comparisonOperatorWithIdenticalObjects.js]
 "use strict";
 class A1 {
-    a;
-    b;
-    c;
-    d;
-    e;
     fn(a) {
         return null;
     }
 }
 class B1 {
-    a;
-    b;
-    c;
-    d;
-    e;
     fn(b) {
         return null;
     }
 }
 class Base {
-    a;
     fn(b) {
         return null;
     }

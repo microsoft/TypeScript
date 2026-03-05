@@ -90,15 +90,12 @@ class Foo9 extends C {
 class C {
 }
 class Foo1 {
-    A;
     constructor(A) {
         "ngInject1";
         this.A = A;
     }
 }
 class Foo2 {
-    A;
-    B;
     constructor(A, B) {
         "ngInject1";
         "ngInject2";
@@ -107,9 +104,6 @@ class Foo2 {
     }
 }
 class Foo3 {
-    A;
-    B;
-    C;
     constructor(A, B, C) {
         "ngInject1";
         "ngInject2";
@@ -119,7 +113,6 @@ class Foo3 {
     }
 }
 class Foo4 {
-    A;
     constructor(A) {
         "ngInject1";
         this.A = A;
@@ -127,8 +120,6 @@ class Foo4 {
     }
 }
 class Foo5 {
-    A;
-    B;
     constructor(A, B) {
         "ngInject1";
         "ngInject2";
@@ -138,9 +129,6 @@ class Foo5 {
     }
 }
 class Foo6 {
-    A;
-    B;
-    C;
     constructor(A, B, C) {
         "ngInject1";
         "ngInject2";
@@ -151,7 +139,6 @@ class Foo6 {
     }
 }
 class Foo7 extends C {
-    member;
     constructor(member) {
         "ngInject1";
         super();
@@ -160,7 +147,6 @@ class Foo7 extends C {
     }
 }
 class Foo8 extends C {
-    member;
     constructor(member) {
         "ngInject1";
         super();

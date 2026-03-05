@@ -14,9 +14,6 @@ class greeter {
 //// [unusedPrivateVariableInClass4.js]
 "use strict";
 class greeter {
-    x;
-    y;
-    z;
     method1() {
         this.x;
     }

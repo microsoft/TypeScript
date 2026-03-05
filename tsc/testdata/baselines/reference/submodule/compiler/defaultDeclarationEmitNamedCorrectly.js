@@ -25,9 +25,8 @@ function make(x) {
     return null;
 }
 class MyComponent {
-    props;
-    static create = make(MyComponent);
 }
+MyComponent.create = make(MyComponent);
 exports.default = MyComponent;
 
 

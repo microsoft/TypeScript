@@ -60,22 +60,26 @@ function getFoo1() {
     };
 }
 function getFoo2() {
-    return class {
-        static method1 = (arg) => {
+    var _a;
+    return _a = class {
+        },
+        _a.method1 = (arg) => {
             arg.numProp = 10;
-        };
-        static method2 = (arg) => {
+        },
+        _a.method2 = (arg) => {
             arg.strProp = "hello";
-        };
-    };
+        },
+        _a;
 }
 function getFoo3() {
-    return class {
-        static method1 = function (arg) {
+    var _a;
+    return _a = class {
+        },
+        _a.method1 = function (arg) {
             arg.numProp = 10;
-        };
-        static method2 = function (arg) {
+        },
+        _a.method2 = function (arg) {
             arg.strProp = "hello";
-        };
-    };
+        },
+        _a;
 }

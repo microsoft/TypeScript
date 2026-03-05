@@ -23,8 +23,8 @@ class B {
 //// [emitClassDeclarationWithThisKeywordInES6.js]
 "use strict";
 class B {
-    x = 10;
     constructor() {
+        this.x = 10;
         this.x = 10;
     }
     static log(a) { }

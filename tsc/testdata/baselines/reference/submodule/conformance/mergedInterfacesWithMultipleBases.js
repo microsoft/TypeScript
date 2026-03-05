@@ -61,16 +61,10 @@ namespace M {
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
 class C {
-    a;
 }
 class C2 {
-    b;
 }
 class D {
-    a;
-    b;
-    y;
-    z;
 }
 var a;
 var r = a.a;
@@ -78,15 +72,9 @@ var r = a.a;
 var M;
 (function (M) {
     class C {
-        a;
     }
     class C2 {
-        b;
     }
     class D {
-        a;
-        b;
-        y;
-        z;
     }
 })(M || (M = {}));

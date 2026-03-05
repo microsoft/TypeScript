@@ -44,21 +44,23 @@ const outsideClass: FuncType = function(val) { // compare to errors only on this
 "use strict";
 // turn on strictNullChecks
 class Example {
-    insideClass = function (val) {
-        switch (val) {
-            case 1:
-                return "1";
-            case 2:
-                return "2";
-            case 3:
-                return "3";
-            case 4:
-                return "4";
-            case 5:
-                return "5";
-            // forgot case 6
-        }
-    }; // all the way to here
+    constructor() {
+        this.insideClass = function (val) {
+            switch (val) {
+                case 1:
+                    return "1";
+                case 2:
+                    return "2";
+                case 3:
+                    return "3";
+                case 4:
+                    return "4";
+                case 5:
+                    return "5";
+                // forgot case 6
+            }
+        }; // all the way to here
+    }
 }
 const outsideClass = function (val) {
     switch (val) {

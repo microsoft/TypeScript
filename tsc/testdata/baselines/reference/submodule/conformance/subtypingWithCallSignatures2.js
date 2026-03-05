@@ -178,16 +178,12 @@ var r18 = foo18(r18arg1);
 "use strict";
 // checking subtype relations for function types as it relates to contextual signature instantiation
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Derived {
-    baz;
 }
 class OtherDerived extends Base {
-    bing;
 }
 var r1arg1 = (x) => [x];
 var r1arg2 = (x) => [1];

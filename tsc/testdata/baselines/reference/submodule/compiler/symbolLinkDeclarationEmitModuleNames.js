@@ -32,7 +32,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BindingKey = void 0;
 class BindingKey {
-    __type;
     static create(ctor) {
         return new BindingKey();
     }

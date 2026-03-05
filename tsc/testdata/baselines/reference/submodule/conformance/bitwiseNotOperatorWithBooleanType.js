@@ -46,7 +46,6 @@ var ResultIsNumber8 = ~~BOOLEAN;
 var BOOLEAN;
 function foo() { return true; }
 class A {
-    a;
     static foo() { return false; }
 }
 var M;

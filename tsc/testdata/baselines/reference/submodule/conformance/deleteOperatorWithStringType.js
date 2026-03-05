@@ -51,7 +51,6 @@ delete objA.a,M.n;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
 class A {
-    a;
     static foo() { return ""; }
 }
 var M;

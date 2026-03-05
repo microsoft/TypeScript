@@ -44,7 +44,9 @@ Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
 class Test {
-    method = (input) => { };
+    constructor() {
+        this.method = (input) => { };
+    }
 }
 exports.Test = Test;
 

@@ -24,7 +24,9 @@ function decorator(x) {
 }
 function* g() {
     let C = class C {
-        x = yield 0;
+        constructor() {
+            this.x = yield 0;
+        }
     };
     C = __decorate([
         decorator(yield 0)

@@ -155,7 +155,7 @@ namespace TypeScript.AstWalkerWithDetailCallback {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    let AstWalkerWithDetailCallback;
+    var AstWalkerWithDetailCallback;
     (function (AstWalkerWithDetailCallback) {
         function walk(script, callback) {
             var pre = (cur, parent) => {

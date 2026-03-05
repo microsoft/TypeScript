@@ -22,12 +22,9 @@ class D {
 //// [esDecorators-classDeclaration-accessors-staticPrivate.js]
 "use strict";
 class C {
-    @dec(1)
     static get #method1() { return 0; }
-    @dec(2)
     static set #method1(value) { }
 }
-@dec
 class D {
     static get #method1() { return 0; }
     static set #method1(value) { }

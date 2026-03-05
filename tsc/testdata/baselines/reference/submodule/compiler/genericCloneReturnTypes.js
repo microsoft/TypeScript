@@ -30,8 +30,6 @@ b = b3;
 //// [genericCloneReturnTypes.js]
 "use strict";
 class Bar {
-    size;
-    t;
     constructor(x) {
         this.size = x;
     }

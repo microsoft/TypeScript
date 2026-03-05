@@ -59,7 +59,7 @@ func classHasDeclaredOrExplicitlyAssignedName(emitContext *printer.EmitContext, 
 // the Identifier `__proto__`, or the string literal `"__proto__"`, but not for
 // computed property names.
 func isProtoSetter(node *ast.PropertyName) bool {
-	return ast.IsIdentifier(node) || ast.IsStringLiteral(node) && node.Text() == "__proto__"
+	return (ast.IsIdentifier(node) || ast.IsStringLiteral(node)) && node.Text() == "__proto__"
 }
 
 type anonymousFunctionDefinition = ast.Node // ClassExpression | FunctionExpression | ArrowFunction

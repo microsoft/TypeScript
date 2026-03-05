@@ -45,6 +45,5 @@
 +    class {
 +    }] = obj;
 +[x = class {
-+        @dec
 +        y;
 +    }] = obj;

@@ -30,7 +30,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 class Foo {
-    myList;
 }
 __decorate([
     Decorator,

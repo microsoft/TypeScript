@@ -31,16 +31,9 @@ var r = a.x; // error
 //// [mergedInterfacesWithInheritedPrivates.js]
 "use strict";
 class C {
-    x;
 }
 class D {
-    x;
-    y;
-    z;
 }
 class E {
-    x;
-    y;
-    z;
 }
 var r = a.x; // error

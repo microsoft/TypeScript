@@ -42,21 +42,23 @@ module.exports = {
 };
 //// [index2.js]
 "use strict";
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
 const TopLevelSym = Symbol();
 const InnerSym = Symbol();
 class MyClass {
-    static [TopLevelSym] = 12;
-    [InnerSym] = "ok";
     /**
      * @param {typeof TopLevelSym | typeof InnerSym} _p
      */
     constructor(_p = InnerSym) {
+        this[_b] = "ok";
         // switch on _p
     }
 }
 exports.MyClass = MyClass;
+_a = TopLevelSym, _b = InnerSym;
+MyClass[_a] = 12;
 
 
 //// [index.d.ts]

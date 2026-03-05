@@ -22,11 +22,15 @@ c2 = c;
 //// [classImplementsClass5.js]
 "use strict";
 class A {
-    x = 1;
+    constructor() {
+        this.x = 1;
+    }
     foo() { return 1; }
 }
 class C {
-    x = 1;
+    constructor() {
+        this.x = 1;
+    }
     foo() {
         return 1;
     }

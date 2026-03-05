@@ -16,12 +16,10 @@ class D {
 //// [propertyAndFunctionWithSameName.js]
 "use strict";
 class C {
-    x;
     x() {
         return 1;
     }
 }
 class D {
-    x;
     x(v) { } // error
 }

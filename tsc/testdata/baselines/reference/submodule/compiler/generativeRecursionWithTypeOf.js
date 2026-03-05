@@ -16,7 +16,6 @@ namespace M {
 "use strict";
 class C {
     static foo(x) { }
-    type;
 }
 var M;
 (function (M) {

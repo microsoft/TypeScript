@@ -62,17 +62,14 @@ var E;
     E[E["e2"] = 1] = "e2";
 })(E || (E = {}));
 class A {
-    foo;
 }
 class A2 {
-    foo;
 }
 function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
 class c {
-    baz;
 }
 (function (c) {
     c.bar = 1;

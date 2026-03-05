@@ -50,7 +50,6 @@ class C1 {
 }
 exports.C1 = C1;
 class C2 {
-    C2; // has to be the same as the class name
     bar() {
         return function (t) {
         };

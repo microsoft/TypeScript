@@ -9,6 +9,7 @@ class C {
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js]
 "use strict";
 class C {
-    const;
-    x = 10;
+    constructor() {
+        this.x = 10;
+    }
 }

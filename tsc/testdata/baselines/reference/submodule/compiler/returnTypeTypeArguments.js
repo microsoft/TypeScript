@@ -81,16 +81,10 @@ declare var a: {
 //// [returnTypeTypeArguments.js]
 "use strict";
 class One {
-    value;
 }
 class Two {
-    value;
-    id;
 }
 class Three {
-    value;
-    id;
-    name;
 }
 function A1() { return null; }
 function A2() { return null; }
@@ -114,17 +108,6 @@ class D {
     B3() { return null; }
 }
 class Y {
-    value;
 }
 class X {
-    p1;
-    p2;
-    p3;
-    p4;
-    p5;
-    p6;
-    p7;
-    p8;
-    p9;
-    pa;
 }

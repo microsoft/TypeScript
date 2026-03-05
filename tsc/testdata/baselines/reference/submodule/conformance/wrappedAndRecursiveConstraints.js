@@ -22,7 +22,6 @@ var r = c.foo(y);
 "use strict";
 // no errors expected
 class C {
-    data;
     constructor(data) {
         this.data = data;
     }

@@ -46,7 +46,6 @@ var r20 = E.a + M;
 "use strict";
 function foo() { }
 class C {
-    a;
     static foo() { }
 }
 var E;

@@ -23,19 +23,19 @@ class C {
 "use strict";
 function A() { }
 A.prototype = {
-    #x: 1, // Error
-    #m() { }, // Error
-    get #p() { return ""; } // Error
+    : 1, // Error
+    () { }, // Error
+    get () { return ""; } // Error
 };
 class B {
 }
 B.prototype = {
-    #y: 2, // Error
-    #m() { }, // Error
-    get #p() { return ""; } // Error
+    : 2, // Error
+    () { }, // Error
+    get () { return ""; } // Error
 };
 class C {
     constructor() {
-        this.#z = 3;
+        this. = 3;
     }
 }

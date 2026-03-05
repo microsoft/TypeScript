@@ -9,12 +9,11 @@
  exports.Testing123 = void 0;
 -let Testing123 = Testing123_1 = class Testing123 {
 +let Testing123 = class Testing123 {
-+    static prop0;
-+    static prop1 = Testing123.prop0;
  };
  exports.Testing123 = Testing123;
 -Testing123.prop1 = Testing123_1.prop0;
 -exports.Testing123 = Testing123 = Testing123_1 = __decorate([
++Testing123.prop1 = Testing123.prop0;
 +exports.Testing123 = Testing123 = __decorate([
      Something({ v: () => Testing123 })
  ], Testing123);

@@ -102,5 +102,5 @@ var g3 = { get a() { return undefined; }, set a(n) { } };
 var h1 = {
     x = 1,
     y = 2,
-    #z: 3
+    : 3
 };

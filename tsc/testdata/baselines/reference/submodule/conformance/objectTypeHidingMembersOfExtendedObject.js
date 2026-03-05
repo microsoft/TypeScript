@@ -59,14 +59,11 @@ var r4: void = b.valueOf();
 //// [objectTypeHidingMembersOfExtendedObject.js]
 "use strict";
 class A {
-    foo;
 }
 class B extends A {
-    bar;
 }
 class C {
     valueOf() { }
-    data;
 }
 var r1 = c.valueOf();
 var r1b = c.data;

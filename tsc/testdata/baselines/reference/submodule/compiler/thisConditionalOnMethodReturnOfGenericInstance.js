@@ -23,7 +23,6 @@ const y = x.method(); // usage flags `method` in `B` as circular and marks `y` a
 //// [thisConditionalOnMethodReturnOfGenericInstance.js]
 "use strict";
 class A {
-    unmeasurableUsage;
 }
 class B extends A {
     method() {
@@ -31,7 +30,6 @@ class B extends A {
     }
 }
 class C extends B {
-    marker;
 }
 const x = new C();
 const y = x.method(); // usage flags `method` in `B` as circular and marks `y` as the error-any type

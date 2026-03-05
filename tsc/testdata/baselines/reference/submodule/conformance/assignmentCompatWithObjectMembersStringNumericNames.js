@@ -94,10 +94,8 @@ namespace NumbersAndStrings {
 var JustStrings;
 (function (JustStrings) {
     class S {
-        '1';
     }
     class T {
-        '1.';
     }
     var a2 = { '1.0': '' };
     var b2 = { '1': '' };
@@ -124,10 +122,8 @@ var JustStrings;
 var NumbersAndStrings;
 (function (NumbersAndStrings) {
     class S {
-        '1';
     }
     class T {
-        1;
     }
     var a2 = { '1.0': '' };
     var b2 = { 1.: '' };

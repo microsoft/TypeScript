@@ -7,9 +7,13 @@ class C {
 
 //// [symbolDeclarationEmit2.js]
 "use strict";
+var _a;
 class C {
-    [Symbol.toPrimitive] = "";
+    constructor() {
+        this[_a] = "";
+    }
 }
+_a = Symbol.toPrimitive;
 
 
 //// [symbolDeclarationEmit2.d.ts]

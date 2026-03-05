@@ -20,7 +20,6 @@ interface I2 extends Foo { // error
 //// [interfaceExtendingClass2.js]
 "use strict";
 class Foo {
-    x;
     y() { }
     get Z() {
         return 1;

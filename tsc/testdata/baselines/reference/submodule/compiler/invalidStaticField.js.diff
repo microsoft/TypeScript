@@ -1,9 +1,0 @@
---- old.invalidStaticField.js
-+++ new.invalidStaticField.js
-@@= skipped -9, +9 lines =@@
-     foo() { return B.NULL; }
- }
- class B {
-+    static NOT_NULL = new B();
- }
--B.NOT_NULL = new B();

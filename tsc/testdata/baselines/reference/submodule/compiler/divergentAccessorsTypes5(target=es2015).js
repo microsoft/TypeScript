@@ -46,7 +46,6 @@ i.prop2 = "hello"; // error
 class One {
     get prop1() { return ""; }
     set prop1(s) { }
-    prop2;
 }
 class Two {
     get prop1() { return "hello"; }

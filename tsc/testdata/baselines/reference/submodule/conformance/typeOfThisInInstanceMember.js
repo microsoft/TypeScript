@@ -36,11 +36,11 @@ rs.forEach(x => {
 //// [typeOfThisInInstanceMember.js]
 "use strict";
 class C {
-    x = this;
     foo() {
         return this;
     }
     constructor(x) {
+        this.x = this;
         var t = this;
         t.x;
         t.y;

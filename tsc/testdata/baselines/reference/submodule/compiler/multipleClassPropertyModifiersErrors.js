@@ -14,12 +14,4 @@ class C {
 //// [multipleClassPropertyModifiersErrors.js]
 "use strict";
 class C {
-    p1;
-    p2;
-    static static;
-    p3;
-    p4;
-    p5;
-    static p6;
-    static p7;
 }

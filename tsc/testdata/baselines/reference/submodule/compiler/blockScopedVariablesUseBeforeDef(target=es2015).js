@@ -172,6 +172,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -221,40 +225,49 @@ function foo6() {
 }
 function foo7() {
     class A {
-        a = x;
+        constructor() {
+            this.a = x;
+        }
     }
     let x;
 }
 function foo8() {
     let y = class {
-        a = x;
+        constructor() {
+            this.a = x;
+        }
     };
     let x;
 }
 function foo9() {
-    let y = class {
-        static a = x;
-    };
+    var _a;
+    let y = (_a = class {
+        },
+        __setFunctionName(_a, "y"),
+        _a.a = x,
+        _a);
     let x;
 }
 function foo10() {
     class A {
-        static a = x;
     }
+    A.a = x;
     let x;
 }
 function foo11() {
     function f() {
-        let y = class {
-            static a = x;
-        };
+        var _a;
+        let y = (_a = class {
+            },
+            __setFunctionName(_a, "y"),
+            _a.a = x,
+            _a);
     }
     let x;
 }
 function foo12() {
     function f() {
         let y = class {
-            a;
             constructor() {
                 this.a = x;
             }

@@ -28,14 +28,12 @@ var B;
 (function (B) {
     B.a = A;
     class D extends B.a.C {
-        id;
     }
     B.D = D;
 })(B || (B = {}));
 var A;
 (function (A) {
     class C {
-        name;
     }
     A.C = C;
     A.b = B;

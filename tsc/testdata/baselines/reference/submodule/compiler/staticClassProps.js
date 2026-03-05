@@ -15,5 +15,5 @@ class C
 class C {
     foo() {
     }
-    static z = 1;
 }
+C.z = 1;

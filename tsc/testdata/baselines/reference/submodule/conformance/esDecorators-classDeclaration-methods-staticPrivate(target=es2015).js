@@ -15,11 +15,10 @@ class D {
 
 //// [esDecorators-classDeclaration-methods-staticPrivate.js]
 "use strict";
+var _a, _C_method1, _b, _D_method1;
 class C {
-    @dec
-    static #method1() { }
 }
-@dec
+_a = C, _C_method1 = function _C_method1() { };
 class D {
-    static #method1() { }
 }
+_b = D, _D_method1 = function _D_method1() { };

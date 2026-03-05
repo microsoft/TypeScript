@@ -14,7 +14,9 @@ c.chunk;
 //// [mod1.js]
 "use strict";
 module.exports = class {
-    chunk = 1;
+    constructor() {
+        this.chunk = 1;
+    }
 };
 //// [use.js]
 "use strict";

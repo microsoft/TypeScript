@@ -9,8 +9,8 @@ class C {
 //// [staticModifierAlreadySeen.js]
 "use strict";
 class C {
-    static static;
-    foo = 1;
-    static static;
+    constructor() {
+        this.foo = 1;
+    }
     bar() { }
 }

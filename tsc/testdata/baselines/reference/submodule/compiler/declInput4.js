@@ -27,10 +27,6 @@ var M;
     }
     M.E = E;
     class D {
-        m1;
-        m2;
-        m23;
-        m24;
         m232() { return null; }
         m242() { return null; }
         m26(i) { }

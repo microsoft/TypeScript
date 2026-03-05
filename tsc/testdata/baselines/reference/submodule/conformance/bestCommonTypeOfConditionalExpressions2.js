@@ -31,13 +31,10 @@ function foo3<T extends U, U extends V, V>(t: T, u: U) {
 // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
 // these are errors
 class Base {
-    foo;
 }
 class Derived extends Base {
-    bar;
 }
 class Derived2 extends Base {
-    baz;
 }
 var base;
 var derived;

@@ -87,7 +87,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.d = void 0;
 exports.foo = foo;
 class d {
-    foo;
 }
 exports.d = d;
 function foo() { return null; }
@@ -97,7 +96,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
 exports.foo = foo;
 class d {
-    bar;
 }
 exports.d = d;
 var x;
@@ -108,7 +106,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.d = void 0;
 exports.foo = foo;
 class d {
-    baz;
 }
 exports.d = d;
 function foo() { return null; }
@@ -118,7 +115,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.d = void 0;
 exports.foo = foo;
 class d {
-    bing;
 }
 exports.d = d;
 function foo() { return null; }

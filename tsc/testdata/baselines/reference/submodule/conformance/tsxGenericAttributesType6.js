@@ -28,7 +28,6 @@ class B1 extends React.Component {
     }
 }
 class B extends React.Component {
-    props;
     render() {
         return <B1 {...this.props} x="hi"/>;
     }

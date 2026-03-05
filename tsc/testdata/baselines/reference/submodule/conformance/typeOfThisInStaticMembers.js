@@ -40,7 +40,6 @@ var r7 = new t2('');
 "use strict";
 class C {
     constructor(x) { }
-    static foo;
     static bar() {
         // type of this is the constructor function type
         var t = this;
@@ -53,9 +52,7 @@ var r2 = t.foo + 1;
 var r3 = t.bar();
 var r4 = new t(1);
 class C2 {
-    static test;
     constructor(x) { }
-    static foo;
     static bar() {
         // type of this is the constructor function type
         var t = this;

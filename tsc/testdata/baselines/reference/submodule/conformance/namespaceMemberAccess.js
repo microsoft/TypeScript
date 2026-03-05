@@ -13,7 +13,6 @@ const { A } = types;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class A {
-    a;
 }
 //// [b.js]
 "use strict";

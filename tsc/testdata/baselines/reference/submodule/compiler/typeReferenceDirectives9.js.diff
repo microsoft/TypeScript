@@ -1,14 +1,6 @@
 --- old.typeReferenceDirectives9.js
 +++ new.typeReferenceDirectives9.js
-@@= skipped -35, +35 lines =@@
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Cls = void 0;
- class Cls {
-+    x;
- }
- exports.Cls = Cls;
- //// [mod1.js]
-@@= skipped -39, +40 lines =@@
+@@= skipped -74, +74 lines =@@
  export declare const cls: typeof Cls;
  export declare const foo: Lib;
  export declare const bar: Lib;

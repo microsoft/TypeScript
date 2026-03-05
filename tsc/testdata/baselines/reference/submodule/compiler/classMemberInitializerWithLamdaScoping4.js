@@ -24,12 +24,11 @@ exports.field1 = void 0;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test1 = void 0;
 class Test1 {
-    field1;
     constructor(field1) {
         this.field1 = field1;
+        this.messageHandler = () => {
+            console.log(field1); // Should be error that couldnt find symbol field1
+        };
     }
-    messageHandler = () => {
-        console.log(field1); // Should be error that couldnt find symbol field1
-    };
 }
 exports.Test1 = Test1;

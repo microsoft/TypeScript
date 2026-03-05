@@ -8,8 +8,8 @@ class C {
 //// [symbolDeclarationEmit1.js]
 "use strict";
 class C {
-    [Symbol.toPrimitive];
 }
+Symbol.toPrimitive;
 
 
 //// [symbolDeclarationEmit1.d.ts]

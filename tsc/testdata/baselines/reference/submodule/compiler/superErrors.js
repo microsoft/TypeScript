@@ -62,15 +62,17 @@ function foo() {
     var z = () => () => () => super.;
 }
 class User {
-    name = "Bob";
+    constructor() {
+        this.name = "Bob";
+    }
     sayHello() {
         //console.log("Hello, " + this.name);
     }
 }
 class RegisteredUser extends User {
-    name = "Frank";
     constructor() {
         super();
+        this.name = "Frank";
         // super call in an inner function in a constructor
         function inner() {
             super.sayHello();

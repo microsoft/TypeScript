@@ -29,16 +29,13 @@ class B {
 //// [emitClassDeclarationWithConstructorInES6.js]
 "use strict";
 class A {
-    y;
     constructor(x) {
     }
     foo() { }
 }
 class B {
-    y;
-    x = "hello";
-    _bar;
     constructor(x, z = "hello", ...args) {
+        this.x = "hello";
         this.y = 10;
     }
     baz(z, v) {

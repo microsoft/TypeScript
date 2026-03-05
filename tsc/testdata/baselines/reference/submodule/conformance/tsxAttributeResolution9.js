@@ -33,7 +33,6 @@ exports.MyComponent = void 0;
 class MyComponent {
     render() {
     }
-    props;
 }
 exports.MyComponent = MyComponent;
 <MyComponent foo="bar"/>; // ok  

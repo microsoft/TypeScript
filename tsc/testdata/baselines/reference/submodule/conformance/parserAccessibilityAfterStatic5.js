@@ -10,5 +10,4 @@ static public
 //// [parserAccessibilityAfterStatic5.js]
 "use strict";
 class Outer {
-    static public;
 }

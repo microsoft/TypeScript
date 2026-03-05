@@ -22,7 +22,6 @@ new Builder()
 //// [methodChainError.js]
 "use strict";
 class Builder {
-    notMethod;
     method(param) {
         return this;
     }

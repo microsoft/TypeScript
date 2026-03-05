@@ -111,20 +111,16 @@ function f2<T, U>(x: T, y: U) {
 "use strict";
 // checking whether other types are subtypes of type parameters
 class C3 {
-    foo;
 }
 class D1 extends C3 {
-    foo; // error
 }
 function f1(x, y) {
     var r = true ? x : y; // error
     var r = true ? y : x; // error
 }
 class C1 {
-    foo;
 }
 class C2 {
-    foo;
 }
 var E;
 (function (E) {
@@ -135,7 +131,6 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 class c {
-    baz;
 }
 (function (c) {
     c.bar = 1;

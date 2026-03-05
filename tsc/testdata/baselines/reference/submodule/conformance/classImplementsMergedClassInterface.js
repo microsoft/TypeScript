@@ -30,12 +30,8 @@ class C5 implements C1 { // okay
 class C2 {
 }
 class C3 {
-    x;
 }
 class C4 {
-    y;
 }
 class C5 {
-    x;
-    y;
 }

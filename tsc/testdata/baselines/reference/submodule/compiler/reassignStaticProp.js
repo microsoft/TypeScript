@@ -16,6 +16,5 @@ class foo {
 //// [reassignStaticProp.js]
 "use strict";
 class foo {
-    static bar = 1;
-    static bar; // errror - duplicate id
 }
+foo.bar = 1;

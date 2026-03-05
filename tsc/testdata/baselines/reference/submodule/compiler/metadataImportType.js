@@ -20,7 +20,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 class A {
-    b;
 }
 exports.A = A;
 __decorate([

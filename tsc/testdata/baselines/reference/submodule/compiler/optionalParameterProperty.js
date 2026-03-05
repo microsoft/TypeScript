@@ -15,10 +15,11 @@ class D extends C {
 //// [optionalParameterProperty.js]
 "use strict";
 class C {
-    p = 0;
+    constructor() {
+        this.p = 0;
+    }
 }
 class D extends C {
-    p;
     constructor(p) {
         super();
         this.p = p;

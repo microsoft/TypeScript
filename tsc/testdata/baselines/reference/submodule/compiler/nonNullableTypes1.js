@@ -63,7 +63,9 @@ function f4(obj) {
     }
 }
 class A {
-    x = "hello";
+    constructor() {
+        this.x = "hello";
+    }
     foo() {
         let zz = this === null || this === void 0 ? void 0 : this.x; // string
     }

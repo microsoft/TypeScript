@@ -52,37 +52,44 @@ var d3 = new D2(new Date(), new Date()); // ok
 "use strict";
 // automatic constructors with a class hieararchy of depth > 2
 class Base {
-    a = 1;
-    constructor(x) { this.a = x; }
+    constructor(x) {
+        this.a = 1;
+        this.a = x;
+    }
 }
 class Derived extends Base {
-    b = '';
     constructor(y, z) {
         super(2);
+        this.b = '';
         this.b = y;
     }
 }
 class Derived2 extends Derived {
-    x = 1;
-    y = 'hello';
+    constructor() {
+        super(...arguments);
+        this.x = 1;
+        this.y = 'hello';
+    }
 }
 var r = new Derived(); // error
 var r2 = new Derived2(1); // error
 var r3 = new Derived('', '');
 class Base2 {
-    a;
     constructor(x) { this.a = x; }
 }
 class D extends Base {
-    b = null;
     constructor(y, z) {
         super(2);
+        this.b = null;
         this.b = y;
     }
 }
 class D2 extends D {
-    x = 2;
-    y = null;
+    constructor() {
+        super(...arguments);
+        this.x = 2;
+        this.y = null;
+    }
 }
 var d = new D2(); // error
 var d2 = new D2(new Date()); // error

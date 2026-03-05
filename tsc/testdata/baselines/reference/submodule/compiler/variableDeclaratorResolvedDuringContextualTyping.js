@@ -141,7 +141,6 @@ var Errors;
     Errors.ConnectionError = ConnectionError;
 })(Errors || (Errors = {}));
 class FileService {
-    requestService;
     uploadData() {
         var path = "";
         return this.requestService.makeRequest({

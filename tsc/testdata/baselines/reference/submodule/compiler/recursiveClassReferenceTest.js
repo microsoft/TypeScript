@@ -110,11 +110,11 @@ namespace Sample.Thing.Languages.PlainText {
 // Scenario 2: Test recursive function call with cast and "this" parameter
 var Sample;
 (function (Sample) {
-    let Actions;
+    var Actions;
     (function (Actions) {
-        let Thing;
+        var Thing;
         (function (Thing_1) {
-            let Find;
+            var Find;
             (function (Find) {
                 class StartFindAction {
                     getId() { return "yo"; }
@@ -128,18 +128,17 @@ var Sample;
     })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));
 (function (Sample) {
-    let Thing;
+    var Thing;
     (function (Thing) {
-        let Widgets;
+        var Widgets;
         (function (Widgets) {
             class FindWidget {
-                codeThing;
                 gar(runner) { if (true) {
                     return runner(this);
                 } }
-                domNode = null;
                 constructor(codeThing) {
                     this.codeThing = codeThing;
+                    this.domNode = null;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
@@ -157,14 +156,13 @@ class AbstractMode {
     getInitialState() { return null; }
 }
 (function (Sample) {
-    let Thing;
+    var Thing;
     (function (Thing) {
-        let Languages;
+        var Languages;
         (function (Languages) {
-            let PlainText;
+            var PlainText;
             (function (PlainText) {
                 class State {
-                    mode;
                     constructor(mode) {
                         this.mode = mode;
                     }

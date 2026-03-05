@@ -92,14 +92,12 @@ class c2NoError {
     }
 }
 class c3 {
-    _i;
     constructor(_i, ...restParameters) {
         this._i = _i;
         var _i = 10; // no error
     }
 }
 class c3NoError {
-    _i;
     constructor(_i) {
         this._i = _i;
         var _i = 10; // no error

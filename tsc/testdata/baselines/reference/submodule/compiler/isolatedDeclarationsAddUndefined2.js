@@ -29,25 +29,21 @@ export function test3(x?: Unresolved): void {}
 //// [isolatedDeclarationsAddUndefined2.js]
 // https://github.com/microsoft/TypeScript/issues/60123
 export class Bar {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 export class Bar2 {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 export class Bar3 {
-    x;
     constructor(x) {
         this.x = x;
     }
 }
 export class Bar4 {
-    x;
     constructor(x) {
         this.x = x;
     }

@@ -29,35 +29,30 @@ export class PublicWithDefault {
 //// [parameterPropertyWithDefaultValueExtended.js]
 // Test with default value - should not have undefined
 export class WithDefault {
-    timestamp;
     constructor(timestamp = new Date()) {
         this.timestamp = timestamp;
     }
 }
 // Test without default value but optional - should have undefined
 export class WithoutDefault {
-    timestamp;
     constructor(timestamp) {
         this.timestamp = timestamp;
     }
 }
 // Test with explicit undefined type - should keep it
 export class ExplicitUndefined {
-    timestamp;
     constructor(timestamp = new Date()) {
         this.timestamp = timestamp;
     }
 }
 // Test private parameter property with default value
 export class PrivateWithDefault {
-    timestamp;
     constructor(timestamp = new Date()) {
         this.timestamp = timestamp;
     }
 }
 // Test public parameter property with default value
 export class PublicWithDefault {
-    timestamp;
     constructor(timestamp = new Date()) {
         this.timestamp = timestamp;
     }
