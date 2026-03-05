@@ -5,7 +5,6 @@
     }
 
 //// [parserEnum3.js]
-export { SignatureFlags };
-var SignatureFlags;
+export var SignatureFlags;
 (function (SignatureFlags) {
 })(SignatureFlags || (SignatureFlags = {}));

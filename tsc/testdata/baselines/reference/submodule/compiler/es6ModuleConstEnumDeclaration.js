@@ -50,8 +50,7 @@ namespace m2 {
 //// [es6ModuleConstEnumDeclaration.js]
 var x = 0 /* e1.a */;
 var y = 0 /* e2.x */;
-export { m1 };
-var m1;
+export var m1;
 (function (m1) {
     var x1 = 0 /* e1.a */;
     var y1 = 0 /* e2.x */;

@@ -1,9 +1,0 @@
---- old.internalAliasInterface.js
-+++ new.internalAliasInterface.js
-@@= skipped -15, +15 lines =@@
- "use strict";
- var c;
- (function (c) {
-+    var b = a.I;
- })(c || (c = {}));
-

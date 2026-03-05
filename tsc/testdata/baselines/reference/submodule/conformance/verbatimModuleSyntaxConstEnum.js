@@ -7,8 +7,7 @@ export const enum E {
 
 
 //// [verbatimModuleSyntaxConstEnum.js]
-export { E };
-var E;
+export var E;
 (function (E) {
     E[E["A"] = 1] = "A";
 })(E || (E = {}));

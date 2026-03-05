@@ -22,8 +22,7 @@ export namespace undefined {
 
 
 //// [typeNamedUndefined2.js]
-export { ns };
-var ns;
+export var ns;
 (function (ns) {
     let undefined;
     (function (undefined) {
@@ -38,8 +37,7 @@ var ns;
 export function x(p) {
     return p;
 }
-export { undefined };
-var undefined;
+export var undefined;
 (function (undefined) {
     undefined.s = Symbol();
 })(undefined || (undefined = {}));

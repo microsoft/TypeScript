@@ -21,7 +21,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 var c;
 (function (c) {
-    var b = a.b;
     c.x.foo();
 })(c || (exports.c = c = {}));
 

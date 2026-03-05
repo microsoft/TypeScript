@@ -193,8 +193,7 @@ func TestEnumTransformer(t *testing.T) {
     E[E["B"] = 0] = "B";
 })(E || (E = {}));`},
 
-		{title: "export enum", input: "export enum E {A, B}", output: `export { E };
-var E;
+		{title: "export enum", input: "export enum E {A, B}", output: `export var E;
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";

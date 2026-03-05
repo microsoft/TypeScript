@@ -1,8 +1,0 @@
---- old.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.js
-+++ new.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.js
-@@= skipped -15, +15 lines =@@
- var B;
- (function (B) {
-     var A = 1;
-+    var Y = A;
- })(B || (B = {}));

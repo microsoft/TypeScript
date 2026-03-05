@@ -87,8 +87,7 @@ function f2(foo) {
         foo.a;
     }
 }
-export { GatewayOpcode };
-var GatewayOpcode;
+export var GatewayOpcode;
 (function (GatewayOpcode) {
     GatewayOpcode[GatewayOpcode["DISPATCH"] = 0] = "DISPATCH";
     GatewayOpcode[GatewayOpcode["HEARTBEAT"] = 1] = "HEARTBEAT";

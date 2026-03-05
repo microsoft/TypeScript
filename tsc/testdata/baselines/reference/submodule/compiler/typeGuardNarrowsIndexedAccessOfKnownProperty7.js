@@ -15,8 +15,7 @@ export class C {
 
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty7.js]
-export { Foo };
-var Foo;
+export var Foo;
 (function (Foo) {
     Foo.key = Symbol();
 })(Foo || (Foo = {}));

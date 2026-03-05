@@ -28,8 +28,7 @@ export enum Foo { X }
 
 
 //// [enum.js]
-export { Foo };
-var Foo;
+export var Foo;
 (function (Foo) {
     Foo[Foo["A"] = 0] = "A";
     Foo[Foo["B"] = 1] = "B";
@@ -54,8 +53,7 @@ var ns;
     ns.Foo.X;
 })(ns || (ns = {}));
 //// [more.js]
-export { Foo };
-var Foo;
+export var Foo;
 (function (Foo) {
     Foo[Foo["X"] = 0] = "X";
 })(Foo || (Foo = {}));

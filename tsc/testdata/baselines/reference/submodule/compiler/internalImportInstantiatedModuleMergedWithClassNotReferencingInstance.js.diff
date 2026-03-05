@@ -1,8 +1,0 @@
---- old.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.js
-+++ new.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.js
-@@= skipped -24, +24 lines =@@
- var B;
- (function (B) {
-     var A = 1;
-+    var Y = A;
- })(B || (B = {}));

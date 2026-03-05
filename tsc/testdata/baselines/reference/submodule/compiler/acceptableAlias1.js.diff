@@ -1,8 +1,0 @@
---- old.acceptableAlias1.js
-+++ new.acceptableAlias1.js
-@@= skipped -12, +12 lines =@@
- "use strict";
- var M;
- (function (M) {
-+    M.X = N;
- })(M || (M = {}));

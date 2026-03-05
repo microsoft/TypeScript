@@ -24,5 +24,4 @@ var M;
 const x = 0;
 (function (M) {
     M.v;
-    export { x };
 })(M || (exports.M = M = {}));

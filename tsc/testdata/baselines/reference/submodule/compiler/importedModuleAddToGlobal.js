@@ -22,13 +22,11 @@ namespace C {
 "use strict";
 var B;
 (function (B_1) {
-    var a = A;
     class B {
     }
     B_1.B = B;
 })(B || (B = {}));
 var C;
 (function (C) {
-    var a = A;
     function hello() { return null; }
 })(C || (C = {}));

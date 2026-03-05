@@ -34,7 +34,6 @@ class Aaa extends Bbb {
     class SomeType {
     }
     Bbb.SomeType = SomeType;
-    export * from Aaa; // this line causes the nullref
 })(Bbb || (Bbb = {}));
 var a;
 

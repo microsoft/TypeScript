@@ -13,8 +13,7 @@ export enum Animals {
 
 
 //// [enumExportMergingES6.js]
-export { Animals };
-var Animals;
+export var Animals;
 (function (Animals) {
     Animals[Animals["Cat"] = 1] = "Cat";
 })(Animals || (Animals = {}));

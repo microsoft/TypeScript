@@ -44,8 +44,7 @@ export class C {
 (function (C) {
     C.x = 1;
 })(C || (C = {}));
-export { E };
-var E;
+export var E;
 (function (E) {
     E[E["w"] = 1] = "w";
 })(E || (E = {}));
@@ -58,8 +57,7 @@ var E;
 (function (E) {
     E.z = 1;
 })(E || (E = {}));
-export { N };
-var N;
+export var N;
 (function (N) {
     N.x = 1;
 })(N || (N = {}));

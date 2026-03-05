@@ -18,7 +18,6 @@ namespace M2 {
 "use strict";
 var M2;
 (function (M2) {
-    var T = M1.I;
     class C {
         foo() { }
     }

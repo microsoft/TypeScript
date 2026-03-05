@@ -135,8 +135,7 @@ while (true) {
 
 
 //// [controlFlowManyConsecutiveConditionsNoTimeout.js]
-export { Choice };
-var Choice;
+export var Choice;
 (function (Choice) {
     Choice[Choice["One"] = 0] = "One";
     Choice[Choice["Two"] = 1] = "Two";

@@ -48,8 +48,7 @@ namespace m2 {
 }
 
 //// [es6ModuleEnumDeclaration.js]
-export { e1 };
-var e1;
+export var e1;
 (function (e1) {
     e1[e1["a"] = 0] = "a";
     e1[e1["b"] = 1] = "b";
@@ -63,8 +62,7 @@ var e2;
 })(e2 || (e2 = {}));
 var x = e1.a;
 var y = e2.x;
-export { m1 };
-var m1;
+export var m1;
 (function (m1) {
     let e3;
     (function (e3) {

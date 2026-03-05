@@ -15,6 +15,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.myModule = void 0;
 var myModule;
 (function (myModule) {
-    import foo = require("importInsideModule_file1");
     var a = foo.x;
 })(myModule || (exports.myModule = myModule = {}));

@@ -19,7 +19,6 @@ var A;
 })(A || (A = {}));
 var B;
 (function (B) {
-    var Y = A; // Alias only for module A
     var Z = A.X; // Alias for both type and member A.X
     var v = Z;
 })(B || (B = {}));

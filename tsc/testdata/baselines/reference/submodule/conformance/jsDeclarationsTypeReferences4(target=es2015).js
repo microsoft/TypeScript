@@ -33,8 +33,6 @@ var A;
     (function (B) {
         const Something = require("fs").Something;
         const thing = new Something();
-        // @ts-ignore
-        export { thing };
     })(B = A.B || (A.B = {}));
 })(A || (exports.A = A = {}));
 

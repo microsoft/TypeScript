@@ -111,8 +111,23 @@ func (tx *RuntimeSyntaxTransformer) visit(node *ast.Node) *ast.Node {
 		node = tx.visitFunctionDeclaration(node.AsFunctionDeclaration())
 	case ast.KindVariableStatement:
 		node = tx.visitVariableStatement(node.AsVariableStatement())
+	case ast.KindExportDeclaration, ast.KindImportDeclaration, ast.KindImportClause:
+		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind != ast.KindBlock {
+			// do not emit ES6 imports and exports since they are illegal inside a namespace
+			node = nil
+		} else {
+			node = tx.Visitor().VisitEachChild(node)
+		}
 	case ast.KindImportEqualsDeclaration:
-		node = tx.visitImportEqualsDeclaration(node.AsImportEqualsDeclaration())
+		if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind != ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind == ast.KindExternalModuleReference {
+			// do not emit ES6 imports and exports since they are illegal inside a namespace
+			node = nil
+		} else if tx.currentNamespace != nil && tx.currentScope != nil && tx.currentScope.Kind == ast.KindBlock && node.AsImportEqualsDeclaration().ModuleReference.Kind != ast.KindExternalModuleReference {
+			// inside a block within a namespace, elide internal import aliases
+			node = nil
+		} else {
+			node = tx.visitImportEqualsDeclaration(node.AsImportEqualsDeclaration())
+		}
 	case ast.KindIdentifier:
 		node = tx.visitIdentifier(node)
 	case ast.KindShorthandPropertyAssignment:
@@ -169,11 +184,7 @@ func (tx *RuntimeSyntaxTransformer) isFirstDeclarationInScope(node *ast.Node) bo
 }
 
 func (tx *RuntimeSyntaxTransformer) isExportOfNamespace(node *ast.Node) bool {
-	return tx.currentNamespace != nil && node.ModifierFlags()&ast.ModifierFlagsExport != 0
-}
-
-func (tx *RuntimeSyntaxTransformer) isExportOfExternalModule(node *ast.Node) bool {
-	return tx.currentNamespace == nil && node.ModifierFlags()&ast.ModifierFlagsExport != 0
+	return tx.currentNamespace != nil && (tx.currentScope == nil || tx.currentScope.Kind != ast.KindBlock) && node.ModifierFlags()&ast.ModifierFlagsExport != 0
 }
 
 // Gets an expression that represents a property name, such as `"foo"` for the identifier `foo`.
@@ -252,23 +263,6 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 		return statements, false
 	}
 
-	if tx.isExportOfExternalModule(node) {
-		// export { name };
-		statements = append(statements, tx.Factory().NewExportDeclaration(
-			nil,   /*modifiers*/
-			false, /*isTypeOnly*/
-			tx.Factory().NewNamedExports(tx.Factory().NewNodeList([]*ast.Node{
-				tx.Factory().NewExportSpecifier(
-					false, /*isTypeOnly*/
-					nil,   /*propertyName*/
-					node.Name().Clone(tx.Factory()),
-				),
-			})),
-			nil, /*moduleSpecifier*/
-			nil, /*attributes*/
-		))
-	}
-
 	// var name;
 	name := tx.Factory().GetLocalNameEx(node, printer.AssignedNameOptions{AllowSourceMaps: true})
 	varDecl := tx.Factory().NewVariableDeclaration(name, nil, nil, nil)
@@ -276,7 +270,7 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 	varDecls := tx.Factory().NewVariableDeclarationList(varFlags, tx.Factory().NewNodeList([]*ast.Node{varDecl}))
 	// Replicate modifierVisitor: strip decorators, TypeScript modifiers, and export when in namespace.
 	modifierMask := ^(ast.ModifierFlagsTypeScriptModifier | ast.ModifierFlagsDecorator)
-	if tx.currentNamespace != nil || tx.isExportOfExternalModule(node) {
+	if tx.currentNamespace != nil {
 		modifierMask &= ^ast.ModifierFlagsExport
 	}
 	modifiers := transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), modifierMask)
@@ -1129,7 +1123,7 @@ func (tx *RuntimeSyntaxTransformer) shouldEmitModuleDeclaration(node *ast.Module
 		// If we can't find a parse tree node, assume the node is instantiated.
 		return true
 	}
-	return ast.IsInstantiatedModule(node.AsNode(), tx.compilerOptions.ShouldPreserveConstEnums())
+	return ast.IsInstantiatedModule(pn, tx.compilerOptions.ShouldPreserveConstEnums())
 }
 
 func getInnermostModuleDeclarationFromDottedModule(moduleDeclaration *ast.ModuleDeclaration) *ast.ModuleDeclaration {

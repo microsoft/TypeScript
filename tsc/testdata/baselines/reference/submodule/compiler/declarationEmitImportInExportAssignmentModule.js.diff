@@ -1,9 +1,0 @@
---- old.declarationEmitImportInExportAssignmentModule.js
-+++ new.declarationEmitImportInExportAssignmentModule.js
-@@= skipped -20, +20 lines =@@
-         }
-         c_1.c = c;
-     })(c = m.c || (m.c = {}));
-+    var x = c;
- })(m || (m = {}));
- module.exports = m;

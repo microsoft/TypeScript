@@ -77,7 +77,6 @@ var A;
 var B;
 (function (B) {
     var A = { x: 0, y: 0 };
-    var Point = A;
 })(B || (B = {}));
 var X;
 (function (X) {
@@ -87,12 +86,10 @@ var X;
 })(X || (X = {}));
 var Z;
 (function (Z) {
-    var Y = X.Y;
     var Y = 12;
 })(Z || (Z = {}));
 var b;
 (function (b) {
-    b.A = a.A;
 })(b || (b = {}));
 //
 var q;
@@ -105,6 +102,5 @@ var r;
 })(r || (r = {}));
 var s;
 (function (s) {
-    var Q = r.Q;
     const Q = 0;
 })(s || (s = {}));

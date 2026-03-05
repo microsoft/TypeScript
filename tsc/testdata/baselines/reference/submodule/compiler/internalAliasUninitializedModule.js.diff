@@ -1,9 +1,0 @@
---- old.internalAliasUninitializedModule.js
-+++ new.internalAliasUninitializedModule.js
-@@= skipped -18, +18 lines =@@
- "use strict";
- var c;
- (function (c) {
-+    var b = a.b;
-     c.x.foo();
- })(c || (c = {}));

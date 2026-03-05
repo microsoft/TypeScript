@@ -8,8 +8,7 @@ const orbitol: 01 = 01
 
 
 //// [strictModeOctalLiterals.js]
-export { E };
-var E;
+export var E;
 (function (E) {
     E[E["A"] = 13] = "A";
 })(E || (E = {}));

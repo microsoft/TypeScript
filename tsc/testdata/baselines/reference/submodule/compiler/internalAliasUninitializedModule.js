@@ -19,7 +19,6 @@ namespace c {
 "use strict";
 var c;
 (function (c) {
-    var b = a.b;
     c.x.foo();
 })(c || (c = {}));
 

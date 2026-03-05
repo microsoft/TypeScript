@@ -19,8 +19,7 @@ export const m = X.f();
 
 
 //// [fakeInfinity2.js]
-export { Foo };
-var Foo;
+export var Foo;
 (function (Foo) {
     Foo[Foo["A"] = 1e999] = "A";
     Foo[Foo["B"] = -1e999] = "B";

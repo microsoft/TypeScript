@@ -1,8 +1,0 @@
---- old.multipleExports.js
-+++ new.multipleExports.js
-@@= skipped -23, +23 lines =@@
- const x = 0;
- (function (M) {
-     M.v;
-+    export { x };
- })(M || (exports.M = M = {}));

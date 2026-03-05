@@ -17,8 +17,7 @@ export type undefined = "";
 
 
 //// [typeNamedUndefined1.js]
-export { ns };
-var ns;
+export var ns;
 (function (ns) {
     const s = Symbol();
     function x(p) {

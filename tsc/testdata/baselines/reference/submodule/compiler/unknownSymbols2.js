@@ -59,6 +59,4 @@ var M;
     (function (N) {
         var x = 1;
     })(N || (N = {}));
-    var c = N;
-    var d = asdf;
 })(M || (M = {}));

@@ -33,13 +33,11 @@ const t4 = {
 //// [a.js]
 export const n = 1;
 export const s = "s";
-export { E1 };
-var E1;
+export var E1;
 (function (E1) {
     E1["A"] = "ENUM_KEY";
 })(E1 || (E1 = {}));
-export { E2 };
-var E2;
+export var E2;
 (function (E2) {
     E2[E2["B"] = 0] = "B";
 })(E2 || (E2 = {}));

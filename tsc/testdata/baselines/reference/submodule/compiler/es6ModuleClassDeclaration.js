@@ -149,8 +149,7 @@ c2.k = 20;
 c2.l = 30;
 new c();
 new c2();
-export { m1 };
-var m1;
+export var m1;
 (function (m1) {
     class c3 {
         constructor() {

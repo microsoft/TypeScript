@@ -119,8 +119,7 @@ export const isNodeOfType =
 
 
 //// [ast.js]
-export { SyntaxKind };
-var SyntaxKind;
+export var SyntaxKind;
 (function (SyntaxKind) {
     SyntaxKind[SyntaxKind["Node0"] = 0] = "Node0";
     SyntaxKind[SyntaxKind["Node1"] = 1] = "Node1";

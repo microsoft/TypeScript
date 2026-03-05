@@ -235,9 +235,8 @@ let arr = [[1, 2]];
 let mappedArr = arr.map(([x, y]) => {
     return [x, y];
 });
-export { DiagnosticSeverity };
 // Repro from #13594
-var DiagnosticSeverity;
+export var DiagnosticSeverity;
 (function (DiagnosticSeverity) {
     DiagnosticSeverity.Error = 1;
     DiagnosticSeverity.Warning = 2;

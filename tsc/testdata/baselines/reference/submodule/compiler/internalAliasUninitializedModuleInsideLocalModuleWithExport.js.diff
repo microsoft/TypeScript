@@ -1,9 +1,0 @@
---- old.internalAliasUninitializedModuleInsideLocalModuleWithExport.js
-+++ new.internalAliasUninitializedModuleInsideLocalModuleWithExport.js
-@@= skipped -20, +20 lines =@@
- exports.c = void 0;
- var c;
- (function (c) {
-+    c.b = a.b;
-     c.x.foo();
- })(c || (exports.c = c = {}));

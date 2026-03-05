@@ -1,13 +1,6 @@
 --- old.jsDeclarationsTypeReferences4(target=es2015).js
 +++ new.jsDeclarationsTypeReferences4(target=es2015).js
-@@= skipped -32, +32 lines =@@
-     (function (B) {
-         const Something = require("fs").Something;
-         const thing = new Something();
-+        // @ts-ignore
-+        export { thing };
-     })(B = A.B || (A.B = {}));
- })(A || (exports.A = A = {}));
+@@= skipped -37, +37 lines =@@
 
 
  //// [index.d.ts]

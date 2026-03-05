@@ -115,6 +115,8 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		node = tx.Visitor().VisitEachChild(node)
 		tx.currentSourceFile = savedCurrentSourceFile
 		return node
+	case ast.KindModuleDeclaration, ast.KindModuleBlock:
+		return tx.Visitor().VisitEachChild(node)
 	default:
 		return node
 	}

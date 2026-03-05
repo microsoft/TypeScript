@@ -27,8 +27,7 @@ namespace m2 {
 }
 
 //// [es6ModuleModuleDeclaration.js]
-export { m1 };
-var m1;
+export var m1;
 (function (m1) {
     m1.a = 10;
     var b = 10;

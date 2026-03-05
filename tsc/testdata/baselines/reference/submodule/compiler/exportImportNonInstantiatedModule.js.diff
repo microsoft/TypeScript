@@ -1,9 +1,0 @@
---- old.exportImportNonInstantiatedModule.js
-+++ new.exportImportNonInstantiatedModule.js
-@@= skipped -15, +15 lines =@@
- "use strict";
- var B;
- (function (B) {
-+    B.A1 = A;
- })(B || (B = {}));
- var x = { x: 1 };
