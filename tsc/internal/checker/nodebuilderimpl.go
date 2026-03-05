@@ -2556,6 +2556,9 @@ func (b *NodeBuilderImpl) typeToTypeNodeOrCircularityElision(t *Type) *ast.TypeN
 }
 
 func (b *NodeBuilderImpl) conditionalTypeToTypeNode(_t *Type) *ast.TypeNode {
+	if b.checkTruncationLength() {
+		return b.createElidedInformationPlaceholder()
+	}
 	t := _t.AsConditionalType()
 	checkTypeNode := b.typeToTypeNode(t.checkType)
 	b.ctx.approximateLength += 15

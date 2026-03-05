@@ -1,0 +1,117 @@
+//// [tests/cases/compiler/excessivelyDeepConditionalTypes.ts] ////
+
+=== excessivelyDeepConditionalTypes.ts ===
+// https://github.com/microsoft/typescript-go/issues/2917
+
+export type FlattenKeys<O> = {
+>FlattenKeys : Symbol(FlattenKeys, Decl(excessivelyDeepConditionalTypes.ts, 0, 0))
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+
+	[K in keyof O & (string | number)]: O[K] extends Record<any, any>
+>K : Symbol(K, Decl(excessivelyDeepConditionalTypes.ts, 3, 2))
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+>K : Symbol(K, Decl(excessivelyDeepConditionalTypes.ts, 3, 2))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+		? K | `${K}.${FlattenKeys<O[K]>}`
+>K : Symbol(K, Decl(excessivelyDeepConditionalTypes.ts, 3, 2))
+>K : Symbol(K, Decl(excessivelyDeepConditionalTypes.ts, 3, 2))
+>FlattenKeys : Symbol(FlattenKeys, Decl(excessivelyDeepConditionalTypes.ts, 0, 0))
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+>K : Symbol(K, Decl(excessivelyDeepConditionalTypes.ts, 3, 2))
+
+		: K;
+>K : Symbol(K, Decl(excessivelyDeepConditionalTypes.ts, 3, 2))
+
+}[O extends readonly any[]
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+
+	? keyof O & `${number}`
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+
+	: keyof O & (string | number)];
+>O : Symbol(O, Decl(excessivelyDeepConditionalTypes.ts, 2, 24))
+
+export type KeySeparator = '.' | '[' | ']';
+>KeySeparator : Symbol(KeySeparator, Decl(excessivelyDeepConditionalTypes.ts, 8, 32))
+
+export type GetByString<
+>GetByString : Symbol(GetByString, Decl(excessivelyDeepConditionalTypes.ts, 10, 43))
+
+	Data,
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+
+	Path extends string | number = FlattenKeys<Data>,
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+>FlattenKeys : Symbol(FlattenKeys, Decl(excessivelyDeepConditionalTypes.ts, 0, 0))
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+
+> = Path extends `__proto__${`${KeySeparator}${string | number}` | ''}`
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+>KeySeparator : Symbol(KeySeparator, Decl(excessivelyDeepConditionalTypes.ts, 8, 32))
+
+	? never
+	: Path extends `${KeySeparator}${infer Rest}`
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+>KeySeparator : Symbol(KeySeparator, Decl(excessivelyDeepConditionalTypes.ts, 8, 32))
+>Rest : Symbol(Rest, Decl(excessivelyDeepConditionalTypes.ts, 17, 39))
+
+		? GetByString<Data, Rest>
+>GetByString : Symbol(GetByString, Decl(excessivelyDeepConditionalTypes.ts, 10, 43))
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+>Rest : Symbol(Rest, Decl(excessivelyDeepConditionalTypes.ts, 17, 39))
+
+		: Path extends `${infer Rest}${KeySeparator}`
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+>Rest : Symbol(Rest, Decl(excessivelyDeepConditionalTypes.ts, 19, 25))
+>KeySeparator : Symbol(KeySeparator, Decl(excessivelyDeepConditionalTypes.ts, 8, 32))
+
+			? GetByString<Data, Rest>
+>GetByString : Symbol(GetByString, Decl(excessivelyDeepConditionalTypes.ts, 10, 43))
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+>Rest : Symbol(Rest, Decl(excessivelyDeepConditionalTypes.ts, 19, 25))
+
+			: Path extends `${infer Key extends keyof Data & (string | number)}${KeySeparator}${infer Rest}`
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+>Key : Symbol(Key, Decl(excessivelyDeepConditionalTypes.ts, 21, 26))
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+>KeySeparator : Symbol(KeySeparator, Decl(excessivelyDeepConditionalTypes.ts, 8, 32))
+>Rest : Symbol(Rest, Decl(excessivelyDeepConditionalTypes.ts, 21, 92))
+
+				? GetByString<Data[Key], Rest>
+>GetByString : Symbol(GetByString, Decl(excessivelyDeepConditionalTypes.ts, 10, 43))
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+>Key : Symbol(Key, Decl(excessivelyDeepConditionalTypes.ts, 21, 26))
+>Rest : Symbol(Rest, Decl(excessivelyDeepConditionalTypes.ts, 21, 92))
+
+				: Path extends keyof Data & (string | number)
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+
+					? Data[Path]
+>Data : Symbol(Data, Decl(excessivelyDeepConditionalTypes.ts, 12, 24))
+>Path : Symbol(Path, Decl(excessivelyDeepConditionalTypes.ts, 13, 6))
+
+					: undefined;
+
+interface Duck {
+>Duck : Symbol(Duck, Decl(excessivelyDeepConditionalTypes.ts, 25, 17))
+
+	taxonomy: {
+>taxonomy : Symbol(Duck.taxonomy, Decl(excessivelyDeepConditionalTypes.ts, 27, 16))
+
+		genus: 'anas';
+>genus : Symbol(genus, Decl(excessivelyDeepConditionalTypes.ts, 28, 12))
+
+		species: 'platyrhynchos';
+>species : Symbol(species, Decl(excessivelyDeepConditionalTypes.ts, 29, 16))
+
+	};
+}
+
+type DuckSpecies = GetByString<Duck, 'taxonomy.species'>; // 'platyrhynchos'
+>DuckSpecies : Symbol(DuckSpecies, Decl(excessivelyDeepConditionalTypes.ts, 32, 1))
+>GetByString : Symbol(GetByString, Decl(excessivelyDeepConditionalTypes.ts, 10, 43))
+>Duck : Symbol(Duck, Decl(excessivelyDeepConditionalTypes.ts, 25, 17))
+

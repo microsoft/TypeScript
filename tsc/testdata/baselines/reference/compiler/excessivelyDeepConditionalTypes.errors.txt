@@ -1,0 +1,63 @@
+excessivelyDeepConditionalTypes.ts(5,9): error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...]' and 'Record<any, any>'.
+excessivelyDeepConditionalTypes.ts(5,9): error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...]' and 'readonly any[]'.
+excessivelyDeepConditionalTypes.ts(5,9): error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...][...][...][...][...' and 'Record<any, any>'.
+excessivelyDeepConditionalTypes.ts(5,9): error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...][...][...][...][...' and 'readonly any[]'.
+excessivelyDeepConditionalTypes.ts(13,13): error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...]' and 'Record<any, any>'.
+excessivelyDeepConditionalTypes.ts(13,13): error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...]' and 'readonly any[]'.
+excessivelyDeepConditionalTypes.ts(13,13): error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...][...][...][...' and 'Record<any, any>'.
+excessivelyDeepConditionalTypes.ts(13,13): error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...][...][...][...' and 'readonly any[]'.
+
+
+==== excessivelyDeepConditionalTypes.ts (8 errors) ====
+    // https://github.com/microsoft/typescript-go/issues/2917
+    
+    export type FlattenKeys<O> = {
+    	[K in keyof O & (string | number)]: O[K] extends Record<any, any>
+    		? K | `${K}.${FlattenKeys<O[K]>}`
+    		      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...]' and 'Record<any, any>'.
+    		      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...]' and 'readonly any[]'.
+    		      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...][...][...][...][...' and 'Record<any, any>'.
+    		      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)][O[K][O[K] extends readonly any[] ? keyof O[K] & `${number}` : keyof O[K] & (string | number)] extends readonly any[] ? keyof O[K][...] & `${number}` : keyof O[K][...] & (string | number)][...][...][...][...][...][...][...][...' and 'readonly any[]'.
+    		: K;
+    }[O extends readonly any[]
+    	? keyof O & `${number}`
+    	: keyof O & (string | number)];
+    
+    export type KeySeparator = '.' | '[' | ']';
+    
+    export type GetByString<
+                ~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...]' and 'Record<any, any>'.
+                ~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...]' and 'readonly any[]'.
+                ~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...][...][...][...' and 'Record<any, any>'.
+                ~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)][Data[Data extends readonly any[] ? keyof Data & `${number}` : keyof Data & (string | number)] extends readonly any[] ? keyof Data[...] & `${number}` : keyof Data[...] & (string | number)][...][...][...][...][...][...][...][...' and 'readonly any[]'.
+    	Data,
+    	Path extends string | number = FlattenKeys<Data>,
+    > = Path extends `__proto__${`${KeySeparator}${string | number}` | ''}`
+    	? never
+    	: Path extends `${KeySeparator}${infer Rest}`
+    		? GetByString<Data, Rest>
+    		: Path extends `${infer Rest}${KeySeparator}`
+    			? GetByString<Data, Rest>
+    			: Path extends `${infer Key extends keyof Data & (string | number)}${KeySeparator}${infer Rest}`
+    				? GetByString<Data[Key], Rest>
+    				: Path extends keyof Data & (string | number)
+    					? Data[Path]
+    					: undefined;
+    
+    interface Duck {
+    	taxonomy: {
+    		genus: 'anas';
+    		species: 'platyrhynchos';
+    	};
+    }
+    
+    type DuckSpecies = GetByString<Duck, 'taxonomy.species'>; // 'platyrhynchos'
+    
