@@ -12,8 +12,16 @@ const x = 10;
 }
 
 tsgo 
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6046: [0mArgument for '--module' option must be: 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'node18', 'node20', 'nodenext', 'preserve'.
+
+[7m3[0m         "module": "none",
+[7m [0m [91m                  ~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -45,10 +53,11 @@ declare const x = 10;
 const x = 10;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4447ab8c90027f28bdaff9f2056779ce-const x = 10;","signature":"4be7af7f970696121f4f582a5d074177-declare const x = 10;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./src/main.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.es2025.full.d.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"4447ab8c90027f28bdaff9f2056779ce-const x = 10;","signature":"4be7af7f970696121f4f582a5d074177-declare const x = 10;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./src/main.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -91,14 +100,18 @@ const x = 10;
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.es2025.full.d.ts",
+    "./src/main.ts"
+  ],
   "latestChangedDtsFile": "./src/main.d.ts",
-  "size": 1125
+  "size": 1174
 }
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-*refresh*    /home/src/workspaces/project/src/main.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/workspaces/project/src/main.ts
 Signatures::
 (stored at emit) /home/src/workspaces/project/src/main.ts
 
@@ -170,4 +183,6 @@ Output::
 
 tsconfig.json::
 SemanticDiagnostics::
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*refresh*    /home/src/workspaces/project/src/main.ts
 Signatures::
