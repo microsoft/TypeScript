@@ -430,7 +430,7 @@ func (l *LanguageService) getCompletionData(
 	isInSnippetScope := false
 	if insideComment != nil {
 		if hasDocComment(file, position) {
-			if file.Text()[position] == '@' {
+			if position > 0 && file.Text()[position-1] == '@' {
 				// The current position is next to the '@' sign, when no tag name being provided yet.
 				// Provide a full list of tag names
 				return &completionDataJSDocTagName{}, nil
