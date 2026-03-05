@@ -9176,9 +9176,9 @@ func (f *NodeFactory) NewJsxNamespacedName(namespace *IdentifierNode, name *Iden
 	return f.newNode(KindJsxNamespacedName, data)
 }
 
-func (f *NodeFactory) UpdateJsxNamespacedName(node *JsxNamespacedName, name *IdentifierNode, namespace *IdentifierNode) *Node {
-	if name != node.name || namespace != node.Namespace {
-		return updateNode(f.NewJsxNamespacedName(name, namespace), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateJsxNamespacedName(node *JsxNamespacedName, namespace *IdentifierNode, name *IdentifierNode) *Node {
+	if namespace != node.Namespace || name != node.name {
+		return updateNode(f.NewJsxNamespacedName(namespace, name), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
@@ -9188,7 +9188,7 @@ func (node *JsxNamespacedName) ForEachChild(v Visitor) bool {
 }
 
 func (node *JsxNamespacedName) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJsxNamespacedName(node, v.visitNode(node.name), v.visitNode(node.Namespace))
+	return v.Factory.UpdateJsxNamespacedName(node, v.visitNode(node.Namespace), v.visitNode(node.name))
 }
 
 func (node *JsxNamespacedName) Clone(f NodeFactoryCoercible) *Node {

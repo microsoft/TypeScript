@@ -3374,9 +3374,9 @@ function generateQuickInfoCommand({ kind, marker, text, docs }: VerifyQuickInfoC
 }
 
 function generateOrganizeImports({ expectedContent, mode, preferences }: VerifyOrganizeImportsCmd): string {
-    return `f.VerifyOrganizeImports(t, 
-        ${getGoMultiLineStringLiteral(expectedContent)}, 
-        ${mode}, 
+    return `f.VerifyOrganizeImports(t,
+        ${getGoMultiLineStringLiteral(expectedContent)},
+        ${mode},
         ${preferences},
     )`;
 }
@@ -3606,9 +3606,9 @@ function generateCmd(cmd: Cmd): string {
         case "verifyErrorExistsAtRange":
             return `f.VerifyErrorExistsAtRange(t, ${cmd.range}, ${cmd.code}, ${getGoStringLiteral(cmd.message)})`;
         case "verifyCurrentLineContentIs":
-            return `f.VerifyCurrentLineContentIs(t, ${getGoStringLiteral(cmd.text)})`;
+            return `f.VerifyCurrentLineContent(t, ${getGoStringLiteral(cmd.text)})`;
         case "verifyCurrentFileContentIs":
-            return `f.VerifyCurrentFileContentIs(t, ${getGoStringLiteral(cmd.text)})`;
+            return `f.VerifyCurrentFileContent(t, ${getGoStringLiteral(cmd.text)})`;
         case "verifyErrorExistsBetweenMarkers":
             return `f.VerifyErrorExistsBetweenMarkers(t, ${getGoStringLiteral(cmd.startMarker)}, ${getGoStringLiteral(cmd.endMarker)})`;
         case "verifyErrorExistsAfterMarker":

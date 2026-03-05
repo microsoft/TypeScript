@@ -108,12 +108,7 @@ func (s *scriptInfo) GetLineContent(line int) string {
 		end = core.TextPos(len(s.content))
 	}
 
-	// delete trailing newline
-	content := s.content[start:end]
-	if len(content) > 0 && content[len(content)-1] == '\n' {
-		content = content[:len(content)-1]
-	}
-	return content
+	return strings.TrimRight(s.content[start:end], "\r\n")
 }
 
 const rootDir = "/"
@@ -4202,30 +4197,6 @@ func (f *FourslashTest) VerifyErrorExistsAtRange(t *testing.T, rangeMarker *Rang
 		}
 	}
 	t.Fatalf("Expected error with code %d at range %v but it was not found", code, rangeMarker.LSRange)
-}
-
-// VerifyCurrentLineContentIs verifies that the current line content matches the expected text.
-func (f *FourslashTest) VerifyCurrentLineContentIs(t *testing.T, expectedText string) {
-	script := f.getScriptInfo(f.activeFilename)
-	lines := strings.Split(script.content, "\n")
-	lineNum := int(f.currentCaretPosition.Line)
-	if lineNum >= len(lines) {
-		t.Fatalf("Current line %d is out of range (file has %d lines)", lineNum, len(lines))
-	}
-	actualLine := lines[lineNum]
-	// Handle \r if present
-	actualLine = strings.TrimSuffix(actualLine, "\r")
-	if actualLine != expectedText {
-		t.Fatalf("Current line content mismatch.\nExpected: %q\nActual: %q", expectedText, actualLine)
-	}
-}
-
-// VerifyCurrentFileContentIs verifies that the current file content matches the expected text.
-func (f *FourslashTest) VerifyCurrentFileContentIs(t *testing.T, expectedText string) {
-	script := f.getScriptInfo(f.activeFilename)
-	if script.content != expectedText {
-		t.Fatalf("Current file content mismatch.\nExpected: %q\nActual: %q", expectedText, script.content)
-	}
 }
 
 // VerifyErrorExistsBetweenMarkers verifies that an error exists between the two markers.
