@@ -1,0 +1,20 @@
+// === Call Hierarchy ===
+╭ name: (anonymous)
+├ kind: class
+├ file: /main.ts
+├ span:
+│ ╭ /main.ts:1:1-3:2
+│ │ 1: class {
+│ │    ^^^^^^^
+│ │ 2:     constructor() {}
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /main.ts:1:1-1:6
+│ │ 1: class {
+│ │    ^^^^^
+│ ╰
+├ incoming: none
+╰ outgoing: none

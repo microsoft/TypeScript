@@ -140,7 +140,6 @@ func getCallHierarchyDeclarationReferenceNode(node *ast.Node) *ast.Node {
 		}
 	}
 
-	debug.Assert(false, "Expected call hierarchy declaration to have a reference node")
 	return nil
 }
 
@@ -196,7 +195,18 @@ func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text s
 		declName = ast.GetNameOfDeclaration(node)
 	}
 
-	debug.AssertIsDefined(declName, "Expected call hierarchy item to have a name")
+	if declName == nil || !ast.NodeIsPresent(declName) {
+		sourceFile := ast.GetSourceFileOfNode(node)
+		switch {
+		case ast.IsFunctionDeclaration(node) || ast.IsFunctionExpression(node):
+			kwPos := scanner.SkipTrivia(sourceFile.Text(), moveRangePastModifiers(node).Pos())
+			return "(anonymous)", kwPos, kwPos + 8 // "function".length
+		case ast.IsClassDeclaration(node) || ast.IsClassExpression(node):
+			kwPos := scanner.SkipTrivia(sourceFile.Text(), moveRangePastModifiers(node).Pos())
+			return "(anonymous)", kwPos, kwPos + 5 // "class".length
+		}
+		debug.AssertIsDefined(declName, "Expected call hierarchy item to have a name")
+	}
 
 	if ast.IsIdentifier(declName) {
 		text = declName.Text()

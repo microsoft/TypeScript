@@ -1,0 +1,44 @@
+// === Call Hierarchy ===
+╭ name: default
+├ kind: class
+├ file: /other.ts
+├ span:
+│ ╭ /other.ts:1:1-3:2
+│ │ 1: export default class {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     constructor() {}
+│ │    ^^^^^^^^^^^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /other.ts:1:8-1:15
+│ │ 1: export default class {
+│ │           ^^^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: foo
+│ │ ├ kind: function
+│ │ ├ file: /main.ts
+│ │ ├ span:
+│ │ │ ╭ /main.ts:3:1-5:2
+│ │ │ │ 3: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     new Bar();
+│ │ │ │    ^^^^^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /main.ts:3:10-3:13
+│ │ │ │ 3: function foo() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /main.ts:4:9-4:12
+│ │ │ 4:     new Bar();
+│ │ │            ^^^
+│ ╰ ╰
+╰ outgoing: none
