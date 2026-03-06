@@ -130,7 +130,7 @@ func osFSRealpath(path string) string {
 
 var writeSema = make(chan struct{}, 32)
 
-func (vfs *osFS) writeFile(path string, content string, writeByteOrderMark bool) error {
+func (vfs *osFS) writeFile(path string, content string) error {
 	writeSema <- struct{}{}
 	defer func() { <-writeSema }()
 
@@ -139,12 +139,6 @@ func (vfs *osFS) writeFile(path string, content string, writeByteOrderMark bool)
 		return err
 	}
 	defer file.Close()
-
-	if writeByteOrderMark {
-		if _, err := file.WriteString("\uFEFF"); err != nil {
-			return err
-		}
-	}
 
 	if _, err := file.WriteString(content); err != nil {
 		return err
@@ -157,15 +151,15 @@ func (vfs *osFS) ensureDirectoryExists(directoryPath string) error {
 	return os.MkdirAll(directoryPath, 0o777)
 }
 
-func (vfs *osFS) WriteFile(path string, content string, writeByteOrderMark bool) error {
+func (vfs *osFS) WriteFile(path string, content string) error {
 	_ = internal.RootLength(path) // Assert path is rooted
-	if err := vfs.writeFile(path, content, writeByteOrderMark); err == nil {
+	if err := vfs.writeFile(path, content); err == nil {
 		return nil
 	}
 	if err := vfs.ensureDirectoryExists(tspath.GetDirectoryPath(tspath.NormalizePath(path))); err != nil {
 		return err
 	}
-	return vfs.writeFile(path, content, writeByteOrderMark)
+	return vfs.writeFile(path, content)
 }
 
 func (vfs *osFS) Remove(path string) error {

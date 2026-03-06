@@ -54,7 +54,7 @@ func fmtMain(sys tsc.System, input, output string) tsc.ExitStatus {
 	edits := format.FormatDocument(ctx, sourceFile)
 	newText := core.ApplyBulkEdits(text, edits)
 
-	if err := sys.FS().WriteFile(output, newText, false); err != nil {
+	if err := sys.FS().WriteFile(output, newText); err != nil {
 		fmt.Fprintln(sys.Writer(), err.Error())
 		return tsc.ExitStatusNotImplemented
 	}

@@ -4,7 +4,6 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
@@ -19,14 +18,11 @@ func NewOutputRecorderFS(fs vfs.FS) vfs.FS {
 	return &OutputRecorderFS{FS: fs}
 }
 
-func (fs *OutputRecorderFS) WriteFile(path string, data string, writeByteOrderMark bool) error {
-	if err := fs.FS.WriteFile(path, data, writeByteOrderMark); err != nil {
+func (fs *OutputRecorderFS) WriteFile(path string, data string) error {
+	if err := fs.FS.WriteFile(path, data); err != nil {
 		return err
 	}
 	path = fs.Realpath(path)
-	if writeByteOrderMark {
-		data = stringutil.AddUTF8ByteOrderMark(data)
-	}
 	fs.outputsMut.Lock()
 	defer fs.outputsMut.Unlock()
 	if index, ok := fs.outputsMap[path]; ok {

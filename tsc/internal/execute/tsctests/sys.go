@@ -195,7 +195,7 @@ func (s *TestSys) ensureLibPathExists(path string) {
 			s.fs.defaultLibs = &collections.SyncSet[string]{}
 		}
 		s.fs.defaultLibs.Add(path)
-		err := s.fsFromFileMap().WriteFile(path, tscDefaultLibContent, false)
+		err := s.fsFromFileMap().WriteFile(path, tscDefaultLibContent)
 		if err != nil {
 			panic("Failed to write default library file: " + err.Error())
 		}
@@ -520,8 +520,8 @@ func (s *TestSys) baselineFSwithDiff(baseline io.Writer) {
 	s.fsDiffer.BaselineFSwithDiff(baseline)
 }
 
-func (s *TestSys) writeFileNoError(path string, content string, writeByteOrderMark bool) {
-	if err := s.fsFromFileMap().WriteFile(path, content, writeByteOrderMark); err != nil {
+func (s *TestSys) writeFileNoError(path string, content string) {
+	if err := s.fsFromFileMap().WriteFile(path, content); err != nil {
 		panic(err)
 	}
 }
@@ -541,28 +541,28 @@ func (s *TestSys) readFileNoError(path string) string {
 }
 
 func (s *TestSys) renameFileNoError(oldPath string, newPath string) {
-	s.writeFileNoError(newPath, s.readFileNoError(oldPath), false)
+	s.writeFileNoError(newPath, s.readFileNoError(oldPath))
 	s.removeNoError(oldPath)
 }
 
 func (s *TestSys) replaceFileText(path string, oldText string, newText string) {
 	content := s.readFileNoError(path)
 	content = strings.Replace(content, oldText, newText, 1)
-	s.writeFileNoError(path, content, false)
+	s.writeFileNoError(path, content)
 }
 
 func (s *TestSys) replaceFileTextAll(path string, oldText string, newText string) {
 	content := s.readFileNoError(path)
 	content = strings.ReplaceAll(content, oldText, newText)
-	s.writeFileNoError(path, content, false)
+	s.writeFileNoError(path, content)
 }
 
 func (s *TestSys) appendFile(path string, text string) {
 	content := s.readFileNoError(path)
-	s.writeFileNoError(path, content+text, false)
+	s.writeFileNoError(path, content+text)
 }
 
 func (s *TestSys) prependFile(path string, text string) {
 	content := s.readFileNoError(path)
-	s.writeFileNoError(path, text+content, false)
+	s.writeFileNoError(path, text+content)
 }

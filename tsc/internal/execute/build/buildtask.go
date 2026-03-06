@@ -236,8 +236,8 @@ func (t *BuildTask) compileAndEmit(orchestrator *Orchestrator, path tspath.Path)
 		ReportDiagnostic:   t.reportDiagnostic,
 		ReportErrorSummary: tsc.QuietDiagnosticsReporter,
 		Writer:             &t.result.builder,
-		WriteFile: func(fileName, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
-			return t.writeFile(orchestrator, fileName, text, writeByteOrderMark, data)
+		WriteFile: func(fileName, text string, data *compiler.WriteFileData) error {
+			return t.writeFile(orchestrator, fileName, text, data)
 		},
 		CompileTimes:       &compileTimes,
 		Testing:            orchestrator.opts.Testing,
@@ -840,8 +840,8 @@ func (t *BuildTask) storeOutputTimeStamp(orchestrator *Orchestrator) bool {
 	return orchestrator.opts.Command.CompilerOptions.Watch.IsTrue() && !t.resolved.CompilerOptions().IsIncremental()
 }
 
-func (t *BuildTask) writeFile(orchestrator *Orchestrator, fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
-	err := orchestrator.host.FS().WriteFile(fileName, text, writeByteOrderMark)
+func (t *BuildTask) writeFile(orchestrator *Orchestrator, fileName string, text string, data *compiler.WriteFileData) error {
+	err := orchestrator.host.FS().WriteFile(fileName, text)
 	if err == nil {
 		if data != nil && data.BuildInfo != nil {
 			t.onBuildInfoEmit(orchestrator, fileName, data.BuildInfo.(*incremental.BuildInfo), t.result.program.HasChangedDtsFile())

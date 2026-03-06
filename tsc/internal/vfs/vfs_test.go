@@ -24,7 +24,7 @@ func BenchmarkReadFile(b *testing.B) {
 	const smallData = "hello, world"
 	tmpdir := tspath.NormalizeSlashes(b.TempDir())
 	osSmallDataPath := tspath.CombinePaths(tmpdir, "foo.ts")
-	err := osFS.WriteFile(osSmallDataPath, smallData, false)
+	err := osFS.WriteFile(osSmallDataPath, smallData)
 	assert.NilError(b, err)
 
 	tests := []bench{

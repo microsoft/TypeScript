@@ -202,21 +202,21 @@ func TestWritableFS(t *testing.T) {
 
 	fs := FromMap[any](nil, false)
 
-	err := fs.WriteFile("/foo/bar/baz", "hello, world", false)
+	err := fs.WriteFile("/foo/bar/baz", "hello, world")
 	assert.NilError(t, err)
 
 	content, ok := fs.ReadFile("/foo/bar/baz")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "hello, world")
 
-	err = fs.WriteFile("/foo/bar/baz", "goodbye, world", false)
+	err = fs.WriteFile("/foo/bar/baz", "goodbye, world")
 	assert.NilError(t, err)
 
 	content, ok = fs.ReadFile("/foo/bar/baz")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "goodbye, world")
 
-	err = fs.WriteFile("/foo/bar/baz/oops", "goodbye, world", false)
+	err = fs.WriteFile("/foo/bar/baz/oops", "goodbye, world")
 	assert.ErrorContains(t, err, `mkdir "foo/bar/baz": path exists but is not a directory`)
 }
 
@@ -224,13 +224,13 @@ func TestWritableFSDelete(t *testing.T) {
 	t.Parallel()
 	fs := FromMap[any](nil, false)
 
-	_ = fs.WriteFile("/foo/bar/file.ts", "remove", false)
+	_ = fs.WriteFile("/foo/bar/file.ts", "remove")
 	assert.Assert(t, fs.FileExists("/foo/bar/file.ts"))
 	err := fs.Remove("/foo/bar/file.ts")
 	assert.NilError(t, err)
 	assert.Assert(t, !fs.FileExists("/foo/bar/file.ts"))
 
-	_ = fs.WriteFile("/foo/bar/test/remove2.ts", "remove2", false)
+	_ = fs.WriteFile("/foo/bar/test/remove2.ts", "remove2")
 	assert.Assert(t, fs.DirectoryExists("/foo/bar/test"))
 	err = fs.Remove("/foo/bar/test")
 	assert.NilError(t, err)
@@ -243,7 +243,7 @@ func TestWritableFSDelete(t *testing.T) {
 	err = fs.Remove("/foo/bar/file.ts")
 	assert.NilError(t, err)
 
-	_ = fs.WriteFile("/foo/barbar", "remove2", false)
+	_ = fs.WriteFile("/foo/barbar", "remove2")
 	_ = fs.Remove("/foo/bar")
 	assert.Assert(t, fs.FileExists("/foo/barbar"))
 }
@@ -254,7 +254,7 @@ func TestStress(t *testing.T) {
 	fs := FromMap[any](nil, false)
 
 	ops := []func(){
-		func() { _ = fs.WriteFile("/foo/bar/baz.txt", "hello, world", false) },
+		func() { _ = fs.WriteFile("/foo/bar/baz.txt", "hello, world") },
 		func() { fs.ReadFile("/foo/bar/baz.txt") },
 		func() { fs.DirectoryExists("/foo/bar") },
 		func() { fs.FileExists("/foo/bar") },
@@ -617,7 +617,7 @@ func TestWritableFSSymlink(t *testing.T) {
 		"/d/existing.ts":     "hello, world",
 	}, false)
 
-	err := fs.WriteFile("/some/dirlink/file.ts", "hello, world", false)
+	err := fs.WriteFile("/some/dirlink/file.ts", "hello, world")
 	assert.NilError(t, err)
 
 	content, ok := fs.ReadFile("/some/dirlink/file.ts")
@@ -628,14 +628,14 @@ func TestWritableFSSymlink(t *testing.T) {
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "hello, world")
 
-	err = fs.WriteFile("/some/dirlink/file.ts", "goodbye, world", false)
+	err = fs.WriteFile("/some/dirlink/file.ts", "goodbye, world")
 	assert.NilError(t, err)
 
 	content, ok = fs.ReadFile("/some/dirlink/file.ts")
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "goodbye, world")
 
-	err = fs.WriteFile("/other.ts", "hello, world", false)
+	err = fs.WriteFile("/other.ts", "hello, world")
 	assert.NilError(t, err)
 
 	content, ok = fs.ReadFile("/other.ts")
@@ -646,18 +646,18 @@ func TestWritableFSSymlink(t *testing.T) {
 	assert.Assert(t, ok)
 	assert.Equal(t, content, "hello, world")
 
-	err = fs.WriteFile("/some/dirlink", "hello, world", false)
+	err = fs.WriteFile("/some/dirlink", "hello, world")
 	assert.Error(t, err, `write "some/dirlink": path exists but is not a regular file`)
 
 	// Can't write inside a broken dir symlink
-	err = fs.WriteFile("/brokenlink/file.ts", "hello, world", false)
+	err = fs.WriteFile("/brokenlink/file.ts", "hello, world")
 	assert.Error(t, err, `broken symlink "brokenlink" -> "does/not/exist"`)
 
-	err = fs.WriteFile("/brokenlink/also/wrong/file.ts", "hello, world", false)
+	err = fs.WriteFile("/brokenlink/also/wrong/file.ts", "hello, world")
 	assert.Error(t, err, `broken symlink "brokenlink" -> "does/not/exist"`)
 
 	// But we can write to a broken file symlink
-	err = fs.WriteFile("/brokenlink", "hello, world", false)
+	err = fs.WriteFile("/brokenlink", "hello, world")
 	assert.NilError(t, err)
 	content, ok = fs.ReadFile("/brokenlink")
 	assert.Assert(t, ok)
@@ -677,7 +677,7 @@ func TestWritableFSSymlinkChain(t *testing.T) {
 		"/d/existing.ts": "hello, world",
 	}, false)
 
-	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts", false)
+	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts")
 	assert.NilError(t, err)
 	content, ok := fs.ReadFile("/a/foo/bar/new.ts")
 	assert.Assert(t, ok)
@@ -700,7 +700,7 @@ func TestWritableFSSymlinkChainNotDir(t *testing.T) {
 		"/d": "hello, world",
 	}, false)
 
-	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts", false)
+	err := fs.WriteFile("/a/foo/bar/new.ts", "this is new.ts")
 	assert.Error(t, err, `mkdir "d": path exists but is not a directory`)
 }
 
@@ -732,7 +732,7 @@ func TestWritableFSSymlinkDelete(t *testing.T) {
 	assert.Assert(t, !fs.DirectoryExists("/c"))
 	assert.Assert(t, !fs.DirectoryExists("/d"))
 	assert.Assert(t, !fs.FileExists("/d/again.ts"))
-	err = fs.WriteFile("/d/again.ts", "d exists again", false)
+	err = fs.WriteFile("/d/again.ts", "d exists again")
 	assert.NilError(t, err)
 	assert.Assert(t, fs.DirectoryExists("/b"))
 	assert.Assert(t, fs.DirectoryExists("/c"))
@@ -745,7 +745,7 @@ func TestWritableFSSymlinkDelete(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, !fs.FileExists("/brokenlink"))
 	assert.Assert(t, !fs.DirectoryExists("/brokenlink"))
-	err = fs.WriteFile("/does/not/exist", "hello, world", false)
+	err = fs.WriteFile("/does/not/exist", "hello, world")
 	assert.NilError(t, err)
 	assert.Assert(t, fs.FileExists("/brokenlink"))
 }

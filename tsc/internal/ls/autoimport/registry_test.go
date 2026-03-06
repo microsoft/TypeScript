@@ -161,7 +161,7 @@ export const bar = 2;`,
 
 		fs := sessionUtils.FS()
 		updatePackageJSON := func(content string) {
-			assert.NilError(t, fs.WriteFile(packageJSON.FileName(), content, false))
+			assert.NilError(t, fs.WriteFile(packageJSON.FileName(), content))
 			session.DidChangeWatchedFiles(ctx, []*lsproto.FileEvent{
 				{Type: lsproto.FileChangeTypeChanged, Uri: packageJSON.URI()},
 			})

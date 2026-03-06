@@ -320,32 +320,31 @@ func TestWriteFile(t *testing.T) {
 	underlying := createMockFS()
 	cached := cachedvfs.From(underlying)
 
-	_ = cached.WriteFile("/some/path/file.txt", "new content", false)
+	_ = cached.WriteFile("/some/path/file.txt", "new content")
 	assert.Equal(t, 1, len(underlying.WriteFileCalls()))
 
-	_ = cached.WriteFile("/some/path/file.txt", "another content", true)
+	_ = cached.WriteFile("/some/path/file.txt", "another content")
 	assert.Equal(t, 2, len(underlying.WriteFileCalls()))
 
 	cached.ClearCache()
-	_ = cached.WriteFile("/some/path/file.txt", "third content", false)
+	_ = cached.WriteFile("/some/path/file.txt", "third content")
 	assert.Equal(t, 3, len(underlying.WriteFileCalls()))
 
 	call := underlying.WriteFileCalls()[2]
 	assert.Equal(t, "/some/path/file.txt", call.Path)
 	assert.Equal(t, "third content", call.Data)
-	assert.Equal(t, false, call.WriteByteOrderMark)
 
 	cached.DisableAndClearCache()
-	_ = cached.WriteFile("/some/path/file.txt", "fourth content", false)
+	_ = cached.WriteFile("/some/path/file.txt", "fourth content")
 	assert.Equal(t, 4, len(underlying.WriteFileCalls()))
 
-	_ = cached.WriteFile("/some/path/file.txt", "fifth content", true)
+	_ = cached.WriteFile("/some/path/file.txt", "fifth content")
 	assert.Equal(t, 5, len(underlying.WriteFileCalls()))
 
 	cached.Enable()
-	_ = cached.WriteFile("/some/path/file.txt", "sixth content", false)
+	_ = cached.WriteFile("/some/path/file.txt", "sixth content")
 	assert.Equal(t, 6, len(underlying.WriteFileCalls()))
 
-	_ = cached.WriteFile("/some/path/file.txt", "seventh content", true)
+	_ = cached.WriteFile("/some/path/file.txt", "seventh content")
 	assert.Equal(t, 7, len(underlying.WriteFileCalls()))
 }

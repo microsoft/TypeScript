@@ -64,10 +64,10 @@ func TestBulkCacheInvalidation(t *testing.T) {
 				"types": ["node"]
 			},
 			"include": ["src/**/*"]
-		}`, false)
+		}`)
 			assert.NilError(t, err)
 			// Update fs.d.ts in node_modules
-			err = utils.FS().WriteFile("/project/node_modules/@types/node/fs.d.ts", "new text", false)
+			err = utils.FS().WriteFile("/project/node_modules/@types/node/fs.d.ts", "new text")
 			assert.NilError(t, err)
 
 			// Process the excessive node_modules changes
@@ -139,10 +139,10 @@ func TestBulkCacheInvalidation(t *testing.T) {
 				"types": ["node"]
 			},
 			"include": ["src/**/*"]
-		}`, false)
+		}`)
 			assert.NilError(t, err)
 			// Add root file
-			err = utils.FS().WriteFile("/project/src/rootFile.ts", `console.log("root file")`, false)
+			err = utils.FS().WriteFile("/project/src/rootFile.ts", `console.log("root file")`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), fileEvents)
@@ -199,7 +199,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 				"strict": false,
 				"target": "esnext"
 			}
-		}`, false)
+		}`)
 		assert.NilError(t, err)
 
 		// Create excessive changes to trigger bulk invalidation
@@ -244,7 +244,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			"strict": true
 		},
 		"include": ["src/**/*"]
-	}`, false)
+	}`)
 			assert.NilError(t, err)
 
 			// Process the changes
@@ -309,7 +309,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 				"strict": true
 			},
 			"include": ["src/**/*"]
-		}`, false)
+		}`)
 		assert.NilError(t, err)
 
 		// Create excessive changes in dist folder only

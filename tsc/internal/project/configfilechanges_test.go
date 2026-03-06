@@ -34,7 +34,7 @@ func TestConfigFileChanges(t *testing.T) {
 		session, utils := projecttestutil.Setup(files)
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		err := utils.FS().WriteFile("/src/tsconfig.json", `{"extends": "../tsconfig.base.json", "compilerOptions": {"target": "esnext"}, "references": [{"path": "../utils"}]}`, false /*writeByteOrderMark*/)
+		err := utils.FS().WriteFile("/src/tsconfig.json", `{"extends": "../tsconfig.base.json", "compilerOptions": {"target": "esnext"}, "references": [{"path": "../utils"}]}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{
@@ -53,7 +53,7 @@ func TestConfigFileChanges(t *testing.T) {
 		session, utils := projecttestutil.Setup(files)
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		err := utils.FS().WriteFile("/tsconfig.base.json", `{"compilerOptions": {"strict": false}}`, false /*writeByteOrderMark*/)
+		err := utils.FS().WriteFile("/tsconfig.base.json", `{"compilerOptions": {"strict": false}}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{
@@ -72,7 +72,7 @@ func TestConfigFileChanges(t *testing.T) {
 		session, utils := projecttestutil.Setup(files)
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		err := utils.FS().WriteFile("/tsconfig.more-base.json", `{"compilerOptions": {"verbatimModuleSyntax": true}}`, false /*writeByteOrderMark*/)
+		err := utils.FS().WriteFile("/tsconfig.more-base.json", `{"compilerOptions": {"verbatimModuleSyntax": true}}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{
@@ -93,7 +93,7 @@ func TestConfigFileChanges(t *testing.T) {
 		snapshotBefore, release := session.Snapshot()
 		defer release()
 
-		err := utils.FS().WriteFile("/utils/tsconfig.json", `{"compilerOptions": {"composite": true, "target": "esnext"}}`, false /*writeByteOrderMark*/)
+		err := utils.FS().WriteFile("/utils/tsconfig.json", `{"compilerOptions": {"composite": true, "target": "esnext"}}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{
@@ -136,7 +136,7 @@ func TestConfigFileChanges(t *testing.T) {
 		session, utils := projecttestutil.Setup(files)
 		session.DidOpenFile(context.Background(), "file:///src/subfolder/foo.ts", 1, files["/src/subfolder/foo.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		err := utils.FS().WriteFile("/src/subfolder/tsconfig.json", `{}`, false /*writeByteOrderMark*/)
+		err := utils.FS().WriteFile("/src/subfolder/tsconfig.json", `{}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{
@@ -189,7 +189,7 @@ func TestConfigFileChanges(t *testing.T) {
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, missingBaseFiles["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 
 		// Create the previously-missing base config file that is extended by /src/tsconfig.json
-		err := utils.FS().WriteFile("/tsconfig.base.json", `{"compilerOptions": {"strict": true}}`, false /*writeByteOrderMark*/)
+		err := utils.FS().WriteFile("/tsconfig.base.json", `{"compilerOptions": {"strict": true}}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{

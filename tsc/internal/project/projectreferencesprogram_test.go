@@ -281,7 +281,7 @@ func TestProjectReferencesProgram(t *testing.T) {
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		programBefore := snapshot.ProjectCollection.Projects()[0].Program
 
-		err := utils.FS().WriteFile("/user/username/projects/myproject/dependency/fns2.ts", `export const x = 2;`, false)
+		err := utils.FS().WriteFile("/user/username/projects/myproject/dependency/fns2.ts", `export const x = 2;`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{

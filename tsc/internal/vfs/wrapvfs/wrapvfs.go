@@ -10,7 +10,7 @@ type Replacements struct {
 	UseCaseSensitiveFileNames func() bool
 	FileExists                func(string) bool
 	ReadFile                  func(string) (string, bool)
-	WriteFile                 func(string, string, bool) error
+	WriteFile                 func(string, string) error
 	Remove                    func(string) error
 	Chtimes                   func(string, time.Time, time.Time) error
 	DirectoryExists           func(string) bool
@@ -57,11 +57,11 @@ func (w *wrappedFS) ReadFile(path string) (contents string, ok bool) {
 }
 
 // WriteFile implements [vfs.FS].
-func (w *wrappedFS) WriteFile(path string, data string, writeByteOrderMark bool) error {
+func (w *wrappedFS) WriteFile(path string, data string) error {
 	if w.replacements.WriteFile != nil {
-		return w.replacements.WriteFile(path, data, writeByteOrderMark)
+		return w.replacements.WriteFile(path, data)
 	}
-	return w.fs.WriteFile(path, data, writeByteOrderMark)
+	return w.fs.WriteFile(path, data)
 }
 
 // Remove implements [vfs.FS].

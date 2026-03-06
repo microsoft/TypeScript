@@ -116,8 +116,8 @@ func (host *emitHost) IsEmitBlocked(file string) bool {
 	return host.program.IsEmitBlocked(file)
 }
 
-func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool) error {
-	return host.program.Host().FS().WriteFile(fileName, text, writeByteOrderMark)
+func (host *emitHost) WriteFile(fileName string, text string) error {
+	return host.program.Host().FS().WriteFile(fileName, text)
 }
 
 func (host *emitHost) GetEmitResolver() printer.EmitResolver {

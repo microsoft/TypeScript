@@ -70,7 +70,7 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
-		err = utils.FS().WriteFile("/src/tsconfig.json", `{"compilerOptions": {"strict": false}}`, false)
+		err = utils.FS().WriteFile("/src/tsconfig.json", `{"compilerOptions": {"strict": false}}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{Uri: lsproto.DocumentUri("file:///src/tsconfig.json"), Type: lsproto.FileChangeTypeChanged}})
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
@@ -93,7 +93,7 @@ func TestProjectProgramUpdateKind(t *testing.T) {
 		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
 		content := "export const y = 2;"
-		err = utils.FS().WriteFile("/src/newfile.ts", content, false)
+		err = utils.FS().WriteFile("/src/newfile.ts", content)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{Uri: lsproto.DocumentUri("file:///src/newfile.ts"), Type: lsproto.FileChangeTypeCreated}})
 		session.DidOpenFile(context.Background(), "file:///src/newfile.ts", 1, content, lsproto.LanguageKindTypeScript)
@@ -267,7 +267,7 @@ func TestPushDiagnostics(t *testing.T) {
 		initialCallCount := len(utils.Client().PublishDiagnosticsCalls())
 
 		// Change the tsconfig to remove baseUrl
-		err = utils.FS().WriteFile("/src/tsconfig.json", `{"compilerOptions": {}}`, false)
+		err = utils.FS().WriteFile("/src/tsconfig.json", `{"compilerOptions": {}}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{Uri: lsproto.DocumentUri("file:///src/tsconfig.json"), Type: lsproto.FileChangeTypeChanged}})
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))

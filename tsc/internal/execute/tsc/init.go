@@ -22,7 +22,7 @@ func WriteConfigFile(sys System, locale locale.Locale, reportDiagnostic Diagnost
 	if sys.FS().FileExists(file) {
 		reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file))
 	} else {
-		_ = sys.FS().WriteFile(file, generateTSConfig(options, locale), false)
+		_ = sys.FS().WriteFile(file, generateTSConfig(options, locale))
 		output := []string{"\n"}
 		output = append(output, getHeader(sys, "Created a new tsconfig.json")...)
 		output = append(output, "You can learn more at https://aka.ms/tsconfig", "\n")

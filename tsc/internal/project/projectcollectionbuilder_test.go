@@ -603,7 +603,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 			"imports": {
 				"#utils": "./src/nonexistent.ts"
 			}
-		}`, false)
+		}`)
 		assert.NilError(t, err)
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
 			{

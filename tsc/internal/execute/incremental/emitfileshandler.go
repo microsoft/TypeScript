@@ -176,7 +176,7 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 	return compiler.EmitOptions{
 		TargetSourceFile: options.TargetSourceFile,
 		EmitOnly:         options.EmitOnly,
-		WriteFile: func(fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
+		WriteFile: func(fileName string, text string, data *compiler.WriteFileData) error {
 			var differsOnlyInMap bool
 			if tspath.IsDeclarationFileName(fileName) {
 				if canUseIncrementalState {
@@ -210,9 +210,9 @@ func (h *emitFilesHandler) getEmitOptions(options compiler.EmitOptions) compiler
 			}
 			var err error
 			if options.WriteFile != nil {
-				err = options.WriteFile(fileName, text, writeByteOrderMark, data)
+				err = options.WriteFile(fileName, text, data)
 			} else {
-				err = h.program.program.Host().FS().WriteFile(fileName, text, writeByteOrderMark)
+				err = h.program.program.Host().FS().WriteFile(fileName, text)
 			}
 			if err == nil && differsOnlyInMap {
 				// Revert the time to original one

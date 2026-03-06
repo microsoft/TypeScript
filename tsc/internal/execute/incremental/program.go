@@ -304,11 +304,11 @@ func (p *Program) emitBuildInfo(ctx context.Context, options compiler.EmitOption
 		panic(fmt.Sprintf("Failed to marshal build info: %v", err))
 	}
 	if options.WriteFile != nil {
-		err = options.WriteFile(buildInfoFileName, string(text), false, &compiler.WriteFileData{
+		err = options.WriteFile(buildInfoFileName, string(text), &compiler.WriteFileData{
 			BuildInfo: buildInfo,
 		})
 	} else {
-		err = p.program.Host().FS().WriteFile(buildInfoFileName, string(text), false)
+		err = p.program.Host().FS().WriteFile(buildInfoFileName, string(text))
 	}
 	if err != nil {
 		return &compiler.EmitResult{

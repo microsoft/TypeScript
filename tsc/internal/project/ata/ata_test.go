@@ -377,7 +377,6 @@ func TestATA(t *testing.T) {
 		assert.NilError(t, utils.FS().WriteFile(
 			"/user/username/projects/project/package.json",
 			`{ "dependencies": { "commander": "0.0.2" } }`,
-			false,
 		))
 		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{{
 			Type: lsproto.FileChangeTypeChanged,

@@ -245,7 +245,7 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")) == nil)
 
 		// Simulate file move: create src/index.ts on disk
-		err := utils.FS().WriteFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/index.ts"].(string), false)
+		err := utils.FS().WriteFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/index.ts"].(string))
 		assert.NilError(t, err)
 		err = utils.FS().Remove("/home/projects/TS/p1/index.ts")
 		assert.NilError(t, err)
@@ -316,7 +316,7 @@ func TestProjectLifetime(t *testing.T) {
 
 		// Simulate tsconfig.json move: create tsconfig.json at parent level, delete from src/
 		tsconfigContent := files["/home/projects/TS/p1/src/tsconfig.json"].(string)
-		err := utils.FS().WriteFile("/home/projects/TS/p1/tsconfig.json", tsconfigContent, false)
+		err := utils.FS().WriteFile("/home/projects/TS/p1/tsconfig.json", tsconfigContent)
 		assert.NilError(t, err)
 		err = utils.FS().Remove("/home/projects/TS/p1/src/tsconfig.json")
 		assert.NilError(t, err)
@@ -385,7 +385,7 @@ func TestProjectLifetime(t *testing.T) {
 		// - Create a new file y.ts on disk
 		err = utils.FS().Remove("/home/projects/TS/p1/src/x.ts")
 		assert.NilError(t, err)
-		err = utils.FS().WriteFile("/home/projects/TS/p1/src/y.ts", `export const y = 2;`, false)
+		err = utils.FS().WriteFile("/home/projects/TS/p1/src/y.ts", `export const y = 2;`)
 		assert.NilError(t, err)
 
 		// Send both events in a single batch

@@ -20,7 +20,7 @@ type FS interface {
 	// If the file fails to be read, ok will be false.
 	ReadFile(path string) (contents string, ok bool)
 
-	WriteFile(path string, data string, writeByteOrderMark bool) error
+	WriteFile(path string, data string) error
 
 	// Removes `path` and all its contents. Will return the first error it encounters.
 	Remove(path string) error

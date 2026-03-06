@@ -278,7 +278,7 @@ func TestSession(t *testing.T) {
 					"strict": true
 				},
 				"include": ["./**/*"]
-			}`, false)
+			}`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -315,7 +315,7 @@ func TestSession(t *testing.T) {
 				program := ls.GetProgram()
 				assert.Check(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
 
-				err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", "", false)
+				err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", "")
 				assert.NilError(t, err)
 
 				session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/x.ts", 1, "", lsproto.LanguageKindTypeScript)
@@ -349,7 +349,7 @@ func TestSession(t *testing.T) {
 				program := ls.GetProgram()
 				assert.Check(t, program.GetSourceFile("/home/projects/TS/p1/src/x.ts") == nil)
 
-				err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", "", false)
+				err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", "")
 				assert.NilError(t, err)
 
 				session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/src/x.ts", 1, "", lsproto.LanguageKindTypeScript)
@@ -524,7 +524,7 @@ func TestSession(t *testing.T) {
 			assert.NilError(t, err)
 			programBefore := lsBefore.GetProgram()
 
-			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 2;`, false)
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 2;`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -551,7 +551,7 @@ func TestSession(t *testing.T) {
 			assert.NilError(t, err)
 			programBefore := lsBefore.GetProgram()
 
-			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 2;`, false)
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/x.ts", `export const x = 2;`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -610,7 +610,7 @@ func TestSession(t *testing.T) {
 					}
 					assert.Check(t, xWatched)
 
-					err = utils.FS().WriteFile("/home/projects/TS/x.ts", `export const x = 2;`, false)
+					err = utils.FS().WriteFile("/home/projects/TS/x.ts", `export const x = 2;`)
 					assert.NilError(t, err)
 
 					session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -655,7 +655,7 @@ func TestSession(t *testing.T) {
 					"noLib": false,
 					"strict": true
 				}
-			}`, false)
+			}`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -784,7 +784,7 @@ func TestSession(t *testing.T) {
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/index.ts"))), 1)
 
 			// Add the missing file
-			err = utils.FS().WriteFile("/home/projects/TS/p1/src/y.ts", `export const y = 1;`, false)
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/y.ts", `export const y = 1;`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -824,7 +824,7 @@ func TestSession(t *testing.T) {
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/index.ts"))), 1)
 
 			// Add a new file through failed lookup watch
-			err = utils.FS().WriteFile("/home/projects/TS/p1/src/z.ts", `export const z = 1;`, false)
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/z.ts", `export const z = 1;`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
@@ -864,7 +864,7 @@ func TestSession(t *testing.T) {
 			assert.Equal(t, len(program.GetSemanticDiagnostics(projecttestutil.WithRequestID(t.Context()), program.GetSourceFile("/home/projects/TS/p1/src/index.ts"))), 1)
 
 			// Add a new file through wildcard watch
-			err = utils.FS().WriteFile("/home/projects/TS/p1/src/a.ts", `const a = 1;`, false)
+			err = utils.FS().WriteFile("/home/projects/TS/p1/src/a.ts", `const a = 1;`)
 			assert.NilError(t, err)
 
 			session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{

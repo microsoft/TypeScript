@@ -238,7 +238,7 @@ func TestProgram(t *testing.T) {
 			fs = bundled.WrapFS(fs)
 
 			for _, testFile := range testCase.files {
-				_ = fs.WriteFile(testFile.fileName, testFile.contents, false)
+				_ = fs.WriteFile(testFile.fileName, testFile.contents)
 			}
 
 			opts := core.CompilerOptions{Target: testCase.target}
@@ -276,7 +276,7 @@ func BenchmarkNewProgram(b *testing.B) {
 			fs = bundled.WrapFS(fs)
 
 			for _, testFile := range testCase.files {
-				_ = fs.WriteFile(testFile.fileName, testFile.contents, false)
+				_ = fs.WriteFile(testFile.fileName, testFile.contents)
 			}
 
 			opts := core.CompilerOptions{Target: testCase.target}

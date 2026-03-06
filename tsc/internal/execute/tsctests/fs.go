@@ -50,13 +50,13 @@ func (f *testFs) readFileHandlingBuildInfo(path string) (contents string, ok boo
 	return contents, ok
 }
 
-func (f *testFs) WriteFile(path string, data string, writeByteOrderMark bool) error {
+func (f *testFs) WriteFile(path string, data string) error {
 	f.removeIgnoreLibPath(path)
 	f.writtenFiles.Add(path)
-	return f.writeFileHandlingBuildInfo(path, data, writeByteOrderMark)
+	return f.writeFileHandlingBuildInfo(path, data)
 }
 
-func (f *testFs) writeFileHandlingBuildInfo(path string, data string, writeByteOrderMark bool) error {
+func (f *testFs) writeFileHandlingBuildInfo(path string, data string) error {
 	if tspath.FileExtensionIs(path, tspath.ExtensionTsBuildInfo) {
 		var buildInfo incremental.BuildInfo
 		if err := json.Unmarshal([]byte(data), &buildInfo); err == nil {
@@ -73,7 +73,6 @@ func (f *testFs) writeFileHandlingBuildInfo(path string, data string, writeByteO
 			if err := f.WriteFile(
 				path+".readable.baseline.txt",
 				toReadableBuildInfo(&buildInfo, fsbaselineutil.SanitizeInternalSymbolName(data)),
-				false,
 			); err != nil {
 				return fmt.Errorf("testFs.WriteFile: failed to write readable build info: %w", err)
 			}
@@ -81,7 +80,7 @@ func (f *testFs) writeFileHandlingBuildInfo(path string, data string, writeByteO
 			panic("testFs.WriteFile: failed to unmarshal build info: - use underlying FS's write method if this is intended use for testcase" + err.Error())
 		}
 	}
-	return f.FS.WriteFile(path, data, writeByteOrderMark)
+	return f.FS.WriteFile(path, data)
 }
 
 // Removes `path` and all its contents. Will return the first error it encounters.

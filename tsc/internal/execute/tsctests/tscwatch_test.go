@@ -71,22 +71,22 @@ func noEmitWatchTestInput(
 		},
 		edits: []*tscEdit{
 			newTscEdit("fix error", func(sys *TestSys) {
-				sys.writeFileNoError("/home/src/workspaces/project/a.ts", `const a = "hello";`, false)
+				sys.writeFileNoError("/home/src/workspaces/project/a.ts", `const a = "hello";`)
 			}),
 			newTscEdit("emit after fixing error", func(sys *TestSys) {
-				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig("", optionString), false)
+				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig("", optionString))
 			}),
 			newTscEdit("no emit run after fixing error", func(sys *TestSys) {
-				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig(noEmitOpt, optionString), false)
+				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig(noEmitOpt, optionString))
 			}),
 			newTscEdit("introduce error", func(sys *TestSys) {
-				sys.writeFileNoError("/home/src/workspaces/project/a.ts", aText, false)
+				sys.writeFileNoError("/home/src/workspaces/project/a.ts", aText)
 			}),
 			newTscEdit("emit when error", func(sys *TestSys) {
-				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig("", optionString), false)
+				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig("", optionString))
 			}),
 			newTscEdit("no emit run when error", func(sys *TestSys) {
-				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig(noEmitOpt, optionString), false)
+				sys.writeFileNoError("/home/src/workspaces/project/tsconfig.json", toTsconfig(noEmitOpt, optionString))
 			}),
 		},
 	}

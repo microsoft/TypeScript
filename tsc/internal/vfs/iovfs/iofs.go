@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/internal"
@@ -19,7 +18,7 @@ type RealpathFS interface {
 
 type WritableFS interface {
 	fs.FS
-	WriteFile(path string, data []byte, perm fs.FileMode) error
+	WriteFile(path string, data string, perm fs.FileMode) error
 	MkdirAll(path string, perm fs.FileMode) error
 	// Removes `path` and all its contents. Will return the first error it encounters.
 	Remove(path string) error
@@ -60,20 +59,14 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 		}
 	}
 
-	var writeFile func(path string, content string, writeByteOrderMark bool) error
+	var writeFile func(path string, content string) error
 	var mkdirAll func(path string) error
 	var remove func(path string) error
 	var chtimes func(path string, aTime time.Time, mTime time.Time) error
 	if fsys, ok := fsys.(WritableFS); ok {
-		writeFile = func(path string, content string, writeByteOrderMark bool) error {
+		writeFile = func(path string, content string) error {
 			rest, _ := strings.CutPrefix(path, "/")
-			if writeByteOrderMark {
-				// Strada uses \uFEFF because NodeJS requires it, but substitutes it with the correct BOM based on the
-				// output encoding. \uFEFF is actually the BOM for big-endian UTF-16. For UTF-8 the actual BOM is
-				// \xEF\xBB\xBF.
-				content = stringutil.AddUTF8ByteOrderMark(content)
-			}
-			return fsys.WriteFile(rest, []byte(content), 0o666)
+			return fsys.WriteFile(rest, content, 0o666)
 		}
 		mkdirAll = func(path string) error {
 			rest, _ := strings.CutPrefix(path, "/")
@@ -88,7 +81,7 @@ func From(fsys fs.FS, useCaseSensitiveFileNames bool) FsWithSys {
 			return fsys.Chtimes(rest, aTime, mTime)
 		}
 	} else {
-		writeFile = func(string, string, bool) error {
+		writeFile = func(string, string) error {
 			panic("writeFile not supported")
 		}
 		mkdirAll = func(string) error {
@@ -135,7 +128,7 @@ type ioFS struct {
 
 	useCaseSensitiveFileNames bool
 	realpath                  func(path string) (string, error)
-	writeFile                 func(path string, content string, writeByteOrderMark bool) error
+	writeFile                 func(path string, content string) error
 	mkdirAll                  func(path string) error
 	remove                    func(path string) error
 	chtimes                   func(path string, aTime time.Time, mTime time.Time) error
@@ -194,15 +187,15 @@ func (vfs *ioFS) Realpath(path string) string {
 	return realpath
 }
 
-func (vfs *ioFS) WriteFile(path string, content string, writeByteOrderMark bool) error {
+func (vfs *ioFS) WriteFile(path string, content string) error {
 	_ = internal.RootLength(path) // Assert path is rooted
-	if err := vfs.writeFile(path, content, writeByteOrderMark); err == nil {
+	if err := vfs.writeFile(path, content); err == nil {
 		return nil
 	}
 	if err := vfs.mkdirAll(tspath.GetDirectoryPath(tspath.NormalizePath(path))); err != nil {
 		return err
 	}
-	return vfs.writeFile(path, content, writeByteOrderMark)
+	return vfs.writeFile(path, content)
 }
 
 func (vfs *ioFS) FSys() fs.FS {

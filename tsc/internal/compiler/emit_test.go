@@ -64,7 +64,7 @@ func BenchmarkEmitLongLines(b *testing.B) {
 			})
 
 			// Discard written files — we only care about emit performance.
-			nopWriteFile := func(fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
+			nopWriteFile := func(fileName string, text string, data *compiler.WriteFileData) error {
 				return nil
 			}
 
@@ -118,7 +118,7 @@ func BenchmarkEmitManyFiles(b *testing.B) {
 		Host: host,
 	})
 
-	nopWriteFile := func(fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
+	nopWriteFile := func(fileName string, text string, data *compiler.WriteFileData) error {
 		return nil
 	}
 
@@ -176,7 +176,7 @@ func BenchmarkEmitLongLinesWithLineBreaks(b *testing.B) {
 		Host: host,
 	})
 
-	nopWriteFile := func(fileName string, text string, writeByteOrderMark bool, data *compiler.WriteFileData) error {
+	nopWriteFile := func(fileName string, text string, data *compiler.WriteFileData) error {
 		return nil
 	}
 

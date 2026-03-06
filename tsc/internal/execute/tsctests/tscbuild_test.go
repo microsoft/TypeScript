@@ -391,7 +391,7 @@ func TestBuildConfigFileErrors(t *testing.T) {
 									"a.ts",
 									"b.ts"
 								]
-							}`), false)
+							}`))
 					},
 				},
 			},
@@ -449,7 +449,7 @@ func TestBuildConfigFileErrors(t *testing.T) {
 									"a.ts",
 									"b.ts"
 								]
-							}`), false)
+							}`))
 					},
 				},
 			},
@@ -718,7 +718,7 @@ func TestBuildDemoProject(t *testing.T) {
 									"rootDir": "."
 								},
 							}
-						`), false)
+						`))
 					},
 				},
 			},
@@ -1930,7 +1930,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 								tags() { }
 								private p = 12
 							};
-						`), false)
+						`))
 					},
 				},
 				{
@@ -1969,7 +1969,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 								tags() { }
 								private p = 12
 							};
-						`), false)
+						`))
 					},
 				},
 				{
@@ -2006,7 +2006,6 @@ func TestBuildProgramUpdates(t *testing.T) {
 									"noUnusedParameters": false,
 								},
 							}`),
-							false,
 						)
 					},
 				},
@@ -2088,7 +2087,7 @@ func TestBuildProgramUpdates(t *testing.T) {
                             "compilerOptions": {
 								"strict": true
 							}
-                        }`), false)
+                        }`))
 					},
 				},
 				{
@@ -2098,7 +2097,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 						{
                             "extends": "./alpha.tsconfig.json",
                             "compilerOptions": { "strict": false }
-                        }`), false)
+                        }`))
 					},
 				},
 				{
@@ -2108,13 +2107,13 @@ func TestBuildProgramUpdates(t *testing.T) {
 						{
                             "extends": "./alpha.tsconfig.json",
                             "files": ["other.ts"]
-                        }`), false)
+                        }`))
 					},
 				},
 				{
 					caption: "update aplha config",
 					edit: func(sys *TestSys) {
-						sys.writeFileNoError("/user/username/projects/project/alpha.tsconfig.json", "{}", false)
+						sys.writeFileNoError("/user/username/projects/project/alpha.tsconfig.json", "{}")
 					},
 				},
 				{
@@ -2123,7 +2122,7 @@ func TestBuildProgramUpdates(t *testing.T) {
 						sys.writeFileNoError("/user/username/projects/project/extendsConfig2.tsconfig.json", stringtestutil.Dedent(`
 						{
                             "compilerOptions": { "strictNullChecks": true }
-                        }`), false)
+                        }`))
 					},
 				},
 				{
@@ -2134,7 +2133,7 @@ func TestBuildProgramUpdates(t *testing.T) {
                             "extends": ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
                             "compilerOptions": { "composite": false },
                             "files": ["other2.ts"],
-                        }`), false)
+                        }`))
 					},
 				},
 				{
@@ -2206,7 +2205,7 @@ func TestBuildProgramUpdates(t *testing.T) {
                                 },
                             ],
                             "files": [],
-                        }`), false)
+                        }`))
 					},
 				},
 			},
@@ -3224,13 +3223,13 @@ class someClass2 { }`,
 			{
 				caption: "Change to new File and build core",
 				edit: func(sys *TestSys) {
-					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", `export const newFileConst = 30;`, false)
+					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", `export const newFileConst = 30;`)
 				},
 			},
 			{
 				caption: "Change to new File and build core",
 				edit: func(sys *TestSys) {
-					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", "\nexport class someClass2 { }", false)
+					sys.writeFileNoError("/user/username/projects/sample1/core/newfile.ts", "\nexport class someClass2 { }")
 				},
 			},
 		}
@@ -3377,7 +3376,7 @@ class someClass2 { }`,
 					// Update a file in the leaf node (tests), only it should rebuild the last one
 					caption: "Only builds the leaf node project",
 					edit: func(sys *TestSys) {
-						sys.writeFileNoError("/user/username/projects/sample1/tests/index.ts", "const m = 10;", false)
+						sys.writeFileNoError("/user/username/projects/sample1/tests/index.ts", "const m = 10;")
 					},
 				},
 				{
@@ -3517,7 +3516,7 @@ class someClass2 { }`,
 						sys.writeFileNoError("/user/username/projects/sample1/tests/tsconfig.base.json", stringtestutil.Dedent(`
 						{
 							"compilerOptions": { }
-						}`), false)
+						}`))
 					},
 				},
 			},
@@ -3779,7 +3778,7 @@ class someClass2 { }`,
 				{
 					caption: "Write logic",
 					edit: func(sys *TestSys) {
-						sys.writeFileNoError("/user/username/projects/sample1/logic/tsconfig.json", getLogicConfig(), false)
+						sys.writeFileNoError("/user/username/projects/sample1/logic/tsconfig.json", getLogicConfig())
 					},
 				},
 			},
@@ -3817,7 +3816,7 @@ class someClass2 { }`,
 				{
 					caption: "Add new file",
 					edit: func(sys *TestSys) {
-						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`, false)
+						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`)
 					},
 				},
 				noChange,
@@ -3841,7 +3840,7 @@ class someClass2 { }`,
 				{
 					caption: "Add new file",
 					edit: func(sys *TestSys) {
-						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`, false)
+						sys.writeFileNoError("/user/username/projects/sample1/core/file3.ts", `export const y = 10;`)
 					},
 				},
 				noChange,

@@ -12,6 +12,7 @@ import (
 	"sync"
 	"testing/fstest"
 	"time"
+	"unsafe"
 
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -498,7 +499,7 @@ func (m *MapFS) MkdirAll(path string, perm fs.FileMode) error {
 	return m.mkdirAll(path, perm)
 }
 
-func (m *MapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
+func (m *MapFS) WriteFile(path string, data string, perm fs.FileMode) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -526,7 +527,7 @@ func (m *MapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
 	}
 
 	m.setEntry(path, cp, fstest.MapFile{
-		Data:    data,
+		Data:    unsafe.Slice(unsafe.StringData(data), len(data)),
 		ModTime: m.clock.Now(),
 		Mode:    perm &^ umask,
 	})

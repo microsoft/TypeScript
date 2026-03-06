@@ -470,7 +470,7 @@ func (fs *sourceFS) WalkDir(root string, walkFn vfs.WalkDirFunc) error {
 }
 
 // WriteFile implements vfs.FS.
-func (fs *sourceFS) WriteFile(path string, data string, writeByteOrderMark bool) error {
+func (fs *sourceFS) WriteFile(path string, data string) error {
 	panic("unimplemented")
 }
 
