@@ -1256,6 +1256,12 @@ func (s *Scanner) ScanJsxIdentifier() ast.Kind {
 
 func (s *Scanner) ScanJsxAttributeValue() ast.Kind {
 	s.fullStartPos = s.pos
+	// Skip whitespace between '=' and the value so tokenStart lands on the
+	// opening quote, not on trivia.
+	for ch, size := s.charAndSize(); size > 0 && stringutil.IsWhiteSpaceLike(ch); ch, size = s.charAndSize() {
+		s.pos += size
+	}
+	s.tokenStart = s.pos
 	switch s.char() {
 	case '"', '\'':
 		s.tokenValue = s.scanString(true /*jsxAttributeString*/)
