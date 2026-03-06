@@ -416,7 +416,18 @@ function parseFormatStatement(funcName: string, args: readonly ts.Expression[]):
                 kind: "format",
                 goStatement: `f.Configure(t, ${varName})`,
             }];
-        case "selection":
+        case "selection": {
+            const startMarker = getStringLiteralLike(args[0])?.text;
+            const endMarker = getStringLiteralLike(args[1])?.text;
+            if (startMarker === undefined || endMarker === undefined) {
+                console.error(`format.selection: expected two string literal marker names`);
+                break;
+            }
+            return [{
+                kind: "format",
+                goStatement: `f.FormatSelection(t, ${JSON.stringify(startMarker)}, ${JSON.stringify(endMarker)})`,
+            }];
+        }
         case "onType":
         case "copyFormatOptions":
         case "setFormatOptions":
@@ -3104,7 +3115,7 @@ interface EditCmd {
 }
 
 interface FormatCmd {
-    kind: "format"; // | "formatSelection" | "formatOnType" | "copyFormatOptions" | "setFormatOptions" | "setOption";
+    kind: "format";
     goStatement: string;
 }
 
