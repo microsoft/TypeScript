@@ -1,0 +1,4 @@
+// === documentHighlights ===
+// === /a.ts ===
+// subTitle:
+// /*HIGHLIGHTS*/export const title: string

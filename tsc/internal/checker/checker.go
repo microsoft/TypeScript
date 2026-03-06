@@ -26246,11 +26246,17 @@ func (c *Checker) getPropertyTypeForIndexType(originalObjectType *Type, objectTy
 		}
 		prop := c.getPropertyOfType(objectType, propName)
 		if prop != nil {
-			// !!!
-			// if accessFlags&AccessFlagsReportDeprecated != 0 && accessNode != nil && len(prop.declarations) != 0 && c.isDeprecatedSymbol(prop) && c.isUncalledFunctionReference(accessNode, prop) {
-			// 	deprecatedNode := /* TODO(TS-TO-GO) QuestionQuestionToken BinaryExpression: accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode) */ TODO
-			// 	c.addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName /* as string */)
-			// }
+			if accessFlags&AccessFlagsReportDeprecated != 0 && accessNode != nil && len(prop.Declarations) != 0 && c.isDeprecatedSymbol(prop) && c.isUncalledFunctionReference(accessNode, prop) {
+				var deprecatedNode *ast.Node
+				if accessExpression != nil {
+					deprecatedNode = accessExpression.AsElementAccessExpression().ArgumentExpression
+				} else if ast.IsIndexedAccessTypeNode(accessNode) {
+					deprecatedNode = accessNode.AsIndexedAccessTypeNode().IndexType
+				} else {
+					deprecatedNode = accessNode
+				}
+				c.addDeprecatedSuggestion(deprecatedNode, prop.Declarations, propName)
+			}
 			if accessExpression != nil {
 				c.markPropertyAsReferenced(prop, accessExpression, c.isSelfTypeAccess(accessExpression.Expression(), objectType.symbol))
 				if c.isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression)) {
