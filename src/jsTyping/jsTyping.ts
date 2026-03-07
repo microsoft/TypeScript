@@ -327,7 +327,8 @@ export const enum NameValidationResult {
     NameTooLong,
     NameStartsWithDot,
     NameStartsWithUnderscore,
-    NameContainsNonURISafeCharacters,
+    NameContainsInvalidCharacters,
+    NameContainsNonURISafeCharacters = NameContainsInvalidCharacters, // for backward compatibility
 }
 
 const maxPackageNameLength = 214;
@@ -381,8 +382,8 @@ function validatePackageNameWorker(packageName: string, supportScopedPackage: bo
             return NameValidationResult.Ok;
         }
     }
-    if (encodeURIComponent(packageName) !== packageName) {
-        return NameValidationResult.NameContainsNonURISafeCharacters;
+    if (!/^[\w.-]+$/.test(packageName)) {
+        return NameValidationResult.NameContainsInvalidCharacters;
     }
     return NameValidationResult.Ok;
 }
@@ -405,8 +406,8 @@ function renderPackageNameValidationFailureWorker(typing: string, result: NameVa
             return `'${typing}':: ${kind} name '${name}' cannot start with '.'`;
         case NameValidationResult.NameStartsWithUnderscore:
             return `'${typing}':: ${kind} name '${name}' cannot start with '_'`;
-        case NameValidationResult.NameContainsNonURISafeCharacters:
-            return `'${typing}':: ${kind} name '${name}' contains non URI safe characters`;
+        case NameValidationResult.NameContainsInvalidCharacters:
+            return `'${typing}':: ${kind} name '${name}' contains invalid characters`;
         case NameValidationResult.Ok:
             return Debug.fail(); // Shouldn't have called this.
         default:
