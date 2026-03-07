@@ -14901,6 +14901,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 symbol.links.checkFlags & CheckFlags.StripOptional ? removeMissingOrUndefinedType(propType) :
                 propType;
             if (!popTypeResolution()) {
+                symbol.links.type = errorType;
                 error(currentNode, Diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, symbolToString(symbol), typeToString(mappedType));
                 type = errorType;
             }

@@ -1,0 +1,12 @@
+issue63090.ts(2,10): error TS2615: Type of property 'M' circularly references itself in mapped type '{ M: any; }'.
+issue63090.ts(2,10): error TS2615: Type of property 'M' circularly references itself in mapped type '{ [P in "M"]: any; }'.
+
+
+==== issue63090.ts (2 errors) ====
+    type N<T, K extends string> = T | { [P in K]: N<keyof T, K> }[K];
+    type M = N<number, "M">;
+             ~~~~~~~~~~~~~~
+!!! error TS2615: Type of property 'M' circularly references itself in mapped type '{ M: any; }'.
+             ~~~~~~~~~~~~~~
+!!! error TS2615: Type of property 'M' circularly references itself in mapped type '{ [P in "M"]: any; }'.
+    

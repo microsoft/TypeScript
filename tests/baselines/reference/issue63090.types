@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/issue63090.ts] ////
+
+=== issue63090.ts ===
+type N<T, K extends string> = T | { [P in K]: N<keyof T, K> }[K];
+>N : N<T, K>
+>  : ^^^^^^^
+
+type M = N<number, "M">;
+>M : any
+>  : ^^^
+

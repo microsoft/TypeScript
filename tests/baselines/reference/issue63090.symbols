@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/issue63090.ts] ////
+
+=== issue63090.ts ===
+type N<T, K extends string> = T | { [P in K]: N<keyof T, K> }[K];
+>N : Symbol(N, Decl(issue63090.ts, 0, 0))
+>T : Symbol(T, Decl(issue63090.ts, 0, 7))
+>K : Symbol(K, Decl(issue63090.ts, 0, 9))
+>T : Symbol(T, Decl(issue63090.ts, 0, 7))
+>P : Symbol(P, Decl(issue63090.ts, 0, 37))
+>K : Symbol(K, Decl(issue63090.ts, 0, 9))
+>N : Symbol(N, Decl(issue63090.ts, 0, 0))
+>T : Symbol(T, Decl(issue63090.ts, 0, 7))
+>K : Symbol(K, Decl(issue63090.ts, 0, 9))
+>K : Symbol(K, Decl(issue63090.ts, 0, 9))
+
+type M = N<number, "M">;
+>M : Symbol(M, Decl(issue63090.ts, 0, 65))
+>N : Symbol(N, Decl(issue63090.ts, 0, 0))
+
