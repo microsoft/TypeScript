@@ -114,7 +114,8 @@ func shouldRescanJsxIdentifier(node *ast.Node) bool {
 		case ast.KindJsxAttribute,
 			ast.KindJsxOpeningElement,
 			ast.KindJsxClosingElement,
-			ast.KindJsxSelfClosingElement:
+			ast.KindJsxSelfClosingElement,
+			ast.KindJsxNamespacedName:
 			// May parse an identifier like `module-layout`; that will be scanned as a keyword at first, but we should parse the whole thing to get an identifier.
 			return ast.IsKeywordKind(node.Kind) || node.Kind == ast.KindIdentifier
 		}
