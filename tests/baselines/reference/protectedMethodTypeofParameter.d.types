@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/protectedMethodTypeofParameter.d.ts] ////
+
+=== protectedMethodTypeofParameter.d.ts ===
+export interface Properties {
+    propertyA: number;
+>propertyA : number
+>          : ^^^^^^
+
+    propertyB: string;
+>propertyB : string
+>          : ^^^^^^
+}
+export declare class A {
+>A : A
+>  : ^
+
+    getPropertyValue_Ok(properties: Properties, propertyName: keyof Properties): Properties[typeof propertyName];
+>getPropertyValue_Ok : (properties: Properties, propertyName: keyof Properties) => Properties[typeof propertyName]
+>                    : ^          ^^          ^^            ^^                ^^^^^                               
+>properties : Properties
+>           : ^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+    protected getPropertyValue_Error(properties: Properties, propertyName: keyof Properties): Properties[typeof propertyName];
+>getPropertyValue_Error : (properties: Properties, propertyName: keyof Properties) => Properties[typeof propertyName]
+>                       : ^          ^^          ^^            ^^                ^^^^^                               
+>properties : Properties
+>           : ^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+}
+
