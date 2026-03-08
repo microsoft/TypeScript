@@ -282,7 +282,7 @@ func (l *LanguageService) newDocumentSymbol(node *ast.Node, name *ast.Node, chil
 		nameEndPos = getInteriorModule(node).Name().End()
 	} else if ast.IsAnyExportAssignment(node) && node.AsExportAssignment().IsExportEquals {
 		text = "export="
-		if name != nil {
+		if !ast.NodeIsMissing(name) {
 			nameStartPos = scanner.SkipTrivia(file.Text(), name.Pos())
 			nameEndPos = name.End()
 		} else {
