@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/protectedMethodTypeofParameter.ts] ////
+
+=== protectedMethodTypeofParameter.ts ===
+export interface Properties {
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+  propertyA: number;
+>propertyA : Symbol(Properties.propertyA, Decl(protectedMethodTypeofParameter.ts, 0, 29))
+
+  propertyB: string;
+>propertyB : Symbol(Properties.propertyB, Decl(protectedMethodTypeofParameter.ts, 1, 20))
+}
+
+export class A {
+>A : Symbol(A, Decl(protectedMethodTypeofParameter.ts, 3, 1))
+
+  public getPropertyValue_Ok(
+>getPropertyValue_Ok : Symbol(A.getPropertyValue_Ok, Decl(protectedMethodTypeofParameter.ts, 5, 16))
+
+    properties: Properties,
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 6, 29))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+    propertyName: keyof Properties,
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 7, 27))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+  ): Properties[typeof propertyName] {
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 7, 27))
+
+    return properties[propertyName];
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 6, 29))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 7, 27))
+  }
+
+  protected getPropertyValue_Error(
+>getPropertyValue_Error : Symbol(A.getPropertyValue_Error, Decl(protectedMethodTypeofParameter.ts, 11, 3))
+
+    properties: Properties,
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 13, 35))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+    propertyName: keyof Properties,
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 14, 27))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+  ): Properties[typeof propertyName] {
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 14, 27))
+
+    return properties[propertyName];
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 13, 35))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 14, 27))
+  }
+}
+

@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/protectedMethodTypeofParameter.ts] ////
+
+=== protectedMethodTypeofParameter.ts ===
+export interface Properties {
+  propertyA: number;
+>propertyA : number
+>          : ^^^^^^
+
+  propertyB: string;
+>propertyB : string
+>          : ^^^^^^
+}
+
+export class A {
+>A : A
+>  : ^
+
+  public getPropertyValue_Ok(
+>getPropertyValue_Ok : (properties: Properties, propertyName: keyof Properties) => Properties[typeof propertyName]
+>                    : ^          ^^          ^^            ^^                ^^^^^                               
+
+    properties: Properties,
+>properties : Properties
+>           : ^^^^^^^^^^
+
+    propertyName: keyof Properties,
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+  ): Properties[typeof propertyName] {
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+    return properties[propertyName];
+>properties[propertyName] : string | number
+>                         : ^^^^^^^^^^^^^^^
+>properties : Properties
+>           : ^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+  }
+
+  protected getPropertyValue_Error(
+>getPropertyValue_Error : (properties: Properties, propertyName: keyof Properties) => Properties[typeof propertyName]
+>                       : ^          ^^          ^^            ^^                ^^^^^                               
+
+    properties: Properties,
+>properties : Properties
+>           : ^^^^^^^^^^
+
+    propertyName: keyof Properties,
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+  ): Properties[typeof propertyName] {
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+    return properties[propertyName];
+>properties[propertyName] : string | number
+>                         : ^^^^^^^^^^^^^^^
+>properties : Properties
+>           : ^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+  }
+}
+

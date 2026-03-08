@@ -31,6 +31,7 @@ import {
     getAllAccessorDeclarations,
     getNameOfDeclaration,
     getTextOfNode,
+    hasEffectiveModifier,
     hasSyntacticModifier,
     ImportEqualsDeclaration,
     IndexSignatureDeclaration,
@@ -220,6 +221,9 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
                 Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_private_name_1;
         }
         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+            if (hasEffectiveModifier(node, ModifierFlags.Protected)) {
+                return undefined;
+            }
             return symbolAccessibilityResult.errorModuleName ?
                 symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                     Diagnostics.Public_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -353,7 +357,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         };
     }
 
-    function getReturnTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+    function getReturnTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
         let diagnosticMessage: DiagnosticMessage;
         switch (node.kind) {
             case SyntaxKind.ConstructSignature:
@@ -387,6 +391,9 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                         Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
                 }
                 else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (hasEffectiveModifier(node, ModifierFlags.Protected)) {
+                        return undefined;
+                    }
                     diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
