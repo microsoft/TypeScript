@@ -34,11 +34,11 @@ export class A {
 >propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 7, 27))
   }
 
-  protected getPropertyValue_Error(
->getPropertyValue_Error : Symbol(A.getPropertyValue_Error, Decl(protectedMethodTypeofParameter.ts, 11, 3))
+  protected getPropertyValue_Protected(
+>getPropertyValue_Protected : Symbol(A.getPropertyValue_Protected, Decl(protectedMethodTypeofParameter.ts, 11, 3))
 
     properties: Properties,
->properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 13, 35))
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 13, 39))
 >Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
 
     propertyName: keyof Properties,
@@ -50,8 +50,35 @@ export class A {
 >propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 14, 27))
 
     return properties[propertyName];
->properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 13, 35))
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 13, 39))
 >propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 14, 27))
+  }
+
+  protected setPropertyValue_Protected(
+>setPropertyValue_Protected : Symbol(A.setPropertyValue_Protected, Decl(protectedMethodTypeofParameter.ts, 18, 3))
+
+    properties: Properties,
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 20, 39))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+    propertyName: keyof Properties,
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 21, 27))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+
+    propertyValue: Properties[typeof propertyName],
+>propertyValue : Symbol(propertyValue, Decl(protectedMethodTypeofParameter.ts, 22, 35))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 21, 27))
+
+  ): void {
+    void properties;
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.ts, 20, 39))
+
+    void propertyName;
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.ts, 21, 27))
+
+    void propertyValue;
+>propertyValue : Symbol(propertyValue, Decl(protectedMethodTypeofParameter.ts, 22, 35))
   }
 }
 

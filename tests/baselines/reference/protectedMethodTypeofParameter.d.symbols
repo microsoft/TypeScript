@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/protectedMethodTypeofParameter.d.ts] ////
+
+=== protectedMethodTypeofParameter.d.ts ===
+export interface Properties {
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+
+    propertyA: number;
+>propertyA : Symbol(Properties.propertyA, Decl(protectedMethodTypeofParameter.d.ts, 0, 29))
+
+    propertyB: string;
+>propertyB : Symbol(Properties.propertyB, Decl(protectedMethodTypeofParameter.d.ts, 1, 22))
+}
+export declare class A {
+>A : Symbol(A, Decl(protectedMethodTypeofParameter.d.ts, 3, 1))
+
+    getPropertyValue_Ok(properties: Properties, propertyName: keyof Properties): Properties[typeof propertyName];
+>getPropertyValue_Ok : Symbol(A.getPropertyValue_Ok, Decl(protectedMethodTypeofParameter.d.ts, 4, 24))
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.d.ts, 5, 24))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.d.ts, 5, 47))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.d.ts, 5, 47))
+
+    protected getPropertyValue_Protected(properties: Properties, propertyName: keyof Properties): Properties[typeof propertyName];
+>getPropertyValue_Protected : Symbol(A.getPropertyValue_Protected, Decl(protectedMethodTypeofParameter.d.ts, 5, 113))
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.d.ts, 6, 41))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.d.ts, 6, 64))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.d.ts, 6, 64))
+
+    protected setPropertyValue_Protected(properties: Properties, propertyName: keyof Properties, propertyValue: Properties[typeof propertyName]): void;
+>setPropertyValue_Protected : Symbol(A.setPropertyValue_Protected, Decl(protectedMethodTypeofParameter.d.ts, 6, 130))
+>properties : Symbol(properties, Decl(protectedMethodTypeofParameter.d.ts, 7, 41))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.d.ts, 7, 64))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyValue : Symbol(propertyValue, Decl(protectedMethodTypeofParameter.d.ts, 7, 96))
+>Properties : Symbol(Properties, Decl(protectedMethodTypeofParameter.d.ts, 0, 0))
+>propertyName : Symbol(propertyName, Decl(protectedMethodTypeofParameter.d.ts, 7, 64))
+}
+

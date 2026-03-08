@@ -40,9 +40,9 @@ export class A {
 >             : ^^^^^^^^^^^^^^^^
   }
 
-  protected getPropertyValue_Error(
->getPropertyValue_Error : (properties: Properties, propertyName: keyof Properties) => Properties[typeof propertyName]
->                       : ^          ^^          ^^            ^^                ^^^^^                               
+  protected getPropertyValue_Protected(
+>getPropertyValue_Protected : (properties: Properties, propertyName: keyof Properties) => Properties[typeof propertyName]
+>                           : ^          ^^          ^^            ^^                ^^^^^                               
 
     properties: Properties,
 >properties : Properties
@@ -63,6 +63,44 @@ export class A {
 >           : ^^^^^^^^^^
 >propertyName : keyof Properties
 >             : ^^^^^^^^^^^^^^^^
+  }
+
+  protected setPropertyValue_Protected(
+>setPropertyValue_Protected : (properties: Properties, propertyName: keyof Properties, propertyValue: Properties[typeof propertyName]) => void
+>                           : ^          ^^          ^^            ^^                ^^             ^^                               ^^^^^    
+
+    properties: Properties,
+>properties : Properties
+>           : ^^^^^^^^^^
+
+    propertyName: keyof Properties,
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+    propertyValue: Properties[typeof propertyName],
+>propertyValue : string | number
+>              : ^^^^^^^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+  ): void {
+    void properties;
+>void properties : undefined
+>                : ^^^^^^^^^
+>properties : Properties
+>           : ^^^^^^^^^^
+
+    void propertyName;
+>void propertyName : undefined
+>                  : ^^^^^^^^^
+>propertyName : keyof Properties
+>             : ^^^^^^^^^^^^^^^^
+
+    void propertyValue;
+>void propertyValue : undefined
+>                   : ^^^^^^^^^
+>propertyValue : string | number
+>              : ^^^^^^^^^^^^^^^
   }
 }
 

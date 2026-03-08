@@ -13,10 +13,20 @@ export class A {
     return properties[propertyName];
   }
 
-  protected getPropertyValue_Error(
+  protected getPropertyValue_Protected(
     properties: Properties,
     propertyName: keyof Properties,
   ): Properties[typeof propertyName] {
     return properties[propertyName];
+  }
+
+  protected setPropertyValue_Protected(
+    properties: Properties,
+    propertyName: keyof Properties,
+    propertyValue: Properties[typeof propertyName],
+  ): void {
+    void properties;
+    void propertyName;
+    void propertyValue;
   }
 }

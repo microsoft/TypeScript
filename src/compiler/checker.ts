@@ -6158,6 +6158,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 errorNode: firstIdentifier,
             };
         }
+        // Parameters are always in scope within their enclosing function; `typeof paramName` in a
+        // return type annotation is valid regardless of method visibility (public, protected, private).
+        if (symbol.declarations && every(symbol.declarations, isParameter)) {
+            return { accessibility: SymbolAccessibility.Accessible };
+        }
         // Verify if the symbol is accessible
         return hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible) || {
             accessibility: SymbolAccessibility.NotAccessible,
