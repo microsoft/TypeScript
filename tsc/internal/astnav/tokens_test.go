@@ -476,6 +476,35 @@ func TestFindPrecedingToken(t *testing.T) {
 			},
 		)
 	})
+
+	t.Run("go baseline json", func(t *testing.T) {
+		t.Parallel()
+		baselineGoTokensJSON(t, "FindPrecedingToken", func(file *ast.SourceFile, pos int) *tokenInfo {
+			return toTokenInfo(astnav.FindPrecedingToken(file, pos))
+		})
+	})
+}
+
+func TestFindNextToken(t *testing.T) {
+	t.Parallel()
+	repo.SkipIfNoTypeScriptSubmodule(t)
+
+	t.Run("go baseline json", func(t *testing.T) {
+		t.Parallel()
+		baselineGoTokensJSON(t, "FindNextToken", func(file *ast.SourceFile, pos int) (result *tokenInfo) {
+			// FindNextToken panics (like Go's assert) when the scanner finds trivia between
+			// previousToken.End() and the next syntactic token. Catch those to avoid crashing
+			// the baseline generator; those positions will be absent from the baseline.
+			defer func() {
+				if r := recover(); r != nil {
+					result = nil
+				}
+			}()
+			token := astnav.GetTokenAtPosition(file, pos)
+			next := astnav.FindNextToken(token, file.AsNode(), file)
+			return toTokenInfo(next)
+		})
+	})
 }
 
 func TestUnitFindPrecedingToken(t *testing.T) {

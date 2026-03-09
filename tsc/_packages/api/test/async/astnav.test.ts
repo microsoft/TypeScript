@@ -4,6 +4,8 @@ import { API } from "@typescript/api/async"; // @sync-skip
 // @sync-only-end
 import { createVirtualFileSystem } from "@typescript/api/fs";
 import {
+    findNextToken,
+    findPrecedingToken,
     formatSyntaxKind,
     getTokenAtPosition,
     getTouchingPropertyName,
@@ -117,12 +119,22 @@ describe("astnav", () => {
         {
             name: "getTokenAtPosition",
             baselineFile: "GetTokenAtPosition.mapCode.ts.baseline.json",
-            fn: getTokenAtPosition,
+            fn: (sf: SourceFile, pos: number) => getTokenAtPosition(sf, pos) as Node | undefined,
         },
         {
             name: "getTouchingPropertyName",
             baselineFile: "GetTouchingPropertyName.mapCode.ts.baseline.json",
-            fn: getTouchingPropertyName,
+            fn: (sf: SourceFile, pos: number) => getTouchingPropertyName(sf, pos) as Node | undefined,
+        },
+        {
+            name: "findPrecedingToken",
+            baselineFile: "FindPrecedingToken.mapCode.ts.baseline.json",
+            fn: (sf: SourceFile, pos: number) => findPrecedingToken(sf, pos),
+        },
+        {
+            name: "findNextToken",
+            baselineFile: "FindNextToken.mapCode.ts.baseline.json",
+            fn: (sf: SourceFile, pos: number) => findNextToken(getTokenAtPosition(sf, pos), sf, sf),
         },
     ];
 
@@ -135,11 +147,23 @@ describe("astnav", () => {
             const failures: string[] = [];
 
             for (let pos = 0; pos < fileText.length; pos++) {
-                const result = toTokenInfo(tc.fn(sourceFile, pos));
+                const node = tc.fn(sourceFile, pos);
                 const goExpected = expected.get(pos);
 
                 if (!goExpected) continue;
 
+                if (node === undefined) {
+                    failures.push(
+                        `  pos ${pos}: expected ${goExpected.kind} [${goExpected.pos}, ${goExpected.end}), got undefined`,
+                    );
+                    if (failures.length >= 50) {
+                        failures.push("  ... (truncated, too many failures)");
+                        break;
+                    }
+                    continue;
+                }
+
+                const result = toTokenInfo(node);
                 if (result.kind !== goExpected.kind || result.pos !== goExpected.pos || result.end !== goExpected.end) {
                     failures.push(
                         `  pos ${pos}: expected ${goExpected.kind} [${goExpected.pos}, ${goExpected.end}), ` +
