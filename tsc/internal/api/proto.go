@@ -107,6 +107,7 @@ const (
 	MethodGetParentOfSymbol        Method = "getParentOfSymbol"
 	MethodGetMembersOfSymbol       Method = "getMembersOfSymbol"
 	MethodGetExportsOfSymbol       Method = "getExportsOfSymbol"
+	MethodGetExportSymbolOfSymbol  Method = "getExportSymbolOfSymbol"
 	MethodGetSymbolOfType          Method = "getSymbolOfType"
 	MethodGetSignaturesOfType      Method = "getSignaturesOfType"
 	MethodGetTypeAtLocation        Method = "getTypeAtLocation"
@@ -317,6 +318,7 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetParentOfSymbol:        unmarshallerFor[GetParentOfSymbolParams],
 	MethodGetMembersOfSymbol:       unmarshallerFor[GetMembersOfSymbolParams],
 	MethodGetExportsOfSymbol:       unmarshallerFor[GetExportsOfSymbolParams],
+	MethodGetExportSymbolOfSymbol:  unmarshallerFor[GetExportSymbolOfSymbolParams],
 	MethodGetSymbolOfType:          unmarshallerFor[GetSymbolOfTypeParams],
 	MethodGetSignaturesOfType:      unmarshallerFor[GetSignaturesOfTypeParams],
 	MethodGetTypeAtLocation:        unmarshallerFor[GetTypeAtLocationParams],
@@ -640,6 +642,11 @@ type GetMembersOfSymbolParams struct {
 }
 
 type GetExportsOfSymbolParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Symbol   Handle[ast.Symbol]       `json:"symbol"`
+}
+
+type GetExportSymbolOfSymbolParams struct {
 	Snapshot Handle[project.Snapshot] `json:"snapshot"`
 	Symbol   Handle[ast.Symbol]       `json:"symbol"`
 }

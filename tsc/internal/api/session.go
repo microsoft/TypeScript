@@ -352,6 +352,8 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetMembersOfSymbol(ctx, parsed.(*GetMembersOfSymbolParams))
 	case string(MethodGetExportsOfSymbol):
 		return s.handleGetExportsOfSymbol(ctx, parsed.(*GetExportsOfSymbolParams))
+	case string(MethodGetExportSymbolOfSymbol):
+		return s.handleGetExportSymbolOfSymbol(ctx, parsed.(*GetExportSymbolOfSymbolParams))
 	case string(MethodGetSymbolOfType):
 		return s.handleGetSymbolOfType(ctx, parsed.(*GetSymbolOfTypeParams))
 	case string(MethodGetSignaturesOfType):
@@ -929,6 +931,25 @@ func (s *Session) handleGetExportsOfSymbol(ctx context.Context, params *GetExpor
 	}
 
 	return results, nil
+}
+
+// handleGetExportSymbolOfSymbol returns the export symbol of a symbol.
+func (s *Session) handleGetExportSymbolOfSymbol(ctx context.Context, params *GetExportSymbolOfSymbolParams) (*SymbolResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	symbol, err := sd.resolveSymbolHandle(params.Symbol)
+	if err != nil {
+		return nil, err
+	}
+
+	if symbol.ExportSymbol != nil {
+		return sd.registerSymbol(symbol.ExportSymbol), nil
+	}
+
+	return sd.registerSymbol(symbol), nil
 }
 
 // handleGetSymbolOfType returns the symbol associated with a type.
