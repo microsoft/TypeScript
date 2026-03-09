@@ -16,7 +16,7 @@ You can enable this extension by modifying the following settings:
 {
     // UI Setting:
     // TypeScript (Native Preview) > Use Tsgo
-    "typescript.experimental.useTsgo": true
+    "js/ts.experimental.useTsgo": true
 }
 ```
 
