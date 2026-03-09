@@ -625,6 +625,9 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     get declarationList(): RemoteNode | undefined {
         return this.getNamedChild("declarationList") as RemoteNode;
     }
+    get declarations(): RemoteNode | undefined {
+        return this.getNamedChild("declarations") as RemoteNode;
+    }
     get default(): RemoteNode | undefined {
         return this.getNamedChild("default") as RemoteNode;
     }

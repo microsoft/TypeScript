@@ -594,6 +594,9 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 	case ast.KindVariableStatement:
 		n := node.AsVariableStatement()
 		return (boolToByte(n.Modifiers() != nil) << 0) | (boolToByte(n.DeclarationList != nil) << 1)
+	case ast.KindVariableDeclarationList:
+		n := node.AsVariableDeclarationList()
+		return (boolToByte(n.Declarations != nil) << 0)
 	case ast.KindVariableDeclaration:
 		n := node.AsVariableDeclaration()
 		return (boolToByte(n.Name() != nil) << 0) | (boolToByte(n.ExclamationToken != nil) << 1) | (boolToByte(n.Type != nil) << 2) | (boolToByte(n.Initializer != nil) << 3)
