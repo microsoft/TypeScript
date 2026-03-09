@@ -172,7 +172,7 @@ func TestSnapshot(t *testing.T) {
 		})
 
 		// Now trigger snapshot clone with both program update and auto-imports registry building.
-		_, err := session.GetLanguageServiceWithAutoImports(ctx, otherIndexURI)
+		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, otherIndexURI)
 		assert.NilError(t, err)
 	})
 }

@@ -481,8 +481,10 @@ func (s *Snapshot) Ref() {
 	s.refCount.Add(1)
 }
 
-func (s *Snapshot) Deref() bool {
-	return s.refCount.Add(-1) == 0
+func (s *Snapshot) Deref(session *Session) {
+	if s.refCount.Add(-1) == 0 {
+		s.dispose(session)
+	}
 }
 
 func (s *Snapshot) dispose(session *Session) {

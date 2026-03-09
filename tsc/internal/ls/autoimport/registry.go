@@ -222,7 +222,7 @@ func (r *Registry) IsPreparedForImportingFile(fileName string, projectPath tspat
 	}
 	projectBucket, ok := r.projects[projectPath]
 	if !ok {
-		panic("project bucket missing")
+		return false
 	}
 	path := r.toPath(fileName)
 	if projectBucket.state.possiblyNeedsRebuildForFile(path, preferences) {
@@ -444,8 +444,15 @@ func (b *registryBuilder) updateBucketAndDirectoryExistence(change RegistryChang
 		}
 	}
 
+	if change.RequestedFile != "" {
+		neededProjects[core.FirstResult(b.host.GetDefaultProject(change.RequestedFile))] = struct{}{}
+		if !b.specifierCache.Has(change.RequestedFile) {
+			b.specifierCache.Set(change.RequestedFile, &collections.SyncMap[tspath.Path, string]{})
+		}
+	}
+
 	for path := range b.base.specifierCache {
-		if _, ok := change.OpenFiles[path]; !ok {
+		if _, ok := change.OpenFiles[path]; !ok && path != change.RequestedFile {
 			b.specifierCache.Delete(path)
 		}
 	}

@@ -607,9 +607,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		}
 		if doAsyncWork != nil {
 			return func() error {
-				if ctx.Err() != nil {
-					return ctx.Err()
-				}
+				// note: ctx.Err() has to be checked in the async work to allow async handlers to cleanup resources correctly
 				asyncWorkErr := doAsyncWork()
 				s.logger.Info(core.IfElse(asyncWorkErr != nil, "error handling method '", "handled method '"), req.Method, "'", idStr, " in ", time.Since(start))
 				return asyncWorkErr
@@ -766,18 +764,21 @@ func registerLanguageServiceWithAutoImportsRequestHandler[Req lsproto.HasTextDoc
 		if req.Params != nil {
 			params = req.Params.(Req)
 		}
-		languageService, err := s.session.GetLanguageService(ctx, params.TextDocumentURI())
+		languageService, snapshot, releaseSnapshot, err := s.session.GetLanguageServiceAndSnapshot(ctx, params.TextDocumentURI())
 		if err != nil {
 			return nil, err
 		}
 		return func() error {
+			defer releaseSnapshot()
 			defer s.recover(req)
 			resp, lsErr := fn(s, ctx, languageService, params)
 			if errors.Is(lsErr, ls.ErrNeedsAutoImports) {
-				languageService, lsErr = s.session.GetLanguageServiceWithAutoImports(ctx, params.TextDocumentURI())
+				var releaseAutoImports func()
+				languageService, releaseAutoImports, lsErr = s.session.GetLanguageServiceWithAutoImports(ctx, snapshot, params.TextDocumentURI())
 				if lsErr != nil {
 					return lsErr
 				}
+				defer releaseAutoImports()
 				if ctx.Err() != nil {
 					return ctx.Err()
 				}
@@ -818,6 +819,9 @@ func registerMultiProjectReferenceRequestHandler[Req lsproto.HasTextDocumentPosi
 			resp, lsErr := fn(defaultLs, ctx, params, orchestrator)
 			if lsErr != nil {
 				return lsErr
+			}
+			if ctx.Err() != nil {
+				return ctx.Err()
 			}
 			return s.sendResult(req.ID, resp)
 		}, nil

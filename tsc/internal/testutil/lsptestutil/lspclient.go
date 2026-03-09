@@ -247,18 +247,40 @@ func SendRequest[Params, Resp any](t *testing.T, c *LSPClient, info lsproto.Requ
 	return resp.Message(), result, ok
 }
 
+// SendRequestAsync sends a typed request and returns a waiter for its response.
+func SendRequestAsync[Params, Resp any](t *testing.T, c *LSPClient, info lsproto.RequestInfo[Params, Resp], params Params) func() (*lsproto.Message, Resp, bool) {
+	id := c.NextID()
+	reqID := lsproto.NewID(lsproto.IntegerOrString{Integer: &id})
+	req := info.NewRequestMessage(reqID, params)
+
+	responseChan := c.startRequestWorker(t, req, reqID)
+	return func() (*lsproto.Message, Resp, bool) {
+		resp, ok := c.waitForResponse(t, reqID, responseChan)
+		if !ok {
+			return nil, *new(Resp), false
+		}
+		result, ok := resp.Result.(Resp)
+		return resp.Message(), result, ok
+	}
+}
+
 // This is an untyped version of SendRequest. Prefer to use SendRequest when possible.
 func (c *LSPClient) SendRequestWorker(t *testing.T, req *lsproto.RequestMessage, reqID *jsonrpc.ID) (*lsproto.ResponseMessage, bool) {
-	// Create response channel and register it
+	responseChan := c.startRequestWorker(t, req, reqID)
+	return c.waitForResponse(t, reqID, responseChan)
+}
+
+func (c *LSPClient) startRequestWorker(t *testing.T, req *lsproto.RequestMessage, reqID *jsonrpc.ID) chan *lsproto.ResponseMessage {
 	responseChan := make(chan *lsproto.ResponseMessage, 1)
 	c.pendingRequestsMu.Lock()
 	c.pendingRequests[*reqID] = responseChan
 	c.pendingRequestsMu.Unlock()
 
-	// Send the request
 	c.WriteMsg(t, req.Message())
+	return responseChan
+}
 
-	// Wait for response with context
+func (c *LSPClient) waitForResponse(t *testing.T, reqID *jsonrpc.ID, responseChan <-chan *lsproto.ResponseMessage) (*lsproto.ResponseMessage, bool) {
 	ctx := t.Context()
 	var resp *lsproto.ResponseMessage
 	select {
