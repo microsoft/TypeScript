@@ -2026,11 +2026,15 @@ func ResolveConfig(moduleName string, containingFile string, host ResolutionHost
 }
 
 func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host ResolutionHost) []string {
-	if options.Types != nil {
-		return options.Types
+	if !options.UsesWildcardTypes() {
+		if options.Types != nil {
+			return options.Types
+		}
+		return []string{}
 	}
 
-	var result []string
+	// Walk the primary type lookup locations
+	var wildcardMatches []string
 	typeRoots, _ := options.GetEffectiveTypeRoots(host.GetCurrentDirectory())
 	for _, root := range typeRoots {
 		if host.FS().DirectoryExists(root) {
@@ -2048,13 +2052,24 @@ func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host Resoluti
 				if !isNotNeededPackage {
 					baseFileName := tspath.GetBaseFileName(normalized)
 					if !strings.HasPrefix(baseFileName, ".") {
-						result = append(result, baseFileName)
+						wildcardMatches = append(wildcardMatches, baseFileName)
 					}
 				}
 			}
 		}
 	}
-	return result
+
+	// Order potentially matters in program construction, so substitute
+	// in the wildcard in the position it was specified in the types array
+	var result []string
+	for _, t := range options.Types {
+		if t == "*" {
+			result = append(result, wildcardMatches...)
+		} else {
+			result = append(result, t)
+		}
+	}
+	return core.Deduplicate(result)
 }
 
 type ResolvedEntrypoints struct {

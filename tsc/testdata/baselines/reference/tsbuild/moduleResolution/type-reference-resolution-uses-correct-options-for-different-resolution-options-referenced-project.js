@@ -27,7 +27,7 @@ declare type TheNum = "type1";
 declare type TheNum2 = "type2";
 
 tsgo -b packages/pkg1.tsconfig.json packages/pkg2.tsconfig.json --verbose --traceResolution
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/pkg1.tsconfig.json
@@ -37,24 +37,27 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'packages/pkg1.tsconfig.json'...
 
-======== Resolving type reference directive 'sometype', containing file '/home/src/workspaces/project/packages/__inferred type names__.ts', root directory '/home/src/workspaces/project/packages/typeroot1'. ========
-Resolving with primary search path '/home/src/workspaces/project/packages/typeroot1'.
-File '/home/src/workspaces/project/packages/typeroot1/sometype.d.ts' does not exist.
-File '/home/src/workspaces/project/packages/typeroot1/sometype/package.json' does not exist.
-File '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts', result '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts'.
-======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts', primary: true. ========
+[96mpackages/pkg1_index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'TheNum'.
+
+[7m1[0m export const theNum: TheNum = "type1";
+[7m [0m [91m                     ~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'packages/pkg2.tsconfig.json' is out of date because output file 'packages/pkg2.tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'packages/pkg2.tsconfig.json'...
 
-======== Resolving type reference directive 'sometype', containing file '/home/src/workspaces/project/packages/__inferred type names__.ts', root directory '/home/src/workspaces/project/packages/typeroot2'. ========
-Resolving with primary search path '/home/src/workspaces/project/packages/typeroot2'.
-File '/home/src/workspaces/project/packages/typeroot2/sometype.d.ts' does not exist.
-File '/home/src/workspaces/project/packages/typeroot2/sometype/package.json' does not exist.
-File '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts', result '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts'.
-======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts', primary: true. ========
+[96mpackages/pkg2_index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'TheNum2'.
+
+[7m1[0m export const theNum: TheNum2 = "type2";
+[7m [0m [91m                     ~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  packages/pkg1_index.ts[90m:1[0m
+     1  packages/pkg2_index.ts[90m:1[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -79,7 +82,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/packages/pkg1.tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","./pkg1_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f4662ef3bd793790375f811e7f7d599f-export const theNum: TheNum = \"type1\";","signature":"dea6d3f907d93004db9004d6cea5698d-export declare const theNum: TheNum;\n","impliedNodeFormat":1},{"version":"74a6031362359bba204461bbf64bca2c-declare type TheNum = \"type1\";","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./pkg1_index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","./pkg1_index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f4662ef3bd793790375f811e7f7d599f-export const theNum: TheNum = \"type1\";","signature":"dea6d3f907d93004db9004d6cea5698d-export declare const theNum: TheNum;\n","impliedNodeFormat":1}],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"pos":21,"end":27,"code":2304,"category":1,"messageKey":"Cannot_find_name_0_2304","messageArgs":["TheNum"]}]]],"latestChangedDtsFile":"./pkg1_index.d.ts"}
 //// [/home/src/workspaces/project/packages/pkg1.tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -93,8 +96,7 @@ declare const console: { log(msg: any): void; };
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
-    "./pkg1_index.ts",
-    "./typeroot1/sometype/index.d.ts"
+    "./pkg1_index.ts"
   ],
   "fileInfos": [
     {
@@ -119,25 +121,30 @@ declare const console: { log(msg: any): void; };
         "signature": "dea6d3f907d93004db9004d6cea5698d-export declare const theNum: TheNum;\n",
         "impliedNodeFormat": 1
       }
-    },
-    {
-      "fileName": "./typeroot1/sometype/index.d.ts",
-      "version": "74a6031362359bba204461bbf64bca2c-declare type TheNum = \"type1\";",
-      "signature": "74a6031362359bba204461bbf64bca2c-declare type TheNum = \"type1\";",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "74a6031362359bba204461bbf64bca2c-declare type TheNum = \"type1\";",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
     }
   ],
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./pkg1_index.ts",
+      [
+        {
+          "pos": 21,
+          "end": 27,
+          "code": 2304,
+          "category": 1,
+          "messageKey": "Cannot_find_name_0_2304",
+          "messageArgs": [
+            "TheNum"
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./pkg1_index.d.ts",
-  "size": 1307
+  "size": 1291
 }
 //// [/home/src/workspaces/project/packages/pkg1_index.d.ts] *new* 
 export declare const theNum: TheNum;
@@ -146,7 +153,7 @@ export declare const theNum: TheNum;
 export const theNum = "type1";
 
 //// [/home/src/workspaces/project/packages/pkg2.tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5520638613ac947a47797c35d3ad9c4b-export const theNum: TheNum2 = \"type2\";","signature":"becc5ed6bddc5e1124b92e180d59b5e3-export declare const theNum: TheNum2;\n","impliedNodeFormat":1},{"version":"660a36a739fc0e581ff911c4d5604b0e-declare type TheNum2 = \"type2\";","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"composite":true},"latestChangedDtsFile":"./pkg2_index.d.ts"}
+{"version":"FakeTSVersion","root":[2],"fileNames":["lib.es2025.full.d.ts","./pkg2_index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5520638613ac947a47797c35d3ad9c4b-export const theNum: TheNum2 = \"type2\";","signature":"becc5ed6bddc5e1124b92e180d59b5e3-export declare const theNum: TheNum2;\n","impliedNodeFormat":1}],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"pos":21,"end":28,"code":2304,"category":1,"messageKey":"Cannot_find_name_0_2304","messageArgs":["TheNum2"]}]]],"latestChangedDtsFile":"./pkg2_index.d.ts"}
 //// [/home/src/workspaces/project/packages/pkg2.tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -160,8 +167,7 @@ export const theNum = "type1";
   ],
   "fileNames": [
     "lib.es2025.full.d.ts",
-    "./pkg2_index.ts",
-    "./typeroot2/sometype/index.d.ts"
+    "./pkg2_index.ts"
   ],
   "fileInfos": [
     {
@@ -186,25 +192,30 @@ export const theNum = "type1";
         "signature": "becc5ed6bddc5e1124b92e180d59b5e3-export declare const theNum: TheNum2;\n",
         "impliedNodeFormat": 1
       }
-    },
-    {
-      "fileName": "./typeroot2/sometype/index.d.ts",
-      "version": "660a36a739fc0e581ff911c4d5604b0e-declare type TheNum2 = \"type2\";",
-      "signature": "660a36a739fc0e581ff911c4d5604b0e-declare type TheNum2 = \"type2\";",
-      "affectsGlobalScope": true,
-      "impliedNodeFormat": "CommonJS",
-      "original": {
-        "version": "660a36a739fc0e581ff911c4d5604b0e-declare type TheNum2 = \"type2\";",
-        "affectsGlobalScope": true,
-        "impliedNodeFormat": 1
-      }
     }
   ],
   "options": {
     "composite": true
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./pkg2_index.ts",
+      [
+        {
+          "pos": 21,
+          "end": 28,
+          "code": 2304,
+          "category": 1,
+          "messageKey": "Cannot_find_name_0_2304",
+          "messageArgs": [
+            "TheNum2"
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./pkg2_index.d.ts",
-  "size": 1310
+  "size": 1294
 }
 //// [/home/src/workspaces/project/packages/pkg2_index.d.ts] *new* 
 export declare const theNum: TheNum2;
@@ -217,7 +228,6 @@ packages/pkg1.tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/project/packages/pkg1_index.ts
-*refresh*    /home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts
 Signatures::
 (stored at emit) /home/src/workspaces/project/packages/pkg1_index.ts
 
@@ -225,6 +235,5 @@ packages/pkg2.tsconfig.json::
 SemanticDiagnostics::
 *refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/project/packages/pkg2_index.ts
-*refresh*    /home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts
 Signatures::
 (stored at emit) /home/src/workspaces/project/packages/pkg2_index.ts

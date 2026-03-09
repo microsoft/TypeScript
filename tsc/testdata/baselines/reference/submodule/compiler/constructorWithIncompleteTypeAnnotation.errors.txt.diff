@@ -3,11 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -error TS-1: Pre-emit (93) and post-emit (94) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
  constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
--constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-+constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
  constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
- constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
- constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 @@= skipped -42, +41 lines =@@
  constructorWithIncompleteTypeAnnotation.ts(159,30): error TS1005: '{' expected.
  constructorWithIncompleteTypeAnnotation.ts(159,31): error TS2304: Cannot find name 'Property'.
@@ -36,16 +33,7 @@
  ==== constructorWithIncompleteTypeAnnotation.ts (93 errors) ====
      declare module "fs" {
          export class File {
-@@= skipped -18, +15 lines =@@
-                 ~~~~~~
- !!! error TS2503: Cannot find namespace 'module'.
-                 ~~~~~~
--!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-                       ~
- !!! error TS1005: ';' expected.
-     
-@@= skipped -120, +120 lines =@@
+@@= skipped -138, +135 lines =@@
                  var undef = undefined;
      
                  var  _\uD4A5\u7204\uC316\uE59F  = local;

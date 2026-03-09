@@ -99,9 +99,9 @@
 +out/index.d.ts(12,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +out/index.d.ts(21,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +out/index.d.ts(28,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
-+out/index.d.ts(36,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++out/index.d.ts(36,15): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 +out/index.d.ts(39,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
-+out/index.d.ts(47,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++out/index.d.ts(47,15): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 +out/index.d.ts(50,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +out/index.d.ts(52,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +out/index.d.ts(54,25): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
@@ -181,7 +181,7 @@
 +    }, b: {
 +        y: typeof module.exports.b;
 +                  ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 +    }): void | "";
 +    declare const _exported_5: typeof g;
 +    export { _exported_5 as "g" };
@@ -196,7 +196,7 @@
 +    }, b: {
 +        y: typeof module.exports.b;
 +                  ~~~~~~
-+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++!!! error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 +    }): void | "";
 +    declare const _exported_6: typeof hh;
 +    export { _exported_6 as "h" };

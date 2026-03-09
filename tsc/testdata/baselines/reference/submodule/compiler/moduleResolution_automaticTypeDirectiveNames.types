@@ -2,5 +2,9 @@
 
 === /a.ts ===
 a;
->a : any
+>a : string
+
+=== /node_modules/@types/a/index.d.ts ===
+declare const a: string;
+>a : string
 

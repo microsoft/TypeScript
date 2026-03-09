@@ -31,12 +31,3 @@ File '/.src/node_modules/@types/react/package.json' exists according to earlier 
 'package.json' has 'types' field 'index.d.ts' that references '/.src/node_modules/@types/react/index.d.ts'.
 File '/.src/node_modules/@types/react/index.d.ts' exists - use it as a name resolution result.
 ======== Module name './' was successfully resolved to '/.src/node_modules/@types/react/index.d.ts'. ========
-======== Resolving type reference directive 'react', containing file '/.src/__inferred type names__.ts', root directory '/.src/node_modules/@types,/node_modules/@types'. ========
-Resolving with primary search path '/.src/node_modules/@types, /node_modules/@types'.
-File '/.src/node_modules/@types/react/package.json' exists according to earlier cached lookups.
-'package.json' does not have a 'typesVersions' field.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field 'index.d.ts' that references '/.src/node_modules/@types/react/index.d.ts'.
-File '/.src/node_modules/@types/react/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/.src/node_modules/@types/react/index.d.ts', result '/.src/node_modules/@types/react/index.d.ts'.
-======== Type reference directive 'react' was successfully resolved to '/.src/node_modules/@types/react/index.d.ts', primary: true. ========

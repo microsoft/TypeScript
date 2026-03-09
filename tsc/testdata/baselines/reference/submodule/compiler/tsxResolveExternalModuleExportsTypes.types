@@ -3,7 +3,7 @@
 === foo.tsx ===
 /// <reference path="react.d.ts" />
 import { Test } from 'a';
->Test : null
+>Test : any
 
 const Foo = (<h1></h1>);
 >Foo : JSX.Element
@@ -22,19 +22,4 @@ declare namespace a {
 }
 export = a;
 >a : import("a").Foo
-
-=== /node_modules/@types/b/index.d.ts ===
-import * as a from 'a';
->a : a.Foo
-
-declare module 'a' {
->'a' : Foo
-
-    namespace Test {}
-
-    interface Foo {
-        Test: null;
->Test : null
-    }
-}
 

@@ -191,7 +191,7 @@ func (r *FileIncludeReason) computeDiagnostic(program *Program, toFileName func(
 		}
 	case fileIncludeKindAutomaticTypeDirectiveFile:
 		data := r.asAutomaticTypeDirectiveFileData()
-		if program.Options().Types != nil {
+		if !program.Options().UsesWildcardTypes() {
 			if data.packageId.Name != "" {
 				return ast.NewCompilerDiagnostic(diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, data.typeReference, data.packageId.String())
 			} else {
@@ -277,7 +277,7 @@ func (r *FileIncludeReason) toRelatedInfo(program *Program) *ast.Diagnostic {
 			}
 		}
 	case fileIncludeKindAutomaticTypeDirectiveFile:
-		if program.Options().Types != nil {
+		if !program.Options().UsesWildcardTypes() {
 			data := r.asAutomaticTypeDirectiveFileData()
 			if typesSyntax := tsoptions.GetOptionsSyntaxByArrayElementValue(program.includeProcessor.getCompilerOptionsObjectLiteralSyntax(program), "types", data.typeReference); typesSyntax != nil {
 				return tsoptions.CreateDiagnosticForNodeInSourceFile(config.ConfigFile.SourceFile, typesSyntax.AsNode(), diagnostics.File_is_entry_point_of_type_library_specified_here)

@@ -8,18 +8,7 @@
  parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
  parserharness.ts(22,13): error TS7005: Variable 'it' implicitly has an 'any' type.
  parserharness.ts(23,13): error TS7005: Variable 'describe' implicitly has an 'any' type.
-@@= skipped -8, +4 lines =@@
- parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
- parserharness.ts(26,13): error TS7005: Variable '__dirname' implicitly has an 'any' type.
- parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
--parserharness.ts(43,19): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
--parserharness.ts(44,14): error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-+parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-+parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
- parserharness.ts(52,21): error TS7010: 'on', which lacks return-type annotation, implicitly has an 'any' return type.
- parserharness.ts(116,31): error TS7006: Parameter 'actual' implicitly has an 'any' type.
- parserharness.ts(116,39): error TS7006: Parameter 'expected' implicitly has an 'any' type.
-@@= skipped -64, +64 lines =@@
+@@= skipped -72, +68 lines =@@
    No index signature with a parameter of type 'string' was found on type '{}'.
  parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
  parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
@@ -199,20 +188,7 @@
      
      declare var assert: Harness.Assert;
                          ~~~~~~~~~~~~~~
-@@= skipped -50, +42 lines =@@
-         eval(typescriptServiceFile);
-     } else if (typeof require === "function") {
-                       ~~~~~~~
--!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-         var vm = require('vm');
-                  ~~~~~~~
--!!! error TS2591: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
-+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-         vm.runInThisContext(typescriptServiceFile, 'typescriptServices.js');
-     } else {
-         throw new Error('Unknown context');
-@@= skipped -847, +847 lines =@@
+@@= skipped -897, +889 lines =@@
  !!! error TS2503: Cannot find namespace 'TypeScript'.
                  var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                          ~~~~~~~~~~
