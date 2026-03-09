@@ -3224,9 +3224,7 @@ func (c *Checker) checkImportType(node *ast.Node) {
 func (c *Checker) getResolutionModeOverride(node *ast.ImportAttributes, reportErrors bool) core.ResolutionMode {
 	if len(node.Attributes.Nodes) != 1 {
 		if reportErrors {
-			c.grammarErrorOnNode(node.AsNode(), core.IfElse(node.Token == ast.KindWithKeyword,
-				diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require,
-				diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require))
+			c.grammarErrorOnNode(node.AsNode(), diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require)
 		}
 		return core.ResolutionModeNone
 	}
@@ -3236,9 +3234,7 @@ func (c *Checker) getResolutionModeOverride(node *ast.ImportAttributes, reportEr
 	}
 	if elem.Name().Text() != "resolution-mode" {
 		if reportErrors {
-			c.grammarErrorOnNode(elem.Name(), core.IfElse(node.Token == ast.KindWithKeyword,
-				diagnostics.X_resolution_mode_is_the_only_valid_key_for_type_import_attributes,
-				diagnostics.X_resolution_mode_is_the_only_valid_key_for_type_import_assertions))
+			c.grammarErrorOnNode(elem.Name(), diagnostics.X_resolution_mode_is_the_only_valid_key_for_type_import_attributes)
 		}
 		return core.ResolutionModeNone
 	}
@@ -5203,14 +5199,11 @@ func (c *Checker) checkExternalImportOrExportDeclaration(node *ast.Node) bool {
 	if !ast.IsImportEqualsDeclaration(node) {
 		attributes := ast.GetImportAttributes(node)
 		if attributes != nil {
-			diagnostic := core.IfElse(attributes.AsImportAttributes().Token == ast.KindWithKeyword,
-				diagnostics.Import_attribute_values_must_be_string_literal_expressions,
-				diagnostics.Import_assertion_values_must_be_string_literal_expressions)
 			hasError := false
 			for _, attr := range attributes.AsImportAttributes().Attributes.Nodes {
 				if !ast.IsStringLiteral(attr.AsImportAttribute().Value) {
 					hasError = true
-					c.error(attr.AsImportAttribute().Value, diagnostic)
+					c.error(attr.AsImportAttribute().Value, diagnostics.Import_attribute_values_must_be_string_literal_expressions)
 				}
 			}
 			return !hasError
@@ -5256,40 +5249,24 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 	}
 	isTypeOnly := ast.IsExclusivelyTypeOnlyImportOrExport(declaration)
 	override := c.getResolutionModeOverride(node.AsImportAttributes(), isTypeOnly)
-	isImportAttributes := node.AsImportAttributes().Token == ast.KindWithKeyword
 	if isTypeOnly && override != core.ResolutionModeNone {
-		return // Other grammar checks do not apply to type-only imports with resolution mode assertions
+		return // Other grammar checks do not apply to type-only imports with resolution mode attributes
 	}
 
 	if !c.moduleKind.SupportsImportAttributes() {
-		if isImportAttributes {
-			c.grammarErrorOnNode(node, diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve)
-		} else {
-			c.grammarErrorOnNode(node, diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve)
-		}
-		return
-	}
-
-	if core.ModuleKindNode20 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext && !isImportAttributes {
-		c.grammarErrorOnNode(node, diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
+		c.grammarErrorOnNode(node, diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve)
 		return
 	}
 
 	if moduleSpecifier := getModuleSpecifierFromNode(declaration); moduleSpecifier != nil {
 		if c.getEmitSyntaxForModuleSpecifierExpression(moduleSpecifier) == core.ModuleKindCommonJS {
-			if isImportAttributes {
-				c.grammarErrorOnNode(node, diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
-			} else {
-				c.grammarErrorOnNode(node, diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
-			}
+			c.grammarErrorOnNode(node, diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
 			return
 		}
 	}
 
 	if isTypeOnly {
-		c.grammarErrorOnNode(node, core.IfElse(isImportAttributes,
-			diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports,
-			diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports))
+		c.grammarErrorOnNode(node, diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports)
 		return
 	}
 	if override != core.ResolutionModeNone {
@@ -8062,6 +8039,14 @@ func (c *Checker) checkImportCallExpression(node *ast.Node) *Type {
 		importCallOptionsType := c.getGlobalImportCallOptionsTypeChecked()
 		if importCallOptionsType != c.emptyObjectType {
 			c.checkTypeAssignableTo(optionsType, c.getNullableType(importCallOptionsType, TypeFlagsUndefined), args[1], nil)
+		}
+		if ast.IsObjectLiteralExpression(args[1]) {
+			for _, prop := range args[1].AsObjectLiteralExpression().Properties.Nodes {
+				if ast.IsPropertyAssignment(prop) && ast.IsIdentifier(prop.Name()) && prop.Name().Text() == "assert" {
+					c.error(prop.Name(), diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
+					break
+				}
+			}
 		}
 	}
 	// resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal

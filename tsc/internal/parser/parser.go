@@ -2428,6 +2428,9 @@ func (p *Parser) parseModuleExportName(disallowKeywords bool) (node *ast.Node, n
 
 func (p *Parser) tryParseImportAttributes() *ast.Node {
 	if p.token == ast.KindWithKeyword || (p.token == ast.KindAssertKeyword && !p.hasPrecedingLineBreak()) {
+		if p.token == ast.KindAssertKeyword {
+			p.parseErrorAtCurrentToken(diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
+		}
 		return p.parseImportAttributes(p.token, false /*skipKeyword*/)
 	}
 	return nil
@@ -2492,6 +2495,9 @@ func (p *Parser) parseExportDeclaration(pos int, jsdoc jsdocScannerInfo, modifie
 		}
 	}
 	if moduleSpecifier != nil && (p.token == ast.KindWithKeyword || p.token == ast.KindAssertKeyword) && !p.hasPrecedingLineBreak() {
+		if p.token == ast.KindAssertKeyword {
+			p.parseErrorAtCurrentToken(diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
+		}
 		attributes = p.parseImportAttributes(p.token, false /*skipKeyword*/)
 	}
 	p.parseSemicolon()
@@ -2963,6 +2969,9 @@ func (p *Parser) parseImportType() *ast.Node {
 		p.parseExpected(ast.KindOpenBraceToken)
 		currentToken := p.token
 		if currentToken == ast.KindWithKeyword || currentToken == ast.KindAssertKeyword {
+			if currentToken == ast.KindAssertKeyword {
+				p.parseErrorAtCurrentToken(diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
+			}
 			p.nextToken()
 		} else {
 			p.parseErrorAtCurrentToken(diagnostics.X_0_expected, scanner.TokenToString(ast.KindWithKeyword))
