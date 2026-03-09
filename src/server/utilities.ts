@@ -67,11 +67,11 @@ export class GcTimer {
         self.timerId = undefined;
 
         const log = self.logger.hasLevel(LogLevel.requestTime);
-        const before = log && self.host.getMemoryUsage?.();
+        const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
         self.host.gc!(); // TODO: GH#18217
         if (log) {
-            const after = self.host.getMemoryUsage?.();
+            const after = self.host.getMemoryUsage!(); // TODO: GH#18217
             self.logger.perftrc(`GC::before ${before}, after ${after}`);
         }
     }
