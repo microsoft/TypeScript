@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/templateLiteralMultiByteCharInference.ts] ////
+
+=== templateLiteralMultiByteCharInference.ts ===
+// Verifies that template literal type inference handles multi-byte characters correctly,
+// slicing by Unicode code point (rune) instead of by byte.
+
+type GetFirst<S extends string> = S extends `${infer Head}${string}` ? Head : never;
+>GetFirst : GetFirst<S>
+
+type GetRest<S extends string> = S extends `${string}${infer Rest}` ? Rest : never;
+>GetRest : GetRest<S>
+
+type Split<S extends string> = S extends `${infer Head}${infer Rest}` ? [Head, Rest] : never;
+>Split : Split<S>
+
+// Single-byte (ASCII) characters
+type A = GetFirst<"ABC">;  // "A"
+>A : "A"
+
+type BC = GetRest<"ABC">;  // "BC"
+>BC : "BC"
+
+type ABC_Split = Split<"ABC">;  // ["A", "BC"]
+>ABC_Split : ["A", "BC"]
+
+// Multi-byte characters (Japanese, 3 bytes in UTF-8, 1 code unit in UTF-16)
+type Ah = GetFirst<"あいう">;  // "あ"
+>Ah : "あ"
+
+type IU = GetRest<"あいう">;  // "いう"
+>IU : "いう"
+
+type AIU_Split = Split<"あいう">;  // ["あ", "いう"]
+>AIU_Split : ["あ", "いう"]
+
+// Mixed single-byte and multi-byte
+type M1 = GetFirst<"aあ">;  // "a"
+>M1 : "a"
+
+type M2 = GetFirst<"あa">;  // "あ"
+>M2 : "あ"
+
+// 2-byte UTF-8 characters (Latin Extended, 1 code unit in UTF-16)
+type E = GetFirst<"éàü">;  // "é"
+>E : "é"
+
+// Emoji (4 bytes in UTF-8, 2 code units in UTF-16 as surrogate pair)
+type Emoji = GetFirst<"😀abc">;
+>Emoji : "😀"
+
+// Verification
+type Expect<T, Expected> = T extends Expected ? true : false;
+>Expect : Expect<T, Expected>
+>true : true
+>false : false
+
+const check1: Expect<A, "A"> = true;
+>check1 : true
+>true : true
+
+const check2: Expect<Ah, "あ"> = true;
+>check2 : true
+>true : true
+
+const check3: Expect<BC, "BC"> = true;
+>check3 : true
+>true : true
+
+const check4: Expect<IU, "いう"> = true;
+>check4 : true
+>true : true
+
+const check5: Expect<M1, "a"> = true;
+>check5 : true
+>true : true
+
+const check6: Expect<M2, "あ"> = true;
+>check6 : true
+>true : true
+
+const check7: Expect<E, "é"> = true;
+>check7 : true
+>true : true
+
