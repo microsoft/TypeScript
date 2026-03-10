@@ -602,7 +602,8 @@ func TestSession(t *testing.T) {
 				outer:
 					for _, call := range utils.Client().WatchFilesCalls() {
 						for _, watcher := range call.Watchers {
-							if core.Must(glob.Parse(*watcher.GlobPattern.Pattern)).Match("/home/projects/TS/x.ts") {
+							// On case-insensitive FS, glob patterns use lowercased paths.
+							if core.Must(glob.Parse(*watcher.GlobPattern.Pattern)).Match("/home/projects/ts/x.ts") {
 								xWatched = true
 								break outer
 							}

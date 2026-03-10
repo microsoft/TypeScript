@@ -8,11 +8,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -132,65 +130,70 @@ func (w *WatchedFiles[T]) Clone(input T) *WatchedFiles[T] {
 	}
 }
 
-func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) func(data map[tspath.Path]string) PatternsAndIgnored {
-	comparePathsOptions := tspath.ComparePathsOptions{
-		CurrentDirectory:          currentDirectory,
-		UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
-	}
+func createResolutionLookupGlobMapper(workspaceDirectory string, libDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) func(data *collections.SyncSet[tspath.Path]) PatternsAndIgnored {
+	workspaceDirectoryPath := tspath.ToPath(workspaceDirectory, currentDirectory, useCaseSensitiveFileNames)
+	currentDirectoryPath := tspath.ToPath(currentDirectory, currentDirectory, useCaseSensitiveFileNames)
+	libDirectoryPath := tspath.ToPath(libDirectory, currentDirectory, useCaseSensitiveFileNames)
 
-	return func(data map[tspath.Path]string) PatternsAndIgnored {
+	return func(data *collections.SyncSet[tspath.Path]) PatternsAndIgnored {
 		var ignored map[string]struct{}
-		var seenDirs collections.Set[string]
+		var seenDirs collections.Set[tspath.Path]
 		var includeWorkspace, includeRoot, includeLib bool
-		var nodeModulesDirectories, externalDirectories map[tspath.Path]string
+		var nodeModulesDirectories collections.Set[tspath.Path]
+		var externalDirectories collections.Set[tspath.Path]
 
-		for path, fileName := range data {
-			// Assuming all of the input paths are filenames, we can avoid
-			// duplicate work by only taking one file per dir, since their outputs
-			// will always be the same.
-			if !seenDirs.AddIfAbsent(tspath.GetDirectoryPath(string(path))) {
-				continue
-			}
+		if data != nil {
+			data.Range(func(path tspath.Path) bool {
+				// Assuming all of the input paths are file paths, we can avoid
+				// duplicate work by only taking one file per dir, since their outputs
+				// will always be the same.
+				if !seenDirs.AddIfAbsent(path.GetDirectoryPath()) {
+					return true
+				}
 
-			if tspath.ContainsPath(workspaceDirectory, fileName, comparePathsOptions) {
-				includeWorkspace = true
-			} else if tspath.ContainsPath(currentDirectory, fileName, comparePathsOptions) {
-				includeRoot = true
-			} else if tspath.ContainsPath(libDirectory, fileName, comparePathsOptions) {
-				includeLib = true
-			} else if idx := strings.Index(fileName, "/node_modules/"); idx != -1 {
-				if nodeModulesDirectories == nil {
-					nodeModulesDirectories = make(map[tspath.Path]string)
+				if workspaceDirectoryPath.ContainsPath(path) {
+					includeWorkspace = true
+				} else if currentDirectoryPath.ContainsPath(path) {
+					includeRoot = true
+				} else if libDirectoryPath.ContainsPath(path) {
+					includeLib = true
+				} else if idx := strings.Index(string(path), "/node_modules/"); idx != -1 {
+					nodeModulesDirectories.Add(path[:idx+len("/node_modules")])
+				} else {
+					externalDirectories.Add(path.GetDirectoryPath())
 				}
-				dir := fileName[:idx+len("/node_modules")]
-				nodeModulesDirectories[tspath.ToPath(dir, currentDirectory, useCaseSensitiveFileNames)] = dir
-			} else {
-				if externalDirectories == nil {
-					externalDirectories = make(map[tspath.Path]string)
-				}
-				externalDirectories[path.GetDirectoryPath()] = tspath.GetDirectoryPath(fileName)
-			}
+				return true
+			})
 		}
 
 		var globs []string
 		if includeWorkspace {
-			globs = append(globs, getRecursiveGlobPattern(workspaceDirectory))
+			globs = append(globs, getRecursiveGlobPattern(string(workspaceDirectoryPath)))
 		}
 		if includeRoot {
-			globs = append(globs, getRecursiveGlobPattern(currentDirectory))
+			globs = append(globs, getRecursiveGlobPattern(string(currentDirectoryPath)))
 		}
 		if includeLib {
-			globs = append(globs, getRecursiveGlobPattern(libDirectory))
+			globs = append(globs, getRecursiveGlobPattern(string(libDirectoryPath)))
 		}
-		for _, dir := range nodeModulesDirectories {
-			globs = append(globs, getRecursiveGlobPattern(dir))
+		if nodeModulesDirectories.Len() > 0 {
+			nodeModulesGlobs := make([]string, 0, nodeModulesDirectories.Len())
+			for dir := range nodeModulesDirectories.Keys() {
+				nodeModulesGlobs = append(nodeModulesGlobs, getRecursiveGlobPattern(string(dir)))
+			}
+			slices.Sort(nodeModulesGlobs)
+			globs = append(globs, nodeModulesGlobs...)
 		}
-		if len(externalDirectories) > 0 {
+		if externalDirectories.Len() > 0 {
+			externalDirStrings := make([]string, 0, externalDirectories.Len())
+			for dir := range externalDirectories.Keys() {
+				externalDirStrings = append(externalDirStrings, string(dir))
+			}
 			externalDirectoryParents, ignoredExternalDirs := tspath.GetCommonParents(
-				slices.Collect(maps.Values(externalDirectories)),
+				externalDirStrings,
 				minWatchLocationDepth,
 				getPathComponentsForWatching,
-				comparePathsOptions,
+				tspath.ComparePathsOptions{UseCaseSensitiveFileNames: true}, // Already using tspath.Path
 			)
 			slices.Sort(externalDirectoryParents)
 			ignored = ignoredExternalDirs
@@ -284,75 +287,6 @@ func perceivedOsRootLengthForWatching(pathComponents []string) int {
 		return min(3, length)
 	}
 	return 1
-}
-
-type resolutionWithLookupLocations interface {
-	GetLookupLocations() *module.LookupLocations
-}
-
-func extractLookups[T resolutionWithLookupLocations](
-	projectToPath func(string) tspath.Path,
-	failedLookups map[tspath.Path]string,
-	affectingLocations map[tspath.Path]string,
-	cache map[tspath.Path]module.ModeAwareCache[T],
-) {
-	for _, resolvedModulesInFile := range cache {
-		for _, resolvedModule := range resolvedModulesInFile {
-			for _, failedLookupLocation := range resolvedModule.GetLookupLocations().FailedLookupLocations {
-				path := projectToPath(failedLookupLocation)
-				if _, ok := failedLookups[path]; !ok {
-					failedLookups[path] = failedLookupLocation
-				}
-			}
-			for _, affectingLocation := range resolvedModule.GetLookupLocations().AffectingLocations {
-				path := projectToPath(affectingLocation)
-				if _, ok := affectingLocations[path]; !ok {
-					affectingLocations[path] = affectingLocation
-				}
-			}
-		}
-	}
-}
-
-func getNonRootFileGlobs(workspaceDir string, libDirectory string, sourceFiles []*ast.SourceFile, rootFiles map[tspath.Path]string, comparePathsOptions tspath.ComparePathsOptions) PatternsAndIgnored {
-	var globs []string
-	var includeWorkspace, includeLib bool
-	var ignored map[string]struct{}
-	externalDirectories := make([]string, 0, max(0, len(sourceFiles)-len(rootFiles)))
-	for _, sourceFile := range sourceFiles {
-		if _, ok := rootFiles[sourceFile.Path()]; !ok {
-			if tspath.ContainsPath(workspaceDir, sourceFile.FileName(), comparePathsOptions) {
-				includeWorkspace = true
-			} else if tspath.ContainsPath(libDirectory, sourceFile.FileName(), comparePathsOptions) {
-				includeLib = true
-			} else {
-				externalDirectories = append(externalDirectories, tspath.GetDirectoryPath(sourceFile.FileName()))
-			}
-		}
-	}
-
-	if includeWorkspace {
-		globs = append(globs, getRecursiveGlobPattern(workspaceDir))
-	}
-	if includeLib {
-		globs = append(globs, getRecursiveGlobPattern(libDirectory))
-	}
-	if len(externalDirectories) > 0 {
-		commonParents, ignoredDirs := tspath.GetCommonParents(
-			externalDirectories,
-			minWatchLocationDepth,
-			getPathComponentsForWatching,
-			comparePathsOptions,
-		)
-		globs = append(globs, core.Map(commonParents, func(dir string) string {
-			return getRecursiveGlobPattern(dir)
-		})...)
-		ignored = ignoredDirs
-	}
-	return PatternsAndIgnored{
-		patterns: globs,
-		ignored:  ignored,
-	}
 }
 
 func getRecursiveGlobPattern(directory string) string {

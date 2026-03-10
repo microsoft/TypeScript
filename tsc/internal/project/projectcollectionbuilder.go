@@ -990,10 +990,7 @@ func (b *ProjectCollectionBuilder) updateProgram(entry dirty.Value[*Project], lo
 				}
 				if result.UpdateKind == ProgramUpdateKindNewFiles {
 					filesChanged = true
-					programFilesWatch, failedLookupsWatch, affectingLocationsWatch := project.CloneWatchers(b.sessionOptions.CurrentDirectory, b.sessionOptions.DefaultLibraryPath)
-					project.programFilesWatch = programFilesWatch
-					project.failedLookupsWatch = failedLookupsWatch
-					project.affectingLocationsWatch = affectingLocationsWatch
+					project.programFilesWatch = project.CloneWatchers()
 				}
 				project.dirty = false
 				project.dirtyFilePath = ""
@@ -1018,18 +1015,7 @@ func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project],
 
 			dirtyFilePath = p.dirtyFilePath
 			for _, path := range paths {
-				if _, ok := p.affectingLocationsWatch.input[path]; ok {
-					dirty = true
-					dirtyFilePath = ""
-					break
-				}
-				if changeType == lsproto.FileChangeTypeCreated {
-					if _, ok := p.failedLookupsWatch.input[path]; ok {
-						dirty = true
-						dirtyFilePath = ""
-						break
-					}
-				} else if p.containsFile(path) {
+				if p.containsFile(path) {
 					dirty = true
 					if changeType == lsproto.FileChangeTypeDeleted {
 						dirtyFilePath = ""
@@ -1041,6 +1027,10 @@ func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project],
 						dirtyFilePath = ""
 						break
 					}
+				} else if p.host != nil && p.host.sourceFS.Seen(path) {
+					dirty = true
+					dirtyFilePath = ""
+					break
 				}
 			}
 			return dirty || p.dirtyFilePath != dirtyFilePath

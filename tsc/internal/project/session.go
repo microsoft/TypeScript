@@ -803,25 +803,15 @@ func (s *Session) updateWatches(oldSnapshot *Snapshot, newSnapshot *Snapshot) er
 		newSnapshot.ProjectCollection.ProjectsByPath(),
 		func(_ tspath.Path, addedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.programFilesWatch)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.affectingLocationsWatch)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.failedLookupsWatch)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, nil, addedProject.typingsWatch)...)
 		},
 		func(_ tspath.Path, removedProject *Project) {
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.programFilesWatch, nil)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.affectingLocationsWatch, nil)...)
-			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.failedLookupsWatch, nil)...)
 			errors = append(errors, updateWatch(ctx, s, s.logger, removedProject.typingsWatch, nil)...)
 		},
 		func(_ tspath.Path, oldProject, newProject *Project) {
 			if oldProject.programFilesWatch.ID() != newProject.programFilesWatch.ID() {
 				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.programFilesWatch, newProject.programFilesWatch)...)
-			}
-			if oldProject.affectingLocationsWatch.ID() != newProject.affectingLocationsWatch.ID() {
-				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.affectingLocationsWatch, newProject.affectingLocationsWatch)...)
-			}
-			if oldProject.failedLookupsWatch.ID() != newProject.failedLookupsWatch.ID() {
-				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.failedLookupsWatch, newProject.failedLookupsWatch)...)
 			}
 			if oldProject.typingsWatch.ID() != newProject.typingsWatch.ID() {
 				errors = append(errors, updateWatch(ctx, s, s.logger, oldProject.typingsWatch, newProject.typingsWatch)...)
