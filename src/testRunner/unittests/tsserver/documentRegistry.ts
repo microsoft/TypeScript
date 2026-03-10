@@ -123,6 +123,63 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
     });
 });
 
+describe("unittests:: tsserver:: documentRegistry:: projects with different pathsBasePath share the same document registry bucket", () => {
+    function getProject(session: TestSession, config: File) {
+        return session.getProjectService().configuredProjects.get(config.path.toLowerCase())!;
+    }
+
+    it("shares document registry bucket for projects with same compiler options but different pathsBasePath", () => {
+        const sharedFile: File = {
+            path: "/home/src/projects/shared/utils.d.ts",
+            content: "export const util: number;",
+        };
+
+        const configA: File = {
+            path: "/home/src/projects/projectA/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: { paths: { "@utils": ["../shared/utils.d.ts"] } },
+                files: ["index.ts"],
+            }),
+        };
+        const indexA: File = {
+            path: "/home/src/projects/projectA/index.ts",
+            content: `import { util } from "@utils";`,
+        };
+
+        const configB: File = {
+            path: "/home/src/projects/projectB/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: { paths: { "@utils": ["../shared/utils.d.ts"] } },
+                files: ["index.ts"],
+            }),
+        };
+        const indexB: File = {
+            path: "/home/src/projects/projectB/index.ts",
+            content: `import { util } from "@utils";`,
+        };
+
+        const host = TestServerHost.createServerHost([sharedFile, configA, indexA, configB, indexB]);
+        const session = new TestSession(host);
+        openFilesForSession([
+            { file: indexA, projectRootPath: "/home/src/projects/projectA" },
+            { file: indexB, projectRootPath: "/home/src/projects/projectB" },
+        ], session);
+
+        const projectA = getProject(session, configA);
+        const projectB = getProject(session, configB);
+
+        // Both projects should reuse the same source file instance for the shared file
+        const sharedInfo = session.getProjectService().getScriptInfo(sharedFile.path)!;
+        const sourceFileA = projectA.getSourceFile(sharedInfo.path);
+        const sourceFileB = projectB.getSourceFile(sharedInfo.path);
+        assert.equal(sourceFileA, sourceFileB, "Both projects should share the same source file instance from the document registry");
+
+        session.logger.log("DocumentRegistry::");
+        session.logger.log(reportDocumentRegistryStats(session.getProjectService().documentRegistry).join("\n"));
+        baselineTsserverLogs("documentRegistry", "shares document registry bucket for projects with different pathsBasePath", session);
+    });
+});
+
 describe("unittests:: tsserver:: documentRegistry:: works when reusing orphan script info with different scriptKind", () => {
     it("works when reusing orphan script info with different scriptKind", () => {
         const host = TestServerHost.createServerHost({});

@@ -959,7 +959,7 @@ function compilerOptionValueToString(value: unknown): string {
 
 /** @internal */
 export function getKeyForCompilerOptions(options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]): string {
-    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|") + `|${options.pathsBasePath}`;
+    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|");
 }
 
 /** @internal */
@@ -1042,7 +1042,7 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined,
     function getRedirectsCacheKey(options: CompilerOptions) {
         let result = optionsToRedirectsKey.get(options);
         if (!result) {
-            optionsToRedirectsKey.set(options, result = getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) as RedirectsCacheKey);
+            optionsToRedirectsKey.set(options, result = (getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) + `|${options.pathsBasePath}`) as RedirectsCacheKey);
         }
         return result;
     }

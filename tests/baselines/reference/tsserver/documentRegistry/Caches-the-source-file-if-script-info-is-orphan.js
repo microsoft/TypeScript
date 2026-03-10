@@ -196,7 +196,7 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /user/username/projects/myproject/module1.d.ts: TS 1
     /home/src/tslibs/ts/lib/lib.es2025.full.d.ts: TS 1
@@ -262,7 +262,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /home/src/tslibs/ts/lib/lib.es2025.full.d.ts: TS 1
 Before request
@@ -349,7 +349,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /home/src/tslibs/ts/lib/lib.es2025.full.d.ts: TS 1
     /user/username/projects/myproject/module1.d.ts: TS 1
