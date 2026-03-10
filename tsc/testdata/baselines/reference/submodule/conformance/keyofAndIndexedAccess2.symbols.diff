@@ -1,0 +1,32 @@
+--- old.keyofAndIndexedAccess2.symbols
++++ new.keyofAndIndexedAccess2.symbols
+@@= skipped -96, +96 lines =@@
+ >x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
+
+     c.x;
++>c.x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+ >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
++>x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+
+     c[k];
+ >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+@@= skipped -17, +19 lines =@@
+ >x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
+
+     c.x = 1;  // Error, cannot write to index signature through constraint
++>c.x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+ >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
++>x : Symbol(T[__index], Decl(keyofAndIndexedAccess2.ts, 12, 23))
+
+     c[k] = 1; // Error, cannot write to index signature through constraint
+ >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+@@= skipped -405, +407 lines =@@
+
+   constructor() {
+     this.a = "b";
++>this.a : Symbol(c[__index], Decl(keyofAndIndexedAccess2.ts, 140, 16))
+ >this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))
++>a : Symbol(c[__index], Decl(keyofAndIndexedAccess2.ts, 140, 16))
+
+     this["a"] = "b";
+ >this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))

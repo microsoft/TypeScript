@@ -675,7 +675,6 @@ type Checker struct {
 	declaredTypeLinks                           core.LinkStore[*ast.Symbol, DeclaredTypeLinks]
 	spreadLinks                                 core.LinkStore[*ast.Symbol, SpreadLinks]
 	varianceLinks                               core.LinkStore[*ast.Symbol, VarianceLinks]
-	indexSymbolLinks                            core.LinkStore[*ast.Symbol, IndexSymbolLinks]
 	ReverseMappedSymbolLinks                    core.LinkStore[*ast.Symbol, ReverseMappedSymbolLinks]
 	markedAssignmentSymbolLinks                 core.LinkStore[*ast.Symbol, MarkedAssignmentSymbolLinks]
 	symbolContainerLinks                        core.LinkStore[*ast.Symbol, ContainingSymbolLinks]
@@ -30812,7 +30811,7 @@ func (c *Checker) getSymbolOfNameOrPropertyAccessExpression(name *ast.Node) *ast
 			}
 			if ast.IsPropertyAccessExpression(name) {
 				c.checkPropertyAccessExpression(name, CheckModeNormal, false /*writeOnly*/)
-				if links.resolvedSymbol == nil {
+				if links.resolvedSymbol == nil && !ast.IsPrivateIdentifier(name.Name()) {
 					links.resolvedSymbol = c.getApplicableIndexSymbol(
 						c.checkExpressionCached(name.Expression()),
 						c.getLiteralTypeFromPropertyName(name.Name()),
@@ -31017,34 +31016,30 @@ func (c *Checker) getApplicableIndexInfos(t *Type, keyType *Type) []*IndexInfo {
 }
 
 func (c *Checker) getApplicableIndexSymbol(t *Type, keyType *Type) *ast.Symbol {
-	infos := c.getApplicableIndexInfos(t, keyType)
-	if len(infos) > 0 && t.flags&TypeFlagsObject != 0 && t.AsObjectType().members != nil {
-		symbol := getIndexSymbolFromSymbolTable(c.resolveStructuredTypeMembers(t).members)
-		if core.Same(infos, c.getIndexInfosOfType(t)) {
-			return symbol
-		} else if symbol != nil {
-			indexSymbolLinks := c.indexSymbolLinks.Get(symbol)
-			declarationList := core.MapNonNil(infos, func(info *IndexInfo) *ast.Node { return info.declaration })
-			nodeListId := getNodeListKey(declarationList)
-			if indexSymbolLinks.filteredIndexSymbolCache == nil {
-				indexSymbolLinks.filteredIndexSymbolCache = make(map[CacheHashKey]*ast.Symbol)
-			}
-			if result, ok := indexSymbolLinks.filteredIndexSymbolCache[nodeListId]; ok {
-				return result
+	if info := c.getApplicableIndexInfo(t, keyType); info != nil && info != c.anyBaseTypeIndexInfo {
+		if info.indexSymbol == nil {
+			var declarations []*ast.Node
+			if info.declaration != nil {
+				declarations = []*ast.Node{info.declaration}
 			} else {
-				symbolCopy := c.newSymbol(ast.SymbolFlagsSignature, ast.InternalSymbolNameIndex)
-				symbolCopy.Declarations = declarationList
-				if t.alias != nil && t.alias.symbol != nil {
-					symbolCopy.Parent = t.alias.symbol
-				} else if t.symbol != nil {
-					symbolCopy.Parent = t.symbol
-				} else {
-					symbolCopy.Parent = c.getSymbolAtLocation(symbolCopy.Declarations[0].Parent, false /*ignoreErrors*/)
+				for _, info := range c.getIndexInfosOfType(t) {
+					if info.declaration != nil && c.isApplicableIndexType(keyType, info.keyType) {
+						declarations = append(declarations, info.declaration)
+					}
 				}
-				indexSymbolLinks.filteredIndexSymbolCache[nodeListId] = symbolCopy
-				return symbolCopy
+			}
+			if len(declarations) != 0 {
+				symbol := c.newSymbol(ast.SymbolFlagsProperty, ast.InternalSymbolNameIndex)
+				symbol.CheckFlags |= ast.CheckFlagsIndexSymbol
+				symbol.Declarations = declarations
+				symbol.ValueDeclaration = declarations[0]
+				symbol.Parent = t.symbol
+				links := c.valueSymbolLinks.Get(symbol)
+				links.resolvedType = info.valueType
+				info.indexSymbol = symbol
 			}
 		}
+		return info.indexSymbol
 	}
 	return nil
 }

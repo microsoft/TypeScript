@@ -34,6 +34,10 @@ func (c *Checker) GetAnyType() *Type {
 	return c.anyType
 }
 
+func (c *Checker) GetErrorType() *Type {
+	return c.errorType
+}
+
 func (c *Checker) GetNeverType() *Type {
 	return c.neverType
 }

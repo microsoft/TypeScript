@@ -212,6 +212,11 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		return "this: " + c.TypeToStringEx(c.GetTypeAtLocation(node), container, typeFormatFlags), nil
 	}
 	if symbol == nil {
+		if ast.IsIdentifier(node) {
+			if t := c.GetTypeAtLocation(node); t != c.GetErrorType() {
+				return c.TypeToStringEx(t, container, typeFormatFlags), nil
+			}
+		}
 		return "", nil
 	}
 	var b strings.Builder
@@ -295,36 +300,38 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		if flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0 {
 			writeNewLine()
-			switch {
-			case flags&ast.SymbolFlagsProperty != 0:
-				b.WriteString("(property) ")
-			case flags&ast.SymbolFlagsAccessor != 0:
-				b.WriteString("(accessor) ")
-			default:
-				decl := symbol.ValueDeclaration
-				if decl != nil {
-					switch {
-					case ast.IsParameter(decl):
-						b.WriteString("(parameter) ")
-					case ast.IsVarLet(decl):
-						b.WriteString("let ")
-					case ast.IsVarConst(decl):
-						b.WriteString("const ")
-					case ast.IsVarUsing(decl):
-						b.WriteString("using ")
-					case ast.IsVarAwaitUsing(decl):
-						b.WriteString("await using ")
-					default:
-						b.WriteString("var ")
+			if symbol.CheckFlags&ast.CheckFlagsIndexSymbol == 0 {
+				switch {
+				case flags&ast.SymbolFlagsProperty != 0:
+					b.WriteString("(property) ")
+				case flags&ast.SymbolFlagsAccessor != 0:
+					b.WriteString("(accessor) ")
+				default:
+					decl := symbol.ValueDeclaration
+					if decl != nil {
+						switch {
+						case ast.IsParameter(decl):
+							b.WriteString("(parameter) ")
+						case ast.IsVarLet(decl):
+							b.WriteString("let ")
+						case ast.IsVarConst(decl):
+							b.WriteString("const ")
+						case ast.IsVarUsing(decl):
+							b.WriteString("using ")
+						case ast.IsVarAwaitUsing(decl):
+							b.WriteString("await using ")
+						default:
+							b.WriteString("var ")
+						}
 					}
 				}
+				if symbol.Name == ast.InternalSymbolNameExportEquals && symbol.Parent != nil && symbol.Parent.Flags&ast.SymbolFlagsModule != 0 {
+					b.WriteString("exports")
+				} else {
+					b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
+				}
+				b.WriteString(": ")
 			}
-			if symbol.Name == ast.InternalSymbolNameExportEquals && symbol.Parent != nil && symbol.Parent.Flags&ast.SymbolFlagsModule != 0 {
-				b.WriteString("exports")
-			} else {
-				b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
-			}
-			b.WriteString(": ")
 			if callNode := getCallOrNewExpression(node); callNode != nil {
 				b.WriteString(c.SignatureToStringEx(c.GetResolvedSignature(callNode), container, typeFormatFlags|checker.TypeFormatFlagsWriteCallStyleSignature|checker.TypeFormatFlagsWriteTypeArgumentsOfSignature|checker.TypeFormatFlagsWriteArrowStyleSignature))
 			} else {

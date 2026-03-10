@@ -1,0 +1,9 @@
+--- old.objectSpreadIndexSignature.symbols
++++ new.objectSpreadIndexSignature.symbols
+@@= skipped -50, +50 lines =@@
+ >roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 13, 11))
+
+ writable.a = 0;  // should be ok.
++>writable.a : Symbol(__index, Decl(objectSpreadIndexSignature.ts, 13, 22))
+ >writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 14, 3))
++>a : Symbol(__index, Decl(objectSpreadIndexSignature.ts, 13, 22))

@@ -29,6 +29,7 @@ const (
 	CheckFlagsUnresolved             CheckFlags = 1 << 20 // Unresolved type alias symbol
 	CheckFlagsIsDiscriminantComputed CheckFlags = 1 << 21 // IsDiscriminant flags has been computed
 	CheckFlagsIsDiscriminant         CheckFlags = 1 << 22 // Discriminant property
+	CheckFlagsIndexSymbol            CheckFlags = 1 << 23 // Synthetic property created from index signature
 	CheckFlagsSynthetic                         = CheckFlagsSyntheticProperty | CheckFlagsSyntheticMethod
 	CheckFlagsNonUniformAndLiteral              = CheckFlagsHasNonUniformType | CheckFlagsHasLiteralType
 	CheckFlagsPartial                           = CheckFlagsReadPartial | CheckFlagsWritePartial

@@ -262,10 +262,6 @@ const (
 	VarianceFlagsAllowsStructuralFallback               = VarianceFlagsUnmeasurable | VarianceFlagsUnreliable
 )
 
-type IndexSymbolLinks struct {
-	filteredIndexSymbolCache map[CacheHashKey]*ast.Symbol // Symbol with applicable declarations
-}
-
 type MarkedAssignmentSymbolLinks struct {
 	lastAssignmentPos     int32
 	hasDefiniteAssignment bool // Symbol is definitely assigned somewhere
@@ -1221,6 +1217,7 @@ type IndexInfo struct {
 	valueType   *Type
 	isReadonly  bool
 	declaration *ast.Node   // IndexSignatureDeclaration
+	indexSymbol *ast.Symbol // Synthetic property symbol for this index signature
 	components  []*ast.Node // ElementWithComputedPropertyName
 }
 

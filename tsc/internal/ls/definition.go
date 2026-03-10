@@ -261,7 +261,9 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 		if len(objectLiteralElementDeclarations) > 0 {
 			return objectLiteralElementDeclarations
 		}
-		return symbol.Declarations
+		if len(symbol.Declarations) > 0 {
+			return symbol.Declarations
+		}
 	}
 	if indexInfos := c.GetIndexSignaturesAtLocation(node); len(indexInfos) != 0 {
 		return indexInfos
