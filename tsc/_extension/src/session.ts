@@ -4,7 +4,6 @@ import { registerCodeLensShowLocationsCommand } from "./commands";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
 import { getExe } from "./util";
-import { setupVersionStatusItem } from "./versionStatusItem";
 
 /**
  * SessionManager's lifetime is equal to that of the extension. It is responsible
@@ -110,8 +109,7 @@ class Session implements vscode.Disposable {
     async start(context: vscode.ExtensionContext): Promise<void> {
         const exe = await getExe(context);
         await this.client.start(exe);
-        this.disposables.push(setupVersionStatusItem(exe.version));
-        this.disposables.push(setupStatusBar());
+        this.disposables.push(setupStatusBar(exe.version));
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
     }
 
