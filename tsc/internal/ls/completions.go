@@ -4892,6 +4892,7 @@ func (l *LanguageService) getCompletionItemDetails(
 			symbolDetails.symbol,
 			checker,
 			symbolDetails.location,
+			position,
 			docFormat,
 		)
 	case symbolCompletion.literal != nil:
@@ -5040,9 +5041,10 @@ func (l *LanguageService) createCompletionDetailsForSymbol(
 	symbol *ast.Symbol,
 	checker *checker.Checker,
 	location *ast.Node,
+	position int,
 	docFormat lsproto.MarkupKind,
 ) *lsproto.CompletionItem {
-	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(checker, symbol, location, docFormat)
+	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(checker, symbol, location, position, docFormat)
 	return createCompletionDetails(item, quickInfo, documentation, docFormat)
 }
 

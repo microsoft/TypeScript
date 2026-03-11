@@ -7,9 +7,12 @@
 //     declare prop: string;
 //     method() {
 //         this.prop.foo
-//                      ^
+//                   ^^^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /**/.
+// | ```tsx
+// | any
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //     }
 // }
@@ -24,6 +27,21 @@
       "Name": "",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 6,
+          "character": 18
+        },
+        "end": {
+          "line": 6,
+          "character": 21
+        }
+      }
+    }
   }
 ]

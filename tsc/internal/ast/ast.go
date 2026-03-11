@@ -11263,7 +11263,7 @@ func (file *SourceFile) GetNameTable() map[string]int {
 
 		var walk func(node *Node) bool
 		walk = func(node *Node) bool {
-			if IsIdentifier(node) && !isTagName(node) && node.Text() != "" ||
+			if IsIdentifier(node) && !IsTagName(node) && node.Text() != "" ||
 				IsStringOrNumericLiteralLike(node) && literalIsName(node) ||
 				IsPrivateIdentifier(node) {
 				text := node.Text()

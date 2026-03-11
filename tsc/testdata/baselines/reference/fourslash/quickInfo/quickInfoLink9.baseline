@@ -5,7 +5,10 @@
 //      * Text before {@link a} text after
 //                           ^
 // | ----------------------------------------------------------------------
-// | No quickinfo at /**/.
+// | ```tsx
+// | any
+// | ```
+// | 
 // | ----------------------------------------------------------------------
 //      */
 //     c: (a: number) => void;
@@ -21,6 +24,21 @@
       "Name": "",
       "Data": {}
     },
-    "item": null
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nany\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 26
+        },
+        "end": {
+          "line": 2,
+          "character": 27
+        }
+      }
+    }
   }
 ]

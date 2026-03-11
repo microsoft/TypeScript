@@ -4341,7 +4341,7 @@ func TagNamesAreEquivalent(lhs *Expression, rhs *Expression) bool {
 	panic("Unhandled case in TagNamesAreEquivalent")
 }
 
-func isTagName(node *Node) bool {
+func IsTagName(node *Node) bool {
 	return node.Parent != nil && IsJSDocTag(node.Parent) && node.Parent.TagName() == node
 }
 
