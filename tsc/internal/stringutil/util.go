@@ -2,7 +2,6 @@
 package stringutil
 
 import (
-	"net/url"
 	"regexp"
 	"strings"
 	"unicode"
@@ -143,29 +142,40 @@ func GuessIndentation(lines []string) int {
 // https://tc39.es/ecma262/multipage/global-object.html#sec-encodeuri-uri
 func EncodeURI(s string) string {
 	var builder strings.Builder
-	start := 0
-	pos := indexAny(s, ";/?:@&=+$,#", 0)
-	for pos >= 0 {
-		builder.WriteString(url.QueryEscape(s[start:pos]))
-		builder.WriteString(s[pos : pos+1])
-		start = pos + 1
-		pos = indexAny(s, ";/?:@&=+$,#", start)
-	}
-	if start < len(s) {
-		builder.WriteString(url.QueryEscape(s[start:]))
+	for i := range len(s) {
+		b := s[i]
+		if !shouldEscapeForEncodeURI(b) {
+			builder.WriteByte(b)
+			continue
+		}
+
+		for _, escaped := range []byte(s[i : i+1]) {
+			builder.WriteByte('%')
+			builder.WriteByte(upperhex[escaped>>4])
+			builder.WriteByte(upperhex[escaped&0x0f])
+		}
 	}
 	return builder.String()
 }
 
-func indexAny(s, chars string, start int) int {
-	if start < 0 || start >= len(s) {
-		return -1
+const upperhex = "0123456789ABCDEF"
+
+func shouldEscapeForEncodeURI(b byte) bool {
+	switch {
+	case b >= 'A' && b <= 'Z':
+		return false
+	case b >= 'a' && b <= 'z':
+		return false
+	case b >= '0' && b <= '9':
+		return false
 	}
-	index := strings.IndexAny(s[start:], chars)
-	if index < 0 {
-		return -1
+
+	switch b {
+	case ';', '/', '?', ':', '@', '&', '=', '+', '$', ',', '#', '-', '_', '.', '!', '~', '*', '\'', '(', ')':
+		return false
+	default:
+		return true
 	}
-	return start + index
 }
 
 func getByteOrderMarkLength(text string) int {
