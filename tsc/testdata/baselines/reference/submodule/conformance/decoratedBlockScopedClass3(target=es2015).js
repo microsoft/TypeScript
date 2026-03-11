@@ -33,25 +33,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var Foo_1, Foo_2;
 function decorator() {
     return (target) => { };
 }
-let Foo = class Foo {
+let Foo = Foo_1 = class Foo {
     static func() {
-        return new Foo();
+        return new Foo_1();
     }
 };
-Foo = __decorate([
+Foo = Foo_1 = __decorate([
     decorator()
 ], Foo);
 Foo.func();
 try {
-    let Foo = class Foo {
+    let Foo = Foo_2 = class Foo {
         static func() {
-            return new Foo();
+            return new Foo_2();
         }
     };
-    Foo = __decorate([
+    Foo = Foo_2 = __decorate([
         decorator()
     ], Foo);
     Foo.func();

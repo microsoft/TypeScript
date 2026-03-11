@@ -26,4 +26,4 @@ __decorate([
 ], Foo.prototype, "a", void 0);
 __decorate([
     decorator
-], Foo.prototype, _a, void 0);
+], Foo.prototype, b, void 0);

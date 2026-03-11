@@ -675,7 +675,9 @@ func (c *EmitContext) ReadEmitHelpers() []*EmitHelper {
 
 func (c *EmitContext) AddEmitHelper(node *ast.Node, helper ...*EmitHelper) {
 	emitNode := c.emitNodes.Get(node)
-	emitNode.helpers = append(emitNode.helpers, helper...)
+	for _, h := range helper {
+		emitNode.helpers = core.AppendIfUnique(emitNode.helpers, h)
+	}
 }
 
 func (c *EmitContext) MoveEmitHelpers(source *ast.Node, target *ast.Node, predicate func(helper *EmitHelper) bool) {

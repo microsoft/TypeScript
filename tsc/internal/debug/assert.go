@@ -7,11 +7,11 @@ import (
 	"reflect"
 )
 
-func Assert(expression bool, message ...string) {
+func Assert(expression bool, message ...any) {
 	if !expression {
 		var msg string
 		if len(message) > 0 {
-			msg = "False expression: " + message[0]
+			msg = "False expression: " + fmt.Sprint(message...)
 		} else {
 			msg = "False expression."
 		}
@@ -33,11 +33,11 @@ func isNil[T any](value T) bool {
 	}
 }
 
-func AssertNil(value any, message ...string) {
+func AssertNil(value any, message ...any) {
 	if value != nil && !isNil(value) {
 		var msg string
 		if len(message) > 0 {
-			msg = "Nil expression: " + message[0]
+			msg = "Nil expression: " + fmt.Sprint(message...)
 		} else {
 			msg = "Nil expression."
 		}
@@ -45,97 +45,97 @@ func AssertNil(value any, message ...string) {
 	}
 }
 
-func AssertEqual(a fmt.Stringer, b fmt.Stringer, message ...string) {
+func AssertEqual(a fmt.Stringer, b fmt.Stringer, message ...any) {
 	if a != b {
 		var msg string
 		if len(message) == 0 {
 			msg = ""
 		} else {
-			msg = message[0]
+			msg = fmt.Sprint(message...)
 		}
 		Fail(fmt.Sprintf("Expected %s == %s. %s", a.String(), b.String(), msg))
 	}
 }
 
-func AssertLessThan(a int, b int, message ...string) {
+func AssertLessThan(a int, b int, message ...any) {
 	if a >= b {
 		var msg string
 		if len(message) == 0 {
 			msg = ""
 		} else {
-			msg = message[0]
+			msg = fmt.Sprint(message...)
 		}
 		Fail(fmt.Sprintf("Expected %d < %d. %s", a, b, msg))
 	}
 }
 
-func AssertLessThanOrEqual(a int, b int, message ...string) {
+func AssertLessThanOrEqual(a int, b int, message ...any) {
 	if a > b {
 		var msg string
 		if len(message) == 0 {
 			msg = ""
 		} else {
-			msg = message[0]
+			msg = fmt.Sprint(message...)
 		}
 		Fail(fmt.Sprintf("Expected %d <= %d. %s", a, b, msg))
 	}
 }
 
-func AssertGreaterThan(a int, b int, message ...string) {
+func AssertGreaterThan(a int, b int, message ...any) {
 	if a <= b {
 		var msg string
 		if len(message) == 0 {
 			msg = ""
 		} else {
-			msg = message[0]
+			msg = fmt.Sprint(message...)
 		}
 		Fail(fmt.Sprintf("Expected %d > %d. %s", a, b, msg))
 	}
 }
 
-func AssertGreaterThanOrEqual(a int, b int, message ...string) {
+func AssertGreaterThanOrEqual(a int, b int, message ...any) {
 	if a < b {
 		var msg string
 		if len(message) == 0 {
 			msg = ""
 		} else {
-			msg = message[0]
+			msg = fmt.Sprint(message...)
 		}
 		Fail(fmt.Sprintf("Expected %d >= %d. %s", a, b, msg))
 	}
 }
 
-func AssertIsDefined(value any, message ...string) {
+func AssertIsDefined(value any, message ...any) {
 	if value == nil || isNil(value) { // handle all `nil` interfaces
 		var msg string
 		if len(message) == 0 {
 			msg = ""
 		} else {
-			msg = message[0]
+			msg = fmt.Sprint(message...)
 		}
 		Fail(msg)
 	}
 }
 
-func CheckDefined[T any](value T, message ...string) T {
+func CheckDefined[T any](value T, message ...any) T {
 	AssertIsDefined(value, message...)
 	return value
 }
 
-func AssertEachIsDefined[TElem any](value []TElem, message ...string) {
+func AssertEachIsDefined[TElem any](value []TElem, message ...any) {
 	for _, elem := range value {
 		AssertIsDefined(elem, message...)
 	}
 }
 
-func CheckEachIsDefined[TElem any](value []TElem, message ...string) []TElem {
+func CheckEachIsDefined[TElem any](value []TElem, message ...any) []TElem {
 	AssertEachIsDefined(value, message...)
 	return value
 }
 
-var unexpectedNode []string = []string{"Unexpected node."}
+var unexpectedNode []any = []any{"Unexpected node."}
 
-func AssertEachNode[TElem any](nodes []TElem, test func(elem TElem) bool, message ...string) {
+func AssertEachNode[TElem any](nodes []TElem, test func(elem TElem) bool, message ...any) {
 	if len(message) == 0 {
 		message = unexpectedNode
 	}
@@ -144,7 +144,7 @@ func AssertEachNode[TElem any](nodes []TElem, test func(elem TElem) bool, messag
 	}
 }
 
-func AssertNode[TElem any](node TElem, test func(elem TElem) bool, message ...string) {
+func AssertNode[TElem any](node TElem, test func(elem TElem) bool, message ...any) {
 	if len(message) == 0 {
 		message = unexpectedNode
 	}
@@ -154,7 +154,7 @@ func AssertNode[TElem any](node TElem, test func(elem TElem) bool, message ...st
 	}
 }
 
-func AssertNotNode[TElem any](node TElem, test func(elem TElem) bool, message ...string) {
+func AssertNotNode[TElem any](node TElem, test func(elem TElem) bool, message ...any) {
 	if isNil(node) {
 		return
 	}
@@ -167,7 +167,7 @@ func AssertNotNode[TElem any](node TElem, test func(elem TElem) bool, message ..
 	Assert(!test(node), message...)
 }
 
-func AssertOptionalNode[TElem any](node TElem, test func(elem TElem) bool, message ...string) {
+func AssertOptionalNode[TElem any](node TElem, test func(elem TElem) bool, message ...any) {
 	if isNil(node) {
 		return
 	}
@@ -180,7 +180,7 @@ func AssertOptionalNode[TElem any](node TElem, test func(elem TElem) bool, messa
 	Assert(test(node), message...)
 }
 
-func AssertOptionalToken[TElem interface{ KindValue() int16 }](node TElem, kind int16, message ...string) {
+func AssertOptionalToken[TElem interface{ KindValue() int16 }](node TElem, kind int16, message ...any) {
 	if isNil(node) {
 		return
 	}
@@ -190,7 +190,7 @@ func AssertOptionalToken[TElem interface{ KindValue() int16 }](node TElem, kind 
 	Assert(node.KindValue() == kind, message...)
 }
 
-func AssertMissingNode[TElem any](node TElem, message ...string) {
+func AssertMissingNode[TElem any](node TElem, message ...any) {
 	if len(message) == 0 {
 		message = unexpectedNode
 	}

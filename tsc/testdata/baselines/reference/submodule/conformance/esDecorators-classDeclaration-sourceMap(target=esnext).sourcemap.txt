@@ -24,14 +24,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(2, 5) Source(3, 5) + SourceIndex(0)
 ---
 >>>@dec
-1->^
-2 > ^^^
-3 >    ^^^^^^->
 1->
-  >@
-2 > dec
-1->Emitted(3, 2) Source(4, 2) + SourceIndex(0)
-2 >Emitted(3, 5) Source(4, 5) + SourceIndex(0)
+2 >^
+3 > ^^^
+4 >    ^^^^^^->
+1->
+  >
+2 >@
+3 > dec
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 2) Source(4, 2) + SourceIndex(0)
+3 >Emitted(3, 5) Source(4, 5) + SourceIndex(0)
 ---
 >>>class C {
 1->^^^^^^
@@ -57,14 +60,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(5, 9) Source(6, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(6, 6) Source(7, 6) + SourceIndex(0)
-2 >Emitted(6, 9) Source(7, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(6, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(7, 6) + SourceIndex(0)
+3 >Emitted(6, 9) Source(7, 9) + SourceIndex(0)
 ---
 >>>    method() { }
 1->^^^^
@@ -96,14 +102,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(8, 9) Source(10, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(9, 6) Source(11, 6) + SourceIndex(0)
-2 >Emitted(9, 9) Source(11, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(9, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(9, 6) Source(11, 6) + SourceIndex(0)
+3 >Emitted(9, 9) Source(11, 9) + SourceIndex(0)
 ---
 >>>    get x() { return 1; }
 1->^^^^^^^^
@@ -147,14 +156,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(11, 9) Source(14, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(12, 6) Source(15, 6) + SourceIndex(0)
-2 >Emitted(12, 9) Source(15, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(12, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(12, 6) Source(15, 6) + SourceIndex(0)
+3 >Emitted(12, 9) Source(15, 9) + SourceIndex(0)
 ---
 >>>    set x(value) { }
 1->^^^^^^^^
@@ -192,14 +204,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(14, 9) Source(18, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(15, 6) Source(19, 6) + SourceIndex(0)
-2 >Emitted(15, 9) Source(19, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(15, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(19, 6) + SourceIndex(0)
+3 >Emitted(15, 9) Source(19, 9) + SourceIndex(0)
 ---
 >>>    y = 1;
 1->^^^^
@@ -234,14 +249,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(17, 9) Source(22, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(18, 6) Source(23, 6) + SourceIndex(0)
-2 >Emitted(18, 9) Source(23, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(18, 5) Source(23, 5) + SourceIndex(0)
+2 >Emitted(18, 6) Source(23, 6) + SourceIndex(0)
+3 >Emitted(18, 9) Source(23, 9) + SourceIndex(0)
 ---
 >>>    accessor z = 1;
 1->^^^^
@@ -282,14 +300,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(20, 9) Source(26, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(21, 6) Source(27, 6) + SourceIndex(0)
-2 >Emitted(21, 9) Source(27, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(21, 5) Source(27, 5) + SourceIndex(0)
+2 >Emitted(21, 6) Source(27, 6) + SourceIndex(0)
+3 >Emitted(21, 9) Source(27, 9) + SourceIndex(0)
 ---
 >>>    static #method() { }
 1->^^^^
@@ -327,14 +348,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(23, 9) Source(30, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(24, 6) Source(31, 6) + SourceIndex(0)
-2 >Emitted(24, 9) Source(31, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(24, 5) Source(31, 5) + SourceIndex(0)
+2 >Emitted(24, 6) Source(31, 6) + SourceIndex(0)
+3 >Emitted(24, 9) Source(31, 9) + SourceIndex(0)
 ---
 >>>    static get #x() { return 1; }
 1->^^^^
@@ -384,14 +408,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(26, 9) Source(34, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(27, 6) Source(35, 6) + SourceIndex(0)
-2 >Emitted(27, 9) Source(35, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(27, 5) Source(35, 5) + SourceIndex(0)
+2 >Emitted(27, 6) Source(35, 6) + SourceIndex(0)
+3 >Emitted(27, 9) Source(35, 9) + SourceIndex(0)
 ---
 >>>    static set #x(value) { }
 1->^^^^
@@ -435,14 +462,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(29, 9) Source(38, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(30, 6) Source(39, 6) + SourceIndex(0)
-2 >Emitted(30, 9) Source(39, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(30, 5) Source(39, 5) + SourceIndex(0)
+2 >Emitted(30, 6) Source(39, 6) + SourceIndex(0)
+3 >Emitted(30, 9) Source(39, 9) + SourceIndex(0)
 ---
 >>>    static #y = 1;
 1->^^^^
@@ -483,14 +513,17 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 3 >Emitted(32, 9) Source(42, 9) + SourceIndex(0)
 ---
 >>>    @dec
-1->^^^^^
-2 >     ^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^->
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^^^^^^^^^^^^^^^^^^^^->
 1->
-  >    @
-2 >     dec
-1->Emitted(33, 6) Source(43, 6) + SourceIndex(0)
-2 >Emitted(33, 9) Source(43, 9) + SourceIndex(0)
+  >    
+2 >    @
+3 >     dec
+1->Emitted(33, 5) Source(43, 5) + SourceIndex(0)
+2 >Emitted(33, 6) Source(43, 6) + SourceIndex(0)
+3 >Emitted(33, 9) Source(43, 9) + SourceIndex(0)
 ---
 >>>    static accessor #z = 1;
 1->^^^^

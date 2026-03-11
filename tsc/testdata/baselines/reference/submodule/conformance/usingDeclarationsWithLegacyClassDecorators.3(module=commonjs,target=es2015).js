@@ -14,9 +14,9 @@ export default class C {
 
 //// [usingDeclarationsWithLegacyClassDecorators.3.js]
 "use strict";
-var before, C, _default;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
+var before, C, _default;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);

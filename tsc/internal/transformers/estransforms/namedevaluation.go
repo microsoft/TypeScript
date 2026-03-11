@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/printer"
 )
 
@@ -136,7 +137,8 @@ func isNamedEvaluationAnd(emitContext *printer.EmitContext, node *ast.Node, cb f
 	case ast.KindExportAssignment:
 		return isAnonymousFunctionDefinition(emitContext, node.Expression(), cb)
 	default:
-		panic("Unhandled case in isNamedEvaluation")
+		debug.Fail("Unhandled case in isNamedEvaluation")
+		return false
 	}
 }
 
@@ -168,9 +170,7 @@ func getAssignedNameOfPropertyName(emitContext *printer.EmitContext, name *ast.P
 		return assignedName, name
 	}
 
-	if !ast.IsComputedPropertyName(expression) {
-		panic("Expected computed property name")
-	}
+	debug.Assert(ast.IsComputedPropertyName(name), "Expected computed property name")
 
 	assignedName = factory.NewGeneratedNameForNode(name)
 	emitContext.AddVariableDeclaration(assignedName)
@@ -252,6 +252,7 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 	membersList := factory.NewNodeList(members)
 	membersList.Loc = node.MemberList().Loc
 
+	oldNode := node
 	if ast.IsClassDeclaration(node) {
 		node = factory.UpdateClassDeclaration(
 			node.AsClassDeclaration(),
@@ -273,6 +274,13 @@ func injectClassNamedEvaluationHelperBlockIfMissing(
 	}
 
 	emitContext.SetAssignedName(node, assignedName)
+
+	// Transfer ClassThis from old to new node, since UpdateClassExpression creates
+	// a new node that won't have ClassThis set on it.
+	if ct := emitContext.ClassThis(oldNode); ct != nil {
+		emitContext.SetClassThis(node, ct)
+	}
+
 	return node
 }
 
@@ -523,8 +531,10 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 	var assignedName *ast.Expression
 	if len(assignedNameText) > 0 {
 		assignedName = factory.NewStringLiteral(assignedNameText, ast.TokenFlagsNone)
-	} else {
+	} else if node.IsExportEquals {
 		assignedName = factory.NewStringLiteral("", ast.TokenFlagsNone)
+	} else {
+		assignedName = factory.NewStringLiteral("default", ast.TokenFlagsNone)
 	}
 	expression := finishTransformNamedEvaluation(emitContext, node.Expression, assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateExportAssignment(
@@ -555,6 +565,7 @@ func transformNamedEvaluation(context *printer.EmitContext, node *ast.Node /*Nam
 	case ast.KindExportAssignment:
 		return transformNamedEvaluationOfExportAssignment(context, node.AsExportAssignment(), ignoreEmptyStringLiteral, assignedName)
 	default:
-		panic("Unhandled case in transformNamedEvaluation")
+		debug.Fail("Unhandled case in transformNamedEvaluation")
+		return node
 	}
 }

@@ -13,8 +13,8 @@ export class C {
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.2.js]
-var before, C;
 export { C };
+var before, C;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);

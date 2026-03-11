@@ -474,8 +474,46 @@ func (p *Program) collectDiagnosticsFromFiles(ctx context.Context, sourceFiles [
 
 func (p *Program) GetSyntacticDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
 	return p.collectDiagnostics(ctx, sourceFile, false /*concurrent*/, func(_ context.Context, file *ast.SourceFile) []*ast.Diagnostic {
-		return core.Concatenate(file.Diagnostics(), file.JSDiagnostics())
+		diags := core.Concatenate(file.Diagnostics(), file.JSDiagnostics())
+		// For JS files that won't be checked by the checker (no checkJs/ts-check), we need
+		// program-level syntactic checks that require compiler options. This mirrors Strada's
+		// getJSSyntacticDiagnosticsForFile in program.ts.
+		if ast.IsSourceFileJS(file) && !ast.IsCheckJSEnabledForFile(file, p.Options()) {
+			diags = append(diags, getAdditionalJSSyntacticDiagnostics(file, p.Options())...)
+		}
+		return diags
 	})
+}
+
+// getAdditionalJSSyntacticDiagnostics produces option-dependent syntactic diagnostics for JS files
+// that aren't covered by the parser or the checker. In Strada, the equivalent logic lives in
+// getJSSyntacticDiagnosticsForFile in program.ts. In Corsa, most of that function's checks were
+// moved into the parser (checkJSSyntax/checkJSDecoratorSyntax), but checks that depend on compiler
+// options can't live in the parser and must remain here. The checker handles these for checked files,
+// but doesn't run on unchecked JS files (no checkJs/ts-check).
+func getAdditionalJSSyntacticDiagnostics(file *ast.SourceFile, options *core.CompilerOptions) []*ast.Diagnostic {
+	if options.ExperimentalDecorators.IsTrue() {
+		return nil
+	}
+	var diags []*ast.Diagnostic
+	// Parameter decorators are only valid with experimentalDecorators. Without it,
+	// the checker would report this, but the checker doesn't run on unchecked JS files.
+	var walk ast.Visitor
+	walk = func(node *ast.Node) bool {
+		if node.SubtreeFacts()&ast.SubtreeContainsDecorators == 0 {
+			return false
+		}
+		if node.Kind == ast.KindParameter && ast.HasDecorators(node) {
+			decorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
+			if decorator != nil {
+				diags = append(diags, ast.NewDiagnostic(file, decorator.Loc, diagnostics.Decorators_are_not_valid_here))
+			}
+		}
+		node.ForEachChild(walk)
+		return false
+	}
+	file.AsNode().ForEachChild(walk)
+	return diags
 }
 
 func (p *Program) GetBindDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {

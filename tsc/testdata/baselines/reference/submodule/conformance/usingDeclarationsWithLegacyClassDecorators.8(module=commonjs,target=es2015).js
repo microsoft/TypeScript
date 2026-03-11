@@ -14,7 +14,6 @@ using after = null;
 
 //// [usingDeclarationsWithLegacyClassDecorators.8.js]
 "use strict";
-var after;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 let C = class C {
@@ -23,6 +22,7 @@ exports.C = C;
 exports.C = C = __decorate([
     dec
 ], C);
+var after;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     after = __addDisposableResource(env_1, null, false);

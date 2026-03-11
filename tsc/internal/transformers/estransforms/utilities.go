@@ -275,3 +275,15 @@ func (s *superAccessState) trackSuperAccess(node *ast.Node) {
 		}
 	}
 }
+
+// createAccessorPropertyBackingField creates a private backing field for an `accessor` PropertyDeclaration.
+func createAccessorPropertyBackingField(f *printer.NodeFactory, node *ast.PropertyDeclaration, modifiers *ast.ModifierList, initializer *ast.Expression) *ast.Node {
+	return f.UpdatePropertyDeclaration(
+		node,
+		modifiers,
+		f.NewGeneratedPrivateNameForNodeEx(node.Name(), printer.AutoGenerateOptions{Suffix: "_accessor_storage"}),
+		nil, /*postfixToken*/
+		nil, /*typeNode*/
+		initializer,
+	)
+}

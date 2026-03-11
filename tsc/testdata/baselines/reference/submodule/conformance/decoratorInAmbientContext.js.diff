@@ -1,8 +1,0 @@
---- old.decoratorInAmbientContext.js
-+++ new.decoratorInAmbientContext.js
-@@= skipped -25, +25 lines =@@
- ], Foo.prototype, "a", void 0);
- __decorate([
-     decorator
--], Foo.prototype, b, void 0);
-+], Foo.prototype, _a, void 0);

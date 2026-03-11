@@ -176,7 +176,6 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var d1, a, C1;
 async function af() {
     const env_18 = { stack: [], error: void 0, hasError: false };
     try {
@@ -212,6 +211,7 @@ function ag() {
         }
     });
 }
+var d1, a, C1;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     d1 = __addDisposableResource(env_1, { async [Symbol.asyncDispose]() { } }, true);

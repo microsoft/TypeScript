@@ -71,7 +71,7 @@ func (tx *LegacyDecoratorsTransformer) visit(node *ast.Node) *ast.Node {
 func (tx *LegacyDecoratorsTransformer) visitIdentifier(node *ast.Identifier) *ast.Node {
 	// takes the place of `substituteIdentifier` in the strada transform
 	for _, d := range tx.enclosingClasses {
-		if _, ok := tx.classAliases[d.AsNode()]; ok && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(node.AsNode())) == d.AsNode() {
+		if _, ok := tx.classAliases[d.AsNode()]; ok && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(node.AsNode())) == tx.EmitContext().MostOriginal(d.AsNode()) {
 			return tx.classAliases[d.AsNode()]
 		}
 	}
@@ -483,21 +483,9 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 	if isExport {
 		var exportStatement *ast.Node
 		if isDefault {
-			exportStatement = tx.Factory().NewExportAssignment(nil, false, nil, declName)
+			exportStatement = tx.Factory().NewExportDefault(declName)
 		} else {
-			exportStatement = tx.Factory().NewExportDeclaration(
-				nil,
-				false,
-				tx.Factory().NewNamedExports(
-					tx.Factory().NewNodeList([]*ast.Node{tx.Factory().NewExportSpecifier(
-						false,
-						nil,
-						tx.Factory().GetDeclarationName(node.AsNode()),
-					)}),
-				),
-				nil,
-				nil,
-			)
+			exportStatement = tx.Factory().NewExternalModuleExport(tx.Factory().GetDeclarationName(node.AsNode()))
 		}
 		statements = append(statements, exportStatement)
 	}
@@ -509,15 +497,16 @@ func (tx *LegacyDecoratorsTransformer) transformClassDeclarationWithClassDecorat
 }
 
 func (tx *LegacyDecoratorsTransformer) hasInternalStaticReference(node *ast.ClassDeclaration) bool {
+	classNode := tx.EmitContext().MostOriginal(node.AsNode())
 	var isOrContainsStaticSelfReference func(n *ast.Node) bool
 	isOrContainsStaticSelfReference = func(n *ast.Node) bool {
-		if ast.IsIdentifier(n) && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(n)) == node.AsNode() {
+		if ast.IsIdentifier(n) && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(n)) == classNode {
 			return true
 		}
 		return n.ForEachChild(isOrContainsStaticSelfReference)
 	}
-	for _, node := range node.Members.Nodes {
-		if node.ForEachChild(isOrContainsStaticSelfReference) {
+	for _, member := range node.Members.Nodes {
+		if member.ForEachChild(isOrContainsStaticSelfReference) {
 			return true
 		}
 	}
@@ -567,14 +556,26 @@ func (tx *LegacyDecoratorsTransformer) getConstructorDecorationStatement(node *a
  */
 func (tx *LegacyDecoratorsTransformer) generateConstructorDecorationExpression(node *ast.ClassDeclaration) *ast.Node {
 	allDecorators := getAllDecoratorsOfClass(node, true)
+	// Decorator expressions are evaluated outside the class body, so references to the
+	// class name should use the original binding, not the class alias. In Strada, this is
+	// handled by NodeCheckFlags.ConstructorReference which is only set for identifiers
+	// inside the class body. Since Corsa lacks per-node flags, we temporarily pop the
+	// enclosing class to prevent alias substitution during decorator expression visiting.
+	hasAlias := len(tx.enclosingClasses) > 0 && tx.enclosingClasses[len(tx.enclosingClasses)-1] == node
+	if hasAlias {
+		tx.popEnclosingClass()
+	}
 	decoratorExpressions := tx.transformAllDecoratorsOfDeclaration(allDecorators)
+	if hasAlias {
+		tx.pushEnclosingClass(node)
+	}
 	if len(decoratorExpressions) == 0 {
 		return nil
 	}
 
 	var classAlias *ast.Node
 	if tx.classAliases != nil {
-		classAlias, _ = tx.classAliases[tx.EmitContext().MostOriginal(node.AsNode())]
+		classAlias, _ = tx.classAliases[node.AsNode()]
 	}
 
 	// When we used to transform to ES5/3 this would be moved inside an IIFE and should reference the name
@@ -905,7 +906,7 @@ func (tx *LegacyDecoratorsTransformer) generateClassElementDecorationExpression(
 	//
 
 	prefix := tx.getClassMemberPrefix(node, member)
-	memberName := tx.getExpressionForPropertyName(member, !ast.HasAmbientModifier(member))
+	memberName := tx.getExpressionForPropertyName(member, member.Flags&ast.NodeFlagsAmbient == 0)
 	var descriptor *ast.Node
 	if ast.IsPropertyDeclaration(member) && !ast.HasAccessorModifier(member) {
 		// We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it

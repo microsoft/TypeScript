@@ -1390,7 +1390,7 @@ func (p *Printer) emitModifierList(parentNode *ast.Node, modifiers *ast.Modifier
 		}
 	}
 
-	return greatestEnd(parentNode.Pos(), modifiers, core.LastOrNil(modifiers.Nodes))
+	return greatestEnd(parentNode.Pos(), core.LastOrNil(modifiers.Nodes))
 }
 
 func (p *Printer) emitTypeParameter(node *ast.TypeParameterDeclaration) {
@@ -1449,8 +1449,10 @@ func (p *Printer) emitParameterNode(node *ast.ParameterDeclarationNode) {
 }
 
 func (p *Printer) emitDecorator(node *ast.Decorator) {
+	state := p.enterNode(node.AsNode())
 	p.writePunctuation("@")
-	p.emitExpression(node.Expression, ast.OperatorPrecedenceMember)
+	p.emitExpression(node.Expression, ast.OperatorPrecedenceLeftHandSide)
+	p.exitNode(node.AsNode(), state)
 }
 
 func (p *Printer) emitModifierLike(node *ast.ModifierLike) {
@@ -2568,7 +2570,11 @@ func (p *Printer) emitParenthesizedExpression(node *ast.ParenthesizedExpression)
 	p.emitExpression(node.Expression, ast.OperatorPrecedenceComma)
 	p.writeLineSeparatorsAfter(node.Expression, node.AsNode())
 	p.decreaseIndentIf(indented)
-	p.emitToken(ast.KindCloseParenToken, greatestEnd(openParenPos, node.Expression), WriteKindPunctuation, node.AsNode())
+	closeParenPos := openParenPos
+	if node.Expression != nil {
+		closeParenPos = node.Expression.End()
+	}
+	p.emitToken(ast.KindCloseParenToken, closeParenPos, WriteKindPunctuation, node.AsNode())
 	p.exitNode(node.AsNode(), state)
 }
 
@@ -2872,8 +2878,8 @@ func (p *Printer) emitClassExpression(node *ast.ClassExpression) {
 	state := p.enterNode(node.AsNode())
 	p.generateNameIfNeeded(node.Name())
 
-	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
-	p.emitToken(ast.KindClassKeyword, greatestEnd(node.Pos(), node.Modifiers()), WriteKindKeyword, node.AsNode())
+	pos := p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitToken(ast.KindClassKeyword, pos, WriteKindKeyword, node.AsNode())
 
 	if node.Name() != nil {
 		p.writeSpace()
@@ -3649,8 +3655,8 @@ func (p *Printer) emitFunctionDeclaration(node *ast.FunctionDeclaration) {
 func (p *Printer) emitClassDeclaration(node *ast.ClassDeclaration) {
 	state := p.enterNode(node.AsNode())
 	p.generateNameIfNeeded(node.Name())
-	p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
-	p.emitToken(ast.KindClassKeyword, greatestEnd(node.Pos(), node.Modifiers()), WriteKindKeyword, node.AsNode())
+	pos := p.emitModifierList(node.AsNode(), node.Modifiers(), true /*allowDecorators*/)
+	p.emitToken(ast.KindClassKeyword, pos, WriteKindKeyword, node.AsNode())
 	if node.Name() != nil {
 		p.writeSpace()
 		p.emitIdentifierName(node.Name().AsIdentifier())

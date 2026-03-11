@@ -14,22 +14,22 @@ func Fail(reason string) {
 	panic(reason)
 }
 
-func FailBadSyntaxKind(node interface{ KindString() string }, message ...string) {
+func FailBadSyntaxKind(node interface{ KindString() string }, message ...any) {
 	var msg string
 	if len(message) == 0 {
 		msg = "Unexpected node."
 	} else {
-		msg = message[0]
+		msg = fmt.Sprint(message...)
 	}
 	Fail(fmt.Sprintf("%s\r\nNode %s was unexpected.", msg, node.KindString()))
 }
 
-func AssertNever(member any, message ...string) {
+func AssertNever(member any, message ...any) {
 	var msg string
 	if len(message) == 0 {
 		msg = "Illegal value:"
 	} else {
-		msg = message[0]
+		msg = fmt.Sprint(message...)
 	}
 	var detail string
 	if member, ok := member.(interface{ KindString() string }); ok {

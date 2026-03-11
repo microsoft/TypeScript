@@ -22,36 +22,16 @@ class C {
 //// [esDecorators-classDeclaration-parameterDecorators.js]
 "use strict";
 class C {
-    constructor(
-    @dec
-    x) { }
-    method(
-    @dec
-    x) { }
-    set x(
-    @dec
-    x) { }
-    static method(
-    @dec
-    x) { }
-    static set x(
-    @dec
-    x) { }
+    constructor(x) { }
+    method(x) { }
+    set x(x) { }
+    static method(x) { }
+    static set x(x) { }
 }
 (class C {
-    constructor(
-    @dec
-    x) { }
-    method(
-    @dec
-    x) { }
-    set x(
-    @dec
-    x) { }
-    static method(
-    @dec
-    x) { }
-    static set x(
-    @dec
-    x) { }
+    constructor(x) { }
+    method(x) { }
+    set x(x) { }
+    static method(x) { }
+    static set x(x) { }
 });

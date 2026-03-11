@@ -13,8 +13,8 @@ export default class C {
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.3.js]
-var before, C, _default;
 export { _default as default };
+var before, C, _default;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);

@@ -16,11 +16,11 @@ function f() {
 
 
 //// [usingDeclarationsTopLevelOfModule.3.js]
-var z;
 export { y };
 function f() {
     console.log(y, z);
 }
+var z;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     z = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);

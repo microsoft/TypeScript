@@ -17,10 +17,10 @@ console.log(w, x, y, z);
 
 //// [usingDeclarationsTopLevelOfModule.1.js]
 "use strict";
-var z, y, _default;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.w = exports.default = exports.y = exports.x = void 0;
 exports.x = 1;
+var z, y, _default;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     z = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);

@@ -16,10 +16,10 @@ console.log(w, x, y, z);
 
 
 //// [awaitUsingDeclarationsTopLevelOfModule.1.js]
-var z, y, _default;
 export const x = 1;
 export { y };
 export { _default as default };
+var z, y, _default;
 export let w;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {

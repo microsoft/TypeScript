@@ -148,7 +148,7 @@ func (tx *usingDeclarationTransformer) visitSourceFile(node *ast.SourceFile) *as
 			)
 		}
 
-		topLevelStatements = tx.EmitContext().EndAndMergeVariableEnvironment(topLevelStatements)
+		topLevelStatements = append(topLevelStatements, tx.EmitContext().EndVariableEnvironment()...)
 		if len(tx.exportVars) > 0 {
 			topLevelStatements = append(topLevelStatements, tx.Factory().NewVariableStatement(
 				tx.Factory().NewModifierList([]*ast.Node{

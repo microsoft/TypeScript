@@ -8,6 +8,6 @@ var F = @dec function () {
 
 //// [decoratorOnFunctionExpression.js]
 "use strict";
-var F = ();
+var F = ;
 function () {
 }

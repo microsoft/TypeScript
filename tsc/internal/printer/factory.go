@@ -168,6 +168,7 @@ func (f *NodeFactory) NewStringLiteralFromNode(textSourceNode *ast.Node) *ast.No
 	case ast.KindIdentifier,
 		ast.KindPrivateIdentifier,
 		ast.KindJsxNamespacedName,
+		ast.KindStringLiteral,
 		ast.KindNumericLiteral,
 		ast.KindBigIntLiteral,
 		ast.KindNoSubstitutionTemplateLiteral,
@@ -791,6 +792,18 @@ func (f *NodeFactory) NewImmediatelyInvokedArrowFunction(statements []*ast.State
 	)
 }
 
+// Creates `export default <expression>;`.
+func (f *NodeFactory) NewExportDefault(expression *ast.Expression) *ast.Statement {
+	return f.NewExportAssignment(nil, false, nil, expression)
+}
+
+// Creates `export { <name> };`.
+func (f *NodeFactory) NewExternalModuleExport(name *ast.IdentifierNode) *ast.Statement {
+	specifier := f.NewExportSpecifier(false, nil, name)
+	namedExports := f.NewNamedExports(f.NewNodeList([]*ast.Node{specifier}))
+	return f.NewExportDeclaration(nil, false, namedExports, nil, nil)
+}
+
 // ES2018 Helpers
 // Chains a sequence of expressions using the __assign helper or Object.assign if available in the target
 func (f *NodeFactory) NewAssignHelper(attributesSegments []*ast.Expression, scriptTarget core.ScriptTarget) *ast.Expression {
@@ -966,6 +979,204 @@ func (f *NodeFactory) NewAwaiterHelper(
 			f.NewVoidZeroExpression(),
 			generatorFunc,
 		}),
+		ast.NodeFlagsNone,
+	)
+}
+
+// ES Decorator Helpers
+
+func (f *NodeFactory) NewESDecorateClassContextObject(nameExpr *ast.Expression, metadata *ast.IdentifierNode) *ast.Expression {
+	props := []*ast.Node{
+		f.NewPropertyAssignment(nil, f.NewIdentifier("kind"), nil, nil, f.NewStringLiteral("class", 0)),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("name"), nil, nil, nameExpr),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("metadata"), nil, nil, metadata),
+	}
+	return f.NewObjectLiteralExpression(f.NewNodeList(props), false)
+}
+
+func (f *NodeFactory) NewESDecorateClassElementAccessGetMethod(
+	nameComputed bool,
+	nameExpr *ast.Expression,
+) *ast.Node {
+	var accessor *ast.Expression
+	if nameComputed {
+		accessor = f.NewElementAccessExpression(f.NewIdentifier("obj"), nil, nameExpr, ast.NodeFlagsNone)
+	} else {
+		accessor = f.NewPropertyAccessExpression(f.NewIdentifier("obj"), nil, nameExpr, ast.NodeFlagsNone)
+	}
+
+	objParam := f.NewParameterDeclaration(nil, nil, f.NewIdentifier("obj"), nil, nil, nil)
+
+	arrow := f.NewArrowFunction(
+		nil, nil,
+		f.NewNodeList([]*ast.Node{objParam}),
+		nil, nil,
+		f.NewToken(ast.KindEqualsGreaterThanToken),
+		accessor,
+	)
+
+	return f.NewPropertyAssignment(nil, f.NewIdentifier("get"), nil, nil, arrow)
+}
+
+func (f *NodeFactory) NewESDecorateClassElementAccessSetMethod(
+	nameComputed bool,
+	nameExpr *ast.Expression,
+) *ast.Node {
+	var accessor *ast.Expression
+	if nameComputed {
+		accessor = f.NewElementAccessExpression(f.NewIdentifier("obj"), nil, nameExpr, ast.NodeFlagsNone)
+	} else {
+		accessor = f.NewPropertyAccessExpression(f.NewIdentifier("obj"), nil, nameExpr, ast.NodeFlagsNone)
+	}
+
+	assignment := f.NewAssignmentExpression(accessor, f.NewIdentifier("value"))
+	stmt := f.NewExpressionStatement(assignment)
+	body := f.NewBlock(f.NewNodeList([]*ast.Node{stmt}), false)
+
+	objParam := f.NewParameterDeclaration(nil, nil, f.NewIdentifier("obj"), nil, nil, nil)
+	valueParam := f.NewParameterDeclaration(nil, nil, f.NewIdentifier("value"), nil, nil, nil)
+
+	arrow := f.NewArrowFunction(
+		nil, nil,
+		f.NewNodeList([]*ast.Node{objParam, valueParam}),
+		nil, nil,
+		f.NewToken(ast.KindEqualsGreaterThanToken),
+		body,
+	)
+
+	return f.NewPropertyAssignment(nil, f.NewIdentifier("set"), nil, nil, arrow)
+}
+
+func (f *NodeFactory) NewESDecorateClassElementAccessHasMethod(
+	nameComputed bool,
+	nameExpr *ast.Expression,
+) *ast.Node {
+	// The property name for the "in" expression
+	var propertyName *ast.Expression
+	if !nameComputed && nameExpr != nil && ast.IsIdentifier(nameExpr) {
+		propertyName = f.NewStringLiteralFromNode(nameExpr)
+	} else {
+		propertyName = nameExpr
+	}
+
+	objParam := f.NewParameterDeclaration(nil, nil, f.NewIdentifier("obj"), nil, nil, nil)
+	inExpr := f.NewBinaryExpression(nil, propertyName, nil, f.NewToken(ast.KindInKeyword), f.NewIdentifier("obj"))
+
+	arrow := f.NewArrowFunction(
+		nil, nil,
+		f.NewNodeList([]*ast.Node{objParam}),
+		nil, nil,
+		f.NewToken(ast.KindEqualsGreaterThanToken),
+		inExpr,
+	)
+
+	return f.NewPropertyAssignment(nil, f.NewIdentifier("has"), nil, nil, arrow)
+}
+
+// Creates the "access" object for a class element decorator context.
+//
+// 15.7.3 CreateDecoratorAccessObject (kind, name)
+//
+//  2. If _kind_ is ~field~, ~method~, ~accessor~, or ~getter~, then
+//     a. Let _getAccess_ be a new Abstract Closure with parameters (_object_) that captures _kind_ and _name_ ...
+//     b. Perform ! CreateDataPropertyOrThrow(_access_, "get", _getAccess_).
+//  3. If _kind_ is ~field~, ~accessor~, or ~setter~, then
+//     a. Let _setAccess_ be a new Abstract Closure with parameters (_object_, _value_) that captures _kind_ and _name_ ...
+//     b. Perform ! CreateDataPropertyOrThrow(_access_, "set", _setAccess_).
+func (f *NodeFactory) NewESDecorateClassElementAccessObject(
+	nameComputed bool,
+	nameExpr *ast.Expression,
+	hasGet bool,
+	hasSet bool,
+) *ast.Expression {
+	accessProps := []*ast.Node{}
+
+	// "has" method: obj => name in obj
+	accessProps = append(accessProps, f.NewESDecorateClassElementAccessHasMethod(nameComputed, nameExpr))
+
+	// "get" method: obj => obj.name or obj => obj[name]
+	if hasGet {
+		accessProps = append(accessProps, f.NewESDecorateClassElementAccessGetMethod(nameComputed, nameExpr))
+	}
+
+	// "set" method: (obj, value) => { obj.name = value; } or (obj, value) => { obj[name] = value; }
+	if hasSet {
+		accessProps = append(accessProps, f.NewESDecorateClassElementAccessSetMethod(nameComputed, nameExpr))
+	}
+
+	return f.NewObjectLiteralExpression(f.NewNodeList(accessProps), false)
+}
+
+func (f *NodeFactory) NewESDecorateClassElementContextObject(
+	kind string,
+	nameComputed bool,
+	nameExpr *ast.Expression,
+	isStatic bool,
+	isPrivate bool,
+	hasGet bool,
+	hasSet bool,
+	metadata *ast.IdentifierNode,
+) *ast.Expression {
+	// Build the name value for the context's "name" property
+	var nameValue *ast.Expression
+	if !nameComputed && nameExpr != nil && (ast.IsPrivateIdentifier(nameExpr) || ast.IsIdentifier(nameExpr)) {
+		nameValue = f.NewStringLiteralFromNode(nameExpr)
+	} else {
+		nameValue = nameExpr
+	}
+
+	// Build the access object with has/get/set arrow functions
+	accessObj := f.NewESDecorateClassElementAccessObject(nameComputed, nameExpr, hasGet, hasSet)
+
+	var staticExpr *ast.Node
+	if isStatic {
+		staticExpr = f.NewTrueExpression()
+	} else {
+		staticExpr = f.NewFalseExpression()
+	}
+
+	var privateExpr *ast.Node
+	if isPrivate {
+		privateExpr = f.NewTrueExpression()
+	} else {
+		privateExpr = f.NewFalseExpression()
+	}
+
+	props := []*ast.Node{
+		f.NewPropertyAssignment(nil, f.NewIdentifier("kind"), nil, nil, f.NewStringLiteral(kind, 0)),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("name"), nil, nil, nameValue),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("static"), nil, nil, staticExpr),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("private"), nil, nil, privateExpr),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("access"), nil, nil, accessObj),
+		f.NewPropertyAssignment(nil, f.NewIdentifier("metadata"), nil, nil, metadata),
+	}
+	return f.NewObjectLiteralExpression(f.NewNodeList(props), false)
+}
+
+func (f *NodeFactory) NewESDecorateHelper(ctor *ast.Expression, descriptorIn *ast.Expression, decorators *ast.Expression, contextIn *ast.Expression, initializers *ast.Expression, extraInitializers *ast.Expression) *ast.Expression {
+	f.emitContext.RequestEmitHelper(esDecorateHelper)
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__esDecorate"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers}),
+		ast.NodeFlagsNone,
+	)
+}
+
+func (f *NodeFactory) NewRunInitializersHelper(thisArg *ast.Expression, initializers *ast.Expression, value *ast.Expression) *ast.Expression {
+	f.emitContext.RequestEmitHelper(runInitializersHelper)
+	var arguments []*ast.Expression
+	if value != nil {
+		arguments = []*ast.Expression{thisArg, initializers, value}
+	} else {
+		arguments = []*ast.Expression{thisArg, initializers}
+	}
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__runInitializers"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList(arguments),
 		ast.NodeFlagsNone,
 	)
 }

@@ -163,7 +163,6 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
-var d1, a, C1;
 async function af() {
     const env_18 = { stack: [], error: void 0, hasError: false };
     try {
@@ -197,6 +196,7 @@ async function* ag() {
             await result_19;
     }
 }
+var d1, a, C1;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     d1 = __addDisposableResource(env_1, { async [Symbol.asyncDispose]() { } }, true);

@@ -14,11 +14,11 @@ limit
 
 //// [a.js]
 "use strict";
-const a = !();
-!();
-const b = !();
-!();
-!();
+const a = !;
+!;
+const b = !;
+!;
+!;
 !OK;
 HERE;
 's A shouty thing;

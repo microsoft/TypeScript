@@ -6554,6 +6554,60 @@ func (p *Parser) jsErrorAtRange(loc core.TextRange, message *diagnostics.Message
 	p.jsDiagnostics = append(p.jsDiagnostics, ast.NewDiagnostic(nil, core.NewTextRange(scanner.SkipTrivia(p.sourceText, loc.Pos()), loc.End()), message, args...))
 }
 
+func (p *Parser) checkJSDecoratorSyntax(node *ast.Node) {
+	modifiers := node.ModifierNodes()
+	if len(modifiers) == 0 {
+		return
+	}
+
+	if ast.CanHaveIllegalDecorators(node) {
+		for _, modifier := range modifiers {
+			if ast.IsDecorator(modifier) {
+				p.jsErrorAtRange(modifier.Loc, diagnostics.Decorators_are_not_valid_here)
+				break
+			}
+		}
+	} else if ast.CanHaveDecorators(node) {
+		decoratorIndex := core.FindIndex(modifiers, ast.IsDecorator)
+		if decoratorIndex >= 0 {
+			if ast.IsClassDeclaration(node) {
+				exportIndex := core.FindIndex(modifiers, isExportModifier)
+				if exportIndex >= 0 {
+					defaultIndex := core.FindIndex(modifiers, func(m *ast.Node) bool {
+						return m.Kind == ast.KindDefaultKeyword
+					})
+					if decoratorIndex > exportIndex && defaultIndex >= 0 && decoratorIndex < defaultIndex {
+						// Decorator between `export` and `default`
+						p.jsErrorAtRange(modifiers[decoratorIndex].Loc, diagnostics.Decorators_are_not_valid_here)
+					} else if decoratorIndex < exportIndex {
+						// Find a trailing decorator after the export keyword
+						trailingDecoratorIndex := -1
+						for i := exportIndex; i < len(modifiers); i++ {
+							if ast.IsDecorator(modifiers[i]) {
+								trailingDecoratorIndex = i
+								break
+							}
+						}
+						if trailingDecoratorIndex >= 0 {
+							diag := ast.NewDiagnostic(
+								nil,
+								core.NewTextRange(scanner.SkipTrivia(p.sourceText, modifiers[trailingDecoratorIndex].Loc.Pos()), modifiers[trailingDecoratorIndex].Loc.End()),
+								diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export,
+							)
+							diag.AddRelatedInfo(ast.NewDiagnostic(
+								nil,
+								core.NewTextRange(scanner.SkipTrivia(p.sourceText, modifiers[decoratorIndex].Loc.Pos()), modifiers[decoratorIndex].Loc.End()),
+								diagnostics.Decorator_used_before_export_here,
+							))
+							p.jsDiagnostics = append(p.jsDiagnostics, diag)
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 	if node.Flags&ast.NodeFlagsJavaScriptFile == 0 || node.Flags&(ast.NodeFlagsJSDoc|ast.NodeFlagsReparsed) != 0 {
 		return node
@@ -6612,6 +6666,8 @@ func (p *Parser) checkJSSyntax(node *ast.Node) *ast.Node {
 	case ast.KindSatisfiesExpression:
 		p.jsErrorAtRange(node.Type().Loc, diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files)
 	}
+	// Check decorator placement in JS files
+	p.checkJSDecoratorSyntax(node)
 	// Check absence of type parameters, type arguments and non-JavaScript modifiers
 	switch node.Kind {
 	case ast.KindClassDeclaration, ast.KindClassExpression, ast.KindMethodDeclaration, ast.KindConstructor, ast.KindGetAccessor,

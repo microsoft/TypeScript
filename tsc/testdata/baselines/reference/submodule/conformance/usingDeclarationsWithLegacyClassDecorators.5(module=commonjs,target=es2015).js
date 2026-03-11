@@ -15,9 +15,9 @@ export { C };
 
 //// [usingDeclarationsWithLegacyClassDecorators.5.js]
 "use strict";
-var before, C;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
+var before, C;
 const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
