@@ -118,8 +118,7 @@ x++;`
 	session.DidOpenFile(ctx, "untitled:Untitled-1", 1, "x\n\n", lsproto.LanguageKindTypeScript)
 	session.DidOpenFile(ctx, "untitled:Untitled-2", 1, testContent, lsproto.LanguageKindTypeScript)
 
-	snapshot, release := session.Snapshot()
-	defer release()
+	snapshot := session.Snapshot()
 
 	// Should have an inferred project
 	assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)

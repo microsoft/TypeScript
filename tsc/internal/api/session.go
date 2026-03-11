@@ -27,10 +27,9 @@ var sessionIDCounter atomic.Uint64
 // snapshotData holds the per-snapshot state including the snapshot itself
 // and symbol/type registries scoped to this snapshot.
 // Multiple clients may hold references to the same snapshot via ref counting;
-// the underlying snapshot is only released when refCount reaches zero.
+// the registries are cleaned up when refCount reaches zero.
 type snapshotData struct {
 	snapshot *project.Snapshot
-	release  func()
 	refCount int
 
 	symbolRegistry   map[Handle[ast.Symbol]]*ast.Symbol
@@ -465,23 +464,22 @@ func (s *Session) handleInitialize(ctx context.Context) (*InitializeResponse, er
 // With OpenProject set, it opens the specified project in the new snapshot.
 func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapshotParams) (*UpdateSnapshotResponse, error) {
 	var snapshot *project.Snapshot
-	var release func()
 
 	fileChanges := s.toFileChangeSummary(params.FileChanges)
 
 	if params.OpenProject != "" {
 		configFileName := s.toAbsoluteFileName(params.OpenProject)
-		_, newSnapshot, newRelease, err := s.projectSession.APIOpenProject(ctx, configFileName, fileChanges)
+		_, newSnapshot, err := s.projectSession.APIOpenProject(ctx, configFileName, fileChanges)
 		if err != nil {
 			return nil, fmt.Errorf("%w: failed to load project: %w", ErrClientError, err)
 		}
-		snapshot, release = newSnapshot, newRelease
+		snapshot = newSnapshot
 	} else {
 		// Even when fileChanges is empty, APIUpdateWithFileChanges ensures all projects
 		// opened by the API are up to date. For an API connected to an LSP server, this
 		// brings the API state up to date with the LSP state and ensures projects the
 		// API cares about are ready to be queried.
-		snapshot, release = s.projectSession.APIUpdateWithFileChanges(ctx, fileChanges)
+		snapshot = s.projectSession.APIUpdateWithFileChanges(ctx, fileChanges)
 	}
 
 	// Create or ref-count snapshot data.
@@ -492,13 +490,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	sd, exists := s.snapshots[handle]
 	if exists {
 		sd.refCount++
-		// Release the duplicate reference from the server; the existing
-		// snapshotData already holds the snapshot alive.
-		release()
 	} else {
 		sd = &snapshotData{
 			snapshot:          snapshot,
-			release:           release,
 			refCount:          1,
 			symbolRegistry:    make(map[Handle[ast.Symbol]]*ast.Symbol),
 			typeRegistry:      make(map[Handle[checker.Type]]*checker.Type),
@@ -549,11 +543,8 @@ func (s *Session) handleRelease(ctx context.Context, params *ReleaseParams) (any
 	}
 
 	snapshotHandle := Handle[project.Snapshot](h)
-	var shouldRelease bool
-	var sd *snapshotData
-
 	s.snapshotsMu.Lock()
-	sd = s.snapshots[snapshotHandle]
+	sd := s.snapshots[snapshotHandle]
 	if sd == nil {
 		s.snapshotsMu.Unlock()
 		return nil, fmt.Errorf("%w: snapshot %s not found", ErrClientError, snapshotHandle)
@@ -561,13 +552,8 @@ func (s *Session) handleRelease(ctx context.Context, params *ReleaseParams) (any
 	sd.refCount--
 	if sd.refCount <= 0 {
 		delete(s.snapshots, snapshotHandle)
-		shouldRelease = true
 	}
 	s.snapshotsMu.Unlock()
-
-	if shouldRelease {
-		sd.release()
-	}
 	return true, nil
 }
 
@@ -1726,8 +1712,7 @@ func computeSnapshotChanges(prev *project.Snapshot, next *project.Snapshot) *Sna
 func (s *Session) Close() {
 	s.snapshotsMu.Lock()
 	defer s.snapshotsMu.Unlock()
-	for handle, sd := range s.snapshots {
-		sd.release()
+	for handle := range s.snapshots {
 		delete(s.snapshots, handle)
 	}
 }

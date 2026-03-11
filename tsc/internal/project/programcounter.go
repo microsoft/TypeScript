@@ -1,33 +1,46 @@
 package project
 
 import (
-	"sync/atomic"
+	"sync"
 
-	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 )
 
 type programCounter struct {
-	refs collections.SyncMap[*compiler.Program, *atomic.Int32]
+	mu   sync.Mutex
+	refs map[*compiler.Program]int32
 }
 
 func (c *programCounter) Ref(program *compiler.Program) {
-	counter, _ := c.refs.LoadOrStore(program, &atomic.Int32{})
-	counter.Add(1)
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.refs == nil {
+		c.refs = make(map[*compiler.Program]int32)
+	}
+	c.refs[program]++
 }
 
 func (c *programCounter) Deref(program *compiler.Program) bool {
-	counter, ok := c.refs.Load(program)
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	count, ok := c.refs[program]
 	if !ok {
 		panic("program not found in counter")
 	}
-	count := counter.Add(-1)
+	count--
 	if count < 0 {
 		panic("program reference count went below zero")
 	}
 	if count == 0 {
-		c.refs.Delete(program)
+		delete(c.refs, program)
 		return true
 	}
+	c.refs[program] = count
 	return false
+}
+
+func (c *programCounter) Len() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return len(c.refs)
 }

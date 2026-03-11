@@ -90,8 +90,7 @@ func TestConfigFileChanges(t *testing.T) {
 		t.Parallel()
 		session, utils := projecttestutil.Setup(files)
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
-		snapshotBefore, release := session.Snapshot()
-		defer release()
+		snapshotBefore := session.Snapshot()
 
 		err := utils.FS().WriteFile("/utils/tsconfig.json", `{"compilerOptions": {"composite": true, "target": "esnext"}}`)
 		assert.NilError(t, err)
@@ -104,8 +103,7 @@ func TestConfigFileChanges(t *testing.T) {
 
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
-		snapshotAfter, release := session.Snapshot()
-		defer release()
+		snapshotAfter := session.Snapshot()
 		assert.Assert(t, snapshotAfter != snapshotBefore, "Snapshot should be updated after config file change")
 	})
 
@@ -125,8 +123,7 @@ func TestConfigFileChanges(t *testing.T) {
 
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/index.ts"))
 		assert.NilError(t, err)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Assert(t, len(snapshot.ProjectCollection.Projects()) == 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 	})
@@ -147,8 +144,7 @@ func TestConfigFileChanges(t *testing.T) {
 
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/subfolder/foo.ts"))
 		assert.NilError(t, err)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		assert.Equal(t, snapshot.GetDefaultProject(lsproto.DocumentUri("file:///src/subfolder/foo.ts")).Name(), "/src/subfolder/tsconfig.json")
 
@@ -163,14 +159,12 @@ func TestConfigFileChanges(t *testing.T) {
 
 		_, err = session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///src/subfolder/foo.ts"))
 		assert.NilError(t, err)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, snapshot.GetDefaultProject(lsproto.DocumentUri("file:///src/subfolder/foo.ts")).Name(), "/src/tsconfig.json")
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2) // Old project will be cleaned up on next file open
 
 		session.DidOpenFile(context.Background(), "file:///src/index.ts", 1, files["/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 	})
 

@@ -52,8 +52,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Equal(t, ls.GetProgram().Options().Target, core.ScriptTargetES2015)
 
-			snapshotBefore, release := session.Snapshot()
-			defer release()
+			snapshotBefore := session.Snapshot()
 			configBefore := snapshotBefore.ConfigFileRegistry
 
 			// Update tsconfig.json on disk to test that configs don't get reloaded
@@ -77,8 +76,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			ls, err = session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
 			assert.NilError(t, err)
 
-			snapshotAfter, release := session.Snapshot()
-			defer release()
+			snapshotAfter := session.Snapshot()
 			configAfter := snapshotAfter.ConfigFileRegistry
 
 			// Config should NOT have been reloaded (target should remain ES2015, not esnext)
@@ -183,8 +181,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		session.DidOpenFile(context.Background(), "file:///project/src/utils/lib.ts", 1, baseFiles["/project/src/utils/lib.ts"].(string), lsproto.LanguageKindTypeScript)
 
 		// Initially, the file should use the root project (strict mode)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		initialProject := snapshot.GetDefaultProject("file:///project/src/utils/lib.ts")
 		assert.Equal(t, initialProject.Name(), "/project/tsconfig.json", "Should initially use root tsconfig")
 
@@ -212,8 +209,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		ls, err = session.GetLanguageService(context.Background(), "file:///project/src/utils/lib.ts")
 		assert.NilError(t, err)
 
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		newProject := snapshot.GetDefaultProject("file:///project/src/utils/lib.ts")
 
 		// The file should now use the nested tsconfig
@@ -233,8 +229,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			// Open file without tsconfig - should create inferred project
 			session.DidOpenFile(context.Background(), "file:///project/src/index.ts", 1, files["/project/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 
-			snapshot, release := session.Snapshot()
-			defer release()
+			snapshot := session.Snapshot()
 			assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil, "Should have inferred project")
 			assert.Equal(t, snapshot.GetDefaultProject("file:///project/src/index.ts").Kind, project.KindInferred)
 
@@ -254,8 +249,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 			_, err = session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
 			assert.NilError(t, err)
 
-			snapshot, release = session.Snapshot()
-			defer release()
+			snapshot = session.Snapshot()
 			newProject := snapshot.GetDefaultProject("file:///project/src/index.ts")
 
 			// Check expected behavior
@@ -298,8 +292,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		// Open file without tsconfig - should create inferred project
 		session.DidOpenFile(context.Background(), "file:///project/src/index.ts", 1, files["/project/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, snapshot.GetDefaultProject("file:///project/src/index.ts").Kind, project.KindInferred)
 
 		// Create a tsconfig that would affect this file (simulating a missed creation event)
@@ -320,8 +313,7 @@ func TestBulkCacheInvalidation(t *testing.T) {
 		_, err = session.GetLanguageService(context.Background(), "file:///project/src/index.ts")
 		assert.NilError(t, err)
 
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		newProject := snapshot.GetDefaultProject("file:///project/src/index.ts")
 		assert.Equal(t, newProject.Kind, project.KindInferred, "dist-folder changes should not cause config discovery")
 		// This assertion will fail until we implement logic to ignore dist folder changes

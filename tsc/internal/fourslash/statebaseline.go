@@ -243,8 +243,7 @@ func (f *FourslashTest) printStateDiff(t *testing.T, w io.Writer) {
 		return
 	}
 	session := f.client.Server.Session()
-	snapshot, release := session.Snapshot()
-	defer release()
+	snapshot := session.Snapshot()
 
 	f.printProjectsDiff(t, snapshot, w)
 	f.printOpenFilesDiff(t, snapshot, w)

@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
@@ -43,8 +44,7 @@ func TestSnapshot(t *testing.T) {
 		session := setup(files)
 		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
-		snapshotBefore, release := session.Snapshot()
-		defer release()
+		snapshotBefore := session.Snapshot()
 
 		session.DidChangeFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 			{
@@ -59,8 +59,7 @@ func TestSnapshot(t *testing.T) {
 		})
 		_, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/index.ts")
 		assert.NilError(t, err)
-		snapshotAfter, release := session.Snapshot()
-		defer release()
+		snapshotAfter := session.Snapshot()
 
 		// Configured project was updated by a clone
 		assert.Equal(t, snapshotAfter.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/ts/p1/tsconfig.json")).ProgramUpdateKind, ProgramUpdateKindCloned)
@@ -84,8 +83,7 @@ func TestSnapshot(t *testing.T) {
 		session := setup(files)
 		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
 		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p2/index.ts", 1, files["/home/projects/TS/p2/index.ts"].(string), lsproto.LanguageKindTypeScript)
-		snapshotBefore, release := session.Snapshot()
-		defer release()
+		snapshotBefore := session.Snapshot()
 
 		// a.ts and b.ts are cached
 		assert.Check(t, snapshotBefore.fs.diskFiles["/home/projects/ts/p1/a.ts"] != nil)
@@ -95,8 +93,7 @@ func TestSnapshot(t *testing.T) {
 		session.DidCloseFile(context.Background(), "file:///home/projects/TS/p1/index.ts")
 		// Next open file is unrelated to p1, triggers p1 closing and file cache cleanup
 		session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
-		snapshotAfter, release := session.Snapshot()
-		defer release()
+		snapshotAfter := session.Snapshot()
 
 		// a.ts is cleaned up, b.ts is still cached
 		assert.Check(t, snapshotAfter.fs.diskFiles["/home/projects/ts/p1/a.ts"] == nil)
@@ -111,8 +108,7 @@ func TestSnapshot(t *testing.T) {
 		}
 		session := setup(files)
 		session.DidOpenFile(context.Background(), "file:///home/projects/TS/p1/index.ts", 1, files["/home/projects/TS/p1/index.ts"].(string), lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 
 		handle := snapshot.GetFile("/home/projects/TS/p1/nonexistent.ts")
 		assert.Check(t, handle == nil, "GetFile should return nil for non-existent file")
@@ -175,4 +171,89 @@ func TestSnapshot(t *testing.T) {
 		_, err := session.GetCurrentLanguageServiceWithAutoImports(ctx, otherIndexURI)
 		assert.NilError(t, err)
 	})
+}
+
+func BenchmarkSnapshotCloneRefCost(b *testing.B) {
+	if !bundled.Embedded {
+		b.Skip("bundled files are not embedded")
+	}
+
+	for _, largeProjectSize := range []int{100, 1000, 10_000} {
+		b.Run(fmt.Sprintf("largeProject_%d_files", largeProjectSize), func(b *testing.B) {
+			files := map[string]any{
+				// Small project: 100 files
+				"/small/tsconfig.json": `{"compilerOptions": {"strict": true}}`,
+				// Large project: variable number of files
+				"/large/tsconfig.json": `{"compilerOptions": {"strict": true}}`,
+			}
+
+			// Generate small project files
+			for i := range 100 {
+				files[fmt.Sprintf("/small/file%d.ts", i)] = fmt.Sprintf("export const small%d = %d;", i, i)
+			}
+
+			// Generate large project files
+			for i := range largeProjectSize {
+				files[fmt.Sprintf("/large/file%d.ts", i)] = fmt.Sprintf("export const large%d = %d;", i, i)
+			}
+
+			fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
+			session := NewSession(&SessionInit{
+				BackgroundCtx: context.Background(),
+				Options: &SessionOptions{
+					CurrentDirectory:   "/",
+					DefaultLibraryPath: bundled.LibPath(),
+					TypingsLocation:    "/home/src/Library/Caches/typescript",
+					PositionEncoding:   lsproto.PositionEncodingKindUTF8,
+					WatchEnabled:       false,
+					LoggingEnabled:     false,
+				},
+				FS: fs,
+			})
+
+			// Open one file from each project to initialize them
+			session.DidOpenFile(context.Background(), "file:///small/file0.ts", 1, files["/small/file0.ts"].(string), lsproto.LanguageKindTypeScript)
+			_, err := session.GetLanguageService(context.Background(), "file:///small/file0.ts")
+			if err != nil {
+				b.Fatal(err)
+			}
+
+			session.DidOpenFile(context.Background(), "file:///large/file0.ts", 1, files["/large/file0.ts"].(string), lsproto.LanguageKindTypeScript)
+			_, err = session.GetLanguageService(context.Background(), "file:///large/file0.ts")
+			if err != nil {
+				b.Fatal(err)
+			}
+
+			session.WaitForBackgroundTasks()
+
+			// Now benchmark: change the small project's tsconfig, then request a language service.
+			// This forces a snapshot clone, which refs every file in both projects.
+			strict := true
+			b.ResetTimer()
+			for b.Loop() {
+				strict = !strict
+				var tsconfigContent string
+				if strict {
+					tsconfigContent = `{"compilerOptions": {"strict": true}}`
+				} else {
+					tsconfigContent = `{"compilerOptions": {"strict": false}}`
+				}
+				err := session.fs.fs.WriteFile("/small/tsconfig.json", tsconfigContent)
+				if err != nil {
+					b.Fatal(err)
+				}
+				session.pendingFileChangesMu.Lock()
+				session.pendingFileChanges = append(session.pendingFileChanges, FileChange{
+					Kind: FileChangeKindWatchChange,
+					URI:  "file:///small/tsconfig.json",
+				})
+				session.pendingFileChangesMu.Unlock()
+				_, err = session.GetLanguageService(context.Background(), "file:///small/file0.ts")
+				if err != nil {
+					b.Fatal(err)
+				}
+				session.WaitForBackgroundTasks()
+			}
+		})
+	}
 }

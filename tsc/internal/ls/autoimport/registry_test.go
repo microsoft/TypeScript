@@ -522,7 +522,7 @@ export declare const otherValue: string;`,
 		assert.Equal(t, false, nodeModulesBucket.State.Dirty())
 
 		// IsPreparedForImportingFile should return true with no exclude patterns
-		snapshot, release := session.Snapshot()
+		snapshot := session.Snapshot()
 		defaultProject := snapshot.GetDefaultProject(mainFile.URI())
 		assert.Assert(t, defaultProject != nil)
 		projectPath := defaultProject.ConfigFilePath()
@@ -530,7 +530,6 @@ export declare const otherValue: string;`,
 		preferences.IncludeCompletionsForModuleExports = core.TSTrue
 		preferences.IncludeCompletionsForImportStatements = core.TSTrue
 		isPrepared := snapshot.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, preferences)
-		release()
 		assert.Assert(t, isPrepared)
 
 		// Change the file exclude patterns preference
@@ -541,9 +540,8 @@ export declare const otherValue: string;`,
 		session.Configure(lsutil.NewUserConfig(newPreferences))
 
 		// IsPreparedForImportingFile should return false since exclude patterns changed
-		snapshot2, release2 := session.Snapshot()
+		snapshot2 := session.Snapshot()
 		isPrepared2 := snapshot2.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
-		release2()
 		assert.Assert(t, !isPrepared2)
 
 		// After GetCurrentLanguageServiceWithAutoImports, buckets should be rebuilt
@@ -551,9 +549,8 @@ export declare const otherValue: string;`,
 		assert.NilError(t, err)
 
 		// IsPreparedForImportingFile should return true now that buckets are rebuilt
-		snapshot3, release3 := session.Snapshot()
+		snapshot3 := session.Snapshot()
 		isPrepared3 := snapshot3.AutoImportRegistry().IsPreparedForImportingFile(mainFile.FileName(), projectPath, newPreferences)
-		release3()
 		assert.Assert(t, isPrepared3, "IsPreparedForImportingFile should return true after bucket rebuild with new fileExcludePatterns")
 	})
 
@@ -710,8 +707,7 @@ const (
 
 func autoImportStats(t *testing.T, session *project.Session) *autoimport.CacheStats {
 	t.Helper()
-	snapshot, release := session.Snapshot()
-	defer release()
+	snapshot := session.Snapshot()
 	registry := snapshot.AutoImportRegistry()
 	if registry == nil {
 		t.Fatal("auto import registry not initialized")

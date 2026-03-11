@@ -32,16 +32,14 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure configured project is found for open file
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json")) != nil)
 
 		// Ensure request can use existing snapshot
 		_, err := session.GetLanguageService(context.Background(), uri)
 		assert.NilError(t, err)
-		requestSnapshot, requestRelease := session.Snapshot()
-		defer requestRelease()
+		requestSnapshot := session.Snapshot()
 		assert.Equal(t, requestSnapshot, snapshot)
 
 		// Searched configs should be present while file is open
@@ -52,8 +50,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -73,8 +70,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure configured project is found for open file
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json"))
 		assert.Assert(t, srcProject != nil)
@@ -92,8 +88,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -113,8 +108,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure no configured project is created due to disableReferencedProjectLoad
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json")) == nil)
 
@@ -131,8 +125,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -151,8 +144,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure no configured project is created due to disableReferencedProjectLoad in indirect project
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json")) == nil)
 
@@ -170,8 +162,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -192,8 +183,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure configured project is found through the indirect project without disableReferencedProjectLoad
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json"))
 		assert.Assert(t, srcProject != nil)
@@ -212,8 +202,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -238,8 +227,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure configured project is found for open file - should load both projects
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		srcProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/user/username/projects/myproject/tsconfig-src.json"))
 		assert.Assert(t, srcProject != nil)
@@ -258,8 +246,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -318,8 +305,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure configured project is found for open file
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		demoProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/demos/tsconfig.json"))
 		assert.Assert(t, demoProject != nil)
@@ -339,8 +325,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -381,8 +366,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 
 		// Ensure configured projects are found for open file
 		session.DidOpenFile(context.Background(), uri, 1, content, lsproto.LanguageKindTypeScript)
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 2)
 		rootProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/src/projects/project/tsconfig.json"))
 		assert.Assert(t, rootProject != nil)
@@ -400,8 +384,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidCloseFile(context.Background(), uri)
 		dummyUri := lsproto.DocumentUri("file:///user/username/workspaces/dummy/dummy.ts")
 		session.DidOpenFile(context.Background(), dummyUri, 1, "const x = 1;", lsproto.LanguageKindTypeScript)
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		assert.Assert(t, snapshot.ProjectCollection.InferredProject() != nil)
 
@@ -457,8 +440,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		session.DidOpenFile(context.Background(), "file:///project/c.ts", 1, files["/project/c.ts"].(string), lsproto.LanguageKindTypeScript)
 		session.DidOpenFile(context.Background(), "file:///project/a.ts", 1, files["/project/a.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		snapshot, release := session.Snapshot()
-		defer release()
+		snapshot := session.Snapshot()
 		assert.Equal(t, len(snapshot.ProjectCollection.Projects()), 1)
 		inferredProject := snapshot.ProjectCollection.InferredProject()
 		assert.Assert(t, inferredProject != nil)
@@ -537,12 +519,11 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		depUri := lsproto.DocumentUri("file:///project/node_modules/dep/index.d.ts")
 		session.DidOpenFile(context.Background(), depUri, 1, files["/project/node_modules/dep/index.d.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		snapshot, release := session.Snapshot()
+		snapshot := session.Snapshot()
 		configuredProject := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/project/tsconfig.json"))
 		assert.Assert(t, configuredProject != nil, "configured project should exist")
 		defaultProject := snapshot.GetDefaultProject(depUri)
 		assert.Equal(t, defaultProject, configuredProject, "dependency should be in the configured project initially")
-		release()
 
 		// Step 3: Delete the import from the root file
 		session.DidChangeFile(context.Background(), rootUri, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{{
@@ -554,8 +535,7 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, ls != nil, "language service should be available for dependency")
 
-		snapshot, release = session.Snapshot()
-		defer release()
+		snapshot = session.Snapshot()
 		defaultProject = snapshot.GetDefaultProject(depUri)
 		assert.Assert(t, defaultProject != nil, "dependency should have a default project")
 		assert.Equal(t, defaultProject.Kind, project.KindInferred, "dependency should be in an inferred project after import is deleted")

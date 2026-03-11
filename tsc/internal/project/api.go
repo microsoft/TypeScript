@@ -6,7 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 )
 
-func (s *Session) APIOpenProject(ctx context.Context, configFileName string, apiFileChanges FileChangeSummary) (*Project, *Snapshot, func(), error) {
+func (s *Session) APIOpenProject(ctx context.Context, configFileName string, apiFileChanges FileChangeSummary) (*Project, *Snapshot, error) {
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
 
@@ -21,7 +21,7 @@ func (s *Session) APIOpenProject(ctx context.Context, configFileName string, api
 	})
 
 	if newSnapshot.apiError != nil {
-		return nil, newSnapshot, s.createSnapshotRelease(newSnapshot), newSnapshot.apiError
+		return nil, newSnapshot, newSnapshot.apiError
 	}
 
 	project := newSnapshot.ProjectCollection.ConfiguredProject(s.toPath(configFileName))
@@ -29,11 +29,11 @@ func (s *Session) APIOpenProject(ctx context.Context, configFileName string, api
 		panic("OpenProject request returned no error but project not present in snapshot")
 	}
 
-	return project, newSnapshot, s.createSnapshotRelease(newSnapshot), nil
+	return project, newSnapshot, nil
 }
 
 // APIUpdateWithFileChanges creates a new snapshot incorporating the given file changes.
-func (s *Session) APIUpdateWithFileChanges(ctx context.Context, apiFileChanges FileChangeSummary) (*Snapshot, func()) {
+func (s *Session) APIUpdateWithFileChanges(ctx context.Context, apiFileChanges FileChangeSummary) *Snapshot {
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
 
@@ -46,5 +46,5 @@ func (s *Session) APIUpdateWithFileChanges(ctx context.Context, apiFileChanges F
 		ataChanges:  ataChanges,
 	})
 
-	return newSnapshot, s.createSnapshotRelease(newSnapshot)
+	return newSnapshot
 }
