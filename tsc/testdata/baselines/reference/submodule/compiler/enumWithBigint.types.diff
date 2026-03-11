@@ -5,6 +5,6 @@
 
    0n = 0,
 ->0n : E.__missing
-+>0n : typeof E["\uFFFDmissing"]
++>0n : (typeof E)["\uFFFDmissing"]
  >0 : 0
  }

@@ -1,39 +1,6 @@
 --- old.constEnums.types
 +++ new.constEnums.types
-@@= skipped -185, +185 lines =@@
- >Comments : Comments
-
-     "//",
-->"//" : (typeof Comments)["//"]
-+>"//" : typeof Comments["//"]
-
-     "/*",
-->"/*" : (typeof Comments)["/*"]
-+>"/*" : typeof Comments["/*"]
-
-     "*/",
-->"*/" : (typeof Comments)["*/"]
-+>"*/" : typeof Comments["*/"]
-
-     "///",
-->"///" : (typeof Comments)["///"]
-+>"///" : typeof Comments["///"]
-
-     "#",
-->"#" : (typeof Comments)["#"]
-+>"#" : typeof Comments["#"]
-
-     "<!--",
-->"<!--" : (typeof Comments)["<!--"]
-+>"<!--" : typeof Comments["<!--"]
-
-     "-->",
-->"-->" : (typeof Comments)["-->"]
-+>"-->" : typeof Comments["-->"]
- }
-
- namespace A {
-@@= skipped -385, +385 lines =@@
+@@= skipped -570, +570 lines =@@
  }
 
  function bar(e: A.B.C.E): number {
@@ -42,47 +9,3 @@
  >e : I
  >A : any
  >B : any
-@@= skipped -55, +55 lines =@@
- >c : Comments
-
-         case Comments["//"]:
-->Comments["//"] : (typeof Comments)["//"]
-+>Comments["//"] : typeof Comments["//"]
- >Comments : typeof Comments
- >"//" : "//"
-
-         case Comments["/*"]:
-->Comments["/*"] : (typeof Comments)["/*"]
-+>Comments["/*"] : typeof Comments["/*"]
- >Comments : typeof Comments
- >"/*" : "/*"
-
-         case Comments["*/"]:
-->Comments["*/"] : (typeof Comments)["*/"]
-+>Comments["*/"] : typeof Comments["*/"]
- >Comments : typeof Comments
- >"*/" : "*/"
-
-         case Comments["///"]:
-->Comments["///"] : (typeof Comments)["///"]
-+>Comments["///"] : typeof Comments["///"]
- >Comments : typeof Comments
- >"///" : "///"
-
-         case Comments["#"]:
-->Comments["#"] : (typeof Comments)["#"]
-+>Comments["#"] : typeof Comments["#"]
- >Comments : typeof Comments
- >"#" : "#"
-
-         case Comments["<!--"]:
-->Comments["<!--"] : (typeof Comments)["<!--"]
-+>Comments["<!--"] : typeof Comments["<!--"]
- >Comments : typeof Comments
- >"<!--" : "<!--"
-
-         case Comments["-->"]:
-->Comments["-->"] : (typeof Comments)["-->"]
-+>Comments["-->"] : typeof Comments["-->"]
- >Comments : typeof Comments
- >"-->" : "-->"

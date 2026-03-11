@@ -8,7 +8,7 @@
 //      ^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (enum member) typeof Foo["\t"] = 9
+// | (enum member) (typeof Foo)["\t"] = 9
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -16,7 +16,7 @@
 //      ^^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | (enum member) typeof Foo[""] = 127
+// | (enum member) (typeof Foo)[""] = 127
 // | ```
 // | 
 // | ----------------------------------------------------------------------
@@ -34,7 +34,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) typeof Foo[\"\\t\"] = 9\n```\n"
+        "value": "```tsx\n(enum member) (typeof Foo)[\"\\t\"] = 9\n```\n"
       },
       "range": {
         "start": {
@@ -61,7 +61,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\n(enum member) typeof Foo[\"\"] = 127\n```\n"
+        "value": "```tsx\n(enum member) (typeof Foo)[\"\"] = 127\n```\n"
       },
       "range": {
         "start": {

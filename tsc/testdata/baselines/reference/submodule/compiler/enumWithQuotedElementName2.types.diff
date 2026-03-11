@@ -1,9 +1,0 @@
---- old.enumWithQuotedElementName2.types
-+++ new.enumWithQuotedElementName2.types
-@@= skipped -4, +4 lines =@@
- >E : E
-
-    "fo'o",
-->"fo'o" : (typeof E)["fo'o"]
-+>"fo'o" : typeof E["fo'o"]
- }

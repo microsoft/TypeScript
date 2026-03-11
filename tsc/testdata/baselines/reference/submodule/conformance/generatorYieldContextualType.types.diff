@@ -25,16 +25,7 @@
  >value : T | Directive
 
      return typeof value === "number" && Directive[value] != null;
-@@= skipped -10, +10 lines =@@
- >value : T | Directive
- >"number" : "number"
- >Directive[value] != null : boolean
-->Directive[value] : (typeof Directive)[Directive | (T & number)]
-+>Directive[value] : typeof Directive[Directive | (T & number)]
- >Directive : typeof Directive
- >value : Directive | (T & number)
-   }
-@@= skipped -122, +122 lines =@@
+@@= skipped -132, +132 lines =@@
  };
 
  function canPickStepContinue<T extends QuickPickStep>(

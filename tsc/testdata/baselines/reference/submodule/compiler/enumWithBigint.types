@@ -5,7 +5,7 @@ enum E {
 >E : E
 
   0n = 0,
->0n : typeof E["\uFFFDmissing"]
+>0n : (typeof E)["\uFFFDmissing"]
 >0 : 0
 }
 
