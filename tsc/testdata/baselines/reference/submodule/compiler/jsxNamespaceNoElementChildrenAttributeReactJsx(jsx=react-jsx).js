@@ -26,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("/jsx/jsx-runtime");
-const Title = (props) => jsx_runtime_1.jsx("h1", { children: props.children });
-const element = jsx_runtime_1.jsx(Title, { children: "Hello, world!" });
+const Title = (props) => (0, jsx_runtime_1.jsx)("h1", { children: props.children });
+const element = (0, jsx_runtime_1.jsx)(Title, { children: "Hello, world!" });
 //// [jsx-dev-runtime.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

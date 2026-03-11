@@ -15,8 +15,8 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="/.lib/react16.d.ts" />
-const a = jsx_runtime_1.jsxs(jsx_runtime_1.Fragment, { children: [
-        jsx_runtime_1.jsx("p", {}),
+const a = (0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [
+        (0, jsx_runtime_1.jsx)("p", {}),
         "text",
-        jsx_runtime_1.jsx("div", {})
+        (0, jsx_runtime_1.jsx)("div", {})
     ] });

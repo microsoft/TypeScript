@@ -1,8 +1,0 @@
---- old.jsxClassAttributeResolution.js
-+++ new.jsxClassAttributeResolution.js
-@@= skipped -29, +29 lines =@@
- const jsx_runtime_1 = require("react/jsx-runtime");
- class App {
- }
--exports.a = (0, jsx_runtime_1.jsx)(App, {});
-+exports.a = jsx_runtime_1.jsx(App, {});

@@ -30,4 +30,4 @@ exports.a = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
 class App {
 }
-exports.a = jsx_runtime_1.jsx(App, {});
+exports.a = (0, jsx_runtime_1.jsx)(App, {});

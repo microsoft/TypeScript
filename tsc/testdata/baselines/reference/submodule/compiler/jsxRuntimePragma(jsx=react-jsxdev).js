@@ -86,10 +86,10 @@ exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime automatic */
-const HelloWorld = () => jsx_dev_runtime_1.jsxDEV("h1", { children: "Hello world" });
+const HelloWorld = () => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" });
 exports.HelloWorld = HelloWorld;
-exports.frag = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: jsx_dev_runtime_1.jsxDEV("div", {}) });
-exports.selfClosing = jsx_dev_runtime_1.jsxDEV("img", { src: "./image.png" });
+exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}) });
+exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" });
 //// [three.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -98,10 +98,10 @@ const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
-const HelloWorld = () => jsx_dev_runtime_1.jsxDEV("h1", { children: "Hello world" });
+const HelloWorld = () => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: "Hello world" });
 exports.HelloWorld = HelloWorld;
-exports.frag = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: jsx_dev_runtime_1.jsxDEV("div", {}) });
-exports.selfClosing = jsx_dev_runtime_1.jsxDEV("img", { src: "./image.png" });
+exports.frag = (0, jsx_dev_runtime_1.jsxDEV)(jsx_dev_runtime_1.Fragment, { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}) });
+exports.selfClosing = (0, jsx_dev_runtime_1.jsxDEV)("img", { src: "./image.png" });
 //// [four.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

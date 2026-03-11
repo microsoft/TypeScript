@@ -9,7 +9,4 @@
 +const react_1 = require("react");
  /// <reference path="/.lib/react16.d.ts" />
  const props = { answer: 42 };
--const a = (0, jsx_runtime_1.jsx)("div", Object.assign({}, props, { children: "text" }), "foo");
--const b = (0, react_1.createElement)("div", Object.assign({}, props, { key: "bar" }), "text");
-+const a = jsx_runtime_1.jsx("div", Object.assign({}, props, { children: "text" }), "foo");
-+const b = react_1.createElement("div", Object.assign({}, props, { key: "bar" }), "text");
+ const a = (0, jsx_runtime_1.jsx)("div", Object.assign({}, props, { children: "text" }), "foo");

@@ -76,7 +76,7 @@ declare const console: { log(msg: any): void; };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const App = () => jsx_runtime_1.jsx("div", { propA: true });
+const App = () => (0, jsx_runtime_1.jsx)("div", { propA: true });
 exports.App = App;
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
