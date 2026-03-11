@@ -1,0 +1,26 @@
+x.js(2,5): error TS6424: Multiple 'module.exports' assignments cannot be serialized for declaration emit.
+x.js(2,5): error TS6425: Nested CommonJS export constructs cannot be serialized for declaration emit.
+x.js(5,5): error TS6424: Multiple 'module.exports' assignments cannot be serialized for declaration emit.
+x.js(5,5): error TS6425: Nested CommonJS export constructs cannot be serialized for declaration emit.
+
+
+==== y.js (0 errors) ====
+    const x = require("./x");
+    const a = x.a;
+    const b = x.b;
+    
+==== x.js (4 errors) ====
+    if (!!true) {
+        module.exports = { a: 1 };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6424: Multiple 'module.exports' assignments cannot be serialized for declaration emit.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6425: Nested CommonJS export constructs cannot be serialized for declaration emit.
+    }
+    else {
+        module.exports = { b: "hello" };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6424: Multiple 'module.exports' assignments cannot be serialized for declaration emit.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6425: Nested CommonJS export constructs cannot be serialized for declaration emit.
+    }

@@ -263,12 +263,24 @@ func (tx *DeclarationTransformer) transformSourceFile(node *ast.SourceFile) *ast
 	statements := tx.Visitor().VisitNodes(node.Statements)
 	combinedStatements = tx.transformAndReplaceLatePaintedStatements(statements)
 	combinedStatements.Loc = statements.Loc // setTextRange
-	if ast.IsExternalOrCommonJSModule(node) && (!tx.resultHasExternalModuleIndicator || (tx.needsScopeFixMarker && !tx.resultHasScopeMarker)) {
-		marker := createEmptyExports(tx.Factory().AsNodeFactory())
-		newList := append(combinedStatements.Nodes, marker)
-		withMarker := tx.Factory().NewNodeList(newList)
-		withMarker.Loc = combinedStatements.Loc
-		combinedStatements = withMarker
+	if ast.IsExternalOrCommonJSModule(node) {
+		if ast.IsInJSFile(node.AsNode()) {
+			if exportEquals := node.Symbol.Exports[ast.InternalSymbolNameExportEquals]; exportEquals != nil && len(exportEquals.Declarations) > 1 {
+				for _, node := range exportEquals.Declarations {
+					tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Multiple_module_exports_assignments_cannot_be_serialized_for_declaration_emit))
+				}
+			}
+			for _, node := range node.NestedCJSExports {
+				tx.state.addDiagnostic(createDiagnosticForNode(node, diagnostics.Nested_CommonJS_export_constructs_cannot_be_serialized_for_declaration_emit))
+			}
+		}
+		if !tx.resultHasExternalModuleIndicator || (tx.needsScopeFixMarker && !tx.resultHasScopeMarker) {
+			marker := createEmptyExports(tx.Factory().AsNodeFactory())
+			newList := append(combinedStatements.Nodes, marker)
+			withMarker := tx.Factory().NewNodeList(newList)
+			withMarker.Loc = combinedStatements.Loc
+			combinedStatements = withMarker
+		}
 	}
 	outputFilePath := tspath.GetDirectoryPath(tspath.NormalizeSlashes(tx.declarationFilePath))
 	result := tx.Factory().UpdateSourceFile(node, combinedStatements, node.EndOfFileToken)

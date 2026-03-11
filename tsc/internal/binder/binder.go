@@ -80,6 +80,7 @@ type Binder struct {
 	flowListPool            core.Pool[ast.FlowList]
 	singleDeclarationsPool  core.Pool[*ast.Node]
 	expandoAssignments      []ExpandoAssignmentInfo
+	nestedCJSExports        []*ast.Node
 }
 
 type ActiveLabel struct {
@@ -128,6 +129,7 @@ func bindSourceFile(file *ast.SourceFile) {
 		b.bindDeferredExpandoAssignments()
 		file.SymbolCount = b.symbolCount
 		file.ClassifiableNames = b.classifiableNames
+		file.NestedCJSExports = b.nestedCJSExports
 	})
 }
 
@@ -657,6 +659,7 @@ func (b *Binder) bind(node *ast.Node) bool {
 		node.AsBindingElement().FlowNode = b.currentFlow
 		b.bindVariableDeclarationOrBindingElement(node)
 	case ast.KindCommonJSExport:
+		b.trackNestedCJSExport(node)
 		b.declareModuleMember(node, ast.SymbolFlagsFunctionScopedVariable, ast.SymbolFlagsFunctionScopedVariableExcludes)
 	case ast.KindPropertyDeclaration, ast.KindPropertySignature:
 		b.bindPropertyWorker(node)
@@ -860,6 +863,7 @@ func (b *Binder) bindExportAssignment(node *ast.Node) {
 	container := b.container
 	if ast.IsJSExportAssignment(node) {
 		container = b.file.AsNode()
+		b.trackNestedCJSExport(node)
 	}
 	if container.Symbol() == nil && ast.IsExportAssignment(node) {
 		// Incorrect export assignment in some sort of block construct
@@ -876,6 +880,12 @@ func (b *Binder) bindExportAssignment(node *ast.Node) {
 			// Ensure export assignments have a ValueDeclaration set.
 			SetValueDeclaration(symbol, node)
 		}
+	}
+}
+
+func (b *Binder) trackNestedCJSExport(node *ast.Node) {
+	if !(ast.IsSourceFile(node.Parent) || ast.IsExpressionStatement(node.Parent) && ast.IsSourceFile(node.Parent.Parent)) {
+		b.nestedCJSExports = append(b.nestedCJSExports, node)
 	}
 }
 
@@ -1069,6 +1079,7 @@ func getParentOfPropertyAssignment(node *ast.Node) *ast.Node {
 
 func (b *Binder) bindObjectDefinePropertyExport(node *ast.Node) {
 	if b.setCommonJSModuleIndicator(node) {
+		b.trackNestedCJSExport(node)
 		b.declareModuleMember(node, ast.SymbolFlagsFunctionScopedVariable, ast.SymbolFlagsFunctionScopedVariableExcludes)
 	}
 }

@@ -63,6 +63,14 @@
         "category": "Message",
         "code": 6423
     },
+    "Multiple 'module.exports' assignments cannot be serialized for declaration emit.": {
+        "category": "Error",
+        "code": 6424
+    },
+    "Nested CommonJS export constructs cannot be serialized for declaration emit.": {
+        "category": "Error",
+        "code": 6425
+    },
     "Locale must be an IETF BCP 47 language tag. Examples: '{0}', '{1}'.": {
         "category": "Error",
         "code": 6048
