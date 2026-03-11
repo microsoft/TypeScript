@@ -20,7 +20,7 @@ exports.Sizing = null;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sizing = exports.GridViewSizing = void 0;
 // https://github.com/microsoft/TypeScript/issues/39195
-const gridview_1 = require("./gridview");
+var gridview_1 = require("./gridview");
 Object.defineProperty(exports, "GridViewSizing", { enumerable: true, get: function () { return gridview_1.Sizing; } });
 var Sizing;
 (function (Sizing) {

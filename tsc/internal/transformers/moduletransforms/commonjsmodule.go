@@ -835,7 +835,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node *ast.Ex
 		varStatement := tx.Factory().NewVariableStatement(
 			nil, /*modifiers*/
 			tx.Factory().NewVariableDeclarationList(
-				ast.NodeFlagsConst,
+				ast.NodeFlagsNone,
 				tx.Factory().NewNodeList([]*ast.VariableDeclarationNode{
 					tx.Factory().NewVariableDeclaration(
 						generatedName,

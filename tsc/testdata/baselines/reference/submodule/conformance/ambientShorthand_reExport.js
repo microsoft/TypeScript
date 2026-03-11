@@ -20,7 +20,7 @@ x($);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-const jquery_1 = require("jquery");
+var jquery_1 = require("jquery");
 Object.defineProperty(exports, "x", { enumerable: true, get: function () { return jquery_1.x; } });
 //// [reExportAll.js]
 "use strict";

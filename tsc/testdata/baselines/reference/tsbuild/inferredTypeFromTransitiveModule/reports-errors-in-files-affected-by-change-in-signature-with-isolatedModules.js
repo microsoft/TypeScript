@@ -181,7 +181,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
-const bar_1 = require("./bar");
+var bar_1 = require("./bar");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return __importDefault(bar_1).default; } });
 const bar_2 = __importDefault(require("./bar"));
 (0, bar_2.default)("hello");
@@ -941,7 +941,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
-const bar_1 = require("./bar");
+var bar_1 = require("./bar");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return __importDefault(bar_1).default; } });
 const bar_2 = __importDefault(require("./bar"));
 (0, bar_2.default)();

@@ -21,7 +21,7 @@ exports.OtherThing = OtherThing;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.Thing = void 0;
-const source_1 = require("./source");
+var source_1 = require("./source");
 Object.defineProperty(exports, "Thing", { enumerable: true, get: function () { return source_1.Thing; } });
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return source_1.OtherThing; } });
 

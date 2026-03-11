@@ -18,5 +18,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
-const b_1 = require("./b");
+var b_1 = require("./b");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(b_1).default; } });

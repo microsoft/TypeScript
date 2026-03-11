@@ -58,6 +58,6 @@ class C extends module_2.c2.C {
 }
 let x = new module_1.c();
 let y = ns.value;
-const module_3 = require("module");
+var module_3 = require("module");
 Object.defineProperty(exports, "c1", { enumerable: true, get: function () { return module_3.c1; } });
 exports.z = x;

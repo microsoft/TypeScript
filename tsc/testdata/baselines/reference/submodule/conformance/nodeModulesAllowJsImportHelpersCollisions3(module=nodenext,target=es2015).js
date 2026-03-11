@@ -33,11 +33,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.baz = exports.foo = exports.default = void 0;
 const tslib_1 = require("tslib");
 // cjs format file
-const fs_1 = require("fs");
+var fs_1 = require("fs");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return tslib_1.__importDefault(fs_1).default; } });
-const fs_2 = require("fs");
+var fs_2 = require("fs");
 Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return tslib_1.__importDefault(fs_2).default; } });
-const fs_3 = require("fs");
+var fs_3 = require("fs");
 Object.defineProperty(exports, "baz", { enumerable: true, get: function () { return fs_3.bar; } });
 //// [index.js]
 // esm format file

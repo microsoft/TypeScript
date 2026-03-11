@@ -74,7 +74,7 @@ exports["<X>"] = someValue;
 const arbitraryModuleNamespaceIdentifiers_module_1 = require("./arbitraryModuleNamespaceIdentifiers_module");
 if (arbitraryModuleNamespaceIdentifiers_module_1["<X>"] !== "someValue")
     throw "should be someValue";
-const arbitraryModuleNamespaceIdentifiers_module_2 = require("./arbitraryModuleNamespaceIdentifiers_module");
+var arbitraryModuleNamespaceIdentifiers_module_2 = require("./arbitraryModuleNamespaceIdentifiers_module");
 Object.defineProperty(exports, "<Y>", { enumerable: true, get: function () { return arbitraryModuleNamespaceIdentifiers_module_2["<X>"]; } });
 const arbitraryModuleNamespaceIdentifiers_module_3 = require("./arbitraryModuleNamespaceIdentifiers_module");
 if (arbitraryModuleNamespaceIdentifiers_module_3["<Y>"] !== "someValue")

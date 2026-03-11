@@ -1,9 +1,0 @@
---- old.reexportMissingDefault8.js
-+++ new.reexportMissingDefault8.js
-@@= skipped -17, +17 lines =@@
- };
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.default = void 0;
--var b_1 = require("./b");
-+const b_1 = require("./b");
- Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(b_1).default; } });

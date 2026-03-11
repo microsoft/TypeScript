@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
 exports.default = default_1;
 function default_1() { }
-const hi_1 = require("./hi");
+var hi_1 = require("./hi");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(hi_1).default; } });
-const hi_2 = require("./hi");
+var hi_2 = require("./hi");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return hi_2.aa; } });

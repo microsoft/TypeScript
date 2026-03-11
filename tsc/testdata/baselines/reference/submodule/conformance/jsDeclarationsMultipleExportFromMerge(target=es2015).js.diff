@@ -1,45 +1,6 @@
 --- old.jsDeclarationsMultipleExportFromMerge(target=es2015).js
 +++ new.jsDeclarationsMultipleExportFromMerge(target=es2015).js
-@@= skipped -30, +30 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.c = exports.b = exports.a = void 0;
--var items_1 = require("./items");
-+const items_1 = require("./items");
- Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
- Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
- Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_1.c; } });
-@@= skipped -8, +8 lines =@@
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.c = exports.b = exports.a = void 0;
--var items_1 = require("./items");
-+const items_1 = require("./items");
- Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
--var items_2 = require("./items");
-+const items_2 = require("./items");
- Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_2.b; } });
- Object.defineProperty(exports, "c", { enumerable: true, get: function () { return items_2.c; } });
- //// [multiple.js]
- "use strict";
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.cc = exports.c = exports.bb = exports.aa = exports.b = exports.a = void 0;
--var items_1 = require("./items");
-+const items_1 = require("./items");
- Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
- Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
--var two_1 = require("./two");
-+const two_1 = require("./two");
- Object.defineProperty(exports, "aa", { enumerable: true, get: function () { return two_1.a; } });
--var two_2 = require("./two");
-+const two_2 = require("./two");
- Object.defineProperty(exports, "bb", { enumerable: true, get: function () { return two_2.b; } });
--var two_3 = require("./two");
-+const two_3 = require("./two");
- Object.defineProperty(exports, "c", { enumerable: true, get: function () { return two_3.c; } });
--var items_2 = require("./items");
-+const items_2 = require("./items");
- Object.defineProperty(exports, "cc", { enumerable: true, get: function () { return items_2.c; } });
+@@= skipped -61, +61 lines =@@
 
 
  //// [items.d.ts]

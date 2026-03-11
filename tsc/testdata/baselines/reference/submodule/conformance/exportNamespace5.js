@@ -42,7 +42,7 @@ exports.X = X;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.X = void 0;
-const a_1 = require("./a");
+var a_1 = require("./a");
 Object.defineProperty(exports, "X", { enumerable: true, get: function () { return a_1.X; } });
 //// [c.js]
 "use strict";

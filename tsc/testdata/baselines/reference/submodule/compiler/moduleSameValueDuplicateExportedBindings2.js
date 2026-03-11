@@ -27,7 +27,7 @@ var Animals;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Animals = void 0;
-const c_1 = require("./c");
+var c_1 = require("./c");
 Object.defineProperty(exports, "Animals", { enumerable: true, get: function () { return c_1.Animals; } });
 //// [a.js]
 "use strict";

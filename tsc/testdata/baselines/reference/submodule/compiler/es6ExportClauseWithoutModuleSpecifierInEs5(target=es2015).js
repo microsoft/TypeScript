@@ -35,13 +35,13 @@ exports.x = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.instantiatedModule = exports.c2 = exports.c = void 0;
-const server_1 = require("./server");
+var server_1 = require("./server");
 Object.defineProperty(exports, "c", { enumerable: true, get: function () { return server_1.c; } });
-const server_2 = require("./server");
+var server_2 = require("./server");
 Object.defineProperty(exports, "c2", { enumerable: true, get: function () { return server_2.c; } });
-const server_3 = require("./server");
+var server_3 = require("./server");
 Object.defineProperty(exports, "instantiatedModule", { enumerable: true, get: function () { return server_3.m; } });
-const server_4 = require("./server");
+var server_4 = require("./server");
 Object.defineProperty(exports, "x", { enumerable: true, get: function () { return server_4.x; } });
 
 
