@@ -1,0 +1,15 @@
+error TS5052: Option 'strictPropertyInitialization' cannot be specified without specifying option 'strictNullChecks'.
+
+
+!!! error TS5052: Option 'strictPropertyInitialization' cannot be specified without specifying option 'strictNullChecks'.
+==== strictPropertyInitializationDefaultStrictNullChecks.ts (0 errors) ====
+    // When strict is not specified, it defaults to true in TS 6.0.
+    // strictPropertyInitialization is effectively true via the strict default.
+    // Specifying strictNullChecks: false should produce an error because
+    // strictPropertyInitialization requires strictNullChecks.
+    
+    class C {
+        x: number;
+        constructor() {}
+    }
+    

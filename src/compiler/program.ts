@@ -4070,7 +4070,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
     }
 
     function verifyCompilerOptions() {
-        if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
+        if (getStrictOptionValue(options, "strictPropertyInitialization") && !getStrictOptionValue(options, "strictNullChecks")) {
             createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
         }
         if (options.exactOptionalPropertyTypes && !getStrictOptionValue(options, "strictNullChecks")) {
