@@ -918,7 +918,7 @@ func getNodeDefinedData(node *ast.Node) uint32 {
 		return uint32(boolToByte(n.ContainsOnlyTriviaWhiteSpaces)) << 24
 	case ast.KindVariableDeclarationList:
 		n := node.AsVariableDeclarationList()
-		return uint32(n.Flags & (ast.NodeFlagsLet | ast.NodeFlagsConst) << 24)
+		return (uint32(n.Flags&(ast.NodeFlagsLet|ast.NodeFlagsConst)) << 24)
 	case ast.KindImportAttributes:
 		n := node.AsImportAttributes()
 		return uint32(boolToByte(n.MultiLine))<<24 | uint32(boolToByte(n.Token == ast.KindAssertKeyword))<<25

@@ -1164,7 +1164,7 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		return d.factory.NewBlock(stmts, multiline), nil
 
 	case ast.KindVariableDeclarationList:
-		flags := ast.NodeFlags(definedBits) << 24
+		flags := ast.NodeFlags(definedBits)
 		var decls *ast.NodeList
 		if len(childIndices) > 0 {
 			decls = d.nodeListAt(childIndices[0])
@@ -1333,6 +1333,10 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		ast.KindNeverKeyword,
 		ast.KindIntrinsicKeyword:
 		return d.factory.NewKeywordTypeNode(kind), nil
+
+	// Keyword expressions (must be KeywordExpression, not Token, for the printer)
+	case ast.KindThisKeyword, ast.KindSuperKeyword, ast.KindImportKeyword:
+		return d.factory.NewKeywordExpression(kind), nil
 
 	// Token/keyword nodes with no children
 	default:

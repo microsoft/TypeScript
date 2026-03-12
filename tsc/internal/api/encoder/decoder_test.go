@@ -72,6 +72,36 @@ func TestDecodeSourceFile_VariableDeclaration(t *testing.T) {
 	assert.Equal(t, decl.Initializer.AsNumericLiteral().Text, "1")
 }
 
+func TestDecodeSourceFile_VariableDeclarationListFlags(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		code     string
+		expected ast.NodeFlags
+	}{
+		{"const", "const x = 1;", ast.NodeFlagsConst},
+		{"let", "let x = 1;", ast.NodeFlagsLet},
+		{"var", "var x = 1;", ast.NodeFlagsNone},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			sf := parseSourceFile(tt.code)
+			buf, err := encoder.EncodeSourceFile(sf)
+			assert.NilError(t, err)
+
+			decoded, err := encoder.DecodeSourceFile(buf)
+			assert.NilError(t, err)
+
+			declList := decoded.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList()
+			got := declList.Flags & (ast.NodeFlagsLet | ast.NodeFlagsConst)
+			assert.Equal(t, got, tt.expected, "flags for %q: got %d, want %d", tt.code, got, tt.expected)
+		})
+	}
+}
+
 func TestDecodeSourceFile_FunctionDeclaration(t *testing.T) {
 	t.Parallel()
 	sf := parseSourceFile("function add(a: number, b: number): number { return a + b; }")
@@ -249,6 +279,24 @@ func TestDecodeSourceFile_BinaryExpression(t *testing.T) {
 	assert.Assert(t, binExpr.OperatorToken != nil)
 	assert.Equal(t, binExpr.Left.Kind, ast.KindNumericLiteral)
 	assert.Equal(t, binExpr.Right.Kind, ast.KindNumericLiteral)
+}
+
+func TestDecodeSourceFile_KeywordExpressions(t *testing.T) {
+	t.Parallel()
+	// "this" must decode as KeywordExpression, not Token, or the printer panics
+	sf := parseSourceFile("const x = this;")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	// Navigate: const x = this -> VariableStatement -> declaration -> initializer
+	decl := decoded.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration()
+	thisExpr := decl.Initializer
+	assert.Equal(t, thisExpr.Kind, ast.KindThisKeyword)
+	// This would panic if decoded as Token instead of KeywordExpression
+	assert.Assert(t, thisExpr.AsKeywordExpression() != nil)
 }
 
 func BenchmarkDecodeSourceFile(b *testing.B) {
