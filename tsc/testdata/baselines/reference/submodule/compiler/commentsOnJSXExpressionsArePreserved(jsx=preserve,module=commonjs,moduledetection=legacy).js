@@ -27,12 +27,18 @@ class Component {
 class Component {
     render() {
         return <div>
-            
+            {/* missing */}
             {null /* preserved */}
-            
-            
-            
-            
+            {
+            // ??? 1
+            }
+            {// ??? 2
+            }
+            {// ??? 3
+            }
+            {
+            // ??? 4
+            /* ??? 5 */ }
         </div>;
     }
 }

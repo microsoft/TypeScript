@@ -28,12 +28,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Component {
     render() {
         return <div>
-            
+            {/* missing */}
             {null /* preserved */}
-            
-            
-            
-            
+            {
+            // ??? 1
+            }
+            {// ??? 2
+            }
+            {// ??? 3
+            }
+            {
+            // ??? 4
+            /* ??? 5 */ }
         </div>;
     }
 }

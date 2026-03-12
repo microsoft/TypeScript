@@ -838,7 +838,16 @@ func (p *Printer) shouldEmitDetachedComments(node *ast.Node) bool {
 }
 
 func (p *Printer) hasCommentsAtPosition(pos int) bool {
-	// !!!
+	if p.currentSourceFile == nil {
+		return false
+	}
+
+	for range scanner.GetTrailingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pos+1) {
+		return true
+	}
+	for range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pos+1) {
+		return true
+	}
 	return false
 }
 
@@ -4263,7 +4272,9 @@ func (p *Printer) emitJsxExpression(node *ast.JsxExpression) {
 		p.increaseIndentIf(indented)
 		end := p.emitToken(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
 		p.emitTokenNode(node.DotDotDotToken)
-		p.emitExpression(node.Expression, ast.OperatorPrecedenceDisallowComma)
+		if node.Expression != nil {
+			p.emitExpression(node.Expression, ast.OperatorPrecedenceDisallowComma)
+		}
 		p.emitToken(ast.KindCloseBraceToken, greatestEnd(end, node.Expression, node.DotDotDotToken), WriteKindPunctuation, node.AsNode())
 		p.decreaseIndentIf(indented)
 	}

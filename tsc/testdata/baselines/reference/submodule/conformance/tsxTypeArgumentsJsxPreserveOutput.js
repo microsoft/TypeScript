@@ -48,7 +48,7 @@ function Foo() {
     return null;
 }
 <>
-    
+    {/* JsxSelfClosingElement */}
     <Foo />
     <Foo />
     <Foo />
@@ -60,7 +60,7 @@ function Foo() {
     <Foo />
     <Foo />
 
-    
+    {/* JsxOpeningElement */}
     <Foo></Foo>
     <Foo></Foo>
     <Foo></Foo>

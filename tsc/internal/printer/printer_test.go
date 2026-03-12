@@ -555,6 +555,7 @@ func TestEmit(t *testing.T) {
 		{title: "JsxElement9", input: "<a><b></b></a>", output: "<a><b></b></a>;", jsx: true},
 		{title: "JsxElement10", input: "<a><b /></a>", output: "<a><b /></a>;", jsx: true},
 		{title: "JsxElement11", input: "<a><></></a>", output: "<a><></></a>;", jsx: true},
+		{title: "JsxElement12", input: "<a>\n    {/* missing */}\n    {\n        // foo\n    }\n</a>", output: "<a>\n    {/* missing */}\n    {\n    // foo\n    }\n</a>;", jsx: true},
 		{title: "JsxSelfClosingElement1", input: "<a />", output: "<a />;", jsx: true},
 		{title: "JsxSelfClosingElement2", input: "<this />", output: "<this />;", jsx: true},
 		{title: "JsxSelfClosingElement3", input: "<a:b />", output: "<a:b />;", jsx: true},

@@ -142,15 +142,15 @@ var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
     } attr4="baz">
   </div>;
 (<div>
-    
-    
+    {/* A comment at the beginning */}
+    {/* A second comment at the beginning */}
     <span>
-      
+      {/* A nested comment */}
     </span>
-    
+    {/* A sandwiched comment */}
     <br />
-    
-    
+    {/* A comment at the end */}
+    {/* A second comment at the end */}
   </div>);
 (<div 
 /* a multi-line

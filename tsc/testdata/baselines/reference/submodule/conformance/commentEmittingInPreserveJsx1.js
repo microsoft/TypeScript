@@ -44,7 +44,9 @@ const React = require("react");
 </div>;
 <div>
     // Not Comment
-    
+    {
+    //Comment just Fine
+    }
     // Another not Comment
 </div>;
 <div>
