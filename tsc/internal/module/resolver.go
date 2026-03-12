@@ -219,10 +219,26 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 	resolutionMode core.ResolutionMode,
 	redirectedReference ResolvedProjectReference,
 ) (*ResolvedTypeReferenceDirective, []DiagAndArgs) {
+	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	traceBuilder := r.newTraceBuilder()
 
+	fromInferredTypesContainingFile := strings.HasSuffix(containingFile, InferredTypesContainingFile)
+
+	cacheKey := typeRefDirectiveResolutionCacheKey{
+		containingDirectory:             containingDirectory,
+		typeReferenceName:               typeReferenceDirectiveName,
+		resolutionMode:                  resolutionMode,
+		redirectConfigName:              getRedirectConfigName(redirectedReference),
+		fromInferredTypesContainingFile: fromInferredTypesContainingFile,
+	}
+
+	if traceBuilder == nil {
+		if cached, ok := r.typeRefDirectiveResolutionCache.Get(cacheKey); ok {
+			return cached, nil
+		}
+	}
+
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
 
 	typeRoots, fromConfig := compilerOptions.GetEffectiveTypeRoots(r.host.GetCurrentDirectory())
 	if traceBuilder != nil {
@@ -231,22 +247,39 @@ func (r *Resolver) ResolveTypeReferenceDirective(
 	}
 
 	state := newResolutionState(typeReferenceDirectiveName, containingDirectory, true /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r, traceBuilder)
-	result := state.resolveTypeReferenceDirective(typeRoots, fromConfig, strings.HasSuffix(containingFile, InferredTypesContainingFile))
+	result := state.resolveTypeReferenceDirective(typeRoots, fromConfig, fromInferredTypesContainingFile)
 
 	if traceBuilder != nil {
 		traceBuilder.traceTypeReferenceDirectiveResult(typeReferenceDirectiveName, result)
 	}
+
+	r.typeRefDirectiveResolutionCache.Set(cacheKey, result)
+
 	return result, traceBuilder.getTraces()
 }
 
 func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) (*ResolvedModule, []DiagAndArgs) {
+	containingDirectory := tspath.GetDirectoryPath(containingFile)
 	traceBuilder := r.newTraceBuilder()
+
+	cacheKey := moduleResolutionCacheKey{
+		containingDirectory: containingDirectory,
+		moduleName:          moduleName,
+		resolutionMode:      resolutionMode,
+		redirectConfigName:  getRedirectConfigName(redirectedReference),
+	}
+
+	if traceBuilder == nil {
+		if cached, ok := r.moduleResolutionCache.Get(cacheKey); ok {
+			return cached, nil
+		}
+	}
+
 	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	if traceBuilder != nil {
 		traceBuilder.write(diagnostics.Resolving_module_0_from_1, moduleName, containingFile)
 		traceBuilder.traceResolutionUsingProjectReference(redirectedReference)
 	}
-	containingDirectory := tspath.GetDirectoryPath(containingFile)
 
 	moduleResolution := compilerOptions.GetModuleResolutionKind()
 	if compilerOptions.ModuleResolution != moduleResolution {
@@ -280,7 +313,10 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 		}
 	}
 
-	return r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder), traceBuilder.getTraces()
+	finalResult := r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result, traceBuilder)
+	r.moduleResolutionCache.Set(cacheKey, finalResult)
+
+	return finalResult, traceBuilder.getTraces()
 }
 
 func (r *Resolver) ResolvePackageDirectory(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
