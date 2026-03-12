@@ -19,6 +19,7 @@ type FileSource interface {
 	FS() vfs.FS
 	GetFile(fileName string) FileHandle
 	GetFileByPath(fileName string, path tspath.Path) FileHandle
+	FileExists(fileName string, path tspath.Path) bool
 	GetAccessibleEntries(path string) vfs.Entries
 }
 
@@ -45,6 +46,16 @@ func (s *SnapshotFS) FS() vfs.FS {
 
 func (s *SnapshotFS) GetFile(fileName string) FileHandle {
 	return s.GetFileByPath(fileName, s.toPath(fileName))
+}
+
+func (s *SnapshotFS) FileExists(fileName string, path tspath.Path) bool {
+	if _, ok := s.overlays[path]; ok {
+		return true
+	}
+	if _, ok := s.diskFiles[path]; ok {
+		return true
+	}
+	return s.fs.FileExists(fileName)
 }
 
 func (s *SnapshotFS) GetFileByPath(fileName string, path tspath.Path) FileHandle {
@@ -229,6 +240,25 @@ func (s *snapshotFSBuilder) GetFile(fileName string) FileHandle {
 	return s.GetFileByPath(fileName, path)
 }
 
+func (s *snapshotFSBuilder) FileExists(fileName string, path tspath.Path) bool {
+	if _, ok := s.overlays[path]; ok {
+		return true
+	}
+	if entry, ok := s.diskFiles.Load(path); ok {
+		val := entry.Value()
+		if val == nil {
+			return false
+		}
+		if val.MatchesDiskText() {
+			return true
+		}
+		// Entry is dirty — reload to check current state on disk.
+		return s.reloadEntryIfNeeded(entry) != nil
+	}
+	// Path never loaded into diskFiles — use cached stat (no file read).
+	return s.fs.FileExists(fileName)
+}
+
 func (s *snapshotFSBuilder) GetFileByPath(fileName string, path tspath.Path) FileHandle {
 	if file, ok := s.overlays[path]; ok {
 		return file
@@ -258,39 +288,66 @@ func (s *snapshotFSBuilder) getDiskFile(fileName string, path tspath.Path, force
 }
 
 func (s *snapshotFSBuilder) reloadEntry(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) FileHandle {
-	entry.Locked(func(entry dirty.Value[*diskFile]) {
-		if entry.Value() != nil {
-			s.reloadLockedEntry(entry)
+	var fileName string
+	entry.Locked(func(e dirty.Value[*diskFile]) {
+		if e.Value() != nil {
+			fileName = e.Value().fileName
 		}
 	})
-	if entry == nil || entry.Value() == nil {
+	if fileName == "" {
+		return nil
+	}
+	// Read file outside the lock to avoid blocking other goroutines.
+	content, ok := s.fs.ReadFile(fileName)
+	entry.Locked(func(e dirty.Value[*diskFile]) {
+		if e.Value() == nil {
+			return
+		}
+		if ok {
+			e.Change(func(file *diskFile) {
+				file.content = content
+				file.hash = xxh3.HashString128(content)
+				file.needsReload = false
+			})
+		} else {
+			e.Delete()
+		}
+	})
+	if entry.Value() == nil {
 		return nil
 	}
 	return entry.Value()
 }
 
 func (s *snapshotFSBuilder) reloadEntryIfNeeded(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) FileHandle {
-	entry.Locked(func(entry dirty.Value[*diskFile]) {
-		if entry.Value() != nil && !entry.Value().MatchesDiskText() {
-			s.reloadLockedEntry(entry)
+	var fileName string
+	entry.Locked(func(e dirty.Value[*diskFile]) {
+		if e.Value() != nil && !e.Value().MatchesDiskText() {
+			fileName = e.Value().fileName
 		}
 	})
-	if entry == nil || entry.Value() == nil {
+	if fileName != "" {
+		// Read file outside the lock to avoid blocking other goroutines.
+		content, ok := s.fs.ReadFile(fileName)
+		entry.Locked(func(e dirty.Value[*diskFile]) {
+			if e.Value() == nil || e.Value().MatchesDiskText() {
+				return // another goroutine already reloaded it
+			}
+			if ok {
+				e.Change(func(file *diskFile) {
+					file.content = content
+					file.hash = xxh3.HashString128(content)
+					file.needsReload = false
+				})
+			} else {
+				e.Delete()
+			}
+		})
+	}
+	if entry.Value() == nil {
 		return nil
 	}
 	return entry.Value()
-}
-
-func (s *snapshotFSBuilder) reloadLockedEntry(entry dirty.Value[*diskFile]) {
-	if content, ok := s.fs.ReadFile(entry.Value().fileName); ok {
-		entry.Change(func(file *diskFile) {
-			file.content = content
-			file.hash = xxh3.HashString128(content)
-			file.needsReload = false
-		})
-	} else {
-		entry.Delete()
-	}
 }
 
 func (s *snapshotFSBuilder) watchChangesOverlapCache(change FileChangeSummary) bool {
@@ -430,10 +487,8 @@ func (fs *sourceFS) DirectoryExists(path string) bool {
 
 // FileExists implements vfs.FS.
 func (fs *sourceFS) FileExists(path string) bool {
-	if fh := fs.GetFile(path); fh != nil {
-		return true
-	}
-	return fs.source.FS().FileExists(path)
+	fs.Track(path)
+	return fs.source.FileExists(path, fs.toPath(path))
 }
 
 // GetAccessibleEntries implements vfs.FS.
