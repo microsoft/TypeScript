@@ -37,12 +37,21 @@
         "./scanner": {
             "@typescript/source": "./src/scanner.ts",
             "default": "./dist/scanner.js"
+        },
+        "./visitor": {
+            "@typescript/source": "./src/visitor.ts",
+            "default": "./dist/visitor.js"
+        },
+        "./clone": {
+            "@typescript/source": "./src/clone.ts",
+            "default": "./dist/clone.js"
         }
     },
     "scripts": {
         "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
         "generate:factory": "node --conditions=@typescript/source --experimental-strip-types --no-warnings scripts/generateFactory.ts",
-        "prebuild": "npm run generate:enums && npm run generate:factory",
+        "generate:visitor": "node --conditions=@typescript/source --experimental-strip-types --no-warnings scripts/generateVisitor.ts",
+        "prebuild": "npm run generate:enums && npm run generate:factory && npm run generate:visitor",
         "build": "tsc -b"
     }
 }

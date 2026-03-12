@@ -673,6 +673,1014 @@ export function createNodeArray<T extends Node>(elements: readonly T[], pos: num
     return arr;
 }
 
+/**
+ * Shallow-clone a node, producing a NodeObject copy.
+ * Reads all properties via the getter interface so it works with any
+ * Node implementation (NodeObject, RemoteNode, etc.).
+ */
+export function cloneNode<T extends Node>(node: T): T {
+    const data = cloneNodeData(node);
+    const clone = new NodeObject(node.kind, data);
+    (clone as any).flags = node.flags;
+    (clone as any).pos = node.pos;
+    (clone as any).end = node.end;
+    return clone as unknown as T;
+}
+
+function cloneNodeData(node: any): any {
+    switch (node.kind) {
+        case SyntaxKind.ArrayBindingPattern:
+            return {
+                elements: node.elements,
+            };
+        case SyntaxKind.ArrayLiteralExpression:
+            return {
+                elements: node.elements,
+                multiLine: node.multiLine,
+            };
+        case SyntaxKind.ArrayType:
+            return {
+                elementType: node.elementType,
+            };
+        case SyntaxKind.ArrowFunction:
+            return {
+                modifiers: node.modifiers,
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+                equalsGreaterThanToken: node.equalsGreaterThanToken,
+                body: node.body,
+            };
+        case SyntaxKind.AsExpression:
+            return {
+                expression: node.expression,
+                type: node.type,
+            };
+        case SyntaxKind.AwaitExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.BigIntLiteral:
+            return {
+                text: node.text,
+            };
+        case SyntaxKind.BinaryExpression:
+            return {
+                left: node.left,
+                operatorToken: node.operatorToken,
+                right: node.right,
+            };
+        case SyntaxKind.BindingElement:
+            return {
+                dotDotDotToken: node.dotDotDotToken,
+                propertyName: node.propertyName,
+                name: node.name,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.Block:
+            return {
+                statements: node.statements,
+                multiLine: node.multiLine,
+            };
+        case SyntaxKind.BreakStatement:
+            return {
+                label: node.label,
+            };
+        case SyntaxKind.CallExpression:
+            return {
+                expression: node.expression,
+                questionDotToken: node.questionDotToken,
+                typeArguments: node.typeArguments,
+                arguments: node.arguments,
+            };
+        case SyntaxKind.CallSignature:
+            return {
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.CaseBlock:
+            return {
+                clauses: node.clauses,
+            };
+        case SyntaxKind.CaseClause:
+            return {
+                expression: node.expression,
+                statements: node.statements,
+            };
+        case SyntaxKind.CatchClause:
+            return {
+                variableDeclaration: node.variableDeclaration,
+                block: node.block,
+            };
+        case SyntaxKind.ClassDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                typeParameters: node.typeParameters,
+                heritageClauses: node.heritageClauses,
+                members: node.members,
+            };
+        case SyntaxKind.ClassExpression:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                typeParameters: node.typeParameters,
+                heritageClauses: node.heritageClauses,
+                members: node.members,
+            };
+        case SyntaxKind.ClassStaticBlockDeclaration:
+            return {
+                body: node.body,
+            };
+        case SyntaxKind.CommaListExpression:
+            return {
+                elements: node.elements,
+            };
+        case SyntaxKind.ComputedPropertyName:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.ConditionalExpression:
+            return {
+                condition: node.condition,
+                questionToken: node.questionToken,
+                whenTrue: node.whenTrue,
+                colonToken: node.colonToken,
+                whenFalse: node.whenFalse,
+            };
+        case SyntaxKind.ConditionalType:
+            return {
+                checkType: node.checkType,
+                extendsType: node.extendsType,
+                trueType: node.trueType,
+                falseType: node.falseType,
+            };
+        case SyntaxKind.Constructor:
+            return {
+                modifiers: node.modifiers,
+                parameters: node.parameters,
+                body: node.body,
+            };
+        case SyntaxKind.ConstructorType:
+            return {
+                modifiers: node.modifiers,
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.ConstructSignature:
+            return {
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.ContinueStatement:
+            return {
+                label: node.label,
+            };
+        case SyntaxKind.Decorator:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.DefaultClause:
+            return {
+                statements: node.statements,
+            };
+        case SyntaxKind.DeleteExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.DoStatement:
+            return {
+                statement: node.statement,
+                expression: node.expression,
+            };
+        case SyntaxKind.ElementAccessExpression:
+            return {
+                expression: node.expression,
+                questionDotToken: node.questionDotToken,
+                argumentExpression: node.argumentExpression,
+            };
+        case SyntaxKind.EnumDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                members: node.members,
+            };
+        case SyntaxKind.EnumMember:
+            return {
+                name: node.name,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.ExportAssignment:
+            return {
+                modifiers: node.modifiers,
+                expression: node.expression,
+                isExportEquals: node.isExportEquals,
+            };
+        case SyntaxKind.ExportDeclaration:
+            return {
+                modifiers: node.modifiers,
+                exportClause: node.exportClause,
+                moduleSpecifier: node.moduleSpecifier,
+                attributes: node.attributes,
+                isTypeOnly: node.isTypeOnly,
+            };
+        case SyntaxKind.ExportSpecifier:
+            return {
+                propertyName: node.propertyName,
+                name: node.name,
+                isTypeOnly: node.isTypeOnly,
+            };
+        case SyntaxKind.ExpressionStatement:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.ExpressionWithTypeArguments:
+            return {
+                expression: node.expression,
+                typeArguments: node.typeArguments,
+            };
+        case SyntaxKind.ExternalModuleReference:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.ForInStatement:
+            return {
+                initializer: node.initializer,
+                expression: node.expression,
+                statement: node.statement,
+            };
+        case SyntaxKind.ForOfStatement:
+            return {
+                awaitModifier: node.awaitModifier,
+                initializer: node.initializer,
+                expression: node.expression,
+                statement: node.statement,
+            };
+        case SyntaxKind.ForStatement:
+            return {
+                initializer: node.initializer,
+                condition: node.condition,
+                incrementor: node.incrementor,
+                statement: node.statement,
+            };
+        case SyntaxKind.FunctionDeclaration:
+            return {
+                modifiers: node.modifiers,
+                asteriskToken: node.asteriskToken,
+                name: node.name,
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+                body: node.body,
+            };
+        case SyntaxKind.FunctionExpression:
+            return {
+                modifiers: node.modifiers,
+                asteriskToken: node.asteriskToken,
+                name: node.name,
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+                body: node.body,
+            };
+        case SyntaxKind.FunctionType:
+            return {
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.GetAccessor:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                parameters: node.parameters,
+                type: node.type,
+                body: node.body,
+            };
+        case SyntaxKind.HeritageClause:
+            return {
+                token: node.token,
+                types: node.types,
+            };
+        case SyntaxKind.Identifier:
+            return {
+                text: node.text,
+            };
+        case SyntaxKind.IfStatement:
+            return {
+                expression: node.expression,
+                thenStatement: node.thenStatement,
+                elseStatement: node.elseStatement,
+            };
+        case SyntaxKind.ImportAttribute:
+            return {
+                name: node.name,
+                value: node.value,
+            };
+        case SyntaxKind.ImportAttributes:
+            return {
+                token: node.token,
+                elements: node.elements,
+                multiLine: node.multiLine,
+            };
+        case SyntaxKind.ImportClause:
+            return {
+                name: node.name,
+                namedBindings: node.namedBindings,
+                phaseModifier: node.phaseModifier,
+            };
+        case SyntaxKind.ImportDeclaration:
+            return {
+                modifiers: node.modifiers,
+                importClause: node.importClause,
+                moduleSpecifier: node.moduleSpecifier,
+                attributes: node.attributes,
+            };
+        case SyntaxKind.ImportEqualsDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                moduleReference: node.moduleReference,
+                isTypeOnly: node.isTypeOnly,
+            };
+        case SyntaxKind.ImportSpecifier:
+            return {
+                propertyName: node.propertyName,
+                name: node.name,
+                isTypeOnly: node.isTypeOnly,
+            };
+        case SyntaxKind.ImportType:
+            return {
+                argument: node.argument,
+                attributes: node.attributes,
+                qualifier: node.qualifier,
+                typeArguments: node.typeArguments,
+                isTypeOf: node.isTypeOf,
+            };
+        case SyntaxKind.IndexedAccessType:
+            return {
+                objectType: node.objectType,
+                indexType: node.indexType,
+            };
+        case SyntaxKind.IndexSignature:
+            return {
+                modifiers: node.modifiers,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.InferType:
+            return {
+                typeParameter: node.typeParameter,
+            };
+        case SyntaxKind.InterfaceDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                typeParameters: node.typeParameters,
+                heritageClauses: node.heritageClauses,
+                members: node.members,
+            };
+        case SyntaxKind.IntersectionType:
+            return {
+                types: node.types,
+            };
+        case SyntaxKind.JSDoc:
+            return {
+                comment: node.comment,
+                tags: node.tags,
+            };
+        case SyntaxKind.JSDocAugmentsTag:
+            return {
+                tagName: node.tagName,
+                class: node.class,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocCallbackTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                fullName: node.fullName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocDeprecatedTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocImplementsTag:
+            return {
+                tagName: node.tagName,
+                class: node.class,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocImportTag:
+            return {
+                tagName: node.tagName,
+                importClause: node.importClause,
+                moduleSpecifier: node.moduleSpecifier,
+                attributes: node.attributes,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocLink:
+            return {
+                name: node.name,
+                text: node.text,
+            };
+        case SyntaxKind.JSDocLinkCode:
+            return {
+                name: node.name,
+                text: node.text,
+            };
+        case SyntaxKind.JSDocLinkPlain:
+            return {
+                name: node.name,
+                text: node.text,
+            };
+        case SyntaxKind.JSDocMemberName:
+            return {
+                left: node.left,
+                right: node.right,
+            };
+        case SyntaxKind.JSDocNameReference:
+            return {
+                name: node.name,
+            };
+        case SyntaxKind.JSDocNonNullableType:
+            return {
+                type: node.type,
+                postfix: node.postfix,
+            };
+        case SyntaxKind.JSDocNullableType:
+            return {
+                type: node.type,
+                postfix: node.postfix,
+            };
+        case SyntaxKind.JSDocOptionalType:
+            return {
+                type: node.type,
+            };
+        case SyntaxKind.JSDocOverloadTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocOverrideTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocParameterTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+                isNameFirst: node.isNameFirst,
+                isBracketed: node.isBracketed,
+            };
+        case SyntaxKind.JSDocPrivateTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocPropertyTag:
+            return {
+                comment: node.comment,
+                isNameFirst: node.isNameFirst,
+                isBracketed: node.isBracketed,
+            };
+        case SyntaxKind.JSDocProtectedTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocPublicTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocReadonlyTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocReturnTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocSatisfiesTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocSeeTag:
+            return {
+                tagName: node.tagName,
+                name: node.name,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocSignature:
+            return {
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.JSDocTemplateTag:
+            return {
+                tagName: node.tagName,
+                constraint: node.constraint,
+                typeParameters: node.typeParameters,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocText:
+            return {
+                text: node.text,
+            };
+        case SyntaxKind.JSDocThisTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocTypedefTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                fullName: node.fullName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocTypeExpression:
+            return {
+                type: node.type,
+            };
+        case SyntaxKind.JSDocTypeLiteral:
+            return {
+                jsDocPropertyTags: node.jsDocPropertyTags,
+                isArrayType: node.isArrayType,
+            };
+        case SyntaxKind.JSDocTypeTag:
+            return {
+                tagName: node.tagName,
+                typeExpression: node.typeExpression,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocTag:
+            return {
+                tagName: node.tagName,
+                comment: node.comment,
+            };
+        case SyntaxKind.JSDocVariadicType:
+            return {
+                type: node.type,
+            };
+        case SyntaxKind.JsxAttribute:
+            return {
+                name: node.name,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.JsxAttributes:
+            return {
+                properties: node.properties,
+            };
+        case SyntaxKind.JsxClosingElement:
+            return {
+                tagName: node.tagName,
+            };
+        case SyntaxKind.JsxElement:
+            return {
+                openingElement: node.openingElement,
+                children: node.children,
+                closingElement: node.closingElement,
+            };
+        case SyntaxKind.JsxExpression:
+            return {
+                dotDotDotToken: node.dotDotDotToken,
+                expression: node.expression,
+            };
+        case SyntaxKind.JsxFragment:
+            return {
+                openingFragment: node.openingFragment,
+                children: node.children,
+                closingFragment: node.closingFragment,
+            };
+        case SyntaxKind.JsxNamespacedName:
+            return {
+                name: node.name,
+                namespace: node.namespace,
+            };
+        case SyntaxKind.JsxOpeningElement:
+            return {
+                tagName: node.tagName,
+                typeArguments: node.typeArguments,
+                attributes: node.attributes,
+            };
+        case SyntaxKind.JsxSelfClosingElement:
+            return {
+                tagName: node.tagName,
+                typeArguments: node.typeArguments,
+                attributes: node.attributes,
+            };
+        case SyntaxKind.JsxSpreadAttribute:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.JsxText:
+            return {
+                text: node.text,
+                containsOnlyTriviaWhiteSpaces: node.containsOnlyTriviaWhiteSpaces,
+            };
+        case SyntaxKind.LabeledStatement:
+            return {
+                label: node.label,
+                statement: node.statement,
+            };
+        case SyntaxKind.LiteralType:
+            return {
+                literal: node.literal,
+            };
+        case SyntaxKind.MappedType:
+            return {
+                readonlyToken: node.readonlyToken,
+                typeParameter: node.typeParameter,
+                nameType: node.nameType,
+                questionToken: node.questionToken,
+                type: node.type,
+                members: node.members,
+            };
+        case SyntaxKind.MetaProperty:
+            return {
+                keywordToken: node.keywordToken,
+                name: node.name,
+            };
+        case SyntaxKind.MethodDeclaration:
+            return {
+                modifiers: node.modifiers,
+                asteriskToken: node.asteriskToken,
+                name: node.name,
+                postfixToken: node.postfixToken,
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+                body: node.body,
+            };
+        case SyntaxKind.MethodSignature:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                postfixToken: node.postfixToken,
+                typeParameters: node.typeParameters,
+                parameters: node.parameters,
+                type: node.type,
+            };
+        case SyntaxKind.ModuleBlock:
+            return {
+                statements: node.statements,
+            };
+        case SyntaxKind.ModuleDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                body: node.body,
+            };
+        case SyntaxKind.NamedExports:
+            return {
+                elements: node.elements,
+            };
+        case SyntaxKind.NamedImports:
+            return {
+                elements: node.elements,
+            };
+        case SyntaxKind.NamedTupleMember:
+            return {
+                dotDotDotToken: node.dotDotDotToken,
+                name: node.name,
+                questionToken: node.questionToken,
+                type: node.type,
+            };
+        case SyntaxKind.NamespaceExport:
+            return {
+                name: node.name,
+            };
+        case SyntaxKind.NamespaceExportDeclaration:
+            return {
+                name: node.name,
+            };
+        case SyntaxKind.NamespaceImport:
+            return {
+                name: node.name,
+            };
+        case SyntaxKind.NewExpression:
+            return {
+                expression: node.expression,
+                typeArguments: node.typeArguments,
+                arguments: node.arguments,
+            };
+        case SyntaxKind.NonNullExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return {
+                text: node.text,
+                rawText: node.rawText,
+                templateFlags: node.templateFlags,
+            };
+        case SyntaxKind.NumericLiteral:
+            return {
+                text: node.text,
+                numericLiteralFlags: node.numericLiteralFlags,
+            };
+        case SyntaxKind.ObjectBindingPattern:
+            return {
+                elements: node.elements,
+            };
+        case SyntaxKind.ObjectLiteralExpression:
+            return {
+                properties: node.properties,
+                multiLine: node.multiLine,
+            };
+        case SyntaxKind.OptionalType:
+            return {
+                type: node.type,
+            };
+        case SyntaxKind.Parameter:
+            return {
+                modifiers: node.modifiers,
+                dotDotDotToken: node.dotDotDotToken,
+                name: node.name,
+                questionToken: node.questionToken,
+                type: node.type,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.ParenthesizedExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.ParenthesizedType:
+            return {
+                type: node.type,
+            };
+        case SyntaxKind.PartiallyEmittedExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.PostfixUnaryExpression:
+            return {
+                operand: node.operand,
+                operator: node.operator,
+            };
+        case SyntaxKind.PrefixUnaryExpression:
+            return {
+                operator: node.operator,
+                operand: node.operand,
+            };
+        case SyntaxKind.PrivateIdentifier:
+            return {
+                escapedText: node.escapedText,
+            };
+        case SyntaxKind.PropertyAccessExpression:
+            return {
+                expression: node.expression,
+                questionDotToken: node.questionDotToken,
+                name: node.name,
+            };
+        case SyntaxKind.PropertyAssignment:
+            return {
+                name: node.name,
+                postfixToken: node.postfixToken,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.PropertyDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                postfixToken: node.postfixToken,
+                type: node.type,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.PropertySignature:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                postfixToken: node.postfixToken,
+                type: node.type,
+            };
+        case SyntaxKind.QualifiedName:
+            return {
+                left: node.left,
+                right: node.right,
+            };
+        case SyntaxKind.RegularExpressionLiteral:
+            return {
+                text: node.text,
+            };
+        case SyntaxKind.RestType:
+            return {
+                type: node.type,
+            };
+        case SyntaxKind.ReturnStatement:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.SatisfiesExpression:
+            return {
+                expression: node.expression,
+                type: node.type,
+            };
+        case SyntaxKind.SetAccessor:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                parameters: node.parameters,
+                body: node.body,
+            };
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return {
+                name: node.name,
+                postfixToken: node.postfixToken,
+                equalsToken: node.equalsToken,
+                objectAssignmentInitializer: node.objectAssignmentInitializer,
+            };
+        case SyntaxKind.SourceFile:
+            return {
+                statements: node.statements,
+                endOfFileToken: node.endOfFileToken,
+                text: node.text,
+                fileName: node.fileName,
+                path: node.path,
+            };
+        case SyntaxKind.SpreadAssignment:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.SpreadElement:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.StringLiteral:
+            return {
+                text: node.text,
+            };
+        case SyntaxKind.SwitchStatement:
+            return {
+                expression: node.expression,
+                caseBlock: node.caseBlock,
+                possiblyExhaustive: node.possiblyExhaustive,
+            };
+        case SyntaxKind.TaggedTemplateExpression:
+            return {
+                tag: node.tag,
+                typeArguments: node.typeArguments,
+                template: node.template,
+            };
+        case SyntaxKind.TemplateExpression:
+            return {
+                head: node.head,
+                templateSpans: node.templateSpans,
+            };
+        case SyntaxKind.TemplateHead:
+            return {
+                text: node.text,
+                rawText: node.rawText,
+                templateFlags: node.templateFlags,
+            };
+        case SyntaxKind.TemplateLiteralType:
+            return {
+                head: node.head,
+                templateSpans: node.templateSpans,
+            };
+        case SyntaxKind.TemplateLiteralTypeSpan:
+            return {
+                type: node.type,
+                literal: node.literal,
+            };
+        case SyntaxKind.TemplateMiddle:
+            return {
+                text: node.text,
+                rawText: node.rawText,
+                templateFlags: node.templateFlags,
+            };
+        case SyntaxKind.TemplateSpan:
+            return {
+                expression: node.expression,
+                literal: node.literal,
+            };
+        case SyntaxKind.TemplateTail:
+            return {
+                text: node.text,
+                rawText: node.rawText,
+                templateFlags: node.templateFlags,
+            };
+        case SyntaxKind.ThrowStatement:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.TryStatement:
+            return {
+                tryBlock: node.tryBlock,
+                catchClause: node.catchClause,
+                finallyBlock: node.finallyBlock,
+            };
+        case SyntaxKind.TupleType:
+            return {
+                elements: node.elements,
+            };
+        case SyntaxKind.TypeAliasDeclaration:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                typeParameters: node.typeParameters,
+                type: node.type,
+            };
+        case SyntaxKind.TypeAssertionExpression:
+            return {
+                type: node.type,
+                expression: node.expression,
+            };
+        case SyntaxKind.TypeLiteral:
+            return {
+                members: node.members,
+            };
+        case SyntaxKind.TypeOfExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.TypeOperator:
+            return {
+                operator: node.operator,
+                type: node.type,
+            };
+        case SyntaxKind.TypeParameter:
+            return {
+                modifiers: node.modifiers,
+                name: node.name,
+                constraint: node.constraint,
+                default: node.default,
+            };
+        case SyntaxKind.TypePredicate:
+            return {
+                assertsModifier: node.assertsModifier,
+                parameterName: node.parameterName,
+                type: node.type,
+            };
+        case SyntaxKind.TypeQuery:
+            return {
+                exprName: node.exprName,
+                typeArguments: node.typeArguments,
+            };
+        case SyntaxKind.TypeReference:
+            return {
+                typeName: node.typeName,
+                typeArguments: node.typeArguments,
+            };
+        case SyntaxKind.UnionType:
+            return {
+                types: node.types,
+            };
+        case SyntaxKind.VariableDeclaration:
+            return {
+                name: node.name,
+                exclamationToken: node.exclamationToken,
+                type: node.type,
+                initializer: node.initializer,
+            };
+        case SyntaxKind.VariableDeclarationList:
+            return {
+                declarations: node.declarations,
+            };
+        case SyntaxKind.VariableStatement:
+            return {
+                modifiers: node.modifiers,
+                declarationList: node.declarationList,
+            };
+        case SyntaxKind.VoidExpression:
+            return {
+                expression: node.expression,
+            };
+        case SyntaxKind.WhileStatement:
+            return {
+                expression: node.expression,
+                statement: node.statement,
+            };
+        case SyntaxKind.WithStatement:
+            return {
+                expression: node.expression,
+                statement: node.statement,
+            };
+        case SyntaxKind.YieldExpression:
+            return {
+                asteriskToken: node.asteriskToken,
+                expression: node.expression,
+            };
+    }
+    return undefined;
+}
+
 type ForEachChildFunction = (data: any, cbNode: (node: Node) => any, cbNodes?: (nodes: NodeArray<Node>) => any) => any;
 
 const forEachChildTable: Record<number, ForEachChildFunction> = {
@@ -697,6 +1705,7 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.BindingElement]: (data, cbNode, cbNodes) =>
         visitNode(cbNode, data.dotDotDotToken) ||
         visitNode(cbNode, data.propertyName) ||
+        visitNode(cbNode, data.name) ||
         visitNode(cbNode, data.initializer),
     [SyntaxKind.Block]: (data, cbNode, cbNodes) => visitNodes(cbNode, cbNodes, data.statements),
     [SyntaxKind.BreakStatement]: (data, cbNode, cbNodes) => visitNode(cbNode, data.label),
@@ -995,7 +2004,8 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.ModuleBlock]: (data, cbNode, cbNodes) => visitNodes(cbNode, cbNodes, data.statements),
     [SyntaxKind.ModuleDeclaration]: (data, cbNode, cbNodes) =>
         visitNodes(cbNode, cbNodes, data.modifiers) ||
-        visitNode(cbNode, data.name),
+        visitNode(cbNode, data.name) ||
+        visitNode(cbNode, data.body),
     [SyntaxKind.NamedExports]: (data, cbNode, cbNodes) => visitNodes(cbNode, cbNodes, data.elements),
     [SyntaxKind.NamedImports]: (data, cbNode, cbNodes) => visitNodes(cbNode, cbNodes, data.elements),
     [SyntaxKind.NamedTupleMember]: (data, cbNode, cbNodes) =>
@@ -1017,6 +2027,7 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
     [SyntaxKind.Parameter]: (data, cbNode, cbNodes) =>
         visitNodes(cbNode, cbNodes, data.modifiers) ||
         visitNode(cbNode, data.dotDotDotToken) ||
+        visitNode(cbNode, data.name) ||
         visitNode(cbNode, data.questionToken) ||
         visitNode(cbNode, data.type) ||
         visitNode(cbNode, data.initializer),
@@ -1120,6 +2131,7 @@ const forEachChildTable: Record<number, ForEachChildFunction> = {
         visitNodes(cbNode, cbNodes, data.typeArguments),
     [SyntaxKind.UnionType]: (data, cbNode, cbNodes) => visitNodes(cbNode, cbNodes, data.types),
     [SyntaxKind.VariableDeclaration]: (data, cbNode, cbNodes) =>
+        visitNode(cbNode, data.name) ||
         visitNode(cbNode, data.exclamationToken) ||
         visitNode(cbNode, data.type) ||
         visitNode(cbNode, data.initializer),
@@ -2063,7 +3075,7 @@ export function createModuleBlock(statements: readonly Statement[]): ModuleBlock
     }) as unknown as ModuleBlock;
 }
 
-export function createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body?: ModuleBody | JSDocNamespaceDeclaration): ModuleDeclaration {
+export function createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | JSDocNamespaceDeclaration | undefined): ModuleDeclaration {
     return new NodeObject(SyntaxKind.ModuleDeclaration, {
         modifiers: modifiers ? createNodeArray(modifiers) : undefined,
         name,
@@ -2555,4 +3567,834 @@ export function createYieldExpression(asteriskToken: AsteriskToken | undefined, 
         asteriskToken,
         expression,
     }) as unknown as YieldExpression;
+}
+
+export function updateArrayBindingPattern(node: ArrayBindingPattern, elements: readonly ArrayBindingElement[]): ArrayBindingPattern {
+    if (node.elements === elements) return node;
+    return createArrayBindingPattern(elements);
+}
+
+export function updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression {
+    if (node.elements === elements) return node;
+    return createArrayLiteralExpression(elements, node.multiLine);
+}
+
+export function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
+    if (node.elementType === elementType) return node;
+    return createArrayTypeNode(elementType);
+}
+
+export function updateArrowFunction(node: ArrowFunction, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken, body: ConciseBody): ArrowFunction {
+    if (node.modifiers === modifiers && node.typeParameters === typeParameters && node.parameters === parameters && node.type === type && node.equalsGreaterThanToken === equalsGreaterThanToken && node.body === body) return node;
+    return createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body);
+}
+
+export function updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression {
+    if (node.expression === expression && node.type === type) return node;
+    return createAsExpression(expression, type);
+}
+
+export function updateAwaitExpression(node: AwaitExpression, expression: UnaryExpression): AwaitExpression {
+    if (node.expression === expression) return node;
+    return createAwaitExpression(expression);
+}
+
+export function updateBinaryExpression(node: BinaryExpression, left: Expression, operatorToken: BinaryOperatorToken, right: Expression): BinaryExpression {
+    if (node.left === left && node.operatorToken === operatorToken && node.right === right) return node;
+    return createBinaryExpression(left, operatorToken, right);
+}
+
+export function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken | undefined, propertyName: PropertyName | undefined, name: BindingName, initializer: Expression | undefined): BindingElement {
+    if (node.dotDotDotToken === dotDotDotToken && node.propertyName === propertyName && node.name === name && node.initializer === initializer) return node;
+    return createBindingElement(dotDotDotToken, propertyName, name, initializer);
+}
+
+export function updateBlock(node: Block, statements: readonly Statement[]): Block {
+    if (node.statements === statements) return node;
+    return createBlock(statements, node.multiLine);
+}
+
+export function updateBreakStatement(node: BreakStatement, label: Identifier | undefined): BreakStatement {
+    if (node.label === label) return node;
+    return createBreakStatement(label);
+}
+
+export function updateCallExpression(node: CallExpression, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, arguments_: readonly Expression[]): CallExpression {
+    if (node.expression === expression && node.questionDotToken === questionDotToken && node.typeArguments === typeArguments && node.arguments === arguments_) return node;
+    return createCallExpression(expression, questionDotToken, typeArguments, arguments_);
+}
+
+export function updateCallSignatureDeclaration(node: CallSignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): CallSignatureDeclaration {
+    if (node.typeParameters === typeParameters && node.parameters === parameters && node.type === type) return node;
+    return createCallSignatureDeclaration(typeParameters, parameters, type);
+}
+
+export function updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock {
+    if (node.clauses === clauses) return node;
+    return createCaseBlock(clauses);
+}
+
+export function updateCaseClause(node: CaseClause, expression: Expression, statements: readonly Statement[]): CaseClause {
+    if (node.expression === expression && node.statements === statements) return node;
+    return createCaseClause(expression, statements);
+}
+
+export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause {
+    if (node.variableDeclaration === variableDeclaration && node.block === block) return node;
+    return createCatchClause(variableDeclaration, block);
+}
+
+export function updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.typeParameters === typeParameters && node.heritageClauses === heritageClauses && node.members === members) return node;
+    return createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members);
+}
+
+export function updateClassExpression(node: ClassExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression {
+    if (node.modifiers === modifiers && node.name === name && node.typeParameters === typeParameters && node.heritageClauses === heritageClauses && node.members === members) return node;
+    return createClassExpression(modifiers, name, typeParameters, heritageClauses, members);
+}
+
+export function updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, body: Block): ClassStaticBlockDeclaration {
+    if (node.body === body) return node;
+    return createClassStaticBlockDeclaration(body);
+}
+
+export function updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression {
+    if (node.elements === elements) return node;
+    return createCommaListExpression(elements);
+}
+
+export function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName {
+    if (node.expression === expression) return node;
+    return createComputedPropertyName(expression);
+}
+
+export function updateConditionalExpression(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression {
+    if (node.condition === condition && node.questionToken === questionToken && node.whenTrue === whenTrue && node.colonToken === colonToken && node.whenFalse === whenFalse) return node;
+    return createConditionalExpression(condition, questionToken, whenTrue, colonToken, whenFalse);
+}
+
+export function updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode {
+    if (node.checkType === checkType && node.extendsType === extendsType && node.trueType === trueType && node.falseType === falseType) return node;
+    return createConditionalTypeNode(checkType, extendsType, trueType, falseType);
+}
+
+export function updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: FunctionBody | undefined): ConstructorDeclaration {
+    if (node.modifiers === modifiers && node.parameters === parameters && node.body === body) return node;
+    return createConstructorDeclaration(modifiers, parameters, body);
+}
+
+export function updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode {
+    if (node.modifiers === modifiers && node.typeParameters === typeParameters && node.parameters === parameters && node.type === type) return node;
+    return createConstructorTypeNode(modifiers, typeParameters, parameters, type);
+}
+
+export function updateConstructSignatureDeclaration(node: ConstructSignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration {
+    if (node.typeParameters === typeParameters && node.parameters === parameters && node.type === type) return node;
+    return createConstructSignatureDeclaration(typeParameters, parameters, type);
+}
+
+export function updateContinueStatement(node: ContinueStatement, label: Identifier | undefined): ContinueStatement {
+    if (node.label === label) return node;
+    return createContinueStatement(label);
+}
+
+export function updateDecorator(node: Decorator, expression: LeftHandSideExpression): Decorator {
+    if (node.expression === expression) return node;
+    return createDecorator(expression);
+}
+
+export function updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause {
+    if (node.statements === statements) return node;
+    return createDefaultClause(statements);
+}
+
+export function updateDeleteExpression(node: DeleteExpression, expression: UnaryExpression): DeleteExpression {
+    if (node.expression === expression) return node;
+    return createDeleteExpression(expression);
+}
+
+export function updateDoStatement(node: DoStatement, statement: Statement, expression: Expression): DoStatement {
+    if (node.statement === statement && node.expression === expression) return node;
+    return createDoStatement(statement, expression);
+}
+
+export function updateElementAccessExpression(node: ElementAccessExpression, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression): ElementAccessExpression {
+    if (node.expression === expression && node.questionDotToken === questionDotToken && node.argumentExpression === argumentExpression) return node;
+    return createElementAccessExpression(expression, questionDotToken, argumentExpression);
+}
+
+export function updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.members === members) return node;
+    return createEnumDeclaration(modifiers, name, members);
+}
+
+export function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember {
+    if (node.name === name && node.initializer === initializer) return node;
+    return createEnumMember(name, initializer);
+}
+
+export function updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment {
+    if (node.modifiers === modifiers && node.expression === expression) return node;
+    return createExportAssignment(modifiers, expression, node.isExportEquals);
+}
+
+export function updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, attributes: ImportAttributes | undefined): ExportDeclaration {
+    if (node.modifiers === modifiers && node.exportClause === exportClause && node.moduleSpecifier === moduleSpecifier && node.attributes === attributes) return node;
+    return createExportDeclaration(modifiers, exportClause, moduleSpecifier, attributes, node.isTypeOnly);
+}
+
+export function updateExportSpecifier(node: ExportSpecifier, propertyName: ModuleExportName | undefined, name: ModuleExportName): ExportSpecifier {
+    if (node.propertyName === propertyName && node.name === name) return node;
+    return createExportSpecifier(propertyName, name, node.isTypeOnly);
+}
+
+export function updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement {
+    if (node.expression === expression) return node;
+    return createExpressionStatement(expression);
+}
+
+export function updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: LeftHandSideExpression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments {
+    if (node.expression === expression && node.typeArguments === typeArguments) return node;
+    return createExpressionWithTypeArguments(expression, typeArguments);
+}
+
+export function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference {
+    if (node.expression === expression) return node;
+    return createExternalModuleReference(expression);
+}
+
+export function updateForInStatement(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement {
+    if (node.initializer === initializer && node.expression === expression && node.statement === statement) return node;
+    return createForInStatement(initializer, expression, statement);
+}
+
+export function updateForOfStatement(node: ForOfStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement {
+    if (node.awaitModifier === awaitModifier && node.initializer === initializer && node.expression === expression && node.statement === statement) return node;
+    return createForOfStatement(awaitModifier, initializer, expression, statement);
+}
+
+export function updateForStatement(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement): ForStatement {
+    if (node.initializer === initializer && node.condition === condition && node.incrementor === incrementor && node.statement === statement) return node;
+    return createForStatement(initializer, condition, incrementor, statement);
+}
+
+export function updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: FunctionBody | undefined): FunctionDeclaration {
+    if (node.modifiers === modifiers && node.asteriskToken === asteriskToken && node.name === name && node.typeParameters === typeParameters && node.parameters === parameters && node.type === type && node.body === body) return node;
+    return createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
+}
+
+export function updateFunctionExpression(node: FunctionExpression, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: FunctionBody): FunctionExpression {
+    if (node.modifiers === modifiers && node.asteriskToken === asteriskToken && node.name === name && node.typeParameters === typeParameters && node.parameters === parameters && node.type === type && node.body === body) return node;
+    return createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
+}
+
+export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode {
+    if (node.typeParameters === typeParameters && node.parameters === parameters && node.type === type) return node;
+    return createFunctionTypeNode(typeParameters, parameters, type);
+}
+
+export function updateGetAccessorDeclaration(node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: FunctionBody | undefined): GetAccessorDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.parameters === parameters && node.type === type && node.body === body) return node;
+    return createGetAccessorDeclaration(modifiers, name, parameters, type, body);
+}
+
+export function updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause {
+    if (node.types === types) return node;
+    return createHeritageClause(node.token, types);
+}
+
+export function updateIfStatement(node: IfStatement, expression: Expression, thenStatement: Statement, elseStatement: Statement | undefined): IfStatement {
+    if (node.expression === expression && node.thenStatement === thenStatement && node.elseStatement === elseStatement) return node;
+    return createIfStatement(expression, thenStatement, elseStatement);
+}
+
+export function updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute {
+    if (node.name === name && node.value === value) return node;
+    return createImportAttribute(name, value);
+}
+
+export function updateImportAttributes(node: ImportAttributes, elements: readonly ImportAttribute[]): ImportAttributes {
+    if (node.elements === elements) return node;
+    return createImportAttributes(node.token, elements, node.multiLine);
+}
+
+export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
+    if (node.name === name && node.namedBindings === namedBindings) return node;
+    return createImportClause(name, namedBindings, node.phaseModifier);
+}
+
+export function updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined): ImportDeclaration {
+    if (node.modifiers === modifiers && node.importClause === importClause && node.moduleSpecifier === moduleSpecifier && node.attributes === attributes) return node;
+    return createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
+}
+
+export function updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.moduleReference === moduleReference) return node;
+    return createImportEqualsDeclaration(modifiers, name, moduleReference, node.isTypeOnly);
+}
+
+export function updateImportSpecifier(node: ImportSpecifier, propertyName: ModuleExportName | undefined, name: Identifier): ImportSpecifier {
+    if (node.propertyName === propertyName && node.name === name) return node;
+    return createImportSpecifier(propertyName, name, node.isTypeOnly);
+}
+
+export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined): ImportTypeNode {
+    if (node.argument === argument && node.attributes === attributes && node.qualifier === qualifier && node.typeArguments === typeArguments) return node;
+    return createImportTypeNode(argument, attributes, qualifier, typeArguments, node.isTypeOf);
+}
+
+export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode {
+    if (node.objectType === objectType && node.indexType === indexType) return node;
+    return createIndexedAccessTypeNode(objectType, indexType);
+}
+
+export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
+    if (node.modifiers === modifiers && node.parameters === parameters && node.type === type) return node;
+    return createIndexSignatureDeclaration(modifiers, parameters, type);
+}
+
+export function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode {
+    if (node.typeParameter === typeParameter) return node;
+    return createInferTypeNode(typeParameter);
+}
+
+export function updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.typeParameters === typeParameters && node.heritageClauses === heritageClauses && node.members === members) return node;
+    return createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
+}
+
+export function updateIntersectionTypeNode(node: IntersectionTypeNode, types: readonly TypeNode[]): IntersectionTypeNode {
+    if (node.types === types) return node;
+    return createIntersectionTypeNode(types);
+}
+
+export function updateJSDoc(node: JSDoc, tags: readonly JSDocTag[] | undefined): JSDoc {
+    if (node.tags === tags) return node;
+    return createJSDoc(node.comment, tags);
+}
+
+export function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier, class_: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; }): JSDocAugmentsTag {
+    if (node.tagName === tagName && node.class === class_) return node;
+    return createJSDocAugmentsTag(tagName, class_, node.comment);
+}
+
+export function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier, typeExpression: JSDocSignature, fullName: JSDocNamespaceDeclaration | Identifier | undefined): JSDocCallbackTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression && node.fullName === fullName) return node;
+    return createJSDocCallbackTag(tagName, typeExpression, fullName, node.comment);
+}
+
+export function updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier): JSDocDeprecatedTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocDeprecatedTag(tagName, node.comment);
+}
+
+export function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier, class_: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; }): JSDocImplementsTag {
+    if (node.tagName === tagName && node.class === class_) return node;
+    return createJSDocImplementsTag(tagName, class_, node.comment);
+}
+
+export function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined): JSDocImportTag {
+    if (node.tagName === tagName && node.importClause === importClause && node.moduleSpecifier === moduleSpecifier && node.attributes === attributes) return node;
+    return createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, node.comment);
+}
+
+export function updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined): JSDocLink {
+    if (node.name === name) return node;
+    return createJSDocLink(name, node.text);
+}
+
+export function updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | undefined): JSDocLinkCode {
+    if (node.name === name) return node;
+    return createJSDocLinkCode(name, node.text);
+}
+
+export function updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | undefined): JSDocLinkPlain {
+    if (node.name === name) return node;
+    return createJSDocLinkPlain(name, node.text);
+}
+
+export function updateJSDocMemberName(node: JSDocMemberName, left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName {
+    if (node.left === left && node.right === right) return node;
+    return createJSDocMemberName(left, right);
+}
+
+export function updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocMemberName): JSDocNameReference {
+    if (node.name === name) return node;
+    return createJSDocNameReference(name);
+}
+
+export function updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType {
+    if (node.type === type) return node;
+    return createJSDocNonNullableType(type, node.postfix);
+}
+
+export function updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType {
+    if (node.type === type) return node;
+    return createJSDocNullableType(type, node.postfix);
+}
+
+export function updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType {
+    if (node.type === type) return node;
+    return createJSDocOptionalType(type);
+}
+
+export function updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier, typeExpression: JSDocSignature): JSDocOverloadTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression) return node;
+    return createJSDocOverloadTag(tagName, typeExpression, node.comment);
+}
+
+export function updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier): JSDocOverrideTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocOverrideTag(tagName, node.comment);
+}
+
+export function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier): JSDocParameterTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocParameterTag(tagName, node.comment, node.isNameFirst, node.isBracketed);
+}
+
+export function updateJSDocPrivateTag(node: JSDocPrivateTag, tagName: Identifier): JSDocPrivateTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocPrivateTag(tagName, node.comment);
+}
+
+export function updateJSDocProtectedTag(node: JSDocProtectedTag, tagName: Identifier): JSDocProtectedTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocProtectedTag(tagName, node.comment);
+}
+
+export function updateJSDocPublicTag(node: JSDocPublicTag, tagName: Identifier): JSDocPublicTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocPublicTag(tagName, node.comment);
+}
+
+export function updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier): JSDocReadonlyTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocReadonlyTag(tagName, node.comment);
+}
+
+export function updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier, typeExpression: JSDocTypeExpression | undefined): JSDocReturnTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression) return node;
+    return createJSDocReturnTag(tagName, typeExpression, node.comment);
+}
+
+export function updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier, typeExpression: JSDocTypeExpression): JSDocSatisfiesTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression) return node;
+    return createJSDocSatisfiesTag(tagName, typeExpression, node.comment);
+}
+
+export function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier, name: JSDocNameReference | undefined): JSDocSeeTag {
+    if (node.tagName === tagName && node.name === name) return node;
+    return createJSDocSeeTag(tagName, name, node.comment);
+}
+
+export function updateJSDocSignature(node: JSDocSignature, type: JSDocReturnTag | undefined): JSDocSignature {
+    if (node.type === type) return node;
+    return createJSDocSignature(node.typeParameters, node.parameters, type);
+}
+
+export function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[]): JSDocTemplateTag {
+    if (node.tagName === tagName && node.constraint === constraint && node.typeParameters === typeParameters) return node;
+    return createJSDocTemplateTag(tagName, constraint, typeParameters, node.comment);
+}
+
+export function updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier, typeExpression: JSDocTypeExpression): JSDocThisTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression) return node;
+    return createJSDocThisTag(tagName, typeExpression, node.comment);
+}
+
+export function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier, typeExpression: JSDocTypeExpression | JSDocTypeLiteral | undefined, fullName: JSDocNamespaceDeclaration | Identifier | undefined): JSDocTypedefTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression && node.fullName === fullName) return node;
+    return createJSDocTypedefTag(tagName, typeExpression, fullName, node.comment);
+}
+
+export function updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression {
+    if (node.type === type) return node;
+    return createJSDocTypeExpression(type);
+}
+
+export function updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier, typeExpression: JSDocTypeExpression): JSDocTypeTag {
+    if (node.tagName === tagName && node.typeExpression === typeExpression) return node;
+    return createJSDocTypeTag(tagName, typeExpression, node.comment);
+}
+
+export function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier): JSDocUnknownTag {
+    if (node.tagName === tagName) return node;
+    return createJSDocUnknownTag(tagName, node.comment);
+}
+
+export function updateJSDocVariadicType(node: JSDocVariadicType, type: TypeNode): JSDocVariadicType {
+    if (node.type === type) return node;
+    return createJSDocVariadicType(type);
+}
+
+export function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute {
+    if (node.name === name && node.initializer === initializer) return node;
+    return createJsxAttribute(name, initializer);
+}
+
+export function updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes {
+    if (node.properties === properties) return node;
+    return createJsxAttributes(properties);
+}
+
+export function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement {
+    if (node.tagName === tagName) return node;
+    return createJsxClosingElement(tagName);
+}
+
+export function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement {
+    if (node.openingElement === openingElement && node.children === children && node.closingElement === closingElement) return node;
+    return createJsxElement(openingElement, children, closingElement);
+}
+
+export function updateJsxExpression(node: JsxExpression, dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, expression: Expression | undefined): JsxExpression {
+    if (node.dotDotDotToken === dotDotDotToken && node.expression === expression) return node;
+    return createJsxExpression(dotDotDotToken, expression);
+}
+
+export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment {
+    if (node.openingFragment === openingFragment && node.children === children && node.closingFragment === closingFragment) return node;
+    return createJsxFragment(openingFragment, children, closingFragment);
+}
+
+export function updateJsxNamespacedName(node: JsxNamespacedName, name: Identifier, namespace: Identifier): JsxNamespacedName {
+    if (node.name === name && node.namespace === namespace) return node;
+    return createJsxNamespacedName(name, namespace);
+}
+
+export function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxOpeningElement {
+    if (node.tagName === tagName && node.typeArguments === typeArguments && node.attributes === attributes) return node;
+    return createJsxOpeningElement(tagName, typeArguments, attributes);
+}
+
+export function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxSelfClosingElement {
+    if (node.tagName === tagName && node.typeArguments === typeArguments && node.attributes === attributes) return node;
+    return createJsxSelfClosingElement(tagName, typeArguments, attributes);
+}
+
+export function updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute {
+    if (node.expression === expression) return node;
+    return createJsxSpreadAttribute(expression);
+}
+
+export function updateLabeledStatement(node: LabeledStatement, label: Identifier, statement: Statement): LabeledStatement {
+    if (node.label === label && node.statement === statement) return node;
+    return createLabeledStatement(label, statement);
+}
+
+export function updateLiteralTypeNode(node: LiteralTypeNode, literal: NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression): LiteralTypeNode {
+    if (node.literal === literal) return node;
+    return createLiteralTypeNode(literal);
+}
+
+export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
+    if (node.readonlyToken === readonlyToken && node.typeParameter === typeParameter && node.nameType === nameType && node.questionToken === questionToken && node.type === type && node.members === members) return node;
+    return createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members);
+}
+
+export function updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty {
+    if (node.name === name) return node;
+    return createMetaProperty(node.keywordToken, name);
+}
+
+export function updateMethodDeclaration(node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, postfixToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: FunctionBody | undefined): MethodDeclaration {
+    if (node.modifiers === modifiers && node.asteriskToken === asteriskToken && node.name === name && node.postfixToken === postfixToken && node.typeParameters === typeParameters && node.parameters === parameters && node.type === type && node.body === body) return node;
+    return createMethodDeclaration(modifiers, asteriskToken, name, postfixToken, typeParameters, parameters, type, body);
+}
+
+export function updateMethodSignature(node: MethodSignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, postfixToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): MethodSignature {
+    if (node.modifiers === modifiers && node.name === name && node.postfixToken === postfixToken && node.typeParameters === typeParameters && node.parameters === parameters && node.type === type) return node;
+    return createMethodSignature(modifiers, name, postfixToken, typeParameters, parameters, type);
+}
+
+export function updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]): ModuleBlock {
+    if (node.statements === statements) return node;
+    return createModuleBlock(statements);
+}
+
+export function updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | JSDocNamespaceDeclaration | undefined): ModuleDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.body === body) return node;
+    return createModuleDeclaration(modifiers, name, body);
+}
+
+export function updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports {
+    if (node.elements === elements) return node;
+    return createNamedExports(elements);
+}
+
+export function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports {
+    if (node.elements === elements) return node;
+    return createNamedImports(elements);
+}
+
+export function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode): NamedTupleMember {
+    if (node.dotDotDotToken === dotDotDotToken && node.name === name && node.questionToken === questionToken && node.type === type) return node;
+    return createNamedTupleMember(dotDotDotToken, name, questionToken, type);
+}
+
+export function updateNamespaceExport(node: NamespaceExport, name: ModuleExportName): NamespaceExport {
+    if (node.name === name) return node;
+    return createNamespaceExport(name);
+}
+
+export function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration {
+    if (node.name === name) return node;
+    return createNamespaceExportDeclaration(name);
+}
+
+export function updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport {
+    if (node.name === name) return node;
+    return createNamespaceImport(name);
+}
+
+export function updateNewExpression(node: NewExpression, expression: LeftHandSideExpression, typeArguments: readonly TypeNode[] | undefined, arguments_: readonly Expression[] | undefined): NewExpression {
+    if (node.expression === expression && node.typeArguments === typeArguments && node.arguments === arguments_) return node;
+    return createNewExpression(expression, typeArguments, arguments_);
+}
+
+export function updateNonNullExpression(node: NonNullExpression, expression: Expression): NonNullExpression {
+    if (node.expression === expression) return node;
+    return createNonNullExpression(expression);
+}
+
+export function updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]): ObjectBindingPattern {
+    if (node.elements === elements) return node;
+    return createObjectBindingPattern(elements);
+}
+
+export function updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression {
+    if (node.properties === properties) return node;
+    return createObjectLiteralExpression(properties, node.multiLine);
+}
+
+export function updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode {
+    if (node.type === type) return node;
+    return createOptionalTypeNode(type);
+}
+
+export function updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration {
+    if (node.modifiers === modifiers && node.dotDotDotToken === dotDotDotToken && node.name === name && node.questionToken === questionToken && node.type === type && node.initializer === initializer) return node;
+    return createParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, type, initializer);
+}
+
+export function updateParenthesizedExpression(node: ParenthesizedExpression, expression: Expression): ParenthesizedExpression {
+    if (node.expression === expression) return node;
+    return createParenthesizedExpression(expression);
+}
+
+export function updateParenthesizedTypeNode(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode {
+    if (node.type === type) return node;
+    return createParenthesizedTypeNode(type);
+}
+
+export function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression {
+    if (node.expression === expression) return node;
+    return createPartiallyEmittedExpression(expression);
+}
+
+export function updatePostfixUnaryExpression(node: PostfixUnaryExpression, operand: LeftHandSideExpression): PostfixUnaryExpression {
+    if (node.operand === operand) return node;
+    return createPostfixUnaryExpression(operand, node.operator);
+}
+
+export function updatePrefixUnaryExpression(node: PrefixUnaryExpression, operand: UnaryExpression): PrefixUnaryExpression {
+    if (node.operand === operand) return node;
+    return createPrefixUnaryExpression(node.operator, operand);
+}
+
+export function updatePropertyAccessExpression(node: PropertyAccessExpression, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, name: MemberName): PropertyAccessExpression {
+    if (node.expression === expression && node.questionDotToken === questionDotToken && node.name === name) return node;
+    return createPropertyAccessExpression(expression, questionDotToken, name);
+}
+
+export function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, postfixToken: QuestionToken | undefined, initializer: Expression): PropertyAssignment {
+    if (node.name === name && node.postfixToken === postfixToken && node.initializer === initializer) return node;
+    return createPropertyAssignment(name, postfixToken, initializer);
+}
+
+export function updatePropertyDeclaration(node: PropertyDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, postfixToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.postfixToken === postfixToken && node.type === type && node.initializer === initializer) return node;
+    return createPropertyDeclaration(modifiers, name, postfixToken, type, initializer);
+}
+
+export function updatePropertySignature(node: PropertySignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, postfixToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature {
+    if (node.modifiers === modifiers && node.name === name && node.postfixToken === postfixToken && node.type === type) return node;
+    return createPropertySignature(modifiers, name, postfixToken, type);
+}
+
+export function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName {
+    if (node.left === left && node.right === right) return node;
+    return createQualifiedName(left, right);
+}
+
+export function updateRestTypeNode(node: RestTypeNode, type: TypeNode): RestTypeNode {
+    if (node.type === type) return node;
+    return createRestTypeNode(type);
+}
+
+export function updateReturnStatement(node: ReturnStatement, expression: Expression | undefined): ReturnStatement {
+    if (node.expression === expression) return node;
+    return createReturnStatement(expression);
+}
+
+export function updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression {
+    if (node.expression === expression && node.type === type) return node;
+    return createSatisfiesExpression(expression, type);
+}
+
+export function updateSetAccessorDeclaration(node: SetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: FunctionBody | undefined): SetAccessorDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.parameters === parameters && node.body === body) return node;
+    return createSetAccessorDeclaration(modifiers, name, parameters, body);
+}
+
+export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, postfixToken: QuestionToken | undefined, equalsToken: EqualsToken | undefined, objectAssignmentInitializer: Expression | undefined): ShorthandPropertyAssignment {
+    if (node.name === name && node.postfixToken === postfixToken && node.equalsToken === equalsToken && node.objectAssignmentInitializer === objectAssignmentInitializer) return node;
+    return createShorthandPropertyAssignment(name, postfixToken, equalsToken, objectAssignmentInitializer);
+}
+
+export function updateSourceFile(node: SourceFile, statements: readonly Statement[], endOfFileToken: EndOfFile): SourceFile {
+    if (node.statements === statements && node.endOfFileToken === endOfFileToken) return node;
+    return createSourceFile(statements, endOfFileToken, node.text, node.fileName, node.path);
+}
+
+export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment {
+    if (node.expression === expression) return node;
+    return createSpreadAssignment(expression);
+}
+
+export function updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement {
+    if (node.expression === expression) return node;
+    return createSpreadElement(expression);
+}
+
+export function updateSwitchStatement(node: SwitchStatement, expression: Expression, caseBlock: CaseBlock): SwitchStatement {
+    if (node.expression === expression && node.caseBlock === caseBlock) return node;
+    return createSwitchStatement(expression, caseBlock, node.possiblyExhaustive);
+}
+
+export function updateTaggedTemplateExpression(node: TaggedTemplateExpression, tag: LeftHandSideExpression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression {
+    if (node.tag === tag && node.typeArguments === typeArguments && node.template === template) return node;
+    return createTaggedTemplateExpression(tag, typeArguments, template);
+}
+
+export function updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression {
+    if (node.head === head && node.templateSpans === templateSpans) return node;
+    return createTemplateExpression(head, templateSpans);
+}
+
+export function updateTemplateLiteralTypeNode(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode {
+    if (node.head === head && node.templateSpans === templateSpans) return node;
+    return createTemplateLiteralTypeNode(head, templateSpans);
+}
+
+export function updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan {
+    if (node.type === type && node.literal === literal) return node;
+    return createTemplateLiteralTypeSpan(type, literal);
+}
+
+export function updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan {
+    if (node.expression === expression && node.literal === literal) return node;
+    return createTemplateSpan(expression, literal);
+}
+
+export function updateThrowStatement(node: ThrowStatement, expression: Expression): ThrowStatement {
+    if (node.expression === expression) return node;
+    return createThrowStatement(expression);
+}
+
+export function updateTryStatement(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement {
+    if (node.tryBlock === tryBlock && node.catchClause === catchClause && node.finallyBlock === finallyBlock) return node;
+    return createTryStatement(tryBlock, catchClause, finallyBlock);
+}
+
+export function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode {
+    if (node.elements === elements) return node;
+    return createTupleTypeNode(elements);
+}
+
+export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.typeParameters === typeParameters && node.type === type) return node;
+    return createTypeAliasDeclaration(modifiers, name, typeParameters, type);
+}
+
+export function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: UnaryExpression): TypeAssertion {
+    if (node.type === type && node.expression === expression) return node;
+    return createTypeAssertion(type, expression);
+}
+
+export function updateTypeLiteralNode(node: TypeLiteralNode, members: readonly TypeElement[]): TypeLiteralNode {
+    if (node.members === members) return node;
+    return createTypeLiteralNode(members);
+}
+
+export function updateTypeOfExpression(node: TypeOfExpression, expression: UnaryExpression): TypeOfExpression {
+    if (node.expression === expression) return node;
+    return createTypeOfExpression(expression);
+}
+
+export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode {
+    if (node.type === type) return node;
+    return createTypeOperatorNode(node.operator, type);
+}
+
+export function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, default_: TypeNode | undefined): TypeParameterDeclaration {
+    if (node.modifiers === modifiers && node.name === name && node.constraint === constraint && node.default === default_) return node;
+    return createTypeParameterDeclaration(modifiers, name, constraint, default_);
+}
+
+export function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode {
+    if (node.assertsModifier === assertsModifier && node.parameterName === parameterName && node.type === type) return node;
+    return createTypePredicateNode(assertsModifier, parameterName, type);
+}
+
+export function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments: readonly TypeNode[] | undefined): TypeQueryNode {
+    if (node.exprName === exprName && node.typeArguments === typeArguments) return node;
+    return createTypeQueryNode(exprName, typeArguments);
+}
+
+export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: readonly TypeNode[] | undefined): TypeReferenceNode {
+    if (node.typeName === typeName && node.typeArguments === typeArguments) return node;
+    return createTypeReferenceNode(typeName, typeArguments);
+}
+
+export function updateUnionTypeNode(node: UnionTypeNode, types: readonly TypeNode[]): UnionTypeNode {
+    if (node.types === types) return node;
+    return createUnionTypeNode(types);
+}
+
+export function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration {
+    if (node.name === name && node.exclamationToken === exclamationToken && node.type === type && node.initializer === initializer) return node;
+    return createVariableDeclaration(name, exclamationToken, type, initializer);
+}
+
+export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList {
+    if (node.declarations === declarations) return node;
+    return createVariableDeclarationList(declarations);
+}
+
+export function updateVariableStatement(node: VariableStatement, modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList): VariableStatement {
+    if (node.modifiers === modifiers && node.declarationList === declarationList) return node;
+    return createVariableStatement(modifiers, declarationList);
+}
+
+export function updateVoidExpression(node: VoidExpression, expression: UnaryExpression): VoidExpression {
+    if (node.expression === expression) return node;
+    return createVoidExpression(expression);
+}
+
+export function updateWhileStatement(node: WhileStatement, expression: Expression, statement: Statement): WhileStatement {
+    if (node.expression === expression && node.statement === statement) return node;
+    return createWhileStatement(expression, statement);
+}
+
+export function updateWithStatement(node: WithStatement, expression: Expression, statement: Statement): WithStatement {
+    if (node.expression === expression && node.statement === statement) return node;
+    return createWithStatement(expression, statement);
+}
+
+export function updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
+    if (node.asteriskToken === asteriskToken && node.expression === expression) return node;
+    return createYieldExpression(asteriskToken, expression);
 }

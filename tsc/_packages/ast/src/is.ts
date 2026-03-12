@@ -14,8 +14,12 @@ import type {
     AwaitKeyword,
     BigIntLiteral,
     BinaryExpression,
+    BinaryOperatorToken,
     BindingElement,
+    BindingName,
+    BindingPattern,
     Block,
+    BooleanLiteral,
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
@@ -29,6 +33,7 @@ import type {
     ColonToken,
     CommaListExpression,
     ComputedPropertyName,
+    ConciseBody,
     ConditionalExpression,
     ConditionalTypeNode,
     ConstructorDeclaration,
@@ -36,6 +41,7 @@ import type {
     ConstructSignatureDeclaration,
     ContinueStatement,
     DebuggerStatement,
+    DeclarationName,
     Decorator,
     DefaultClause,
     DefaultKeyword,
@@ -44,20 +50,26 @@ import type {
     DotDotDotToken,
     ElementAccessExpression,
     EmptyStatement,
+    EndOfFile,
+    EntityName,
     EnumDeclaration,
     EnumMember,
     EqualsGreaterThanToken,
+    EqualsToken,
     ExclamationToken,
     ExportAssignment,
     ExportDeclaration,
     ExportKeyword,
     ExportSpecifier,
+    Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
     ExternalModuleReference,
+    ForInitializer,
     ForInStatement,
     ForOfStatement,
     ForStatement,
+    FunctionBody,
     FunctionDeclaration,
     FunctionExpression,
     FunctionTypeNode,
@@ -66,6 +78,7 @@ import type {
     Identifier,
     IfStatement,
     ImportAttribute,
+    ImportAttributeName,
     ImportAttributes,
     ImportClause,
     ImportDeclaration,
@@ -90,6 +103,7 @@ import type {
     JSDocLinkPlain,
     JSDocMemberName,
     JSDocNameReference,
+    JSDocNamespaceDeclaration,
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
@@ -114,7 +128,11 @@ import type {
     JSDocUnknownTag,
     JSDocVariadicType,
     JsxAttribute,
+    JsxAttributeLike,
+    JsxAttributeName,
     JsxAttributes,
+    JsxAttributeValue,
+    JsxChild,
     JsxClosingElement,
     JsxClosingFragment,
     JsxElement,
@@ -123,20 +141,32 @@ import type {
     JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
+    JsxOpeningLikeElement,
     JsxSelfClosingElement,
     JsxSpreadAttribute,
+    JsxTagNameExpression,
     JsxText,
     LabeledStatement,
+    LeftHandSideExpression,
+    LiteralExpression,
     LiteralTypeNode,
     MappedTypeNode,
+    MemberName,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
     MinusToken,
+    Modifier,
+    ModifierLike,
     ModuleBlock,
+    ModuleBody,
     ModuleDeclaration,
     ModuleExportName,
+    ModuleName,
+    ModuleReference,
+    NamedExportBindings,
     NamedExports,
+    NamedImportBindings,
     NamedImports,
     NamedTupleMember,
     NamespaceExport,
@@ -146,6 +176,7 @@ import type {
     Node,
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
+    NullLiteral,
     NumericLiteral,
     ObjectBindingPattern,
     ObjectLiteralExpression,
@@ -163,6 +194,7 @@ import type {
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
+    PropertyName,
     PropertySignature,
     QualifiedName,
     QuestionDotToken,
@@ -178,6 +210,7 @@ import type {
     SourceFile,
     SpreadAssignment,
     SpreadElement,
+    Statement,
     StaticKeyword,
     StringLiteral,
     SuperExpression,
@@ -185,6 +218,7 @@ import type {
     TaggedTemplateExpression,
     TemplateExpression,
     TemplateHead,
+    TemplateLiteral,
     TemplateLiteralTypeNode,
     TemplateLiteralTypeSpan,
     TemplateMiddle,
@@ -198,12 +232,14 @@ import type {
     TypeAliasDeclaration,
     TypeAssertion,
     TypeLiteralNode,
+    TypeNode,
     TypeOfExpression,
     TypeOperatorNode,
     TypeParameterDeclaration,
     TypePredicateNode,
     TypeQueryNode,
     TypeReferenceNode,
+    UnaryExpression,
     UnionTypeNode,
     VariableDeclaration,
     VariableDeclarationList,
@@ -1135,4 +1171,373 @@ export function isPropertyNameLiteral(node: Node): boolean {
             return true;
     }
     return false;
+}
+
+export function isTypeNode(node: Node): node is TypeNode {
+    return node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode;
+}
+
+export function isStatement(node: Node): node is Statement {
+    switch (node.kind) {
+        case SyntaxKind.Block:
+        case SyntaxKind.EmptyStatement:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.ExpressionStatement:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.DoStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.ContinueStatement:
+        case SyntaxKind.BreakStatement:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.WithStatement:
+        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.LabeledStatement:
+        case SyntaxKind.ThrowStatement:
+        case SyntaxKind.TryStatement:
+        case SyntaxKind.DebuggerStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.NotEmittedStatement:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function isEntityName(node: Node): node is EntityName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName;
+}
+
+export function isPropertyName(node: Node): node is PropertyName {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.PrivateIdentifier
+        || kind === SyntaxKind.StringLiteral
+        || kind === SyntaxKind.NumericLiteral
+        || kind === SyntaxKind.ComputedPropertyName
+        || kind === SyntaxKind.NoSubstitutionTemplateLiteral
+        || kind === SyntaxKind.BigIntLiteral;
+}
+
+export function isBindingName(node: Node): node is BindingName {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.ObjectBindingPattern
+        || kind === SyntaxKind.ArrayBindingPattern;
+}
+
+export function isModuleName(node: Node): node is ModuleName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral;
+}
+
+export function isBindingPattern(node: Node): node is BindingPattern {
+    return node.kind === SyntaxKind.ObjectBindingPattern || node.kind === SyntaxKind.ArrayBindingPattern;
+}
+
+function isModifierKind(kind: SyntaxKind): kind is SyntaxKind {
+    switch (kind) {
+        case SyntaxKind.AbstractKeyword:
+        case SyntaxKind.AccessorKeyword:
+        case SyntaxKind.AsyncKeyword:
+        case SyntaxKind.ConstKeyword:
+        case SyntaxKind.DeclareKeyword:
+        case SyntaxKind.DefaultKeyword:
+        case SyntaxKind.ExportKeyword:
+        case SyntaxKind.InKeyword:
+        case SyntaxKind.PrivateKeyword:
+        case SyntaxKind.ProtectedKeyword:
+        case SyntaxKind.PublicKeyword:
+        case SyntaxKind.OutKeyword:
+        case SyntaxKind.OverrideKeyword:
+        case SyntaxKind.ReadonlyKeyword:
+        case SyntaxKind.StaticKeyword:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function isModifier(node: Node): node is Modifier {
+    return isModifierKind(node.kind);
+}
+
+export function isModifierLike(node: Node): node is ModifierLike {
+    return isModifier(node) || node.kind === SyntaxKind.Decorator;
+}
+
+function isExpressionKind(kind: SyntaxKind): boolean {
+    switch (kind) {
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.RegularExpressionLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.PrivateIdentifier:
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.ThisKeyword:
+        case SyntaxKind.SuperKeyword:
+        case SyntaxKind.ImportKeyword:
+        case SyntaxKind.JsxElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxFragment:
+        case SyntaxKind.JsxOpeningFragment:
+        case SyntaxKind.JsxClosingFragment:
+        case SyntaxKind.JsxExpression:
+        case SyntaxKind.PartiallyEmittedExpression:
+        case SyntaxKind.CommaListExpression:
+            return true;
+        default:
+            // ArrayLiteralExpression (210) through SatisfiesExpression (239)
+            return kind >= SyntaxKind.ArrayLiteralExpression && kind <= SyntaxKind.SatisfiesExpression;
+    }
+}
+
+export function isExpression(node: Node): node is Expression {
+    return isExpressionKind(node.kind);
+}
+
+export function isConciseBody(node: Node): node is ConciseBody {
+    return node.kind === SyntaxKind.Block || isExpression(node);
+}
+
+function isBinaryOperatorKind(kind: SyntaxKind): boolean {
+    return kind >= SyntaxKind.FirstBinaryOperator && kind <= SyntaxKind.LastBinaryOperator;
+}
+
+export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
+    return isBinaryOperatorKind(node.kind);
+}
+
+function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
+    switch (kind) {
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.RegularExpressionLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.PrivateIdentifier:
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.ThisKeyword:
+        case SyntaxKind.SuperKeyword:
+        case SyntaxKind.ImportKeyword:
+        case SyntaxKind.ArrayLiteralExpression:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.CallExpression:
+        case SyntaxKind.NewExpression:
+        case SyntaxKind.TaggedTemplateExpression:
+        case SyntaxKind.ParenthesizedExpression:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.TemplateExpression:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.OmittedExpression:
+        case SyntaxKind.ExpressionWithTypeArguments:
+        case SyntaxKind.NonNullExpression:
+        case SyntaxKind.MetaProperty:
+        case SyntaxKind.JsxElement:
+        case SyntaxKind.JsxSelfClosingElement:
+        case SyntaxKind.JsxFragment:
+        case SyntaxKind.JsxAttributes:
+        case SyntaxKind.PartiallyEmittedExpression:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
+    return isLeftHandSideExpressionKind(node.kind);
+}
+
+export function isDeclarationName(node: Node): node is DeclarationName {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.PrivateIdentifier
+        || kind === SyntaxKind.StringLiteral
+        || kind === SyntaxKind.NumericLiteral
+        || kind === SyntaxKind.ComputedPropertyName
+        || kind === SyntaxKind.NoSubstitutionTemplateLiteral
+        || kind === SyntaxKind.BigIntLiteral
+        || kind === SyntaxKind.JsxNamespacedName
+        || kind === SyntaxKind.ElementAccessExpression
+        || kind === SyntaxKind.ObjectBindingPattern
+        || kind === SyntaxKind.ArrayBindingPattern
+        || kind === SyntaxKind.PropertyAccessExpression;
+}
+
+export function isJsxChild(node: Node): node is JsxChild {
+    const kind = node.kind;
+    return kind === SyntaxKind.JsxText
+        || kind === SyntaxKind.JsxExpression
+        || kind === SyntaxKind.JsxElement
+        || kind === SyntaxKind.JsxSelfClosingElement
+        || kind === SyntaxKind.JsxFragment;
+}
+
+export function isJsxAttributeName(node: Node): node is JsxAttributeName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.JsxNamespacedName;
+}
+
+export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression {
+    const kind = node.kind;
+    return kind === SyntaxKind.Identifier
+        || kind === SyntaxKind.ThisKeyword
+        || kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.JsxNamespacedName;
+}
+
+export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
+    return node.kind === SyntaxKind.JsxOpeningElement || node.kind === SyntaxKind.JsxSelfClosingElement;
+}
+
+export function isJsxAttributeLike(node: Node): node is JsxAttributeLike {
+    return node.kind === SyntaxKind.JsxAttribute || node.kind === SyntaxKind.JsxSpreadAttribute;
+}
+
+export function isMemberName(node: Node): node is MemberName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateIdentifier;
+}
+
+export function isTemplateLiteral(node: Node): node is TemplateLiteral {
+    return node.kind === SyntaxKind.TemplateExpression || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+}
+
+export function isImportAttributeName(node: Node): node is ImportAttributeName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral;
+}
+
+export function isNamedImportBindings(node: Node): node is NamedImportBindings {
+    return node.kind === SyntaxKind.NamespaceImport || node.kind === SyntaxKind.NamedImports;
+}
+
+export function isNamedExportBindings(node: Node): node is NamedExportBindings {
+    return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
+}
+
+export function isModuleReference(node: Node): node is ModuleReference {
+    return node.kind === SyntaxKind.ExternalModuleReference || isEntityName(node);
+}
+
+export function isJsxAttributeValue(node: Node): node is JsxAttributeValue {
+    const kind = node.kind;
+    return kind === SyntaxKind.StringLiteral
+        || kind === SyntaxKind.JsxExpression
+        || kind === SyntaxKind.JsxElement
+        || kind === SyntaxKind.JsxSelfClosingElement
+        || kind === SyntaxKind.JsxFragment;
+}
+
+export function isToken(node: Node): node is Token<SyntaxKind> {
+    return isTokenKind(node.kind);
+}
+
+function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+    switch (kind) {
+        case SyntaxKind.PrefixUnaryExpression:
+        case SyntaxKind.PostfixUnaryExpression:
+        case SyntaxKind.DeleteExpression:
+        case SyntaxKind.TypeOfExpression:
+        case SyntaxKind.VoidExpression:
+        case SyntaxKind.AwaitExpression:
+        case SyntaxKind.TypeAssertionExpression:
+            return true;
+        default:
+            return isLeftHandSideExpressionKind(kind);
+    }
+}
+
+export function isUnaryExpression(node: Node): node is UnaryExpression {
+    return isUnaryExpressionKind(node.kind);
+}
+
+export function isEndOfFile(node: Node): node is EndOfFile {
+    return node.kind === SyntaxKind.EndOfFile;
+}
+
+export function isEqualsToken(node: Node): node is EqualsToken {
+    return node.kind === SyntaxKind.EqualsToken;
+}
+
+export function isFunctionBody(node: Node): node is FunctionBody {
+    return node.kind === SyntaxKind.Block;
+}
+
+export function isForInitializer(node: Node): node is ForInitializer {
+    return node.kind === SyntaxKind.VariableDeclarationList || isExpression(node);
+}
+
+export function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken {
+    return isQuestionToken(node) || isExclamationToken(node);
+}
+
+export function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode {
+    return isIdentifier(node) || isThisTypeNode(node);
+}
+
+export function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken {
+    return isReadonlyKeyword(node) || isPlusToken(node) || isMinusToken(node);
+}
+
+export function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken {
+    return isQuestionToken(node) || isPlusToken(node) || isMinusToken(node);
+}
+
+export function isModuleBody(node: Node): node is ModuleBody {
+    const kind = node.kind;
+    return kind === SyntaxKind.ModuleBlock
+        || kind === SyntaxKind.ModuleDeclaration
+        || kind === SyntaxKind.Identifier;
+}
+
+export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail {
+    const kind = node.kind;
+    return kind === SyntaxKind.TemplateMiddle
+        || kind === SyntaxKind.TemplateTail;
+}
+
+export function isLiteralExpression(node: Node): node is LiteralExpression {
+    return node.kind >= SyntaxKind.FirstLiteralToken && node.kind <= SyntaxKind.LastLiteralToken;
+}
+
+export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
+    switch (node.kind) {
+        case SyntaxKind.NullKeyword:
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.PrefixUnaryExpression:
+            return true;
+        default:
+            return isLiteralExpression(node);
+    }
+}
+
+export function isEntityNameOrJSDocMemberName(node: Node): node is EntityName | JSDocMemberName {
+    return isEntityName(node) || isJSDocMemberName(node);
+}
+
+export function isIdentifierOrJSDocNamespaceDeclaration(node: Node): node is Identifier | JSDocNamespaceDeclaration {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ModuleDeclaration;
+}
+
+export function isJSDocTypeExpressionOrJSDocTypeLiteral(node: Node): node is JSDocTypeExpression | JSDocTypeLiteral {
+    return node.kind === SyntaxKind.JSDocTypeExpression || node.kind === SyntaxKind.JSDocTypeLiteral;
 }
