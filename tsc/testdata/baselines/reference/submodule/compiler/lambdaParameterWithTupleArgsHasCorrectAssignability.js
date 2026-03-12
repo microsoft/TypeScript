@@ -28,7 +28,7 @@ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
 class GenericClass {
 }
 function createClass(f) {
-    return new GenericClass( /* ... use f */ /* ... use f */);
+    return new GenericClass( /* ... use f */);
 }
 function consumeClass(c) { }
 // should work

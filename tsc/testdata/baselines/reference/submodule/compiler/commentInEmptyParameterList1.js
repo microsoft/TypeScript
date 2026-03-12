@@ -6,5 +6,5 @@ function foo(/** nothing */) {
 
 //// [commentInEmptyParameterList1.js]
 "use strict";
-function foo( /** nothing */ /** nothing */) {
+function foo( /** nothing */) {
 }

@@ -162,6 +162,7 @@ func TestEmit(t *testing.T) {
 		{title: "ArrayLiteralExpression#3", input: `[a,]`, output: `[a,];`},
 		{title: "ArrayLiteralExpression#4", input: `[,a]`, output: `[, a];`},
 		{title: "ArrayLiteralExpression#5", input: `[...a]`, output: `[...a];`},
+		{title: "ArrayLiteralExpression#6", input: `const array = [/* comment */];`, output: `const array = [ /* comment */];`},
 		{title: "ObjectLiteralExpression#1", input: `({})`, output: `({});`},
 		{title: "ObjectLiteralExpression#2", input: `({a,})`, output: `({ a, });`},
 		{title: "ShorthandPropertyAssignment", input: `({a})`, output: `({ a });`},

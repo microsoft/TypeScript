@@ -4666,7 +4666,7 @@ func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node), parentNod
 
 	if format&LFBracketsMask != 0 {
 		if isEmpty && !isNil {
-			p.emitTrailingComments(children.Pos(), commentSeparatorBefore) // Emit comments within empty lists
+			p.emitLeadingComments(children.End(), false /*elided*/) // Emit comments within empty lists
 		}
 		p.writePunctuation(getClosingBracket(format))
 	}
