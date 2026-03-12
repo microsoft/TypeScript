@@ -243,6 +243,7 @@ Program files::
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 
 No shapes updated in the builder::
 
@@ -297,6 +298,7 @@ Program files::
 /user/username/projects/myproject/b.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 
 No shapes updated in the builder::
 

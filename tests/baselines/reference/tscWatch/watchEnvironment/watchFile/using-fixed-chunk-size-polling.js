@@ -194,7 +194,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/project/commonfile1.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/project/commonfile2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
