@@ -4017,13 +4017,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (valueSymbol.flags & (SymbolFlags.Type | SymbolFlags.Namespace)) {
             return valueSymbol;
         }
-        const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName);
+        const valueCheckFlags = getCheckFlags(valueSymbol);
+        const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName, valueCheckFlags & CheckFlags.Mapped);
         Debug.assert(valueSymbol.declarations || typeSymbol.declarations);
         result.declarations = deduplicate(concatenate(valueSymbol.declarations!, typeSymbol.declarations), equateValues);
         result.parent = valueSymbol.parent || typeSymbol.parent;
         if (valueSymbol.valueDeclaration) result.valueDeclaration = valueSymbol.valueDeclaration;
         if (typeSymbol.members) result.members = new Map(typeSymbol.members);
         if (valueSymbol.exports) result.exports = new Map(valueSymbol.exports);
+        if (valueCheckFlags & CheckFlags.Mapped) {
+            const valueLinks = (valueSymbol as MappedSymbol).links;
+            (result as MappedSymbol).links.mappedType = valueLinks.mappedType;
+            (result as MappedSymbol).links.keyType = valueLinks.keyType;
+            if (valueLinks.nameType) (result as MappedSymbol).links.nameType = valueLinks.nameType;
+            if (valueLinks.syntheticOrigin) (result as MappedSymbol).links.syntheticOrigin = valueLinks.syntheticOrigin;
+        }
         return result;
     }
 

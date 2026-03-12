@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeCombineValueAndTypeSymbolMinimal.ts] ////
+
+=== assert.d.ts ===
+declare namespace assert {
+>assert : Symbol(assert, Decl(assert.d.ts, 0, 0))
+
+  class AssertionError extends Error {}
+>AssertionError : Symbol(AssertionError, Decl(assert.d.ts, 0, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+  const strict: Omit<typeof assert, never>;
+>strict : Symbol(strict, Decl(assert.d.ts, 2, 7))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>assert : Symbol(assert, Decl(assert.d.ts, 0, 0))
+}
+
+export = assert.strict;
+>assert.strict : Symbol(assert.strict, Decl(assert.d.ts, 2, 7))
+>assert : Symbol(assert, Decl(assert.d.ts, 0, 0))
+>strict : Symbol(assert.strict, Decl(assert.d.ts, 2, 7))
+
+=== index.ts ===
+import { AssertionError } from "./assert";
+>AssertionError : Symbol(AssertionError, Decl(index.ts, 0, 8))
+
+new AssertionError("assert");
+>AssertionError : Symbol(AssertionError, Decl(index.ts, 0, 8))
+

@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeCombineValueAndTypeSymbolMinimal.ts] ////
+
+=== assert.d.ts ===
+declare namespace assert {
+>assert : typeof assert
+>       : ^^^^^^^^^^^^^
+
+  class AssertionError extends Error {}
+>AssertionError : AssertionError
+>               : ^^^^^^^^^^^^^^
+>Error : Error
+>      : ^^^^^
+
+  const strict: Omit<typeof assert, never>;
+>strict : Omit<typeof assert, never>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assert : typeof assert
+>       : ^^^^^^^^^^^^^
+}
+
+export = assert.strict;
+>assert.strict : Omit<typeof assert, never>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assert : typeof assert
+>       : ^^^^^^^^^^^^^
+>strict : Omit<typeof assert, never>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== index.ts ===
+import { AssertionError } from "./assert";
+>AssertionError : typeof assert.AssertionError
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+new AssertionError("assert");
+>new AssertionError("assert") : assert.AssertionError
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>AssertionError : typeof assert.AssertionError
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"assert" : "assert"
+>         : ^^^^^^^^
+
