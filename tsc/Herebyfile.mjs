@@ -529,7 +529,17 @@ function goTestFlags(taskName) {
     ];
 }
 
+function getGODEBUG() {
+    const key = "tracebackancestors";
+    const setting = `${key}=10`;
+    const existing = process.env.GODEBUG ?? "";
+    if (!existing) return setting;
+    if (existing.includes(`${key}=`)) return existing;
+    return `${existing},${setting}`;
+}
+
 const goTestEnv = {
+    GODEBUG: getGODEBUG(),
     ...(options.concurrentTestPrograms ? { TS_TEST_PROGRAM_SINGLE_THREADED: "false" } : {}),
     // Go test caching takes a long time on Windows.
     // https://github.com/golang/go/issues/72992
