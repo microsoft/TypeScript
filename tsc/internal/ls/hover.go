@@ -27,15 +27,15 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	program, file := l.getProgramAndFile(documentURI)
 	position := int(l.converters.LineAndCharacterToPosition(file, lspPosition))
 	node := astnav.GetTouchingPropertyName(file, position)
-	if node.Kind == ast.KindSourceFile {
-		// Avoid giving quickInfo for the sourceFile as a whole.
+	if ast.IsSourceFile(node) || ast.IsPropertyAccessOrQualifiedName(node) && isInComment(file, position, node) == nil {
+		// Avoid giving quickInfo for the sourceFile as a whole or inside the comment of a/**/.b
 		return lsproto.HoverOrNull{}, nil
 	}
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
 	rangeNode := getNodeForQuickInfo(node)
 	symbol := getSymbolAtLocationForQuickInfo(c, node)
-	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, position, contentFormat)
+	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(c, symbol, rangeNode, contentFormat)
 	if quickInfo == "" {
 		return lsproto.HoverOrNull{}, nil
 	}
@@ -61,8 +61,8 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}, nil
 }
 
-func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, position int, contentFormat lsproto.MarkupKind) (string, string) {
-	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, symbol, node, position)
+func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind) (string, string) {
+	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, symbol, node)
 	if quickInfo == "" {
 		return "", ""
 	}
@@ -207,20 +207,12 @@ func formatQuickInfo(quickInfo string) string {
 	return b.String()
 }
 
-func shouldGetType(node *ast.Node, position int) bool {
-	file := ast.GetSourceFileOfNode(node)
+func shouldGetType(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindIdentifier:
-		if node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsInJSFile(node) &&
-			((node.Parent.Kind == ast.KindPropertyDeclaration && node.Parent.Name() == node) ||
-				ast.FindAncestor(node, func(n *ast.Node) bool { return n.Kind == ast.KindParameter }) != nil) {
-			// if we'd request type at those locations we'd get `errorType` that displays confusingly as `any`
-			return false
-		}
-		return !ast.IsLabelName(node) && !ast.IsTagName(node) && !ast.IsConstTypeReference(node.Parent)
-	case ast.KindPropertyAccessExpression, ast.KindQualifiedName:
-		// Don't return quickInfo if inside the comment in `a/**/.b`
-		return isInComment(file, position, astnav.GetTokenAtPosition(file, position)) == nil
+		// If we're in a JSDoc node with no associated symbol, no binding has taken place for the node and
+		// we can't answer questions about types of declaration nodes (such as property declarations).
+		return !(node.Flags&ast.NodeFlagsJSDoc != 0 && ast.IsDeclarationName(node)) && !ast.IsLabelName(node) && !ast.IsTagName(node) && !ast.IsConstTypeReference(node.Parent)
 	case ast.KindThisKeyword, ast.KindThisType, ast.KindSuperKeyword, ast.KindNamedTupleMember:
 		return true
 	case ast.KindMetaProperty:
@@ -230,13 +222,13 @@ func shouldGetType(node *ast.Node, position int) bool {
 	}
 }
 
-func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node, position int) (string, *ast.Node) {
+func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol, node *ast.Node) (string, *ast.Node) {
 	container := getContainerNode(node)
 	if node.Kind == ast.KindThisKeyword && ast.IsInExpressionContext(node) || ast.IsThisInTypeQuery(node) {
 		return "this: " + c.TypeToStringEx(c.GetTypeAtLocation(node), container, typeFormatFlags), nil
 	}
 	if symbol == nil {
-		if shouldGetType(node, position) {
+		if shouldGetType(node) {
 			return c.TypeToStringEx(c.GetTypeAtLocation(node), container, typeFormatFlags), nil
 		}
 		return "", nil

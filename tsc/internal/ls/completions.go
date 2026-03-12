@@ -5044,7 +5044,7 @@ func (l *LanguageService) createCompletionDetailsForSymbol(
 	position int,
 	docFormat lsproto.MarkupKind,
 ) *lsproto.CompletionItem {
-	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(checker, symbol, location, position, docFormat)
+	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(checker, symbol, location, docFormat)
 	return createCompletionDetails(item, quickInfo, documentation, docFormat)
 }
 
