@@ -126,7 +126,6 @@ main.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/project/main.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 

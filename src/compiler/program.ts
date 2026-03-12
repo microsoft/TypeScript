@@ -2555,6 +2555,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
         Debug.assert(newSourceFiles.length === oldProgram.getSourceFiles().length);
         for (const newSourceFile of newSourceFiles) {
             filesByName.set(newSourceFile.path, newSourceFile);
+            if (oldProgram.isSourceFileDefaultLibrary(newSourceFile)) {
+                libFiles.add(newSourceFile.path);
+            }
         }
         const oldFilesByNameMap = oldProgram.getFilesByNameMap();
         oldFilesByNameMap.forEach((oldFile, path) => {

@@ -169,7 +169,6 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/rootfolder/project/scripts/javascript.js (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
