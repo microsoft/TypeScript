@@ -1,24 +1,6 @@
 --- old.jsDeclarationsExportDefinePropertyEmit.js
 +++ new.jsDeclarationsExportDefinePropertyEmit.js
-@@= skipped -70, +70 lines =@@
-  * @param {number} b
-  * @return {string}
-  */
--function d(a, b) { return /** @type {*} */ (null); }
-+function d(a, b) { return /** @type {*} */ null; }
- Object.defineProperty(module.exports, "d", { value: d });
- /**
-  * @template T,U
-@@= skipped -8, +8 lines =@@
-  * @param {U} b
-  * @return {T & U}
-  */
--function e(a, b) { return /** @type {*} */ (null); }
-+function e(a, b) { return /** @type {*} */ null; }
- Object.defineProperty(module.exports, "e", { value: e });
- /**
-  * @template T
-@@= skipped -35, +35 lines =@@
+@@= skipped -113, +113 lines =@@
 
 
  //// [index.d.ts]

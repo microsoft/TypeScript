@@ -71,7 +71,7 @@ Object.defineProperty(module.exports.b, "cat", { value: "cat" });
  * @param {number} b
  * @return {string}
  */
-function d(a, b) { return /** @type {*} */ null; }
+function d(a, b) { return /** @type {*} */ (null); }
 Object.defineProperty(module.exports, "d", { value: d });
 /**
  * @template T,U
@@ -79,7 +79,7 @@ Object.defineProperty(module.exports, "d", { value: d });
  * @param {U} b
  * @return {T & U}
  */
-function e(a, b) { return /** @type {*} */ null; }
+function e(a, b) { return /** @type {*} */ (null); }
 Object.defineProperty(module.exports, "e", { value: e });
 /**
  * @template T

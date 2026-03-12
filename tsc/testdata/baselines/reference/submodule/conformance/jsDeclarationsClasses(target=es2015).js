@@ -227,7 +227,7 @@ class E {
     /**
      * @return {U}
      */
-    get f1() { return /** @type {*} */ null; }
+    get f1() { return /** @type {*} */ (null); }
     /**
      * @param {U} _p
      */
@@ -235,7 +235,7 @@ class E {
     /**
      * @return {U}
      */
-    get f2() { return /** @type {*} */ null; }
+    get f2() { return /** @type {*} */ (null); }
     /**
      * @param {U} _p
      */
@@ -343,7 +343,7 @@ class O extends N {
     }
 }
 exports.O = O;
-var x = /** @type {*} */ null;
+var x = /** @type {*} */ (null);
 class VariableBase extends x {
 }
 exports.VariableBase = VariableBase;

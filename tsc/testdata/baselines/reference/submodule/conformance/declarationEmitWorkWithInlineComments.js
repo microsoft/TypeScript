@@ -101,8 +101,8 @@ export declare class Foo {
     isInternal5: string, isInternal6: string, isInternal7: string, /** @internal */ notInternal1: string, notInternal2: string, notInternal3: string);
 }
 export declare class Bar {
-    constructor(isInternal1: string);
+    constructor(/* @internal */ isInternal1: string);
 }
 export declare class Baz {
-    constructor(isInternal: string);
+    constructor(/* @internal */ isInternal: string);
 }

@@ -1,14 +1,6 @@
 --- old.templateInsideCallback.js
 +++ new.templateInsideCallback.js
-@@= skipped -105, +105 lines =@@
-     /** @type {unknown[]} */
-     const result = [];
-     for (let i = 0; i < array.length; i += 1) {
--        result.push(... /** @type {unknown[]} */(iterable(array[i])));
-+        result.push(... /** @type {unknown[]} */iterable(array[i]));
-     }
-     return result;
- }
+@@= skipped -112, +112 lines =@@
 
 
  //// [templateInsideCallback.d.ts]
@@ -32,7 +24,7 @@
  /**
   * @typedef Oops
   * @template T
-@@= skipped -46, +31 lines =@@
+@@= skipped -39, +24 lines =@@
          noooooo: string;
      };
  };

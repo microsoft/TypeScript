@@ -59,7 +59,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.X = void 0;
 class Foo {
     constructor() {
-        this.a = null;
+        this.a = (null);
     }
 }
 exports.default = Foo;
@@ -76,7 +76,7 @@ const index3_1 = __importDefault(require("./index3"));
 class Bar extends index3_1.default {
     constructor() {
         super(...arguments);
-        this.x = null;
+        this.x = (null);
     }
 }
 exports.default = Bar;

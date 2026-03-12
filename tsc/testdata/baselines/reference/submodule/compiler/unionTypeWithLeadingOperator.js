@@ -18,4 +18,4 @@ export {};
 
 
 //// [unionTypeWithLeadingOperator.d.ts]
-export type D = 1 | 2;
+export type D = /*leading1*/ 1 | /*leading2*/ 2;

@@ -37,7 +37,7 @@ export const main = () => {
  * @returns { asserts a is B }
  */
 const foo = (a) => {
-    if ( /** @type { B } */a.y !== 0)
+    if ( /** @type { B } */(a).y !== 0)
         throw TypeError();
     return undefined;
 };

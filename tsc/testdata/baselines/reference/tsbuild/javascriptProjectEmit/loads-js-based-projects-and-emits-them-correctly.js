@@ -254,7 +254,7 @@ export {};
 //// [/home/src/workspaces/lib/sub-project-2/index.js] *new* 
 import { MyNominal } from '../sub-project/index';
 const variable = {
-    key: /** @type {MyNominal} */ 'value',
+    key: /** @type {MyNominal} */ ('value'),
 };
 /**
  * @return {keyof typeof variable}

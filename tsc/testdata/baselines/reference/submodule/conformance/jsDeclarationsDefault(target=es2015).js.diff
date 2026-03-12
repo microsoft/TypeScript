@@ -1,24 +1,6 @@
 --- old.jsDeclarationsDefault(target=es2015).js
 +++ new.jsDeclarationsDefault(target=es2015).js
-@@= skipped -58, +58 lines =@@
- exports.Bar = exports.X = void 0;
- class Foo {
-     constructor() {
--        this.a = (null);
-+        this.a = null;
-     }
- }
- exports.default = Foo;
-@@= skipped -17, +17 lines =@@
- class Bar extends index3_1.default {
-     constructor() {
-         super(...arguments);
--        this.x = (null);
-+        this.x = null;
-     }
- }
- exports.default = Bar;
-@@= skipped -25, +25 lines =@@
+@@= skipped -100, +100 lines =@@
 
 
  //// [index1.d.ts]

@@ -74,14 +74,14 @@ module.exports.c.Cls = class {
  * @param {number} b
  * @return {string}
  */
-module.exports.d = function d(a, b) { return /** @type {*} */ null; };
+module.exports.d = function d(a, b) { return /** @type {*} */ (null); };
 /**
  * @template T,U
  * @param {T} a
  * @param {U} b
  * @return {T & U}
  */
-module.exports.e = function e(a, b) { return /** @type {*} */ null; };
+module.exports.e = function e(a, b) { return /** @type {*} */ (null); };
 /**
  * @template T
  * @param {T} a
