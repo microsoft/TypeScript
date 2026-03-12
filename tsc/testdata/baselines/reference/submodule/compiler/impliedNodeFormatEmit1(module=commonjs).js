@@ -40,6 +40,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._ = void 0;
 exports._ = 0;
 //// [b.mjs]
+"use strict";
 export const _ = 0;
 //// [c.cjs]
 "use strict";
@@ -52,13 +53,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._ = void 0;
 exports._ = 0;
 //// [e.mjs]
+"use strict";
 export const _ = 0;
 //// [f.mjs]
+"use strict";
 export const _ = 0;
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [h.mjs]
+"use strict";
 export {};
 //// [i.cjs]
 "use strict";

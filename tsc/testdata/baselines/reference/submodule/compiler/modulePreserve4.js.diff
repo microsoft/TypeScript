@@ -1,14 +1,6 @@
 --- old.modulePreserve4.js
 +++ new.modulePreserve4.js
-@@= skipped -122, +122 lines =@@
- //// [f.cjs]
- export default 0;
- //// [g.js]
--"use strict";
- exports.default = 0;
- //// [main1.js]
- import { x, y } from "./a"; // No y
-@@= skipped -72, +71 lines =@@
+@@= skipped -194, +194 lines =@@
 
 
  //// [a.d.ts]
