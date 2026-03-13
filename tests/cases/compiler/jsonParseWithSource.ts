@@ -1,4 +1,4 @@
-// @lib: esnext
+// @lib: es2025
 // @strictNullChecks: true
 
 // JSON.rawJSON

@@ -86,6 +86,7 @@
         "es2025.iterator",
         "es2025.promise",
         "es2025.regexp",
+        "es2025.json",
         "esnext.array",
         "esnext.collection",
         "esnext.date",
@@ -96,7 +97,6 @@
         "esnext.sharedmemory",
         "esnext.temporal",
         "esnext.typedarrays",
-        "esnext.json",
         "decorators",
         "decorators.legacy",
         // Default libraries

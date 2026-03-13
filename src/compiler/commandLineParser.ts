@@ -237,6 +237,7 @@ const libEntries: [string, string][] = [
     ["es2025.iterator", "lib.es2025.iterator.d.ts"],
     ["es2025.promise", "lib.es2025.promise.d.ts"],
     ["es2025.regexp", "lib.es2025.regexp.d.ts"],
+    ["es2025.json", "lib.es2025.json.d.ts"],
     // Fallback for backward compatibility
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
@@ -259,7 +260,6 @@ const libEntries: [string, string][] = [
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
     ["esnext.temporal", "lib.esnext.temporal.d.ts"],
     ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
-    ["esnext.json", "lib.esnext.json.d.ts"],
     // Decorators
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
