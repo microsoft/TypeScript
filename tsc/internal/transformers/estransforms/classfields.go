@@ -94,10 +94,9 @@ type classFieldsTransformer struct {
 	shouldTransformInitializersUsingDefine            bool
 	shouldTransformInitializers                       bool
 	shouldTransformPrivateElementsOrClassStaticBlocks bool
-	shouldTransformAutoAccessors                      core.Tristate
+	shouldTransformAutoAccessors                      bool
 	shouldTransformThisInStaticInitializers           bool
 	shouldTransformSuperInStaticInitializers          bool
-	shouldTransformAnything                           bool
 	shouldTransformPrivateStaticElementsInFile        bool
 	legacyDecorators                                  bool
 
@@ -135,14 +134,21 @@ type classFieldsTransformer struct {
 }
 
 func newClassFieldsTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
+	languageVersion := opts.CompilerOptions.GetEmitScriptTarget()
+	useDefineForClassFields := opts.CompilerOptions.GetUseDefineForClassFields()
+
+	// When targeting ESNext+ with useDefineForClassFields (the default), there are no class
+	// field transformations to perform and no prior transform sets EFTransformPrivateStaticElements,
+	// so every node would be returned unchanged. Skip entirely.
+	if languageVersion >= core.ScriptTargetESNext && useDefineForClassFields {
+		return nil
+	}
+
 	tx := &classFieldsTransformer{
 		compilerOptions:  opts.CompilerOptions,
 		resolver:         opts.EmitResolver,
 		legacyDecorators: opts.CompilerOptions.ExperimentalDecorators.IsTrue(),
 	}
-
-	languageVersion := opts.CompilerOptions.GetEmitScriptTarget()
-	useDefineForClassFields := opts.CompilerOptions.GetUseDefineForClassFields()
 
 	// Always transform field initializers using Set semantics when `useDefineForClassFields: false`.
 	tx.shouldTransformInitializersUsingSet = !useDefineForClassFields
@@ -157,13 +163,7 @@ func newClassFieldsTransformer(opts *transformers.TransformOptions) *transformer
 
 	// We need to transform `accessor` fields when target < ESNext.
 	// We may need to transform `accessor` fields when `useDefineForClassFields: false`
-	if languageVersion < core.ScriptTargetESNext {
-		tx.shouldTransformAutoAccessors = core.TSTrue
-	} else if !useDefineForClassFields {
-		tx.shouldTransformAutoAccessors = core.TSUnknown // Ternary.Maybe
-	} else {
-		tx.shouldTransformAutoAccessors = core.TSFalse
-	}
+	tx.shouldTransformAutoAccessors = languageVersion < core.ScriptTargetESNext
 
 	// We need to transform `this` in a static initializer into a reference to the class
 	// when target < ES2022 since the assignment will be moved outside of the class body.
@@ -172,10 +172,6 @@ func newClassFieldsTransformer(opts *transformers.TransformOptions) *transformer
 	// Since target is always >= ES2015, this is always the same as
 	// shouldTransformThisInStaticInitializers.
 	tx.shouldTransformSuperInStaticInitializers = tx.shouldTransformThisInStaticInitializers
-
-	tx.shouldTransformAnything = tx.shouldTransformInitializers ||
-		tx.shouldTransformPrivateElementsOrClassStaticBlocks ||
-		tx.shouldTransformAutoAccessors == core.TSTrue
 
 	result := tx.NewTransformer(tx.visit, opts.Context)
 	tx.modifierVisitor = tx.EmitContext().NewNodeVisitor(tx.visitModifier)
@@ -222,9 +218,6 @@ func (tx *classFieldsTransformer) visitSourceFile(node *ast.SourceFile) *ast.Nod
 	}
 	tx.lexicalEnvironment = nil
 	tx.shouldTransformPrivateStaticElementsInFile = tx.EmitContext().EmitFlags(node.AsNode())&printer.EFTransformPrivateStaticElements != 0
-	if !tx.shouldTransformAnything && !tx.shouldTransformPrivateStaticElementsInFile {
-		return node.AsNode()
-	}
 	tx.classAliases = make(map[*ast.Node]*ast.IdentifierNode)
 	tx.enclosingClassDeclarations.Clear()
 	visited := tx.Visitor().VisitEachChild(node.AsNode())
@@ -249,10 +242,6 @@ func (tx *classFieldsTransformer) visitModifier(node *ast.Node) *ast.Node {
 
 // visit is the main visitor.
 func (tx *classFieldsTransformer) visit(node *ast.Node) *ast.Node {
-	if !tx.shouldTransformAnything && !tx.shouldTransformPrivateStaticElementsInFile {
-		return node
-	}
-
 	// Strada's onSubstituteNode runs on ALL emitted nodes regardless of transform flags.
 	// Since we substitute eagerly, we must check for identifiers needing alias substitution
 	// even in subtrees with no class field transforms.
@@ -985,14 +974,13 @@ func (tx *classFieldsTransformer) transformFieldInitializer(node *ast.PropertyDe
 }
 
 func (tx *classFieldsTransformer) shouldTransformAutoAccessorsInCurrentClass() bool {
-	if tx.shouldTransformAutoAccessors == core.TSTrue {
+	if tx.shouldTransformAutoAccessors {
 		return true
 	}
-	if tx.shouldTransformAutoAccessors == core.TSUnknown {
-		return tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil &&
-			tx.lexicalEnvironment.data.facts&classFactsWillHoistInitializersToConstructor != 0
-	}
-	return false
+	// When targeting ESNext with useDefineForClassFields: false, auto-accessors are only
+	// transformed if the current class will hoist initializers to the constructor.
+	return tx.lexicalEnvironment != nil && tx.lexicalEnvironment.data != nil &&
+		tx.lexicalEnvironment.data.facts&classFactsWillHoistInitializersToConstructor != 0
 }
 
 func (tx *classFieldsTransformer) visitPropertyDeclaration(node *ast.Node) *ast.Node {
@@ -1721,7 +1709,7 @@ func (tx *classFieldsTransformer) getClassFacts(node *ast.Node) classFacts {
 			if member.Name() != nil && (ast.IsPrivateIdentifier(member.Name()) || ast.IsAutoAccessorPropertyDeclaration(member)) &&
 				tx.shouldTransformPrivateElementsOrClassStaticBlocks {
 				facts |= classFactsNeedsClassConstructorReference
-			} else if ast.IsAutoAccessorPropertyDeclaration(member) && tx.shouldTransformAutoAccessors == core.TSTrue &&
+			} else if ast.IsAutoAccessorPropertyDeclaration(member) && tx.shouldTransformAutoAccessors &&
 				node.Name() == nil && tx.EmitContext().ClassThis(node) == nil {
 				facts |= classFactsNeedsClassConstructorReference
 			}
@@ -1757,7 +1745,7 @@ func (tx *classFieldsTransformer) getClassFacts(node *ast.Node) classFacts {
 	willHoistInitializersToConstructor := (tx.shouldTransformInitializersUsingDefine && containsPublicInstanceFields) ||
 		(tx.shouldTransformInitializersUsingSet && containsInitializedPublicInstanceFields) ||
 		(tx.shouldTransformPrivateElementsOrClassStaticBlocks && containsInstancePrivateElements) ||
-		(tx.shouldTransformPrivateElementsOrClassStaticBlocks && containsInstanceAutoAccessors && tx.shouldTransformAutoAccessors == core.TSTrue)
+		(tx.shouldTransformPrivateElementsOrClassStaticBlocks && containsInstanceAutoAccessors && tx.shouldTransformAutoAccessors)
 
 	if willHoistInitializersToConstructor {
 		facts |= classFactsWillHoistInitializersToConstructor

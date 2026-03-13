@@ -122,6 +122,13 @@ type esDecoratorTransformer struct {
 }
 
 func newESDecoratorTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
+	// When experimentalDecorators is set, the legacy decorator transformer handles all
+	// decorators. When targeting ESNext with useDefineForClassFields, there's nothing to
+	// transform. In either case every node would be returned unchanged, so skip entirely.
+	if opts.CompilerOptions.ExperimentalDecorators.IsTrue() ||
+		(opts.CompilerOptions.GetEmitScriptTarget() >= core.ScriptTargetESNext && opts.CompilerOptions.GetUseDefineForClassFields()) {
+		return nil
+	}
 	tx := &esDecoratorTransformer{compilerOptions: opts.CompilerOptions}
 	result := tx.NewTransformer(tx.visit, opts.Context)
 	ec := tx.EmitContext()
@@ -295,13 +302,6 @@ func (tx *esDecoratorTransformer) shouldVisitNode(node *ast.Node) bool {
 }
 
 func (tx *esDecoratorTransformer) visit(node *ast.Node) *ast.Node {
-	// When experimentalDecorators is set, the legacy decorator transformer has already
-	// removed all decorators before this transform runs, so this is a no-op.
-	// When targeting ESNext with useDefineForClassFields, there's nothing to transform either.
-	if tx.compilerOptions.ExperimentalDecorators.IsTrue() ||
-		(tx.compilerOptions.GetEmitScriptTarget() >= core.ScriptTargetESNext && tx.compilerOptions.GetUseDefineForClassFields()) {
-		return node
-	}
 	if node.Kind == ast.KindSourceFile {
 		return tx.visitSourceFile(node.AsSourceFile())
 	}

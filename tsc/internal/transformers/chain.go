@@ -46,7 +46,15 @@ func Chain(transforms ...TransformerFactory) TransformerFactory {
 		constructed := make([]*Transformer, 0, len(transforms))
 		for _, t := range transforms {
 			// TODO: flatten nested chains?
-			constructed = append(constructed, t(opt))
+			if result := t(opt); result != nil {
+				constructed = append(constructed, result)
+			}
+		}
+		switch len(constructed) {
+		case 0:
+			return nil
+		case 1:
+			return constructed[0]
 		}
 		ch := &chainedTransformer{components: constructed}
 		return ch.NewTransformer(ch.visit, opt.Context)
