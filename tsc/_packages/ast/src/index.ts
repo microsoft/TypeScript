@@ -1,6 +1,5 @@
 export { CharacterCodes } from "#enums/characterCodes";
 export { CommentDirectiveType } from "#enums/commentDirectiveType";
-export { JSDocParsingMode } from "#enums/jsDocParsingMode";
 export { LanguageVariant } from "#enums/languageVariant";
 export { NodeFlags } from "#enums/nodeFlags";
 export { RegularExpressionFlags } from "#enums/regularExpressionFlags";
