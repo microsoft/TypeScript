@@ -556,7 +556,8 @@ const baselineTrackingEnabled = isTypeScriptSubmoduleCloned() && ![
 
 const goTestSumFlags = [
     "--format-hide-empty-pkg",
-    ...(!isCI ? ["--hide-summary", "skipped"] : []),
+    "--hide-summary",
+    "skipped",
 ];
 
 /**
