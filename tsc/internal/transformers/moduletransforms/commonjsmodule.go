@@ -690,9 +690,6 @@ func (tx *CommonJSModuleTransformer) createRequireCall(node *ast.Node /*ImportDe
 }
 
 func (tx *CommonJSModuleTransformer) getHelperExpressionForExport(node *ast.ExportDeclaration, innerExpr *ast.Expression) *ast.Expression {
-	if tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper != 0 {
-		return innerExpr
-	}
 	if getExportNeedsImportStarHelper(node) {
 		return tx.Visitor().VisitNode(tx.Factory().NewImportStarHelper(innerExpr))
 	}
@@ -700,9 +697,6 @@ func (tx *CommonJSModuleTransformer) getHelperExpressionForExport(node *ast.Expo
 }
 
 func (tx *CommonJSModuleTransformer) getHelperExpressionForImport(node *ast.ImportDeclaration, innerExpr *ast.Expression) *ast.Expression {
-	if tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper != 0 {
-		return innerExpr
-	}
 	if getImportNeedsImportStarHelper(node) {
 		return tx.Visitor().VisitNode(tx.Factory().NewImportStarHelper(innerExpr))
 	}
@@ -852,8 +846,7 @@ func (tx *CommonJSModuleTransformer) visitTopLevelExportDeclaration(node *ast.Ex
 
 		for _, specifier := range node.ExportClause.Elements() {
 			specifierName := specifier.PropertyNameOrName()
-			exportNeedsImportDefault := tx.EmitContext().EmitFlags(node.AsNode())&printer.EFNeverApplyImportHelper == 0 &&
-				ast.ModuleExportNameIsDefault(specifierName)
+			exportNeedsImportDefault := ast.ModuleExportNameIsDefault(specifierName)
 
 			var target *ast.Node
 			if exportNeedsImportDefault {

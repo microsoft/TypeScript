@@ -261,7 +261,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 					externalHelpersModuleName,
 					emitContext.Factory.NewExternalModuleReference(emitContext.Factory.NewStringLiteral(externalHelpersModuleNameText, ast.TokenFlagsNone)),
 				)
-				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper|printer.EFCustomPrologue)
+				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFCustomPrologue)
 				return externalHelpersImportDeclaration
 			}
 		} else {
@@ -297,7 +297,7 @@ func createExternalHelpersImportDeclarationIfNeeded(emitContext *printer.EmitCon
 					nil, /*attributes*/
 				)
 
-				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFNeverApplyImportHelper|printer.EFCustomPrologue)
+				emitContext.AddEmitFlags(externalHelpersImportDeclaration, printer.EFCustomPrologue)
 				return externalHelpersImportDeclaration
 			}
 		}

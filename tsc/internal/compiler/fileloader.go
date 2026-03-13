@@ -469,11 +469,8 @@ func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *a
 	defer p.factoryMu.Unlock()
 	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
 	importDecl := p.factory.NewImportDeclaration(nil, nil, externalHelpersModuleReference, nil)
-	// !!! addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
 	externalHelpersModuleReference.Parent = importDecl
 	importDecl.Parent = file.AsNode()
-	// !!! externalHelpersModuleReference.Flags &^= ast.NodeFlagsSynthesized
-	// !!! importDecl.Flags &^= ast.NodeFlagsSynthesized
 	return externalHelpersModuleReference
 }
 

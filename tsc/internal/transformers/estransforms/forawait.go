@@ -442,7 +442,6 @@ func (tx *forawaitTransformer) transformForAwaitOfStatement(node *ast.ForInOrOfS
 		f.NewVariableDeclaration(result, nil, nil, nil),
 	}))
 	varDeclList.Loc = node.Expression.Loc
-	tx.EmitContext().AddEmitFlags(varDeclList, printer.EFNoHoisting)
 
 	condition := f.InlineExpressions([]*ast.Node{
 		f.NewAssignmentExpression(result, tx.createDownlevelAwait(callNext)),
