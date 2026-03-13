@@ -20360,12 +20360,15 @@ func (c *Checker) getTypeOfMappedSymbol(symbol *ast.Symbol) *Type {
 		case symbol.CheckFlags&ast.CheckFlagsStripOptional != 0:
 			propType = c.removeMissingOrUndefinedType(propType)
 		}
-		if !c.popTypeResolution() {
+		if c.popTypeResolution() {
+			if links.resolvedType == nil {
+				links.resolvedType = propType
+			}
+		} else {
+			if links.resolvedType == nil {
+				links.resolvedType = c.errorType
+			}
 			c.error(c.currentNode, diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, c.symbolToString(symbol), c.TypeToString(mappedType))
-			propType = c.errorType
-		}
-		if links.resolvedType == nil {
-			links.resolvedType = propType
 		}
 	}
 	return links.resolvedType
