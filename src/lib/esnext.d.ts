@@ -9,3 +9,4 @@
 /// <reference lib="esnext.typedarrays" />
 /// <reference lib="esnext.temporal" />
 /// <reference lib="esnext.date" />
+/// <reference lib="esnext.json" />

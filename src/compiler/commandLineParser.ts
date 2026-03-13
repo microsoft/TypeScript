@@ -259,6 +259,7 @@ const libEntries: [string, string][] = [
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
     ["esnext.temporal", "lib.esnext.temporal.d.ts"],
     ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
+    ["esnext.json", "lib.esnext.json.d.ts"],
     // Decorators
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
