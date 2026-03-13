@@ -247,7 +247,6 @@ func (p *Parser) initializeState(opts ast.SourceFileParseOptions, sourceText str
 	p.scanner.SetText(p.sourceText)
 	p.scanner.SetOnError(p.scanError)
 	p.scanner.SetLanguageVariant(p.languageVariant)
-	p.scanner.SetScriptKind(p.scriptKind)
 }
 
 func (p *Parser) scanError(message *diagnostics.Message, pos int, length int, args ...any) {

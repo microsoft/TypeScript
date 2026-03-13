@@ -214,7 +214,6 @@ type Scanner struct {
 	languageVariant core.LanguageVariant
 	onError         ErrorCallback
 	skipTrivia      bool
-	scriptKind      core.ScriptKind
 	ScannerState
 
 	containsNonASCII bool
@@ -408,10 +407,6 @@ func (s *Scanner) SetText(text string) {
 
 func (s *Scanner) SetOnError(errorCallback ErrorCallback) {
 	s.onError = errorCallback
-}
-
-func (s *Scanner) SetScriptKind(scriptKind core.ScriptKind) {
-	s.scriptKind = scriptKind
 }
 
 func (s *Scanner) SetLanguageVariant(languageVariant core.LanguageVariant) {

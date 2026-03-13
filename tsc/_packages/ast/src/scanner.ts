@@ -2,7 +2,6 @@ import { CharacterCodes } from "#enums/characterCodes";
 import { CommentDirectiveType } from "#enums/commentDirectiveType";
 import { LanguageVariant } from "#enums/languageVariant";
 import { RegularExpressionFlags } from "#enums/regularExpressionFlags";
-import { ScriptKind } from "#enums/scriptKind";
 import { ScriptTarget } from "#enums/scriptTarget";
 import { SyntaxKind } from "#enums/syntaxKind";
 import { TokenFlags } from "#enums/tokenFlags";
@@ -80,7 +79,6 @@ export interface Scanner {
     clearCommentDirectives(): void;
     setText(text: string | undefined, start?: number, length?: number): void;
     setLanguageVariant(variant: LanguageVariant): void;
-    setScriptKind(scriptKind: ScriptKind): void;
     resetTokenState(pos: number): void;
     setSkipJsDocLeadingAsterisks(skip: boolean): void;
     lookAhead<T>(callback: () => T): T;
@@ -916,8 +914,6 @@ export function createScanner(
     var commentDirectives: CommentDirective[] | undefined;
     var skipJsDocLeadingAsterisks = 0;
 
-    var scriptKind: ScriptKind = ScriptKind.Unknown;
-
     setText(text, start, length);
 
     var scanner: Scanner = {
@@ -961,7 +957,6 @@ export function createScanner(
         clearCommentDirectives,
         setText,
         setLanguageVariant,
-        setScriptKind,
         resetTokenState,
         setSkipJsDocLeadingAsterisks,
         tryScan,
@@ -2519,10 +2514,6 @@ export function createScanner(
 
     function setLanguageVariant(variant: LanguageVariant) {
         languageVariant = variant;
-    }
-
-    function setScriptKind(kind: ScriptKind) {
-        scriptKind = kind;
     }
 
     function resetTokenState(position: number) {
