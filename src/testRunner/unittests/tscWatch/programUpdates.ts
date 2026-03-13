@@ -2488,4 +2488,51 @@ import { x } from "../b";`,
             },
         ],
     });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "toggling isolatedModules re-emits const enums",
+        commandLineArgs: ["-w"],
+        sys: () => {
+            const enumFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `const enum TestEnum { a = 1, b = 3, c = 5 }
+const x = TestEnum.b;`,
+            };
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {},
+                }),
+            };
+            return TestServerHost.createWatchedSystem(
+                [enumFile, configFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
+        },
+        edits: [
+            {
+                caption: "Enable isolatedModules — const enum should no longer be inlined",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { isolatedModules: true },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "Disable isolatedModules — const enum should be inlined again",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { isolatedModules: false },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
 });

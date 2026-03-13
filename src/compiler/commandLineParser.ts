@@ -859,6 +859,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "isolatedModules",
         type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsEmit: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Ensure_that_each_file_can_be_safely_transpiled_without_relying_on_other_imports,
         transpileOptionValue: true,
