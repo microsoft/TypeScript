@@ -22,6 +22,9 @@ func findEnclosingNode(r core.TextRange, sourceFile *ast.SourceFile) *ast.Node {
 	find = func(n *ast.Node) *ast.Node {
 		var candidate *ast.Node
 		n.ForEachChild(func(c *ast.Node) bool {
+			if c.Flags&ast.NodeFlagsReparsed != 0 {
+				return false
+			}
 			if r.ContainedBy(withTokenStart(c, sourceFile)) {
 				candidate = c
 				return true
