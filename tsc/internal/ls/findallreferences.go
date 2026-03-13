@@ -621,7 +621,7 @@ func (l *LanguageService) provideSymbolsAndEntries(ctx context.Context, uri lspr
 
 		entry := queue[0]
 		queue = queue[1:]
-		if !seenNodes.Has(entry.node) {
+		if entry.node != nil && !seenNodes.Has(entry.node) {
 			seenNodes.Add(entry.node)
 			addToQueue(l.getSymbolAndEntries(ctx, entry.node.Pos(), entry.node, program, isRename, implementations))
 		}
