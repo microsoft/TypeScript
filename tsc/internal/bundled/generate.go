@@ -4,20 +4,17 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"go/format"
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 
-	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/core"
-	"github.com/microsoft/typescript-go/internal/locale"
-	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
-	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 var (
@@ -130,67 +127,58 @@ func generateEmbedded(libs []lib) {
 	writeCode("embed_generated.go", code.Bytes())
 }
 
-func readLibs() []lib {
-	type libsMeta struct {
-		libs  []string
-		paths map[string]string
-	}
+var (
+	// Match escaped characters, double-quoted strings, single-line comments, and multi-line comments.
+	reJSONComments = regexp.MustCompile(`\\.|"(?:\\.|[^"])*"|//.*|/\*[\s\S]*?\*/`)
+	// Match double-quoted strings (to skip) or trailing commas before ] or }.
+	reTrailingComma = regexp.MustCompile(`"(?:\\.|[^"])*"|,\s*([}\]])`)
+)
 
-	libsFile := tspath.NormalizeSlashes(filepath.Join(libInputDir, "libs.json"))
+// stripJSONC replaces comments and trailing commas with spaces in JSONC content,
+// producing valid JSON. The input slice is mutated in place.
+func stripJSONC(b []byte) {
+	for _, loc := range reJSONComments.FindAllIndex(b, -1) {
+		if b[loc[0]] == '/' {
+			for i := loc[0]; i < loc[1]; i++ {
+				if b[i] != '\n' {
+					b[i] = ' '
+				}
+			}
+		}
+	}
+	for _, loc := range reTrailingComma.FindAllSubmatchIndex(b, -1) {
+		// loc[2]:loc[3] is the capture group; -1 means this matched a string, not a comma.
+		if loc[2] < 0 {
+			continue
+		}
+		// Blank the comma (at loc[0]), keep whitespace and closing bracket.
+		b[loc[0]] = ' '
+	}
+}
+
+func readLibs() []lib {
+	libsFile := filepath.Join(libInputDir, "libs.json")
 
 	b, err := os.ReadFile(libsFile)
 	if err != nil {
 		log.Fatalf("failed to open libs.json: %v", err)
 	}
+	stripJSONC(b)
 
-	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: libsFile,
-		Path:     tspath.Path(libsFile),
-	}, string(b), core.ScriptKindJSON)
-	diags := sourceFile.Diagnostics()
-
-	if len(diags) > 0 {
-		for _, diag := range diags {
-			log.Printf("%s", diag.Localize(locale.Default))
-		}
-		log.Fatalf("failed to parse libs.json")
+	var meta struct {
+		Libs  []string          `json:"libs"`
+		Paths map[string]string `json:"paths"`
 	}
 
-	paths := make(map[string]string)
-	var libNames []string
-
-	props := sourceFile.Statements.Nodes[0].
-		AsExpressionStatement().
-		Expression.
-		AsObjectLiteralExpression().
-		Properties.
-		Nodes
-
-	for _, prop := range props {
-		assign := prop.AsPropertyAssignment()
-		name := assign.Name().Text()
-		switch name {
-		case "libs":
-			for _, lib := range assign.Initializer.AsArrayLiteralExpression().Elements.Nodes {
-				libNames = append(libNames, lib.AsStringLiteral().Text)
-			}
-		case "paths":
-			for _, path := range assign.Initializer.AsObjectLiteralExpression().Properties.Nodes {
-				prop := path.AsPropertyAssignment()
-				key := prop.Name().Text()
-				value := prop.Initializer.AsStringLiteral().Text
-				paths[key] = value
-			}
-		default:
-			log.Fatalf("unexpected property: %s", name)
-		}
+	if err := json.Unmarshal(b, &meta); err != nil {
+		log.Fatalf("failed to parse libs.json: %v", err)
 	}
 
 	var libs []lib
-	for _, libName := range libNames {
+	for _, libName := range meta.Libs {
 		sources := []string{libName + ".d.ts"}
 		var target string
-		if path, ok := paths[libName]; ok {
+		if path, ok := meta.Paths[libName]; ok {
 			target = path
 		} else {
 			target = "lib." + libName + ".d.ts"
