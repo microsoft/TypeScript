@@ -1,0 +1,80 @@
+exactOptionalPropertyTypes_spreadTernary.ts(13,1): error TS2375: Type '{ parentId: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'parentId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+exactOptionalPropertyTypes_spreadTernary.ts(16,1): error TS2375: Type '{ parentId?: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'parentId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+exactOptionalPropertyTypes_spreadTernary.ts(20,1): error TS2375: Type '{ parentId?: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'parentId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+exactOptionalPropertyTypes_spreadTernary.ts(24,1): error TS2375: Type '{ parentId?: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'parentId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+
+
+==== exactOptionalPropertyTypes_spreadTernary.ts (4 errors) ====
+    // Repro from https://github.com/microsoft/TypeScript/issues/63240
+    // exactOptionalPropertyTypes should flag optional-property values spread via ternary
+    
+    type Foo = {
+        parentId?: string;
+    };
+    
+    declare const requestBody: Foo;
+    declare const cond: boolean;
+    let target: Foo;
+    
+    // Direct assignment — correctly flagged
+    target = { parentId: requestBody.parentId }; // Error
+    ~~~~~~
+!!! error TS2375: Type '{ parentId: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'parentId' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+    // Spread + ternary with optional property access — must also be flagged
+    target = { ...(cond ? { parentId: requestBody.parentId } : {}) }; // Error
+    ~~~~~~
+!!! error TS2375: Type '{ parentId?: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'parentId' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+    // Destructured optional property — must also be flagged
+    const { parentId } = requestBody;
+    target = { ...(cond ? { parentId } : {}) }; // Error
+    ~~~~~~
+!!! error TS2375: Type '{ parentId?: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'parentId' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+    // Explicit `string | undefined` value — must be flagged (was already working)
+    const parentId2 = '' as string | undefined;
+    target = { ...(cond ? { parentId: parentId2 } : {}) }; // Error
+    ~~~~~~
+!!! error TS2375: Type '{ parentId?: string | undefined; }' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'parentId' are incompatible.
+!!! error TS2375:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'string'.
+    
+    // ------------------------------------------------------------------
+    // Valid cases — must NOT produce errors
+    // ------------------------------------------------------------------
+    
+    // Spreading the whole Foo object is fine (its optional properties are already correctly typed)
+    target = { ...(cond ? requestBody : {}) }; // OK
+    
+    // A required string value is fine
+    const parentId3 = 'hello';
+    target = { ...(cond ? { parentId: parentId3 } : {}) }; // OK
+    
+    // Spreading an object where the property is narrowed to string
+    if (cond && requestBody.parentId !== undefined) {
+        target = { ...(cond ? { parentId: requestBody.parentId } : {}) }; // OK — narrowed to string
+    }
+    

@@ -20135,7 +20135,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                     const flags = SymbolFlags.Property | SymbolFlags.Optional;
                     const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
-                    result.links.type = isSetonlyAccessor ? undefinedType : addOptionality(getTypeOfSymbol(prop), /*isProperty*/ true);
+                    let propType = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
+                    if (exactOptionalPropertyTypes && !isSetonlyAccessor && !(prop.flags & SymbolFlags.Optional) && containsMissingType(propType)) {
+                        propType = getUnionType([removeMissingOrUndefinedType(propType), undefinedType]);
+                    }
+                    result.links.type = isSetonlyAccessor ? undefinedType : addOptionality(propType, /*isProperty*/ true);
                     result.declarations = prop.declarations;
                     result.links.nameType = getSymbolLinks(prop).nameType;
                     result.links.syntheticOrigin = prop;

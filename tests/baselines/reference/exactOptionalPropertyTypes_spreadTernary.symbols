@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/exactOptionalPropertyTypes_spreadTernary.ts] ////
+
+=== exactOptionalPropertyTypes_spreadTernary.ts ===
+// Repro from https://github.com/microsoft/TypeScript/issues/63240
+// exactOptionalPropertyTypes should flag optional-property values spread via ternary
+
+type Foo = {
+>Foo : Symbol(Foo, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 0, 0))
+
+    parentId?: string;
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+
+};
+
+declare const requestBody: Foo;
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+>Foo : Symbol(Foo, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 0, 0))
+
+declare const cond: boolean;
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+
+let target: Foo;
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>Foo : Symbol(Foo, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 0, 0))
+
+// Direct assignment — correctly flagged
+target = { parentId: requestBody.parentId }; // Error
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 12, 10))
+>requestBody.parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+
+// Spread + ternary with optional property access — must also be flagged
+target = { ...(cond ? { parentId: requestBody.parentId } : {}) }; // Error
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 15, 23))
+>requestBody.parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+
+// Destructured optional property — must also be flagged
+const { parentId } = requestBody;
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 18, 7))
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+
+target = { ...(cond ? { parentId } : {}) }; // Error
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 19, 23))
+
+// Explicit `string | undefined` value — must be flagged (was already working)
+const parentId2 = '' as string | undefined;
+>parentId2 : Symbol(parentId2, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 22, 5))
+
+target = { ...(cond ? { parentId: parentId2 } : {}) }; // Error
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 23, 23))
+>parentId2 : Symbol(parentId2, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 22, 5))
+
+// ------------------------------------------------------------------
+// Valid cases — must NOT produce errors
+// ------------------------------------------------------------------
+
+// Spreading the whole Foo object is fine (its optional properties are already correctly typed)
+target = { ...(cond ? requestBody : {}) }; // OK
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+
+// A required string value is fine
+const parentId3 = 'hello';
+>parentId3 : Symbol(parentId3, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 33, 5))
+
+target = { ...(cond ? { parentId: parentId3 } : {}) }; // OK
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 34, 23))
+>parentId3 : Symbol(parentId3, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 33, 5))
+
+// Spreading an object where the property is narrowed to string
+if (cond && requestBody.parentId !== undefined) {
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>requestBody.parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+>undefined : Symbol(undefined)
+
+    target = { ...(cond ? { parentId: requestBody.parentId } : {}) }; // OK — narrowed to string
+>target : Symbol(target, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 9, 3))
+>cond : Symbol(cond, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 8, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 38, 27))
+>requestBody.parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+>requestBody : Symbol(requestBody, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 7, 13))
+>parentId : Symbol(parentId, Decl(exactOptionalPropertyTypes_spreadTernary.ts, 3, 12))
+}
+

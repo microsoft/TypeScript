@@ -1,0 +1,226 @@
+//// [tests/cases/compiler/exactOptionalPropertyTypes_spreadTernary.ts] ////
+
+=== exactOptionalPropertyTypes_spreadTernary.ts ===
+// Repro from https://github.com/microsoft/TypeScript/issues/63240
+// exactOptionalPropertyTypes should flag optional-property values spread via ternary
+
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    parentId?: string;
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+};
+
+declare const requestBody: Foo;
+>requestBody : Foo
+>            : ^^^
+
+declare const cond: boolean;
+>cond : boolean
+>     : ^^^^^^^
+
+let target: Foo;
+>target : Foo
+>       : ^^^
+
+// Direct assignment — correctly flagged
+target = { parentId: requestBody.parentId }; // Error
+>target = { parentId: requestBody.parentId } : { parentId: string | undefined; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : Foo
+>       : ^^^
+>{ parentId: requestBody.parentId } : { parentId: string | undefined; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>requestBody.parentId : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
+>requestBody : Foo
+>            : ^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+
+// Spread + ternary with optional property access — must also be flagged
+target = { ...(cond ? { parentId: requestBody.parentId } : {}) }; // Error
+>target = { ...(cond ? { parentId: requestBody.parentId } : {}) } : { parentId?: string | undefined; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : Foo
+>       : ^^^
+>{ ...(cond ? { parentId: requestBody.parentId } : {}) } : { parentId?: string | undefined; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? { parentId: requestBody.parentId } : {}) : { parentId: string | undefined; } | {}
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond ? { parentId: requestBody.parentId } : {} : { parentId: string | undefined; } | {}
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>{ parentId: requestBody.parentId } : { parentId: string | undefined; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>requestBody.parentId : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
+>requestBody : Foo
+>            : ^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+// Destructured optional property — must also be flagged
+const { parentId } = requestBody;
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>requestBody : Foo
+>            : ^^^
+
+target = { ...(cond ? { parentId } : {}) }; // Error
+>target = { ...(cond ? { parentId } : {}) } : { parentId?: string | undefined; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : Foo
+>       : ^^^
+>{ ...(cond ? { parentId } : {}) } : { parentId?: string | undefined; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? { parentId } : {}) : { parentId: string | undefined; } | {}
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond ? { parentId } : {} : { parentId: string | undefined; } | {}
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>{ parentId } : { parentId: string | undefined; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+// Explicit `string | undefined` value — must be flagged (was already working)
+const parentId2 = '' as string | undefined;
+>parentId2 : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>'' as string | undefined : string | undefined
+>                         : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+target = { ...(cond ? { parentId: parentId2 } : {}) }; // Error
+>target = { ...(cond ? { parentId: parentId2 } : {}) } : { parentId?: string | undefined; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target : Foo
+>       : ^^^
+>{ ...(cond ? { parentId: parentId2 } : {}) } : { parentId?: string | undefined; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? { parentId: parentId2 } : {}) : { parentId: string | undefined; } | {}
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond ? { parentId: parentId2 } : {} : { parentId: string | undefined; } | {}
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>{ parentId: parentId2 } : { parentId: string | undefined; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>parentId2 : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+// ------------------------------------------------------------------
+// Valid cases — must NOT produce errors
+// ------------------------------------------------------------------
+
+// Spreading the whole Foo object is fine (its optional properties are already correctly typed)
+target = { ...(cond ? requestBody : {}) }; // OK
+>target = { ...(cond ? requestBody : {}) } : { parentId?: string; }
+>                                          : ^^^^^^^^^^^^^      ^^^
+>target : Foo
+>       : ^^^
+>{ ...(cond ? requestBody : {}) } : { parentId?: string; }
+>                                 : ^^^^^^^^^^^^^      ^^^
+>(cond ? requestBody : {}) : Foo
+>                          : ^^^
+>cond ? requestBody : {} : Foo
+>                        : ^^^
+>cond : boolean
+>     : ^^^^^^^
+>requestBody : Foo
+>            : ^^^
+>{} : {}
+>   : ^^
+
+// A required string value is fine
+const parentId3 = 'hello';
+>parentId3 : "hello"
+>          : ^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+target = { ...(cond ? { parentId: parentId3 } : {}) }; // OK
+>target = { ...(cond ? { parentId: parentId3 } : {}) } : { parentId?: string; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^
+>target : Foo
+>       : ^^^
+>{ ...(cond ? { parentId: parentId3 } : {}) } : { parentId?: string; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? { parentId: parentId3 } : {}) : { parentId: string; } | {}
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond ? { parentId: parentId3 } : {} : { parentId: string; } | {}
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>{ parentId: parentId3 } : { parentId: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^
+>parentId : string
+>         : ^^^^^^
+>parentId3 : "hello"
+>          : ^^^^^^^
+>{} : {}
+>   : ^^
+
+// Spreading an object where the property is narrowed to string
+if (cond && requestBody.parentId !== undefined) {
+>cond && requestBody.parentId !== undefined : boolean
+>                                           : ^^^^^^^
+>cond : boolean
+>     : ^^^^^^^
+>requestBody.parentId !== undefined : boolean
+>                                   : ^^^^^^^
+>requestBody.parentId : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
+>requestBody : Foo
+>            : ^^^
+>parentId : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    target = { ...(cond ? { parentId: requestBody.parentId } : {}) }; // OK — narrowed to string
+>target = { ...(cond ? { parentId: requestBody.parentId } : {}) } : { parentId?: string; }
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^
+>target : Foo
+>       : ^^^
+>{ ...(cond ? { parentId: requestBody.parentId } : {}) } : { parentId?: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^
+>(cond ? { parentId: requestBody.parentId } : {}) : { parentId: string; } | {}
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond ? { parentId: requestBody.parentId } : {} : { parentId: string; } | {}
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cond : true
+>     : ^^^^
+>{ parentId: requestBody.parentId } : { parentId: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^
+>parentId : string
+>         : ^^^^^^
+>requestBody.parentId : string
+>                     : ^^^^^^
+>requestBody : Foo
+>            : ^^^
+>parentId : string
+>         : ^^^^^^
+>{} : {}
+>   : ^^
+}
+
