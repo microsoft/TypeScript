@@ -1,0 +1,63 @@
+// === Inlay Hints ===
+test(10, 'a', 'b', 'c')
+     ^
+{
+  "text": "first:",
+  "position": 83,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+test(10, 'a', 'b', 'c')
+         ^
+{
+  "text": "...middle:",
+  "position": 87,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+test(10, 'a', 'b', 'c')
+              ^
+{
+  "text": "...middle:",
+  "position": 92,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+test(10, 'a', 'b', 'c')
+                   ^
+{
+  "text": "last:",
+  "position": 97,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+test(10, 'a', 'c')
+     ^
+{
+  "text": "first:",
+  "position": 107,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+test(10, 'a', 'c')
+         ^
+{
+  "text": "...middle:",
+  "position": 111,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+test(10, 'a', 'c')
+              ^
+{
+  "text": "last:",
+  "position": 116,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
