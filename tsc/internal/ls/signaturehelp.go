@@ -867,7 +867,7 @@ func getImmediatelyContainingArgumentInfo(node *ast.Node, position int, sourceFi
 		}
 
 		spanIndex := ast.IndexOfNode(templateSpan.Parent.AsTemplateExpression().TemplateSpans.Nodes, templateSpan)
-		argumentIndex := getArgumentIndexForTemplatePiece(spanIndex, templateSpan, position, sourceFile)
+		argumentIndex := getArgumentIndexForTemplatePiece(spanIndex, node, position, sourceFile)
 
 		return getArgumentListInfoForTemplate(tagExpression.AsTaggedTemplateExpression(), argumentIndex, sourceFile)
 	} else if ast.IsJsxOpeningLikeElement(parent) {
