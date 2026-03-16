@@ -4180,12 +4180,12 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
         // characters could match any of the central patterns, resulting in bad backtracking.
         const questionWildcardIndex = spec.indexOf("?");
         const starWildcardIndex = spec.indexOf("*");
-        const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
+        const lastDirectorySeparatorIndex = spec.lastIndexOf(directorySeparator);
         return {
             key: toCanonicalKey(match[0], useCaseSensitiveFileNames),
             path: match[0],
-            flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
-                    || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
+            flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeparatorIndex)
+                    || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeparatorIndex)
                 ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None,
         };
     }

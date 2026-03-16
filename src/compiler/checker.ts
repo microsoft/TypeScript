@@ -14739,7 +14739,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ) {
                 // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
                 // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
-                // type identities produced, we simplify such indexed access occurences
+                // type identities produced, we simplify such indexed access occurrences
                 const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
                 const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
                 inferredProp.links.mappedType = newMappedType as MappedType;
@@ -16291,7 +16291,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             // Parameter has no annotation
-            // By using a `DeferredType` symbol, we allow the type of this rest arg to be overriden by contextual type assignment so long as its type hasn't been
+            // By using a `DeferredType` symbol, we allow the type of this rest arg to be overridden by contextual type assignment so long as its type hasn't been
             // cached by `getTypeOfSymbol` yet.
             syntheticArgsSymbol.links.checkFlags |= CheckFlags.DeferredType;
             syntheticArgsSymbol.links.deferralParent = neverType;
@@ -31010,7 +31010,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * This part of `checkIdentifier` is kept seperate from the rest, so `NodeCheckFlags` (and related diagnostics) can be lazily calculated
+     * This part of `checkIdentifier` is kept separate from the rest, so `NodeCheckFlags` (and related diagnostics) can be lazily calculated
      * without calculating the flow type of the identifier.
      */
     function checkIdentifierCalculateNodeCheckFlags(node: Identifier, symbol: Symbol) {
@@ -50787,7 +50787,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const container = getSourceFileOfNode(symbol.valueDeclaration);
         const fileSymbol = container && getSymbolOfDeclaration(container);
         // Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
-        // If we don't, the merge may not have yet occured, and the flags check below will be missing flags that
+        // If we don't, the merge may not have yet occurred, and the flags check below will be missing flags that
         // are added as a result of the merge.
         void resolveExternalModuleSymbol(fileSymbol);
         const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));

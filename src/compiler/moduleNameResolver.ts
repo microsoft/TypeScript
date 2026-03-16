@@ -2947,7 +2947,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                     for (const candidateDir of candidateDirectories) {
                         if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames(state))) {
                             // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
-                            const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
+                            const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory separator
                             const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
                             const jsAndDtsExtensions = [Extension.Mjs, Extension.Cjs, Extension.Js, Extension.Json, Extension.Dmts, Extension.Dcts, Extension.Dts];
                             for (const ext of jsAndDtsExtensions) {

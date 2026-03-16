@@ -68,7 +68,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
 
     const commaExpression = findAncestor(token, node =>
         isExpressionStatement(node.parent) ? true :
-            isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit");
+            isPossiblyPartOfCommaSeparatedInitializer(node) ? false : "quit");
     if (commaExpression) {
         const checker = program.getTypeChecker();
         if (!expressionCouldBeVariableDeclaration(commaExpression, checker)) {
@@ -105,7 +105,7 @@ function arrayElementCouldBeVariableDeclaration(expression: Expression, checker:
     return !!identifier && !checker.getSymbolAtLocation(identifier);
 }
 
-function isPossiblyPartOfCommaSeperatedInitializer(node: Node): boolean {
+function isPossiblyPartOfCommaSeparatedInitializer(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.BinaryExpression:
