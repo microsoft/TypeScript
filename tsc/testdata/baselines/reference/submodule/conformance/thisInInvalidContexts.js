@@ -78,8 +78,6 @@ class ErrClass3 extends this {
 //'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {
-    SomeEnum["A"] = this;
-    if (typeof SomeEnum.A !== "string") SomeEnum[SomeEnum.A] = "A";
-    SomeEnum["B"] = this.spaaaace; // Also should not be allowed
-    if (typeof SomeEnum.B !== "string") SomeEnum[SomeEnum.B] = "B";
+    SomeEnum[SomeEnum["A"] = this] = "A";
+    SomeEnum[SomeEnum["B"] = this.spaaaace] = "B"; // Also should not be allowed
 })(SomeEnum || (SomeEnum = {}));

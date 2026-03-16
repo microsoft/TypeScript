@@ -103,20 +103,14 @@ var M2;
 (function (M2) {
     let EComp2;
     (function (EComp2) {
-        EComp2["A"] = 'foo'.length;
-        if (typeof EComp2.A !== "string") EComp2[EComp2.A] = "A";
-        EComp2["B"] = 'foo'.length;
-        if (typeof EComp2.B !== "string") EComp2[EComp2.B] = "B";
-        EComp2["C"] = 'foo'.length;
-        if (typeof EComp2.C !== "string") EComp2[EComp2.C] = "C";
+        EComp2[EComp2["A"] = 'foo'.length] = "A";
+        EComp2[EComp2["B"] = 'foo'.length] = "B";
+        EComp2[EComp2["C"] = 'foo'.length] = "C";
     })(EComp2 = M2.EComp2 || (M2.EComp2 = {}));
     (function (EComp2) {
-        EComp2["D"] = 'foo'.length;
-        if (typeof EComp2.D !== "string") EComp2[EComp2.D] = "D";
-        EComp2["E"] = 'foo'.length;
-        if (typeof EComp2.E !== "string") EComp2[EComp2.E] = "E";
-        EComp2["F"] = 'foo'.length;
-        if (typeof EComp2.F !== "string") EComp2[EComp2.F] = "F";
+        EComp2[EComp2["D"] = 'foo'.length] = "D";
+        EComp2[EComp2["E"] = 'foo'.length] = "E";
+        EComp2[EComp2["F"] = 'foo'.length] = "F";
     })(EComp2 = M2.EComp2 || (M2.EComp2 = {}));
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
 })(M2 || (M2 = {}));

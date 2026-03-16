@@ -11,8 +11,14 @@ func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression
 	case string:
 		return factory.NewStringLiteral(value, ast.TokenFlagsNone)
 	case jsnum.Number:
-		if value.IsInf() || value.IsNaN() {
-			return nil
+		if value.IsInf() {
+			if value > 0 {
+				return factory.NewIdentifier("Infinity")
+			}
+			return factory.NewPrefixUnaryExpression(ast.KindMinusToken, factory.NewIdentifier("Infinity"))
+		}
+		if value.IsNaN() {
+			return factory.NewIdentifier("NaN")
 		}
 		if value < 0 {
 			return factory.NewPrefixUnaryExpression(ast.KindMinusToken, constantExpression(-value, factory))

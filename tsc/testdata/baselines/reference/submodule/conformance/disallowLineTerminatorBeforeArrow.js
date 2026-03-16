@@ -114,8 +114,7 @@ var m;
     }
     let Enum;
     (function (Enum) {
-        Enum["claw"] = (() => 10)();
-        if (typeof Enum.claw !== "string") Enum[Enum.claw] = "claw";
+        Enum[Enum["claw"] = (() => 10)()] = "claw";
     })(Enum = m.Enum || (m.Enum = {}));
     m.v = x => new City(Enum.claw);
 })(m || (m = {}));

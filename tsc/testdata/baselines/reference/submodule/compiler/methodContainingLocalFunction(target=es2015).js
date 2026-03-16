@@ -95,11 +95,10 @@ var M;
 })(M || (M = {}));
 var E;
 (function (E) {
-    E["A"] = (() => {
+    E[E["A"] = (() => {
         function localFunction() { }
         var x;
         x = localFunction;
         return 0;
-    })();
-    if (typeof E.A !== "string") E[E.A] = "A";
+    })()] = "A";
 })(E || (E = {}));

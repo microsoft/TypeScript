@@ -122,10 +122,8 @@ var arr; // Incorrect error here (bug 829597)
 // Arrow function as enum value
 var E;
 (function (E) {
-    E["x"] = () => 4;
-    if (typeof E.x !== "string") E[E.x] = "x";
-    E["y"] = (() => this).length; // error, can't use this in enum
-    if (typeof E.y !== "string") E[E.y] = "y";
+    E[E["x"] = () => 4] = "x";
+    E[E["y"] = (() => this).length] = "y"; // error, can't use this in enum
 })(E || (E = {}));
 // Arrow function as module variable initializer
 var M;
@@ -159,10 +157,8 @@ var M2;
     // Arrow function as enum value
     let E;
     (function (E) {
-        E["x"] = () => 4;
-        if (typeof E.x !== "string") E[E.x] = "x";
-        E["y"] = (() => this).length;
-        if (typeof E.y !== "string") E[E.y] = "y";
+        E[E["x"] = () => 4] = "x";
+        E[E["y"] = (() => this).length] = "y";
     })(E || (E = {}));
     // Arrow function as module variable initializer
     let M;

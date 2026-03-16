@@ -52,12 +52,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("./helpers");
 var A;
 (function (A) {
-    var auto;
-    A[A["a"] = auto = helpers_1.foo] = "a";
-    A[A["b"] = ++auto] = "b";
+    A[A["a"] = 2] = "a";
+    A[A["b"] = 3] = "b";
     A[A["c"] = 10] = "c";
-    A[A["d"] = 10] = "d";
-    A[A["e"] = 11] = "e";
+    A[A["d"] = (A.c)] = "d";
+    A[A["e"] = void 0] = "e";
 })(A || (A = {}));
 //// [good.js]
 "use strict";
@@ -65,8 +64,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("./helpers");
 var A;
 (function (A) {
-    A["a"] = helpers_1.foo;
-    if (typeof A.a !== "string") A[A.a] = "a";
+    A[A["a"] = 2] = "a";
     A[A["b"] = 3] = "b";
 })(A || (A = {}));
 var B;

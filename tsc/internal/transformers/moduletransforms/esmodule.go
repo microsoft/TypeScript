@@ -27,11 +27,7 @@ type importRequireStatements struct {
 
 func NewESModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	compilerOptions := opts.CompilerOptions
-	resolver := opts.Resolver
-	if resolver == nil {
-		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
-	}
-	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile}
+	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile}
 	return tx.NewTransformer(tx.visit, opts.Context)
 }
 

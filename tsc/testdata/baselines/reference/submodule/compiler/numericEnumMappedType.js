@@ -58,17 +58,13 @@ b2[1] = "a";
 b2[e2] = "b";
 var N1;
 (function (N1) {
-    N1["A"] = val();
-    if (typeof N1.A !== "string") N1[N1.A] = "A";
-    N1["B"] = val();
-    if (typeof N1.B !== "string") N1[N1.B] = "B";
+    N1[N1["A"] = val()] = "A";
+    N1[N1["B"] = val()] = "B";
 })(N1 || (N1 = {}));
 var N2;
 (function (N2) {
-    N2["C"] = val();
-    if (typeof N2.C !== "string") N2[N2.C] = "C";
-    N2["D"] = val();
-    if (typeof N2.D !== "string") N2[N2.D] = "D";
+    N2[N2["C"] = val()] = "C";
+    N2[N2["D"] = val()] = "D";
 })(N2 || (N2 = {}));
 const e = E.ONE;
 const x = e;

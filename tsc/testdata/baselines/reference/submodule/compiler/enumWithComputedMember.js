@@ -12,9 +12,7 @@ enum A {
 "use strict";
 var A;
 (function (A) {
-    var auto;
-    A["X"] = "".length;
-    if (typeof A.X !== "string") A[A.X] = "X";
-    A[A["Y"] = auto = A.X] = "Y";
-    A[A["Z"] = ++auto] = "Z";
+    A[A["X"] = "".length] = "X";
+    A[A["Y"] = A.X] = "Y";
+    A[A["Z"] = void 0] = "Z";
 })(A || (A = {}));

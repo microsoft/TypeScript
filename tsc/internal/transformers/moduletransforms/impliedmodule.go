@@ -17,12 +17,7 @@ type ImpliedModuleTransformer struct {
 }
 
 func NewImpliedModuleTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
-	compilerOptions := opts.CompilerOptions
-	resolver := opts.Resolver
-	if resolver == nil {
-		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
-	}
-	tx := &ImpliedModuleTransformer{opts: opts, resolver: resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile}
+	tx := &ImpliedModuleTransformer{opts: opts, resolver: opts.Resolver, getEmitModuleFormatOfFile: opts.GetEmitModuleFormatOfFile}
 	return tx.NewTransformer(tx.visit, opts.Context)
 }
 

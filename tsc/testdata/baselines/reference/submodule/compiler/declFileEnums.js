@@ -54,8 +54,7 @@ var e2;
 var e3;
 (function (e3) {
     e3[e3["a"] = 10] = "a";
-    e3["b"] = Math.PI;
-    if (typeof e3.b !== "string") e3[e3.b] = "b";
+    e3[e3["b"] = Math.PI] = "b";
     e3[e3["c"] = 13] = "c";
 })(e3 || (e3 = {}));
 var e4;

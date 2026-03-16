@@ -31,6 +31,5 @@ var MyEnum;
 Object.defineProperty(exports, "__esModule", { value: true });
 var MyEnum;
 (function (MyEnum) {
-    MyEnum["a"] = enum_1.MyEnum.a;
-    if (typeof MyEnum.a !== "string") MyEnum[MyEnum.a] = "a";
+    MyEnum[MyEnum["a"] = 0] = "a";
 })(MyEnum || (MyEnum = {}));

@@ -83,10 +83,10 @@ func getScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	// JS files don't use reference calculations as they don't do import elision, no need to calculate it
 	importElisionEnabled := !options.VerbatimModuleSyntax.IsTrue() && !ast.IsInJSFile(sourceFile.AsNode())
 
-	var emitResolver printer.EmitResolver
+	emitResolver := host.GetEmitResolver()
+
 	var referenceResolver binder.ReferenceResolver
-	if importElisionEnabled || options.GetJSXTransformEnabled() || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() { // full emit resolver is needed for import ellision and const enum inlining
-		emitResolver = host.GetEmitResolver()
+	if importElisionEnabled || options.GetJSXTransformEnabled() || !options.GetIsolatedModules() || options.EmitDecoratorMetadata.IsTrue() {
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
 	} else {

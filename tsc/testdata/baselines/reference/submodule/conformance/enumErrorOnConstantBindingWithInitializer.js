@@ -18,6 +18,5 @@ enum E {
 const { value = "123" } = thing;
 var E;
 (function (E) {
-    E["test"] = value;
-    if (typeof E.test !== "string") E[E.test] = "test";
+    E[E["test"] = value] = "test";
 })(E || (E = {}));

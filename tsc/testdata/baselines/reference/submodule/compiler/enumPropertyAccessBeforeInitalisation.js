@@ -13,12 +13,8 @@ enum E {
 "use strict";
 var E;
 (function (E) {
-    E["A"] = E.A;
-    if (typeof E.A !== "string") E[E.A] = "A";
-    E["B"] = E.B;
-    if (typeof E.B !== "string") E[E.B] = "B";
-    E["C"] = E["C"];
-    if (typeof E.C !== "string") E[E.C] = "C";
-    E["D"] = 1 + E.D;
-    if (typeof E.D !== "string") E[E.D] = "D";
+    E[E["A"] = E.A] = "A";
+    E[E["B"] = E.B] = "B";
+    E[E["C"] = E["C"]] = "C";
+    E[E["D"] = 1 + E.D] = "D";
 })(E || (E = {}));

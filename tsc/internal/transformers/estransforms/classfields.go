@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/debug"
@@ -87,7 +88,7 @@ type classLexicalEnv struct {
 type classFieldsTransformer struct {
 	transformers.Transformer
 	compilerOptions *core.CompilerOptions
-	resolver        printer.EmitResolver
+	resolver        binder.ReferenceResolver
 
 	// Computed configuration flags
 	shouldTransformInitializersUsingSet               bool
@@ -146,7 +147,7 @@ func newClassFieldsTransformer(opts *transformers.TransformOptions) *transformer
 
 	tx := &classFieldsTransformer{
 		compilerOptions:  opts.CompilerOptions,
-		resolver:         opts.EmitResolver,
+		resolver:         opts.Resolver,
 		legacyDecorators: opts.CompilerOptions.ExperimentalDecorators.IsTrue(),
 	}
 
@@ -432,9 +433,6 @@ func (tx *classFieldsTransformer) visitAccessorFieldResult(node *ast.Node) *ast.
 // substituting at emit time using NodeCheckFlags.ConstructorReference, we resolve the
 // identifier to its declaration and check if that declaration has a registered alias.
 func (tx *classFieldsTransformer) visitIdentifier(node *ast.Identifier) *ast.Node {
-	if tx.resolver == nil {
-		return node.AsNode()
-	}
 	declaration := tx.resolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(node.AsNode()))
 	if declaration != nil {
 		if alias, ok := tx.classAliases[declaration]; ok && tx.enclosingClassDeclarations.Has(declaration) {
@@ -1637,9 +1635,6 @@ func (tx *classFieldsTransformer) getPrivateInstanceMethodsAndAccessors(node *as
 // Only checks member bodies (not computed property names), since computed property names
 // are evaluated during class definition when the binding is still correct.
 func (tx *classFieldsTransformer) memberContainsConstructorReference(member *ast.Node, classDecl *ast.Node) bool {
-	if tx.resolver == nil {
-		return false
-	}
 	classOriginal := tx.EmitContext().MostOriginal(classDecl)
 	className := ast.GetNameOfDeclaration(classDecl)
 	var check func(n *ast.Node) bool

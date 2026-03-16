@@ -83,14 +83,10 @@ val2 = MyDeclaredEnum.B;
 "use strict";
 var E;
 (function (E) {
-    E["A"] = computed(0);
-    if (typeof E.A !== "string") E[E.A] = "A";
-    E["B"] = computed(1);
-    if (typeof E.B !== "string") E[E.B] = "B";
-    E["C"] = computed(2);
-    if (typeof E.C !== "string") E[E.C] = "C";
-    E["D"] = computed(3);
-    if (typeof E.D !== "string") E[E.D] = "D";
+    E[E["A"] = computed(0)] = "A";
+    E[E["B"] = computed(1)] = "B";
+    E[E["C"] = computed(2)] = "C";
+    E[E["D"] = computed(3)] = "D";
 })(E || (E = {}));
 function f1() {
     const c1 = E.B; // Fresh E.B

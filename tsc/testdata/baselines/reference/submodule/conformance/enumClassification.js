@@ -154,14 +154,10 @@ var E12;
 // Examples of numeric enum types with constant and computed members
 var E20;
 (function (E20) {
-    E20["A"] = "foo".length;
-    if (typeof E20.A !== "string") E20[E20.A] = "A";
-    E20["B"] = E20.A + 1;
-    if (typeof E20.B !== "string") E20[E20.B] = "B";
-    E20["C"] = +"123";
-    if (typeof E20.C !== "string") E20[E20.C] = "C";
-    E20["D"] = Math.sin(1);
-    if (typeof E20.D !== "string") E20[E20.D] = "D";
+    E20[E20["A"] = "foo".length] = "A";
+    E20[E20["B"] = E20.A + 1] = "B";
+    E20[E20["C"] = +"123"] = "C";
+    E20[E20["D"] = Math.sin(1)] = "D";
 })(E20 || (E20 = {}));
 
 

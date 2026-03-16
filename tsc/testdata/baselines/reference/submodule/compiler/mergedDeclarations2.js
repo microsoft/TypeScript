@@ -19,8 +19,7 @@ var Foo;
     Foo[Foo["b"] = 0] = "b";
 })(Foo || (Foo = {}));
 (function (Foo) {
-    Foo["a"] = Foo.b;
-    if (typeof Foo.a !== "string") Foo[Foo.a] = "a";
+    Foo[Foo["a"] = 0] = "a";
 })(Foo || (Foo = {}));
 (function (Foo) {
     Foo.x = b;

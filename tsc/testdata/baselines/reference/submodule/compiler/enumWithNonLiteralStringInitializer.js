@@ -32,8 +32,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("./helpers");
 var A;
 (function (A) {
-    A["a"] = helpers_1.bar;
-    if (typeof A.a !== "string") A[A.a] = "a";
+    A["a"] = "bar";
 })(A || (A = {}));
 //// [good.js]
 "use strict";
@@ -41,8 +40,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("./helpers");
 var A;
 (function (A) {
-    A["a"] = `${helpers_1.foo}`;
-    if (typeof A.a !== "string") A[A.a] = "a";
+    A["a"] = "2";
     A["b"] = "2";
     A["c"] = "2";
     A["d"] = "foo";

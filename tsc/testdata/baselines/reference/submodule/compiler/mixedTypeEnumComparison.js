@@ -56,8 +56,7 @@ var E2;
 (function (E2) {
     E2["S1"] = "foo";
     E2[E2["N1"] = 1000] = "N1";
-    E2["C1"] = someValue();
-    if (typeof E2.C1 !== "string") E2[E2.C1] = "C1";
+    E2[E2["C1"] = someValue()] = "C1";
 })(E2 || (E2 = {}));
 someString > E2.S1;
 someNumber > E2.N1;

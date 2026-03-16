@@ -12,6 +12,5 @@ enum E {
 var E;
 (function (E) {
     // No ASI
-    E[e] = 0[e2] = 1;
-    if (typeof E[e] !== "string") E[E[e]] = e;
+    E[E[e] = 0[e2] = 1] = e;
 })(E || (E = {}));

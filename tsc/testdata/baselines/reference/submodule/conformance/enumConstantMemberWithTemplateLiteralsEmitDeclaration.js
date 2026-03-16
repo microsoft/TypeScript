@@ -76,8 +76,7 @@ var T5;
 var T6;
 (function (T6) {
     T6[T6["a"] = 1] = "a";
-    T6["b"] = `12`.length;
-    if (typeof T6.b !== "string") T6[T6.b] = "b";
+    T6[T6["b"] = `12`.length] = "b";
 })(T6 || (T6 = {}));
 
 

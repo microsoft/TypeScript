@@ -52,21 +52,15 @@ enum StrExt {
 "use strict";
 var E;
 (function (E) {
-    E["A"] = computed(0);
-    if (typeof E.A !== "string") E[E.A] = "A";
-    E["B"] = computed(1);
-    if (typeof E.B !== "string") E[E.B] = "B";
-    E["C"] = computed(2);
-    if (typeof E.C !== "string") E[E.C] = "C";
-    E["D"] = computed(3);
-    if (typeof E.D !== "string") E[E.D] = "D";
+    E[E["A"] = computed(0)] = "A";
+    E[E["B"] = computed(1)] = "B";
+    E[E["C"] = computed(2)] = "C";
+    E[E["D"] = computed(3)] = "D";
 })(E || (E = {}));
 var F;
 (function (F) {
-    F["A"] = E.A;
-    if (typeof F.A !== "string") F[F.A] = "A";
-    F["B"] = F.A;
-    if (typeof F.B !== "string") F[F.B] = "B";
+    F[F["A"] = E.A] = "A";
+    F[F["B"] = F.A] = "B";
 })(F || (F = {}));
 var Flag;
 (function (Flag) {
@@ -81,12 +75,9 @@ const EV = 1;
 var ExtFlags;
 (function (ExtFlags) {
     ExtFlags[ExtFlags["D"] = 2] = "D";
-    ExtFlags["E"] = EV;
-    if (typeof ExtFlags.E !== "string") ExtFlags[ExtFlags.E] = "E";
-    ExtFlags["ABCD"] = Flag.ABC | ExtFlags.D;
-    if (typeof ExtFlags.ABCD !== "string") ExtFlags[ExtFlags.ABCD] = "ABCD";
-    ExtFlags["AC"] = Flag["A"] | ExtFlags.D;
-    if (typeof ExtFlags.AC !== "string") ExtFlags[ExtFlags.AC] = "AC";
+    ExtFlags[ExtFlags["E"] = 1] = "E";
+    ExtFlags[ExtFlags["ABCD"] = 2] = "ABCD";
+    ExtFlags[ExtFlags["AC"] = 2] = "AC";
 })(ExtFlags || (ExtFlags = {}));
 var Str;
 (function (Str) {
@@ -97,10 +88,8 @@ var Str;
 var StrExt;
 (function (StrExt) {
     StrExt["D"] = "D";
-    StrExt["ABD"] = Str.AB + StrExt.D;
-    if (typeof StrExt.ABD !== "string") StrExt[StrExt.ABD] = "ABD";
-    StrExt["AD"] = Str["A"] + StrExt.D;
-    if (typeof StrExt.AD !== "string") StrExt[StrExt.AD] = "AD";
+    StrExt["ABD"] = "ABD";
+    StrExt["AD"] = "AD";
 })(StrExt || (StrExt = {}));
 
 

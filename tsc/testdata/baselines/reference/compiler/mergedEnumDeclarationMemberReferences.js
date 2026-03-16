@@ -22,8 +22,6 @@ var E;
     E[E["B"] = 1] = "B";
 })(E || (E = {}));
 (function (E) {
-    E["C"] = E.A;
-    if (typeof E.C !== "string") E[E.C] = "C";
-    E["D"] = E.B + 1;
-    if (typeof E.D !== "string") E[E.D] = "D";
+    E[E["C"] = 0] = "C";
+    E[E["D"] = 2] = "D";
 })(E || (E = {}));

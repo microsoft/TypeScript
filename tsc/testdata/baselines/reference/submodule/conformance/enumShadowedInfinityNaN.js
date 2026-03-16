@@ -25,15 +25,13 @@
     let Infinity = {};
     let En;
     (function (En) {
-        En["X"] = Infinity;
-        if (typeof En.X !== "string") En[En.X] = "X";
+        En[En["X"] = Infinity] = "X";
     })(En || (En = {}));
 }
 {
     let NaN = {};
     let En;
     (function (En) {
-        En["X"] = NaN;
-        if (typeof En.X !== "string") En[En.X] = "X";
+        En[En["X"] = NaN] = "X";
     })(En || (En = {}));
 }
