@@ -1,0 +1,4 @@
+// === documentHighlights ===
+// === /a.ts ===
+// const [|v/*HIGHLIGHTS*/alue|] = 1;
+// type Box<T extends +[|value|]> = typeof [|value|]

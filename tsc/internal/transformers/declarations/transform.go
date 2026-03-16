@@ -726,6 +726,7 @@ func (tx *DeclarationTransformer) transformTypeParameterDeclaration(input *ast.T
 			input.Modifiers(),
 			input.Name(),
 			nil,
+			input.Expression,
 			nil,
 		)
 	}

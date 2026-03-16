@@ -3289,6 +3289,7 @@ func ReplaceModifiers(factory *NodeFactory, node *Node, modifierArray *ModifierL
 			modifierArray,
 			node.Name(),
 			node.AsTypeParameter().Constraint,
+			node.AsTypeParameter().Expression,
 			node.AsTypeParameter().DefaultType,
 		)
 	case KindParameter:

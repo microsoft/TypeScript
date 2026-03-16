@@ -2818,9 +2818,11 @@ func (f *NodeFactory) NewTypeParameterDeclaration(modifiers *ModifierList, name 
 	return f.newNode(KindTypeParameter, data)
 }
 
-func (f *NodeFactory) UpdateTypeParameterDeclaration(node *TypeParameterDeclaration, modifiers *ModifierList, name *IdentifierNode, constraint *TypeNode, defaultType *TypeNode) *Node {
-	if modifiers != node.modifiers || name != node.name || constraint != node.Constraint || defaultType != node.DefaultType {
-		return updateNode(f.NewTypeParameterDeclaration(modifiers, name, constraint, defaultType), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateTypeParameterDeclaration(node *TypeParameterDeclaration, modifiers *ModifierList, name *IdentifierNode, constraint *TypeNode, expression *Expression, defaultType *TypeNode) *Node {
+	if modifiers != node.modifiers || name != node.name || constraint != node.Constraint || expression != node.Expression || defaultType != node.DefaultType {
+		updated := updateNode(f.NewTypeParameterDeclaration(modifiers, name, constraint, defaultType), node.AsNode(), f.hooks)
+		updated.AsTypeParameter().Expression = expression
+		return updated
 	}
 	return node.AsNode()
 }
@@ -2830,11 +2832,13 @@ func (node *TypeParameterDeclaration) ForEachChild(v Visitor) bool {
 }
 
 func (node *TypeParameterDeclaration) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateTypeParameterDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Constraint), v.visitNode(node.DefaultType))
+	return v.Factory.UpdateTypeParameterDeclaration(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Constraint), v.visitNode(node.Expression), v.visitNode(node.DefaultType))
 }
 
 func (node *TypeParameterDeclaration) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewTypeParameterDeclaration(node.Modifiers(), node.Name(), node.Constraint, node.DefaultType), node.AsNode(), f.AsNodeFactory().hooks)
+	clone := cloneNode(f.AsNodeFactory().NewTypeParameterDeclaration(node.Modifiers(), node.Name(), node.Constraint, node.DefaultType), node.AsNode(), f.AsNodeFactory().hooks)
+	clone.AsTypeParameter().Expression = node.Expression
+	return clone
 }
 
 func (node *TypeParameterDeclaration) Name() *DeclarationName {
