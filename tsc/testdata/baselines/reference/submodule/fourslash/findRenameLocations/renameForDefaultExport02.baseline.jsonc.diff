@@ -1,0 +1,60 @@
+--- old.renameForDefaultExport02.baseline.jsonc
++++ new.renameForDefaultExport02.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport02.ts ===
+ // export default function /*RENAME*/[|DefaultExportedFunctionRENAME|]() {
+ //     return [|DefaultExportedFunctionRENAME|]
+ // }
+ // /**
+-//  *  Commenting [|DefaultExportedFunctionRENAME|]
++//  *  Commenting DefaultExportedFunction
+ //  */
+ // 
+ // var x: typeof [|DefaultExportedFunctionRENAME|];
+@@= skipped -14, +13 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport02.ts ===
+ // export default function [|DefaultExportedFunctionRENAME|]() {
+ //     return /*RENAME*/[|DefaultExportedFunctionRENAME|]
+ // }
+ // /**
+-//  *  Commenting [|DefaultExportedFunctionRENAME|]
++//  *  Commenting DefaultExportedFunction
+ //  */
+ // 
+ // var x: typeof [|DefaultExportedFunctionRENAME|];
+@@= skipped -16, +15 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport02.ts ===
+ // export default function [|DefaultExportedFunctionRENAME|]() {
+ //     return [|DefaultExportedFunctionRENAME|]
+ // }
+ // /**
+-//  *  Commenting [|DefaultExportedFunctionRENAME|]
++//  *  Commenting DefaultExportedFunction
+ //  */
+ // 
+ // var x: typeof /*RENAME*/[|DefaultExportedFunctionRENAME|];
+@@= skipped -16, +15 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport02.ts ===
+ // export default function [|DefaultExportedFunctionRENAME|]() {
+ //     return [|DefaultExportedFunctionRENAME|]
+ // }
+ // /**
+-//  *  Commenting [|DefaultExportedFunctionRENAME|]
++//  *  Commenting DefaultExportedFunction
+ //  */
+ // 
+ // var x: typeof [|DefaultExportedFunctionRENAME|];

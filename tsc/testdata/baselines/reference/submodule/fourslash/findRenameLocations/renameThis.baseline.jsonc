@@ -10,8 +10,8 @@
 
 // === findRenameLocations ===
 // === /renameThis.ts ===
-// function f(this) {
-//     return /*RENAME*/this;
+// function f([|thisRENAME|]) {
+//     return /*RENAME*/[|thisRENAME|];
 // }
 // this;
 // const _ = { this: 0 }.this;

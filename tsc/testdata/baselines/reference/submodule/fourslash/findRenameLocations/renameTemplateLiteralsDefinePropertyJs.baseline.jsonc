@@ -2,11 +2,16 @@
 // === /a.js ===
 // let obj = {};
 // 
-// Object.defineProperty(obj, `/*RENAME*/prop`, { value: 0 });
+// Object.defineProperty(obj, `/*RENAME*/[|propRENAME|]`, { value: 0 });
 // 
 // obj = {
-//     [`prop`]: 1
-// --- (line: 7) skipped ---
+//     [`[|propRENAME|]`]: 1
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
 
 
 
@@ -14,14 +19,16 @@
 // === /a.js ===
 // let obj = {};
 // 
-// Object.defineProperty(obj, `prop`, { value: 0 });
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
 // 
 // obj = {
-//     [`/*RENAME*/prop`]: 1
+//     [`/*RENAME*/[|propRENAME|]`]: 1
 // };
 // 
-// obj.prop;
-// --- (line: 10) skipped ---
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
 
 
 
@@ -44,31 +51,49 @@
 
 // === findRenameLocations ===
 // === /a.js ===
-// --- (line: 6) skipped ---
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     [`[|propRENAME|]`]: 1
 // };
 // 
-// obj.prop;
-// obj['/*RENAME*/prop'];
-// obj["prop"];
-// obj[`prop`];
+// obj.[|propRENAME|];
+// obj['/*RENAME*/[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
 
 
 
 // === findRenameLocations ===
 // === /a.js ===
-// --- (line: 7) skipped ---
+// let obj = {};
 // 
-// obj.prop;
-// obj['prop'];
-// obj["/*RENAME*/prop"];
-// obj[`prop`];
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     [`[|propRENAME|]`]: 1
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["/*RENAME*/[|propRENAME|]"];
+// obj[`[|propRENAME|]`];
 
 
 
 // === findRenameLocations ===
 // === /a.js ===
-// --- (line: 8) skipped ---
-// obj.prop;
-// obj['prop'];
-// obj["prop"];
-// obj[`/*RENAME*/prop`];
+// let obj = {};
+// 
+// Object.defineProperty(obj, `[|propRENAME|]`, { value: 0 });
+// 
+// obj = {
+//     [`[|propRENAME|]`]: 1
+// };
+// 
+// obj.[|propRENAME|];
+// obj['[|propRENAME|]'];
+// obj["[|propRENAME|]"];
+// obj[`/*RENAME*/[|propRENAME|]`];

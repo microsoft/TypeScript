@@ -161,6 +161,10 @@ function parseFourslashStatement(statement: ts.Statement): Cmd[] | undefined {
         // variable declarations (for ranges and markers), e.g. `const range = test.ranges()[0];`
         return [];
     }
+    else if (ts.isEmptyStatement(statement)) {
+        // Stray semicolons, e.g. `;;`
+        return [];
+    }
     else if (ts.isExpressionStatement(statement) && ts.isCallExpression(statement.expression)) {
         const callExpression = statement.expression;
         if (!ts.isPropertyAccessExpression(callExpression.expression)) {
@@ -1464,6 +1468,7 @@ function parseRenameInfo(funcName: "renameInfoSucceeded" | "renameInfoFailed", a
             console.error(`Unrecognized user preferences in ${funcName}: ${prefArg.getText()}`);
             return undefined;
         }
+        preferences = parsedPreferences;
     }
     return [{ kind: funcName, preferences }];
 }
@@ -1921,6 +1926,11 @@ function parseBaselineMarkerOrRangeArg(arg: ts.Expression): string | undefined {
         if (result) {
             return result;
         }
+        // Handle `.filter(r => !(r.marker && r.marker.data.KEY))` patterns
+        const filterResult = parseFilterExpression(arg);
+        if (filterResult) {
+            return filterResult;
+        }
     }
     console.error(`Unrecognized argument in verify.baselineRename: ${arg.getText()}`);
     return undefined;
@@ -1932,20 +1942,20 @@ function parseRangeVariable(arg: ts.Identifier | ts.ElementAccessExpression): st
     const varStmts = file.statements.filter(ts.isVariableStatement);
     for (const varStmt of varStmts) {
         for (const decl of varStmt.declarationList.declarations) {
-            if (ts.isArrayBindingPattern(decl.name) && decl.initializer?.getText().includes("ranges")) {
+            if (ts.isArrayBindingPattern(decl.name) && decl.initializer) {
+                // Resolve the initializer to a Go expression for the source array
+                const sourceExpr = resolveRangesExpression(decl.initializer, varStmts);
+                if (!sourceExpr) continue;
                 for (let i = 0; i < decl.name.elements.length; i++) {
                     const elem = decl.name.elements[i];
                     if (ts.isBindingElement(elem) && ts.isIdentifier(elem.name) && elem.name.text === argName) {
-                        // `const [range_0, ..., range_n, ...] = test.ranges();` and arg is `range_n`
                         if (elem.dotDotDotToken === undefined) {
-                            return `f.Ranges()[${i}]`;
+                            return `${sourceExpr}[${i}]`;
                         }
-                        // `const [range_0, ..., ...rest] = test.ranges();` and arg is `rest[n]`
                         if (ts.isElementAccessExpression(arg)) {
-                            return `f.Ranges()[${i + parseInt(arg.argumentExpression!.getText())}]`;
+                            return `${sourceExpr}[${i + parseInt(arg.argumentExpression!.getText())}]`;
                         }
-                        // `const [range_0, ..., ...rest] = test.ranges();` and arg is `rest`
-                        return `ToAny(f.Ranges()[${i}:])...`;
+                        return `ToAny(${sourceExpr}[${i}:])...`;
                     }
                 }
             }
@@ -1954,6 +1964,63 @@ function parseRangeVariable(arg: ts.Identifier | ts.ElementAccessExpression): st
                 if (ts.isElementAccessExpression(arg)) {
                     return `f.Ranges()[${arg.argumentExpression!.getText()}]`;
                 }
+            }
+            // `const cRanges = ranges.get("C")` or `const cRanges = test.rangesByText().get("C")`
+            if (ts.isIdentifier(decl.name) && decl.name.text === argName && decl.initializer && ts.isCallExpression(decl.initializer)) {
+                const initText = decl.initializer.getText();
+                if (initText.includes("rangesByText") || (ts.isPropertyAccessExpression(decl.initializer.expression) && decl.initializer.expression.name.text === "get")) {
+                    // Try to find the .get("text") argument
+                    const getCall = decl.initializer;
+                    if (getCall.arguments.length === 1 && ts.isStringLiteralLike(getCall.arguments[0])) {
+                        return `ToAny(f.GetRangesByText().Get(${getGoStringLiteral(getCall.arguments[0].text)}))...`;
+                    }
+                }
+            }
+        }
+    }
+    return undefined;
+}
+
+/**
+ * Resolves a range initializer expression to a Go expression.
+ * Handles `test.ranges()`, `test.rangesByText().get("X")`, and variable references to those.
+ */
+function resolveRangesExpression(expr: ts.Expression, varStmts: ts.VariableStatement[]): string | undefined {
+    const text = expr.getText();
+    if (text.includes("test.ranges()")) {
+        return "f.Ranges()";
+    }
+    if (text.includes("rangesByText()") && ts.isCallExpression(expr) && expr.arguments.length === 1 && ts.isStringLiteralLike(expr.arguments[0])) {
+        return `f.GetRangesByText().Get(${getGoStringLiteral(expr.arguments[0].text)})`;
+    }
+    // Handle `someVar.get("text")` where someVar resolves to rangesByText()
+    if (ts.isCallExpression(expr) && ts.isPropertyAccessExpression(expr.expression) && expr.expression.name.text === "get" && expr.arguments.length === 1 && ts.isStringLiteralLike(expr.arguments[0])) {
+        const obj = expr.expression.expression;
+        if (ts.isIdentifier(obj)) {
+            const resolved = resolveIdentifier(obj, varStmts);
+            if (resolved?.includes("rangesByText")) {
+                return `f.GetRangesByText().Get(${getGoStringLiteral(expr.arguments[0].text)})`;
+            }
+        }
+    }
+    // It might be a variable reference like `const [d0, d1] = dRanges;`
+    if (ts.isIdentifier(expr)) {
+        for (const varStmt of varStmts) {
+            for (const decl of varStmt.declarationList.declarations) {
+                if (ts.isIdentifier(decl.name) && decl.name.text === expr.text && decl.initializer) {
+                    return resolveRangesExpression(decl.initializer, varStmts);
+                }
+            }
+        }
+    }
+    return undefined;
+}
+
+function resolveIdentifier(id: ts.Identifier, varStmts: ts.VariableStatement[]): string | undefined {
+    for (const varStmt of varStmts) {
+        for (const decl of varStmt.declarationList.declarations) {
+            if (ts.isIdentifier(decl.name) && decl.name.text === id.text && decl.initializer) {
+                return decl.initializer.getText();
             }
         }
     }
@@ -1966,6 +2033,79 @@ function getRangesByTextArg(arg: ts.CallExpression): string | undefined {
             return `ToAny(f.GetRangesByText().Get(${getGoStringLiteral(arg.arguments[0].text)}))...`;
         }
     }
+    return undefined;
+}
+
+/**
+ * Handles `.filter(r => !(r.marker && r.marker.data.KEY))` patterns on range arrays.
+ * Converts to `ToAny(core.Filter(source, func(r *fourslash.RangeMarker) bool { ... }))...`
+ */
+function parseFilterExpression(arg: ts.CallExpression): string | undefined {
+    if (!ts.isPropertyAccessExpression(arg.expression) || arg.expression.name.text !== "filter") {
+        return undefined;
+    }
+    if (arg.arguments.length !== 1) {
+        return undefined;
+    }
+    const filterArg = arg.arguments[0];
+    if (!ts.isArrowFunction(filterArg)) {
+        return undefined;
+    }
+
+    // Resolve the source (the thing being filtered)
+    const sourceExpr = arg.expression.expression;
+    let sourceGo: string | undefined;
+
+    if (ts.isIdentifier(sourceExpr)) {
+        const file = sourceExpr.getSourceFile();
+        const varStmts = file.statements.filter(ts.isVariableStatement);
+        sourceGo = resolveRangesExpression(sourceExpr, varStmts);
+    }
+    else if (ts.isCallExpression(sourceExpr)) {
+        // e.g. test.ranges().filter(...)
+        if (sourceExpr.getText().includes("test.ranges()")) {
+            sourceGo = "f.Ranges()";
+        }
+    }
+
+    if (!sourceGo) {
+        return undefined;
+    }
+
+    // Parse the filter body to generate a Go predicate
+    const predicate = parseFilterPredicate(filterArg);
+    if (!predicate) {
+        return undefined;
+    }
+
+    return `ToAny(core.Filter(${sourceGo}, ${predicate}))...`;
+}
+
+function parseFilterPredicate(arrow: ts.ArrowFunction): string | undefined {
+    // Handle `r => !(r.marker && r.marker.data.KEY)` → filter OUT ranges with marker.data.KEY
+    const body = arrow.body;
+    if (!ts.isExpression(body)) {
+        return undefined;
+    }
+
+    const paramName = arrow.parameters[0]?.name.getText();
+    if (!paramName) {
+        return undefined;
+    }
+
+    // Check for `!(r.marker && r.marker.data.KEY)` pattern
+    if (ts.isPrefixUnaryExpression(body) && body.operator === ts.SyntaxKind.ExclamationToken) {
+        const inner = ts.isParenthesizedExpression(body.operand) ? body.operand.expression : body.operand;
+        if (ts.isBinaryExpression(inner) && inner.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
+            // Right side should be `r.marker.data.KEY`
+            const right = inner.right;
+            if (ts.isPropertyAccessExpression(right) && right.expression.getText() === `${paramName}.marker.data`) {
+                const key = right.name.text;
+                return `func(r *fourslash.RangeMarker) bool { return r.Marker == nil || r.Marker.Data[${getGoStringLiteral(key)}] == nil }`;
+            }
+        }
+    }
+
     return undefined;
 }
 

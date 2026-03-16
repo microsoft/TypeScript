@@ -1,0 +1,85 @@
+--- old.renameForDefaultExport03.baseline.jsonc
++++ new.renameForDefaultExport03.baseline.jsonc
+@@= skipped -0, +0 lines =@@
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport03.ts ===
+ // function /*RENAME*/[|fRENAME|]() {
+ //     return 100;
+@@= skipped -11, +10 lines =@@
+ // var y = [|fRENAME|]();
+ // 
+ // /**
+-//  *  Commenting [|fRENAME|]
++//  *  Commenting f
+ //  */
+ // namespace [|fRENAME|] {
+ //     var local = 100;
+@@= skipped -9, +9 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport03.ts ===
+ // function [|fRENAME|]() {
+ //     return 100;
+@@= skipped -13, +12 lines =@@
+ // var y = [|fRENAME|]();
+ // 
+ // /**
+-//  *  Commenting [|fRENAME|]
++//  *  Commenting f
+ //  */
+ // namespace [|fRENAME|] {
+ //     var local = 100;
+@@= skipped -9, +9 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport03.ts ===
+ // function [|fRENAME|]() {
+ //     return 100;
+@@= skipped -13, +12 lines =@@
+ // var y = [|fRENAME|]();
+ // 
+ // /**
+-//  *  Commenting [|fRENAME|]
++//  *  Commenting f
+ //  */
+ // namespace [|fRENAME|] {
+ //     var local = 100;
+@@= skipped -9, +9 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport03.ts ===
+ // function [|fRENAME|]() {
+ //     return 100;
+@@= skipped -13, +12 lines =@@
+ // var y = /*RENAME*/[|fRENAME|]();
+ // 
+ // /**
+-//  *  Commenting [|fRENAME|]
++//  *  Commenting f
+ //  */
+ // namespace [|fRENAME|] {
+ //     var local = 100;
+@@= skipped -9, +9 lines =@@
+
+
+ // === findRenameLocations ===
+-
+ // === /renameForDefaultExport03.ts ===
+ // function [|fRENAME|]() {
+ //     return 100;
+@@= skipped -13, +12 lines =@@
+ // var y = [|fRENAME|]();
+ // 
+ // /**
+-//  *  Commenting [|fRENAME|]
++//  *  Commenting f
+ //  */
+ // namespace /*RENAME*/[|fRENAME|] {
+ //     var local = 100;

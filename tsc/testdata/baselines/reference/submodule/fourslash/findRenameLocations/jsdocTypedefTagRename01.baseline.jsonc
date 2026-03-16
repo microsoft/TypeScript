@@ -29,5 +29,5 @@
 // 
 // NumberLike = 10;
 // 
-// /** @type {/*RENAME*/[|NumberLikeRENAME|]} */
+// /** @type {/*RENAME*/NumberLike} */
 // var numberLike;

@@ -17,39 +17,48 @@
 // === findRenameLocations ===
 // === /renameStringPropertyNames.ts ===
 // var o = {
-//     prop: 0
+//     [|propRENAME|]: 0
 // };
 // 
 // o = {
-//     "/*RENAME*/prop": 1
+//     "/*RENAME*/[|propRENAME|]": 1
 // };
 // 
-// o["prop"];
-// o['prop'];
-// o.prop;
+// o["[|propRENAME|]"];
+// o['[|propRENAME|]'];
+// o.[|propRENAME|];
 
 
 
 // === findRenameLocations ===
 // === /renameStringPropertyNames.ts ===
-// --- (line: 5) skipped ---
-//     "prop": 1
+// var o = {
+//     [|propRENAME|]: 0
 // };
 // 
-// o["/*RENAME*/prop"];
-// o['prop'];
-// o.prop;
+// o = {
+//     "[|propRENAME|]": 1
+// };
+// 
+// o["/*RENAME*/[|propRENAME|]"];
+// o['[|propRENAME|]'];
+// o.[|propRENAME|];
 
 
 
 // === findRenameLocations ===
 // === /renameStringPropertyNames.ts ===
-// --- (line: 6) skipped ---
+// var o = {
+//     [|propRENAME|]: 0
 // };
 // 
-// o["prop"];
-// o['/*RENAME*/prop'];
-// o.prop;
+// o = {
+//     "[|propRENAME|]": 1
+// };
+// 
+// o["[|propRENAME|]"];
+// o['/*RENAME*/[|propRENAME|]'];
+// o.[|propRENAME|];
 
 
 

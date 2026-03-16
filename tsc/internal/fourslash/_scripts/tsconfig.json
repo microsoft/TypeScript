@@ -4,6 +4,7 @@
         "noEmit": true,
         "module": "nodenext",
         "allowImportingTsExtensions": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "types": ["node"]
     }
 }
