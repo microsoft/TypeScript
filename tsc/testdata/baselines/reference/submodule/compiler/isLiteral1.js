@@ -5,4 +5,4 @@ var x: number = 02343;
 
 //// [isLiteral1.js]
 "use strict";
-var x = 2343;
+var x = 1251;

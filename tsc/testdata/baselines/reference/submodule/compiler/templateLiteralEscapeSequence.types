@@ -434,7 +434,7 @@ tag`0${055}`;
 >tag`0${055}` : string
 >tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
 >`0${055}` : string
->055 : 55
+>055 : 45
 
 tag`${00}0`;
 >tag`${00}0` : string
@@ -464,7 +464,7 @@ tag`${055}0`;
 >tag`${055}0` : string
 >tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
 >`${055}0` : string
->055 : 55
+>055 : 45
 
 tag`\0`;
 >tag`\0` : string

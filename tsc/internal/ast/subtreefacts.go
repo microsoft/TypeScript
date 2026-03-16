@@ -38,6 +38,7 @@ const (
 	SubtreeContainsDecorators
 	SubtreeContainsIdentifier
 	SubtreeContainsPrivateIdentifierInExpression
+	SubtreeContainsInvalidTemplateEscape
 
 	SubtreeFactsComputed              // NOTE: This should always be last
 	SubtreeFactsNone     SubtreeFacts = 0
@@ -49,7 +50,7 @@ const (
 	SubtreeContainsES2021 = SubtreeContainsLogicalAssignments
 	SubtreeContainsES2020 = SubtreeContainsNullishCoalescing | SubtreeContainsOptionalChaining
 	SubtreeContainsES2019 = SubtreeContainsMissingCatchClauseVariable
-	SubtreeContainsES2018 = SubtreeContainsESObjectRestOrSpread | SubtreeContainsForAwaitOrAsyncGenerator
+	SubtreeContainsES2018 = SubtreeContainsESObjectRestOrSpread | SubtreeContainsForAwaitOrAsyncGenerator | SubtreeContainsInvalidTemplateEscape
 	SubtreeContainsES2017 = SubtreeContainsAnyAwait
 	SubtreeContainsES2016 = SubtreeContainsExponentiationOperator
 

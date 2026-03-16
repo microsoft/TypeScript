@@ -1,8 +1,0 @@
---- old.isLiteral1.js
-+++ new.isLiteral1.js
-@@= skipped -4, +4 lines =@@
-
- //// [isLiteral1.js]
- "use strict";
--var x = 1251;
-+var x = 2343;

@@ -3,5 +3,5 @@
 === isLiteral1.ts ===
 var x: number = 02343;
 >x : number
->02343 : 2343
+>02343 : 1251
 

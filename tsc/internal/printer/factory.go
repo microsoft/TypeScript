@@ -1183,6 +1183,17 @@ func (f *NodeFactory) NewRunInitializersHelper(thisArg *ast.Expression, initiali
 
 // ES2015 Helpers
 
+func (f *NodeFactory) NewTemplateObjectHelper(cookedArray *ast.Expression, rawArray *ast.Expression) *ast.Expression {
+	f.emitContext.RequestEmitHelper(makeTemplateObjectHelper)
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__makeTemplateObject"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{cookedArray, rawArray}),
+		ast.NodeFlagsNone,
+	)
+}
+
 func (f *NodeFactory) NewPropKeyHelper(expr *ast.Expression) *ast.Expression {
 	f.emitContext.RequestEmitHelper(propKeyHelper)
 	return f.NewCallExpression(

@@ -15,7 +15,7 @@ var (
 	NewES2021Transformer = transformers.Chain(NewESNextTransformer, newLogicalAssignmentTransformer)
 	NewES2020Transformer = transformers.Chain(NewES2021Transformer, newNullishCoalescingTransformer, newOptionalChainTransformer)
 	NewES2019Transformer = transformers.Chain(NewES2020Transformer, newOptionalCatchTransformer)
-	NewES2018Transformer = transformers.Chain(NewES2019Transformer, newObjectRestSpreadTransformer, newforawaitTransformer)
+	NewES2018Transformer = transformers.Chain(NewES2019Transformer, newObjectRestSpreadTransformer, newforawaitTransformer, newTaggedTemplateLiftRestrictionTransformer)
 	NewES2017Transformer = transformers.Chain(NewES2018Transformer, newAsyncTransformer)
 	NewES2016Transformer = transformers.Chain(NewES2017Transformer, newExponentiationTransformer)
 )

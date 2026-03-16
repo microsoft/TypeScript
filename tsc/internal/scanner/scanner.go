@@ -1890,10 +1890,11 @@ func (s *Scanner) scanNumber() ast.Kind {
 				s.tokenFlags |= ast.TokenFlagsContainsLeadingZero
 				fixedPart = digits
 			} else {
-				s.tokenValue = jsnum.FromString(digits).String()
+				val, _ := strconv.ParseInt(digits, 8, 64)
+				s.tokenValue = strconv.FormatInt(val, 10)
 				s.tokenFlags |= ast.TokenFlagsOctal
 				withMinus := s.token == ast.KindMinusToken
-				literal := core.IfElse(withMinus, "-", "") + "0o" + s.tokenValue
+				literal := core.IfElse(withMinus, "-", "") + "0o" + strconv.FormatInt(val, 8)
 				if withMinus {
 					start--
 				}
