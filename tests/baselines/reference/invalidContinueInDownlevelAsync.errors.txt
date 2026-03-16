@@ -1,4 +1,4 @@
-invalidContinueInDownlevelAsync.ts(3,9): error TS1107: Jump target cannot cross function boundary.
+invalidContinueInDownlevelAsync.ts(3,9): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 
 
 ==== invalidContinueInDownlevelAsync.ts (1 errors) ====
@@ -6,7 +6,7 @@ invalidContinueInDownlevelAsync.ts(3,9): error TS1107: Jump target cannot cross 
         if (true) {
             continue;
             ~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
         }
         else {
             await 1;

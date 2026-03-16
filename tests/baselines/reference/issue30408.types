@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/issue30408.ts] ////
+
+=== issue30408.ts ===
+function foo() {
+>foo : () => void
+>    : ^^^^^^^^^^
+
+    for (let i = 0; i < 10; i++) {
+>i : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>i < 10 : boolean
+>       : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+>i++ : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+        console.log(`${i}`);
+>console.log(`${i}`) : void
+>                    : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>`${i}` : string
+>       : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+        continue loopend;
+>loopend : any
+>        : ^^^
+    }
+
+    loopend:
+>loopend : any
+>        : ^^^
+
+    console.log('end of loop');
+>console.log('end of loop') : void
+>                           : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>'end of loop' : "end of loop"
+>              : ^^^^^^^^^^^^^
+}
+
+function bar() {
+>bar : () => void
+>    : ^^^^^^^^^^
+
+    continue loopend;
+>loopend : any
+>        : ^^^
+}
+

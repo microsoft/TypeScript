@@ -1,0 +1,23 @@
+issue30408.ts(4,9): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+issue30408.ts(12,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+
+
+==== issue30408.ts (2 errors) ====
+    function foo() {
+        for (let i = 0; i < 10; i++) {
+            console.log(`${i}`);
+            continue loopend;
+            ~~~~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+        }
+    
+        loopend:
+        console.log('end of loop');
+    }
+    
+    function bar() {
+        continue loopend;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+    }
+    

@@ -53028,15 +53028,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
         let current: Node = node;
+        let crossedFunctionBoundary = false;
+
         while (current) {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
-                return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                crossedFunctionBoundary = true;
             }
 
             switch (current.kind) {
                 case SyntaxKind.LabeledStatement:
                     if (node.label && (current as LabeledStatement).label.escapedText === node.label.escapedText) {
                         // found matching label - verify that label usage is correct
+
+                        if (crossedFunctionBoundary) {
+                            return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                        }
+
                         // continue can only target labels that are on iteration statements
                         const isMisplacedContinueLabel = node.kind === SyntaxKind.ContinueStatement
                             && !isIterationStatement((current as LabeledStatement).statement, /*lookInLabeledStatements*/ true);
@@ -53051,12 +53058,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.SwitchStatement:
                     if (node.kind === SyntaxKind.BreakStatement && !node.label) {
                         // unlabeled break within switch statement - ok
+                        if (crossedFunctionBoundary) {
+                            return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                        }
                         return false;
                     }
                     break;
                 default:
                     if (isIterationStatement(current, /*lookInLabeledStatements*/ false) && !node.label) {
                         // unlabeled break or continue within iteration statement - ok
+                        if (crossedFunctionBoundary) {
+                            return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                        }
                         return false;
                     }
                     break;
