@@ -1027,7 +1027,9 @@ func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project],
 						dirtyFilePath = ""
 						break
 					}
-				} else if p.host != nil && p.host.sourceFS.Seen(path) {
+				} else if p.host != nil &&
+					(changeType == lsproto.FileChangeTypeCreated && p.host.sourceFS.SeenFileOrMissingParentDirectory(path) ||
+						changeType != lsproto.FileChangeTypeCreated && p.host.sourceFS.SeenFile(path)) {
 					dirty = true
 					dirtyFilePath = ""
 					break

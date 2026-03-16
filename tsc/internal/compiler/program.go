@@ -132,8 +132,9 @@ func (p *Program) GetNearestAncestorDirectoryWithPackageJson(dirname string) str
 
 // GetPackageJsonInfo implements checker.Program.
 func (p *Program) GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheEntry {
-	scoped := p.resolver.GetPackageScopeForPath(pkgJsonPath)
-	if scoped != nil && scoped.Exists() && scoped.PackageDirectory == tspath.GetDirectoryPath(pkgJsonPath) {
+	directory := tspath.GetDirectoryPath(pkgJsonPath)
+	scoped := p.resolver.GetPackageScopeForPath(directory)
+	if scoped != nil && scoped.Exists() && scoped.PackageDirectory == directory {
 		return scoped
 	}
 	return nil

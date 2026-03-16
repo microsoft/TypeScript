@@ -702,14 +702,14 @@ func TestSourceFS(t *testing.T) {
 		sourceFS := newSourceFS(true /* tracking */, snapshot, toPath)
 
 		// File should not be seen yet
-		assert.Assert(t, !sourceFS.Seen(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, !sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
 
 		// Read the file
 		fh := sourceFS.GetFile("/src/foo.ts")
 		assert.Assert(t, fh != nil)
 
 		// Now it should be seen
-		assert.Assert(t, sourceFS.Seen(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
 	})
 
 	t.Run("does not track files when tracking disabled", func(t *testing.T) {
@@ -734,7 +734,7 @@ func TestSourceFS(t *testing.T) {
 		assert.Assert(t, fh != nil)
 
 		// Should not be seen since tracking is disabled
-		assert.Assert(t, !sourceFS.Seen(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, !sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
 	})
 
 	t.Run("DisableTracking stops tracking", func(t *testing.T) {
@@ -757,14 +757,14 @@ func TestSourceFS(t *testing.T) {
 
 		// Read foo while tracking
 		sourceFS.GetFile("/src/foo.ts")
-		assert.Assert(t, sourceFS.Seen(tspath.Path("/src/foo.ts")))
+		assert.Assert(t, sourceFS.SeenFile(tspath.Path("/src/foo.ts")))
 
 		// Disable tracking
 		sourceFS.DisableTracking()
 
 		// Read bar after tracking disabled
 		sourceFS.GetFile("/src/bar.ts")
-		assert.Assert(t, !sourceFS.Seen(tspath.Path("/src/bar.ts")))
+		assert.Assert(t, !sourceFS.SeenFile(tspath.Path("/src/bar.ts")))
 	})
 
 	t.Run("FileExists returns true for files in source", func(t *testing.T) {

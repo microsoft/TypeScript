@@ -499,8 +499,13 @@ func (c *configFileRegistryBuilder) DidChangeFiles(summary FileChangeSummary, lo
 						return false
 					}
 					logger.Logf("Checking if any of %d created files match root files for config %s", len(createdFiles), entry.Key())
-					for _, fileName := range createdFiles {
+					for path, fileName := range createdFiles {
 						if config.commandLine.PossiblyMatchesFileName(fileName) {
+							return true
+						}
+						if config.commandLine.PossiblyMatchesDirectoryName(path) && c.fs.DirectoryExists(fileName) {
+							// If we got a creation event for a directory, it's probably a symlink. We don't need to
+							// test realpath here; this is enough confidence to trigger a filename reload.
 							return true
 						}
 					}

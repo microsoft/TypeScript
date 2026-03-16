@@ -59,9 +59,7 @@ Found 'package.json' at '/home/src/workspaces/project/b/package.json'.
 Loading module 'pg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspaces/project/b/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/b/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/workspaces/project/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspaces/project/b/node_modules/@types' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/workspaces/project/node_modules/@types/pg/package.json'.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.

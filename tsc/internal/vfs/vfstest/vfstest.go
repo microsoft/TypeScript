@@ -499,6 +499,17 @@ func (m *MapFS) MkdirAll(path string, perm fs.FileMode) error {
 	return m.mkdirAll(path, perm)
 }
 
+func (m *MapFS) AddSymlink(path string, target string) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	canonical := m.getCanonicalPath(path)
+	m.setEntry(path, canonical, fstest.MapFile{
+		Data: []byte(target),
+		Mode: fs.ModeSymlink,
+	})
+}
+
 func (m *MapFS) WriteFile(path string, data string, perm fs.FileMode) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()

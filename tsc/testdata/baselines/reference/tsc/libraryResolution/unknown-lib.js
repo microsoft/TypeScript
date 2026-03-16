@@ -41,23 +41,11 @@ File '/package.json' does not exist.
 Loading module '@typescript/lib-es2025/full' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/full'
 Directory '/home/src/workspace/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/full'
 Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspace/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/full'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/full'
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/full'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/full'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspace/projects/node_modules' does not exist, skipping all lookups in it.
@@ -78,23 +66,11 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspace/projects/project1/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/home/src/workspace/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspace/projects/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/home/src/workspace/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/workspace/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/workspace/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/workspace/projects/node_modules' does not exist, skipping all lookups in it.

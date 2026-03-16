@@ -45,6 +45,16 @@ func (s *SyncSet[T]) Size() int {
 	return count
 }
 
+func (s *SyncSet[T]) IsEmpty() bool {
+	empty := true
+	s.m.Range(func(_ T, _ struct{}) bool {
+		empty = false
+		return false
+	})
+
+	return empty
+}
+
 func (s *SyncSet[T]) ToSlice() []T {
 	var arr []T
 	arr = make([]T, 0, s.m.Size())

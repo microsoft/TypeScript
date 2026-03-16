@@ -25,7 +25,6 @@ Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/.src'.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/pkg/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
 Matched 'exports' condition 'import'.

@@ -15,7 +15,6 @@ File '/packages/a/node_modules/react/index.tsx' does not exist.
 File '/packages/a/node_modules/react/index.d.ts' does not exist.
 Directory '/packages/a/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/packages/node_modules' does not exist, skipping all lookups in it.
-Directory '/packages/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/react.ts' does not exist.
 File '/node_modules/react.tsx' does not exist.
 File '/node_modules/react.d.ts' does not exist.

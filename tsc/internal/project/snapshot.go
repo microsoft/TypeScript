@@ -294,6 +294,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 			logger.Logf("npm install detected, invalidated node_modules cache in %v", time.Since(invalidateStart))
 		}
 	} else {
+		change.fileChanges = fs.expandAndFilterWatchEvents(change.fileChanges)
 		fs.markDirtyFiles(change.fileChanges)
 		change.fileChanges = fs.convertOpenAndCloseToChanges(change.fileChanges)
 	}
@@ -367,7 +368,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 			removedFiles := 0
 			fs.diskFiles.Range(func(entry *dirty.SyncMapEntry[tspath.Path, *diskFile]) bool {
 				for _, project := range projectCollection.Projects() {
-					if project.host != nil && project.host.sourceFS.Seen(entry.Key()) {
+					if project.host != nil && project.host.sourceFS.SeenFile(entry.Key()) {
 						return true
 					}
 				}

@@ -42,6 +42,7 @@ File '/.src/node_modules/ext/ts3.1/other.d.ts' does not exist.
 Module name 'index', matched pattern '*'.
 Trying substitution 'ts3.1/*', candidate module location: 'ts3.1/index'.
 Loading module as file / folder, candidate module location '/.src/node_modules/ext/ts3.1/other/ts3.1/index', target file types: TypeScript, Declaration.
+Directory '/.src/node_modules/ext/ts3.1/other/ts3.1' does not exist, skipping all lookups in it.
 File '/.src/node_modules/ext/other.ts' does not exist.
 File '/.src/node_modules/ext/other.tsx' does not exist.
 File '/.src/node_modules/ext/other.d.ts' does not exist.
@@ -50,9 +51,9 @@ File '/.src/node_modules/ext/other.d.ts' does not exist.
 Module name 'index', matched pattern '*'.
 Trying substitution 'ts3.1/*', candidate module location: 'ts3.1/index'.
 Loading module as file / folder, candidate module location '/.src/node_modules/ext/other/ts3.1/index', target file types: TypeScript, Declaration.
+Directory '/.src/node_modules/ext/other/ts3.1' does not exist, skipping all lookups in it.
 Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/.src/node_modules/ext/package.json' exists according to earlier cached lookups.
 'package.json' has a 'typesVersions' field with version-specific path mappings.
@@ -66,6 +67,7 @@ File '/.src/node_modules/ext/ts3.1/other.jsx' does not exist.
 Module name 'index', matched pattern '*'.
 Trying substitution 'ts3.1/*', candidate module location: 'ts3.1/index'.
 Loading module as file / folder, candidate module location '/.src/node_modules/ext/ts3.1/other/ts3.1/index', target file types: JavaScript, JSON.
+Directory '/.src/node_modules/ext/ts3.1/other/ts3.1' does not exist, skipping all lookups in it.
 File '/.src/node_modules/ext/other.js' does not exist.
 File '/.src/node_modules/ext/other.jsx' does not exist.
 'package.json' has a 'typesVersions' field with version-specific path mappings.
@@ -73,5 +75,6 @@ File '/.src/node_modules/ext/other.jsx' does not exist.
 Module name 'index', matched pattern '*'.
 Trying substitution 'ts3.1/*', candidate module location: 'ts3.1/index'.
 Loading module as file / folder, candidate module location '/.src/node_modules/ext/other/ts3.1/index', target file types: JavaScript, JSON.
+Directory '/.src/node_modules/ext/other/ts3.1' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'ext/other' was not resolved. ========

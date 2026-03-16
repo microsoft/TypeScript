@@ -31,11 +31,8 @@ File '/package.json' does not exist.
 Loading module 'library-a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/src/library-b/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/library-b/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/src/library-b/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.

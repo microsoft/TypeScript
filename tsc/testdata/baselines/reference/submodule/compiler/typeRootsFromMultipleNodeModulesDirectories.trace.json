@@ -7,7 +7,6 @@ File '/package.json' does not exist.
 Loading module 'xyz' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/foo/bar/node_modules' does not exist, skipping all lookups in it.
-Directory '/foo/bar/node_modules/@types' does not exist, skipping all lookups in it.
 File '/foo/node_modules/xyz.ts' does not exist.
 File '/foo/node_modules/xyz.tsx' does not exist.
 File '/foo/node_modules/xyz.d.ts' does not exist.
@@ -32,7 +31,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pdq' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/foo/bar/node_modules' does not exist, skipping all lookups in it.
-Directory '/foo/bar/node_modules/@types' does not exist, skipping all lookups in it.
 File '/foo/node_modules/pdq.ts' does not exist.
 File '/foo/node_modules/pdq.tsx' does not exist.
 File '/foo/node_modules/pdq.d.ts' does not exist.
@@ -57,7 +55,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'abc' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/foo/bar/node_modules' does not exist, skipping all lookups in it.
-Directory '/foo/bar/node_modules/@types' does not exist, skipping all lookups in it.
 File '/foo/node_modules/abc.ts' does not exist.
 File '/foo/node_modules/abc.tsx' does not exist.
 File '/foo/node_modules/abc.d.ts' does not exist.

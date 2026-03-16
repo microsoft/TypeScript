@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/dirty"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -398,10 +399,75 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) {
 	for uri := range change.Deleted.Keys() {
 		path := s.toPath(uri.FileName())
 		if entry, ok := s.diskFiles.Load(path); ok {
-			entry.Change(func(file *diskFile) {
-				file.needsReload = true
-			})
+			entry.Delete()
 		}
+	}
+}
+
+// hasRelevantWatchExtension returns true if the given path ends with a file
+// extension relevant to TypeScript compilation. This is used to quickly filter
+// out watch events for files that cannot affect the project.
+func hasRelevantWatchExtension(path string) bool {
+	i := strings.LastIndexByte(path, '.')
+	if i < 0 {
+		return false
+	}
+	switch path[i:] {
+	case ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".json":
+		return true
+	}
+	return false
+}
+
+// expandAndFilterWatchEvents expands directory deletion URIs into individual
+// file deletion URIs using the cached directory structure, and filters out
+// watch events for paths that are neither known directories nor have relevant
+// file extensions.
+func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary) FileChangeSummary {
+	if change.Deleted.Len() > 0 {
+		var filteredDeleted collections.Set[lsproto.DocumentUri]
+		for uri := range change.Deleted.Keys() {
+			path := s.toPath(uri.FileName())
+			if _, ok := s.diskDirectories.Get(path); ok {
+				s.collectFilesRecursive(path, &filteredDeleted)
+			} else if hasRelevantWatchExtension(string(path)) {
+				filteredDeleted.Add(uri)
+			}
+		}
+		change.Deleted = filteredDeleted
+	}
+
+	if change.Changed.Len() > 0 {
+		var filteredChanged collections.Set[lsproto.DocumentUri]
+		for uri := range change.Changed.Keys() {
+			if hasRelevantWatchExtension(string(s.toPath(uri.FileName()))) {
+				filteredChanged.Add(uri)
+			}
+		}
+		change.Changed = filteredChanged
+	}
+
+	// We can't filter created events because any created path could be a directory symlink
+	// that includes relevant files. configFileRegistryBuilder will do check if these paths
+	// are directories if they fall within a config's wildcard directories.
+
+	return change
+}
+
+// collectFilesRecursive recursively collects all cached file URIs under the
+// given directory path using the diskDirectories and diskFiles maps.
+func (s *snapshotFSBuilder) collectFilesRecursive(dirPath tspath.Path, files *collections.Set[lsproto.DocumentUri]) {
+	dirEntry, ok := s.diskDirectories.Get(dirPath)
+	if !ok {
+		return
+	}
+	for childPath := range dirEntry.Value() {
+		if entry, ok := s.diskFiles.Load(childPath); ok {
+			if file := entry.Value(); file != nil {
+				files.Add(lsconv.FileNameToDocumentURI(file.FileName()))
+			}
+		}
+		s.collectFilesRecursive(childPath, files)
 	}
 }
 
@@ -432,10 +498,11 @@ func (s *snapshotFSBuilder) convertOpenAndCloseToChanges(change FileChangeSummar
 
 // sourceFS is a vfs.FS that sources files from a FileSource and tracks seen files.
 type sourceFS struct {
-	tracking  bool
-	toPath    func(fileName string) tspath.Path
-	seenFiles *collections.SyncSet[tspath.Path]
-	source    FileSource
+	tracking           bool
+	toPath             func(fileName string) tspath.Path
+	missingDirectories *collections.SyncSet[tspath.Path]
+	seenFiles          *collections.SyncSet[tspath.Path]
+	source             FileSource
 }
 
 func newSourceFS(tracking bool, source FileSource, toPath func(fileName string) tspath.Path) *sourceFS {
@@ -446,6 +513,7 @@ func newSourceFS(tracking bool, source FileSource, toPath func(fileName string) 
 	}
 	if tracking {
 		fs.seenFiles = &collections.SyncSet[tspath.Path]{}
+		fs.missingDirectories = &collections.SyncSet[tspath.Path]{}
 	}
 	return fs
 }
@@ -463,11 +531,31 @@ func (fs *sourceFS) Track(fileName string) {
 	fs.seenFiles.Add(fs.toPath(fileName))
 }
 
-func (fs *sourceFS) Seen(path tspath.Path) bool {
+func (fs *sourceFS) SeenFile(path tspath.Path) bool {
 	if fs.seenFiles == nil {
 		return false
 	}
 	return fs.seenFiles.Has(path)
+}
+
+func (fs *sourceFS) SeenFileOrMissingParentDirectory(path tspath.Path) bool {
+	if fs.seenFiles != nil && fs.seenFiles.Has(path) {
+		return true
+	}
+	if fs.missingDirectories != nil && !fs.missingDirectories.IsEmpty() {
+		for {
+			if fs.missingDirectories.Has(path) {
+				return true
+			}
+
+			parent := path.GetDirectoryPath()
+			if parent == path {
+				break
+			}
+			path = parent
+		}
+	}
+	return false
 }
 
 func (fs *sourceFS) GetFile(fileName string) FileHandle {
@@ -482,7 +570,11 @@ func (fs *sourceFS) GetFileByPath(fileName string, path tspath.Path) FileHandle 
 
 // DirectoryExists implements vfs.FS.
 func (fs *sourceFS) DirectoryExists(path string) bool {
-	return fs.source.FS().DirectoryExists(path)
+	exists := fs.source.FS().DirectoryExists(path)
+	if !exists && fs.tracking {
+		fs.missingDirectories.Add(fs.toPath(path))
+	}
+	return exists
 }
 
 // FileExists implements vfs.FS.

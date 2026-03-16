@@ -23,9 +23,7 @@ Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/node_modules/@types/library-b'.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Directory '/node_modules/@types/library-b/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types/library-b/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules/@types/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/library-a.d.ts' does not exist according to earlier cached lookups.
 File '/node_modules/@types/library-a/package.json' does not exist according to earlier cached lookups.
 File '/node_modules/@types/library-a.d.ts' does not exist according to earlier cached lookups.

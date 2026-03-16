@@ -147,9 +147,7 @@ Found 'package.json' at '/user/username/projects/myproject/plugin-two/package.js
 Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/plugin-two/dist/commonjs/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/myproject/plugin-two/dist/commonjs/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/plugin-two/dist/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/myproject/plugin-two/dist/node_modules/@types' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json'.
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.ts' does not exist.
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.tsx' does not exist.

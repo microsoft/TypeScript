@@ -343,6 +343,22 @@ func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName string) bool {
 	return false
 }
 
+func (p *ParsedCommandLine) PossiblyMatchesDirectoryName(directoryPath tspath.Path) bool {
+	for wildcardDir, recursive := range p.WildcardDirectories() {
+		wildcardDirPath := tspath.ToPath(wildcardDir, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+		if recursive {
+			if wildcardDirPath.ContainsPath(directoryPath) {
+				return true
+			}
+		} else {
+			if wildcardDirPath == directoryPath {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (p *ParsedCommandLine) GetMatchedFileSpec(fileName string) string {
 	return p.ConfigFile.configFileSpecs.getMatchedFileSpec(fileName, p.comparePathsOptions)
 }

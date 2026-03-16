@@ -95,9 +95,13 @@ func (t *parseTask) load(loader *fileLoader) {
 	loader.totalFileCount.Add(1)
 	if t.libFile != nil {
 		loader.libFileCount.Add(1)
+		// Default lib files are all scripts; we can safely skip looking up their package.json
+		// to avoid adding spurious lookups to file watcher tracking.
+		t.metadata = ast.SourceFileMetaData{ImpliedNodeFormat: core.ResolutionModeCommonJS}
+	} else {
+		t.metadata = loader.loadSourceFileMetaData(t.normalizedFilePath)
 	}
 
-	t.metadata = loader.loadSourceFileMetaData(t.normalizedFilePath)
 	file := loader.parseSourceFile(t)
 	if file == nil {
 		return

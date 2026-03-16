@@ -9,10 +9,7 @@ File '/somepath/node_modules/@typescript/lib-decorators.ts' does not exist.
 File '/somepath/node_modules/@typescript/lib-decorators.tsx' does not exist.
 File '/somepath/node_modules/@typescript/lib-decorators.d.ts' does not exist.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/somepath/node_modules/@typescript/lib-decorators.js' does not exist.
 File '/somepath/node_modules/@typescript/lib-decorators.jsx' does not exist.
@@ -26,10 +23,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-decorators/legacy' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators/legacy'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators/legacy'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-decorators/legacy' was not resolved. ========
@@ -61,10 +55,7 @@ File '/somepath/node_modules/@typescript/lib-dom/iterable.ts' does not exist.
 File '/somepath/node_modules/@typescript/lib-dom/iterable.tsx' does not exist.
 File '/somepath/node_modules/@typescript/lib-dom/iterable.d.ts' does not exist.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom/iterable'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-dom/iterable'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/somepath/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/somepath/node_modules/@typescript/lib-dom/iterable.js' does not exist.
@@ -79,10 +70,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/collection'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/collection'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/collection' was not resolved. ========
@@ -94,10 +82,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/core' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/core'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/core'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/core' was not resolved. ========
@@ -112,10 +97,7 @@ File '/somepath/node_modules/@typescript/lib-es2015.ts' does not exist.
 File '/somepath/node_modules/@typescript/lib-es2015.tsx' does not exist.
 File '/somepath/node_modules/@typescript/lib-es2015.d.ts' does not exist.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/somepath/node_modules/@typescript/lib-es2015.js' does not exist.
 File '/somepath/node_modules/@typescript/lib-es2015.jsx' does not exist.
@@ -129,10 +111,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/generator' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/generator'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/generator'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/generator' was not resolved. ========
@@ -144,10 +123,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/iterable' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/iterable'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/iterable'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/iterable' was not resolved. ========
@@ -159,10 +135,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/promise' was not resolved. ========
@@ -174,10 +147,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/proxy' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/proxy'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/proxy'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/proxy' was not resolved. ========
@@ -189,10 +159,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/reflect' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/reflect'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/reflect'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/reflect' was not resolved. ========
@@ -204,10 +171,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/symbol' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/symbol' was not resolved. ========
@@ -219,10 +183,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/symbol-wellknown' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol-wellknown'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol-wellknown'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es2015/symbol-wellknown' was not resolved. ========
@@ -237,10 +198,7 @@ File '/somepath/node_modules/@typescript/lib-es5.ts' does not exist.
 File '/somepath/node_modules/@typescript/lib-es5.tsx' does not exist.
 File '/somepath/node_modules/@typescript/lib-es5.d.ts' does not exist.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/somepath/node_modules/@typescript/lib-es5.js' does not exist.
 File '/somepath/node_modules/@typescript/lib-es5.jsx' does not exist.
@@ -257,10 +215,7 @@ File '/somepath/node_modules/@typescript/lib-es6.ts' does not exist.
 File '/somepath/node_modules/@typescript/lib-es6.tsx' does not exist.
 File '/somepath/node_modules/@typescript/lib-es6.d.ts' does not exist.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es6'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es6'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/somepath/node_modules/@typescript/lib-es6.js' does not exist.
 File '/somepath/node_modules/@typescript/lib-es6.jsx' does not exist.
@@ -277,10 +232,7 @@ File '/somepath/node_modules/@typescript/lib-scripthost.ts' does not exist.
 File '/somepath/node_modules/@typescript/lib-scripthost.tsx' does not exist.
 File '/somepath/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-scripthost'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/somepath/node_modules/@typescript/lib-scripthost.js' does not exist.
 File '/somepath/node_modules/@typescript/lib-scripthost.jsx' does not exist.
@@ -294,10 +246,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-webworker/importscripts' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/somepath/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker/importscripts'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-webworker/importscripts'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-webworker/importscripts' was not resolved. ========

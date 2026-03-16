@@ -147,13 +147,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -206,13 +202,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -514,13 +506,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -573,13 +561,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -632,13 +616,9 @@ File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does no
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -751,13 +731,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -792,13 +768,9 @@ File '/home/src/projects/project/node_modules/foo/index.d.ts.tsx' does not exist
 File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'foo' was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'. ========
 ======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -825,13 +797,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -884,13 +852,9 @@ File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does no
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1009,13 +973,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -1050,13 +1010,9 @@ File '/home/src/projects/project/node_modules/foo/index.d.ts.tsx' does not exist
 File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'foo' was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'. ========
 ======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -1083,13 +1039,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -1245,13 +1197,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -1304,13 +1252,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -1465,13 +1409,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2047,13 +1987,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2321,13 +2257,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2380,13 +2312,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2662,13 +2590,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2721,13 +2645,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2780,13 +2700,9 @@ File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does n
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 [96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
   There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
@@ -2899,13 +2815,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -2940,13 +2852,9 @@ File '/home/src/projects/project/node_modules/foo2/index.d.ts.tsx' does not exis
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'foo2' was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'. ========
 ======== Resolving module 'bar2' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -2973,13 +2881,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -3032,13 +2936,9 @@ File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does n
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 [96mindex.mts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.
   There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json "exports". The 'foo2' library may need to update its package.json or typings.
@@ -3157,13 +3057,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -3198,13 +3094,9 @@ File '/home/src/projects/project/node_modules/foo2/index.d.ts.tsx' does not exis
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Module name 'foo2' was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'. ========
 ======== Resolving module 'bar2' from '/home/src/projects/project/index.mts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -3231,13 +3123,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -3393,13 +3281,9 @@ Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.
@@ -3452,13 +3336,9 @@ Entering conditional exports.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 File '/home/src/projects/project/node_modules/bar2/package.json' exists according to earlier cached lookups.
 Entering conditional exports.

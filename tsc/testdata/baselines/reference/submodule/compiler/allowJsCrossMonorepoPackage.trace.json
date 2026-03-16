@@ -12,7 +12,6 @@ File '/packages/main/node_modules/shared/index.tsx' does not exist.
 File '/packages/main/node_modules/shared/index.d.ts' does not exist.
 Directory '/packages/main/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/packages/node_modules' does not exist, skipping all lookups in it.
-Directory '/packages/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/shared.ts' does not exist.
 File '/node_modules/shared.tsx' does not exist.
 File '/node_modules/shared.d.ts' does not exist.
@@ -41,7 +40,6 @@ File '/packages/main/node_modules/shared/index.tsx' does not exist according to 
 File '/packages/main/node_modules/shared/index.d.ts' does not exist according to earlier cached lookups.
 Directory '/packages/main/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/packages/node_modules' does not exist, skipping all lookups in it.
-Directory '/packages/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/shared.ts' does not exist according to earlier cached lookups.
 File '/node_modules/shared.tsx' does not exist according to earlier cached lookups.
 File '/node_modules/shared.d.ts' does not exist according to earlier cached lookups.
@@ -64,9 +62,7 @@ Found 'package.json' at '/packages/shared/package.json'.
 Loading module 'pkg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/packages/shared/node_modules' does not exist, skipping all lookups in it.
-Directory '/packages/shared/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/packages/node_modules' does not exist, skipping all lookups in it.
-Directory '/packages/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/pkg/package.json' does not exist.
 File '/node_modules/pkg.ts' does not exist.
 File '/node_modules/pkg.tsx' does not exist.

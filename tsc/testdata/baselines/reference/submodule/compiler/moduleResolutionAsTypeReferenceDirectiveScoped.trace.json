@@ -5,8 +5,6 @@ File '/package.json' does not exist.
 Loading module '@scoped/typescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'scoped__typescache'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@scoped/typescache' was not resolved. ========
@@ -17,8 +15,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@mangled/typescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'mangled__typescache'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@mangled/typescache' was not resolved. ========
@@ -29,8 +25,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@scoped/nodemodulescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'scoped__nodemodulescache'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@scoped/nodemodulescache' was not resolved. ========
@@ -41,8 +35,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@mangled/nodemodulescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'mangled__nodemodulescache'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@mangled/nodemodulescache' was not resolved. ========
@@ -53,8 +45,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@scoped/attypescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'scoped__attypescache'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@scoped/attypescache' was not resolved. ========
@@ -65,8 +55,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@mangled/attypescache' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'mangled__attypescache'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@mangled/attypescache' was not resolved. ========

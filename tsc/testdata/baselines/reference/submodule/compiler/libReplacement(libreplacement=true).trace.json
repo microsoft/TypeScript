@@ -6,11 +6,7 @@ File '/package.json' does not exist.
 Loading module '@typescript/lib-decorators' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -23,11 +19,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-decorators/legacy' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators/legacy'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-decorators/legacy'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -40,11 +32,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/collection'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/collection'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -57,11 +45,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/core' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/core'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/core'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -74,11 +58,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -91,11 +71,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/generator' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/generator'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/generator'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -108,11 +84,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/iterable' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/iterable'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/iterable'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -125,11 +97,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -142,11 +110,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/proxy' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/proxy'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/proxy'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -159,11 +123,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/reflect' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/reflect'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/reflect'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -176,11 +136,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/symbol' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -193,11 +149,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2015/symbol-wellknown' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol-wellknown'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2015/symbol-wellknown'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -210,11 +162,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2016/array-include' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2016/array-include'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2016/array-include'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -227,11 +175,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2016' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2016'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2016'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -244,11 +188,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2016/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2016/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2016/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -261,11 +201,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/arraybuffer' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/arraybuffer'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/arraybuffer'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -278,11 +214,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -295,11 +227,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/date' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/date'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/date'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -312,11 +240,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -329,11 +253,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/object' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/object'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/object'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -346,11 +266,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/sharedmemory' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/sharedmemory'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/sharedmemory'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -363,11 +279,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/string' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/string'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/string'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -380,11 +292,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2017/typedarrays' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/typedarrays'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2017/typedarrays'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -397,11 +305,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2018/asyncgenerator' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/asyncgenerator'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/asyncgenerator'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -414,11 +318,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2018/asynciterable' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/asynciterable'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/asynciterable'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -431,11 +331,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2018' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -448,11 +344,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2018/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -465,11 +357,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2018/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -482,11 +370,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2018/regexp' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/regexp'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2018/regexp'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -499,11 +383,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2019/array' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/array'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/array'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -516,11 +396,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2019' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -533,11 +409,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2019/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -550,11 +422,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2019/object' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/object'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/object'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -567,11 +435,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2019/string' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/string'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/string'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -584,11 +448,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2019/symbol' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/symbol'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2019/symbol'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -601,11 +461,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/bigint' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/bigint'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/bigint'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -618,11 +474,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -635,11 +487,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/date' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/date'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/date'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -652,11 +500,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -669,11 +513,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/number' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/number'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/number'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -686,11 +526,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -703,11 +539,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/sharedmemory' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/sharedmemory'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/sharedmemory'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -720,11 +552,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/string' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/string'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/string'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -737,11 +565,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2020/symbol-wellknown' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/symbol-wellknown'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2020/symbol-wellknown'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -754,11 +578,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2021' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -771,11 +591,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2021/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -788,11 +604,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2021/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -805,11 +617,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2021/string' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/string'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/string'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -822,11 +630,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2021/weakref' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/weakref'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2021/weakref'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -839,11 +643,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022/array' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/array'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/array'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -856,11 +656,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -873,11 +669,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022/error' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/error'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/error'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -890,11 +682,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -907,11 +695,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022/object' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/object'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/object'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -924,11 +708,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022/regexp' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/regexp'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/regexp'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -941,11 +721,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2022/string' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/string'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2022/string'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -958,11 +734,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2023/array' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023/array'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023/array'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -975,11 +747,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2023/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023/collection'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023/collection'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -992,11 +760,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2023' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1009,11 +773,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2023/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2023/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1026,11 +786,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/arraybuffer' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/arraybuffer'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/arraybuffer'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1043,11 +799,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/collection'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/collection'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1060,11 +812,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1077,11 +825,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/object' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/object'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/object'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1094,11 +838,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1111,11 +851,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/regexp' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/regexp'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/regexp'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1128,11 +864,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/sharedmemory' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/sharedmemory'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/sharedmemory'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1145,11 +877,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2024/string' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/string'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2024/string'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1162,11 +890,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/collection'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/collection'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1179,11 +903,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1196,11 +916,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025/float16' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/float16'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/float16'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1213,11 +929,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1230,11 +942,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025/iterator' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/iterator'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/iterator'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1247,11 +955,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025/promise' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/promise'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/promise'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1264,11 +968,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es2025/regexp' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/regexp'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es2025/regexp'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1281,11 +981,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-es5'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1298,11 +994,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/array' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/array'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/array'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1315,11 +1007,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/collection' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/collection'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/collection'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1332,11 +1020,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1349,11 +1033,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/date' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/date'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/date'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1366,11 +1046,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/decorators' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/decorators'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/decorators'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1383,11 +1059,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/disposable' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/disposable'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/disposable'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1400,11 +1072,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/error' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/error'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/error'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1417,11 +1085,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/intl' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/intl'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/intl'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1434,11 +1098,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/sharedmemory' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/sharedmemory'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/sharedmemory'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1451,11 +1111,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/temporal' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/temporal'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/temporal'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
@@ -1468,11 +1124,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module '@typescript/lib-esnext/typedarrays' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
-Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/typedarrays'
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'typescript__lib-esnext/typedarrays'
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/.src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.

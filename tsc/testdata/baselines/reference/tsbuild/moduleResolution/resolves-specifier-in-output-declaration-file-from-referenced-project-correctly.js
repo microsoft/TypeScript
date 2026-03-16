@@ -72,9 +72,7 @@ File '/package.json' does not exist.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/myproject/packages/pkg1/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/myproject/packages/node_modules/@types' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
 File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.

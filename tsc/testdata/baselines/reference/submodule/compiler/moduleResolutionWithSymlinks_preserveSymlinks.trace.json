@@ -7,7 +7,6 @@ Searching all ancestor node_modules directories for preferred extensions: Declar
 File '/app/node_modules/linked.d.ts' does not exist.
 Directory '/app/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 ======== Type reference directive 'linked' was not resolved. ========
 ======== Resolving module 'linked' from '/app/app.ts'. ========
 Explicitly specified module resolution kind: 'Bundler'.
@@ -21,7 +20,6 @@ File '/app/node_modules/linked.tsx' does not exist.
 File '/app/node_modules/linked.d.ts' does not exist according to earlier cached lookups.
 Directory '/app/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/app/node_modules/linked.js' does not exist.
 File '/app/node_modules/linked.jsx' does not exist.
@@ -39,7 +37,6 @@ File '/app/node_modules/linked2.tsx' does not exist.
 File '/app/node_modules/linked2.d.ts' does not exist.
 Directory '/app/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 File '/app/node_modules/linked2.js' does not exist.
 File '/app/node_modules/linked2.jsx' does not exist.

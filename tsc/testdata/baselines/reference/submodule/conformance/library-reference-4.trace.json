@@ -4,7 +4,6 @@ File '/src/foo.d.ts' does not exist.
 Looking up in 'node_modules' folder, initial location '/src'.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/foo/package.json' does not exist.
 File '/node_modules/foo.d.ts' does not exist.
 File '/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
@@ -16,7 +15,6 @@ File '/src/bar.d.ts' does not exist.
 Looking up in 'node_modules' folder, initial location '/src'.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/node_modules/@types' does not exist, skipping all lookups in it.
 File '/node_modules/bar/package.json' does not exist.
 File '/node_modules/bar.d.ts' does not exist.
 File '/node_modules/bar/index.d.ts' exists - use it as a name resolution result.
