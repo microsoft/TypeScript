@@ -44,7 +44,7 @@ Vec.prototype = {
 >length : any
 >this.storage.length : any
 >this.storage : any
->this : any
+>this : { dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >length : any
 
@@ -64,7 +64,7 @@ Vec.prototype = {
 >i : number
 >this.storage.length : any
 >this.storage : any
->this : any
+>this : { dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >length : any
 >i++ : number
@@ -77,7 +77,7 @@ Vec.prototype = {
 >this.storage[i] * other.storage[i] : number
 >this.storage[i] : any
 >this.storage : any
->this : any
+>this : { dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >i : number
 >other.storage[i] : any
@@ -104,7 +104,7 @@ Vec.prototype = {
 >i : number
 >this.storage.length : any
 >this.storage : any
->this : any
+>this : { dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >length : any
 >i++ : number
@@ -117,7 +117,7 @@ Vec.prototype = {
 >this.storage[i] ** 2 : number
 >this.storage[i] : any
 >this.storage : any
->this : any
+>this : { dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >i : number
 >2 : 2
@@ -193,7 +193,7 @@ Point2D.prototype = {
         return this.storage[0];
 >this.storage[0] : any
 >this.storage : any
->this : any
+>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
 >storage : any
 >0 : 0
 
@@ -209,7 +209,7 @@ Point2D.prototype = {
 >this.storage[0] = x : number
 >this.storage[0] : any
 >this.storage : any
->this : any
+>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
 >storage : any
 >0 : 0
 >x : number
@@ -221,7 +221,7 @@ Point2D.prototype = {
         return this.storage[1];
 >this.storage[1] : any
 >this.storage : any
->this : any
+>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
 >storage : any
 >1 : 1
 
@@ -237,7 +237,7 @@ Point2D.prototype = {
 >this.storage[1] = y : number
 >this.storage[1] : any
 >this.storage : any
->this : any
+>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
 >storage : any
 >1 : 1
 >y : number

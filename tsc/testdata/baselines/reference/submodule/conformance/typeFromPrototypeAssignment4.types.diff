@@ -32,7 +32,7 @@
 ->this : this
 ->_map : {}
 +>this._map : any
-+>this : any
++>this : { get(key: string): number; }
 +>_map : any
  >key + '' : string
  >key : string

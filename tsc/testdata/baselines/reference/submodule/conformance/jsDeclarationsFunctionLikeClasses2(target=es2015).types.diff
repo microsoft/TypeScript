@@ -51,7 +51,7 @@
 +>length : any
 +>this.storage.length : any
 +>this.storage : any
-+>this : any
++>this : { dot(other: Vec): number; magnitude(): number; }
 +>storage : any
 +>length : any
 
@@ -68,7 +68,7 @@
 ->length : number
 +>this.storage.length : any
 +>this.storage : any
-+>this : any
++>this : { dot(other: Vec): number; magnitude(): number; }
 +>storage : any
 +>length : any
  >i++ : number
@@ -84,7 +84,7 @@
 ->storage : number[]
 +>this.storage[i] : any
 +>this.storage : any
-+>this : any
++>this : { dot(other: Vec): number; magnitude(): number; }
 +>storage : any
  >i : number
 ->other.storage[i] : number
@@ -108,7 +108,7 @@
 ->length : number
 +>this.storage.length : any
 +>this.storage : any
-+>this : any
++>this : { dot(other: Vec): number; magnitude(): number; }
 +>storage : any
 +>length : any
  >i++ : number
@@ -124,7 +124,7 @@
 ->storage : number[]
 +>this.storage[i] : any
 +>this.storage : any
-+>this : any
++>this : { dot(other: Vec): number; magnitude(): number; }
 +>storage : any
  >i : number
  >2 : 2
@@ -211,7 +211,7 @@
  >this.storage[0] : any
  >this.storage : any
 ->this : { get x(): number; set x(x: number); get y(): number; set y(y: number); __proto__: typeof Vec; }
-+>this : any
++>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
  >storage : any
  >0 : 0
 
@@ -220,7 +220,7 @@
  >this.storage[0] : any
  >this.storage : any
 ->this : { get x(): number; set x(x: number); get y(): number; set y(y: number); __proto__: typeof Vec; }
-+>this : any
++>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
  >storage : any
  >0 : 0
  >x : number
@@ -229,7 +229,7 @@
  >this.storage[1] : any
  >this.storage : any
 ->this : { get x(): number; set x(x: number); get y(): number; set y(y: number); __proto__: typeof Vec; }
-+>this : any
++>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
  >storage : any
  >1 : 1
 
@@ -238,7 +238,7 @@
  >this.storage[1] : any
  >this.storage : any
 ->this : { get x(): number; set x(x: number); get y(): number; set y(y: number); __proto__: typeof Vec; }
-+>this : any
++>this : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
  >storage : any
  >1 : 1
  >y : number

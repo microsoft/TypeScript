@@ -11,7 +11,7 @@ const a1 = {
         this.x = 0;
 >this.x = 0 : 0
 >this.x : any
->this : any
+>this : { foo(): void; }
 >x : any
 >0 : 0
     }
@@ -28,7 +28,7 @@ const a2 = {
         this.x = 0;
 >this.x = 0 : 0
 >this.x : any
->this : any
+>this : { foo: () => void; }
 >x : any
 >0 : 0
     }
@@ -45,7 +45,7 @@ const b1 = {
         this.x = 0;
 >this.x = 0 : 0
 >this.x : any
->this : any
+>this : { foo(): void; }
 >x : any
 >0 : 0
     }
@@ -63,7 +63,7 @@ const b2 = {
         this.x = 0;
 >this.x = 0 : 0
 >this.x : any
->this : any
+>this : { foo: () => void; }
 >x : any
 >0 : 0
     }

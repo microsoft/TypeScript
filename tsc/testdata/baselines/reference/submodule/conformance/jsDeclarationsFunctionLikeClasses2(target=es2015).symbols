@@ -30,6 +30,7 @@ Vec.prototype = {
 
         if (other.storage.length !== this.storage.length) {
 >other : Symbol(other, Decl(source.js, 14, 8))
+>this : Symbol(__object, Decl(source.js, 10, 15))
 
             throw new Error(`Dot product only applicable for vectors of equal length`);
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -40,10 +41,12 @@ Vec.prototype = {
         for (let i = 0; i < this.storage.length; i++) {
 >i : Symbol(i, Decl(source.js, 19, 16))
 >i : Symbol(i, Decl(source.js, 19, 16))
+>this : Symbol(__object, Decl(source.js, 10, 15))
 >i : Symbol(i, Decl(source.js, 19, 16))
 
             sum += (this.storage[i] * other.storage[i]);
 >sum : Symbol(sum, Decl(source.js, 18, 11))
+>this : Symbol(__object, Decl(source.js, 10, 15))
 >i : Symbol(i, Decl(source.js, 19, 16))
 >other : Symbol(other, Decl(source.js, 14, 8))
 >i : Symbol(i, Decl(source.js, 19, 16))
@@ -61,10 +64,12 @@ Vec.prototype = {
         for (let i = 0; i < this.storage.length; i++) {
 >i : Symbol(i, Decl(source.js, 26, 16))
 >i : Symbol(i, Decl(source.js, 26, 16))
+>this : Symbol(__object, Decl(source.js, 10, 15))
 >i : Symbol(i, Decl(source.js, 26, 16))
 
             sum += (this.storage[i] ** 2);
 >sum : Symbol(sum, Decl(source.js, 25, 11))
+>this : Symbol(__object, Decl(source.js, 10, 15))
 >i : Symbol(i, Decl(source.js, 26, 16))
         }
         return Math.sqrt(sum);
@@ -117,6 +122,8 @@ Point2D.prototype = {
 >x : Symbol(x, Decl(source.js, 47, 19), Decl(source.js, 50, 6))
 
         return this.storage[0];
+>this : Symbol(__object, Decl(source.js, 46, 19))
+
     },
     /**
      * @param {number} x
@@ -126,6 +133,7 @@ Point2D.prototype = {
 >x : Symbol(x, Decl(source.js, 54, 10))
 
         this.storage[0] = x;
+>this : Symbol(__object, Decl(source.js, 46, 19))
 >x : Symbol(x, Decl(source.js, 54, 10))
 
     },
@@ -133,6 +141,8 @@ Point2D.prototype = {
 >y : Symbol(y, Decl(source.js, 56, 6), Decl(source.js, 59, 6))
 
         return this.storage[1];
+>this : Symbol(__object, Decl(source.js, 46, 19))
+
     },
     /**
      * @param {number} y
@@ -142,6 +152,7 @@ Point2D.prototype = {
 >y : Symbol(y, Decl(source.js, 63, 10))
 
         this.storage[1] = y;
+>this : Symbol(__object, Decl(source.js, 46, 19))
 >y : Symbol(y, Decl(source.js, 63, 10))
     }
 };

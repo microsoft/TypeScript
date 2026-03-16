@@ -15,16 +15,15 @@
  }
  var e = new exports.E();
  >e : Symbol(e, Decl(b.js, 3, 3))
-@@= skipped -21, +18 lines =@@
- >C : Symbol(C, Decl(b.js, 5, 9))
+@@= skipped -22, +19 lines =@@
 
          this.c = 'nested object'
-->this : Symbol(o, Decl(b.js, 5, 7))
+ >this : Symbol(o, Decl(b.js, 5, 7))
 ->c : Symbol(C.c, Decl(b.js, 6, 20))
      }
  }
  var og = new o.C();
-@@= skipped -14, +12 lines =@@
+@@= skipped -13, +12 lines =@@
  >V : Symbol(V, Decl(b.js, 12, 3))
 
      this.v = 'simple'

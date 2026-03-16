@@ -13,21 +13,21 @@ const obj = {
 >method : () => void
 
         this;
->this : any
+>this : { prop: number; method(): void; }
 
         this.prop;
->this.prop : any
->this : any
->prop : any
+>this.prop : number
+>this : { prop: number; method(): void; }
+>prop : number
 
         this.method;
->this.method : any
->this : any
->method : any
+>this.method : () => void
+>this : { prop: number; method(): void; }
+>method : () => void
 
         this.unknown; // ok, obj has a string indexer
 >this.unknown : any
->this : any
+>this : { prop: number; method(): void; }
 >unknown : any
     }
 }

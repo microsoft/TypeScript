@@ -1,14 +1,6 @@
 --- old.objectPropertyAsClass.types
 +++ new.objectPropertyAsClass.types
-@@= skipped -10, +10 lines =@@
-         this.x = 0;
- >this.x = 0 : 0
- >this.x : any
-->this : { foo(): void; }
-+>this : any
- >x : any
- >0 : 0
-     }
+@@= skipped -17, +17 lines =@@
  }
 
  const a2 = {
@@ -27,19 +19,11 @@
  >this.x = 0 : 0
  >this.x : any
 ->this : { foo: typeof foo; }
-+>this : any
++>this : { foo: () => void; }
  >x : any
  >0 : 0
      }
 @@= skipped -34, +34 lines =@@
-         this.x = 0;
- >this.x = 0 : 0
- >this.x : any
-->this : { foo(): void; }
-+>this : any
- >x : any
- >0 : 0
-     }
  }
 
  const b2 = {
@@ -59,7 +43,7 @@
  >this.x = 0 : 0
  >this.x : any
 ->this : this
-+>this : any
++>this : { foo: () => void; }
  >x : any
  >0 : 0
      }

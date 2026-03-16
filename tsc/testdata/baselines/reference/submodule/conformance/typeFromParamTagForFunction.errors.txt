@@ -1,5 +1,4 @@
 a-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-a-ext.js(2,10): error TS2339: Property 'x' does not exist on type 'typeof import("a-ext")'.
 a.js(3,13): error TS2749: 'A' refers to a value, but is being used as a type here. Did you mean 'typeof A'?
 b.js(3,13): error TS2749: 'B' refers to a value, but is being used as a type here. Did you mean 'typeof B'?
 c-ext.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
@@ -16,13 +15,11 @@ g.js(5,13): error TS2749: 'G' refers to a value, but is being used as a type her
     declare function require(id: string): any;
     declare var module: any, exports: any;
     
-==== a-ext.js (2 errors) ====
+==== a-ext.js (1 errors) ====
     exports.A = function () {
         this.x = 1;
         ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-             ~
-!!! error TS2339: Property 'x' does not exist on type 'typeof import("a-ext")'.
     };
     
 ==== a.js (1 errors) ====

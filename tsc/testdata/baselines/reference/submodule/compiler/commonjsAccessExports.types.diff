@@ -16,12 +16,10 @@
 
          this.x = 0;
  >this.x = 0 : 0
-->this.x : any
+ >this.x : any
 ->this : this
-->x : any
-+>this.x : 0
-+>this : typeof import("./a")
-+>x : 0
++>this : any
+ >x : any
  >0 : 0
      }
  }

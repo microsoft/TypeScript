@@ -20,6 +20,7 @@ Multimap4["prototype"] = {
 >key : Symbol(key, Decl(a.js, 9, 6))
 
     return this._map[key + ''];
+>this : Symbol(__object, Decl(a.js, 4, 24))
 >key : Symbol(key, Decl(a.js, 9, 6))
   }
 };

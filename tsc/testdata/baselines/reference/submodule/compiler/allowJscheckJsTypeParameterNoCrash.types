@@ -38,9 +38,9 @@ export var a = vextend({
 
       this.data2 = 1;
 >this.data2 = 1 : 1
->this.data2 : any
->this : any
->data2 : any
+>this.data2 : (val: any) => void
+>this : Record<string, (val: any) => void>
+>data2 : (val: any) => void
 >1 : 1
 
     },

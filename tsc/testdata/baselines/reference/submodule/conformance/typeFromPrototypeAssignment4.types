@@ -31,7 +31,7 @@ Multimap4["prototype"] = {
     return this._map[key + ''];
 >this._map[key + ''] : any
 >this._map : any
->this : any
+>this : { get(key: string): number; }
 >_map : any
 >key + '' : string
 >key : string

@@ -27,6 +27,7 @@
 ->this._map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
 ->this : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
 ->_map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
++>this : Symbol(__object, Decl(a.js, 4, 24))
  >key : Symbol(key, Decl(a.js, 9, 6))
    }
  };

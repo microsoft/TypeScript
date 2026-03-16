@@ -49,7 +49,7 @@
  >this.c = 'nested object' : "nested object"
  >this.c : any
 ->this : { C: typeof C; }
-+>this : any
++>this : { C: () => void; }
  >c : any
  >'nested object' : "nested object"
      }

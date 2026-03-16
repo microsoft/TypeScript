@@ -11564,7 +11564,8 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 			}
 		}
 	}
-	if c.noImplicitThis {
+	inJs := ast.IsInJSFile(fn)
+	if c.noImplicitThis || inJs {
 		containingLiteral := getContainingObjectLiteral(fn)
 		if containingLiteral != nil {
 			// We have an object literal method. Check if the containing object literal has a contextual type
@@ -11591,7 +11592,15 @@ func (c *Checker) getContextualThisParameterType(fn *ast.Node) *Type {
 		if ast.IsAssignmentExpression(parent, false) {
 			target := parent.AsBinaryExpression().Left
 			if ast.IsAccessExpression(target) {
-				return c.getWidenedType(c.checkExpressionCached(target.Expression()))
+				expression := target.Expression()
+				// Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
+				if inJs && ast.IsIdentifier(expression) {
+					sourceFile := ast.GetSourceFileOfNode(parent)
+					if sourceFile.CommonJSModuleIndicator != nil && c.getResolvedSymbol(expression) == sourceFile.Symbol {
+						return nil
+					}
+				}
+				return c.getWidenedType(c.checkExpressionCached(expression))
 			}
 		}
 	}

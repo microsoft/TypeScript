@@ -33,7 +33,7 @@ var o = {
         this.c = 'nested object'
 >this.c = 'nested object' : "nested object"
 >this.c : any
->this : any
+>this : { C: () => void; }
 >c : any
 >'nested object' : "nested object"
     }
