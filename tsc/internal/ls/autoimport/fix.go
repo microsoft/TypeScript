@@ -517,8 +517,12 @@ func insertImports(ct *change.Tracker, sourceFile *ast.SourceFile, imports []*as
 				return lsutil.CompareImportsOrRequireStatements(a, b, comparer)
 			})
 			if insertionIndex == 0 {
-				// If the first import is top-of-file, insert after the leading comment which is likely the header
-				ct.InsertNodeAt(sourceFile, core.TextPos(astnav.GetStartOfNode(existingImportStatements[0], sourceFile, false)), newImport.AsNode(), change.NodeOptions{})
+				// If the first import is top-of-file, insert after the leading comment which is likely the header.
+				leadingTriviaOption := change.LeadingTriviaOptionNone
+				if existingImportStatements[0] == sourceFile.Statements.Nodes[0] {
+					leadingTriviaOption = change.LeadingTriviaOptionExclude
+				}
+				ct.InsertNodeBefore(sourceFile, existingImportStatements[0].AsNode(), newImport.AsNode(), false /*blankLineBetween*/, leadingTriviaOption)
 			} else {
 				prevImport := existingImportStatements[insertionIndex-1]
 				ct.InsertNodeAfter(sourceFile, prevImport.AsNode(), newImport.AsNode())
