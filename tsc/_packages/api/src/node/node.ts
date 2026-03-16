@@ -1,5 +1,6 @@
 import {
     type FileReference,
+    ModifierFlags,
     type Node,
     type NodeArray,
     NodeFlags,
@@ -66,6 +67,45 @@ const NODE_OFFSET_NEXT = 12;
 const NODE_OFFSET_PARENT = 16;
 const NODE_OFFSET_DATA = 20;
 const NODE_OFFSET_FLAGS = 24;
+
+function modifierToFlag(kind: SyntaxKind): ModifierFlags {
+    switch (kind) {
+        case SyntaxKind.StaticKeyword:
+            return ModifierFlags.Static;
+        case SyntaxKind.PublicKeyword:
+            return ModifierFlags.Public;
+        case SyntaxKind.ProtectedKeyword:
+            return ModifierFlags.Protected;
+        case SyntaxKind.PrivateKeyword:
+            return ModifierFlags.Private;
+        case SyntaxKind.AbstractKeyword:
+            return ModifierFlags.Abstract;
+        case SyntaxKind.AccessorKeyword:
+            return ModifierFlags.Accessor;
+        case SyntaxKind.ExportKeyword:
+            return ModifierFlags.Export;
+        case SyntaxKind.DeclareKeyword:
+            return ModifierFlags.Ambient;
+        case SyntaxKind.ConstKeyword:
+            return ModifierFlags.Const;
+        case SyntaxKind.DefaultKeyword:
+            return ModifierFlags.Default;
+        case SyntaxKind.AsyncKeyword:
+            return ModifierFlags.Async;
+        case SyntaxKind.ReadonlyKeyword:
+            return ModifierFlags.Readonly;
+        case SyntaxKind.OverrideKeyword:
+            return ModifierFlags.Override;
+        case SyntaxKind.InKeyword:
+            return ModifierFlags.In;
+        case SyntaxKind.OutKeyword:
+            return ModifierFlags.Out;
+        case SyntaxKind.Decorator:
+            return ModifierFlags.Decorator;
+        default:
+            return ModifierFlags.None;
+    }
+}
 
 export class RemoteNodeBase {
     parent: RemoteNode;
@@ -961,6 +1001,16 @@ export class RemoteNode extends RemoteNodeBase implements Node {
     // Other properties
     get flags(): number {
         return this.view.getUint32(this._byteIndex + NODE_OFFSET_FLAGS, true);
+    }
+
+    get modifierFlags(): ModifierFlags {
+        const mods = this.modifiers;
+        if (!mods) return ModifierFlags.None;
+        let flags: ModifierFlags = ModifierFlags.None;
+        for (const mod of mods) {
+            flags |= modifierToFlag(mod.kind);
+        }
+        return flags;
     }
 
     get phaseModifier(): SyntaxKind {

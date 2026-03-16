@@ -129,6 +129,9 @@ for (const stmt of sourceFile.statements) {
             fail(`${name}: unexpected property name kind ${ts.SyntaxKind[member.name.kind]} at pos ${member.name.pos}`);
         }
 
+        // Skip computed properties that are derived from other properties
+        if (propName === "modifierFlags") continue;
+
         if (!member.type) {
             fail(`${name}.${propName}: property has no type annotation`);
         }
@@ -427,12 +430,15 @@ for (const def of factoryDefs) {
 referencedTypes.delete("SyntaxKind");
 const needsTokenFlags = referencedTypes.has("TokenFlags");
 referencedTypes.delete("TokenFlags");
+const needsModifierFlags = referencedTypes.has("ModifierFlags");
+referencedTypes.delete("ModifierFlags");
 
 // Validate all referenced types are accounted for
 const KNOWN_EXTERNAL_TYPES = new Set([
     "SyntaxKind",
     "TokenFlags",
     "NodeFlags",
+    "ModifierFlags",
 ]);
 for (const t of referencedTypes) {
     if (!exportedTypeNames.has(t) && !KNOWN_EXTERNAL_TYPES.has(t)) {
@@ -463,6 +469,10 @@ emit("//");
 emit("");
 emit(`import { NodeFlags } from "#enums/nodeFlags";`);
 emit(`import { SyntaxKind } from "#enums/syntaxKind";`);
+
+if (needsModifierFlags) {
+    emit(`import { ModifierFlags } from "#enums/modifierFlags";`);
+}
 
 if (needsTokenFlags) {
     emit(`import { TokenFlags } from "#enums/tokenFlags";`);

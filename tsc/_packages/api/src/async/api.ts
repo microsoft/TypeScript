@@ -6,13 +6,15 @@ import { SignatureKind } from "#enums/signatureKind";
 import { SymbolFlags } from "#enums/symbolFlags";
 import { TypeFlags } from "#enums/typeFlags";
 import { TypePredicateKind } from "#enums/typePredicateKind";
-import type {
-    Expression,
-    Node,
-    Path,
-    SourceFile,
-    SyntaxKind,
-    TypeNode,
+import {
+    type Expression,
+    type Identifier,
+    ModifierFlags,
+    type Node,
+    type Path,
+    type SourceFile,
+    type SyntaxKind,
+    type TypeNode,
 } from "@typescript/ast";
 import {
     encodeNode,
@@ -84,7 +86,7 @@ import type {
     UnionType,
 } from "./types.ts";
 
-export { ElementFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
+export { ElementFlags, ModifierFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags, TypePredicateKind };
 export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
 export type { AssertsIdentifierTypePredicate, AssertsThisTypePredicate, ConditionalType, IdentifierTypePredicate, IndexedAccessType, IndexInfo, IndexType, InterfaceType, IntersectionType, LiteralType, ObjectType, StringMappingType, SubstitutionType, TemplateLiteralType, ThisTypePredicate, TupleType, Type, TypeParameter, TypePredicate, TypePredicateBase, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
@@ -509,6 +511,12 @@ export class Checker {
             excludeGlobals,
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    async getResolvedSymbol(node: Identifier): Promise<Symbol | undefined> {
+        const text = node.text;
+        if (!text) return undefined;
+        return this.resolveName(text, SymbolFlags.Value | SymbolFlags.ExportValue, node);
     }
 
     async getContextualType(node: Expression): Promise<Type | undefined> {

@@ -159,8 +159,7 @@ function getNodeDefinedData(node: Node): number {
             return ((node as JsxText).containsOnlyTriviaWhiteSpaces ? 1 : 0) << 24;
         case SyntaxKind.VariableDeclarationList: {
             const flags = node.flags;
-            // NodeFlags.Let = 1, NodeFlags.Const = 2
-            return (flags & (NodeFlags.Let | NodeFlags.Const)) << 24;
+            return (flags & NodeFlags.BlockScoped) << 24;
         }
         case SyntaxKind.ImportAttributes: {
             const attrs = node as ImportAttributes;

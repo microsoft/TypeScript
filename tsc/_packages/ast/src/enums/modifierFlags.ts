@@ -1,0 +1,50 @@
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// Source: internal/ast/modifierflags.go
+// Regenerate: npx hereby generate:enums
+//
+export var ModifierFlags: any;
+(function (ModifierFlags) {
+    ModifierFlags[ModifierFlags["None"] = 0] = "None";
+    ModifierFlags[ModifierFlags["Public"] = 1] = "Public";
+    ModifierFlags[ModifierFlags["Private"] = 2] = "Private";
+    ModifierFlags[ModifierFlags["Protected"] = 4] = "Protected";
+    ModifierFlags[ModifierFlags["Readonly"] = 8] = "Readonly";
+    ModifierFlags[ModifierFlags["Override"] = 16] = "Override";
+    ModifierFlags[ModifierFlags["Export"] = 32] = "Export";
+    ModifierFlags[ModifierFlags["Abstract"] = 64] = "Abstract";
+    ModifierFlags[ModifierFlags["Ambient"] = 128] = "Ambient";
+    ModifierFlags[ModifierFlags["Static"] = 256] = "Static";
+    ModifierFlags[ModifierFlags["Accessor"] = 512] = "Accessor";
+    ModifierFlags[ModifierFlags["Async"] = 1024] = "Async";
+    ModifierFlags[ModifierFlags["Default"] = 2048] = "Default";
+    ModifierFlags[ModifierFlags["Const"] = 4096] = "Const";
+    ModifierFlags[ModifierFlags["In"] = 8192] = "In";
+    ModifierFlags[ModifierFlags["Out"] = 16384] = "Out";
+    ModifierFlags[ModifierFlags["Decorator"] = 32768] = "Decorator";
+    ModifierFlags[ModifierFlags["Deprecated"] = 65536] = "Deprecated";
+    ModifierFlags[ModifierFlags["JSDocPublic"] = 8388608] = "JSDocPublic";
+    ModifierFlags[ModifierFlags["JSDocPrivate"] = 16777216] = "JSDocPrivate";
+    ModifierFlags[ModifierFlags["JSDocProtected"] = 33554432] = "JSDocProtected";
+    ModifierFlags[ModifierFlags["JSDocReadonly"] = 67108864] = "JSDocReadonly";
+    ModifierFlags[ModifierFlags["JSDocOverride"] = 134217728] = "JSDocOverride";
+    ModifierFlags[ModifierFlags["HasComputedJSDocModifiers"] = 268435456] = "HasComputedJSDocModifiers";
+    ModifierFlags[ModifierFlags["HasComputedFlags"] = 536870912] = "HasComputedFlags";
+    ModifierFlags[ModifierFlags["SyntacticOrJSDocModifiers"] = 31] = "SyntacticOrJSDocModifiers";
+    ModifierFlags[ModifierFlags["SyntacticOnlyModifiers"] = 65504] = "SyntacticOnlyModifiers";
+    ModifierFlags[ModifierFlags["SyntacticModifiers"] = 65535] = "SyntacticModifiers";
+    ModifierFlags[ModifierFlags["JSDocCacheOnlyModifiers"] = 260046848] = "JSDocCacheOnlyModifiers";
+    ModifierFlags[ModifierFlags["JSDocOnlyModifiers"] = 65536] = "JSDocOnlyModifiers";
+    ModifierFlags[ModifierFlags["NonCacheOnlyModifiers"] = 131071] = "NonCacheOnlyModifiers";
+    ModifierFlags[ModifierFlags["AccessibilityModifier"] = 7] = "AccessibilityModifier";
+    ModifierFlags[ModifierFlags["ParameterPropertyModifier"] = 31] = "ParameterPropertyModifier";
+    ModifierFlags[ModifierFlags["NonPublicAccessibilityModifier"] = 6] = "NonPublicAccessibilityModifier";
+    ModifierFlags[ModifierFlags["TypeScriptModifier"] = 28895] = "TypeScriptModifier";
+    ModifierFlags[ModifierFlags["ExportDefault"] = 2080] = "ExportDefault";
+    ModifierFlags[ModifierFlags["All"] = 131071] = "All";
+    ModifierFlags[ModifierFlags["Modifier"] = 98303] = "Modifier";
+    ModifierFlags[ModifierFlags["JavaScript"] = 3872] = "JavaScript";
+})(ModifierFlags || (ModifierFlags = {}));

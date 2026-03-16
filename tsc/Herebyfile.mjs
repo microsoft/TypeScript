@@ -318,6 +318,7 @@ const enumDefs = [
     // @typescript/ast enums
     { name: "SyntaxKind", goPrefix: "Kind", goFile: "internal/ast/kind.go", outDir: "_packages/ast/src/enums" },
     { name: "NodeFlags", goPrefix: "NodeFlags", goFile: "internal/ast/nodeflags.go", outDir: "_packages/ast/src/enums" },
+    { name: "ModifierFlags", goPrefix: "ModifierFlags", goFile: "internal/ast/modifierflags.go", outDir: "_packages/ast/src/enums" },
     { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/ast/src/enums", constEnum: true },
 ];
 

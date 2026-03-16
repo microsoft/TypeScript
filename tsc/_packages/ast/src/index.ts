@@ -1,6 +1,7 @@
 export { CharacterCodes } from "#enums/characterCodes";
 export { CommentDirectiveType } from "#enums/commentDirectiveType";
 export { LanguageVariant } from "#enums/languageVariant";
+export { ModifierFlags } from "#enums/modifierFlags";
 export { NodeFlags } from "#enums/nodeFlags";
 export { RegularExpressionFlags } from "#enums/regularExpressionFlags";
 export { ScriptKind } from "#enums/scriptKind";
