@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/requireTypesOnly.ts] ////
+
+=== main.js ===
+const t = require("./t")
+>t : any
+>require("./t") : any
+>require : any
+>"./t" : "./t"
+
+=== t.ts ===
+type Strings = string[]
+>Strings : Strings
+
+export = Strings
+>Strings : Strings
+

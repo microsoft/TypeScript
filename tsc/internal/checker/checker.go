@@ -6531,18 +6531,22 @@ func (c *Checker) checkAliasSymbol(node *ast.Node) {
 				}
 			}
 		} else {
-			debug.Assert(node.Kind != ast.KindVariableDeclaration)
-			specifierText := "..."
-			if importDeclaration := ast.FindAncestor(node, ast.IsImportOrImportEqualsDeclaration); importDeclaration != nil {
-				if moduleSpecifier := TryGetModuleSpecifierFromDeclaration(importDeclaration); moduleSpecifier != nil {
-					specifierText = moduleSpecifier.Text()
-				}
-			}
 			identifierText := symbol.Name
 			if ast.IsIdentifier(errorNode) {
 				identifierText = errorNode.Text()
 			}
-			importText := "import(\"" + specifierText + "\")." + identifierText
+			specifierText := "..."
+			if importDeclaration := ast.FindAncestor(node, func(n *ast.Node) bool {
+				return ast.IsImportOrImportEqualsDeclaration(n) || ast.IsVariableDeclaration(n)
+			}); importDeclaration != nil {
+				if moduleSpecifier := TryGetModuleSpecifierFromDeclaration(importDeclaration); moduleSpecifier != nil {
+					specifierText = moduleSpecifier.Text()
+				}
+			}
+			importText := "import(\"" + specifierText + "\")"
+			if ast.IsImportSpecifier(node) {
+				importText = importText + "." + identifierText
+			}
 			c.error(errorNode, diagnostics.X_0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation, identifierText, importText)
 		}
 		return
