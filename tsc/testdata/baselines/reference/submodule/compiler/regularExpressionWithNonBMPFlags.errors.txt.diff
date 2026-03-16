@@ -1,22 +1,9 @@
 --- old.regularExpressionWithNonBMPFlags.errors.txt
 +++ new.regularExpressionWithNonBMPFlags.errors.txt
-@@= skipped -0, +0 lines =@@
--regularExpressionWithNonBMPFlags.ts(7,23): error TS1499: Unknown regular expression flag.
--regularExpressionWithNonBMPFlags.ts(7,25): error TS1499: Unknown regular expression flag.
--regularExpressionWithNonBMPFlags.ts(7,28): error TS1499: Unknown regular expression flag.
--regularExpressionWithNonBMPFlags.ts(7,41): error TS1499: Unknown regular expression flag.
--regularExpressionWithNonBMPFlags.ts(7,43): error TS1499: Unknown regular expression flag.
--regularExpressionWithNonBMPFlags.ts(7,45): error TS1499: Unknown regular expression flag.
--
--
--==== regularExpressionWithNonBMPFlags.ts (6 errors) ====
--    // The characters in the following regular expression are ASCII-lookalike characters found in Unicode, including:
--    // - 𝘴 (U+1D634 Mathematical Sans-Serif Italic Small S)
--    // - 𝘪 (U+1D62A Mathematical Sans-Serif Italic Small I)
--    // - 𝘮 (U+1D62E Mathematical Sans-Serif Italic Small M)
--    //
--    // See https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
--    const 𝘳𝘦𝘨𝘦𝘹 = /(?𝘴𝘪-𝘮:^𝘧𝘰𝘰.)/𝘨𝘮𝘶;
+@@= skipped -13, +13 lines =@@
+     //
+     // See https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
+     const 𝘳𝘦𝘨𝘦𝘹 = /(?𝘴𝘪-𝘮:^𝘧𝘰𝘰.)/𝘨𝘮𝘶;
 -                          ~~
 -!!! error TS1499: Unknown regular expression flag.
 -                            ~~
@@ -28,6 +15,16 @@
 -                                              ~~
 -!!! error TS1499: Unknown regular expression flag.
 -                                                ~~
--!!! error TS1499: Unknown regular expression flag.
--    
-+<no content>
++                     ~
++!!! error TS1499: Unknown regular expression flag.
++                      ~
++!!! error TS1499: Unknown regular expression flag.
++                        ~
++!!! error TS1499: Unknown regular expression flag.
++                                 ~
++!!! error TS1499: Unknown regular expression flag.
++                                  ~
++!!! error TS1499: Unknown regular expression flag.
++                                   ~
+ !!! error TS1499: Unknown regular expression flag.
+     

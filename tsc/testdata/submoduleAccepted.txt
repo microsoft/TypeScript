@@ -57,3 +57,6 @@ fourslash/inlayHints/inlayHintsInteractiveVariableTypes1.baseline.diff
 fourslash/inlayHints/inlayHintsInteractiveVariableTypes2.baseline.diff
 fourslash/inlayHints/inlayHintsVariableTypes3.baseline.diff
 fourslash/inlayHints/inlayHintsInteractiveFunctionParameterTypes1.baseline.diff
+
+## regex checking ##
+

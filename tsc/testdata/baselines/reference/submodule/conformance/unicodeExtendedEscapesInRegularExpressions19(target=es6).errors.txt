@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInRegularExpressions19.ts(1,13): error TS1125: Hexadecimal digit expected.
+
+
+==== unicodeExtendedEscapesInRegularExpressions19.ts (1 errors) ====
+    var x = /\u{}/gu;
+                
+!!! error TS1125: Hexadecimal digit expected.
+    

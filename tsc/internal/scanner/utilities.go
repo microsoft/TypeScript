@@ -27,6 +27,28 @@ func surrogatePairToCodepoint(r1, r2 rune) rune {
 	return (r1-surr1)<<10 | (r2 - surr2) + surrSelf
 }
 
+// encodeSurrogate encodes a surrogate code unit (0xD800–0xDFFF) as a 3-byte
+// CESU-8 sequence. Standard UTF-8 decoders reject this range, so it acts as a
+// sentinel that decodeClassAtomRune can identify when comparing class ranges in
+// non-unicode regex mode (where surrogates are valid individual characters).
+func encodeSurrogate(r rune) string {
+	return string([]byte{
+		0xED,
+		byte(0x80 | ((r >> 6) & 0x3F)),
+		byte(0x80 | (r & 0x3F)),
+	})
+}
+
+// decodeClassAtomRune is like utf8.DecodeRuneInString but also handles
+// surrogate code units encoded by encodeSurrogate.
+func decodeClassAtomRune(s string) (rune, int) {
+	if len(s) >= 3 && s[0] == 0xED && s[1] >= 0xA0 && s[1] <= 0xBF && s[2] >= 0x80 && s[2] <= 0xBF {
+		r := rune(0xD000) | rune(s[1]&0x3F)<<6 | rune(s[2]&0x3F)
+		return r, 3
+	}
+	return utf8.DecodeRuneInString(s)
+}
+
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {
 	return token >= ast.KindIdentifier
 }

@@ -679,6 +679,7 @@ type Checker struct {
 	markedAssignmentSymbolLinks                 core.LinkStore[*ast.Symbol, MarkedAssignmentSymbolLinks]
 	symbolContainerLinks                        core.LinkStore[*ast.Symbol, ContainingSymbolLinks]
 	sourceFileLinks                             core.LinkStore[*ast.SourceFile, SourceFileLinks]
+	regExpScanner                               *scanner.Scanner
 	patternForType                              map[*Type]*ast.Node
 	contextFreeTypes                            map[*ast.Node]*Type
 	anyType                                     *Type
