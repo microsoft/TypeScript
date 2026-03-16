@@ -2357,7 +2357,7 @@ namespace Parser {
 
     /**
      * Provides a better error message than the generic "';' expected" if possible for
-     * known common variants of a missing semicolon, such as from a mispelled names.
+     * known common variants of a missing semicolon, such as from misspelled names.
      *
      * @param node Node preceding the expected semicolon location.
      */
@@ -2421,7 +2421,7 @@ namespace Parser {
             return;
         }
 
-        // Otherwise, we know this some kind of unknown word, not just a missing expected semicolon.
+        // Otherwise, we know this is some kind of unknown word, not just a missing expected semicolon.
         parseErrorAt(pos, node.end, Diagnostics.Unexpected_keyword_or_identifier);
     }
 
