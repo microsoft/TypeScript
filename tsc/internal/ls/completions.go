@@ -2042,7 +2042,7 @@ func (l *LanguageService) createCompletionItem(
 		} else {
 			end = dot.End()
 		}
-		replacementSpan = l.createLspRangeFromBounds(astnav.GetStartOfNode(dot, file, false /*includeJSDoc*/), end, file)
+		replacementSpan = new(l.createLspRangeFromBounds(astnav.GetStartOfNode(dot, file, false /*includeJSDoc*/), end, file))
 	}
 
 	if data.jsxInitializer.isInitializer {
@@ -2051,7 +2051,7 @@ func (l *LanguageService) createCompletionItem(
 		}
 		insertText = fmt.Sprintf("{%s}", insertText)
 		if data.jsxInitializer.initializer != nil {
-			replacementSpan = l.createLspRangeFromNode(data.jsxInitializer.initializer, file)
+			replacementSpan = new(l.createLspRangeFromNode(data.jsxInitializer.initializer, file))
 		}
 	}
 
@@ -2078,10 +2078,10 @@ func (l *LanguageService) createCompletionItem(
 			data.propertyAccessToConvert.Parent,
 			data.propertyAccessToConvert.Expression(),
 		)
-		replacementSpan = l.createLspRangeFromBounds(
+		replacementSpan = new(l.createLspRangeFromBounds(
 			astnav.GetStartOfNode(wrapNode, file, false /*includeJSDoc*/),
 			data.propertyAccessToConvert.End(),
-			file)
+			file))
 	}
 
 	if originIsTypeOnlyAlias(origin) {
@@ -3047,7 +3047,7 @@ func (l *LanguageService) getReplacementRangeForContextToken(file *ast.SourceFil
 	case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
 		return l.createRangeFromStringLiteralLikeContent(file, contextToken, position)
 	default:
-		return l.createLspRangeFromNode(contextToken, file)
+		return new(l.createLspRangeFromNode(contextToken, file))
 	}
 }
 
@@ -3061,7 +3061,7 @@ func (l *LanguageService) createRangeFromStringLiteralLikeContent(file *ast.Sour
 		}
 		replacementEnd = min(position, node.End())
 	}
-	return l.createLspRangeFromBounds(nodeStart+1, replacementEnd, file)
+	return new(l.createLspRangeFromBounds(nodeStart+1, replacementEnd, file))
 }
 
 func quotePropertyName(file *ast.SourceFile, preferences *lsutil.UserPreferences, name string) string {
@@ -3410,7 +3410,7 @@ func (l *LanguageService) getOptionalReplacementSpan(location *ast.Node, file *a
 	// StringLiteralLike locations are handled separately in stringCompletions.ts
 	if location != nil && (location.Kind == ast.KindIdentifier || location.Kind == ast.KindPrivateIdentifier) {
 		start := astnav.GetStartOfNode(location, file, false /*includeJSDoc*/)
-		return l.createLspRangeFromBounds(start, location.End(), file)
+		return new(l.createLspRangeFromBounds(start, location.End(), file))
 	}
 	return nil
 }
@@ -4301,7 +4301,7 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 	tagName := jsxClosingElement.Parent.AsJsxElement().OpeningElement.TagName()
 	closingTag := scanner.GetTextOfNode(tagName)
 	fullClosingTag := closingTag + core.IfElse(hasClosingAngleBracket, "", ">")
-	optionalReplacementSpan := l.createLspRangeFromNode(jsxClosingElement.TagName(), file)
+	optionalReplacementSpan := new(l.createLspRangeFromNode(jsxClosingElement.TagName(), file))
 	defaultCommitCharacters := getDefaultCommitCharacters(false /*isNewIdentifierLocation*/)
 
 	item := l.createLSPCompletionItem(
@@ -5132,7 +5132,7 @@ func (l *LanguageService) getSingleLineReplacementSpanForImportCompletionNode(no
 	// Use token position (excluding JSDoc/trivia) instead of node.Pos() to avoid including JSDoc comments
 	tokenPos := scanner.GetTokenPosOfNode(node, sourceFile, false /*includeJSDoc*/)
 	if printer.GetLinesBetweenPositions(sourceFile, tokenPos, node.End()) == 0 {
-		return l.createLspRangeFromNode(node, sourceFile)
+		return new(l.createLspRangeFromNode(node, sourceFile))
 	}
 
 	if node.Kind == ast.KindImportKeyword || node.Kind == ast.KindImportSpecifier {
@@ -5167,7 +5167,7 @@ func (l *LanguageService) getSingleLineReplacementSpanForImportCompletionNode(no
 	// assume that the "module specifier" is actually just another statement, and return
 	// the single-line range of the import excluding that probable statement.
 	if printer.GetLinesBetweenPositions(sourceFile, withoutModuleSpecifier.Pos(), withoutModuleSpecifier.End()) == 0 {
-		return l.createLspRangeFromBounds(withoutModuleSpecifier.Pos(), withoutModuleSpecifier.End(), sourceFile)
+		return new(l.createLspRangeFromBounds(withoutModuleSpecifier.Pos(), withoutModuleSpecifier.End(), sourceFile))
 	}
 	return nil
 }

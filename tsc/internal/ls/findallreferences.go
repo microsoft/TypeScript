@@ -127,16 +127,16 @@ func (entry *SymbolAndEntries) canUseDefinitionSymbol() bool {
 	}
 }
 
-func (l *LanguageService) getRangeOfEntry(entry *ReferenceEntry) *lsproto.Range {
-	return &l.resolveEntry(entry).lspRange.Range
+func (l *LanguageService) getRangeOfEntry(entry *ReferenceEntry) lsproto.Range {
+	return l.resolveEntry(entry).lspRange.Range
 }
 
 func (l *LanguageService) getFileNameOfEntry(entry *ReferenceEntry) lsproto.DocumentUri {
 	return l.resolveEntry(entry).lspRange.Uri
 }
 
-func (l *LanguageService) getLocationOfEntry(entry *ReferenceEntry) *lsproto.Location {
-	return l.resolveEntry(entry).lspRange
+func (l *LanguageService) getLocationOfEntry(entry *ReferenceEntry) lsproto.Location {
+	return *l.resolveEntry(entry).lspRange
 }
 
 func (l *LanguageService) resolveEntry(entry *ReferenceEntry) *ReferenceEntry {
@@ -281,7 +281,7 @@ func getContextNode(node *ast.Node) *ast.Node {
 }
 
 // utils
-func (l *LanguageService) getLspRangeOfNode(node *ast.Node, sourceFile *ast.SourceFile, endNode *ast.Node) *lsproto.Range {
+func (l *LanguageService) getLspRangeOfNode(node *ast.Node, sourceFile *ast.SourceFile, endNode *ast.Node) lsproto.Range {
 	if sourceFile == nil {
 		sourceFile = ast.GetSourceFileOfNode(node)
 	}
@@ -754,7 +754,7 @@ func isDeclarationOfSymbol(node *ast.Node, target *ast.Symbol) bool {
 func (l *LanguageService) convertEntriesToLocations(entries []*ReferenceEntry) []lsproto.Location {
 	locations := make([]lsproto.Location, len(entries))
 	for i, entry := range entries {
-		locations[i] = *l.getLocationOfEntry(entry)
+		locations[i] = l.getLocationOfEntry(entry)
 	}
 	return locations
 }
@@ -764,7 +764,8 @@ func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntr
 	for i, entry := range entries {
 
 		// Get the selection range (the actual reference)
-		targetSelectionRange := &l.getLocationOfEntry(entry).Range
+		loc := l.getLocationOfEntry(entry)
+		targetSelectionRange := loc.Range
 		targetRange := targetSelectionRange
 
 		// For entries with nodes, compute ranges directly from the node
@@ -773,14 +774,14 @@ func (l *LanguageService) convertEntriesToLocationLinks(entries []*ReferenceEntr
 			contextTextRange := toContextRange(entry.textRange, l.program.GetSourceFile(entry.fileName), entry.context)
 			if contextTextRange != nil {
 				contextLocation := l.getMappedLocation(entry.fileName, *contextTextRange)
-				targetRange = &contextLocation.Range
+				targetRange = contextLocation.Range
 			}
 		}
 
 		links[i] = &lsproto.LocationLink{
 			TargetUri:            lsconv.FileNameToDocumentURI(entry.fileName),
-			TargetRange:          *targetRange,
-			TargetSelectionRange: *targetSelectionRange,
+			TargetRange:          targetRange,
+			TargetSelectionRange: targetSelectionRange,
 		}
 	}
 	return links

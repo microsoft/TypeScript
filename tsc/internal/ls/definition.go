@@ -130,7 +130,7 @@ type fileRange struct {
 }
 
 func (l *LanguageService) createDefinitionLocations(
-	originSelectionRange *lsproto.Range,
+	originSelectionRange lsproto.Range,
 	clientSupportsLink bool,
 	declarations []*ast.Node,
 	reference *refInfo,
@@ -150,7 +150,7 @@ func (l *LanguageService) createDefinitionLocations(
 			},
 		}
 		locations = append(locations, &lsproto.LocationLink{
-			OriginSelectionRange: originSelectionRange,
+			OriginSelectionRange: &originSelectionRange,
 			TargetUri:            lsconv.FileNameToDocumentURI(reference.fileName),
 			TargetRange:          targetRange,
 			TargetSelectionRange: targetRange,
@@ -168,7 +168,7 @@ func (l *LanguageService) createDefinitionLocations(
 			targetSelectionLoc := l.getMappedLocation(fileName, nameRange)
 			targetLoc := l.getMappedLocation(fileName, *contextRange)
 			locations = append(locations, &lsproto.LocationLink{
-				OriginSelectionRange: originSelectionRange,
+				OriginSelectionRange: &originSelectionRange,
 				TargetSelectionRange: targetSelectionLoc.Range,
 				TargetUri:            targetLoc.Uri,
 				TargetRange:          targetLoc.Range,

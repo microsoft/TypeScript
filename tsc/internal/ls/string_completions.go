@@ -200,7 +200,7 @@ func (l *LanguageService) convertPathCompletions(
 	items := core.Map(pathCompletions, func(pathCompletion *pathCompletion) *lsproto.CompletionItem {
 		var replacementSpan *lsproto.Range
 		if pathCompletion.textRange != nil {
-			replacementSpan = l.createLspRangeFromBounds(pathCompletion.textRange.Pos(), pathCompletion.textRange.End(), file)
+			replacementSpan = new(l.createLspRangeFromBounds(pathCompletion.textRange.Pos(), pathCompletion.textRange.End(), file))
 		}
 		detail := pathCompletion.name
 		if !strings.HasSuffix(pathCompletion.name, pathCompletion.extension) {

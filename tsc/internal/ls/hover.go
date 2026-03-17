@@ -56,7 +56,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 					Value: content,
 				},
 			},
-			Range: hoverRange,
+			Range: &hoverRange,
 		},
 	}, nil
 }

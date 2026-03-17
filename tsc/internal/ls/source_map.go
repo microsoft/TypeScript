@@ -15,7 +15,7 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 		lspRange := l.createLspRangeFromRange(fileRange, l.getScript(fileName))
 		return lsproto.Location{
 			Uri:   lsconv.FileNameToDocumentURI(fileName),
-			Range: *lspRange,
+			Range: lspRange,
 		}
 	}
 	endPos := l.tryGetSourcePosition(fileName, core.TextPos(fileRange.End()))
@@ -31,7 +31,7 @@ func (l *LanguageService) getMappedLocation(fileName string, fileRange core.Text
 	lspRange := l.createLspRangeFromRange(newRange, l.getScript(startPos.FileName))
 	return lsproto.Location{
 		Uri:   lsconv.FileNameToDocumentURI(startPos.FileName),
-		Range: *lspRange,
+		Range: lspRange,
 	}
 }
 

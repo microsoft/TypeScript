@@ -18,7 +18,7 @@ func (l *LanguageService) toLSProtoTextEdits(file *ast.SourceFile, changes []cor
 	for _, c := range changes {
 		result = append(result, &lsproto.TextEdit{
 			NewText: c.NewText,
-			Range:   *l.createLspRangeFromBounds(c.Pos(), c.End(), file),
+			Range:   l.createLspRangeFromBounds(c.Pos(), c.End(), file),
 		})
 	}
 	return result

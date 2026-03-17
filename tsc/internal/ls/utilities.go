@@ -284,7 +284,7 @@ func isInRightSideOfInternalImportEqualsDeclaration(node *ast.Node) bool {
 	return ast.IsInternalModuleImportEqualsDeclaration(node.Parent) && node.Parent.AsImportEqualsDeclaration().ModuleReference == node
 }
 
-func (l *LanguageService) createLspRangeFromNode(node *ast.Node, file *ast.SourceFile) *lsproto.Range {
+func (l *LanguageService) createLspRangeFromNode(node *ast.Node, file *ast.SourceFile) lsproto.Range {
 	return l.createLspRangeFromBounds(scanner.GetTokenPosOfNode(node, file, false /*includeJSDoc*/), node.End(), file)
 }
 
@@ -292,14 +292,12 @@ func createRangeFromNode(node *ast.Node, file *ast.SourceFile) core.TextRange {
 	return core.NewTextRange(scanner.GetTokenPosOfNode(node, file, false /*includeJSDoc*/), node.End())
 }
 
-func (l *LanguageService) createLspRangeFromBounds(start, end int, file *ast.SourceFile) *lsproto.Range {
-	lspRange := l.converters.ToLSPRange(file, core.NewTextRange(start, end))
-	return &lspRange
+func (l *LanguageService) createLspRangeFromBounds(start, end int, file *ast.SourceFile) lsproto.Range {
+	return l.converters.ToLSPRange(file, core.NewTextRange(start, end))
 }
 
-func (l *LanguageService) createLspRangeFromRange(textRange core.TextRange, script lsconv.Script) *lsproto.Range {
-	lspRange := l.converters.ToLSPRange(script, textRange)
-	return &lspRange
+func (l *LanguageService) createLspRangeFromRange(textRange core.TextRange, script lsconv.Script) lsproto.Range {
+	return l.converters.ToLSPRange(script, textRange)
 }
 
 func (l *LanguageService) createLspPosition(position int, file *ast.SourceFile) lsproto.Position {

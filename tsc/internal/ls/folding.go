@@ -505,7 +505,7 @@ func spanForNode(ctx context.Context, node *ast.Node, open ast.Kind, useFullStar
 }
 
 func rangeBetweenTokens(ctx context.Context, openToken *ast.Node, closeToken *ast.Node, sourceFile *ast.SourceFile, useFullStart bool, l *LanguageService) *lsproto.FoldingRange {
-	var textRange *lsproto.Range
+	var textRange lsproto.Range
 	if useFullStart {
 		textRange = l.createLspRangeFromBounds(openToken.Pos(), closeToken.End(), sourceFile)
 	} else {
@@ -518,7 +518,7 @@ func supportsCollapsedText(ctx context.Context) bool {
 	return lsproto.GetClientCapabilities(ctx).TextDocument.FoldingRange.FoldingRange.CollapsedText
 }
 
-func createFoldingRange(ctx context.Context, textRange *lsproto.Range, foldingRangeKind lsproto.FoldingRangeKind, collapsedText string) *lsproto.FoldingRange {
+func createFoldingRange(ctx context.Context, textRange lsproto.Range, foldingRangeKind lsproto.FoldingRangeKind, collapsedText string) *lsproto.FoldingRange {
 	var kind *lsproto.FoldingRangeKind
 	if foldingRangeKind != "" {
 		kind = &foldingRangeKind

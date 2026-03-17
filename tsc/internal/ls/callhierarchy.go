@@ -568,9 +568,7 @@ func (l *LanguageService) convertCallSiteGroupToIncomingCall(program *compiler.P
 		fromRanges[i] = l.converters.ToLSPRange(script, entry.textRange)
 	}
 
-	slices.SortFunc(fromRanges, func(a, b lsproto.Range) int {
-		return lsproto.CompareRanges(&a, &b)
-	})
+	slices.SortFunc(fromRanges, lsproto.CompareRanges)
 
 	return &lsproto.CallHierarchyIncomingCall{
 		From:       l.createCallHierarchyItem(program, entries[0].declaration),
@@ -652,7 +650,7 @@ func (l *LanguageService) getIncomingCalls(ctx context.Context, program *compile
 			if len(a.FromRanges) == 0 || len(b.FromRanges) == 0 {
 				return 0
 			}
-			return lsproto.CompareRanges(&a.FromRanges[0], &b.FromRanges[0])
+			return lsproto.CompareRanges(a.FromRanges[0], b.FromRanges[0])
 		})
 	}
 	return result, err
@@ -927,9 +925,7 @@ func (l *LanguageService) convertCallSiteGroupToOutgoingCall(program *compiler.P
 		fromRanges[i] = l.converters.ToLSPRange(script, entry.textRange)
 	}
 
-	slices.SortFunc(fromRanges, func(a, b lsproto.Range) int {
-		return lsproto.CompareRanges(&a, &b)
-	})
+	slices.SortFunc(fromRanges, lsproto.CompareRanges)
 
 	return &lsproto.CallHierarchyOutgoingCall{
 		To:         l.createCallHierarchyItem(program, entries[0].declaration),
@@ -970,7 +966,7 @@ func (l *LanguageService) getOutgoingCalls(program *compiler.Program, declaratio
 		if len(a.FromRanges) == 0 || len(b.FromRanges) == 0 {
 			return 0
 		}
-		return lsproto.CompareRanges(&a.FromRanges[0], &b.FromRanges[0])
+		return lsproto.CompareRanges(a.FromRanges[0], b.FromRanges[0])
 	})
 
 	return result

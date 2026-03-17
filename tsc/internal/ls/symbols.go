@@ -390,7 +390,7 @@ func mergeChildren(target *lsproto.DocumentSymbol, source *lsproto.DocumentSymbo
 		} else {
 			*target.Children = mergeExpandos(append(*target.Children, *source.Children...))
 			slices.SortFunc(*target.Children, func(a, b *lsproto.DocumentSymbol) int {
-				return lsproto.CompareRanges(&a.Range, &b.Range)
+				return lsproto.CompareRanges(a.Range, b.Range)
 			})
 		}
 	}

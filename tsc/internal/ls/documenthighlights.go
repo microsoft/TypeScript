@@ -27,13 +27,13 @@ func (l *LanguageService) ProvideDocumentHighlights(ctx context.Context, documen
 		kind := lsproto.DocumentHighlightKindRead
 		if openingElement != nil {
 			documentHighlights = append(documentHighlights, &lsproto.DocumentHighlight{
-				Range: *l.createLspRangeFromNode(openingElement, sourceFile),
+				Range: l.createLspRangeFromNode(openingElement, sourceFile),
 				Kind:  &kind,
 			})
 		}
 		if closingElement != nil {
 			documentHighlights = append(documentHighlights, &lsproto.DocumentHighlight{
-				Range: *l.createLspRangeFromNode(closingElement, sourceFile),
+				Range: l.createLspRangeFromNode(closingElement, sourceFile),
 				Kind:  &kind,
 			})
 		}
@@ -74,7 +74,7 @@ func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *l
 	kind := lsproto.DocumentHighlightKindRead
 	if entry.kind == entryKindRange {
 		return entry.fileName, &lsproto.DocumentHighlight{
-			Range: *l.getRangeOfEntry(entry),
+			Range: l.getRangeOfEntry(entry),
 			Kind:  &kind,
 		}
 	}
@@ -85,7 +85,7 @@ func (l *LanguageService) toDocumentHighlight(entry *ReferenceEntry) (string, *l
 	}
 
 	dh := &lsproto.DocumentHighlight{
-		Range: *l.getRangeOfEntry(entry),
+		Range: l.getRangeOfEntry(entry),
 		Kind:  &kind,
 	}
 
@@ -160,7 +160,7 @@ func (l *LanguageService) highlightSpans(nodes []*ast.Node, sourceFile *ast.Sour
 	for _, node := range nodes {
 		if node != nil {
 			highlights = append(highlights, &lsproto.DocumentHighlight{
-				Range: *l.createLspRangeFromNode(node, sourceFile),
+				Range: l.createLspRangeFromNode(node, sourceFile),
 				Kind:  &kind,
 			})
 		}
@@ -218,7 +218,7 @@ func (l *LanguageService) getIfElseOccurrences(ifStatement *ast.IfStatement, sou
 			}
 			if shouldCombine {
 				highlights = append(highlights, &lsproto.DocumentHighlight{
-					Range: *l.createLspRangeFromBounds(scanner.SkipTrivia(sourceFile.Text(), elseKeyword.Pos()), ifKeyword.End(), sourceFile),
+					Range: l.createLspRangeFromBounds(scanner.SkipTrivia(sourceFile.Text(), elseKeyword.Pos()), ifKeyword.End(), sourceFile),
 					Kind:  &kind,
 				})
 				i++ // skip the next keyword
@@ -227,7 +227,7 @@ func (l *LanguageService) getIfElseOccurrences(ifStatement *ast.IfStatement, sou
 		}
 		// Ordinary case: just highlight the keyword.
 		highlights = append(highlights, &lsproto.DocumentHighlight{
-			Range: *l.createLspRangeFromNode(keywords[i], sourceFile),
+			Range: l.createLspRangeFromNode(keywords[i], sourceFile),
 			Kind:  &kind,
 		})
 	}

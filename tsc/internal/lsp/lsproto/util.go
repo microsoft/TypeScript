@@ -13,11 +13,11 @@ func ComparePositions(pos, other Position) int {
 	return cmp.Compare(pos.Character, other.Character)
 }
 
-// Implements a cmp.Compare like function for two *Range
-// CompareRanges(lsRange, other) == cmp.Compare(lsrange, other)
+// Implements a cmp.Compare like function for two Range
+// CompareRanges(lsRange, other) == cmp.Compare(lsRange, other)
 //
 //	Range.Start is compared before Range.End
-func CompareRanges(lsRange, other *Range) int {
+func CompareRanges(lsRange, other Range) int {
 	if startComp := ComparePositions(lsRange.Start, other.Start); startComp != 0 {
 		return startComp
 	}
