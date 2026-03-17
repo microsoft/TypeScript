@@ -25,3 +25,35 @@ x + y;
 //// [/app/bin/index.d.ts]
 /// <reference path="../../types/bar.d.ts" preserve="true" />
 export {};
+
+
+//// [DtsFileErrors]
+
+
+error TS5011: The common source directory of 'tsconfig.json' is '../.src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+!!! error TS5011: The common source directory of 'tsconfig.json' is '../.src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+!!! error TS5011:   Visit https://aka.ms/ts6 for migration information.
+==== /app/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "bin",
+            "typeRoots": ["../types"],
+            "sourceMap": true,
+            "mapRoot": "myMapRoot",
+            "sourceRoot": "mySourceRoot",
+            "declaration": true
+        }
+    }
+    
+==== /app/bin/index.d.ts (0 errors) ====
+    /// <reference path="../../types/bar.d.ts" preserve="true" />
+    export {};
+    
+==== /types/bar.d.ts (0 errors) ====
+    declare module "bar" {
+        export const y = 0;
+    }
+    

@@ -46,16 +46,11 @@ export interface MyType<T = any> extends Function {
 tsgo -p D:\Work\pkg1 --explainFiles
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96msrc/main.ts[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS2564: [0mProperty 'id' has no initializer and is not definitely assigned in the constructor.
+[96mtsconfig.json[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m6[0m     id: string;
-[7m [0m [91m    ~~[0m
-
-[96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Cannot assign an abstract constructor type to a non-abstract constructor type.
-
-[7m8[0m     return PartialClassType as MyReturnType;
-[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m5[0m         "outDir": "./dist",
+[7m [0m [91m        ~~~~~~~~[0m
 
 ../../home/src/tslibs/TS/Lib/lib.es2017.full.d.ts
    Default library for target 'ES2017'
@@ -68,11 +63,7 @@ src/utils/index.ts
 src/main.ts
    Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 2 errors in 2 files.
-
-Errors  Files
-     1  src/main.ts[90m:6[0m
-     1  src/utils/index.ts[90m:8[0m
+Found 1 error in tsconfig.json[90m:5[0m
 
 //// [D:/Work/pkg1/dist/src/main.d.ts] *new* 
 declare const Sub_base: import("./utils/type-helpers").MyReturnType;

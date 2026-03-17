@@ -903,6 +903,48 @@ func (p *Program) verifyCompilerOptions() {
 		}
 	}
 
+	if !options.NoEmit.IsTrue() &&
+		!options.Composite.IsTrue() &&
+		options.RootDir == "" &&
+		options.ConfigFilePath != "" &&
+		(options.OutDir != "" ||
+			(options.GetEmitDeclarations() && options.DeclarationDir != "") ||
+			options.OutFile != "") {
+		// Check if rootDir inferred changed and issue diagnostic
+		dir := p.CommonSourceDirectory()
+		var emittedFiles []string
+		for _, file := range p.files {
+			if !file.IsDeclarationFile && sourceFileMayBeEmitted(file, p, false) {
+				emittedFiles = append(emittedFiles, file.FileName())
+			}
+		}
+		dir59 := outputpaths.GetComputedCommonSourceDirectory(emittedFiles, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
+		if dir59 != "" && tspath.GetCanonicalFileName(dir, p.UseCaseSensitiveFileNames()) != tspath.GetCanonicalFileName(dir59, p.UseCaseSensitiveFileNames()) {
+			// change in layout
+			var option1 string
+			if options.OutFile != "" {
+				option1 = "outFile"
+			} else if options.OutDir != "" {
+				option1 = "outDir"
+			} else {
+				option1 = "declarationDir"
+			}
+			var option2 string
+			if options.OutFile == "" && options.OutDir != "" {
+				option2 = "declarationDir"
+			}
+			diag := createDiagnosticForOption(
+				true, /*onKey*/
+				option1,
+				option2,
+				diagnostics.The_common_source_directory_of_0_is_1_The_rootDir_setting_must_be_explicitly_set_to_this_or_another_path_to_adjust_your_output_s_file_layout,
+				tspath.GetBaseFileName(options.ConfigFilePath),
+				tspath.GetRelativePathFromFile(options.ConfigFilePath, dir59, p.comparePathsOptions),
+			)
+			diag.AddMessageChain(ast.NewCompilerDiagnostic(diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashts6_for_migration_information))
+		}
+	}
+
 	if options.CheckJs.IsTrue() && !options.GetAllowJS() {
 		createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs")
 	}

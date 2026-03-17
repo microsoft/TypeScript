@@ -25,7 +25,7 @@ export default hello.hello
 }
 
 tsgo --b project --v --explainFiles --listEmittedFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
@@ -33,6 +33,12 @@ Output::
 [[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
+
+[96mproject/tsconfig.json[0m:[93m9[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m9[0m         "outDir": "dist",
+[7m [0m [91m        ~~~~~~~~[0m
 
 TSFILE:  /home/src/workspaces/solution/project/dist/src/hello.json
 TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js.map
@@ -45,6 +51,9 @@ project/src/hello.json
    Part of 'files' list in tsconfig.json
 project/src/index.ts
    Part of 'files' list in tsconfig.json
+
+Found 1 error in project/tsconfig.json[90m:9[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -85,10 +94,11 @@ exports.default = hello_json_1.default.hello;
 //// [/home/src/workspaces/solution/project/dist/src/index.js.map] *new* 
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":";;;;;AAAA,8DAAgC;kBACjB,oBAAK,CAAC,KAAK"}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../src/index.ts","../src/hello.json"]}
+{"version":"FakeTSVersion","errors":true,"root":["../src/index.ts","../src/hello.json"]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -103,25 +113,58 @@ exports.default = hello_json_1.default.hello;
       "original": "../src/hello.json"
     }
   ],
-  "size": 74
+  "size": 88
 }
 
 project/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-*refresh*    /home/src/workspaces/solution/project/src/hello.json
-*refresh*    /home/src/workspaces/solution/project/src/index.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/workspaces/solution/project/src/hello.json
+*not cached* /home/src/workspaces/solution/project/src/index.ts
 Signatures::
 
 
 Edit [0]:: no change
 
 tsgo --b project --v --explainFiles --listEmittedFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is up to date because newest input 'project/src/index.ts' is older than output 'project/dist/src/hello.json'
+[[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because buildinfo file 'project/dist/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
+[[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
 
+[96mproject/tsconfig.json[0m:[93m9[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m9[0m         "outDir": "dist",
+[7m [0m [91m        ~~~~~~~~[0m
+
+TSFILE:  /home/src/workspaces/solution/project/dist/src/hello.json
+TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js.map
+TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js
+TSFILE:  /home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
+project/src/hello.json
+   Imported via "./hello.json" from file 'project/src/index.ts'
+   Part of 'files' list in tsconfig.json
+project/src/index.ts
+   Part of 'files' list in tsconfig.json
+
+Found 1 error in project/tsconfig.json[90m:9[0m
+
+//// [/home/src/workspaces/solution/project/dist/src/hello.json] *rewrite with same content*
+//// [/home/src/workspaces/solution/project/dist/src/index.js] *rewrite with same content*
+//// [/home/src/workspaces/solution/project/dist/src/index.js.map] *rewrite with same content*
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *rewrite with same content*
+//// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *rewrite with same content*
+
+project/tsconfig.json::
+SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/workspaces/solution/project/src/hello.json
+*not cached* /home/src/workspaces/solution/project/src/index.ts
+Signatures::

@@ -25,7 +25,7 @@ export default hello.hello
 }
 
 tsgo --b project --v --explainFiles --listEmittedFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/tsconfig.json
@@ -33,6 +33,12 @@ Output::
 [[90mHH:MM:SS AM[0m] Project 'project/tsconfig.json' is out of date because output file 'project/dist/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
+
+[96mproject/tsconfig.json[0m:[93m9[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m9[0m         "outDir": "dist",
+[7m [0m [91m        ~~~~~~~~[0m
 
 TSFILE:  /home/src/workspaces/solution/project/dist/src/hello.json
 TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js
@@ -43,6 +49,9 @@ project/src/hello.json
    Imported via "./hello.json" from file 'project/src/index.ts'
 project/src/index.ts
    Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
+
+Found 1 error in project/tsconfig.json[90m:9[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -81,10 +90,11 @@ const hello_json_1 = __importDefault(require("./hello.json"));
 exports.default = hello_json_1.default.hello;
 
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":["../src/index.ts"]}
+{"version":"FakeTSVersion","errors":true,"root":["../src/index.ts"]}
 //// [/home/src/workspaces/solution/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -93,12 +103,12 @@ exports.default = hello_json_1.default.hello;
       "original": "../src/index.ts"
     }
   ],
-  "size": 54
+  "size": 68
 }
 
 project/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
-*refresh*    /home/src/workspaces/solution/project/src/hello.json
-*refresh*    /home/src/workspaces/solution/project/src/index.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+*not cached* /home/src/workspaces/solution/project/src/hello.json
+*not cached* /home/src/workspaces/solution/project/src/index.ts
 Signatures::
