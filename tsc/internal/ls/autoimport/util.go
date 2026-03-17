@@ -143,8 +143,18 @@ func getDefaultLikeExportNameFromDeclaration(symbol *ast.Symbol) string {
 }
 
 func getResolvedPackageNames(ctx context.Context, program *compiler.Program) *collections.Set[string] {
-	resolvedPackageNames := program.ResolvedPackageNames().Clone()
+	rawNames := program.ResolvedPackageNames()
 	unresolvedPackageNames := program.UnresolvedPackageNames()
+
+	// Normalize @types/ package names to their actual package names
+	// (e.g., "@types/react" → "react"). ResolvedPackageNames can contain
+	// @types names when the program resolves an import like "react" to
+	// "@types/react/index.d.ts" via the PackageId.Name field.
+	resolvedPackageNames := collections.NewSetWithSizeHint[string](rawNames.Len())
+	for name := range rawNames.Keys() {
+		resolvedPackageNames.Add(module.GetPackageNameFromTypesPackageName(name))
+	}
+
 	if unresolvedPackageNames.Len() > 0 {
 		checker, done := program.GetTypeChecker(ctx)
 		defer done()
@@ -152,7 +162,7 @@ func getResolvedPackageNames(ctx context.Context, program *compiler.Program) *co
 			if symbol := checker.TryFindAmbientModule(name); symbol != nil {
 				declaringFile := ast.GetSourceFileOfModule(symbol)
 				if packageName := modulespecifiers.GetPackageNameFromDirectory(declaringFile.FileName()); packageName != "" {
-					resolvedPackageNames.Add(packageName)
+					resolvedPackageNames.Add(module.GetPackageNameFromTypesPackageName(packageName))
 				}
 			}
 		}
