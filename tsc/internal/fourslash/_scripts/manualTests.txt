@@ -58,6 +58,14 @@ jsdocDeprecated_suggestion2
 jsDocFunctionSignatures12
 jsDocFunctionSignatures2
 jsdocParameterNameCompletion
+linkedEditingJsxTag1
+linkedEditingJsxTag12
+linkedEditingJsxTag2
+linkedEditingJsxTag4
+linkedEditingJsxTag5
+linkedEditingJsxTag6
+linkedEditingJsxTag7
+linkedEditingJsxTag9
 navigationBarFunctionPrototype
 navigationBarFunctionPrototype2
 navigationBarFunctionPrototype3

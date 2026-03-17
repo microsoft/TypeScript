@@ -3811,6 +3811,112 @@ func (f *FourslashTest) VerifyBaselineInlayHints(
 	f.addResultToBaseline(t, inlayHintsCmd, strings.Join(annotations, "\n\n"))
 }
 
+func (f *FourslashTest) VerifyBaselineLinkedEditing(t *testing.T) {
+	baselineBuilder := &strings.Builder{}
+	offset := 0
+
+	// write to baseline in order of file appearance in test data
+	for _, file := range f.testData.Files {
+		fmt.Fprint(baselineBuilder, "// === Linked Editing ===\n")
+		fmt.Fprintf(baselineBuilder, "=== %s ===\n", file.FileName())
+		results := []*lsproto.LinkedEditingRanges{}
+		found := map[lsproto.Range]bool{}
+
+		// request linkedEditing at every position in the file
+		for i := range file.Content {
+			params := &lsproto.LinkedEditingRangeParams{
+				TextDocument: lsproto.TextDocumentIdentifier{
+					Uri: lsconv.FileNameToDocumentURI(file.FileName()),
+				},
+				Position: f.converters.PositionToLineAndCharacter(f.getScriptInfo(file.FileName()), core.TextPos(i)),
+			}
+			result := sendRequest(t, f, lsproto.TextDocumentLinkedEditingRangeInfo, params)
+			if result.LinkedEditingRanges != nil && len(result.LinkedEditingRanges.Ranges) > 0 && !found[result.LinkedEditingRanges.Ranges[0]] {
+				results = append(results, result.LinkedEditingRanges)
+				found[result.LinkedEditingRanges.Ranges[0]] = true
+			}
+		}
+
+		if len(results) == 0 {
+			fmt.Fprintf(baselineBuilder, "%s\n\n--No linked edits found--\n\n\n", file.Content)
+			continue
+		}
+
+		// sort entries in each file
+		slices.SortFunc(results, func(a, b *lsproto.LinkedEditingRanges) int {
+			return lsproto.ComparePositions(a.Ranges[0].Start, b.Ranges[0].Start)
+		})
+		baselineDetails := []baselineDetail{}
+		foundEditInfoBuilder := &strings.Builder{}
+		for _, edit := range results {
+			baselineDetails = append(baselineDetails, baselineDetail{
+				pos:            edit.Ranges[0].Start,
+				positionMarker: fmt.Sprintf("[|/*%d*/", offset),
+			})
+			baselineDetails = append(baselineDetails, baselineDetail{
+				pos:            edit.Ranges[0].End,
+				positionMarker: "|]",
+			})
+			baselineDetails = append(baselineDetails, baselineDetail{
+				pos:            edit.Ranges[1].Start,
+				positionMarker: fmt.Sprintf("[|/*%d*/", offset),
+			})
+			baselineDetails = append(baselineDetails, baselineDetail{
+				pos:            edit.Ranges[1].End,
+				positionMarker: "|]",
+			})
+
+			fmt.Fprintf(foundEditInfoBuilder, "\n\n=== %d ===\n%s", offset, core.Must(core.StringifyJson(edit, "", "  ")))
+			offset++
+		}
+
+		// sort baselineDetails by position
+		slices.SortStableFunc(baselineDetails, func(a, b baselineDetail) int {
+			return lsproto.ComparePositions(a.pos, b.pos)
+		})
+
+		// write file content with inline annotations for linked edits
+		lastPosition := 0
+		for _, detail := range baselineDetails {
+			currentPosition := f.converters.LineAndCharacterToPosition(f.getScriptInfo(file.FileName()), detail.pos)
+			fmt.Fprint(baselineBuilder, file.Content[lastPosition:currentPosition])
+			fmt.Fprint(baselineBuilder, detail.positionMarker)
+			lastPosition = int(currentPosition)
+		}
+		fmt.Fprint(baselineBuilder, file.Content[lastPosition:])
+		baselineBuilder.WriteString(foundEditInfoBuilder.String() + "\n\n\n")
+	}
+
+	f.writeToBaseline(linkedEditingCmd, baselineBuilder.String())
+}
+
+func (f *FourslashTest) VerifyLinkedEditing(t *testing.T, markerNamesToExpected map[string][]lsproto.Range) {
+	for markerName, expectedRanges := range markerNamesToExpected {
+		f.GoToMarker(t, markerName)
+		params := &lsproto.LinkedEditingRangeParams{
+			TextDocument: lsproto.TextDocumentIdentifier{
+				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+			},
+			Position: f.currentCaretPosition,
+		}
+		result := sendRequest(t, f, lsproto.TextDocumentLinkedEditingRangeInfo, params)
+		actualRanges := result.LinkedEditingRanges
+		if len(expectedRanges) == 0 {
+			if actualRanges != nil && len(actualRanges.Ranges) != 0 {
+				t.Fatalf("Expected no linked editing ranges for marker '%s', but found %v", markerName, actualRanges)
+			}
+			continue
+		} else {
+			if actualRanges == nil || len(actualRanges.Ranges) == 0 {
+				t.Fatalf("Expected linked editing ranges for marker '%s', but found none", markerName)
+			}
+
+			assertDeepEqual(t, actualRanges.Ranges[0], expectedRanges[0], fmt.Sprintf("Linked editing ranges for opening element do not match expected for marker '%s'", markerName))
+			assertDeepEqual(t, actualRanges.Ranges[1], expectedRanges[1], fmt.Sprintf("Linked editing ranges for closing element do not match expected for marker '%s'", markerName))
+		}
+	}
+}
+
 func (f *FourslashTest) VerifyDiagnostics(t *testing.T, expected []*lsproto.Diagnostic) {
 	f.verifyDiagnostics(t, expected, func(d *lsproto.Diagnostic) bool { return true })
 }

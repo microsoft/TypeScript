@@ -1,0 +1,309 @@
+// === Linked Editing ===
+=== /incomplete.tsx ===
+function Test() {
+    return <[|/*0*/div|]>
+        <
+        <div {...{}}>
+        </[|/*0*/div|]>
+    </div>
+}
+
+=== 0 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 1,
+        "character": 12
+      },
+      "end": {
+        "line": 1,
+        "character": 15
+      }
+    },
+    {
+      "start": {
+        "line": 4,
+        "character": 10
+      },
+      "end": {
+        "line": 4,
+        "character": 13
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+
+// === Linked Editing ===
+=== /incompleteMismatched.tsx ===
+function Test() {
+    return <[|/*1*/div|]>
+        <T
+        <div {...{}}>
+        </[|/*1*/div|]>
+    </div>
+}
+
+=== 1 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 1,
+        "character": 12
+      },
+      "end": {
+        "line": 1,
+        "character": 15
+      }
+    },
+    {
+      "start": {
+        "line": 4,
+        "character": 10
+      },
+      "end": {
+        "line": 4,
+        "character": 13
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+
+// === Linked Editing ===
+=== /incompleteMismatched2.tsx ===
+function Test() {
+    return <[|/*2*/div|]>
+        <T
+        <div {...{}}>
+        T</[|/*2*/div|]>
+    </div>
+}
+
+=== 2 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 1,
+        "character": 12
+      },
+      "end": {
+        "line": 1,
+        "character": 15
+      }
+    },
+    {
+      "start": {
+        "line": 4,
+        "character": 11
+      },
+      "end": {
+        "line": 4,
+        "character": 14
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+
+// === Linked Editing ===
+=== /incompleteMismatched3.tsx ===
+function Test() {
+    return <[|/*3*/div|]>
+        <[|/*4*/div|] {...{}}>
+        </[|/*4*/div|]>
+        <T
+    </[|/*3*/div|]>
+}
+
+=== 3 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 1,
+        "character": 12
+      },
+      "end": {
+        "line": 1,
+        "character": 15
+      }
+    },
+    {
+      "start": {
+        "line": 5,
+        "character": 6
+      },
+      "end": {
+        "line": 5,
+        "character": 9
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+=== 4 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 2,
+        "character": 9
+      },
+      "end": {
+        "line": 2,
+        "character": 12
+      }
+    },
+    {
+      "start": {
+        "line": 3,
+        "character": 10
+      },
+      "end": {
+        "line": 3,
+        "character": 13
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+
+// === Linked Editing ===
+=== /mismatched.tsx ===
+function Test() {
+    return <[|/*5*/div|]>
+        <T>
+        <[|/*6*/div|] {...{}}>
+        </[|/*6*/div|]>
+    </[|/*5*/div|]>
+}
+
+=== 5 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 1,
+        "character": 12
+      },
+      "end": {
+        "line": 1,
+        "character": 15
+      }
+    },
+    {
+      "start": {
+        "line": 5,
+        "character": 6
+      },
+      "end": {
+        "line": 5,
+        "character": 9
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+=== 6 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 3,
+        "character": 9
+      },
+      "end": {
+        "line": 3,
+        "character": 12
+      }
+    },
+    {
+      "start": {
+        "line": 4,
+        "character": 10
+      },
+      "end": {
+        "line": 4,
+        "character": 13
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+
+// === Linked Editing ===
+=== /matched.tsx ===
+function Test() {
+    return <[|/*7*/div|]>
+
+        <[|/*8*/div|] {...{}}>
+        </[|/*8*/div|]>
+    </[|/*7*/div|]>
+}
+
+=== 7 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 1,
+        "character": 12
+      },
+      "end": {
+        "line": 1,
+        "character": 15
+      }
+    },
+    {
+      "start": {
+        "line": 5,
+        "character": 6
+      },
+      "end": {
+        "line": 5,
+        "character": 9
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+=== 8 ===
+{
+  "ranges": [
+    {
+      "start": {
+        "line": 3,
+        "character": 9
+      },
+      "end": {
+        "line": 3,
+        "character": 12
+      }
+    },
+    {
+      "start": {
+        "line": 4,
+        "character": 10
+      },
+      "end": {
+        "line": 4,
+        "character": 13
+      }
+    }
+  ],
+  "wordPattern": "[a-zA-Z0-9:\\-\\._$]*"
+}
+
+

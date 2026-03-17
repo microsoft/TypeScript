@@ -26,7 +26,6 @@ export enum NodeFlags {
     ThisNodeHasError = 1 << 15,
     JavaScriptFile = 1 << 16,
     ThisNodeOrAnySubNodesHasError = 1 << 17,
-    HasAggregatedChildData = 1 << 18,
     PossiblyContainsDynamicImport = 1 << 19,
     PossiblyContainsImportMeta = 1 << 20,
     HasJSDoc = 1 << 21,

@@ -27,7 +27,6 @@ export var NodeFlags: any;
     NodeFlags[NodeFlags["ThisNodeHasError"] = 32768] = "ThisNodeHasError";
     NodeFlags[NodeFlags["JavaScriptFile"] = 65536] = "JavaScriptFile";
     NodeFlags[NodeFlags["ThisNodeOrAnySubNodesHasError"] = 131072] = "ThisNodeOrAnySubNodesHasError";
-    NodeFlags[NodeFlags["HasAggregatedChildData"] = 262144] = "HasAggregatedChildData";
     NodeFlags[NodeFlags["PossiblyContainsDynamicImport"] = 524288] = "PossiblyContainsDynamicImport";
     NodeFlags[NodeFlags["PossiblyContainsImportMeta"] = 1048576] = "PossiblyContainsImportMeta";
     NodeFlags[NodeFlags["HasJSDoc"] = 2097152] = "HasJSDoc";

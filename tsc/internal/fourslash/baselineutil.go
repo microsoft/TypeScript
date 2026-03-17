@@ -32,6 +32,7 @@ const (
 	inlayHintsCmd               baselineCommand = "Inlay Hints"
 	nonSuggestionDiagnosticsCmd baselineCommand = "Syntax and Semantic Diagnostics"
 	quickInfoCmd                baselineCommand = "QuickInfo"
+	linkedEditingCmd            baselineCommand = "linkedEditing"
 	renameCmd                   baselineCommand = "findRenameLocations"
 	signatureHelpCmd            baselineCommand = "SignatureHelp"
 	smartSelectionCmd           baselineCommand = "Smart Selection"
@@ -79,6 +80,8 @@ func getBaselineExtension(command baselineCommand) string {
 		return "callHierarchy.txt"
 	case autoImportsCmd:
 		return "baseline.md"
+	case linkedEditingCmd:
+		return "linkedEditing.txt"
 	default:
 		return "baseline.jsonc"
 	}
@@ -441,6 +444,35 @@ func (f *FourslashTest) getBaselineOptions(command baselineCommand, testPath str
 
 				return strings.Join(dropTrailingEmptyLines(commandLines), "\n")
 			},
+		}
+	case linkedEditingCmd:
+		deleteInfo := func(s string) string {
+			commandLines := []string{}
+			lines := strings.Split(s, "\n")
+			linkedEditingInfoHeader := regexp.MustCompile(`=== [0-9]+ ===`)
+			fileNameHeader := regexp.MustCompile(`=== [\w,\s-]+\.[A-Za-z]+ ===`)
+			inLinkedEditingInfo := false
+			for i, line := range lines {
+				if linkedEditingInfoHeader.MatchString(line) {
+					inLinkedEditingInfo = true
+					continue
+				}
+				if fileNameHeader.MatchString(line) {
+					inLinkedEditingInfo = false
+					continue
+				}
+				// drop the info since it's different--linked editing positions should be verified by file content/markers
+				if !inLinkedEditingInfo {
+					lines[i] = ""
+				}
+			}
+			return strings.Join(dropTrailingEmptyLines(commandLines), "\n")
+		}
+		return baseline.Options{
+			Subfolder:    subfolder,
+			IsSubmodule:  true,
+			DiffFixupOld: deleteInfo,
+			DiffFixupNew: deleteInfo,
 		}
 	default:
 		return baseline.Options{
