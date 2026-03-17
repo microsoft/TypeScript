@@ -22,7 +22,7 @@ const (
 )
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -trimprefix=Kind -output=project_stringer_generated.go
-//go:generate go tool mvdan.cc/gofumpt -w project_stringer_generated.go
+//go:generate npx dprint fmt project_stringer_generated.go
 
 type Kind int
 

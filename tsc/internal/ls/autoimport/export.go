@@ -8,7 +8,7 @@ import (
 )
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=ExportSyntax -output=export_stringer_generated.go
-//go:generate go tool mvdan.cc/gofumpt -w export_stringer_generated.go
+//go:generate npx dprint fmt export_stringer_generated.go
 
 // ModuleID uniquely identifies a module across multiple declarations.
 // If the export is from an ambient module declaration, this is the module name.
