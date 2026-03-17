@@ -3565,10 +3565,13 @@ func (f *FourslashTest) verifyBaselineRename(
 	preferences *lsutil.UserPreferences,
 	markerOrRanges []MarkerOrRange,
 ) {
+	if preferences != nil {
+		defer f.ConfigureWithReset(t, preferences)()
+	}
+
 	for _, markerOrRange := range markerOrRanges {
 		f.GoToMarkerOrRange(t, markerOrRange)
 
-		// !!! set preferences
 		params := &lsproto.RenameParams{
 			TextDocument: lsproto.TextDocumentIdentifier{
 				Uri: lsconv.FileNameToDocumentURI(f.activeFilename),

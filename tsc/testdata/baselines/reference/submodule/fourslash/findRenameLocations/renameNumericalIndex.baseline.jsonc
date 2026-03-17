@@ -1,11 +1,11 @@
 // === findRenameLocations ===
 // === /renameNumericalIndex.ts ===
 // const foo = { /*RENAME*/[|0RENAME|]: true };
-// foo[[|0RENAME|]];
+// foo[/*START PREFIX*/"[|0RENAME|]"/*END SUFFIX*/];
 
 
 
 // === findRenameLocations ===
 // === /renameNumericalIndex.ts ===
 // const foo = { [|0RENAME|]: true };
-// foo[/*RENAME*/[|0RENAME|]];
+// foo[/*START PREFIX*/"/*RENAME*/[|0RENAME|]"/*END SUFFIX*/];

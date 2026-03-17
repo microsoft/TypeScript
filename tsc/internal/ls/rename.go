@@ -77,6 +77,8 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 	ch, done := program.GetTypeChecker(ctx)
 	defer done()
 
+	quotePreference := lsutil.GetQuotePreference(sourceFile, l.UserPreferences())
+
 	for _, entry := range entries {
 		uri := l.getFileNameOfEntry(entry)
 		if l.UserPreferences().AllowRenameOfImportPath != core.TSTrue && entry.node != nil && ast.IsStringLiteralLike(entry.node) && ast.TryGetImportFromModuleSpecifier(entry.node) != nil {
@@ -84,7 +86,7 @@ func (l *LanguageService) symbolAndEntriesToRename(ctx context.Context, params *
 		}
 		textEdit := &lsproto.TextEdit{
 			Range:   *l.getRangeOfEntry(entry),
-			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch),
+			NewText: l.getTextForRename(data.OriginalNode, entry, params.NewName, ch, quotePreference),
 		}
 		changes[uri] = append(changes[uri], textEdit)
 	}
@@ -252,7 +254,7 @@ func (l *LanguageService) getRenameInfoForModule(ctx context.Context, node *ast.
 	}, true
 }
 
-func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker) string {
+func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *ReferenceEntry, newText string, ch *checker.Checker, quotePreference lsutil.QuotePreference) string {
 	if entry.kind != entryKindRange && (ast.IsIdentifier(originalNode) || ast.IsStringLiteralLike(originalNode)) {
 		node := ast.GetReparsedNodeForNode(entry.node)
 		kind := entry.kind
@@ -297,7 +299,21 @@ func (l *LanguageService) getTextForRename(originalNode *ast.Node, entry *Refere
 			return newText + " as " + name
 		}
 	}
+
+	// If the node is a numerical indexing literal, then add quotes around the property access.
+	if entry.kind != entryKindRange && ast.IsNumericLiteral(entry.node) && ast.IsAccessExpression(entry.node.Parent) {
+		quote := getQuoteFromPreference(quotePreference)
+		return quote + newText + quote
+	}
+
 	return newText
+}
+
+func getQuoteFromPreference(quotePreference lsutil.QuotePreference) string {
+	if quotePreference == lsutil.QuotePreferenceSingle {
+		return "'"
+	}
+	return `"`
 }
 
 func getRenameInfoError(ctx context.Context, message *diagnostics.Message) RenameInfo {
