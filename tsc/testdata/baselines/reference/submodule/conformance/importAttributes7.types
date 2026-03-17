@@ -20,7 +20,7 @@ export default {
 === /b.ts ===
 import a from "./a" with { a: "a", "b": "b" };
 >a : { a: string; b: string; 1: string; }
->a : any
+>a : error
 
 export async function f() {
 >f : () => Promise<void>

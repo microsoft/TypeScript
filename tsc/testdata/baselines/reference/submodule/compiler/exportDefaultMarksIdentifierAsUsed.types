@@ -14,7 +14,7 @@ import Obj from './a';
 
 Obj.fn = function() {};
 >Obj.fn = function() {} : () => void
->Obj.fn : any
+>Obj.fn : error
 >Obj : {}
 >fn : any
 >function() {} : () => void

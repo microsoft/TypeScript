@@ -3,7 +3,7 @@
 === a.js ===
 /** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
 Animation.AnimationModel.ScreenshotCapture.Request;
->Animation.AnimationModel.ScreenshotCapture.Request : any
+>Animation.AnimationModel.ScreenshotCapture.Request : error
 >Animation.AnimationModel.ScreenshotCapture : any
 >Animation.AnimationModel : any
 >Animation : { new (effect?: AnimationEffect | null | undefined, timeline?: AnimationTimeline | null | undefined): Animation; prototype: Animation; }
@@ -13,7 +13,7 @@ Animation.AnimationModel.ScreenshotCapture.Request;
 
 /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
 Animation.AnimationModel.ScreenshotCapture.Request;
->Animation.AnimationModel.ScreenshotCapture.Request : any
+>Animation.AnimationModel.ScreenshotCapture.Request : error
 >Animation.AnimationModel.ScreenshotCapture : any
 >Animation.AnimationModel : any
 >Animation : { new (effect?: AnimationEffect | null | undefined, timeline?: AnimationTimeline | null | undefined): Animation; prototype: Animation; }

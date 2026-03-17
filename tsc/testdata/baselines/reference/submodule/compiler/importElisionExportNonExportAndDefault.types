@@ -5,8 +5,8 @@ import MyFunction from "./MyComponent";
 >MyFunction : any
 
 MyFunction({msg: "Hello World"});
->MyFunction({msg: "Hello World"}) : any
->MyFunction : any
+>MyFunction({msg: "Hello World"}) : error
+>MyFunction : error
 >{msg: "Hello World"} : { msg: string; }
 >msg : string
 >"Hello World" : "Hello World"

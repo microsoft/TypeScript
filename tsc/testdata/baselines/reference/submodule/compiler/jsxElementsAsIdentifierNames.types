@@ -16,7 +16,7 @@ function A() {
 >A : () => any
 
     return <package />
-><package /> : any
+><package /> : error
 >package : any
 }
 
@@ -24,7 +24,7 @@ function B() {
 >B : () => any
 
     return <package></package>
-><package></package> : any
+><package></package> : error
 >package : any
 >package : any
 }

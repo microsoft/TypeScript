@@ -50,7 +50,7 @@ export declare const goodDeclaration: <T>() => () => {
   /** Specifier should come from module, local path should not be reused */ 
   shouldLookupName: typeof import('./other').shouldLookupName,
 >shouldLookupName : unique symbol
->shouldLookupName : any
+>shouldLookupName : error
 
   /** This is imported in index so local name should be reused */ 
   shouldReuseLocalName: typeof shouldReuseLocalName

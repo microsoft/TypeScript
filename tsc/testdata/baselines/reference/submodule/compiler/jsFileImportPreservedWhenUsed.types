@@ -49,7 +49,7 @@ export class Test {
 
         vm.objects = _.mapValues(
 >vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
->vm.objects : any
+>vm.objects : error
 >vm : object
 >objects : any
 >_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : object
@@ -63,8 +63,8 @@ export class Test {
             object => ({ ...object, [INDEX_FIELD]: index++ }),
 >object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: never) => any
 >object : never
->({ ...object, [INDEX_FIELD]: index++ }) : any
->{ ...object, [INDEX_FIELD]: index++ } : any
+>({ ...object, [INDEX_FIELD]: index++ }) : error
+>{ ...object, [INDEX_FIELD]: index++ } : error
 >object : never
 >[INDEX_FIELD] : number
 >INDEX_FIELD : "__INDEX"

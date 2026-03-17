@@ -2,8 +2,8 @@
 
 === file.tsx ===
 export const a = <div></div>;
->a : any
-><div></div> : any
+>a : error
+><div></div> : error
 >div : any
 >div : any
 

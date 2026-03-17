@@ -1,17 +1,6 @@
 --- old.jsxLibraryManagedAttributesUnusedGeneric.types
 +++ new.jsxLibraryManagedAttributesUnusedGeneric.types
-@@= skipped -5, +5 lines =@@
- >React : any
-
- declare const jsx: typeof React.createElement
-->jsx : error
-->React.createElement : error
-+>jsx : any
-+>React.createElement : any
- >React : any
- >createElement : any
-
-@@= skipped -35, +35 lines =@@
+@@= skipped -40, +40 lines =@@
  }
 
  declare const Comp: (p: { className?: string }) => null

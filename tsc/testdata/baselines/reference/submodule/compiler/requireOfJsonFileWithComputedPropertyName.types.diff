@@ -1,0 +1,10 @@
+--- old.requireOfJsonFileWithComputedPropertyName.types
++++ new.requireOfJsonFileWithComputedPropertyName.types
+@@= skipped -25, +25 lines =@@
+
+     [a]: 10
+ >[a] : number
+->a : any
++>a : error
+ >10 : 10
+ }

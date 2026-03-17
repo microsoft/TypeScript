@@ -1,8 +1,0 @@
---- old.duplicateVarAndImport.types
-+++ new.duplicateVarAndImport.types
-@@= skipped -8, +8 lines =@@
- namespace M { }
- import a = M;
- >a : any
-->M : error
-+>M : any

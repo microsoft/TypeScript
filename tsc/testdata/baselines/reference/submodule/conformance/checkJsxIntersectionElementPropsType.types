@@ -30,8 +30,8 @@ const y = new C({foobar: "example"});
 >"example" : "example"
 
 const x = <C foobar="example" />
->x : any
-><C foobar="example" /> : any
+>x : error
+><C foobar="example" /> : error
 >C : typeof C
 >foobar : string
 

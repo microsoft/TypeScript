@@ -9,16 +9,7 @@
 
    /** Other Can't be named in index.ts, but the whole conditional type can be resolved  */
    shouldPrintResult: T extends Other? "O": "N",
-@@= skipped -14, +14 lines =@@
-   /** Specifier should come from module, local path should not be reused */ 
-   shouldLookupName: typeof import('./other').shouldLookupName,
- >shouldLookupName : unique symbol
-->shouldLookupName : error
-+>shouldLookupName : any
-
-   /** This is imported in index so local name should be reused */ 
-   shouldReuseLocalName: typeof shouldReuseLocalName
-@@= skipped -20, +20 lines =@@
+@@= skipped -34, +34 lines =@@
 
  === src/index.ts ===
  import { goodDeclaration, shouldReuseLocalName, shouldBeElided } from "some-dep";

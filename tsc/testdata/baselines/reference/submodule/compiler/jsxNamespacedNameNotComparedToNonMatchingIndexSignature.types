@@ -20,6 +20,6 @@ export const tag = <div ns:thing="a"/>
 ><div ns:thing="a"/> : JSX.Element
 >div : any
 >ns:thing : string
->ns : any
->thing : any
+>ns : error
+>thing : error
 

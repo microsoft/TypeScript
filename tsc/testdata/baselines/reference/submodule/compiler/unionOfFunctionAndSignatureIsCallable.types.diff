@@ -9,33 +9,3 @@
  >c1 : Function
  >c2 : () => object
  >callable : Function | (() => object)
-@@= skipped -18, +18 lines =@@
- >c2 : () => object
-
-     const c = callable();
-->c : error
-->callable() : error
-+>c : any
-+>callable() : any
- >callable : Function | (() => object)
- }
-
-@@= skipped -10, +10 lines =@@
- >fetcherParams : object | (() => object)
-
-     const data = typeof fetcherParams === 'function'
-->data : error
-->typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : error
-+>data : any
-+>typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : any
- >typeof fetcherParams === 'function' : boolean
- >typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >fetcherParams : object | (() => object)
- >'function' : "function"
-
-         ? fetcherParams()
-->fetcherParams() : error
-+>fetcherParams() : any
- >fetcherParams : Function | (() => object)
-
-         : fetcherParams

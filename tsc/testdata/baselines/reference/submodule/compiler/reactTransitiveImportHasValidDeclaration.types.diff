@@ -1,21 +1,6 @@
 --- old.reactTransitiveImportHasValidDeclaration.types
 +++ new.reactTransitiveImportHasValidDeclaration.types
-@@= skipped -8, +8 lines =@@
- >React : any
-
- export as namespace React;
-->React : error
-+>React : any
-
- === node_modules/create-emotion-styled/types/react/index.d.ts ===
- /// <reference types="react" />
- declare module 'react' { // augment
-->'react' : error
-+>'react' : any
-
-     interface HTMLAttributes<T> {
-         css?: unknown;
-@@= skipped -30, +30 lines =@@
+@@= skipped -38, +38 lines =@@
  >StyledOtherComponentList : any
 
  export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;

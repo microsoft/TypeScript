@@ -6,8 +6,8 @@ import React from 'react'
 >React : any
 
 declare const jsx: typeof React.createElement
->jsx : any
->React.createElement : any
+>jsx : error
+>React.createElement : error
 >React : any
 >createElement : any
 

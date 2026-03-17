@@ -26,7 +26,7 @@ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>
 >OneLine : ListItemVariant.OneLine
 
     return <ListItem variant={listItemVariant} />;
-><ListItem variant={listItemVariant} /> : any
+><ListItem variant={listItemVariant} /> : error
 >ListItem : (_data: IListItemData) => null
 >variant : ListItemVariant
 >listItemVariant : ListItemVariant

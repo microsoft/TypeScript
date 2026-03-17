@@ -8,10 +8,4 @@
 +>initialize : () => string
 
          super.initialize(...arguments)
-->super.initialize(...arguments) : error
-->super.initialize : error
-+>super.initialize(...arguments) : any
-+>super.initialize : any
- >super : any
- >initialize : any
- >...arguments : any
+ >super.initialize(...arguments) : error

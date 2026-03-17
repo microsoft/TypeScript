@@ -200,7 +200,7 @@ export function jsxDEV<P>(
 
 export import JSX = JSXInternal;
 >JSX : any
->JSXInternal : any
+>JSXInternal : error
 
 === /index.tsx ===
 export const Comp = () => <div></div>;

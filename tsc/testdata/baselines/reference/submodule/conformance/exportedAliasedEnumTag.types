@@ -4,7 +4,7 @@
 var middlewarify = module.exports = {};
 >middlewarify : {}
 >module.exports = {} : {}
->module.exports : any
+>module.exports : error
 >module : any
 >exports : any
 >{} : {}
@@ -12,7 +12,7 @@ var middlewarify = module.exports = {};
 /** @enum */
 middlewarify.Type = {
 >middlewarify.Type = {  BEFORE: 'before'} : { BEFORE: string; }
->middlewarify.Type : any
+>middlewarify.Type : error
 >middlewarify : {}
 >Type : any
 >{  BEFORE: 'before'} : { BEFORE: string; }

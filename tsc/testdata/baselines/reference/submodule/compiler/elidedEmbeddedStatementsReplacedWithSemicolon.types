@@ -49,5 +49,5 @@ with (window)
 >window : Window & typeof globalThis
 
     const enum H {}
->H : any
+>H : error
 

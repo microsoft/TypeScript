@@ -32,8 +32,8 @@ function A() {
 >A : () => any
 
     return (<p>Hello</p>);
->(<p>Hello</p>) : any
-><p>Hello</p> : any
+>(<p>Hello</p>) : error
+><p>Hello</p> : error
 >p : any
 >p : any
 }

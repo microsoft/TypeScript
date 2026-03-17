@@ -5,8 +5,8 @@ import React = require("react");
 >React : typeof React
 
 export const FooComponent = <div></div>
->FooComponent : any
-><div></div> : any
+>FooComponent : error
+><div></div> : error
 >div : any
 >div : any
 

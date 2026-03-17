@@ -1,9 +1,0 @@
---- old.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.types
-+++ new.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.types
-@@= skipped -14, +14 lines =@@
-
-     import Y = A;
- >Y : any
-->A : error
-+>A : any
- }

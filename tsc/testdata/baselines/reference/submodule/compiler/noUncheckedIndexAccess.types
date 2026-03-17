@@ -60,8 +60,8 @@ enum Meat {
 >"testing" : "testing"
 
   const value2 = Meat[valueUndefined]
->value2 : any
->Meat[valueUndefined] : any
+>value2 : error
+>Meat[valueUndefined] : error
 >Meat : typeof Meat
 >valueUndefined : "testing"
 

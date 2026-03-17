@@ -96,12 +96,3 @@
  >children : ComponentChildren | undefined
 
      key?: string
-@@= skipped -16, +16 lines =@@
-
- export import JSX = JSXInternal;
- >JSX : any
-->JSXInternal : error
-+>JSXInternal : any
-
- === /index.tsx ===
- export const Comp = () => <div></div>;

@@ -9,17 +9,3 @@
  >{} : {}
 
  		super();
-@@= skipped -21, +21 lines =@@
- 		 * @type object
- 		 */
- 		this.bar = super.arguments.foo;
-->this.bar = super.arguments.foo : error
-+>this.bar = super.arguments.foo : any
- >this.bar : object
- >this : this
- >bar : object
-->super.arguments.foo : error
-+>super.arguments.foo : any
- >super.arguments : { bar: {}; }
- >super : A
- >arguments : { bar: {}; }

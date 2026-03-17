@@ -15,6 +15,6 @@ namespace B {
 
     import Y = A;
 >Y : any
->A : any
+>A : error
 }
 

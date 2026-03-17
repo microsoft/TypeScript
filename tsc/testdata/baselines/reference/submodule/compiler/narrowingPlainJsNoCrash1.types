@@ -28,7 +28,7 @@ while ((c = a$b != a$b)) c.e;
 >a$b != a$b : boolean
 >a$b : {}
 >a$b : {}
->c.e : any
+>c.e : error
 >c : true
 >e : any
 

@@ -13,15 +13,15 @@ function Test() {
 >Test : () => any
 
     return <Child>
-><Child>        <Child>            <Child></Child>        </Child>    </Child> : any
+><Child>        <Child>            <Child></Child>        </Child>    </Child> : error
 >Child : (props: { children?: any; }) => any
 
         <Child>
-><Child>            <Child></Child>        </Child> : any
+><Child>            <Child></Child>        </Child> : error
 >Child : (props: { children?: any; }) => any
 
             <Child></Child>
-><Child></Child> : any
+><Child></Child> : error
 >Child : (props: { children?: any; }) => any
 >Child : (props: { children?: any; }) => any
 

@@ -14,7 +14,7 @@
  // @ts-expect-error
  NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
 ->NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
-+>NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : any
++>NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : error
  >NewAjax.prototype : NewAjax
  >NewAjax : typeof NewAjax
  >prototype : NewAjax

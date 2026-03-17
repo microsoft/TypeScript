@@ -26,8 +26,8 @@ const oobj = {
 }
 
 obj[incr()] ??= incr();
->obj[incr()] ??= incr() : any
->obj[incr()] : any
+>obj[incr()] ??= incr() : error
+>obj[incr()] : error
 >obj : {}
 >incr() : number
 >incr : () => number
@@ -35,8 +35,8 @@ obj[incr()] ??= incr();
 >incr : () => number
 
 oobj["obj"][incr()] ??= incr();
->oobj["obj"][incr()] ??= incr() : any
->oobj["obj"][incr()] : any
+>oobj["obj"][incr()] ??= incr() : error
+>oobj["obj"][incr()] : error
 >oobj["obj"] : {}
 >oobj : { obj: {}; }
 >"obj" : "obj"

@@ -20,7 +20,7 @@ export default {
 === /b.ts ===
 import a from "./a" with { a: /* a */ "a", "b": /* b */ "b" };
 >a : { a: string; b: string; 1: string; }
->a : any
+>a : error
 
 a;
 >a : { a: string; b: string; 1: string; }

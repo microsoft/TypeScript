@@ -26,6 +26,6 @@ if (x) {
 
     [a]: 10
 >[a] : number
->a : any
+>a : error
 >10 : 10
 }

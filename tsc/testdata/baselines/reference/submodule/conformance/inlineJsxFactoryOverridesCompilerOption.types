@@ -24,7 +24,7 @@ import {dom} from "./renderer";
 >dom : () => void
 
 <h></h>
-><h></h> : any
+><h></h> : error
 >h : any
 >h : any
 
@@ -33,7 +33,7 @@ import { p } from "./renderer";
 >p : () => void
 
 <h></h>
-><h></h> : any
+><h></h> : error
 >h : any
 >h : any
 
