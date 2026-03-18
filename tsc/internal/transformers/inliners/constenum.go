@@ -71,7 +71,7 @@ func (tx *ConstEnumInliningTransformer) visit(node *ast.Node) *ast.Node {
 					original := tx.EmitContext().MostOriginal(node)
 					if original != nil && !ast.NodeIsSynthesized(original) {
 						originalText := scanner.GetTextOfNode(original)
-						escapedText := " " + safeMultiLineComment(originalText) + " "
+						escapedText := safeMultiLineComment(originalText)
 						tx.EmitContext().AddSyntheticTrailingComment(replacement, ast.KindMultiLineCommentTrivia, escapedText, false)
 					}
 				}
@@ -84,5 +84,19 @@ func (tx *ConstEnumInliningTransformer) visit(node *ast.Node) *ast.Node {
 }
 
 func safeMultiLineComment(text string) string {
-	return strings.ReplaceAll(text, "*/", "*_/")
+	var b strings.Builder
+	b.Grow(len(text) + 2)
+	b.WriteByte(' ')
+	for {
+		i := strings.Index(text, "*/")
+		if i < 0 {
+			break
+		}
+		b.WriteString(text[:i])
+		b.WriteString("*_/")
+		text = text[i+2:]
+	}
+	b.WriteString(text)
+	b.WriteByte(' ')
+	return b.String()
 }
