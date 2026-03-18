@@ -25,9 +25,11 @@ jsxComponentTypeErrors.tsx(28,16): error TS2786: 'MixedComponent' cannot be used
           Types of property 'type' are incompatible.
             Type 'string' is not assignable to type '"element-class"'.
 jsxComponentTypeErrors.tsx(37,16): error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
-  Property 'type' is missing in type '{}' but required in type 'Element'.
+  Its return type '{}' is not a valid JSX element.
+    Property 'type' is missing in type '{}' but required in type 'Element'.
 jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
-  Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
+  Its instance type 'MemberClassComponent' is not a valid JSX element.
+    Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
 
 
 ==== jsxComponentTypeErrors.tsx (7 errors) ====
@@ -101,11 +103,13 @@ jsxComponentTypeErrors.tsx(38,16): error TS2786: 'obj. MemberClassComponent' can
     const elem5 = <obj.MemberFunctionComponent />;
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2786: 'obj.MemberFunctionComponent' cannot be used as a JSX component.
-!!! error TS2786:   Property 'type' is missing in type '{}' but required in type 'Element'.
+!!! error TS2786:   Its return type '{}' is not a valid JSX element.
+!!! error TS2786:     Property 'type' is missing in type '{}' but required in type 'Element'.
 !!! related TS2728 jsxComponentTypeErrors.tsx:3:5: 'type' is declared here.
     const elem6 = <obj. MemberClassComponent />;
                    ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2786: 'obj. MemberClassComponent' cannot be used as a JSX component.
-!!! error TS2786:   Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
+!!! error TS2786:   Its instance type 'MemberClassComponent' is not a valid JSX element.
+!!! error TS2786:     Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
 !!! related TS2728 jsxComponentTypeErrors.tsx:6:5: 'type' is declared here.
     
