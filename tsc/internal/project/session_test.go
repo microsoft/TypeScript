@@ -153,6 +153,44 @@ func TestSession(t *testing.T) {
 			assert.Equal(t, programAfter.GetSourceFile("/home/projects/TS/p1/src/x.ts").Text(), "export const x = 2;")
 		})
 
+		t.Run("update untitled file", func(t *testing.T) {
+			t.Parallel()
+			session, _ := projecttestutil.Setup(defaultFiles)
+
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "let x = 1;", lsproto.LanguageKindTypeScript)
+
+			lsBefore, err := session.GetLanguageService(context.Background(), "untitled:Untitled-1")
+			assert.NilError(t, err)
+			programBefore := lsBefore.GetProgram()
+			untitledFileName := lsproto.DocumentUri("untitled:Untitled-1").FileName()
+			assert.Equal(t, programBefore.GetSourceFile(untitledFileName).Text(), "let x = 1;")
+
+			session.DidChangeFile(context.Background(), "untitled:Untitled-1", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+				{
+					Partial: new(lsproto.TextDocumentContentChangePartial{
+						Range: lsproto.Range{
+							Start: lsproto.Position{
+								Line:      0,
+								Character: 8,
+							},
+							End: lsproto.Position{
+								Line:      0,
+								Character: 9,
+							},
+						},
+						Text: "2",
+					}),
+				},
+			})
+
+			lsAfter, err := session.GetLanguageService(context.Background(), "untitled:Untitled-1")
+			assert.NilError(t, err)
+			programAfter := lsAfter.GetProgram()
+
+			assert.Check(t, programAfter != programBefore)
+			assert.Equal(t, programAfter.GetSourceFile(untitledFileName).Text(), "let x = 2;")
+		})
+
 		t.Run("unchanged source files are reused", func(t *testing.T) {
 			t.Parallel()
 			session, _ := projecttestutil.Setup(defaultFiles)

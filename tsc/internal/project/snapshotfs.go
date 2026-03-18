@@ -404,15 +404,23 @@ func (s *snapshotFSBuilder) markDirtyFiles(change FileChangeSummary) {
 	}
 }
 
-// hasRelevantWatchExtension returns true if the given path ends with a file
-// extension relevant to TypeScript compilation. This is used to quickly filter
-// out watch events for files that cannot affect the project.
-func hasRelevantWatchExtension(path string) bool {
-	i := strings.LastIndexByte(path, '.')
+// isRelevantFileName returns true if the given URI refers to a file that
+// could affect the project: it has a TypeScript-relevant extension, is a
+// dynamic (e.g. untitled) file, or is currently open as an overlay.
+func (s *snapshotFSBuilder) isRelevantFileName(uri lsproto.DocumentUri) bool {
+	fileName := uri.FileName()
+	if tspath.IsDynamicFileName(fileName) {
+		return true
+	}
+	path := s.toPath(fileName)
+	if _, ok := s.overlays[path]; ok {
+		return true
+	}
+	i := strings.LastIndexByte(string(path), '.')
 	if i < 0 {
 		return false
 	}
-	switch path[i:] {
+	switch string(path)[i:] {
 	case ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".mts", ".cts", ".json":
 		return true
 	}
@@ -430,7 +438,7 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary)
 			path := s.toPath(uri.FileName())
 			if _, ok := s.diskDirectories.Get(path); ok {
 				s.collectFilesRecursive(path, &filteredDeleted)
-			} else if hasRelevantWatchExtension(string(path)) {
+			} else if s.isRelevantFileName(uri) {
 				filteredDeleted.Add(uri)
 			}
 		}
@@ -440,7 +448,7 @@ func (s *snapshotFSBuilder) expandAndFilterWatchEvents(change FileChangeSummary)
 	if change.Changed.Len() > 0 {
 		var filteredChanged collections.Set[lsproto.DocumentUri]
 		for uri := range change.Changed.Keys() {
-			if hasRelevantWatchExtension(string(s.toPath(uri.FileName()))) {
+			if s.isRelevantFileName(uri) {
 				filteredChanged.Add(uri)
 			}
 		}
