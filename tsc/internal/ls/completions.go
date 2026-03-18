@@ -3637,7 +3637,20 @@ func getConstraintOfTypeArgumentProperty(node *ast.Node, typeChecker *checker.Ch
 
 	switch node.Kind {
 	case ast.KindPropertySignature:
-		return typeChecker.GetTypeOfPropertyOfContextualType(t, node.Symbol().Name)
+		// Try to get the reparsed node first - we may be in JSDoc.
+		reparsed := ast.GetReparsedNodeForNode(node)
+		if symbol := reparsed.Symbol(); symbol != nil {
+			return typeChecker.GetTypeOfPropertyOfContextualType(t, symbol.Name)
+		}
+
+		// In some cases, we won't have a corresponding symbol
+		// (e.g. JSDoc types that never get re-attached) so we'll use
+		// the name as declared by the property as a best-effort.
+		if name, ok := ast.TryGetTextOfPropertyName(reparsed.Name()); ok {
+			return typeChecker.GetTypeOfPropertyOfContextualType(t, name)
+		}
+
+		return nil
 	case ast.KindColonToken:
 		if node.Parent.Kind == ast.KindPropertySignature {
 			// The cursor is at a property value location like `Foo<{ x: | }`.
