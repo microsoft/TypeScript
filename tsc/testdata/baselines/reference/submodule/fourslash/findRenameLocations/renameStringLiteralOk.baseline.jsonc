@@ -1,31 +1,33 @@
 // === findRenameLocations ===
 // === /renameStringLiteralOk.ts ===
 // interface Foo {
-//     f: '/*RENAME*/foo' | 'bar'
+//     f: '/*RENAME*/[|fooRENAME|]' | 'bar'
 // }
 // const d: 'foo' = 'foo'
 // declare const f: Foo
-// f.f = 'foo'
-// f.f = `foo`
+// f.f = '[|fooRENAME|]'
+// f.f = `[|fooRENAME|]`
 
 
 
 // === findRenameLocations ===
 // === /renameStringLiteralOk.ts ===
 // interface Foo {
-//     f: 'foo' | 'bar'
+//     f: '[|fooRENAME|]' | 'bar'
 // }
 // const d: 'foo' = 'foo'
 // declare const f: Foo
-// f.f = '/*RENAME*/foo'
-// f.f = `foo`
+// f.f = '/*RENAME*/[|fooRENAME|]'
+// f.f = `[|fooRENAME|]`
 
 
 
 // === findRenameLocations ===
 // === /renameStringLiteralOk.ts ===
-// --- (line: 3) skipped ---
+// interface Foo {
+//     f: '[|fooRENAME|]' | 'bar'
+// }
 // const d: 'foo' = 'foo'
 // declare const f: Foo
-// f.f = 'foo'
-// f.f = `/*RENAME*/foo`
+// f.f = '[|fooRENAME|]'
+// f.f = `/*RENAME*/[|fooRENAME|]`

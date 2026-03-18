@@ -1,8 +1,11 @@
 // === findRenameLocations ===
 // === /a.ts ===
 // interface Foo {
-//     property: /*RENAME*/"foo";
+//     property: /*RENAME*/"[|fooRENAME|]";
 // }
 // /**
 //  * @type {{ property: "foo"}}
-// --- (line: 6) skipped ---
+//  */
+// const obj: Foo = {
+//     property: "[|fooRENAME|]",
+// }

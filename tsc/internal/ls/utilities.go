@@ -1534,3 +1534,49 @@ func getReferenceAtPosition(sourceFile *ast.SourceFile, position int, program *c
 
 	return nil
 }
+
+func getContextualTypeFromParent(node *ast.Expression, typeChecker *checker.Checker, contextFlags checker.ContextFlags) *checker.Type {
+	parent := ast.WalkUpParenthesizedExpressions(node.Parent)
+	switch parent.Kind {
+	case ast.KindNewExpression:
+		return typeChecker.GetContextualType(parent, contextFlags)
+	case ast.KindBinaryExpression:
+		if isEqualityOperatorKind(parent.AsBinaryExpression().OperatorToken.Kind) {
+			return typeChecker.GetTypeAtLocation(
+				core.IfElse(node == parent.AsBinaryExpression().Right, parent.AsBinaryExpression().Left, parent.AsBinaryExpression().Right))
+		}
+		return typeChecker.GetContextualType(node, contextFlags)
+	case ast.KindCaseClause:
+		return getSwitchedType(parent, typeChecker)
+	default:
+		return typeChecker.GetContextualType(node, contextFlags)
+	}
+}
+
+func getContextualTypeFromParentOrAncestorTypeNode(node *ast.Expression, typeChecker *checker.Checker) *checker.Type {
+	if node.Flags&ast.NodeFlagsJSDoc != 0 && node.Flags&ast.NodeFlagsJavaScriptFile == 0 {
+		return nil
+	}
+
+	contextualType := getContextualTypeFromParent(node, typeChecker, checker.ContextFlagsNone)
+	if contextualType != nil {
+		return contextualType
+	}
+
+	if ancestorTypeNode := getAncestorTypeNode(node); ancestorTypeNode != nil {
+		return typeChecker.GetTypeAtLocation(ancestorTypeNode)
+	}
+
+	return nil
+}
+
+func getAncestorTypeNode(node *ast.Node) *ast.Node {
+	var lastTypeNode *ast.TypeNode
+	ast.FindAncestor(node, func(n *ast.Node) bool {
+		if ast.IsTypeNode(n) {
+			lastTypeNode = n
+		}
+		return !ast.IsQualifiedName(n.Parent) && !ast.IsTypeNode(n.Parent) && !ast.IsTypeElement(n.Parent)
+	})
+	return lastTypeNode
+}

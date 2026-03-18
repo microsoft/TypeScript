@@ -4,7 +4,7 @@
 //       variable: function () {
 //         let name;
 // 
-//         if (parserInput.currentChar() === "/*FIND ALL REFS*/@") {
+//         if (parserInput.currentChar() === "/*FIND ALL REFS*/[|@|]") {
 //           return name[1];
 //         }
 //       },

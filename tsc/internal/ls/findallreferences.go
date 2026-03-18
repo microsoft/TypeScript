@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 
@@ -906,9 +907,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 				// anything useful, but I guess it's better than nothing, and there's an existing
 				// test that expects this to happen (fourslash/cases/untypedModuleImport.ts).
 			}
-			// !!! not implemented
-			// return getReferencesForStringLiteral(node, sourceFiles, checker) // !!! cancellationToken
-			return nil
+			return l.getReferencesForStringLiteral(ctx, node, sourceFiles, checker)
 		}
 		return nil
 	}
@@ -927,6 +926,53 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 
 	references := getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, options) // !!! cancellationToken
 	return l.mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget)
+}
+
+func (l *LanguageService) getReferencesForStringLiteral(
+	ctx context.Context,
+	node *ast.StringLiteralLike,
+	sourceFiles []*ast.SourceFile,
+	checker *checker.Checker,
+) []*SymbolAndEntries {
+	t := getContextualTypeFromParentOrAncestorTypeNode(node, checker)
+	references := core.FlatMap(sourceFiles, func(sourceFile *ast.SourceFile) []*ReferenceEntry {
+		if ctx.Err() != nil {
+			return nil
+		}
+		var entries []*ReferenceEntry
+		possibleReferences := getPossibleSymbolReferenceNodes(sourceFile, node.Text(), nil /*container*/)
+		for _, ref := range possibleReferences {
+			if ast.IsStringLiteralLike(ref) && ref.Text() == node.Text() {
+				if t != nil {
+					refType := getContextualTypeFromParentOrAncestorTypeNode(ref, checker)
+					if t != checker.GetStringType() &&
+						(t == refType || isStringLiteralPropertyReference(ref, checker)) {
+						entries = append(entries, newNodeEntryWithKind(ref, entryKindStringLiteral))
+					}
+				} else {
+					if ast.IsNoSubstitutionTemplateLiteral(ref) && !printer.RangeIsOnSingleLine(ref.Loc, sourceFile) {
+						continue
+					}
+					entries = append(entries, newNodeEntryWithKind(ref, entryKindStringLiteral))
+				}
+			}
+		}
+		return entries
+	})
+
+	return []*SymbolAndEntries{
+		{
+			definition: &Definition{Kind: definitionKindString, node: node},
+			references: references,
+		},
+	}
+}
+
+func isStringLiteralPropertyReference(node *ast.StringLiteralLike, checker *checker.Checker) bool {
+	if ast.IsPropertySignatureDeclaration(node.Parent) {
+		return checker.GetPropertyOfType(checker.GetTypeAtLocation(node.Parent.Parent), node.Text()) != nil
+	}
+	return false
 }
 
 func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx context.Context, symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, checker *checker.Checker, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {

@@ -1,34 +1,147 @@
 // === findRenameLocations ===
 // === /renameStringLiteralTypes3.ts ===
-// type Foo = "/*RENAME*/a" | "b";
+// type Foo = "/*RENAME*/[|aRENAME|]" | "b";
 // 
 // class C {
-//     p: Foo = "a";
-// --- (line: 5) skipped ---
-
-
-
-// === findRenameLocations ===
-// === /renameStringLiteralTypes3.ts ===
-// type Foo = "a" | "b";
-// 
-// class C {
-//     p: Foo = "/*RENAME*/a";
+//     p: Foo = "[|aRENAME|]";
 //     m() {
 //         switch (this.p) {
-//             case "a":
-// --- (line: 8) skipped ---
-
-
-
-// === findRenameLocations ===
-// === /renameStringLiteralTypes3.ts ===
-// --- (line: 3) skipped ---
-//     p: Foo = "a";
-//     m() {
-//         switch (this.p) {
-//             case "/*RENAME*/a":
+//             case "[|aRENAME|]":
 //                 return 1;
 //             case "b":
 //                 return 2;
 // --- (line: 11) skipped ---
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes3.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "/*RENAME*/[|aRENAME|]";
+//     m() {
+//         switch (this.p) {
+//             case "[|aRENAME|]":
+//                 return 1;
+//             case "b":
+//                 return 2;
+// --- (line: 11) skipped ---
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 
+
+
+
+// === findRenameLocations ===
+// === /renameStringLiteralTypes3.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         switch (this.p) {
+//             case "/*RENAME*/[|aRENAME|]":
+//                 return 1;
+//             case "b":
+//                 return 2;
+// --- (line: 11) skipped ---
+
+// === bundled:///libs/lib.dom.d.ts ===
+// --- (line: --) skipped ---
+// }
+// 
+// interface HTMLElementTagNameMap {
+//     "[|aRENAME|]": HTMLAnchorElement;
+//     "abbr": HTMLElement;
+//     "address": HTMLElement;
+//     "area": HTMLAreaElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface SVGElementTagNameMap {
+//     "[|aRENAME|]": SVGAElement;
+//     "animate": SVGAnimateElement;
+//     "animateMotion": SVGAnimateMotionElement;
+//     "animateTransform": SVGAnimateTransformElement;
+// --- (line: --) skipped ---
+// 
+
+// --- (line: --) skipped ---
+// }
+// 
+// interface MathMLElementTagNameMap {
+//     "[|aRENAME|]": MathMLElement;
+//     "annotation": MathMLElement;
+//     "annotation-xml": MathMLElement;
+//     "maction": MathMLElement;
+// --- (line: --) skipped ---
+// 

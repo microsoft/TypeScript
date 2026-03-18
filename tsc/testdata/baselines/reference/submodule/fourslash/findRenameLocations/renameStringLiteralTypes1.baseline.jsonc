@@ -3,19 +3,23 @@
 // interface AnimationOptions {
 //     deltaX: number;
 //     deltaY: number;
-//     easing: "ease-in" | "ease-out" | "/*RENAME*/ease-in-out";
+//     easing: "ease-in" | "ease-out" | "/*RENAME*/[|ease-in-outRENAME|]";
 // }
 // 
 // function animate(o: AnimationOptions) { }
 // 
-// animate({ deltaX: 100, deltaY: 100, easing: "ease-in-out" });
+// animate({ deltaX: 100, deltaY: 100, easing: "[|ease-in-outRENAME|]" });
 
 
 
 // === findRenameLocations ===
 // === /renameStringLiteralTypes1.ts ===
-// --- (line: 5) skipped ---
+// interface AnimationOptions {
+//     deltaX: number;
+//     deltaY: number;
+//     easing: "ease-in" | "ease-out" | "[|ease-in-outRENAME|]";
+// }
 // 
 // function animate(o: AnimationOptions) { }
 // 
-// animate({ deltaX: 100, deltaY: 100, easing: "/*RENAME*/ease-in-out" });
+// animate({ deltaX: 100, deltaY: 100, easing: "/*RENAME*/[|ease-in-outRENAME|]" });

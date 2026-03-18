@@ -1,6 +1,6 @@
 // === documentHighlights ===
 // === /getOccurrencesStringLiterals.ts ===
-// var x = "/*HIGHLIGHTS*/string";
+// var x = "/*HIGHLIGHTS*/[|string|]";
 // function f(a = "initial value") { }
 
 
@@ -8,4 +8,4 @@
 // === documentHighlights ===
 // === /getOccurrencesStringLiterals.ts ===
 // var x = "string";
-// function f(a = "/*HIGHLIGHTS*/initial value") { }
+// function f(a = "/*HIGHLIGHTS*/[|initial value|]") { }
