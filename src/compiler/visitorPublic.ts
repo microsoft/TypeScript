@@ -777,7 +777,7 @@ const visitEachChildTable: VisitEachChildTable = {
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
             nodesVisitor(node.parameters, visitor, isParameter),
-            Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
+            nodeVisitor(node.type, visitor, isTypeNode)!, // GH#63230: node.type may be undefined for malformed index signatures
         );
     },
 
