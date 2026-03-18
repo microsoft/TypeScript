@@ -21,6 +21,7 @@ import type {
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, "../../../..");
 
 const out = path.resolve(__dirname, "../lsp_generated.go");
 const metaModelPath = path.resolve(__dirname, "metaModel.json");
@@ -1940,7 +1941,7 @@ async function main() {
     const generatedCode = generateCode();
     fs.writeFileSync(out, generatedCode);
 
-    await $`dprint fmt ${out}`;
+    await $({ cwd: repoRoot })`dprint fmt ${out}`;
 
     console.log(`Successfully generated ${out}`);
 }

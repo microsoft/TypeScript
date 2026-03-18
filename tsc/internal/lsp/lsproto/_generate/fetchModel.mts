@@ -12,10 +12,16 @@ const __dirname = path.dirname(__filename);
 const metaModelPath = path.join(__dirname, "metaModel.json");
 const metaModelSchemaPath = path.join(__dirname, "metaModelSchema.mts");
 
-const hash = "51bb6ee4b47bd104d469e6bdeaafaee1ba6129a0";
+// Resolve the vscode-languageclient version from the root package-lock.json.
+const lockfilePath = path.resolve(__dirname, "../../../../package-lock.json");
+const lockfile = JSON.parse(fs.readFileSync(lockfilePath, "utf-8"));
+const clientVersion: string = lockfile.packages["node_modules/vscode-languageclient"].version;
 
-const metaModelURL = `https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/${hash}/protocol/metaModel.json`;
-const metaModelSchemaURL = `https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/${hash}/tools/src/metaModel.ts`;
+const ref = `release/client/${clientVersion}`;
+console.log(`Using vscode-languageclient@${clientVersion}`);
+
+const metaModelURL = `https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/${ref}/protocol/metaModel.json`;
+const metaModelSchemaURL = `https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/${ref}/tools/src/metaModel.ts`;
 
 const metaModelResponse = await fetch(metaModelURL);
 const metaModel = await metaModelResponse.text();

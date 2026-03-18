@@ -80,7 +80,8 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 		sys.baselineFSwithDiff(baselineBuilder)
 		result := test.executeCommand(sys, baselineBuilder, test.commandLineArgs)
 		sys.serializeState(baselineBuilder)
-		unexpectedDiff := sys.baselinePrograms(baselineBuilder, "Initial build")
+		var unexpectedDiff strings.Builder
+		unexpectedDiff.WriteString(sys.baselinePrograms(baselineBuilder, "Initial build"))
 
 		for index, do := range test.edits {
 			sys.clearOutput()
@@ -100,7 +101,7 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 					result.Watcher.DoCycle()
 				}
 				sys.serializeState(baselineBuilder)
-				unexpectedDiff += sys.baselinePrograms(baselineBuilder, fmt.Sprintf("Edit [%d]:: %s\n", index, do.caption))
+				unexpectedDiff.WriteString(sys.baselinePrograms(baselineBuilder, fmt.Sprintf("Edit [%d]:: %s\n", index, do.caption)))
 			})
 			wg.Queue(func() {
 				// Compute build with all the edits
@@ -119,16 +120,16 @@ func (test *tscInput) run(t *testing.T, scenario string) {
 				baselineBuilder.WriteString(fmt.Sprintf("\n\nDiff:: %s\n", core.IfElse(do.expectedDiff == "", "!!! Unexpected diff, please review and either fix or write explanation as expectedDiff !!!", do.expectedDiff)))
 				baselineBuilder.WriteString(diff)
 				if do.expectedDiff == "" {
-					unexpectedDiff += fmt.Sprintf("Edit [%d]:: %s\n!!! Unexpected diff, please review and either fix or write explanation as expectedDiff !!!\n%s\n", index, do.caption, diff) //nolint:perfsprint
+					unexpectedDiff.WriteString(fmt.Sprintf("Edit [%d]:: %s\n!!! Unexpected diff, please review and either fix or write explanation as expectedDiff !!!\n%s\n", index, do.caption, diff))
 				}
 			} else if do.expectedDiff != "" {
 				baselineBuilder.WriteString(fmt.Sprintf("\n\nDiff:: %s !!! Diff not found but explanation present, please review and remove the explanation !!!\n", do.expectedDiff))
-				unexpectedDiff += fmt.Sprintf("Edit [%d]:: %s\n!!! Diff not found but explanation present, please review and remove the explanation !!!\n", index, do.caption)
+				unexpectedDiff.WriteString(fmt.Sprintf("Edit [%d]:: %s\n!!! Diff not found but explanation present, please review and remove the explanation !!!\n", index, do.caption))
 			}
 		}
 		baseline.Run(t, strings.ReplaceAll(test.subScenario, " ", "-")+".js", baselineBuilder.String(), baseline.Options{Subfolder: filepath.Join(test.getBaselineSubFolder(), scenario)})
-		if unexpectedDiff != "" {
-			t.Errorf("Test %s has unexpected diff %s with incremental build, please review the baseline file", test.subScenario, unexpectedDiff)
+		if unexpectedDiff.String() != "" {
+			t.Errorf("Test %s has unexpected diff %s with incremental build, please review the baseline file", test.subScenario, unexpectedDiff.String())
 		}
 	})
 }

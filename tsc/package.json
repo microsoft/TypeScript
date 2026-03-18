@@ -7,16 +7,16 @@
         "node": ">=20.19"
     },
     "devDependencies": {
-        "@types/adm-zip": "^0.5.7",
+        "@types/adm-zip": "^0.5.8",
         "@types/node": "latest",
         "@types/tmp": "^0.2.6",
         "@types/which": "^3.0.4",
         "adm-zip": "^0.5.16",
         "chokidar": "^5.0.0",
-        "dprint": "^0.52.0",
+        "dprint": "^0.53.0",
         "execa": "^9.6.1",
         "glob": "^13.0.6",
-        "hereby": "^1.12.0",
+        "hereby": "^1.14.0",
         "p-limit": "^7.3.0",
         "picocolors": "^1.1.1",
         "tmp": "^0.2.5",
@@ -39,9 +39,9 @@
         "./_extension",
         "./_packages/*"
     ],
-    "packageManager": "npm@11.11.0+sha512.f36811c4aae1fde639527368ae44c571d050006a608d67a191f195a801a52637a312d259186254aa3a3799b05335b7390539cf28656d18f0591a1125ba35f973",
+    "packageManager": "npm@11.11.1+sha512.6ac6b30a876415dcf545e433ba4cb34bf0c3efbb86088a9415e446de0b5a4fc6fd511d277b59bd40e06e3204fbda28f5aeded346b3a8c780355b39ed31622e12",
     "volta": {
         "node": "22.22.0",
-        "npm": "11.11.0"
+        "npm": "11.11.1"
     }
 }

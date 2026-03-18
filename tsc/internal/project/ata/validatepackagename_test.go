@@ -1,6 +1,7 @@
 package ata_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/project/ata"
@@ -11,11 +12,12 @@ func TestValidatePackageName(t *testing.T) {
 	t.Parallel()
 	t.Run("name cannot be too long", func(t *testing.T) {
 		t.Parallel()
-		packageName := "a"
+		var packageName strings.Builder
+		packageName.WriteString("a")
 		for range 8 {
-			packageName += packageName //nolint:perfsprint
+			packageName.WriteString(packageName.String())
 		}
-		status, _, _ := ata.ValidatePackageName(packageName)
+		status, _, _ := ata.ValidatePackageName(packageName.String())
 		assert.Equal(t, status, ata.NameTooLong)
 	})
 	t.Run("package name cannot start with dot", func(t *testing.T) {

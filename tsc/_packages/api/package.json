@@ -52,7 +52,7 @@
         "tinybench": "^6.0.0"
     },
     "dependencies": {
-        "@types/node": "^25.3.3",
+        "@types/node": "^25.5.0",
         "@typescript/ast": "1.0.0",
         "vscode-jsonrpc": "^9.0.0-next.11"
     }

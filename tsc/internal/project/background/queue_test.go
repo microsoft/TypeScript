@@ -32,18 +32,18 @@ func TestQueue(t *testing.T) {
 		q := background.NewQueue()
 		defer q.Close()
 
-		var counter int64
+		var counter atomic.Int64
 		numTasks := 10
 
 		for range numTasks {
 			q.Enqueue(context.Background(), func(ctx context.Context) {
-				atomic.AddInt64(&counter, 1)
+				counter.Add(1)
 			})
 		}
 
 		q.Wait()
 
-		assert.Equal(t, atomic.LoadInt64(&counter), int64(numTasks))
+		assert.Equal(t, counter.Load(), int64(numTasks))
 	})
 
 	t.Run("NestedEnqueue", func(t *testing.T) {
