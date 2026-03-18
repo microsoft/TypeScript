@@ -1,0 +1,15 @@
+a.mts(6,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+
+
+==== a.mts (1 errors) ====
+    // @see https://github.com/microsoft/TypeScript/issues/44442
+    const a = <T,>(arg: T): T => {
+      return arg;
+    };
+    
+    const b = <T>(arg: T): T => {
+               ~
+!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+      return arg;
+    };
+    

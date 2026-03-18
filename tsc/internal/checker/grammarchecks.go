@@ -779,9 +779,8 @@ func (c *Checker) checkGrammarArrowFunction(node *ast.Node, file *ast.SourceFile
 	typeParameters := arrowFunc.TypeParameters
 	if typeParameters != nil {
 		typeParamNodes := typeParameters.Nodes
-		if len(typeParamNodes) == 0 ||
-			len(typeParamNodes) == 1 && typeParamNodes[0].AsTypeParameter().Constraint == nil ||
-			typeParameters.HasTrailingComma() {
+		hasConstraint := len(typeParamNodes) > 0 && typeParamNodes[0].AsTypeParameter().Constraint != nil
+		if !(len(typeParamNodes) > 1 || typeParameters.HasTrailingComma() || hasConstraint) {
 			if tspath.FileExtensionIsOneOf(file.FileName(), []string{tspath.ExtensionMts, tspath.ExtensionCts}) {
 				// TODO(danielr): should we return early here?
 				c.grammarErrorOnNode(typeParameters.Nodes[0], diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint)
