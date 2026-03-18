@@ -86,24 +86,25 @@ func (p *projectReferenceParser) initMapperWorker(tasks []*projectReferenceParse
 		if !seen.AddIfAbsent(task) {
 			continue
 		}
-		var referencesInConfig []tspath.Path
-		referencesInConfig = p.initMapperWorker(task.subTasks, seen)
 		p.loader.projectReferenceFileMapper.configToProjectReference[path] = task.resolved
+		if task.resolved != nil && p.loader.projectReferenceFileMapper.opts.Config.ConfigFile != task.resolved.ConfigFile {
+			// Map current task's files first, before recursing into subtasks.
+			// This matches TypeScript's behavior where child project references
+			// overwrite parent entries when a file belongs to multiple projects.
+			maps.Copy(p.loader.projectReferenceFileMapper.sourceToProjectReference, task.resolved.SourceToProjectReference())
+			maps.Copy(p.loader.projectReferenceFileMapper.outputDtsToProjectReference, task.resolved.OutputDtsToProjectReference())
+			if p.loader.projectReferenceFileMapper.opts.canUseProjectReferenceSource() {
+				declDir := task.resolved.CompilerOptions().DeclarationDir
+				if declDir == "" {
+					declDir = task.resolved.CompilerOptions().OutDir
+				}
+				if declDir != "" {
+					p.loader.dtsDirectories.Add(p.loader.toPath(declDir))
+				}
+			}
+		}
+		referencesInConfig := p.initMapperWorker(task.subTasks, seen)
 		p.loader.projectReferenceFileMapper.referencesInConfigFile[path] = referencesInConfig
-		if task.resolved == nil || p.loader.projectReferenceFileMapper.opts.Config.ConfigFile == task.resolved.ConfigFile {
-			continue
-		}
-		maps.Copy(p.loader.projectReferenceFileMapper.sourceToProjectReference, task.resolved.SourceToProjectReference())
-		maps.Copy(p.loader.projectReferenceFileMapper.outputDtsToProjectReference, task.resolved.OutputDtsToProjectReference())
-		if p.loader.projectReferenceFileMapper.opts.canUseProjectReferenceSource() {
-			declDir := task.resolved.CompilerOptions().DeclarationDir
-			if declDir == "" {
-				declDir = task.resolved.CompilerOptions().OutDir
-			}
-			if declDir != "" {
-				p.loader.dtsDirectories.Add(p.loader.toPath(declDir))
-			}
-		}
 	}
 	return results
 }
