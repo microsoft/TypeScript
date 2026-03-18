@@ -23,5 +23,5 @@ func TestFormatDocumentZeroTabSize(t *testing.T) {
 	opts.FormatCodeSettings.ConvertTabsToSpaces = true
 	f.Configure(t, opts)
 	f.FormatDocument(t, "")
-	f.VerifyCurrentFileContent(t, "function foo() {\nif (true) {\nvar x = 1;\n}\n} ")
+	f.VerifyCurrentFileContent(t, "function foo() {\nif (true) {\nvar x = 1;\n}\n}")
 }

@@ -12,11 +12,8 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func TestFormatNoTrailingNewline(t *testing.T) {
+func TestFormatNoTrailingSpace(t *testing.T) {
 	t.Parallel()
-	// Issue: Formatter adds extra space at end of line
-	// When formatting a file that has content "1;" with no trailing newline,
-	// an extra space should NOT be added at the end of the line
 
 	testCases := []struct {
 		name string
@@ -24,8 +21,12 @@ func TestFormatNoTrailingNewline(t *testing.T) {
 	}{
 		{"simple statement without trailing newline", "1;"},
 		{"function call without trailing newline", "console.log('hello');"},
-		{"variable declaration without trailing newline", "const x = 1;"},
-		{"multiple statements without trailing newline", "const x = 1;\nconst y = 2;"},
+		{"if block on single line", "if (true) { }"},
+		{"class declaration", "class A {\n    // Class Contents Go Here\n}"},
+		{"class declaration with trailing newline", "class A {\n    // Class Contents Go Here\n}\n"},
+		{"empty block", "if (true) {}"},
+		{"module declaration", "module M { }"},
+		{"enum declaration", "enum E { A, B }"},
 	}
 
 	for _, tc := range testCases {
@@ -35,7 +36,6 @@ func TestFormatNoTrailingNewline(t *testing.T) {
 				EditorSettings: lsutil.EditorSettings{
 					TabSize:                4,
 					IndentSize:             4,
-					BaseIndentSize:         4,
 					NewLineCharacter:       "\n",
 					ConvertTabsToSpaces:    true,
 					IndentStyle:            lsutil.IndentStyleSmart,
@@ -48,13 +48,10 @@ func TestFormatNoTrailingNewline(t *testing.T) {
 			}, tc.text, core.ScriptKindTS)
 			edits := format.FormatDocument(ctx, sourceFile)
 			newText := applyBulkEdits(tc.text, edits)
-
-			// The formatted text should not add extra space at the end
-			// It may add proper spacing within the code, but not after the last character
-			assert.Assert(t, !strings.HasSuffix(newText, " "), "Formatter should not add trailing space")
-			// Also check that no space was added at EOF position if text didn't end with newline
-			if !strings.HasSuffix(tc.text, "\n") {
-				assert.Assert(t, !strings.HasSuffix(newText, " "), "Formatter should not add space before EOF")
+			// Formatting should not add trailing whitespace at end of file
+			for i, line := range strings.Split(newText, "\n") {
+				trimmed := strings.TrimRight(line, " \t")
+				assert.Equal(t, line, trimmed, "Formatter should not add trailing whitespace on line %d", i+1)
 			}
 		})
 	}

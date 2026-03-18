@@ -16,8 +16,8 @@ func getAllRules() []ruleSpec {
 	}
 
 	anyTokenExcept := func(tokens ...ast.Kind) tokenRange {
-		newTokens := make([]ast.Kind, 0, ast.KindLastToken-ast.KindFirstToken+1)
-		for token := ast.KindFirstToken; token <= ast.KindLastToken; token++ {
+		newTokens := make([]ast.Kind, 0, len(allTokens))
+		for _, token := range allTokens {
 			if slices.Contains(tokens, token) {
 				continue
 			}
