@@ -1,8 +1,0 @@
---- old.TransportStream.js
-+++ new.TransportStream.js
-@@= skipped -5, +5 lines =@@
- //// [TransportStream.js]
- "use strict";
- G;
-+G;
-+G;

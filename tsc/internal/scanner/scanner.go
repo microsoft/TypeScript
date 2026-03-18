@@ -916,7 +916,7 @@ func (s *Scanner) Scan() ast.Kind {
 				break
 			}
 			ch, size := s.charAndSize()
-			if ch == utf8.RuneError && size == 1 {
+			if ch == utf8.RuneError {
 				s.errorAt(diagnostics.File_appears_to_be_binary, 0, 0)
 				s.pos = len(s.text)
 				s.token = ast.KindNonTextFileMarkerTrivia
