@@ -185,8 +185,12 @@ func (p *ProjectTreeRequest) Projects() []tspath.Path {
 type ResourceRequest struct {
 	// Documents are URIs that were requested by the client.
 	// The new snapshot should ensure projects for these URIs have loaded programs.
-	// If the requested Documents are not open, ensure that their default project is created
 	Documents []lsproto.DocumentUri
+	// ConfiguredProjectDocuments are URIs for which configured projects should be loaded
+	// (if disableSolutionSearching/disableReferencedProjectLoad settings allow),
+	// but no inferred project should be created if no configured project is found.
+	// This is used by cross-project operations like find-all-references.
+	ConfiguredProjectDocuments []lsproto.DocumentUri
 	// Update requested Projects.
 	// this is used when we want to get LS and from all the Projects the file can be part of
 	Projects []tspath.Path
@@ -246,6 +250,9 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 			details := ""
 			if len(change.Documents) != 0 {
 				details += fmt.Sprintf(" Documents: %v", change.Documents)
+			}
+			if len(change.ConfiguredProjectDocuments) != 0 {
+				details += fmt.Sprintf(" ConfiguredProjectDocuments: %v", change.ConfiguredProjectDocuments)
 			}
 			if len(change.Projects) != 0 {
 				details += fmt.Sprintf(" Projects: %v", change.Projects)
@@ -333,7 +340,11 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 	}
 
 	for _, uri := range change.Documents {
-		projectCollectionBuilder.DidRequestFile(uri, logger.Fork("DidRequestFile"))
+		projectCollectionBuilder.DidRequestFile(uri, false /*configuredProjectsOnly*/, logger.Fork("DidRequestFile"))
+	}
+
+	for _, uri := range change.ConfiguredProjectDocuments {
+		projectCollectionBuilder.DidRequestFile(uri, true /*configuredProjectsOnly*/, logger.Fork("DidRequestFile (optional)"))
 	}
 
 	for _, projectId := range change.Projects {

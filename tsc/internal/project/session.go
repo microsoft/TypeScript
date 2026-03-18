@@ -480,21 +480,25 @@ func (s *Session) getSnapshot(
 		updateReason = UpdateReasonRequestedLanguageServiceWithAutoImports
 	} else {
 		for _, document := range request.Documents {
-			if snapshot.fs.isOpenFile(document.FileName()) {
-				// The current snapshot does not have an up to date project for the URI,
-				// so we need to update the snapshot to ensure the project is loaded.
-				// !!! Allow multiple projects to update in parallel
-				project := snapshot.GetDefaultProject(document)
-				if project == nil {
-					updateReason = UpdateReasonRequestedLanguageServiceProjectNotLoaded
-					break
-				} else if project.dirty {
-					updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
-					break
+			project := snapshot.GetDefaultProject(document)
+			if project == nil {
+				updateReason = UpdateReasonRequestedLanguageServiceProjectNotLoaded
+			} else if project.dirty {
+				updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
+			}
+		}
+		if updateReason == UpdateReasonUnknown {
+			for _, document := range request.ConfiguredProjectDocuments {
+				if snapshot.fs.isOpenFile(document.FileName()) {
+					project := snapshot.GetDefaultProject(document)
+					if project == nil {
+						updateReason = UpdateReasonRequestedLanguageServiceProjectNotLoaded
+					} else if project.dirty {
+						updateReason = UpdateReasonRequestedLanguageServiceProjectDirty
+					}
+				} else {
+					updateReason = UpdateReasonRequestedLanguageServiceForFileNotOpen
 				}
-			} else {
-				updateReason = UpdateReasonRequestedLanguageServiceForFileNotOpen
-				break
 			}
 		}
 	}
@@ -550,7 +554,7 @@ func (s *Session) GetLanguageServiceAndProjectsForFile(ctx context.Context, uri 
 func (s *Session) GetProjectsForFile(ctx context.Context, uri lsproto.DocumentUri) ([]ls.Project, error) {
 	snapshot := s.getSnapshot(
 		ctx,
-		ResourceRequest{Documents: []lsproto.DocumentUri{uri}},
+		ResourceRequest{ConfiguredProjectDocuments: []lsproto.DocumentUri{uri}},
 	)
 
 	// !!! TODO: sheetal:  Get other projects that contain the file with symlink

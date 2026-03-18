@@ -1217,4 +1217,58 @@ func TestSession(t *testing.T) {
 		assert.DeepEqual(t, *actualConfig2.TS(), *expectedPrefs1)
 		assert.DeepEqual(t, *actualConfig2.JS(), *expectedPrefs2)
 	})
+
+	t.Run("language service for closed files", func(t *testing.T) {
+		t.Parallel()
+
+		t.Run("closed file in configured project not yet opened", func(t *testing.T) {
+			t.Parallel()
+			// Set up a project where a tsconfig exists but no files have been opened.
+			// Requesting language service for a file covered by that tsconfig should
+			// work even though the file was never opened via didOpen.
+			files := map[string]any{
+				"/home/projects/TS/p1/tsconfig.json": `{
+					"compilerOptions": {
+						"noLib": true,
+						"strict": true
+					},
+					"include": ["src"]
+				}`,
+				"/home/projects/TS/p1/src/index.ts": `export const x: number = 1;`,
+			}
+			session, _ := projecttestutil.Setup(files)
+
+			// Do NOT open any file. Directly request language service for a closed file
+			// that belongs to the configured project.
+			ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/p1/src/index.ts")
+			assert.NilError(t, err)
+			assert.Assert(t, ls != nil)
+			program := ls.GetProgram()
+			assert.Assert(t, program != nil)
+			sourceFile := program.GetSourceFile("/home/projects/TS/p1/src/index.ts")
+			assert.Assert(t, sourceFile != nil)
+			assert.Equal(t, sourceFile.Text(), `export const x: number = 1;`)
+		})
+
+		t.Run("closed file with no configured project creates inferred project", func(t *testing.T) {
+			t.Parallel()
+			// Set up a file that has no tsconfig. Requesting language service for it
+			// should create an inferred project even though the file was never opened.
+			files := map[string]any{
+				"/home/projects/TS/loose/index.ts": `const greeting: string = "hello";`,
+			}
+			session, _ := projecttestutil.Setup(files)
+
+			// Do NOT open any file. Directly request language service for a closed file
+			// that has no configured project.
+			ls, err := session.GetLanguageService(context.Background(), "file:///home/projects/TS/loose/index.ts")
+			assert.NilError(t, err)
+			assert.Assert(t, ls != nil)
+			program := ls.GetProgram()
+			assert.Assert(t, program != nil)
+			sourceFile := program.GetSourceFile("/home/projects/TS/loose/index.ts")
+			assert.Assert(t, sourceFile != nil)
+			assert.Equal(t, sourceFile.Text(), `const greeting: string = "hello";`)
+		})
+	})
 }
