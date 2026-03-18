@@ -209,8 +209,63 @@ func (p *Parser) parseJSONText() *ast.SourceFile {
 	}
 	node := p.finishNode(p.factory.NewSourceFile(p.opts, p.sourceText, statements, eof), pos)
 	result := node.AsSourceFile()
+	if len(result.Statements.Nodes) > 0 {
+		p.validateJsonValue(result, result.Statements.Nodes[0].Expression())
+	}
 	p.finishSourceFile(result, false)
 	return result
+}
+
+func getErrorSpanForNode(sourceText string, node *ast.Node) core.TextRange {
+	pos := scanner.SkipTrivia(sourceText, node.Pos())
+	return core.NewTextRange(pos, node.End())
+}
+
+func (p *Parser) validateJsonValue(sourceFile *ast.SourceFile, valueExpression *ast.Expression) {
+	if valueExpression == nil {
+		return
+	}
+	switch valueExpression.Kind {
+	case ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindNullKeyword, ast.KindNumericLiteral:
+		return
+	case ast.KindStringLiteral:
+		if !isDoubleQuotedString(valueExpression) {
+			p.diagnostics = append(p.diagnostics, ast.NewDiagnostic(sourceFile, getErrorSpanForNode(p.sourceText, valueExpression), diagnostics.String_literal_with_double_quotes_expected))
+		}
+		return
+	case ast.KindPrefixUnaryExpression:
+		if valueExpression.AsPrefixUnaryExpression().Operator != ast.KindMinusToken || valueExpression.AsPrefixUnaryExpression().Operand.Kind != ast.KindNumericLiteral {
+			break // not valid JSON syntax
+		}
+		return
+	case ast.KindObjectLiteralExpression:
+		p.validateJsonObjectLiteral(sourceFile, valueExpression.AsObjectLiteralExpression())
+		return
+	case ast.KindArrayLiteralExpression:
+		for _, element := range valueExpression.Elements() {
+			p.validateJsonValue(sourceFile, element)
+		}
+		return
+	}
+	p.diagnostics = append(p.diagnostics, ast.NewDiagnostic(sourceFile, getErrorSpanForNode(p.sourceText, valueExpression), diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal))
+}
+
+func isDoubleQuotedString(node *ast.Node) bool {
+	return ast.IsStringLiteral(node) && node.AsStringLiteral().TokenFlags&ast.TokenFlagsSingleQuote == 0
+}
+
+// validateJsonObjectLiteral validates properties of a JSON object literal.
+func (p *Parser) validateJsonObjectLiteral(sourceFile *ast.SourceFile, node *ast.ObjectLiteralExpression) {
+	for _, element := range node.Properties.Nodes {
+		if element.Kind != ast.KindPropertyAssignment {
+			p.diagnostics = append(p.diagnostics, ast.NewDiagnostic(sourceFile, getErrorSpanForNode(p.sourceText, element), diagnostics.Property_assignment_expected))
+			continue
+		}
+		if element.Name() != nil && !isDoubleQuotedString(element.Name()) {
+			p.diagnostics = append(p.diagnostics, ast.NewDiagnostic(sourceFile, getErrorSpanForNode(p.sourceText, element.Name()), diagnostics.String_literal_with_double_quotes_expected))
+		}
+		p.validateJsonValue(sourceFile, element.AsPropertyAssignment().Initializer)
+	}
 }
 
 func ParseIsolatedEntityName(text string) *ast.EntityName {

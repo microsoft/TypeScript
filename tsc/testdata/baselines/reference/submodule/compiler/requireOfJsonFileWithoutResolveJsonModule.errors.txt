@@ -1,6 +1,9 @@
 b.json(1,1): error TS1005: '{' expected.
+b.json(1,1): error TS1136: Property assignment expected.
 b.json(1,10): error TS1005: ',' expected.
+b.json(1,10): error TS1136: Property assignment expected.
 b.json(1,14): error TS1005: ',' expected.
+b.json(1,14): error TS1136: Property assignment expected.
 b.json(1,18): error TS1005: '}' expected.
 file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{ contents: any; Not: any; read: any; }'.
 file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
@@ -22,13 +25,19 @@ file1.ts(6,13): error TS2339: Property 'b' does not exist on type '{ contents: a
 !!! error TS2339: Property 'b' does not exist on type '{ contents: any; Not: any; read: any; }'.
     }
     
-==== b.json (4 errors) ====
+==== b.json (7 errors) ====
     contents Not read
     ~~~~~~~~
 !!! error TS1005: '{' expected.
+    ~~~~~~~~
+!!! error TS1136: Property assignment expected.
              ~~~
 !!! error TS1005: ',' expected.
+             ~~~
+!!! error TS1136: Property assignment expected.
                  ~~~~
 !!! error TS1005: ',' expected.
+                 ~~~~
+!!! error TS1136: Property assignment expected.
                      
 !!! error TS1005: '}' expected.
