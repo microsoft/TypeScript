@@ -59,6 +59,7 @@ func TestMain(m *testing.M) {
 
     parseTypeScriptFiles(getManualTests(), stradaFourslashPath);
 
+    unparsedFiles.sort((a, b) => a.file.localeCompare(b.file, "en-US"));
     fs.writeFileSync(unparsedReportPath, unparsedFiles.map(({ file, error }) => `${file} parse error: ${JSON.stringify(error)}`).join("\n"), "utf-8");
     console.log(`Failed to parse ${unparsedFiles.length} files. See ${unparsedReportPath} for details.`);
     await $`dprint fmt ${outputDir}/**/*.go`;
