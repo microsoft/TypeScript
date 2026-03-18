@@ -43,22 +43,31 @@ tsgo --showConfig
 ExitStatus:: Success
 Output::
 {
-    "declaration": true,
-    "declarationDir": "/home/src/projects/myproject/decls",
-    "outDir": "/home/src/projects/myproject/outDir",
-    "paths": {
-        "@myscope/*": [
-            "/home/src/projects/myproject/types/*"
-        ]
+    "compilerOptions": {
+        "declaration": true,
+        "declarationDir": "./decls",
+        "outDir": "./outDir",
+        "paths": {
+            "@myscope/*": [
+                "/home/src/projects/myproject/types/*"
+            ]
+        },
+        "traceResolution": true,
+        "typeRoots": [
+            "../configs/first/root1",
+            "./root2",
+            "../configs/first/root3"
+        ],
+        "types": []
     },
-    "traceResolution": true,
-    "typeRoots": [
-        "/home/src/projects/configs/first/root1",
-        "/home/src/projects/myproject/root2",
-        "/home/src/projects/configs/first/root3"
+    "files": [
+        "./main.ts"
     ],
-    "types": [],
-    "configFilePath": "/home/src/projects/myproject/tsconfig.json",
-    "pathsBasePath": "/home/src/projects/configs/second",
-    "showConfig": true
+    "include": [
+        "/home/src/projects/myproject/src"
+    ],
+    "exclude": [
+        "/home/src/projects/myproject/outDir",
+        "/home/src/projects/myproject/decls"
+    ]
 }

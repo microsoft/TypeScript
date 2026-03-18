@@ -200,7 +200,7 @@ func tscCompilation(sys tsc.System, commandLine *tsoptions.ParsedCommandLine, te
 
 	reportErrorSummary := tsc.CreateReportErrorSummary(sys, locale, configForCompilation.CompilerOptions())
 	if compilerOptionsFromCommandLine.ShowConfig.IsTrue() {
-		showConfig(sys, configForCompilation.CompilerOptions())
+		showConfig(sys, configForCompilation, configFileName)
 		return tsc.CommandLineResult{Status: tsc.ExitStatusSuccess}
 	}
 	if configForCompilation.CompilerOptions().Watch.IsTrue() {
@@ -329,7 +329,7 @@ func performCompilation(
 	}
 }
 
-func showConfig(sys tsc.System, config *core.CompilerOptions) {
-	// !!!
-	_ = json.MarshalIndentWrite(sys.Writer(), config, "", "    ")
+func showConfig(sys tsc.System, config *tsoptions.ParsedCommandLine, configFileName string) {
+	tsConfig := tsoptions.ConvertToTSConfig(config, configFileName)
+	_ = json.MarshalIndentWrite(sys.Writer(), tsConfig, "", "    ")
 }
