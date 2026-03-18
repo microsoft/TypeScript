@@ -4547,10 +4547,9 @@ func (p *Parser) parseConditionalExpressionRest(leftOperand *ast.Expression, pos
 	p.contextFlags = saveContextFlags
 	colonToken := p.parseExpectedToken(ast.KindColonToken)
 	var falseExpression *ast.Expression
-	if colonToken != nil {
+	if ast.NodeIsPresent(colonToken) {
 		falseExpression = p.parseAssignmentExpressionOrHigherWorker(allowReturnTypeInArrowFunction)
 	} else {
-		p.parseErrorAtCurrentToken(diagnostics.X_0_expected, scanner.TokenToString(ast.KindColonToken))
 		falseExpression = p.createMissingIdentifier()
 	}
 	return p.finishNode(p.factory.NewConditionalExpression(leftOperand, questionToken, trueExpression, colonToken, falseExpression), pos)
@@ -5837,12 +5836,29 @@ func (p *Parser) createIdentifierWithDiagnostic(isIdentifier bool, diagnosticMes
 		}
 		return p.createIdentifier(true /*isIdentifier*/)
 	}
+	// Only for end of file because the error gets reported incorrectly on embedded script tags.
+	reportAtCurrentPosition := p.token == ast.KindEndOfFile
 	if diagnosticMessage != nil {
-		p.parseErrorAtCurrentToken(diagnosticMessage)
+		if reportAtCurrentPosition {
+			pos := p.scanner.TokenFullStart()
+			p.parseErrorAt(pos, pos, diagnosticMessage)
+		} else {
+			p.parseErrorAtCurrentToken(diagnosticMessage)
+		}
 	} else if isReservedWord(p.token) {
-		p.parseErrorAtCurrentToken(diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, p.scanner.TokenText())
+		if reportAtCurrentPosition {
+			pos := p.scanner.TokenFullStart()
+			p.parseErrorAt(pos, pos, diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, p.scanner.TokenText())
+		} else {
+			p.parseErrorAtCurrentToken(diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, p.scanner.TokenText())
+		}
 	} else {
-		p.parseErrorAtCurrentToken(diagnostics.Identifier_expected)
+		if reportAtCurrentPosition {
+			pos := p.scanner.TokenFullStart()
+			p.parseErrorAt(pos, pos, diagnostics.Identifier_expected)
+		} else {
+			p.parseErrorAtCurrentToken(diagnostics.Identifier_expected)
+		}
 	}
 	return p.createMissingIdentifier()
 }

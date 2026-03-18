@@ -9552,10 +9552,14 @@ func (c *Checker) getArgumentArityError(node *ast.Node, signatures []*Signature,
 			return diagnostic
 		}
 		sourceFile := ast.GetSourceFileOfNode(node)
-		pos := scanner.SkipTrivia(sourceFile.Text(), args[maxCount].Pos())
+		pos := args[maxCount].Pos()
 		end := args[len(args)-1].End()
 		if end == pos {
 			end++
+		}
+		pos = scanner.SkipTrivia(sourceFile.Text(), pos)
+		if end < pos {
+			end = pos
 		}
 		diagnostic := ast.NewDiagnostic(sourceFile, core.NewTextRange(pos, end), message, parameterRange, len(args))
 		if headMessage != nil {
