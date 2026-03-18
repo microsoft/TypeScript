@@ -199,7 +199,9 @@ func iterateBaseline(allFiles []*harnessutil.TestFile, fullWalker *typeWriterWal
 	for _, file := range allFiles {
 		unitName := file.UnitName
 		var typeLines strings.Builder
-		typeLines.WriteString("=== " + unitName + " ===\r\n")
+		typeLines.WriteString("=== ")
+		typeLines.WriteString(unitName)
+		typeLines.WriteString(" ===\r\n")
 		codeLines := codeLinesRegexp.Split(file.Content, -1)
 		var results []*typeWriterResult
 		if isSymbolBaseline {

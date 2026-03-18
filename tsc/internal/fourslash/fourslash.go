@@ -1597,7 +1597,9 @@ func (f *FourslashTest) VerifyImportFixAtPosition(t *testing.T, expectedTexts []
 		var actualJoined strings.Builder
 		for i, actual := range actualTextArray {
 			if i > 0 {
-				actualJoined.WriteString("\n\n" + strings.Repeat("-", 20) + "\n\n")
+				actualJoined.WriteString("\n\n")
+				actualJoined.WriteString(strings.Repeat("-", 20))
+				actualJoined.WriteString("\n\n")
 			}
 			actualJoined.WriteString(actual)
 		}
@@ -2195,7 +2197,12 @@ func (f *FourslashTest) VerifyBaselineSelectionRanges(t *testing.T) {
 
 	for i, marker := range markers {
 		if i > 0 {
-			result.WriteString(newLine + strings.Repeat("=", 80) + newLine + newLine)
+			result.WriteString(newLine)
+			for range 80 {
+				result.WriteByte('=')
+			}
+			result.WriteString(newLine)
+			result.WriteString(newLine)
 		}
 
 		script := f.getScriptInfo(marker.FileName())
@@ -2435,33 +2442,42 @@ func formatCallHierarchyItem(
 		result.WriteString(fmt.Sprintf("%s├ containerName: %s\n", prefix, *callHierarchyItem.Detail))
 	}
 	result.WriteString(fmt.Sprintf("%s├ file: %s\n", prefix, callHierarchyItem.Uri.FileName()))
-	result.WriteString(prefix + "├ span:\n")
+	result.WriteString(prefix)
+	result.WriteString("├ span:\n")
 	formatCallHierarchyItemSpan(f, file, result, callHierarchyItem.Range, prefix+"│ ", prefix+"│ ")
-	result.WriteString(prefix + "├ selectionSpan:\n")
+	result.WriteString(prefix)
+	result.WriteString("├ selectionSpan:\n")
 	formatCallHierarchyItemSpan(f, file, result, callHierarchyItem.SelectionRange, prefix+"│ ", prefix+"│ ")
 
 	// Handle incoming calls
 	if incomingCalls.seen {
 		if outgoingCalls.skip {
-			result.WriteString(trailingPrefix + "╰ incoming: ...\n")
+			result.WriteString(trailingPrefix)
+			result.WriteString("╰ incoming: ...\n")
 		} else {
-			result.WriteString(prefix + "├ incoming: ...\n")
+			result.WriteString(prefix)
+			result.WriteString("├ incoming: ...\n")
 		}
 	} else if !incomingCalls.skip {
 		if len(incomingCalls.values) == 0 {
 			if outgoingCalls.skip {
-				result.WriteString(trailingPrefix + "╰ incoming: none\n")
+				result.WriteString(trailingPrefix)
+				result.WriteString("╰ incoming: none\n")
 			} else {
-				result.WriteString(prefix + "├ incoming: none\n")
+				result.WriteString(prefix)
+				result.WriteString("├ incoming: none\n")
 			}
 		} else {
-			result.WriteString(prefix + "├ incoming:\n")
+			result.WriteString(prefix)
+			result.WriteString("├ incoming:\n")
 			for i, incomingCall := range incomingCalls.values {
 				fromFileName := incomingCall.From.Uri.FileName()
 				fromFile := f.getScriptInfo(fromFileName)
-				result.WriteString(prefix + "│ ╭ from:\n")
+				result.WriteString(prefix)
+				result.WriteString("│ ╭ from:\n")
 				formatCallHierarchyItem(t, f, fromFile, result, *incomingCall.From, callHierarchyItemDirectionIncoming, seen, prefix+"│ │ ")
-				result.WriteString(prefix + "│ ├ fromSpans:\n")
+				result.WriteString(prefix)
+				result.WriteString("│ ├ fromSpans:\n")
 
 				fromSpansTrailingPrefix := trailingPrefix + "╰ ╰ "
 				if i < len(incomingCalls.values)-1 {
@@ -2476,18 +2492,23 @@ func formatCallHierarchyItem(
 
 	// Handle outgoing calls
 	if outgoingCalls.seen {
-		result.WriteString(trailingPrefix + "╰ outgoing: ...\n")
+		result.WriteString(trailingPrefix)
+		result.WriteString("╰ outgoing: ...\n")
 	} else if !outgoingCalls.skip {
 		if len(outgoingCalls.values) == 0 {
-			result.WriteString(trailingPrefix + "╰ outgoing: none\n")
+			result.WriteString(trailingPrefix)
+			result.WriteString("╰ outgoing: none\n")
 		} else {
-			result.WriteString(prefix + "├ outgoing:\n")
+			result.WriteString(prefix)
+			result.WriteString("├ outgoing:\n")
 			for i, outgoingCall := range outgoingCalls.values {
 				toFileName := outgoingCall.To.Uri.FileName()
 				toFile := f.getScriptInfo(toFileName)
-				result.WriteString(prefix + "│ ╭ to:\n")
+				result.WriteString(prefix)
+				result.WriteString("│ ╭ to:\n")
 				formatCallHierarchyItem(t, f, toFile, result, *outgoingCall.To, callHierarchyItemDirectionOutgoing, seen, prefix+"│ │ ")
-				result.WriteString(prefix + "│ ├ fromSpans:\n")
+				result.WriteString(prefix)
+				result.WriteString("│ ├ fromSpans:\n")
 
 				fromSpansTrailingPrefix := trailingPrefix + "╰ ╰ "
 				if i < len(outgoingCalls.values)-1 {
@@ -2595,7 +2616,8 @@ func formatCallHierarchyItemSpan(
 		}
 	}
 
-	result.WriteString(closingPrefix + "╰\n")
+	result.WriteString(closingPrefix)
+	result.WriteString("╰\n")
 }
 
 func computeLineStarts(content string) []int {

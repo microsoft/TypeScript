@@ -308,7 +308,8 @@ func (s *TestSys) writeHeaderToBaseline(builder *strings.Builder, program *incre
 		builder.WriteString(tspath.GetRelativePathFromDirectory(s.cwd, configFilePath, tspath.ComparePathsOptions{
 			UseCaseSensitiveFileNames: s.FS().UseCaseSensitiveFileNames(),
 			CurrentDirectory:          s.GetCurrentDirectory(),
-		}) + "::\n")
+		}))
+		builder.WriteString("::\n")
 	}
 }
 
@@ -320,10 +321,14 @@ func (s *TestSys) OnProgram(program *incremental.Program) {
 	for _, file := range program.GetProgram().GetSourceFiles() {
 		if diagnostics, ok := testingData.SemanticDiagnosticsPerFile.Load(file.Path()); ok {
 			if oldDiagnostics, ok := testingData.OldProgramSemanticDiagnosticsPerFile.Load(file.Path()); !ok || oldDiagnostics != diagnostics {
-				s.programBaselines.WriteString("*refresh*    " + file.FileName() + "\n")
+				s.programBaselines.WriteString("*refresh*    ")
+				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString("\n")
 			}
 		} else {
-			s.programBaselines.WriteString("*not cached* " + file.FileName() + "\n")
+			s.programBaselines.WriteString("*not cached* ")
+			s.programBaselines.WriteString(file.FileName())
+			s.programBaselines.WriteString("\n")
 		}
 	}
 
@@ -333,11 +338,17 @@ func (s *TestSys) OnProgram(program *incremental.Program) {
 		if kind, ok := testingData.UpdatedSignatureKinds[file.Path()]; ok {
 			switch kind {
 			case incremental.SignatureUpdateKindComputedDts:
-				s.programBaselines.WriteString("(computed .d.ts) " + file.FileName() + "\n")
+				s.programBaselines.WriteString("(computed .d.ts) ")
+				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString("\n")
 			case incremental.SignatureUpdateKindStoredAtEmit:
-				s.programBaselines.WriteString("(stored at emit) " + file.FileName() + "\n")
+				s.programBaselines.WriteString("(stored at emit) ")
+				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString("\n")
 			case incremental.SignatureUpdateKindUsedVersion:
-				s.programBaselines.WriteString("(used version)   " + file.FileName() + "\n")
+				s.programBaselines.WriteString("(used version)   ")
+				s.programBaselines.WriteString(file.FileName())
+				s.programBaselines.WriteString("\n")
 			}
 		}
 	}
@@ -359,11 +370,15 @@ func (s *TestSys) OnProgram(program *incremental.Program) {
 		s.writeHeaderToBaseline(&s.programIncludeBaselines, program)
 		s.programIncludeBaselines.WriteString("!!! Expected all files to have include reasons\nfilesWithoutIncludeReason::\n")
 		for _, file := range filesWithoutIncludeReason {
-			s.programIncludeBaselines.WriteString("  " + file + "\n")
+			s.programIncludeBaselines.WriteString("  ")
+			s.programIncludeBaselines.WriteString(file)
+			s.programIncludeBaselines.WriteString("\n")
 		}
 		s.programIncludeBaselines.WriteString("filesNotInProgramWithIncludeReason::\n")
 		for _, file := range fileNotInProgramWithIncludeReason {
-			s.programIncludeBaselines.WriteString("  " + file + "\n")
+			s.programIncludeBaselines.WriteString("  ")
+			s.programIncludeBaselines.WriteString(file)
+			s.programIncludeBaselines.WriteString("\n")
 		}
 	}
 }

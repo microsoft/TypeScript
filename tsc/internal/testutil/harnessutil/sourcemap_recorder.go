@@ -22,7 +22,8 @@ func (w *writerAggregator) WriteStringf(format string, args ...any) {
 }
 
 func (w *writerAggregator) WriteLine(s string) {
-	w.WriteString(s + "\r\n")
+	w.WriteString(s)
+	w.WriteString("\r\n")
 }
 
 func (w *writerAggregator) WriteLinef(format string, args ...any) {
