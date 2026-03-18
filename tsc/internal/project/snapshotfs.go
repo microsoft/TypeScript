@@ -250,13 +250,10 @@ func (s *snapshotFSBuilder) FileExists(fileName string, path tspath.Path) bool {
 		if val == nil {
 			return false
 		}
-		if val.MatchesDiskText() {
-			return true
-		}
-		// Entry is dirty — reload to check current state on disk.
+		// Entry may be dirty - reload to check current state on disk.
 		return s.reloadEntryIfNeeded(entry) != nil
 	}
-	// Path never loaded into diskFiles — use cached stat (no file read).
+	// Path never loaded into diskFiles - use cached stat (no file read).
 	return s.fs.FileExists(fileName)
 }
 
