@@ -1,13 +1,16 @@
 // === findAllReferences ===
 // === /a.ts ===
 // type /*FIND ALL REFS*/[|T|] = number;
-// export = T;
+// export = [|T|];
+
+// === /b.ts ===
+// import [|T|] = require("./a");
 
 
 
 // === findAllReferences ===
 // === /a.ts ===
-// type T = number;
+// type [|T|] = number;
 // /*FIND ALL REFS*/export = [|T|];
 
 // === /b.ts ===
@@ -17,7 +20,7 @@
 
 // === findAllReferences ===
 // === /a.ts ===
-// type T = number;
+// type [|T|] = number;
 // export = /*FIND ALL REFS*/[|T|];
 
 // === /b.ts ===

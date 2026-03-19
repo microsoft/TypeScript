@@ -987,7 +987,7 @@ func getMeaningFromLocation(node *ast.Node) ast.SemanticMeaning {
 	switch {
 	case ast.IsSourceFile(node):
 		return ast.SemanticMeaningValue
-	case ast.NodeKindIs(node, ast.KindExportAssignment, ast.KindExportSpecifier, ast.KindExternalModuleReference, ast.KindImportSpecifier, ast.KindImportClause) || parent.Kind == ast.KindImportEqualsDeclaration && node == parent.Name():
+	case ast.NodeKindIs(parent, ast.KindExportAssignment, ast.KindExportSpecifier, ast.KindExternalModuleReference, ast.KindImportSpecifier, ast.KindImportClause) || parent.Kind == ast.KindImportEqualsDeclaration && node == parent.Name():
 		return ast.SemanticMeaningAll
 	case isInRightSideOfInternalImportEqualsDeclaration(node):
 		//     import a = |b|; // Namespace

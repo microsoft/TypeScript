@@ -4,7 +4,7 @@
 // module Foo { export interface Bar { } }
 // function Foo() { }
 // 
-// export = Foo;
+// export = [|Foo|];
 
 
 
@@ -14,7 +14,7 @@
 // module /*FIND ALL REFS*/[|Foo|] { export interface Bar { } }
 // function Foo() { }
 // 
-// export = Foo;
+// export = [|Foo|];
 
 
 
@@ -30,8 +30,8 @@
 
 // === findAllReferences ===
 // === /referencesForMergedDeclarations5.ts ===
-// interface Foo { }
-// module Foo { export interface Bar { } }
+// interface [|Foo|] { }
+// module [|Foo|] { export interface Bar { } }
 // function [|Foo|]() { }
 // 
 // export = /*FIND ALL REFS*/[|Foo|];
