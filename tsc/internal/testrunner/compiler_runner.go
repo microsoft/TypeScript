@@ -84,9 +84,6 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 }
 
 var skippedTests = []string{
-	// Flaky
-	"for-of29.ts",
-
 	// Tests that depended on typescript.d.ts in built.
 	"APILibCheck.ts",
 	"APISample_Watch.ts",

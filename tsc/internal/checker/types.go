@@ -342,6 +342,7 @@ type AssertionLinks struct {
 
 type SourceFileLinks struct {
 	typeChecked               bool
+	unusedChecked             bool
 	deferredNodes             collections.OrderedSet[*ast.Node]
 	identifierCheckNodes      []*ast.Node
 	localJsxNamespace         string

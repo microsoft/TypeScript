@@ -2,9 +2,9 @@
 
 === YieldExpression6_es6.ts ===
 function* foo() {
->foo : () => any
+>foo : () => Generator<any, void, unknown>
 
   yield*foo
 >yield*foo : any
->foo : () => any
+>foo : () => Generator<any, void, unknown>
 }
