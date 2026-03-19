@@ -916,15 +916,15 @@ func (l *LanguageService) getReferencedSymbolsForNode(ctx context.Context, posit
 		return l.getReferencedSymbolsForModule(ctx, program, symbol.Parent, false /*excludeImportTypeOfExportEquals*/, sourceFiles, sourceFilesSet)
 	}
 
-	moduleReferences := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, symbol, program, sourceFiles, checker, options, sourceFilesSet) // !!! cancellationToken
+	moduleReferences := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, symbol, program, sourceFiles, checker, options, sourceFilesSet)
 	if moduleReferences != nil && symbol.Flags&ast.SymbolFlagsTransient == 0 {
 		return moduleReferences
 	}
 
 	aliasedSymbol := getMergedAliasedSymbolOfNamespaceExportDeclaration(node, symbol, checker)
-	moduleReferencesOfExportTarget := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, aliasedSymbol, program, sourceFiles, checker, options, sourceFilesSet) // !!! cancellationToken
+	moduleReferencesOfExportTarget := l.getReferencedSymbolsForModuleIfDeclaredBySourceFile(ctx, aliasedSymbol, program, sourceFiles, checker, options, sourceFilesSet)
 
-	references := getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, options) // !!! cancellationToken
+	references := getReferencedSymbolsForSymbol(ctx, program, symbol, node, sourceFiles, sourceFilesSet, checker, options)
 	return l.mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget)
 }
 
@@ -992,7 +992,7 @@ func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(ct
 		return moduleReferences
 	}
 	symbol, _ = checker.ResolveAlias(exportEquals)
-	return l.mergeReferences(program, moduleReferences, getReferencedSymbolsForSymbol(symbol /*node*/, nil, sourceFiles, sourceFilesSet, checker /*, cancellationToken*/, options))
+	return l.mergeReferences(program, moduleReferences, getReferencedSymbolsForSymbol(ctx, program, symbol /*node*/, nil, sourceFiles, sourceFilesSet, checker /*, cancellationToken*/, options))
 }
 
 func getReferencedSymbolsSpecial(node *ast.Node, sourceFiles []*ast.SourceFile) []*SymbolAndEntries {
@@ -1429,7 +1429,7 @@ func getSpecialSearchKind(node *ast.Node) string {
 	}
 }
 
-func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], checker *checker.Checker, options refOptions) []*SymbolAndEntries {
+func getReferencedSymbolsForSymbol(ctx context.Context, program *compiler.Program, originalSymbol *ast.Symbol, node *ast.Node, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], checker *checker.Checker, options refOptions) []*SymbolAndEntries {
 	// Core find-all-references algorithm for a normal symbol.
 
 	symbol := core.Coalesce(skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker /*useLocalSymbolForExportSpecifier*/, !isForRenameWithPrefixAndSuffixText(options)), originalSymbol)
@@ -1439,7 +1439,7 @@ func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, s
 	if options.use != referenceUseRename {
 		searchMeaning = getIntersectingMeaningFromDeclarations(node, symbol, ast.SemanticMeaningAll)
 	}
-	state := newState(sourceFiles, sourceFilesSet, node, checker /*, cancellationToken*/, searchMeaning, options)
+	state := newState(ctx, program, sourceFiles, sourceFilesSet, node, checker, searchMeaning, options)
 
 	var exportSpecifier *ast.Node
 	if isForRenameWithPrefixAndSuffixText(options) && len(symbol.Declarations) != 0 {
@@ -1485,11 +1485,12 @@ type inheritKey struct {
 }
 
 type refState struct {
-	sourceFiles       []*ast.SourceFile
-	sourceFilesSet    *collections.Set[string]
-	specialSearchKind string // "none", "constructor", or "class"
-	checker           *checker.Checker
-	// cancellationToken CancellationToken
+	sourceFiles                  []*ast.SourceFile
+	sourceFilesSet               *collections.Set[string]
+	specialSearchKind            string // "none", "constructor", or "class"
+	checker                      *checker.Checker
+	ctx                          context.Context
+	program                      *compiler.Program
 	searchMeaning                ast.SemanticMeaning
 	options                      refOptions
 	result                       []*SymbolAndEntries
@@ -1501,12 +1502,14 @@ type refState struct {
 	sourceFileToSeenSymbols      map[*ast.SourceFile]*collections.Set[*ast.Symbol]
 }
 
-func newState(sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
+func newState(ctx context.Context, program *compiler.Program, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
 	return &refState{
 		sourceFiles:             sourceFiles,
 		sourceFilesSet:          sourceFilesSet,
 		specialSearchKind:       getSpecialSearchKind(node),
 		checker:                 checker,
+		ctx:                     ctx,
+		program:                 program,
 		searchMeaning:           searchMeaning,
 		options:                 options,
 		inheritsFromCache:       map[inheritKey]bool{},
@@ -1521,7 +1524,7 @@ func (state *refState) includesSourceFile(sourceFile *ast.SourceFile) bool {
 
 func (state *refState) getImportSearches(exportSymbol *ast.Symbol, exportInfo *ExportInfo) *ImportsResult {
 	if state.importTracker == nil {
-		state.importTracker = createImportTracker(state.sourceFiles, state.sourceFilesSet, state.checker)
+		state.importTracker = createImportTracker(state.ctx, state.program, state.sourceFiles, state.sourceFilesSet, state.checker)
 	}
 	return state.importTracker(exportSymbol, exportInfo, state.options.use == referenceUseRename)
 }

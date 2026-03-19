@@ -933,7 +933,7 @@ func newTextWithContext(fileName string, content string) *textWithContext {
 }
 
 func (t *textWithContext) add(detail *baselineDetail) {
-	if t.content == "" && detail == nil {
+	if t.newContent.Len() == 0 && detail == nil {
 		panic("Unsupported")
 	}
 	if detail == nil || (detail.kind != detailKindTextEnd && detail.kind != detailKindContextEnd) {

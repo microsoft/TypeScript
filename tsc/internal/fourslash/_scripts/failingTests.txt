@@ -422,7 +422,6 @@ TestQuickInfoUntypedModuleImport
 TestQuickInfoWidenedTypes
 TestQuickinfoWrongComment
 TestRecursiveInternalModuleImport
-TestReferencesInEmptyFile
 TestRegexDetection
 TestReverseMappedTypeQuickInfo
 TestSelfReferencedExternalModule

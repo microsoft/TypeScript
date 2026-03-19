@@ -78,7 +78,7 @@ type processedFiles struct {
 	typeResolutionsInFile         map[tspath.Path]module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	sourceFileMetaDatas           map[tspath.Path]ast.SourceFileMetaData
 	jsxRuntimeImportSpecifiers    map[tspath.Path]*jsxRuntimeImportSpecifier
-	importHelpersImportSpecifiers map[tspath.Path]*ast.Node
+	importHelpersImportSpecifiers map[tspath.Path]*ast.StringLiteralNode
 	libFiles                      map[tspath.Path]*LibFile
 	// List of present unsupported extensions
 	sourceFilesFoundSearchingNodeModules collections.Set[tspath.Path]
@@ -95,7 +95,7 @@ type processedFiles struct {
 
 type jsxRuntimeImportSpecifier struct {
 	moduleReference string
-	specifier       *ast.Node
+	specifier       *ast.StringLiteralNode
 }
 
 func processAllProgramFiles(
@@ -464,7 +464,7 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(t *parseTask) {
 	}
 }
 
-func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.Node {
+func (p *fileLoader) createSyntheticImport(text string, file *ast.SourceFile) *ast.StringLiteralNode {
 	p.factoryMu.Lock()
 	defer p.factoryMu.Unlock()
 	externalHelpersModuleReference := p.factory.NewStringLiteral(text, ast.TokenFlagsNone)
