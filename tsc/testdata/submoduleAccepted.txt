@@ -60,3 +60,5 @@ fourslash/inlayHints/inlayHintsInteractiveFunctionParameterTypes1.baseline.diff
 
 ## regex checking ##
 
+## find all references ##
+fourslash/findAllReferences/isDefinitionAcrossGlobalProjects.baseline.jsonc.diff
