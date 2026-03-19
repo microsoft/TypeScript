@@ -978,7 +978,8 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 				// !!! other options
 			},
 			SignatureHelpProvider: &lsproto.SignatureHelpOptions{
-				TriggerCharacters: &[]string{"(", ","},
+				TriggerCharacters:   &[]string{"(", ",", "<"},
+				RetriggerCharacters: &[]string{")"},
 			},
 			DocumentFormattingProvider: &lsproto.BooleanOrDocumentFormattingOptions{
 				Boolean: new(true),
