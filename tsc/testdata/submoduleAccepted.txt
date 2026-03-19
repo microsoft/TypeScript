@@ -62,3 +62,15 @@ fourslash/inlayHints/inlayHintsInteractiveFunctionParameterTypes1.baseline.diff
 
 ## find all references ##
 fourslash/findAllReferences/isDefinitionAcrossGlobalProjects.baseline.jsonc.diff
+fourslash/findAllReferences/findAllRefsNonexistentPropertyNoCrash1.baseline.jsonc.diff
+fourslash/findAllReferences/findAllRefsParameterPropertyDeclaration_inheritance.baseline.jsonc.diff
+fourslash/findAllReferences/findAllRefsOnDefinition.baseline.jsonc.diff
+fourslash/findAllReferences/findReferencesDefinitionDisplayParts.baseline.jsonc.diff
+fourslash/findAllReferences/localGetReferences.baseline.jsonc.diff
+fourslash/findAllReferences/referencesForDeclarationKeywords.baseline.jsonc.diff
+fourslash/findAllReferences/referencesForMergedDeclarations.baseline.jsonc.diff
+fourslash/findAllReferences/referencesForMergedDeclarations3.baseline.jsonc.diff
+fourslash/findAllReferences/referencesForModifiers.baseline.jsonc.diff
+fourslash/findAllReferences/referencesForOverrides.baseline.jsonc.diff
+fourslash/findAllReferences/referencesForStaticsAndMembersWithSameNames.baseline.jsonc.diff
+fourslash/findAllReferences/remoteGetReferences.baseline.jsonc.diff
