@@ -846,7 +846,7 @@ func tryDirectoryWithPackageJson(
 	}
 
 	packageJsonContent := packageJson.GetContents()
-	if options.GetResolvePackageJsonImports() {
+	if options.GetResolvePackageJsonExports() {
 		// The package name that we found in node_modules could be different from the package
 		// name in the package.json content via url/filepath dependency specifiers. We need to
 		// use the actual directory name, so don't look at `packageJsonContent.name` here.
