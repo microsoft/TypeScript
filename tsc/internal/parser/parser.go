@@ -199,7 +199,7 @@ func (p *Parser) parseJSONText() *ast.SourceFile {
 
 		var expression *ast.Expression
 		if es, ok := expressions.([]*ast.Expression); ok {
-			expression = p.factory.NewArrayLiteralExpression(p.newNodeList(core.NewTextRange(pos, p.nodePos()), es), false)
+			expression = p.finishNode(p.factory.NewArrayLiteralExpression(p.newNodeList(core.NewTextRange(pos, p.nodePos()), es), false), pos)
 		} else {
 			expression = expressions.(*ast.Expression)
 		}

@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/jsonImportMultipleTopLevelObjects.ts] ////
+
+=== data.json ===
+{"a": 1}
+>"a" : Symbol("a", Decl(data.json, 0, 1))
+
+{"b": 2}
+>"b" : Symbol("b", Decl(data.json, 1, 1))
+
+=== index.ts ===
+import data from "./data.json";
+>data : Symbol(data, Decl(index.ts, 0, 6))
+
