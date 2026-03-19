@@ -1,6 +1,7 @@
 package format
 
 import (
+	"iter"
 	"slices"
 	"unicode/utf8"
 
@@ -16,6 +17,263 @@ import (
 func GetIndentationForNode(n *ast.Node, ignoreActualIndentationRange *core.TextRange, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
 	startline, startpos := scanner.GetECMALineAndByteOffsetOfPosition(sourceFile, scanner.GetTokenPosOfNode(n, sourceFile, false))
 	return getIndentationForNodeWorker(n, startline, startpos, ignoreActualIndentationRange /*indentationDelta*/, 0, sourceFile /*isNextChild*/, false, options)
+}
+
+// GetIndentation computes the expected indentation for a position in a source file.
+// This is the Go port of SmartIndenter.getIndentation from TypeScript.
+func GetIndentation(position int, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings, assumeNewLineBeforeCloseBrace bool) int {
+	if position > len(sourceFile.Text()) {
+		return options.BaseIndentSize // past EOF
+	}
+
+	// no indentation when the indent style is set to none,
+	// so we can return fast
+	if options.IndentStyle == lsutil.IndentStyleNone {
+		return 0
+	}
+
+	precedingToken := astnav.FindPrecedingTokenEx(sourceFile, position, nil /*startNode*/, true /*excludeJSDoc*/)
+
+	enclosingCommentRange := getRangeOfEnclosingComment(sourceFile, position, precedingToken)
+	if enclosingCommentRange != nil && enclosingCommentRange.Kind == ast.KindMultiLineCommentTrivia {
+		return getCommentIndent(sourceFile, position, options, enclosingCommentRange)
+	}
+
+	if precedingToken == nil {
+		return options.BaseIndentSize
+	}
+
+	// no indentation in string/regex/template literals
+	if isStringOrRegularExpressionOrTemplateLiteral(precedingToken.Kind) {
+		tokenStart := scanner.GetTokenPosOfNode(precedingToken, sourceFile, false)
+		if tokenStart <= position && position < precedingToken.End() {
+			return 0
+		}
+	}
+
+	lineAtPosition := scanner.GetECMALineOfPosition(sourceFile, position)
+
+	// indentation is first non-whitespace character in a previous line
+	// for block indentation, we should look for a line which contains something that's not
+	// whitespace.
+	currentToken := astnav.GetTokenAtPosition(sourceFile, position)
+	// For object literals, we want indentation to work just like with blocks.
+	// If the `{` starts in any position (even in the middle of a line), then
+	// the following indentation should treat `{` as the start of that line (including leading whitespace).
+	// ```
+	//     const a: { x: undefined, y: undefined } = {}       // leading 4 whitespaces and { starts in the middle of line
+	// ->
+	//     const a: { x: undefined, y: undefined } = {
+	//         x: undefined,
+	//         y: undefined,
+	//     }
+	// ---------------------
+	//     const a: {x : undefined, y: undefined } =
+	//      {}
+	// ->
+	//     const a: { x: undefined, y: undefined } =
+	//      {                                                  // leading 5 whitespaces and { starts at 6 column
+	//          x: undefined,
+	//          y: undefined,
+	//      }
+	// ```
+	isObjectLiteral := currentToken.Kind == ast.KindOpenBraceToken && currentToken.Parent != nil && currentToken.Parent.Kind == ast.KindObjectLiteralExpression
+	if options.IndentStyle == lsutil.IndentStyleBlock || isObjectLiteral {
+		return getBlockIndent(sourceFile, position, options)
+	}
+
+	if precedingToken.Kind == ast.KindCommaToken && precedingToken.Parent != nil && precedingToken.Parent.Kind != ast.KindBinaryExpression {
+		// previous token is comma that separates items in list - find the previous item and try to derive indentation from it
+		actualIndentation := getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options)
+		if actualIndentation != -1 {
+			return actualIndentation
+		}
+	}
+
+	containerList := getListByPosition(position, precedingToken.Parent, sourceFile)
+	// use list position if the preceding token is before any list items
+	if containerList != nil && !precedingToken.Loc.ContainedBy(containerList.Loc) {
+		useTheSameBaseIndentation := currentToken.Parent != nil && (currentToken.Parent.Kind == ast.KindFunctionExpression || currentToken.Parent.Kind == ast.KindArrowFunction)
+		indentSize := 0
+		if !useTheSameBaseIndentation {
+			indentSize = options.IndentSize
+		}
+		res := getActualIndentationForListStartLine(containerList, sourceFile, options)
+		if res == -1 {
+			return indentSize
+		}
+		return res + indentSize
+	}
+
+	return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options)
+}
+
+func getCommentIndent(sourceFile *ast.SourceFile, position int, options *lsutil.FormatCodeSettings, enclosingCommentRange *ast.CommentRange) int {
+	previousLine := scanner.GetECMALineOfPosition(sourceFile, position) - 1
+	commentStartLine := scanner.GetECMALineOfPosition(sourceFile, enclosingCommentRange.Pos())
+
+	debug.Assert(commentStartLine >= 0, "commentStartLine >= 0")
+
+	if previousLine <= commentStartLine {
+		lineStarts := scanner.GetECMALineStarts(sourceFile)
+		return FindFirstNonWhitespaceColumn(int(lineStarts[commentStartLine]), position, sourceFile, options)
+	}
+
+	lineStarts := scanner.GetECMALineStarts(sourceFile)
+	startPositionOfLine := int(lineStarts[previousLine])
+	character, column := findFirstNonWhitespaceCharacterAndColumn(startPositionOfLine, position, sourceFile, options)
+
+	if column == 0 {
+		return column
+	}
+
+	firstNonWhitespaceCharacterCode := sourceFile.Text()[startPositionOfLine+character]
+	if firstNonWhitespaceCharacterCode == '*' {
+		return column - 1
+	}
+	return column
+}
+
+func getLeadingCommentRangesOfNode(node *ast.Node, file *ast.SourceFile) iter.Seq[ast.CommentRange] {
+	if node.Kind == ast.KindJsxText {
+		return nil
+	}
+	return scanner.GetLeadingCommentRanges(&ast.NodeFactory{}, file.Text(), node.Pos())
+}
+
+func getRangeOfEnclosingComment(
+	sourceFile *ast.SourceFile,
+	position int,
+	precedingToken *ast.Node,
+) *ast.CommentRange {
+	tokenAtPosition := astnav.GetTokenAtPosition(sourceFile, position)
+	jsdoc := ast.FindAncestor(tokenAtPosition, (*ast.Node).IsJSDoc)
+	if jsdoc != nil {
+		tokenAtPosition = jsdoc.Parent
+	}
+	tokenStart := astnav.GetStartOfNode(tokenAtPosition, sourceFile, false /*includeJSDoc*/)
+	if tokenStart <= position && position < tokenAtPosition.End() {
+		return nil
+	}
+
+	// Between two consecutive tokens, all comments are either trailing on the former
+	// or leading on the latter (and none are in both lists).
+	var trailingRangesOfPreviousToken iter.Seq[ast.CommentRange]
+	if precedingToken != nil {
+		trailingRangesOfPreviousToken = scanner.GetTrailingCommentRanges(&ast.NodeFactory{}, sourceFile.Text(), precedingToken.End())
+	}
+	leadingRangesOfNextToken := getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile)
+	commentRanges := core.ConcatenateSeq(trailingRangesOfPreviousToken, leadingRangesOfNextToken)
+	for commentRange := range commentRanges {
+		if commentRange.ContainsExclusive(position) ||
+			position == commentRange.End() &&
+				(commentRange.Kind == ast.KindSingleLineCommentTrivia || position == len(sourceFile.Text())) {
+			return &commentRange
+		}
+	}
+	return nil
+}
+
+func getBlockIndent(sourceFile *ast.SourceFile, position int, options *lsutil.FormatCodeSettings) int {
+	// move backwards until we find a line with a non-whitespace character,
+	// then find the first non-whitespace character for that line.
+	current := position
+	for current > 0 {
+		ch, size := utf8.DecodeRuneInString(sourceFile.Text()[current:])
+		if !stringutil.IsWhiteSpaceLike(ch) {
+			break
+		}
+		current -= size
+	}
+
+	lineStart := GetLineStartPositionForPosition(current, sourceFile)
+	return FindFirstNonWhitespaceColumn(lineStart, current, sourceFile, options)
+}
+
+func getActualIndentationForListItemBeforeComma(commaToken *ast.Node, sourceFile *ast.SourceFile, options *lsutil.FormatCodeSettings) int {
+	// previous token is comma that separates items in list - find the previous item and try to derive indentation from it
+	if commaToken.Parent == nil {
+		return -1
+	}
+	containingList := GetContainingList(commaToken, sourceFile)
+	if containingList == nil {
+		return -1
+	}
+	commaIndex := core.FindIndex(containingList.Nodes, func(n *ast.Node) bool { return n == commaToken })
+	if commaIndex > 0 {
+		return deriveActualIndentationFromList(containingList, commaIndex-1, sourceFile, options)
+	}
+	return -1
+}
+
+type nextTokenKind int
+
+const (
+	nextTokenKindUnknown    nextTokenKind = 0
+	nextTokenKindOpenBrace  nextTokenKind = 1
+	nextTokenKindCloseBrace nextTokenKind = 2
+)
+
+func nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken *ast.Node, current *ast.Node, lineAtPosition int, sourceFile *ast.SourceFile) nextTokenKind {
+	nextToken := astnav.FindNextToken(precedingToken, current, sourceFile)
+	if nextToken == nil {
+		return nextTokenKindUnknown
+	}
+
+	if nextToken.Kind == ast.KindOpenBraceToken {
+		// open braces are always indented at the parent level
+		return nextTokenKindOpenBrace
+	} else if nextToken.Kind == ast.KindCloseBraceToken {
+		// close braces are indented at the parent level if they are located on the same line with cursor
+		nextTokenStartLine := getStartLineForNode(nextToken, sourceFile)
+		if lineAtPosition == nextTokenStartLine {
+			return nextTokenKindCloseBrace
+		}
+		return nextTokenKindUnknown
+	}
+
+	return nextTokenKindUnknown
+}
+
+func getSmartIndent(sourceFile *ast.SourceFile, position int, precedingToken *ast.Node, lineAtPosition int, assumeNewLineBeforeCloseBrace bool, options *lsutil.FormatCodeSettings) int {
+	// try to find node that can contribute to indentation and includes 'position' starting from 'precedingToken'
+	// if such node is found - compute initial indentation for 'position' inside this node
+	var previous *ast.Node
+	current := precedingToken
+
+	for current != nil {
+		if lsutil.PositionBelongsToNode(current, position, sourceFile) && ShouldIndentChildNode(options, current, previous, sourceFile, true) {
+			currentStartLine, currentStartChar := getStartLineAndCharacterForNode(current, sourceFile)
+			ntk := nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)
+			var indentationDelta int
+			if ntk != nextTokenKindUnknown {
+				// handle cases when codefix is about to be inserted before the close brace
+				if assumeNewLineBeforeCloseBrace && ntk == nextTokenKindCloseBrace {
+					indentationDelta = options.IndentSize
+				}
+				// else 0
+			} else {
+				if lineAtPosition != currentStartLine {
+					indentationDelta = options.IndentSize
+				}
+			}
+			return getIndentationForNodeWorker(current, currentStartLine, currentStartChar, nil, indentationDelta, sourceFile, true, options)
+		}
+
+		// check if current node is a list item - if yes, take indentation from it
+		// do not consider parent-child line sharing yet:
+		// function foo(a
+		//    | preceding node 'a' does share line with its parent but indentation is expected
+		actualIndentation := getActualIndentationForListItem(current, sourceFile, options, true /*listIndentsChild*/)
+		if actualIndentation != -1 {
+			return actualIndentation
+		}
+
+		previous = current
+		current = current.Parent
+	}
+	// no parent was found - return the base indentation of the SourceFile
+	return options.BaseIndentSize
 }
 
 func getIndentationForNodeWorker(

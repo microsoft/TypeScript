@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -40,19 +41,19 @@ new SomePig`,
     type SomeInterface,
 } from "./exports.js";
 new SomePig`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import {
     type SomeInterface,
     SomePig,
 } from "./exports.js";
 new SomePig`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import {
     type SomeInterface,
     SomePig,
 } from "./exports.js";
 new SomePig`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst})
 }

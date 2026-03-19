@@ -211,7 +211,7 @@ func deleteNodeInList(t *Tracker, deletedNodesInLists map[*ast.Node]bool, source
 	startPos := t.startPositionToDeleteNodeInList(sourceFile, node)
 	var endPos int
 	if index == len(containingList.Nodes)-1 {
-		endPos = t.getAdjustedEndPosition(sourceFile, node, TrailingTriviaOptionInclude)
+		endPos = t.getAdjustedEndPosition(sourceFile, node, TrailingTriviaOptionNone)
 	} else {
 		prevNode := (*ast.Node)(nil)
 		if index > 0 {

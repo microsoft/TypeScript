@@ -1055,6 +1055,10 @@ func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenI
 				if savePreviousRange != NewTextRangeWithKind(0, 0, 0) {
 					prevEndLine := scanner.GetECMALineOfPosition(w.sourceFile, savePreviousRange.Loc.End())
 					indentToken = lastTriviaWasNewLine && tokenStartLine != prevEndLine
+				} else {
+					// When there's no previous range (first token), TS sets prevEndLine to undefined.
+					// tokenStart.line !== undefined is always true in JS, so indentToken = lastTriviaWasNewLine.
+					indentToken = lastTriviaWasNewLine
 				}
 			} else {
 				indentToken = lineAction == LineActionLineAdded

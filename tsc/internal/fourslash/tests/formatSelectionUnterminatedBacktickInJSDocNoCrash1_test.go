@@ -35,7 +35,7 @@ func TestFormatSelectionUnterminatedBacktickInJSDocNoCrash1(t *testing.T) {
 		"   * @param {ExtType} extType - `dri\n"+
 		"   * @param {string} extName\n"+
 		"   */\n"+
-		"  setExtension(extType, extName, extData) {\n"+
+		"    setExtension(extType, extName, extData) {\n"+
 		"        const data = _.cloneDeep(extData);\n"+
 		"        this.#data[`${extType}s`][extName] = data;\n"+
 		"        return data;\n"+

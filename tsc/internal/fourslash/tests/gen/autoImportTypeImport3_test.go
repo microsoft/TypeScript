@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -32,15 +33,15 @@ console.log(A, D/**/);`
 		`import { A, D, type B, type C } from './foo';
 const b: B | C;
 console.log(A, D);`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, type B, type C, D } from './foo';
 const b: B | C;
 console.log(A, D);`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, type B, type C, D } from './foo';
 const b: B | C;
 console.log(A, D);`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst})
 }

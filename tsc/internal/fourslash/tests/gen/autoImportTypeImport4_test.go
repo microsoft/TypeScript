@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -54,7 +55,7 @@ b;`,
 		`import { A, b, B, C } from "./exports1";
 a;
 b;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "0a")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a, A, B, C } from "./exports1";
@@ -63,7 +64,7 @@ b;`,
 		`import { A, b, B, C } from "./exports1";
 a;
 b;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "1")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a, A, B, C, type Y, type Z } from "./exports1";
@@ -72,7 +73,7 @@ b;`,
 		`import { A, b, B, C, type Y, type Z } from "./exports1";
 a;
 b;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "1a")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a, A, B, C, type Y, type Z } from "./exports1";
@@ -81,7 +82,7 @@ b;`,
 		`import { A, b, B, C, type Y, type Z } from "./exports1";
 a;
 b;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "1b")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a, A, B, C, type Y, type Z } from "./exports1";
@@ -90,7 +91,7 @@ b;`,
 		`import { A, b, B, C, type Y, type Z } from "./exports1";
 a;
 b;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline})
 	f.GoToMarker(t, "1c")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { a, A, B, C, type Y, type Z } from "./exports1";
@@ -99,29 +100,29 @@ b;`,
 		`import { A, b, B, C, type Y, type Z } from "./exports1";
 a;
 b;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline})
 	f.GoToMarker(t, "2")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, a, B, b, type Y, type Z } from "./exports1";
 import { d, E } from "./exports2";
 d`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "2a")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, a, B, b, type Y, type Z } from "./exports1";
 import { E, d } from "./exports2";
 d`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "2b")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, a, B, b, type Y, type Z } from "./exports1";
 import { d, E } from "./exports2";
 d`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.GoToMarker(t, "2c")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, a, B, b, type Y, type Z } from "./exports1";
 import { E, d } from "./exports2";
 d`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 }

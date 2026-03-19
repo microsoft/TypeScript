@@ -1677,6 +1677,24 @@ function parseUserPreferences(arg: ts.ObjectLiteralExpression): string {
                 case "preferTypeOnlyAutoImports":
                     preferences.push(`PreferTypeOnlyAutoImports: ${prop.initializer.getText()}`);
                     break;
+                case "organizeImportsTypeOrder":
+                    if (!ts.isStringLiteralLike(prop.initializer)) {
+                        return undefined;
+                    }
+                    switch (prop.initializer.text) {
+                        case "last":
+                            preferences.push(`OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast`);
+                            break;
+                        case "inline":
+                            preferences.push(`OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline`);
+                            break;
+                        case "first":
+                            preferences.push(`OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst`);
+                            break;
+                        default:
+                            return undefined;
+                    }
+                    break;
                 case "autoImportFileExcludePatterns":
                     const arrayArg = getArrayLiteralExpression(prop.initializer);
                     if (!arrayArg) {

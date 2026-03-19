@@ -30,10 +30,10 @@ let x: AAA = new BBB()`
 	defer done()
 	f.GoToFile(t, "/foo.ts")
 
-	// TODO: fix formatting
 	f.VerifyImportFixAtPosition(t, []string{
 		`import {
-BBB,     type AAA,
+    BBB,
+    type AAA,
 } from "./bar";
 
 let x: AAA = new BBB()`,

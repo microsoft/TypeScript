@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -51,7 +52,7 @@ const bar: y;`,
 		`import { type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { type x, type X, type Y, type Z } from "./exports1";
 const foo: x;
@@ -59,7 +60,7 @@ const bar: y;`,
 		`import { type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { type x, type X, type Y, type Z } from "./exports1";
 const foo: x;
@@ -67,7 +68,7 @@ const bar: y;`,
 		`import { type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { type x, type X, type Y, type Z } from "./exports1";
 const foo: x;
@@ -75,7 +76,7 @@ const bar: y;`,
 		`import { type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderInline})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { type x, type X, type Y, type Z } from "./exports1";
 const foo: x;
@@ -83,7 +84,7 @@ const bar: y;`,
 		`import { type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { type x, type X, type Y, type Z } from "./exports1";
 const foo: x;
@@ -91,7 +92,7 @@ const bar: y;`,
 		`import { type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderFirst})
 	f.GoToMarker(t, "1")
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, B, type x, type X, type Y, type Z } from "./exports1";
@@ -100,7 +101,7 @@ const bar: y;`,
 		`import { A, B, type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 	f.VerifyImportFixAtPosition(t, []string{
 		`import { A, B, type x, type X, type Y, type Z } from "./exports1";
 const foo: x;
@@ -108,5 +109,5 @@ const bar: y;`,
 		`import { A, B, type X, type y, type Y, type Z } from "./exports1";
 const foo: x;
 const bar: y;`,
-	}, nil /*preferences*/)
+	}, &lsutil.UserPreferences{OrganizeImportsTypeOrder: lsutil.OrganizeImportsTypeOrderLast})
 }
