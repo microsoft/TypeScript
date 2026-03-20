@@ -10,8 +10,8 @@ import React = require('react');
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => JSX.Element
 >      : ^ ^^                  ^^^^^^^^^^^^^^^^
->x : { name?: string; }
->  : ^^^^^^^^^      ^^^
+>x : { name?: string | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 
@@ -20,8 +20,8 @@ function Greet(x: {name?: string}) {
 >                      : ^^^^^^^^^^^
 >div : any
 >    : ^^^
->x : { name?: string; }
->  : ^^^^^^^^^      ^^^
+>x : { name?: string | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >div : any
 >    : ^^^
 }
@@ -29,8 +29,8 @@ function Greet(x: {name?: string}) {
 class BigGreeter extends React.Component<{ name?: string }, {}> {
 >BigGreeter : BigGreeter
 >           : ^^^^^^^^^^
->React.Component : React.Component<{ name?: string; }, {}>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^
+>React.Component : React.Component<{ name?: string | undefined; }, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

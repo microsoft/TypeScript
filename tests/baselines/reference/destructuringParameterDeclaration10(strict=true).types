@@ -63,16 +63,16 @@ export function prepareConfigWithoutAnnotation({
 export const prepareConfigWithContextualSignature: (param:{
 >prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
 >                                     : ^     ^^                                                                            ^^^^^    
->param : { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }
->      : ^^^^^^^^^^^^^^^^^^^^                                                     ^^^
+>param : { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
 >additionalFiles : Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }) => void = ({
->({    additionalFiles: {        json = []    } = {}} = {}) => {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
->                                                                                     : ^                             ^^^^^^^^^^^^^^^^^^^^^^^                                                     ^^^^^^^^^^^^
+>({    additionalFiles: {        json = []    } = {}} = {}) => {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>> | undefined; }) => void
+>                                                                                     : ^                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     additionalFiles: {
 >additionalFiles : any

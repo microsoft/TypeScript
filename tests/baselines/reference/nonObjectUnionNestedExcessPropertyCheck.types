@@ -7,8 +7,8 @@ interface IProps {
 >         : ^^^^^^^^^^^^^^^^^^
 
     nestedProp?: {
->nestedProp : { testBool?: boolean; } | undefined
->           : ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>nestedProp : { testBool?: boolean | undefined; } | undefined
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         testBool?: boolean;
 >testBool : boolean | undefined

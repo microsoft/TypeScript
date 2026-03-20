@@ -51,12 +51,12 @@ class B<U> extends React.Component<U, {}> {
 >                              : ^^^^^^^^^^^
 >B1 : typeof B1
 >   : ^^^^^^^^^
->this.props : U & { children?: React.ReactNode; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.props : U & { children?: React.ReactNode | undefined; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->props : U & { children?: React.ReactNode; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : U & { children?: React.ReactNode | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
     }

@@ -20,8 +20,8 @@ const Foo = (props: any) => undefined;
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => undefined
 >      : ^ ^^                  ^^^^^^^^^^^^^^
->x : { name?: string; }
->  : ^^^^^^^^^      ^^^
+>x : { name?: string | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 

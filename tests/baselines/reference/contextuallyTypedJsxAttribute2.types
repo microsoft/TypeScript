@@ -54,8 +54,8 @@ function UnwrappedLink2<T extends ElementType = ElementType>(
 >               : ^ ^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^     ^^                                                                                ^^^^^^^^^^^^^^^^
 
   props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
->props : Omit<React.ComponentPropsWithRef<React.ElementType extends T ? "a" : T>, "as"> & { as?: T; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^
+>props : Omit<React.ComponentPropsWithRef<React.ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     as?: T;
 >as : T | undefined

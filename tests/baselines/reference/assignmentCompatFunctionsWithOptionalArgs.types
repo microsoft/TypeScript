@@ -4,8 +4,8 @@
 function foo(x: { id: number; name?: string; }): void;
 >foo : (x: { id: number; name?: string; }) => void
 >    : ^ ^^                              ^^^^^    
->x : { id: number; name?: string; }
->  : ^^^^^^      ^^^^^^^^^      ^^^
+>x : { id: number; name?: string | undefined; }
+>  : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
 >name : string | undefined

@@ -28,8 +28,8 @@ class MyComponent {
   }
 
   props: {
->props : { ref?: string; }
->      : ^^^^^^^^      ^^^
+>props : { ref?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	  ref?: string;
 >ref : string | undefined

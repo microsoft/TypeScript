@@ -32,7 +32,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "property",
-    "name": "(property) JSX.IntrinsicElements.div: {\n    name?: string;\n    isOpen?: boolean;\n}",
+    "name": "(property) JSX.IntrinsicElements.div: {\n    name?: string | undefined;\n    isOpen?: boolean | undefined;\n}",
     "displayParts": [
      {
       "text": "(",
@@ -111,6 +111,22 @@
       "kind": "keyword"
      },
      {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
+      "kind": "keyword"
+     },
+     {
       "text": ";",
       "kind": "punctuation"
      },
@@ -140,6 +156,22 @@
      },
      {
       "text": "boolean",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
       "kind": "keyword"
      },
      {
@@ -204,7 +236,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "property",
-    "name": "(property) JSX.IntrinsicElements.div: {\n    name?: string;\n    isOpen?: boolean;\n}",
+    "name": "(property) JSX.IntrinsicElements.div: {\n    name?: string | undefined;\n    isOpen?: boolean | undefined;\n}",
     "displayParts": [
      {
       "text": "(",
@@ -283,6 +315,22 @@
       "kind": "keyword"
      },
      {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
+      "kind": "keyword"
+     },
+     {
       "text": ";",
       "kind": "punctuation"
      },
@@ -312,6 +360,22 @@
      },
      {
       "text": "boolean",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "|",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "undefined",
       "kind": "keyword"
      },
      {

@@ -142,8 +142,8 @@ declare function TestingOneThing({y1: string}): JSX.Element;
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
 >TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >                : ^^^              ^^^^^^^^^^^^^^^^^           ^^^ ^^                                      ^^^           ^^^ ^^                                   ^^^           ^^^ ^^                             ^^^           ^^^
->j : { "extra-data": string; yy?: string; }
->  : ^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^
+>j : { "extra-data": string; yy?: string | undefined; }
+>  : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"extra-data" : string
 >             : ^^^^^^
 >yy : string | undefined
@@ -154,8 +154,8 @@ declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.El
 declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
 >TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >                : ^^^              ^^^^^^^^^^^^^^^^^           ^^^ ^^                                      ^^^           ^^^ ^^                                   ^^^           ^^^ ^^                             ^^^           ^^^
->n : { yy: number; direction?: number; }
->  : ^^^^^^      ^^^^^^^^^^^^^^      ^^^
+>n : { yy: number; direction?: number | undefined; }
+>  : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yy : number
 >   : ^^^^^^
 >direction : number | undefined
@@ -246,8 +246,8 @@ const d5 = <TestingOneThing extra-data="hello" yy="hello" name="Bob" />;
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
 >                : ^^^ ^^                             ^^^           ^^^ ^^                                          ^^^           ^^^
->a : { y1?: string; y2?: number; }
->  : ^^^^^^^      ^^^^^^^      ^^^
+>a : { y1?: string | undefined; y2?: number | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y1 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >y2 : number | undefined
@@ -258,8 +258,8 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
 >                : ^^^ ^^                             ^^^           ^^^ ^^                                          ^^^           ^^^
->a : { y1: boolean; y2?: number; y3: boolean; }
->  : ^^^^^^       ^^^^^^^      ^^^^^^       ^^^
+>a : { y1: boolean; y2?: number | undefined; y3: boolean; }
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >y1 : boolean
 >   : ^^^^^^^
 >y2 : number | undefined

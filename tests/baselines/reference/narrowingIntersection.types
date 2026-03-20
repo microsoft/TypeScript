@@ -43,8 +43,8 @@ function test1(result: Disjoint): string {
         throw result.err;
 >result.err : FooAndBaz
 >           : ^^^^^^^^^
->result : { readonly value?: never; readonly err: FooAndBaz; }
->       : ^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^         ^^^
+>result : { readonly value?: undefined; readonly err: FooAndBaz; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^
 >err : FooAndBaz
 >    : ^^^^^^^^^
     }
@@ -52,8 +52,8 @@ function test1(result: Disjoint): string {
     return result.value;
 >result.value : string
 >             : ^^^^^^
->result : { readonly value: string; readonly err?: never; }
->       : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^     ^^^
+>result : { readonly value: string; readonly err?: undefined; }
+>       : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 }

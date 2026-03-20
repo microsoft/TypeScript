@@ -17,8 +17,8 @@ import React, { ReactElement } from "react";
 declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
 >NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => ReactElement<any>
 >         : ^     ^^                                            ^^^^^                 
->props : { fixed?: boolean; } | { value?: number; }
->      : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^      ^^^
+>props : { fixed?: boolean | undefined; } | { value?: number | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fixed : boolean | undefined
 >      : ^^^^^^^^^^^^^^^^^^^
 >value : number | undefined
@@ -27,8 +27,8 @@ declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): Re
 declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
 >Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
 >      : ^     ^^                                    ^^^^^                 
->props : { fixed?: boolean; value?: number; }
->      : ^^^^^^^^^^       ^^^^^^^^^^      ^^^
+>props : { fixed?: boolean | undefined; value?: number | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fixed : boolean | undefined
 >      : ^^^^^^^^^^^^^^^^^^^
 >value : number | undefined

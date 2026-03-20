@@ -4,8 +4,8 @@
 function foo(obj: { name?: string; id: number }) { }
 >foo : (obj: { name?: string; id: number; }) => void
 >    : ^   ^^                              ^^^^^^^^^
->obj : { name?: string; id: number; }
->    : ^^^^^^^^^      ^^^^^^      ^^^
+>obj : { name?: string | undefined; id: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >id : number

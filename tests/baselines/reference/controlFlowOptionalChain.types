@@ -387,8 +387,8 @@ o3.x;
 >  : ^^^^^
 
 declare const o4: { x?: { y: boolean } };
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean
@@ -399,8 +399,8 @@ if (o4.x?.y) {
 >        : ^^^^^^^^^^^^^^^^^^^
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean | undefined
@@ -409,8 +409,8 @@ if (o4.x?.y) {
     o4.x; // { y: boolean }
 >o4.x : { y: boolean; }
 >     : ^^^^^       ^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; }
 >  : ^^^^^       ^^^
 
@@ -419,8 +419,8 @@ if (o4.x?.y) {
 >       : ^^^^
 >o4.x : { y: boolean; }
 >     : ^^^^^       ^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; }
 >  : ^^^^^       ^^^
 >y : true
@@ -431,8 +431,8 @@ if (o4.x?.y) {
 >        : ^^^^
 >o4.x : { y: boolean; }
 >     : ^^^^^       ^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; }
 >  : ^^^^^       ^^^
 >y : true
@@ -442,8 +442,8 @@ else {
     o4.x;
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 
@@ -452,8 +452,8 @@ else {
 >        : ^^^^^^^^^^^^^^^^^^^
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean | undefined
@@ -464,8 +464,8 @@ else {
 >       : ^^^^^^^
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean
@@ -474,8 +474,8 @@ else {
 o4.x;
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 
@@ -484,8 +484,8 @@ o4.x?.y;
 >        : ^^^^^^^^^^^^^^^^^^^
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean | undefined
@@ -496,20 +496,20 @@ o4.x.y;
 >       : ^^^^^^^
 >o4.x : { y: boolean; } | undefined
 >     : ^^^^^       ^^^^^^^^^^^^^^^
->o4 : { x?: { y: boolean; }; }
->   : ^^^^^^               ^^^
+>o4 : { x?: { y: boolean; } | undefined; }
+>   : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >x : { y: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >y : boolean
 >  : ^^^^^^^
 
 declare const o5: { x?: { y: { z?: { w: boolean } } } };
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean
@@ -520,16 +520,16 @@ if (o5.x?.y.z?.w) {
 >             : ^^^^^^^^^^^^^^^^^^^
 >o5.x?.y.z : { w: boolean; } | undefined
 >          : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean | undefined
@@ -538,36 +538,36 @@ if (o5.x?.y.z?.w) {
     o5.x;
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
 
     o5.x.y;
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 
     o5.x.y.z;
 >o5.x.y.z : { w: boolean; }
 >         : ^^^^^       ^^^
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; }
 >  : ^^^^^       ^^^
 
@@ -576,16 +576,16 @@ if (o5.x?.y.z?.w) {
 >           : ^^^^
 >o5.x.y.z : { w: boolean; }
 >         : ^^^^^       ^^^
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; }
 >  : ^^^^^       ^^^
 >w : true
@@ -596,16 +596,16 @@ if (o5.x?.y.z?.w) {
 >            : ^^^^
 >o5.x.y.z : { w: boolean; }
 >         : ^^^^^       ^^^
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; }
 >  : ^^^^^       ^^^
 >w : true
@@ -616,16 +616,16 @@ if (o5.x?.y.z?.w) {
 >            : ^^^^
 >o5.x?.y.z : { w: boolean; }
 >          : ^^^^^       ^^^
->o5.x?.y : { z?: { w: boolean; }; }
->        : ^^^^^^               ^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; }
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; }
 >  : ^^^^^       ^^^
 >w : true
@@ -636,16 +636,16 @@ if (o5.x?.y.z?.w) {
 >             : ^^^^
 >o5.x?.y.z : { w: boolean; }
 >          : ^^^^^       ^^^
->o5.x?.y : { z?: { w: boolean; }; }
->        : ^^^^^^               ^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; }
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; }
 >     : ^^^^^                        ^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; }
 >  : ^^^^^                        ^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; }
 >  : ^^^^^       ^^^
 >w : true
@@ -655,36 +655,36 @@ else {
     o5.x;
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
 
     o5.x?.y;
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     o5.x?.y.z;
 >o5.x?.y.z : { w: boolean; } | undefined
 >          : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 
@@ -693,48 +693,48 @@ else {
 >             : ^^^^^^^^^^^^^^^^^^^
 >o5.x?.y.z : { w: boolean; } | undefined
 >          : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 
     o5.x.y;
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 
     o5.x.y.z.w;
 >o5.x.y.z.w : boolean
 >           : ^^^^^^^
 >o5.x.y.z : { w: boolean; } | undefined
 >         : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean
@@ -743,36 +743,36 @@ else {
 o5.x;
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
 
 o5.x?.y;
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o5.x?.y.z;
 >o5.x?.y.z : { w: boolean; } | undefined
 >          : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 
@@ -781,48 +781,48 @@ o5.x?.y.z?.w;
 >             : ^^^^^^^^^^^^^^^^^^^
 >o5.x?.y.z : { w: boolean; } | undefined
 >          : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x?.y : { z?: { w: boolean; }; } | undefined
->        : ^^^^^^               ^^^^^^^^^^^^^^^
+>o5.x?.y : { z?: { w: boolean; } | undefined; } | undefined
+>        : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; } | undefined
->  : ^^^^^^               ^^^^^^^^^^^^^^^
+>y : { z?: { w: boolean; } | undefined; } | undefined
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 
 o5.x.y;
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 
 o5.x.y.z.w;
 >o5.x.y.z.w : boolean
 >           : ^^^^^^^
 >o5.x.y.z : { w: boolean; } | undefined
 >         : ^^^^^       ^^^^^^^^^^^^^^^
->o5.x.y : { z?: { w: boolean; }; }
->       : ^^^^^^               ^^^
+>o5.x.y : { z?: { w: boolean; } | undefined; }
+>       : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >o5.x : { y: { z?: { w: boolean; }; }; } | undefined
 >     : ^^^^^                        ^^^^^^^^^^^^^^^
->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
->   : ^^^^^^                                ^^^
+>o5 : { x?: { y: { z?: { w: boolean; }; }; } | undefined; }
+>   : ^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^^
 >x : { y: { z?: { w: boolean; }; }; } | undefined
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
->y : { z?: { w: boolean; }; }
->  : ^^^^^^               ^^^
+>y : { z?: { w: boolean; } | undefined; }
+>  : ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^
 >z : { w: boolean; } | undefined
 >  : ^^^^^       ^^^^^^^^^^^^^^^
 >w : boolean

@@ -6,8 +6,8 @@ type X = {
 >  : ^
 
   y?: {
->y : { z?: string; } | undefined
->  : ^^^^^^      ^^^^^^^^^^^^^^^
+>y : { z?: string | undefined; } | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     z?: string;
 >z : string | undefined
@@ -88,12 +88,12 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 >          : ^ ^^ ^^ ^^^^^                   
 >x?.y?.z : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
->x?.y : { z?: string; } | undefined
->     : ^^^^^^      ^^^^^^^^^^^^^^^
+>x?.y : { z?: string | undefined; } | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : X
 >  : ^
->y : { z?: string; } | undefined
->  : ^^^^^^      ^^^^^^^^^^^^^^^
+>y : { z?: string | undefined; } | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >title(x.y.z) : string
@@ -102,12 +102,12 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 >      : ^   ^^      ^^^^^^^^^^^
 >x.y.z : string
 >      : ^^^^^^
->x.y : { z?: string; }
->    : ^^^^^^      ^^^
+>x.y : { z?: string | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : X
 >  : ^
->y : { z?: string; }
->  : ^^^^^^      ^^^
+>y : { z?: string | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : string
 >  : ^^^^^^
 

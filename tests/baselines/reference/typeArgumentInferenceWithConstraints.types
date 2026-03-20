@@ -626,10 +626,10 @@ var a9a: {};
 >    : ^^^^^^
 
 var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
->a9b : { a?: number; b?: string; }
->    : ^^^^^^      ^^^^^^      ^^^
->someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
->                                                                      : ^^^^^^      ^^^^^^      ^^^
+>a9b : { a?: number | undefined; b?: string | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number | undefined; b?: string | undefined; }
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : number | undefined
@@ -650,8 +650,8 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >   : ^^
 
 var a9b: { a?: number; b?: string; };
->a9b : { a?: number; b?: string; }
->    : ^^^^^^      ^^^^^^      ^^^
+>a9b : { a?: number | undefined; b?: string | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : string | undefined

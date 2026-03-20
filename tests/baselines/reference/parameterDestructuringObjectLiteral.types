@@ -8,8 +8,8 @@ const fn1 = (options: { headers?: {} }) => { };
 >    : ^       ^^                 ^^^^^^^^^
 >(options: { headers?: {} }) => { } : (options: { headers?: {}; }) => void
 >                                   : ^       ^^                 ^^^^^^^^^
->options : { headers?: {}; }
->        : ^^^^^^^^^^^^  ^^^
+>options : { headers?: {} | undefined; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : {} | undefined
 >        : ^^^^^^^^^^^^^^
 

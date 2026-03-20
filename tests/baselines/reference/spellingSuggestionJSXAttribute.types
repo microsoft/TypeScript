@@ -15,8 +15,8 @@ import * as React from "react";
 function MyComp2(props: { className?: string, htmlFor?: string }) {
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => never
 >        : ^     ^^                                         ^^^^^^^^^^
->props : { className?: string; htmlFor?: string; }
->      : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
+>props : { className?: string | undefined; htmlFor?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >className : string | undefined
 >          : ^^^^^^^^^^^^^^^^^^
 >htmlFor : string | undefined
@@ -29,8 +29,8 @@ function MyComp2(props: { className?: string, htmlFor?: string }) {
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp
 >       : ^^^^^^
->React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>React.Component : React.Component<{ className?: string | undefined; htmlFor?: string | undefined; }, {}, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

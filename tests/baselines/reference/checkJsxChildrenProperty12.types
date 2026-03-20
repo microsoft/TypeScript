@@ -48,12 +48,12 @@ class Button extends React.Component<ButtonProp, any> {
 >                                : ^^^^^^^^^^^
 >InnerButton : typeof InnerButton
 >            : ^^^^^^^^^^^^^^^^^^
->this.props : ButtonProp & { children?: React.ReactNode; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.props : ButtonProp & { children?: React.ReactNode | undefined; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->props : ButtonProp & { children?: React.ReactNode; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : ButtonProp & { children?: React.ReactNode | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 		}
 		else {
 			return (<InnerButton {...this.props} >
@@ -63,12 +63,12 @@ class Button extends React.Component<ButtonProp, any> {
 >                                                                           : ^^^^^^^^^^^
 >InnerButton : typeof InnerButton
 >            : ^^^^^^^^^^^^^^^^^^
->this.props : ButtonProp & { children?: React.ReactNode; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.props : ButtonProp & { children?: React.ReactNode | undefined; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->props : ButtonProp & { children?: React.ReactNode; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : ButtonProp & { children?: React.ReactNode | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 				<div>Hello World</div>
 ><div>Hello World</div> : JSX.Element

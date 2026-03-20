@@ -3,8 +3,8 @@
 === index.js ===
 /** @type {Array<[string, {x?:number, y?:number}]>} */
 const arr = [
->arr : [string, { x?: number; y?: number; }][]
->    : ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^
+>arr : [string, { x?: number | undefined; y?: number | undefined; }][]
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[    ['a', { x: 1 }],    ['b', { y: 2 }]] : ([string, { x: number; }] | [string, { y: number; }])[]
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -76,14 +76,14 @@ class C {
 
     /** @param {Array<[string, {x?:number, y?:number}]>} value */
     set x(value) { }
->x : [string, { x?: number; y?: number; }][]
->  : ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^
->value : [string, { x?: number; y?: number; }][]
->      : ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^
+>x : [string, { x?: number | undefined; y?: number | undefined; }][]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : [string, { x?: number | undefined; y?: number | undefined; }][]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     get x() {
->x : [string, { x?: number; y?: number; }][]
->  : ^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^
+>x : [string, { x?: number | undefined; y?: number | undefined; }][]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return [
 >[            ['a', { x: 1 }],            ['b', { y: 2 }]        ] : ([string, { x: number; }] | [string, { y: number; }])[]

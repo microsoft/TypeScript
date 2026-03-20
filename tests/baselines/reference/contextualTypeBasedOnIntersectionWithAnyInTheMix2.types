@@ -6,8 +6,8 @@ type IntrinsicElements = {
 >                  : ^^^^^^^^^^^^^^^^^
 
   a: {
->a : { href?: string; }
->  : ^^^^^^^^^      ^^^
+>a : { href?: string | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     href?: string;
 >href : string | undefined
@@ -15,8 +15,8 @@ type IntrinsicElements = {
 
   };
   div: {
->div : { dir?: string; }
->    : ^^^^^^^^      ^^^
+>div : { dir?: string | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     dir?: string;
 >dir : string | undefined
@@ -61,28 +61,28 @@ MyMDXComponent({
 >                                                                                                                    : ^^^^
 >MyMDXComponent : (props: MDXProps) => null
 >               : ^     ^^        ^^^^^    
->{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }; }
->                                                                                                    : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+>{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a(props: { href?: string | undefined; }): null; div(props: { dir?: string | undefined; }): null; }; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   components: {
->components : { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }
->           : ^^^^     ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^
->{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }
->                                                                                   : ^^^^     ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^     ^^^^^^^^^^      ^^^^^^^^^^^^^
+>components : { a(props: { href?: string | undefined; }): null; div(props: { dir?: string | undefined; }): null; }
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a(props: { href?: string | undefined; }): null; div(props: { dir?: string | undefined; }): null; }
+>                                                                                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a(props) {
->a : (props: { href?: string; }) => null
->  : ^     ^^^^^^^^^^^      ^^^^^^^^^^^^
->props : { href?: string; }
->      : ^^^^^^^^^      ^^^
+>a : (props: { href?: string | undefined; }) => null
+>  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : { href?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       return null;
     },
     div(props) {
->div : (props: { dir?: string; }) => null
->    : ^     ^^^^^^^^^^      ^^^^^^^^^^^^
->props : { dir?: string; }
->      : ^^^^^^^^      ^^^
+>div : (props: { dir?: string | undefined; }) => null
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : { dir?: string | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       return null;
     },

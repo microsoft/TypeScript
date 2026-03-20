@@ -206,8 +206,8 @@ let y21 = nonpartial(x21);
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare let x22: { a: number | undefined, b?: string[] };
->x22 : { a: number | undefined; b?: string[]; }
->    : ^^^^^                  ^^^^^^        ^^^
+>x22 : { a: number | undefined; b?: string[] | undefined; }
+>    : ^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : string[] | undefined
@@ -220,8 +220,8 @@ let y22 = nonpartial(x22);
 >                : ^^^^^^^^^^^^^^^^        ^^^
 >nonpartial : <T>(x: Partial<T>) => T
 >           : ^ ^^ ^^          ^^^^^ 
->x22 : { a: number | undefined; b?: string[]; }
->    : ^^^^^                  ^^^^^^        ^^^
+>x22 : { a: number | undefined; b?: string[] | undefined; }
+>    : ^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 >__Awaited : __Awaited<T>

@@ -4,8 +4,8 @@
 // Basic uses of optional properties
 
 var a: {
->a : { x?: number; }
->  : ^^^^^^      ^^^
+>a : { x?: number | undefined; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x?: number; // ok
 >x : number | undefined

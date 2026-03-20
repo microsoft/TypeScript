@@ -1284,8 +1284,8 @@ class C11 {
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
 >f40 : (obj: { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }) => void
 >    : ^   ^^                                                               ^^^^^^^^^
->obj : { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }
->    : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
+>obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "foo"
 >     : ^^^^^
 >foo : string | undefined
@@ -1298,8 +1298,8 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
     const { kind } = obj;
 >kind : "foo" | "bar"
 >     : ^^^^^^^^^^^^^
->obj : { kind: "foo"; foo?: string; } | { kind: "bar"; bar?: number; }
->    : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
+>obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isFoo = kind == 'foo';
 >isFoo : boolean
@@ -1318,8 +1318,8 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
 >      : ^^^^^^^
 >obj.foo : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
->obj : { kind: "foo"; foo?: string; }
->    : ^^^^^^^^     ^^^^^^^^      ^^^
+>obj : { kind: "foo"; foo?: string | undefined; }
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -1328,8 +1328,8 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
 >  : ^^^^^^
 >obj.foo : string
 >        : ^^^^^^
->obj : { kind: "foo"; foo?: string; }
->    : ^^^^^^^^     ^^^^^^^^      ^^^
+>obj : { kind: "foo"; foo?: string | undefined; }
+>    : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
     }

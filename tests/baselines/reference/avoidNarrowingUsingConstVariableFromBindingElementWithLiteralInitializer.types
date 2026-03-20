@@ -8,8 +8,8 @@ declare const foo: ["a", string, number] | ["b", string, boolean];
 export function test(arg: { index?: number }) {
 >test : (arg: { index?: number; }) => void
 >     : ^   ^^                   ^^^^^^^^^
->arg : { index?: number; }
->    : ^^^^^^^^^^      ^^^
+>arg : { index?: number | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >index : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -18,8 +18,8 @@ export function test(arg: { index?: number }) {
 >      : ^^^^^^
 >0 : 0
 >  : ^
->arg : { index?: number; }
->    : ^^^^^^^^^^      ^^^
+>arg : { index?: number | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   if (foo[index] === "a") {
 >foo[index] === "a" : boolean

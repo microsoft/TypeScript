@@ -52,12 +52,12 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 >                                       : ^^^^^^^^^^^
 >this.props.children : ((user: IUser) => JSX.Element) & (React.ReactNode | undefined)
 >                    : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->this.props : IFetchUserProps & { children?: React.ReactNode; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.props : IFetchUserProps & { children?: React.ReactNode | undefined; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->props : IFetchUserProps & { children?: React.ReactNode; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : IFetchUserProps & { children?: React.ReactNode | undefined; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : ((user: IUser) => JSX.Element) & (React.ReactNode | undefined)
 >         : ^^    ^^     ^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state.result : any

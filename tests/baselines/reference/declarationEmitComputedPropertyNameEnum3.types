@@ -42,10 +42,10 @@ import { type Type } from "./type";
 >     : ^^^
 
 export const foo = { ...({} as Type) };
->foo : { x?: {}; }
->    : ^^^^^^  ^^^
->{ ...({} as Type) } : { x?: {}; }
->                    : ^^^^^^  ^^^
+>foo : { x?: {} | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...({} as Type) } : { x?: {} | undefined; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^
 >({} as Type) : Type
 >             : ^^^^
 >{} as Type : Type

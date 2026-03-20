@@ -142,9 +142,9 @@ export interface C<T, U> {
     (x: T): U;
     <Q>(x: Q): T & Q;
     field: T & U;
-    optionalField?: T;
+    optionalField?: T | undefined;
     readonly readonlyField: T & U;
-    readonly readonlyOptionalField?: U;
+    readonly readonlyOptionalField?: U | undefined;
     method<Q = number>(): number;
     method<Q>(a: T & Q): Q & number;
     method(a?: number): number;

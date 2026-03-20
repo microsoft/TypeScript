@@ -16,8 +16,8 @@ export const c = create<{
 >       : ^ ^^^^^^^^^  ^^^^^^^ 
 
   data: {
->data : { a_b_c: string; sss: string; s_d: string; queryData?: string; "foo bar": string; }
->     : ^^^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
+>data : { a_b_c: string; sss: string; s_d: string; queryData?: string | undefined; "foo bar": string; }
+>     : ^^^^^^^^^      ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     ["a_b_c"]: string;
 >["a_b_c"] : string

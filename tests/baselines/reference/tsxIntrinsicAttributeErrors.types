@@ -20,8 +20,8 @@ declare namespace JSX {
     }
     interface IntrinsicElements {
         div: {
->div : { text?: string; width?: number; }
->    : ^^^^^^^^^      ^^^^^^^^^^      ^^^
+>div : { text?: string | undefined; width?: number | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             text?: string;
 >text : string | undefined

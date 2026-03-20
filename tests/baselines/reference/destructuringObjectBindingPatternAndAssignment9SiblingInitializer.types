@@ -126,8 +126,8 @@ function f3() {
 // Based on comment:
 //   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
 declare const yadda: { a?: number, b?: number } | undefined
->yadda : { a?: number; b?: number; } | undefined
->      : ^^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^
+>yadda : { a?: number | undefined; b?: number | undefined; } | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >b : number | undefined
@@ -144,10 +144,10 @@ function f4() {
 >  : ^^^^^^^^^^^^^^^^^^
 >a : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->yadda ?? {} : { a?: number; b?: number; }
->            : ^^^^^^      ^^^^^^      ^^^
->yadda : { a?: number; b?: number; } | undefined
->      : ^^^^^^      ^^^^^^      ^^^^^^^^^^^^^^^
+>yadda ?? {} : { a?: number | undefined; b?: number | undefined; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yadda : { a?: number | undefined; b?: number | undefined; } | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 }

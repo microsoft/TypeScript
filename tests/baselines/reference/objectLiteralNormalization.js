@@ -147,14 +147,14 @@ declare let opts: {
     baz?: boolean;
 };
 declare let c1: {
-    foo?: string;
-    bar?: string;
-    baz?: boolean;
+    foo?: string | undefined;
+    bar?: string | undefined;
+    baz?: boolean | undefined;
 };
 declare let c2: {
-    foo?: string;
-    bar?: string;
-    baz?: boolean;
+    foo?: string | undefined;
+    bar?: string | undefined;
+    baz?: boolean | undefined;
 };
 declare let c3: {
     a: number;
