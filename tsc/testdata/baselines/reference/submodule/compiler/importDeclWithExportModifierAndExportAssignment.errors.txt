@@ -1,8 +1,9 @@
 importDeclWithExportModifierAndExportAssignment.ts(5,19): error TS2708: Cannot use namespace 'x' as a value.
 importDeclWithExportModifierAndExportAssignment.ts(5,21): error TS2694: Namespace 'x' has no exported member 'c'.
+importDeclWithExportModifierAndExportAssignment.ts(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== importDeclWithExportModifierAndExportAssignment.ts (2 errors) ====
+==== importDeclWithExportModifierAndExportAssignment.ts (3 errors) ====
     namespace x {
         interface c {
         }
@@ -13,3 +14,5 @@ importDeclWithExportModifierAndExportAssignment.ts(5,21): error TS2694: Namespac
                         ~
 !!! error TS2694: Namespace 'x' has no exported member 'c'.
     export = x;
+    ~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

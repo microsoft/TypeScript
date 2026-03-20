@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/exportAssignmentMerging8.ts] ////
+
+=== a.ts ===
+type SomeTypeAlias = { x: string };
+>SomeTypeAlias : Symbol(SomeTypeAlias, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(a.ts, 0, 22))
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(a.ts, 0, 35))
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(a.ts, 0, 35))
+
+export { SomeTypeAlias };
+>SomeTypeAlias : Symbol(SomeTypeAlias, Decl(a.ts, 3, 8))
+
+=== b.ts ===
+import { SomeTypeAlias } from "./a";
+>SomeTypeAlias : Symbol(SomeTypeAlias, Decl(b.ts, 0, 8))
+
+const value: SomeTypeAlias = { x: "ok" };
+>value : Symbol(value, Decl(b.ts, 1, 5))
+>SomeTypeAlias : Symbol(SomeTypeAlias, Decl(b.ts, 0, 8))
+>x : Symbol(x, Decl(b.ts, 1, 30))
+
+

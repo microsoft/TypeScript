@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/exportAssignmentMerging8.ts] ////
+
+=== a.ts ===
+type SomeTypeAlias = { x: string };
+>SomeTypeAlias : SomeTypeAlias
+>x : string
+
+class Foo {}
+>Foo : Foo
+
+export = Foo;
+>Foo : Foo
+
+export { SomeTypeAlias };
+>SomeTypeAlias : any
+
+=== b.ts ===
+import { SomeTypeAlias } from "./a";
+>SomeTypeAlias : any
+
+const value: SomeTypeAlias = { x: "ok" };
+>value : SomeTypeAlias
+>{ x: "ok" } : { x: string; }
+>x : string
+>"ok" : "ok"
+
+
