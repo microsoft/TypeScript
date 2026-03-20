@@ -9130,7 +9130,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return false;
             }
             if ((isPropertySignature(annotatedDeclaration) || isPropertyDeclaration(annotatedDeclaration)) && annotatedDeclaration.questionToken) {
-                return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
+                // When `exactOptionalPropertyTypes` is enabled we interpret optional properties as written,
+                // so reusing the existing annotation even if it doesn't include `undefined` is fine.
+                // When it's disabled, optional properties implicitly include `undefined`, so the annotation
+                // without `| undefined` must *not* be treated as equivalent.
+                return exactOptionalPropertyTypes ? getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode : false;
             }
             if (isParameter(annotatedDeclaration) && hasEffectiveQuestionToken(annotatedDeclaration)) {
                 return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
