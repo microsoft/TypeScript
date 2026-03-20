@@ -1,13 +1,10 @@
 --- old.jsxJsxsCjsTransformKeyProp(jsx=react-jsxdev).js
 +++ new.jsxJsxsCjsTransformKeyProp(jsx=react-jsxdev).js
-@@= skipped -11, +11 lines =@@
- //// [jsxJsxsCjsTransformKeyProp.js]
- "use strict";
+@@= skipped -13, +13 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
--const react_1 = require("react");
+ const react_1 = require("react");
  const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 -const _jsxFileName = "jsxJsxsCjsTransformKeyProp.tsx";
-+const react_1 = require("react");
 +const _jsxFileName = "/.src/jsxJsxsCjsTransformKeyProp.tsx";
  /// <reference path="/.lib/react16.d.ts" />
  const props = { answer: 42 };

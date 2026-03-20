@@ -47,6 +47,18 @@ func (c *externalModuleInfoCollector) collect() *externalModuleInfo {
 	hasImportStar := false
 	hasImportDefault := false
 	for _, node := range c.sourceFile.Statements.Nodes {
+		// Look through NotEmittedStatement to find elided export= declarations
+		// (e.g., `declare export = x` is elided by the type eraser but must still be collected)
+		if ast.IsNotEmittedStatement(node) {
+			original := c.emitContext.MostOriginal(node)
+			if original != nil && ast.IsExportAssignment(original) {
+				n := original.AsExportAssignment()
+				if n.IsExportEquals && c.output.exportEquals == nil {
+					c.output.exportEquals = n
+				}
+			}
+			continue
+		}
 		switch node.Kind {
 		case ast.KindImportDeclaration:
 			// import "mod"

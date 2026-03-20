@@ -11,9 +11,10 @@ namespace m {
 "use strict";
 var m;
 (function (m) {
+    var _a;
     class c {
     }
-    [m.x, m.y, m.z] = [10, new c(), 30];
+    _a = [10, new c(), 30], m.x = _a[0], m.y = _a[1], m.z = _a[2];
 })(m || (m = {}));
 
 

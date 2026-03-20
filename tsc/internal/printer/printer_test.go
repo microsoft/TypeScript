@@ -1911,7 +1911,7 @@ func TestParenthesizeExpressionStatement3(t *testing.T) {
 	), factory.NewToken(ast.KindEndOfFile))
 
 	parsetestutil.MarkSyntheticRecursive(file)
-	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "(class {\n});")
+	emittestutil.CheckEmit(t, nil, file.AsSourceFile(), "class {\n};")
 }
 
 func TestParenthesizeExpressionDefault1(t *testing.T) {

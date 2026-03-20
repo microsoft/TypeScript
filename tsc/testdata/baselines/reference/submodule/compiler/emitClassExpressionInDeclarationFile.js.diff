@@ -1,19 +1,6 @@
 --- old.emitClassExpressionInDeclarationFile.js
 +++ new.emitClassExpressionInDeclarationFile.js
-@@= skipped -41, +41 lines =@@
-     tags() { }
- };
- exports.simpleExample = simpleExample;
--var circularReference = class C {
-+exports.circularReference = class C {
-     static getTags(c) { return c; }
-     tags(c) { return c; }
- };
--exports.circularReference = circularReference;
- // repro from #15066
- class FooItem {
-     foo() { }
-@@= skipped -38, +37 lines =@@
+@@= skipped -79, +79 lines =@@
      getTags(c: {
          tags(c: /*elided*/ any): /*elided*/ any;
      }): {

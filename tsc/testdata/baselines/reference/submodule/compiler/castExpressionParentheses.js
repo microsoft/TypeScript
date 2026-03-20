@@ -89,7 +89,7 @@ a().x;
 (-A).x;
 new (A());
 (() => { })();
-(function foo() { }());
+(function foo() { })();
 (-A).x;
 // nested cast, should keep one pair of parenthese
 (-A).x;

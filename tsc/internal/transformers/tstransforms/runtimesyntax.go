@@ -232,11 +232,10 @@ func (tx *RuntimeSyntaxTransformer) getNamespaceQualifiedElement(ns *ast.Identif
 
 // Gets an expression used within the provided node's container for any exported references.
 func (tx *RuntimeSyntaxTransformer) getExportQualifiedReferenceToDeclaration(node *ast.Declaration) *ast.Expression {
-	exportName := tx.Factory().GetDeclarationNameEx(node.AsNode(), printer.NameOptions{AllowSourceMaps: true})
 	if tx.isExportOfNamespace(node.AsNode()) {
-		return tx.getNamespaceQualifiedProperty(tx.getNamespaceContainerName(tx.currentNamespace), exportName)
+		return tx.Factory().GetExternalModuleOrNamespaceExportName(tx.getNamespaceContainerName(tx.currentNamespace), node, false /*allowComments*/, true /*allowSourceMaps*/)
 	}
-	return exportName
+	return tx.Factory().GetDeclarationNameEx(node.AsNode(), printer.NameOptions{AllowSourceMaps: true})
 }
 
 func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.Statement, node *ast.Declaration) ([]*ast.Statement, bool) {
@@ -582,9 +581,26 @@ func (tx *RuntimeSyntaxTransformer) visitVariableStatement(node *ast.VariableSta
 	if tx.isExportOfNamespace(node.AsNode()) {
 		expressions := []*ast.Expression{}
 		for _, declaration := range node.DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
-			expression := transformers.ConvertVariableDeclarationToAssignmentExpression(tx.EmitContext(), declaration.AsVariableDeclaration())
-			if expression != nil {
-				expressions = append(expressions, expression)
+			v := declaration.AsVariableDeclaration()
+			if v.Initializer == nil {
+				continue
+			}
+			if ast.IsBindingPattern(v.Name()) {
+				expression := transformers.FlattenDestructuringAssignment(
+					&tx.Transformer,
+					tx.Visitor().VisitNode(declaration),
+					false, /*needsValue*/
+					transformers.FlattenLevelAll,
+					tx.createNamespaceExportExpression,
+				)
+				if expression != nil {
+					expressions = append(expressions, expression)
+				}
+			} else {
+				expression := transformers.ConvertVariableDeclarationToAssignmentExpression(tx.EmitContext(), v)
+				if expression != nil {
+					expressions = append(expressions, expression)
+				}
 			}
 		}
 		if len(expressions) == 0 {
@@ -605,11 +621,22 @@ func (tx *RuntimeSyntaxTransformer) visitVariableStatement(node *ast.VariableSta
 	return tx.Visitor().VisitEachChild(node.AsNode())
 }
 
+// createNamespaceExportExpression creates an assignment to a namespace member for use as a
+// callback during destructuring flattening.
+func (tx *RuntimeSyntaxTransformer) createNamespaceExportExpression(exportName *ast.IdentifierNode, exportValue *ast.Expression, location *core.TextRange) *ast.Expression {
+	memberName := tx.getNamespaceQualifiedProperty(tx.getNamespaceContainerName(tx.currentNamespace), exportName)
+	expression := tx.Factory().NewAssignmentExpression(memberName, exportValue)
+	if location != nil {
+		expression.Loc = *location
+	}
+	return expression
+}
+
 func (tx *RuntimeSyntaxTransformer) visitFunctionDeclaration(node *ast.FunctionDeclaration) *ast.Node {
 	if tx.isExportOfNamespace(node.AsNode()) {
 		updated := tx.Factory().UpdateFunctionDeclaration(
 			node,
-			tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExportDefault)),
+			tx.Visitor().VisitModifiers(transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), ^ast.ModifierFlagsExport)),
 			node.AsteriskToken,
 			tx.Visitor().VisitNode(node.Name()),
 			nil, /*typeParameters*/
@@ -649,6 +676,9 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node *ast.ClassDeclara
 	}
 
 	name := tx.Visitor().VisitNode(node.Name())
+	if exported && name == nil {
+		name = tx.Factory().NewGeneratedNameForNode(node.AsNode())
+	}
 	heritageClauses := tx.Visitor().VisitNodes(node.HeritageClauses)
 	members := tx.Visitor().VisitNodes(node.Members)
 	parameterProperties := tx.getParameterProperties(core.Find(node.Members.Nodes, ast.IsConstructorDeclaration))
@@ -911,18 +941,19 @@ func (tx *RuntimeSyntaxTransformer) visitExpressionIdentifier(node *ast.Identifi
 }
 
 func (tx *RuntimeSyntaxTransformer) createExportStatementForDeclaration(node *ast.Declaration) *ast.Statement {
-	name := node.Name()
-	if name == nil {
-		return nil
-	}
-
+	exportName := tx.Factory().GetExternalModuleOrNamespaceExportName(tx.getNamespaceContainerName(tx.currentNamespace), node, false /*allowComments*/, true /*allowSourceMaps*/)
 	localName := tx.Factory().GetLocalName(node)
+	expression := tx.Factory().NewAssignmentExpression(exportName, localName)
 	exportAssignmentSourceMapRange := node.Loc
 	if node.Name() != nil {
-		exportAssignmentSourceMapRange = exportAssignmentSourceMapRange.WithPos(name.Pos())
+		exportAssignmentSourceMapRange = exportAssignmentSourceMapRange.WithPos(node.Name().Pos())
 	}
+	tx.EmitContext().SetSourceMapRange(expression, exportAssignmentSourceMapRange)
+
+	statement := tx.Factory().NewExpressionStatement(expression)
 	exportStatementSourceMapRange := node.Loc.WithPos(-1)
-	return tx.createExportStatement(name, localName, exportAssignmentSourceMapRange, exportStatementSourceMapRange, node)
+	tx.EmitContext().SetSourceMapRange(statement, exportStatementSourceMapRange)
+	return statement
 }
 
 func (tx *RuntimeSyntaxTransformer) createExportAssignment(name *ast.IdentifierNode, expression *ast.Expression, exportAssignmentSourceMapRange core.TextRange, original *ast.Node) *ast.Expression {

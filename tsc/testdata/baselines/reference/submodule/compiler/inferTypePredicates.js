@@ -320,14 +320,17 @@ function negative(t: Something) {
 const numsOrNull = [1, 2, 3, 4, null];
 const filteredNumsTruthy = numsOrNull.filter(x => !!x); // should error
 const filteredNumsNonNullish = numsOrNull.filter(x => x !== null); // should ok
-const evenSquaresInline = [1, 2, 3, 4]
+const evenSquaresInline = // should error
+ [1, 2, 3, 4]
     .map(x => x % 2 === 0 ? x * x : null)
     .filter(x => !!x); // tests truthiness, not non-nullishness
 const isTruthy = (x) => !!x;
-const evenSquares = [1, 2, 3, 4]
+const evenSquares = // should error
+ [1, 2, 3, 4]
     .map(x => x % 2 === 0 ? x * x : null)
     .filter(isTruthy);
-const evenSquaresNonNull = [1, 2, 3, 4]
+const evenSquaresNonNull = // should ok
+ [1, 2, 3, 4]
     .map(x => x % 2 === 0 ? x * x : null)
     .filter(x => x !== null);
 function isNonNull(x) {

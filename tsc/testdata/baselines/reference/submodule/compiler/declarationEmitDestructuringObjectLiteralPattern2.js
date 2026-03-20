@@ -27,7 +27,8 @@ function f15() {
 var { a4, b4, c4 } = f15();
 var m;
 (function (m) {
-    ({ a4: m.a4, b4: m.b4, c4: m.c4 } = f15());
+    var _a;
+    _a = f15(), m.a4 = _a.a4, m.b4 = _a.b4, m.c4 = _a.c4;
 })(m || (m = {}));
 
 

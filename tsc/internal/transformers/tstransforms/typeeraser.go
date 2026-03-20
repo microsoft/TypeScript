@@ -177,7 +177,11 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindVariableDeclaration:
 		n := node.AsVariableDeclaration()
-		return tx.Factory().UpdateVariableDeclaration(n, tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
+		updated := tx.Factory().UpdateVariableDeclaration(n, tx.Visitor().VisitNode(n.Name()), nil, nil, tx.Visitor().VisitNode(n.Initializer))
+		if n.Type != nil {
+			tx.EmitContext().SetTypeNode(updated.AsVariableDeclaration().Name(), n.Type)
+		}
+		return updated
 
 	case ast.KindHeritageClause:
 		n := node.AsHeritageClause()

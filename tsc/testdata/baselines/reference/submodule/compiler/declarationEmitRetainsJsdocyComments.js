@@ -49,11 +49,7 @@ declare global {
 //// [declarationEmitRetainsJsdocyComments.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.
-/**
-* comment5
-*/
-someMethod = exports.Foo = exports.foo = void 0;
+exports.someMethod = exports.Foo = exports.foo = void 0;
 /**
  * comment1
  * @param p
@@ -82,11 +78,10 @@ class Foo {
     }
 }
 exports.Foo = Foo;
-({ 
-    /**
-    * comment5
-    */
-    someMethod: exports.someMethod } = null);
+/**
+* comment5
+*/
+exports.someMethod = null.someMethod;
 
 
 //// [declarationEmitRetainsJsdocyComments.d.ts]

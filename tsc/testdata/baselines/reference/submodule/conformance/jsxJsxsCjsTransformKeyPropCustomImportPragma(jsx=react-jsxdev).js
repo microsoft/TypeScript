@@ -23,8 +23,8 @@ export {};
 //// [preact.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 const preact_1 = require("preact");
+const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 const _jsxFileName = "/.src/preact.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource preact */
@@ -34,8 +34,8 @@ const b = (0, preact_1.createElement)("div", Object.assign({}, props, { key: "ba
 //// [react.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const react_1 = require("react");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "/.src/react.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource react */

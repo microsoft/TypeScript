@@ -89,9 +89,9 @@ func (w *textWriter) RawWrite(s string) {
 	if s != "" {
 		w.builder.WriteString(s)
 		w.lastWritten = s
-		w.updateLineCountAndPosFor(s)
 		w.hasTrailingCommentState = false
 	}
+	w.updateLineCountAndPosFor(s)
 }
 
 func (w *textWriter) updateLineCountAndPosFor(s string) {

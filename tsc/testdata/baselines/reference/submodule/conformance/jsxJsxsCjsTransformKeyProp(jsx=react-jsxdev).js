@@ -12,8 +12,8 @@ export {};
 //// [jsxJsxsCjsTransformKeyProp.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const react_1 = require("react");
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 const _jsxFileName = "/.src/jsxJsxsCjsTransformKeyProp.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 const props = { answer: 42 };

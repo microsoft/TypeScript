@@ -161,12 +161,12 @@ function* gen() {
 // at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
 ({ foo() { } }.foo());
 // at the start of an ExpressionStatement if followed by function keyword
-(function () { }());
+(function () { })();
 (function () { });
 // at the start of an ExpressionStatement if followed by an anonymous class expression
 // note that this exact syntax currently emits invalid JS (no parenthesis added like for function above)
-(class {
-});
+class {
+};
 //// [commonjs.cjs]
 "use strict";
 const foo = require("./other.cjs");

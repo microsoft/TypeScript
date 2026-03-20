@@ -38,11 +38,17 @@ const foo_1 = require("./foo");
 Object.defineProperty(exports, "foo", { enumerable: true, get: function () { return foo_1.foo; } });
 Object.defineProperty(exports, "arr", { enumerable: true, get: function () { return foo_1.arr; } });
 const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo_1.foo;
+exports.baz = baz;
+exports.ibaz = ibaz;
 const [, one, , [, bee, , [, { sec }]]] = foo_1.arr;
+exports.one = one;
+exports.bee = bee;
+exports.sec = sec;
 const getFoo = () => ({
     foo: 'foo'
 });
 const { foo: foo2 } = getFoo();
+exports.foo2 = foo2;
 
 
 //// [foo.d.ts]

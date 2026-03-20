@@ -285,7 +285,8 @@ f14([2, ["abc", { x: 0 }]]);
 f14([2, ["abc", { y: false }]]); // Error, no x
 var M;
 (function (M) {
-    [M.a, M.b] = [1, 2];
+    var _a;
+    _a = [1, 2], M.a = _a[0], M.b = _a[1];
 })(M || (M = {}));
 function f15() {
     var a = "hello";

@@ -13,9 +13,9 @@ let g: any = /* comment2 */ d(e);
 //// [emitOneLineVariableDeclarationRemoveCommentsFalse.js]
 "use strict";
 let a = /*[[${something}]]*/ {};
-let b = {};
-let c = { hoge: true };
-let d = {};
+let b = /*[[${something}]]*/ {};
+let c = /*[[${something}]]*/ { hoge: true };
+let d /*[[${something}]]*/ = {};
 let e /*[[${something}]]*/ = {};
 let f = /* comment1 */ d(e);
-let g = d(e);
+let g = /* comment2 */ d(e);

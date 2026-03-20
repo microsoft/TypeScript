@@ -23,8 +23,8 @@ export {};
 //// [preact.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("preact/jsx-runtime");
 const preact_1 = require("preact");
+const jsx_runtime_1 = require("preact/jsx-runtime");
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource preact */
 const props = { answer: 42 };
@@ -33,8 +33,8 @@ const b = (0, preact_1.createElement)("div", Object.assign({}, props, { key: "ba
 //// [react.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_runtime_1 = require("react/jsx-runtime");
 const react_1 = require("react");
+const jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxImportSource react */
 require("./preact");

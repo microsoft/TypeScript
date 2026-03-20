@@ -14,10 +14,10 @@ declare let g: <T>(...args: any) => any;
 "use strict";
 // existing errors
 {
-    (class C {
-    });
+    class C {
+    };
 }
 {
-    (class C {
-    });
+    class C {
+    };
 }

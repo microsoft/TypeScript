@@ -12,8 +12,8 @@ export {};
 //// [jsxJsxsCjsTransformKeyPropCustomImport.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 const preact_1 = require("preact");
+const jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 const _jsxFileName = "/.src/jsxJsxsCjsTransformKeyPropCustomImport.tsx";
 /// <reference path="/.lib/react16.d.ts" />
 const props = { answer: 42 };

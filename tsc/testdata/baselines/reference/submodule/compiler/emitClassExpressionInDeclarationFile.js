@@ -42,10 +42,11 @@ var simpleExample = class {
     tags() { }
 };
 exports.simpleExample = simpleExample;
-exports.circularReference = class C {
+var circularReference = class C {
     static getTags(c) { return c; }
     tags(c) { return c; }
 };
+exports.circularReference = circularReference;
 // repro from #15066
 class FooItem {
     foo() { }

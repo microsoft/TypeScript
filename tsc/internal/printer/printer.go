@@ -2615,7 +2615,12 @@ func (p *Printer) emitConciseBody(node *ast.BlockOrExpression) {
 	case ast.IsBlock(node):
 		p.emitFunctionBody(node.AsBlock())
 	case ast.IsObjectLiteralExpression(ast.GetLeftmostExpression(node, false /*stopAtCallExpressions*/)):
-		p.emitExpression(node, ast.OperatorPrecedenceParentheses)
+		// Wrap in ParenthesizedExpression to ensure parens are emitted after any leading
+		// PartiallyEmittedExpression comments, matching TypeScript's factory-time wrapping
+		// via parenthesizeConciseBodyOfArrowFunction.
+		paren := p.emitContext.Factory.NewParenthesizedExpression(node)
+		paren.Loc = node.Loc
+		p.emitExpression(paren, ast.OperatorPrecedenceLowest)
 	case ast.IsExpression(node):
 		p.emitExpression(node, ast.OperatorPrecedenceYield)
 	default:
@@ -3360,11 +3365,13 @@ func (p *Printer) emitExpressionStatement(node *ast.ExpressionStatement) {
 		// !!! In strada, this was handled by an undefined parenthesizerRule, so this is a hack.
 		p.emitExpression(node.Expression, ast.OperatorPrecedenceComma)
 	} else if isImmediatelyInvokedFunctionExpressionOrArrowFunction(node.Expression) {
-		// !!! introduce parentheses around callee
-		p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
+		// For IIFEs, parenthesize just the callee (not the whole call), matching TypeScript's
+		// parenthesizeExpressionOfExpressionStatement which wraps the function/arrow in parens:
+		//   (function() { })()  -- not (function() { }())
+		p.emitIIFEWithParenthesizedCallee(node.Expression)
 	} else {
 		switch ast.GetLeftmostExpression(node.Expression, false /*stopAtCallExpression*/).Kind {
-		case ast.KindFunctionExpression, ast.KindClassExpression, ast.KindObjectLiteralExpression:
+		case ast.KindFunctionExpression, ast.KindObjectLiteralExpression:
 			p.emitExpression(node.Expression, ast.OperatorPrecedenceParentheses)
 		default:
 			p.emitExpression(node.Expression, ast.OperatorPrecedenceComma)
@@ -3380,6 +3387,29 @@ func (p *Printer) emitExpressionStatement(node *ast.ExpressionStatement) {
 	}
 
 	p.exitNode(node.AsNode(), state)
+}
+
+// emitIIFEWithParenthesizedCallee emits a call expression that is an IIFE,
+// wrapping just the callee in parens rather than the entire call expression.
+// This matches TypeScript's parenthesizeExpressionOfExpressionStatement behavior:
+//
+//	(function() { })()   -- parens around callee only
+//
+// instead of:
+//
+//	(function() { }())   -- parens around entire call
+func (p *Printer) emitIIFEWithParenthesizedCallee(node *ast.Expression) {
+	// Walk through PartiallyEmittedExpression wrappers to find the call
+	call := ast.SkipPartiallyEmittedExpressions(node).AsCallExpression()
+	state := p.enterNode(call.AsNode())
+	// Emit the callee wrapped in parens
+	p.writePunctuation("(")
+	p.emitExpression(call.Expression, ast.OperatorPrecedenceLowest)
+	p.writePunctuation(")")
+	p.emitTokenNode(call.QuestionDotToken)
+	p.emitTypeArguments(call.AsNode(), call.TypeArguments)
+	p.emitList((*Printer).emitArgument, call.AsNode(), call.Arguments, LFCallExpressionArguments)
+	p.exitNode(call.AsNode(), state)
 }
 
 func (p *Printer) emitIfStatement(node *ast.IfStatement) {
@@ -3624,8 +3654,7 @@ func (p *Printer) emitVariableDeclaration(node *ast.VariableDeclaration) {
 	p.emitBindingName(node.Name())
 	p.emitPunctuationNode(node.ExclamationToken)
 	p.emitTypeAnnotation(node.Type)
-	// !!! old compiler can set a type node purely for emit. Is this necessary?
-	p.emitInitializer(node.Initializer, greatestEnd(node.Name().End(), node.Type /*, node.Name().emitNode?.typeNode*/), node.AsNode())
+	p.emitInitializer(node.Initializer, greatestEnd(node.Name().End(), node.Type, p.emitContext.GetTypeNode(node.Name())), node.AsNode())
 	p.exitNode(node.AsNode(), state)
 }
 
@@ -4358,7 +4387,7 @@ func (p *Printer) emitJsxAttributeValue(node *ast.JsxAttributeValue) {
 // Clauses
 //
 
-func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClause) {
+func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClause, colonPos int) {
 	emitAsSingleStatement := len(node.Statements.Nodes) == 1 &&
 		// treat synthesized nodes as located on the same line for emit purposes
 		(p.currentSourceFile == nil ||
@@ -4368,8 +4397,13 @@ func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClaus
 
 	format := LFCaseOrDefaultClauseStatements
 	if emitAsSingleStatement {
+		// When emitting as a single statement, use writeToken (no comments) for the colon
+		// to avoid duplicating trailing comments that will be picked up by the statement list.
+		p.writeTokenText(ast.KindColonToken, WriteKindPunctuation, colonPos)
 		p.writeSpace()
 		format &= ^(LFMultiLine | LFIndented)
+	} else {
+		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node.AsNode())
 	}
 
 	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
@@ -4380,16 +4414,14 @@ func (p *Printer) emitCaseClause(node *ast.CaseOrDefaultClause) {
 	p.emitToken(ast.KindCaseKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
 	p.writeSpace()
 	p.emitExpression(node.Expression, ast.OperatorPrecedenceLowest)
-	p.emitToken(ast.KindColonToken, node.Expression.End(), WriteKindPunctuation, node.AsNode())
-	p.emitCaseOrDefaultClauseStatements(node)
+	p.emitCaseOrDefaultClauseStatements(node, node.Expression.End())
 	p.exitNode(node.AsNode(), state)
 }
 
 func (p *Printer) emitDefaultClause(node *ast.CaseOrDefaultClause) {
 	state := p.enterNode(node.AsNode())
 	pos := p.emitToken(ast.KindDefaultKeyword, node.Pos(), WriteKindKeyword, node.AsNode())
-	p.emitToken(ast.KindColonToken, pos, WriteKindPunctuation, node.AsNode())
-	p.emitCaseOrDefaultClauseStatements(node)
+	p.emitCaseOrDefaultClauseStatements(node, pos)
 	p.exitNode(node.AsNode(), state)
 }
 
@@ -4910,7 +4942,13 @@ func (p *Printer) emitListItems(
 	//          /* end of element 2 */
 	//       ];
 	if previousSibling != nil && parentEnd != previousSibling.End() && format&LFDelimitersMask != 0 && !skipTrailingComments {
-		p.emitLeadingComments(greatestEnd(previousSibling.End(), childrenTextRange), false /*elided*/)
+		var commentsPos int
+		if emitTrailingComma && childrenTextRange.End() > 0 {
+			commentsPos = childrenTextRange.End()
+		} else {
+			commentsPos = previousSibling.End()
+		}
+		p.emitLeadingComments(commentsPos, false /*elided*/)
 	}
 
 	// Decrease the indent, if requested.
@@ -5219,11 +5257,10 @@ func (p *Printer) emitCommentsAfterNode(node *ast.Node, state *commentState) {
 	p.emitTrailingSyntheticCommentsOfNode(node, emitFlags)
 	p.emitTrailingCommentsOfNode(node, emitFlags, commentRange, containerPos, containerEnd, declarationListContainerEnd)
 
-	// !!! Preserve comments from type annotation:
-	// typeNode := node.Type()
-	// if typeNode != nil {
-	// 	p.emitTrailingCommentsOfNode(node, typeNode.Pos(), typeNode.End(), state)
-	// }
+	// Preserve comments from erased type annotation
+	if typeNode := p.emitContext.GetTypeNode(node); typeNode != nil {
+		p.emitTrailingCommentsOfNode(node, emitFlags, typeNode.Loc, containerPos, containerEnd, declarationListContainerEnd)
+	}
 }
 
 func (p *Printer) emitCommentsBeforeToken(token ast.Kind, pos int, contextNode *ast.Node, flags tokenEmitFlags) (*commentState, int) {

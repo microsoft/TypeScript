@@ -92,7 +92,7 @@ this is 4 spaces left aligned but above line is empty
 var m;
 (function (m) {
     /** this is first line - aligned to class declaration
-    * this is 4 spaces left aligned
+* this is 4 spaces left aligned
  * this is 3 spaces left aligned
   * this is 2 spaces left aligned
    * this is 1 spaces left aligned
@@ -109,11 +109,11 @@ var m;
     }
     m.c = c;
     /** this is first line - 4 spaces right aligned to class but in js file should be aligned to class declaration
-    * this is 8 spaces left aligned
-    * this is 7 spaces left aligned
-    * this is 6 spaces left aligned
-    * this is 5 spaces left aligned
-    * this is 4 spaces left aligned
+* this is 8 spaces left aligned
+* this is 7 spaces left aligned
+* this is 6 spaces left aligned
+* this is 5 spaces left aligned
+* this is 4 spaces left aligned
  * this is 3 spaces left aligned
   * this is 2 spaces left aligned
    * this is 1 spaces left aligned
@@ -131,7 +131,7 @@ var m;
     m.c2 = c2;
     /** this is comment with new lines in between
 
-    this is 4 spaces left aligned but above line is empty
+this is 4 spaces left aligned but above line is empty
 
  this is 3 spaces left aligned but above line is empty
 
@@ -181,7 +181,7 @@ var m;
 //// [commentsFormatting.d.ts]
 declare namespace m {
     /** this is first line - aligned to class declaration
-    * this is 4 spaces left aligned
+* this is 4 spaces left aligned
  * this is 3 spaces left aligned
   * this is 2 spaces left aligned
    * this is 1 spaces left aligned
@@ -197,11 +197,11 @@ declare namespace m {
     class c {
     }
     /** this is first line - 4 spaces right aligned to class but in js file should be aligned to class declaration
-    * this is 8 spaces left aligned
-    * this is 7 spaces left aligned
-    * this is 6 spaces left aligned
-    * this is 5 spaces left aligned
-    * this is 4 spaces left aligned
+* this is 8 spaces left aligned
+* this is 7 spaces left aligned
+* this is 6 spaces left aligned
+* this is 5 spaces left aligned
+* this is 4 spaces left aligned
  * this is 3 spaces left aligned
   * this is 2 spaces left aligned
    * this is 1 spaces left aligned
@@ -218,7 +218,7 @@ declare namespace m {
     }
     /** this is comment with new lines in between
 
-    this is 4 spaces left aligned but above line is empty
+this is 4 spaces left aligned but above line is empty
 
  this is 3 spaces left aligned but above line is empty
 

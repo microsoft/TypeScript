@@ -29,6 +29,7 @@ export { exportedFoo as foo, nonexportedFoo as nfoo };
 
 //// [destructuringAssignmentWithExportedName.js]
 "use strict";
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nfoo = exports.foo = exports.nonexportedFoo = exports.exportedFoo = void 0;
 let nonexportedFoo;
@@ -36,17 +37,17 @@ let nonexportedFoo;
 exports.foo = exports.exportedFoo = null;
 exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;
 if (null) {
-    ({ exportedFoo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, nonexportedFoo: { set value(value_1) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_1; } }.value } = null);
+    (_a = null, exports.foo = exports.exportedFoo = _a.exportedFoo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _a.nonexportedFoo);
 }
 else if (null) {
-    ({ foo: { set value(value_2) { exports.foo = exports.exportedFoo = value_2; } }.value, bar: { set value(value_3) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_3; } }.value } = null);
+    (_b = null, exports.foo = exports.exportedFoo = _b.foo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _b.bar);
 }
 else if (null) {
-    ({ foo: { bar: { set value(value_4) { exports.foo = exports.exportedFoo = value_4; } }.value, baz: { set value(value_5) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_5; } }.value } } = null);
+    (_c = null.foo, exports.foo = exports.exportedFoo = _c.bar, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _c.baz);
 }
 else if (null) {
-    ([{ set value(value_6) { exports.foo = exports.exportedFoo = value_6; } }.value, { set value(value_7) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_7; } }.value] = null);
+    (_d = null, exports.foo = exports.exportedFoo = _d[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _d[1]);
 }
 else {
-    ([[{ set value(value_8) { exports.foo = exports.exportedFoo = value_8; } }.value, { set value(value_9) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_9; } }.value]] = null);
+    (_e = null[0], exports.foo = exports.exportedFoo = _e[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _e[1]);
 }
