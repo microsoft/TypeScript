@@ -2,22 +2,22 @@ controlFlowAliasing.ts(59,13): error TS2322: Type 'string | number' is not assig
   Type 'number' is not assignable to type 'string'.
 controlFlowAliasing.ts(74,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-controlFlowAliasing.ts(91,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-controlFlowAliasing.ts(94,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-controlFlowAliasing.ts(101,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-controlFlowAliasing.ts(104,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-controlFlowAliasing.ts(112,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-controlFlowAliasing.ts(115,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-controlFlowAliasing.ts(154,19): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
-controlFlowAliasing.ts(157,19): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+controlFlowAliasing.ts(91,13): error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
+controlFlowAliasing.ts(94,13): error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
+controlFlowAliasing.ts(101,13): error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
+controlFlowAliasing.ts(104,13): error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
+controlFlowAliasing.ts(112,13): error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
+controlFlowAliasing.ts(115,13): error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
+controlFlowAliasing.ts(154,19): error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
+controlFlowAliasing.ts(157,19): error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
 controlFlowAliasing.ts(233,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 controlFlowAliasing.ts(280,5): error TS2448: Block-scoped variable 'a' used before its declaration.
@@ -123,14 +123,14 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
         if (isFoo) {
             obj.foo;  // Not narrowed because isFoo has type annotation
                 ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
         }
         else {
             obj.bar;  // Not narrowed because isFoo has type annotation
                 ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
         }
     }
     
@@ -139,14 +139,14 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
         if (isFoo) {
             obj.foo;  // Not narrowed because isFoo is mutable
                 ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
         }
         else {
             obj.bar;  // Not narrowed because isFoo is mutable
                 ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
         }
     }
     
@@ -156,14 +156,14 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
         if (isFoo) {
             obj.foo;  // Not narrowed because obj is assigned in function body
                 ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
         }
         else {
             obj.bar;  // Not narrowed because obj is assigned in function body
                 ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
         }
     }
     
@@ -204,14 +204,14 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
         if (isFoo) {
             outer.obj.foo;  // Not narrowed because obj is mutable
                       ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: 'bar'; bar: number; }'.
         }
         else {
             outer.obj.bar;  // Not narrowed because obj is mutable
                       ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
-!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: 'foo'; foo: string; }'.
         }
     }
     

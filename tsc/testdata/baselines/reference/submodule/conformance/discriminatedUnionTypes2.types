@@ -318,7 +318,7 @@ type abc = a | b | c;
 >abc : abc
 
 function f(problem: abc & (b | c)) {
->f : (problem: b | c) => void
+>f : (problem: abc & (b | c)) => void
 >problem : b | c
 
     if (problem.type === 'b') {
@@ -357,52 +357,52 @@ type RuntimeValue =
 >value : boolean
 
 function foo1(x: RuntimeValue & { type: 'number' }) {
->foo1 : (x: { type: "number"; value: number; } & { type: "number"; }) => void
->x : { type: "number"; value: number; } & { type: "number"; }
+>foo1 : (x: RuntimeValue & { type: 'number'; }) => void
+>x : { type: 'number'; value: number; } & { type: 'number'; }
 >type : "number"
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
 >x.type : "number"
->x : { type: "number"; value: number; } & { type: "number"; }
+>x : { type: 'number'; value: number; } & { type: 'number'; }
 >type : "number"
 >'number' : "number"
 
         x.value;  // number
 >x.value : number
->x : { type: "number"; value: number; } & { type: "number"; }
+>x : { type: 'number'; value: number; } & { type: 'number'; }
 >value : number
     }
     else {
         x.value;  // number
 >x.value : number
->x : { type: "number"; value: number; } & { type: "number"; }
+>x : { type: 'number'; value: number; } & { type: 'number'; }
 >value : number
     }
 }
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
->foo2 : (x: ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })) => void
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+>foo2 : (x: RuntimeValue & ({ type: 'number'; } | { type: 'string'; })) => void
+>x : ({ type: 'number'; value: number; } & { type: 'number'; }) | ({ type: 'string'; value: string; } & { type: 'string'; })
 >type : "number"
 >type : "string"
 
     if (x.type === 'number') {
 >x.type === 'number' : boolean
 >x.type : "number" | "string"
->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+>x : ({ type: 'number'; value: number; } & { type: 'number'; }) | ({ type: 'string'; value: string; } & { type: 'string'; })
 >type : "number" | "string"
 >'number' : "number"
 
         x.value;  // number
 >x.value : number
->x : { type: "number"; value: number; } & { type: "number"; }
+>x : { type: 'number'; value: number; } & { type: 'number'; }
 >value : number
     }
     else {
         x.value;  // string
 >x.value : string
->x : { type: "string"; value: string; } & { type: "string"; }
+>x : { type: 'string'; value: string; } & { type: 'string'; }
 >value : string
     }
 }

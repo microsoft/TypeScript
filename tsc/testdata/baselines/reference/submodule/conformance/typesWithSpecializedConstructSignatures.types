@@ -56,7 +56,7 @@ var i: I;
 >i : I
 
 var a: {
->a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
     new(x: 'hi'): Derived1;
 >x : "hi"
@@ -75,18 +75,18 @@ c = i;
 >i : I
 
 c = a;
->c = a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>c = a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 >c : C
->a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
 i = a;
->i = a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>i = a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 >i : I
->a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
 a = i;
 >a = i : I
->a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 >i : I
 
 var r1 = new C('hi');
@@ -104,6 +104,6 @@ var r2: Derived2 = new i('bye');
 var r3: Base = new a('hm');
 >r3 : Base
 >new a('hm') : Base
->a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 >'hm' : "hm"
 

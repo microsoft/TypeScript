@@ -621,8 +621,8 @@ declare function assertAndPredicate(x: string | number | Date): x is string;
 declare let snd: string | number | Date;
 declare function isNumberWithThis(this: Date, x: number | string): x is number;
 declare function narrowFromAny(x: any): x is number;
-declare const noInferenceFromRest: (f_0: "a" | "b") => boolean;
-declare const noInferenceFromImpossibleRest: () => boolean;
+declare const noInferenceFromRest: (...f: ["a" | "b"]) => boolean;
+declare const noInferenceFromImpossibleRest: (...f: []) => boolean;
 declare function inferWithRest(x: string | null, ...f: ["a", "b"]): x is string;
 declare const foobar: {
     type: "foo";
@@ -631,13 +631,7 @@ declare const foobar: {
     type: "bar";
     bar: string;
 };
-declare const foobarPred: (fb: {
-    type: "foo";
-    foo: number;
-} | {
-    type: "bar";
-    bar: string;
-}) => fb is {
+declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };

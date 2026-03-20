@@ -1,0 +1,34 @@
+--- old.override2.types
++++ new.override2.types
+@@= skipped -27, +27 lines =@@
+ >AB : AB
+
+     abstract foo(v: ''): void // need override?
+->foo : (v: "") => void
++>foo : (v: '') => void
+ >v : ""
+ }
+
+@@= skipped -9, +9 lines =@@
+ >AB : AB
+
+     override foo(v: ''): void { } // need override?
+->foo : (v: "") => void
++>foo : (v: '') => void
+ >v : ""
+
+     abstract bar(): void;
+@@= skipped -15, +15 lines =@@
+ >AB : AB
+
+     override foo(v: ''): void {}
+->foo : (v: "") => void
++>foo : (v: '') => void
+ >v : ""
+
+     override bar(v: ''): void {}
+->bar : (v: "") => void
++>bar : (v: '') => void
+ >v : ""
+
+     baz(): void { }

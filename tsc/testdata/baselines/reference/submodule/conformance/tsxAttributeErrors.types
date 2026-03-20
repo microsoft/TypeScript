@@ -5,7 +5,7 @@ declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		div: {
->div : { text?: string | undefined; width?: number | undefined; }
+>div : { text?: string; width?: number; }
 
 			text?: string;
 >text : string | undefined

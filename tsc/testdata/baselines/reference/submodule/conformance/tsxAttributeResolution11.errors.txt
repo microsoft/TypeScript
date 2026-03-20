@@ -1,6 +1,6 @@
 file.tsx(5,3): error TS2564: Property 'props' has no initializer and is not definitely assigned in the constructor.
-file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string | undefined; }'.
-  Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string | undefined; }'.
+file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
+  Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
 react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
 
 
@@ -34,7 +34,7 @@ react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
     // Should be an OK
     var x = <MyComponent bar='world' />;
                          ~~~
-!!! error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string | undefined; }'.
-!!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string | undefined; }'.
+!!! error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
+!!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
     
     

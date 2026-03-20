@@ -228,9 +228,9 @@ declare function referencedInSignartureKeyword({ function: alias }: {
     function: string;
 }): typeof alias;
 declare function referencedInInferredType({ name: alias }: Named): {
-    name: string;
+    name: typeof alias;
 };
-declare function referencedInNestedFunction({ name: alias }: Named): (p: string) => void;
+declare function referencedInNestedFunction({ name: alias }: Named): (p: typeof alias) => void;
 declare function referencedNestedAlias({ p: { name: alias } }: {
     p: Named;
 }): typeof alias;

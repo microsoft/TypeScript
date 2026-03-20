@@ -24,9 +24,9 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 
         const { AnyComponent } = this.props;
 >AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
->this.props : ComponentProps & { children?: React.ReactNode | undefined; }
+>this.props : ComponentProps & { children?: React.ReactNode; }
 >this : this
->props : ComponentProps & { children?: React.ReactNode | undefined; }
+>props : ComponentProps & { children?: React.ReactNode; }
 
         return (<AnyComponent />);
 >(<AnyComponent />) : JSX.Element

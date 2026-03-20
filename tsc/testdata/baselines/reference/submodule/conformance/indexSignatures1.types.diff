@@ -1,44 +1,6 @@
 --- old.indexSignatures1.types
 +++ new.indexSignatures1.types
-@@= skipped -848, +848 lines =@@
- >'directive' : "directive"
-
- declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
-->foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
-->options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }
-+>foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
-+>options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }
- >arg : TArg
- >[directive] : TDir | undefined
- >directive : unique symbol
-@@= skipped -9, +9 lines =@@
- let case1 = foo({
- >case1 : void
- >foo({    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
-->foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
-+>foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
- >{    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: (x: string) => "str"; addOne: (x: number) => number; double: (x: number) => number; }
-
-     [directive]: (x: string) => 'str',
-@@= skipped -31, +31 lines =@@
- let case2 = foo({
- >case2 : void
- >foo({    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',}) : void
-->foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
-+>foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
- >{    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',} : { addOne: (x: number) => number; double: (x: number) => number; [directive]: (x: string) => "str"; }
-
-     addOne: (x: number) => x + 1,
-@@= skipped -31, +31 lines =@@
- let case3 = foo({
- >case3 : void
- >foo({    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
-->foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
-+>foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
- >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
-
-     [directive]: 'str',
-@@= skipped -78, +78 lines =@@
+@@= skipped -997, +997 lines =@@
 
  const a: A = { [id]: 'test' }
  >a : A

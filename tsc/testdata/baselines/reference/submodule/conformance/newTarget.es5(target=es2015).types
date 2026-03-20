@@ -83,8 +83,8 @@ const f2 = function () {
 }
 
 const O = {
->O : { k: () => any; }
->{    k: function () { return new.target; }} : { k: () => any; }
+>O : { k: () => () => any; }
+>{    k: function () { return new.target; }} : { k: () => () => any; }
 
     k: function () { return new.target; }
 >k : () => any

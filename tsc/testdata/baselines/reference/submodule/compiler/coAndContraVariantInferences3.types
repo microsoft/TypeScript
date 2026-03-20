@@ -42,7 +42,7 @@ type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<
 >OverloadDeprecations : OverloadDeprecations<T>
 
 declare function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>): UnionToIntersection<T[keyof T]>;
->createOverload : <T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T> | undefined) => UnionToIntersection<T[keyof T]>
+>createOverload : <T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) => UnionToIntersection<T[keyof T]>
 >name : string
 >overloads : T
 >binder : OverloadBinders<T>
@@ -67,7 +67,7 @@ interface BindableOverloadBuilder<T extends OverloadDefinitions> {
 
 interface FinishableOverloadBuilder<T extends OverloadDefinitions> {
     finish(): OverloadFunction<T>;
->finish : () => UnionToIntersection<T[keyof T]>
+>finish : () => OverloadFunction<T>
 }
 
 interface BoundOverloadBuilder<T extends OverloadDefinitions> extends FinishableOverloadBuilder<T> {

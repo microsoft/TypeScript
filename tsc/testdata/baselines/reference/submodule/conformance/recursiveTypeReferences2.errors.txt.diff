@@ -1,0 +1,16 @@
+--- old.recursiveTypeReferences2.errors.txt
++++ new.recursiveTypeReferences2.errors.txt
+@@= skipped -0, +0 lines =@@
+ bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
+-  Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[] | undefined; }; $O: { foo?: ({ $$?: Record<string, string> | undefined; } & { $: string; }) | undefined; }; $$?: Record<string, string> | undefined; }': $A, $O
++  Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[] | undefined; }; $O: { foo?: ({ $$?: Record<string, string>; } & { $: string; }) | undefined; }; $$?: Record<string, string>; }': $A, $O
+
+
+ ==== bug39372.js (1 errors) ====
+@@= skipped -29, +29 lines =@@
+     const p = {};
+           ~
+ !!! error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
+-!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[] | undefined; }; $O: { foo?: ({ $$?: Record<string, string> | undefined; } & { $: string; }) | undefined; }; $$?: Record<string, string> | undefined; }': $A, $O
++!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[] | undefined; }; $O: { foo?: ({ $$?: Record<string, string>; } & { $: string; }) | undefined; }; $$?: Record<string, string>; }': $A, $O
+     

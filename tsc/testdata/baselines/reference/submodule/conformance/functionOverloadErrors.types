@@ -22,15 +22,15 @@ function fn2a() {
 
 }
 function fn2b(n: number[]);
->fn2b : { (n: number[]): any; (n: number[]): any; }
+>fn2b : { (n: number[]): any; (n: Array<number>): any; }
 >n : number[]
 
 function fn2b(n: Array<number>);
->fn2b : { (n: number[]): any; (n: number[]): any; }
+>fn2b : { (n: number[]): any; (n: Array<number>): any; }
 >n : number[]
 
 function fn2b() {
->fn2b : { (n: number[]): any; (n: number[]): any; }
+>fn2b : { (n: number[]): any; (n: Array<number>): any; }
 }
 
 //Multiple function overload signatures that differ only by return type
@@ -112,14 +112,14 @@ function fn10() { }
 
 //Function overloads that differ only by type parameter constraints where constraints are structually identical
 function fn11<T extends Window>();
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
 
 function fn11<S extends typeof window>();
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
 >window : Window & typeof globalThis
 
 function fn11() { }
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
 
 //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
 interface List<T> {

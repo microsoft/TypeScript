@@ -46,4 +46,4 @@
 -        new (): {};
 -    };
 -}) => any;
-+declare const test: (base: any) => any;
++declare const test: (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>;

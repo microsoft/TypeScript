@@ -87,8 +87,8 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 }
 
 function test4(options?: { a?: boolean; b?: boolean }) {
->test4 : (options?: { a?: boolean | undefined; b?: boolean | undefined; } | undefined) => void
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>test4 : (options?: { a?: boolean; b?: boolean; }) => void
+>options : { a?: boolean; b?: boolean; } | undefined
 >a : boolean | undefined
 >b : boolean | undefined
 
@@ -96,15 +96,15 @@ function test4(options?: { a?: boolean; b?: boolean }) {
 >options?.a === false || options.b : boolean | undefined
 >options?.a === false : boolean
 >options?.a : boolean | undefined
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>options : { a?: boolean; b?: boolean; } | undefined
 >a : boolean | undefined
 >false : false
 >options.b : boolean | undefined
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>options : { a?: boolean; b?: boolean; } | undefined
 >b : boolean | undefined
 
     options;
->options : { a?: boolean | undefined; b?: boolean | undefined; } | undefined
+>options : { a?: boolean; b?: boolean; } | undefined
   }
 }
 

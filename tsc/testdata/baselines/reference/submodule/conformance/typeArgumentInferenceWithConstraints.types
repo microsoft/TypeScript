@@ -93,9 +93,9 @@ someGenerics2a<string>((n) => n.substr(0));
 >(n) => n.substr(0) : (n: string) => string
 >n : string
 >n.substr(0) : string
->n.substr : (from: number, length?: number | undefined) => string
+>n.substr : (from: number, length?: number) => string
 >n : string
->substr : (from: number, length?: number | undefined) => string
+>substr : (from: number, length?: number) => string
 >0 : 0
 
 function someGenerics2b<T extends string, U extends number>(n: (x: T, y: U) => void) { }
@@ -127,9 +127,9 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >n : string
 >t : number
 >n.substr(t * t) : string
->n.substr : (from: number, length?: number | undefined) => string
+>n.substr : (from: number, length?: number) => string
 >n : string
->substr : (from: number, length?: number | undefined) => string
+>substr : (from: number, length?: number) => string
 >t * t : number
 >t : number
 >t : number
@@ -369,8 +369,8 @@ var a9a: {};
 >a9a : string
 
 var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
->a9b : { a?: number | undefined; b?: string | undefined; }
->someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number | undefined; b?: string | undefined; }
+>a9b : { a?: number; b?: string; }
+>someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >a : number | undefined
 >b : string | undefined
@@ -382,7 +382,7 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >'' : ""
 
 var a9b: { a?: number; b?: string; };
->a9b : { a?: number | undefined; b?: string | undefined; }
+>a9b : { a?: number; b?: string; }
 >a : number | undefined
 >b : string | undefined
 

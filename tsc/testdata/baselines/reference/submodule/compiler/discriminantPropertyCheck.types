@@ -300,11 +300,11 @@ function func2(inst: Instance) {
 >Num : Types.Num
 
                 inst.value.toExponential;
->inst.value.toExponential : (fractionDigits?: number | undefined) => string
+>inst.value.toExponential : (fractionDigits?: number) => string
 >inst.value : number
 >inst : NumType
 >value : number
->toExponential : (fractionDigits?: number | undefined) => string
+>toExponential : (fractionDigits?: number) => string
 
                 break;
             }
@@ -415,7 +415,7 @@ export function foo(obj: Obj) {
 
             onlyPlus(obj.key);
 >onlyPlus(obj.key) : "+"
->onlyPlus : (arg: "+") => "+"
+>onlyPlus : (arg: '+') => "+"
 >obj.key : "+"
 >obj : AdditiveObj
 >key : "+"
@@ -426,7 +426,7 @@ export function foo(obj: Obj) {
 }
 
 function onlyPlus(arg: '+') {
->onlyPlus : (arg: "+") => "+"
+>onlyPlus : (arg: '+') => "+"
 >arg : "+"
 
   return arg;

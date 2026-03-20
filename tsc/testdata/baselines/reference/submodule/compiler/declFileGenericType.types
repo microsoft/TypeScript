@@ -15,19 +15,19 @@ export namespace C {
 >x : T
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
->F2 : <T>(x: T) => A<B>
+>F2 : <T>(x: T) => C.A<C.B>
 >x : T
 >C : any
 >C : any
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
->F3 : <T>(x: T) => A<B>[]
+>F3 : <T>(x: T) => C.A<C.B>[]
 >x : T
 >C : any
 >C : any
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
->F4 : <T extends A<B>>(x: T) => A<B>[]
+>F4 : <T extends A<B>>(x: T) => Array<C.A<C.B>>
 >x : T
 >C : any
 >C : any
@@ -72,10 +72,10 @@ export var d = C.F3;
 >F3 : <T>(x: T) => C.A<C.B>[]
 
 export var e = C.F4;
->e : <T extends C.A<C.B>>(x: T) => C.A<C.B>[]
->C.F4 : <T extends C.A<C.B>>(x: T) => C.A<C.B>[]
+>e : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
+>C.F4 : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
 >C : typeof C
->F4 : <T extends C.A<C.B>>(x: T) => C.A<C.B>[]
+>F4 : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
 
 export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 >x : C.A<C.B>

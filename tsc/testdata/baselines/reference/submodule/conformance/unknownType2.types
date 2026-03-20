@@ -48,9 +48,9 @@ if (u === 5) {
     const y = u.toString(10);
 >y : string
 >u.toString(10) : string
->u.toString : (radix?: number | undefined) => string
+>u.toString : (radix?: number) => string
 >u : 5
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 >10 : 10
 }
 

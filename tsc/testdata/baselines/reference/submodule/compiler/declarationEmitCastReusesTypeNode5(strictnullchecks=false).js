@@ -28,23 +28,23 @@ export class C {
 
 
 //// [declarationEmitCastReusesTypeNode5.d.ts]
-export declare const vNumberLiteral: 1;
-export declare const vStringLiteral: "1";
-export declare const vLiteral: "1";
+export declare const vNumberLiteral: 1 | 1;
+export declare const vStringLiteral: "1" | "1";
+export declare const vLiteral: "1" | "1";
 type R = {
     foo: string;
 };
 export declare class C {
-    tsResolve?: R;
-    tsResolve2?: string | R;
-    reuseType?: string | ((p: R) => void);
-    reuseType2?: string | (new (p: R) => R);
-    reuseType3?: any;
-    reuseType4?: [R, R, R];
-    reuseType5?: R[];
-    reuseType6?: "2" | 1 | 1n;
-    reuseType7?: "A";
-    reuseType8?: `${string}-ok`;
-    reuseType9?: this;
+    tsResolve?: R | R;
+    tsResolve2?: R | R | string;
+    reuseType?: ((p: R) => void) | string | string;
+    reuseType2?: (new (p: R) => R) | string | string;
+    reuseType3?: string | number | bigint | symbol | unknown | any | never | symbol;
+    reuseType4?: [R, R, R] | [R, R, R];
+    reuseType5?: R[] | R[];
+    reuseType6?: 1 | "2" | 1n | 1n;
+    reuseType7?: `A` | `A`;
+    reuseType8?: `${string}-ok` | `${string}-ok`;
+    reuseType9?: this | this;
 }
 export {};

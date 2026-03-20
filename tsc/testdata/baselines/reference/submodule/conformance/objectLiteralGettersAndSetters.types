@@ -164,8 +164,8 @@ var sameType1 = { get x(): string { return undefined; }, set x(n: string) { } };
 >n : string
 
 var sameType2 = { get x(): Array<number> { return undefined; }, set x(n: number[]) { } };
->sameType2 : { x: number[]; }
->{ get x(): Array<number> { return undefined; }, set x(n: number[]) { } } : { x: number[]; }
+>sameType2 : { x: Array<number>; }
+>{ get x(): Array<number> { return undefined; }, set x(n: number[]) { } } : { x: Array<number>; }
 >x : number[]
 >undefined : undefined
 >x : number[]

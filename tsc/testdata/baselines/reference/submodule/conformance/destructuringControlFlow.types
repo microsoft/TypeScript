@@ -2,36 +2,36 @@
 
 === destructuringControlFlow.ts ===
 function f1(obj: { a?: string }) {
->f1 : (obj: { a?: string | undefined; }) => void
->obj : { a?: string | undefined; }
+>f1 : (obj: { a?: string; }) => void
+>obj : { a?: string; }
 >a : string | undefined
 
     if (obj.a) {
 >obj.a : string | undefined
->obj : { a?: string | undefined; }
+>obj : { a?: string; }
 >a : string | undefined
 
         obj = {};
 >obj = {} : {}
->obj : { a?: string | undefined; }
+>obj : { a?: string; }
 >{} : {}
 
         let a1 = obj["a"];  // string | undefined
 >a1 : string | undefined
 >obj["a"] : string | undefined
->obj : { a?: string | undefined; }
+>obj : { a?: string; }
 >"a" : "a"
 
         let a2 = obj.a;  // string | undefined
 >a2 : string | undefined
 >obj.a : string | undefined
->obj : { a?: string | undefined; }
+>obj : { a?: string; }
 >a : string | undefined
     }
 }
 
 function f2(obj: [number, string] | null[]) {
->f2 : (obj: null[] | [number, string]) => void
+>f2 : (obj: [number, string] | null[]) => void
 >obj : null[] | [number, string]
 
     let a0 = obj[0];  // number | null
@@ -96,32 +96,32 @@ function f2(obj: [number, string] | null[]) {
 }
 
 function f3(obj: { a?: number, b?: string }) {
->f3 : (obj: { a?: number | undefined; b?: string | undefined; }) => void
->obj : { a?: number | undefined; b?: string | undefined; }
+>f3 : (obj: { a?: number; b?: string; }) => void
+>obj : { a?: number; b?: string; }
 >a : number | undefined
 >b : string | undefined
 
     if (obj.a && obj.b) {
 >obj.a && obj.b : string | 0 | undefined
 >obj.a : number | undefined
->obj : { a?: number | undefined; b?: string | undefined; }
+>obj : { a?: number; b?: string; }
 >a : number | undefined
 >obj.b : string | undefined
->obj : { a?: number | undefined; b?: string | undefined; }
+>obj : { a?: number; b?: string; }
 >b : string | undefined
 
         let { a, b } = obj;  // number, string
 >a : number
 >b : string
->obj : { a?: number | undefined; b?: string | undefined; }
+>obj : { a?: number; b?: string; }
 
         ({ a, b } = obj);
->({ a, b } = obj) : { a?: number | undefined; b?: string | undefined; }
->{ a, b } = obj : { a?: number | undefined; b?: string | undefined; }
+>({ a, b } = obj) : { a?: number; b?: string; }
+>{ a, b } = obj : { a?: number; b?: string; }
 >{ a, b } : { a: number; b: string; }
 >a : number
 >b : string
->obj : { a?: number | undefined; b?: string | undefined; }
+>obj : { a?: number; b?: string; }
     }
 }
 

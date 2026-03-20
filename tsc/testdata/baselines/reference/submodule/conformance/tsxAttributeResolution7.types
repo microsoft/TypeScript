@@ -5,7 +5,7 @@ declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { "data-foo"?: string };
->test1 : { "data-foo"?: string | undefined; }
+>test1 : { "data-foo"?: string; }
 >"data-foo" : string | undefined
 	}
 }

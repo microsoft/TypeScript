@@ -85,9 +85,9 @@ function f01(x: unknown) {
 >"number" : "number"
 
         x.toLocaleString;
->x.toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string)
+>x.toLocaleString : (() => string) | ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string)
 >x : number | boolean
->toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string)
+>toLocaleString : (() => string) | ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string)
     }
     if (!!true) {
 >!!true : true
@@ -272,7 +272,7 @@ namespace Debug {
 >Debug : typeof Debug
 
     export declare function assert(value: unknown, message?: string): asserts value;
->assert : (value: unknown, message?: string | undefined) => asserts value
+>assert : (value: unknown, message?: string) => asserts value
 >value : unknown
 >message : string | undefined
 
@@ -292,9 +292,9 @@ function f10(x: string | undefined) {
 
         Debug.assert(x);
 >Debug.assert(x) : void
->Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug.assert : (value: unknown, message?: string) => asserts value
 >Debug : typeof Debug
->assert : (value: unknown, message?: string | undefined) => asserts value
+>assert : (value: unknown, message?: string) => asserts value
 >x : string | undefined
 
         x.length;
@@ -309,9 +309,9 @@ function f10(x: string | undefined) {
 
         Debug.assert(x !== undefined);
 >Debug.assert(x !== undefined) : void
->Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug.assert : (value: unknown, message?: string) => asserts value
 >Debug : typeof Debug
->assert : (value: unknown, message?: string | undefined) => asserts value
+>assert : (value: unknown, message?: string) => asserts value
 >x !== undefined : boolean
 >x : string | undefined
 >undefined : undefined
@@ -345,9 +345,9 @@ function f10(x: string | undefined) {
 
         Debug.assert(false);
 >Debug.assert(false) : void
->Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug.assert : (value: unknown, message?: string) => asserts value
 >Debug : typeof Debug
->assert : (value: unknown, message?: string | undefined) => asserts value
+>assert : (value: unknown, message?: string) => asserts value
 >false : false
 
         x;  // Unreachable

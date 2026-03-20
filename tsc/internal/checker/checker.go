@@ -11094,6 +11094,11 @@ func (c *Checker) reportNonexistentProperty(propNode *ast.Node, containingType *
 		return
 	}
 	c.nonExistentProperties.Add(key)
+	links := c.nodeLinks.Get(propNode)
+	if links.flags&NodeCheckFlagsTypeChecked != 0 {
+		return // error already made/in progress
+	}
+	links.flags |= NodeCheckFlagsTypeChecked
 	if ast.IsJSDocNameReferenceContext(propNode) {
 		return
 	}
@@ -14596,6 +14601,26 @@ func (c *Checker) resolveExternalModuleNameWorker(location *ast.Node, moduleRefe
 		return c.resolveExternalModule(location, moduleReferenceExpression.Text(), moduleNotFoundError, core.IfElse(!ignoreErrors, moduleReferenceExpression, nil), isForAugmentation)
 	}
 	return nil
+}
+
+func (c *Checker) getExternalModuleFileFromDeclaration(declaration *ast.Node) *ast.SourceFile {
+	var specifier *ast.Node
+	if declaration.Kind == ast.KindModuleDeclaration {
+		if ast.IsStringLiteral(declaration.Name()) {
+			specifier = declaration.Name()
+		}
+	} else {
+		specifier = ast.GetExternalModuleName(declaration)
+	}
+	moduleSymbol := c.resolveExternalModuleNameWorker(specifier, specifier /*moduleNotFoundError*/, nil, false, false) // TODO: GH#18217
+	if moduleSymbol == nil {
+		return nil
+	}
+	decl := ast.GetDeclarationOfKind(moduleSymbol, ast.KindSourceFile)
+	if decl == nil {
+		return nil
+	}
+	return decl.AsSourceFile()
 }
 
 func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference string, moduleNotFoundError *diagnostics.Message, errorNode *ast.Node, isForAugmentation bool) *ast.Symbol {

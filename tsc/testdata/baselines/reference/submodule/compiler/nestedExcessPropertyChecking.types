@@ -3,12 +3,12 @@
 === nestedExcessPropertyChecking.ts ===
 type A1 = { x: { a?: string } };
 >A1 : A1
->x : { a?: string | undefined; }
+>x : { a?: string; }
 >a : string | undefined
 
 type B1 = { x: { b?: string } };
 >B1 : B1
->x : { b?: string | undefined; }
+>x : { b?: string; }
 >b : string | undefined
 
 type C1 = { x: { c: string } };
@@ -65,9 +65,9 @@ type OverridesInput = {
 }
 
 const foo1: Partial<{ something: any }> & { variables: {
->foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>; }
+>foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>; }
 >something : any
->variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
+>variables : { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>
 
     overrides?: OverridesInput;
 >overrides : OverridesInput | undefined
@@ -114,7 +114,7 @@ type T1 = {
 >T1 : T1
 
     primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
->primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; dark: number; }; }
+>primary : { __typename?: 'Feature'; } & { colors: { light: number; dark: number; }; }
 >__typename : "Feature" | undefined
 >colors : { light: number; dark: number; }
 >light : number
@@ -126,7 +126,7 @@ type T2 = {
 >T2 : T2
 
     primary: { __typename?: 'Feature' } & { colors: { light: number } },
->primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; }; }
+>primary : { __typename?: 'Feature'; } & { colors: { light: number; }; }
 >__typename : "Feature" | undefined
 >colors : { light: number; }
 >light : number

@@ -31,51 +31,24 @@ export function fnWithPartialAnnotationOnDefaultparam(x: P = null! as P, b: numb
 
 
 //// [declarationEmitCastReusesTypeNode1.d.ts]
-export declare let vLet: {
+type P = {} & {
     name: string;
 };
-export declare const vConst: {
-    name: string;
-};
-export declare function fn(p?: {
-    name: string;
-}): void;
-export declare function fnWithRequiredDefaultParam(p: {
-    name: string;
-} | undefined, req: number): void;
+export declare let vLet: P;
+export declare const vConst: P;
+export declare function fn(p?: P): void;
+export declare function fnWithRequiredDefaultParam(p: P | undefined, req: number): void;
 export declare class C {
-    ctorField: {
-        name: string;
-    };
-    field: {
-        name: string;
-    };
-    optField?: {
-        name: string;
-    } | undefined;
-    readonly roFiled: {
-        name: string;
-    };
-    method(p?: {
-        name: string;
-    }): void;
-    methodWithRequiredDefault(p: {
-        name: string;
-    } | undefined, req: number): void;
-    constructor(ctorField?: {
-        name: string;
-    });
-    get x(): {
-        name: string;
-    };
-    set x(v: {
-        name: string;
-    });
+    ctorField: P;
+    field: P;
+    optField?: P;
+    readonly roFiled: P;
+    method(p?: P): void;
+    methodWithRequiredDefault(p: P | undefined, req: number): void;
+    constructor(ctorField?: P);
+    get x(): P;
+    set x(v: P);
 }
-declare const _default: {
-    name: string;
-};
+declare const _default: P;
 export default _default;
-export declare function fnWithPartialAnnotationOnDefaultparam(x: {
-    name: string;
-} | undefined, b: number): void;
+export declare function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;

@@ -20,7 +20,7 @@
  function f(o) {
 ->f : (o: { [x: string]: boolean; }) => void
 ->o : { [x: string]: boolean; }
-+>f : (o: any) => void
++>f : (o: Object<string, boolean>) => void
 +>o : any
 
      o.foo = 1; // error

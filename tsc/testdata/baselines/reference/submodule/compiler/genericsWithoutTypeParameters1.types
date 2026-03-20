@@ -26,17 +26,17 @@ var i2: I<C>;
 >i2 : I<any>
 
 function foo(x: C, y: I) { }
->foo : (x: any, y: any) => void
+>foo : (x: C, y: I) => void
 >x : any
 >y : any
 
 function foo2(x: C<I>, y: I<C>) { }
->foo2 : (x: C<any>, y: I<any>) => void
+>foo2 : (x: C<I>, y: I<C>) => void
 >x : C<any>
 >y : I<any>
 
 var x: { a: C } = { a: new C<number>() };
->x : { a: any; }
+>x : { a: C; }
 >a : any
 >{ a: new C<number>() } : { a: C<number>; }
 >a : C<number>
@@ -44,7 +44,7 @@ var x: { a: C } = { a: new C<number>() };
 >C : typeof C
 
 var x2: { a: I } = { a: { bar() { return 1 } } };
->x2 : { a: any; }
+>x2 : { a: I; }
 >a : any
 >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
 >a : { bar(): number; }
@@ -74,7 +74,7 @@ class A<T> { }
 >A : A<T>
 
 function f<T>(x: T): A {
->f : <T>(x: T) => any
+>f : <T>(x: T) => A
 >x : T
 
     return null;

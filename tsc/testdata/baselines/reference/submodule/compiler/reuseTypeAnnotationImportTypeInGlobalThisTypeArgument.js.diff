@@ -16,7 +16,5 @@
 -export const blah: {
 +export declare const blah: {
      publicMixin: {
--        getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
-+        getGovernedParams: () => globalThis.ERef<globalThis.ParamStateRecord>;
+         getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
      };
- };

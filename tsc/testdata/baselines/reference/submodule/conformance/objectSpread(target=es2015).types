@@ -396,7 +396,7 @@ let changeTypeBoth: { a: string, b: number } =
 
 // optional
 function container(
->container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }) => void
+>container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string; }, optionalNumber: { sn?: number; }) => void
 
     definiteBoolean: { sn: boolean },
 >definiteBoolean : { sn: boolean; }
@@ -407,11 +407,11 @@ function container(
 >sn : string
 
     optionalString: { sn?: string },
->optionalString : { sn?: string | undefined; }
+>optionalString : { sn?: string; }
 >sn : string | undefined
 
     optionalNumber: { sn?: number }) {
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
 >sn : number | undefined
 
     let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
@@ -420,7 +420,7 @@ function container(
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
@@ -428,15 +428,15 @@ function container(
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>optionalString : { sn?: string; }
+>optionalNumber : { sn?: number; }
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
->allOptional : { sn?: string | number | undefined; }
+>allOptional : { sn?: string | number; }
 >sn : string | number | undefined
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>optionalString : { sn?: string; }
+>optionalNumber : { sn?: number; }
 
     // computed property
     let computedFirst: { a: number, b: string, "before everything": number } =

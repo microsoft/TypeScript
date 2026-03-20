@@ -262,8 +262,8 @@ ff2 = ff1;
 >ff1 : (...rest: [string, string] | [string, number]) => void
 
 function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
->ff3 : <A extends unknown[]>(s1: (...args: [x: string, number] | [x: string, ...rest: A]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
->s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
+>ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
+>s1 : (...args: [x: string, ...rest: A | [number]]) => void
 >args : [x: string, number] | [x: string, ...rest: A]
 >s2 : (x: string, ...rest: A | [number]) => void
 >x : string
@@ -271,12 +271,12 @@ function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number
 
     s1 = s2;
 >s1 = s2 : (x: string, ...rest: A | [number]) => void
->s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
+>s1 : (...args: [x: string, ...rest: A | [number]]) => void
 >s2 : (x: string, ...rest: A | [number]) => void
 
     s2 = s1;
->s2 = s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
+>s2 = s1 : (...args: [x: string, ...rest: A | [number]]) => void
 >s2 : (x: string, ...rest: A | [number]) => void
->s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
+>s1 : (...args: [x: string, ...rest: A | [number]]) => void
 }
 

@@ -5,7 +5,7 @@ type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean 
 >HomomorphicMappedType : HomomorphicMappedType<T>
 
 function test1<T extends [number] | [string]>(args: T) {
->test1 : <T extends [string] | [number]>(args: T) => void
+>test1 : <T extends [number] | [string]>(args: T) => void
 >args : T
 
   const arr: any[] = [] as HomomorphicMappedType<T>

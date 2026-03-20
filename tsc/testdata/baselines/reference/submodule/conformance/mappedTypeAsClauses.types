@@ -246,7 +246,7 @@ interface M {
 }
 
 function f(x: KeysExtendedBy<M, number>) {
->f : (x: "b") => "b"
+>f : (x: KeysExtendedBy<M, number>) => "b"
 >x : "b"
 
     return x;
@@ -255,7 +255,7 @@ function f(x: KeysExtendedBy<M, number>) {
 
 f("a");  // Error, should allow only "b"
 >f("a") : "b"
->f : (x: "b") => "b"
+>f : (x: KeysExtendedBy<M, number>) => "b"
 >"a" : "a"
 
 type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };

@@ -11,7 +11,7 @@ function foo<T extends "foo">(f: (x: T) => T) {
 }
 
 function bar<T extends "foo" | "bar">(f: (x: T) => T) {
->bar : <T extends "bar" | "foo">(f: (x: T) => T) => (x: T) => T
+>bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
 >f : (x: T) => T
 >x : T
 
@@ -51,7 +51,7 @@ let gResult = g("foo");
 let h = bar(x => x);
 >h : (x: "bar" | "foo") => "bar" | "foo"
 >bar(x => x) : (x: "bar" | "foo") => "bar" | "foo"
->bar : <T extends "bar" | "foo">(f: (x: T) => T) => (x: T) => T
+>bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
 >x => x : (x: "bar" | "foo") => "bar" | "foo"
 >x : "bar" | "foo"
 >x : "bar" | "foo"

@@ -32,9 +32,9 @@ callIt({
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 
@@ -54,9 +54,9 @@ callIt({
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 
@@ -77,9 +77,9 @@ callIt({
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 
@@ -98,9 +98,9 @@ callItT([() => 0, n => n.toFixed()]);
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 callItT([_a => 0, n => n.toFixed()]);
 >callItT([_a => 0, n => n.toFixed()]) : void
@@ -112,9 +112,9 @@ callItT([_a => 0, n => n.toFixed()]);
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 // Repro from #25092
 
@@ -151,9 +151,9 @@ const myGeneric = inferTypeFn({
 >generic => generic.toFixed() : (generic: number) => string
 >generic : number
 >generic.toFixed() : string
->generic.toFixed : (fractionDigits?: number | undefined) => string
+>generic.toFixed : (fractionDigits?: number) => string
 >generic : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 
@@ -696,9 +696,9 @@ Foo({
 
       arg.toString();
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>arg.toString : (radix?: number) => string
 >arg : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
     },
   },
@@ -744,9 +744,9 @@ const resNested = nested({
 >(arg) => arg.join(",") : (arg: number[]) => string
 >arg : number[]
 >arg.join(",") : string
->arg.join : (separator?: string | undefined) => string
+>arg.join : (separator?: string) => string
 >arg : number[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >"," : ","
 
   },
@@ -955,9 +955,9 @@ const resOnion = onion({
 >(arg) => arg.join(",") : (arg: string[]) => string
 >arg : string[]
 >arg.join(",") : string
->arg.join : (separator?: string | undefined) => string
+>arg.join : (separator?: string) => string
 >arg : string[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >"," : ","
 
     nested2: {
@@ -1028,9 +1028,9 @@ const resOnion2 = onion2({
 >(arg) => arg.join(",") : (arg: string[]) => string
 >arg : string[]
 >arg.join(",") : string
->arg.join : (separator?: string | undefined) => string
+>arg.join : (separator?: string) => string
 >arg : string[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >"," : ","
 
     c: (arg) => Number(arg),

@@ -6,7 +6,7 @@ interface IProps {
 >iconProp : string | undefined
 
     nestedProp?: {
->nestedProp : { testBool?: boolean | undefined; } | undefined
+>nestedProp : { testBool?: boolean; } | undefined
 
         testBool?: boolean;
 >testBool : boolean | undefined

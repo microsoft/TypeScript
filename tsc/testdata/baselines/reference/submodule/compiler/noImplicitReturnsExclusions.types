@@ -41,7 +41,7 @@ function f4(b: boolean): string | undefined {  // Error
 }
 
 function f5(b: boolean): string | void {
->f5 : (b: boolean) => void | string
+>f5 : (b: boolean) => string | void
 >b : boolean
 
     if (b) return undefined;
@@ -147,7 +147,7 @@ declare class HistoryItem {
 
 interface Thenable<T> {
   then<TResult>(
->then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
+>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
@@ -159,7 +159,7 @@ interface Thenable<T> {
 
   ): Thenable<TResult>;
   then<TResult>(
->then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
+>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined

@@ -335,7 +335,7 @@ type DeepReadonlyObject<T> = {
 };
 
 function f10(part: DeepReadonly<Part>) {
->f10 : (part: DeepReadonlyObject<Part>) => void
+>f10 : (part: DeepReadonly<Part>) => void
 >part : DeepReadonlyObject<Part>
 
     let name: string = part.name;
@@ -406,7 +406,7 @@ type ZeroOf<T extends number | string | boolean> = T extends number ? 0 : T exte
 >false : false
 
 function zeroOf<T extends number | string | boolean>(value: T) {
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T extends number | string | boolean>(value: T) => ZeroOf<T>
 >value : T
 
     return <ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false);
@@ -436,42 +436,42 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 
     zeroOf(5);  // 0
 >zeroOf(5) : 0
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >5 : 5
 
     zeroOf("hello");  // ""
 >zeroOf("hello") : ""
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >"hello" : "hello"
 
     zeroOf(true);  // false
 >zeroOf(true) : false
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >true : true
 
     zeroOf(n);  // 0
 >zeroOf(n) : 0
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >n : number
 
     zeroOf(b);  // False
 >zeroOf(b) : false
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >b : boolean
 
     zeroOf(x);  // 0 | false
 >zeroOf(x) : 0 | false
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >x : number | boolean
 
     zeroOf(y);  // ZeroOf<T>
 >zeroOf(y) : ZeroOf<T>
->zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
+>zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 >y : T
 }
 
 function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
->f21 : <T extends string | number>(x: T, y: ZeroOf<T>) => void
+>f21 : <T extends number | string>(x: T, y: ZeroOf<T>) => void
 >x : T
 >y : ZeroOf<T>
 
@@ -789,8 +789,8 @@ type Baz<T> = Foo<T>;
 >Baz : Baz<T>
 
 const convert2 = <T>(value: Foo<T>): Baz<T> => value;
->convert2 : <T>(value: Foo<T>) => Foo<T>
-><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
+>convert2 : <T>(value: Foo<T>) => Baz<T>
+><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
 >value : Foo<T>
 >value : Foo<T>
 

@@ -1,40 +1,6 @@
 --- old.typeParameterConstModifiersReturnsAndYields.types
 +++ new.typeParameterConstModifiersReturnsAndYields.types
-@@= skipped -168, +168 lines =@@
- >'foo' : "foo"
-
- declare function test3<const T, const R>(arg: () => Generator<T, R>): [T, R]
-->test3 : <const T, const R>(arg: () => Generator<T, R>) => [T, R]
-->arg : () => Generator<T, R>
-+>test3 : <const T, const R>(arg: () => Generator<T, R, any>) => [T, R]
-+>arg : () => Generator<T, R, any>
-
- const result21 = test3(function*() {
- >result21 : [10, "1"]
- >test3(function*() {    yield 10;    return '1';}) : [10, "1"]
-->test3 : <const T, const R>(arg: () => Generator<T, R>) => [T, R]
-+>test3 : <const T, const R>(arg: () => Generator<T, R, any>) => [T, R]
- >function*() {    yield 10;    return '1';} : () => Generator<10, "1", any>
-
-     yield 10;
-@@= skipped -19, +19 lines =@@
- });
-
- declare function test4<const T, const R>(arg: () => AsyncGenerator<T, R>): [T, R]
-->test4 : <const T, const R>(arg: () => AsyncGenerator<T, R>) => [T, R]
-->arg : () => AsyncGenerator<T, R>
-+>test4 : <const T, const R>(arg: () => AsyncGenerator<T, R, any>) => [T, R]
-+>arg : () => AsyncGenerator<T, R, any>
-
- const result22 = test4(async function*() {
- >result22 : [10, "1"]
- >test4(async function*() {    yield 10;    return '1';}) : [10, "1"]
-->test4 : <const T, const R>(arg: () => AsyncGenerator<T, R>) => [T, R]
-+>test4 : <const T, const R>(arg: () => AsyncGenerator<T, R, any>) => [T, R]
- >async function*() {    yield 10;    return '1';} : () => AsyncGenerator<10, "1", any>
-
-     yield 10;
-@@= skipped -151, +151 lines =@@
+@@= skipped -338, +338 lines =@@
  >"foo" : "foo"
 
  declare function overloaded1<const T>(cb: () => T): T;

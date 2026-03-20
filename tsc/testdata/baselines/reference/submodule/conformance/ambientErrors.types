@@ -8,11 +8,11 @@ declare var x = 4;
 
 // Ambient functions with invalid overloads
 declare function fn(x: number): string;
->fn : { (x: number): string; (x: "foo"): number; }
+>fn : { (x: number): string; (x: 'foo'): number; }
 >x : number
 
 declare function fn(x: 'foo'): number;
->fn : { (x: number): string; (x: "foo"): number; }
+>fn : { (x: number): string; (x: 'foo'): number; }
 >x : "foo"
 
 // Ambient functions with duplicate signatures

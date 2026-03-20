@@ -1,0 +1,9 @@
+--- old.definiteAssignmentAssertionsWithObjectShortHand.js
++++ new.definiteAssignmentAssertionsWithObjectShortHand.js
+@@= skipped -22, +22 lines =@@
+     a: string;
+ };
+ declare const bar: {
+-    a?(): void;
++    a(): void;
+ };

@@ -29,13 +29,13 @@ function test1(result: Disjoint): string {
 
         throw result.err;
 >result.err : FooAndBaz
->result : { readonly value?: undefined; readonly err: FooAndBaz; }
+>result : { readonly value?: never; readonly err: FooAndBaz; }
 >err : FooAndBaz
     }
     // Error, should OK
     return result.value;
 >result.value : string
->result : { readonly value: string; readonly err?: undefined; }
+>result : { readonly value: string; readonly err?: never; }
 >value : string
 }
 

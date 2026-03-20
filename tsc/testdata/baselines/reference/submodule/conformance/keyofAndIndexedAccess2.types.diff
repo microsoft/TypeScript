@@ -1,84 +1,40 @@
 --- old.keyofAndIndexedAccess2.types
 +++ new.keyofAndIndexedAccess2.types
-@@= skipped -195, +195 lines =@@
- }
+@@= skipped -1, +1 lines =@@
 
- function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
-->f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
-+>f3b : <K extends string>(a: { [P in K]: number; }, b: { [x: string]: number; }, k: K) => void
- >a : { [P in K]: number; }
- >b : { [x: string]: number; }
- >k : K
-@@= skipped -17, +17 lines =@@
+ === keyofAndIndexedAccess2.ts ===
+ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
+->f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
++>f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
+ >obj : { a: number; b: 0 | 1; c: string; }
+ >a : number
+ >b : 0 | 1
+@@= skipped -211, +211 lines =@@
  }
 
  function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
 ->f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
-+>f4 : <K extends string>(a: number, b: number) => void
++>f4 : <K extends string>(a: {    [key: string]: number;}[K], b: number) => void
  >a : number
  >key : string
  >b : number
-@@= skipped -62, +62 lines =@@
- >Dict : Dict
-
- function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
-->f11 : <K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) => void
-+>f11 : <K extends string>(obj: Dict, k1: string, k2: K) => void
- >obj : Dict
- >k1 : string
- >k2 : K
-@@= skipped -28, +28 lines =@@
- }
-
- function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
-->f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
-+>f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: string, k2: keyof T, k3: K) => void
- >obj : T
- >k1 : string
- >k2 : keyof T
-@@= skipped -90, +90 lines =@@
-     if (!ids.includes(id)) {
- >!ids.includes(id) : boolean
- >ids.includes(id) : boolean
-->ids.includes : (searchElement: IdOf<E>, fromIndex?: number) => boolean
-+>ids.includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
- >ids : IdOf<E>[]
-->includes : (searchElement: IdOf<E>, fromIndex?: number) => boolean
-+>includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
- >id : IdOf<E>
-
-         return undefined;
-@@= skipped -49, +49 lines =@@
+@@= skipped -229, +229 lines =@@
  // Repros from #30938
 
  function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
 ->fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T["elements"][number]) => void) => void
-+>fn : <T extends { elements: string[]; } | { elements: number[]; }>(param: T, cb: (element: T["elements"][number]) => void) => void
++>fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T['elements'][number]) => void) => void
  >elements : string[]
  >elements : number[]
  >param : T
-@@= skipped -12, +12 lines =@@
- >cb : (element: T["elements"][number]) => void
+->cb : (element: T["elements"][number]) => void
++>cb : (element: T['elements'][number]) => void
+ >element : T["elements"][number]
+
+     cb(param.elements[0]);
+ >cb(param.elements[0]) : void
+->cb : (element: T["elements"][number]) => void
++>cb : (element: T['elements'][number]) => void
  >param.elements[0] : string | number
  >param.elements : string[] | number[]
-->param : { elements: Array<string>; } | { elements: Array<number>; }
-+>param : { elements: string[]; } | { elements: number[]; }
- >elements : string[] | number[]
- >0 : 0
- }
-
- function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
-->fn2 : <T extends Array<string>>(param: T, cb: (element: T[number]) => void) => void
-+>fn2 : <T extends string[]>(param: T, cb: (element: T[number]) => void) => void
- >param : T
- >cb : (element: T[number]) => void
- >element : T[number]
-@@= skipped -22, +22 lines =@@
- // Repro from #31149
-
- function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
-->fn3 : <T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) => void
-+>fn3 : <T extends readonly string[]>(param: T, cb: (element: T[number]) => void) => void
- >param : T
- >cb : (element: T[number]) => void
- >element : T[number]
+ >param : { elements: Array<string>; } | { elements: Array<number>; }

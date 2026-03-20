@@ -12,7 +12,7 @@
 // a(() => {
 //    ^
 // | ----------------------------------------------------------------------
-// | a(**fn?: ((x: string) => string) | ((y: number) => number) | undefined**): void
+// | a(**fn?: ((x: string) => string) | ((y: number) => number)**): void
 // | ----------------------------------------------------------------------
 //     return undefined;
 // });
@@ -42,10 +42,10 @@
     "item": {
       "signatures": [
         {
-          "label": "a(fn?: ((x: string) => string) | ((y: number) => number) | undefined): void",
+          "label": "a(fn?: ((x: string) => string) | ((y: number) => number)): void",
           "parameters": [
             {
-              "label": "fn?: ((x: string) => string) | ((y: number) => number) | undefined"
+              "label": "fn?: ((x: string) => string) | ((y: number) => number)"
             }
           ],
           "activeParameter": 0

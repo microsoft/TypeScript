@@ -8,7 +8,7 @@ function f10(): undefined {
 }
 
 function f11(): undefined | number {
->f11 : () => number | undefined
+>f11 : () => undefined | number
 
     // Error, return type isn't just undefined
 }
@@ -27,7 +27,7 @@ const f20: () => undefined = () => {
 }
 
 const f21: () => undefined | number = () => {
->f21 : () => number | undefined
+>f21 : () => undefined | number
 >() => {    // Ok, contextual type for implicit return contains undefined} : () => undefined
 
     // Ok, contextual type for implicit return contains undefined
@@ -47,7 +47,7 @@ async function f30(): Promise<undefined> {
 }
 
 async function f31(): Promise<undefined | number> {
->f31 : () => Promise<number | undefined>
+>f31 : () => Promise<undefined | number>
 
     // Error, return type isn't just undefined
 }

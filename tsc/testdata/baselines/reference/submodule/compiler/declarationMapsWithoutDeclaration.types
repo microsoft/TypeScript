@@ -21,7 +21,7 @@ namespace m2 {
 }
 
 declare var m2: {
->m2 : { (): import("./declarationMapsWithoutDeclaration").connectExport; test1: import("./declarationMapsWithoutDeclaration").connectModule; test2(): import("./declarationMapsWithoutDeclaration").connectModule; }
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
     (): m2.connectExport;
 >m2 : any
@@ -31,11 +31,11 @@ declare var m2: {
 >m2 : any
 
     test2(): m2.connectModule;
->test2 : () => import("./declarationMapsWithoutDeclaration").connectModule
+>test2 : () => m2.connectModule
 >m2 : any
 
 };
 
 export = m2;
->m2 : { (): import("./declarationMapsWithoutDeclaration").connectExport; test1: import("./declarationMapsWithoutDeclaration").connectModule; test2(): import("./declarationMapsWithoutDeclaration").connectModule; }
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 

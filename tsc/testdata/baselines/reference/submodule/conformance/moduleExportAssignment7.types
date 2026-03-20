@@ -59,7 +59,7 @@ module.exports = {
  * @param {import("./mod").literal} g
  */
 function jstypes(a, b, c, d, e, f, g) {
->jstypes : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
+>jstypes : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
 >a : any
 >b : any
 >c : any
@@ -104,7 +104,7 @@ function jstypes(a, b, c, d, e, f, g) {
  * @param {typeof import("./mod").literal} g
  */
 function jsvalues(a, b, c, d, e, f, g) {
->jsvalues : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
+>jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
 >a : typeof Thing
 >b : typeof AnotherThing
 >c : () => number
@@ -141,7 +141,7 @@ function jsvalues(a, b, c, d, e, f, g) {
 
 === index.ts ===
 function types(
->types : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
+>types : (a: import('./mod').Thing, b: import('./mod').AnotherThing, c: import('./mod').foo, d: import('./mod').qux, e: import('./mod').baz, f: import('./mod').buz, g: import('./mod').literal) => any
 
     a: import('./mod').Thing,
 >a : any
@@ -192,7 +192,7 @@ function types(
 }
 
 function values(
->values : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
+>values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: typeof import('./mod').buz, g: typeof import('./mod').literal) => any
 
     a: typeof import('./mod').Thing,
 >a : typeof Thing

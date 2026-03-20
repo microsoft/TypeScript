@@ -20,22 +20,22 @@ namespace EmptyTypes {
 >f : f
 
         public voidIfAny(x: boolean, y?: boolean): number;
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : boolean
 >y : boolean | undefined
 
         public voidIfAny(x: string, y?: boolean): number;
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : string
 >y : boolean | undefined
 
         public voidIfAny(x: number, y?: boolean): number;
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : number
 >y : boolean | undefined
 
         public voidIfAny(x: any, y = false): any { return null; }
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : any
 >y : boolean
 >false : false
@@ -47,9 +47,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([4, 2][0])) : number
 >(this.voidIfAny([4, 2][0])) : number
 >this.voidIfAny([4, 2][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2][0] : number
 >[4, 2] : number[]
 >4 : 4
@@ -60,9 +60,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([4, 2, undefined][0])) : number
 >(this.voidIfAny([4, 2, undefined][0])) : number
 >this.voidIfAny([4, 2, undefined][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2, undefined][0] : number | undefined
 >[4, 2, undefined] : (number | undefined)[]
 >4 : 4
@@ -74,9 +74,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([undefined, 2, 4][0])) : number
 >(this.voidIfAny([undefined, 2, 4][0])) : number
 >this.voidIfAny([undefined, 2, 4][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, 2, 4][0] : number | undefined
 >[undefined, 2, 4] : (number | undefined)[]
 >undefined : undefined
@@ -88,9 +88,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([null, 2, 4][0])) : number
 >(this.voidIfAny([null, 2, 4][0])) : number
 >this.voidIfAny([null, 2, 4][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[null, 2, 4][0] : number | null
 >[null, 2, 4] : (number | null)[]
 >2 : 2
@@ -101,9 +101,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([2, 4, null][0])) : number
 >(this.voidIfAny([2, 4, null][0])) : number
 >this.voidIfAny([2, 4, null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[2, 4, null][0] : number | null
 >[2, 4, null] : (number | null)[]
 >2 : 2
@@ -114,9 +114,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([undefined, 4, null][0])) : number
 >(this.voidIfAny([undefined, 4, null][0])) : number
 >this.voidIfAny([undefined, 4, null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, 4, null][0] : number | null | undefined
 >[undefined, 4, null] : (number | null | undefined)[]
 >undefined : undefined
@@ -127,9 +127,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny(['', "q"][0])) : number
 >(this.voidIfAny(['', "q"][0])) : number
 >this.voidIfAny(['', "q"][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q"][0] : string
 >['', "q"] : string[]
 >'' : ""
@@ -140,9 +140,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny(['', "q", undefined][0])) : number
 >(this.voidIfAny(['', "q", undefined][0])) : number
 >this.voidIfAny(['', "q", undefined][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q", undefined][0] : string | undefined
 >['', "q", undefined] : (string | undefined)[]
 >'' : ""
@@ -154,9 +154,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([undefined, "q", ''][0])) : number
 >(this.voidIfAny([undefined, "q", ''][0])) : number
 >this.voidIfAny([undefined, "q", ''][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, "q", ''][0] : string | undefined
 >[undefined, "q", ''] : (string | undefined)[]
 >undefined : undefined
@@ -168,9 +168,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([null, "q", ''][0])) : number
 >(this.voidIfAny([null, "q", ''][0])) : number
 >this.voidIfAny([null, "q", ''][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[null, "q", ''][0] : string | null
 >[null, "q", ''] : (string | null)[]
 >"q" : "q"
@@ -181,9 +181,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny(["q", '', null][0])) : number
 >(this.voidIfAny(["q", '', null][0])) : number
 >this.voidIfAny(["q", '', null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >["q", '', null][0] : string | null
 >["q", '', null] : (string | null)[]
 >"q" : "q"
@@ -194,9 +194,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([undefined, '', null][0])) : number
 >(this.voidIfAny([undefined, '', null][0])) : number
 >this.voidIfAny([undefined, '', null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, '', null][0] : string | null | undefined
 >[undefined, '', null] : (string | null | undefined)[]
 >undefined : undefined
@@ -207,9 +207,9 @@ namespace EmptyTypes {
 ><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
 >(this.voidIfAny([[3, 4], [null]][0][0])) : number
 >this.voidIfAny([[3, 4], [null]][0][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[[3, 4], [null]][0][0] : number | null
 >[[3, 4], [null]][0] : null[] | number[]
 >[[3, 4], [null]] : (null[] | number[])[]
@@ -406,22 +406,22 @@ namespace NonEmptyTypes {
 >f : f
 
         public voidIfAny(x: boolean, y?: boolean): number;
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : boolean
 >y : boolean | undefined
 
         public voidIfAny(x: string, y?: boolean): number;
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : string
 >y : boolean | undefined
 
         public voidIfAny(x: number, y?: boolean): number;
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : number
 >y : boolean | undefined
 
         public voidIfAny(x: any, y = false): any { return null; }
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >x : any
 >y : boolean
 >false : false
@@ -433,9 +433,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([4, 2][0])) : number
 >(this.voidIfAny([4, 2][0])) : number
 >this.voidIfAny([4, 2][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2][0] : number
 >[4, 2] : number[]
 >4 : 4
@@ -446,9 +446,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([4, 2, undefined][0])) : number
 >(this.voidIfAny([4, 2, undefined][0])) : number
 >this.voidIfAny([4, 2, undefined][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[4, 2, undefined][0] : number | undefined
 >[4, 2, undefined] : (number | undefined)[]
 >4 : 4
@@ -460,9 +460,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([undefined, 2, 4][0])) : number
 >(this.voidIfAny([undefined, 2, 4][0])) : number
 >this.voidIfAny([undefined, 2, 4][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, 2, 4][0] : number | undefined
 >[undefined, 2, 4] : (number | undefined)[]
 >undefined : undefined
@@ -474,9 +474,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([null, 2, 4][0])) : number
 >(this.voidIfAny([null, 2, 4][0])) : number
 >this.voidIfAny([null, 2, 4][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[null, 2, 4][0] : number | null
 >[null, 2, 4] : (number | null)[]
 >2 : 2
@@ -487,9 +487,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([2, 4, null][0])) : number
 >(this.voidIfAny([2, 4, null][0])) : number
 >this.voidIfAny([2, 4, null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[2, 4, null][0] : number | null
 >[2, 4, null] : (number | null)[]
 >2 : 2
@@ -500,9 +500,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([undefined, 4, null][0])) : number
 >(this.voidIfAny([undefined, 4, null][0])) : number
 >this.voidIfAny([undefined, 4, null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, 4, null][0] : number | null | undefined
 >[undefined, 4, null] : (number | null | undefined)[]
 >undefined : undefined
@@ -513,9 +513,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny(['', "q"][0])) : number
 >(this.voidIfAny(['', "q"][0])) : number
 >this.voidIfAny(['', "q"][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q"][0] : string
 >['', "q"] : string[]
 >'' : ""
@@ -526,9 +526,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny(['', "q", undefined][0])) : number
 >(this.voidIfAny(['', "q", undefined][0])) : number
 >this.voidIfAny(['', "q", undefined][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >['', "q", undefined][0] : string | undefined
 >['', "q", undefined] : (string | undefined)[]
 >'' : ""
@@ -540,9 +540,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([undefined, "q", ''][0])) : number
 >(this.voidIfAny([undefined, "q", ''][0])) : number
 >this.voidIfAny([undefined, "q", ''][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, "q", ''][0] : string | undefined
 >[undefined, "q", ''] : (string | undefined)[]
 >undefined : undefined
@@ -554,9 +554,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([null, "q", ''][0])) : number
 >(this.voidIfAny([null, "q", ''][0])) : number
 >this.voidIfAny([null, "q", ''][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[null, "q", ''][0] : string | null
 >[null, "q", ''] : (string | null)[]
 >"q" : "q"
@@ -567,9 +567,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny(["q", '', null][0])) : number
 >(this.voidIfAny(["q", '', null][0])) : number
 >this.voidIfAny(["q", '', null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >["q", '', null][0] : string | null
 >["q", '', null] : (string | null)[]
 >"q" : "q"
@@ -580,9 +580,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([undefined, '', null][0])) : number
 >(this.voidIfAny([undefined, '', null][0])) : number
 >this.voidIfAny([undefined, '', null][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[undefined, '', null][0] : string | null | undefined
 >[undefined, '', null] : (string | null | undefined)[]
 >undefined : undefined
@@ -593,9 +593,9 @@ namespace NonEmptyTypes {
 ><number>(this.voidIfAny([[3, 4], [null]][0][0])) : number
 >(this.voidIfAny([[3, 4], [null]][0][0])) : number
 >this.voidIfAny([[3, 4], [null]][0][0]) : number
->this.voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>this.voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >this : this
->voidIfAny : { (x: boolean, y?: boolean | undefined): number; (x: string, y?: boolean | undefined): number; (x: number, y?: boolean | undefined): number; }
+>voidIfAny : { (x: boolean, y?: boolean): number; (x: string, y?: boolean): number; (x: number, y?: boolean): number; }
 >[[3, 4], [null]][0][0] : number | null
 >[[3, 4], [null]][0] : null[] | number[]
 >[[3, 4], [null]] : (null[] | number[])[]

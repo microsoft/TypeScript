@@ -62,13 +62,13 @@ declare var b4: { fn(): C };
 >fn : () => C
 
 declare var a5: { fn(a?: Base): void };
->a5 : { fn(a?: Base | undefined): void; }
->fn : (a?: Base | undefined) => void
+>a5 : { fn(a?: Base): void; }
+>fn : (a?: Base) => void
 >a : Base | undefined
 
 declare var b5: { fn(a?: C): void };
->b5 : { fn(a?: C | undefined): void; }
->fn : (a?: C | undefined) => void
+>b5 : { fn(a?: C): void; }
+>fn : (a?: C) => void
 >a : C | undefined
 
 declare var a6: { fn(...a: Base[]): void };
@@ -119,8 +119,8 @@ var r1a4 = a4 < b4;
 var r1a5 = a5 < b5;
 >r1a5 : boolean
 >a5 < b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r1a6 = a6 < b6;
 >r1a6 : boolean
@@ -161,8 +161,8 @@ var r1b4 = b4 < a4;
 var r1b5 = b5 < a5;
 >r1b5 : boolean
 >b5 < a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r1b6 = b6 < a6;
 >r1b6 : boolean
@@ -204,8 +204,8 @@ var r2a4 = a4 > b4;
 var r2a5 = a5 > b5;
 >r2a5 : boolean
 >a5 > b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r2a6 = a6 > b6;
 >r2a6 : boolean
@@ -246,8 +246,8 @@ var r2b4 = b4 > a4;
 var r2b5 = b5 > a5;
 >r2b5 : boolean
 >b5 > a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r2b6 = b6 > a6;
 >r2b6 : boolean
@@ -289,8 +289,8 @@ var r3a4 = a4 <= b4;
 var r3a5 = a5 <= b5;
 >r3a5 : boolean
 >a5 <= b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r3a6 = a6 <= b6;
 >r3a6 : boolean
@@ -331,8 +331,8 @@ var r3b4 = b4 <= a4;
 var r3b5 = b5 <= a5;
 >r3b5 : boolean
 >b5 <= a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r3b6 = b6 <= a6;
 >r3b6 : boolean
@@ -374,8 +374,8 @@ var r4a4 = a4 >= b4;
 var r4a5 = a5 >= b5;
 >r4a5 : boolean
 >a5 >= b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r4a6 = a6 >= b6;
 >r4a6 : boolean
@@ -416,8 +416,8 @@ var r4b4 = b4 >= a4;
 var r4b5 = b5 >= a5;
 >r4b5 : boolean
 >b5 >= a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r4b6 = b6 >= a6;
 >r4b6 : boolean
@@ -459,8 +459,8 @@ var r5a4 = a4 == b4;
 var r5a5 = a5 == b5;
 >r5a5 : boolean
 >a5 == b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r5a6 = a6 == b6;
 >r5a6 : boolean
@@ -501,8 +501,8 @@ var r5b4 = b4 == a4;
 var r5b5 = b5 == a5;
 >r5b5 : boolean
 >b5 == a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r5b6 = b6 == a6;
 >r5b6 : boolean
@@ -544,8 +544,8 @@ var r6a4 = a4 != b4;
 var r6a5 = a5 != b5;
 >r6a5 : boolean
 >a5 != b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r6a6 = a6 != b6;
 >r6a6 : boolean
@@ -586,8 +586,8 @@ var r6b4 = b4 != a4;
 var r6b5 = b5 != a5;
 >r6b5 : boolean
 >b5 != a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r6b6 = b6 != a6;
 >r6b6 : boolean
@@ -629,8 +629,8 @@ var r7a4 = a4 === b4;
 var r7a5 = a5 === b5;
 >r7a5 : boolean
 >a5 === b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r7a6 = a6 === b6;
 >r7a6 : boolean
@@ -671,8 +671,8 @@ var r7b4 = b4 === a4;
 var r7b5 = b5 === a5;
 >r7b5 : boolean
 >b5 === a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r7b6 = b6 === a6;
 >r7b6 : boolean
@@ -714,8 +714,8 @@ var r8a4 = a4 !== b4;
 var r8a5 = a5 !== b5;
 >r8a5 : boolean
 >a5 !== b5 : boolean
->a5 : { fn(a?: Base | undefined): void; }
->b5 : { fn(a?: C | undefined): void; }
+>a5 : { fn(a?: Base): void; }
+>b5 : { fn(a?: C): void; }
 
 var r8a6 = a6 !== b6;
 >r8a6 : boolean
@@ -756,8 +756,8 @@ var r8b4 = b4 !== a4;
 var r8b5 = b5 !== a5;
 >r8b5 : boolean
 >b5 !== a5 : boolean
->b5 : { fn(a?: C | undefined): void; }
->a5 : { fn(a?: Base | undefined): void; }
+>b5 : { fn(a?: C): void; }
+>a5 : { fn(a?: Base): void; }
 
 var r8b6 = b6 !== a6;
 >r8b6 : boolean

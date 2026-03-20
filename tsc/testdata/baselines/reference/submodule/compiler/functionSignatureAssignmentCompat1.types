@@ -11,7 +11,7 @@ interface Parsers {
 >raw : ParserFunc
 
     readline(delimiter?: string): ParserFunc;
->readline : (delimiter?: string | undefined) => ParserFunc
+>readline : (delimiter?: string) => ParserFunc
 >delimiter : string | undefined
 }
 declare var parsers: Parsers;
@@ -25,14 +25,14 @@ var c: ParserFunc = parsers.raw; // ok!
 
 var d: ParserFunc = parsers.readline; // not ok
 >d : ParserFunc
->parsers.readline : (delimiter?: string | undefined) => ParserFunc
+>parsers.readline : (delimiter?: string) => ParserFunc
 >parsers : Parsers
->readline : (delimiter?: string | undefined) => ParserFunc
+>readline : (delimiter?: string) => ParserFunc
 
 var e: ParserFunc = parsers.readline(); // ok
 >e : ParserFunc
 >parsers.readline() : ParserFunc
->parsers.readline : (delimiter?: string | undefined) => ParserFunc
+>parsers.readline : (delimiter?: string) => ParserFunc
 >parsers : Parsers
->readline : (delimiter?: string | undefined) => ParserFunc
+>readline : (delimiter?: string) => ParserFunc
 

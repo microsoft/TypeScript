@@ -1,0 +1,72 @@
+--- old.inferFromGenericFunctionReturnTypes3.types
++++ new.inferFromGenericFunctionReturnTypes3.types
+@@= skipped -29, +29 lines =@@
+ }
+
+ function wrappedFoo(): Wrap<'foo'> {
+->wrappedFoo : () => Wrap<"foo">
++>wrappedFoo : () => Wrap<'foo'>
+
+     return wrap('foo');
+ >wrap('foo') : Wrap<"foo">
+@@= skipped -9, +9 lines =@@
+ }
+
+ function wrapBar(value: 'bar'): Wrap<'bar'> {
+->wrapBar : (value: "bar") => Wrap<"bar">
++>wrapBar : (value: 'bar') => Wrap<'bar'>
+ >value : "bar"
+
+     return { value };
+@@= skipped -9, +9 lines =@@
+ }
+
+ function wrappedBar(): Wrap<'bar'> {
+->wrappedBar : () => Wrap<"bar">
++>wrappedBar : () => Wrap<'bar'>
+
+     const value = 'bar';
+ >value : "bar"
+@@= skipped -9, +9 lines =@@
+     const inferred = wrapBar(value);
+ >inferred : Wrap<"bar">
+ >wrapBar(value) : Wrap<"bar">
+->wrapBar : (value: "bar") => Wrap<"bar">
++>wrapBar : (value: 'bar') => Wrap<'bar'>
+ >value : "bar"
+
+     const literal = wrapBar('bar');
+ >literal : Wrap<"bar">
+ >wrapBar('bar') : Wrap<"bar">
+->wrapBar : (value: "bar") => Wrap<"bar">
++>wrapBar : (value: 'bar') => Wrap<'bar'>
+ >'bar' : "bar"
+
+     const value2: string = 'bar';
+@@= skipped -16, +16 lines =@@
+     const literal2 = wrapBar(value2);  // Error
+ >literal2 : Wrap<"bar">
+ >wrapBar(value2) : Wrap<"bar">
+->wrapBar : (value: "bar") => Wrap<"bar">
++>wrapBar : (value: 'bar') => Wrap<'bar'>
+ >value2 : string
+
+     return wrap(value);
+@@= skipped -10, +10 lines =@@
+ }
+
+ function wrappedBaz(): Wrap<'baz'> {
+->wrappedBaz : () => Wrap<"baz">
++>wrappedBaz : () => Wrap<'baz'>
+
+     const value: 'baz' = 'baz';
+ >value : "baz"
+@@= skipped -169, +169 lines =@@
+
+ interface Person {
+   phoneNumbers: {
+->phoneNumbers : { __typename: "PhoneNumber"; }[]
++>phoneNumbers : { __typename: 'PhoneNumber'; }[]
+
+     __typename: 'PhoneNumber';
+ >__typename : "PhoneNumber"

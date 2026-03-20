@@ -21,7 +21,7 @@ type Constructor<I extends Object, C = any> = ClassInterface<C> & InstanceInterf
 >Constructor : Constructor<I, C>
 
 function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
->cloneClass : <T extends Constructor<{}, any>>(OriginalClass: T) => T
+>cloneClass : <T extends Constructor<{}>>(OriginalClass: T) => T
 >OriginalClass : T
 
     class AnotherOriginalClass extends OriginalClass {

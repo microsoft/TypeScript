@@ -122,7 +122,7 @@ function c2({z = 10}) { }
 >10 : 10
 
 function c3({b}: { b: number|string } = { b: "hello" }) { }
->c3 : ({ b }?: { b: string | number; }) => void
+>c3 : ({ b }?: { b: number | string; }) => void
 >b : string | number
 >b : string | number
 >{ b: "hello" } : { b: string; }
@@ -175,7 +175,7 @@ c2({ z: false });  // Error, implied type is {z?: number}
 
 c3({ b: true });   // Error, implied type is { b: number|string }. 
 >c3({ b: true }) : void
->c3 : ({ b }?: { b: string | number; }) => void
+>c3 : ({ b }?: { b: number | string; }) => void
 >{ b: true } : { b: boolean; }
 >b : boolean
 >true : true

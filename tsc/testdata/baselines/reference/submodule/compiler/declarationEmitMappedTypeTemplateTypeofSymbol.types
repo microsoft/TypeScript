@@ -14,7 +14,7 @@ export declare const Timestamp: {
 };
 
 export declare function now(): typeof Timestamp;
->now : () => { [timestampSymbol]: true; }
+>now : () => typeof Timestamp
 >Timestamp : { [timestampSymbol]: true; }
 
 === b.ts ===
@@ -24,16 +24,16 @@ import * as x from "./a";
 export const timestamp = x.now();
 >timestamp : { [x.timestampSymbol]: true; }
 >x.now() : { [x.timestampSymbol]: true; }
->x.now : () => { [x.timestampSymbol]: true; }
+>x.now : () => typeof x.Timestamp
 >x : typeof x
->now : () => { [x.timestampSymbol]: true; }
+>now : () => typeof x.Timestamp
 
 === c.ts ===
 import { now } from "./a";
->now : () => { [timestampSymbol]: true; }
+>now : () => typeof import("./a").Timestamp
 
 export const timestamp = now();
 >timestamp : { [timestampSymbol]: true; }
 >now() : { [timestampSymbol]: true; }
->now : () => { [timestampSymbol]: true; }
+>now : () => typeof import("./a").Timestamp
 

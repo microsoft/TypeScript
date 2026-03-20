@@ -21,8 +21,8 @@ import { SomeType } from "some-dep";
 >SomeType : any
 
 export const foo = (thing: SomeType) => {
->foo : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").SomeType
->(thing: SomeType) => {  return thing;} : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").SomeType
+>foo : (thing: SomeType) => import("../node_modules/some-dep/dist/inner").SomeType
+>(thing: SomeType) => {  return thing;} : (thing: SomeType) => import("../node_modules/some-dep/dist/inner").SomeType
 >thing : import("../node_modules/some-dep/dist/inner").SomeType
 
   return thing;
@@ -31,8 +31,8 @@ export const foo = (thing: SomeType) => {
 };
 
 export const bar = (thing: SomeType) => {
->bar : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").Other
->(thing: SomeType) => {  return thing.arg;} : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").Other
+>bar : (thing: SomeType) => import("../node_modules/some-dep/dist/inner").Other
+>(thing: SomeType) => {  return thing.arg;} : (thing: SomeType) => import("../node_modules/some-dep/dist/inner").Other
 >thing : import("../node_modules/some-dep/dist/inner").SomeType
 
   return thing.arg;

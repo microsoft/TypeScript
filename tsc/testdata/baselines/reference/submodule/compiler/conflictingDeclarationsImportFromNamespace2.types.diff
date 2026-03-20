@@ -1,33 +1,11 @@
 --- old.conflictingDeclarationsImportFromNamespace2.types
 +++ new.conflictingDeclarationsImportFromNamespace2.types
-@@= skipped -8, +8 lines =@@
-
-     interface LoDashStatic {
-       pick: <T extends object, U extends keyof T>(
-->pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
-+>pick : <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>
-
-         object: T,
- >object : T
-@@= skipped -14, +14 lines =@@
-
- === node_modules/@types/lodash/pick.d.ts ===
- import { pick } from "./index";
-->pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
-+>pick : <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>
-
- export = pick;
-->pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
-+>pick : <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>
-
- === node_modules/@types/lodash/index.d.ts ===
- /// <reference path="./object.d.ts" />
-@@= skipped -23, +23 lines =@@
+@@= skipped -45, +45 lines =@@
 
  === index.ts ===
  import * as pick from 'lodash/pick';
 ->pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
-+>pick : { default: <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>; }
++>pick : { default: <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>; }
 
  export const pick = () => pick();
  >pick : () => any

@@ -1,0 +1,9 @@
+--- old.jsdocClassMissingTypeArguments.types
++++ new.jsdocClassMissingTypeArguments.types
+@@= skipped -6, +6 lines =@@
+
+ /** @param {C} p */
+ function f(p) {}
+->f : (p: C<any>) => void
++>f : (p: C) => void
+ >p : C<any>

@@ -2,20 +2,20 @@
 
 === genericCallAtYieldExpressionInGenericCall1.ts ===
 declare const inner: {
->inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, A>; }; }
+>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
 
   <A>(value: A): {
 >value : A
 
     (): A;
     [Symbol.iterator](): {
->[Symbol.iterator] : () => { next(...args: readonly any[]): IteratorResult<any, A>; }
+>[Symbol.iterator] : () => { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
       next(...args: ReadonlyArray<any>): IteratorResult<any, A>;
->next : (...args: readonly any[]) => IteratorResult<any, A>
+>next : (...args: ReadonlyArray<any>) => IteratorResult<any, A>
 >args : readonly any[]
 
     };
@@ -36,8 +36,8 @@ outer(function* <T>(value: T) {
   const result = yield* inner(value); // ok
 >result : T
 >yield* inner(value) : T
->inner(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
->inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, A>; }; }
+>inner(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
 >value : T
 
 });
@@ -49,15 +49,15 @@ outer(function* <T>(value: T) {
 >value : T
 
   const x = inner(value);
->x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
->inner(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
->inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, A>; }; }
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>inner(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
+>inner : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, A>; }; }
 >value : T
 
   const result = yield* x; // ok
 >result : T
 >yield* x : T
->x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<any, T>; }; }
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<any, T>; }; }
 
 });
 
@@ -85,20 +85,20 @@ outer(function* <T>(value: T) {
 });
 
 declare const inner3: {
->inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, A>; }; }
+>inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, A>; }; }
 
   <A>(value: A): {
 >value : A
 
     (): A;
     [Symbol.iterator](): {
->[Symbol.iterator] : () => { next(...args: readonly any[]): IteratorResult<number, A>; }
+>[Symbol.iterator] : () => { next(...args: ReadonlyArray<any>): IteratorResult<number, A>; }
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
       next(...args: ReadonlyArray<any>): IteratorResult<number, A>;
->next : (...args: readonly any[]) => IteratorResult<number, A>
+>next : (...args: ReadonlyArray<any>) => IteratorResult<number, A>
 >args : readonly any[]
 
     };
@@ -120,8 +120,8 @@ const result1 = outer2(function* <T>(value: T) {
 
   yield* inner3(value);
 >yield* inner3(value) : T
->inner3(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
->inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, A>; }; }
+>inner3(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
+>inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, A>; }; }
 >value : T
 
 });
@@ -135,14 +135,14 @@ const result2 = outer2(function* <T>(value: T) {
 >value : T
 
   const x = inner3(value);
->x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
->inner3(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
->inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, A>; }; }
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
+>inner3(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
+>inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, A>; }; }
 >value : T
 
   yield* x;
 >yield* x : T
->x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
 
 });
 
@@ -164,8 +164,8 @@ outer3(function* <T>(value: T) {
 
   yield* inner3(value);
 >yield* inner3(value) : T
->inner3(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
->inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, A>; }; }
+>inner3(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
+>inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, A>; }; }
 >value : T
 
 });
@@ -178,14 +178,14 @@ outer3(function* <T>(value: T) {
 >value : T
 
   const x = inner3(value);
->x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
->inner3(value) : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
->inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, A>; }; }
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
+>inner3(value) : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
+>inner3 : <A>(value: A) => { (): A; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, A>; }; }
 >value : T
 
   yield* x;
 >yield* x : T
->x : { (): T; [Symbol.iterator](): { next(...args: readonly any[]): IteratorResult<number, T>; }; }
+>x : { (): T; [Symbol.iterator](): { next(...args: ReadonlyArray<any>): IteratorResult<number, T>; }; }
 
 });
 

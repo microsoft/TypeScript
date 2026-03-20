@@ -53,8 +53,8 @@ interface I1 {
 >value : string
 }
 const o1 = {
->o1 : { get x(): number; set x(value: string); }
->{    get x(): number { return 0; },    set x(value: Fail<string>) {}} : { get x(): number; set x(value: string); }
+>o1 : { get x(): number; set x(value: Fail<string>); }
+>{    get x(): number { return 0; },    set x(value: Fail<string>) {}} : { get x(): number; set x(value: Fail<string>); }
 
     get x(): number { return 0; },
 >x : number

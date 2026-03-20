@@ -236,7 +236,7 @@ const nf = new Intl.NumberFormat("en-US", {
 const filtered = nf
 >filtered : string
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join("") : string
->nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : (separator?: string | undefined) => string
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : (separator?: string) => string
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value) : string[]
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map : <U>(callbackfn: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => U, thisArg?: any) => U[]
 >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign") : Intl.NumberRangeFormatPart[]
@@ -269,6 +269,6 @@ const filtered = nf
 >value : string
 
   .join("");
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >"" : ""
 

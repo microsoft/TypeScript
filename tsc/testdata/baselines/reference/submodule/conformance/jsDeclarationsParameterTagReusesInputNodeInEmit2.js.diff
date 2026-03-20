@@ -27,7 +27,7 @@
   */
 -declare function test(base: InstanceType<BaseFactory["Base"]>): InstanceType<BaseFactory["Base"]>;
 -type BaseFactory = typeof import("./base");
-+declare const test: (base: {}) => {};
++declare const test: (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>;
 +
 +
 +//// [DtsFileErrors]
@@ -56,5 +56,5 @@
 +     * @param {InstanceType<BaseFactory["Base"]>} base
 +     * @returns {InstanceType<BaseFactory["Base"]>}
 +     */
-+    declare const test: (base: {}) => {};
++    declare const test: (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>;
 +    

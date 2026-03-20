@@ -31,7 +31,7 @@ const uniqueSymbol1 = Symbol.for("");
 
 
 function getUniqueSymbol0(): typeof uniqueSymbol0 {
->getUniqueSymbol0 : () => unique symbol
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
 >uniqueSymbol0 : unique symbol
 
   return uniqueSymbol0;
@@ -39,7 +39,7 @@ function getUniqueSymbol0(): typeof uniqueSymbol0 {
 }
 
 function getUniqueSymbol1(): typeof uniqueSymbol1 {
->getUniqueSymbol1 : () => unique symbol
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
 >uniqueSymbol1 : unique symbol
 
     return uniqueSymbol1;
@@ -127,25 +127,25 @@ const t3 = {
   [getUniqueSymbol0()]: "first",
 >[getUniqueSymbol0()] : string
 >getUniqueSymbol0() : unique symbol
->getUniqueSymbol0 : () => unique symbol
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
 >"first" : "first"
 
   [getUniqueSymbol0()]: "last",
 >[getUniqueSymbol0()] : string
 >getUniqueSymbol0() : unique symbol
->getUniqueSymbol0 : () => unique symbol
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
 >"last" : "last"
 
   [getUniqueSymbol1()]: "first",
 >[getUniqueSymbol1()] : string
 >getUniqueSymbol1() : unique symbol
->getUniqueSymbol1 : () => unique symbol
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
 >"first" : "first"
 
   [getUniqueSymbol1()]: "last",
 >[getUniqueSymbol1()] : string
 >getUniqueSymbol1() : unique symbol
->getUniqueSymbol1 : () => unique symbol
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
 >"last" : "last"
 
 };
@@ -198,24 +198,24 @@ class Cls3 {
   [getUniqueSymbol0()] = "first";
 >[getUniqueSymbol0()] : string
 >getUniqueSymbol0() : unique symbol
->getUniqueSymbol0 : () => unique symbol
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
 >"first" : "first"
 
   [getUniqueSymbol0()] = "last";
 >[getUniqueSymbol0()] : string
 >getUniqueSymbol0() : unique symbol
->getUniqueSymbol0 : () => unique symbol
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
 >"last" : "last"
 
   [getUniqueSymbol1()] = "first";
 >[getUniqueSymbol1()] : string
 >getUniqueSymbol1() : unique symbol
->getUniqueSymbol1 : () => unique symbol
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
 >"first" : "first"
 
   [getUniqueSymbol1()] = "last";
 >[getUniqueSymbol1()] : string
 >getUniqueSymbol1() : unique symbol
->getUniqueSymbol1 : () => unique symbol
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
 >"last" : "last"
 }

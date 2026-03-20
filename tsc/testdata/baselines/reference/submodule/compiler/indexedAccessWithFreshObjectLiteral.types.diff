@@ -1,0 +1,29 @@
+--- old.indexedAccessWithFreshObjectLiteral.types
++++ new.indexedAccessWithFreshObjectLiteral.types
+@@= skipped -25, +25 lines =@@
+ }
+
+ function bar (id: 'a' | 'b') {
+->bar : (id: "a" | "b") => string | number
++>bar : (id: 'a' | 'b') => string | number
+ >id : "a" | "b"
+
+   return {
+@@= skipped -24, +24 lines =@@
+ }
+
+ function baz (id: '1' | '2') {
+->baz : (id: "1" | "2") => string | number
++>baz : (id: '1' | '2') => string | number
+ >id : "1" | "2"
+
+   return {
+@@= skipped -48, +48 lines =@@
+ }
+
+ function quux (id: 'a' | 'b' | 'z') {
+->quux : (id: "a" | "b" | "z") => string | number | undefined
++>quux : (id: 'a' | 'b' | 'z') => string | number | undefined
+ >id : "a" | "b" | "z"
+
+   return {

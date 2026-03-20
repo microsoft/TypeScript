@@ -18,7 +18,7 @@ namespace NonGenericParameter {
     }
 
     function foo4(cb: typeof a) {
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 >cb : { (x: boolean): boolean; (x: string): string; }
 >a : { (x: boolean): boolean; (x: string): string; }
 
@@ -29,13 +29,13 @@ namespace NonGenericParameter {
     var r = foo4(a);
 >r : { (x: boolean): boolean; (x: string): string; }
 >foo4(a) : { (x: boolean): boolean; (x: string): string; }
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 >a : { (x: boolean): boolean; (x: string): string; }
 
     var r2 = foo4(<T>(x: T) => x);
 >r2 : { (x: boolean): boolean; (x: string): string; }
 >foo4(<T>(x: T) => x) : { (x: boolean): boolean; (x: string): string; }
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 ><T>(x: T) => x : <T>(x: T) => T
 >x : T
 >x : T
@@ -43,7 +43,7 @@ namespace NonGenericParameter {
     var r4 = foo4(x => x);    
 >r4 : { (x: boolean): boolean; (x: string): string; }
 >foo4(x => x) : { (x: boolean): boolean; (x: string): string; }
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 >x => x : (x: any) => any
 >x : any
 >x : any

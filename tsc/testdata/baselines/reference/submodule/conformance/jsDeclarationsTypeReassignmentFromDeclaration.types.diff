@@ -5,6 +5,6 @@
  >module.exports = items : Item[]
  >module.exports : Item[]
 ->module : { exports: Item[]; }
-+>module : { readonly items: Item[]; }
++>module : { readonly items: typeof import("/some-mod"); }
  >exports : Item[]
  >items : Item[]

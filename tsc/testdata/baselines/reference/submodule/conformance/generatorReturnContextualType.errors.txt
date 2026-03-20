@@ -1,7 +1,7 @@
-generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: 'x'; }'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"x"'.
-generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: 'x'; }'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"x"'.
 
@@ -37,7 +37,7 @@ generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is n
       const ret = { x: 'x' };
       return Promise.resolve(ret); // Error
       ~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: 'x'; }'.
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type '"x"'.
     }
@@ -46,7 +46,7 @@ generatorReturnContextualType.ts(34,3): error TS2322: Type '{ x: string; }' is n
       const ret = { x: 'x' };
       return Promise.resolve(ret); // Error
       ~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: 'x'; }'.
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type '"x"'.
     }

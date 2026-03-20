@@ -1,19 +1,15 @@
 --- old.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=true).types
 +++ new.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=true).types
-@@= skipped -27, +27 lines =@@
- >Out : Out
-
- const foo = <A = {}>() => (x: Out & A) => null
-->foo : <A = {}>() => (x: Out & A) => null
--><A = {}>() => (x: Out & A) => null : <A = {}>() => (x: Out & A) => null
-->(x: Out & A) => null : (x: Out & A) => null
-+>foo : <A = {}>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
-+><A = {}>() => (x: Out & A) => null : <A = {}>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
-+>(x: Out & A) => null : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
- >x : { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A
+@@= skipped -30, +30 lines =@@
+ >foo : <A = {}>() => (x: Out & A) => null
+ ><A = {}>() => (x: Out & A) => null : <A = {}>() => (x: Out & A) => null
+ >(x: Out & A) => null : (x: Out & A) => null
+->x : { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A
++>x : { foo?: string; baz?: undefined; } & { bar: number; } & A
 
  export const baddts = foo()
- >baddts : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
- >foo() : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
-->foo : <A = {}>() => (x: Out & A) => null
-+>foo : <A = {}>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
+->baddts : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
+->foo() : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
++>baddts : (x: { foo?: string; baz?: undefined; } & { bar: number; }) => null
++>foo() : (x: { foo?: string; baz?: undefined; } & { bar: number; }) => null
+ >foo : <A = {}>() => (x: Out & A) => null

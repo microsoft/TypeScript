@@ -977,8 +977,10 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 1->^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^^^^^^^^^
-5 >                    ^^^^^^->
+4 >         ^^^^
+5 >             ^^^^^^
+6 >                   ^
+7 >                    ^^^^^^->
 1->
   >
   >    
@@ -987,10 +989,18 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >        get 
 3 >        x
 4 >         () { return 1; }
+  >         
+  >             @dec
+  >             @dec
+  >             set x(value: 
+5 >             number
+6 >                   
 1->Emitted(5, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(5, 9) Source(12, 9) + SourceIndex(0)
 3 >Emitted(5, 10) Source(12, 10) + SourceIndex(0)
-4 >Emitted(5, 21) Source(12, 26) + SourceIndex(0)
+4 >Emitted(5, 14) Source(16, 18) + SourceIndex(0)
+5 >Emitted(5, 20) Source(16, 24) + SourceIndex(0)
+6 >Emitted(5, 21) Source(12, 26) + SourceIndex(0)
 ---
 >>>    set x(value: number);
 1->^^^^

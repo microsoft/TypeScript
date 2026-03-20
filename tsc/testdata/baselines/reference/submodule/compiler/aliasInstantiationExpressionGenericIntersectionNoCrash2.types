@@ -13,11 +13,11 @@ declare function fn<T>(): T;
 
 
 type ClassAlias<T> = typeof Class<T>;
->ClassAlias : { new (): Class<T>; prototype: Class<any>; }
+>ClassAlias : typeof Class<T>
 >Class : typeof Class
 
 type FnAlias<T> = typeof fn<T>;
->FnAlias : () => T
+>FnAlias : typeof fn<T>
 >fn : <T_1>() => T_1
 
 type Wat<T> = ClassAlias<T> & FnAlias<T>;

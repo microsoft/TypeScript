@@ -19,7 +19,7 @@ function a2(o: { x: number, a: number }) { }
 >a : number
 
 function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boolean, n: number }, q: (number|string)[] }) { };
->a3 : ({ j, k, l: { m, n }, q: [a, b, c] }: { j: number; k: string; l: { m: boolean; n: number; }; q: (string | number)[]; }) => void
+>a3 : ({ j, k, l: { m, n }, q: [a, b, c] }: { j: number; k: string; l: { m: boolean; n: number; }; q: (number | string)[]; }) => void
 >j : number
 >k : string
 >l : any
@@ -211,7 +211,7 @@ function c2({z = 10}) { }
 >10 : 10
 
 function c3({b}: { b: number|string} = { b: "hello" }) { }
->c3 : ({ b }?: { b: string | number; }) => void
+>c3 : ({ b }?: { b: number | string; }) => void
 >b : string | number
 >b : string | number
 >{ b: "hello" } : { b: string; }
@@ -282,7 +282,7 @@ c2({z:1});      // Implied type is {z?: number}
 
 c3({ b: 1 });     // Implied type is { b: number|string }.
 >c3({ b: 1 }) : void
->c3 : ({ b }?: { b: string | number; }) => void
+>c3 : ({ b }?: { b: number | string; }) => void
 >{ b: 1 } : { b: number; }
 >b : number
 >1 : 1
@@ -410,7 +410,7 @@ function e2({x}: { x: number }) { }  // x is type number
 >x : number
 
 function e3({x}: { x?: number }) { }  // x is an optional with type number
->e3 : ({ x }: { x?: number | undefined; }) => void
+>e3 : ({ x }: { x?: number; }) => void
 >x : number | undefined
 >x : number | undefined
 

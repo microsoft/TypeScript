@@ -3,7 +3,7 @@
 === promisePermutations.ts ===
 interface Promise<T> {
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >success : (value: T) => Promise<U>
 >value : T
 >error : (error: any) => Promise<U>
@@ -12,7 +12,7 @@ interface Promise<T> {
 >progress : any
 
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >success : (value: T) => Promise<U>
 >value : T
 >error : (error: any) => U
@@ -21,7 +21,7 @@ interface Promise<T> {
 >progress : any
 
     then<U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >success : (value: T) => U
 >value : T
 >error : (error: any) => Promise<U>
@@ -30,7 +30,7 @@ interface Promise<T> {
 >progress : any
 
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }
 >success : (value: T) => U
 >value : T
 >error : (error: any) => U

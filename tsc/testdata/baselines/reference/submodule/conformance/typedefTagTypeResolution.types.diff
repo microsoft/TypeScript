@@ -1,15 +1,6 @@
 --- old.typedefTagTypeResolution.types
 +++ new.typedefTagTypeResolution.types
-@@= skipped -8, +8 lines =@@
-  * @return {T}
-  */
- function f(x) {
-->f : <U>(x: U) => T
-+>f : <U>(x: U) => U
- >x : U
-
-     return x;
-@@= skipped -28, +28 lines =@@
+@@= skipped -36, +36 lines =@@
  /** @type {Cb} */
  const cb = x => {}
  >cb : Cb

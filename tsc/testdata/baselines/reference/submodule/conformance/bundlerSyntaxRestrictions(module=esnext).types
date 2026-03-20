@@ -10,7 +10,7 @@ declare module "fs" {
 >"fs" : typeof import("fs")
 
     export function readFileSync(path: string, encoding?: string): string;
->readFileSync : (path: string, encoding?: string | undefined) => string
+>readFileSync : (path: string, encoding?: string) => string
 >path : string
 >encoding : string | undefined
 }

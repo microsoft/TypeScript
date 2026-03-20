@@ -1,26 +1,23 @@
 --- old.correlatedUnions.js
 +++ new.correlatedUnions.js
-@@= skipped -517, +517 lines =@@
- declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
- declare const clickEvent: {
-     readonly name: "click";
--    readonly once?: boolean;
-+    readonly once?: boolean | undefined;
-     readonly callback: (ev: PointerEvent) => void;
+@@= skipped -557, +557 lines =@@
+     [Item in T[number] as Item[Attr]]: Item;
  };
- declare const scrollEvent: {
-     readonly name: "scroll";
--    readonly once?: boolean;
-+    readonly once?: boolean | undefined;
-     readonly callback: (ev: Event) => void;
- };
- declare function ff1(): void;
-@@= skipped -74, +74 lines =@@
+ declare const ALL_BARS: readonly [{
+-    readonly name: "a";
++    readonly name: 'a';
+ }, {
+-    readonly name: "b";
++    readonly name: 'b';
+ }];
+ declare const BAR_LOOKUP: {
+     a: {
+-        readonly name: "a";
++        readonly name: 'a';
+     };
+     b: {
+-        readonly name: "b";
++        readonly name: 'b';
      };
  };
- type MappedFromOriginal = SameKeys<Original>;
--declare const getStringAndNumberFromOriginalAndMapped: <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
-+declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
- interface Config {
-     string: string;
-     number: number;
+ type BarLookup = typeof BAR_LOOKUP;

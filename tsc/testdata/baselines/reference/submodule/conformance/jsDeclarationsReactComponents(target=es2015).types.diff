@@ -9,34 +9,7 @@
 
      return (
  >(        <div className="" key="">            ok        </div>    ) : JSX.Element
-@@= skipped -42, +42 lines =@@
-  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
-  */
- const TabbedShowLayout = () => {
-->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
-+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
- >() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: { tabs: string; }; }
-
-     return (
-@@= skipped -22, +22 lines =@@
- TabbedShowLayout.defaultProps = {
- >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
- >TabbedShowLayout.defaultProps : { tabs: string; }
-->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
-+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
- >defaultProps : { tabs: string; }
- >{    tabs: "default value"} : { tabs: string; }
-
-@@= skipped -11, +11 lines =@@
- };
-
- export default TabbedShowLayout;
-->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
-+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
-
- === jsDeclarationsReactComponents4.jsx ===
- import React from "react";
-@@= skipped -54, +54 lines =@@
+@@= skipped -129, +129 lines =@@
  >PropTypes : typeof PropTypes
 
  function Tree({ allowDropOnRoot }) {

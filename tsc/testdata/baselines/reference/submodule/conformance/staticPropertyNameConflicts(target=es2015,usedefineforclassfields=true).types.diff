@@ -1,0 +1,494 @@
+--- old.staticPropertyNameConflicts(target=es2015,usedefineforclassfields=true).types
++++ new.staticPropertyNameConflicts(target=es2015,usedefineforclassfields=true).types
+@@= skipped -1, +1 lines =@@
+
+ === staticPropertyNameConflicts.ts ===
+ const FunctionPropertyNames = {
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+->{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} as const : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+->{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
++>{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} as const : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
++>{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+
+     name: 'name',
+ >name : "name"
+@@= skipped -43, +43 lines =@@
+     static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.name] : number
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+
+     [FunctionPropertyNames.name]: number; // ok
+ >[FunctionPropertyNames.name] : number
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+ }
+
+@@= skipped -26, +26 lines =@@
+     static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.name] : () => void
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+
+     [FunctionPropertyNames.name]() {} // ok
+ >[FunctionPropertyNames.name] : () => void
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+ }
+
+@@= skipped -27, +27 lines =@@
+     static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.length] : number
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+
+     [FunctionPropertyNames.length]: number; // ok
+ >[FunctionPropertyNames.length] : number
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+ }
+
+@@= skipped -26, +26 lines =@@
+     static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.length] : () => void
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+
+     [FunctionPropertyNames.length]() {} // ok
+ >[FunctionPropertyNames.length] : () => void
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+ }
+
+@@= skipped -27, +27 lines =@@
+     static [FunctionPropertyNames.prototype]: number; // always an error
+ >[FunctionPropertyNames.prototype] : StaticPrototype2
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+
+     [FunctionPropertyNames.prototype]: string; // ok
+ >[FunctionPropertyNames.prototype] : string
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+ }
+
+@@= skipped -26, +26 lines =@@
+     static [FunctionPropertyNames.prototype]() {} // always an error
+ >[FunctionPropertyNames.prototype] : () => void
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+
+     [FunctionPropertyNames.prototype]() {} // ok
+ >[FunctionPropertyNames.prototype] : () => void
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+ }
+
+@@= skipped -27, +27 lines =@@
+     static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.caller] : number
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+
+     [FunctionPropertyNames.caller]: string; // ok
+ >[FunctionPropertyNames.caller] : string
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+ }
+
+@@= skipped -26, +26 lines =@@
+     static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.caller] : () => void
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+
+     [FunctionPropertyNames.caller]() {} // ok
+ >[FunctionPropertyNames.caller] : () => void
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+ }
+
+@@= skipped -27, +27 lines =@@
+     static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.arguments] : number
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+
+     [FunctionPropertyNames.arguments]: string; // ok
+ >[FunctionPropertyNames.arguments] : string
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+ }
+
+@@= skipped -26, +26 lines =@@
+     static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.arguments] : () => void
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+
+     [FunctionPropertyNames.arguments]() {} // ok
+ >[FunctionPropertyNames.arguments] : () => void
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+ }
+
+@@= skipped -32, +32 lines =@@
+     static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.name] : number
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+
+     [FunctionPropertyNames.name]: string; // ok
+ >[FunctionPropertyNames.name] : string
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+ }
+
+@@= skipped -28, +28 lines =@@
+     static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.name] : () => void
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+
+     [FunctionPropertyNames.name]() {} // ok
+ >[FunctionPropertyNames.name] : () => void
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+ }
+
+@@= skipped -29, +29 lines =@@
+     static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.length] : number
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+
+     [FunctionPropertyNames.length]: string; // ok
+ >[FunctionPropertyNames.length] : string
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+ }
+
+@@= skipped -28, +28 lines =@@
+     static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.length] : () => void
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+
+     [FunctionPropertyNames.length]() {} // ok
+ >[FunctionPropertyNames.length] : () => void
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+ }
+
+@@= skipped -29, +29 lines =@@
+     static [FunctionPropertyNames.prototype]: number; // always an error
+ >[FunctionPropertyNames.prototype] : StaticPrototype_Anonymous2
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+
+     [FunctionPropertyNames.prototype]: string; // ok
+ >[FunctionPropertyNames.prototype] : string
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+ }
+
+@@= skipped -28, +28 lines =@@
+     static [FunctionPropertyNames.prototype]() {} // always an error
+ >[FunctionPropertyNames.prototype] : () => void
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+
+     [FunctionPropertyNames.prototype]() {} // ok
+ >[FunctionPropertyNames.prototype] : () => void
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+ }
+
+@@= skipped -29, +29 lines =@@
+     static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.caller] : number
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+
+     [FunctionPropertyNames.caller]: string; // ok
+ >[FunctionPropertyNames.caller] : string
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+ }
+
+@@= skipped -28, +28 lines =@@
+     static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.caller] : () => void
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+
+     [FunctionPropertyNames.caller]() {} // ok
+ >[FunctionPropertyNames.caller] : () => void
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+ }
+
+@@= skipped -29, +29 lines =@@
+     static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.arguments] : number
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+
+     [FunctionPropertyNames.arguments]: string; // ok
+ >[FunctionPropertyNames.arguments] : string
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+ }
+
+@@= skipped -28, +28 lines =@@
+     static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.arguments] : () => void
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+
+     [FunctionPropertyNames.arguments]() {} // ok
+ >[FunctionPropertyNames.arguments] : () => void
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+ }
+
+@@= skipped -34, +34 lines =@@
+     static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.name] : number
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+
+     [FunctionPropertyNames.name]: string; // ok
+ >[FunctionPropertyNames.name] : string
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+ }
+
+@@= skipped -30, +30 lines =@@
+     static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.name] : () => void
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+
+     [FunctionPropertyNames.name]() {} // ok
+ >[FunctionPropertyNames.name] : () => void
+ >FunctionPropertyNames.name : "name"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >name : "name"
+ }
+
+@@= skipped -31, +31 lines =@@
+     static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.length] : number
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+
+     [FunctionPropertyNames.length]: string; // ok
+ >[FunctionPropertyNames.length] : string
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+ }
+
+@@= skipped -30, +30 lines =@@
+     static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.length] : () => void
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+
+     [FunctionPropertyNames.length]() {} // ok
+ >[FunctionPropertyNames.length] : () => void
+ >FunctionPropertyNames.length : "length"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >length : "length"
+ }
+
+@@= skipped -31, +31 lines =@@
+     static [FunctionPropertyNames.prototype]: number; // always an error
+ >[FunctionPropertyNames.prototype] : ExportedStaticPrototype
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+
+     [FunctionPropertyNames.prototype]: string; // ok
+ >[FunctionPropertyNames.prototype] : string
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+ }
+
+@@= skipped -30, +30 lines =@@
+     static [FunctionPropertyNames.prototype]() {} // always an error
+ >[FunctionPropertyNames.prototype] : () => void
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+
+     [FunctionPropertyNames.prototype]() {} // ok
+ >[FunctionPropertyNames.prototype] : () => void
+ >FunctionPropertyNames.prototype : "prototype"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >prototype : "prototype"
+ }
+
+@@= skipped -31, +31 lines =@@
+     static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.caller] : number
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+
+     [FunctionPropertyNames.caller]: string; // ok
+ >[FunctionPropertyNames.caller] : string
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+ }
+
+@@= skipped -30, +30 lines =@@
+     static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.caller] : () => void
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+
+     [FunctionPropertyNames.caller]() {} // ok
+ >[FunctionPropertyNames.caller] : () => void
+ >FunctionPropertyNames.caller : "caller"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >caller : "caller"
+ }
+
+@@= skipped -31, +31 lines =@@
+     static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
+ >[FunctionPropertyNames.arguments] : number
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+
+     [FunctionPropertyNames.arguments]: string; // ok
+ >[FunctionPropertyNames.arguments] : string
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+ }
+
+@@= skipped -30, +30 lines =@@
+     static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
+ >[FunctionPropertyNames.arguments] : () => void
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+
+     [FunctionPropertyNames.arguments]() {} // ok
+ >[FunctionPropertyNames.arguments] : () => void
+ >FunctionPropertyNames.arguments : "arguments"
+->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
++>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+ >arguments : "arguments"
+ }

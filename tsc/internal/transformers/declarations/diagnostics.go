@@ -4,6 +4,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/printer"
+	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
 type GetSymbolAccessibilityDiagnostic = func(symbolAccessibilityResult printer.SymbolAccessibilityResult) *SymbolAccessibilityDiagnostic
@@ -448,4 +449,269 @@ func getTypeParameterConstraintVisibilityDiagnosticMessage(node *ast.Node, symbo
 	}
 }
 
-// !!! TODO isolatedDeclarations createGetIsolatedDeclarationErrors
+func getRelatedSuggestionByDeclarationKind(kind ast.Kind) *diagnostics.Message {
+	switch kind {
+	case ast.KindArrowFunction:
+		return diagnostics.Add_a_return_type_to_the_function_expression
+	case ast.KindFunctionExpression:
+		return diagnostics.Add_a_return_type_to_the_function_expression
+	case ast.KindMethodDeclaration:
+		return diagnostics.Add_a_return_type_to_the_method
+	case ast.KindGetAccessor:
+		return diagnostics.Add_a_return_type_to_the_get_accessor_declaration
+	case ast.KindSetAccessor:
+		return diagnostics.Add_a_type_to_parameter_of_the_set_accessor_declaration
+	case ast.KindFunctionDeclaration:
+		return diagnostics.Add_a_return_type_to_the_function_declaration
+	case ast.KindConstructSignature:
+		return diagnostics.Add_a_return_type_to_the_function_declaration
+	case ast.KindParameter:
+		return diagnostics.Add_a_type_annotation_to_the_parameter_0
+	case ast.KindVariableDeclaration:
+		return diagnostics.Add_a_type_annotation_to_the_variable_0
+	case ast.KindPropertyDeclaration:
+		return diagnostics.Add_a_type_annotation_to_the_property_0
+	case ast.KindPropertySignature:
+		return diagnostics.Add_a_type_annotation_to_the_property_0
+	case ast.KindExportAssignment:
+		return diagnostics.Move_the_expression_in_default_export_to_a_variable_and_add_a_type_annotation_to_it
+	default:
+		return nil
+	}
+}
+
+func getErrorByDeclarationKind(kind ast.Kind) *diagnostics.Message {
+	switch kind {
+	case ast.KindFunctionExpression:
+		return diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations
+	case ast.KindFunctionDeclaration:
+		return diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations
+	case ast.KindArrowFunction:
+		return diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations
+	case ast.KindMethodDeclaration:
+		return diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations
+	case ast.KindConstructSignature:
+		return diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations
+	case ast.KindGetAccessor:
+		return diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations
+	case ast.KindSetAccessor:
+		return diagnostics.At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations
+	case ast.KindParameter:
+		return diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations
+	case ast.KindVariableDeclaration:
+		return diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations
+	case ast.KindPropertyDeclaration:
+		return diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations
+	case ast.KindPropertySignature:
+		return diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations
+	case ast.KindComputedPropertyName:
+		return diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations
+	case ast.KindSpreadAssignment:
+		return diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations
+	case ast.KindShorthandPropertyAssignment:
+		return diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations
+	case ast.KindArrayLiteralExpression:
+		return diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations
+	case ast.KindExportAssignment:
+		return diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations
+	case ast.KindSpreadElement:
+		return diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations
+	default:
+		return nil
+	}
+}
+
+func isDeclarationEnoughForErrors(node *ast.Node) bool {
+	return ast.IsExportAssignment(node) || ast.IsStatement(node) || ast.IsVariableDeclaration(node) || ast.IsPropertyDeclaration(node) || ast.IsParameter(node)
+}
+
+func isFunctionLikeAndNotConstructor(node *ast.Node) bool {
+	return ast.IsFunctionLikeDeclaration(node) && !ast.IsConstructorDeclaration(node)
+}
+
+func findNearestDeclaration(node *ast.Node) *ast.Node {
+	result := ast.FindAncestor(node, isDeclarationEnoughForErrors)
+	if result == nil {
+		return nil
+	}
+	if ast.IsExportAssignment(result) {
+		return result
+	}
+	if ast.IsReturnStatement(result) {
+		return ast.FindAncestor(result, isFunctionLikeAndNotConstructor)
+	}
+	if ast.IsStatement(result) {
+		return nil
+	}
+	return result
+}
+
+func createEntityInTypeNodeError(node *ast.Node) *ast.Diagnostic {
+	diag := createDiagnosticForNode(node, diagnostics.Type_containing_private_name_0_can_t_be_used_with_isolatedDeclarations, scanner.GetTextOfNode(node))
+	addParentDeclarationRelatedInfo(node, diag)
+	return diag
+}
+
+func addParentDeclarationRelatedInfo(node *ast.Node, diag *ast.Diagnostic) {
+	parentDeclaration := findNearestDeclaration(node)
+	if parentDeclaration == nil {
+		return
+	}
+	targetStr := ""
+	if !ast.IsExportAssignment(parentDeclaration) && parentDeclaration.Name() != nil {
+		targetStr = scanner.GetTextOfNode(parentDeclaration.Name())
+	}
+	diag.AddRelatedInfo(createDiagnosticForNode(parentDeclaration, getRelatedSuggestionByDeclarationKind(parentDeclaration.Kind), targetStr))
+}
+
+func createAccessorTypeError(node *ast.Node) *ast.Diagnostic {
+	allDeclarations := ast.GetAllAccessorDeclarationsForDeclaration(node, node.Symbol().Declarations)
+	getAccessor := allDeclarations.GetAccessor
+	setAccessor := allDeclarations.SetAccessor
+	targetNode := node
+	if ast.IsSetAccessorDeclaration(node) && len(node.Parameters()) > 0 {
+		targetNode = node.Parameters()[0]
+	}
+	diag := createDiagnosticForNode(targetNode, getErrorByDeclarationKind(node.Kind))
+	if setAccessor != nil {
+		diag.AddRelatedInfo(createDiagnosticForNode(setAccessor.AsNode(), getRelatedSuggestionByDeclarationKind(setAccessor.Kind)))
+	}
+	if getAccessor != nil {
+		diag.AddRelatedInfo(createDiagnosticForNode(getAccessor.AsNode(), getRelatedSuggestionByDeclarationKind(getAccessor.Kind)))
+	}
+	return diag
+}
+
+func createObjectLiteralError(node *ast.Node) *ast.Diagnostic {
+	diag := createDiagnosticForNode(node, getErrorByDeclarationKind(node.Kind))
+	addParentDeclarationRelatedInfo(node, diag)
+	return diag
+}
+
+func createArrayLiteralError(node *ast.Node) *ast.Diagnostic {
+	diag := createDiagnosticForNode(node, getErrorByDeclarationKind(node.Kind))
+	addParentDeclarationRelatedInfo(node, diag)
+	return diag
+}
+
+func createReturnTypeError(node *ast.Node) *ast.Diagnostic {
+	diag := createDiagnosticForNode(node, getErrorByDeclarationKind(node.Kind))
+	addParentDeclarationRelatedInfo(node, diag)
+	diag.AddRelatedInfo(createDiagnosticForNode(node, getRelatedSuggestionByDeclarationKind(node.Kind)))
+	return diag
+}
+
+func createBindingElementError(node *ast.Node) *ast.Diagnostic {
+	return createDiagnosticForNode(node, diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations)
+}
+
+func createVariableOrPropertyError(node *ast.Node) *ast.Diagnostic {
+	diag := createDiagnosticForNode(node, getErrorByDeclarationKind(node.Kind))
+	diag.AddRelatedInfo(createDiagnosticForNode(node, getRelatedSuggestionByDeclarationKind(node.Kind), scanner.GetTextOfNode(node.Name())))
+	return diag
+}
+
+func createExpressionError(node *ast.Node) *ast.Diagnostic {
+	return createExpressionErrorEx(node, nil)
+}
+
+func createClassExpressionError(node *ast.Node) *ast.Diagnostic {
+	return createExpressionErrorEx(node, diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations)
+}
+
+func isParentForIDDIagnostic(node *ast.Node) ast.FindAncestorResult {
+	if ast.IsExportAssignment(node) {
+		return ast.FindAncestorTrue
+	}
+	if ast.IsStatement(node) {
+		return ast.FindAncestorQuit
+	}
+	return ast.ToFindAncestorResult(!ast.IsParenthesizedExpression(node) && !ast.IsAssertionExpression(node))
+}
+
+func createExpressionErrorEx(node *ast.Node, diagnosticMessage *diagnostics.Message) *ast.Diagnostic {
+	parentDeclaration := findNearestDeclaration(node)
+	if parentDeclaration == nil {
+		if diagnosticMessage == nil {
+			diagnosticMessage = diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations
+		}
+		return createDiagnosticForNode(node, diagnosticMessage)
+	}
+
+	targetStr := ""
+	if !ast.IsExportAssignment(parentDeclaration) && parentDeclaration.Name() != nil {
+		targetStr = scanner.GetTextOfNode(parentDeclaration.Name())
+	}
+	parent := ast.FindAncestorOrQuit(node.Parent, isParentForIDDIagnostic)
+
+	if parentDeclaration == parent {
+		if diagnosticMessage == nil {
+			diagnosticMessage = getErrorByDeclarationKind(parentDeclaration.Kind)
+		}
+		diag := createDiagnosticForNode(node, diagnosticMessage)
+		diag.AddRelatedInfo(createDiagnosticForNode(parentDeclaration, getRelatedSuggestionByDeclarationKind(parentDeclaration.Kind), targetStr))
+		return diag
+	}
+	if diagnosticMessage == nil {
+		diagnosticMessage = diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations
+	}
+	diag := createDiagnosticForNode(node, diagnosticMessage)
+	diag.AddRelatedInfo(createDiagnosticForNode(parentDeclaration, getRelatedSuggestionByDeclarationKind(parentDeclaration.Kind), targetStr))
+	diag.AddRelatedInfo(createDiagnosticForNode(node, diagnostics.Add_satisfies_and_a_type_assertion_to_this_expression_satisfies_T_as_T_to_make_the_type_explicit))
+	return diag
+}
+
+func createGetIsolatedDeclarationErrors(resolver printer.EmitResolver) func(node *ast.Node) *ast.Diagnostic {
+	createParameterError := func(node *ast.Node) *ast.Diagnostic {
+		if ast.IsSetAccessorDeclaration(node.Parent) {
+			return createAccessorTypeError(node.Parent)
+		}
+		addUndefined := resolver.RequiresAddingImplicitUndefinedUnsafe(node, nil, nil) // skip checker lock - node builder will already have one
+		if !addUndefined && node.Initializer() != nil {
+			return createExpressionError(node)
+		}
+		message := getErrorByDeclarationKind(node.Kind)
+		if addUndefined {
+			message = diagnostics.Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_supported_with_isolatedDeclarations
+		}
+		diag := createDiagnosticForNode(node, message)
+		targetStr := scanner.GetTextOfNode(node.Name())
+		diag.AddRelatedInfo(createDiagnosticForNode(node, getRelatedSuggestionByDeclarationKind(node.Kind), targetStr))
+		return diag
+	}
+
+	return func(node *ast.Node) *ast.Diagnostic {
+		heritageClause := ast.FindAncestor(node, ast.IsHeritageClause)
+		if heritageClause != nil {
+			return createDiagnosticForNode(node, diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations)
+		}
+		if ast.IsPartOfTypeNode(node) || ast.IsTypeQueryNode(node) {
+			return createEntityInTypeNodeError(node)
+		}
+		if ast.IsEntityName(node) || ast.IsEntityNameExpression(node) {
+			return createEntityInTypeNodeError(node)
+		}
+		switch node.Kind {
+		case ast.KindGetAccessor, ast.KindSetAccessor:
+			return createAccessorTypeError(node)
+		case ast.KindComputedPropertyName, ast.KindShorthandPropertyAssignment, ast.KindSpreadAssignment:
+			return createObjectLiteralError(node)
+		case ast.KindArrayLiteralExpression, ast.KindSpreadElement:
+			return createArrayLiteralError(node)
+		case ast.KindMethodDeclaration, ast.KindConstructSignature, ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindFunctionDeclaration:
+			return createReturnTypeError(node)
+		case ast.KindBindingElement:
+			return createBindingElementError(node)
+		case ast.KindPropertyDeclaration, ast.KindVariableDeclaration:
+			return createVariableOrPropertyError(node)
+		case ast.KindParameter:
+			return createParameterError(node)
+		case ast.KindPropertyAssignment:
+			return createExpressionError(node.Initializer())
+		case ast.KindClassExpression:
+			return createClassExpressionError(node)
+		default:
+			return createExpressionError(node)
+		}
+	}
+}

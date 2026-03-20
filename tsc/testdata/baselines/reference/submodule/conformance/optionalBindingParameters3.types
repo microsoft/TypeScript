@@ -10,7 +10,7 @@
  * @param {Foo} [options]
  */
 function f({ a = "a" }) {}
->f : ({ a }?: Foo | undefined) => void
+>f : ({ a }?: Foo) => void
 >a : string
 >"a" : "a"
 

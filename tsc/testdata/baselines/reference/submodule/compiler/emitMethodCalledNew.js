@@ -35,5 +35,5 @@ export declare const b: {
     "new"(x: number): number;
 };
 export declare const c: {
-    "new"(x: number): number;
+    ["new"](x: number): number;
 };

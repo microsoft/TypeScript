@@ -91,44 +91,44 @@ function f6<T>(x: T) {
 //}
 
 var a: { x: number; y?: number };
->a : { x: number; y?: number | undefined; }
+>a : { x: number; y?: number; }
 >x : number
 >y : number | undefined
 
 var b: { x: number; z?: number };
->b : { x: number; z?: number | undefined; }
+>b : { x: number; z?: number; }
 >x : number
 >z : number | undefined
 
 // returns typeof a
 function f9() {
->f9 : () => { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
+>f9 : () => { x: number; y?: number; } | { x: number; z?: number; }
 
     if (true) {
 >true : true
 
         return a;
->a : { x: number; y?: number | undefined; }
+>a : { x: number; y?: number; }
 
     } else {
         return b;
->b : { x: number; z?: number | undefined; }
+>b : { x: number; z?: number; }
     }
 }
 
 // returns typeof b
 function f10() {
->f10 : () => { x: number; y?: number | undefined; } | { x: number; z?: number | undefined; }
+>f10 : () => { x: number; y?: number; } | { x: number; z?: number; }
 
     if (true) {
 >true : true
 
         return b;
->b : { x: number; z?: number | undefined; }
+>b : { x: number; z?: number; }
 
     } else {
         return a;
->a : { x: number; y?: number | undefined; }
+>a : { x: number; y?: number; }
     }
 }
 

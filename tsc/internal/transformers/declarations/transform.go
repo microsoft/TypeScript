@@ -81,6 +81,18 @@ func NewDeclarationTransformer(host DeclarationEmitHost, context *printer.EmitCo
 		declarationFilePath: declarationFilePath,
 		declarationMapPath:  declarationMapPath,
 	}
+	tx.state.reportExpandoFunctionErrors = func(node *ast.Node) {
+		props := resolver.GetPropertiesOfContainerFunction(node)
+		for _, p := range props {
+			if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
+				errorTarget := p.ValueDeclaration
+				if ast.IsBinaryExpression(errorTarget) {
+					errorTarget = errorTarget.AsBinaryExpression().Left
+				}
+				tx.state.addDiagnostic(createDiagnosticForNode(errorTarget, diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function))
+			}
+		}
+	}
 	tx.NewTransformer(tx.visit, context)
 	return tx
 }
@@ -474,13 +486,11 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 				// In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
 				if !tx.resolver.IsDefinitelyReferenceToGlobalSymbolObject(input.Name().Expression()) {
 					if ast.IsClassDeclaration(input.Parent) || ast.IsObjectLiteralExpression(input.Parent) {
-						// !!! TODO: isolatedDeclarations diagnostics
-						// context.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations))
+						tx.state.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations))
 						return nil
 					} else if (ast.IsInterfaceDeclaration(input.Parent) || ast.IsTypeLiteralNode(input.Parent)) && !ast.IsEntityNameExpression(input.Name().Expression()) {
 						// Type declarations just need to double-check that the input computed name is an entity name expression
-						// !!! TODO: isolatedDeclarations diagnostics
-						// context.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations))
+						tx.state.addDiagnostic(createDiagnosticForNode(input, diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations))
 						return nil
 					}
 				}
@@ -1187,7 +1197,7 @@ func (tx *DeclarationTransformer) ensureType(node *ast.Node, ignorePrivate bool)
 	}
 	var typeNode *ast.Node
 
-	if hasInferredType(node) {
+	if ast.HasInferredType(node) {
 		typeNode = tx.resolver.CreateTypeOfDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
 	} else if ast.IsFunctionLike(node) {
 		typeNode = tx.resolver.CreateReturnTypeOfSignatureDeclaration(tx.EmitContext(), node, tx.enclosingDeclaration, declarationEmitNodeBuilderFlags, declarationEmitInternalNodeBuilderFlags, tx.tracker)
@@ -1310,6 +1320,9 @@ func (tx *DeclarationTransformer) transformInterfaceDeclaration(input *ast.Inter
 }
 
 func (tx *DeclarationTransformer) transformFunctionDeclaration(input *ast.FunctionDeclaration) *ast.Node {
+	if tx.resolver.IsExpandoFunctionDeclaration(input.AsNode()) && tx.state.isolatedDeclarations {
+		tx.state.reportExpandoFunctionErrors(input.AsNode())
+	}
 	return tx.Factory().UpdateFunctionDeclaration(
 		input,
 		tx.ensureModifiers(input.AsNode()),
@@ -1617,17 +1630,15 @@ func (tx *DeclarationTransformer) transformEnumDeclaration(input *ast.EnumDeclar
 				return nil
 			}
 
-			// !!! TODO: isolatedDeclarations support
-			// if (
-			// 	isolatedDeclarations && m.initializer && enumValue?.hasExternalReferences &&
-			// 	// This will be its own compiler error instead, so don't report.
-			// 	!isComputedPropertyName(m.name)
-			// ) {
-			// 	context.addDiagnostic(createDiagnosticForNode(m, Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations));
-			// }
-
 			// Rewrite enum values to their constants, if available
 			enumValue := tx.resolver.GetEnumMemberValue(m)
+
+			if tx.state.isolatedDeclarations && m.Initializer() != nil && enumValue.HasExternalReferences &&
+				// This will be its own compiler error instead, so don't report.
+				!ast.IsComputedPropertyName(m.Name()) {
+				tx.state.addDiagnostic(createDiagnosticForNode(m, diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations))
+			}
+
 			var newInitializer *ast.Node
 			switch value := enumValue.Value.(type) {
 			case jsnum.Number:
@@ -1761,7 +1772,7 @@ func (tx *DeclarationTransformer) ensureParameter(p *ast.ParameterDeclaration) *
 func (tx *DeclarationTransformer) ensureNoInitializer(node *ast.Node) *ast.Node {
 	if tx.shouldPrintWithInitializer(node) {
 		unwrappedInitializer := unwrapParenthesizedExpression(node.Initializer())
-		if !isPrimitiveLiteralValue(unwrappedInitializer, true) {
+		if !ast.IsPrimitiveLiteralValue(unwrappedInitializer, true) {
 			tx.tracker.ReportInferenceFallback(node)
 		}
 		return tx.resolver.CreateLiteralConstValue(tx.EmitContext(), tx.EmitContext().ParseNode(node), tx.tracker)
@@ -1914,10 +1925,9 @@ func (tx *DeclarationTransformer) transformImportDeclaration(decl *ast.ImportDec
 	}
 	// Augmentation of export depends on import
 	if tx.resolver.IsImportRequiredByAugmentation(decl) {
-		// IsolatedDeclarations support
-		// if (isolatedDeclarations) {
-		// 	context.addDiagnostic(createDiagnosticForNode(decl, Diagnostics.Declaration_emit_for_this_file_requires_preserving_this_import_for_augmentations_This_is_not_supported_with_isolatedDeclarations));
-		// }
+		if tx.state.isolatedDeclarations {
+			tx.state.addDiagnostic(createDiagnosticForNode(decl.AsNode(), diagnostics.Declaration_emit_for_this_file_requires_preserving_this_import_for_augmentations_This_is_not_supported_with_isolatedDeclarations))
+		}
 		return tx.Factory().UpdateImportDeclaration(
 			decl,
 			decl.Modifiers(),

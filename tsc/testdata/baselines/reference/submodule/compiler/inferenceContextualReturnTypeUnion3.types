@@ -2,7 +2,7 @@
 
 === inferenceContextualReturnTypeUnion3.ts ===
 declare function deprecate<T extends Function>(
->deprecate : <T extends Function>(fn: T, msg: string, code?: string | undefined) => T
+>deprecate : <T extends Function>(fn: T, msg: string, code?: string) => T
 
   fn: T,
 >fn : T
@@ -54,7 +54,7 @@ const soonFrozenObjectDeprecation = <T extends object>(
     set: deprecate(
 >set : (target: T, property: string | symbol, value: any, receiver: any) => boolean
 >deprecate(      (target, property, value, receiver) =>        Reflect.set(target, property, value, receiver),      message,      code,    ) : (target: T, property: string | symbol, value: any, receiver: any) => boolean
->deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string | undefined) => T_1
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
 
       (target, property, value, receiver) =>
 >(target, property, value, receiver) =>        Reflect.set(target, property, value, receiver) : (target: T, property: string | symbol, value: any, receiver: any) => boolean
@@ -83,7 +83,7 @@ const soonFrozenObjectDeprecation = <T extends object>(
     defineProperty: deprecate(
 >defineProperty : (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean
 >deprecate(      (target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor),      message,      code,    ) : (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean
->deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string | undefined) => T_1
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
 
       (target, property, descriptor) =>
 >(target, property, descriptor) =>        Reflect.defineProperty(target, property, descriptor) : (target: T, property: string | symbol, descriptor: PropertyDescriptor) => boolean
@@ -110,7 +110,7 @@ const soonFrozenObjectDeprecation = <T extends object>(
     deleteProperty: deprecate(
 >deleteProperty : (target: T, property: string | symbol) => boolean
 >deprecate(      (target, property) => Reflect.deleteProperty(target, property),      message,      code,    ) : (target: T, property: string | symbol) => boolean
->deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string | undefined) => T_1
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
 
       (target, property) => Reflect.deleteProperty(target, property),
 >(target, property) => Reflect.deleteProperty(target, property) : (target: T, property: string | symbol) => boolean
@@ -133,7 +133,7 @@ const soonFrozenObjectDeprecation = <T extends object>(
     setPrototypeOf: deprecate(
 >setPrototypeOf : (target: T, proto: object | null) => boolean
 >deprecate(      (target, proto) => Reflect.setPrototypeOf(target, proto),      message,      code,    ) : (target: T, proto: object | null) => boolean
->deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string | undefined) => T_1
+>deprecate : <T_1 extends Function>(fn: T_1, msg: string, code?: string) => T_1
 
       (target, proto) => Reflect.setPrototypeOf(target, proto),
 >(target, proto) => Reflect.setPrototypeOf(target, proto) : (target: T, proto: object | null) => boolean

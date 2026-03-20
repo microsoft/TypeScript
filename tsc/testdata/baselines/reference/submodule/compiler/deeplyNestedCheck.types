@@ -5,7 +5,7 @@
 
 interface DataSnapshot<X = {}> {
   child(path: string): DataSnapshot;
->child : (path: string) => DataSnapshot<{}>
+>child : (path: string) => DataSnapshot
 >path : string
 }
 

@@ -2,32 +2,32 @@
 
 === assignmentToConditionalBrandedStringTemplateOrMapping.ts ===
 let a: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
->a : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
+>a : <T>() => T extends `${'a' & { a: 1; }}` ? 1 : 2
 >a : 1
 >null! : never
 
 let b: (<T>() => T extends `${'a' & { a: 1 }}` ? 1 : 2) = null!;
->b : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
+>b : <T>() => T extends `${'a' & { a: 1; }}` ? 1 : 2
 >a : 1
 >null! : never
 
 a = b;
->a = b : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
->a : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
->b : <T>() => T extends `${"a" & { a: 1; }}` ? 1 : 2
+>a = b : <T>() => T extends `${'a' & { a: 1; }}` ? 1 : 2
+>a : <T>() => T extends `${'a' & { a: 1; }}` ? 1 : 2
+>b : <T>() => T extends `${'a' & { a: 1; }}` ? 1 : 2
 
 let c: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
->c : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
+>c : <T>() => T extends Uppercase<'a' & { a: 1; }> ? 1 : 2
 >a : 1
 >null! : never
 
 let d: (<T>() => T extends Uppercase<'a' & { a: 1 }> ? 1 : 2) = null!;
->d : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
+>d : <T>() => T extends Uppercase<'a' & { a: 1; }> ? 1 : 2
 >a : 1
 >null! : never
 
 c = d;
->c = d : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
->c : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
->d : <T>() => T extends Uppercase<`${"a" & { a: 1; }}`> ? 1 : 2
+>c = d : <T>() => T extends Uppercase<'a' & { a: 1; }> ? 1 : 2
+>c : <T>() => T extends Uppercase<'a' & { a: 1; }> ? 1 : 2
+>d : <T>() => T extends Uppercase<'a' & { a: 1; }> ? 1 : 2
 

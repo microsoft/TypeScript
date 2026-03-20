@@ -29,8 +29,8 @@ import { type Type } from "./type";
 >Type : any
 
 export const foo = { ...({} as Type) };
->foo : { x?: {} | undefined; }
->{ ...({} as Type) } : { x?: {} | undefined; }
+>foo : { x?: {}; }
+>{ ...({} as Type) } : { x?: {}; }
 >({} as Type) : Type
 >{} as Type : Type
 >{} : {}

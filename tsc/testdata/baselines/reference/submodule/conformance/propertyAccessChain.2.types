@@ -23,14 +23,14 @@ o2?.b.c;
 >c : string
 
 declare const o3: { b: undefined | { c: string } };
->o3 : { b: { c: string; }; }
+>o3 : { b: undefined | { c: string; }; }
 >b : { c: string; }
 >c : string
 
 o3.b?.c;
 >o3.b?.c : string
 >o3.b : { c: string; }
->o3 : { b: { c: string; }; }
+>o3 : { b: undefined | { c: string; }; }
 >b : { c: string; }
 >c : string
 

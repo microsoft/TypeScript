@@ -11,7 +11,7 @@ function doSomething(cb: () => void) {
 }
 
 function fn(x: number | string) {
->fn : (x: string | number) => void
+>fn : (x: number | string) => void
 >x : string | number
 
   if (typeof x === 'number') {
@@ -25,9 +25,9 @@ function fn(x: number | string) {
 >doSomething : (cb: () => void) => void
 >() => x.toFixed() : () => string
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number | undefined) => string
+>x.toFixed : (fractionDigits?: number) => string
 >x : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
   }
 }
 

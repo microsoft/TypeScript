@@ -18,27 +18,19 @@
      }
  };
 
- /** @type {{ d(): void; e?(n: number): number; f?(n: number): number; g?: number }} */
- const o2 = {
-->o2 : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
-+>o2 : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
- >{    d() {        this.e = this.f = m => this.g || m;    }} : { d(): void; }
-
-     d() {
+@@= skipped -19, +19 lines =@@
  >d : () => void
 
          this.e = this.f = m => this.g || m;
 ->this.e = this.f = m => this.g || m : (m: number) => number
 +>this.e = this.f = m => this.g || m : (m: any) => any
  >this.e : ((n: number) => number) | undefined
-->this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
-+>this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+ >this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
  >e : ((n: number) => number) | undefined
 ->this.f = m => this.g || m : (m: number) => number
 +>this.f = m => this.g || m : (m: any) => any
  >this.f : ((n: number) => number) | undefined
-->this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
-+>this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+ >this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
  >f : ((n: number) => number) | undefined
 ->m => this.g || m : (m: number) => number
 ->m : number
@@ -47,8 +39,7 @@
 +>m : any
 +>this.g || m : any
  >this.g : number | undefined
-->this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
-+>this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number | undefined; }
+ >this : { d(): void; e?(n: number): number; f?(n: number): number; g?: number; }
  >g : number | undefined
 ->m : number
 +>m : any

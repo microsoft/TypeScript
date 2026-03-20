@@ -1,15 +1,6 @@
 --- old.typeGuardFunctionErrors.types
 +++ new.typeGuardFunctionErrors.types
-@@= skipped -233, +233 lines =@@
- >A : any
-
- function b3(): A | b is A {
-->b3 : () => A | b
-+>b3 : () => any
- >is : any
- >A : typeof A
-
-@@= skipped -119, +119 lines =@@
+@@= skipped -352, +352 lines =@@
 
  // expected an error, since Keys doesn't have a 'd'
  declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;

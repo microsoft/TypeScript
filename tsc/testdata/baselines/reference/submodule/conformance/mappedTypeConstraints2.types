@@ -59,7 +59,7 @@ type Mapped4<K extends `_${string}`> = {
 };
 
 function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
->f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: K) => void
+>f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) => void
 >obj : Mapped4<K>
 >key : K
 
@@ -169,9 +169,9 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >key : string
 >val : any
 >Object.entries(obj) : [string, any][]
->Object.entries : { <T_1>(o: ArrayLike<T_1> | { [s: string]: T_1; }): [string, T_1][]; (o: {}): [string, any][]; }
+>Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
->entries : { <T_1>(o: ArrayLike<T_1> | { [s: string]: T_1; }): [string, T_1][]; (o: {}): [string, any][]; }
+>entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 >obj : T
 
         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];

@@ -88,7 +88,7 @@ function f3<T extends keyof Shape>(x: T) {
 }
 
 function f4<T extends keyof Named>(x: T) {
->f4 : <T extends "name">(x: T) => void
+>f4 : <T extends keyof Named>(x: T) => void
 >x : T
 
     let y: Pick<Shape, T>;
@@ -468,7 +468,7 @@ let x2: Partial<T2> = { a: 'no' }; // Error
 >'no' : "no"
 
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
->x3 : { [x: string]: any; a?: number | undefined; }
+>x3 : { [x: string]: any; a?: number; }
 >{ a: 'no' } : { a: string; }
 >a : string
 >'no' : "no"

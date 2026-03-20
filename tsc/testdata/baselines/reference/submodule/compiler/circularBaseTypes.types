@@ -12,7 +12,7 @@ type M3 = M2[keyof M2];  // Error
 >M3 : any
 
 function f(m: M3) {
->f : (m: any) => any
+>f : (m: M3) => any
 >m : any
 
   return m.value;

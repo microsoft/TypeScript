@@ -36,8 +36,7 @@
 +>prop11 : X<<Tany>() => Tany>
  }
  function f4(): X<(<Tany>() => Tany)> { // written type with parenthesis
-->f4 : () => X<(<Tany>() => Tany)>
-+>f4 : () => X<<Tany>() => Tany>
+ >f4 : () => X<(<Tany>() => Tany)>
 
      return prop12;
 ->prop12 : X<(<Tany>() => Tany)>

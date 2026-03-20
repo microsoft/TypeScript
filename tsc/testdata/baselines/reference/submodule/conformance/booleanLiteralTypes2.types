@@ -32,7 +32,7 @@ function f1() {
 }
 
 function f2(a: true | false, b: boolean) {
->f2 : (a: boolean, b: boolean) => void
+>f2 : (a: true | false, b: boolean) => void
 >a : boolean
 >true : true
 >false : false
@@ -50,7 +50,7 @@ function f2(a: true | false, b: boolean) {
 }
 
 function f3(a: true | false, b: true | false) {
->f3 : (a: boolean, b: boolean) => void
+>f3 : (a: true | false, b: true | false) => void
 >a : boolean
 >true : true
 >false : false
@@ -166,7 +166,7 @@ function assertNever(x: never): never {
 }
 
 function f10(x: true | false) {
->f10 : (x: boolean) => "false" | "true"
+>f10 : (x: true | false) => "false" | "true"
 >x : boolean
 >true : true
 >false : false
@@ -185,7 +185,7 @@ function f10(x: true | false) {
 }
 
 function f11(x: true | false) {
->f11 : (x: boolean) => "false" | "true"
+>f11 : (x: true | false) => "false" | "true"
 >x : boolean
 >true : true
 >false : false
@@ -208,7 +208,7 @@ function f11(x: true | false) {
 }
 
 function f12(x: true | false) {
->f12 : (x: boolean) => void
+>f12 : (x: true | false) => void
 >x : boolean
 >true : true
 >false : false
@@ -226,7 +226,7 @@ function f12(x: true | false) {
 }
 
 function f13(x: true | false) {
->f13 : (x: boolean) => void
+>f13 : (x: true | false) => void
 >x : boolean
 >true : true
 >false : false

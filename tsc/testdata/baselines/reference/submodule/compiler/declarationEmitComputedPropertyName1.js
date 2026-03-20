@@ -31,11 +31,11 @@ export interface IData {
 //// [declarationEmitComputedPropertyName1.d.ts]
 export declare const c: {
     data: {
-        a_b_c: string;
-        sss: string;
+        ["a_b_c"]: string;
+        ["sss"]: string;
         s_d: string;
-        queryData?: string | undefined;
-        "foo bar": string;
+        queryData?: string;
+        ["foo bar"]: string;
     };
     a_b_c: string;
 };

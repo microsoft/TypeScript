@@ -118,7 +118,7 @@ x;
 
 x.toString();
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 

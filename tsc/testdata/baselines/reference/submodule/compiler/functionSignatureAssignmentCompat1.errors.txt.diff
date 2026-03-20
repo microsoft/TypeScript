@@ -1,0 +1,17 @@
+--- old.functionSignatureAssignmentCompat1.errors.txt
++++ new.functionSignatureAssignmentCompat1.errors.txt
+@@= skipped -0, +0 lines =@@
+-functionSignatureAssignmentCompat1.ts(10,21): error TS2322: Type '(delimiter?: string | undefined) => ParserFunc' is not assignable to type 'ParserFunc'.
++functionSignatureAssignmentCompat1.ts(10,21): error TS2322: Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc'.
+   Types of parameters 'delimiter' and 'eventEmitter' are incompatible.
+     Type 'number' is not assignable to type 'string'.
+
+@@= skipped -14, +14 lines =@@
+     var c: ParserFunc = parsers.raw; // ok!
+     var d: ParserFunc = parsers.readline; // not ok
+                         ~~~~~~~~~~~~~~~~
+-!!! error TS2322: Type '(delimiter?: string | undefined) => ParserFunc' is not assignable to type 'ParserFunc'.
++!!! error TS2322: Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc'.
+ !!! error TS2322:   Types of parameters 'delimiter' and 'eventEmitter' are incompatible.
+ !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+ !!! related TS6212 functionSignatureAssignmentCompat1.ts:10:21: Did you mean to call this expression?

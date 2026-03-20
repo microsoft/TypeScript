@@ -3,7 +3,7 @@
 === b.ts ===
 ///<reference path="a.ts"/>
 declare function foobar(a: typeof foo): typeof bar;
->foobar : (a: () => any) => () => any
+>foobar : (a: typeof foo) => typeof bar
 >a : () => any
 >foo : () => any
 >bar : () => any

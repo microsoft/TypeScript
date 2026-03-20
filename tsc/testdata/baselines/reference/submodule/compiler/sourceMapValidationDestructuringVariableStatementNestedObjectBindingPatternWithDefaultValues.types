@@ -13,7 +13,7 @@ interface Robot {
 >name : string
 
     skills: {
->skills : { primary?: string | undefined; secondary?: string | undefined; }
+>skills : { primary?: string; secondary?: string; }
 
         primary?: string;
 >primary : string | undefined

@@ -5,18 +5,7 @@
   */
  export function prepareConfig({
 ->prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;}) => void
-+>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>>; }) => void
-
-     additionalFiles: {
- >additionalFiles : any
-@@= skipped -43, +43 lines =@@
-   additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
- }) => void} */
- export const prepareConfigWithContextualSignature = ({
-->prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
-->({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
-+>prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>>; }) => void
-+>({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>>; }) => void
++>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<'json' | 'jsonc' | 'json5', string[]>>; }) => void
 
      additionalFiles: {
  >additionalFiles : any

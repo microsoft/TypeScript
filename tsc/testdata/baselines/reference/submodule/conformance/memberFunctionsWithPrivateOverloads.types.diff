@@ -1,0 +1,112 @@
+--- old.memberFunctionsWithPrivateOverloads.types
++++ new.memberFunctionsWithPrivateOverloads.types
+@@= skipped -18, +18 lines =@@
+ >y : any
+
+     private bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : "hi"
+
+     private bar(x: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : string
+
+     private bar(x: number, y: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : number
+ >y : string
+
+     private bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : any
+ >y : any
+
+@@= skipped -32, +32 lines =@@
+ >y : any
+
+     private static bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : "hi"
+
+     private static bar(x: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : string
+
+     private static bar(x: number, y: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : number
+ >y : string
+
+     private static bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : any
+ >y : any
+ }
+@@= skipped -36, +36 lines =@@
+ >y : any
+
+     private bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : "hi"
+
+     private bar(x: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : string
+
+     private bar(x: T, y: T);
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : T
+ >y : T
+
+     private bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : any
+ >y : any
+
+@@= skipped -32, +32 lines =@@
+ >y : any
+
+     private static bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+ >x : "hi"
+
+     private static bar(x: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+ >x : string
+
+     private static bar(x: number, y: number);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+ >x : number
+ >y : number
+
+     private static bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+ >x : any
+ >y : any
+
+@@= skipped -52, +52 lines =@@
+ var r4 = D.bar(''); // error
+ >r4 : any
+ >D.bar('') : any
+->D.bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
++>D.bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+ >D : typeof D
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: number): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: number): any; }
+ >'' : ""

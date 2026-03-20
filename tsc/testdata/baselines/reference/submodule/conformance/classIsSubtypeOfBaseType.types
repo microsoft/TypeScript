@@ -28,7 +28,7 @@ class Derived2 extends Base<{ bar: string; }> {
 >bar : string
 
     foo: {
->foo : { bar?: string | undefined; }
+>foo : { bar?: string; }
 
         bar?: string; // error
 >bar : string | undefined

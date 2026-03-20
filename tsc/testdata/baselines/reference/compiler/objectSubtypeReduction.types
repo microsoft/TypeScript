@@ -4,16 +4,16 @@
 // https://github.com/microsoft/typescript-go/issues/1164
 
 function foo(x?: object) {
->foo : (x?: object | undefined) => [string, any][]
+>foo : (x?: object) => [string, any][]
 >x : object | undefined
 
     return Object.entries(x || {})
 >Object.entries(x || {})        .sort(([k1, v1], [k2, v2]) => v1.name.localeCompare(v2.name)) : [string, any][]
 >Object.entries(x || {})        .sort : (compareFn?: ((a: [string, any], b: [string, any]) => number) | undefined) => [string, any][]
 >Object.entries(x || {}) : [string, any][]
->Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
->entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >x || {} : object
 >x : object | undefined
 >{} : {}

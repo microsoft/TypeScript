@@ -2,7 +2,7 @@
 
 === objectSpreadStrictNull.ts ===
 function f(
->f : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }, undefinedString: { sn: string | undefined; }, undefinedNumber: { sn: number | undefined; }) => void
+>f : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string; }, optionalNumber: { sn?: number; }, undefinedString: { sn: string | undefined; }, undefinedNumber: { sn: number | undefined; }) => void
 
     definiteBoolean: { sn: boolean },
 >definiteBoolean : { sn: boolean; }
@@ -13,11 +13,11 @@ function f(
 >sn : string
 
     optionalString: { sn?: string },
->optionalString : { sn?: string | undefined; }
+>optionalString : { sn?: string; }
 >sn : string | undefined
 
     optionalNumber: { sn?: number },
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
 >sn : number | undefined
 
     undefinedString: { sn: string | undefined },
@@ -35,7 +35,7 @@ function f(
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
 
     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
 >optionalUnionDuplicates : { sn: string | number; }
@@ -43,15 +43,15 @@ function f(
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
 >definiteBoolean : { sn: boolean; }
 >definiteString : { sn: string; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>optionalString : { sn?: string; }
+>optionalNumber : { sn?: number; }
 
     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
->allOptional : { sn?: string | number | undefined; }
+>allOptional : { sn?: string | number; }
 >sn : string | number | undefined
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->optionalString : { sn?: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>optionalString : { sn?: string; }
+>optionalNumber : { sn?: number; }
 
     // undefined
     let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
@@ -84,7 +84,7 @@ function f(
 >{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | undefined; }
 >definiteBoolean : { sn: boolean; }
 >undefinedString : { sn: string | undefined; }
->optionalNumber : { sn?: number | undefined; }
+>optionalNumber : { sn?: number; }
 }
 
 type Movie = {

@@ -518,12 +518,12 @@ declare function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]
 declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
 declare const clickEvent: {
     readonly name: "click";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: PointerEvent) => void;
 };
 declare const scrollEvent: {
     readonly name: "scroll";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: Event) => void;
 };
 declare function ff1(): void;
@@ -558,16 +558,16 @@ declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr ex
     [Item in T[number] as Item[Attr]]: Item;
 };
 declare const ALL_BARS: readonly [{
-    readonly name: "a";
+    readonly name: 'a';
 }, {
-    readonly name: "b";
+    readonly name: 'b';
 }];
 declare const BAR_LOOKUP: {
     a: {
-        readonly name: "a";
+        readonly name: 'a';
     };
     b: {
-        readonly name: "b";
+        readonly name: 'b';
     };
 };
 type BarLookup = typeof BAR_LOOKUP;
@@ -592,7 +592,7 @@ type SameKeys<T> = {
     };
 };
 type MappedFromOriginal = SameKeys<Original>;
-declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
+declare const getStringAndNumberFromOriginalAndMapped: <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
 interface Config {
     string: string;
     number: number;

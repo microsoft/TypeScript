@@ -5,7 +5,7 @@
   * @param {Array=} y desc
   */
 function x(y) { }
->x : (y?: any[]) => void
+>x : (y?: Array | undefined) => void
 >y : any[]
 
 // @ts-ignore
@@ -19,12 +19,12 @@ function y(func) { return; }
  * @return {(Array.<> | null)} list of devices
  */
 function z() { return null ;}
->z : () => any[]
+>z : () => (Array | null)
 
 /**
  * 
  * @return {?Promise} A promise
  */
 function w() { return null; }
->w : () => Promise<any>
+>w : () => Promise | null
 

@@ -30,5 +30,5 @@ export type Type = {
 export declare const foo: {
     x?: {
         a: 0;
-    } | undefined;
+    };
 };

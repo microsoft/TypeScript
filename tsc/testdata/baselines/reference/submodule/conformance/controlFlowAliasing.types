@@ -249,8 +249,8 @@ function f18(obj: readonly [string | number]) {
 }
 
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f20 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f20 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -260,7 +260,7 @@ function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -269,20 +269,20 @@ function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f21 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f21 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -292,7 +292,7 @@ function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -301,20 +301,20 @@ function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;  // Not narrowed because isFoo has type annotation
 >obj.foo : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >foo : any
     }
     else {
         obj.bar;  // Not narrowed because isFoo has type annotation
 >obj.bar : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >bar : any
     }
 }
 
 function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f22 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f22 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -324,7 +324,7 @@ function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -333,20 +333,20 @@ function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;  // Not narrowed because isFoo is mutable
 >obj.foo : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >foo : any
     }
     else {
         obj.bar;  // Not narrowed because isFoo is mutable
 >obj.bar : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >bar : any
     }
 }
 
 function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f23 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f23 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -356,48 +356,48 @@ function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
     obj = obj;
->obj = obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj = obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 
     if (isFoo) {
 >isFoo : boolean
 
         obj.foo;  // Not narrowed because obj is assigned in function body
 >obj.foo : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >foo : any
     }
     else {
         obj.bar;  // Not narrowed because obj is assigned in function body
 >obj.bar : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >bar : any
     }
 }
 
 function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f24 : (arg: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f24 : (arg: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>arg : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
 >bar : number
 
     const obj = arg;
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>arg : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -406,34 +406,34 @@ function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f25 : (arg: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f25 : (arg: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>arg : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
 >bar : number
 
     let obj = arg;
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>arg : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -442,21 +442,21 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
->f26 : (outer: { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }) => void
->outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f26 : (outer: { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }) => void
+>outer : { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -466,9 +466,9 @@ function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar'
 >isFoo : boolean
 >outer.obj.kind === 'foo' : boolean
 >outer.obj.kind : "bar" | "foo"
->outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>outer.obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>outer : { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -477,25 +477,25 @@ function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar'
 
         outer.obj.foo;
 >outer.obj.foo : string
->outer.obj : { kind: "foo"; foo: string; }
->outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; }
+>outer.obj : { kind: 'foo'; foo: string; }
+>outer : { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         outer.obj.bar;
 >outer.obj.bar : number
->outer.obj : { kind: "bar"; bar: number; }
->outer : { readonly obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "bar"; bar: number; }
+>outer.obj : { kind: 'bar'; bar: number; }
+>outer : { readonly obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
->f27 : (outer: { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }) => void
->outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f27 : (outer: { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }) => void
+>outer : { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -505,9 +505,9 @@ function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: nu
 >isFoo : boolean
 >outer.obj.kind === 'foo' : boolean
 >outer.obj.kind : "bar" | "foo"
->outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>outer.obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>outer : { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
@@ -516,24 +516,24 @@ function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: nu
 
         outer.obj.foo;  // Not narrowed because obj is mutable
 >outer.obj.foo : any
->outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>outer.obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>outer : { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >foo : any
     }
     else {
         outer.obj.bar;  // Not narrowed because obj is mutable
 >outer.obj.bar : any
->outer.obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->outer : { obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }; }
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>outer.obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
+>outer : { obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >bar : any
     }
 }
 
 function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f28 : (obj?: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
+>f28 : (obj?: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; } | undefined
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -542,20 +542,20 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
     const isFoo = obj && obj.kind === 'foo';
 >isFoo : boolean | undefined
 >obj && obj.kind === 'foo' : boolean | undefined
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; } | undefined
 >obj.kind === 'foo' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'foo' : "foo"
 
     const isBar = obj && obj.kind === 'bar';
 >isBar : boolean | undefined
 >obj && obj.kind === 'bar' : boolean | undefined
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; } | undefined
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; } | undefined
 >obj.kind === 'bar' : boolean
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 >'bar' : "bar"
 
@@ -564,7 +564,7 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     if (isBar) {
@@ -572,7 +572,7 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
 
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
@@ -580,8 +580,8 @@ function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) 
 // Narrowing by aliased discriminant property access
 
 function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f30 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f30 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -590,7 +590,7 @@ function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const kind = obj.kind;
 >kind : "bar" | "foo"
 >obj.kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "bar" | "foo"
 
     if (kind === 'foo') {
@@ -600,20 +600,20 @@ function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f31 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f31 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -621,7 +621,7 @@ function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
     const { kind } = obj;
 >kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 
     if (kind === 'foo') {
 >kind === 'foo' : boolean
@@ -630,20 +630,20 @@ function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f32 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f32 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -652,7 +652,7 @@ function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const { kind: k } = obj;
 >kind : any
 >k : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 
     if (k === 'foo') {
 >k === 'foo' : boolean
@@ -661,20 +661,20 @@ function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
         obj.foo;
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
     }
     else {
         obj.bar;
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
 
 function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
->f33 : (obj: { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }) => void
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>f33 : (obj: { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }) => void
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 >kind : "foo"
 >foo : string
 >kind : "bar"
@@ -682,7 +682,7 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 
     const { kind } = obj;
 >kind : "bar" | "foo"
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
+>obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }
 
     switch (kind) {
 >kind : "bar" | "foo"
@@ -690,13 +690,13 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
         case 'foo': obj.foo; break;
 >'foo' : "foo"
 >obj.foo : string
->obj : { kind: "foo"; foo: string; }
+>obj : { kind: 'foo'; foo: string; }
 >foo : string
 
         case 'bar': obj.bar; break;
 >'bar' : "bar"
 >obj.bar : number
->obj : { kind: "bar"; bar: number; }
+>obj : { kind: 'bar'; bar: number; }
 >bar : number
     }
 }
@@ -809,8 +809,8 @@ class C11 {
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
->f40 : (obj: { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }) => void
->obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
+>f40 : (obj: { kind: 'foo'; foo?: string; } | { kind: 'bar'; bar?: number; }) => void
+>obj : { kind: 'foo'; foo?: string; } | { kind: 'bar'; bar?: number; }
 >kind : "foo"
 >foo : string | undefined
 >kind : "bar"
@@ -818,7 +818,7 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
 
     const { kind } = obj;
 >kind : "bar" | "foo"
->obj : { kind: "foo"; foo?: string | undefined; } | { kind: "bar"; bar?: number | undefined; }
+>obj : { kind: 'foo'; foo?: string; } | { kind: 'bar'; bar?: number; }
 
     const isFoo = kind == 'foo';
 >isFoo : boolean
@@ -830,13 +830,13 @@ function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number })
 >isFoo && obj.foo : string | false | undefined
 >isFoo : boolean
 >obj.foo : string | undefined
->obj : { kind: "foo"; foo?: string | undefined; }
+>obj : { kind: 'foo'; foo?: string; }
 >foo : string | undefined
 
         let t: string = obj.foo;
 >t : string
 >obj.foo : string
->obj : { kind: "foo"; foo?: string | undefined; }
+>obj : { kind: 'foo'; foo?: string; }
 >foo : string
     }
 }
@@ -864,14 +864,14 @@ function gg2(obj: Data) {
         let t: string = obj.payload;
 >t : string
 >obj.payload : string
->obj : { kind: "str"; payload: string; }
+>obj : { kind: 'str'; payload: string; }
 >payload : string
     }
     else {
         let t: number = obj.payload;
 >t : number
 >obj.payload : number
->obj : { kind: "num"; payload: number; }
+>obj : { kind: 'num'; payload: number; }
 >payload : number
     }
 }

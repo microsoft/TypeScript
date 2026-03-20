@@ -1,0 +1,11 @@
+--- old.parserParameterList2.types
++++ new.parserParameterList2.types
+@@= skipped -4, +4 lines =@@
+ >C : C
+
+   F(A?= 0) { }
+->F : (A?: number | undefined) => void
++>F : (A?: number) => void
+ >A : number | undefined
+ >0 : 0
+ }

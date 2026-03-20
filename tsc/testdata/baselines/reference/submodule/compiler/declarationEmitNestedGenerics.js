@@ -24,19 +24,5 @@ function g(x) {
 
 
 //// [declarationEmitNestedGenerics.d.ts]
-declare function f<T>(p: T): <T>(x: T) => T_1;
+declare function f<T>(p: T): <T>(x: T) => typeof p;
 declare function g<T>(x: T): T extends (infer T_1)[] ? T_1 : T;
-
-
-//// [DtsFileErrors]
-
-
-declarationEmitNestedGenerics.d.ts(1,43): error TS2304: Cannot find name 'T_1'.
-
-
-==== declarationEmitNestedGenerics.d.ts (1 errors) ====
-    declare function f<T>(p: T): <T>(x: T) => T_1;
-                                              ~~~
-!!! error TS2304: Cannot find name 'T_1'.
-    declare function g<T>(x: T): T extends (infer T_1)[] ? T_1 : T;
-    

@@ -11,7 +11,7 @@ class Person {
 >a : number
 
     ["A"](a: string|number): number | string {
->["A"] : (a: string | number) => string | number
+>["A"] : (a: string | number) => number | string
 >"A" : "A"
 >a : string | number
 
@@ -26,9 +26,9 @@ let p = new Person();
 
 p.A(0)
 >p.A(0) : string | number
->p.A : (a: string | number) => string | number
+>p.A : (a: string | number) => number | string
 >p : Person
->A : (a: string | number) => string | number
+>A : (a: string | number) => number | string
 >0 : 0
 
 p.B(0)

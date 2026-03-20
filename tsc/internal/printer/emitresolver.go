@@ -100,6 +100,7 @@ type EmitResolver interface {
 	IsSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) SymbolAccessibilityResult
 	IsEntityNameVisible(entityName *ast.Node, enclosingDeclaration *ast.Node) SymbolAccessibilityResult // previously SymbolVisibilityResult in strada - ErrorModuleName never set
 	IsExpandoFunctionDeclaration(node *ast.Node) bool
+	IsExpandoFunctionDeclarationUnsafe(node *ast.Node) bool
 	IsLiteralConstDeclaration(node *ast.Node) bool
 	RequiresAddingImplicitUndefined(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
 	IsDeclarationVisible(node *ast.Node) bool
@@ -109,6 +110,10 @@ type EmitResolver interface {
 	GetEnumMemberValue(node *ast.Node) evaluator.Result
 	IsLateBound(node *ast.Node) bool
 	IsOptionalParameter(node *ast.Node) bool
+
+	// isolatedDeclarations-specific declaration emit
+	GetPropertiesOfContainerFunction(node *ast.Node) []*ast.Symbol
+	RequiresAddingImplicitUndefinedUnsafe(node *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool
 
 	// Node construction for declaration emit
 	CreateTypeOfDeclaration(emitContext *EmitContext, declaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node

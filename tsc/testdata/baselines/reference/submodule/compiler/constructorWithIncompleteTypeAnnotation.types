@@ -284,13 +284,13 @@ namespace TypeScriptAllInOne {
 >f : string
 >hexchar : boolean
 >float.toString() : string
->float.toString : (radix?: number | undefined) => string
+>float.toString : (radix?: number) => string
 >float : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 >float2.toString() : string
->float2.toString : (radix?: number | undefined) => string
+>float2.toString : (radix?: number) => string
 >float2 : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 >reg.toString() : string
 >reg.toString : () => string
 >reg : RegExp

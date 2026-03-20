@@ -79,7 +79,7 @@ type IndirectArrayish<U extends unknown[]> = Objectish<U>;
 >IndirectArrayish : Objectish<U>
 
 function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
->bar : (arrayish: any[], objectish: Objectish<any>, indirectArrayish: Objectish<any>) => void
+>bar : (arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) => void
 >arrayish : any[]
 >objectish : Objectish<any>
 >indirectArrayish : Objectish<any>

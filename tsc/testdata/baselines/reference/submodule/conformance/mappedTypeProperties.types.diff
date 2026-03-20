@@ -5,6 +5,6 @@
      [placeType in PlaceType]?: void;
      model(duration: number): 'hour' | 'day';
 ->model : (duration: number) => "hour" | "day"
-+>model : (duration: number) => "day" | "hour"
++>model : (duration: number) => 'hour' | 'day'
  >duration : number
  }

@@ -35,7 +35,7 @@ export type GetByString<
 
 interface Duck {
 	taxonomy: {
->taxonomy : { genus: "anas"; species: "platyrhynchos"; }
+>taxonomy : { genus: 'anas'; species: 'platyrhynchos'; }
 
 		genus: 'anas';
 >genus : "anas"

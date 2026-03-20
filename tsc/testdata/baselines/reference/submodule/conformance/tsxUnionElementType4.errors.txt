@@ -1,6 +1,6 @@
 file.tsx(34,17): error TS2322: Type 'boolean' is not assignable to type 'number'.
-file.tsx(36,22): error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
-  Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
+file.tsx(36,22): error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+  Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
 
 
 ==== file.tsx (2 errors) ====
@@ -40,10 +40,10 @@ file.tsx(36,22): error TS2322: Type '{ prop: true; }' is not assignable to type 
     let a = <RCComp x />;
                     ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
-!!! related TS6500 file.tsx:5:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode | undefined; }'
+!!! related TS6500 file.tsx:5:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; }'
     let b = <PartRCComp x={10} />
     let c = <EmptyRCComp prop />;
                          ~~~~
-!!! error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
-!!! error TS2322:   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode | undefined; }'.
+!!! error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+!!! error TS2322:   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
     

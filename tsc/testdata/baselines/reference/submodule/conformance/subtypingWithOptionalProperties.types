@@ -5,22 +5,22 @@
 
 // returns { s?: number; }
 function f<T>(a: T) {
->f : <T>(a: T) => { s?: number | undefined; }
+>f : <T>(a: T) => { s?: number; }
 >a : T
 
     var b: { s?: number } = a;
->b : { s?: number | undefined; }
+>b : { s?: number; }
 >s : number | undefined
 >a : T
 
     return b;
->b : { s?: number | undefined; }
+>b : { s?: number; }
 }
 
 var r = f({ s: new Object() }); // ok
->r : { s?: number | undefined; }
->f({ s: new Object() }) : { s?: number | undefined; }
->f : <T>(a: T) => { s?: number | undefined; }
+>r : { s?: number; }
+>f({ s: new Object() }) : { s?: number; }
+>f : <T>(a: T) => { s?: number; }
 >{ s: new Object() } : { s: Object; }
 >s : Object
 >new Object() : Object
@@ -29,12 +29,12 @@ var r = f({ s: new Object() }); // ok
 r.s && r.s.toFixed(); // would blow up at runtime
 >r.s && r.s.toFixed() : string | 0 | undefined
 >r.s : number | undefined
->r : { s?: number | undefined; }
+>r : { s?: number; }
 >s : number | undefined
 >r.s.toFixed() : string
->r.s.toFixed : (fractionDigits?: number | undefined) => string
+>r.s.toFixed : (fractionDigits?: number) => string
 >r.s : number
->r : { s?: number | undefined; }
+>r : { s?: number; }
 >s : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 

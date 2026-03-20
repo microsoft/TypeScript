@@ -65,13 +65,13 @@ function action1(animal: Animal) {
 >console : Console
 >log : (...data: any[]) => void
 >animal.meow : string
->animal : { type: "cat"; meow: string; }
+>animal : { type: `${AnimalType.cat}`; meow: string; }
 >meow : string
 
   } else if (animal.type === AnimalType.dog) {
 >animal.type === AnimalType.dog : boolean
 >animal.type : "dog"
->animal : { type: "dog"; bark: string; }
+>animal : { type: `${AnimalType.dog}`; bark: string; }
 >type : "dog"
 >AnimalType.dog : AnimalType.dog
 >AnimalType : typeof AnimalType
@@ -83,7 +83,7 @@ function action1(animal: Animal) {
 >console : Console
 >log : (...data: any[]) => void
 >animal.bark : string
->animal : { type: "dog"; bark: string; }
+>animal : { type: `${AnimalType.dog}`; bark: string; }
 >bark : string
 
   } else {
@@ -115,7 +115,7 @@ function action2(animal: Animal) {
 >console : Console
 >log : (...data: any[]) => void
 >animal.meow : string
->animal : { type: "cat"; meow: string; }
+>animal : { type: `${AnimalType.cat}`; meow: string; }
 >meow : string
 
       break;
@@ -131,7 +131,7 @@ function action2(animal: Animal) {
 >console : Console
 >log : (...data: any[]) => void
 >animal.bark : string
->animal : { type: "dog"; bark: string; }
+>animal : { type: `${AnimalType.dog}`; bark: string; }
 >bark : string
 
       break;
@@ -163,7 +163,7 @@ function action3(animal: Animal) {
 >console : Console
 >log : (...data: any[]) => void
 >animal.meow : string
->animal : { type: "cat"; meow: string; }
+>animal : { type: `${AnimalType.cat}`; meow: string; }
 >meow : string
 
       break;
@@ -178,7 +178,7 @@ function action3(animal: Animal) {
 >console : Console
 >log : (...data: any[]) => void
 >animal.bark : string
->animal : { type: "dog"; bark: string; }
+>animal : { type: `${AnimalType.dog}`; bark: string; }
 >bark : string
 
       break;

@@ -24,6 +24,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -1083,6 +1084,8 @@ func (p *Printer) emitTemplateMiddleTail(node *ast.TemplateMiddleOrTail) {
 //
 
 func (p *Printer) emitIdentifierText(node *ast.Identifier) {
+	f := ast.GetSourceFileOfNode(node.AsNode())
+	debug.Assert(f == nil || p.currentSourceFile == nil || f.FileName() == p.currentSourceFile.FileName())
 	text := p.getTextOfNode(node.AsNode(), false /*includeTrivia*/)
 
 	// !!! In the old emitter, an Identifier could have a Symbol associated with it. That
@@ -2132,12 +2135,14 @@ func (p *Printer) emitMappedType(node *ast.MappedTypeNode) {
 	p.emitTypeNodeOutsideExtends(node.Type)
 	p.writeTrailingSemicolon()
 	if node.Members != nil {
-		if singleLine {
-			p.writeSpace()
-		} else {
-			p.writeLine()
+		if len(node.Members.Nodes) > 0 {
+			if singleLine {
+				p.writeSpace()
+			} else {
+				p.writeLine()
+			}
+			p.emitList((*Printer).emitTypeElement, node.AsNode(), node.Members, LFPreserveLines)
 		}
-		p.emitList((*Printer).emitTypeElement, node.AsNode(), node.Members, LFPreserveLines)
 	}
 	if singleLine {
 		p.writeSpace()

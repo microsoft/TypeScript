@@ -22,7 +22,7 @@ class TestClass<T> {
 >v : T
 
   func(val: T | number): void {
->func : (val: number | T) => void
+>func : (val: T | number) => void
 >val : number | T
 
     if (this.typeguard(val)) {
@@ -69,7 +69,7 @@ class TestClass2<T extends Date> {
 >v : T
 
   func(val: T | number): void {
->func : (val: number | T) => void
+>func : (val: T | number) => void
 >val : number | T
 
     if (this.typeguard(val)) {

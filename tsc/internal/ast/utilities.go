@@ -3030,6 +3030,15 @@ func HasInitializer(node *Node) bool {
 	}
 }
 
+func IsVariableParameterOrProperty(node *Node) bool {
+	switch node.Kind {
+	case KindVariableDeclaration, KindParameter, KindPropertySignature, KindPropertyDeclaration:
+		return true
+	default:
+		return false
+	}
+}
+
 func GetTypeAnnotationNode(node *Node) *TypeNode {
 	switch node.Kind {
 	case KindVariableDeclaration, KindParameter, KindPropertySignature, KindPropertyDeclaration,
@@ -3995,6 +4004,55 @@ func IsImportOrImportEqualsDeclaration(node *Node) bool {
 	return IsImportDeclaration(node) || IsImportEqualsDeclaration(node)
 }
 
+func IsPrimitiveLiteralValue(node *Node, includeBigInt bool) bool {
+	switch node.Kind {
+	case KindTrueKeyword,
+		KindFalseKeyword,
+		KindNumericLiteral,
+		KindStringLiteral,
+		KindNoSubstitutionTemplateLiteral:
+		return true
+	case KindBigIntLiteral:
+		return includeBigInt
+	case KindPrefixUnaryExpression:
+		if node.AsPrefixUnaryExpression().Operator == KindMinusToken {
+			return IsNumericLiteral(node.AsPrefixUnaryExpression().Operand) || (includeBigInt && IsBigIntLiteral(node.AsPrefixUnaryExpression().Operand))
+		}
+		if node.AsPrefixUnaryExpression().Operator == KindPlusToken {
+			return IsNumericLiteral(node.AsPrefixUnaryExpression().Operand)
+		}
+		return false
+	default:
+		return false
+	}
+}
+
+func HasInferredType(node *Node) bool {
+	// Debug.type<HasInferredType>(node); // !!!
+	switch node.Kind {
+	case KindParameter,
+		KindPropertySignature,
+		KindPropertyDeclaration,
+		KindBindingElement,
+		KindPropertyAccessExpression,
+		KindElementAccessExpression,
+		KindBinaryExpression,
+		KindCallExpression,
+		KindVariableDeclaration,
+		KindExportAssignment,
+		KindJSExportAssignment,
+		KindPropertyAssignment,
+		KindShorthandPropertyAssignment,
+		KindJSDocParameterTag,
+		KindJSDocPropertyTag,
+		KindCommonJSExport:
+		return true
+	default:
+		// assertType<never>(node); // !!!
+		return false
+	}
+}
+
 func IsKeyword(token Kind) bool {
 	return KindFirstKeyword <= token && token <= KindLastKeyword
 }
@@ -4403,6 +4461,13 @@ func findCloneInNode(node *Node, original *Node) *Node {
 			return nil
 		}
 	}
+}
+
+func IsExpandoPropertyDeclaration(node *Node) bool {
+	if node == nil {
+		return false
+	}
+	return IsPropertyAccessExpression(node) || IsElementAccessExpression(node) || IsBinaryExpression(node)
 }
 
 // IsSuperProperty checks if a node is super.x or super[x].

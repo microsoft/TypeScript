@@ -17,7 +17,7 @@ declare module "foo" {
 >"foo" : typeof foo
 
     export function f(): T; // OK
->f : () => number
+>f : () => T
 }
 
 === /b.ts ===
@@ -28,7 +28,7 @@ declare module "foo" {
 >"foo" : typeof foo
 
     export function g(): foo.T; // OK
->g : () => number
+>g : () => foo.T
 >foo : any
 }
 

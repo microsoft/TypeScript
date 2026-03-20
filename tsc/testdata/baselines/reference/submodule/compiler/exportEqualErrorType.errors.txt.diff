@@ -1,0 +1,17 @@
+--- old.exportEqualErrorType.errors.txt
++++ new.exportEqualErrorType.errors.txt
+@@= skipped -0, +0 lines =@@
+-exportEqualErrorType_1.ts(3,23): error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
++exportEqualErrorType_1.ts(3,23): error TS2339: Property 'static' does not exist on type '{ (): server.connectExport; foo: Date; }'.
+
+
+ ==== exportEqualErrorType_1.ts (1 errors) ====
+@@= skipped -5, +5 lines =@@
+     import connect = require('./exportEqualErrorType_0');
+     connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
+                           ~~~~~~
+-!!! error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
++!!! error TS2339: Property 'static' does not exist on type '{ (): server.connectExport; foo: Date; }'.
+     
+ ==== exportEqualErrorType_0.ts (0 errors) ====
+     namespace server {

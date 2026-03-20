@@ -27,7 +27,7 @@ export function getPrismaClient(options?: any) {
 >this : this
 >self : PrismaClient
 >applyModelsAndClientExtensions(this) : PrismaClient
->applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
+>applyModelsAndClientExtensions : (client: Client) => PrismaClient
 >this : this
     }
   }
@@ -37,7 +37,7 @@ export function getPrismaClient(options?: any) {
 }
 
 export function applyModelsAndClientExtensions(client: Client) {
->applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
+>applyModelsAndClientExtensions : (client: Client) => PrismaClient
 >client : PrismaClient
 
   return client;

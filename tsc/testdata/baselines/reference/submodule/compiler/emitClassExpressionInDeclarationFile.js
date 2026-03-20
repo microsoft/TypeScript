@@ -91,7 +91,7 @@ export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
     new (...args: any[]): {
         tags(): void;
         foo(): void;
-        name?: string | undefined;
+        name?: string;
     };
     getTags(): void;
 } & T;
@@ -99,7 +99,7 @@ declare const Test_base: {
     new (...args: any[]): {
         tags(): void;
         foo(): void;
-        name?: string | undefined;
+        name?: string;
     };
     getTags(): void;
 } & typeof FooItem;

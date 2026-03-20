@@ -2,14 +2,14 @@
 
 === a.ts ===
 import { object } from "./obj";
->object : { foo: 1; }
+>object : { foo: id.A<1>; }
 
 import { id } from "./id";
 >id : any
 
 export const _ = object;
->_ : { foo: 1; }
->object : { foo: 1; }
+>_ : { foo: id.A<1>; }
+>object : { foo: id.A<1>; }
 
 /**
 */
@@ -19,7 +19,7 @@ import { id } from "./id";
 
 // ----
 export declare const object: id.A<{
->object : { foo: 1; }
+>object : { foo: id.A<1>; }
 >id : any
 
     foo: id.A<1>

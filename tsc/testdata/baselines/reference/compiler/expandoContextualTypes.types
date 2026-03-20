@@ -43,7 +43,7 @@ export const FooPage: Page = () => {
 FooPage.getLayout = () => {
 >FooPage.getLayout = () => {    return <></>} : () => JSX.Element
 >FooPage.getLayout : ((component: JSX.Element) => JSX.Element) | undefined
->FooPage : import("react").StatelessComponent<{}> & { getLayout?: ((component: JSX.Element) => JSX.Element) | undefined; }
+>FooPage : import("react").StatelessComponent<{}> & { getLayout?: (component: JSX.Element) => JSX.Element; }
 >getLayout : ((component: JSX.Element) => JSX.Element) | undefined
 >() => {    return <></>} : () => JSX.Element
 

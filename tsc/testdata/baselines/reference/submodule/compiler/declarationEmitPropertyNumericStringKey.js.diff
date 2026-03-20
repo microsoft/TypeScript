@@ -1,0 +1,11 @@
+--- old.declarationEmitPropertyNumericStringKey.js
++++ new.declarationEmitPropertyNumericStringKey.js
+@@= skipped -27, +27 lines =@@
+
+ //// [declarationEmitPropertyNumericStringKey.d.ts]
+ declare const STATUS: {
+-    readonly "404": "not found";
++    readonly ["404"]: "not found";
+ };
+ declare const hundredStr = "100";
+ declare const obj: {

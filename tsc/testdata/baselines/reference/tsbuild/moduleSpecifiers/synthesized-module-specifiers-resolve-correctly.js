@@ -232,8 +232,9 @@ export {};
   "size": 1481
 }
 //// [/home/src/workspaces/packages/lib/solution/sub-project-2/index.d.ts] *new* 
+import { MyNominal } from '../sub-project/index';
 declare const variable: {
-    key: string;
+    key: MyNominal;
 };
 export declare function getVar(): keyof typeof variable;
 export {};
@@ -247,7 +248,7 @@ export function getVar() {
 }
 
 //// [/home/src/workspaces/packages/lib/solution/sub-project-2/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2025.full.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../../solution/sub-project-2/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"6b86fa4ec711c70d7c514bb012b90db9-export declare type Nominal<T, Name extends string> = T & {};\n","ba931f9684d9e8eb38e02da33050dc55-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;\n",{"version":"8d7f0cd34ff9cb954b00662137820b98-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: 'value' as MyNominal,\n};\n\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}","signature":"3b4c68b4750c4c11bb5e79eda7ccd331-declare const variable: {\n    key: string;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"outDir":"../..","rootDir":"../../..","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2025.full.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../../solution/sub-project-2/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"6b86fa4ec711c70d7c514bb012b90db9-export declare type Nominal<T, Name extends string> = T & {};\n","ba931f9684d9e8eb38e02da33050dc55-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;\n",{"version":"8d7f0cd34ff9cb954b00662137820b98-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: 'value' as MyNominal,\n};\n\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}","signature":"d3fc4bf12d5f8dfcac4dd45791e378ef-import { MyNominal } from '../sub-project/index';\ndeclare const variable: {\n    key: MyNominal;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"composite":true,"outDir":"../..","rootDir":"../../..","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/packages/lib/solution/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -293,11 +294,11 @@ export function getVar() {
     {
       "fileName": "../../../solution/sub-project-2/index.ts",
       "version": "8d7f0cd34ff9cb954b00662137820b98-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: 'value' as MyNominal,\n};\n\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}",
-      "signature": "3b4c68b4750c4c11bb5e79eda7ccd331-declare const variable: {\n    key: string;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n",
+      "signature": "d3fc4bf12d5f8dfcac4dd45791e378ef-import { MyNominal } from '../sub-project/index';\ndeclare const variable: {\n    key: MyNominal;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "8d7f0cd34ff9cb954b00662137820b98-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: 'value' as MyNominal,\n};\n\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}",
-        "signature": "3b4c68b4750c4c11bb5e79eda7ccd331-declare const variable: {\n    key: string;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n",
+        "signature": "d3fc4bf12d5f8dfcac4dd45791e378ef-import { MyNominal } from '../sub-project/index';\ndeclare const variable: {\n    key: MyNominal;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n",
         "impliedNodeFormat": 1
       }
     }
@@ -325,7 +326,7 @@ export function getVar() {
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1789
+  "size": 1843
 }
 //// [/home/src/workspaces/packages/lib/solution/sub-project/index.d.ts] *new* 
 import { Nominal } from '../common/nominal';

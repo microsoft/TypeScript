@@ -1,6 +1,15 @@
 --- old.jsFileFunctionOverloads.types
 +++ new.jsFileFunctionOverloads.types
-@@= skipped -62, +62 lines =@@
+@@= skipped -20, +20 lines =@@
+  * @returns {string}
+  */
+  function getTypeName(x) {
+->getTypeName : { (x: number): "number"; (x: string): "string"; (x: boolean): "boolean"; }
++>getTypeName : { (x: number): 'number'; (x: string): 'string'; (x: boolean): 'boolean'; }
+ >x : unknown
+
+   return typeof x;
+@@= skipped -42, +42 lines =@@
  >flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T>(array: T[][]): T[]; }
  >array : unknown[]
  >iterable : (x: unknown) => unknown

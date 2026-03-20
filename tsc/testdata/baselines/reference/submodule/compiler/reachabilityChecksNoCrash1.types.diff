@@ -1,0 +1,11 @@
+--- old.reachabilityChecksNoCrash1.types
++++ new.reachabilityChecksNoCrash1.types
+@@= skipped -16, +16 lines =@@
+ >T[] : any
+ >T : any
+ > : any
+->{    const out = [];    for await (const v of asyncIterable) {        out.push(await v);    } : { const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }
++>{    const out = [];    for await (const v of asyncIterable) {        out.push(await v);    } : { const: never[]; for: any; of: any; asyncIterable: any; out: any; "": any; }
+
+     const out = [];
+ >const : never[]

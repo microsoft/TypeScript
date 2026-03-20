@@ -1,0 +1,11 @@
+--- old.indexedAccessTypeConstraints.types
++++ new.indexedAccessTypeConstraints.types
+@@= skipped -73, +73 lines =@@
+ // Repro from #14557
+
+ function foo<C, T extends { content: C }>(x: C, y: T['content']) {
+->foo : <C, T extends { content: C; }>(x: C, y: T["content"]) => void
++>foo : <C, T extends { content: C; }>(x: C, y: T['content']) => void
+ >content : C
+ >x : C
+ >y : T["content"]

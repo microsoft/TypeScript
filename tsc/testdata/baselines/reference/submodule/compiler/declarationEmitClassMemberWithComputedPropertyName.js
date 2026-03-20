@@ -58,9 +58,9 @@ export const t12 = new Foo().p1;
 
 //// [declarationEmitClassMemberWithComputedPropertyName.d.ts]
 declare const k1: unique symbol;
-declare const k2: "foo";
+declare const k2: 'foo';
 declare const k3: unique symbol;
-declare const k4: "prop";
+declare const k4: 'prop';
 declare class Foo {
     static [k1](): number;
     [k1](): string;

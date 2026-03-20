@@ -23,5 +23,5 @@ declare const foo: {
     a: string;
 };
 declare const bar: {
-    a?(): void;
+    a(): void;
 };

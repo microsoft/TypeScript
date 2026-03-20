@@ -19,7 +19,7 @@ interface MachineConfig<TEvent extends { type: string }> {
 
   };
   on?: {
->on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; }) | undefined
+>on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
 
     [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
 >type : K
@@ -121,7 +121,7 @@ interface MachineConfig2<TEvent extends { type: string }> {
 
   };
   on?: {
->on : ({ [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; }) | undefined
+>on : ({ [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
 
     [K in TEvent["type"] as K extends Uppercase<string> ? K : never]?: Action<TEvent extends { type: K } ? TEvent : never>;
 >type : K
@@ -308,7 +308,7 @@ type ValidateSliceCaseReducers<S, ACR extends SliceCaseReducers<S>> = ACR & {
 
   [T in keyof ACR]: ACR[T] extends {
     reducer(s: S, action?: infer A): any;
->reducer : (s: S, action?: A | undefined) => any
+>reducer : (s: S, action?: infer A) => any
 >s : S
 >action : A | undefined
   }

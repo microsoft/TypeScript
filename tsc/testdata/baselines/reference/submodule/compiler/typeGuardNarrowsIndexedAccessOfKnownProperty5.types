@@ -2,8 +2,8 @@
 
 === typeGuardNarrowsIndexedAccessOfKnownProperty5.ts ===
 const a: { key?: { x?: number } } = {};
->a : { key?: { x?: number | undefined; } | undefined; }
->key : { x?: number | undefined; } | undefined
+>a : { key?: { x?: number; }; }
+>key : { x?: number; } | undefined
 >x : number | undefined
 >{} : {}
 
@@ -13,26 +13,26 @@ const aIndex = "key";
 
 if (a[aIndex] && a[aIndex].x) {
 >a[aIndex] && a[aIndex].x : number | undefined
->a[aIndex] : { x?: number | undefined; } | undefined
->a : { key?: { x?: number | undefined; } | undefined; }
+>a[aIndex] : { x?: number; } | undefined
+>a : { key?: { x?: number; }; }
 >aIndex : "key"
 >a[aIndex].x : number | undefined
->a[aIndex] : { x?: number | undefined; }
->a : { key?: { x?: number | undefined; } | undefined; }
+>a[aIndex] : { x?: number; }
+>a : { key?: { x?: number; }; }
 >aIndex : "key"
 >x : number | undefined
 
     a[aIndex].x // number
 >a[aIndex].x : number
->a[aIndex] : { x?: number | undefined; }
->a : { key?: { x?: number | undefined; } | undefined; }
+>a[aIndex] : { x?: number; }
+>a : { key?: { x?: number; }; }
 >aIndex : "key"
 >x : number
 }
 
 const b: { key: { x?: number } } = { key: {} };
->b : { key: { x?: number | undefined; }; }
->key : { x?: number | undefined; }
+>b : { key: { x?: number; }; }
+>key : { x?: number; }
 >x : number | undefined
 >{ key: {} } : { key: {}; }
 >key : {}
@@ -44,15 +44,15 @@ const bIndex = "key";
 
 if (b[bIndex].x) {
 >b[bIndex].x : number | undefined
->b[bIndex] : { x?: number | undefined; }
->b : { key: { x?: number | undefined; }; }
+>b[bIndex] : { x?: number; }
+>b : { key: { x?: number; }; }
 >bIndex : "key"
 >x : number | undefined
 
     b[bIndex].x // number
 >b[bIndex].x : number
->b[bIndex] : { x?: number | undefined; }
->b : { key: { x?: number | undefined; }; }
+>b[bIndex] : { x?: number; }
+>b : { key: { x?: number; }; }
 >bIndex : "key"
 >x : number
 }

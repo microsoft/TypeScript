@@ -270,7 +270,7 @@ export declare let templateLetOk4: string;
 export declare let numberLetAsConst: 1;
 export declare let bigIntLetAsConst: 1n;
 export declare let stringLetAsConst: "s";
-export declare let templateLetOk1AsConst: "s";
+export declare let templateLetOk1AsConst: `s`;
 export declare let templateLetOk2AsConst: "s1 - S";
 export declare let templateLetOk3AsConst: "s1 - S - false";
 export declare let templateLetOk4AsConst: `s${number} - S - true`;
@@ -309,7 +309,7 @@ export declare class Exported {
     numberLetAsConst: 1;
     bigIntLetAsConst: 1n;
     stringLetAsConst: "s";
-    templateLetOk1AsConst: "s";
+    templateLetOk1AsConst: `s`;
     templateLetOk2AsConst: "s1 - S";
     templateLetOk3AsConst: "s1 - S - false";
     templateLetOk4AsConst: `s${number} - S - true`;

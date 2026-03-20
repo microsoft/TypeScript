@@ -5,7 +5,7 @@
  === mixinAccessors3.ts ===
  function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
 ->mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
-+>mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
++>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
  >args : any[]
  >superclass : T
 
@@ -22,7 +22,7 @@
 ->mixin(BaseClass) : mixin<typeof BaseClass>.(Anonymous class) & BaseClass
 ->mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin<any>.(Anonymous class); } & T
 +>mixin(BaseClass) : mixin.(Anonymous class) & BaseClass
-+>mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
++>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
  >BaseClass : typeof BaseClass
 
    get name() {

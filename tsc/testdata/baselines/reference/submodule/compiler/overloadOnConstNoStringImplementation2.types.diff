@@ -1,0 +1,81 @@
+--- old.overloadOnConstNoStringImplementation2.types
++++ new.overloadOnConstNoStringImplementation2.types
+@@= skipped -2, +2 lines =@@
+ === overloadOnConstNoStringImplementation2.ts ===
+ interface I {
+     x1(a: number, callback: (x: 'hi') => number);
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >a : number
+->callback : (x: "hi") => number
++>callback : (x: 'hi') => number
+ >x : "hi"
+ }
+
+@@= skipped -10, +10 lines =@@
+ >C : C
+
+     x1(a: number, callback: (x: 'hi') => number);
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >a : number
+->callback : (x: "hi") => number
++>callback : (x: 'hi') => number
+ >x : "hi"
+
+     x1(a: number, callback: (x: any) => number) {
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >a : number
+ >callback : (x: any) => number
+ >x : any
+@@= skipped -42, +42 lines =@@
+
+ c.x1(1, (x: 'hi') => { return 1; } );
+ >c.x1(1, (x: 'hi') => { return 1; } ) : any
+->c.x1 : (a: number, callback: (x: "hi") => number) => any
++>c.x1 : (a: number, callback: (x: 'hi') => number) => any
+ >c : C
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >1 : 1
+->(x: 'hi') => { return 1; } : (x: "hi") => number
++>(x: 'hi') => { return 1; } : (x: 'hi') => number
+ >x : "hi"
+ >1 : 1
+
+ c.x1(1, (x: 'bye') => { return 1; } ); 
+ >c.x1(1, (x: 'bye') => { return 1; } ) : any
+->c.x1 : (a: number, callback: (x: "hi") => number) => any
++>c.x1 : (a: number, callback: (x: 'hi') => number) => any
+ >c : C
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >1 : 1
+->(x: 'bye') => { return 1; } : (x: "bye") => number
++>(x: 'bye') => { return 1; } : (x: 'bye') => number
+ >x : "bye"
+ >1 : 1
+
+ c.x1(1, (x: string) => { return 1; } );
+ >c.x1(1, (x: string) => { return 1; } ) : any
+->c.x1 : (a: number, callback: (x: "hi") => number) => any
++>c.x1 : (a: number, callback: (x: 'hi') => number) => any
+ >c : C
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >1 : 1
+ >(x: string) => { return 1; } : (x: string) => number
+ >x : string
+@@= skipped -30, +30 lines =@@
+
+ c.x1(1, (x: number) => { return 1; } );
+ >c.x1(1, (x: number) => { return 1; } ) : any
+->c.x1 : (a: number, callback: (x: "hi") => number) => any
++>c.x1 : (a: number, callback: (x: 'hi') => number) => any
+ >c : C
+->x1 : (a: number, callback: (x: "hi") => number) => any
++>x1 : (a: number, callback: (x: 'hi') => number) => any
+ >1 : 1
+ >(x: number) => { return 1; } : (x: number) => number
+ >x : number

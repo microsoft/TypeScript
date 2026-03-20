@@ -7,7 +7,7 @@ export var config: {}
 === test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
->demo : (a: any) => void
+>demo : (a: import('./ex')) => void
 >a : any
 
     a.config

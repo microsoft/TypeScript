@@ -44,6 +44,6 @@ export const foo = new Set([ 'a', 'b' ]);
  * @returns {Foo}
  */
 function f4() { return 1; }
->f4 : () => string
+>f4 : () => Foo
 >1 : 1
 

@@ -6,7 +6,7 @@
  function demo(a) {
 ->demo : (a: { fix: boolean; }) => void
 ->a : { fix: boolean; }
-+>demo : (a: any) => void
++>demo : (a: import('./ex')) => void
 +>a : any
 
      a.fix

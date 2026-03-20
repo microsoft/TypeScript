@@ -1,11 +1,14 @@
 --- old.deepKeysIndexing.types
 +++ new.deepKeysIndexing.types
-@@= skipped -74, +74 lines =@@
- >value : V
+@@= skipped -111, +111 lines =@@
 
-   workaround<
-->workaround : <K1 extends keyof O, K2 extends keys2workaround<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
-+>workaround : <K1 extends keyof O, K2 extends Extract<O[K1] extends object ? keyof O[K1] : never, string>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
-
-     K1 extends keyof O,
-     K2 extends keys2workaround<O, K1>,
+ bar.workaround("a", "1", true); // ok - true is not allowed
+ >bar.workaround("a", "1", true) : void
+->bar.workaround : <K1 extends keyof Foo, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
++>bar.workaround : <K1 extends keyof Foo, K2 extends keys2workaround<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+ >bar : Bar<Foo>
+->workaround : <K1 extends keyof Foo, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
++>workaround : <K1 extends keyof Foo, K2 extends keys2workaround<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+ >"a" : "a"
+ >"1" : "1"
+ >true : true

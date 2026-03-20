@@ -95,9 +95,9 @@ function normalise_trace_logs([log]: any[]) {
 >log : any
 >"string" : "string"
 >log.includes("%c") : boolean
->log.includes : (searchString: string, position?: number | undefined) => boolean
+>log.includes : (searchString: string, position?: number) => boolean
 >log : string
->includes : (searchString: string, position?: number | undefined) => boolean
+>includes : (searchString: string, position?: number) => boolean
 >"%c" : "%c"
 
         normalised.push({ log, highlighted: log.includes("foo") });
@@ -109,9 +109,9 @@ function normalise_trace_logs([log]: any[]) {
 >log : string
 >highlighted : boolean
 >log.includes("foo") : boolean
->log.includes : (searchString: string, position?: number | undefined) => boolean
+>log.includes : (searchString: string, position?: number) => boolean
 >log : string
->includes : (searchString: string, position?: number | undefined) => boolean
+>includes : (searchString: string, position?: number) => boolean
 >"foo" : "foo"
 
     } else {

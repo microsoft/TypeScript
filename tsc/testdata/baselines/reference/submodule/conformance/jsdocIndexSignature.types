@@ -15,7 +15,7 @@ var o3;
 
 /** @param {Object.<string, boolean>} o */
 function f(o) {
->f : (o: any) => void
+>f : (o: Object<string, boolean>) => void
 >o : any
 
     o.foo = 1; // error

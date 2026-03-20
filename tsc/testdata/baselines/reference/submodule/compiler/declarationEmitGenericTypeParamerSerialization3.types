@@ -2,7 +2,7 @@
 
 === declarationEmitGenericTypeParamerSerialization3.ts ===
 function mixin<T extends { new (...args: any[]): {} }>(superclass: T) {
->mixin : <T extends new (...args: any[]) => {}>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
+>mixin : <T extends { new (...args: any[]): {}; }>(superclass: T) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T
 >args : any[]
 >superclass : T
 
@@ -26,7 +26,7 @@ export function wrapper<T>(value: T) {
 >class MyClass extends mixin(BaseClass) {    accessor name = value;  } : typeof MyClass
 >MyClass : typeof MyClass
 >mixin(BaseClass) : mixin.(Anonymous class) & BaseClass
->mixin : <T_1 extends new (...args: any[]) => {}>(superclass: T_1) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T_1
+>mixin : <T_1 extends { new (...args: any[]): {}; }>(superclass: T_1) => { new (...args: any[]): (Anonymous class); prototype: mixin.(Anonymous class); } & T_1
 >BaseClass : typeof BaseClass
 
     accessor name = value;

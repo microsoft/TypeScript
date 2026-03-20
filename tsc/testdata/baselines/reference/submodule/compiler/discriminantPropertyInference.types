@@ -31,13 +31,13 @@ type Props = DiscriminatorTrue | DiscriminatorFalse;
 >Props : Props
 
 declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
->f : (options: DiscriminatorFalse | DiscriminatorTrue) => any
+>f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
 >options : DiscriminatorFalse | DiscriminatorTrue
 
 // simple inference
 f({
 >f({    disc: true,    cb: s => parseInt(s)}) : any
->f : (options: DiscriminatorFalse | DiscriminatorTrue) => any
+>f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
 >{    disc: true,    cb: s => parseInt(s)} : { disc: true; cb: (s: string) => number; }
 
     disc: true,
@@ -49,7 +49,7 @@ f({
 >s => parseInt(s) : (s: string) => number
 >s : string
 >parseInt(s) : number
->parseInt : (string: string, radix?: number | undefined) => number
+>parseInt : (string: string, radix?: number) => number
 >s : string
 
 });
@@ -57,7 +57,7 @@ f({
 // simple inference
 f({
 >f({    disc: false,    cb: n => n.toFixed()}) : any
->f : (options: DiscriminatorFalse | DiscriminatorTrue) => any
+>f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
 >{    disc: false,    cb: n => n.toFixed()} : { disc: false; cb: (n: number) => string; }
 
     disc: false,
@@ -69,16 +69,16 @@ f({
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 
 // simple inference when strict-null-checks are enabled
 f({
 >f({    disc: undefined,    cb: n => n.toFixed()}) : any
->f : (options: DiscriminatorFalse | DiscriminatorTrue) => any
+>f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
 >{    disc: undefined,    cb: n => n.toFixed()} : { disc: undefined; cb: (n: number) => string; }
 
     disc: undefined,
@@ -90,16 +90,16 @@ f({
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 
 // requires checking type information since discriminator is missing from object
 f({
 >f({    cb: n => n.toFixed()}) : any
->f : (options: DiscriminatorFalse | DiscriminatorTrue) => any
+>f : (options: DiscriminatorTrue | DiscriminatorFalse) => any
 >{    cb: n => n.toFixed()} : { cb: (n: number) => string; }
 
     cb: n => n.toFixed()
@@ -107,9 +107,9 @@ f({
 >n => n.toFixed() : (n: number) => string
 >n : number
 >n.toFixed() : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
 });
 

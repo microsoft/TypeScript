@@ -1,20 +1,11 @@
 --- old.noImplicitReturnsExclusions.types
 +++ new.noImplicitReturnsExclusions.types
-@@= skipped -40, +40 lines =@@
- }
-
- function f5(b: boolean): string | void {
-->f5 : (b: boolean) => string | void
-+>f5 : (b: boolean) => void | string
- >b : boolean
-
-     if (b) return undefined;
-@@= skipped -106, +106 lines =@@
+@@= skipped -146, +146 lines =@@
 
  interface Thenable<T> {
    then<TResult>(
 ->then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => void): Thenable<TResult_1>; }
-+>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
++>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
 
      onfulfilled?: (value: T) => TResult | Thenable<TResult>,
  >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
@@ -23,7 +14,7 @@
    ): Thenable<TResult>;
    then<TResult>(
 ->then : { <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => TResult_1 | Thenable<TResult_1>): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
-+>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
++>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
 
      onfulfilled?: (value: T) => TResult | Thenable<TResult>,
  >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined

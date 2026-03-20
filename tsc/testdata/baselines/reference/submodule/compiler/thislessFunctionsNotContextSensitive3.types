@@ -37,8 +37,8 @@ interface ExtendableConfig<
 >name : string
 
   addOptions?: (this: {
->addOptions : ((this: { name: string; parent: Partial<{ [P in keyof Config]: Required<Config>[P] extends (...args: any) => any ? (...args: Parameters<Required<Config>[P]>) => ReturnType<Required<Config>[P]> : Config[P]; }>["addOptions"]; }) => Options) | undefined
->this : { name: string; parent: Partial<{ [P in keyof Config]: Required<Config>[P] extends (...args: any) => any ? (...args: Parameters<Required<Config>[P]>) => ReturnType<Required<Config>[P]> : Config[P]; }>["addOptions"]; }
+>addOptions : ((this: { name: string; parent: ParentConfig<Config>["addOptions"]; }) => Options) | undefined
+>this : { name: string; parent: ParentConfig<Config>["addOptions"]; }
 
     name: string;
 >name : string
@@ -74,7 +74,7 @@ declare class Extension<Options = any> {
 >config : Partial<ExtensionConfig<O>>
 
   configure(options?: Partial<Options>): Extension<Options>;
->configure : (options?: Partial<Options> | undefined) => Extension<Options>
+>configure : (options?: Partial<Options>) => Extension<Options>
 >options : Partial<Options> | undefined
 }
 
@@ -128,7 +128,7 @@ Extension.create({
       Suggestion({
 >Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }) : Plugin
 >Suggestion : (options: SuggestionOptions) => Plugin
->{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string | undefined; }
+>{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string; }
 
         editor: this.editor, // error
 >editor : Editor
@@ -187,7 +187,7 @@ Extension.create({
       Suggestion({
 >Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }) : Plugin
 >Suggestion : (options: SuggestionOptions) => Plugin
->{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string | undefined; }
+>{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string; }
 
         editor: this.editor, // error
 >editor : Editor

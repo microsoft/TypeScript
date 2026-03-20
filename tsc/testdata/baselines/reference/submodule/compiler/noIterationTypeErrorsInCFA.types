@@ -6,7 +6,7 @@ interface F {
 >d : () => void
 }
 export function doRemove(dds: F | F[]) {
->doRemove : (dds: F[] | F) => F[]
+>doRemove : (dds: F | F[]) => F[]
 >dds : F[] | F
 
     if (!Array.isArray(dds)) {

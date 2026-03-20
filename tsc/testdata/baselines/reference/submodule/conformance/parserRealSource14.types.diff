@@ -1,11 +1,30 @@
 --- old.parserRealSource14.types
 +++ new.parserRealSource14.types
-@@= skipped -3813, +3813 lines =@@
-     /// Return the stack of AST nodes containing "position"
-     ///
-     export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
-->getAstPathToPosition : (script: TypeScript.AST, pos: number, options?: GetAstPathOptions) => TypeScript.AstPath
-+>getAstPathToPosition : (script: TypeScript.AST, pos: number, options?: GetAstPathOptions) => AstPath
- >script : TypeScript.AST
- >TypeScript : any
- >pos : number
+@@= skipped -171, +171 lines =@@
+
+                 this.asts.pop();
+ >this.asts.pop() : TypeScript.AST
+->this.asts.pop : () => TypeScript.AST
++>this.asts.pop : () => TypeScript.AST | undefined
+ >this.asts : TypeScript.AST[]
+ >this : this
+ >asts : TypeScript.AST[]
+->pop : () => TypeScript.AST
++>pop : () => TypeScript.AST | undefined
+             }
+             return head;
+ >head : TypeScript.AST
+@@= skipped -29, +29 lines =@@
+
+                 this.asts.pop();
+ >this.asts.pop() : TypeScript.AST
+->this.asts.pop : () => TypeScript.AST
++>this.asts.pop : () => TypeScript.AST | undefined
+ >this.asts : TypeScript.AST[]
+ >this : this
+ >asts : TypeScript.AST[]
+->pop : () => TypeScript.AST
++>pop : () => TypeScript.AST | undefined
+             }
+             this.top = this.asts.length;
+ >this.top = this.asts.length : number

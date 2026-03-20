@@ -1,0 +1,16 @@
+--- old.ambientErrors.types
++++ new.ambientErrors.types
+@@= skipped -7, +7 lines =@@
+
+ // Ambient functions with invalid overloads
+ declare function fn(x: number): string;
+->fn : { (x: number): string; (x: "foo"): number; }
++>fn : { (x: number): string; (x: 'foo'): number; }
+ >x : number
+
+ declare function fn(x: 'foo'): number;
+->fn : { (x: number): string; (x: "foo"): number; }
++>fn : { (x: number): string; (x: 'foo'): number; }
+ >x : "foo"
+
+ // Ambient functions with duplicate signatures

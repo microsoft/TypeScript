@@ -158,7 +158,7 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo");
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
 >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
->(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number | undefined) => string
+>(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number) => string
 >foo : string
 >bar : number | undefined
 >"Async result" : "Async result"
@@ -169,7 +169,7 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo", undefined);
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
 >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
->(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number | undefined) => string
+>(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number) => string
 >foo : string
 >bar : number | undefined
 >"Async result" : "Async result"
@@ -181,7 +181,7 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo", 42);
 >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
 >Promise : PromiseConstructor
 >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
->(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number | undefined) => string
+>(foo: string, bar?: number) => "Async result" : (foo: string, bar?: number) => string
 >foo : string
 >bar : number | undefined
 >"Async result" : "Async result"

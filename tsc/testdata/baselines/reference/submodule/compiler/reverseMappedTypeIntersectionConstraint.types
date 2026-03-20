@@ -213,7 +213,7 @@ type XNumber = { x: number }
 >x : number
 
 declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+>foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 >props : { [K in keyof T & "x"]: T[K]; }
 
 function bar(props: {x: number, y: string}) {
@@ -224,13 +224,13 @@ function bar(props: {x: number, y: string}) {
 
   return foo(props); // no error because lack of excess property check by design
 >foo(props) : void
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+>foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 >props : { x: number; y: string; }
 }
 
 foo({x: 1, y: 'foo'});
 >foo({x: 1, y: 'foo'}) : void
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+>foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
 >x : 1
 >1 : 1
@@ -239,7 +239,7 @@ foo({x: 1, y: 'foo'});
 
 foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 >foo({...{x: 1, y: 'foo'}}) : void
->foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
+>foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 >{...{x: 1, y: 'foo'}} : { x: 1; y: string; }
 >{x: 1, y: 'foo'} : { x: 1; y: string; }
 >x : 1
@@ -356,7 +356,7 @@ type DistributeActors<TActor> = TActor extends { src: infer TSrc }
 
 interface MachineConfig<TActor extends ProvidedActor> {
   types?: {
->types : { actors?: TActor | undefined; } | undefined
+>types : { actors?: TActor; } | undefined
 
     actors?: TActor;
 >actors : TActor | undefined
@@ -401,18 +401,18 @@ const child = () => Promise.resolve("foo");
 >"foo" : "foo"
 
 const config = createXMachine({
->config : { types: { actors: { src: "str"; logic: () => Promise<string>; }; }; invoke: { readonly src: "str"; }; }
->createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: () => Promise<string>; }; }; invoke: { readonly src: "str"; }; }
+>config : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
+>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: () => Promise<string>; }; }; invoke: { src: "str"; }; extra: number; }
+>{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { src: "str"; }; extra: number; }
 
   types: {} as {
->types : { actors: { src: "str"; logic: () => Promise<string>; }; }
->{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: () => Promise<string>; }; }
+>types : { actors: { src: "str"; logic: typeof child; }; }
+>{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: typeof child; }; }
 >{} : {}
 
     actors: {
->actors : { src: "str"; logic: () => Promise<string>; }
+>actors : { src: "str"; logic: typeof child; }
 
       src: "str";
 >src : "str"

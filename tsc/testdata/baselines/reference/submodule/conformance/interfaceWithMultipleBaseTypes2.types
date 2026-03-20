@@ -3,7 +3,7 @@
 === interfaceWithMultipleBaseTypes2.ts ===
 interface Base {
     x: {
->x : { a?: string | undefined; b: string; }
+>x : { a?: string; b: string; }
 
         a?: string; b: string;
 >a : string | undefined
@@ -13,7 +13,7 @@ interface Base {
 
 interface Base2 {
     x: {
->x : { b: string; c?: number | undefined; }
+>x : { b: string; c?: number; }
 
         b: string; c?: number;
 >b : string

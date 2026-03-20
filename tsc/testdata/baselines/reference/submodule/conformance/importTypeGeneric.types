@@ -12,7 +12,7 @@ export interface Foo {
 }
 === usage.ts ===
 export function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo {
->getFooFrom : <T extends "./a" | "./b">(v: T) => any
+>getFooFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo
 >v : T
 
     return undefined as any;
@@ -21,7 +21,7 @@ export function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo {
 }
 
 export function getFooValueFrom<T extends "./a" | "./b">(v: T): import(T).Foo["a"] {
->getFooValueFrom : <T extends "./a" | "./b">(v: T) => any
+>getFooValueFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo["a"]
 >v : T
 
     return undefined as any;

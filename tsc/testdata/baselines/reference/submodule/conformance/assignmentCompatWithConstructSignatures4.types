@@ -60,7 +60,7 @@ namespace Errors {
 >bar : string
 
         declare var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
->a12 : new (x: Base[], y: Derived2[]) => Derived[]
+>a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >x : Base[]
 >y : Derived2[]
 
@@ -81,10 +81,10 @@ namespace Errors {
 >b : number
 
         declare var a16: {
->a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 
                 new (x: {
->x : { new (a: number): number; new (a?: number | undefined): number; }
+>x : { new (a: number): number; new (a?: number): number; }
 
                     new (a: number): number;
 >a : number
@@ -94,7 +94,7 @@ namespace Errors {
 
                 }): number[];
                 new (x: {
->x : { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }
+>x : { new (a: boolean): boolean; new (a?: boolean): boolean; }
 
                     new (a: boolean): boolean;
 >a : boolean
@@ -209,19 +209,19 @@ namespace Errors {
 >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
         declare var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
->b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
+>b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
 >x : Base[]
 >y : Base[]
 
         a12 = b12; // ok
->a12 = b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->a12 : new (x: Base[], y: Derived2[]) => Derived[]
->b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
+>a12 = b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
+>a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
 
         b12 = a12; // ok
->b12 = a12 : new (x: Base[], y: Derived2[]) => Derived[]
->b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->a12 : new (x: Base[], y: Derived2[]) => Derived[]
+>b12 = a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+>b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
+>a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 
         declare var b15: new <T>(x: { a: T; b: T }) => T; 
 >b15 : new <T>(x: { a: T; b: T; }) => T
@@ -262,13 +262,13 @@ namespace Errors {
 
         a16 = b16; // error
 >a16 = b16 : new <T>(x: (a: T) => T) => T[]
->a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 >b16 : new <T>(x: (a: T) => T) => T[]
 
         b16 = a16; // error
->b16 = a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
+>b16 = a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 >b16 : new <T>(x: (a: T) => T) => T[]
->a16 : { new (x: { new (a: number): number; new (a?: number | undefined): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean | undefined): boolean; }): boolean[]; }
+>a16 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 
         declare var b17: new <T>(x: (a: T) => T) => any[];
 >b17 : new <T>(x: (a: T) => T) => any[]

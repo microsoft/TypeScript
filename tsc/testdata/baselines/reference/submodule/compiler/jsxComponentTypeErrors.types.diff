@@ -5,7 +5,7 @@
 
  function FunctionComponent<T extends string>({type}: {type?: T}) {
 ->FunctionComponent : typeof FunctionComponent
-+>FunctionComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; }
++>FunctionComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; }
  >type : T | undefined
  >type : T | undefined
 
@@ -14,14 +14,14 @@
  >FunctionComponent.useThis = function() {  return <this type="foo" />;} : () => JSX.Element
  >FunctionComponent.useThis : () => JSX.Element
 ->FunctionComponent : typeof FunctionComponent
-+>FunctionComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; }
++>FunctionComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; }
  >useThis : () => JSX.Element
  >function() {  return <this type="foo" />;} : () => JSX.Element
 
    return <this type="foo" />;
  ><this type="foo" /> : JSX.Element
 ->this : typeof FunctionComponent
-+>this : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; }
++>this : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; }
  >type : "foo"
  }
 
@@ -31,28 +31,28 @@
  const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 ->MixedComponent : typeof FunctionComponent | typeof ClassComponent
 ->Math.random() ? FunctionComponent : ClassComponent : typeof FunctionComponent | typeof ClassComponent
-+>MixedComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; } | typeof ClassComponent
-+>Math.random() ? FunctionComponent : ClassComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; } | typeof ClassComponent
++>MixedComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; } | typeof ClassComponent
++>Math.random() ? FunctionComponent : ClassComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; } | typeof ClassComponent
  >Math.random() : number
  >Math.random : () => number
  >Math : Math
  >random : () => number
 ->FunctionComponent : typeof FunctionComponent
-+>FunctionComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; }
++>FunctionComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; }
  >ClassComponent : typeof ClassComponent
 
  const elem1 = <FunctionComponent type="abc" />;
  >elem1 : JSX.Element
  ><FunctionComponent type="abc" /> : JSX.Element
 ->FunctionComponent : typeof FunctionComponent
-+>FunctionComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; }
++>FunctionComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; }
  >type : "abc"
 
  const elem2 = <FunctionComponent<"abc"> />;
  >elem2 : JSX.Element
  ><FunctionComponent<"abc"> /> : JSX.Element
 ->FunctionComponent : typeof FunctionComponent
-+>FunctionComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; }
++>FunctionComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; }
 
  const elem3 = <ClassComponent />;
  >elem3 : JSX.Element
@@ -61,7 +61,7 @@
  >elem4 : JSX.Element
  ><MixedComponent /> : JSX.Element
 ->MixedComponent : typeof FunctionComponent | typeof ClassComponent
-+>MixedComponent : { <T extends string>({ type }: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => JSX.Element; } | typeof ClassComponent
++>MixedComponent : { <T extends string>({ type }: { type?: T; }): { type: T | undefined; }; useThis: () => JSX.Element; } | typeof ClassComponent
 
  const obj = {
  >obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }

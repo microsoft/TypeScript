@@ -22,7 +22,7 @@ typeArgumentInferenceWithConstraints.ts(71,5): error TS2322: Type 'null' is not 
   'null' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'unknown'.
 typeArgumentInferenceWithConstraints.ts(73,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 typeArgumentInferenceWithConstraints.ts(74,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
-typeArgumentInferenceWithConstraints.ts(75,75): error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number | undefined; b?: string | undefined; }'.
+typeArgumentInferenceWithConstraints.ts(75,75): error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number; b?: string; }'.
 typeArgumentInferenceWithConstraints.ts(88,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window & typeof globalThis; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined', but here has type '{}'.
 typeArgumentInferenceWithConstraints.ts(89,30): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'A92'.
 typeArgumentInferenceWithConstraints.ts(103,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'never[] | null | undefined', but here has type 'any[]'.
@@ -148,7 +148,7 @@ typeArgumentInferenceWithConstraints.ts(103,5): error TS2403: Subsequent variabl
 !!! related TS6203 typeArgumentInferenceWithConstraints.ts:73:5: 'a9a' was also declared here.
     var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
                                                                               ~~~~
-!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number | undefined; b?: string | undefined; }'.
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number; b?: string; }'.
     var a9b: { a?: number; b?: string; };
     
     // Generic call with multiple parameters of generic type passed arguments with multiple best common types

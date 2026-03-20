@@ -27,11 +27,6 @@
  >value : string
 
  declare function doThis2(value: string & Tag2): void;
-->doThis2 : (value: string & Tag2) => void
-+>doThis2 : (value: never) => void
- >value : never
-
- declare function doThat2(value: string) : void;
 @@= skipped -13, +13 lines =@@
 
  if (isNonBlank2(value)) {
@@ -41,9 +36,3 @@
  >value : string
 
      doThis2(value);
- >doThis2(value) : void
-->doThis2 : (value: string & Tag2) => void
-+>doThis2 : (value: never) => void
- >value : never
-
- } else {

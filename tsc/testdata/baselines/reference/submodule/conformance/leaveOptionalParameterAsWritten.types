@@ -32,7 +32,7 @@ type Foo = teams.calling.Foo;
 >calling : any
 
 export const bar = (p?: Foo) => {}
->bar : (p?: import("./a").Foo | undefined) => void
->(p?: Foo) => {} : (p?: import("./a").Foo | undefined) => void
+>bar : (p?: Foo) => void
+>(p?: Foo) => {} : (p?: Foo) => void
 >p : import("./a").Foo | undefined
 

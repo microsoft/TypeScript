@@ -1,0 +1,21 @@
+--- old.tsxElementResolution11.errors.txt
++++ new.tsxElementResolution11.errors.txt
+@@= skipped -0, +0 lines =@@
+-file.tsx(17,7): error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number | undefined; }'.
+-  Property 'x' does not exist on type '{ q?: number | undefined; }'.
++file.tsx(17,7): error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number; }'.
++  Property 'x' does not exist on type '{ q?: number; }'.
+
+
+ ==== file.tsx (1 errors) ====
+@@= skipped -20, +20 lines =@@
+     declare var Obj2: Obj2type;
+     <Obj2 x={10} />; // Error
+           ~
+-!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number | undefined; }'.
+-!!! error TS2322:   Property 'x' does not exist on type '{ q?: number | undefined; }'.
++!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number; }'.
++!!! error TS2322:   Property 'x' does not exist on type '{ q?: number; }'.
+     
+     interface Obj3type {
+     	new(n: string): { x: number; };

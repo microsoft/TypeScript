@@ -61,11 +61,11 @@ interface Foo6 { [Cls1.a]: number; [Cls2.b]: number; [obj1.c]: number; [obj2.d]:
 >b : "b"
 >[obj1.c] : number
 >obj1.c : "c"
->obj1 : { c: "c"; }
+>obj1 : { c: 'c'; }
 >c : "c"
 >[obj2.d] : number
 >obj2.d : "d"
->obj2 : { readonly d: "d"; }
+>obj2 : { readonly d: 'd'; }
 >d : "d"
 
 declare class Cls1 { static a: "a"; }
@@ -79,13 +79,13 @@ class Cls2 { static b = "b" as const; }
 >"b" : "b"
 
 declare const obj1: { c: 'c' }
->obj1 : { c: "c"; }
+>obj1 : { c: 'c'; }
 >c : "c"
 
 const obj2 = { d: 'd' } as const
->obj2 : { readonly d: "d"; }
->{ d: 'd' } as const : { readonly d: "d"; }
->{ d: 'd' } : { readonly d: "d"; }
+>obj2 : { readonly d: 'd'; }
+>{ d: 'd' } as const : { readonly d: 'd'; }
+>{ d: 'd' } : { readonly d: 'd'; }
 >d : "d"
 >'d' : "d"
 

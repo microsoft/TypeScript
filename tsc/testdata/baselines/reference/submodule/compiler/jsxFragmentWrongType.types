@@ -17,11 +17,11 @@ const jsxWithJsxFragment = <>{test}</>;
 const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
 >jsxWithReactFragment : JSX.Element
 ><React.Fragment>{test}</React.Fragment> : JSX.Element
->React.Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+>React.Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
 >React : typeof React
->Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+>Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
 >test : () => string
->React.Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+>React.Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
 >React : typeof React
->Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+>Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
 

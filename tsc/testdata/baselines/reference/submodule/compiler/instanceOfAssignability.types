@@ -44,7 +44,7 @@ class Giraffe extends Mammal { neck; }
 >neck : any
 
 function fn1(x: Array<number>|Array<string>|boolean) {
->fn1 : (x: boolean | string[] | number[]) => void
+>fn1 : (x: Array<number> | Array<string> | boolean) => void
 >x : boolean | string[] | number[]
 
 	if(x instanceof Array) {
@@ -146,7 +146,7 @@ function fn6(x: Animal|Mammal) {
 }
 
 function fn7(x: Array<number>|Array<string>) {
->fn7 : (x: string[] | number[]) => void
+>fn7 : (x: Array<number> | Array<string>) => void
 >x : string[] | number[]
 
 	if(x instanceof Array) {

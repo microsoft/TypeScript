@@ -77,9 +77,9 @@ function getImplicitAriaRole(element: SomeRecord) {
 >parent : SomeRecord | undefined
 >!parents.includes(parent.a) : boolean
 >parents.includes(parent.a) : boolean
->parents.includes : (searchElement: string, fromIndex?: number | undefined) => boolean
+>parents.includes : (searchElement: string, fromIndex?: number) => boolean
 >parents : string[]
->includes : (searchElement: string, fromIndex?: number | undefined) => boolean
+>includes : (searchElement: string, fromIndex?: number) => boolean
 >parent.a : string
 >parent : SomeRecord
 >a : string

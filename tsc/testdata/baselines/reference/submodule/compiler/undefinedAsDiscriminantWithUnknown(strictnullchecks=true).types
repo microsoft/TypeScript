@@ -30,9 +30,9 @@ if (s.value !== undefined) {
 >undefined : undefined
 
   s;
->s : { type: "string"; value: string; } | { type: "number"; value: number; } | { type: "unknown"; value: unknown; }
+>s : { type: 'string'; value: string; } | { type: 'number'; value: number; } | { type: 'unknown'; value: unknown; }
 }
 else {
   s;
->s : { type: "unknown"; value: unknown; } | { value: undefined; }
+>s : { type: 'unknown'; value: unknown; } | { value: undefined; }
 }

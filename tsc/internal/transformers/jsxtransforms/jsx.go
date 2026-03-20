@@ -657,7 +657,7 @@ func (tx *JSXTransformer) createJsxFactoryExpressionFromEntityName(e *ast.Node, 
 	return tx.createReactNamespace(e.Text(), parent)
 }
 
-func (tx *JSXTransformer) createJsxPsuedoFactoryExpression(parent *ast.Node, e *ast.Node, target string) *ast.Node {
+func (tx *JSXTransformer) createJsxPseudoFactoryExpression(parent *ast.Node, e *ast.Node, target string) *ast.Node {
 	if e != nil {
 		return tx.createJsxFactoryExpressionFromEntityName(e, parent)
 	}
@@ -671,12 +671,12 @@ func (tx *JSXTransformer) createJsxPsuedoFactoryExpression(parent *ast.Node, e *
 
 func (tx *JSXTransformer) createJsxFactoryExpression(parent *ast.Node) *ast.Node {
 	e := tx.emitResolver.GetJsxFactoryEntity(tx.currentSourceFile.AsNode())
-	return tx.createJsxPsuedoFactoryExpression(parent, e, "createElement")
+	return tx.createJsxPseudoFactoryExpression(parent, e, "createElement")
 }
 
 func (tx *JSXTransformer) createJsxFragmentFactoryExpression(parent *ast.Node) *ast.Node {
 	e := tx.emitResolver.GetJsxFragmentFactoryEntity(tx.currentSourceFile.AsNode())
-	return tx.createJsxPsuedoFactoryExpression(parent, e, "Fragment")
+	return tx.createJsxPseudoFactoryExpression(parent, e, "Fragment")
 }
 
 func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.Node, children *ast.NodeList, location core.TextRange) *ast.Node {

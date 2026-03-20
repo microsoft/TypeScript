@@ -1,0 +1,13 @@
+--- old.newTarget.es5(target=es2015).types
++++ new.newTarget.es5(target=es2015).types
+@@= skipped -82, +82 lines =@@
+ }
+
+ const O = {
+->O : { k: () => any; }
+->{    k: function () { return new.target; }} : { k: () => any; }
++>O : { k: () => () => any; }
++>{    k: function () { return new.target; }} : { k: () => () => any; }
+
+     k: function () { return new.target; }
+ >k : () => any

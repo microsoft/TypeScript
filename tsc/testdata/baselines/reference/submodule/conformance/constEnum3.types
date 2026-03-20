@@ -15,7 +15,7 @@ function f1(f: TestType) { }
 >f : TestType
 
 function f2(f: TestTypeStr) { }
->f2 : (f: "bar" | "foo") => void
+>f2 : (f: TestTypeStr) => void
 >f : "bar" | "foo"
 
 f1(TestType.foo)
@@ -34,11 +34,11 @@ f1(TestType.bar)
 
 f2('foo')
 >f2('foo') : void
->f2 : (f: "bar" | "foo") => void
+>f2 : (f: TestTypeStr) => void
 >'foo' : "foo"
 
 f2('bar')
 >f2('bar') : void
->f2 : (f: "bar" | "foo") => void
+>f2 : (f: TestTypeStr) => void
 >'bar' : "bar"
 

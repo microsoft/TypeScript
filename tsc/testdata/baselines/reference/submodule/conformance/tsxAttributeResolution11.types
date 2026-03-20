@@ -24,7 +24,7 @@ class MyComponent {
   }
 
   props: {
->props : { ref?: string | undefined; }
+>props : { ref?: string; }
 
 	  ref?: string;
 >ref : string | undefined

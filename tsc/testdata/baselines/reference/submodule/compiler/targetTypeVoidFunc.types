@@ -2,7 +2,7 @@
 
 === targetTypeVoidFunc.ts ===
 function f1(): { new (): number; } {
->f1 : () => new () => number
+>f1 : () => { new (): number; }
 
     return function () { return; }
 >function () { return; } : () => void
@@ -12,7 +12,7 @@ function f1(): { new (): number; } {
 var x = f1();
 >x : new () => number
 >f1() : new () => number
->f1 : () => new () => number
+>f1 : () => { new (): number; }
 
 var y = new x();
 >y : number
@@ -24,5 +24,5 @@ var z = new (f1())();
 >new (f1())() : number
 >(f1()) : new () => number
 >f1() : new () => number
->f1 : () => new () => number
+>f1 : () => { new (): number; }
 

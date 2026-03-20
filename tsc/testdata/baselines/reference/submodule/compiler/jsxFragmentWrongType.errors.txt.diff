@@ -1,0 +1,17 @@
+--- old.jsxFragmentWrongType.errors.txt
++++ new.jsxFragmentWrongType.errors.txt
+@@= skipped -0, +0 lines =@@
+-a.tsx(6,28): error TS2322: Type '{ children: () => string; }' is not assignable to type '{ children?: ReactNode; }'.
++a.tsx(6,28): error TS2322: Type '{ children: () => string; }' is not assignable to type '{ children?: ReactNode | undefined; }'.
+   Types of property 'children' are incompatible.
+     Type '() => string' is not assignable to type 'ReactNode'.
+ a.tsx(7,47): error TS2322: Type '() => string' is not assignable to type 'ReactNode'.
+@@= skipped -11, +11 lines =@@
+     
+     const jsxWithJsxFragment = <>{test}</>;
+                                ~~
+-!!! error TS2322: Type '{ children: () => string; }' is not assignable to type '{ children?: ReactNode; }'.
++!!! error TS2322: Type '{ children: () => string; }' is not assignable to type '{ children?: ReactNode | undefined; }'.
+ !!! error TS2322:   Types of property 'children' are incompatible.
+ !!! error TS2322:     Type '() => string' is not assignable to type 'ReactNode'.
+     const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;

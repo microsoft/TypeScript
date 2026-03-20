@@ -187,7 +187,7 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 // Repro from #49316
 
 function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
->configureStore : <S extends object>(reducer: Record<keyof S, () => void> | (() => void)) => void
+>configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
 >reducer : Record<keyof S, () => void> | (() => void)
 
     let rootReducer: () => void;

@@ -5,20 +5,25 @@
   */
  function foo1(opts1) {
 ->foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
-+>foo1 : (opts1: { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }) => void
- >opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
+->opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
++>foo1 : (opts1: { x: string; y?: string | undefined; z?: string; w?: string; }) => void
++>opts1 : { x: string; y?: string | undefined; z?: string; w?: string; }
 
      opts1.x;
-@@= skipped -11, +11 lines =@@
+ >opts1.x : string
+->opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
++>opts1 : { x: string; y?: string | undefined; z?: string; w?: string; }
+ >x : string
+ }
 
  foo1({x: 'abc'});
  >foo1({x: 'abc'}) : void
 ->foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
-+>foo1 : (opts1: { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }) => void
++>foo1 : (opts1: { x: string; y?: string | undefined; z?: string; w?: string; }) => void
  >{x: 'abc'} : { x: string; }
  >x : string
  >'abc' : "abc"
-@@= skipped -11, +11 lines =@@
+@@= skipped -22, +22 lines =@@
   * @param {string=} opts2[].anotherY
   */
  function foo2(/** @param opts2 bad idea theatre! */opts2) {
@@ -59,20 +64,28 @@
   */
  function foo4(opts4) {
 ->foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
-+>foo4 : (opts4: { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]) => void
- >opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
+->opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
++>foo4 : (opts4: { x: string; y?: string | undefined; z?: string; w?: string; }[]) => void
++>opts4 : { x: string; y?: string | undefined; z?: string; w?: string; }[]
 
      opts4[0].x;
-@@= skipped -13, +13 lines =@@
+ >opts4[0].x : string
+->opts4[0] : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
+->opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
++>opts4[0] : { x: string; y?: string | undefined; z?: string; w?: string; }
++>opts4 : { x: string; y?: string | undefined; z?: string; w?: string; }[]
+ >0 : 0
+ >x : string
+ }
 
  foo4([{ x: 'hi' }]);
  >foo4([{ x: 'hi' }]) : void
 ->foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
-+>foo4 : (opts4: { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]) => void
++>foo4 : (opts4: { x: string; y?: string | undefined; z?: string; w?: string; }[]) => void
  >[{ x: 'hi' }] : { x: string; }[]
  >{ x: 'hi' } : { x: string; }
  >x : string
-@@= skipped -17, +17 lines =@@
+@@= skipped -30, +30 lines =@@
   * @param {number} opts5[].unnest - Here we are almost all the way back at the beginning.
   */
  function foo5(opts5) {

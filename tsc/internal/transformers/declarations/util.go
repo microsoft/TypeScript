@@ -48,32 +48,6 @@ func canProduceDiagnostics(node *ast.Node) bool {
 	/* ast.IsJSDocTypeAlias(node); */
 }
 
-func hasInferredType(node *ast.Node) bool {
-	// Debug.type<HasInferredType>(node); // !!!
-	switch node.Kind {
-	case ast.KindParameter,
-		ast.KindPropertySignature,
-		ast.KindPropertyDeclaration,
-		ast.KindBindingElement,
-		ast.KindPropertyAccessExpression,
-		ast.KindElementAccessExpression,
-		ast.KindBinaryExpression,
-		ast.KindCallExpression,
-		ast.KindVariableDeclaration,
-		ast.KindExportAssignment,
-		ast.KindJSExportAssignment,
-		ast.KindPropertyAssignment,
-		ast.KindShorthandPropertyAssignment,
-		ast.KindJSDocParameterTag,
-		ast.KindJSDocPropertyTag,
-		ast.KindCommonJSExport:
-		return true
-	default:
-		// assertType<never>(node); // !!!
-		return false
-	}
-}
-
 func isDeclarationAndNotVisible(emitContext *printer.EmitContext, resolver printer.EmitResolver, node *ast.Node) bool {
 	node = emitContext.ParseNode(node)
 	switch node.Kind {
@@ -160,31 +134,6 @@ func unwrapParenthesizedExpression(o *ast.Node) *ast.Node {
 		o = o.Expression()
 	}
 	return o
-}
-
-func isPrimitiveLiteralValue(node *ast.Node, includeBigInt bool) bool {
-	// !!! Debug.type<PrimitiveLiteral>(node);
-	switch node.Kind {
-	case ast.KindTrueKeyword,
-		ast.KindFalseKeyword,
-		ast.KindNumericLiteral,
-		ast.KindStringLiteral,
-		ast.KindNoSubstitutionTemplateLiteral:
-		return true
-	case ast.KindBigIntLiteral:
-		return includeBigInt
-	case ast.KindPrefixUnaryExpression:
-		if node.AsPrefixUnaryExpression().Operator == ast.KindMinusToken {
-			return ast.IsNumericLiteral(node.AsPrefixUnaryExpression().Operand) || (includeBigInt && ast.IsBigIntLiteral(node.AsPrefixUnaryExpression().Operand))
-		}
-		if node.AsPrefixUnaryExpression().Operator == ast.KindPlusToken {
-			return ast.IsNumericLiteral(node.AsPrefixUnaryExpression().Operand)
-		}
-		return false
-	default:
-		// !!! assertType<never>(node);
-		return false
-	}
 }
 
 func isPrivateMethodTypeParameter(host DeclarationEmitHost, node *ast.TypeParameterDeclaration) bool {

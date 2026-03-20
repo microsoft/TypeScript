@@ -63,7 +63,7 @@ function infiniteLoop2(): never {
 }
 
 function move1(direction: "up" | "down") {
->move1 : (direction: "down" | "up") => -1 | 1
+>move1 : (direction: "up" | "down") => -1 | 1
 >direction : "down" | "up"
 
     switch (direction) {
@@ -89,7 +89,7 @@ function move1(direction: "up" | "down") {
 }
 
 function move2(direction: "up" | "down") {
->move2 : (direction: "down" | "up") => -1 | 1
+>move2 : (direction: "up" | "down") => -1 | 1
 >direction : "down" | "up"
 
     return direction === "up" ? 1 :

@@ -42,7 +42,7 @@ class Bar<T extends string> {
 >[] : never[]
 
   cast(_name: ([T] extends [string] ? string : string)) { }
->cast : (_name: [T] extends [string] ? string : string) => void
+>cast : (_name: ([T] extends [string] ? string : string)) => void
 >_name : [T] extends [string] ? string : string
   
   pushThis() {

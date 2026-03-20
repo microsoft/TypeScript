@@ -5,7 +5,7 @@
 
  export declare const goodDeclaration: <T>() => () => { 
 ->goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? Other : "N"; shouldLookupName: typeof import("./other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof reuseDepName; }
-+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends unique symbol ? Other : "N"; shouldLookupName: unique symbol; shouldReuseLocalName: unique symbol; reuseDepName: unique symbol; }
++>goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? Other : "N"; shouldLookupName: typeof import('./other').shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof reuseDepName; }
 
    /** Other Can't be named in index.ts, but the whole conditional type can be resolved  */
    shouldPrintResult: T extends Other? "O": "N",
@@ -14,7 +14,7 @@
  === src/index.ts ===
  import { goodDeclaration, shouldReuseLocalName, shouldBeElided } from "some-dep";
 ->goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("../node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? import("../node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("some-dep").reuseDepName; }
-+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("../node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends unique symbol ? import("../node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: unique symbol; shouldReuseLocalName: unique symbol; reuseDepName: unique symbol; }
++>goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("../node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? import("../node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: unique symbol; }
  >shouldReuseLocalName : unique symbol
  >shouldBeElided : unique symbol
 
@@ -22,7 +22,7 @@
 ->bar : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("some-dep").reuseDepName; }
 ->goodDeclaration<{}> : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("some-dep").reuseDepName; }
 ->goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("../node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? import("../node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("some-dep").reuseDepName; }
-+>bar : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: unique symbol; shouldReuseLocalName: unique symbol; reuseDepName: unique symbol; }
-+>goodDeclaration<{}> : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: unique symbol; shouldReuseLocalName: unique symbol; reuseDepName: unique symbol; }
-+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("../node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends unique symbol ? import("../node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: unique symbol; shouldReuseLocalName: unique symbol; reuseDepName: unique symbol; }
++>bar : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: unique symbol; }
++>goodDeclaration<{}> : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: unique symbol; }
++>goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("../node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? import("../node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: typeof import("some-dep").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: unique symbol; }
 

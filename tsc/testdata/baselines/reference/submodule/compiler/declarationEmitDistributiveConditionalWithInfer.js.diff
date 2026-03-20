@@ -1,8 +1,0 @@
---- old.declarationEmitDistributiveConditionalWithInfer.js
-+++ new.declarationEmitDistributiveConditionalWithInfer.js
-@@= skipped -16, +16 lines =@@
-
-
- //// [declarationEmitDistributiveConditionalWithInfer.d.ts]
--export declare const fun: (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void;
-+export declare const fun: (subFun: <Collection, Field extends keyof Collection>() => (Collection[Field] extends infer T ? T extends Collection[Field] ? T extends readonly (infer InnerArr)[] ? InnerArr : T : never : never)[]) => void;

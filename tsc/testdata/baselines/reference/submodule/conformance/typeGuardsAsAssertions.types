@@ -102,9 +102,9 @@ function foo1() {
 >x : string | number
 >"string" : "string"
 >x.slice() : string
->x.slice : (start?: number | undefined, end?: number | undefined) => string
+>x.slice : (start?: number, end?: number) => string
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 >"abc" : "abc"
 
         x;  // string
@@ -140,9 +140,9 @@ function foo2() {
 >x = x.slice() : string
 >x : string | number | boolean
 >x.slice() : string
->x.slice : (start?: number | undefined, end?: number | undefined) => string
+>x.slice : (start?: number, end?: number) => string
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
         }
         else {
             x = "abc";
@@ -279,10 +279,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 
     x = "";
 >x = "" : ""
@@ -291,10 +291,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 
     x = undefined;
 >x = undefined : undefined
@@ -303,10 +303,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 
     x = null;
 >x = null : null
@@ -314,10 +314,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 
     x = <undefined | null>undefined;
 >x = <undefined | null>undefined : null | undefined
@@ -327,10 +327,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string | null | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 
     x = <string | undefined>"";
 >x = <string | undefined>"" : string | undefined
@@ -340,10 +340,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string | undefined
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 
     x = <string | null>"";
 >x = <string | null>"" : string | null
@@ -353,10 +353,10 @@ function f6() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string | null
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 }
 
 function f7() {
@@ -367,9 +367,9 @@ function f7() {
 
     x!.slice();
 >x!.slice() : string
->x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x!.slice : (start?: number, end?: number) => string
 >x! : string
 >x : string
->slice : (start?: number | undefined, end?: number | undefined) => string
+>slice : (start?: number, end?: number) => string
 }
 

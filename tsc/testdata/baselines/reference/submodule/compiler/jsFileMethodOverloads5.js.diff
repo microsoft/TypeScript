@@ -16,4 +16,4 @@
 + * @param {string | number} a
 + * @param {number} [b]
 + */
-+export declare const foo: (a: string | number, b?: number | undefined) => void;
++export declare const foo: (a: string | number, b?: number) => void;

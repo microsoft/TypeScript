@@ -28,7 +28,7 @@ export const out = t.pipe(s => parseInt(s))
 >s => parseInt(s) : (s: string) => number
 >s : string
 >parseInt(s) : number
->parseInt : (string: string, radix?: number | undefined) => number
+>parseInt : (string: string, radix?: number) => number
 >s : string
 
 export type inferPipe2<t, pipe> =
@@ -65,6 +65,6 @@ export const out2 = t2.pipe(s => parseInt(s))
 >s => parseInt(s) : (s: string) => number
 >s : string
 >parseInt(s) : number
->parseInt : (string: string, radix?: number | undefined) => number
+>parseInt : (string: string, radix?: number) => number
 >s : string
 

@@ -5,13 +5,13 @@
  * @param {<T>(m: Boolean<T>) => string} somebody
  */
 function sayHello(somebody) {
->sayHello : (somebody: <T>(m: any) => string) => string
->somebody : <T>(m: any) => string
+>sayHello : (somebody: <T>(m: Boolean<T>) => string) => string
+>somebody : <T>(m: Boolean<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : <T>(m: any) => string
+>somebody : <T>(m: Boolean<T>) => string
 }
 
 === index2.js ===
@@ -49,13 +49,13 @@ function sayHello3(somebody) {
  * @param {<T>(m: Function<T>) => string} somebody
  */
 function sayHello4(somebody) {
->sayHello4 : (somebody: <T>(m: any) => string) => string
->somebody : <T>(m: any) => string
+>sayHello4 : (somebody: <T>(m: Function<T>) => string) => string
+>somebody : <T>(m: Function<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : <T>(m: any) => string
+>somebody : <T>(m: Function<T>) => string
 }
 
 
@@ -64,13 +64,13 @@ function sayHello4(somebody) {
  * @param {<T>(m: String<T>) => string} somebody
  */
 function sayHello5(somebody) {
->sayHello5 : (somebody: <T>(m: any) => string) => string
->somebody : <T>(m: any) => string
+>sayHello5 : (somebody: <T>(m: String<T>) => string) => string
+>somebody : <T>(m: String<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : <T>(m: any) => string
+>somebody : <T>(m: String<T>) => string
 }
 
 
@@ -79,13 +79,13 @@ function sayHello5(somebody) {
  * @param {<T>(m: Number<T>) => string} somebody
  */
 function sayHello6(somebody) {
->sayHello6 : (somebody: <T>(m: any) => string) => string
->somebody : <T>(m: any) => string
+>sayHello6 : (somebody: <T>(m: Number<T>) => string) => string
+>somebody : <T>(m: Number<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : <T>(m: any) => string
+>somebody : <T>(m: Number<T>) => string
 }
 
 
@@ -94,13 +94,13 @@ function sayHello6(somebody) {
  * @param {<T>(m: Object<T>) => string} somebody
  */
 function sayHello7(somebody) {
->sayHello7 : (somebody: <T>(m: any) => string) => string
->somebody : <T>(m: any) => string
+>sayHello7 : (somebody: <T>(m: Object<T>) => string) => string
+>somebody : <T>(m: Object<T>) => string
 
     return 'Hello ' + somebody;
 >'Hello ' + somebody : string
 >'Hello ' : "Hello "
->somebody : <T>(m: any) => string
+>somebody : <T>(m: Object<T>) => string
 }
 
 === index8.js ===

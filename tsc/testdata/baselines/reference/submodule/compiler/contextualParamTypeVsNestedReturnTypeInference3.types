@@ -17,7 +17,7 @@ interface Effect<out A, out E = never, out R = never> {
 }
 
 declare function effectGen<Eff extends Effect<any, any, any>, AEff>(
->effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+>effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
 
   f: () => Generator<Eff, AEff, never>,
 >f : () => Generator<Eff, AEff, never>
@@ -29,7 +29,7 @@ declare function effectGen<Eff extends Effect<any, any, any>, AEff>(
 >;
 
 declare function effectFn<
->effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+>effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
 
   Eff extends Effect<any, any, any>,
   AEff,
@@ -97,7 +97,7 @@ declare function Tag<const Id extends string>(
 
 class Foo extends Tag("Foo")<
 >Foo : Foo
->Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void, never, never>; }>
+>Tag("Foo")<  Foo,  {    fn: (a: string) => Effect<void>;  }>() : TagClassShape<"Foo", { fn: (a: string) => Effect<void>; }>
 >Tag("Foo") : <Self, Shape>() => TagClass<Self, "Foo", Shape>
 >Tag : <const Id extends string>(id: Id) => <Self, Shape>() => TagClass<Self, Id, Shape>
 >"Foo" : "Foo"
@@ -105,7 +105,7 @@ class Foo extends Tag("Foo")<
   Foo,
   {
     fn: (a: string) => Effect<void>;
->fn : (a: string) => Effect<void, never, never>
+>fn : (a: string) => Effect<void>
 >a : string
   }
 >() {}
@@ -119,7 +119,7 @@ layerEffect(
 
   effectGen(function* () {
 >effectGen(function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  }) : Effect<{ fn: (a: string) => Effect<void, unknown, unknown>; }, unknown, unknown>
->effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+>effectGen : <Eff extends Effect<any, any, any>, AEff>(f: () => Generator<Eff, AEff, never>) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
 >function* () {    return {      fn: effectFn(function* (a) {        a; // string      }),    };  } : () => Generator<never, { fn: (a: string) => Effect<void, unknown, unknown>; }, never>
 
     return {
@@ -128,7 +128,7 @@ layerEffect(
       fn: effectFn(function* (a) {
 >fn : (a: string) => Effect<void, unknown, unknown>
 >effectFn(function* (a) {        a; // string      }) : (a: string) => Effect<void, unknown, unknown>
->effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends any[]>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A_1, infer _E, infer R>] ? R : never>
+>effectFn : <Eff extends Effect<any, any, any>, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, never>) => (...args: Args) => Effect<AEff, [Eff] extends [Effect<infer _A, infer E, infer _R>] ? E : never, [Eff] extends [Effect<infer _A, infer _E, infer R>] ? R : never>
 >function* (a) {        a; // string      } : (a: string) => Generator<never, void, never>
 >a : string
 

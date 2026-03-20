@@ -69,7 +69,7 @@ export interface HttpResponse<D extends unknown, E extends unknown = unknown> ex
     error: E;
 }
 export declare class HttpClient<SecurityDataType = unknown> {
-    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>, any>;
+    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>>;
 }
 export {};
 //// [Api.d.ts]
@@ -5395,7 +5395,7 @@ export declare class Api<SecurityDataType = unknown> {
                                             };
                                             catch<TResult_7 = never>(onrejected?: ((reason: any) => TResult_7 | PromiseLike<TResult_7>) | null | undefined): Omit<Promise<TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1>, "catch" | "then"> & {
                                                 then<TResult1_2 = TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1, TResult2_2 = never>(onfulfilled?: ((value: TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1) => TResult1_2 | PromiseLike<TResult1_2>) | null | undefined, onrejected?: ((reason: any) => TResult2_2 | PromiseLike<TResult2_2>) | null | undefined): Omit<Promise<TResult1_2 | TResult2_2>, "catch" | "then"> & /*elided*/ any;
-                                                catch<TResult_8 = never>(onrejected?: ((reason: any) => TResult_8 | PromiseLike<TResult_8>) | null | undefined): Omit<Promise<TResult_5 | /*... 5 more elided ...*/ any | TResult2_1>, "catch" | "then"> & /*elided*/ any;
+                                                catch<TResult_8 = never>(onrejected?: ((reason: any) => TResult_8 | PromiseLike<TResult_8>) | null | undefined): Omit<Promise<TResult_5 | TResult_6 | /*... 4 more elided ...*/ any | TResult2_1>, "catch" | "then"> & /*elided*/ any;
                                             };
                                         };
                                     };
@@ -10731,7 +10731,7 @@ export declare class Api<SecurityDataType = unknown> {
                                             };
                                             catch<TResult_7 = never>(onrejected?: ((reason: any) => TResult_7 | PromiseLike<TResult_7>) | null | undefined): Omit<Promise<TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1>, "catch" | "then"> & {
                                                 then<TResult1_2 = TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1, TResult2_2 = never>(onfulfilled?: ((value: TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1) => TResult1_2 | PromiseLike<TResult1_2>) | null | undefined, onrejected?: ((reason: any) => TResult2_2 | PromiseLike<TResult2_2>) | null | undefined): Omit<Promise<TResult1_2 | TResult2_2>, "catch" | "then"> & /*elided*/ any;
-                                                catch<TResult_8 = never>(onrejected?: ((reason: any) => TResult_8 | PromiseLike<TResult_8>) | null | undefined): Omit<Promise<TResult_5 | /*... 5 more elided ...*/ any | TResult2_1>, "catch" | "then"> & /*elided*/ any;
+                                                catch<TResult_8 = never>(onrejected?: ((reason: any) => TResult_8 | PromiseLike<TResult_8>) | null | undefined): Omit<Promise<TResult_5 | TResult_6 | /*... 4 more elided ...*/ any | TResult2_1>, "catch" | "then"> & /*elided*/ any;
                                             };
                                         };
                                     };
@@ -16067,7 +16067,7 @@ export declare class Api<SecurityDataType = unknown> {
                                             };
                                             catch<TResult_7 = never>(onrejected?: ((reason: any) => TResult_7 | PromiseLike<TResult_7>) | null | undefined): Omit<Promise<TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1>, "catch" | "then"> & {
                                                 then<TResult1_2 = TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1, TResult2_2 = never>(onfulfilled?: ((value: TResult_5 | TResult_6 | TResult_7 | TResult1_1 | TResult2_1) => TResult1_2 | PromiseLike<TResult1_2>) | null | undefined, onrejected?: ((reason: any) => TResult2_2 | PromiseLike<TResult2_2>) | null | undefined): Omit<Promise<TResult1_2 | TResult2_2>, "catch" | "then"> & /*elided*/ any;
-                                                catch<TResult_8 = never>(onrejected?: ((reason: any) => TResult_8 | PromiseLike<TResult_8>) | null | undefined): Omit<Promise<TResult_5 | /*... 5 more elided ...*/ any | TResult2_1>, "catch" | "then"> & /*elided*/ any;
+                                                catch<TResult_8 = never>(onrejected?: ((reason: any) => TResult_8 | PromiseLike<TResult_8>) | null | undefined): Omit<Promise<TResult_5 | TResult_6 | /*... 4 more elided ...*/ any | TResult2_1>, "catch" | "then"> & /*elided*/ any;
                                             };
                                         };
                                     };

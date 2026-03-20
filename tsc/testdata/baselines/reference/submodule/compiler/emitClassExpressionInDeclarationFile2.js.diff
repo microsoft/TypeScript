@@ -25,7 +25,7 @@
 +    new (...args: any[]): {
 +        tags(): void;
 +        foo(): void;
-+        name?: string | undefined;
++        name?: string;
 +        property: string;
 +    };
 +    getTags(): void;
@@ -34,7 +34,7 @@
 +    new (...args: any[]): {
 +        tags(): void;
 +        foo(): void;
-+        name?: string | undefined;
++        name?: string;
 +        property: string;
 +    };
 +    getTags(): void;

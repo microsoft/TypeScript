@@ -1,37 +1,25 @@
 --- old.controlFlowGenericTypes.types
 +++ new.controlFlowGenericTypes.types
-@@= skipped -331, +331 lines =@@
- };
+@@= skipped -167, +167 lines =@@
+ // Repro from #13995
 
- function get<K extends keyof A>(key: K, obj: A): number {
-->get : <K extends keyof A>(key: K, obj: A) => number
-+>get : <K extends "a">(key: K, obj: A) => number
- >key : K
- >obj : A
+ declare function takeA(val: 'A'): void;
+->takeA : (val: "A") => void
++>takeA : (val: 'A') => void
+ >val : "A"
 
-@@= skipped -28, +28 lines =@@
- >EventEmitter : EventEmitter<ET>
+ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
+->bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => AB
++>bounceAndTakeIfA : <AB extends 'A' | 'B'>(value: AB) => AB
+ >value : AB
 
-     off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
-->off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
-+>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
- >args : [unknown, string] | [K, number]
- }
- function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
-@@= skipped -226, +226 lines =@@
- >title : string | undefined
+     if (value === 'A') {
+@@= skipped -14, +14 lines =@@
 
- function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
-->getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
-+>getColumnProperty : <T>(column: Column<T>, key: "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
- >column : Column<T>
-->key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
-+>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+         takeA(value);
+ >takeA(value) : void
+->takeA : (val: "A") => void
++>takeA : (val: 'A') => void
+ >value : "A"
 
-   return column[key];
-->column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
-+>column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
- >column : Column<T>
-->key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
-+>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
- }
+         return value;

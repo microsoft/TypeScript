@@ -335,7 +335,7 @@ function f22<T extends {} | undefined>(x: T) {
 }
 
 function f23<T>(x: T | undefined | null) {
->f23 : <T>(x: T | null | undefined) => void
+>f23 : <T>(x: T | undefined | null) => void
 >x : T | null | undefined
 
     if (x !== undefined) {
@@ -818,7 +818,7 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
 }
 
 function fx2<T extends {}>(value: T & ({} | null)) {
->fx2 : <T extends {}>(value: T) => void
+>fx2 : <T extends {}>(value: T & ({} | null)) => void
 >value : T
 
     if (value === 42) {
@@ -836,7 +836,7 @@ function fx2<T extends {}>(value: T & ({} | null)) {
 }
 
 function fx3<T extends {} | undefined>(value: T & ({} | null)) {
->fx3 : <T extends {} | undefined>(value: T & {}) => void
+>fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
 >value : T & {}
 
     if (value === 42) {
@@ -854,7 +854,7 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 }
 
 function fx4<T extends {} | null>(value: T & ({} | null)) {
->fx4 : <T extends {} | null>(value: T) => void
+>fx4 : <T extends {} | null>(value: T & ({} | null)) => void
 >value : T
 
     if (value === 42) {
@@ -1035,7 +1035,7 @@ type AB = "A" | "B";
 >AB : AB
 
 function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
->x : <T_AB extends AB>(x: never, y: any) => void
+>x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
 >x : never
 >y : any
 

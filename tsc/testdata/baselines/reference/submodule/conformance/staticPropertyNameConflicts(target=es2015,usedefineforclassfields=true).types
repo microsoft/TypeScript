@@ -2,9 +2,9 @@
 
 === staticPropertyNameConflicts.ts ===
 const FunctionPropertyNames = {
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
->{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} as const : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
->{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+>{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} as const : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
+>{    name: 'name',    length: 'length',    prototype: 'prototype',    caller: 'caller',    arguments: 'arguments',} : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 
     name: 'name',
 >name : "name"
@@ -45,13 +45,13 @@ class StaticName2 {
     static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.name] : number
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 
     [FunctionPropertyNames.name]: number; // ok
 >[FunctionPropertyNames.name] : number
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 }
 
@@ -71,13 +71,13 @@ class StaticNameFn2 {
     static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.name] : () => void
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 
     [FunctionPropertyNames.name]() {} // ok
 >[FunctionPropertyNames.name] : () => void
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 }
 
@@ -98,13 +98,13 @@ class StaticLength2 {
     static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.length] : number
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 
     [FunctionPropertyNames.length]: number; // ok
 >[FunctionPropertyNames.length] : number
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 }
 
@@ -124,13 +124,13 @@ class StaticLengthFn2 {
     static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.length] : () => void
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 
     [FunctionPropertyNames.length]() {} // ok
 >[FunctionPropertyNames.length] : () => void
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 }
 
@@ -151,13 +151,13 @@ class StaticPrototype2 {
     static [FunctionPropertyNames.prototype]: number; // always an error
 >[FunctionPropertyNames.prototype] : StaticPrototype2
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 
     [FunctionPropertyNames.prototype]: string; // ok
 >[FunctionPropertyNames.prototype] : string
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 }
 
@@ -177,13 +177,13 @@ class StaticPrototypeFn2 {
     static [FunctionPropertyNames.prototype]() {} // always an error
 >[FunctionPropertyNames.prototype] : () => void
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 
     [FunctionPropertyNames.prototype]() {} // ok
 >[FunctionPropertyNames.prototype] : () => void
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 }
 
@@ -204,13 +204,13 @@ class StaticCaller2 {
     static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.caller] : number
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 
     [FunctionPropertyNames.caller]: string; // ok
 >[FunctionPropertyNames.caller] : string
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 }
 
@@ -230,13 +230,13 @@ class StaticCallerFn2 {
     static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.caller] : () => void
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 
     [FunctionPropertyNames.caller]() {} // ok
 >[FunctionPropertyNames.caller] : () => void
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 }
 
@@ -257,13 +257,13 @@ class StaticArguments2 {
     static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.arguments] : number
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 
     [FunctionPropertyNames.arguments]: string; // ok
 >[FunctionPropertyNames.arguments] : string
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 }
 
@@ -283,13 +283,13 @@ class StaticArgumentsFn2 {
     static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.arguments] : () => void
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 
     [FunctionPropertyNames.arguments]() {} // ok
 >[FunctionPropertyNames.arguments] : () => void
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 }
 
@@ -315,13 +315,13 @@ var StaticName_Anonymous2 = class {
     static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.name] : number
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 
     [FunctionPropertyNames.name]: string; // ok
 >[FunctionPropertyNames.name] : string
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 }
 
@@ -343,13 +343,13 @@ var StaticNameFn_Anonymous2 = class {
     static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.name] : () => void
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 
     [FunctionPropertyNames.name]() {} // ok
 >[FunctionPropertyNames.name] : () => void
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 }
 
@@ -372,13 +372,13 @@ var StaticLength_Anonymous2 = class {
     static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.length] : number
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 
     [FunctionPropertyNames.length]: string; // ok
 >[FunctionPropertyNames.length] : string
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 }
 
@@ -400,13 +400,13 @@ var StaticLengthFn_Anonymous2 = class {
     static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.length] : () => void
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 
     [FunctionPropertyNames.length]() {} // ok
 >[FunctionPropertyNames.length] : () => void
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 }
 
@@ -429,13 +429,13 @@ var StaticPrototype_Anonymous2 = class {
     static [FunctionPropertyNames.prototype]: number; // always an error
 >[FunctionPropertyNames.prototype] : StaticPrototype_Anonymous2
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 
     [FunctionPropertyNames.prototype]: string; // ok
 >[FunctionPropertyNames.prototype] : string
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 }
 
@@ -457,13 +457,13 @@ var StaticPrototypeFn_Anonymous2 = class {
     static [FunctionPropertyNames.prototype]() {} // always an error
 >[FunctionPropertyNames.prototype] : () => void
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 
     [FunctionPropertyNames.prototype]() {} // ok
 >[FunctionPropertyNames.prototype] : () => void
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 }
 
@@ -486,13 +486,13 @@ var StaticCaller_Anonymous2 = class {
     static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.caller] : number
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 
     [FunctionPropertyNames.caller]: string; // ok
 >[FunctionPropertyNames.caller] : string
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 }
 
@@ -514,13 +514,13 @@ var StaticCallerFn_Anonymous2 = class {
     static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.caller] : () => void
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 
     [FunctionPropertyNames.caller]() {} // ok
 >[FunctionPropertyNames.caller] : () => void
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 }
 
@@ -543,13 +543,13 @@ var StaticArguments_Anonymous2 = class {
     static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.arguments] : number
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 
     [FunctionPropertyNames.arguments]: string; // ok
 >[FunctionPropertyNames.arguments] : string
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 }
 
@@ -571,13 +571,13 @@ var StaticArgumentsFn_Anonymous2 = class {
     static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.arguments] : () => void
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 
     [FunctionPropertyNames.arguments]() {} // ok
 >[FunctionPropertyNames.arguments] : () => void
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 }
 
@@ -605,13 +605,13 @@ export class ExportedStaticName {
     static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.name] : number
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 
     [FunctionPropertyNames.name]: string; // ok
 >[FunctionPropertyNames.name] : string
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 }
 
@@ -635,13 +635,13 @@ export class ExportedStaticNameFn {
     static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.name] : () => void
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 
     [FunctionPropertyNames.name]() {} // ok
 >[FunctionPropertyNames.name] : () => void
 >FunctionPropertyNames.name : "name"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >name : "name"
 }
 
@@ -666,13 +666,13 @@ export class ExportedStaticLength {
     static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.length] : number
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 
     [FunctionPropertyNames.length]: string; // ok
 >[FunctionPropertyNames.length] : string
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 }
 
@@ -696,13 +696,13 @@ export class ExportedStaticLengthFn {
     static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.length] : () => void
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 
     [FunctionPropertyNames.length]() {} // ok
 >[FunctionPropertyNames.length] : () => void
 >FunctionPropertyNames.length : "length"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >length : "length"
 }
 
@@ -727,13 +727,13 @@ export class ExportedStaticPrototype {
     static [FunctionPropertyNames.prototype]: number; // always an error
 >[FunctionPropertyNames.prototype] : ExportedStaticPrototype
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 
     [FunctionPropertyNames.prototype]: string; // ok
 >[FunctionPropertyNames.prototype] : string
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 }
 
@@ -757,13 +757,13 @@ export class ExportedStaticPrototypeFn {
     static [FunctionPropertyNames.prototype]() {} // always an error
 >[FunctionPropertyNames.prototype] : () => void
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 
     [FunctionPropertyNames.prototype]() {} // ok
 >[FunctionPropertyNames.prototype] : () => void
 >FunctionPropertyNames.prototype : "prototype"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >prototype : "prototype"
 }
 
@@ -788,13 +788,13 @@ export class ExportedStaticCaller {
     static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.caller] : number
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 
     [FunctionPropertyNames.caller]: string; // ok
 >[FunctionPropertyNames.caller] : string
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 }
 
@@ -818,13 +818,13 @@ export class ExportedStaticCallerFn {
     static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.caller] : () => void
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 
     [FunctionPropertyNames.caller]() {} // ok
 >[FunctionPropertyNames.caller] : () => void
 >FunctionPropertyNames.caller : "caller"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >caller : "caller"
 }
 
@@ -849,13 +849,13 @@ export class ExportedStaticArguments {
     static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
 >[FunctionPropertyNames.arguments] : number
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 
     [FunctionPropertyNames.arguments]: string; // ok
 >[FunctionPropertyNames.arguments] : string
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 }
 
@@ -879,12 +879,12 @@ export class ExportedStaticArgumentsFn {
     static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
 >[FunctionPropertyNames.arguments] : () => void
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 
     [FunctionPropertyNames.arguments]() {} // ok
 >[FunctionPropertyNames.arguments] : () => void
 >FunctionPropertyNames.arguments : "arguments"
->FunctionPropertyNames : { readonly name: "name"; readonly length: "length"; readonly prototype: "prototype"; readonly caller: "caller"; readonly arguments: "arguments"; }
+>FunctionPropertyNames : { readonly name: 'name'; readonly length: 'length'; readonly prototype: 'prototype'; readonly caller: 'caller'; readonly arguments: 'arguments'; }
 >arguments : "arguments"
 }

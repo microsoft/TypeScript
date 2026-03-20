@@ -1,0 +1,34 @@
+--- old.declarationFiles.errors.txt
++++ new.declarationFiles.errors.txt
+@@= skipped -11, +11 lines =@@
+ declarationFiles.ts(24,5): error TS2564: Property 'h' has no initializer and is not definitely assigned in the constructor.
+ declarationFiles.ts(25,5): error TS2564: Property 'i' has no initializer and is not definitely assigned in the constructor.
+ declarationFiles.ts(26,5): error TS2564: Property 'j' has no initializer and is not definitely assigned in the constructor.
+-declarationFiles.ts(30,5): error TS2527: The inferred type of 'x1' references an inaccessible 'this' type. A type annotation is necessary.
+ declarationFiles.ts(32,5): error TS2527: The inferred type of 'x3' references an inaccessible 'this' type. A type annotation is necessary.
+-declarationFiles.ts(34,5): error TS2527: The inferred type of 'f1' references an inaccessible 'this' type. A type annotation is necessary.
+ declarationFiles.ts(40,5): error TS2527: The inferred type of 'f3' references an inaccessible 'this' type. A type annotation is necessary.
+
+
+-==== declarationFiles.ts (17 errors) ====
++==== declarationFiles.ts (15 errors) ====
+     class C1 {
+         x: this;
+         ~
+@@= skipped -64, +62 lines =@@
+     
+     class C4 {
+         x1 = { a: this };
+-        ~~
+-!!! error TS2527: The inferred type of 'x1' references an inaccessible 'this' type. A type annotation is necessary.
+         x2 = [this];
+         x3 = [{ a: this }];
+         ~~
+ !!! error TS2527: The inferred type of 'x3' references an inaccessible 'this' type. A type annotation is necessary.
+         x4 = () => this;
+         f1() {
+-        ~~
+-!!! error TS2527: The inferred type of 'f1' references an inaccessible 'this' type. A type annotation is necessary.
+             return { a: this };
+         }
+         f2() {

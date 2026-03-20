@@ -38,7 +38,7 @@ function foo9<T extends 1 > (test: T) { }
 >test : T
 
 function foo10<T extends (1)> (test: T) { }
->foo10 : <T extends 1>(test: T) => void
+>foo10 : <T extends (1)>(test: T) => void
 >test : T
 
 function foo11<T extends null> (test: T) { }

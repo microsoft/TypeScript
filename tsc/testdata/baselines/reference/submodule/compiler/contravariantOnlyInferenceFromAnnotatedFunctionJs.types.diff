@@ -1,12 +1,10 @@
 --- old.contravariantOnlyInferenceFromAnnotatedFunctionJs.types
 +++ new.contravariantOnlyInferenceFromAnnotatedFunctionJs.types
-@@= skipped -13, +13 lines =@@
-  * @returns {[A, B]}
+@@= skipped -14, +14 lines =@@
   */
  function foo(fns) {
-->foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
+ >foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
 ->fns : Funcs<A, B>
-+>foo : <A, B extends Record<string, unknown>>(fns: any) => [A, B]
 +>fns : any
 
    return /** @type {any} */ (null);
@@ -16,10 +14,7 @@
  const result = foo({
 ->result : [string, { bar: string; }]
 ->foo({  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },}) : [string, { bar: string; }]
-->foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
 +>result : [unknown, Record<string, unknown>]
 +>foo({  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },}) : [unknown, Record<string, unknown>]
-+>foo : <A, B extends Record<string, unknown>>(fns: any) => [A, B]
+ >foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
  >{  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },} : { bar: { fn: (a: string) => void; thing: string; }; }
-
-   bar: {

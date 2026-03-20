@@ -1,15 +1,6 @@
 --- old.declarationEmitGenericTypeParamerSerialization2.types
 +++ new.declarationEmitGenericTypeParamerSerialization2.types
-@@= skipped -46, +46 lines =@@
- export const x = (() => null! as ExpandRecursively<G>)();
- >x : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
- >(() => null! as ExpandRecursively<G>)() : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
-->(() => null! as ExpandRecursively<G>) : () => ExpandRecursively<G>
-->() => null! as ExpandRecursively<G> : () => ExpandRecursively<G>
-+>(() => null! as ExpandRecursively<G>) : () => { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
-+>() => null! as ExpandRecursively<G> : () => { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
- >null! as ExpandRecursively<G> : { readonly readonlyProperty: string; field: string; method: (p: string) => string; fnField: (p: string) => string; writeOnlyProperty: string; property: string; divergentProperty: string; }
- >null! : never
+@@= skipped -53, +53 lines =@@
 
 
  function makeV() {
@@ -18,7 +9,7 @@
 
    type X<T> = {
  >X : { readonly readonlyProperty: T; field: T; method(p: T): T; fnField: (p: T) => T; writeOnlyProperty: T; property: T; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
-@@= skipped -45, +45 lines =@@
+@@= skipped -38, +38 lines =@@
  >p : number | T
     }
    return null! as X<number>

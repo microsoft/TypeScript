@@ -43,7 +43,7 @@ const res3 = fn3()(() => res3);
 // https://github.com/microsoft/TypeScript/issues/58616
 
 function foo(arg: Parameters<typeof bar>[0]) {
->foo : (arg: string) => string
+>foo : (arg: Parameters<typeof bar>[0]) => string
 >arg : string
 >bar : (arg: string) => string
 
@@ -57,7 +57,7 @@ function bar(arg: string) {
 
     return foo(arg);
 >foo(arg) : string
->foo : (arg: string) => string
+>foo : (arg: Parameters<typeof bar>[0]) => string
 >arg : string
 }
 

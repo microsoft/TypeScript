@@ -84,16 +84,7 @@
 
          this.foonly = 12
  >this.foonly = 12 : 12
-@@= skipped -38, +38 lines =@@
-      * This is not assignable, so should have a type error
-      */
-     load(files, format) {
-->load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
-+>load : (files: string[], format: "csv" | "json" | "xmlolololol") => void
- >files : string[]
- >format : "csv" | "json" | "xmlolololol"
-
-@@= skipped -16, +16 lines =@@
+@@= skipped -54, +54 lines =@@
          }
          else {
              super.speed() // run faster
@@ -150,10 +141,9 @@
      }
      // should error since others is not optional
      static circle(others: (typeof Wagon)[]) {
-->circle : (others: (typeof Wagon)[]) => number
+ >circle : (others: (typeof Wagon)[]) => number
 ->others : (typeof Wagon)[]
 ->Wagon : typeof Wagon
-+>circle : (others: { (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }[]) => number
 +>others : { (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }[]
 +>Wagon : { (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }
 

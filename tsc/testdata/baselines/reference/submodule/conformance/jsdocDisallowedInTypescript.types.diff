@@ -1,15 +1,6 @@
 --- old.jsdocDisallowedInTypescript.types
 +++ new.jsdocDisallowedInTypescript.types
-@@= skipped -9, +9 lines =@@
- >3 : 3
-
- function f(x: ?number, y: Array.<number>) {
-->f : (x: number | null, y: Array<number>) => number
-+>f : (x: number | null, y: number[]) => number
- >x : number | null
- >y : number[]
-
-@@= skipped -17, +17 lines =@@
+@@= skipped -26, +26 lines =@@
  >0 : 0
  }
  function hof(ctor: function(new: number, string)) {
@@ -46,7 +37,7 @@
 ->f(12, 'hullo') : string
 ->f : (this: number, arg1: string) => string
 +>f(12, 'hullo') : number
-+>f : (x: number | null, y: number[]) => number
++>f : (x: number | null, y: Array<number>) => number
  >12 : 12
  >'hullo' : "hullo"
  }

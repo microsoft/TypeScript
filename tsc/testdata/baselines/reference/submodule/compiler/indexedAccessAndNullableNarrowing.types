@@ -85,7 +85,7 @@ interface Store<S = State> {
 }
 
 export function syncStoreProp<
->syncStoreProp : <S extends AnyObject, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
+>syncStoreProp : <S extends State, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
 
     S extends State,
     P extends Partial<S>,

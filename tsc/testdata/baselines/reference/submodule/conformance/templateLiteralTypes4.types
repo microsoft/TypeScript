@@ -480,11 +480,11 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
 
     // get/set a field by index
     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
->getIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
+>getIndex : <I extends IndicesOf<TDef>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
 >index : I
 
     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
->setIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
+>setIndex : <I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
 >index : I
 >value : FieldType<Extract<TDef[I], FieldDefinition>["type"]>
 }
@@ -515,46 +515,46 @@ declare const p: Point;
 
 p.getIndex(0); // ok, 0 is a valid index
 >p.getIndex(0) : number
->p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>p.getIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
 >p : Point
->getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>getIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
 >0 : 0
 
 p.getIndex(1); // ok, 1 is a valid index
 >p.getIndex(1) : number
->p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>p.getIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
 >p : Point
->getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>getIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
 >1 : 1
 
 p.getIndex(2); // error, 2 is not a valid index
 >p.getIndex(2) : number
->p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>p.getIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
 >p : Point
->getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>getIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
 >2 : 2
 
 p.setIndex(0, 0); // ok, 0 is a valid index
 >p.setIndex(0, 0) : void
->p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>p.setIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
 >p : Point
->setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>setIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
 >0 : 0
 >0 : 0
 
 p.setIndex(1, 0); // ok, 1 is a valid index
 >p.setIndex(1, 0) : void
->p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>p.setIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
 >p : Point
->setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>setIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
 >1 : 1
 >0 : 0
 
 p.setIndex(2, 3); // error, 2 is not a valid index
 >p.setIndex(2, 3) : void
->p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>p.setIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
 >p : Point
->setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>setIndex : <I extends IndicesOf<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }]>>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
 >2 : 2
 >3 : 3
 

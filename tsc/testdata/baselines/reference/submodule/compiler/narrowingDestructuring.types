@@ -129,7 +129,7 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 }
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
->farr : <T extends [string, number, number] | [number, string, string]>(x: T) => void
+>farr : <T extends [number, string, string] | [string, number, number]>(x: T) => void
 >x : T
 
     const [head, ...tail] = x;

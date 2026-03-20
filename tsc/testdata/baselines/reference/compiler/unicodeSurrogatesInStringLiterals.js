@@ -36,9 +36,9 @@ export const lowHigh = "\ude03\ud83d";
 
 
 //// [unicodeSurrogatesInStringLiterals.d.ts]
-export declare const highLow: "😃";
-export declare const high: "�";
-export declare const low: "�";
-export declare const highHigh: "��";
-export declare const lowLow: "��";
-export declare const lowHigh: "��";
+export declare const highLow: "\uD83D\uDE03";
+export declare const high: "\uFFFD";
+export declare const low: "\uFFFD";
+export declare const highHigh: "\uFFFD\uFFFD";
+export declare const lowLow: "\uFFFD\uFFFD";
+export declare const lowHigh: "\uFFFD\uFFFD";

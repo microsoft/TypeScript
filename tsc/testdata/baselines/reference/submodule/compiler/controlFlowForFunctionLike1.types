@@ -2,7 +2,7 @@
 
 === controlFlowForFunctionLike1.ts ===
 function test1(a: number | string) {
->test1 : (a: string | number) => ((arg: number) => boolean) | undefined
+>test1 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >a : string | number
 
   if (typeof a === "number") {
@@ -12,14 +12,14 @@ function test1(a: number | string) {
 >"number" : "number"
 
     const fn = (arg: typeof a) => true;
->fn : (arg: number) => boolean
->(arg: typeof a) => true : (arg: number) => boolean
+>fn : (arg: typeof a) => boolean
+>(arg: typeof a) => true : (arg: typeof a) => boolean
 >arg : number
 >a : number
 >true : true
 
     return fn;
->fn : (arg: number) => boolean
+>fn : (arg: typeof a) => boolean
   }
   return;
 }
@@ -27,19 +27,19 @@ function test1(a: number | string) {
 test1(0)?.(100);
 >test1(0)?.(100) : boolean | undefined
 >test1(0) : ((arg: number) => boolean) | undefined
->test1 : (a: string | number) => ((arg: number) => boolean) | undefined
+>test1 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >0 : 0
 >100 : 100
 
 test1(0)?.("");
 >test1(0)?.("") : boolean | undefined
 >test1(0) : ((arg: number) => boolean) | undefined
->test1 : (a: string | number) => ((arg: number) => boolean) | undefined
+>test1 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >0 : 0
 >"" : ""
 
 function test2(a: number | string) {
->test2 : (a: string | number) => ((arg: string | number) => boolean) | undefined
+>test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >a : string | number
 
   if (typeof a === "number") {
@@ -49,14 +49,14 @@ function test2(a: number | string) {
 >"number" : "number"
 
     const fn: { (arg: typeof a): boolean; } = () => true;
->fn : (arg: string | number) => boolean
+>fn : (arg: typeof a) => boolean
 >arg : string | number
 >a : string | number
 >() => true : () => true
 >true : true
 
     return fn;
->fn : (arg: string | number) => boolean
+>fn : (arg: typeof a) => boolean
   }
   return;
 }
@@ -64,19 +64,19 @@ function test2(a: number | string) {
 test2(0)?.(100);
 >test2(0)?.(100) : boolean | undefined
 >test2(0) : ((arg: string | number) => boolean) | undefined
->test2 : (a: string | number) => ((arg: string | number) => boolean) | undefined
+>test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >0 : 0
 >100 : 100
 
 test2(0)?.("");
 >test2(0)?.("") : boolean | undefined
 >test2(0) : ((arg: string | number) => boolean) | undefined
->test2 : (a: string | number) => ((arg: string | number) => boolean) | undefined
+>test2 : (a: number | string) => ((arg: typeof a) => boolean) | undefined
 >0 : 0
 >"" : ""
 
 function test3(a: number | string) {
->test3 : (a: string | number) => (arg: number) => void
+>test3 : (a: number | string) => (arg: typeof a) => void
 >a : string | number
 
   if (typeof a === "number") {
@@ -86,7 +86,7 @@ function test3(a: number | string) {
 >"number" : "number"
 
     return (arg: typeof a) => {};
->(arg: typeof a) => {} : (arg: number) => void
+>(arg: typeof a) => {} : (arg: typeof a) => void
 >arg : number
 >a : number
   }
@@ -99,24 +99,24 @@ function test3(a: number | string) {
 test3(1)(100);
 >test3(1)(100) : void
 >test3(1) : (arg: number) => void
->test3 : (a: string | number) => (arg: number) => void
+>test3 : (a: number | string) => (arg: typeof a) => void
 >1 : 1
 >100 : 100
 
 test3(1)("");
 >test3(1)("") : void
 >test3(1) : (arg: number) => void
->test3 : (a: string | number) => (arg: number) => void
+>test3 : (a: number | string) => (arg: typeof a) => void
 >1 : 1
 >"" : ""
 
 function test4(a: number | string) {
->test4 : (a: string | number) => (arg: string | number) => void
+>test4 : (a: number | string) => (arg: typeof a) => void
 >a : string | number
 
   let fn = (arg: typeof a) => {};
->fn : (arg: string | number) => void
->(arg: typeof a) => {} : (arg: string | number) => void
+>fn : (arg: typeof a) => void
+>(arg: typeof a) => {} : (arg: typeof a) => void
 >arg : string | number
 >a : string | number
 
@@ -132,7 +132,7 @@ function test4(a: number | string) {
 >"number" : "number"
 
     return fn;
->fn : (arg: string | number) => void
+>fn : (arg: typeof a) => void
   }
   throw new Error("");
 >new Error("") : Error
@@ -143,14 +143,14 @@ function test4(a: number | string) {
 test4(1)?.(100);
 >test4(1)?.(100) : void
 >test4(1) : (arg: string | number) => void
->test4 : (a: string | number) => (arg: string | number) => void
+>test4 : (a: number | string) => (arg: typeof a) => void
 >1 : 1
 >100 : 100
 
 test4(1)?.("");
 >test4(1)?.("") : void
 >test4(1) : (arg: string | number) => void
->test4 : (a: string | number) => (arg: string | number) => void
+>test4 : (a: number | string) => (arg: typeof a) => void
 >1 : 1
 >"" : ""
 

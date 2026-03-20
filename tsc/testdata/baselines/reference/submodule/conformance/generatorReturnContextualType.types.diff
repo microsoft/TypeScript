@@ -1,0 +1,74 @@
+--- old.generatorReturnContextualType.types
++++ new.generatorReturnContextualType.types
+@@= skipped -3, +3 lines =@@
+ // #35995
+
+ function* f1(): Generator<any, { x: 'x' }, any> {
+->f1 : () => Generator<any, { x: "x"; }, any>
++>f1 : () => Generator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   return { x: 'x' };
+@@= skipped -10, +10 lines =@@
+ }
+
+ function* g1(): Iterator<any, { x: 'x' }, any> {
+->g1 : () => Iterator<any, { x: "x"; }, any>
++>g1 : () => Iterator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   return { x: 'x' };
+@@= skipped -10, +10 lines =@@
+ }
+
+ async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
+->f2 : () => AsyncGenerator<any, { x: "x"; }, any>
++>f2 : () => AsyncGenerator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   return { x: 'x' };
+@@= skipped -10, +10 lines =@@
+ }
+
+ async function* g2(): AsyncIterator<any, { x: 'x' }, any> {
+->g2 : () => AsyncIterator<any, { x: "x"; }, any>
++>g2 : () => AsyncIterator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   return { x: 'x' };
+@@= skipped -10, +10 lines =@@
+ }
+
+ async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
+->f3 : () => AsyncGenerator<any, { x: "x"; }, any>
++>f3 : () => AsyncGenerator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   return Promise.resolve({ x: 'x' });
+@@= skipped -14, +14 lines =@@
+ }
+
+ async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
+->g3 : () => AsyncIterator<any, { x: "x"; }, any>
++>g3 : () => AsyncIterator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   return Promise.resolve({ x: 'x' });
+@@= skipped -14, +14 lines =@@
+ }
+
+ async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
+->f4 : () => AsyncGenerator<any, { x: "x"; }, any>
++>f4 : () => AsyncGenerator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   const ret = { x: 'x' };
+@@= skipped -18, +18 lines =@@
+ }
+
+ async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
+->g4 : () => AsyncIterator<any, { x: "x"; }, any>
++>g4 : () => AsyncIterator<any, { x: 'x'; }, any>
+ >x : "x"
+
+   const ret = { x: 'x' };

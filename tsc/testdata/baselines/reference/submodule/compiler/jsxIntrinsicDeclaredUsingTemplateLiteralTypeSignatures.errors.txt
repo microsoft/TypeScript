@@ -22,5 +22,5 @@ jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx(14,12): error TS2322:
     <foobarbaz prop="smth"/>;
                ~~~~
 !!! error TS2322: Type '"smth"' is not assignable to type '"literal"'.
-!!! related TS6500 jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx:5:28: The expected type comes from property 'prop' which is declared here on type '{ prop: string; } & { prop: "literal"; }'
+!!! related TS6500 jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx:5:28: The expected type comes from property 'prop' which is declared here on type '{ prop: string; } & { prop: 'literal'; }'
     

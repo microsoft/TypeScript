@@ -216,15 +216,15 @@ const result = myArray
 >myArray  .map((arr) => arr.list)  .filter((arr) => arr && arr.length) : (MyObj[] | undefined)[]
 >myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
 >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
->myArray  .map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
+>myArray  .map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
 >myArray : MyArray
 
   .map((arr) => arr.list)
->map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
->(arr) => arr.list : (arr: { list?: MyObj[] | undefined; }) => MyObj[] | undefined
->arr : { list?: MyObj[] | undefined; }
+>map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+>(arr) => arr.list : (arr: { list?: MyObj[]; }) => MyObj[] | undefined
+>arr : { list?: MyObj[]; }
 >arr.list : MyObj[] | undefined
->arr : { list?: MyObj[] | undefined; }
+>arr : { list?: MyObj[]; }
 >list : MyObj[] | undefined
 
   .filter((arr) => arr && arr.length)
@@ -262,9 +262,9 @@ const result = myArray
 >obj => JSON.parse(obj.data) : (obj: MyObj) => any
 >obj : MyObj
 >JSON.parse(obj.data) : any
->JSON.parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >JSON : JSON
->parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >obj.data : string | undefined
 >obj : MyObj
 >data : string | undefined
@@ -280,15 +280,15 @@ const result2 = myArray
 >myArray  .map((arr) => arr.list)  .filter((arr) => !!arr) : MyObj[][]
 >myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
 >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
->myArray  .map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
+>myArray  .map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
 >myArray : MyArray
 
   .map((arr) => arr.list)
->map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
->(arr) => arr.list : (arr: { list?: MyObj[] | undefined; }) => MyObj[] | undefined
->arr : { list?: MyObj[] | undefined; }
+>map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+>(arr) => arr.list : (arr: { list?: MyObj[]; }) => MyObj[] | undefined
+>arr : { list?: MyObj[]; }
 >arr.list : MyObj[] | undefined
->arr : { list?: MyObj[] | undefined; }
+>arr : { list?: MyObj[]; }
 >list : MyObj[] | undefined
 
   .filter((arr) => !!arr)
@@ -341,9 +341,9 @@ const result2 = myArray
 >obj => JSON.parse(obj.data) : (obj: MyObj) => any
 >obj : MyObj
 >JSON.parse(obj.data) : any
->JSON.parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >JSON : JSON
->parse : (text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined) => any
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >obj.data : string | undefined
 >obj : MyObj
 >data : string | undefined
@@ -435,7 +435,7 @@ a.push(10);
 
 // Defer to explicit type guards, even when they're incorrect.
 function backwardsGuard(x: number|string): x is number {
->backwardsGuard : (x: string | number) => x is number
+>backwardsGuard : (x: number | string) => x is number
 >x : string | number
 
   return typeof x === 'string';
@@ -668,7 +668,7 @@ function guardsOneButNotOthers(a: string|number, b: string|number, c: string|num
 
 // Checks that there are no string escaping issues
 function dunderguard(__x: number | string) {
->dunderguard : (__x: string | number) => __x is string
+>dunderguard : (__x: number | string) => __x is string
 >__x : string | number
 
   return typeof __x  === 'string';
@@ -700,14 +700,14 @@ const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 // inferred guards in methods
 interface NumberInferrer {
   isNumber(x: number | string): x is number;
->isNumber : (x: string | number) => x is number
+>isNumber : (x: number | string) => x is number
 >x : string | number
 }
 class Inferrer implements NumberInferrer {
 >Inferrer : Inferrer
 
   isNumber(x: number | string) {  // should ok
->isNumber : (x: string | number) => x is number
+>isNumber : (x: number | string) => x is number
 >x : string | number
 
     return typeof x === 'number';
@@ -727,9 +727,9 @@ const inf = new Inferrer();
 
 if (inf.isNumber(numOrStr)) {
 >inf.isNumber(numOrStr) : boolean
->inf.isNumber : (x: string | number) => x is number
+>inf.isNumber : (x: number | string) => x is number
 >inf : Inferrer
->isNumber : (x: string | number) => x is number
+>isNumber : (x: number | string) => x is number
 >numOrStr : string | number
 
   let t: number = numOrStr;  // should ok
@@ -926,7 +926,7 @@ if (assertAndPredicate(snd)) {
 }
 
 function isNumberWithThis(this: Date, x: number | string) {
->isNumberWithThis : (this: Date, x: string | number) => x is number
+>isNumberWithThis : (this: Date, x: number | string) => x is number
 >this : Date
 >x : string | number
 
@@ -992,8 +992,8 @@ declare const foobar:
 >bar : string
 
 const foobarPred = (fb: typeof foobar) => fb.type === "foo";
->foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
->(fb: typeof foobar) => fb.type === "foo" : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
+>foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>(fb: typeof foobar) => fb.type === "foo" : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
 >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 >fb.type === "foo" : boolean
@@ -1004,7 +1004,7 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 
 if (foobarPred(foobar)) {
 >foobarPred(foobar) : boolean
->foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
+>foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
 >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 
   foobar.foo;

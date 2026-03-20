@@ -1,15 +1,6 @@
 --- old.inferenceDoesNotAddUndefinedOrNull.types
 +++ new.inferenceDoesNotAddUndefinedOrNull.types
-@@= skipped -4, +4 lines =@@
-
- interface Node {
-     forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined
-+>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T | undefined) | undefined) => T | undefined
- >cbNode : (node: Node) => T | undefined
- >node : Node
- >cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
-@@= skipped -8, +8 lines =@@
+@@= skipped -12, +12 lines =@@
  }
 
  declare function toArray<T>(value: T | T[]): T[];
@@ -23,63 +14,3 @@
  >value : T | readonly T[]
 
  function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
-->flatMapChildren : <T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined) => readonly T[]
-+>flatMapChildren : <T>(node: Node, cb: (child: Node) => T | readonly T[] | undefined) => readonly T[]
- >node : Node
-->cb : (child: Node) => readonly T[] | T | undefined
-+>cb : (child: Node) => T | readonly T[] | undefined
- >child : Node
-
-     const result: T[] = [];
-@@= skipped -19, +19 lines =@@
-
-     node.forEachChild(child => {
- >node.forEachChild(child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    }) : undefined
-->node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T_1 | undefined) | undefined) => T_1 | undefined
- >node : Node
-->forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T_1 | undefined) | undefined) => T_1 | undefined
- >child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    } : (child: Node) => undefined
- >child : Node
-
-         const value = cb(child);
- >value : T | readonly T[] | undefined
- >cb(child) : T | readonly T[] | undefined
-->cb : (child: Node) => readonly T[] | T | undefined
-+>cb : (child: Node) => T | readonly T[] | undefined
- >child : Node
-
-         if (value !== undefined) {
-@@= skipped -33, +33 lines =@@
- }
-
- function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T | null): readonly T[] {
-->flatMapChildren2 : <T>(node: Node, cb: (child: Node) => readonly T[] | T | null) => readonly T[]
-+>flatMapChildren2 : <T>(node: Node, cb: (child: Node) => T | readonly T[] | null) => readonly T[]
- >node : Node
-->cb : (child: Node) => readonly T[] | T | null
-+>cb : (child: Node) => T | readonly T[] | null
- >child : Node
-
-     const result: T[] = [];
-@@= skipped -11, +11 lines =@@
-
-     node.forEachChild(child => {
- >node.forEachChild(child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    }) : undefined
-->node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>node.forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T_1 | undefined) | undefined) => T_1 | undefined
- >node : Node
-->forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T_1 | undefined) => T_1 | undefined
-+>forEachChild : <T_1>(cbNode: (node: Node) => T_1 | undefined, cbNodeArray?: ((nodes: NodeArray<Node>) => T_1 | undefined) | undefined) => T_1 | undefined
- >child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    } : (child: Node) => undefined
- >child : Node
-
-         const value = cb(child);
- >value : T | readonly T[] | null
- >cb(child) : T | readonly T[] | null
-->cb : (child: Node) => readonly T[] | T | null
-+>cb : (child: Node) => T | readonly T[] | null
- >child : Node
-
-         if (value !== null) {

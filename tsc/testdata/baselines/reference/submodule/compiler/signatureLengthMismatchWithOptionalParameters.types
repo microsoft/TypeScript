@@ -7,12 +7,12 @@ function callee(n: number | undefined, m: string) { }
 >m : string
 
 function caller(arg: (n?: number) => void) { }
->caller : (arg: (n?: number | undefined) => void) => void
->arg : (n?: number | undefined) => void
+>caller : (arg: (n?: number) => void) => void
+>arg : (n?: number) => void
 >n : number | undefined
 
 caller(callee);
 >caller(callee) : void
->caller : (arg: (n?: number | undefined) => void) => void
+>caller : (arg: (n?: number) => void) => void
 >callee : (n: number | undefined, m: string) => void
 

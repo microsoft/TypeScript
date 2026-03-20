@@ -28,7 +28,7 @@ abstract class AD2 extends AB {
 >AB : AB
 
     abstract foo(v: ''): void // need override?
->foo : (v: "") => void
+>foo : (v: '') => void
 >v : ""
 }
 
@@ -37,7 +37,7 @@ abstract class AD3 extends AB {
 >AB : AB
 
     override foo(v: ''): void { } // need override?
->foo : (v: "") => void
+>foo : (v: '') => void
 >v : ""
 
     abstract bar(): void;
@@ -52,11 +52,11 @@ class D4 extends AB {
 >AB : AB
 
     override foo(v: ''): void {}
->foo : (v: "") => void
+>foo : (v: '') => void
 >v : ""
 
     override bar(v: ''): void {}
->bar : (v: "") => void
+>bar : (v: '') => void
 >v : ""
 
     baz(): void { }

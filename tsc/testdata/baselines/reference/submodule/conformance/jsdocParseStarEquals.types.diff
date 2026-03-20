@@ -1,17 +1,15 @@
 --- old.jsdocParseStarEquals.types
 +++ new.jsdocParseStarEquals.types
-@@= skipped -3, +3 lines =@@
- /** @param {...*=} args
+@@= skipped -4, +4 lines =@@
      @return {*=} */
  function f(...args) {
-->f : (...args?: any[] | undefined) => any | undefined
+ >f : (...args?: any[] | undefined) => any | undefined
 ->args : any
-+>f : (...args?: any[] | undefined) => any
 +>args : any[] | undefined
 
      return null
  }
-@@= skipped -13, +13 lines =@@
+@@= skipped -12, +12 lines =@@
 
  /** @param {function():*=} f */
  function cbf(f) {

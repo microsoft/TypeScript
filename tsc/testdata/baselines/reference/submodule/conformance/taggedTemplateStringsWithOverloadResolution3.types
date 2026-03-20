@@ -272,9 +272,9 @@ fn5 `${ (n) => n.substr(0) }`;
 >(n) => n.substr(0) : (n: string) => string
 >n : string
 >n.substr(0) : string
->n.substr : (from: number, length?: number | undefined) => string
+>n.substr : (from: number, length?: number) => string
 >n : string
->substr : (from: number, length?: number | undefined) => string
+>substr : (from: number, length?: number) => string
 >0 : 0
 
 

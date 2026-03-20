@@ -38,7 +38,7 @@ exports.x = { p: a_1.fn };
 //// [a.d.ts]
 export type X = string;
 export declare const fn: {
-    o: (a?: (string | undefined)[] | undefined) => void;
+    o: (a?: (X | undefined)[]) => void;
 };
 //// [b.d.ts]
 export declare const m: {
@@ -49,6 +49,6 @@ export declare const m: {
 };
 export declare const x: {
     p: {
-        o: (a?: (string | undefined)[] | undefined) => void;
+        o: (a?: (import("./a").X | undefined)[]) => void;
     };
 };

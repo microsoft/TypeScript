@@ -50,7 +50,7 @@
 
  function foo4(): ({x: number}) {
 ->foo4 : typeof foo4
-+>foo4 : { (): { x: number; }; x: string; }
++>foo4 : { (): ({ x: number; }); x: string; }
  >x : number
 
      return {x: 123};
@@ -59,6 +59,6 @@
  >foo4.x = "456" : "456"
  >foo4.x : string
 ->foo4 : typeof foo4
-+>foo4 : { (): { x: number; }; x: string; }
++>foo4 : { (): ({ x: number; }); x: string; }
  >x : string
  >"456" : "456"

@@ -11,17 +11,14 @@
  >[n] : number
  >n : number
  >1 : 1
-
- numericIndex[n].toFixed();
+@@= skipped -10, +10 lines =@@
  >numericIndex[n].toFixed() : string
-->numericIndex[n].toFixed : (fractionDigits?: number) => string
-+>numericIndex[n].toFixed : (fractionDigits?: number | undefined) => string
+ >numericIndex[n].toFixed : (fractionDigits?: number) => string
  >numericIndex[n] : number
 ->numericIndex : { [n]: number; }
 +>numericIndex : { [x: number]: number; }
  >n : number
-->toFixed : (fractionDigits?: number) => string
-+>toFixed : (fractionDigits?: number | undefined) => string
+ >toFixed : (fractionDigits?: number) => string
 
  const stringIndex = { [s]: 1 };
 ->stringIndex : { [s]: number; }
@@ -31,15 +28,11 @@
  >[s] : number
  >s : string
  >1 : 1
-
- stringIndex[s].toFixed();
+@@= skipped -15, +15 lines =@@
  >stringIndex[s].toFixed() : string
-->stringIndex[s].toFixed : (fractionDigits?: number) => string
-+>stringIndex[s].toFixed : (fractionDigits?: number | undefined) => string
+ >stringIndex[s].toFixed : (fractionDigits?: number) => string
  >stringIndex[s] : number
 ->stringIndex : { [s]: number; }
 +>stringIndex : { [x: string]: number; }
  >s : string
-->toFixed : (fractionDigits?: number) => string
-+>toFixed : (fractionDigits?: number | undefined) => string
-
+ >toFixed : (fractionDigits?: number) => string

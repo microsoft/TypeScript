@@ -63,9 +63,9 @@ namespace M {
 >F2 : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 }
 
 namespace N {
@@ -82,9 +82,9 @@ namespace N {
 >F2 : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 }
 
 // literals
@@ -386,29 +386,29 @@ do { }while(k)
 >k : { x: number; y: string; }
 
 function fn(x?: string): I { return null; }
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 >x : string | undefined
 
 if (fn()) { }
 >fn() : I
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 
 while (fn()) { }
 >fn() : I
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 
 do { }while(fn())
 >fn() : I
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 
 if (fn) { }
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 
 while (fn) { }
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 
 do { }while(fn)
->fn : (x?: string | undefined) => I
+>fn : (x?: string) => I
 
 
 

@@ -12,7 +12,7 @@ type U3 = | () => number
 >U3 : () => number
 
 type U4 = | (foo?: number) => void;
->U4 : (foo?: number | undefined) => void
+>U4 : (foo?: number) => void
 >foo : number | undefined
 
 type U5 = string | (number: number, foo?: string) => void | number;
@@ -40,7 +40,7 @@ type I3 = & () => boolean
 >I3 : () => boolean
 
 type I4 = & () => boolean & null;
->I4 : () => never
+>I4 : () => boolean & null
 
 type I5 = string & (any: any, any2: any) => any & any;
 >I5 : I5

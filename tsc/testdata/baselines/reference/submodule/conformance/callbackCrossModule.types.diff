@@ -27,3 +27,12 @@
  >p : any
  >1 : 1
  }
+@@= skipped -20, +20 lines =@@
+ === use.js ===
+ /** @param {import('./mod1').Con} k */
+ function f(k) {
+->f : (k: import("./mod1").Con) => any
++>f : (k: import('./mod1').Con) => any
+ >k : import("./mod1").Con
+
+     if (1 === 2 - 1) {

@@ -14,7 +14,7 @@ export declare const thing: {
     toString: () => string;
     toLocaleString: {
         (): string;
-        (locales: string | string[], options?: (Intl.NumberFormatOptions & Intl.DateTimeFormatOptions) | undefined): string;
+        (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
     };
     pop: () => number | undefined;
     push: (...items: number[]) => number;
@@ -22,18 +22,18 @@ export declare const thing: {
         (...items: ConcatArray<number>[]): number[];
         (...items: (number | ConcatArray<number>)[]): number[];
     };
-    join: (separator?: string | undefined) => string;
+    join: (separator?: string) => string;
     reverse: () => number[];
     shift: () => number | undefined;
-    slice: (start?: number | undefined, end?: number | undefined) => number[];
+    slice: (start?: number, end?: number) => number[];
     sort: (compareFn?: ((a: number, b: number) => number) | undefined) => number[];
     splice: {
-        (start: number, deleteCount?: number | undefined): number[];
+        (start: number, deleteCount?: number): number[];
         (start: number, deleteCount: number, ...items: number[]): number[];
     };
     unshift: (...items: number[]) => number;
-    indexOf: (searchElement: number, fromIndex?: number | undefined) => number;
-    lastIndexOf: (searchElement: number, fromIndex?: number | undefined) => number;
+    indexOf: (searchElement: number, fromIndex?: number) => number;
+    lastIndexOf: (searchElement: number, fromIndex?: number) => number;
     every: {
         <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[];
         (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean;
@@ -60,8 +60,8 @@ export declare const thing: {
         (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined;
     };
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
-    fill: (value: number, start?: number | undefined, end?: number | undefined) => number[];
-    copyWithin: (target: number, start: number, end?: number | undefined) => number[];
+    fill: (value: number, start?: number, end?: number) => number[];
+    copyWithin: (target: number, start: number, end?: number) => number[];
     [Symbol.iterator]: () => ArrayIterator<number>;
     entries: () => ArrayIterator<[number, number]>;
     keys: () => ArrayIterator<number>;
@@ -103,7 +103,7 @@ export declare const thing: {
         flatMap?: boolean | undefined;
         flat?: boolean | undefined;
     };
-    includes: (searchElement: number, fromIndex?: number | undefined) => boolean;
+    includes: (searchElement: number, fromIndex?: number) => boolean;
     flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[];
     flat: <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[];
 };

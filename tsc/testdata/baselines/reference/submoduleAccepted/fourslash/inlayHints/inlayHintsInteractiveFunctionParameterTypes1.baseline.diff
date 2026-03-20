@@ -10,17 +10,7 @@
      },
      {
        "value": ": "
-@@= skipped -9, +10 lines =@@
-       "value": "("
-     },
-     {
--      "value": "d"
-+      "value": "d",
-+      "location": {},
-     },
-     {
-       "value": ": "
-@@= skipped -107, +108 lines =@@
+@@= skipped -116, +117 lines =@@
        "value": "("
      },
      {
@@ -70,7 +60,16 @@
      },
      {
        "value": "?"
-@@= skipped -21, +22 lines =@@
+@@= skipped -12, +13 lines =@@
+       "value": "number"
+     },
+     {
+-      "value": " | "
+-    },
+-    {
+-      "value": "undefined"
+-    },
+-    {
        "value": "; "
      },
      {
@@ -80,7 +79,7 @@
      },
      {
        "value": "("
-@@= skipped -18, +19 lines =@@
+@@= skipped -27, +22 lines =@@
        "value": "; "
      },
      {

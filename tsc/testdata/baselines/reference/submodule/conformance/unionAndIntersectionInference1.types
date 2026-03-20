@@ -125,7 +125,7 @@ type Maybe<T> = T | void;
 >Maybe : Maybe<T>
 
 function get<U>(x: U | void): U {
->get : <U>(x: void | U) => U
+>get : <U>(x: U | void) => U
 >x : void | U
 
    return null; // just an example
@@ -138,7 +138,7 @@ get(foo).toUpperCase(); // Ok
 >get(foo).toUpperCase() : string
 >get(foo).toUpperCase : () => string
 >get(foo) : string
->get : <U>(x: void | U) => U
+>get : <U>(x: U | void) => U
 >foo : Maybe<string>
 >toUpperCase : () => string
 

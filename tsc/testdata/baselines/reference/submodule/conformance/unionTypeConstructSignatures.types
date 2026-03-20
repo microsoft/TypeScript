@@ -127,7 +127,7 @@ new unionWithDifferentParameterCount("hello", 10);// ok
 >10 : 10
 
 declare var unionWithOptionalParameter1: { new (a: string, b?: number): string; } | { new (a: string, b?: number): number; };
->unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+>unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
 >a : string
 >b : number | undefined
 >a : string
@@ -137,14 +137,14 @@ strOrNum = new unionWithOptionalParameter1('hello');
 >strOrNum = new unionWithOptionalParameter1('hello') : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter1('hello') : string | number
->unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+>unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
 >'hello' : "hello"
 
 strOrNum = new unionWithOptionalParameter1('hello', 10);
 >strOrNum = new unionWithOptionalParameter1('hello', 10) : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter1('hello', 10) : string | number
->unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+>unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
 >'hello' : "hello"
 >10 : 10
 
@@ -152,7 +152,7 @@ strOrNum = new unionWithOptionalParameter1('hello', "hello"); // error in parame
 >strOrNum = new unionWithOptionalParameter1('hello', "hello") : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter1('hello', "hello") : string | number
->unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+>unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
 >'hello' : "hello"
 >"hello" : "hello"
 
@@ -160,10 +160,10 @@ strOrNum = new unionWithOptionalParameter1(); // error
 >strOrNum = new unionWithOptionalParameter1() : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter1() : string | number
->unionWithOptionalParameter1 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b?: number | undefined) => number)
+>unionWithOptionalParameter1 : (new (a: string, b?: number) => string) | (new (a: string, b?: number) => number)
 
 declare var unionWithOptionalParameter2: { new (a: string, b?: number): string; } | { new (a: string, b: number): number };
->unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+>unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
 >a : string
 >b : number | undefined
 >a : string
@@ -173,14 +173,14 @@ strOrNum = new unionWithOptionalParameter2('hello'); // error no call signature
 >strOrNum = new unionWithOptionalParameter2('hello') : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter2('hello') : string | number
->unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+>unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
 >'hello' : "hello"
 
 strOrNum = new unionWithOptionalParameter2('hello', 10); // error no call signature
 >strOrNum = new unionWithOptionalParameter2('hello', 10) : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter2('hello', 10) : string | number
->unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+>unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
 >'hello' : "hello"
 >10 : 10
 
@@ -188,7 +188,7 @@ strOrNum = new unionWithOptionalParameter2('hello', "hello"); // error no call s
 >strOrNum = new unionWithOptionalParameter2('hello', "hello") : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter2('hello', "hello") : string | number
->unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+>unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
 >'hello' : "hello"
 >"hello" : "hello"
 
@@ -196,10 +196,10 @@ strOrNum = new unionWithOptionalParameter2(); // error no call signature
 >strOrNum = new unionWithOptionalParameter2() : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter2() : string | number
->unionWithOptionalParameter2 : (new (a: string, b?: number | undefined) => string) | (new (a: string, b: number) => number)
+>unionWithOptionalParameter2 : (new (a: string, b?: number) => string) | (new (a: string, b: number) => number)
 
 declare var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
->unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+>unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
 >a : string
 >b : number | undefined
 >a : string
@@ -208,14 +208,14 @@ strOrNum = new unionWithOptionalParameter3('hello'); // error no call signature
 >strOrNum = new unionWithOptionalParameter3('hello') : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter3('hello') : string | number
->unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+>unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
 >'hello' : "hello"
 
 strOrNum = new unionWithOptionalParameter3('hello', 10); // ok
 >strOrNum = new unionWithOptionalParameter3('hello', 10) : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter3('hello', 10) : string | number
->unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+>unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
 >'hello' : "hello"
 >10 : 10
 
@@ -223,7 +223,7 @@ strOrNum = new unionWithOptionalParameter3('hello', "hello"); // wrong type
 >strOrNum = new unionWithOptionalParameter3('hello', "hello") : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter3('hello', "hello") : string | number
->unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+>unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
 >'hello' : "hello"
 >"hello" : "hello"
 
@@ -231,7 +231,7 @@ strOrNum = new unionWithOptionalParameter3(); // error no call signature
 >strOrNum = new unionWithOptionalParameter3() : string | number
 >strOrNum : string | number
 >new unionWithOptionalParameter3() : string | number
->unionWithOptionalParameter3 : (new (a: string, b?: number | undefined) => string) | (new (a: string) => number)
+>unionWithOptionalParameter3 : (new (a: string, b?: number) => string) | (new (a: string) => number)
 
 declare var unionWithRestParameter1: { new (a: string, ...b: number[]): string; } | { new (a: string, ...b: number[]): number };
 >unionWithRestParameter1 : (new (a: string, ...b: number[]) => string) | (new (a: string, ...b: number[]) => number)

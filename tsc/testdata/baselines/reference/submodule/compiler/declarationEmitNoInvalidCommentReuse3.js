@@ -21,8 +21,9 @@ export declare namespace id {
 
 
 //// [a.d.ts]
+import { id } from "./id";
 export declare const _: {
-    foo: 1;
+    foo: id.A<1>;
 };
 /**
 */ 

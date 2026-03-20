@@ -66,7 +66,7 @@ type BaseFactory = typeof import('./base');
  * @param {InstanceType<BaseFactory["Base"]>} base
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
-declare const test: (base: {}) => {};
+declare const test: (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>;
 
 
 //// [DtsFileErrors]
@@ -95,5 +95,5 @@ out/base.d.ts(6,9): error TS2502: 'Base' is referenced directly or indirectly in
      * @param {InstanceType<BaseFactory["Base"]>} base
      * @returns {InstanceType<BaseFactory["Base"]>}
      */
-    declare const test: (base: {}) => {};
+    declare const test: (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>;
     

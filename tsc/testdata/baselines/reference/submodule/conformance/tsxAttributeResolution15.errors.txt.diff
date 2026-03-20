@@ -1,0 +1,22 @@
+--- old.tsxAttributeResolution15.errors.txt
++++ new.tsxAttributeResolution15.errors.txt
+@@= skipped -0, +0 lines =@@
+ file.tsx(9,5): error TS2564: Property 'greeting' has no initializer and is not definitely assigned in the constructor.
+-file.tsx(13,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
+-  Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
++file.tsx(13,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
++  Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+ file.tsx(16,39): error TS2532: Object is possibly 'undefined'.
+
+
+@@= skipped -20, +20 lines =@@
+     // Error
+     let a = <BigGreeter prop1="hello" />
+                         ~~~~~
+-!!! error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
+-!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode | undefined; }'.
++!!! error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
++!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+     
+     // OK
+     let b = <BigGreeter ref={(input) => { this.textInput = input; }} />

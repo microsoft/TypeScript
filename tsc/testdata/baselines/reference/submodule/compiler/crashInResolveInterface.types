@@ -7,7 +7,7 @@ declare var c: C;
 
 interface C {
     count(countTitle?: string): void;
->count : (countTitle?: string | undefined) => void
+>count : (countTitle?: string) => void
 >countTitle : string | undefined
 }
 interface C {

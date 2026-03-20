@@ -9,8 +9,8 @@ import * as React from 'react';
 >React : typeof React
 
 declare const TestComponentWithChildren: <T, TParam>(props: {
->TestComponentWithChildren : <T, TParam>(props: { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; children?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }) => React.ReactElement<any>
->props : { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; children?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }
+>TestComponentWithChildren : <T, TParam>(props: { state: T; selector?: (state: NoInfer<T>) => TParam; children?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }) => React.ReactElement<any>
+>props : { state: T; selector?: (state: NoInfer<T>) => TParam; children?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }
 
   state: T;
 >state : T
@@ -28,8 +28,8 @@ declare const TestComponentWithChildren: <T, TParam>(props: {
 >React : any
 
 declare const TestComponentWithoutChildren: <T, TParam>(props: {
->TestComponentWithoutChildren : <T, TParam>(props: { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; notChildren?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }) => React.ReactElement<any>
->props : { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; notChildren?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }
+>TestComponentWithoutChildren : <T, TParam>(props: { state: T; selector?: (state: NoInfer<T>) => TParam; notChildren?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }) => React.ReactElement<any>
+>props : { state: T; selector?: (state: NoInfer<T>) => TParam; notChildren?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }
 
   state: T;
 >state : T
@@ -58,7 +58,7 @@ const App = () => {
 
       <TestComponentWithChildren state={{ foo: 123 }} selector={(state) => state.foo}>
 ><TestComponentWithChildren state={{ foo: 123 }} selector={(state) => state.foo}>        {(selected) => <div>{Math.max(selected, 0)}</div>}      </TestComponentWithChildren> : JSX.Element
->TestComponentWithChildren : <T, TParam>(props: { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; children?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }) => React.ReactElement<any>
+>TestComponentWithChildren : <T, TParam>(props: { state: T; selector?: (state: NoInfer<T>) => TParam; children?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }) => React.ReactElement<any>
 >state : { foo: number; }
 >{ foo: 123 } : { foo: number; }
 >foo : number
@@ -84,11 +84,11 @@ const App = () => {
 >div : any
 
       </TestComponentWithChildren>
->TestComponentWithChildren : <T, TParam>(props: { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; children?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }) => React.ReactElement<any>
+>TestComponentWithChildren : <T, TParam>(props: { state: T; selector?: (state: NoInfer<T>) => TParam; children?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }) => React.ReactElement<any>
 
       <TestComponentWithoutChildren
 ><TestComponentWithoutChildren        state={{ foo: 123 }}        selector={(state) => state.foo}        notChildren={(selected) => <div>{Math.max(selected, 0)}</div>}      /> : JSX.Element
->TestComponentWithoutChildren : <T, TParam>(props: { state: T; selector?: ((state: NoInfer<T>) => TParam) | undefined; notChildren?: ((state: NoInfer<TParam>) => React.ReactElement<any> | null) | undefined; }) => React.ReactElement<any>
+>TestComponentWithoutChildren : <T, TParam>(props: { state: T; selector?: (state: NoInfer<T>) => TParam; notChildren?: (state: NoInfer<TParam>) => React.ReactElement<any> | null; }) => React.ReactElement<any>
 
         state={{ foo: 123 }}
 >state : { foo: number; }
@@ -131,8 +131,8 @@ interface State {
 }
 
 declare const Subscribe: <TSelected = State>(props: {
->Subscribe : <TSelected = State>(props: { selector?: ((state: State) => TSelected) | undefined; children: (state: TSelected) => void; }) => React.ReactElement<any>
->props : { selector?: ((state: State) => TSelected) | undefined; children: (state: TSelected) => void; }
+>Subscribe : <TSelected = State>(props: { selector?: (state: State) => TSelected; children: (state: TSelected) => void; }) => React.ReactElement<any>
+>props : { selector?: (state: State) => TSelected; children: (state: TSelected) => void; }
 
   selector?: (state: State) => TSelected
 >selector : ((state: State) => TSelected) | undefined
@@ -151,7 +151,7 @@ const _result = (
 
   <Subscribe
 ><Subscribe    selector={(state) => {      return [state.value]    }}  >    {([value = false]) => {      console.log(value)    }}  </Subscribe> : JSX.Element
->Subscribe : <TSelected = State>(props: { selector?: ((state: State) => TSelected) | undefined; children: (state: TSelected) => void; }) => React.ReactElement<any>
+>Subscribe : <TSelected = State>(props: { selector?: (state: State) => TSelected; children: (state: TSelected) => void; }) => React.ReactElement<any>
 
     selector={(state) => {
 >selector : (state: State) => boolean[]
@@ -180,7 +180,7 @@ const _result = (
 
     }}
   </Subscribe>
->Subscribe : <TSelected = State>(props: { selector?: ((state: State) => TSelected) | undefined; children: (state: TSelected) => void; }) => React.ReactElement<any>
+>Subscribe : <TSelected = State>(props: { selector?: (state: State) => TSelected; children: (state: TSelected) => void; }) => React.ReactElement<any>
 
 )
 

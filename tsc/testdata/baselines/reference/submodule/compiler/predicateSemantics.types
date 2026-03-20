@@ -254,7 +254,7 @@ console.log((cond || undefined) && 1 / cond);
 >cond : any
 
 function foo(this: Object | undefined) {
->foo : (this: Object) => 0 | Object
+>foo : (this: Object | undefined) => 0 | Object
 >this : Object
 
     // Should be OK
@@ -323,7 +323,7 @@ class X {
 
 // https://github.com/microsoft/TypeScript/issues/60614
 declare function tag<T>(
->tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T
+>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
 
   strings: TemplateStringsArray,
 >strings : TemplateStringsArray
@@ -336,7 +336,7 @@ declare function tag<T>(
 tag`foo${1}` ?? 32; // ok
 >tag`foo${1}` ?? 32 : unknown
 >tag`foo${1}` : unknown
->tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T
+>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
 >`foo${1}` : string
 >1 : 1
 >32 : 32

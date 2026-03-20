@@ -1,0 +1,21 @@
+--- old.objectLiteralComputedNameNoDeclarationError.types
++++ new.objectLiteralComputedNameNoDeclarationError.types
+@@= skipped -1, +1 lines =@@
+
+ === objectLiteralComputedNameNoDeclarationError.ts ===
+ const Foo = {
+->Foo : { BANANA: "banana"; }
+->{    BANANA: 'banana' as 'banana',} : { BANANA: "banana"; }
++>Foo : { BANANA: 'banana'; }
++>{    BANANA: 'banana' as 'banana',} : { BANANA: 'banana'; }
+
+     BANANA: 'banana' as 'banana',
+ >BANANA : "banana"
+@@= skipped -16, +16 lines =@@
+     [Foo.BANANA]: 1
+ >[Foo.BANANA] : number
+ >Foo.BANANA : "banana"
+->Foo : { BANANA: "banana"; }
++>Foo : { BANANA: 'banana'; }
+ >BANANA : "banana"
+ >1 : 1

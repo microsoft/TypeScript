@@ -14,7 +14,7 @@ function isMissingReturnExpression2(): any {
 }
 
 function isMissingReturnExpression3(): number|void {
->isMissingReturnExpression3 : () => void | number
+>isMissingReturnExpression3 : () => number | void
 
     return;
 }

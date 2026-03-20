@@ -1,0 +1,20 @@
+--- old.controlFlowFunctionLikeCircular1.errors.txt
++++ new.controlFlowFunctionLikeCircular1.errors.txt
+@@= skipped -34, +34 lines =@@
+ controlFlowFunctionLikeCircular_9.ts(1,10): error TS2393: Duplicate function implementation.
+ controlFlowFunctionLikeCircular_9.ts(3,5): error TS2448: Block-scoped variable 'o' used before its declaration.
+ controlFlowFunctionLikeCircular_9.ts(3,5): error TS2454: Variable 'o' is used before being assigned.
+-controlFlowFunctionLikeCircular_9.ts(4,47): error TS2411: Property 'x' of type '(() => DateConstructor) | (() => void)' is not assignable to 'string' index type '() => string | number'.
++controlFlowFunctionLikeCircular_9.ts(4,47): error TS2411: Property 'x' of type '(() => typeof Date) | (() => void)' is not assignable to 'string' index type '() => typeof arg'.
+
+
+ ==== controlFlowFunctionLikeCircular_1.ts (5 errors) ====
+@@= skipped -150, +150 lines =@@
+ !!! error TS2454: Variable 'o' is used before being assigned.
+         const o: { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void) } = whatever
+                                                   ~
+-!!! error TS2411: Property 'x' of type '(() => DateConstructor) | (() => void)' is not assignable to 'string' index type '() => string | number'.
++!!! error TS2411: Property 'x' of type '(() => typeof Date) | (() => void)' is not assignable to 'string' index type '() => typeof arg'.
+         return o.x;
+       }
+       return undefined;

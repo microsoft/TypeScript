@@ -64,9 +64,9 @@ catch (e) {
 
         e.toExponential();
 >e.toExponential() : string
->e.toExponential : (fractionDigits?: number | undefined) => string
+>e.toExponential : (fractionDigits?: number) => string
 >e : number
->toExponential : (fractionDigits?: number | undefined) => string
+>toExponential : (fractionDigits?: number) => string
 
         e++;
 >e++ : number

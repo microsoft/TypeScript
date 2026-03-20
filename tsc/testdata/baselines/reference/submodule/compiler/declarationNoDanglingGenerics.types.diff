@@ -1,24 +1,6 @@
 --- old.declarationNoDanglingGenerics.types
 +++ new.declarationNoDanglingGenerics.types
-@@= skipped -6, +6 lines =@@
- >{} : {}
-
- function register(kind: string): void | never {
-->register : (kind: string) => void | never
-+>register : (kind: string) => void
- >kind : string
-
-   if (kindCache[kind]) {
-@@= skipped -28, +28 lines =@@
-
-   register(kind);
- >register(kind) : void
-->register : (kind: string) => void | never
-+>register : (kind: string) => void
- >kind : TKind
-
-   return class {
-@@= skipped -35, +35 lines =@@
+@@= skipped -69, +69 lines =@@
 
  export class AKind extends ClassFactory(Kinds.A) {
  >AKind : AKind

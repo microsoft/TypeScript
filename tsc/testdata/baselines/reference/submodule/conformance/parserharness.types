@@ -67,17 +67,17 @@ function filePath(fullPath: string) {
     var components = fullPath.split("/");
 >components : string[]
 >fullPath.split("/") : string[]
->fullPath.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>fullPath.split : (separator: string | RegExp, limit?: number) => string[]
 >fullPath : string
->split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>split : (separator: string | RegExp, limit?: number) => string[]
 >"/" : "/"
 
     var path: string[] = components.slice(0, components.length - 1);
 >path : string[]
 >components.slice(0, components.length - 1) : string[]
->components.slice : (start?: number | undefined, end?: number | undefined) => string[]
+>components.slice : (start?: number, end?: number) => string[]
 >components : string[]
->slice : (start?: number | undefined, end?: number | undefined) => string[]
+>slice : (start?: number, end?: number) => string[]
 >0 : 0
 >components.length - 1 : number
 >components.length : number
@@ -88,9 +88,9 @@ function filePath(fullPath: string) {
     return path.join("/") + "/";
 >path.join("/") + "/" : string
 >path.join("/") : string
->path.join : (separator?: string | undefined) => string
+>path.join : (separator?: string) => string
 >path : string[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >"/" : "/"
 >"/" : "/"
 }
@@ -257,9 +257,9 @@ namespace Harness {
             if (bugIds.indexOf(id) < 0) {
 >bugIds.indexOf(id) < 0 : boolean
 >bugIds.indexOf(id) : number
->bugIds.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>bugIds.indexOf : (searchElement: string, fromIndex?: number) => number
 >bugIds : string[]
->indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>indexOf : (searchElement: string, fromIndex?: number) => number
 >id : string
 >0 : 0
 
@@ -304,7 +304,7 @@ namespace Harness {
         }
 
         export function is(result: boolean, msg?: string) {
->is : (result: boolean, msg?: string | undefined) => void
+>is : (result: boolean, msg?: string) => void
 >result : boolean
 >msg : string | undefined
 
@@ -773,9 +773,9 @@ namespace Harness {
         var lines = content.split('\r\n');
 >lines : string[]
 >content.split('\r\n') : string[]
->content.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>content.split : (separator: string | RegExp, limit?: number) => string[]
 >content : string
->split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>split : (separator: string | RegExp, limit?: number) => string[]
 >'\r\n' : "\r\n"
 
         if (lines.length === 1) {
@@ -789,9 +789,9 @@ namespace Harness {
 >lines = content.split('\n') : string[]
 >lines : string[]
 >content.split('\n') : string[]
->content.split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>content.split : (separator: string | RegExp, limit?: number) => string[]
 >content : string
->split : (separator: string | RegExp, limit?: number | undefined) => string[]
+>split : (separator: string | RegExp, limit?: number) => string[]
 >'\n' : "\n"
         }
         return lines;
@@ -806,9 +806,9 @@ namespace Harness {
         if (path.indexOf('tests') < 0) {
 >path.indexOf('tests') < 0 : boolean
 >path.indexOf('tests') : number
->path.indexOf : (searchString: string, position?: number | undefined) => number
+>path.indexOf : (searchString: string, position?: number) => number
 >path : string
->indexOf : (searchString: string, position?: number | undefined) => number
+>indexOf : (searchString: string, position?: number) => number
 >'tests' : "tests"
 >0 : 0
 
@@ -857,12 +857,12 @@ namespace Harness {
     // Logger
     export interface ILogger {
         start: (fileName?: string, priority?: number) => void;
->start : (fileName?: string | undefined, priority?: number | undefined) => void
+>start : (fileName?: string, priority?: number) => void
 >fileName : string | undefined
 >priority : number | undefined
 
         end: (fileName?: string) => void;
->end : (fileName?: string | undefined) => void
+>end : (fileName?: string) => void
 >fileName : string | undefined
 
         scenarioStart: (scenario: IScenarioMetadata) => void;
@@ -870,7 +870,7 @@ namespace Harness {
 >scenario : IScenarioMetadata
 
         scenarioEnd: (scenario: IScenarioMetadata, error?: Error) => void;
->scenarioEnd : (scenario: IScenarioMetadata, error?: Error | undefined) => void
+>scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
 >scenario : IScenarioMetadata
 >error : Error | undefined
 
@@ -912,12 +912,12 @@ namespace Harness {
 >Logger : Logger
 
         public start(fileName?: string, priority?: number) { }
->start : (fileName?: string | undefined, priority?: number | undefined) => void
+>start : (fileName?: string, priority?: number) => void
 >fileName : string | undefined
 >priority : number | undefined
 
         public end(fileName?: string) { }
->end : (fileName?: string | undefined) => void
+>end : (fileName?: string) => void
 >fileName : string | undefined
 
         public scenarioStart(scenario: IScenarioMetadata) { }
@@ -925,7 +925,7 @@ namespace Harness {
 >scenario : IScenarioMetadata
 
         public scenarioEnd(scenario: IScenarioMetadata, error?: Error) { }
->scenarioEnd : (scenario: IScenarioMetadata, error?: Error | undefined) => void
+>scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
 >scenario : IScenarioMetadata
 >error : Error | undefined
 
@@ -1076,8 +1076,8 @@ namespace Harness {
          *  on whether the function was asynchronous or not.
          */
         public call(fn: (done?: IDone) => void , done: IDone) {
->call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
->fn : (done?: IDone | undefined) => void
+>call : (fn: (done?: IDone) => void, done: IDone) => boolean
+>fn : (done?: IDone) => void
 >done : IDone | undefined
 >done : IDone
 
@@ -1089,14 +1089,14 @@ namespace Harness {
                 if (fn.length === 0) {
 >fn.length === 0 : boolean
 >fn.length : number
->fn : (done?: IDone | undefined) => void
+>fn : (done?: IDone) => void
 >length : number
 >0 : 0
 
                     // No async.
                     fn();
 >fn() : void
->fn : (done?: IDone | undefined) => void
+>fn : (done?: IDone) => void
 
                     done();
 >done() : void
@@ -1117,7 +1117,7 @@ namespace Harness {
 
                     fn(function () {
 >fn(function () {                        isAsync = false; // If we execute synchronously, this will get called before the return below.                        Runnable.popGlobalErrorHandler();                        done();                    }) : void
->fn : (done?: IDone | undefined) => void
+>fn : (done?: IDone) => void
 >function () {                        isAsync = false; // If we execute synchronously, this will get called before the return below.                        Runnable.popGlobalErrorHandler();                        done();                    } : () => void
 
                         isAsync = false; // If we execute synchronously, this will get called before the return below.
@@ -1164,9 +1164,9 @@ namespace Harness {
 
             return this.call(this.block, done);
 >this.call(this.block, done) : boolean
->this.call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+>this.call : (fn: (done?: IDone) => void, done: IDone) => boolean
 >this : this
->call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+>call : (fn: (done?: IDone) => void, done: IDone) => boolean
 >this.block : any
 >this : this
 >block : any
@@ -1180,9 +1180,9 @@ namespace Harness {
 
             return this.call(<any>((done) => this.children[index].run(done)), done);
 >this.call(<any>((done) => this.children[index].run(done)), done) : boolean
->this.call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+>this.call : (fn: (done?: IDone) => void, done: IDone) => boolean
 >this : this
->call : (fn: (done?: IDone | undefined) => void, done: IDone) => boolean
+>call : (fn: (done?: IDone) => void, done: IDone) => boolean
 ><any>((done) => this.children[index].run(done)) : any
 >((done) => this.children[index].run(done)) : (done: any) => void
 >(done) => this.children[index].run(done) : (done: any) => void
@@ -2193,7 +2193,7 @@ namespace Harness {
 >"" : ""
 
             public bench(subBench?: () => void ) { }
->bench : (subBench?: (() => void) | undefined) => void
+>bench : (subBench?: () => void) => void
 >subBench : (() => void) | undefined
 
             public before() { }
@@ -2254,7 +2254,7 @@ namespace Harness {
 >[] : never[]
 
         var timeFunction: (
->timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -2266,15 +2266,15 @@ namespace Harness {
 >name : string | undefined
 
             f?: (bench?: { (): void; }) => void
->f : ((bench?: (() => void) | undefined) => void) | undefined
+>f : ((bench?: { (): void; }) => void) | undefined
 >bench : (() => void) | undefined
 
         ) => void;
 
         timeFunction = function (
->timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
->timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
->function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
+>timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: { (): void; }) => void) | undefined) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
+>function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: ((bench?: { (): void; }) => void) | undefined) => void
 
             benchmark: Benchmark,
 >benchmark : Benchmark
@@ -2290,10 +2290,10 @@ namespace Harness {
 >'' : ""
 
             f = benchmark.bench
->f : ((bench?: (() => void) | undefined) => void) | undefined
->benchmark.bench : (subBench?: (() => void) | undefined) => void
+>f : ((bench?: { (): void; }) => void) | undefined
+>benchmark.bench : (subBench?: () => void) => void
 >benchmark : Benchmark
->bench : (subBench?: (() => void) | undefined) => void
+>bench : (subBench?: () => void) => void
 
         ): void {
 
@@ -2316,7 +2316,7 @@ namespace Harness {
 
                 timeFunction(benchmark, description, name, f);
 >timeFunction(benchmark, description, name, f) : void
->timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 >benchmark : Benchmark
 >description : string
 >name : any
@@ -2326,7 +2326,7 @@ namespace Harness {
             f.call(benchmark, subBenchmark);
 >f.call(benchmark, subBenchmark) : void
 >f.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->f : (bench?: (() => void) | undefined) => void
+>f : (bench?: { (): void; }) => void
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
 >benchmark : Benchmark
 >subBenchmark : (name: any, f: any) => void
@@ -2400,7 +2400,7 @@ namespace Harness {
 
                     timeFunction(b);
 >timeFunction(b) : void
->timeFunction : (benchmark: Benchmark, description?: string | undefined, name?: string | undefined, f?: ((bench?: (() => void) | undefined) => void) | undefined) => void
+>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 >b : Benchmark
 
                     b.afterEach();
@@ -2648,7 +2648,7 @@ namespace Harness {
 
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
             public createFile(s: string, useUTF8?: boolean): ITextWriter {
->createFile : (s: string, useUTF8?: boolean | undefined) => ITextWriter
+>createFile : (s: string, useUTF8?: boolean) => ITextWriter
 >s : string
 >useUTF8 : boolean | undefined
 
@@ -2860,7 +2860,7 @@ namespace Harness {
         }
 
         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
->makeDefaultCompilerForTest : (c?: any) => any
+>makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
 >c : any
 >TypeScript : any
 
@@ -2987,7 +2987,7 @@ namespace Harness {
 >true : true
 
         export function compile(code?: string, filename?: string) {
->compile : (code?: string | undefined, filename?: string | undefined) => void
+>compile : (code?: string, filename?: string) => void
 >code : string | undefined
 >filename : string | undefined
 
@@ -3093,7 +3093,7 @@ namespace Harness {
 
                 compileString(testCode, 'test.ts', function (compilerResult) {
 >compileString(testCode, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >testCode : any
 >'test.ts' : "test.ts"
 >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
@@ -3710,7 +3710,7 @@ namespace Harness {
 
                 compileString(code, 'test.ts', function (compilerResult) {
 >compileString(code, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >'test.ts' : "test.ts"
 >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
@@ -4465,7 +4465,7 @@ namespace Harness {
           * @param references the set of referenced files used by the given code
           */
         export function generateDeclFile(code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]): string {
->generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string | undefined, compilationContext?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => string
+>generateDeclFile : (code: string, verifyNoDeclFile: boolean, unitName?: string, compilationContext?: Harness.Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => string
 >code : string
 >verifyNoDeclFile : boolean
 >unitName : string | undefined
@@ -4521,7 +4521,7 @@ namespace Harness {
 
                 addUnit(code, unitName, false, false, references);
 >addUnit(code, unitName, false, false, references) : TypeScript.Script
->addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
 >unitName : string | undefined
 >false : false
@@ -4613,9 +4613,9 @@ namespace Harness {
                     if (fn.indexOf('.d.ts') >= 0) {
 >fn.indexOf('.d.ts') >= 0 : boolean
 >fn.indexOf('.d.ts') : number
->fn.indexOf : (searchString: string, position?: number | undefined) => number
+>fn.indexOf : (searchString: string, position?: number) => number
 >fn : string
->indexOf : (searchString: string, position?: number | undefined) => number
+>indexOf : (searchString: string, position?: number) => number
 >'.d.ts' : ".d.ts"
 >0 : 0
 
@@ -4638,11 +4638,11 @@ namespace Harness {
 >results = writer.lines.join('\n') : string
 >results : string
 >writer.lines.join('\n') : string
->writer.lines.join : (separator?: string | undefined) => string
+>writer.lines.join : (separator?: string) => string
 >writer.lines : string[]
 >writer : WriterAggregator
 >lines : string[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >'\n' : "\n"
 
                         if (verifyNoDeclFile && results != "") {
@@ -4726,7 +4726,7 @@ namespace Harness {
 
                 updateUnit('', uName);
 >updateUnit('', uName) : void
->updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+>updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >'' : ""
 >uName : string
             }
@@ -4783,9 +4783,9 @@ namespace Harness {
 >this : this
 >code : string
 >lines.join("\n") : string
->lines.join : (separator?: string | undefined) => string
+>lines.join : (separator?: string) => string
 >lines : any[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >"\n" : "\n"
 
                 this.errors = [];
@@ -5003,7 +5003,7 @@ namespace Harness {
 >compiler = makeDefaultCompilerForTest() : any
 >compiler : TypeScript.TypeScriptCompiler
 >makeDefaultCompilerForTest() : any
->makeDefaultCompilerForTest : (c?: any) => any
+>makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
 
             if (usePull) {
 >usePull : boolean
@@ -5077,7 +5077,7 @@ namespace Harness {
 
                     updateUnit('', fname);
 >updateUnit('', fname) : void
->updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+>updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >'' : ""
 >fname : any
                     }
@@ -5107,7 +5107,7 @@ namespace Harness {
         }
 
         export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
->addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
 >unitName : string | undefined
 >isResident : boolean | undefined
@@ -5157,7 +5157,7 @@ namespace Harness {
 
                     updateUnit(code, uName);
 >updateUnit(code, uName) : void
->updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+>updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >code : string
 >uName : string
 
@@ -5206,7 +5206,7 @@ namespace Harness {
         }
 
         export function updateUnit(code: string, unitName: string, setRecovery?: boolean) {
->updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+>updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >code : string
 >unitName : string
 >setRecovery : boolean | undefined
@@ -5242,11 +5242,11 @@ namespace Harness {
         }
 
         export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >path : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : ((settings?: any) => void) | undefined
+>settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
 >settings : any
 >TypeScript : any
 >context : CompilationContext | undefined
@@ -5278,22 +5278,22 @@ namespace Harness {
 
             compileUnit(code, filename, callback, settingsCallback, context, references);
 >compileUnit(code, filename, callback, settingsCallback, context, references) : void
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : any
 >filename : string
 >callback : (res: CompilerResult) => void
->settingsCallback : ((settings?: any) => void) | undefined
+>settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
 >context : CompilationContext | undefined
 >references : TypeScript.IFileReference[] | undefined
         }
 
         export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->settingsCallback : ((settings?: any) => void) | undefined
+>settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
 >settings : any
 >TypeScript : any
 >context : CompilationContext | undefined
@@ -5361,11 +5361,11 @@ namespace Harness {
 >moduleGenTarget : any
 
             if (settingsCallback) {
->settingsCallback : ((settings?: any) => void) | undefined
+>settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
 
                 settingsCallback(compiler.settings);
 >settingsCallback(compiler.settings) : void
->settingsCallback : (settings?: any) => void
+>settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 >compiler.settings : any
 >compiler : TypeScript.TypeScriptCompiler
 >settings : any
@@ -5386,7 +5386,7 @@ namespace Harness {
             try {
                 compileString(code, filename, callback, context, references);
 >compileString(code, filename, callback, context, references) : void
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >filename : string
 >callback : (res: CompilerResult) => void
@@ -5397,7 +5397,7 @@ namespace Harness {
                 // If settingsCallback exists, assume that it modified the global compiler instance's settings in some way.
                 // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                 if (settingsCallback) {
->settingsCallback : ((settings?: any) => void) | undefined
+>settingsCallback : ((settings?: TypeScript.CompilationSettings) => void) | undefined
 
                     compiler.settings = oldCompilerSettings;
 >compiler.settings = oldCompilerSettings : any
@@ -5424,10 +5424,10 @@ namespace Harness {
         }
 
         export function compileUnits(units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void , settingsCallback?: () => void ) {
->compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: CompilerResult) => void, settingsCallback?: (() => void) | undefined) => void
+>compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void, settingsCallback?: () => void) => void
 >units : TestCaseParser.TestUnitData[]
 >TestCaseParser : any
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
 >settingsCallback : (() => void) | undefined
@@ -5459,9 +5459,9 @@ namespace Harness {
             var dependencies = units.slice(0, units.length - 1);
 >dependencies : TestCaseParser.TestUnitData[]
 >units.slice(0, units.length - 1) : TestCaseParser.TestUnitData[]
->units.slice : (start?: number | undefined, end?: number | undefined) => TestCaseParser.TestUnitData[]
+>units.slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
 >units : TestCaseParser.TestUnitData[]
->slice : (start?: number | undefined, end?: number | undefined) => TestCaseParser.TestUnitData[]
+>slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
 >0 : 0
 >units.length - 1 : number
 >units.length : number
@@ -5482,12 +5482,12 @@ namespace Harness {
 
             compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references);
 >compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references) : void
->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: ((settings?: any) => void) | undefined, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >lastUnit.content : string
 >lastUnit : TestCaseParser.TestUnitData
 >content : string
 >unitName : string
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >settingsCallback : (() => void) | undefined
 >compilationContext : CompilationContext
 >lastUnit.references : TypeScript.IFileReference[]
@@ -5508,7 +5508,7 @@ namespace Harness {
         }
 
         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean | undefined) => void
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 >ioHost : TypeScript.EmitterIOHost
 >TypeScript : any
 >usePullEmitter : boolean | undefined
@@ -5523,10 +5523,10 @@ namespace Harness {
         }
 
         export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
->compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >unitName : string
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
 >context : CompilationContext | undefined
@@ -5581,7 +5581,7 @@ namespace Harness {
 >scripts : TypeScript.Script[]
 >push : (...items: TypeScript.Script[]) => number
 >addUnit(code, uName, false, isDeclareFile, references) : TypeScript.Script
->addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >code : string
 >uName : string
 >false : false
@@ -5590,7 +5590,7 @@ namespace Harness {
 
             compile(code, uName);
 >compile(code, uName) : void
->compile : (code?: string | undefined, filename?: string | undefined) => void
+>compile : (code?: string, filename?: string) => void
 >code : string
 >uName : string
 
@@ -5612,7 +5612,7 @@ namespace Harness {
 
                 emit(stdout, true);
 >emit(stdout, true) : void
->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean | undefined) => void
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 >stdout : EmitterIOHost
 >true : true
             }
@@ -5626,7 +5626,7 @@ namespace Harness {
 
                 emit(stdout, false);
 >emit(stdout, false) : void
->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean | undefined) => void
+>emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 >stdout : EmitterIOHost
 >false : false
 
@@ -5650,7 +5650,7 @@ namespace Harness {
 
             callback(new CompilerResult(stdout.toArray(), errors, scripts));
 >callback(new CompilerResult(stdout.toArray(), errors, scripts)) : void
->callback : (res: CompilerResult) => void
+>callback : (res: Compiler.CompilerResult) => void
 >new CompilerResult(stdout.toArray(), errors, scripts) : CompilerResult
 >CompilerResult : typeof CompilerResult
 >stdout.toArray() : { filename: string; file: WriterAggregator; }[]
@@ -5700,7 +5700,7 @@ namespace Harness {
 
                         addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
 >addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name)) : TypeScript.Script
->addUnit : (code: string, unitName?: string | undefined, isResident?: boolean | undefined, isDeclareFile?: boolean | undefined, references?: TypeScript.IFileReference[] | undefined) => TypeScript.Script
+>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 >dep.content : string
 >dep : TestCaseParser.TestUnitData
 >content : string
@@ -5743,7 +5743,7 @@ namespace Harness {
 
                         updateUnit('', file);
 >updateUnit('', file) : void
->updateUnit : (code: string, unitName: string, setRecovery?: boolean | undefined) => void
+>updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >'' : ""
 >file : any
 
@@ -6006,9 +6006,9 @@ namespace Harness {
                     var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
 >fileNameIndex : number
 >fileMetadataNames.indexOf(testMetaData[1].toLowerCase()) : number
->fileMetadataNames.indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>fileMetadataNames.indexOf : (searchElement: string, fromIndex?: number) => number
 >fileMetadataNames : string[]
->indexOf : (searchElement: string, fromIndex?: number | undefined) => number
+>indexOf : (searchElement: string, fromIndex?: number) => number
 >testMetaData[1].toLowerCase() : any
 >testMetaData[1].toLowerCase : any
 >testMetaData[1] : any
@@ -6034,9 +6034,9 @@ namespace Harness {
 >1 : 1
 >'". Available file metadata names are: ' : "\". Available file metadata names are: "
 >fileMetadataNames.join(', ') : string
->fileMetadataNames.join : (separator?: string | undefined) => string
+>fileMetadataNames.join : (separator?: string) => string
 >fileMetadataNames : string[]
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
 >', ' : ", "
 
                     } else if (fileNameIndex == 0) {
@@ -6285,11 +6285,11 @@ namespace Harness {
             var prefix = this.content.substring(0, minChar);
 >prefix : string
 >this.content.substring(0, minChar) : string
->this.content.substring : (start: number, end?: number | undefined) => string
+>this.content.substring : (start: number, end?: number) => string
 >this.content : string
 >this : this
 >content : string
->substring : (start: number, end?: number | undefined) => string
+>substring : (start: number, end?: number) => string
 >0 : 0
 >minChar : number
 
@@ -6300,11 +6300,11 @@ namespace Harness {
             var suffix = this.content.substring(limChar);
 >suffix : string
 >this.content.substring(limChar) : string
->this.content.substring : (start: number, end?: number | undefined) => string
+>this.content.substring : (start: number, end?: number) => string
 >this.content : string
 >this : this
 >content : string
->substring : (start: number, end?: number | undefined) => string
+>substring : (start: number, end?: number) => string
 >limChar : number
 
             this.content = prefix + middle + suffix;
@@ -6368,11 +6368,11 @@ namespace Harness {
 
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
 >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this.editRanges.splice : { (start: number, deleteCount?: number | undefined): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
+>this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->splice : { (start: number, deleteCount?: number | undefined): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
+>splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
 >0 : 0
 >this.maxScriptVersions - this.editRanges.length : number
 >this.maxScriptVersions : number
@@ -6450,11 +6450,11 @@ namespace Harness {
             var entries = this.editRanges.slice(initialEditRangeIndex);
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this.editRanges.slice : (start?: number | undefined, end?: number | undefined) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->slice : (start?: number | undefined, end?: number | undefined) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
+>slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >initialEditRangeIndex : number
 
             var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
@@ -6826,7 +6826,7 @@ namespace Harness {
 
             return this.scripts[scriptIndex].content.substring(start, end);
 >this.scripts[scriptIndex].content.substring(start, end) : string
->this.scripts[scriptIndex].content.substring : (start: number, end?: number | undefined) => string
+>this.scripts[scriptIndex].content.substring : (start: number, end?: number) => string
 >this.scripts[scriptIndex].content : string
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
@@ -6834,7 +6834,7 @@ namespace Harness {
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >content : string
->substring : (start: number, end?: number | undefined) => string
+>substring : (start: number, end?: number) => string
 >start : number
 >end : number
         }
@@ -7274,9 +7274,9 @@ namespace Harness {
                 var prefix = result.substring(0, edit.minChar);
 >prefix : string
 >result.substring(0, edit.minChar) : string
->result.substring : (start: number, end?: number | undefined) => string
+>result.substring : (start: number, end?: number) => string
 >result : string
->substring : (start: number, end?: number | undefined) => string
+>substring : (start: number, end?: number) => string
 >0 : 0
 >edit.minChar : any
 >edit : Services.TextEdit
@@ -7291,9 +7291,9 @@ namespace Harness {
                 var suffix = result.substring(edit.limChar);
 >suffix : string
 >result.substring(edit.limChar) : string
->result.substring : (start: number, end?: number | undefined) => string
+>result.substring : (start: number, end?: number) => string
 >result : string
->substring : (start: number, end?: number | undefined) => string
+>substring : (start: number, end?: number) => string
 >edit.limChar : any
 >edit : Services.TextEdit
 >limChar : any
@@ -7531,9 +7531,9 @@ namespace Harness {
 
             return JSON.stringify({ usePullLanguageService: usePull });
 >JSON.stringify({ usePullLanguageService: usePull }) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
 >{ usePullLanguageService: usePull } : { usePullLanguageService: boolean; }
 >usePullLanguageService : boolean
 >usePull : boolean
@@ -7792,9 +7792,9 @@ namespace Harness {
 
             Compiler.compileString(code, unitName, function (res) {
 >Compiler.compileString(code, unitName, function (res) {                runJSString(res.code, callback);            }) : void
->Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
 >Compiler : typeof Compiler
->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext | undefined, references?: TypeScript.IFileReference[] | undefined) => void
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
 >code : string
 >unitName : string
 >function (res) {                runJSString(res.code, callback);            } : (res: Compiler.CompilerResult) => void
@@ -8336,7 +8336,7 @@ namespace Harness {
         }
 
         export function runBaseline(
->runBaseline : (descriptionForDescribe: string, relativeFilename: string, generateContent: () => string, runImmediately?: boolean | undefined, opts?: BaselineOptions | undefined) => void
+>runBaseline : (descriptionForDescribe: string, relativeFilename: string, generateContent: () => string, runImmediately?: boolean, opts?: BaselineOptions) => void
 
             descriptionForDescribe: string,
 >descriptionForDescribe : string

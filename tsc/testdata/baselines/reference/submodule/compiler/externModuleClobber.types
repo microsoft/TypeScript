@@ -11,7 +11,7 @@ declare namespace EM {
 >EC : EC
 
 		public getPosition() : EM.Position;
->getPosition : () => Position
+>getPosition : () => EM.Position
 >EM : any
 	}
 }

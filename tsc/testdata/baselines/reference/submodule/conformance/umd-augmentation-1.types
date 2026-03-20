@@ -36,9 +36,9 @@ p = v.reverse();
 >p = v.reverse() : m.Point
 >p : m.Point
 >v.reverse() : m.Point
->v.reverse : () => m.Point
+>v.reverse : () => Math2d.Point
 >v : m.Vector
->reverse : () => m.Point
+>reverse : () => Math2d.Point
 
 var t = p.x;
 >t : number
@@ -92,7 +92,7 @@ declare module 'math2d' {
 	// Add a method to the class
 	interface Vector {
 		reverse(): Math2d.Point;
->reverse : () => Point
+>reverse : () => Math2d.Point
 >Math2d : any
 	}
 }

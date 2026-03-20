@@ -40,7 +40,7 @@ export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme,
 }
 export interface StyledInterface {
     div: (a: TemplateStringsArray) => StyledComponent<"div">;
->div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray) => StyledComponent<"div">
 >a : TemplateStringsArray
 }
 
@@ -57,25 +57,25 @@ import styled from "styled-components";
 const A = styled.div``;
 >A : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
 >styled.div`` : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div">
 >styled : import("styled-components").StyledInterface
->div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div">
 >`` : ""
 
 const B = styled.div``;
 >B : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
 >styled.div`` : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div">
 >styled : import("styled-components").StyledInterface
->div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div">
 >`` : ""
 
 export const C = styled.div``;
 >C : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
 >styled.div`` : import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div">
 >styled : import("styled-components").StyledInterface
->div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray) => import("styled-components").StyledComponent<"div">
 >`` : ""
 
 export default Object.assign(A, {

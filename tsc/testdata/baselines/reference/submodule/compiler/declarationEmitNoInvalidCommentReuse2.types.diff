@@ -5,22 +5,13 @@
  === a.ts ===
  import { object } from "./obj.ts";
 ->object : { foo: import("./id").Id<{}>; }
-+>object : { foo: {}; }
++>object : { foo: import("./id.d.ts").Id<{}>; }
 
  export const _ = object;
 ->_ : { foo: import("./id").Id<{}>; }
 ->object : { foo: import("./id").Id<{}>; }
-+>_ : { foo: {}; }
-+>object : { foo: {}; }
++>_ : { foo: import("./id.d.ts").Id<{}>; }
++>object : { foo: import("./id.d.ts").Id<{}>; }
 
  ///////////
  /**
-@@= skipped -12, +12 lines =@@
-  */
- === obj.d.ts ===
- export declare const object: import("./id.ts").Id<{
-->object : { foo: import("./id.ts").Id<{}>; }
-+>object : { foo: {}; }
-
-     foo: import("./id.ts" ).Id<{}>;
- >foo : {}

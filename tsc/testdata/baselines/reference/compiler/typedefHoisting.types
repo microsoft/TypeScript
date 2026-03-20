@@ -14,7 +14,7 @@ class C {
 >"def" : "def"
 
     bar(/** @type {Bar} */ x) {
->bar : (x: string) => string
+>bar : (x: Bar) => string
 >x : string
 
         return x

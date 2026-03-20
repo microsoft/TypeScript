@@ -5,7 +5,7 @@ export declare const MySymbol: unique symbol;
 >MySymbol : unique symbol
 
 export declare function createService<T>(): {
->createService : <T>() => new () => { [MySymbol](): T | undefined; }
+>createService : <T>() => { new (): { [MySymbol](): T | undefined; }; }
 
     new (): {
         [MySymbol](): T | undefined;
@@ -21,14 +21,14 @@ import { MySymbol } from "lib";
 >MySymbol : unique symbol
 
 import { createService } from "lib";
->createService : <T>() => new () => { [MySymbol](): T | undefined; }
+>createService : <T>() => { new (): { [MySymbol](): T | undefined; }; }
 
 // The extends clause references the factory result which uses MySymbol
 // This should trigger symbol accessibility check for MySymbol
 export class Client extends createService<string>() {
 >Client : Client
 >createService<string>() : { [MySymbol](): string | undefined; }
->createService : <T>() => new () => { [MySymbol](): T | undefined; }
+>createService : <T>() => { new (): { [MySymbol](): T | undefined; }; }
 
     doSomething(): string {
 >doSomething : () => string

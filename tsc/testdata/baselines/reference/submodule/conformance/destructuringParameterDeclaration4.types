@@ -21,7 +21,7 @@ function a0(...x: [number, number, string]) { }  // Error, rest parameter must b
 >x : [number, number, string]
 
 function a1(...x: (number|string)[]) { }
->a1 : (...x: (string | number)[]) => void
+>a1 : (...x: (number | string)[]) => void
 >x : (string | number)[]
 
 function a2(...a: someArray) { }  // Error, rest parameter must be array type
@@ -56,7 +56,7 @@ function a6([a, b, c, ...x]: number[]) { }
 
 a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
 >a1(1, 2, "hello", true) : void
->a1 : (...x: (string | number)[]) => void
+>a1 : (...x: (number | string)[]) => void
 >1 : 1
 >2 : 2
 >"hello" : "hello"
@@ -64,7 +64,7 @@ a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
 
 a1(...array2);            // Error parameter type is (number|string)[]
 >a1(...array2) : void
->a1 : (...x: (string | number)[]) => void
+>a1 : (...x: (number | string)[]) => void
 >...array2 : any
 >array2 : any
 

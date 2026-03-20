@@ -41,4 +41,4 @@ declare const duplicateIndetifiers3: ({ name: alias }: Named, { name: alias2 }: 
 declare let value: string;
 declare const shadowedVariable: ({ value: alias }: {
     value: string;
-}) => string;
+}) => typeof value;

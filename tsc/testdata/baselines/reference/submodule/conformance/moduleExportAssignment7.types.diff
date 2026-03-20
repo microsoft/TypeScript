@@ -19,7 +19,7 @@
 ->c : () => number
 ->d : () => number
 ->e : () => number
-+>jstypes : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
++>jstypes : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
 +>a : any
 +>b : any
 +>c : any
@@ -77,21 +77,12 @@
  }
 
  /**
-@@= skipped -45, +45 lines =@@
-  * @param {typeof import("./mod").literal} g
-  */
- function jsvalues(a, b, c, d, e, f, g) {
-->jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
-+>jsvalues : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
- >a : typeof Thing
- >b : typeof AnotherThing
- >c : () => number
-@@= skipped -37, +37 lines =@@
+@@= skipped -82, +82 lines =@@
 
  === index.ts ===
  function types(
 ->types : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
-+>types : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
++>types : (a: import('./mod').Thing, b: import('./mod').AnotherThing, c: import('./mod').foo, d: import('./mod').qux, e: import('./mod').baz, f: import('./mod').buz, g: import('./mod').literal) => any
 
      a: import('./mod').Thing,
  >a : any
@@ -100,7 +91,7 @@
 
  function values(
 ->values : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
-+>values : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
++>values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: typeof import('./mod').buz, g: typeof import('./mod').literal) => any
 
      a: typeof import('./mod').Thing,
  >a : typeof Thing

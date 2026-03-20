@@ -1,0 +1,33 @@
+--- old.forwardRefInTypeDeclaration(strict=false).types
++++ new.forwardRefInTypeDeclaration(strict=false).types
+@@= skipped -60, +60 lines =@@
+ >b : "b"
+ >[obj1.c] : number
+ >obj1.c : "c"
+->obj1 : { c: "c"; }
++>obj1 : { c: 'c'; }
+ >c : "c"
+ >[obj2.d] : number
+ >obj2.d : "d"
+->obj2 : { readonly d: "d"; }
++>obj2 : { readonly d: 'd'; }
+ >d : "d"
+
+ declare class Cls1 { static a: "a"; }
+@@= skipped -18, +18 lines =@@
+ >"b" : "b"
+
+ declare const obj1: { c: 'c' }
+->obj1 : { c: "c"; }
++>obj1 : { c: 'c'; }
+ >c : "c"
+
+ const obj2 = { d: 'd' } as const
+->obj2 : { readonly d: "d"; }
+->{ d: 'd' } as const : { readonly d: "d"; }
+->{ d: 'd' } : { readonly d: "d"; }
++>obj2 : { readonly d: 'd'; }
++>{ d: 'd' } as const : { readonly d: 'd'; }
++>{ d: 'd' } : { readonly d: 'd'; }
+ >d : "d"
+ >'d' : "d"

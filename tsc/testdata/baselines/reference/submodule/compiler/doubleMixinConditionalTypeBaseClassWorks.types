@@ -19,8 +19,8 @@ type FooConstructor = typeof Mixin1 extends (a: Constructor) => infer Cls ? Cls 
 >a : Constructor
 
 const Mixin2 = <C extends FooConstructor>(Base: C) => class extends Base {};
->Mixin2 : <C extends { new (...args: any[]): Mixin1.(Anonymous class); prototype: Mixin1.(Anonymous class); } & Constructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
-><C extends FooConstructor>(Base: C) => class extends Base {} : <C extends { new (...args: any[]): Mixin1.(Anonymous class); prototype: Mixin1.(Anonymous class); } & Constructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
+>Mixin2 : <C extends FooConstructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
+><C extends FooConstructor>(Base: C) => class extends Base {} : <C extends FooConstructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
 >Base : C
 >class extends Base {} : { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
 >Base : Mixin1.(Anonymous class)
@@ -28,7 +28,7 @@ const Mixin2 = <C extends FooConstructor>(Base: C) => class extends Base {};
 class C extends Mixin2(Mixin1(Object)) {}
 >C : C
 >Mixin2(Mixin1(Object)) : Mixin2.(Anonymous class) & Mixin1.(Anonymous class) & Object
->Mixin2 : <C extends { new (...args: any[]): Mixin1.(Anonymous class); prototype: Mixin1.(Anonymous class); } & Constructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
+>Mixin2 : <C extends FooConstructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin2.(Anonymous class); } & C
 >Mixin1(Object) : { new (...args: any[]): Mixin1.(Anonymous class); prototype: Mixin1.(Anonymous class); } & ObjectConstructor
 >Mixin1 : <C extends Constructor>(Base: C) => { new (...args: any[]): (Anonymous class); prototype: Mixin1.(Anonymous class); } & C
 >Object : ObjectConstructor

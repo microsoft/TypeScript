@@ -6,7 +6,7 @@ typeArgumentInference.ts(66,5): error TS2322: Type 'null' is not assignable to t
   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 typeArgumentInference.ts(68,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 typeArgumentInference.ts(69,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
-typeArgumentInference.ts(70,75): error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number | undefined; b?: string | undefined; }'.
+typeArgumentInference.ts(70,75): error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number; b?: string; }'.
 typeArgumentInference.ts(83,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { z?: undefined; x: number; y: string; } | undefined', but here has type '{}'.
 typeArgumentInference.ts(84,30): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'A92'.
 typeArgumentInference.ts(98,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'never[] | null | undefined', but here has type 'any[]'.
@@ -101,7 +101,7 @@ typeArgumentInference.ts(98,5): error TS2403: Subsequent variable declarations m
 !!! related TS6203 typeArgumentInference.ts:68:5: 'a9a' was also declared here.
     var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
                                                                               ~~~~
-!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number | undefined; b?: string | undefined; }'.
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type '{ a?: number; b?: string; }'.
     var a9b: { a?: number; b?: string; };
     
     // Generic call with multiple parameters of generic type passed arguments with multiple best common types

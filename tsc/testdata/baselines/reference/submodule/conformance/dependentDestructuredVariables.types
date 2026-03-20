@@ -24,9 +24,9 @@ function f10({ kind, payload }: Action) {
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -57,9 +57,9 @@ function f11(action: Action) {
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -87,9 +87,9 @@ function f12({ kind, payload }: Action) {
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
             break;
         case 'B':
@@ -121,9 +121,9 @@ function f13<T extends Action>({ kind, payload }: T) {
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -154,9 +154,9 @@ function f14<T extends Action>(t: T) {
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -197,9 +197,9 @@ function f20({ kind, payload }: Action2) {
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -234,9 +234,9 @@ function f21(action: Action2) {
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -273,9 +273,9 @@ function f22(action: Action2) {
 
             payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -307,9 +307,9 @@ function f23({ kind, payload }: Action2) {
 
                 payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 
                 break;
             case 'B':
@@ -403,9 +403,9 @@ function f40(...[kind, data]: Args) {
 
         data.toFixed();
 >data.toFixed() : string
->data.toFixed : (fractionDigits?: number | undefined) => string
+>data.toFixed : (fractionDigits?: number) => string
 >data : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -438,7 +438,7 @@ declare function printValue<T>(t: T): void;
 >t : T
 
 declare function printValueList<T>(t: Array<T>): void;
->printValueList : <T>(t: T[]) => void
+>printValueList : <T>(t: Array<T>) => void
 >t : T[]
 
 function unrefined1<T>(ab: AB<T>): void {
@@ -463,7 +463,7 @@ function unrefined1<T>(ab: AB<T>): void {
     else {
         printValueList<T>(value);
 >printValueList<T>(value) : void
->printValueList : <T_1>(t: T_1[]) => void
+>printValueList : <T_1>(t: Array<T_1>) => void
 >value : T[]
     }
 }
@@ -557,9 +557,9 @@ f50((kind, data) => {
 
         data.toFixed();
 >data.toFixed() : string
->data.toFixed : (fractionDigits?: number | undefined) => string
+>data.toFixed : (fractionDigits?: number) => string
 >data : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -575,7 +575,7 @@ f50((kind, data) => {
 });
 
 const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
->f51 : (...args: ["A", number] | ["B", string]) => void
+>f51 : (...args: ['A', number] | ['B', string]) => void
 >args : ["A", number] | ["B", string]
 >(kind, payload) => {    if (kind === 'A') {        payload.toFixed();    }    if (kind === 'B') {        payload.toUpperCase();    }} : (kind: "A" | "B", payload: string | number) => void
 >kind : "A" | "B"
@@ -588,9 +588,9 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -606,7 +606,7 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 };
 
 const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
->f52 : (...args: ["B"] | ["A", number]) => void
+>f52 : (...args: ['A', number] | ['B']) => void
 >args : ["B"] | ["A", number]
 >(kind, payload?) => {    if (kind === 'A') {        payload.toFixed();    }    else {        payload;  // undefined    }} : (kind: "A" | "B", payload?: number | undefined) => void
 >kind : "A" | "B"
@@ -619,9 +619,9 @@ const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
 
         payload.toFixed();
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     else {
         payload;  // undefined
@@ -746,7 +746,7 @@ type FooMethod = {
 >FooMethod : FooMethod
 
   method(...args:
->method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => void
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
 >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -790,7 +790,7 @@ type FooAsyncMethod = {
 >FooAsyncMethod : FooAsyncMethod
 
   method(...args:
->method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => Promise<any>
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
 >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -834,7 +834,7 @@ type FooGenMethod = {
 >FooGenMethod : FooGenMethod
 
   method(...args:
->method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => Generator<any, any, any>
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
 >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -878,7 +878,7 @@ type FooAsyncGenMethod = {
 >FooAsyncGenMethod : FooAsyncGenMethod
 
   method(...args:
->method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => AsyncGenerator<any, any, any>
+>method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
 >args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
 
     [type: "str", cb: (e: string) => void] |
@@ -937,9 +937,9 @@ const f60: Func = (kind, payload) => {
 
         payload.toFixed();  // error
 >payload.toFixed() : string
->payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload.toFixed : (fractionDigits?: number) => string
 >payload : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
     }
     if (kind === "b") {
 >kind === "b" : boolean
@@ -1021,7 +1021,7 @@ function foo({
 // Repro from #49772
 
 function fa1(x: [true, number] | [false, string]) {
->fa1 : (x: [false, string] | [true, number]) => void
+>fa1 : (x: [true, number] | [false, string]) => void
 >x : [false, string] | [true, number]
 >true : true
 >false : false
@@ -1087,7 +1087,7 @@ function fa2(x: { guard: true, value: number } | { guard: false, value: string }
 }
 
 const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
->fa3 : (...args: [false, string] | [true, number]) => void
+>fa3 : (...args: [true, number] | [false, string]) => void
 >args : [false, string] | [true, number]
 >true : true
 >false : false
@@ -1191,7 +1191,7 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 // Destructuring tuple types with different arities
 
 function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
->fz1 : ([x, y]: [5] | [1, 2] | [3, 4]) => void
+>fz1 : ([x, y]: [1, 2] | [3, 4] | [5]) => void
 >x : 1 | 3 | 5
 >y : 2 | 4 | undefined
 
@@ -1248,7 +1248,7 @@ function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
 // Repro from #55661
 
 function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
->tooNarrow : ([x, y]: [1] | [1, 1] | [1, 2]) => void
+>tooNarrow : ([x, y]: [1, 1] | [1, 2] | [1]) => void
 >x : 1
 >y : 1 | 2 | undefined
 

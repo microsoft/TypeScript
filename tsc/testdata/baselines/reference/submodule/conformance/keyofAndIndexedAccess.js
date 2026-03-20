@@ -1141,13 +1141,13 @@ declare function f81<T extends {
     a: {
         x: any;
     };
-}>(obj: T): T["a"]["x"];
+}>(obj: T): T['a']['x'];
 declare function f82(): void;
 declare function f83<T extends {
     [x: string]: {
         x: any;
     };
-}, K extends keyof T>(obj: T, key: K): T[K]["x"];
+}, K extends keyof T>(obj: T, key: K): T[K]['x'];
 declare function f84(): void;
 declare class C1 {
     x: number;
@@ -1356,4 +1356,4 @@ declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1:
 declare const cf1: <T extends { [P in K]: string; } & {
     cool: string;
 }, K extends keyof T>(t: T, k: K) => void;
-declare const cf2: <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;

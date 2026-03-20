@@ -107,11 +107,15 @@ declare class C3 {
     j: (x: any) => x is this;
 }
 declare class C4 {
-    x1: any;
+    x1: {
+        a: this;
+    };
     x2: this[];
     x3: any;
     x4: () => this;
-    f1(): any;
+    f1(): {
+        a: this;
+    };
     f2(): this[];
     f3(): any;
     f4(): () => this;

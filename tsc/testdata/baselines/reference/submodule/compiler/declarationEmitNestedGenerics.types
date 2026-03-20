@@ -2,17 +2,17 @@
 
 === declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
->f : <T>(p: T) => <T_1>(x: T_1) => T
+>f : <T>(p: T) => <T_1>(x: T_1) => typeof p
 >p : T
 
     let g: <T>(x: T) => typeof p = null as any;
->g : <T_1>(x: T_1) => T
+>g : <T_1>(x: T_1) => typeof p
 >x : T
 >p : T_1
 >null as any : any
 
     return g;
->g : <T_1>(x: T_1) => T
+>g : <T_1>(x: T_1) => typeof p
 }
 
 function g<T>(x: T) {

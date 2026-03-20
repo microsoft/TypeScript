@@ -45,13 +45,13 @@ declare var a: { Foo: Base; }
 >Foo : Base
 
 declare var b: { Foo?: Derived; }
->b : { Foo?: Derived | undefined; }
+>b : { Foo?: Derived; }
 >Foo : Derived | undefined
 
 var r = true ? a : b; // ok
->r : { Foo: Base; } | { Foo?: Derived | undefined; }
->true ? a : b : { Foo: Base; } | { Foo?: Derived | undefined; }
+>r : { Foo: Base; } | { Foo?: Derived; }
+>true ? a : b : { Foo: Base; } | { Foo?: Derived; }
 >true : true
 >a : { Foo: Base; }
->b : { Foo?: Derived | undefined; }
+>b : { Foo?: Derived; }
 

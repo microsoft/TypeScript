@@ -21,7 +21,7 @@ fn2({ headers: { foo: 1 } });
 
 //// [parameterDestructuringObjectLiteral.d.ts]
 declare const fn1: (options: {
-    headers?: {} | undefined;
+    headers?: {};
 }) => void;
 declare const fn2: ({ headers }: {
     headers?: {} | undefined;

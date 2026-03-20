@@ -1,15 +1,6 @@
 --- old.defaultDeclarationEmitShadowedNamedCorrectly.types
 +++ new.defaultDeclarationEmitShadowedNamedCorrectly.types
-@@= skipped -11, +11 lines =@@
- >t : T
- }
- export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
-->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
-+>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
- >x : new () => CTor & { props: P; }
- >props : P
-
-@@= skipped -15, +15 lines =@@
+@@= skipped -26, +26 lines =@@
  >MyComponent : me.default
 
      props: Props;
@@ -27,10 +18,8 @@
      export const create = make(me.default);
 ->create : me.Things<me.Props, me.default>
 ->make(me.default) : me.Things<me.Props, me.default>
-->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
 +>create : Things<Props, me.default>
 +>make(me.default) : Things<Props, me.default>
-+>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
+ >make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
  >me.default : typeof me.default
  >me : typeof me
- >default : typeof me.default

@@ -20,3 +20,12 @@
  !!! related TS2728 mappedTypeErrors.ts:75:37: 'y' is declared here.
          let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
          let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
+@@= skipped -83, +82 lines =@@
+     let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
+                                           ~
+ !!! error TS2322: Type 'string' is not assignable to type 'number'.
+-!!! related TS6500 mappedTypeErrors.ts:129:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number | undefined; }'
++!!! related TS6500 mappedTypeErrors.ts:129:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number; }'
+     
+     // Repro from #13044
+     

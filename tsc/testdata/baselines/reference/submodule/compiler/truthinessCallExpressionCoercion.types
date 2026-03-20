@@ -2,7 +2,7 @@
 
 === truthinessCallExpressionCoercion.ts ===
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
->onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: (() => boolean) | undefined) => void
+>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
 >required : () => boolean
 >optional : (() => boolean) | undefined
 

@@ -38,9 +38,9 @@ function f() {
     using it2 = Iterator.from(i)
 >it2 : IteratorObject<string, undefined, unknown>
 >Iterator.from(i) : IteratorObject<string, undefined, unknown>
->Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 >Iterator : IteratorConstructor
->from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 >i : Iterator<string, undefined, any>
 
     using it3 = new MyIterator();

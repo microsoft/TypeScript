@@ -16,12 +16,12 @@ type N = { d: "n"; cb: (x: number) => void };
 >x : number
 
 declare function foo(foo: S | N): void;
->foo : (foo: N | S) => void
+>foo : (foo: S | N) => void
 >foo : N | S
 
 foo({
 >foo({  d: `${"s"}`,  cb: (x) => {    x; // string  },}) : void
->foo : (foo: N | S) => void
+>foo : (foo: S | N) => void
 >{  d: `${"s"}`,  cb: (x) => {    x; // string  },} : { d: "s"; cb: (x: string) => void; }
 
   d: `${"s"}`,

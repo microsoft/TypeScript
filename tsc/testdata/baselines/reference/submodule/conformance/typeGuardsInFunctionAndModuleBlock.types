@@ -4,7 +4,7 @@
 // typeguards are scoped in function/module block
 
 function foo(x: number | string | boolean) {
->foo : (x: string | number | boolean) => string
+>foo : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     return typeof x === "string"
@@ -41,14 +41,14 @@ function foo(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
         } ();
 }
 function foo2(x: number | string | boolean) {
->foo2 : (x: string | number | boolean) => string
+>foo2 : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     return typeof x === "string"
@@ -86,15 +86,15 @@ function foo2(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
         } (x); // x here is narrowed to number | boolean
 >x : number | boolean
 }
 function foo3(x: number | string | boolean) {
->foo3 : (x: string | number | boolean) => string
+>foo3 : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     return typeof x === "string"
@@ -131,14 +131,14 @@ function foo3(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
         })();
 }
 function foo4(x: number | string | boolean) {
->foo4 : (x: string | number | boolean) => string
+>foo4 : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     return typeof x === "string"
@@ -176,16 +176,16 @@ function foo4(x: number | string | boolean) {
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
         })(x); // x here is narrowed to number | boolean
 >x : number | boolean
 }
 // Type guards do not affect nested function declarations
 function foo5(x: number | string | boolean) {
->foo5 : (x: string | number | boolean) => void
+>foo5 : (x: number | string | boolean) => void
 >x : string | number | boolean
 
     if (typeof x === "string") {
@@ -252,9 +252,9 @@ namespace m {
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
         }
     }
 }
@@ -304,9 +304,9 @@ namespace m1 {
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
         }
     }
 }

@@ -95,9 +95,9 @@ const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<mont
 >testRegExpMatchArrayGroups : any
 >"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups : any
 >"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g) : RegExpMatchArray
->"2019-04-30".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
+>"2019-04-30".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >"2019-04-30" : "2019-04-30"
->match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
 >groups : any
 
@@ -105,9 +105,9 @@ const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[
 >testRegExpExecArrayGroups : any
 >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups : any
 >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30") : RegExpExecArray
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : (string: string) => RegExpExecArray
+>/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : (string: string) => RegExpExecArray | null
 >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
->exec : (string: string) => RegExpExecArray
+>exec : (string: string) => RegExpExecArray | null
 >"2019-04-30" : "2019-04-30"
 >groups : any
 

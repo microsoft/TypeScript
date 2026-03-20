@@ -23,7 +23,7 @@
 
  declare const Elem2: ComponentType<{ opt?: number }>;
 ->Elem2 : React.ComponentType<{ opt?: number; }>
-+>Elem2 : ComponentType<{ opt?: number | undefined; }>
++>Elem2 : ComponentType<{ opt?: number; }>
  >opt : number | undefined
 
  const alsoOk = <Elem2>text</Elem2>;
@@ -31,5 +31,5 @@
  ><Elem2>text</Elem2> : JSX.Element
 ->Elem2 : React.ComponentType<{ opt?: number; }>
 ->Elem2 : React.ComponentType<{ opt?: number; }>
-+>Elem2 : ComponentType<{ opt?: number | undefined; }>
-+>Elem2 : ComponentType<{ opt?: number | undefined; }>
++>Elem2 : ComponentType<{ opt?: number; }>
++>Elem2 : ComponentType<{ opt?: number; }>

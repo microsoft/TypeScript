@@ -81,12 +81,7 @@ func (b *NodeBuilder) IndexInfoToIndexSignatureDeclaration(info *IndexInfo, encl
 func (b *NodeBuilder) SerializeReturnTypeForSignature(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
 	signature := b.impl.ch.getSignatureFromDeclaration(signatureDeclaration)
-	symbol := b.impl.ch.getSymbolOfDeclaration(signatureDeclaration)
-	returnType, ok := b.impl.ctx.enclosingSymbolTypes[ast.GetSymbolId(symbol)]
-	if !ok || returnType == nil {
-		returnType = b.impl.ch.instantiateType(b.impl.ch.getReturnTypeOfSignature(signature), b.impl.ctx.mapper)
-	}
-	return b.exitContext(b.impl.serializeInferredReturnTypeForSignature(signature, returnType))
+	return b.exitContext(b.impl.serializeReturnTypeForSignature(signature, true))
 }
 
 func (b *NodeBuilder) SerializeTypeParametersForSignature(signatureDeclaration *ast.Node, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) []*ast.Node {
@@ -99,7 +94,7 @@ func (b *NodeBuilder) SerializeTypeParametersForSignature(signatureDeclaration *
 // SerializeTypeForDeclaration implements NodeBuilderInterface.
 func (b *NodeBuilder) SerializeTypeForDeclaration(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
-	return b.exitContext(b.impl.serializeTypeForDeclaration(declaration, nil, symbol))
+	return b.exitContext(b.impl.serializeTypeForDeclaration(declaration, nil, symbol, true))
 }
 
 // SerializeTypeForExpression implements NodeBuilderInterface.

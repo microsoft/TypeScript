@@ -1,0 +1,29 @@
+--- old.escapedReservedCompilerNamedIdentifier.js
++++ new.escapedReservedCompilerNamedIdentifier.js
+@@= skipped -68, +68 lines =@@
+ //// [escapedReservedCompilerNamedIdentifier.d.ts]
+ declare var __proto__: number;
+ declare var o: {
+-    __proto__: number;
++    "__proto__": number;
+ };
+ declare var b: number;
+ declare var o1: {
+@@= skipped -9, +9 lines =@@
+ declare var b1: number;
+ declare var ___proto__: number;
+ declare var o2: {
+-    ___proto__: number;
++    "___proto__": number;
+ };
+ declare var b2: number;
+ declare var o3: {
+@@= skipped -9, +9 lines =@@
+ declare var b3: number;
+ declare var _proto__: number;
+ declare var o4: {
+-    _proto__: number;
++    "_proto__": number;
+ };
+ declare var b4: number;
+ declare var o5: {

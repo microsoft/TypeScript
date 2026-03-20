@@ -17,7 +17,7 @@ interface Props<T extends string = string> {
 }
 
 declare function forwardRef<T, P>(
->forwardRef : <T, P>(render: (props: P, ref: { current: T | null; }) => string) => (props: P & { ref?: { current: T | null; } | undefined; }) => string
+>forwardRef : <T, P>(render: (props: P, ref: { current: T | null; }) => string) => (props: P & { ref?: { current: T | null; }; }) => string
 
     render: (props: P, ref: { current: T | null }) => string
 >render : (props: P, ref: { current: T | null; }) => string
@@ -26,7 +26,7 @@ declare function forwardRef<T, P>(
 >current : T | null
 
 ): (props: P & { ref?: { current: T | null } }) => string;
->props : P & { ref?: { current: T | null; } | undefined; }
+>props : P & { ref?: { current: T | null; }; }
 >ref : { current: T | null; } | undefined
 >current : T | null
 
@@ -40,14 +40,14 @@ type FixedForwardRef = <T, P = {}>(
 >current : T | null
 
 ) => (props: P & { ref?: { current: T | null } }) => string;
->props : P & { ref?: { current: T | null; } | undefined; }
+>props : P & { ref?: { current: T | null; }; }
 >ref : { current: T | null; } | undefined
 >current : T | null
 
 const GenericForwardRef = forwardRef as FixedForwardRef;
 >GenericForwardRef : FixedForwardRef
 >forwardRef as FixedForwardRef : FixedForwardRef
->forwardRef : <T, P>(render: (props: P, ref: { current: T | null; }) => string) => (props: P & { ref?: { current: T | null; } | undefined; }) => string
+>forwardRef : <T, P>(render: (props: P, ref: { current: T | null; }) => string) => (props: P & { ref?: { current: T | null; }; }) => string
 
 function Inner<T extends string>(
 >Inner : <T extends string>({ disabled, value, onValueChange, colors }: Props<T>, ref: { current: HTMLButtonElement | null; }) => string

@@ -3,7 +3,7 @@
 === propagationOfPromiseInitialization.ts ===
 interface IPromise<T> {
     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
->then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: ((reason: any) => TResult) | undefined) => IPromise<TResult>
+>then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
 >successCallback : (promiseValue: T) => TResult
 >promiseValue : T
 >errorCallback : ((reason: any) => TResult) | undefined

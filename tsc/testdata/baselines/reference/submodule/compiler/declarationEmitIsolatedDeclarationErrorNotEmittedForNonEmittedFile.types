@@ -48,17 +48,17 @@ declare class TRPCBuilder<TParams> {
 >TRPCBuilder : TRPCBuilder<TParams>
 
     create<TOptions extends Record<string, any>>(): {
->create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>; router: {}; }
+>create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>; router: {}; }
 
         procedure: {};
 >procedure : {}
 
         middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{
->middleware : <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>
->fn : import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>
+>middleware : <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>
+>fn : import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>
 
             _config: RootConfig<{
->_config : RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>
+>_config : RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>
 
                 errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
 >errorShape : ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>
@@ -66,7 +66,7 @@ declare class TRPCBuilder<TParams> {
             }>;
         }, TNewParams>) => import("./middleware").MiddlewareBuilder<{
             _config: RootConfig<{
->_config : RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>
+>_config : RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>
 
                 errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
 >errorShape : ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>

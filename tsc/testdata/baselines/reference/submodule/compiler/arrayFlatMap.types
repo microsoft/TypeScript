@@ -14,7 +14,7 @@ array.flatMap((): ReadonlyArray<number> => []); // ok
 >array.flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]
 >array : number[]
 >flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]
->(): ReadonlyArray<number> => [] : () => readonly number[]
+>(): ReadonlyArray<number> => [] : () => ReadonlyArray<number>
 >[] : never[]
 
 readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
@@ -22,6 +22,6 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >readonlyArray.flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]
 >readonlyArray : readonly number[]
 >flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]
->(): ReadonlyArray<number> => [] : () => readonly number[]
+>(): ReadonlyArray<number> => [] : () => ReadonlyArray<number>
 >[] : never[]
 

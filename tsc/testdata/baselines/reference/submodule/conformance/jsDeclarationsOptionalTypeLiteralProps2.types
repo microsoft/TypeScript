@@ -12,7 +12,7 @@
  * @returns {number}
  */
 function foo({ a, b, c }) {
->foo : ({ a, b, c }: { a: number; b?: number | undefined; c?: number | undefined; }) => number
+>foo : ({ a, b, c }: { a: number; b?: number; c?: number; }) => number
 >a : number
 >b : number | undefined
 >c : number | undefined

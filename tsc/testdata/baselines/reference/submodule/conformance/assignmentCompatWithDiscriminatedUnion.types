@@ -301,7 +301,7 @@ namespace GH30170 {
 >val : Blue | Yellow
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
+>drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
 >currentColor : "blue" | "yellow" | undefined
 
         return draw({ color: currentColor });
@@ -530,7 +530,7 @@ namespace GH58603 {
 >a : MyType
     
     function indirect(kind: MyEnum, id?: number): void {
->indirect : (kind: MyEnum, id?: number | undefined) => void
+>indirect : (kind: MyEnum, id?: number) => void
 >kind : MyEnum
 >id : number | undefined
 

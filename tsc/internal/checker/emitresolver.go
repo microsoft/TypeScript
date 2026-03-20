@@ -547,6 +547,14 @@ func (r *EmitResolver) RequiresAddingImplicitUndefined(declaration *ast.Node, sy
 	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
 }
 
+func (r *EmitResolver) RequiresAddingImplicitUndefinedUnsafe(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
+	if !ast.IsParseTreeNode(declaration) {
+		return false
+	}
+	// NO LOCKING - only should be called in contexts that already have a checker lock
+	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
+}
+
 func (r *EmitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
 	// node = r.emitContext.ParseNode(node)
 	if !ast.IsParseTreeNode(declaration) {
@@ -645,10 +653,25 @@ func (r *EmitResolver) IsLiteralConstDeclaration(node *ast.Node) bool {
 	return false
 }
 
-func (r *EmitResolver) IsExpandoFunctionDeclaration(node *ast.Node) bool {
+func (r *EmitResolver) IsExpandoFunctionDeclarationUnsafe(node *ast.Node) bool {
 	// node = r.emitContext.ParseNode(node)
-	// !!! TODO: expando function support
+	if !ast.IsParseTreeNode(node) {
+		return false
+	}
+	// this is substantially different from strada, but so is expando property checking
+	props := r.GetPropertiesOfContainerFunction(node)
+	for _, p := range props {
+		if ast.IsExpandoPropertyDeclaration(p.ValueDeclaration) {
+			return true
+		}
+	}
 	return false
+}
+
+func (r *EmitResolver) IsExpandoFunctionDeclaration(node *ast.Node) bool {
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	return r.IsExpandoFunctionDeclarationUnsafe(node)
 }
 
 func (r *EmitResolver) isSymbolAccessible(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, shouldComputeAliasToMarkVisible bool) printer.SymbolAccessibilityResult {
@@ -803,25 +826,9 @@ func (r *EmitResolver) GetExternalModuleFileFromDeclaration(declaration *ast.Nod
 		return nil
 	}
 
-	var specifier *ast.Node
-	if declaration.Kind == ast.KindModuleDeclaration {
-		if ast.IsStringLiteral(declaration.Name()) {
-			specifier = declaration.Name()
-		}
-	} else {
-		specifier = ast.GetExternalModuleName(declaration)
-	}
 	r.checkerMu.Lock()
 	defer r.checkerMu.Unlock()
-	moduleSymbol := r.checker.resolveExternalModuleNameWorker(specifier, specifier /*moduleNotFoundError*/, nil, false, false) // TODO: GH#18217
-	if moduleSymbol == nil {
-		return nil
-	}
-	decl := ast.GetDeclarationOfKind(moduleSymbol, ast.KindSourceFile)
-	if decl == nil {
-		return nil
-	}
-	return decl.AsSourceFile()
+	return r.checker.getExternalModuleFileFromDeclaration(declaration)
 }
 
 func (r *EmitResolver) getReferenceResolver() binder.ReferenceResolver {
@@ -1207,4 +1214,19 @@ func (r *EmitResolver) GetTypeReferenceSerializationKind(typeName *ast.Node, loc
 	} else {
 		return printer.TypeReferenceSerializationKindObjectType
 	}
+}
+
+func (r *EmitResolver) GetPropertiesOfContainerFunction(node *ast.Node) []*ast.Symbol {
+	// This is explicitly _not locked_ because it is only called via error reporters invoked via node builder calls
+	// to the symbol tracker already within locked contexts.
+	// r.checkerMu.Lock()
+	// defer r.checkerMu.Unlock()
+	if node == nil {
+		return []*ast.Symbol{}
+	}
+	s := r.checker.getSymbolOfDeclaration(node)
+	if s == nil {
+		return []*ast.Symbol{}
+	}
+	return r.checker.getPropertiesOfType(r.checker.getTypeOfSymbol(s))
 }

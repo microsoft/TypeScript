@@ -82,19 +82,19 @@ declare const j: {
     description: string;
     main: string;
     bin: {
-        cli: string;
+        "cli": string;
     };
     engines: {
-        node: string;
+        "node": string;
     };
     scripts: {
-        scriptname: string;
+        "scriptname": string;
     };
     devDependencies: {
         "@ns/dep": string;
     };
     dependencies: {
-        dep: string;
+        "dep": string;
     };
     repository: string;
     keywords: string[];
@@ -102,7 +102,7 @@ declare const j: {
     license: string;
     homepage: string;
     config: {
-        o: string[];
+        "o": string[];
     };
 };
 export = j;

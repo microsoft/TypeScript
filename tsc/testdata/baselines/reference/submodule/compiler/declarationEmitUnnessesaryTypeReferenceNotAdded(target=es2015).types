@@ -28,12 +28,12 @@ declare namespace thing {
     interface ParsedArgs {}
 }
 declare function thing(x: any): thing.ParsedArgs;
->thing : (x: any) => import("minimist").ParsedArgs
+>thing : (x: any) => thing.ParsedArgs
 >x : any
 >thing : any
 
 export = thing;
->thing : (x: any) => import("minimist").ParsedArgs
+>thing : (x: any) => thing.ParsedArgs
 
 === /node_modules/@types/process/process.d.ts ===
 declare const thing: any;

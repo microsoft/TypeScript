@@ -1,15 +1,6 @@
 --- old.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
 +++ new.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
-@@= skipped -20, +20 lines =@@
-      * @param {LionRequestInit} [init]
-      */
-     case5_unexpectedlyResolvesPathToNodeModules(init) {}
-->case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
-+>case5_unexpectedlyResolvesPathToNodeModules : (init?: import("./node_modules/@lion/ajax/dist-types/types/types.js").LionRequestInit | undefined) => void
- >init : import("./node_modules/@lion/ajax/dist-types/types/types.js").LionRequestInit | undefined
- }
-
-@@= skipped -9, +9 lines =@@
+@@= skipped -29, +29 lines =@@
   */
  // @ts-expect-error
  NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;

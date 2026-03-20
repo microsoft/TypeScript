@@ -42,9 +42,9 @@ class B {
 
                         return fso.toString();
 >fso.toString() : string
->fso.toString : (radix?: number | undefined) => string
+>fso.toString : (radix?: number) => string
 >fso : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
                     }
                 }
             })();

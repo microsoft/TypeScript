@@ -45,13 +45,13 @@ var a: { Foo: Base; }
 >Foo : Base
 
 var b: { Foo2?: Derived; }
->b : { Foo2?: Derived | undefined; }
+>b : { Foo2?: Derived; }
 >Foo2 : Derived | undefined
 
 var r = true ? a : b; // ok
->r : { Foo: Base; } | { Foo2?: Derived | undefined; }
->true ? a : b : { Foo: Base; } | { Foo2?: Derived | undefined; }
+>r : { Foo: Base; } | { Foo2?: Derived; }
+>true ? a : b : { Foo: Base; } | { Foo2?: Derived; }
 >true : true
 >a : { Foo: Base; }
->b : { Foo2?: Derived | undefined; }
+>b : { Foo2?: Derived; }
 

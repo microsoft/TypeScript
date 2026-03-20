@@ -4,14 +4,14 @@
 // Repro from #22644
 
 const fn1 = (options: { headers?: {} }) => { };
->fn1 : (options: { headers?: {} | undefined; }) => void
->(options: { headers?: {} }) => { } : (options: { headers?: {} | undefined; }) => void
->options : { headers?: {} | undefined; }
+>fn1 : (options: { headers?: {}; }) => void
+>(options: { headers?: {} }) => { } : (options: { headers?: {}; }) => void
+>options : { headers?: {}; }
 >headers : {} | undefined
 
 fn1({ headers: { foo: 1 } });
 >fn1({ headers: { foo: 1 } }) : void
->fn1 : (options: { headers?: {} | undefined; }) => void
+>fn1 : (options: { headers?: {}; }) => void
 >{ headers: { foo: 1 } } : { headers: { foo: number; }; }
 >headers : { foo: number; }
 >{ foo: 1 } : { foo: number; }

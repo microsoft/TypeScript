@@ -1,0 +1,20 @@
+--- old.neverAsDiscriminantType(strict=false).types
++++ new.neverAsDiscriminantType(strict=false).types
+@@= skipped -20, +20 lines =@@
+
+         foo.a;
+ >foo.a : number
+->foo : { kind: "a"; a: number; }
++>foo : { kind: 'a'; a: number; }
+ >a : number
+     }
+ }
+@@= skipped -25, +25 lines =@@
+
+         foo.a;
+ >foo.a : number
+->foo : { kind?: "a"; a: number; }
++>foo : { kind?: 'a'; a: number; }
+ >a : number
+     }
+ }

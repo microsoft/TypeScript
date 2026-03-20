@@ -125,12 +125,12 @@ function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<
 }
 
 declare function f23<T>(t: TupleOf<T, 3>): T;
->f23 : <T>(t: [T, T, T]) => T
+>f23 : <T>(t: TupleOf<T, 3>) => T
 >t : [T, T, T]
 
 f23(['a', 'b', 'c']);  // string
 >f23(['a', 'b', 'c']) : string
->f23 : <T>(t: [T, T, T]) => T
+>f23 : <T>(t: TupleOf<T, 3>) => T
 >['a', 'b', 'c'] : [string, string, string]
 >'a' : "a"
 >'b' : "b"
@@ -179,11 +179,11 @@ declare let b3: InfBox<string>;
 >b3 : InfBox<string>
 
 declare let b4: { value: { value: { value: typeof b4 }}};
->b4 : { value: { value: { value: any; }; }; }
->value : { value: { value: { value: any; }; }; }
->value : { value: { value: { value: any; }; }; }
->value : { value: { value: { value: any; }; }; }
->b4 : { value: { value: { value: any; }; }; }
+>b4 : { value: { value: { value: typeof b4; }; }; }
+>value : { value: { value: typeof b4; }; }
+>value : { value: typeof b4; }
+>value : { value: { value: { value: typeof b4; }; }; }
+>b4 : { value: { value: { value: typeof b4; }; }; }
 
 unbox(b1);  // string
 >unbox(b1) : string
@@ -218,9 +218,9 @@ unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // numbe
 >5 : 5
 
 unbox(b4);  // { value: { value: typeof b4 }}
->unbox(b4) : { value: { value: { value: any; }; }; }
+>unbox(b4) : { value: { value: typeof b4; }; }
 >unbox : <T>(box: RecBox<T>) => T
->b4 : { value: { value: { value: any; }; }; }
+>b4 : { value: { value: { value: typeof b4; }; }; }
 
 unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
 >unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
@@ -380,7 +380,7 @@ type Enumerate<N extends number> = number extends N
     : never;
 
 function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
->foo2 : <T extends unknown[]>(value: T) => Enumerate<T["length"]>
+>foo2 : <T extends unknown[]>(value: T) => Enumerate<T['length']>
 >value : T
 
     return value.length;  // Error

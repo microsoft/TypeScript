@@ -56,9 +56,9 @@ namespace M {
 >F2 : (x: number) => string
 >x : number
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 }
 
 // all of these are errors

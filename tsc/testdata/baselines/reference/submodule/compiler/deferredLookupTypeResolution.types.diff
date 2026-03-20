@@ -1,0 +1,11 @@
+--- old.deferredLookupTypeResolution.types
++++ new.deferredLookupTypeResolution.types
+@@= skipped -44, +44 lines =@@
+ }
+
+ function f3(x: 'a' | 'b') {
+->f3 : (x: "a" | "b") => { a: any; b: any; x: any; }
++>f3 : (x: 'a' | 'b') => { a: any; b: any; x: any; }
+ >x : "a" | "b"
+
+     return f2(x);

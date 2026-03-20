@@ -22,7 +22,7 @@ interface Instance<Data> {
 }
 
 declare var Moon: {
->Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
+>Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
 
     <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
 >options : ConstructorOptions<Data> | undefined
@@ -32,7 +32,7 @@ declare var Moon: {
 const r2 = Moon({
 >r2 : Instance<{ msg: string; }>
 >Moon({    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },}) : Instance<{ msg: string; }>
->Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
+>Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
 >{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render(): unknown; }
 
     data: { msg: "" },

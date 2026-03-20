@@ -8,8 +8,35 @@
  declare const j: {
      name: string;
      version: string;
-@@= skipped -30, +29 lines =@@
-         o: string[];
+     description: string;
+     main: string;
+     bin: {
+-        cli: string;
++        "cli": string;
+     };
+     engines: {
+-        node: string;
++        "node": string;
+     };
+     scripts: {
+-        scriptname: string;
++        "scriptname": string;
+     };
+     devDependencies: {
+         "@ns/dep": string;
+     };
+     dependencies: {
+-        dep: string;
++        "dep": string;
+     };
+     repository: string;
+     keywords: string[];
+@@= skipped -27, +26 lines =@@
+     license: string;
+     homepage: string;
+     config: {
+-        o: string[];
++        "o": string[];
      };
  };
 +export = j;

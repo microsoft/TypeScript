@@ -248,9 +248,9 @@ function Foo<T>(props: Props<T>) {
 >(arg) => { arg.toString(); } : (arg: number) => void
 >arg : number
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>arg.toString : (radix?: number) => string
 >arg : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
 />;
 
@@ -269,9 +269,9 @@ function Foo<T>(props: Props<T>) {
 >(arg) => { arg.toString(); } : (arg: number) => void
 >arg : number
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>arg.toString : (radix?: number) => string
 >arg : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
 />;
 
@@ -291,9 +291,9 @@ function Foo<T>(props: Props<T>) {
 >(arg) => { arg.toString(); } : (arg: number) => void
 >arg : number
 >arg.toString() : string
->arg.toString : (radix?: number | undefined) => string
+>arg.toString : (radix?: number) => string
 >arg : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 
 }} />;
 

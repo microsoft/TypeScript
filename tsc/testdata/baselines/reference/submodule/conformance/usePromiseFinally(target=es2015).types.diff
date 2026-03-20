@@ -1,0 +1,18 @@
+--- old.usePromiseFinally(target=es2015).types
++++ new.usePromiseFinally(target=es2015).types
+@@= skipped -3, +3 lines =@@
+ let promise1 = new Promise(function(resolve, reject) {})
+ >promise1 : Promise<unknown>
+ >new Promise(function(resolve, reject) {})                .finally(function() {}) : Promise<unknown>
+->new Promise(function(resolve, reject) {})                .finally : (onfinally?: (() => void) | null | undefined) => Promise<unknown>
++>new Promise(function(resolve, reject) {})                .finally : (onfinally?: (() => void) | undefined | null) => Promise<unknown>
+ >new Promise(function(resolve, reject) {}) : Promise<unknown>
+ >Promise : PromiseConstructor
+ >function(resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+@@= skipped -8, +8 lines =@@
+ >reject : (reason?: any) => void
+
+                 .finally(function() {});
+->finally : (onfinally?: (() => void) | null | undefined) => Promise<unknown>
++>finally : (onfinally?: (() => void) | undefined | null) => Promise<unknown>
+ >function() {} : () => void

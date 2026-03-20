@@ -66,12 +66,12 @@ namespace m3 {
 
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : ((error: any) => Promise<U>) | undefined
@@ -101,12 +101,12 @@ namespace m4 {
 
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : ((error: any) => Promise<U>) | undefined
@@ -140,19 +140,19 @@ namespace m5 {
 
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: ((preservation: any) => void) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: ((preservation: any) => void) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : ((error: any) => Promise<U>) | undefined
 >error : any
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: ((preservation: any) => void) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : ((error: any) => U) | undefined
@@ -175,9 +175,9 @@ namespace m5 {
     var newPromise = numPromise.then(testFunction);
 >newPromise : Promise<string>
 >numPromise.then(testFunction) : Promise<string>
->numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: ((preservation: any) => void) | undefined): Promise<U>; }
+>numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: (preservation: any) => void): Promise<U>; }
 >numPromise : Promise<number>
->then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: ((preservation: any) => void) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: ((error: any) => U) | undefined, progress?: (preservation: any) => void): Promise<U>; }
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 }
 
@@ -188,12 +188,12 @@ namespace m6 {
 
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: ((error: any) => Promise<U>) | undefined): Promise<U>; }
+>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 >cb : (x: T) => Promise<U>
 >x : T
 >error : ((error: any) => Promise<U>) | undefined

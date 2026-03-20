@@ -5,7 +5,32 @@
      prop4 = {
  >prop4 : { a: () => any; }
 ->{        a: function() { return this; },    } : { a: () => any; }
-+>{        a: function() { return this; },    } : { a: () => { a: any; }; }
++>{        a: function() { return this; },    } : { a: () => { a: () => any; }; }
 
          a: function() { return this; },
- >a : () => { a: any; }
+->a : () => { a: any; }
+->function() { return this; } : () => { a: any; }
++>a : () => { a: () => any; }
++>function() { return this; } : () => { a: () => any; }
+ >this : { a: () => any; }
+
+     };
+
+     prop5 = () => {
+->prop5 : () => { a: () => any; }
+->() => {        return {            a: function() { return this; },        };    } : () => { a: () => any; }
++>prop5 : () => { a: () => { a: () => any; }; }
++>() => {        return {            a: function() { return this; },        };    } : () => { a: () => { a: () => any; }; }
+
+         return {
+->{            a: function() { return this; },        } : { a: () => { a: any; }; }
++>{            a: function() { return this; },        } : { a: () => { a: () => any; }; }
+
+             a: function() { return this; },
+->a : () => { a: any; }
+->function() { return this; } : () => { a: any; }
++>a : () => { a: () => any; }
++>function() { return this; } : () => { a: () => any; }
+ >this : { a: () => any; }
+
+         };

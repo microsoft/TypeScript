@@ -22,7 +22,7 @@ class Derived extends Base {
 >n : string | Derived
 
     fn() {
->fn : () => string | number
+>fn : () => number | string
 
         return 10 as number | string;
 >10 as number | string : string | number
@@ -36,7 +36,7 @@ class DerivedInterface implements Base {
 >n : string | DerivedInterface
 
     fn() {
->fn : () => string | number
+>fn : () => number | string
 
         return 10 as number | string;
 >10 as number | string : string | number

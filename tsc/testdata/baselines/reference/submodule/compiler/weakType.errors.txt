@@ -5,10 +5,10 @@ weakType.ts(17,13): error TS2560: Value of type 'CtorOnly' has no properties in 
 weakType.ts(18,13): error TS2559: Type '12' has no properties in common with type 'Settings'.
 weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
 weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
-weakType.ts(37,18): error TS2559: Type '{ error?: number | undefined; }' has no properties in common with type 'ChangeOptions'.
+weakType.ts(37,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
 weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
   Types of property 'properties' are incompatible.
-    Type '{ wrong: string; }' has no properties in common with type '{ b?: number | undefined; }'.
+    Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
 
 
 ==== weakType.ts (9 errors) ====
@@ -67,7 +67,7 @@ weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is n
         changes.push(options);
         changes.push(error);
                      ~~~~~
-!!! error TS2559: Type '{ error?: number | undefined; }' has no properties in common with type 'ChangeOptions'.
+!!! error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
     }
     
     class K {
@@ -96,6 +96,6 @@ weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is n
         ~~~~
 !!! error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
 !!! error TS2322:   Types of property 'properties' are incompatible.
-!!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number | undefined; }'.
+!!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
     
     

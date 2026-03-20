@@ -7,9 +7,9 @@ export * from "./c";
 
 === b.ts ===
 export function __foo(): number | void {}
->__foo : () => void | number
+>__foo : () => number | void
 
 === c.ts ===
 export function __foo(): string | void {}
->__foo : () => void | string
+>__foo : () => string | void
 

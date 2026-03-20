@@ -27,7 +27,7 @@ declare namespace templa.mvc.composite {
 >mvc : typeof mvc
 
         getControllers(): mvc.IController<mvc.IModel>[];
->getControllers : () => IController<IModel>[]
+>getControllers : () => mvc.IController<mvc.IModel>[]
 >mvc : any
 >mvc : any
     }

@@ -11,13 +11,13 @@ declare function ClassDecorator2(x: number): (target: Function) => void;
 >target : Function
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
->PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >target : Object
 >key : string | symbol
 >descriptor : PropertyDescriptor | undefined
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >x : number
 >target : Object
 >key : string | symbol
@@ -72,11 +72,11 @@ class Greeter {
     }
     
     @PropertyDecorator1
->PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 
     @PropertyDecorator2(40)
->PropertyDecorator2(40) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator2(40) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >40 : 40
 
     greet() {
@@ -93,22 +93,22 @@ class Greeter {
     }
 
     @PropertyDecorator1
->PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 
     @PropertyDecorator2(50)
->PropertyDecorator2(50) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator2(50) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >50 : 50
 
     private x: string;
 >x : string
 
     @PropertyDecorator1
->PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 
     @PropertyDecorator2(60)
->PropertyDecorator2(60) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator2(60) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >60 : 60
 
     private static x1: number = 10;
@@ -136,11 +136,11 @@ class Greeter {
     }
 
     @PropertyDecorator1
->PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 
     @PropertyDecorator2(80)
->PropertyDecorator2(80) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor | undefined) => void
+>PropertyDecorator2(80) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >80 : 80
 
     get greetings() {

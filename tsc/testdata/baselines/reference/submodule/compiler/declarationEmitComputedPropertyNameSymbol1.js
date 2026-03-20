@@ -27,5 +27,5 @@ export type Type = {
 export declare const foo: {
     x?: {
         [Foo.sym]: 0;
-    } | undefined;
+    };
 };

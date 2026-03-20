@@ -5,7 +5,7 @@
   */
  function Cp(t) {
 ->Cp : typeof Cp
-+>Cp : { <T>(t: T): void; prototype: { m4(): any; }; }
++>Cp : { <T>(t: T): void; prototype: { m4(): this; }; }
  >t : T
 
      /** @type {this} */
@@ -29,36 +29,28 @@
  >y : any
  >t : T
 
-     /** @return {this} */
+@@= skipped -22, +22 lines =@@
      this.m3 = () => this
-->this.m3 = () => this : () => this
-+>this.m3 = () => this : () => any
+ >this.m3 = () => this : () => this
  >this.m3 : any
 ->this : this
 +>this : any
  >m3 : any
-->() => this : () => this
+ >() => this : () => this
 ->this : this
-+>() => this : () => any
 +>this : any
  }
 
  Cp.prototype = {
-->Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
-->Cp.prototype : { m4(): this; }
+ >Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
+ >Cp.prototype : { m4(): this; }
 ->Cp : typeof Cp
-->prototype : { m4(): this; }
-->{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
-+>Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): any; }
-+>Cp.prototype : { m4(): any; }
-+>Cp : { <T>(t: T): void; prototype: { m4(): any; }; }
-+>prototype : { m4(): any; }
-+>{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): any; }
++>Cp : { <T>(t: T): void; prototype: { m4(): this; }; }
+ >prototype : { m4(): this; }
+ >{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
 
-     /** @return {this} */
-     m4() {
-->m4 : () => this
-+>m4 : () => any
+@@= skipped -18, +18 lines =@@
+ >m4 : () => this
 
          this.z = this.y; return this
 ->this.z = this.y : T
@@ -71,16 +63,16 @@
 ->this : this
 +>this.z = this.y : any
 +>this.z : any
-+>this : { m4(): any; }
++>this : { m4(): this; }
 +>z : any
 +>this.y : any
-+>this : { m4(): any; }
++>this : { m4(): this; }
 +>y : any
-+>this : { m4(): any; }
++>this : { m4(): this; }
      }
  }
 
-@@= skipped -57, +57 lines =@@
+@@= skipped -17, +17 lines =@@
   * @param {T} t
   */
  function Cpp(t) {
@@ -96,18 +88,15 @@
  >y : any
  >t : T
  }
- /** @return {this} */
- Cpp.prototype.m2 = function () {
-->Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => this
-+>Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => any
+@@= skipped -15, +15 lines =@@
+ >Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => this
  >Cpp.prototype.m2 : any
  >Cpp.prototype : any
 ->Cpp : typeof Cpp
 +>Cpp : <T>(t: T) => void
  >prototype : any
  >m2 : any
-->function () {    this.z = this.y; return this} : () => this
-+>function () {    this.z = this.y; return this} : () => any
+ >function () {    this.z = this.y; return this} : () => this
 
      this.z = this.y; return this
 ->this.z = this.y : T
@@ -134,7 +123,7 @@
 ->Cp : typeof Cp
 +>cp : any
 +>new Cp(1) : any
-+>Cp : { <T>(t: T): void; prototype: { m4(): any; }; }
++>Cp : { <T>(t: T): void; prototype: { m4(): this; }; }
  >1 : 1
 
  var cpp = new Cpp(2)

@@ -9,4 +9,4 @@ var x = function somefn() { return somefn; };
 
 
 //// [functionExpressionReturningItself.d.ts]
-declare var x: () => /*elided*/ any;
+declare var x: () => () => /*elided*/ any;

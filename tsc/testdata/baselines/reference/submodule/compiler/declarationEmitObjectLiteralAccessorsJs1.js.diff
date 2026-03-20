@@ -13,13 +13,18 @@
 +     * my awesome getter (first in source order)
 +     * @returns {string}
 +     */
-+    x: string;
++    get x(): string;
++    /**
++     * my awesome setter (second in source order)
++     * @param {string} a
++     */
++    set x(a: string);
 +};
 +export declare const obj2: {
      /**
       * my awesome getter
       * @returns {string}
-@@= skipped -15, +19 lines =@@
+@@= skipped -15, +24 lines =@@
       */
      set x(a: number);
  };

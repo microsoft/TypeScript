@@ -4,7 +4,7 @@
 // Repros from #43130
 
 function f1<T>(x: T & string | T & undefined) {
->f1 : <T>(x: (T & undefined) | (T & string)) => void
+>f1 : <T>(x: (T & string) | (T & undefined)) => void
 >x : (T & undefined) | (T & string)
 
     if (x) {
@@ -16,7 +16,7 @@ function f1<T>(x: T & string | T & undefined) {
 }
 
 function f2<T>(x: T & string | T & undefined) {
->f2 : <T>(x: (T & undefined) | (T & string)) => void
+>f2 : <T>(x: (T & string) | (T & undefined)) => void
 >x : (T & undefined) | (T & string)
 
     if (x !== undefined) {

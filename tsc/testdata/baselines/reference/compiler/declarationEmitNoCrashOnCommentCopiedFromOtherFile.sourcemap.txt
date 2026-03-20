@@ -35,21 +35,39 @@ sourceFile:export.ts
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                        ^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                           ^^^^^^^^^^^^
+5 >                                       ^^^^^^^
+6 >                                              ^^^^^
+7 >                                                   ^^^^^
+8 >                                                        ^^^^
+9 >                                                            ^^^^^^^
+10>                                                                   ^
 1->
   >
   >
 2 >export function 
 3 >                        foo
 4 >                           () {
-  >                             return (_item: unknown): _item is boolean => {
-  >                               return true;
-  >                             };
-  >                           }
+  >                             return (_item: 
+5 >                                       unknown
+6 >                                              ): 
+7 >                                                   _item
+8 >                                                         is 
+9 >                                                            boolean
+10>                                                                    => {
+  >                                                                       return true;
+  >                                                                     };
+  >                                                                   }
 1->Emitted(8, 1) Source(9, 1) + SourceIndex(0)
 2 >Emitted(8, 25) Source(9, 17) + SourceIndex(0)
 3 >Emitted(8, 28) Source(9, 20) + SourceIndex(0)
-4 >Emitted(8, 69) Source(13, 2) + SourceIndex(0)
+4 >Emitted(8, 40) Source(10, 18) + SourceIndex(0)
+5 >Emitted(8, 47) Source(10, 25) + SourceIndex(0)
+6 >Emitted(8, 52) Source(10, 28) + SourceIndex(0)
+7 >Emitted(8, 57) Source(10, 33) + SourceIndex(0)
+8 >Emitted(8, 61) Source(10, 37) + SourceIndex(0)
+9 >Emitted(8, 68) Source(10, 44) + SourceIndex(0)
+10>Emitted(8, 69) Source(13, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=export.d.ts.map===================================================================
 JsFile: import.d.ts

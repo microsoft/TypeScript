@@ -18,6 +18,6 @@ export type Type = {
 //// [index.d.ts]
 export declare const foo: {
     x?: {
-        [x: number]: 0;
-    } | undefined;
+        [Enum.A]: 0;
+    };
 };

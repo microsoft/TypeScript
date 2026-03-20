@@ -168,11 +168,11 @@ function g4<T extends Box<T> | undefined>(x: T) {
 // Repro from #13995
 
 declare function takeA(val: 'A'): void;
->takeA : (val: "A") => void
+>takeA : (val: 'A') => void
 >val : "A"
 
 export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
->bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => AB
+>bounceAndTakeIfA : <AB extends 'A' | 'B'>(value: AB) => AB
 >value : AB
 
     if (value === 'A') {
@@ -182,7 +182,7 @@ export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
 
         takeA(value);
 >takeA(value) : void
->takeA : (val: "A") => void
+>takeA : (val: 'A') => void
 >value : "A"
 
         return value;
@@ -332,7 +332,7 @@ interface A {
 };
 
 function get<K extends keyof A>(key: K, obj: A): number {
->get : <K extends "a">(key: K, obj: A) => number
+>get : <K extends keyof A>(key: K, obj: A) => number
 >key : K
 >obj : A
 
@@ -360,7 +360,7 @@ class EventEmitter<ET> {
 >EventEmitter : EventEmitter<ET>
 
     off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
->off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
 >args : [unknown, string] | [K, number]
 }
 function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
@@ -586,13 +586,13 @@ type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) 
 >title : string | undefined
 
 function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
->getColumnProperty : <T>(column: Column<T>, key: "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
 >column : Column<T>
->key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+>key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
 
   return column[key];
->column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
 >column : Column<T>
->key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+>key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
 }
 

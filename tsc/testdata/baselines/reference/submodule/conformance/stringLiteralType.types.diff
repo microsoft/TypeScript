@@ -1,0 +1,20 @@
+--- old.stringLiteralType.types
++++ new.stringLiteralType.types
+@@= skipped -4, +4 lines =@@
+ >x : "hi"
+
+ function f(x: 'hi');
+->f : { (x: "hi"): any; (x: string): any; }
++>f : { (x: 'hi'): any; (x: string): any; }
+ >x : "hi"
+
+ function f(x: string);
+->f : { (x: "hi"): any; (x: string): any; }
++>f : { (x: 'hi'): any; (x: string): any; }
+ >x : string
+
+ function f(x: any) {
+->f : { (x: "hi"): any; (x: string): any; }
++>f : { (x: 'hi'): any; (x: string): any; }
+ >x : any
+ }

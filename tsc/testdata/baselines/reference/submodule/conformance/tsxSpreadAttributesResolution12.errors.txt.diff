@@ -1,0 +1,16 @@
+--- old.tsxSpreadAttributesResolution12.errors.txt
++++ new.tsxSpreadAttributesResolution12.errors.txt
+@@= skipped -36, +36 lines =@@
+     let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
+                                     ~
+ !!! error TS2322: Type 'true' is not assignable to type 'false'.
+-!!! related TS6500 file.tsx:16:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode | undefined; }'
++!!! related TS6500 file.tsx:16:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
+     let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
+                                                      ~
+ !!! error TS2322: Type '3' is not assignable to type '2'.
+-!!! related TS6500 file.tsx:15:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode | undefined; }'
++!!! related TS6500 file.tsx:15:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'
+     let x2 = <OverWriteAttr {...anyobj} x={3} />
+     let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
+               ~~~~~~~~~~~~~

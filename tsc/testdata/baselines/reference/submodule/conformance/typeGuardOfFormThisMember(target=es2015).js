@@ -150,7 +150,7 @@ declare namespace Test {
         path: string;
         isFSO: this is FileSystemObject;
         get isFile(): this is File;
-        set isFile(param: boolean);
+        set isFile(param: this is File);
         get isDirectory(): this is Directory;
         isNetworked: this is (Networked & this);
         constructor(path: string);

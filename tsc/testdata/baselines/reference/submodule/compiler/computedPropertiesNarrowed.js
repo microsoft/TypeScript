@@ -98,7 +98,7 @@ export declare let o2: {
     0: number;
 };
 export declare let o3: {
-    1: number;
+    [1]: number;
 };
 export declare let o31: {
     [-1]: number;

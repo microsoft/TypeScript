@@ -12,6 +12,17 @@
  strictFunctionTypesErrors.ts(134,1): error TS2322: Type '(f: (x: Animal) => Animal) => void' is not assignable to type '(f: (x: Dog) => Dog) => void'.
    Types of parameters 'f' and 'f' are incompatible.
      Types of parameters 'x' and 'x' are incompatible.
+       Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+-strictFunctionTypesErrors.ts(147,5): error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
++strictFunctionTypesErrors.ts(147,5): error TS2322: Type '(cb: typeof Foo.f1) => void' is not assignable to type '(cb: typeof Foo.f2) => void'.
+   Types of parameters 'cb' and 'cb' are incompatible.
+     Types of parameters 'x' and 'x' are incompatible.
+       Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+-strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
++strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(cb: BivariantHack<Animal, Animal>) => void' is not assignable to type '(cb: BivariantHack<Dog, Animal>) => void'.
+   Types of parameters 'cb' and 'cb' are incompatible.
+     Types of parameters 'x' and 'x' are incompatible.
+       Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
 @@= skipped -262, +263 lines =@@
      declare let fc2: (f: (x: Dog) => Dog) => void;
      fc1 = fc2;  // Error
@@ -24,3 +35,21 @@
  !!! related TS2728 strictFunctionTypesErrors.ts:91:32: 'dog' is declared here.
      fc2 = fc1;  // Error
      ~~~
+@@= skipped -24, +25 lines =@@
+         f1 = f2;
+         f2 = f1;  // Error
+         ~~
+-!!! error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
++!!! error TS2322: Type '(cb: typeof Foo.f1) => void' is not assignable to type '(cb: typeof Foo.f2) => void'.
+ !!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
+ !!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+ !!! error TS2322:       Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+@@= skipped -14, +14 lines =@@
+         f1 = f2;
+         f2 = f1;  // Error
+         ~~
+-!!! error TS2322: Type '(cb: (x: Animal) => Animal) => void' is not assignable to type '(cb: (x: Dog) => Animal) => void'.
++!!! error TS2322: Type '(cb: BivariantHack<Animal, Animal>) => void' is not assignable to type '(cb: BivariantHack<Dog, Animal>) => void'.
+ !!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
+ !!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+ !!! error TS2322:       Property 'dog' is missing in type 'Animal' but required in type 'Dog'.

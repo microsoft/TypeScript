@@ -12,7 +12,7 @@ reachabilityChecksNoCrash1.ts(1,71): error TS7006: Parameter 'T' implicitly has 
 reachabilityChecksNoCrash1.ts(1,72): error TS1005: ',' expected.
 reachabilityChecksNoCrash1.ts(1,73): error TS1109: Expression expected.
 reachabilityChecksNoCrash1.ts(1,74): error TS1128: Declaration or statement expected.
-reachabilityChecksNoCrash1.ts(1,76): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
+reachabilityChecksNoCrash1.ts(1,76): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: never[]; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
 reachabilityChecksNoCrash1.ts(1,84): error TS2304: Cannot find name 'T'.
 reachabilityChecksNoCrash1.ts(1,86): error TS1011: An element access expression should take an argument.
 reachabilityChecksNoCrash1.ts(2,11): error TS1005: ':' expected.
@@ -116,7 +116,7 @@ reachabilityChecksNoCrash1.ts(7,1): error TS1128: Declaration or statement expec
 !!! error TS1005: ',' expected.
         }
     ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: never[]; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
         return out;
     }
     ~

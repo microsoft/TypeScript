@@ -70,9 +70,9 @@ f.self = f;
  * @param {{y: typeof b}} b
  */
 function g(a, b) {
->g : (a: { x: string; }, b: { y: any; }) => any
+>g : (a: { x: string; }, b: { y: typeof b; }) => any
 >a : { x: string; }
->b : { y: any; }
+>b : { y: typeof b; }
 
     return a.x && b.y();
 >a.x && b.y() : any
@@ -80,22 +80,22 @@ function g(a, b) {
 >a : { x: string; }
 >x : string
 >b.y() : any
->b.y : { y: any; }
->b : { y: any; }
->y : { y: any; }
+>b.y : { y: typeof b; }
+>b : { y: typeof b; }
+>y : { y: typeof b; }
 }
 
 export { g };
->g : (a: { x: string; }, b: { y: any; }) => any
+>g : (a: { x: string; }, b: { y: typeof b; }) => any
 
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
  */
 function hh(a, b) {
->hh : (a: { x: string; }, b: { y: any; }) => any
+>hh : (a: { x: string; }, b: { y: typeof b; }) => any
 >a : { x: string; }
->b : { y: any; }
+>b : { y: typeof b; }
 
     return a.x && b.y();
 >a.x && b.y() : any
@@ -103,14 +103,14 @@ function hh(a, b) {
 >a : { x: string; }
 >x : string
 >b.y() : any
->b.y : { y: any; }
->b : { y: any; }
->y : { y: any; }
+>b.y : { y: typeof b; }
+>b : { y: typeof b; }
+>y : { y: typeof b; }
 }
 
 export { hh as h };
->hh : (a: { x: string; }, b: { y: any; }) => any
->h : (a: { x: string; }, b: { y: any; }) => any
+>hh : (a: { x: string; }, b: { y: typeof b; }) => any
+>h : (a: { x: string; }, b: { y: typeof b; }) => any
 
 export function i() {}
 >i : () => void

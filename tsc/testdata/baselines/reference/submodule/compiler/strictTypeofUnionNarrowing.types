@@ -37,7 +37,7 @@ function stringify2(anything: {} | undefined): string {
 }
 
 function stringify3(anything: unknown | undefined): string { // should simplify to just `unknown` which should narrow fine
->stringify3 : (anything: unknown) => string
+>stringify3 : (anything: unknown | undefined) => string
 >anything : unknown
 
     return typeof anything === "string" ? anything.toUpperCase() : "";

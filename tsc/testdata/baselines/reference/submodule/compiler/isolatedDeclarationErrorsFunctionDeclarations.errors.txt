@@ -1,0 +1,40 @@
+isolatedDeclarationErrorsFunctionDeclarations.ts(1,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsFunctionDeclarations.ts(3,35): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsFunctionDeclarations.ts(7,49): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsFunctionDeclarations.ts(7,66): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsFunctionDeclarations.ts(7,81): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+isolatedDeclarationErrorsFunctionDeclarations.ts(9,55): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+
+
+==== isolatedDeclarationErrorsFunctionDeclarations.ts (6 errors) ====
+    export function noReturn() {}
+                    ~~~~~~~~
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 isolatedDeclarationErrorsFunctionDeclarations.ts:1:17: Add a return type to the function declaration.
+    
+    export function noParamAnnotation(p): void {}
+                                      ~
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:3:35: Add a type annotation to the parameter p.
+    
+    export function noParamAnnotationDefault(p = 1): void {}
+    
+    export function noParamAnnotationBadDefault(p = 1 + 1, p2 = { a: 1 + 1 }, p3 = [1 + 1] as const): void {}
+                                                    ~~~~~
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:7:45: Add a type annotation to the parameter p.
+                                                                     ~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:7:56: Add a type annotation to the parameter p2.
+!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:7:66: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+                                                                                    ~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:7:75: Add a type annotation to the parameter p3.
+!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:7:81: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+    export function noParamAnnotationBadDefault2(p = { a: 1 + 1 }): void {}
+                                                          ~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:9:46: Add a type annotation to the parameter p.
+!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:9:55: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    

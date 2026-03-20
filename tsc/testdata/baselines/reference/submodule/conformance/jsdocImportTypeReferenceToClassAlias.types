@@ -20,7 +20,7 @@ module.exports.C = C
 /** @typedef {import('./mod1').C} X */
 /** @param {X} c */
 function demo(c) {
->demo : (c: any) => void
+>demo : (c: X) => void
 >c : any
 
     c.s

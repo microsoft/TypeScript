@@ -260,7 +260,7 @@ interface Child<A, B = unknown> extends Parent<A> {
 }
 
 function fn<A>(inp: Child<A>) {
->fn : <A>(inp: Child<A, unknown>) => void
+>fn : <A>(inp: Child<A>) => void
 >inp : Child<A, unknown>
 
     const a: Child<unknown> = inp;
@@ -350,7 +350,7 @@ let Anon = class <out T> {
 >class <out T> {    foo(): InstanceType<(typeof Anon<T>)> {        return this;    }} : typeof Anon
 
     foo(): InstanceType<(typeof Anon<T>)> {
->foo : () => Anon<T>
+>foo : () => InstanceType<(typeof Anon<T>)>
 >Anon : typeof Anon
 
         return this;

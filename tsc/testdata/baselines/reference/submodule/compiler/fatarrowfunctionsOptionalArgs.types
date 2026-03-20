@@ -48,7 +48,7 @@ arg => 2;
 
 // optional param
 (arg?: number) => 7;
->(arg?: number) => 7 : (arg?: number | undefined) => number
+>(arg?: number) => 7 : (arg?: number) => number
 >arg : number | undefined
 >7 : 7
 
@@ -94,7 +94,7 @@ arg => 2;
 >16 : 16
 
 (arg1?: number, arg2?: number) => 17;
->(arg1?: number, arg2?: number) => 17 : (arg1?: number | undefined, arg2?: number | undefined) => number
+>(arg1?: number, arg2?: number) => 17 : (arg1?: number, arg2?: number) => number
 >arg1 : number | undefined
 >arg2 : number | undefined
 >17 : 17
@@ -106,7 +106,7 @@ arg => 2;
 >18 : 18
 
 (arg1, arg2?: number) => 19;
->(arg1, arg2?: number) => 19 : (arg1: any, arg2?: number | undefined) => number
+>(arg1, arg2?: number) => 19 : (arg1: any, arg2?: number) => number
 >arg1 : any
 >arg2 : number | undefined
 >19 : 19
@@ -150,8 +150,8 @@ arg => 2;
 >26 : 26
 
 ((arg?: number) => 27);
->((arg?: number) => 27) : (arg?: number | undefined) => number
->(arg?: number) => 27 : (arg?: number | undefined) => number
+>((arg?: number) => 27) : (arg?: number) => number
+>(arg?: number) => 27 : (arg?: number) => number
 >arg : number | undefined
 >27 : 27
 
@@ -208,16 +208,16 @@ false ? (arg: number) => 45 : null;
 >45 : 45
 
 false ? (arg?: number) => 46 : null;
->false ? (arg?: number) => 46 : null : ((arg?: number | undefined) => number) | null
+>false ? (arg?: number) => 46 : null : ((arg?: number) => number) | null
 >false : false
->(arg?: number) => 46 : (arg?: number | undefined) => number
+>(arg?: number) => 46 : (arg?: number) => number
 >arg : number | undefined
 >46 : 46
 
 false ? (arg?: number = 0) => 47 : null;
->false ? (arg?: number = 0) => 47 : null : ((arg?: number | undefined) => number) | null
+>false ? (arg?: number = 0) => 47 : null : ((arg?: number) => number) | null
 >false : false
->(arg?: number = 0) => 47 : (arg?: number | undefined) => number
+>(arg?: number = 0) => 47 : (arg?: number) => number
 >arg : number | undefined
 >0 : 0
 >47 : 47
@@ -271,18 +271,18 @@ false ? ((arg: number) => 55) : null;
 >55 : 55
 
 false ? ((arg?: number) => 56) : null;
->false ? ((arg?: number) => 56) : null : ((arg?: number | undefined) => number) | null
+>false ? ((arg?: number) => 56) : null : ((arg?: number) => number) | null
 >false : false
->((arg?: number) => 56) : (arg?: number | undefined) => number
->(arg?: number) => 56 : (arg?: number | undefined) => number
+>((arg?: number) => 56) : (arg?: number) => number
+>(arg?: number) => 56 : (arg?: number) => number
 >arg : number | undefined
 >56 : 56
 
 false ? ((arg?: number = 0) => 57) : null;
->false ? ((arg?: number = 0) => 57) : null : ((arg?: number | undefined) => number) | null
+>false ? ((arg?: number = 0) => 57) : null : ((arg?: number) => number) | null
 >false : false
->((arg?: number = 0) => 57) : (arg?: number | undefined) => number
->(arg?: number = 0) => 57 : (arg?: number | undefined) => number
+>((arg?: number = 0) => 57) : (arg?: number) => number
+>(arg?: number = 0) => 57 : (arg?: number) => number
 >arg : number | undefined
 >0 : 0
 >57 : 57
@@ -332,16 +332,16 @@ false ? null : (arg: number) => 65;
 >65 : 65
 
 false ? null : (arg?: number) => 66;
->false ? null : (arg?: number) => 66 : ((arg?: number | undefined) => number) | null
+>false ? null : (arg?: number) => 66 : ((arg?: number) => number) | null
 >false : false
->(arg?: number) => 66 : (arg?: number | undefined) => number
+>(arg?: number) => 66 : (arg?: number) => number
 >arg : number | undefined
 >66 : 66
 
 false ? null : (arg?: number = 0) => 67;
->false ? null : (arg?: number = 0) => 67 : ((arg?: number | undefined) => number) | null
+>false ? null : (arg?: number = 0) => 67 : ((arg?: number) => number) | null
 >false : false
->(arg?: number = 0) => 67 : (arg?: number | undefined) => number
+>(arg?: number = 0) => 67 : (arg?: number) => number
 >arg : number | undefined
 >0 : 0
 >67 : 67
@@ -430,8 +430,8 @@ false ? null : (...arg: number[]) => 68;
 
 ((arg?: number) => 95) instanceof Function;
 >((arg?: number) => 95) instanceof Function : boolean
->((arg?: number) => 95) : (arg?: number | undefined) => number
->(arg?: number) => 95 : (arg?: number | undefined) => number
+>((arg?: number) => 95) : (arg?: number) => number
+>(arg?: number) => 95 : (arg?: number) => number
 >arg : number | undefined
 >95 : 95
 >Function : FunctionConstructor
@@ -524,14 +524,14 @@ false ? null : (...arg: number[]) => 68;
 ((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
 >((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106) : string
 >((arg?:number = 1) => 0) + '' : string
->((arg?:number = 1) => 0) : (arg?: number | undefined) => number
->(arg?:number = 1) => 0 : (arg?: number | undefined) => number
+>((arg?:number = 1) => 0) : (arg?: number) => number
+>(arg?:number = 1) => 0 : (arg?: number) => number
 >arg : number | undefined
 >1 : 1
 >0 : 0
 >'' : ""
->((arg?:number = 2) => 106) : (arg?: number | undefined) => number
->(arg?:number = 2) => 106 : (arg?: number | undefined) => number
+>((arg?:number = 2) => 106) : (arg?: number) => number
+>(arg?:number = 2) => 106 : (arg?: number) => number
 >arg : number | undefined
 >2 : 2
 >106 : 106
@@ -637,7 +637,7 @@ foo(
 >117 : 117
 
     (a?: number = 0) => 118, 
->(a?: number = 0) => 118 : (a?: number | undefined) => number
+>(a?: number = 0) => 118 : (a?: number) => number
 >a : number | undefined
 >0 : 0
 >118 : 118

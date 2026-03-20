@@ -12,7 +12,7 @@ type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
 >AllArg : AllArg<T>
 
 function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
->fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
+>fn : <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>
 >x : Map<T["x"]>
 >sliceIndex : T
 
@@ -21,8 +21,8 @@ function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
 }
 
 export default { fn };
->{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
->fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
+>{ fn } : { fn: <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>; }
+>fn : <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>
 
 === reexport.ts ===
 import test from "./types";

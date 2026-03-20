@@ -49,6 +49,19 @@ type localsRecord struct {
 	oldSymbol *ast.Symbol
 }
 
+func (b *NodeBuilderImpl) addSymbolTypeToContext(symbol *ast.Symbol, t *Type) func() {
+	id := ast.GetSymbolId(symbol)
+	oldType, oldTypeExists := b.ctx.enclosingSymbolTypes[id]
+	b.ctx.enclosingSymbolTypes[id] = t
+	return func() {
+		if oldTypeExists {
+			b.ctx.enclosingSymbolTypes[id] = oldType
+		} else {
+			delete(b.ctx.enclosingSymbolTypes, id)
+		}
+	}
+}
+
 func (b *NodeBuilderImpl) enterNewScope(declaration *ast.Node, expandedParams []*ast.Symbol, typeParameters []*Type, originalParameters []*ast.Symbol, mapper *TypeMapper) func() {
 	cleanupContext := cloneNodeBuilderContext(b.ctx)
 	// For regular function/method declarations, the enclosing declaration will already be signature.declaration,

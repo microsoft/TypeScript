@@ -104,7 +104,7 @@ class Sql extends Wagon {
      * This is not assignable, so should have a type error
      */
     load(files, format) {
->load : (files: string[], format: "csv" | "json" | "xmlolololol") => void
+>load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
 >files : string[]
 >format : "csv" | "json" | "xmlolololol"
 
@@ -202,7 +202,7 @@ class Conestoga extends Wagon {
     }
     // should error since others is not optional
     static circle(others: (typeof Wagon)[]) {
->circle : (others: { (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }[]) => number
+>circle : (others: (typeof Wagon)[]) => number
 >others : { (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }[]
 >Wagon : { (numberOxen: number): void; circle: (wagons?: Wagon[] | undefined) => number; }
 

@@ -4,7 +4,7 @@
 // Repro from comment in #21496
 
 function Mixin<TBase extends {new (...args: any[]): {}}>(Base: TBase) {
->Mixin : <TBase extends new (...args: any[]) => {}>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
+>Mixin : <TBase extends { new (...args: any[]): {}; }>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
 >args : any[]
 >Base : TBase
 
@@ -17,7 +17,7 @@ function Mixin<TBase extends {new (...args: any[]): {}}>(Base: TBase) {
 
 type Mixin = ReturnTypeOf<typeof Mixin>
 >Mixin : { new (...args: any[]): Mixin.(Anonymous class); prototype: Mixin.(Anonymous class); } & (new (...args: any[]) => {})
->Mixin : <TBase extends new (...args: any[]) => {}>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
+>Mixin : <TBase extends { new (...args: any[]): {}; }>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
 
 type ReturnTypeOf<V> = V extends (...args: any[])=>infer R ? R : never;
 >ReturnTypeOf : ReturnTypeOf<V>

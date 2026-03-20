@@ -1,6 +1,24 @@
 --- old.jsdocArrayObjectPromiseNoImplicitAny.types
 +++ new.jsdocArrayObjectPromiseNoImplicitAny.types
-@@= skipped -63, +63 lines =@@
+@@= skipped -17, +17 lines =@@
+  * @return {Array}
+  */
+ function returnNotAnyArray(arr) {
+->returnNotAnyArray : (arr: any[]) => any[]
++>returnNotAnyArray : (arr: Array) => Array
+ >arr : any[]
+
+   return arr;
+@@= skipped -30, +30 lines =@@
+  * @return {Promise}
+  */
+ function returnNotAnyPromise(pr) {
+->returnNotAnyPromise : (pr: Promise<any>) => Promise<any>
++>returnNotAnyPromise : (pr: Promise) => Promise
+ >pr : Promise<any>
+
+   return pr;
+@@= skipped -16, +16 lines =@@
 
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};

@@ -1,9 +1,0 @@
---- old.noUnusedLocals_writeOnly.types
-+++ new.noUnusedLocals_writeOnly.types
-@@= skipped -109, +109 lines =@@
- >1 : 1
- }
- function f2(_: ReadonlyArray<number>): void {}
-->f2 : (_: ReadonlyArray<number>) => void
-+>f2 : (_: readonly number[]) => void
- >_ : readonly number[]

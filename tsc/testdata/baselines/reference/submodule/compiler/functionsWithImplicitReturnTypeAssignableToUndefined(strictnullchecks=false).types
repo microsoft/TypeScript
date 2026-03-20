@@ -94,7 +94,7 @@ function f7(): null {
 }
 
 function f8(): string | null {
->f8 : () => string
+>f8 : () => string | null
 
     if (Math.random() < 0.5) return "foo";
 >Math.random() < 0.5 : boolean

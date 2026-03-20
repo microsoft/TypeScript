@@ -22,7 +22,7 @@ declare namespace knex {
 declare namespace Knex {
   interface Interface {
     method(): ShouldJustBeAny;
->method : () => any
+>method : () => ShouldJustBeAny
   }
 }
 
@@ -38,7 +38,7 @@ declare module "knex" {
 >Knex : typeof Knex
 
     function newFunc(): Knex.Interface;
->newFunc : () => Interface
+>newFunc : () => Knex.Interface
 >Knex : any
   }
 }

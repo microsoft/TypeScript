@@ -947,21 +947,21 @@ function f12(x: { a: string }) {
 }
 
 function f13(x: { a?: string }) {
->f13 : (x: { a?: string | undefined; }) => void
->x : { a?: string | undefined; }
+>f13 : (x: { a?: string; }) => void
+>x : { a?: string; }
 >a : string | undefined
 
     if ("a" in x) {
 >"a" in x : boolean
 >"a" : "a"
->x : { a?: string | undefined; }
+>x : { a?: string; }
 
         x;
->x : { a?: string | undefined; }
+>x : { a?: string; }
     }
     else {
         x;
->x : { a?: string | undefined; }
+>x : { a?: string; }
     }
 }
 
@@ -1076,8 +1076,8 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 // Repro from #51549
 
 const f = <P extends object>(a: P & {}) => {
->f : <P extends object>(a: P) => void
-><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P) => void
+>f : <P extends object>(a: P & {}) => void
+><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
 >a : P
 
     "foo" in a;

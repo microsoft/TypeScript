@@ -1,10 +1,11 @@
 --- old.assignmentCompatWithDiscriminatedUnion.types
 +++ new.assignmentCompatWithDiscriminatedUnion.types
-@@= skipped -529, +529 lines =@@
- >a : MyType
-     
-     function indirect(kind: MyEnum, id?: number): void {
-->indirect : (kind: MyEnum, id?: number) => void
-+>indirect : (kind: MyEnum, id?: number | undefined) => void
- >kind : MyEnum
- >id : number | undefined
+@@= skipped -300, +300 lines =@@
+ >val : Blue | Yellow
+
+     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
+->drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
++>drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
+ >currentColor : "blue" | "yellow" | undefined
+
+         return draw({ color: currentColor });

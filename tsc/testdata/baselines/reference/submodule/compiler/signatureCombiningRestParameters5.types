@@ -24,7 +24,7 @@ test1(42, [true]); // error
 >true : true
 
 declare function test2<
->test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: ((...args: A) => void) | ((...args: B) => void)) => void) => void
+>test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: typeof c | typeof d) => void) => void
 
   A extends readonly unknown[],
   B extends readonly unknown[],
@@ -38,7 +38,7 @@ declare function test2<
 >args : B
 
   e: (arg: typeof c | typeof d) => void,
->e : (arg: ((...args: A) => void) | ((...args: B) => void)) => void
+>e : (arg: typeof c | typeof d) => void
 >arg : ((...args: A) => void) | ((...args: B) => void)
 >c : (...args: A) => void
 >d : (...args: B) => void
@@ -47,7 +47,7 @@ declare function test2<
 
 test2(
 >test2(  (a: number | boolean, b: string | number) => {},  (c: string | boolean, d: number | boolean) => {},  (cb) => {    cb(true, 42);    cb(true, [42]); // error  },) : void
->test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: ((...args: A) => void) | ((...args: B) => void)) => void) => void
+>test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: typeof c | typeof d) => void) => void
 
   (a: number | boolean, b: string | number) => {},
 >(a: number | boolean, b: string | number) => {} : (a: number | boolean, b: string | number) => void

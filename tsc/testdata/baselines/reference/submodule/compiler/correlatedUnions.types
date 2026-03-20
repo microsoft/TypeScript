@@ -66,9 +66,9 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 >v => v.toExponential() : (v: number) => string
 >v : number
 >v.toExponential() : string
->v.toExponential : (fractionDigits?: number | undefined) => string
+>v.toExponential : (fractionDigits?: number) => string
 >v : number
->toExponential : (fractionDigits?: number | undefined) => string
+>toExponential : (fractionDigits?: number) => string
 
 // --------
 
@@ -182,9 +182,9 @@ const handlers: HandlerMap = {
 >n => n.toFixed(2) : (n: number) => string
 >n : number
 >n.toFixed(2) : string
->n.toFixed : (fractionDigits?: number | undefined) => string
+>n.toFixed : (fractionDigits?: number) => string
 >n : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 >2 : 2
 
 };
@@ -228,7 +228,7 @@ const data: DataEntry[] = [
 ];
 
 function process<K extends Keys>(data: DataEntry<K>[]) {
->process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
+>process : <K extends Keys>(data: DataEntry<K>[]) => void
 >data : DataEntry<K>[]
 
     data.forEach(block => {
@@ -262,12 +262,12 @@ function process<K extends Keys>(data: DataEntry<K>[]) {
 
 process(data);
 >process(data) : void
->process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
+>process : <K extends Keys>(data: DataEntry<K>[]) => void
 >data : DataEntry<keyof TypeMap>[]
 
 process([{ type: 'foo', data: 'abc' }]);
 >process([{ type: 'foo', data: 'abc' }]) : void
->process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
+>process : <K extends Keys>(data: DataEntry<K>[]) => void
 >[{ type: 'foo', data: 'abc' }] : { type: "foo"; data: string; }[]
 >{ type: 'foo', data: 'abc' } : { type: "foo"; data: string; }
 >type : "foo"
@@ -354,9 +354,9 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 
         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
->document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
 >document : Document
->addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
 >event.name : K
 >event : Ev<K>
 >name : K
@@ -390,8 +390,8 @@ function createEventListener<K extends keyof DocumentEventMap>({ name, once = fa
 }
 
 const clickEvent = createEventListener({
->clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; }
->createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; }
+>clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; }
+>createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; }
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: PointerEvent) => void; }
 
@@ -412,8 +412,8 @@ const clickEvent = createEventListener({
 });
 
 const scrollEvent = createEventListener({
->scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
->createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
+>scrollEvent : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
+>createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 >{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event) => void; }
 
@@ -436,9 +436,9 @@ const scrollEvent = createEventListener({
 processEvents([clickEvent, scrollEvent]);
 >processEvents([clickEvent, scrollEvent]) : void
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
->[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
->clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: PointerEvent) => void; }
->scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
+>[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; })[]
+>clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: PointerEvent) => void; }
+>scrollEvent : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
 
 processEvents([
 >processEvents([    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },]) : void
@@ -616,7 +616,7 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 }
 
 function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
->f4 : <K extends keyof ArgMap>(x: Func<"a"> | Func<"b">, y: Funcs[K]) => void
+>f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
 >x : Func<"a"> | Func<"b">
 >y : Funcs[K]
 
@@ -662,7 +662,7 @@ const ref: MyObj = {
 };
 
 function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
->func : <K extends keyof MyObj>(k: K) => MyObj[K]["name"] | undefined
+>func : <K extends keyof MyObj>(k: K) => MyObj[K]['name'] | undefined
 >k : K
 
     const myObj: Partial<MyObj>[K] = ref[k];
@@ -705,7 +705,7 @@ interface Foo {
 }
 
 function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
->foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
+>foo : <T extends keyof Foo>(prop: T, f: Required<Foo>) => void
 >prop : T
 >f : Required<Foo>
 
@@ -724,33 +724,33 @@ declare function bar(t: string): void;
 // Repro from #48246
 
 declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
->makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
 
     ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
 >ops : T
 >attr : Attr
 
 const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
->ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
->[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
->[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
->{ name: 'a'} : { readonly name: "a"; }
+>ALL_BARS : readonly [{ readonly name: 'a'; }, { readonly name: 'b'; }]
+>[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: 'a'; }, { readonly name: 'b'; }]
+>[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: 'a'; }, { readonly name: 'b'; }]
+>{ name: 'a'} : { readonly name: 'a'; }
 >name : "a"
 >'a' : "a"
->{name: 'b'} : { readonly name: "b"; }
+>{name: 'b'} : { readonly name: 'b'; }
 >name : "b"
 >'b' : "b"
 
 const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
->BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
->makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
->makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
->ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
+>BAR_LOOKUP : { a: { readonly name: 'a'; }; b: { readonly name: 'b'; }; }
+>makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: 'a'; }; b: { readonly name: 'b'; }; }
+>makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
+>ALL_BARS : readonly [{ readonly name: 'a'; }, { readonly name: 'b'; }]
 >'name' : "name"
 
 type BarLookup = typeof BAR_LOOKUP;
->BarLookup : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
->BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
+>BarLookup : { a: { readonly name: 'a'; }; b: { readonly name: 'b'; }; }
+>BAR_LOOKUP : { a: { readonly name: 'a'; }; b: { readonly name: 'b'; }; }
 
 type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
 >Baz : Baz
@@ -797,8 +797,8 @@ type MappedFromOriginal = SameKeys<Original>;
 >MappedFromOriginal : SameKeys<Original>
 
 const getStringAndNumberFromOriginalAndMapped = <
->getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
-><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+>getStringAndNumberFromOriginalAndMapped : <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
 
   K extends KeyOfOriginal,
   N extends NestedKeyOfOriginalFor<K>

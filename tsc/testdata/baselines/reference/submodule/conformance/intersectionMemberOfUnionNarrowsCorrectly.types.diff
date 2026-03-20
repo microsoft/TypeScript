@@ -5,11 +5,11 @@
 
  declare let x: Ex<U, { kind?: 'A' }>
 ->x : { kind?: "A"; a: string; }
-+>x : { kind?: "A" | undefined; a: string; }
++>x : { kind?: 'A'; a: string; }
  >kind : "A" | undefined
 
  x.a
  >x.a : string
 ->x : { kind?: "A"; a: string; }
-+>x : { kind?: "A" | undefined; a: string; }
++>x : { kind?: 'A'; a: string; }
  >a : string

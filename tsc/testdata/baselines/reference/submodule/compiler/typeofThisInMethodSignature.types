@@ -11,7 +11,7 @@ export class A {
 >1 : 1
 
 	a(x: typeof this.x): void {}
->a : (x: number) => void
+>a : (x: typeof this.x) => void
 >x : number
 >this.x : number
 >this : this
@@ -21,9 +21,9 @@ export class A {
 const a = new A().a(1);
 >a : void
 >new A().a(1) : void
->new A().a : (x: number) => void
+>new A().a : (x: typeof this.x) => void
 >new A() : A
 >A : typeof A
->a : (x: number) => void
+>a : (x: typeof this.x) => void
 >1 : 1
 

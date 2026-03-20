@@ -77,8 +77,8 @@ function test2() {
     };
 
     const test1 = (type: "foo" | "bar") =>
->test1 : (type: "bar" | "foo") => string
->(type: "foo" | "bar") =>        messages[type]({ a: "A", b: 0 }) : (type: "bar" | "foo") => string
+>test1 : (type: "foo" | "bar") => string
+>(type: "foo" | "bar") =>        messages[type]({ a: "A", b: 0 }) : (type: "foo" | "bar") => string
 >type : "bar" | "foo"
 
         messages[type]({ a: "A", b: 0 });
@@ -112,7 +112,7 @@ function test3(items: string[] | number[]) {
 }
 
 function test4(
->test4 : (arg1: ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number), arg2: ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number), arg3: ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number), arg4: ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number), arg5: ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number), arg6: ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)) => void
+>test4 : (arg1: ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number), arg2: ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number), arg3: ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number), arg4: ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number), arg5: ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number), arg6: ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)) => void
 
     arg1: ((...objs: {x: number}[]) => number) | ((...objs: {y: number}[]) => number),
 >arg1 : ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number)
@@ -140,7 +140,7 @@ function test4(
 >x : number
 
     arg4: ((a?: {x: number}, b?: {x: number}) => number) | ((a?: {y: number}) => number),
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
 >a : { x: number; } | undefined
 >x : number
 >b : { x: number; } | undefined
@@ -149,7 +149,7 @@ function test4(
 >y : number
 
     arg5: ((a?: {x: number}, ...b: {x: number}[]) => number) | ((a?: {y: number}) => number),
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
 >a : { x: number; } | undefined
 >x : number
 >b : { x: number; }[]
@@ -158,7 +158,7 @@ function test4(
 >y : number
 
     arg6: ((a?: {x: number}, b?: {x: number}) => number) | ((...a: {y: number}[]) => number),
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
 >a : { x: number; } | undefined
 >x : number
 >b : { x: number; } | undefined
@@ -242,11 +242,11 @@ function test4(
 
     arg4();
 >arg4() : number
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
 
     arg4({x: 0, y: 0});
 >arg4({x: 0, y: 0}) : number
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -255,7 +255,7 @@ function test4(
 
     arg4({x: 0, y: 0}, {x: 0});
 >arg4({x: 0, y: 0}, {x: 0}) : number
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -267,11 +267,11 @@ function test4(
 
     arg5();
 >arg5() : number
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
 
     arg5({x: 0, y: 0});
 >arg5({x: 0, y: 0}) : number
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -280,7 +280,7 @@ function test4(
 
     arg5({x: 0, y: 0}, {x: 0});
 >arg5({x: 0, y: 0}, {x: 0}) : number
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -292,11 +292,11 @@ function test4(
 
     arg6();
 >arg6() : number
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
 
     arg6({x: 0, y: 0});
 >arg6({x: 0, y: 0}) : number
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -305,7 +305,7 @@ function test4(
 
     arg6({x: 0, y: 0}, {x: 0, y: 0});
 >arg6({x: 0, y: 0}, {x: 0, y: 0}) : number
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -319,7 +319,7 @@ function test4(
 
     arg6({x: 0, y: 0}, {x: 0, y: 0}, {y: 0});
 >arg6({x: 0, y: 0}, {x: 0, y: 0}, {y: 0}) : number
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
 >{x: 0, y: 0} : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -341,7 +341,7 @@ function test5() {
 
     // Pair of non-like intrinsics
     function render(url?: string): React.ReactNode {
->render : (url?: string | undefined) => React.ReactNode
+>render : (url?: string) => React.ReactNode
 >url : string | undefined
 >React : any
 
@@ -360,8 +360,8 @@ function test5() {
 
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
->App : (props: { component: React.ReactType<any>; }) => JSX.Element
->props : { component: React.ReactType<any>; }
+>App : (props: { component: React.ReactType; }) => JSX.Element
+>props : { component: React.ReactType; }
 >component : React.ReactType<any>
 >React : any
 
@@ -369,7 +369,7 @@ function test5() {
 >Comp : React.ReactType<any>
 >React : any
 >props.component : React.ReactType<any>
->props : { component: React.ReactType<any>; }
+>props : { component: React.ReactType; }
 >component : React.ReactType<any>
 
         return (<Comp />);

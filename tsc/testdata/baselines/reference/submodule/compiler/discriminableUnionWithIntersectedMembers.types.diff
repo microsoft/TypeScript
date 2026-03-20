@@ -1,0 +1,20 @@
+--- old.discriminableUnionWithIntersectedMembers.types
++++ new.discriminableUnionWithIntersectedMembers.types
+@@= skipped -18, +18 lines =@@
+ // error
+ const x: X = 4 as any as { x: 'x' | 'y', y: number };
+ >x : X
+->4 as any as { x: 'x' | 'y', y: number } : { x: "x" | "y"; y: number; }
++>4 as any as { x: 'x' | 'y', y: number } : { x: 'x' | 'y'; y: number; }
+ >4 as any : any
+ >4 : 4
+ >x : "x" | "y"
+@@= skipped -21, +21 lines =@@
+ // no  error
+ const y: Y = 4 as any as { x: 'x' | 'y', y: number };
+ >y : Y
+->4 as any as { x: 'x' | 'y', y: number } : { x: "x" | "y"; y: number; }
++>4 as any as { x: 'x' | 'y', y: number } : { x: 'x' | 'y'; y: number; }
+ >4 as any : any
+ >4 : 4
+ >x : "x" | "y"

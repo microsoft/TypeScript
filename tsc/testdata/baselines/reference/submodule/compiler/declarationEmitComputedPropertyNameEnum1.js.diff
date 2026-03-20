@@ -1,9 +1,0 @@
---- old.declarationEmitComputedPropertyNameEnum1.js
-+++ new.declarationEmitComputedPropertyNameEnum1.js
-@@= skipped -29, +29 lines =@@
- export declare const foo: {
-     x?: {
-         a: 0;
--    };
-+    } | undefined;
- };

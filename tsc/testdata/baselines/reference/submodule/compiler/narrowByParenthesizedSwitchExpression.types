@@ -23,7 +23,7 @@ interface Bar extends Base {
 }
 
 function getV(): Foo | Bar {
->getV : () => Bar | Foo
+>getV : () => Foo | Bar
 
   return null!;
 >null! : never
@@ -32,7 +32,7 @@ function getV(): Foo | Bar {
 const v = getV();
 >v : Bar | Foo
 >getV() : Bar | Foo
->getV : () => Bar | Foo
+>getV : () => Foo | Bar
 
 switch ((v.type)) {
 >(v.type) : "bar" | "foo"

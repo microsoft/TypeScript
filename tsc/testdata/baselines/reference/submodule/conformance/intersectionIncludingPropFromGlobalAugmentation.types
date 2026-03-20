@@ -15,7 +15,7 @@ declare const source: Test1;
 
 const target: Test2 = { ...source };
 >target : Test2
->{ ...source } : { toString: "string" | null; }
+>{ ...source } : { toString: null | 'string'; }
 >source : Test1
 
 const toString = target.toString;

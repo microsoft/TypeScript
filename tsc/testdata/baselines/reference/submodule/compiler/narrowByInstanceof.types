@@ -150,7 +150,7 @@ class Car {
 }
 
 function test(o: Person | Car) {
->test : (o: Car | Person) => void
+>test : (o: Person | Car) => void
 >o : Car | Person
 
     if (o instanceof cls) {

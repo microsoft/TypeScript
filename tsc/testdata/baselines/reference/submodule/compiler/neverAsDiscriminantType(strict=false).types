@@ -21,7 +21,7 @@ function f1(foo: Foo1) {
 
         foo.a;
 >foo.a : number
->foo : { kind: "a"; a: number; }
+>foo : { kind: 'a'; a: number; }
 >a : number
     }
 }
@@ -46,7 +46,7 @@ function f2(foo: Foo2) {
 
         foo.a;
 >foo.a : number
->foo : { kind?: "a"; a: number; }
+>foo : { kind?: 'a'; a: number; }
 >a : number
     }
 }

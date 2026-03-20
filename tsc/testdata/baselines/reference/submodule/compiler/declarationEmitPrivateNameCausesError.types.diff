@@ -5,7 +5,7 @@
  //This is exported
  export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (ctor : CtorT) {
 ->ignoreExtraVariables : <CtorT extends { new (...args: any[]): {}; }>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
-+>ignoreExtraVariables : <CtorT extends new (...args: any[]) => {}>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables.(Anonymous class); } & CtorT
++>ignoreExtraVariables : <CtorT extends { new (...args: any[]): {}; }>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables.(Anonymous class); } & CtorT
  >args : any[]
  >ctor : CtorT
 

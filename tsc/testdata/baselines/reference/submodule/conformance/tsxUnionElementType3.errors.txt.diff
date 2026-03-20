@@ -1,0 +1,11 @@
+--- old.tsxUnionElementType3.errors.txt
++++ new.tsxUnionElementType3.errors.txt
+@@= skipped -39, +39 lines =@@
+     let a = <RCComp x="Hi" />;
+                     ~
+ !!! error TS2322: Type 'string' is not assignable to type 'number'.
+-!!! related TS6500 file.tsx:5:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode | undefined; }'
++!!! related TS6500 file.tsx:5:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode; }'
+     let a1 = <EmptyRCComp />;
+     let a2 = <EmptyRCComp data-prop="hello" />;
+     let b = <PartRCComp />

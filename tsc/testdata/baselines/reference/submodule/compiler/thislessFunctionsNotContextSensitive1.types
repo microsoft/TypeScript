@@ -4,7 +4,7 @@
 // https://github.com/microsoft/TypeScript/issues/62204
 
 declare function TestConfig<const TConfig extends { a?: any; b?: any; c?: any }>(
->TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: Exclude<keyof TConfig, "a" | "b"> extends never ? true : false) => void
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
 >a : any
 >b : any
 >c : any
@@ -21,7 +21,7 @@ declare function TestConfig<const TConfig extends { a?: any; b?: any; c?: any }>
 
 TestConfig(
 >TestConfig(  {    a: "hello",    b: function () {      return 123;    },  },  true,) : void
->TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: Exclude<keyof TConfig, "a" | "b"> extends never ? true : false) => void
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
   {
 >{    a: "hello",    b: function () {      return 123;    },  } : { a: "hello"; b: () => 123; }
 
@@ -45,7 +45,7 @@ TestConfig(
 
 TestConfig(
 >TestConfig(  {    a: "hello",    b: function () {      return 123;    },  },  false, // error) : void
->TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: Exclude<keyof TConfig, "a" | "b"> extends never ? true : false) => void
+>TestConfig : <const TConfig extends { a?: any; b?: any; c?: any; }>(config: TConfig, test: keyof Omit<TConfig, "a" | "b"> extends never ? true : false) => void
   {
 >{    a: "hello",    b: function () {      return 123;    },  } : { a: "hello"; b: () => 123; }
 

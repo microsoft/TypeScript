@@ -52,7 +52,7 @@ interface S3 extends T3 {
 
 // object literal case
 var a: { Foo?: Base; };
->a : { Foo?: Base | undefined; }
+>a : { Foo?: Base; }
 >Foo : Base | undefined
 
 var b = { Foo: <Derived>null };
@@ -62,10 +62,10 @@ var b = { Foo: <Derived>null };
 ><Derived>null : Derived
 
 var r = true ? a : b;
->r : { Foo?: Base | undefined; }
->true ? a : b : { Foo?: Base | undefined; }
+>r : { Foo?: Base; }
+>true ? a : b : { Foo?: Base; }
 >true : true
->a : { Foo?: Base | undefined; }
+>a : { Foo?: Base; }
 >b : { Foo: Derived; }
 
 namespace TwoLevels {
@@ -103,7 +103,7 @@ namespace TwoLevels {
 
     // object literal case
     var a: { Foo?: Base; };
->a : { Foo?: Base | undefined; }
+>a : { Foo?: Base; }
 >Foo : Base | undefined
 
     var b = { Foo: <Derived2>null };
@@ -113,9 +113,9 @@ namespace TwoLevels {
 ><Derived2>null : Derived2
 
     var r = true ? a : b;
->r : { Foo?: Base | undefined; }
->true ? a : b : { Foo?: Base | undefined; }
+>r : { Foo?: Base; }
+>true ? a : b : { Foo?: Base; }
 >true : true
->a : { Foo?: Base | undefined; }
+>a : { Foo?: Base; }
 >b : { Foo: Derived2; }
 }

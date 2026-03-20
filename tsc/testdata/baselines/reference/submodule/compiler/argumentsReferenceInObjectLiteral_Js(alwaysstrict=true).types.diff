@@ -1,0 +1,13 @@
+--- old.argumentsReferenceInObjectLiteral_Js(alwaysstrict=true).types
++++ new.argumentsReferenceInObjectLiteral_Js(alwaysstrict=true).types
+@@= skipped -1, +1 lines =@@
+
+ === /a.js ===
+ const a = () => {
+->a : () => { arguments: any[]; }
+->() => {    return {        arguments: [],    };} : () => { arguments: any[]; }
++>a : () => { arguments: undefined[]; }
++>() => {    return {        arguments: [],    };} : () => { arguments: undefined[]; }
+
+     return {
+ >{        arguments: [],    } : { arguments: undefined[]; }

@@ -81,8 +81,8 @@ function call<TName extends string,TPayload>(
 }
 
 const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
->printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
->(action: typeof actionA | typeof actionB)=> console.log(action) : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+>printFn : (action: typeof actionA | typeof actionB) => void
+>(action: typeof actionA | typeof actionB)=> console.log(action) : (action: typeof actionA | typeof actionB) => void
 >action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
 >actionA : Action<"ACTION_A", string>
 >actionB : Action<"ACTION_B", boolean>
@@ -96,11 +96,11 @@ call(actionA, printFn);
 >call(actionA, printFn) : void
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
 >actionA : Action<"ACTION_A", string>
->printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+>printFn : (action: typeof actionA | typeof actionB) => void
 
 call(actionB, printFn);
 >call(actionB, printFn) : void
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
 >actionB : Action<"ACTION_B", boolean>
->printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+>printFn : (action: typeof actionA | typeof actionB) => void
 

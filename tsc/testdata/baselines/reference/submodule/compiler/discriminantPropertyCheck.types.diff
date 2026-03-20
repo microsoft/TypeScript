@@ -1,16 +1,20 @@
 --- old.discriminantPropertyCheck.types
 +++ new.discriminantPropertyCheck.types
-@@= skipped -299, +299 lines =@@
- >Num : Types.Num
+@@= skipped -414, +414 lines =@@
 
-                 inst.value.toExponential;
-->inst.value.toExponential : (fractionDigits?: number) => string
-+>inst.value.toExponential : (fractionDigits?: number | undefined) => string
- >inst.value : number
- >inst : NumType
- >value : number
-->toExponential : (fractionDigits?: number) => string
-+>toExponential : (fractionDigits?: number | undefined) => string
+             onlyPlus(obj.key);
+ >onlyPlus(obj.key) : "+"
+->onlyPlus : (arg: "+") => "+"
++>onlyPlus : (arg: '+') => "+"
+ >obj.key : "+"
+ >obj : AdditiveObj
+ >key : "+"
+@@= skipped -11, +11 lines =@@
+ }
 
-                 break;
-             }
+ function onlyPlus(arg: '+') {
+->onlyPlus : (arg: "+") => "+"
++>onlyPlus : (arg: '+') => "+"
+ >arg : "+"
+
+   return arg;

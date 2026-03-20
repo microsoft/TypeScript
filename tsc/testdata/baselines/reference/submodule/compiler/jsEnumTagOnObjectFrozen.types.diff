@@ -26,19 +26,7 @@
 
      };
  });
-@@= skipped -10, +10 lines =@@
- const Thing = Object.freeze({
- >Thing : Readonly<{ a: "thing"; b: "chill"; }>
- >Object.freeze({    a: "thing",    b: "chill"}) : Readonly<{ a: "thing"; b: "chill"; }>
-->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
-+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
- >Object : ObjectConstructor
-->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
-+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
- >{    a: "thing",    b: "chill"} : { a: "thing"; b: "chill"; }
-
-     a: "thing",
-@@= skipped -27, +27 lines =@@
+@@= skipped -37, +37 lines =@@
   */
  function useThing(x) {}
  >useThing : (x: Thing) => void

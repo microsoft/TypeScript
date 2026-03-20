@@ -451,13 +451,13 @@ const w: What = { a: 4 };
 // Repro from #33568
 
 declare function save(_response: IRootResponse<string>): void;
->save : (_response: IResponse<string>) => void
+>save : (_response: IRootResponse<string>) => void
 >_response : IResponse<string>
 
 exportCommand(save);
 >exportCommand(save) : void
 >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
->save : (_response: IResponse<string>) => void
+>save : (_response: IRootResponse<string>) => void
 
 declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
 >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
@@ -490,7 +490,7 @@ declare type IResponse<T> = {
 >IResponse : IResponse<T>
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
->sendValue : (name: GetPropertyNamesOfType<Required<T>, string>) => void
+>sendValue : (name: keyof GetAllPropertiesOfType<T, string>) => void
 >name : GetPropertyNamesOfType<Required<T>, string>
 
 };
@@ -511,7 +511,7 @@ declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 // Repro from #33568
 
 declare function ff(x: Foo3<string>): void;
->ff : (x: { x: string; }) => void
+>ff : (x: Foo3<string>) => void
 >x : { x: string; }
 
 declare function gg<T>(f: (x: Foo3<T>) => void): void;
@@ -527,7 +527,7 @@ type Foo3<T> = T extends number ? { n: T } : { x: T };
 gg(ff);
 >gg(ff) : void
 >gg : <T>(f: (x: Foo3<T>) => void) => void
->ff : (x: { x: string; }) => void
+>ff : (x: Foo3<string>) => void
 
 // Repro from #41613
 

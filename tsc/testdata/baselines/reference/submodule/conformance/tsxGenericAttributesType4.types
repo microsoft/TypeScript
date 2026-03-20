@@ -34,9 +34,9 @@ class B<U> extends React.Component<U, {}> {
         return <B1 {...this.props} x="hi" />;
 ><B1 {...this.props} x="hi" /> : JSX.Element
 >B1 : typeof B1
->this.props : U & { children?: React.ReactNode | undefined; }
+>this.props : U & { children?: React.ReactNode; }
 >this : this
->props : U & { children?: React.ReactNode | undefined; }
+>props : U & { children?: React.ReactNode; }
 >x : string
     }
 }

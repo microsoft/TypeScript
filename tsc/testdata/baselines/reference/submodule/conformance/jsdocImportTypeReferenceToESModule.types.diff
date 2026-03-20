@@ -6,7 +6,7 @@
  function demo(a) {
 ->demo : (a: typeof import("./ex")) => void
 ->a : typeof import("./ex")
-+>demo : (a: any) => void
++>demo : (a: import('./ex')) => void
 +>a : any
 
      a.config

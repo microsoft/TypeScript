@@ -44,9 +44,9 @@ function foo(things: Val[]): void {
 
             val.toFixed(2);
 >val.toFixed(2) : string
->val.toFixed : (fractionDigits?: number | undefined) => string
+>val.toFixed : (fractionDigits?: number) => string
 >val : number
->toFixed : (fractionDigits?: number | undefined) => string
+>toFixed : (fractionDigits?: number) => string
 >2 : 2
         }
         else {

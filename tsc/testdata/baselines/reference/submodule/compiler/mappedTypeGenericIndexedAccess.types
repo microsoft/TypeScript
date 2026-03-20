@@ -78,12 +78,12 @@ type TypesMap = {
 >TypesMap : TypesMap
 
     [0]: { foo: 'bar'; };
->[0] : { foo: "bar"; }
+>[0] : { foo: 'bar'; }
 >0 : 0
 >foo : "bar"
 
     [1]: { a: 'b'; };
->[1] : { a: "b"; }
+>[1] : { a: 'b'; }
 >1 : 1
 >a : "b"
 
@@ -143,7 +143,7 @@ const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >typeHandlers[p.t] : ((p: P<T>) => void) | undefined
 >typeHandlers : TypeHandlers
 >p.t : T
->p : { t: T; } & ({ foo: "bar"; } | { a: "b"; })
+>p : { t: T; } & ({ foo: 'bar'; } | { a: 'b'; })
 >t : T
 >p : P<T>
 

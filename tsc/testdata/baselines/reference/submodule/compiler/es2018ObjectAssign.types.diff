@@ -1,0 +1,11 @@
+--- old.es2018ObjectAssign.types
++++ new.es2018ObjectAssign.types
+@@= skipped -16, +16 lines =@@
+
+ p.finally();
+ >p.finally() : Promise<number>
+->p.finally : (onfinally?: (() => void) | null | undefined) => Promise<number>
++>p.finally : (onfinally?: (() => void) | undefined | null) => Promise<number>
+ >p : Promise<number>
+->finally : (onfinally?: (() => void) | null | undefined) => Promise<number>
++>finally : (onfinally?: (() => void) | undefined | null) => Promise<number>

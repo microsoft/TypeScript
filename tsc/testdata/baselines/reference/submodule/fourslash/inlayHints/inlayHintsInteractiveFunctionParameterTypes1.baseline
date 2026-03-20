@@ -137,20 +137,7 @@
       "value": "("
     },
     {
-      "value": "d",
-      "location": {
-        "uri": "file:///inlayHintsInteractiveFunctionParameterTypes1.ts",
-        "range": {
-          "start": {
-            "line": 7,
-            "character": 28
-          },
-          "end": {
-            "line": 7,
-            "character": 29
-          }
-        }
-      }
+      "value": "d"
     },
     {
       "value": ": "
@@ -481,12 +468,6 @@
     },
     {
       "value": "number"
-    },
-    {
-      "value": " | "
-    },
-    {
-      "value": "undefined"
     },
     {
       "value": "; "

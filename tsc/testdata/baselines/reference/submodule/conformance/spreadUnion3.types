@@ -20,7 +20,7 @@ f(undefined)
 
 
 function g(t?: { a: number } | null): void {
->g : (t?: { a: number; } | null | undefined) => void
+>g : (t?: { a: number; } | null) => void
 >t : { a: number; } | null | undefined
 >a : number
 
@@ -37,16 +37,16 @@ function g(t?: { a: number } | null): void {
 }
 g()
 >g() : void
->g : (t?: { a: number; } | null | undefined) => void
+>g : (t?: { a: number; } | null) => void
 
 g(undefined)
 >g(undefined) : void
->g : (t?: { a: number; } | null | undefined) => void
+>g : (t?: { a: number; } | null) => void
 >undefined : undefined
 
 g(null)
 >g(null) : void
->g : (t?: { a: number; } | null | undefined) => void
+>g : (t?: { a: number; } | null) => void
 
 // spreading nothing but null and undefined is not allowed
 declare const nullAndUndefinedUnion: null | undefined;

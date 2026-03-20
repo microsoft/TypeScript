@@ -23,9 +23,9 @@ function a() {
 >x = x.toExponential() : string
 >x : string | number | boolean | RegExp
 >x.toExponential() : string
->x.toExponential : (fractionDigits?: number | undefined) => string
+>x.toExponential : (fractionDigits?: number) => string
 >x : number
->toExponential : (fractionDigits?: number | undefined) => string
+>toExponential : (fractionDigits?: number) => string
     }
     x; // string | boolean
 >x : string | true

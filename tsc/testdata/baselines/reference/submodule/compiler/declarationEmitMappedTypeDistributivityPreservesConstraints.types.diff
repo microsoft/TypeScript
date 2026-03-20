@@ -1,6 +1,22 @@
 --- old.declarationEmitMappedTypeDistributivityPreservesConstraints.types
 +++ new.declarationEmitMappedTypeDistributivityPreservesConstraints.types
-@@= skipped -25, +25 lines =@@
+@@= skipped -11, +11 lines =@@
+ >AllArg : AllArg<T>
+
+ function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
+->fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
++>fn : <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>
+ >x : Map<T["x"]>
+ >sliceIndex : T
+
+@@= skipped -9, +9 lines =@@
+ }
+
+ export default { fn };
+->{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
+->fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
++>{ fn } : { fn: <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>; }
++>fn : <T extends { x: Map<T['x']>; }>(sliceIndex: T) => AllArg<T['x']>
 
  === reexport.ts ===
  import test from "./types";

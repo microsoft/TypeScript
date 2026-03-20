@@ -65,17 +65,17 @@ g({ a: '', b: '' })
 >'' : ""
 
 declare function h(x: Foo | Bar | Other): any;
->h : (x: Bar | Foo | Other) => any
+>h : (x: Foo | Bar | Other) => any
 >x : Bar | Foo | Other
 
 h(x);
 >h(x) : any
->h : (x: Bar | Foo | Other) => any
+>h : (x: Foo | Bar | Other) => any
 >x : { a: string; b: string; }
 
 h({ a: '', b: '' })
 >h({ a: '', b: '' }) : any
->h : (x: Bar | Foo | Other) => any
+>h : (x: Foo | Bar | Other) => any
 >{ a: '', b: '' } : { a: string; b: string; }
 >a : string
 >'' : ""

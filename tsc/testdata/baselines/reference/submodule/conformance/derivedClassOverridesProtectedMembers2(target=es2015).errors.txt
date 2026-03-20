@@ -2,7 +2,7 @@ derivedClassOverridesProtectedMembers2.ts(5,15): error TS2564: Property 'a' has 
 derivedClassOverridesProtectedMembers2.ts(9,15): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
 derivedClassOverridesProtectedMembers2.ts(22,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 derivedClassOverridesProtectedMembers2.ts(26,5): error TS2416: Property 'd' in type 'Derived' is not assignable to the same property in base type 'Base'.
-  Type '(a: { foo: string; bar: string; }) => void' is not assignable to type '(a: { foo: string; }) => void'.
+  Type '(a: typeof y) => void' is not assignable to type '(a: typeof x) => void'.
     Types of parameters 'a' and 'a' are incompatible.
       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
 derivedClassOverridesProtectedMembers2.ts(26,5): error TS2564: Property 'd' has no initializer and is not definitely assigned in the constructor.
@@ -50,7 +50,7 @@ derivedClassOverridesProtectedMembers2.ts(61,10): error TS2454: Variable 'd2' is
         d: (a: typeof y) => void;
         ~
 !!! error TS2416: Property 'd' in type 'Derived' is not assignable to the same property in base type 'Base'.
-!!! error TS2416:   Type '(a: { foo: string; bar: string; }) => void' is not assignable to type '(a: { foo: string; }) => void'.
+!!! error TS2416:   Type '(a: typeof y) => void' is not assignable to type '(a: typeof x) => void'.
 !!! error TS2416:     Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2416:       Property 'bar' is missing in type '{ foo: string; }' but required in type '{ foo: string; bar: string; }'.
 !!! related TS2728 derivedClassOverridesProtectedMembers2.ts:2:23: 'bar' is declared here.

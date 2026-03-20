@@ -5,7 +5,7 @@
    */
  function x(y) { }
 ->x : (y?: any[] | undefined) => void
-+>x : (y?: any[]) => void
++>x : (y?: Array | undefined) => void
  >y : any[]
 
  // @ts-ignore
@@ -22,7 +22,7 @@
   */
  function z() { return null ;}
 ->z : () => (any[] | null)
-+>z : () => any[]
++>z : () => (Array | null)
 
  /**
   * 
@@ -30,4 +30,4 @@
   */
  function w() { return null; }
 ->w : () => Promise<any> | null
-+>w : () => Promise<any>
++>w : () => Promise | null

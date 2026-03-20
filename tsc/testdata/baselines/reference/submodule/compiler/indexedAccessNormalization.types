@@ -13,7 +13,7 @@ type MyMap<M extends object> = {
 }
 
 declare function g<T>(value?: T): void;
->g : <T>(value?: T | undefined) => void
+>g : <T>(value?: T) => void
 >value : T | undefined
 
 function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
@@ -29,7 +29,7 @@ function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
 
     g(elemofM);
 >g(elemofM) : void
->g : <T>(value?: T | undefined) => void
+>g : <T>(value?: T) => void
 >elemofM : MyMap<M>[keyof M]
 }
 

@@ -143,9 +143,9 @@ export declare const constObject: {
     /** Value Of "1" */
     readonly oneStrDoubleQuote: "1";
     /** Value Of '1' */
-    readonly oneStrSingleQuote: "1";
+    readonly oneStrSingleQuote: '1';
     /** Value Of `1` */
-    readonly oneStrTemplate: "1";
+    readonly oneStrTemplate: `1`;
     /** A method */
     readonly method: () => void;
 };

@@ -4,7 +4,7 @@
 // https://github.com/microsoft/TypeScript/issues/61633#issuecomment-2841778576
 
 function RenderFlagsMixin<T extends new (...args: any[]) => object>(Base?: T) {}
->RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T | undefined) => void
+>RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T) => void
 >args : any[]
 >Base : T | undefined
 
@@ -16,6 +16,6 @@ class Container<T> {
 }
 RenderFlagsMixin(Container);
 >RenderFlagsMixin(Container) : void
->RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T | undefined) => void
+>RenderFlagsMixin : <T extends new (...args: any[]) => object>(Base?: T) => void
 >Container : typeof Container
 

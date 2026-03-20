@@ -38,7 +38,7 @@ interface OnChanges {
 }
 interface Validator {
     validate(): null | Record<string, unknown>;
->validate : () => Record<string, unknown> | null
+>validate : () => null | Record<string, unknown>
 }
 
 class C {

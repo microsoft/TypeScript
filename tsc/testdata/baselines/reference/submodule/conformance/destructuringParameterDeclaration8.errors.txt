@@ -1,5 +1,5 @@
 destructuringParameterDeclaration8.ts(4,5): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
-destructuringParameterDeclaration8.ts(5,15): error TS2339: Property 'p' does not exist on type '{ p: "a" | "b"; } | undefined'.
+destructuringParameterDeclaration8.ts(5,15): error TS2339: Property 'p' does not exist on type '{ p: 'a' | 'b'; } | undefined'.
 destructuringParameterDeclaration8.ts(17,8): error TS2322: Type '"z"' is not assignable to type '"x" | "y" | undefined'.
 destructuringParameterDeclaration8.ts(18,8): error TS2322: Type '"one"' is not assignable to type '"x" | "y" | undefined'.
 
@@ -13,7 +13,7 @@ destructuringParameterDeclaration8.ts(18,8): error TS2322: Type '"one"' is not a
 !!! error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
         nested: { p = 'c' }
                   ~
-!!! error TS2339: Property 'p' does not exist on type '{ p: "a" | "b"; } | undefined'.
+!!! error TS2339: Property 'p' does not exist on type '{ p: 'a' | 'b'; } | undefined'.
     }: {
         method?: 'x' | 'y',
         nested?: { p: 'a' | 'b' }
@@ -28,9 +28,9 @@ destructuringParameterDeclaration8.ts(18,8): error TS2322: Type '"one"' is not a
     test({ method: 'z', nested: { p: 'b' } })
            ~~~~~~
 !!! error TS2322: Type '"z"' is not assignable to type '"x" | "y" | undefined'.
-!!! related TS6500 destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y" | undefined; nested?: { p: "a" | "b"; } | undefined; }'
+!!! related TS6500 destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }'
     test({ method: 'one', nested: { p: 'a' } })
            ~~~~~~
 !!! error TS2322: Type '"one"' is not assignable to type '"x" | "y" | undefined'.
-!!! related TS6500 destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y" | undefined; nested?: { p: "a" | "b"; } | undefined; }'
+!!! related TS6500 destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: 'x' | 'y'; nested?: { p: 'a' | 'b'; }; }'
     

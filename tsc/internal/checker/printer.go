@@ -16,9 +16,12 @@ func createPrinterWithRemoveComments(emitContext *printer.EmitContext) *printer.
 	return printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, emitContext)
 }
 
-func createPrinterWithRemoveCommentsOmitTrailingSemicolon(emitContext *printer.EmitContext) *printer.Printer {
+func createPrinterWithRemoveCommentsOmitTrailingSemicolonNeverAsciiEscape(emitContext *printer.EmitContext) *printer.Printer {
 	// TODO: OmitTrailingSemicolon support
-	return printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, emitContext)
+	return printer.NewPrinter(printer.PrinterOptions{
+		RemoveComments:   true,
+		NeverAsciiEscape: true,
+	}, printer.PrintHandlers{}, emitContext)
 }
 
 func createPrinterWithRemoveCommentsNeverAsciiEscape(emitContext *printer.EmitContext) *printer.Printer {
@@ -306,7 +309,7 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 	nodeBuilder := c.getNodeBuilder()
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
 	sig := nodeBuilder.SignatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
-	printer_ := createPrinterWithRemoveCommentsOmitTrailingSemicolon(nodeBuilder.EmitContext())
+	printer_ := createPrinterWithRemoveCommentsOmitTrailingSemicolonNeverAsciiEscape(nodeBuilder.EmitContext())
 	var sourceFile *ast.SourceFile
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)

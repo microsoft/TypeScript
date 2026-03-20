@@ -1,0 +1,16 @@
+--- old.intersectionTypeNormalization.types
++++ new.intersectionTypeNormalization.types
+@@= skipped -132, +132 lines =@@
+ >'' + value.num : string
+ >'' : ""
+ >value.num : number
+->value : { kind: "int"; num: number; } & ToString
++>value : { kind: 'int'; num: number; } & ToString
+ >num : number
+     }
+     return value.str;
+ >value.str : string
+->value : { kind: "string"; str: string; } & ToString
++>value : { kind: 'string'; str: string; } & ToString
+ >str : string
+ }

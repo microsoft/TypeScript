@@ -1,15 +1,23 @@
 --- old.declarationMapsMultifile.sourcemap.txt
 +++ new.declarationMapsMultifile.sourcemap.txt
-@@= skipped -62, +62 lines =@@
+@@= skipped -61, +61 lines =@@
+ 1 >Emitted(4, 6) Source(2, 27) + SourceIndex(0)
  ---
  >>>        b: number;
- >>>    };
-+1->^^^^^^
-+2 >      ^^^^^^^^^^^^^^^^^^->
++1->^^^^^^^^
++2 >        ^
 +1->) {
-+  >        return {b: x.a};
++  >        return {
++2 >        b
++1->Emitted(5, 9) Source(3, 17) + SourceIndex(0)
++2 >Emitted(5, 10) Source(3, 18) + SourceIndex(0)
++---
+ >>>    };
++1 >^^^^^^
++2 >      ^^^^^^^^^^^^^^^^^^->
++1 >: x.a};
 +  >    }
-+1->Emitted(6, 7) Source(4, 6) + SourceIndex(0)
++1 >Emitted(6, 7) Source(4, 6) + SourceIndex(0)
 +---
  >>>    static make(): Foo;
  1->^^^^

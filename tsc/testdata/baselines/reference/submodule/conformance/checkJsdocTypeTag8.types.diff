@@ -6,7 +6,7 @@
  function isLessThanFive(n) {
 ->isLessThanFive : (n: number | bigint) => boolean
 ->n : number | bigint
-+>isLessThanFive : (n: any) => boolean
++>isLessThanFive : (n: Number | BigInt) => boolean
 +>n : any
 
    return n < 5;

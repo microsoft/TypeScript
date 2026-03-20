@@ -2,20 +2,20 @@
 
 === /src/index.ts ===
 import { useBar } from "bar";
->useBar : () => string
+>useBar : () => ReturnType<() => typeof myGlobal>
 
 import { useBaz } from "baz";
->useBaz : () => string
+>useBaz : () => ReturnType<() => typeof myGlobal>
 
 const barResult = useBar();
 >barResult : string
 >useBar() : string
->useBar : () => string
+>useBar : () => ReturnType<() => typeof myGlobal>
 
 const bazResult = useBaz();
 >bazResult : string
 >useBaz() : string
->useBaz : () => string
+>useBaz : () => ReturnType<() => typeof myGlobal>
 
 const x: string = myGlobal;
 >x : string
@@ -24,7 +24,7 @@ const x: string = myGlobal;
 === /node_modules/.pnpm/foo@1.0.0+globals@1.0.0/node_modules/foo/index.d.ts ===
 import "globals";
 export declare function useFoo(): typeof myGlobal;
->useFoo : () => string
+>useFoo : () => typeof myGlobal
 >myGlobal : string
 
 === /node_modules/.pnpm/foo@1.0.0+globals@1.0.0/node_modules/globals/index.d.ts ===
@@ -34,24 +34,24 @@ declare var myGlobal: string;
 === /node_modules/.pnpm/foo@1.0.0+globals@2.0.0/node_modules/foo/index.d.ts ===
 import "globals";
 export declare function useFoo(): typeof myGlobal;
->useFoo : () => string
+>useFoo : () => typeof myGlobal
 >myGlobal : string
 
 === /node_modules/.pnpm/bar@1.0.0/node_modules/bar/index.d.ts ===
 import { useFoo } from "foo";
->useFoo : () => string
+>useFoo : () => typeof myGlobal
 
 export declare function useBar(): ReturnType<typeof useFoo>;
->useBar : () => string
->useFoo : () => string
+>useBar : () => ReturnType<typeof useFoo>
+>useFoo : () => typeof myGlobal
 
 === /node_modules/.pnpm/baz@1.0.0/node_modules/baz/index.d.ts ===
 import { useFoo } from "foo";
->useFoo : () => string
+>useFoo : () => typeof myGlobal
 
 export declare function useBaz(): ReturnType<typeof useFoo>;
->useBaz : () => string
->useFoo : () => string
+>useBaz : () => ReturnType<typeof useFoo>
+>useFoo : () => typeof myGlobal
 
 
 

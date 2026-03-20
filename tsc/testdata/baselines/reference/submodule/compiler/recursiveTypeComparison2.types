@@ -19,7 +19,7 @@ declare namespace Bacon {
 >b : U
 
         slidingWindow(max: number, min?: number): Property<T[]>;
->slidingWindow : (max: number, min?: number | undefined) => Property<T[]>
+>slidingWindow : (max: number, min?: number) => Property<T[]>
 >max : number
 >min : number | undefined
 
@@ -49,7 +49,7 @@ declare namespace Bacon {
 >other : Observable<U>
 
         endOnError(f?: (value: T) => boolean): Observable<T>;
->endOnError : (f?: ((value: T) => boolean) | undefined) => Observable<T>
+>endOnError : (f?: (value: T) => boolean) => Observable<T>
 >f : ((value: T) => boolean) | undefined
 >value : T
 

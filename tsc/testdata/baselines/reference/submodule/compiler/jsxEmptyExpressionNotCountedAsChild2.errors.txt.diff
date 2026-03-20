@@ -1,0 +1,17 @@
+--- old.jsxEmptyExpressionNotCountedAsChild2.errors.txt
++++ new.jsxEmptyExpressionNotCountedAsChild2.errors.txt
+@@= skipped -0, +0 lines =@@
+-jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
++jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{}' is not assignable to type '{ bar?: number; } & { __children__: () => number; }'.
+   Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
+
+
+@@= skipped -31, +31 lines =@@
+     
+     <MockComponent>{}</MockComponent>; // error
+      ~~~~~~~~~~~~~
+-!!! error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
++!!! error TS2322: Type '{}' is not assignable to type '{ bar?: number; } & { __children__: () => number; }'.
+ !!! error TS2322:   Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
+ !!! related TS2728 jsxEmptyExpressionNotCountedAsChild2.tsx:22:46: '__children__' is declared here.
+     

@@ -109,7 +109,7 @@ type FilterFunction<U extends Update, V extends U> = (up: U) => up is V;
 >up : U
 
 export function matchFilter<U extends Update, Q extends FilterQuery>(
->matchFilter : <U extends Update, Q extends "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query">(filter: Q | Q[]) => FilterFunction<U, PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
+>matchFilter : <U extends Update, Q extends FilterQuery>(filter: Q | Q[]) => FilterFunction<U, Filter<U, Q>>
 
     filter: Q | Q[],
 >filter : Q | Q[]
@@ -183,7 +183,7 @@ class EventHub<U extends Update> {
 >EventHub : EventHub<U>
 
     use(...middleware: Array<Middleware<U>>): EventHub<U> {
->use : (...middleware: Middleware<U>[]) => EventHub<U>
+>use : (...middleware: Array<Middleware<U>>) => EventHub<U>
 >middleware : Middleware<U>[]
 
         console.log("Adding", middleware.length, "generic handlers");
@@ -201,7 +201,7 @@ class EventHub<U extends Update> {
 >this : this
     }
     on<Q extends FilterQuery>(
->on : <Q extends "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query">(filter: Q | Q[], ...middleware: Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]) => EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
+>on : <Q extends FilterQuery>(filter: Q | Q[], ...middleware: Array<Middleware<Filter<U, Q>>>) => EventHub<Filter<U, Q>>
 
         filter: Q | Q[],
 >filter : Q | Q[]

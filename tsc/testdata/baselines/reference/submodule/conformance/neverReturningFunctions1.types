@@ -2,7 +2,7 @@
 
 === neverReturningFunctions1.ts ===
 function fail(message?: string): never {
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     throw new Error(message);
@@ -20,7 +20,7 @@ function f01(x: string | undefined) {
 >x : string | undefined
 >undefined : undefined
 >fail("undefined argument") : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"undefined argument" : "undefined argument"
 
     x.length;  // string
@@ -41,7 +41,7 @@ function f02(x: number): number {
 
     fail("negative number");
 >fail("negative number") : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"negative number" : "negative number"
 
     x;  // Unreachable
@@ -57,16 +57,16 @@ function f03(x: string) {
 
     fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
     x;  // Unreachable
 >x : string
 }
 
 function f11(x: string | undefined, fail: (message?: string) => never) {
->f11 : (x: string | undefined, fail: (message?: string | undefined) => never) => void
+>f11 : (x: string | undefined, fail: (message?: string) => never) => void
 >x : string | undefined
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     if (x === undefined) fail("undefined argument");
@@ -74,7 +74,7 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 >x : string | undefined
 >undefined : undefined
 >fail("undefined argument") : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"undefined argument" : "undefined argument"
 
     x.length;  // string
@@ -84,9 +84,9 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 }
 
 function f12(x: number, fail: (message?: string) => never): number {
->f12 : (x: number, fail: (message?: string | undefined) => never) => number
+>f12 : (x: number, fail: (message?: string) => never) => number
 >x : number
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     if (x >= 0) return x;
@@ -97,7 +97,7 @@ function f12(x: number, fail: (message?: string) => never): number {
 
     fail("negative number");
 >fail("negative number") : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"negative number" : "negative number"
 
     x;  // Unreachable
@@ -105,9 +105,9 @@ function f12(x: number, fail: (message?: string) => never): number {
 }
 
 function f13(x: string, fail: (message?: string) => never) {
->f13 : (x: string, fail: (message?: string | undefined) => never) => void
+>f13 : (x: string, fail: (message?: string) => never) => void
 >x : string
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     x;  // string
@@ -115,7 +115,7 @@ function f13(x: string, fail: (message?: string) => never) {
 
     fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
     x;  // Unreachable
 >x : string
@@ -125,7 +125,7 @@ namespace Debug {
 >Debug : typeof Debug
 
     export declare function fail(message?: string): never;
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 }
 
@@ -138,9 +138,9 @@ function f21(x: string | undefined) {
 >x : string | undefined
 >undefined : undefined
 >Debug.fail("undefined argument") : never
->Debug.fail : (message?: string | undefined) => never
+>Debug.fail : (message?: string) => never
 >Debug : typeof Debug
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"undefined argument" : "undefined argument"
 
     x.length;  // string
@@ -161,9 +161,9 @@ function f22(x: number): number {
 
     Debug.fail("negative number");
 >Debug.fail("negative number") : never
->Debug.fail : (message?: string | undefined) => never
+>Debug.fail : (message?: string) => never
 >Debug : typeof Debug
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"negative number" : "negative number"
 
     x;  // Unreachable
@@ -179,9 +179,9 @@ function f23(x: string) {
 
     Debug.fail();
 >Debug.fail() : never
->Debug.fail : (message?: string | undefined) => never
+>Debug.fail : (message?: string) => never
 >Debug : typeof Debug
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
     x;  // Unreachable
 >x : string
@@ -196,11 +196,11 @@ function f24(x: string) {
 
     ((Debug).fail)();
 >((Debug).fail)() : never
->((Debug).fail) : (message?: string | undefined) => never
->(Debug).fail : (message?: string | undefined) => never
+>((Debug).fail) : (message?: string) => never
+>(Debug).fail : (message?: string) => never
 >(Debug) : typeof Debug
 >Debug : typeof Debug
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
     x;  // Unreachable
 >x : string
@@ -210,7 +210,7 @@ class Test {
 >Test : Test
 
     fail(message?: string): never {
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
         throw new Error(message);
@@ -227,9 +227,9 @@ class Test {
 >x : string | undefined
 >undefined : undefined
 >this.fail("undefined argument") : never
->this.fail : (message?: string | undefined) => never
+>this.fail : (message?: string) => never
 >this : this
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"undefined argument" : "undefined argument"
 
         x.length;  // string
@@ -249,9 +249,9 @@ class Test {
 
         this.fail("negative number");
 >this.fail("negative number") : never
->this.fail : (message?: string | undefined) => never
+>this.fail : (message?: string) => never
 >this : this
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >"negative number" : "negative number"
 
         x;  // Unreachable
@@ -266,9 +266,9 @@ class Test {
 
         this.fail();
 >this.fail() : never
->this.fail : (message?: string | undefined) => never
+>this.fail : (message?: string) => never
 >this : this
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;  // Unreachable
 >x : string
@@ -287,7 +287,7 @@ function f30(x: string | number | undefined) {
 
         fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;  // Unreachable
 >x : string | number | undefined
@@ -306,7 +306,7 @@ function f30(x: string | number | undefined) {
 
             fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
             x;  // Unreachable
 >x : string | number | undefined
@@ -317,7 +317,7 @@ function f30(x: string | number | undefined) {
 
             fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
             x;  // Unreachable
 >x : string | number | undefined
@@ -344,7 +344,7 @@ function f31(x: { a: string | number }) {
 
         fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;    // Unreachable
 >x : { a: string | number; }
@@ -373,7 +373,7 @@ function f40(x: number) {
 
         fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;  // Unreachable
 >x : number
@@ -384,7 +384,7 @@ function f40(x: number) {
 
         fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;  // Unreachable
 >x : number
@@ -407,7 +407,7 @@ function f41(x: number) {
 
         fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;  // Unreachable
 >x : number
@@ -426,7 +426,7 @@ function f42(x: number) {
 
         fail();
 >fail() : never
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 
         x;  // Unreachable
 >x : number
@@ -498,7 +498,7 @@ export interface Component<T extends object = any> {
 >system : any
 
 	init(data?: T): void;
->init : (data?: T | undefined) => void
+>init : (data?: T) => void
 >data : T | undefined
 
 	pause(): void;

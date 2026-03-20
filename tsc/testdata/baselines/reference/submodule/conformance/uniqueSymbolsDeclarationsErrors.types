@@ -10,11 +10,11 @@ interface I { readonly readonlyType: unique symbol; }
 // not allowed when emitting declarations
 
 export const obj = {
->obj : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
+>obj : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
+>{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
 
     method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
+>method1 : (p: typeof s) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol
@@ -24,7 +24,7 @@ export const obj = {
 
     },
     method2(p: I["readonlyType"]): I["readonlyType"] {
->method2 : (p: unique symbol) => unique symbol
+>method2 : (p: I["readonlyType"]) => I["readonlyType"]
 >p : unique symbol
 
         return p;
@@ -37,7 +37,7 @@ export const classExpression = class {
 >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof classExpression
 
     method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
+>method1 : (p: typeof s) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol
@@ -46,7 +46,7 @@ export const classExpression = class {
 >p : unique symbol
     }
     method2(p: I["readonlyType"]): I["readonlyType"] {
->method2 : (p: unique symbol) => unique symbol
+>method2 : (p: I["readonlyType"]) => I["readonlyType"]
 >p : unique symbol
 
         return p;
@@ -55,14 +55,14 @@ export const classExpression = class {
 };
 
 export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: { method(p: unique symbol): void; }) => { method(p: unique symbol): void; }
->obj : { method(p: unique symbol): void; }
->method : (p: unique symbol) => void
+>funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
+>obj : { method(p: typeof s): void; }
+>method : (p: typeof s) => void
 >p : unique symbol
 >s : unique symbol
 
     return obj;
->obj : { method(p: unique symbol): void; }
+>obj : { method(p: typeof s): void; }
 }
 
 export interface InterfaceWithPrivateNamedProperties {

@@ -32,14 +32,14 @@ export class Bar4 {
 }
 
 export function test1(x?: Array | undefined): void {}
->test1 : (x?: any) => void
+>test1 : (x?: Array | undefined) => void
 >x : any
 
 export function test2(x?: Unresolved | undefined): void {}
->test2 : (x?: any) => void
+>test2 : (x?: Unresolved | undefined) => void
 >x : any
 
 export function test3(x?: Unresolved): void {}
->test3 : (x?: any) => void
+>test3 : (x?: Unresolved) => void
 >x : any
 

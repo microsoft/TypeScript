@@ -43,7 +43,7 @@ foo3.trim = "";
 >"" : ""
 
 function foo4(): ({x: number}) {
->foo4 : { (): { x: number; }; x: string; }
+>foo4 : { (): ({ x: number; }); x: string; }
 >x : number
 
     return {x: 123};
@@ -54,7 +54,7 @@ function foo4(): ({x: number}) {
 foo4.x = "456";
 >foo4.x = "456" : "456"
 >foo4.x : string
->foo4 : { (): { x: number; }; x: string; }
+>foo4 : { (): ({ x: number; }); x: string; }
 >x : string
 >"456" : "456"
 

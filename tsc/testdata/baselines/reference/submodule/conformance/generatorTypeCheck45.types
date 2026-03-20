@@ -2,16 +2,16 @@
 
 === generatorTypeCheck45.ts ===
 declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T): T;
->foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U, any, any>, fun2: (y: U) => T) => T
+>foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T
 >x : T
->fun : () => Iterator<(x: T) => U, any, any>
+>fun : () => Iterator<(x: T) => U>
 >x : T
 >fun2 : (y: U) => T
 >y : U
 
 foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
 >foo("", function* () { yield x => x.length }, p => undefined) : string
->foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U, any, any>, fun2: (y: U) => T) => T
+>foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T
 >"" : ""
 >function* () { yield x => x.length } : () => Generator<(x: string) => number, void, any>
 >yield x => x.length : any

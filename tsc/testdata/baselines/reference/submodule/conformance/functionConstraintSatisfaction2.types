@@ -122,7 +122,7 @@ var r16 = foo2(f2);
 >f2 : F2
 
 function fff<T extends { (): void }, U extends T>(x: T, y: U) {
->fff : <T extends () => void, U extends T>(x: T, y: U) => void
+>fff : <T extends { (): void; }, U extends T>(x: T, y: U) => void
 >x : T
 >y : U
 

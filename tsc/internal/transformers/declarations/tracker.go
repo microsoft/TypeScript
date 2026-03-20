@@ -14,6 +14,8 @@ type SymbolTrackerImpl struct {
 	state         *SymbolTrackerSharedState
 	host          DeclarationEmitHost
 	fallbackStack []*ast.Node
+
+	getIsolatedDeclarationError func(node *ast.Node) *ast.Diagnostic
 }
 
 // PopErrorFallbackNode implements checker.SymbolTracker.
@@ -52,17 +54,16 @@ func (s *SymbolTrackerImpl) ReportInaccessibleUniqueSymbolError() {
 
 // ReportInferenceFallback implements checker.SymbolTracker.
 func (s *SymbolTrackerImpl) ReportInferenceFallback(node *ast.Node) {
-	if s.state.isolatedDeclarations || ast.IsSourceFileJS(s.state.currentSourceFile) {
+	if !s.state.isolatedDeclarations || ast.IsSourceFileJS(s.state.currentSourceFile) {
 		return
 	}
 	if ast.GetSourceFileOfNode(node) != s.state.currentSourceFile {
 		return // Nested error on a declaration in another file - ignore, will be reemitted if file is in the output file set
 	}
-	if ast.IsVariableDeclaration(node) && s.state.resolver.IsExpandoFunctionDeclaration(node) {
+	if ast.IsVariableDeclaration(node) && s.state.resolver.IsExpandoFunctionDeclarationUnsafe(node) { // within a node builder call that should already lock the checker, use the unsafe call
 		s.state.reportExpandoFunctionErrors(node)
 	} else {
-		// !!! isolatedDeclaration support
-		// s.state.addDiagnostic(getIsolatedDeclarationError(node))
+		s.state.addDiagnostic(s.getIsolatedDeclarationError(node))
 	}
 }
 
@@ -213,6 +214,6 @@ func (s *SymbolTrackerSharedState) addDiagnostic(diag *ast.Diagnostic) {
 }
 
 func NewSymbolTracker(host DeclarationEmitHost, resolver printer.EmitResolver, state *SymbolTrackerSharedState) *SymbolTrackerImpl {
-	tracker := &SymbolTrackerImpl{host: host, resolver: resolver, state: state}
+	tracker := &SymbolTrackerImpl{host: host, resolver: resolver, state: state, getIsolatedDeclarationError: createGetIsolatedDeclarationErrors(resolver)}
 	return tracker
 }

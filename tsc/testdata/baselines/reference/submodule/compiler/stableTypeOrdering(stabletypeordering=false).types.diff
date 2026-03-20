@@ -7,7 +7,7 @@
 ->takeMessageOrArray : (message: Message | Message[]) => Message | Message[]
 ->message : Message | Message[]
 ->message : Message | Message[]
-+>takeMessageOrArray : (message: Message[] | Message) => Message[] | Message
++>takeMessageOrArray : (message: Message | Message[]) => Message[] | Message
 +>message : Message[] | Message
 +>message : Message[] | Message
 
@@ -17,7 +17,7 @@
 ->takeMessageOrArray : (message: Message | Message[]) => Message | Message[]
 +>result1 : Message[] | Message
 +>takeMessageOrArray(null!) : Message[] | Message
-+>takeMessageOrArray : (message: Message[] | Message) => Message[] | Message
++>takeMessageOrArray : (message: Message | Message[]) => Message[] | Message
  >null! : never
 
  function checkType(x: string | number | boolean) {
@@ -56,7 +56,7 @@
  function enumUnion(x: Color | string | string[]) {
 ->enumUnion : (x: Color | string | string[]) => string | Color | string[]
 ->x : string | Color | string[]
-+>enumUnion : (x: string | string[] | Color) => string | string[] | Color
++>enumUnion : (x: Color | string | string[]) => string | string[] | Color
 +>x : string | string[] | Color
 
      return x;

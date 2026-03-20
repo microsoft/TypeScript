@@ -4,7 +4,7 @@
 // In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
 interface ErrorConstructor {
   captureStackTrace(targetObject: Object, constructorOpt?: Function): void;
->captureStackTrace : (targetObject: Object, constructorOpt?: Function | undefined) => void
+>captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
 >targetObject : Object
 >constructorOpt : Function | undefined
 }
@@ -29,7 +29,7 @@ new x().message
 >message : string
 
 x.captureStackTrace
->x.captureStackTrace : (targetObject: Object, constructorOpt?: Function | undefined) => void
+>x.captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
 >x : ErrorConstructor
->captureStackTrace : (targetObject: Object, constructorOpt?: Function | undefined) => void
+>captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
 

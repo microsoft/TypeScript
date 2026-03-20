@@ -1,19 +1,54 @@
 --- old.narrowingTypeofDiscriminant.types
 +++ new.narrowingTypeofDiscriminant.types
-@@= skipped -93, +93 lines =@@
+@@= skipped -1, +1 lines =@@
+
+ === narrowingTypeofDiscriminant.ts ===
+ function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
+->f1 : (obj: { kind: "a"; data: string; } | { kind: 1; data: number; }) => void
+->obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
++>f1 : (obj: { kind: 'a'; data: string; } | { kind: 1; data: number; }) => void
++>obj : { kind: 'a'; data: string; } | { kind: 1; data: number; }
+ >kind : "a"
+ >data : string
+ >kind : 1
+@@= skipped -11, +11 lines =@@
+ >typeof obj.kind === "string" : boolean
+ >typeof obj.kind : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >obj.kind : "a" | 1
+->obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
++>obj : { kind: 'a'; data: string; } | { kind: 1; data: number; }
+ >kind : "a" | 1
+ >"string" : "string"
+
+         obj;  // { kind: 'a', data: string }
+->obj : { kind: "a"; data: string; }
++>obj : { kind: 'a'; data: string; }
      }
-     return wrapped.value;
- >wrapped.value : string
-->wrapped : { value?: string; }
-+>wrapped : { value?: string | undefined; }
- >value : string
+     else {
+         obj;  // { kind: 1, data: number }
+@@= skipped -14, +14 lines =@@
  }
 
-@@= skipped -21, +21 lines =@@
+ function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undefined) {
+->f2 : (obj: { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined) => void
+->obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
++>f2 : (obj: { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined) => void
++>obj : { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined
+ >kind : "a"
+ >data : string
+ >kind : 1
+@@= skipped -11, +11 lines =@@
+ >typeof obj?.kind === "string" : boolean
+ >typeof obj?.kind : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >obj?.kind : "a" | 1 | undefined
+->obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
++>obj : { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined
+ >kind : "a" | 1 | undefined
+ >"string" : "string"
+
+         obj;  // { kind: 'a', data: string }
+->obj : { kind: "a"; data: string; }
++>obj : { kind: 'a'; data: string; }
      }
-     return wrapped.value;
- >wrapped.value : string
-->wrapped : { value?: string; }
-+>wrapped : { value?: string | undefined; }
- >value : string
- }
+     else {
+         obj;  // { kind: 1, data: number } | undefined

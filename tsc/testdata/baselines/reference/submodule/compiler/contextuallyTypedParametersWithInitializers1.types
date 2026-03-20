@@ -17,13 +17,13 @@ declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
 >input : T
 
 declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
->id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
->x : { foo?: number | undefined; }
+>id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
+>x : { foo?: number; }
 >foo : number | undefined
 >input : T
 
 declare function id5<T extends (x?: number) => any>(input: T): T;
->id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+>id5 : <T extends (x?: number) => any>(input: T) => T
 >x : number | undefined
 >input : T
 
@@ -62,10 +62,10 @@ const f13 = id3(function ({ foo = 42 }) { return foo });
 >foo : any
 
 const f14 = id4(function ({ foo = 42 }) { return foo });
->f14 : ({ foo }: { foo?: number | undefined; }) => number
->id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
->id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
+>f14 : ({ foo }: { foo?: number; }) => number
+>id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number; }) => number
+>id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number; }) => number
 >foo : number
 >42 : 42
 >foo : number
@@ -98,7 +98,7 @@ const f22 = id2(function (foo = 42) { return foo });
 const f25 = id5(function (foo = 42) { return foo });
 >f25 : (foo?: number | undefined) => number
 >id5(function (foo = 42) { return foo }) : (foo?: number | undefined) => number
->id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+>id5 : <T extends (x?: number) => any>(input: T) => T
 >function (foo = 42) { return foo } : (foo?: number | undefined) => number
 >foo : number | undefined
 >42 : 42

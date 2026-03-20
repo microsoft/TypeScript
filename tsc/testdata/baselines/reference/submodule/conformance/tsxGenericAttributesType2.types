@@ -15,11 +15,11 @@ const decorator4 = function <T extends { x: number }>(Component: React.Stateless
 >React : any
 
     return (props) => <Component {...props} y={"blah"} ></Component>
->(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode | undefined; }) => JSX.Element
->props : T & { children?: React.ReactNode | undefined; }
+>(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+>props : T & { children?: React.ReactNode; }
 ><Component {...props} y={"blah"} ></Component> : JSX.Element
 >Component : React.StatelessComponent<T>
->props : T & { children?: React.ReactNode | undefined; }
+>props : T & { children?: React.ReactNode; }
 >y : string
 >"blah" : "blah"
 >Component : React.StatelessComponent<T>

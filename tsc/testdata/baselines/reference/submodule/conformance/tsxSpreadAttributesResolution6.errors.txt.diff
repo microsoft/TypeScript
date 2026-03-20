@@ -1,0 +1,17 @@
+--- old.tsxSpreadAttributesResolution6.errors.txt
++++ new.tsxSpreadAttributesResolution6.errors.txt
+@@= skipped -0, +0 lines =@@
+-file.tsx(15,10): error TS2322: Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & (IntrinsicClassAttributes<TextComponent> & (TextProps & { children?: ReactNode | undefined; }))'.
++file.tsx(15,10): error TS2322: Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & (IntrinsicClassAttributes<TextComponent> & (TextProps & { children?: ReactNode; }))'.
+   Property 'onEdit' is missing in type '{ editable: true; }' but required in type '{ editable: true; onEdit: (newText: string) => void; }'.
+
+
+@@= skipped -18, +18 lines =@@
+     // Error
+     let x = <TextComponent editable={true} />
+              ~~~~~~~~~~~~~
+-!!! error TS2322: Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & (IntrinsicClassAttributes<TextComponent> & (TextProps & { children?: ReactNode | undefined; }))'.
++!!! error TS2322: Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & (IntrinsicClassAttributes<TextComponent> & (TextProps & { children?: ReactNode; }))'.
+ !!! error TS2322:   Property 'onEdit' is missing in type '{ editable: true; }' but required in type '{ editable: true; onEdit: (newText: string) => void; }'.
+ !!! related TS2728 file.tsx:6:36: 'onEdit' is declared here.
+     

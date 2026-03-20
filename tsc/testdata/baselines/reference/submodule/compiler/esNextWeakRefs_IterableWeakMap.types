@@ -129,10 +129,10 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
             this.#finalizationGroup.register(key, {
 >this.#finalizationGroup.register(key, {                set: this.#refSet,                ref,            }, ref) : void
->this.#finalizationGroup.register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey | undefined) => void
+>this.#finalizationGroup.register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey) => void
 >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
 >this : this
->register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey | undefined) => void
+>register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey) => void
 >key : K
 >{                set: this.#refSet,                ref,            } : { set: Set<WeakRef<K>>; ref: WeakRef<K>; }
 
@@ -313,7 +313,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >iterator : unique symbol
 
     *entries(): Generator<[key: K, value: V], void> {
->entries : () => Generator<[key: K, value: V], void, any>
+>entries : () => Generator<[key: K, value: V], void>
 
         for (const ref of this.#refSet) {
 >ref : WeakRef<K>

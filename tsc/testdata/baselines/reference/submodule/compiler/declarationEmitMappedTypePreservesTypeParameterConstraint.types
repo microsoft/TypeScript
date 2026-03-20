@@ -60,8 +60,8 @@ export declare type ZodRawShape = {
 };
 
 export const buildSchema = <V extends string>(
->buildSchema : <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: T[k]; } : never
-><V extends string>(  version: V): objectOutputType<{  version: ZodLiteral<V>;}> => ({} as any) : <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{ version: ZodLiteral<V>; }>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: T[k]; } : never
+>buildSchema : <V extends string>(version: V) => objectOutputType<{ version: ZodLiteral<V>; }>
+><V extends string>(  version: V): objectOutputType<{  version: ZodLiteral<V>;}> => ({} as any) : <V extends string>(version: V) => objectOutputType<{ version: ZodLiteral<V>; }>
 
   version: V
 >version : V
@@ -92,15 +92,15 @@ export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
 >entriesOf : ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
 
 export const entriesOf = <o extends object>(o: o) =>
->entriesOf : <o extends object>(o: o) => ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
-><o extends object>(o: o) =>    Object.entries(o) as entriesOf<o> : <o extends object>(o: o) => ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
+>entriesOf : <o extends object>(o: o) => entriesOf<o>
+><o extends object>(o: o) =>    Object.entries(o) as entriesOf<o> : <o extends object>(o: o) => entriesOf<o>
 >o : o
 
     Object.entries(o) as entriesOf<o>
 >Object.entries(o) as entriesOf<o> : ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[]
 >Object.entries(o) : [string, any][]
->Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
->entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >o : o
 

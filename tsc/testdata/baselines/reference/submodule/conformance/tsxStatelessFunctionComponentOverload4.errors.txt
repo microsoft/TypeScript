@@ -19,7 +19,7 @@ file.tsx(19,13): error TS2769: No overload matches this call.
         Type 'boolean' is not assignable to type 'number'.
 file.tsx(27,13): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number | undefined; }'.
+    Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number; }'.
 file.tsx(28,40): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Type 'string' is not assignable to type 'number'.
@@ -99,7 +99,7 @@ file.tsx(38,29): error TS2769: No overload matches this call.
                 ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
-!!! error TS2769:     Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number | undefined; }'.
+!!! error TS2769:     Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number; }'.
 !!! related TS2728 file.tsx:24:38: 'yy' is declared here.
 !!! related TS2771 file.tsx:24:18: The last overload is declared here.
     const d2 = <TestingOneThing yy="hello" direction="left" />
@@ -107,7 +107,7 @@ file.tsx(38,29): error TS2769: No overload matches this call.
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.
-!!! related TS6500 file.tsx:24:50: The expected type comes from property 'direction' which is declared here on type 'IntrinsicAttributes & { yy: string; direction?: number | undefined; }'
+!!! related TS6500 file.tsx:24:50: The expected type comes from property 'direction' which is declared here on type 'IntrinsicAttributes & { yy: string; direction?: number; }'
 !!! related TS2771 file.tsx:24:18: The last overload is declared here.
     
     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
@@ -120,27 +120,27 @@ file.tsx(38,29): error TS2769: No overload matches this call.
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 file.tsx:32:64: The expected type comes from property 'y3' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number | undefined; y3: boolean; }'
+!!! related TS6500 file.tsx:32:64: The expected type comes from property 'y3' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
 !!! related TS2771 file.tsx:32:18: The last overload is declared here.
     const e2 = <TestingOptional y1="hello" y2={1000} y3 />
                                 ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 file.tsx:32:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number | undefined; y3: boolean; }'
+!!! related TS6500 file.tsx:32:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
 !!! related TS2771 file.tsx:32:18: The last overload is declared here.
     const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
                                 ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 file.tsx:32:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number | undefined; y3: boolean; }'
+!!! related TS6500 file.tsx:32:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
 !!! related TS2771 file.tsx:32:18: The last overload is declared here.
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
                                 ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 file.tsx:32:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number | undefined; y3: boolean; }'
+!!! related TS6500 file.tsx:32:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
 !!! related TS2771 file.tsx:32:18: The last overload is declared here.
     

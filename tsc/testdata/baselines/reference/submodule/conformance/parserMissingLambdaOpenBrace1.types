@@ -5,7 +5,7 @@ class C {
 >C : C
 
     where(filter: Iterator<T, boolean>): Query<T> {
->where : (filter: Iterator<T, boolean, any>) => Query<T>
+>where : (filter: Iterator<T, boolean>) => Query<T>
 >filter : Iterator<T, boolean, any>
 
         return fromDoWhile(test =>

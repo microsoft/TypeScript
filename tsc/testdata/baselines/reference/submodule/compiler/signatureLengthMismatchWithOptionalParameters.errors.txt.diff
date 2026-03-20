@@ -1,0 +1,16 @@
+--- old.signatureLengthMismatchWithOptionalParameters.errors.txt
++++ new.signatureLengthMismatchWithOptionalParameters.errors.txt
+@@= skipped -0, +0 lines =@@
+-signatureLengthMismatchWithOptionalParameters.ts(5,8): error TS2345: Argument of type '(n: number | undefined, m: string) => void' is not assignable to parameter of type '(n?: number | undefined) => void'.
++signatureLengthMismatchWithOptionalParameters.ts(5,8): error TS2345: Argument of type '(n: number | undefined, m: string) => void' is not assignable to parameter of type '(n?: number) => void'.
+   Target signature provides too few arguments. Expected 2 or more, but got 1.
+
+
+@@= skipped -8, +8 lines =@@
+     
+     caller(callee);
+            ~~~~~~
+-!!! error TS2345: Argument of type '(n: number | undefined, m: string) => void' is not assignable to parameter of type '(n?: number | undefined) => void'.
++!!! error TS2345: Argument of type '(n: number | undefined, m: string) => void' is not assignable to parameter of type '(n?: number) => void'.
+ !!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
+     

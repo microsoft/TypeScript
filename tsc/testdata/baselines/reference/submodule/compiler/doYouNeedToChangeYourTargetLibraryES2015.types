@@ -19,9 +19,9 @@ const testReflectApply = Reflect.apply(noOp, this, []);
 const testReflectConstruct = Reflect.construct(noOp, []);
 >testReflectConstruct : any
 >Reflect.construct(noOp, []) : any
->Reflect.construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: (new (...args: any) => any) | undefined): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function | undefined): any; }
+>Reflect.construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: new (...args: any) => any): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function): any; }
 >Reflect : typeof Reflect
->construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: (new (...args: any) => any) | undefined): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function | undefined): any; }
+>construct : { <A extends readonly any[], R>(target: new (...args: A) => R, argumentsList: Readonly<A>, newTarget?: new (...args: any) => any): R; (target: Function, argumentsList: ArrayLike<any>, newTarget?: Function): any; }
 >noOp : () => void
 >[] : never[]
 
@@ -148,19 +148,19 @@ const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
 const testArrayFill = [""].fill("fill");
 >testArrayFill : string[]
 >[""].fill("fill") : string[]
->[""].fill : (value: string, start?: number | undefined, end?: number | undefined) => string[]
+>[""].fill : (value: string, start?: number, end?: number) => string[]
 >[""] : string[]
 >"" : ""
->fill : (value: string, start?: number | undefined, end?: number | undefined) => string[]
+>fill : (value: string, start?: number, end?: number) => string[]
 >"fill" : "fill"
 
 const testArrayCopyWithin = [""].copyWithin(0, 0);
 >testArrayCopyWithin : string[]
 >[""].copyWithin(0, 0) : string[]
->[""].copyWithin : (target: number, start: number, end?: number | undefined) => string[]
+>[""].copyWithin : (target: number, start: number, end?: number) => string[]
 >[""] : string[]
 >"" : ""
->copyWithin : (target: number, start: number, end?: number | undefined) => string[]
+>copyWithin : (target: number, start: number, end?: number) => string[]
 >0 : 0
 >0 : 0
 
@@ -191,9 +191,9 @@ const testArrayValues = [""].values();
 const testArrayConstructorFrom = Array.from([]);
 >testArrayConstructorFrom : never[]
 >Array.from([]) : never[]
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >[] : never[]
 
 const testArrayConstructorOf = Array.of([]);
@@ -290,9 +290,9 @@ const testNumberConstructorParseFloat = Number.parseFloat("0");
 const testNumberConstructorParseInt = Number.parseInt("0");
 >testNumberConstructorParseInt : number
 >Number.parseInt("0") : number
->Number.parseInt : (string: string, radix?: number | undefined) => number
+>Number.parseInt : (string: string, radix?: number) => number
 >Number : NumberConstructor
->parseInt : (string: string, radix?: number | undefined) => number
+>parseInt : (string: string, radix?: number) => number
 >"0" : "0"
 
 const testMathClz32 = Math.clz32(0);
@@ -514,25 +514,25 @@ const testStringCodePointAt = "".codePointAt(0);
 const testStringIncludes = "".includes("");
 >testStringIncludes : boolean
 >"".includes("") : boolean
->"".includes : (searchString: string, position?: number | undefined) => boolean
+>"".includes : (searchString: string, position?: number) => boolean
 >"" : ""
->includes : (searchString: string, position?: number | undefined) => boolean
+>includes : (searchString: string, position?: number) => boolean
 >"" : ""
 
 const testStringEndsWith = "".endsWith("");
 >testStringEndsWith : boolean
 >"".endsWith("") : boolean
->"".endsWith : (searchString: string, endPosition?: number | undefined) => boolean
+>"".endsWith : (searchString: string, endPosition?: number) => boolean
 >"" : ""
->endsWith : (searchString: string, endPosition?: number | undefined) => boolean
+>endsWith : (searchString: string, endPosition?: number) => boolean
 >"" : ""
 
 const testStringNormalize = "".normalize();
 >testStringNormalize : string
 >"".normalize() : string
->"".normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string | undefined): string; }
+>"".normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string): string; }
 >"" : ""
->normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string | undefined): string; }
+>normalize : { (form: "NFC" | "NFD" | "NFKC" | "NFKD"): string; (form?: string): string; }
 
 const testStringRepeat = "".repeat(0);
 >testStringRepeat : string
@@ -545,9 +545,9 @@ const testStringRepeat = "".repeat(0);
 const testStringStartsWith = "".startsWith("");
 >testStringStartsWith : boolean
 >"".startsWith("") : boolean
->"".startsWith : (searchString: string, position?: number | undefined) => boolean
+>"".startsWith : (searchString: string, position?: number) => boolean
 >"" : ""
->startsWith : (searchString: string, position?: number | undefined) => boolean
+>startsWith : (searchString: string, position?: number) => boolean
 >"" : ""
 
 const testStringAnchor = "".anchor("");
@@ -655,9 +655,9 @@ const testStringConstructorFromCodePoint = String.fromCodePoint();
 const testStringConstructorRaw = String.raw``;
 >testStringConstructorRaw : string
 >String.raw`` : string
->String.raw : (template: { raw: ArrayLike<string> | readonly string[]; }, ...substitutions: any[]) => string
+>String.raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
 >String : StringConstructor
->raw : (template: { raw: ArrayLike<string> | readonly string[]; }, ...substitutions: any[]) => string
+>raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
 >`` : ""
 
 const testRegExpFlags = /abc/g.flags;

@@ -28,5 +28,5 @@ export {};
 export declare const foo: {
     x?: {
         [Foo.sym]: 0;
-    } | undefined;
+    };
 };

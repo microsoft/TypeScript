@@ -2,7 +2,7 @@
 
 === destructureOptionalParameter.ts ===
 declare function f1({ a, b }?: { a: number, b: string }): void;
->f1 : ({ a, b }?: { a: number; b: string; } | undefined) => void
+>f1 : ({ a, b }?: { a: number; b: string; }) => void
 >a : number
 >b : string
 >a : number

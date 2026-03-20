@@ -1,0 +1,10 @@
+--- old.invariantGenericErrorElaboration.types
++++ new.invariantGenericErrorElaboration.types
+@@= skipped -40, +40 lines =@@
+ >underlying : A
+
+   check: (x: A['witness']) => void,
+->check : (x: A["witness"]) => void
++>check : (x: A['witness']) => void
+ >x : A["witness"]
+ }

@@ -60,7 +60,12 @@ export declare const obj1: {
      * my awesome getter (first in source order)
      * @returns {string}
      */
-    x: string;
+    get x(): string;
+    /**
+     * my awesome setter (second in source order)
+     * @param {string} a
+     */
+    set x(a: string);
 };
 export declare const obj2: {
     /**

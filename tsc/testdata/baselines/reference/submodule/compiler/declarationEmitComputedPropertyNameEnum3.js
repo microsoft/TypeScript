@@ -29,5 +29,5 @@ export type Type = {
 };
 //// [index.d.ts]
 export declare const foo: {
-    x?: {} | undefined;
+    x?: {};
 };

@@ -1,26 +1,13 @@
 --- old.genericFunctionParameters.types
 +++ new.genericFunctionParameters.types
-@@= skipped -11, +11 lines =@@
- >x : S
-
- declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
-->f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
-->cb : <S extends Array<S>>(x: S) => T
-+>f3 : <T>(cb: <S extends S[]>(x: S) => T) => T
-+>cb : <S extends S[]>(x: S) => T
- >x : S
-
- let x1 = f1(x => x);  // {}
-@@= skipped -21, +21 lines =@@
+@@= skipped -32, +32 lines =@@
  >x : S
 
  let x3 = f3(x => x);  // Array<any>
 ->x3 : any[]
 ->f3(x => x) : any[]
-->f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
 +>x3 : any[][]
 +>f3(x => x) : any[][]
-+>f3 : <T>(cb: <S extends S[]>(x: S) => T) => T
+ >f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
  >x => x : <S extends S[]>(x: S) => S
- >x : S
  >x : S

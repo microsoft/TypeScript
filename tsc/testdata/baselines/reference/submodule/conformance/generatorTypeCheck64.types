@@ -2,7 +2,7 @@
 
 === generatorTypeCheck64.ts ===
 function* g3(): Generator<Generator<(x: string) => number>> {
->g3 : () => Generator<Generator<(x: string) => number, any, any>, any, any>
+>g3 : () => Generator<Generator<(x: string) => number>>
 >x : string
 
     yield function* () {
@@ -22,7 +22,7 @@ function* g3(): Generator<Generator<(x: string) => number>> {
 }
 
 function* g4(): Iterator<Iterable<(x: string) => number>> {
->g4 : () => Iterator<Iterable<(x: string) => number>, any, any>
+>g4 : () => Iterator<Iterable<(x: string) => number>>
 >x : string
 
   yield (function* () {

@@ -1,0 +1,123 @@
+--- old.memberFunctionsWithPublicPrivateOverloads.types
++++ new.memberFunctionsWithPublicPrivateOverloads.types
+@@= skipped -18, +18 lines =@@
+ >y : any
+
+     private bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : "hi"
+
+     public bar(x: string); // error
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : string
+
+     private bar(x: number, y: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : number
+ >y : string
+
+     private bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : any
+ >y : any
+
+@@= skipped -46, +46 lines =@@
+ >y : any
+
+     private static bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : "hi"
+
+     public static bar(x: string); // error
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : string
+
+     private static bar(x: number, y: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : number
+ >y : string
+
+     private static bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : any
+ >y : any
+
+     protected static baz(x: 'hi');
+->baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : "hi"
+
+     public static baz(x: string); // error
+->baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : string
+
+     protected static baz(x: number, y: string);
+->baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : number
+ >y : string
+
+     protected static baz(x: any, y?: any) { }
+->baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : any
+ >y : any
+ }
+@@= skipped -54, +54 lines =@@
+ >y : any
+
+     private bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : "hi"
+
+     public bar(x: string); // error
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : string
+
+     private bar(x: T, y: T);
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : T
+ >y : T
+
+     private bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
+ >x : any
+ >y : any
+
+@@= skipped -46, +46 lines =@@
+ >y : any
+
+     private static bar(x: 'hi');
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : "hi"
+
+     public static bar(x: string); // error
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : string
+
+     private static bar(x: number, y: string);
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : number
+ >y : string
+
+     private static bar(x: any, y?: any) { }
+->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
++>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
+ >x : any
+ >y : any

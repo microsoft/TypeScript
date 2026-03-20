@@ -259,9 +259,9 @@ function f4() {
 
             return x.toString();
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
         }
     };
 }
@@ -274,9 +274,9 @@ function f5() {
 
     x.toString();
 >x.toString() : string
->x.toString : (radix?: number | undefined) => string
+>x.toString : (radix?: number) => string
 >x : number
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
 }
 export default {};
 >{} : {}
@@ -445,8 +445,8 @@ function transformClassFields() {
 
         enabledSubstitutions.toString();
 >enabledSubstitutions.toString() : string
->enabledSubstitutions.toString : (radix?: number | undefined) => string
+>enabledSubstitutions.toString : (radix?: number) => string
 >enabledSubstitutions : ClassPropertySubstitutionFlags
->toString : (radix?: number | undefined) => string
+>toString : (radix?: number) => string
     }
 }

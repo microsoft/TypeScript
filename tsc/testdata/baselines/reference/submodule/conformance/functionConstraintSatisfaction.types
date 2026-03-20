@@ -192,7 +192,7 @@ var r17 = foo(f2);
 >f2 : F2
 
 function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
->foo2 : <T extends () => void, U extends () => void>(x: T, y: U) => void
+>foo2 : <T extends { (): void; }, U extends { (): void; }>(x: T, y: U) => void
 >x : T
 >y : U
 

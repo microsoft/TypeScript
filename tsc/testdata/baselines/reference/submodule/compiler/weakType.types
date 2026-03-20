@@ -86,12 +86,12 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 >ChangeOptions : ChangeOptions
 
 function del(options: ConfigurableStartEnd = {},
->del : (options?: ConfigurableStartEnd, error?: { error?: number | undefined; }) => void
+>del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
 >options : ConfigurableStartEnd
 >{} : {}
 
              error: { error?: number } = {}) {
->error : { error?: number | undefined; }
+>error : { error?: number; }
 >error : number | undefined
 >{} : {}
 
@@ -111,7 +111,7 @@ function del(options: ConfigurableStartEnd = {},
 >changes.push : (...items: ChangeOptions[]) => number
 >changes : ChangeOptions[]
 >push : (...items: ChangeOptions[]) => number
->error : { error?: number | undefined; }
+>error : { error?: number; }
 }
 
 class K {
@@ -143,7 +143,7 @@ type Weak = {
 >a : number | undefined
 
     properties?: {
->properties : { b?: number | undefined; } | undefined
+>properties : { b?: number; } | undefined
 
         b?: number
 >b : number | undefined

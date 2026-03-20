@@ -13,7 +13,7 @@ type TypeMap = {
 };
 
 declare function test1<
->test1 : <T extends { str: ("a" | "b" | "c")[]; num: (1 | 2 | 3)[]; } & { [k: string]: any[]; }>(arg: T) => T
+>test1 : <T extends { [K in keyof TypeMap]: TypeMap[K][]; } & { [k: string]: any[]; }>(arg: T) => T
 
   T extends { [K in keyof TypeMap]: TypeMap[K][] } & { [k: string]: any[] },
 >k : string
@@ -24,7 +24,7 @@ declare function test1<
 const result = test1({
 >result : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
 >test1({  num: [1, 2],  str: ["a", "b"],  bool: [true, false],}) : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
->test1 : <T extends { str: ("a" | "b" | "c")[]; num: (1 | 2 | 3)[]; } & { [k: string]: any[]; }>(arg: T) => T
+>test1 : <T extends { [K in keyof TypeMap]: TypeMap[K][]; } & { [k: string]: any[]; }>(arg: T) => T
 >{  num: [1, 2],  str: ["a", "b"],  bool: [true, false],} : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
 
   num: [1, 2],
@@ -48,14 +48,14 @@ const result = test1({
 });
 
 declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
->test2 : (a: { type: "bar" | "foo"; } & { type: any; }) => void
->a : { type: "bar" | "foo"; } & { type: any; }
+>test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
+>a : { type: "foo" | "bar"; } & { type: any; }
 >type : "bar" | "foo"
 >type : any
 
 test2({ type: "foo" });
 >test2({ type: "foo" }) : void
->test2 : (a: { type: "bar" | "foo"; } & { type: any; }) => void
+>test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
 >{ type: "foo" } : { type: "foo"; }
 >type : "foo"
 >"foo" : "foo"
@@ -63,7 +63,7 @@ test2({ type: "foo" });
 // https://github.com/microsoft/TypeScript/issues/59473
 
 const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
->x : { ml: any; } & { ml: "edge"; }
+>x : { ml: any; } & { ml: 'edge'; }
 >ml : any
 >ml : "edge"
 >{ ml: 'edge' } : { ml: "edge"; }

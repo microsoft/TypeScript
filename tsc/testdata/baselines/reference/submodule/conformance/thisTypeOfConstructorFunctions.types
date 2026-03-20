@@ -7,7 +7,7 @@
  * @param {T} t
  */
 function Cp(t) {
->Cp : { <T>(t: T): void; prototype: { m4(): any; }; }
+>Cp : { <T>(t: T): void; prototype: { m4(): this; }; }
 >t : T
 
     /** @type {this} */
@@ -27,34 +27,34 @@ function Cp(t) {
 
     /** @return {this} */
     this.m3 = () => this
->this.m3 = () => this : () => any
+>this.m3 = () => this : () => this
 >this.m3 : any
 >this : any
 >m3 : any
->() => this : () => any
+>() => this : () => this
 >this : any
 }
 
 Cp.prototype = {
->Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): any; }
->Cp.prototype : { m4(): any; }
->Cp : { <T>(t: T): void; prototype: { m4(): any; }; }
->prototype : { m4(): any; }
->{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): any; }
+>Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
+>Cp.prototype : { m4(): this; }
+>Cp : { <T>(t: T): void; prototype: { m4(): this; }; }
+>prototype : { m4(): this; }
+>{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
 
     /** @return {this} */
     m4() {
->m4 : () => any
+>m4 : () => this
 
         this.z = this.y; return this
 >this.z = this.y : any
 >this.z : any
->this : { m4(): any; }
+>this : { m4(): this; }
 >z : any
 >this.y : any
->this : { m4(): any; }
+>this : { m4(): this; }
 >y : any
->this : { m4(): any; }
+>this : { m4(): this; }
     }
 }
 
@@ -76,13 +76,13 @@ function Cpp(t) {
 }
 /** @return {this} */
 Cpp.prototype.m2 = function () {
->Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => any
+>Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => this
 >Cpp.prototype.m2 : any
 >Cpp.prototype : any
 >Cpp : <T>(t: T) => void
 >prototype : any
 >m2 : any
->function () {    this.z = this.y; return this} : () => any
+>function () {    this.z = this.y; return this} : () => this
 
     this.z = this.y; return this
 >this.z = this.y : any
@@ -98,7 +98,7 @@ Cpp.prototype.m2 = function () {
 var cp = new Cp(1)
 >cp : any
 >new Cp(1) : any
->Cp : { <T>(t: T): void; prototype: { m4(): any; }; }
+>Cp : { <T>(t: T): void; prototype: { m4(): this; }; }
 >1 : 1
 
 var cpp = new Cpp(2)

@@ -109,8 +109,7 @@
 +      "value": "("
 +    },
 +    {
-+      "value": "d",
-+      "location": {},
++      "value": "d"
 +    },
 +    {
 +      "value": ": "
@@ -146,7 +145,7 @@
    "kind": 1,
    "paddingLeft": true
  }
-@@= skipped -8, +59 lines =@@
+@@= skipped -8, +58 lines =@@
      a(d => {})
         ^
  {

@@ -1,24 +1,6 @@
 --- old.uniqueSymbolsPropertyNames.types
 +++ new.uniqueSymbolsPropertyNames.types
-@@= skipped -30, +30 lines =@@
-
-
- function getUniqueSymbol0(): typeof uniqueSymbol0 {
-->getUniqueSymbol0 : () => typeof uniqueSymbol0
-+>getUniqueSymbol0 : () => unique symbol
- >uniqueSymbol0 : unique symbol
-
-   return uniqueSymbol0;
-@@= skipped -8, +8 lines =@@
- }
-
- function getUniqueSymbol1(): typeof uniqueSymbol1 {
-->getUniqueSymbol1 : () => typeof uniqueSymbol1
-+>getUniqueSymbol1 : () => unique symbol
- >uniqueSymbol1 : unique symbol
-
-     return uniqueSymbol1;
-@@= skipped -42, +42 lines =@@
+@@= skipped -80, +80 lines =@@
  };
 
  const t1 = {
@@ -29,62 +11,3 @@
 
    [Op.equal]: "first",
  >[Op.equal] : string
-@@= skipped -46, +46 lines =@@
-   [getUniqueSymbol0()]: "first",
- >[getUniqueSymbol0()] : string
- >getUniqueSymbol0() : unique symbol
-->getUniqueSymbol0 : () => typeof uniqueSymbol0
-+>getUniqueSymbol0 : () => unique symbol
- >"first" : "first"
-
-   [getUniqueSymbol0()]: "last",
- >[getUniqueSymbol0()] : string
- >getUniqueSymbol0() : unique symbol
-->getUniqueSymbol0 : () => typeof uniqueSymbol0
-+>getUniqueSymbol0 : () => unique symbol
- >"last" : "last"
-
-   [getUniqueSymbol1()]: "first",
- >[getUniqueSymbol1()] : string
- >getUniqueSymbol1() : unique symbol
-->getUniqueSymbol1 : () => typeof uniqueSymbol1
-+>getUniqueSymbol1 : () => unique symbol
- >"first" : "first"
-
-   [getUniqueSymbol1()]: "last",
- >[getUniqueSymbol1()] : string
- >getUniqueSymbol1() : unique symbol
-->getUniqueSymbol1 : () => typeof uniqueSymbol1
-+>getUniqueSymbol1 : () => unique symbol
- >"last" : "last"
-
- };
-@@= skipped -71, +71 lines =@@
-   [getUniqueSymbol0()] = "first";
- >[getUniqueSymbol0()] : string
- >getUniqueSymbol0() : unique symbol
-->getUniqueSymbol0 : () => typeof uniqueSymbol0
-+>getUniqueSymbol0 : () => unique symbol
- >"first" : "first"
-
-   [getUniqueSymbol0()] = "last";
- >[getUniqueSymbol0()] : string
- >getUniqueSymbol0() : unique symbol
-->getUniqueSymbol0 : () => typeof uniqueSymbol0
-+>getUniqueSymbol0 : () => unique symbol
- >"last" : "last"
-
-   [getUniqueSymbol1()] = "first";
- >[getUniqueSymbol1()] : string
- >getUniqueSymbol1() : unique symbol
-->getUniqueSymbol1 : () => typeof uniqueSymbol1
-+>getUniqueSymbol1 : () => unique symbol
- >"first" : "first"
-
-   [getUniqueSymbol1()] = "last";
- >[getUniqueSymbol1()] : string
- >getUniqueSymbol1() : unique symbol
-->getUniqueSymbol1 : () => typeof uniqueSymbol1
-+>getUniqueSymbol1 : () => unique symbol
- >"last" : "last"
- }

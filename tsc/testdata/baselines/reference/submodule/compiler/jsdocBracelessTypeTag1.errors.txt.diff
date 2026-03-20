@@ -1,0 +1,9 @@
+--- old.jsdocBracelessTypeTag1.errors.txt
++++ new.jsdocBracelessTypeTag1.errors.txt
+@@= skipped -26, +26 lines =@@
+     const obj2 = { type: "other", prop: 10 };
+                    ~~~~
+ !!! error TS2322: Type '"other"' is not assignable to type '"bar" | "foo"'.
+-!!! related TS6500 index.js:19:14: The expected type comes from property 'type' which is declared here on type '({ type: "foo"; } | { type: "bar"; }) & { prop: number; }'
++!!! related TS6500 index.js:19:14: The expected type comes from property 'type' which is declared here on type '({ type: 'foo'; } | { type: 'bar'; }) & { prop: number; }'
+     

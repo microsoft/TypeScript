@@ -1,0 +1,38 @@
+--- old.styledComponentsInstantiaionLimitNotReached.errors.txt
++++ new.styledComponentsInstantiaionLimitNotReached.errors.txt
+@@= skipped -2, +2 lines =@@
+     Type 'StyledComponent<any, any, any, any>' is not assignable to type 'ComponentType<any>'.
+       Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
+         Types of property 'propTypes' are incompatible.
+-          Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
++          Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: React.ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
+               'string' index signatures are incompatible.
+                 Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.
+@@= skipped -9, +9 lines =@@
+                       Type 'AnyStyledComponent' is not assignable to type 'StatelessComponent<any>'.
+                         Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
+                           Types of property 'propTypes' are incompatible.
+-                            Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
++                            Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: React.ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+                               Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
+                                 'string' index signatures are incompatible.
+                                   Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.
+@@= skipped -189, +189 lines =@@
+ !!! error TS2344:     Type 'StyledComponent<any, any, any, any>' is not assignable to type 'ComponentType<any>'.
+ !!! error TS2344:       Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
+ !!! error TS2344:         Types of property 'propTypes' are incompatible.
+-!!! error TS2344:           Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
++!!! error TS2344:           Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: React.ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+ !!! error TS2344:             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
+ !!! error TS2344:               'string' index signatures are incompatible.
+ !!! error TS2344:                 Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.
+@@= skipped -9, +9 lines =@@
+ !!! error TS2344:                       Type 'AnyStyledComponent' is not assignable to type 'StatelessComponent<any>'.
+ !!! error TS2344:                         Type 'StyledComponent<any, any, any, any>' is not assignable to type 'StatelessComponent<any>'.
+ !!! error TS2344:                           Types of property 'propTypes' are incompatible.
+-!!! error TS2344:                             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
++!!! error TS2344:                             Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & ({ theme?: any; } | ({ theme?: any; } & { children?: React.ReactNode; }))> | undefined' is not assignable to type 'ValidationMap<any> | undefined'.
+ !!! error TS2344:                               Type 'WeakValidationMap<Omit<Omit<any, any> & Partial<Pick<any, any>>, "theme"> & { theme?: any; }>' is not assignable to type 'ValidationMap<any>'.
+ !!! error TS2344:                                 'string' index signatures are incompatible.
+ !!! error TS2344:                                   Type 'Validator<any> | undefined' is not assignable to type 'Validator<any>'.

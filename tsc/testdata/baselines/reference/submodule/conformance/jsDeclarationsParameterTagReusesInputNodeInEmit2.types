@@ -40,8 +40,8 @@ module.exports = BaseFactory;
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
 const test = (base) => {
->test : (base: Base) => Base
->(base) => {    return base;} : (base: Base) => Base
+>test : (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>
+>(base) => {    return base;} : (base: InstanceType<BaseFactory["Base"]>) => InstanceType<BaseFactory["Base"]>
 >base : Base
 
     return base;

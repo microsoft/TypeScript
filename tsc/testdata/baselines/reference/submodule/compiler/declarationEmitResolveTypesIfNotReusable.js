@@ -31,14 +31,32 @@ export const f = { ...d };
 
 
 //// [decl.d.ts]
-export declare const o1: (o: "value of b") => void;
-export declare const o2: (o: "value of a") => void;
-export declare const o3: (o: "value of a") => void;
-export declare const o4: (o: "b" | "notNecessary") => void;
+declare const u = "X";
+type A = {
+    a: {
+        b: "value of b";
+        notNecessary: typeof u;
+    };
+};
+declare const a: {
+    readonly a: "value of a";
+    readonly notNecessary: "X";
+};
+export declare const o1: (o: A['a']['b']) => void;
+export declare const o2: (o: (typeof a)['a']) => void;
+export declare const o3: (o: (typeof a)['a']) => void;
+export declare const o4: (o: keyof (A['a'])) => void;
+export {};
 //// [main.d.ts]
 export declare const f: {
     o1: (o: "value of b") => void;
-    o2: (o: "value of a") => void;
+    o2: (o: ({
+        readonly a: "value of a";
+        readonly notNecessary: "X";
+    })['a']) => void;
     o3: (o: "value of a") => void;
-    o4: (o: "b" | "notNecessary") => void;
+    o4: (o: keyof ({
+        b: "value of b";
+        notNecessary: "X";
+    })) => void;
 };

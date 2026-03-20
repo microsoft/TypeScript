@@ -1,60 +1,6 @@
 --- old.narrowingUnionToUnion.types
 +++ new.narrowingUnionToUnion.types
-@@= skipped -244, +244 lines =@@
-         }
-     },
-     (value?: string) => {
-->(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string) => void
-+>(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string | undefined) => void
- >value : string | undefined
-
-         if (isMaybeEmptyString(value)) {
-@@= skipped -46, +46 lines =@@
-         }
-     },
-     (value?: number) => {
-->(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number) => void
-+>(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number | undefined) => void
- >value : number | undefined
-
-         if (isMaybeZero(value)) {
-@@= skipped -46, +46 lines =@@
-         }
-     },
-     (value?: string[]) => {
-->(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[]) => void
-+>(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[] | undefined) => void
- >value : string[] | undefined
-
-         if (isMaybeEmptyArray(value)) {
-@@= skipped -24, +24 lines =@@
- >EmptyString : EmptyString
-
- function isEmpty(value: string | EmptyString): value is EmptyString {
-->isEmpty : (value: string | EmptyString) => value is EmptyString
-+>isEmpty : (value: string | null | undefined) => value is EmptyString
- >value : string | null | undefined
-
-     return value === '' || value === null || value === undefined;
-@@= skipped -21, +21 lines =@@
-
- if (isEmpty(test)) {
- >isEmpty(test) : boolean
-->isEmpty : (value: string | EmptyString) => value is EmptyString
-+>isEmpty : (value: string | null | undefined) => value is EmptyString
- >test : string | null | undefined
-
-     test;  // EmptyString
-@@= skipped -14, +14 lines =@@
- >value : any
-
- function test1(foo: number | string | boolean) {
-->test1 : (foo: number | string | boolean) => void
-+>test1 : (foo: string | number | boolean) => void
- >foo : string | number | boolean
-
-     assert<1 | string>(foo);
-@@= skipped -15, +15 lines =@@
+@@= skipped -410, +410 lines =@@
  // Repro from #46909
 
  function check1(x: unknown): x is (string | 0) {
@@ -90,3 +36,109 @@
  >x : string | 0
 
  			x;  // 0 | "hello"
+@@= skipped -62, +62 lines =@@
+ >type : "A" | "B"
+ >'A' : "A"
+ >working.aProp : number
+->working : { type: "A"; aProp: number; }
++>working : { type: 'A'; aProp: number; }
+ >aProp : number
+
+ isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+@@= skipped -15, +15 lines =@@
+ >type : "A" | "B"
+ >'A' : "A"
+ >broken.aProp : number
+->broken : { type: "A"; aProp: number; }
++>broken : { type: 'A'; aProp: number; }
+ >aProp : number
+
+ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
+@@= skipped -15, +15 lines =@@
+ >type : "A" | "B"
+ >'A' : "A"
+ >workingAgain.aProp : number
+->workingAgain : { type: "A"; aProp: number; }
++>workingAgain : { type: 'A'; aProp: number; }
+ >aProp : number
+
+ // Repro from #56144
+@@= skipped -20, +20 lines =@@
+ >type : "b"
+
+ function example1(value: Union): { type: 'a'; variant: 2 } | null {
+->example1 : (value: Union) => { type: "a"; variant: 2; } | null
++>example1 : (value: Union) => { type: 'a'; variant: 2; } | null
+ >value : Union
+ >type : "a"
+ >variant : 2
+@@= skipped -17, +17 lines =@@
+     if (value.variant === 1) {
+ >value.variant === 1 : boolean
+ >value.variant : 1 | 2
+->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
+ >variant : 1 | 2
+ >1 : 1
+
+         return null;
+     }
+     return value;
+->value : { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 2; }
+ }
+
+ function example2(value: Union): { type: 'a'; variant: 2 } | null {
+->example2 : (value: Union) => { type: "a"; variant: 2; } | null
++>example2 : (value: Union) => { type: 'a'; variant: 2; } | null
+ >value : Union
+ >type : "a"
+ >variant : 2
+@@= skipped -29, +29 lines =@@
+ >value.type === 'a' && value.variant === 1 : boolean
+ >value.type === 'a' : boolean
+ >value.type : "a"
+->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
+ >type : "a"
+ >'a' : "a"
+ >value.variant === 1 : boolean
+ >value.variant : 1 | 2
+->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
+ >variant : 1 | 2
+ >1 : 1
+
+         return null;
+     }
+     return value;
+->value : { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 2; }
+ }
+
+ function example3(value: Union): { type: 'a'; variant: 2 } | null {
+->example3 : (value: Union) => { type: "a"; variant: 2; } | null
++>example3 : (value: Union) => { type: 'a'; variant: 2; } | null
+ >value : Union
+ >type : "a"
+ >variant : 2
+@@= skipped -33, +33 lines =@@
+     if (value.type && value.variant === 1) {
+ >value.type && value.variant === 1 : boolean
+ >value.type : "a"
+->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
+ >type : "a"
+ >value.variant === 1 : boolean
+ >value.variant : 1 | 2
+->value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; }
+ >variant : 1 | 2
+ >1 : 1
+
+         return null;
+     }
+     return value;
+->value : { type: "a"; variant: 2; }
++>value : { type: 'a'; variant: 2; }
+ }

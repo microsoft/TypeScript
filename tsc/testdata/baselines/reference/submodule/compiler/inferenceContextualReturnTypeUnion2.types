@@ -35,7 +35,7 @@ type FindByText<T extends HTMLElement = HTMLElement> = (
 ) => Promise<T>;
 
 declare function findByLabelText<T extends HTMLElement = HTMLElement>(
->findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>
+>findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>
 
   ...args: Parameters<FindByText<T>>
 >args : [container: HTMLElement, text: string]
@@ -43,17 +43,17 @@ declare function findByLabelText<T extends HTMLElement = HTMLElement>(
 ): ReturnType<FindByText<T>>;
 
 const queries = {
->queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>; }
->{  findByLabelText,} : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>; }
+>queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>; }
+>{  findByLabelText,} : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>; }
 
   findByLabelText,
->findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>
+>findByLabelText : <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>
 
 };
 
 type MapQueries<Q extends Queries = typeof queries> = {
 >MapQueries : MapQueries<Q>
->queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => Promise<T>; }
+>queries : { findByLabelText: <T extends HTMLElement = HTMLElement>(container: HTMLElement, text: string) => ReturnType<FindByText<T>>; }
 
   [P in keyof Q]: Q[P];
 };

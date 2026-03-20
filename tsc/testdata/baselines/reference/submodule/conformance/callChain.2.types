@@ -19,7 +19,7 @@ o2?.b();
 >b : () => number
 
 declare const o3: { b: (() => { c: string }) | undefined };
->o3 : { b: () => { c: string; }; }
+>o3 : { b: (() => { c: string; }) | undefined; }
 >b : () => { c: string; }
 >c : string
 
@@ -27,7 +27,7 @@ o3.b?.().c;
 >o3.b?.().c : string
 >o3.b?.() : { c: string; }
 >o3.b : () => { c: string; }
->o3 : { b: () => { c: string; }; }
+>o3 : { b: (() => { c: string; }) | undefined; }
 >b : () => { c: string; }
 >c : string
 

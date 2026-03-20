@@ -7,7 +7,7 @@ const otherValue = () => true;
 >true : true
 
 const value: { inner: number | string } = null as any;
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : string | number
 >null as any : any
 
@@ -23,28 +23,28 @@ if (typeof (otherValue(), value).inner === 'number') {
 >typeof (otherValue(), value).inner === 'number' : boolean
 >typeof (otherValue(), value).inner : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >(otherValue(), value).inner : string | number
->(otherValue(), value) : { inner: string | number; }
->otherValue(), value : { inner: string | number; }
+>(otherValue(), value) : { inner: number | string; }
+>otherValue(), value : { inner: number | string; }
 >otherValue() : boolean
 >otherValue : () => boolean
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : string | number
 >'number' : "number"
 
     const a = value.inner; // number
 >a : number
 >value.inner : number
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : number
 
     const b: number = (otherValue(), value).inner; // string | number , but should be number
 >b : number
 >(otherValue(), value).inner : number
->(otherValue(), value) : { inner: string | number; }
->otherValue(), value : { inner: string | number; }
+>(otherValue(), value) : { inner: number | string; }
+>otherValue(), value : { inner: number | string; }
 >otherValue() : boolean
 >otherValue : () => boolean
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : number
 }
 
@@ -52,26 +52,26 @@ if (isNumber((otherValue(), value).inner)) {
 >isNumber((otherValue(), value).inner) : boolean
 >isNumber : (obj: any) => obj is number
 >(otherValue(), value).inner : string | number
->(otherValue(), value) : { inner: string | number; }
->otherValue(), value : { inner: string | number; }
+>(otherValue(), value) : { inner: number | string; }
+>otherValue(), value : { inner: number | string; }
 >otherValue() : boolean
 >otherValue : () => boolean
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : string | number
 
     const a = value.inner; // number
 >a : number
 >value.inner : number
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : number
 
     const b: number = (otherValue(), value).inner; // string | number , but should be number
 >b : number
 >(otherValue(), value).inner : number
->(otherValue(), value) : { inner: string | number; }
->otherValue(), value : { inner: string | number; }
+>(otherValue(), value) : { inner: number | string; }
+>otherValue(), value : { inner: number | string; }
 >otherValue() : boolean
 >otherValue : () => boolean
->value : { inner: string | number; }
+>value : { inner: number | string; }
 >inner : number
 }
