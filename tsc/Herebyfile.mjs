@@ -808,23 +808,25 @@ const buildCustomLinter = memoize(async () => {
 export const lint = task({
     name: "lint",
     description: "Runs golangci-lint.",
-    run: async () => {
-        await buildCustomLinter();
-
-        const lintArgs = ["run"];
-        if (defaultGoBuildTags.length) {
-            lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
-        }
-        if (options.fix) {
-            lintArgs.push("--fix");
-        }
-
-        const resolvedCustomLinterPath = path.resolve(customLinterPath);
-        await $`${resolvedCustomLinterPath} ${lintArgs}`;
-        console.log("Linting _tools");
-        await $({ cwd: "./_tools" })`${resolvedCustomLinterPath} ${lintArgs}`;
-    },
+    run: runLint,
 });
+
+async function runLint() {
+    await buildCustomLinter();
+
+    const lintArgs = ["run"];
+    if (defaultGoBuildTags.length) {
+        lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
+    }
+    if (options.fix) {
+        lintArgs.push("--fix");
+    }
+
+    const resolvedCustomLinterPath = path.resolve(customLinterPath);
+    await $`${resolvedCustomLinterPath} ${lintArgs}`;
+    console.log("Linting _tools");
+    await $({ cwd: "./_tools" })`${resolvedCustomLinterPath} ${lintArgs}`;
+}
 
 export const installTools = task({
     name: "install-tools",
@@ -840,10 +842,12 @@ export const installTools = task({
 export const format = task({
     name: "format",
     description: "Formats the repo.",
-    run: async () => {
-        await $`dprint fmt`;
-    },
+    run: runFormat,
 });
+
+async function runFormat() {
+    await $`dprint fmt`;
+}
 
 export const checkFormat = task({
     name: "check:format",
@@ -1791,4 +1795,17 @@ export const nativePreview = task({
     run: options.forRelease ? async () => {
         throw new Error("This task should not be run in release builds.");
     } : undefined,
+});
+
+export const allChecks = task({
+    name: "all-checks",
+    description: "Runs all checks for the Go code (fourslash, lint, tests, etc.)",
+    run: async () => {
+        await $`npm run convertfourslash`;
+        await runTests();
+        await $`npm run updatefailing`;
+        await runFormat();
+        await runLint();
+        await runTests();
+    },
 });
