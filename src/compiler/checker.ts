@@ -22656,7 +22656,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 else {
-                    errorInfo = undefined;
+                    // When the target is an indexed access type (e.g. this["faa"]), preserve any
+                    // specific error elaboration from the constraint comparison (e.g., missing
+                    // property or type mismatch errors) rather than discarding them. For plain
+                    // type parameters, clear the error info as the constraint-based errors may
+                    // be misleading.
+                    if (!(target.flags & TypeFlags.IndexedAccess)) {
+                        errorInfo = undefined;
+                    }
                     reportError(
                         Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
                         targetType,
