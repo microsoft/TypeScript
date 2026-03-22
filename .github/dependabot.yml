@@ -4,12 +4,12 @@
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 # https://containers.dev/guide/dependabot
 
-version: 2
+version: 2.1
 updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
-    schedul:
-      interval: 'weekly'
+    schedule:
+      interval: 'daily'
     groups:
       github-actions:
         patterns:
@@ -17,5 +17,5 @@ updates:
 
   - package-ecosystem: 'devcontainers'
     directory: '/'
-    schedul:
-      interval: weekly
+    schedule:
+      interval: daily
