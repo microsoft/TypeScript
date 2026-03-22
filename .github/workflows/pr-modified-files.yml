@@ -136,6 +136,6 @@ jobs:
               gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$MESSAGE"
             fi
           fi
-        fi
+        exit
 
       
