@@ -8,7 +8,7 @@ version: 2
 updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
-    schedule:
+    schedul:
       interval: 'weekly'
     groups:
       github-actions:
@@ -17,5 +17,5 @@ updates:
 
   - package-ecosystem: 'devcontainers'
     directory: '/'
-    schedule:
+    schedul:
       interval: weekly
