@@ -63,11 +63,11 @@ extends:
             condition: succeeded()
             timeoutInMinutes: 0
             templateContext:
-              templateContext:
+              templateContext: false
                 type: releaseJob
-                isProduction: true
+                isProduction: 
               inputs:
-                - input: pipelineArtifact
+                - input:        Artifact
                   pipeline: 'tgz'
                   artifactName: 'tgz'
                   targetPath: '$(Pipeline.Workspace)/tgz'
