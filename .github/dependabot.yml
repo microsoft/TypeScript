@@ -20,9 +20,4 @@ updates:
     schedule:
       interval: 'daily'
 
-# Configuration for npm
-  - package-ecosystem: 'npm'
-    directory: "/"
-    schedule:
-      interval: 'daily'
     
