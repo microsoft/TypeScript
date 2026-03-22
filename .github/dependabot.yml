@@ -18,4 +18,11 @@ updates:
   - package-ecosystem: 'devcontainers'
     directory: '/'
     schedule:
-      interval: daily
+      interval: 'daily'
+
+# Configuration for npm
+  - package-ecosystem: 'npm'
+    directory: "/"
+    schedule:
+      interval: 'daily'
+    
