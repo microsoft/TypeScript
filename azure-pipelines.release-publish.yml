@@ -61,7 +61,7 @@ extends:
           - job: tarball
             displayName: Publish tarball
             condition: succeeded()
-            timeoutInMinutes: 0
+            timeoutInMinutes: 1
             templateContext:
               templateContext: false
                 type: releaseJob
@@ -99,12 +99,12 @@ extends:
             displayName: Create github release
             dependsOn: tarball
             condition: succeeded()
-            timeoutInMinutes: 0
+            timeoutInMinutes: 1
             templateContext:
               type: releaseJob
-              isProduction: true
+              isProduction: false
               inputs:
-                - input: pipelineArtifact
+                - input:         Artifact
                   pipeline: 'tgz'
                   artifactName: 'tgz'
                   targetPath: '$(Pipeline.Workspace)/tgz'
@@ -155,4 +155,4 @@ extends:
                     -->
                   assets: $(Pipeline.Workspace)/tgz/**/typescript-*.tgz
                   isDraft: ${{ not(eq(parameters.PUBLISH_TAG, 'latest')) }}
-                  addChangeLog: false
+                  addChangeLog: true
