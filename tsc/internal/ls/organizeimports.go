@@ -804,6 +804,10 @@ func organizeExportsWorker(
 				change.TrailingTriviaOptionInclude,
 			)
 		} else {
+			for _, exp := range newExportDecls {
+				changeTracker.AddEmitFlags(exp.AsNode(), printer.EFNoLeadingComments)
+			}
+
 			options := change.NodeOptions{
 				LeadingTriviaOption:  change.LeadingTriviaOptionExclude,
 				TrailingTriviaOption: change.TrailingTriviaOptionInclude,
