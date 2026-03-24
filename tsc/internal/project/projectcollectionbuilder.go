@@ -37,8 +37,9 @@ type ProjectCollectionBuilder struct {
 	compilerOptionsForInferredProjects *core.CompilerOptions
 	configFileRegistryBuilder          *configFileRegistryBuilder
 
-	newSnapshotID           uint64
-	programStructureChanged bool
+	newSnapshotID              uint64
+	programStructureChanged    bool
+	defaultProjectsInvalidated bool
 
 	fileDefaultProjects map[tspath.Path]tspath.Path
 	configuredProjects  *dirty.SyncMap[tspath.Path, *Project]
@@ -56,6 +57,7 @@ func newProjectCollectionBuilder(
 	oldAPIOpenedProjects map[tspath.Path]struct{},
 	compilerOptionsForInferredProjects *core.CompilerOptions,
 	sessionOptions *SessionOptions,
+	customConfigFileName string,
 	parseCache *ParseCache,
 	extendedConfigCache *ExtendedConfigCache,
 ) *ProjectCollectionBuilder {
@@ -68,7 +70,7 @@ func newProjectCollectionBuilder(
 		parseCache:                         parseCache,
 		extendedConfigCache:                extendedConfigCache,
 		base:                               oldProjectCollection,
-		configFileRegistryBuilder:          newConfigFileRegistryBuilder(fs, oldConfigFileRegistry, extendedConfigCache, sessionOptions, nil),
+		configFileRegistryBuilder:          newConfigFileRegistryBuilder(fs, oldConfigFileRegistry, extendedConfigCache, sessionOptions, customConfigFileName, nil),
 		newSnapshotID:                      newSnapshotID,
 		configuredProjects:                 dirty.NewSyncMap(oldProjectCollection.configuredProjects),
 		inferredProject:                    dirty.NewBox(oldProjectCollection.inferredProject),
@@ -371,6 +373,12 @@ func (b *ProjectCollectionBuilder) DidRequestFile(uri lsproto.DocumentUri, confi
 	startTime := time.Now()
 	fileName := uri.FileName()
 	path := b.toPath(fileName)
+	if b.defaultProjectsInvalidated {
+		b.ensureConfiguredProjectAndAncestorsForFile(fileName, path, logger)
+		if !b.fs.isOpenFile(path) {
+			return
+		}
+	}
 	if b.fs.isOpenFile(path) {
 		hasChanges := b.programStructureChanged
 
@@ -570,6 +578,17 @@ func (b *ProjectCollectionBuilder) DidUpdateATAState(ataChanges map[tspath.Path]
 	}
 }
 
+// if customConfigFileName changes, invalidate default projects.
+func (b *ProjectCollectionBuilder) DidChangeCustomConfigFileName(logger *logging.LogTree) {
+	if !b.configFileRegistryBuilder.DidChangeCustomConfigFileName(logger) {
+		return
+	}
+
+	b.fileDefaultProjects = nil
+	b.defaultProjectsInvalidated = true
+	b.programStructureChanged = true
+}
+
 func (b *ProjectCollectionBuilder) markProjectsAffectedByConfigChanges(
 	configChangeResult changeFileResult,
 	logger *logging.LogTree,
@@ -620,7 +639,11 @@ func (b *ProjectCollectionBuilder) findDefaultProject(fileName string, path tspa
 }
 
 func (b *ProjectCollectionBuilder) findDefaultConfiguredProject(fileName string, path tspath.Path) *dirty.SyncMapEntry[tspath.Path, *Project] {
-	// !!! look in fileDefaultProjects first?
+	if key, ok := b.fileDefaultProjects[path]; ok && key != inferredProjectName {
+		if entry, ok := b.configuredProjects.Load(key); ok {
+			return entry
+		}
+	}
 	// Sort configured projects so we can use a deterministic "first" as a last resort.
 	var configuredProjectPaths []tspath.Path
 	configuredProjects := make(map[tspath.Path]*dirty.SyncMapEntry[tspath.Path, *Project])

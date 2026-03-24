@@ -17,6 +17,9 @@ type ConfigFileRegistry struct {
 	// about their ancestor config file names. It is only used as
 	// a cache during
 	configFileNames map[tspath.Path]*configFileNames
+	// customConfigFileName is the custom config file name preference that was
+	// used when building this registry's configFileNames cache.
+	customConfigFileName string
 }
 
 type configFileEntry struct {
@@ -104,8 +107,9 @@ func (c *ConfigFileRegistry) GetAncestorConfigFileName(path tspath.Path, higherT
 // clone creates a shallow copy of the configFileRegistry.
 func (c *ConfigFileRegistry) clone() *ConfigFileRegistry {
 	return &ConfigFileRegistry{
-		configs:         maps.Clone(c.configs),
-		configFileNames: maps.Clone(c.configFileNames),
+		configs:              maps.Clone(c.configs),
+		configFileNames:      maps.Clone(c.configFileNames),
+		customConfigFileName: c.customConfigFileName,
 	}
 }
 

@@ -243,6 +243,7 @@ func (s *Session) Configure(config *lsutil.UserConfig) {
 	if oldConfig != config {
 		s.refreshInlayHintsIfNeeded(oldConfig, config)
 		s.refreshCodeLensIfNeeded(oldConfig, config)
+		s.refreshDiagnosticsIfNeeded(oldConfig, config)
 	}
 }
 
@@ -996,6 +997,12 @@ func (s *Session) refreshCodeLensIfNeeded(oldPrefs *lsutil.UserConfig, newPrefs 
 		if err := s.client.RefreshCodeLens(s.backgroundCtx); err != nil && s.options.LoggingEnabled {
 			s.logger.Logf("Error refreshing code lens: %v", err)
 		}
+	}
+}
+
+func (s *Session) refreshDiagnosticsIfNeeded(oldPrefs *lsutil.UserConfig, newPrefs *lsutil.UserConfig) {
+	if oldPrefs.TS().CustomConfigFileName != newPrefs.TS().CustomConfigFileName {
+		s.ScheduleDiagnosticsRefresh()
 	}
 }
 
