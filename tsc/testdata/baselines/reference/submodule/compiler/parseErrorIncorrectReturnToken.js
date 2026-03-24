@@ -20,9 +20,7 @@ let o = {
 string; // should be => not :
 // doesn't work in non-type contexts, where the return type is optional
 let f = (n) => string => n.toString();
-let o = {
-    m(n) { }
-};
+let o = {};
 string;
 {
     return n.toString();

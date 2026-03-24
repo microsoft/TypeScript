@@ -27,8 +27,6 @@ var M;
 (function (M) {
     let N;
     (function (N) {
-        function f(x) { }
-        N.f = f;
         2 * x;
         let X;
         (function (X) {

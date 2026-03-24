@@ -137,7 +137,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindConstructor:
 		n := node.AsConstructorDeclaration()
-		if n.Body == nil {
+		if ast.NodeIsMissing(n.Body) {
 			// TypeScript overloads are elided
 			return nil
 		}
@@ -145,7 +145,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindMethodDeclaration:
 		n := node.AsMethodDeclaration()
-		if n.Body == nil {
+		if ast.NodeIsMissing(n.Body) {
 			// TypeScript overloads are elided
 			return nil
 		}
@@ -153,7 +153,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindGetAccessor:
 		n := node.AsGetAccessorDeclaration()
-		if n.Body == nil && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
+		if ast.NodeIsMissing(n.Body) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
 			// Abstract accessors are elided
 			return nil
 		}
@@ -165,7 +165,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindSetAccessor:
 		n := node.AsSetAccessorDeclaration()
-		if n.Body == nil && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
+		if ast.NodeIsMissing(n.Body) && ast.HasSyntacticModifier(node, ast.ModifierFlagsAbstract) {
 			// Abstract accessors are elided
 			return nil
 		}
@@ -201,7 +201,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindFunctionDeclaration:
 		n := node.AsFunctionDeclaration()
-		if n.Body == nil {
+		if ast.NodeIsMissing(n.Body) {
 			// TypeScript overloads are elided
 			return tx.elide(node)
 		}

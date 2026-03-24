@@ -1,11 +1,6 @@
 --- old.reachabilityChecksNoCrash1.js
 +++ new.reachabilityChecksNoCrash1.js
-@@= skipped -10, +10 lines =@@
-
-
- //// [reachabilityChecksNoCrash1.js]
-+export async function arrayFromAsync(asyncIterable, , AsyncIterable, , T) { }
-  > ;
+@@= skipped -14, +14 lines =@@
  Promise < T[] > {
      const: out = [],
      for: await (), const: v, of, asyncIterable,
@@ -14,4 +9,3 @@
  };
  return out;
  ;
--export {};

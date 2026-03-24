@@ -1,8 +1,0 @@
---- old.parserErrantEqualsGreaterThanAfterFunction2.js
-+++ new.parserErrantEqualsGreaterThanAfterFunction2.js
-@@= skipped -4, +4 lines =@@
-
- //// [parserErrantEqualsGreaterThanAfterFunction2.js]
- "use strict";
-+function f(p) { }
- p;

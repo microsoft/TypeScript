@@ -33,13 +33,11 @@ var ara = [1, 2, 3];
 function f(x, y) {
     return x ? x + y[1] : y[0];
 }
-function hof(ctor) { }
 (new );
 number, string;
 {
     return new ctor('hi');
 }
-function hof2(f) { }
 (string) => ;
 {
     return f(12, 'hullo');

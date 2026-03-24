@@ -5,5 +5,4 @@ function f(p: A) => p;
 
 //// [parserErrantEqualsGreaterThanAfterFunction2.js]
 "use strict";
-function f(p) { }
 p;

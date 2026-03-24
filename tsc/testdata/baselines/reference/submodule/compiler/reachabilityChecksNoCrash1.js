@@ -11,7 +11,6 @@ export async function arrayFromAsync<T>(asyncIterable!: AsyncIterable<T>): Promi
 
 
 //// [reachabilityChecksNoCrash1.js]
-export async function arrayFromAsync(asyncIterable, , AsyncIterable, , T) { }
  > ;
 Promise < T[] > {
     const: out = [],
@@ -20,3 +19,4 @@ Promise < T[] > {
 };
 return out;
 ;
+export {};
