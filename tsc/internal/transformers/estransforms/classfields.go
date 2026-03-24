@@ -456,14 +456,11 @@ func (tx *classFieldsTransformer) visitIdentifier(node *ast.Identifier) *ast.Nod
 }
 
 // visitPrivateIdentifier handles an undeclared private name. Replace it with an empty
-// identifier to indicate a problem with the code, unless we are in a statement position -
-// otherwise this will not trigger a SyntaxError.
+// identifier to indicate a problem with the code.
+// Note: private identifiers in statement position (e.g., `#;`) are intercepted earlier
+// by visitExpressionStatement, which preserves them so the runtime throws a SyntaxError.
 func (tx *classFieldsTransformer) visitPrivateIdentifier(node *ast.Node) *ast.Node {
 	if !tx.shouldTransformPrivateElementsOrClassStaticBlocks {
-		return node
-	}
-	// !!! Strada used .parent too; this is suspicious in a transform.
-	if node.Parent != nil && ast.IsStatement(node.Parent) {
 		return node
 	}
 	result := tx.Factory().NewIdentifier("")
@@ -1236,6 +1233,13 @@ func (tx *classFieldsTransformer) visitForStatement(node *ast.ForStatement) *ast
 }
 
 func (tx *classFieldsTransformer) visitExpressionStatement(node *ast.ExpressionStatement) *ast.Node {
+	// Preserve private identifiers that appear directly as the expression of an
+	// ExpressionStatement (e.g., `#;`). This is error-recovery output from the parser
+	// for invalid syntax. Keeping it ensures the runtime throws a SyntaxError rather
+	// than silently succeeding with an empty statement.
+	if ast.IsPrivateIdentifier(node.Expression) && tx.shouldTransformPrivateElementsOrClassStaticBlocks {
+		return node.AsNode()
+	}
 	return tx.Factory().UpdateExpressionStatement(
 		node,
 		tx.discardedValueVisitor.VisitNode(node.Expression),
