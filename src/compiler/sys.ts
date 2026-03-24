@@ -1655,8 +1655,18 @@ export let sys: System = (() => {
             const session = new inspector.Session();
             session.connect();
 
-            session.post("Profiler.enable", () => {
-                session.post("Profiler.start", () => {
+            session.post("Profiler.enable", (enableErr) => {
+                if (enableErr) {
+                    session.disconnect();
+                    cb();
+                    return;
+                }
+                session.post("Profiler.start", (startErr) => {
+                    if (startErr) {
+                        session.disconnect();
+                        cb();
+                        return;
+                    }
                     activeSession = session;
                     profilePath = path;
                     cb();
