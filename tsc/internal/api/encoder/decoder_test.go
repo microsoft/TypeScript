@@ -299,6 +299,81 @@ func TestDecodeSourceFile_KeywordExpressions(t *testing.T) {
 	assert.Assert(t, thisExpr.AsKeywordExpression() != nil)
 }
 
+func TestDecodeSourceFile_EmptyModuleBlock(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile("namespace N { }")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	// Navigate: namespace N { } -> ModuleDeclaration -> ModuleBlock
+	mod := decoded.Statements.Nodes[0].AsModuleDeclaration()
+	assert.Assert(t, mod.Body != nil)
+	block := mod.Body.AsModuleBlock()
+	// Statements must be non-nil even when empty, otherwise the printer panics
+	assert.Assert(t, block.Statements != nil)
+	assert.Equal(t, len(block.Statements.Nodes), 0)
+}
+
+func TestDecodeSourceFile_EmptyBlockAndParams(t *testing.T) {
+	t.Parallel()
+	// Empty blocks and parameter lists must decode with non-nil NodeLists (not nil),
+	// matching parser behavior. Previously the decoder left them nil, crashing the printer.
+	sf := parseSourceFile("function foo() {}")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	funcDecl := decoded.Statements.Nodes[0].AsFunctionDeclaration()
+	assert.Assert(t, funcDecl.Parameters != nil, "FunctionDeclaration.Parameters must be non-nil for foo()")
+	assert.Equal(t, len(funcDecl.Parameters.Nodes), 0)
+	assert.Assert(t, funcDecl.Body != nil)
+	block := funcDecl.Body.AsBlock()
+	assert.Assert(t, block.Statements != nil, "Block.Statements must be non-nil for empty blocks")
+	assert.Equal(t, len(block.Statements.Nodes), 0)
+}
+
+func TestDecodeSourceFile_ArrowFunctionEmptyParams(t *testing.T) {
+	t.Parallel()
+	// `() => {}` must decode with non-nil Parameters (empty NodeList),
+	// matching parser behavior. Previously the decoder left it nil, crashing the printer.
+	sf := parseSourceFile("const f = () => {};")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	decl := decoded.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration()
+	arrow := decl.Initializer.AsArrowFunction()
+	assert.Assert(t, arrow.Parameters != nil, "ArrowFunction.Parameters must be non-nil for () => {}")
+	assert.Equal(t, len(arrow.Parameters.Nodes), 0)
+	assert.Assert(t, arrow.Body != nil)
+	block := arrow.Body.AsBlock()
+	assert.Assert(t, block.Statements != nil, "Block.Statements must be non-nil for empty body")
+	assert.Equal(t, len(block.Statements.Nodes), 0)
+}
+
+func TestDecodeSourceFile_FunctionExpressionEmptyParams(t *testing.T) {
+	t.Parallel()
+	// `function() {}` must decode with non-nil Parameters (empty NodeList).
+	sf := parseSourceFile("const f = function() {};")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	decl := decoded.Statements.Nodes[0].AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0].AsVariableDeclaration()
+	funcExpr := decl.Initializer.AsFunctionExpression()
+	assert.Assert(t, funcExpr.Parameters != nil, "FunctionExpression.Parameters must be non-nil for function() {}")
+	assert.Equal(t, len(funcExpr.Parameters.Nodes), 0)
+}
+
 func BenchmarkDecodeSourceFile(b *testing.B) {
 	repo.SkipIfNoTypeScriptSubmodule(b)
 	filePath := filepath.Join(repo.TypeScriptSubmodulePath(), "src/compiler/checker.ts")

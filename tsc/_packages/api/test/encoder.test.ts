@@ -9,6 +9,10 @@ import {
     createFunctionDeclaration,
     createIdentifier,
     createIfStatement,
+    createJsxAttributes,
+    createJsxClosingElement,
+    createJsxElement,
+    createJsxOpeningElement,
     createSourceFile,
     createToken,
     createVariableDeclaration,
@@ -24,7 +28,10 @@ import {
     encodeNode,
     encodeSourceFile,
 } from "../src/node/encoder.ts";
-import { RemoteSourceFile } from "../src/node/node.ts";
+import {
+    RemoteNodeList,
+    RemoteSourceFile,
+} from "../src/node/node.ts";
 import {
     HEADER_OFFSET_NODES,
     NODE_LEN,
@@ -174,6 +181,41 @@ describe("Encoder", () => {
         const data = view.getUint32(offsetNodes + NODE_LEN + NODE_OFFSET_DATA, true);
         // Bit 24 should be 1 (multiLine)
         assert.strictEqual((data >>> 24) & 1, 1);
+    });
+
+    test("single-child node with no children returns undefined", () => {
+        // JsxAttributes is a single-child node (property: "properties").
+        // When the properties NodeList is empty, the encoder skips it,
+        // so JsxAttributes has zero encoded children. Accessing .properties
+        // must return undefined, not throw "Expected only one child".
+        const tagName = createIdentifier("div");
+        const emptyAttrs = createJsxAttributes([]);
+        const opening = createJsxOpeningElement(tagName, undefined, emptyAttrs);
+        const closing = createJsxClosingElement(createIdentifier("div"));
+        const jsx = createJsxElement(opening, [], closing);
+        const stmt = createVariableStatement(
+            undefined,
+            createVariableDeclarationList([createVariableDeclaration(createIdentifier("x"), undefined, undefined, jsx)]),
+        );
+        const sf = makeSF("const x = <div></div>;", "/test.tsx", [stmt]);
+
+        const encoded = encodeSourceFile(sf);
+        const decoded = decode(encoded);
+
+        // Walk to JsxOpeningElement → attributes (JsxAttributes)
+        const varStmt = decoded.statements!.at(0)!;
+        const declList = varStmt.declarationList!;
+        const declarationsNode = declList.declarations!;
+        assert.ok(declarationsNode instanceof RemoteNodeList);
+        const varDecl = declarationsNode.at(0)!;
+        const jsxElem = varDecl.initializer!;
+        assert.strictEqual(jsxElem.kind, SyntaxKind.JsxElement);
+        const openingElem = jsxElem.openingElement!;
+        assert.strictEqual(openingElem.kind, SyntaxKind.JsxOpeningElement);
+        const attrs = openingElem.attributes!;
+        assert.strictEqual(attrs.kind, SyntaxKind.JsxAttributes);
+        // Empty properties should return undefined, not throw
+        assert.strictEqual(attrs.properties, undefined);
     });
 });
 
