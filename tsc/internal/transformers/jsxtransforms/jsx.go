@@ -630,7 +630,7 @@ func (tx *JSXTransformer) createReactNamespace(reactNamespace string, parent *as
 		reactNamespace = "React"
 	}
 	react := tx.Factory().NewIdentifier(reactNamespace)
-	react.Flags &= ^ast.NodeFlagsSynthesized
+	react.Flags &^= ast.NodeFlagsSynthesized
 
 	// Set the parent that is in parse tree
 	// this makes sure that parent chain is intact for checker to traverse complete scope tree

@@ -4401,7 +4401,7 @@ func (p *Printer) emitCaseOrDefaultClauseStatements(node *ast.CaseOrDefaultClaus
 		// to avoid duplicating trailing comments that will be picked up by the statement list.
 		p.writeTokenText(ast.KindColonToken, WriteKindPunctuation, colonPos)
 		p.writeSpace()
-		format &= ^(LFMultiLine | LFIndented)
+		format &^= LFMultiLine | LFIndented
 	} else {
 		p.emitToken(ast.KindColonToken, colonPos, WriteKindPunctuation, node.AsNode())
 	}

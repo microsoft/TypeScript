@@ -11,6 +11,7 @@ import (
 	"strings"
 	"testing"
 
+	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/checker"
 	"golang.org/x/tools/go/packages"
 	"gotest.tools/v3/assert"
@@ -59,6 +60,8 @@ func TestPlugin(t *testing.T) {
 	assert.NilError(t, err)
 
 	diagsByPath := make(map[string]map[diagnostic]struct{})
+	editsByPath := make(map[string][]analysis.TextEdit)
+	fileBaseByPath := make(map[string]int)
 
 	for act := range graph.All() {
 		assert.NilError(t, act.Err)
@@ -89,6 +92,12 @@ func TestPlugin(t *testing.T) {
 			}
 
 			m[d] = struct{}{}
+
+			f := act.Package.Fset.File(diag.Pos)
+			fileBaseByPath[path] = f.Base()
+			for _, fix := range diag.SuggestedFixes {
+				editsByPath[path] = append(editsByPath[path], fix.TextEdits...)
+			}
 		}
 	}
 
@@ -128,6 +137,12 @@ func TestPlugin(t *testing.T) {
 			assert.NilError(t, relErr)
 
 			expected := toGolden(fileContents, diags)
+
+			if edits := editsByPath[p]; len(edits) > 0 {
+				fixed, fixErr := applyEdits(fileContents, edits, fileBaseByPath[p])
+				assert.NilError(t, fixErr)
+				expected += "=== FIXED ===\n" + string(fixed)
+			}
 
 			golden.Assert(t, expected, goldenPath)
 		})
@@ -192,4 +207,26 @@ func toWhitespace(linePrefix []byte) string {
 		}
 	}
 	return b.String()
+}
+
+func applyEdits(contents []byte, edits []analysis.TextEdit, fileBase int) ([]byte, error) {
+	// Sort edits by position descending so we can apply from end to start
+	// without invalidating earlier positions.
+	slices.SortFunc(edits, func(a, b analysis.TextEdit) int {
+		if r := cmp.Compare(a.Pos, b.Pos); r != 0 {
+			return -r // descending
+		}
+		return -cmp.Compare(a.End, b.End)
+	})
+
+	result := slices.Clone(contents)
+	for _, edit := range edits {
+		start := int(edit.Pos) - fileBase
+		end := int(edit.End) - fileBase
+		if edit.End == token.NoPos || edit.End <= edit.Pos {
+			end = start
+		}
+		result = slices.Concat(result[:start], edit.NewText, result[end:])
+	}
+	return result, nil
 }

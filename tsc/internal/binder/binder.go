@@ -903,7 +903,7 @@ func (b *Binder) setExportContextFlag(node *ast.Node) {
 	if node.Flags&ast.NodeFlagsAmbient != 0 && !b.hasExportDeclarations(node) {
 		node.Flags |= ast.NodeFlagsExportContext
 	} else {
-		node.Flags &= ^ast.NodeFlagsExportContext
+		node.Flags &^= ast.NodeFlagsExportContext
 	}
 }
 
@@ -1546,7 +1546,7 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 		b.seenThisKeyword = false
 		b.bindChildren(node)
 		// Reset flags (for incremental scenarios)
-		node.Flags &= ^(ast.NodeFlagsReachabilityCheckFlags | ast.NodeFlagsContainsThis)
+		node.Flags &^= ast.NodeFlagsReachabilityCheckFlags | ast.NodeFlagsContainsThis
 		if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 && containerFlags&ContainerFlagsIsFunctionLike != 0 {
 			bodyData := node.BodyData()
 			if bodyData != nil && ast.NodeIsPresent(bodyData.Body) {
@@ -1593,7 +1593,7 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 		if b.seenThisKeyword {
 			node.Flags |= ast.NodeFlagsContainsThis
 		} else {
-			node.Flags &= ^ast.NodeFlagsContainsThis
+			node.Flags &^= ast.NodeFlagsContainsThis
 		}
 		b.seenThisKeyword = saveSeenThisKeyword
 	} else {

@@ -1245,7 +1245,7 @@ func (b *NodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 
 func (b *NodeBuilderImpl) typeParameterToDeclarationWithConstraint(typeParameter *Type, constraintNode *ast.TypeNode) *ast.TypeParameterDeclarationNode {
 	restoreFlags := b.saveRestoreFlags()
-	b.ctx.flags &= ^nodebuilder.FlagsWriteTypeParametersInQualifiedName // Avoids potential infinite loop when building for a claimspace with a generic
+	b.ctx.flags &^= nodebuilder.FlagsWriteTypeParametersInQualifiedName // Avoids potential infinite loop when building for a claimspace with a generic
 	modifiers := ast.CreateModifiersFromModifierFlags(b.ch.getTypeParameterModifiers(typeParameter), b.f.NewModifier)
 	var modifiersList *ast.ModifierList
 	if len(modifiers) > 0 {
@@ -1958,7 +1958,7 @@ func (b *NodeBuilderImpl) serializeReturnTypeForSignature(signature *Signature, 
 	suppressAny := b.ctx.flags&nodebuilder.FlagsSuppressAnyReturnType != 0
 	restoreFlags := b.saveRestoreFlags()
 	if suppressAny {
-		b.ctx.flags &= ^nodebuilder.FlagsSuppressAnyReturnType // suppress only toplevel `any`s
+		b.ctx.flags &^= nodebuilder.FlagsSuppressAnyReturnType // suppress only toplevel `any`s
 	}
 	var returnTypeNode *ast.Node
 

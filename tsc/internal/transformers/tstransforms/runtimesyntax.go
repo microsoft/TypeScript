@@ -252,7 +252,7 @@ func (tx *RuntimeSyntaxTransformer) addVarForDeclaration(statements []*ast.State
 	// Replicate modifierVisitor: strip decorators, TypeScript modifiers, and export when in namespace.
 	modifierMask := ^(ast.ModifierFlagsTypeScriptModifier | ast.ModifierFlagsDecorator)
 	if tx.currentNamespace != nil {
-		modifierMask &= ^ast.ModifierFlagsExport
+		modifierMask &^= ast.ModifierFlagsExport
 	}
 	modifiers := transformers.ExtractModifiers(tx.EmitContext(), node.Modifiers(), modifierMask)
 	varStatement := tx.Factory().NewVariableStatement(modifiers, varDecls)

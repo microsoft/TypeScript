@@ -97,7 +97,7 @@ func propagateEraseableSyntaxSubtreeFacts(child *TypeNode) SubtreeFacts {
 func propagateObjectBindingElementSubtreeFacts(child *BindingElementNode) SubtreeFacts {
 	facts := propagateSubtreeFacts(child)
 	if facts&SubtreeContainsRestOrSpread != 0 {
-		facts &= ^SubtreeContainsRestOrSpread
+		facts &^= SubtreeContainsRestOrSpread
 		facts |= SubtreeContainsObjectRestOrSpread | SubtreeContainsESObjectRestOrSpread
 	}
 	return facts

@@ -513,7 +513,7 @@ func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
 		shouldModuleRefErr := c.compilerOptions.Jsx != core.JsxEmitPreserve && c.compilerOptions.Jsx != core.JsxEmitReactNative
 		flags := ast.SymbolFlagsValue
 		if !shouldModuleRefErr {
-			flags &= ^ast.SymbolFlagsEnum
+			flags &^= ast.SymbolFlagsEnum
 		}
 		jsxFactorySymbol = c.resolveName(node, jsxFragmentFactoryName, flags, diagnostics.Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found, true /*isUse*/, false /*excludeGlobals*/)
 	}

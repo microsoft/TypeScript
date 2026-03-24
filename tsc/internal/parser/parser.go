@@ -4043,7 +4043,7 @@ func (p *Parser) parseExpression() *ast.Expression {
 
 	// clear the decorator context when parsing Expression, as it should be unambiguous when parsing a decorator
 	saveContextFlags := p.contextFlags
-	p.contextFlags &= ^ast.NodeFlagsDecoratorContext
+	p.contextFlags &^= ast.NodeFlagsDecoratorContext
 	pos := p.nodePos()
 	expr := p.parseAssignmentExpressionOrHigher()
 	for {
@@ -6339,7 +6339,7 @@ func (p *Parser) setContextFlags(flags ast.NodeFlags, value bool) {
 	if value {
 		p.contextFlags |= flags
 	} else {
-		p.contextFlags &= ^flags
+		p.contextFlags &^= flags
 	}
 }
 
