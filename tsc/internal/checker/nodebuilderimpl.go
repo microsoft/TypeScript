@@ -1974,15 +1974,26 @@ func (b *NodeBuilderImpl) serializeReturnTypeForSignature(signature *Signature, 
 		returnType = b.ch.getReturnTypeOfSignature(signature)
 	}
 	if !(suppressAny && IsTypeAny(returnType)) {
-		typePredicate := b.ch.getTypePredicateOfSignature(signature)
-		if tryReuse && typePredicate == nil && signature.declaration != nil && !ast.NodeIsSynthesized(signature.declaration) {
+		if tryReuse && signature.declaration != nil && !ast.NodeIsSynthesized(signature.declaration) {
 			declarationSymbol := b.ch.getSymbolOfDeclaration(signature.declaration)
 			restore := b.addSymbolTypeToContext(declarationSymbol, returnType)
 			pt := b.pc.GetReturnTypeOfSignature(signature.declaration)
 			if b.pseudoTypeEquivalentToType(pt, returnType, false, !b.ctx.suppressReportInferenceFallback) {
-				// !!! TODO: If annotated type node is a reference with insufficient type arguments, we should still fall back to type serialization
-				// see: canReuseTypeNodeAnnotation in strada for context
-				returnTypeNode = b.pseudoTypeToNode(pt)
+				// Also verify the pseudo type captures any inferred type predicate, not just the boolean return type.
+				// The pseudochecker is unaware of inferred type predicates, so it produces boolean where
+				// the checker infers e.g. `x is string`.
+				typePredicate := b.ch.getTypePredicateOfSignature(signature)
+				if typePredicate != nil && !b.pseudoReturnTypeMatchesPredicate(pt, typePredicate) {
+					if !b.ctx.suppressReportInferenceFallback {
+						b.ctx.tracker.ReportInferenceFallback(signature.declaration)
+					}
+					pt = nil
+				}
+				if pt != nil {
+					// !!! TODO: If annotated type node is a reference with insufficient type arguments, we should still fall back to type serialization
+					// see: canReuseTypeNodeAnnotation in strada for context
+					returnTypeNode = b.pseudoTypeToNode(pt)
+				}
 			}
 			restore()
 		}

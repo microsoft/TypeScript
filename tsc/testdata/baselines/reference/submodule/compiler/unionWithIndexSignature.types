@@ -33,7 +33,7 @@ export type TypedArray = Int32Array | Uint8Array;
 >TypedArray : TypedArray
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
->isTypedArray : (a: {}) => a is Int32Array<ArrayBuffer> | Uint8Array<ArrayBuffer>
+>isTypedArray : (a: {}) => a is Int32Array | Uint8Array
 >a : {}
 
   return a instanceof Int32Array || a instanceof Uint8Array;
@@ -52,7 +52,7 @@ export function flatten<T extends number|TypedArray>(arr: T) {
 
   if (isTypedArray(arr)) {
 >isTypedArray(arr) : boolean
->isTypedArray : (a: {}) => a is Int32Array<ArrayBuffer> | Uint8Array<ArrayBuffer>
+>isTypedArray : (a: {}) => a is Int32Array | Uint8Array
 >arr : number | TypedArray
 
       arr[1];

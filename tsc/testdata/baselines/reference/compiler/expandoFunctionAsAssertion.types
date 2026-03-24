@@ -2,15 +2,15 @@
 
 === expandoFunctionAsAssertion.ts ===
 function example() {}
->example : { (): void; isFoo: (value: string) => asserts value is "foo"; }
+>example : { (): void; isFoo: (value: string) => asserts value is 'foo'; }
 
 example.isFoo = function isFoo(value: string): asserts value is 'foo' {
->example.isFoo = function isFoo(value: string): asserts value is 'foo' {  if (value !== 'foo') {    throw new Error('Not foo');  }} : (value: string) => asserts value is "foo"
->example.isFoo : (value: string) => asserts value is "foo"
->example : { (): void; isFoo: (value: string) => asserts value is "foo"; }
->isFoo : (value: string) => asserts value is "foo"
->function isFoo(value: string): asserts value is 'foo' {  if (value !== 'foo') {    throw new Error('Not foo');  }} : (value: string) => asserts value is "foo"
->isFoo : (value: string) => asserts value is "foo"
+>example.isFoo = function isFoo(value: string): asserts value is 'foo' {  if (value !== 'foo') {    throw new Error('Not foo');  }} : (value: string) => asserts value is 'foo'
+>example.isFoo : (value: string) => asserts value is 'foo'
+>example : { (): void; isFoo: (value: string) => asserts value is 'foo'; }
+>isFoo : (value: string) => asserts value is 'foo'
+>function isFoo(value: string): asserts value is 'foo' {  if (value !== 'foo') {    throw new Error('Not foo');  }} : (value: string) => asserts value is 'foo'
+>isFoo : (value: string) => asserts value is 'foo'
 >value : string
 
   if (value !== 'foo') {
@@ -27,8 +27,8 @@ example.isFoo = function isFoo(value: string): asserts value is 'foo' {
 
 example.isFoo('test');
 >example.isFoo('test') : void
->example.isFoo : (value: string) => asserts value is "foo"
->example : { (): void; isFoo: (value: string) => asserts value is "foo"; }
->isFoo : (value: string) => asserts value is "foo"
+>example.isFoo : (value: string) => asserts value is 'foo'
+>example : { (): void; isFoo: (value: string) => asserts value is 'foo'; }
+>isFoo : (value: string) => asserts value is 'foo'
 >'test' : "test"
 

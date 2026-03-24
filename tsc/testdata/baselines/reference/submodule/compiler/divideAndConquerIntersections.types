@@ -125,7 +125,7 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 >filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
 
     return (up: U): up is Filter<U, Q> => !!up;
->(up: U): up is Filter<U, Q> => !!up : (up: U) => up is PerformQuery<U, Combine<L1Fragment<Q>, Q>>
+>(up: U): up is Filter<U, Q> => !!up : (up: U) => up is Filter<U, Q>
 >up : U
 >!!up : true
 >!up : false

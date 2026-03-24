@@ -11,7 +11,7 @@ interface Breed {
 }
 
 declare function isNil(value: unknown): value is undefined | null;
->isNil : (value: unknown) => value is null | undefined
+>isNil : (value: unknown) => value is undefined | null
 >value : unknown
 
 function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
@@ -46,7 +46,7 @@ function getBreedSizeWithFunction(animal: Animal): string | undefined {
   if (!isNil(animal?.breed?.size)) {
 >!isNil(animal?.breed?.size) : boolean
 >isNil(animal?.breed?.size) : boolean
->isNil : (value: unknown) => value is null | undefined
+>isNil : (value: unknown) => value is undefined | null
 >animal?.breed?.size : string | undefined
 >animal?.breed : Breed | undefined
 >animal : Animal

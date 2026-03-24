@@ -124,7 +124,7 @@ declare namespace Immutable {
 >Collection : any
 
   export function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
->isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Indexed<any> | Collection.Keyed<any, any>
+>isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
 >maybeAssociative : any
 >Collection : any
 >Collection : any
@@ -973,7 +973,7 @@ declare namespace Immutable {
 >Record : typeof Record
 
     export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
->isRecord : (maybeRecord: any) => maybeRecord is Instance<any>
+>isRecord : (maybeRecord: any) => maybeRecord is Record.Instance<any>
 >maybeRecord : any
 >Record : any
 
@@ -1139,7 +1139,7 @@ declare namespace Immutable {
 >Seq : typeof Seq
 
     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
->isSeq : (maybeSeq: any) => maybeSeq is Indexed<any> | Keyed<any, any>
+>isSeq : (maybeSeq: any) => maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>
 >maybeSeq : any
 >Seq : any
 >Seq : any
@@ -1474,17 +1474,17 @@ declare namespace Immutable {
 >Collection : typeof Collection
 
     function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
->isKeyed : (maybeKeyed: any) => maybeKeyed is Keyed<any, any>
+>isKeyed : (maybeKeyed: any) => maybeKeyed is Collection.Keyed<any, any>
 >maybeKeyed : any
 >Collection : any
 
     function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
->isIndexed : (maybeIndexed: any) => maybeIndexed is Indexed<any>
+>isIndexed : (maybeIndexed: any) => maybeIndexed is Collection.Indexed<any>
 >maybeIndexed : any
 >Collection : any
 
     function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
->isAssociative : (maybeAssociative: any) => maybeAssociative is Indexed<any> | Keyed<any, any>
+>isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
 >maybeAssociative : any
 >Collection : any
 >Collection : any

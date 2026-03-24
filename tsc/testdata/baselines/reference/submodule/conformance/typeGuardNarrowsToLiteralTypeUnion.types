@@ -2,7 +2,7 @@
 
 === typeGuardNarrowsToLiteralTypeUnion.ts ===
 declare function isFoo(value: string) : value is ("foo" | "bar");
->isFoo : (value: string) => value is "bar" | "foo"
+>isFoo : (value: string) => value is ("foo" | "bar")
 >value : string
 
 declare function doThis(value: "foo" | "bar"): void;
@@ -18,7 +18,7 @@ let value: string;
 
 if (isFoo(value)) {
 >isFoo(value) : boolean
->isFoo : (value: string) => value is "bar" | "foo"
+>isFoo : (value: string) => value is ("foo" | "bar")
 >value : string
 
     doThis(value);

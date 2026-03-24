@@ -29,7 +29,7 @@ declare function invalidThisType(this: unique symbol): void;
 >this : symbol
 
 declare function invalidTypePredicate(n: any): n is unique symbol;
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
 >n : any
 
 declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
@@ -67,7 +67,7 @@ class InvalidClass {
 >this : symbol
 
     invalidTypePredicate(n: any): n is unique symbol { return; }
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
 >n : any
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
@@ -102,7 +102,7 @@ class InvalidClass {
 >this : symbol
 
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
->invalidStaticTypePredicate : (n: any) => n is symbol
+>invalidStaticTypePredicate : (n: any) => n is unique symbol
 >n : any
 
     static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
@@ -140,7 +140,7 @@ interface InvalidInterface {
 >this : symbol
 
     invalidTypePredicate(n: any): n is unique symbol
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
 >n : any
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
@@ -173,7 +173,7 @@ type InvalidTypeLiteral = {
 >this : symbol
 
     invalidTypePredicate(n: any): n is unique symbol
->invalidTypePredicate : (n: any) => n is symbol
+>invalidTypePredicate : (n: any) => n is unique symbol
 >n : any
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;

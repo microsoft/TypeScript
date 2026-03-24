@@ -18,16 +18,7 @@
  >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
  >reduction : R | V
  >value : V
-@@= skipped -92, +92 lines =@@
- >Collection : any
-
-   export function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
-->isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
-+>isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Indexed<any> | Collection.Keyed<any, any>
- >maybeAssociative : any
- >Collection : any
- >Collection : any
-@@= skipped -708, +708 lines =@@
+@@= skipped -800, +800 lines =@@
  >collections : Collection<any, any>[]
 
      zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>;
@@ -53,25 +44,7 @@
  >zipper : (...any: Array<any>) => Z
  >any : any[]
  >collections : Collection<any, any>[]
-@@= skipped -125, +125 lines =@@
- >Record : typeof Record
-
-     export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
-->isRecord : (maybeRecord: any) => maybeRecord is Record.Instance<any>
-+>isRecord : (maybeRecord: any) => maybeRecord is Instance<any>
- >maybeRecord : any
- >Record : any
-
-@@= skipped -166, +166 lines =@@
- >Seq : typeof Seq
-
-     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
-->isSeq : (maybeSeq: any) => maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>
-+>isSeq : (maybeSeq: any) => maybeSeq is Indexed<any> | Keyed<any, any>
- >maybeSeq : any
- >Seq : any
- >Seq : any
-@@= skipped -12, +12 lines =@@
+@@= skipped -303, +303 lines =@@
 
      export namespace Keyed {}
      export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
@@ -93,28 +66,7 @@
  >Seq : any
 
      export function Keyed(): Seq.Keyed<any, any>;
-@@= skipped -323, +323 lines =@@
- >Collection : typeof Collection
-
-     function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
-->isKeyed : (maybeKeyed: any) => maybeKeyed is Collection.Keyed<any, any>
-+>isKeyed : (maybeKeyed: any) => maybeKeyed is Keyed<any, any>
- >maybeKeyed : any
- >Collection : any
-
-     function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
-->isIndexed : (maybeIndexed: any) => maybeIndexed is Collection.Indexed<any>
-+>isIndexed : (maybeIndexed: any) => maybeIndexed is Indexed<any>
- >maybeIndexed : any
- >Collection : any
-
-     function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
-->isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
-+>isAssociative : (maybeAssociative: any) => maybeAssociative is Indexed<any> | Keyed<any, any>
- >maybeAssociative : any
- >Collection : any
- >Collection : any
-@@= skipped -21, +21 lines =@@
+@@= skipped -344, +344 lines =@@
 
      export namespace Keyed {}
      export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;

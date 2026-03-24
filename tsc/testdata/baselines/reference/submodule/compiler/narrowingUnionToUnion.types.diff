@@ -1,42 +1,47 @@
 --- old.narrowingUnionToUnion.types
 +++ new.narrowingUnionToUnion.types
-@@= skipped -410, +410 lines =@@
- // Repro from #46909
+@@= skipped -187, +187 lines =@@
+ // #39105
 
- function check1(x: unknown): x is (string | 0) {
-->check1 : (x: unknown) => x is (string | 0)
-+>check1 : (x: unknown) => x is string | 0
- >x : unknown
+ declare function isEmptyString(value: string): value is '';
+->isEmptyString : (value: string) => value is ""
++>isEmptyString : (value: string) => value is ''
+ >value : string
 
- 	return typeof x === "string" || x === 0;
-@@= skipped -15, +15 lines =@@
- }
+ declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
+->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
++>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
+ >value : string | null | undefined
 
- function check2(x: unknown): x is ("hello" | 0) {
-->check2 : (x: unknown) => x is ("hello" | 0)
-+>check2 : (x: unknown) => x is "hello" | 0
- >x : unknown
+ declare function isZero(value: number): value is 0;
+@@= skipped -33, +33 lines =@@
 
- 	return x === "hello" || x === 0;
-@@= skipped -45, +45 lines =@@
- 	}
- 	if (check1(x)) {
- >check1(x) : boolean
-->check1 : (x: unknown) => x is (string | 0)
-+>check1 : (x: unknown) => x is string | 0
- >x : unknown
+         if (isEmptyString(value)) {
+ >isEmptyString(value) : boolean
+->isEmptyString : (value: string) => value is ""
++>isEmptyString : (value: string) => value is ''
+ >value : string
 
- 		x;  // string | 0
-@@= skipped -8, +8 lines =@@
+             value;  // ""
+@@= skipped -12, +12 lines =@@
+         }
+         if (isMaybeEmptyString(value)) {
+ >isMaybeEmptyString(value) : boolean
+->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
++>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
+ >value : string
 
- 		if (check2(x)) {
- >check2(x) : boolean
-->check2 : (x: unknown) => x is ("hello" | 0)
-+>check2 : (x: unknown) => x is "hello" | 0
- >x : string | 0
+             value;  // ""
+@@= skipped -17, +17 lines =@@
 
- 			x;  // 0 | "hello"
-@@= skipped -62, +62 lines =@@
+         if (isMaybeEmptyString(value)) {
+ >isMaybeEmptyString(value) : boolean
+->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
++>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
+ >value : string | undefined
+
+             value;  // "" | undefined
+@@= skipped -291, +291 lines =@@
  >type : "A" | "B"
  >'A' : "A"
  >working.aProp : number

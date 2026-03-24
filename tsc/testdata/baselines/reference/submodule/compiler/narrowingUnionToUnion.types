@@ -188,11 +188,11 @@ v2;  // 6 | undefined
 // #39105
 
 declare function isEmptyString(value: string): value is '';
->isEmptyString : (value: string) => value is ""
+>isEmptyString : (value: string) => value is ''
 >value : string
 
 declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
 >value : string | null | undefined
 
 declare function isZero(value: number): value is 0;
@@ -221,7 +221,7 @@ const TEST_CASES = [
 
         if (isEmptyString(value)) {
 >isEmptyString(value) : boolean
->isEmptyString : (value: string) => value is ""
+>isEmptyString : (value: string) => value is ''
 >value : string
 
             value;  // ""
@@ -233,7 +233,7 @@ const TEST_CASES = [
         }
         if (isMaybeEmptyString(value)) {
 >isMaybeEmptyString(value) : boolean
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
 >value : string
 
             value;  // ""
@@ -250,7 +250,7 @@ const TEST_CASES = [
 
         if (isMaybeEmptyString(value)) {
 >isMaybeEmptyString(value) : boolean
->isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
 >value : string | undefined
 
             value;  // "" | undefined
@@ -411,7 +411,7 @@ function test1(foo: number | string | boolean) {
 // Repro from #46909
 
 function check1(x: unknown): x is (string | 0) {
->check1 : (x: unknown) => x is string | 0
+>check1 : (x: unknown) => x is (string | 0)
 >x : unknown
 
 	return typeof x === "string" || x === 0;
@@ -426,7 +426,7 @@ function check1(x: unknown): x is (string | 0) {
 }
 
 function check2(x: unknown): x is ("hello" | 0) {
->check2 : (x: unknown) => x is "hello" | 0
+>check2 : (x: unknown) => x is ("hello" | 0)
 >x : unknown
 
 	return x === "hello" || x === 0;
@@ -471,7 +471,7 @@ function test3(x: unknown) {
 	}
 	if (check1(x)) {
 >check1(x) : boolean
->check1 : (x: unknown) => x is string | 0
+>check1 : (x: unknown) => x is (string | 0)
 >x : unknown
 
 		x;  // string | 0
@@ -479,7 +479,7 @@ function test3(x: unknown) {
 
 		if (check2(x)) {
 >check2(x) : boolean
->check2 : (x: unknown) => x is "hello" | 0
+>check2 : (x: unknown) => x is ("hello" | 0)
 >x : string | 0
 
 			x;  // 0 | "hello"

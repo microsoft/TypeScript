@@ -13,6 +13,17 @@
  >type : "B"
  >b : number | undefined
 
+ declare function isA(arg: unknown): arg is 'A';
+->isA : (arg: unknown) => arg is "A"
++>isA : (arg: unknown) => arg is 'A'
+ >arg : unknown
+
+ declare function isB(arg: unknown): arg is 'B';
+->isB : (arg: unknown) => arg is "B"
++>isB : (arg: unknown) => arg is 'B'
+ >arg : unknown
+
+ declare function assert(condition: boolean): asserts condition;
 @@= skipped -20, +20 lines =@@
  >condition : boolean
 
@@ -25,8 +36,12 @@
  >type : "A"
  >a : number | undefined
 
-@@= skipped -18, +18 lines =@@
- >isA : (arg: unknown) => arg is "A"
+@@= skipped -15, +15 lines =@@
+ >['value', 'type'] : ["value", "type"]
+ >'value' : "value"
+ >'type' : "type"
+->isA : (arg: unknown) => arg is "A"
++>isA : (arg: unknown) => arg is 'A'
 
      return foo;
 ->foo : { value: { type: "A"; }; a?: number; }
@@ -43,7 +58,11 @@
  >a : number | undefined
 
 @@= skipped -23, +23 lines =@@
- >isB : (arg: unknown) => arg is "B"
+ >['value', 'type'] : ["value", "type"]
+ >'value' : "value"
+ >'type' : "type"
+->isB : (arg: unknown) => arg is "B"
++>isB : (arg: unknown) => arg is 'B'
 
      return foo;
 ->foo : { value: { type: "A"; }; a?: number; }
@@ -51,21 +70,3 @@
  }
 
  // Repro from #53063
-@@= skipped -25, +25 lines =@@
- >true : true
-
- declare const checkIsPremium: (a: Union) => a is Union & Premium;
-->checkIsPremium : (a: Union) => a is Union & Premium
-+>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
- >a : Union
-
- const f = (value: Union) => {
-@@= skipped -11, +11 lines =@@
-     if (!checkIsPremium(value)) {
- >!checkIsPremium(value) : boolean
- >checkIsPremium(value) : boolean
-->checkIsPremium : (a: Union) => a is Union & Premium
-+>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
- >value : Union
-
-         value.premium;

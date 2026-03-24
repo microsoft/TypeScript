@@ -459,11 +459,11 @@ type Foo = {value: {type: 'A'}; a?: number} | {value: {type: 'B'}; b?: number};
 >b : number | undefined
 
 declare function isA(arg: unknown): arg is 'A';
->isA : (arg: unknown) => arg is "A"
+>isA : (arg: unknown) => arg is 'A'
 >arg : unknown
 
 declare function isB(arg: unknown): arg is 'B';
->isB : (arg: unknown) => arg is "B"
+>isB : (arg: unknown) => arg is 'B'
 >arg : unknown
 
 declare function assert(condition: boolean): asserts condition;
@@ -486,7 +486,7 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 >['value', 'type'] : ["value", "type"]
 >'value' : "value"
 >'type' : "type"
->isA : (arg: unknown) => arg is "A"
+>isA : (arg: unknown) => arg is 'A'
 
     return foo;
 >foo : { value: { type: 'A'; }; a?: number; }
@@ -509,7 +509,7 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >['value', 'type'] : ["value", "type"]
 >'value' : "value"
 >'type' : "type"
->isB : (arg: unknown) => arg is "B"
+>isB : (arg: unknown) => arg is 'B'
 
     return foo;
 >foo : { value: { type: 'A'; }; a?: number; }
@@ -537,7 +537,7 @@ type Union = { premium: false } | { premium: true };
 >true : true
 
 declare const checkIsPremium: (a: Union) => a is Union & Premium;
->checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+>checkIsPremium : (a: Union) => a is Union & Premium
 >a : Union
 
 const f = (value: Union) => {
@@ -548,7 +548,7 @@ const f = (value: Union) => {
     if (!checkIsPremium(value)) {
 >!checkIsPremium(value) : boolean
 >checkIsPremium(value) : boolean
->checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+>checkIsPremium : (a: Union) => a is Union & Premium
 >value : Union
 
         value.premium;
