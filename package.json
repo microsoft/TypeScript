@@ -78,7 +78,7 @@
         "playwright": "^1.58.2",
         "source-map-support": "^0.5.21",
         "tslib": "^2.8.1",
-        "typescript": "^5.9.3",
+        "typescript": "^6.0.2",
         "typescript-eslint": "^8.57.2",
         "which": "^3.0.1"
     },
