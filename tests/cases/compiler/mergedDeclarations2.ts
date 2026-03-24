@@ -1,3 +1,4 @@
+// @target: es2015
 enum Foo {
     b
 }
@@ -5,6 +6,6 @@ enum Foo {
     a = b
 }
 
-module Foo {
+namespace Foo {
     export var x = b
 }

@@ -24,7 +24,7 @@ class A {
 >a : number
 >  : ^^^^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

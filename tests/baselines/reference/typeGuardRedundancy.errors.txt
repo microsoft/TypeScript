@@ -1,0 +1,62 @@
+typeGuardRedundancy.ts(3,17): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(3,70): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(3,72): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+  Property 'toFixed' does not exist on type 'string'.
+typeGuardRedundancy.ts(5,19): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(5,62): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(5,64): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+  Property 'toFixed' does not exist on type 'string'.
+typeGuardRedundancy.ts(7,17): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(7,42): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(7,70): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(7,72): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+  Property 'toFixed' does not exist on type 'string'.
+typeGuardRedundancy.ts(9,19): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(9,44): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(9,62): error TS2454: Variable 'x' is used before being assigned.
+typeGuardRedundancy.ts(9,64): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+  Property 'toFixed' does not exist on type 'string'.
+
+
+==== typeGuardRedundancy.ts (14 errors) ====
+    var x: string|number;
+    
+    var r1 = typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed;
+                    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                         ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                           ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+    
+    var r2 = !(typeof x === "string" && typeof x === "string") ? x.toFixed : x.substr;
+                      ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                 ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                   ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+    
+    var r3 = typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed;
+                    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                             ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                         ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                           ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+    
+    var r4 = !(typeof x === "string" || typeof x === "string") ? x.toFixed : x.substr;
+                      ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                 ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+                                                                   ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.

@@ -1,10 +1,11 @@
+// @target: es2015
 declare module "express" {
 
     export = express;
 
     function express(): express.ExpressServer;
 
-    module express {
+    namespace express {
 
         export interface ExpressServer {
 

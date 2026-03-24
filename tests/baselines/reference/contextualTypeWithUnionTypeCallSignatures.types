@@ -91,8 +91,11 @@ var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any
 >a => /*here a should be any*/ a.toString() : (a: any) => any
 >                                           : ^ ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a.toString() : any
+>             : ^^^
 >a.toString : any
+>           : ^^^
 >a : any
 >  : ^^^
 >toString : any
@@ -102,16 +105,16 @@ var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any
 var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any*/ a.toString();
 >x4 : IWithCallSignatures | IWithCallSignatures4
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a => /*here a should be any*/ a.toString() : (a: number) => string
->                                           : ^ ^^^^^^^^^^^^^^^^^^^
->a : number
->  : ^^^^^^
->a.toString() : string
->             : ^^^^^^
->a.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^      
->a : number
->  : ^^^^^^
->toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^      
+>a => /*here a should be any*/ a.toString() : (a: any) => any
+>                                           : ^ ^^^^^^^^^^^^^
+>a : any
+>  : ^^^
+>a.toString() : any
+>             : ^^^
+>a.toString : any
+>           : ^^^
+>a : any
+>  : ^^^
+>toString : any
+>         : ^^^
 

@@ -26,7 +26,7 @@ class Foo {
 
         function inner() {
 >inner : () => (x: any) => any
->      : ^^^^^^^ ^^^^^^^^^^^^^
+>      : ^^^^^^^   ^^^^^^^^^^^
 
             console.log(_this); // Error as this doesnt not resolve to user defined _this
 >console.log(_this) : any

@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-methods-static.js]
+"use strict";
 const method3 = "method3";
 class C {
     @dec(1)

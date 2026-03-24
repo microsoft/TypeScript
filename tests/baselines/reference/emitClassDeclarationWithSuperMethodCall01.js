@@ -13,6 +13,7 @@ class Foo extends Parent {
 }
 
 //// [emitClassDeclarationWithSuperMethodCall01.js]
+"use strict";
 class Parent {
     foo() {
     }

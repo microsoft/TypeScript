@@ -1,5 +1,6 @@
+// @target: es2015
 // @module: amd
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @outFile: out/output.js
 // @fullEmitPaths: true
 // @resolveJsonModule: true

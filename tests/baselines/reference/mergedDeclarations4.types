@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/mergedDeclarations4.ts] ////
 
 === mergedDeclarations4.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -36,11 +36,11 @@ module M {
 >      : ^^^^^^
 }
  
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    export module f {
+    export namespace f {
 >f : typeof f
 >  : ^^^^^^^^
 

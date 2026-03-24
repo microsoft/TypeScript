@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts] ////
 
 //// [collisionCodeGenModuleWithEnumMemberConflict.ts]
-module m1 {
+namespace m1 {
     enum e {
         m1, 
         m2 = m1
@@ -9,9 +9,10 @@ module m1 {
 }
 
 //// [collisionCodeGenModuleWithEnumMemberConflict.js]
+"use strict";
 var m1;
 (function (m1) {
-    var e;
+    let e;
     (function (e) {
         e[e["m1"] = 0] = "m1";
         e[e["m2"] = 0] = "m2";

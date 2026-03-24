@@ -1,9 +1,10 @@
-﻿module Z.M {
+﻿// @target: es2015
+namespace Z.M {
     export function bar() {
         return "";
     }
 }
-module A.M {
+namespace A.M {
     export import M = Z.M;
     export function bar() {
     }

@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @declaration: true
 import { type In, type Out, type Base } from "./a";
 

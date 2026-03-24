@@ -1,3 +1,4 @@
+// @target: es2015
 // @experimentaldecorators: true
 // @emitdecoratormetadata: true
 // @allowjs: true

@@ -1,4 +1,5 @@
-module NonGeneric {
+// @target: es2015
+namespace NonGeneric {
     class C {
         foo: string;
     }
@@ -13,7 +14,7 @@ module NonGeneric {
     r2.bar;
 }
 
-module Generic {
+namespace Generic {
     class C<T,U> {
         foo: T;
         bar: U;

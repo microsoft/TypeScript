@@ -13,5 +13,6 @@ declare var x: number;
 
 !!!! File noEmitOnError.js missing from original emit, but present in noCheck emit
 //// [noEmitOnError.js]
+"use strict";
 var x = "";
 //# sourceMappingURL=noEmitOnError.js.map

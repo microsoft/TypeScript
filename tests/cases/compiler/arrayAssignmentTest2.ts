@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface I1 {
 	IM1():void[];
 }

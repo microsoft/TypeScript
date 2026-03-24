@@ -22,7 +22,7 @@ class C {
 >    : ^^^^^^^^^^
 }
 
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -38,7 +38,7 @@ module C {
 >2 : 2
 >  : ^
 }
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 

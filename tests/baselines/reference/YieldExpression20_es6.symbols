@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression20_es6.ts] ////
+
+=== YieldExpression20_es6.ts ===
+function* test() {
+>test : Symbol(test, Decl(YieldExpression20_es6.ts, 0, 0))
+
+  return () => ({
+    b: yield 2, // error
+>b : Symbol(b, Decl(YieldExpression20_es6.ts, 1, 17))
+
+  });
+}
+

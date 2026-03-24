@@ -1,3 +1,4 @@
+// @target: es2015
 let x: string | boolean | number;
 let obj: any;
 

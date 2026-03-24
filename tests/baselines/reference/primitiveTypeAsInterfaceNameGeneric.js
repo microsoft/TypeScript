@@ -4,3 +4,4 @@
 interface number<T> {}
 
 //// [primitiveTypeAsInterfaceNameGeneric.js]
+"use strict";

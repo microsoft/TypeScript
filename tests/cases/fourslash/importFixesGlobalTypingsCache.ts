@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /project/tsconfig.json
-//// { "compilerOptions": { "allowJs": true, "checkJs": true } }
+//// { "compilerOptions": { "allowJs": true, "checkJs": true, "module": "commonjs" } }
 
 // @Filename: /home/src/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json
 //// { "name": "@types/react-router-dom", "version": "16.8.4", "types": "index.d.ts" }

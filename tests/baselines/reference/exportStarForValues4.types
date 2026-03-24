@@ -3,10 +3,12 @@
 === file1.ts ===
 export interface Foo { x }
 >x : any
+>  : ^^^
 
 === file2.ts ===
 export interface A { x }
 >x : any
+>  : ^^^
 
 export * from "file1"
 export * from "file3"
@@ -19,6 +21,7 @@ var x = 1;
 === file3.ts ===
 export interface B { x }
 >x : any
+>  : ^^^
 
 export * from "file2"
 var x = 1;

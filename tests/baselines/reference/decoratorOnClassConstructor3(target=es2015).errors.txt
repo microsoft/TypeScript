@@ -1,0 +1,21 @@
+2.ts(6,18): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+
+
+==== 0.ts (0 errors) ====
+    export class base { }
+    export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
+    
+==== 2.ts (1 errors) ====
+    import {base} from "./0"
+    import {foo} from "./0"
+    
+    /* Comment on the Class Declaration */
+    export class C  extends base{
+        constructor(@foo prop: any) {
+                     ~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+            super();
+        }
+    }

@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     public foo(x: any) { return x; }
     private x = 1;
@@ -14,8 +15,8 @@ class D extends C implements I {
 } 
 
 var c: C;
-var i: I;
-var d: D;
+declare var i: I;
+declare var d: D;
 
 c = i;
 i = c; // error

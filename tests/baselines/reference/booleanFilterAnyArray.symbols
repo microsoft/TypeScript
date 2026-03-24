@@ -83,7 +83,7 @@ var foo = [{ name: 'x' }]
 
 var foor: Array<{name: string}>
 >foor : Symbol(foor, Decl(booleanFilterAnyArray.ts, 20, 3), Decl(booleanFilterAnyArray.ts, 21, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >name : Symbol(name, Decl(booleanFilterAnyArray.ts, 20, 17))
 
 var foor = foo.filter(x => x.name)
@@ -98,7 +98,7 @@ var foor = foo.filter(x => x.name)
 
 var foos: Array<boolean>
 >foos : Symbol(foos, Decl(booleanFilterAnyArray.ts, 22, 3), Decl(booleanFilterAnyArray.ts, 23, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var foos = [true, true, false, null].filter((thing): thing is boolean => thing !== null)
 >foos : Symbol(foos, Decl(booleanFilterAnyArray.ts, 22, 3), Decl(booleanFilterAnyArray.ts, 23, 3))

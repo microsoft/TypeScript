@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: foo_0.ts
 export interface Person {
@@ -5,7 +6,7 @@ export interface Person {
 	age: number;
 }
 
-export module M2 {
+export namespace M2 {
 	export interface I2 {
 		x: Person;
 	}

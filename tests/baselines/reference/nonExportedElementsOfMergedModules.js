@@ -1,16 +1,16 @@
 //// [tests/cases/compiler/nonExportedElementsOfMergedModules.ts] ////
 
 //// [nonExportedElementsOfMergedModules.ts]
-module One {
+namespace One {
     enum A { X }
-    module B {
+    namespace B {
         export var x;
     }
 }
 
-module One {
+namespace One {
     enum A { Y }
-    module B {
+    namespace B {
         export var y;
     }
     B.x;
@@ -19,22 +19,23 @@ module One {
 
 
 //// [nonExportedElementsOfMergedModules.js]
+"use strict";
 var One;
 (function (One) {
-    var A;
+    let A;
     (function (A) {
         A[A["X"] = 0] = "X";
     })(A || (A = {}));
-    var B;
+    let B;
     (function (B) {
     })(B || (B = {}));
 })(One || (One = {}));
 (function (One) {
-    var A;
+    let A;
     (function (A) {
         A[A["Y"] = 0] = "Y";
     })(A || (A = {}));
-    var B;
+    let B;
     (function (B) {
     })(B || (B = {}));
     B.x;

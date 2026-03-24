@@ -4,4 +4,5 @@
 var x = {x ?: 1} // should not crash
 
 //// [spaceBeforeQuestionMarkInPropertyAssignment.js]
+"use strict";
 var x = { x: 1 }; // should not crash

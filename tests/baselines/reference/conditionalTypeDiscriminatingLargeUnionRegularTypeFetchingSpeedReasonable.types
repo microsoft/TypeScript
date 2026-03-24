@@ -4,7 +4,7 @@
 Strict subtype cache: 2,500
 Assignability cache: 10,000
 Type Count: 10,000
-Instantiation count: 100,000
+Instantiation count: 50,000
 
 === conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts ===
 type BigUnion =
@@ -20034,7 +20034,7 @@ export function makeThing<T extends BigUnion['name']>(
     children: ChildrenOf<WithName<T>>[] = [],
 >children : ChildrenOf<WithName<T>>[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 ) { }

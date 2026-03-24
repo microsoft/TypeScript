@@ -202,6 +202,7 @@ export const enum CommandTypes {
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
     MapCode = "mapCode",
+    /** @internal */
     CopilotRelated = "copilotRelated",
 }
 
@@ -2004,6 +2005,14 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
+export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+    /**
+     * This controls how many levels of definitions will be expanded in the quick info response.
+     * The default value is 0.
+     */
+    verbosityLevel?: number;
+}
+
 /**
  * Body of QuickInfoResponse.
  */
@@ -2043,6 +2052,11 @@ export interface QuickInfoResponseBody {
      * JSDoc tags associated with symbol.
      */
     tags: JSDocTagInfo[];
+
+    /**
+     * Whether the verbosity level can be increased for this quick info response.
+     */
+    canIncreaseVerbosityLevel?: boolean;
 }
 
 /**
@@ -2407,18 +2421,6 @@ export interface MapCodeResponse extends Response {
     body: readonly FileCodeEdits[];
 }
 
-export interface CopilotRelatedRequest extends FileRequest {
-    command: CommandTypes.CopilotRelated;
-    arguments: FileRequestArgs;
-}
-
-export interface CopilotRelatedItems {
-    relatedFiles: readonly string[];
-}
-
-export interface CopilotRelatedResponse extends Response {
-    body: CopilotRelatedItems;
-}
 /**
  * Synchronous request for semantic diagnostics of one file.
  */
@@ -3255,6 +3257,8 @@ export const enum ModuleKind {
     ES2022 = "es2022",
     ESNext = "esnext",
     Node16 = "node16",
+    Node18 = "node18",
+    Node20 = "node20",
     NodeNext = "nodenext",
     Preserve = "preserve",
 }
@@ -3265,6 +3269,7 @@ export const enum ModuleResolutionKind {
     Node = "node",
     /** @deprecated Renamed to `Node10` */
     NodeJs = "node",
+    /** @deprecated */
     Node10 = "node10",
     Node16 = "node16",
     NodeNext = "nodenext",
@@ -3276,9 +3281,14 @@ export const enum NewLineKind {
     Lf = "Lf",
 }
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = "es3",
+    /** @deprecated */
     ES5 = "es5",
     ES6 = "es6",
     ES2015 = "es2015",
@@ -3291,9 +3301,11 @@ export const enum ScriptTarget {
     ES2022 = "es2022",
     ES2023 = "es2023",
     ES2024 = "es2024",
+    ES2025 = "es2025",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,
+    LatestStandard = ES2025,
 }
 
 {

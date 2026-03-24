@@ -1,0 +1,10 @@
+commentOnParenthesizedExpressionOpenParen1.ts(3,27): error TS2454: Variable 'f' is used before being assigned.
+
+
+==== commentOnParenthesizedExpressionOpenParen1.ts (1 errors) ====
+    var j;
+    var f: () => any;
+    <any>( /* Preserve */ j = f());
+                              ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    

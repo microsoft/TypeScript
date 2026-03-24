@@ -1,8 +1,11 @@
+parserErrorRecovery_ParameterList4.ts(1,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 parserErrorRecovery_ParameterList4.ts(1,14): error TS1127: Invalid character.
 
 
-==== parserErrorRecovery_ParameterList4.ts (1 errors) ====
+==== parserErrorRecovery_ParameterList4.ts (2 errors) ====
     function f(a,¬) {
+               ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
                  ~
 !!! error TS1127: Invalid character.
     }

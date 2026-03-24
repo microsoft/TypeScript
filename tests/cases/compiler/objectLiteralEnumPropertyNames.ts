@@ -1,3 +1,4 @@
+// @target: es2015
 // Fixes #16887
 enum Strs {
     A = 'a',

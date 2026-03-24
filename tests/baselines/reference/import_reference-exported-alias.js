@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/import_reference-exported-alias.ts] ////
 
 //// [file1.ts]
-module App {
-    export module Services {
+namespace App {
+    export namespace Services {
         export class UserServices {
             public getUserName(): string {
                 return "Bill Gates";
@@ -26,16 +26,13 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     var App;
     (function (App) {
-        var Services;
+        let Services;
         (function (Services) {
-            var UserServices = /** @class */ (function () {
-                function UserServices() {
-                }
-                UserServices.prototype.getUserName = function () {
+            class UserServices {
+                getUserName() {
                     return "Bill Gates";
-                };
-                return UserServices;
-            }());
+                }
+            }
             Services.UserServices = UserServices;
         })(Services = App.Services || (App.Services = {}));
     })(App || (App = {}));

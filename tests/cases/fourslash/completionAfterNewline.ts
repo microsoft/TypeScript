@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 // issue: https://github.com/microsoft/TypeScript/issues/54729
 // Tests that `isCompletionListBlocker` returns true at position 1, and returns false after a newline.
 

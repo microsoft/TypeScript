@@ -7,6 +7,7 @@ namespace globalThis {
 
 
 //// [extendGlobalThis2.js]
+"use strict";
 var globalThis;
 (function (globalThis) {
     function foo() { console.log("x"); }

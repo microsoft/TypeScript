@@ -1,0 +1,66 @@
+declarationEmitExpressionInExtends3.ts(2,2): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+declarationEmitExpressionInExtends3.ts(6,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+declarationEmitExpressionInExtends3.ts(7,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+declarationEmitExpressionInExtends3.ts(28,60): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+declarationEmitExpressionInExtends3.ts(32,64): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+declarationEmitExpressionInExtends3.ts(36,64): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+declarationEmitExpressionInExtends3.ts(40,64): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+
+
+==== declarationEmitExpressionInExtends3.ts (7 errors) ====
+    export class ExportedClass<T> {
+    	x: T;
+    	~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class LocalClass<T, U> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        y: U;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    export interface ExportedInterface {
+        x: number;
+    }
+    
+    interface LocalInterface {
+        x: number;
+    }
+    
+    function getLocalClass<T>(c: T) {
+        return LocalClass;
+    }
+    
+    function getExportedClass<T>(c: T) {
+        return ExportedClass;
+    }
+    
+    
+    
+    export class MyClass extends getLocalClass<LocalInterface>(undefined)<string, number> { // error LocalClass is inaccisible
+                                                               ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+    }
+    
+    
+    export class MyClass2 extends getExportedClass<LocalInterface>(undefined)<string> { // OK
+                                                                   ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+    }
+    
+    
+    export class MyClass3 extends getExportedClass<LocalInterface>(undefined)<LocalInterface> { // Error LocalInterface is inaccisble
+                                                                   ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+    }
+    
+    
+    export class MyClass4 extends getExportedClass<LocalInterface>(undefined)<ExportedInterface> { // OK
+                                                                   ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'LocalInterface'.
+    }
+    

@@ -1,5 +1,6 @@
-﻿// @jsx: react
-declare module JSX {
+﻿// @target: es2015
+// @jsx: react
+declare namespace JSX {
     interface Element {
         div: string;
     }

@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @noLib: true
+// @strict: false
 
 // @Filename: /a.ts
 ////[|var /*ax0*/[|{| "isDefinition": true, "contextRangeIndex": 0 |}x|];|]

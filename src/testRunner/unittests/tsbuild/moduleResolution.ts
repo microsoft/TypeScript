@@ -78,18 +78,80 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
                 "/home/src/workspaces/project/packages/pkg1.tsconfig.json": jsonToReadableText({
-                    compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
+                    compilerOptions: { composite: true, typeRoots: ["./typeroot1"], types: ["*"] },
                     files: ["./pkg1_index.ts"],
                 }),
                 "/home/src/workspaces/project/packages/typeroot1/sometype/index.d.ts": dedent`declare type TheNum = "type1";`,
                 "/home/src/workspaces/project/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
                 "/home/src/workspaces/project/packages/pkg2.tsconfig.json": jsonToReadableText({
-                    compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
+                    compilerOptions: { composite: true, typeRoots: ["./typeroot2"], types: ["*"] },
                     files: ["./pkg2_index.ts"],
                 }),
                 "/home/src/workspaces/project/packages/typeroot2/sometype/index.d.ts": dedent`declare type TheNum2 = "type2";`,
             }),
         commandLineArgs: ["-b", "packages/pkg1.tsconfig.json", "packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
+    });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "resolution from d.ts of referenced project",
+        sys: () =>
+            TestServerHost.createWatchedSystem({
+                "/home/src/workspaces/project/common.d.ts": "export type OnValue = (value: number) => void",
+                "/home/src/workspaces/project/producer/index.ts": dedent`
+                    export { ValueProducerDeclaration } from "./in-js"
+                    import { OnValue } from "@common"
+                    export interface ValueProducerFromTs {
+                        onValue: OnValue;
+                    }
+                `,
+                "/home/src/workspaces/project/producer/in-js.d.ts": dedent`
+                    import { OnValue } from "@common"
+                    export interface ValueProducerDeclaration {
+                        onValue: OnValue;
+                    }
+                `,
+                "/home/src/workspaces/project/producer/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        strict: true,
+                        composite: true,
+                        module: "nodenext",
+                        moduleResolution: "nodenext",
+                        paths: {
+                            "@common": ["../common.d.ts"],
+                        },
+                        libReplacement: false,
+                    },
+                }),
+                "/home/src/workspaces/project/consumer/index.ts": dedent`
+                    import { ValueProducerDeclaration, ValueProducerFromTs } from "@producer"
+                    declare let v: ValueProducerDeclaration;
+                    // n is implicitly any because onValue is actually any (despite what the tooltip says)
+                    v.onValue = (n) => {
+
+                    }
+
+                    // n is implicitly number as expected
+                    declare let v2: ValueProducerFromTs;
+                    v2.onValue = (n) => {
+
+                    }`,
+                "/home/src/workspaces/project/consumer/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        strict: true,
+                        module: "nodenext",
+                        moduleResolution: "nodenext",
+                        paths: {
+                            "@producer": ["../producer/index"],
+                        },
+                        libReplacement: false,
+                    },
+                    references: [
+                        { path: "../producer" },
+                    ],
+                }),
+            }),
+        commandLineArgs: ["--b", "consumer", "--traceResolution", "-v"],
     });
 });
 
@@ -101,7 +163,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
             TestServerHost.createWatchedSystem({
                 "/home/src/workspaces/project/a/src/index.ts": "",
                 "/home/src/workspaces/project/a/tsconfig.json": jsonToReadableText({
-                    compilerOptions: { strict: true },
+                    compilerOptions: { strict: true, types: ["*"] },
                 }),
                 "/home/src/workspaces/project/b/src/index.ts": dedent`
                     import pg from "pg";

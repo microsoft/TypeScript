@@ -4,7 +4,7 @@
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using function arguments, no errors expected
 
-module ImmediatelyFix {
+namespace ImmediatelyFix {
 >ImmediatelyFix : typeof ImmediatelyFix
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -155,7 +155,7 @@ module ImmediatelyFix {
 >  : ^
 }
 
-module WithCandidates {
+namespace WithCandidates {
 >WithCandidates : typeof WithCandidates
 >               : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -183,7 +183,7 @@ module WithCandidates {
         }
     }
 
-    var c: C<number>;
+    declare var c: C<number>;
 >c : C<number>
 >  : ^^^^^^^^^
 
@@ -273,7 +273,7 @@ module WithCandidates {
         }
     }
 
-    var c2: C2<number, string>;
+    declare var c2: C2<number, string>;
 >c2 : C2<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 
@@ -346,7 +346,7 @@ module WithCandidates {
 >  : ^
         }
     }
-    var c3: C3<number, string>;
+    declare var c3: C3<number, string>;
 >c3 : C3<number, string>
 >   : ^^^^^^^^^^^^^^^^^^
 

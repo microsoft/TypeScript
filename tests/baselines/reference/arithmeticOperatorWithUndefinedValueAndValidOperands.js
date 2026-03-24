@@ -9,8 +9,8 @@ enum E {
     b
 }
 
-var a: any;
-var b: number;
+declare var a: any;
+declare var b: number;
 
 // operator *
 var ra1 = undefined * a;
@@ -113,6 +113,7 @@ var rj7 = 0 | undefined;
 var rj8 = E.b | undefined;
 
 //// [arithmeticOperatorWithUndefinedValueAndValidOperands.js]
+"use strict";
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 var E;
@@ -120,8 +121,6 @@ var E;
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
-var a;
-var b;
 // operator *
 var ra1 = undefined * a;
 var ra2 = undefined * b;

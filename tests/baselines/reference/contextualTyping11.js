@@ -4,9 +4,9 @@
 class foo { public bar:{id:number;}[] = [<foo>({})]; }
 
 //// [contextualTyping11.js]
-var foo = /** @class */ (function () {
-    function foo() {
+"use strict";
+class foo {
+    constructor() {
         this.bar = [({})];
     }
-    return foo;
-}());
+}

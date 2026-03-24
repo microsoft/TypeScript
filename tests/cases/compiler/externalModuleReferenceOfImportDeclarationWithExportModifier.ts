@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 // @Filename: externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts
 export function foo() { };

@@ -14,5 +14,5 @@ export const tag = <div ns:thing="a"/>
 
 //// [jsxNamespacedNameNotComparedToNonMatchingIndexSignature.js]
 import { jsx as _jsx } from "react/jsx-runtime";
-/// <reference path="react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" />
 export const tag = _jsx("div", { "ns:thing": "a" });

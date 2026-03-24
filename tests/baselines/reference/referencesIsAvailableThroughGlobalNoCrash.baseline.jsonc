@@ -30,7 +30,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+    "name": "module \"debug\"",
     "displayParts": [
      {
       "text": "module",
@@ -41,7 +41,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/packages/playwright-core/bundles/utils/node_modules/@types/debug/index\"",
+      "text": "\"debug\"",
       "kind": "stringLiteral"
      }
     ]

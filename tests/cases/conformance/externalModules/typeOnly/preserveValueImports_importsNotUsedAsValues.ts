@@ -1,3 +1,4 @@
+// @target: es2015
 // @preserveValueImports: true
 // @importsNotUsedAsValues: preserve
 // @module: esnext

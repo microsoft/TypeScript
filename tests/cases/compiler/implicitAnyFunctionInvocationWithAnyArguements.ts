@@ -1,9 +1,10 @@
+// @target: es2015
 //@noimplicitany: true
 // this should be errors
 var arg0 = null;  // error at "arg0"
 var anyArray = [null, undefined];  // error at array literal
-var objL: { v; w; }             // error at "y,z"
-var funcL: (y2) => number;
+declare var objL: { v; w; }             // error at "y,z"
+declare var funcL: (y2) => number;
 function temp1(arg1) { }  // error at "temp1"
 function testFunctionExprC(subReplace: (s: string, ...arg: any[]) => string) { }
 function testFunctionExprC2(eq: (v1: any, v2: any) => number) { };

@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === globalThisUnknownNoImplicitAny.ts ===
 declare let win: Window & typeof globalThis;
 >win : Window & typeof globalThis

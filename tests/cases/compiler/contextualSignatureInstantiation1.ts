@@ -1,3 +1,4 @@
+// @target: es2015
 declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
 var e = <K>(x: string, y?: K) => x.length;
 var r99 = map(e); // should be {}[] for S since a generic lambda is not inferentially typed

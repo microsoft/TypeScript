@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noFallthroughCasesInSwitch: true
 
 declare function use(a: string);

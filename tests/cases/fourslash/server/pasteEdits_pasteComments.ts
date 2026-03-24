@@ -6,7 +6,7 @@
 //// const c = 10;
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["target.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["target.ts"] }
 
 verify.pasteEdits({
     args: {

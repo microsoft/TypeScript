@@ -2,16 +2,16 @@
 // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
 // <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}dx|] = "Foo";|>
 // 
-// module M { export var dx; }
-// module M {
+// namespace M { export var dx; }
+// namespace M {
 // --- (line: 5) skipped ---
 
   // === Definitions ===
   // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
   // <|var /*FIND ALL REFS*/[|dx|] = "Foo";|>
   // 
-  // module M { export var dx; }
-  // module M {
+  // namespace M { export var dx; }
+  // namespace M {
   // --- (line: 5) skipped ---
 
   // === Details ===
@@ -56,8 +56,8 @@
 // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
 // var dx = "Foo";
 // 
-// module M { <|export var /*FIND ALL REFS*/[|{| isDefinition: true |}dx|];|> }
-// module M {
+// namespace M { <|export var /*FIND ALL REFS*/[|{| isDefinition: true |}dx|];|> }
+// namespace M {
 //    var z = 100;
 //    export var y = { [|{| isWriteAccess: true |}dx|], z };
 // }
@@ -67,8 +67,8 @@
   // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
   // var dx = "Foo";
   // 
-  // module M { <|export var /*FIND ALL REFS*/[|dx|];|> }
-  // module M {
+  // namespace M { <|export var /*FIND ALL REFS*/[|dx|];|> }
+  // namespace M {
   //    var z = 100;
   //    export var y = { dx, z };
   // }
@@ -124,8 +124,8 @@
 // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
 // var dx = "Foo";
 // 
-// module M { <|export var [|{| defId: 0 |}dx|];|> }
-// module M {
+// namespace M { <|export var [|{| defId: 0 |}dx|];|> }
+// namespace M {
 //    var z = 100;
 //    export var y = { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}dx|], z };
 // }
@@ -135,8 +135,8 @@
   // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
   // var dx = "Foo";
   // 
-  // module M { <|export var [|{| defId: 0 |}dx|];|> }
-  // module M {
+  // namespace M { <|export var [|{| defId: 0 |}dx|];|> }
+  // namespace M {
   //    var z = 100;
   //    export var y = { /*FIND ALL REFS*/[|{| defId: 1 |}dx|], z };
   // }
@@ -234,8 +234,8 @@
 // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
 // var dx = "Foo";
 // 
-// module M { export var dx; }
-// module M {
+// namespace M { export var dx; }
+// namespace M {
 //    var z = 100;
 //    export var y = { [|{| isWriteAccess: true |}dx|], z };
 // }
@@ -245,8 +245,8 @@
   // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
   // var dx = "Foo";
   // 
-  // module M { export var dx; }
-  // module M {
+  // namespace M { export var dx; }
+  // namespace M {
   //    var z = 100;
   //    export var y = { [|dx|], z };
   // }

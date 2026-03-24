@@ -9,10 +9,8 @@ function bar(a = v[1 + 1]) {
 }
 
 //// [functionWithDefaultParameterWithNoStatements14.js]
+"use strict";
 var v;
-function foo(a) {
-    if (a === void 0) { a = v[1 + 1]; }
-}
-function bar(a) {
-    if (a === void 0) { a = v[1 + 1]; }
+function foo(a = v[1 + 1]) { }
+function bar(a = v[1 + 1]) {
 }

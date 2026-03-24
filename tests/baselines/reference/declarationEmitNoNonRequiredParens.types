@@ -27,6 +27,6 @@ export const bar = null! as TestType[Extract<keyof TestType, string>][] satisfie
 >                                                                   : ^^^^^^
 >null! as TestType[Extract<keyof TestType, string>][] : Test[]
 >                                                     : ^^^^^^
->null! : null
->      : ^^^^
+>null! : never
+>      : ^^^^^
 

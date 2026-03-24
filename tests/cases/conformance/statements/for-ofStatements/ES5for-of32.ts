@@ -1,4 +1,4 @@
-//@target: ES5
+//@target: ES5, ES2015
 
 var array = [1,2,3];
 var sum = 0;

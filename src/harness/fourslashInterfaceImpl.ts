@@ -257,10 +257,6 @@ export class VerifyNegatable {
     public baselineMapCode(ranges: FourSlash.Range[][], changes: string[] = []): void {
         this.state.baselineMapCode(ranges, changes);
     }
-
-    public getImports(fileName: string, imports: string[]): void {
-        return this.state.verifyGetImports(fileName, imports);
-    }
 }
 
 export interface CompletionsResult {
@@ -283,6 +279,9 @@ export class Verify extends VerifyNegatable {
             return this.state.verifyCompletions(optionsArray[0]);
         }
         for (const options of optionsArray) {
+            if (options.preferences && Object.keys(options).length === 1 && optionsArray.length > 1 && optionsArray.indexOf(options) > 0) {
+                throw new Error("Did you mean to put 'preferences' in the previous 'verify.completions' object argument instead of their own object?");
+            }
             this.state.verifyCompletions(options);
         }
         return {
@@ -453,8 +452,8 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGetEmitOutput();
     }
 
-    public baselineQuickInfo(): void {
-        this.state.baselineQuickInfo();
+    public baselineQuickInfo(verbosityLevels?: FourSlash.VerbosityLevels, maximumLength?: number): void {
+        this.state.baselineQuickInfo(verbosityLevels, maximumLength);
     }
 
     public baselineSignatureHelp(): void {
@@ -2050,9 +2049,4 @@ export interface RenameOptions {
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
     readonly quotePreference?: "auto" | "double" | "single";
-}
-
-export interface VerifyGetImportsOptions {
-    fileName: string;
-    imports: string[];
 }

@@ -1,26 +1,40 @@
+aliasUsageInOrExpression_backbone.ts(2,12): error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+aliasUsageInOrExpression_main.ts(10,40): error TS2352: Conversion of type 'null' to type '{ x: IHasVisualizationModel; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 aliasUsageInOrExpression_main.ts(10,40): error TS2873: This kind of expression is always falsy.
+aliasUsageInOrExpression_main.ts(11,5): error TS2322: Type '{ x: typeof import("aliasUsageInOrExpression_moduleA"); } | null' is not assignable to type '{ x: IHasVisualizationModel; }'.
+  Type 'null' is not assignable to type '{ x: IHasVisualizationModel; }'.
+aliasUsageInOrExpression_main.ts(11,40): error TS2352: Conversion of type 'null' to type '{ x: IHasVisualizationModel; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 aliasUsageInOrExpression_main.ts(11,40): error TS2873: This kind of expression is always falsy.
 
 
-==== aliasUsageInOrExpression_main.ts (2 errors) ====
+==== aliasUsageInOrExpression_main.ts (5 errors) ====
     import Backbone = require("./aliasUsageInOrExpression_backbone");
     import moduleA = require("./aliasUsageInOrExpression_moduleA");
     interface IHasVisualizationModel {
         VisualizationModel: typeof Backbone.Model;
     }
-    var i: IHasVisualizationModel;
+    declare var i: IHasVisualizationModel;
     var d1 = i || moduleA;
     var d2: IHasVisualizationModel = i || moduleA;
     var d2: IHasVisualizationModel = moduleA || i;
     var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { x: moduleA };
                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2873: This kind of expression is always falsy.
-    var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
+!!! error TS2352: Conversion of type 'null' to type '{ x: IHasVisualizationModel; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2873: This kind of expression is always falsy.
-==== aliasUsageInOrExpression_backbone.ts (0 errors) ====
+    var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
+        ~
+!!! error TS2322: Type '{ x: typeof import("aliasUsageInOrExpression_moduleA"); } | null' is not assignable to type '{ x: IHasVisualizationModel; }'.
+!!! error TS2322:   Type 'null' is not assignable to type '{ x: IHasVisualizationModel; }'.
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'null' to type '{ x: IHasVisualizationModel; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
+==== aliasUsageInOrExpression_backbone.ts (1 errors) ====
     export class Model {
         public someData: string;
+               ~~~~~~~~
+!!! error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
     }
     
 ==== aliasUsageInOrExpression_moduleA.ts (0 errors) ====

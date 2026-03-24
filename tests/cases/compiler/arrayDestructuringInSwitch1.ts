@@ -1,3 +1,4 @@
+// @target: es2015
 export type Expression = BooleanLogicExpression | 'true' | 'false';
 export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expression];
 

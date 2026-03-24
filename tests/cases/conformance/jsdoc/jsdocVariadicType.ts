@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJS: true
 // @checkJs: true
 // @noEmit: true

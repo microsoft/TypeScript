@@ -10,6 +10,7 @@
 
 
 //// [scannerNonAsciiHorizontalWhitespace.js]
+"use strict";
 //// [scannerNonAsciiHorizontalWhitespace.ts]
 "  function f() {}";
 //// [scannerNonAsciiHorizontalWhitespace.js]

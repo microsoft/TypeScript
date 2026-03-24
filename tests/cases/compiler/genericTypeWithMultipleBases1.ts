@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export interface I1 {
     m1: () => void;

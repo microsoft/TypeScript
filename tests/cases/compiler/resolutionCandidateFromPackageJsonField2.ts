@@ -1,4 +1,5 @@
-// @moduleResolution: node10,bundler
+// @target: es2015
+// @moduleResolution: bundler
 
 // @filename: tsconfig.json
 {

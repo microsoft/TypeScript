@@ -1649,3 +1649,137 @@ if (foobarPred(foobar)) {
 >    : ^^^^^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/60778
+const arrTest: Array<number> = [1, 2, null, 3].filter(
+>arrTest : number[]
+>        : ^^^^^^^^
+>[1, 2, null, 3].filter(  (x) => (x != null) satisfies boolean,) : number[]
+>                                                                : ^^^^^^^^
+>[1, 2, null, 3].filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, null, 3] : (number | null)[]
+>                : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+
+  (x) => (x != null) satisfies boolean,
+>(x) => (x != null) satisfies boolean : (x: number | null) => x is number
+>                                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>(x != null) satisfies boolean : boolean
+>                              : ^^^^^^^
+>(x != null) : boolean
+>            : ^^^^^^^
+>x != null : boolean
+>          : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+);
+
+function isEmptyString(x: unknown) {
+>isEmptyString : (x: unknown) => x is ""
+>              : ^ ^^       ^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  const rv = x === "";
+>rv : boolean
+>   : ^^^^^^^
+>x === "" : boolean
+>         : ^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"" : ""
+>   : ^^
+
+  return rv satisfies boolean;
+>rv satisfies boolean : boolean
+>                     : ^^^^^^^
+>rv : boolean
+>   : ^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+>Animal : Animal
+>       : ^^^^^^
+
+  breath: true,
+>breath : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+};
+
+type Rock = {
+>Rock : Rock
+>     : ^^^^
+
+  breath: false,
+>breath : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+
+};
+
+type Something = Animal | Rock;
+>Something : Something
+>          : ^^^^^^^^^
+
+function isAnimal(something: Something): something is Animal {
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>something : Something
+>          : ^^^^^^^^^
+
+  return something.breath
+>something.breath : boolean
+>                 : ^^^^^^^
+>something : Something
+>          : ^^^^^^^^^
+>breath : boolean
+>       : ^^^^^^^
+}
+
+function positive(t: Something) {
+>positive : (t: Something) => t is Animal
+>         : ^ ^^         ^^^^^^^^^^^^^^^^
+>t : Something
+>  : ^^^^^^^^^
+
+  return isAnimal(t)
+>isAnimal(t) : boolean
+>            : ^^^^^^^
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>t : Something
+>  : ^^^^^^^^^
+}
+
+function negative(t: Something) { 
+>negative : (t: Something) => t is Rock
+>         : ^ ^^         ^^^^^^^^^^^^^^
+>t : Something
+>  : ^^^^^^^^^
+
+  return !isAnimal(t)
+>!isAnimal(t) : boolean
+>             : ^^^^^^^
+>isAnimal(t) : boolean
+>            : ^^^^^^^
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>t : Something
+>  : ^^^^^^^^^
+}
+

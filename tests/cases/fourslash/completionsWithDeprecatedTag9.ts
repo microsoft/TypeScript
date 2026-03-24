@@ -11,7 +11,7 @@
 ////class Foo {
 ////    foo: number;
 ////    m() {
-////        foo/**/
+////        [|foo|]/**/
 ////    }
 ////}
 
@@ -19,11 +19,16 @@ verify.completions({
     marker: "",
     includes: [{
         name: "foo",
+        insertText: "this.foo",
+        kind: "property",
+        source: completion.CompletionSource.ThisProperty,
+        sortText: completion.SortText.SuggestedClassMembers,
+    }, {
+        name: "foo",
         kind: "var",
         kindModifiers: "deprecated,declare",
         sortText: completion.SortText.Deprecated(completion.SortText.GlobalsOrKeywords),
-    }]
-}, {
+    }],
     preferences: {
         includeInsertTextCompletions: true
     }

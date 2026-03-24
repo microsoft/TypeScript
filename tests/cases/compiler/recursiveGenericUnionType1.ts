@@ -1,11 +1,12 @@
-declare module Test1 {
+// @target: es2015
+declare namespace Test1 {
     export type Container<T> = T | {
         [i: string]: Container<T>;
     };
     export type IStringContainer = Container<string>;
 }
 
-declare module Test2 {
+declare namespace Test2 {
     export type Container<T> = T | {
         [i: string]: Container<T>;
     };

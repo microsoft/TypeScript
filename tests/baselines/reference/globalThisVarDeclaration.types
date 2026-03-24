@@ -1,5 +1,8 @@
 //// [tests/cases/conformance/es2019/globalThisVarDeclaration.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+
 === b.js ===
 var a = 10;
 >a : number
@@ -75,16 +78,16 @@ window.b;
 top.a;
 >top.a : any
 >      : ^^^
->top : Window
->    : ^^^^^^
+>top : Window | null
+>    : ^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
 top.b;
 >top.b : any
 >      : ^^^
->top : Window
->    : ^^^^^^
+>top : Window | null
+>    : ^^^^^^^^^^^^^
 >b : any
 >  : ^^^
 
@@ -163,16 +166,16 @@ window.b;
 top.a;
 >top.a : any
 >      : ^^^
->top : Window
->    : ^^^^^^
+>top : Window | null
+>    : ^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
 top.b;
 >top.b : any
 >      : ^^^
->top : Window
->    : ^^^^^^
+>top : Window | null
+>    : ^^^^^^^^^^^^^
 >b : any
 >  : ^^^
 

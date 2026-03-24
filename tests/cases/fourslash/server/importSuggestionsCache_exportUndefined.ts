@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "compilerOptions": { "module": "esnext" } }
+////{ "compilerOptions": { "module": "esnext", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/undefined.ts
 ////export = undefined;
@@ -20,7 +20,7 @@ verify.completions({
     name: "x",
      hasAction: true,
      sortText: completion.SortText.AutoImportSuggestions,
-     source: "/home/src/workspaces/project/undefinedAlias"
+     source: "./undefinedAlias"
   }],
   preferences: {
     includeCompletionsForModuleExports: true,
@@ -34,7 +34,7 @@ verify.completions({
     name: "x",
      hasAction: true,
      sortText: completion.SortText.AutoImportSuggestions,
-     source: "/home/src/workspaces/project/undefinedAlias"
+     source: "./undefinedAlias"
   }],
   preferences: {
     includeCompletionsForModuleExports: true,

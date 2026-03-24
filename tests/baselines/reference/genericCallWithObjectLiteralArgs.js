@@ -11,6 +11,7 @@ var r3 = foo({ bar: foo, baz: foo }); // T = typeof foo
 var r4 = foo<Object>({ bar: 1, baz: '' }); // T = Object
 
 //// [genericCallWithObjectLiteralArgs.js]
+"use strict";
 function foo(x) {
     return x;
 }

@@ -33,6 +33,7 @@ function f1(s: Source, t: Target) {
 }
 
 //// [varianceCallbacksAndIndexedAccesses.js]
+"use strict";
 function f1(s, t) {
     t = s;
 }

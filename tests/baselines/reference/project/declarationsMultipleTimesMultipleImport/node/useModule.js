@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = exports.m1 = exports.f4 = exports.d4 = exports.x4 = void 0;
-var m4 = require("m4"); // Emit used
+const m4 = require("m4"); // Emit used
 exports.x4 = m4.x;
 exports.d4 = m4.d;
 exports.f4 = m4.foo();
@@ -15,5 +15,5 @@ var m1;
     var f3 = m4.foo();
 })(m1 || (exports.m1 = m1 = {}));
 // Do not emit unused import
-var m5 = require("m5");
+const m5 = require("m5");
 exports.d = m5.foo2();

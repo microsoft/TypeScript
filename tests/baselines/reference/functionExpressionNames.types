@@ -6,8 +6,8 @@ exports.E = function() {
 >                                                 : ^^^^^^^^
 >exports.E : typeof E
 >          : ^^^^^^^^
->exports : typeof import("b")
->        : ^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./b")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >E : typeof E
 >  : ^^^^^^^^
 >function() {    this.e = 'exported'} : typeof E
@@ -31,8 +31,8 @@ var e = new exports.E();
 >                : ^
 >exports.E : typeof E
 >          : ^^^^^^^^
->exports : typeof import("b")
->        : ^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./b")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >E : typeof E
 >  : ^^^^^^^^
 

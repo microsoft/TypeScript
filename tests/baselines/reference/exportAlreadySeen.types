@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportAlreadySeen.ts] ////
 
 === exportAlreadySeen.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -15,7 +15,7 @@ module M {
 >f : () => void
 >  : ^^^^^^^^^^
 
-    export export module N {
+    export export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
@@ -27,7 +27,7 @@ module M {
     }  
 }
 
-declare module A {
+declare namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -39,7 +39,7 @@ declare module A {
 >f : () => any
 >  : ^^^^^^^^^
 
-    export export module N {
+    export export namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

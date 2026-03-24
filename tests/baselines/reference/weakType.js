@@ -35,7 +35,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 
 function del(options: ConfigurableStartEnd = {},
              error: { error?: number } = {}) {
-    let changes: ChangeOptions[];
+    let changes: ChangeOptions[] = [];
     changes.push(options);
     changes.push(error);
 }
@@ -67,28 +67,25 @@ let weak: Weak & Spoiler = propertiesWrong
 
 
 //// [weakType.js]
+"use strict";
 function getDefaultSettings() {
     return { timeout: 1000 };
 }
 function doSomething(settings) { }
 // forgot to call `getDefaultSettings`
 doSomething(getDefaultSettings);
-doSomething(function () { return ({ timeout: 1000 }); });
+doSomething(() => ({ timeout: 1000 }));
 doSomething(null);
 doSomething(12);
 doSomething('completely wrong');
 doSomething(false);
-function del(options, error) {
-    if (options === void 0) { options = {}; }
-    if (error === void 0) { error = {}; }
-    var changes;
+function del(options = {}, error = {}) {
+    let changes = [];
     changes.push(options);
     changes.push(error);
 }
-var K = /** @class */ (function () {
-    function K(s) {
-    }
-    return K;
-}());
-var ctor = K;
-var weak = propertiesWrong;
+class K {
+    constructor(s) { }
+}
+let ctor = K;
+let weak = propertiesWrong;

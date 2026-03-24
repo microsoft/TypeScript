@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/modFunctionCrash.ts] ////
 
 //// [modFunctionCrash.ts]
-declare module Q {
+declare namespace Q {
     function f(fn:()=>void); // typechecking the function type shouldnot crash the compiler
 }
 
@@ -9,4 +9,5 @@ declare module Q {
 Q.f(function() {this;});
 
 //// [modFunctionCrash.js]
+"use strict";
 Q.f(function () { this; });

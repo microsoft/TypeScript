@@ -10,6 +10,11 @@ import * as vpath from "./_namespaces/vpath.js";
 export const builtFolder = "/.ts";
 
 /**
+ * Posix-style path to libs for fourslash server tests (mounted to same location as builtFolder)
+ */
+export const fourslashLibFolder = "/home/src/tslibs/TS/Lib";
+
+/**
  * Posix-style path to additional mountable folders (./tests/projects in this repo)
  */
 export const projectsFolder = "/.projects";
@@ -637,7 +642,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: null): Buffer; // eslint-disable-line no-restricted-syntax
+    public readFileSync(path: string, encoding?: null): Buffer<ArrayBuffer>; // eslint-disable-line no-restricted-syntax
     /**
      * Read from a file.
      *
@@ -649,7 +654,7 @@ export class FileSystem {
      *
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
-    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer; // eslint-disable-line no-restricted-syntax
+    public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer<ArrayBuffer>; // eslint-disable-line no-restricted-syntax
     public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-restricted-syntax
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
@@ -1148,7 +1153,7 @@ export class FileSystem {
         for (const key of Object.keys(files)) {
             const value = normalizeFileSetEntry(files[key]);
             const path = dirname ? vpath.resolve(dirname, key) : key;
-            vpath.validate(path, vpath.ValidationFlags.Absolute);
+            vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
 
             // eslint-disable-next-line no-restricted-syntax
             if (value === null || value === undefined || value instanceof Rmdir || value instanceof Unlink) {
@@ -1581,6 +1586,73 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
         builtLocalCS.makeReadonly();
     }
     return builtLocalCS;
+}
+
+let fourslashLibsOnlyHost: FileSystemResolverHost | undefined;
+let fourslashLibsOnlyCI: FileSystem | undefined;
+let fourslashLibsOnlyCS: FileSystem | undefined;
+
+function getFourslashLibsOnly(host: FileSystemResolverHost, ignoreCase: boolean): FileSystem {
+    if (fourslashLibsOnlyHost !== host) {
+        fourslashLibsOnlyCI = undefined;
+        fourslashLibsOnlyCS = undefined;
+        fourslashLibsOnlyHost = host;
+    }
+    if (!fourslashLibsOnlyCI) {
+        const resolver = createResolver(host);
+        fourslashLibsOnlyCI = new FileSystem(/*ignoreCase*/ true, {
+            files: {
+                [fourslashLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
+            },
+            cwd: "/",
+            meta: { defaultLibLocation: fourslashLibFolder },
+        });
+        fourslashLibsOnlyCI.makeReadonly();
+    }
+    if (ignoreCase) return fourslashLibsOnlyCI;
+    if (!fourslashLibsOnlyCS) {
+        fourslashLibsOnlyCS = fourslashLibsOnlyCI.shadow(/*ignoreCase*/ false);
+        fourslashLibsOnlyCS.makeReadonly();
+    }
+    return fourslashLibsOnlyCS;
+}
+
+/**
+ * Creates a VFS with only libs mounted at fourslashLibFolder, suitable for fourslash tests.
+ */
+export function createFourslashVfs(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}): FileSystem {
+    const fs = getFourslashLibsOnly(host, ignoreCase).shadow();
+    if (meta) {
+        for (const key of Object.keys(meta)) {
+            fs.meta.set(key, meta[key]);
+        }
+    }
+    if (time) {
+        fs.time(time);
+    }
+    if (cwd) {
+        fs.mkdirpSync(cwd);
+        fs.chdir(cwd);
+    }
+    if (documents) {
+        for (const document of documents) {
+            fs.mkdirpSync(vpath.dirname(document.file));
+            fs.writeFileSync(document.file, document.text, "utf8");
+            fs.filemeta(document.file).set("document", document);
+            // Add symlinks
+            const symlink = document.meta.get("symlink");
+            if (symlink) {
+                for (const link of symlink.split(",").map(link => link.trim())) {
+                    fs.mkdirpSync(vpath.dirname(link));
+                    fs.symlinkSync(vpath.resolve(fs.cwd(), document.file), link);
+                }
+            }
+        }
+    }
+    if (files) {
+        fs.apply(files);
+    }
+    return fs;
 }
 
 /* eslint-disable no-restricted-syntax */

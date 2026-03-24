@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>(n: { x: T; y: T }, m: T) { return m; }
 // these are all errors
 var x = foo({ x: 3, y: "" }, 4);

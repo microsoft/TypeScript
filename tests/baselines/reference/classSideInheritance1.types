@@ -26,11 +26,11 @@ class C2 extends A {}
 >A : A
 >  : ^
 
-var a: A;
+declare var a: A;
 >a : A
 >  : ^
 
-var c: C2;
+declare var c: C2;
 >c : C2
 >  : ^^
 

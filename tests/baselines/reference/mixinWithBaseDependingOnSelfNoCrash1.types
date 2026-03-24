@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/classes/mixinWithBaseDependingOnSelfNoCrash1.ts] ////
+
+=== mixinWithBaseDependingOnSelfNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60202
+
+declare class Document<Parent> {}
+>Document : Document<Parent>
+>         : ^^^^^^^^^^^^^^^^
+
+declare class BaseItem extends Document<typeof Item> {}
+>BaseItem : BaseItem
+>         : ^^^^^^^^
+>Document : Document<typeof Item>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>Item : typeof Item
+>     : ^^^^^^^^^^^
+
+declare function ClientDocumentMixin<
+>ClientDocumentMixin : <BaseClass extends new (...args: any[]) => any>(Base: BaseClass) => any
+>                    : ^         ^^^^^^^^^                           ^^    ^^         ^^^^^   
+
+  BaseClass extends new (...args: any[]) => any,
+>args : any[]
+>     : ^^^^^
+
+>(Base: BaseClass): any;
+>Base : BaseClass
+>     : ^^^^^^^^^
+
+declare class Item extends ClientDocumentMixin(BaseItem) {}
+>Item : Item
+>     : ^^^^
+>ClientDocumentMixin(BaseItem) : any
+>                              : ^^^
+>ClientDocumentMixin : <BaseClass extends new (...args: any[]) => any>(Base: BaseClass) => any
+>                    : ^         ^^^^^^^^^                           ^^    ^^         ^^^^^   
+>BaseItem : typeof BaseItem
+>         : ^^^^^^^^^^^^^^^
+
+export {};
+

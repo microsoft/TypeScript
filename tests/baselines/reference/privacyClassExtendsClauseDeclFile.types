@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyClassExtendsClauseDeclFile.ts] ////
 
 === privacyClassExtendsClauseDeclFile_externalModule.ts ===
-export module publicModule {
+export namespace publicModule {
 >publicModule : typeof publicModule
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
 >privateModule : typeof privateModule
 >              : ^^^^^^^^^^^^^^^^^^^^
 
@@ -195,7 +195,7 @@ export class publicClassExtendingFromPrivateModuleClass extends privateModule.pu
 }
 
 === privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

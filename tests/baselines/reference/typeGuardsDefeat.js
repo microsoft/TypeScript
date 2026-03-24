@@ -40,6 +40,7 @@ function foo3(x: number | string) {
 
 
 //// [typeGuardsDefeat.js]
+"use strict";
 // Also note that it is possible to defeat a type guard by calling a function that changes the 
 // type of the guarded variable.
 function foo(x) {
@@ -71,7 +72,7 @@ function foo3(x) {
         return x.length; // string
     }
     else {
-        var f = function () { return x * x; };
+        var f = () => x * x;
     }
     x = "hello";
     f();

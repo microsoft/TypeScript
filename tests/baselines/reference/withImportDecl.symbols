@@ -55,11 +55,11 @@ function simpleFunction() {
     };
 }
 
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(withImportDecl_1.ts, 26, 1))
 
     export function foo() {
->foo : Symbol(foo, Decl(withImportDecl_1.ts, 28, 11))
+>foo : Symbol(foo, Decl(withImportDecl_1.ts, 28, 14))
 
         return "Hello";
     }

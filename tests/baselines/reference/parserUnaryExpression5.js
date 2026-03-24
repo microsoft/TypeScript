@@ -4,5 +4,6 @@
 ++ delete foo.bar
 
 //// [parserUnaryExpression5.js]
+"use strict";
 ++;
 delete foo.bar;

@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: library.ts
 ////[|export function foo() {}|]
 ////[|export function bar() {}|]

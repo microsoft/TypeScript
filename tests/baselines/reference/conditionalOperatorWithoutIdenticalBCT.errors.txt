@@ -1,3 +1,7 @@
+conditionalOperatorWithoutIdenticalBCT.ts(2,27): error TS2564: Property 'propertyX1' has no initializer and is not definitely assigned in the constructor.
+conditionalOperatorWithoutIdenticalBCT.ts(2,47): error TS2564: Property 'propertyX2' has no initializer and is not definitely assigned in the constructor.
+conditionalOperatorWithoutIdenticalBCT.ts(3,21): error TS2564: Property 'propertyA' has no initializer and is not definitely assigned in the constructor.
+conditionalOperatorWithoutIdenticalBCT.ts(4,21): error TS2564: Property 'propertyB' has no initializer and is not definitely assigned in the constructor.
 conditionalOperatorWithoutIdenticalBCT.ts(15,5): error TS2322: Type 'A | B' is not assignable to type 'A'.
   Property 'propertyA' is missing in type 'B' but required in type 'A'.
 conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2322: Type 'A | B' is not assignable to type 'B'.
@@ -13,15 +17,23 @@ conditionalOperatorWithoutIdenticalBCT.ts(21,5): error TS2322: Type '((m: X) => 
     Type 'number' is not assignable to type 'boolean'.
 
 
-==== conditionalOperatorWithoutIdenticalBCT.ts (5 errors) ====
+==== conditionalOperatorWithoutIdenticalBCT.ts (9 errors) ====
     //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
     class X { propertyX: any; propertyX1: number; propertyX2: string };
+                              ~~~~~~~~~~
+!!! error TS2564: Property 'propertyX1' has no initializer and is not definitely assigned in the constructor.
+                                                  ~~~~~~~~~~
+!!! error TS2564: Property 'propertyX2' has no initializer and is not definitely assigned in the constructor.
     class A extends X { propertyA: number };
+                        ~~~~~~~~~
+!!! error TS2564: Property 'propertyA' has no initializer and is not definitely assigned in the constructor.
     class B extends X { propertyB: string };
+                        ~~~~~~~~~
+!!! error TS2564: Property 'propertyB' has no initializer and is not definitely assigned in the constructor.
     
-    var x: X;
-    var a: A;
-    var b: B;
+    declare var x: X;
+    declare var a: A;
+    declare var b: B;
     
     // No errors anymore, uses union types
     true ? a : b;

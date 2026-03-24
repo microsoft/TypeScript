@@ -1,3 +1,4 @@
+// @target: es2015
 export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 }

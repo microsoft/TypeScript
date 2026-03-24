@@ -1,9 +1,10 @@
-module A {
+// @target: es2015
+namespace A {
     export class B<T> {
         foo() { }
         static bar() { }
     }
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }

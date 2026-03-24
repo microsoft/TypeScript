@@ -1,3 +1,4 @@
+// @target: es2015
 class Builder {
     notMethod: string
     method(param: string): Builder {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @declaration: true
 class privateClass {
@@ -65,7 +66,7 @@ export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T exte
 interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
 }
 
-export module publicModule {
+export namespace publicModule {
     class privateClassInPublicModule {
     }
 
@@ -131,7 +132,7 @@ export module publicModule {
     }
 }
 
-module privateModule {
+namespace privateModule {
     class privateClassInPrivateModule {
     }
 

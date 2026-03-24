@@ -1,49 +1,49 @@
 //// [tests/cases/compiler/privacyImportParseErrors.ts] ////
 
 === privacyImportParseErrors.ts ===
-export module m1 {
+export namespace m1 {
 >m1 : Symbol(m1, Decl(privacyImportParseErrors.ts, 0, 0))
 
-    export module m1_M1_public {
->m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 18))
+    export namespace m1_M1_public {
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 21))
 
         export class c1 {
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 35))
         }
         export function f1() {
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 3, 9))
 
             return new c1;
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 35))
         }
         export var v1 = c1;
 >v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 7, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 35))
 
         export var v2: c1;
 >v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 8, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 1, 35))
     }
 
-    module m1_M2_private {
+    namespace m1_M2_private {
 >m1_M2_private : Symbol(m1_M2_private, Decl(privacyImportParseErrors.ts, 9, 5))
 
         export class c1 {
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 29))
         }
         export function f1() {
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 13, 9))
 
             return new c1;
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 29))
         }
         export var v1 = c1;
 >v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 17, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 29))
 
         export var v2: c1;
 >v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 18, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 11, 29))
     }
 
     export declare module "m1_M3_public" {
@@ -84,19 +84,19 @@ export module m1 {
 
     import m1_im1_private = m1_M1_public;
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
->m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 18))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 21))
 
     export var m1_im1_private_v1_public = m1_im1_private.c1;
 >m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyImportParseErrors.ts, 38, 14))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 
     export var m1_im1_private_v2_public = new m1_im1_private.c1();
 >m1_im1_private_v2_public : Symbol(m1_im1_private_v2_public, Decl(privacyImportParseErrors.ts, 39, 14))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 
     export var m1_im1_private_v3_public = m1_im1_private.f1;
 >m1_im1_private_v3_public : Symbol(m1_im1_private_v3_public, Decl(privacyImportParseErrors.ts, 40, 14))
@@ -112,15 +112,15 @@ export module m1 {
 
     var m1_im1_private_v1_private = m1_im1_private.c1;
 >m1_im1_private_v1_private : Symbol(m1_im1_private_v1_private, Decl(privacyImportParseErrors.ts, 42, 7))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 
     var m1_im1_private_v2_private = new m1_im1_private.c1();
 >m1_im1_private_v2_private : Symbol(m1_im1_private_v2_private, Decl(privacyImportParseErrors.ts, 43, 7))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 35, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 1, 35))
 
     var m1_im1_private_v3_private = m1_im1_private.f1;
 >m1_im1_private_v3_private : Symbol(m1_im1_private_v3_private, Decl(privacyImportParseErrors.ts, 44, 7))
@@ -141,15 +141,15 @@ export module m1 {
 
     export var m1_im2_private_v1_public = m1_im2_private.c1;
 >m1_im2_private_v1_public : Symbol(m1_im2_private_v1_public, Decl(privacyImportParseErrors.ts, 49, 14))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 
     export var m1_im2_private_v2_public = new m1_im2_private.c1();
 >m1_im2_private_v2_public : Symbol(m1_im2_private_v2_public, Decl(privacyImportParseErrors.ts, 50, 14))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 
     export var m1_im2_private_v3_public = m1_im2_private.f1;
 >m1_im2_private_v3_public : Symbol(m1_im2_private_v3_public, Decl(privacyImportParseErrors.ts, 51, 14))
@@ -165,15 +165,15 @@ export module m1 {
 
     var m1_im2_private_v1_private = m1_im2_private.c1;
 >m1_im2_private_v1_private : Symbol(m1_im2_private_v1_private, Decl(privacyImportParseErrors.ts, 53, 7))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 
     var m1_im2_private_v2_private = new m1_im2_private.c1();
 >m1_im2_private_v2_private : Symbol(m1_im2_private_v2_private, Decl(privacyImportParseErrors.ts, 54, 7))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 45, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 11, 29))
 
     var m1_im2_private_v3_private = m1_im2_private.f1;
 >m1_im2_private_v3_private : Symbol(m1_im2_private_v3_private, Decl(privacyImportParseErrors.ts, 55, 7))
@@ -259,7 +259,7 @@ export module m1 {
 
     export import m1_im1_public = m1_M1_public;
 >m1_im1_public : Symbol(m1_im1_public, Decl(privacyImportParseErrors.ts, 76, 56))
->m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 18))
+>m1_M1_public : Symbol(m1_M1_public, Decl(privacyImportParseErrors.ts, 0, 21))
 
     export import m1_im2_public = m1_M2_private;
 >m1_im2_public : Symbol(m1_im2_public, Decl(privacyImportParseErrors.ts, 78, 47))
@@ -272,49 +272,49 @@ export module m1 {
 >m1_im4_public : Symbol(m1_im4_public, Decl(privacyImportParseErrors.ts, 80, 58))
 }
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 82, 1), Decl(privacyImportParseErrors.ts, 337, 1))
 
-    export module m2_M1_public {
->m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 11))
+    export namespace m2_M1_public {
+>m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 14))
 
         export class c1 {
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 35))
         }
         export function f1() {
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 87, 9))
 
             return new c1;
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 35))
         }
         export var v1 = c1;
 >v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 91, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 35))
 
         export var v2: c1;
 >v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 92, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 85, 35))
     }
 
-    module m2_M2_private {
+    namespace m2_M2_private {
 >m2_M2_private : Symbol(m2_M2_private, Decl(privacyImportParseErrors.ts, 93, 5))
 
         export class c1 {
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 29))
         }
         export function f1() {
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 97, 9))
 
             return new c1;
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 29))
         }
         export var v1 = c1;
 >v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 101, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 29))
 
         export var v2: c1;
 >v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 102, 18))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 95, 29))
     }
 
     export declare module "m2_M3_public" {
@@ -355,19 +355,19 @@ module m2 {
 
     import m1_im1_private = m2_M1_public;
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
->m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 11))
+>m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 14))
 
     export var m1_im1_private_v1_public = m1_im1_private.c1;
 >m1_im1_private_v1_public : Symbol(m1_im1_private_v1_public, Decl(privacyImportParseErrors.ts, 122, 14))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 
     export var m1_im1_private_v2_public = new m1_im1_private.c1();
 >m1_im1_private_v2_public : Symbol(m1_im1_private_v2_public, Decl(privacyImportParseErrors.ts, 123, 14))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 
     export var m1_im1_private_v3_public = m1_im1_private.f1;
 >m1_im1_private_v3_public : Symbol(m1_im1_private_v3_public, Decl(privacyImportParseErrors.ts, 124, 14))
@@ -383,15 +383,15 @@ module m2 {
 
     var m1_im1_private_v1_private = m1_im1_private.c1;
 >m1_im1_private_v1_private : Symbol(m1_im1_private_v1_private, Decl(privacyImportParseErrors.ts, 126, 7))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 
     var m1_im1_private_v2_private = new m1_im1_private.c1();
 >m1_im1_private_v2_private : Symbol(m1_im1_private_v2_private, Decl(privacyImportParseErrors.ts, 127, 7))
->m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>m1_im1_private.c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 >m1_im1_private : Symbol(m1_im1_private, Decl(privacyImportParseErrors.ts, 119, 5))
->c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 32))
+>c1 : Symbol(m1_im1_private.c1, Decl(privacyImportParseErrors.ts, 85, 35))
 
     var m1_im1_private_v3_private = m1_im1_private.f1;
 >m1_im1_private_v3_private : Symbol(m1_im1_private_v3_private, Decl(privacyImportParseErrors.ts, 128, 7))
@@ -412,15 +412,15 @@ module m2 {
 
     export var m1_im2_private_v1_public = m1_im2_private.c1;
 >m1_im2_private_v1_public : Symbol(m1_im2_private_v1_public, Decl(privacyImportParseErrors.ts, 133, 14))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 
     export var m1_im2_private_v2_public = new m1_im2_private.c1();
 >m1_im2_private_v2_public : Symbol(m1_im2_private_v2_public, Decl(privacyImportParseErrors.ts, 134, 14))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 
     export var m1_im2_private_v3_public = m1_im2_private.f1;
 >m1_im2_private_v3_public : Symbol(m1_im2_private_v3_public, Decl(privacyImportParseErrors.ts, 135, 14))
@@ -436,15 +436,15 @@ module m2 {
 
     var m1_im2_private_v1_private = m1_im2_private.c1;
 >m1_im2_private_v1_private : Symbol(m1_im2_private_v1_private, Decl(privacyImportParseErrors.ts, 137, 7))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 
     var m1_im2_private_v2_private = new m1_im2_private.c1();
 >m1_im2_private_v2_private : Symbol(m1_im2_private_v2_private, Decl(privacyImportParseErrors.ts, 138, 7))
->m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>m1_im2_private.c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 >m1_im2_private : Symbol(m1_im2_private, Decl(privacyImportParseErrors.ts, 129, 56))
->c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 26))
+>c1 : Symbol(m1_im2_private.c1, Decl(privacyImportParseErrors.ts, 95, 29))
 
     var m1_im2_private_v3_private = m1_im2_private.f1;
 >m1_im2_private_v3_private : Symbol(m1_im2_private_v3_private, Decl(privacyImportParseErrors.ts, 139, 7))
@@ -531,7 +531,7 @@ module m2 {
     // Parse error to export module
     export import m1_im1_public = m2_M1_public;
 >m1_im1_public : Symbol(m1_im1_public, Decl(privacyImportParseErrors.ts, 160, 56))
->m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 11))
+>m2_M1_public : Symbol(m2_M1_public, Decl(privacyImportParseErrors.ts, 84, 14))
 
     export import m1_im2_public = m2_M2_private;
 >m1_im2_public : Symbol(m1_im2_public, Decl(privacyImportParseErrors.ts, 163, 47))
@@ -544,25 +544,25 @@ module m2 {
 >m1_im4_public : Symbol(m1_im4_public, Decl(privacyImportParseErrors.ts, 165, 58))
 }
 
-export module glo_M1_public {
+export namespace glo_M1_public {
 >glo_M1_public : Symbol(glo_M1_public, Decl(privacyImportParseErrors.ts, 167, 1))
 
     export class c1 {
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 32))
     }
     export function f1() {
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 171, 5))
 
         return new c1;
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 32))
     }
     export var v1 = c1;
 >v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 175, 14))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
     export var v2: c1;
 >v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 176, 14))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 169, 32))
 }
 
 export declare module "glo_M2_public" {
@@ -583,25 +583,25 @@ export declare module "glo_M2_public" {
 >c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 180, 25))
 }
 
-export module glo_M3_private {
+export namespace glo_M3_private {
 >glo_M3_private : Symbol(glo_M3_private, Decl(privacyImportParseErrors.ts, 185, 1))
 
     export class c1 {
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 33))
     }
     export function f1() {
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 189, 5))
 
         return new c1;
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 33))
     }
     export var v1 = c1;
 >v1 : Symbol(v1, Decl(privacyImportParseErrors.ts, 193, 14))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
     export var v2: c1;
 >v2 : Symbol(v2, Decl(privacyImportParseErrors.ts, 194, 14))
->c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(c1, Decl(privacyImportParseErrors.ts, 187, 33))
 }
 
 export declare module "glo_M4_private" {
@@ -629,15 +629,15 @@ import glo_im1_private = glo_M1_public;
 
 export var glo_im1_private_v1_public = glo_im1_private.c1;
 >glo_im1_private_v1_public : Symbol(glo_im1_private_v1_public, Decl(privacyImportParseErrors.ts, 207, 10))
->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
->c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
 export var glo_im1_private_v2_public = new glo_im1_private.c1();
 >glo_im1_private_v2_public : Symbol(glo_im1_private_v2_public, Decl(privacyImportParseErrors.ts, 208, 10))
->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
->c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
 export var glo_im1_private_v3_public = glo_im1_private.f1;
 >glo_im1_private_v3_public : Symbol(glo_im1_private_v3_public, Decl(privacyImportParseErrors.ts, 209, 10))
@@ -653,15 +653,15 @@ export var glo_im1_private_v4_public = glo_im1_private.f1();
 
 var glo_im1_private_v1_private = glo_im1_private.c1;
 >glo_im1_private_v1_private : Symbol(glo_im1_private_v1_private, Decl(privacyImportParseErrors.ts, 211, 3))
->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
->c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
 var glo_im1_private_v2_private = new glo_im1_private.c1();
 >glo_im1_private_v2_private : Symbol(glo_im1_private_v2_private, Decl(privacyImportParseErrors.ts, 212, 3))
->glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>glo_im1_private.c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 >glo_im1_private : Symbol(glo_im1_private, Decl(privacyImportParseErrors.ts, 203, 1))
->c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(glo_im1_private.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
 var glo_im1_private_v3_private = glo_im1_private.f1;
 >glo_im1_private_v3_private : Symbol(glo_im1_private_v3_private, Decl(privacyImportParseErrors.ts, 213, 3))
@@ -717,15 +717,15 @@ import glo_im3_private = glo_M3_private;
 
 export var glo_im3_private_v1_public = glo_im3_private.c1;
 >glo_im3_private_v1_public : Symbol(glo_im3_private_v1_public, Decl(privacyImportParseErrors.ts, 228, 10))
->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
->c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
 export var glo_im3_private_v2_public = new glo_im3_private.c1();
 >glo_im3_private_v2_public : Symbol(glo_im3_private_v2_public, Decl(privacyImportParseErrors.ts, 229, 10))
->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
->c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
 export var glo_im3_private_v3_public = glo_im3_private.f1;
 >glo_im3_private_v3_public : Symbol(glo_im3_private_v3_public, Decl(privacyImportParseErrors.ts, 230, 10))
@@ -741,15 +741,15 @@ export var glo_im3_private_v4_public = glo_im3_private.f1();
 
 var glo_im3_private_v1_private = glo_im3_private.c1;
 >glo_im3_private_v1_private : Symbol(glo_im3_private_v1_private, Decl(privacyImportParseErrors.ts, 232, 3))
->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
->c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
 var glo_im3_private_v2_private = new glo_im3_private.c1();
 >glo_im3_private_v2_private : Symbol(glo_im3_private_v2_private, Decl(privacyImportParseErrors.ts, 233, 3))
->glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>glo_im3_private.c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 >glo_im3_private : Symbol(glo_im3_private, Decl(privacyImportParseErrors.ts, 225, 54))
->c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(glo_im3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
 var glo_im3_private_v3_private = glo_im3_private.f1;
 >glo_im3_private_v3_private : Symbol(glo_im3_private_v3_private, Decl(privacyImportParseErrors.ts, 234, 3))
@@ -824,7 +824,7 @@ export declare module "use_glo_M1_public" {
     export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_public : Symbol(use_glo_M1_public_v1_public, Decl(privacyImportParseErrors.ts, 256, 14))
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
->c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
     export var use_glo_M1_public_v2_public: use_glo_M1_public;
 >use_glo_M1_public_v2_public : Symbol(use_glo_M1_public_v2_public, Decl(privacyImportParseErrors.ts, 257, 14))
@@ -833,12 +833,12 @@ export declare module "use_glo_M1_public" {
     export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_public : Symbol(use_glo_M1_public_v3_public, Decl(privacyImportParseErrors.ts, 258, 14))
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
->c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
     var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_private : Symbol(use_glo_M1_public_v1_private, Decl(privacyImportParseErrors.ts, 259, 7))
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
->c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
     var use_glo_M1_public_v2_private: use_glo_M1_public;
 >use_glo_M1_public_v2_private : Symbol(use_glo_M1_public_v2_private, Decl(privacyImportParseErrors.ts, 260, 7))
@@ -847,7 +847,7 @@ export declare module "use_glo_M1_public" {
     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_private : Symbol(use_glo_M1_public_v3_private, Decl(privacyImportParseErrors.ts, 261, 7))
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
->c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 29))
+>c1 : Symbol(use_glo_M1_public.c1, Decl(privacyImportParseErrors.ts, 169, 32))
 
     import use_glo_M2_public = require("glo_M2_public");
 >use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
@@ -880,21 +880,21 @@ export declare module "use_glo_M1_public" {
 >use_glo_M2_public : Symbol(use_glo_M2_public, Decl(privacyImportParseErrors.ts, 261, 65))
 >c1 : Symbol(use_glo_M2_public.c1)
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 269, 65))
 
         import errorImport = require("glo_M2_public");
->errorImport : Symbol(errorImport, Decl(privacyImportParseErrors.ts, 271, 15))
+>errorImport : Symbol(errorImport, Decl(privacyImportParseErrors.ts, 271, 18))
 
         import nonerrorImport = glo_M1_public;
 >nonerrorImport : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 272, 54))
 >glo_M1_public : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 167, 1))
 
-        module m5 {
+        namespace m5 {
 >m5 : Symbol(m5, Decl(privacyImportParseErrors.ts, 273, 46))
 
             import m5_errorImport = require("glo_M2_public");
->m5_errorImport : Symbol(m5_errorImport, Decl(privacyImportParseErrors.ts, 275, 19))
+>m5_errorImport : Symbol(m5_errorImport, Decl(privacyImportParseErrors.ts, 275, 22))
 
             import m5_nonerrorImport = glo_M1_public;
 >m5_nonerrorImport : Symbol(m5_nonerrorImport, Decl(privacyImportParseErrors.ts, 276, 61))
@@ -914,7 +914,7 @@ declare module "use_glo_M3_private" {
     export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
 >use_glo_M3_private_v1_public : Symbol(use_glo_M3_private_v1_public, Decl(privacyImportParseErrors.ts, 285, 14))
 >use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
->c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
     export var use_glo_M3_private_v2_public: use_glo_M3_private;
 >use_glo_M3_private_v2_public : Symbol(use_glo_M3_private_v2_public, Decl(privacyImportParseErrors.ts, 286, 14))
@@ -923,12 +923,12 @@ declare module "use_glo_M3_private" {
     export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
 >use_glo_M3_private_v3_public : Symbol(use_glo_M3_private_v3_public, Decl(privacyImportParseErrors.ts, 287, 14))
 >use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
->c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
     var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
 >use_glo_M3_private_v1_private : Symbol(use_glo_M3_private_v1_private, Decl(privacyImportParseErrors.ts, 288, 7))
 >use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
->c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
     var use_glo_M3_private_v2_private: use_glo_M3_private;
 >use_glo_M3_private_v2_private : Symbol(use_glo_M3_private_v2_private, Decl(privacyImportParseErrors.ts, 289, 7))
@@ -937,7 +937,7 @@ declare module "use_glo_M3_private" {
     var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
 >use_glo_M3_private_v3_private : Symbol(use_glo_M3_private_v3_private, Decl(privacyImportParseErrors.ts, 290, 7))
 >use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
->c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 30))
+>c1 : Symbol(use_glo_M3_private.c1, Decl(privacyImportParseErrors.ts, 187, 33))
 
     import use_glo_M4_private = require("glo_M4_private");
 >use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
@@ -970,21 +970,21 @@ declare module "use_glo_M3_private" {
 >use_glo_M4_private : Symbol(use_glo_M4_private, Decl(privacyImportParseErrors.ts, 290, 67))
 >c1 : Symbol(use_glo_M4_private.c1)
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 298, 67))
 
         import errorImport = require("glo_M4_private");
->errorImport : Symbol(errorImport, Decl(privacyImportParseErrors.ts, 300, 15))
+>errorImport : Symbol(errorImport, Decl(privacyImportParseErrors.ts, 300, 18))
 
         import nonerrorImport = glo_M3_private;
 >nonerrorImport : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 301, 55))
 >glo_M3_private : Symbol(nonerrorImport, Decl(privacyImportParseErrors.ts, 185, 1))
 
-        module m5 {
+        namespace m5 {
 >m5 : Symbol(m5, Decl(privacyImportParseErrors.ts, 302, 47))
 
             import m5_errorImport = require("glo_M4_private");
->m5_errorImport : Symbol(m5_errorImport, Decl(privacyImportParseErrors.ts, 304, 19))
+>m5_errorImport : Symbol(m5_errorImport, Decl(privacyImportParseErrors.ts, 304, 22))
 
             import m5_nonerrorImport = glo_M3_private;
 >m5_nonerrorImport : Symbol(m5_nonerrorImport, Decl(privacyImportParseErrors.ts, 305, 62))
@@ -996,19 +996,19 @@ declare module "use_glo_M3_private" {
 declare module "anotherParseError" {
 >"anotherParseError" : Symbol("anotherParseError", Decl(privacyImportParseErrors.ts, 309, 1))
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
 
         declare module "abc" {
->"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 312, 15))
+>"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 312, 18))
         }
     }
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
 
         module "abc2" {
->"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 317, 15))
+>"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 317, 18))
         }
     }
     module "abc3" {
@@ -1019,19 +1019,19 @@ declare module "anotherParseError" {
 declare export module "anotherParseError2" {
 >"anotherParseError2" : Symbol("anotherParseError2", Decl(privacyImportParseErrors.ts, 323, 1))
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))
 
         declare module "abc" {
->"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 326, 15))
+>"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 326, 18))
         }
     }
 
-    module m2 {
+    namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))
 
         module "abc2" {
->"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 331, 15))
+>"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 331, 18))
         }
     }
     module "abc3" {
@@ -1039,13 +1039,13 @@ declare export module "anotherParseError2" {
     }
 }
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 82, 1), Decl(privacyImportParseErrors.ts, 337, 1))
 
     import m3 = require("use_glo_M1_public");
->m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 339, 11))
+>m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 339, 14))
 
-    module m4 {
+    namespace m4 {
 >m4 : Symbol(m4, Decl(privacyImportParseErrors.ts, 340, 45))
 
         var a = 10;
@@ -1057,13 +1057,13 @@ module m2 {
 
 }
 
-export module m3 {
+export namespace m3 {
 >m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 346, 1))
 
     import m3 = require("use_glo_M1_public");
->m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 348, 18))
+>m3 : Symbol(m3, Decl(privacyImportParseErrors.ts, 348, 21))
 
-    module m4 {
+    namespace m4 {
 >m4 : Symbol(m4, Decl(privacyImportParseErrors.ts, 349, 45))
 
         var a = 10;

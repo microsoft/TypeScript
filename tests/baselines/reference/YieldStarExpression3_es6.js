@@ -6,6 +6,7 @@ function *g() {
 }
 
 //// [YieldStarExpression3_es6.js]
+"use strict";
 function* g() {
     yield* ;
 }

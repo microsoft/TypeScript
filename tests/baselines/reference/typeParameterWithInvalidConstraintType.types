@@ -9,7 +9,7 @@ class A<T extends T> {
 >foo : () => void
 >    : ^^^^^^^^^^
 
-        var x: T;
+        var x!: T;
 >x : T
 >  : ^
 

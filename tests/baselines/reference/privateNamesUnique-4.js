@@ -10,6 +10,7 @@ const c: C = a;
 
 
 //// [privateNamesUnique-4.js]
+"use strict";
 var _C_something;
 class A1 {
 }

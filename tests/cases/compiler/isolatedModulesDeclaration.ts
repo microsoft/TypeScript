@@ -1,3 +1,4 @@
+// @strict: false
 // @isolatedModules: true
 // @declaration: true
 // @target: es6

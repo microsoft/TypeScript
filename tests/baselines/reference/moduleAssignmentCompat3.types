@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleAssignmentCompat3.ts] ////
 
 === moduleAssignmentCompat3.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ module A {
 >1 : 1
 >  : ^
 }
-module B {
+namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

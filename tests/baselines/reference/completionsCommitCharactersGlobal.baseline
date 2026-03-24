@@ -2601,7 +2601,7 @@
 // | interface ArrayConstructor
 // | interface ArrayLike<T>
 // | asserts
-// | type Awaited<T> = T extends null ? T : T extends object & {
+// | type Awaited<T> = T extends null | undefined ? T : T extends object & {
 // |     then(onfulfilled: infer F, ...args: infer _): any;
 // | } ? F extends (value: infer V, ...args: infer _) => any ? Awaited<...> : never : T
 // | bigint
@@ -2630,7 +2630,7 @@
 // | var Date: DateConstructor
 // | interface DateConstructor
 // | type DecoratorContext = ClassMemberDecoratorContext | ClassDecoratorContext<abstract new (...args: any) => any>
-// | type DecoratorMetadata = Record<PropertyKey, unknown> & object
+// | type DecoratorMetadata = DecoratorMetadataObject | undefined
 // | type DecoratorMetadataObject = Record<PropertyKey, unknown> & object
 // | interface Error
 // | var Error: ErrorConstructor
@@ -2691,7 +2691,7 @@
 // | type OmitThisParameter<T> = unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T
 // | type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void
 // | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
-// | type Partial<T> = { [P in keyof T]?: T[P]; }
+// | type Partial<T> = { [P in keyof T]?: T[P] | undefined; }
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
 // | interface Promise<T>
 // | type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>
@@ -2781,7 +2781,7 @@
 // | interface ArrayConstructor
 // | interface ArrayLike<T>
 // | asserts
-// | type Awaited<T> = T extends null ? T : T extends object & {
+// | type Awaited<T> = T extends null | undefined ? T : T extends object & {
 // |     then(onfulfilled: infer F, ...args: infer _): any;
 // | } ? F extends (value: infer V, ...args: infer _) => any ? Awaited<...> : never : T
 // | bigint
@@ -2810,7 +2810,7 @@
 // | var Date: DateConstructor
 // | interface DateConstructor
 // | type DecoratorContext = ClassMemberDecoratorContext | ClassDecoratorContext<abstract new (...args: any) => any>
-// | type DecoratorMetadata = Record<PropertyKey, unknown> & object
+// | type DecoratorMetadata = DecoratorMetadataObject | undefined
 // | type DecoratorMetadataObject = Record<PropertyKey, unknown> & object
 // | interface Error
 // | var Error: ErrorConstructor
@@ -2871,7 +2871,7 @@
 // | type OmitThisParameter<T> = unknown extends ThisParameterType<T> ? T : T extends (...args: infer A) => infer R ? (...args: A) => R : T
 // | type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void
 // | type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
-// | type Partial<T> = { [P in keyof T]?: T[P]; }
+// | type Partial<T> = { [P in keyof T]?: T[P] | undefined; }
 // | type Pick<T, K extends keyof T> = { [P in K]: T[P]; }
 // | interface Promise<T>
 // | type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>
@@ -74744,6 +74744,22 @@
               "kind": "space"
             },
             {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
               "text": "?",
               "kind": "punctuation"
             },
@@ -77379,19 +77395,15 @@
               "kind": "space"
             },
             {
-              "text": "Record",
+              "text": "DecoratorMetadataObject",
               "kind": "aliasName"
             },
             {
-              "text": "<",
-              "kind": "punctuation"
+              "text": " ",
+              "kind": "space"
             },
             {
-              "text": "PropertyKey",
-              "kind": "aliasName"
-            },
-            {
-              "text": ",",
+              "text": "|",
               "kind": "punctuation"
             },
             {
@@ -77399,27 +77411,7 @@
               "kind": "space"
             },
             {
-              "text": "unknown",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "&",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "object",
+              "text": "undefined",
               "kind": "keyword"
             }
           ],
@@ -80589,6 +80581,22 @@
             {
               "text": "]",
               "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
             },
             {
               "text": ";",
@@ -84215,6 +84223,22 @@
               "kind": "space"
             },
             {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
               "text": "?",
               "kind": "punctuation"
             },
@@ -86850,19 +86874,15 @@
               "kind": "space"
             },
             {
-              "text": "Record",
+              "text": "DecoratorMetadataObject",
               "kind": "aliasName"
             },
             {
-              "text": "<",
-              "kind": "punctuation"
+              "text": " ",
+              "kind": "space"
             },
             {
-              "text": "PropertyKey",
-              "kind": "aliasName"
-            },
-            {
-              "text": ",",
+              "text": "|",
               "kind": "punctuation"
             },
             {
@@ -86870,27 +86890,7 @@
               "kind": "space"
             },
             {
-              "text": "unknown",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "&",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "object",
+              "text": "undefined",
               "kind": "keyword"
             }
           ],
@@ -90060,6 +90060,22 @@
             {
               "text": "]",
               "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
             },
             {
               "text": ";",

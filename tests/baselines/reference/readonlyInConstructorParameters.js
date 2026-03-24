@@ -16,23 +16,21 @@ class F {
 new F(1).x;
 
 //// [readonlyInConstructorParameters.js]
-var C = /** @class */ (function () {
-    function C(x) {
+"use strict";
+class C {
+    constructor(x) {
         this.x = x;
     }
-    return C;
-}());
+}
 new C(1).x = 2;
-var E = /** @class */ (function () {
-    function E(x) {
+class E {
+    constructor(x) {
         this.x = x;
     }
-    return E;
-}());
-var F = /** @class */ (function () {
-    function F(x) {
+}
+class F {
+    constructor(x) {
         this.x = x;
     }
-    return F;
-}());
+}
 new F(1).x;

@@ -606,12 +606,10 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
 
 /** @internal */
 export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder: ImportAdder, scriptTarget: ScriptTarget): TypeNode | undefined {
-    if (typeNode && isImportTypeNode(typeNode)) {
-        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
-        if (importableReference) {
-            importSymbols(importAdder, importableReference.symbols);
-            typeNode = importableReference.typeNode;
-        }
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+    if (importableReference) {
+        importSymbols(importAdder, importableReference.symbols);
+        typeNode = importableReference.typeNode;
     }
 
     // Ensure nodes are fresh so they can have different positions when going through formatting.
@@ -623,6 +621,9 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
     const fullTypeArguments = type.typeArguments;
     const target = type.target;
     for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
+        if (target.localTypeParameters?.[cutoff].constraint === undefined) {
+            continue;
+        }
         const typeArguments = fullTypeArguments.slice(0, cutoff);
         const filledIn = checker.fillMissingTypeArguments(typeArguments, target.typeParameters, cutoff, /*isJavaScriptImplicitAny*/ false);
         if (filledIn.every((fill, i) => fill === fullTypeArguments[i])) {

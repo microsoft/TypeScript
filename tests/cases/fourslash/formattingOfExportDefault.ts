@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////module Foo {
+////namespace Foo {
 /////*1*/    export        default        class        Test { }
 ////}
 /////*2*/export        default        function        bar() { }

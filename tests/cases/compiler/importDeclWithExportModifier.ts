@@ -1,5 +1,6 @@
+// @target: es2015
 //@module: amd
-module x {
+namespace x {
     interface c {
     }
 }

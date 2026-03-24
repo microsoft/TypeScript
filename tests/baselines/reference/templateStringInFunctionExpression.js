@@ -7,7 +7,8 @@ var x = function y() {
 };
 
 //// [templateStringInFunctionExpression.js]
+"use strict";
 var x = function y() {
-    "abc".concat(0, "def");
-    return "abc".concat(0, "def");
+    `abc${0}def`;
+    return `abc${0}def`;
 };

@@ -7,5 +7,6 @@ export throw null;
 
 
 //// [invalidThrowStatement.js]
+"use strict";
 throw ;
 throw null;

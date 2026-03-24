@@ -4,4 +4,5 @@
 var v = { *{ } }
 
 //// [FunctionPropertyAssignments3_es6.js]
+"use strict";
 var v = { *() { } };

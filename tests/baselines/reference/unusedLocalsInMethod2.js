@@ -8,11 +8,9 @@ class greeter {
 }
 
 //// [unusedLocalsInMethod2.js]
-var greeter = /** @class */ (function () {
-    function greeter() {
-    }
-    greeter.prototype.function1 = function () {
+"use strict";
+class greeter {
+    function1() {
         var x, y = 10;
-    };
-    return greeter;
-}());
+    }
+}

@@ -1,3 +1,4 @@
+// @target: es2015
 class A<T, U extends T> { }
 class B<T extends Object, U extends T> {
     data: A<Object, Object>;

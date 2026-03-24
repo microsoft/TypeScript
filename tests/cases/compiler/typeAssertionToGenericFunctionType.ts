@@ -1,3 +1,4 @@
+// @target: es2015
 var x = {
     a: < <T>(x: T) => T > ((x: any) => 1),
     b: <T>(x: T) => { x }

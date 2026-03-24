@@ -12,3 +12,4 @@ declare namespace Foo {
 
 
 //// [b.js]
+"use strict";

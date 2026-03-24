@@ -7,9 +7,9 @@ interface I {
     "__@iterator": string;
 }
 
-var i: I;
+declare var i: I;
 var it = i[Symbol.iterator];
 
 //// [symbolProperty17.js]
-var i;
+"use strict";
 var it = i[Symbol.iterator];

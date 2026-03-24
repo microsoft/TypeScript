@@ -1,4 +1,5 @@
-// @target: ES5
+// @module: commonjs
+// @target: ES5, ES2015
 // @lib: es5,es2015.promise
 // @isolatedModules: true
 import { MyPromise } from "missing";
@@ -37,6 +38,6 @@ class C {
 	static async m6(): MyPromise<void> { }
 }
 
-module M {
+namespace M {
 	export async function f1() { }
 }

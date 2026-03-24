@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/declInput-2.ts] ////
 
 === declInput-2.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(declInput-2.ts, 0, 0))
 
     class C { }
->C : Symbol(C, Decl(declInput-2.ts, 0, 10))
+>C : Symbol(C, Decl(declInput-2.ts, 0, 13))
 
     export class E {}
 >E : Symbol(E, Decl(declInput-2.ts, 1, 15))
@@ -21,7 +21,7 @@ module M {
 
         private c: C; // don't generate
 >c : Symbol(D.c, Decl(declInput-2.ts, 5, 20))
->C : Symbol(C, Decl(declInput-2.ts, 0, 10))
+>C : Symbol(C, Decl(declInput-2.ts, 0, 13))
 
         public m1: number;
 >m1 : Symbol(D.m1, Decl(declInput-2.ts, 6, 21))
@@ -31,7 +31,7 @@ module M {
 
         public m22: C; // don't generate
 >m22 : Symbol(D.m22, Decl(declInput-2.ts, 8, 26))
->C : Symbol(C, Decl(declInput-2.ts, 0, 10))
+>C : Symbol(C, Decl(declInput-2.ts, 0, 13))
 
         public m23: E;
 >m23 : Symbol(D.m23, Decl(declInput-2.ts, 9, 22))
@@ -69,7 +69,7 @@ module M {
 
         public m3():C { return new C(); }
 >m3 : Symbol(D.m3, Decl(declInput-2.ts, 17, 28))
->C : Symbol(C, Decl(declInput-2.ts, 0, 10))
->C : Symbol(C, Decl(declInput-2.ts, 0, 10))
+>C : Symbol(C, Decl(declInput-2.ts, 0, 13))
+>C : Symbol(C, Decl(declInput-2.ts, 0, 13))
     }
 }

@@ -1,18 +1,26 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload6.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react')
 >React : typeof React
 >      : ^^^^^^^^^^^^
 
+declare function log(...args: any[]): void;
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>args : any[]
+>     : ^^^^^
+
 export interface ClickableProps {
     children?: string;
->children : string
->         : ^^^^^^
+>children : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     className?: string;
->className : string
->          : ^^^^^^
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 }
 
 export interface ButtonProps extends ClickableProps {
@@ -55,6 +63,7 @@ let obj = {
 }
 let obj1: any;
 >obj1 : any
+>     : ^^^
 
 let obj2 = {
 >obj2 : { onClick: () => void; }
@@ -119,7 +128,9 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 
         return this._buildMainLink(props);
 >this._buildMainLink(props) : any
+>                           : ^^^
 >this._buildMainLink : any
+>                    : ^^^
 >this : any
 >     : ^^^
 >_buildMainLink : any
@@ -130,7 +141,9 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 
     return this._buildMainButton(props);
 >this._buildMainButton(props) : any
+>                             : ^^^
 >this._buildMainButton : any
+>                      : ^^^
 >this : any
 >     : ^^^
 >_buildMainButton : any
@@ -202,6 +215,7 @@ const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj1 : any
+>     : ^^^
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 >b5 : JSX.Element
@@ -211,6 +225,7 @@ const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the seco
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj1 : any
+>     : ^^^
 >to : string
 >   : ^^^^^^
 
@@ -224,27 +239,23 @@ const b6 = <MainButton {...obj2} />;
 >obj2 : { onClick: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
-const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
+const b7 = <MainButton {...{onClick: () => { log("hi") }}} />;
 >b7 : JSX.Element
 >   : ^^^^^^^^^^^
-><MainButton {...{onClick: () => { console.log("hi") }}} /> : JSX.Element
->                                                           : ^^^^^^^^^^^
+><MainButton {...{onClick: () => { log("hi") }}} /> : JSX.Element
+>                                                   : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
->{onClick: () => { console.log("hi") }} : { onClick: () => void; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{onClick: () => { log("hi") }} : { onClick: () => void; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : () => void
 >        : ^^^^^^^^^^
->() => { console.log("hi") } : () => void
->                            : ^^^^^^^^^^
->console.log("hi") : void
->                  : ^^^^
->console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^       ^^^   ^^^^^              ^^     ^^^^^    
->console : Console
->        : ^^^^^^^
->log : (message?: any, ...optionalParams: any[]) => void
->    : ^       ^^^   ^^^^^              ^^     ^^^^^    
+>() => { log("hi") } : () => void
+>                    : ^^^^^^^^^^
+>log("hi") : void
+>          : ^^^^
+>log : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"hi" : "hi"
 >     : ^^^^
 

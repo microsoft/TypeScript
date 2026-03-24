@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 var { } = { x: 5, y: "hello" };
@@ -18,6 +19,6 @@ function f15() {
 }
 var { a4, b4, c4 } = f15();
 
-module m {
+namespace m {
     export var { a4, b4, c4 } = f15();
 }

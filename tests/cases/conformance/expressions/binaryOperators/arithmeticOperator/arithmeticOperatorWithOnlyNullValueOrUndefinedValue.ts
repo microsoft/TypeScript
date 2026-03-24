@@ -1,3 +1,4 @@
+// @target: es2015
 // operator *
 var ra1 = null * null;
 var ra2 = null * undefined;

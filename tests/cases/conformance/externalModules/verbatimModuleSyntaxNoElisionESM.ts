@@ -1,7 +1,7 @@
+// @target: es2015
 // @verbatimModuleSyntax: true
 // @module: esnext
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /a.ts
 export const a = 0;
 export type A = typeof a;

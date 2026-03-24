@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution2.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	    [x: string]: any;
@@ -15,6 +15,7 @@ declare module JSX {
 <span />;
 
 //// [file.jsx]
+"use strict";
 // OK
 <div />;
 // OK

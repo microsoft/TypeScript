@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 function f(x: { y: string } | undefined): { y: string } {
     return { y: 123, ...x } // y: string | number

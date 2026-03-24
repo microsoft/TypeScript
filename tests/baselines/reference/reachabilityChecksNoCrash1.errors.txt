@@ -1,0 +1,120 @@
+reachabilityChecksNoCrash1.ts(1,23): error TS7010: 'arrayFromAsync', which lacks return-type annotation, implicitly has an 'any' return type.
+reachabilityChecksNoCrash1.ts(1,41): error TS7006: Parameter 'asyncIterable' implicitly has an 'any' type.
+reachabilityChecksNoCrash1.ts(1,54): error TS2300: Duplicate identifier '(Missing)'.
+reachabilityChecksNoCrash1.ts(1,54): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+reachabilityChecksNoCrash1.ts(1,54): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(1,55): error TS1138: Parameter declaration expected.
+reachabilityChecksNoCrash1.ts(1,57): error TS7006: Parameter 'AsyncIterable' implicitly has an 'any' type.
+reachabilityChecksNoCrash1.ts(1,70): error TS2300: Duplicate identifier '(Missing)'.
+reachabilityChecksNoCrash1.ts(1,70): error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+reachabilityChecksNoCrash1.ts(1,70): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(1,71): error TS7006: Parameter 'T' implicitly has an 'any' type.
+reachabilityChecksNoCrash1.ts(1,72): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(1,73): error TS1109: Expression expected.
+reachabilityChecksNoCrash1.ts(1,74): error TS1128: Declaration or statement expected.
+reachabilityChecksNoCrash1.ts(1,76): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
+reachabilityChecksNoCrash1.ts(1,84): error TS2304: Cannot find name 'T'.
+reachabilityChecksNoCrash1.ts(1,86): error TS1011: An element access expression should take an argument.
+reachabilityChecksNoCrash1.ts(2,11): error TS1005: ':' expected.
+reachabilityChecksNoCrash1.ts(2,11): error TS2304: Cannot find name 'out'.
+reachabilityChecksNoCrash1.ts(2,19): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(3,9): error TS1005: ':' expected.
+reachabilityChecksNoCrash1.ts(3,16): error TS1109: Expression expected.
+reachabilityChecksNoCrash1.ts(3,22): error TS1005: ':' expected.
+reachabilityChecksNoCrash1.ts(3,22): error TS2304: Cannot find name 'v'.
+reachabilityChecksNoCrash1.ts(3,24): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(3,24): error TS18004: No value exists in scope for the shorthand property 'of'. Either declare one or provide an initializer.
+reachabilityChecksNoCrash1.ts(3,27): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(3,27): error TS18004: No value exists in scope for the shorthand property 'asyncIterable'. Either declare one or provide an initializer.
+reachabilityChecksNoCrash1.ts(3,40): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(3,42): error TS1136: Property assignment expected.
+reachabilityChecksNoCrash1.ts(4,9): error TS18004: No value exists in scope for the shorthand property 'out'. Either declare one or provide an initializer.
+reachabilityChecksNoCrash1.ts(4,12): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(4,24): error TS2304: Cannot find name 'v'.
+reachabilityChecksNoCrash1.ts(4,26): error TS1005: ',' expected.
+reachabilityChecksNoCrash1.ts(7,1): error TS1109: Expression expected.
+
+
+==== reachabilityChecksNoCrash1.ts (35 errors) ====
+    export async function arrayFromAsync<T>(asyncIterable!: AsyncIterable<T>): Promise<T[]> {
+                          ~~~~~~~~~~~~~~
+!!! error TS7010: 'arrayFromAsync', which lacks return-type annotation, implicitly has an 'any' return type.
+                                            ~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'asyncIterable' implicitly has an 'any' type.
+                                                         
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                                                         
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+                                                         ~
+!!! error TS1005: ',' expected.
+                                                          ~
+!!! error TS1138: Parameter declaration expected.
+                                                            ~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'AsyncIterable' implicitly has an 'any' type.
+                                                                         
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                                                                         
+!!! error TS7006: Parameter '(Missing)' implicitly has an 'any' type.
+                                                                         ~
+!!! error TS1005: ',' expected.
+                                                                          ~
+!!! error TS7006: Parameter 'T' implicitly has an 'any' type.
+                                                                           ~
+!!! error TS1005: ',' expected.
+                                                                            ~
+!!! error TS1109: Expression expected.
+                                                                             ~
+!!! error TS1128: Declaration or statement expected.
+                                                                               ~~~~~~~~~~~~~~
+                                                                                       ~
+!!! error TS2304: Cannot find name 'T'.
+                                                                                         
+!!! error TS1011: An element access expression should take an argument.
+        const out = [];
+    ~~~~~~~~~~~~~~~~~~~
+              ~~~
+!!! error TS1005: ':' expected.
+              ~~~
+!!! error TS2304: Cannot find name 'out'.
+                      ~
+!!! error TS1005: ',' expected.
+        for await (const v of asyncIterable) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~
+!!! error TS1005: ':' expected.
+                   ~~~~~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1005: ':' expected.
+                         ~
+!!! error TS2304: Cannot find name 'v'.
+                           ~~
+!!! error TS1005: ',' expected.
+                           ~~
+!!! error TS18004: No value exists in scope for the shorthand property 'of'. Either declare one or provide an initializer.
+                              ~~~~~~~~~~~~~
+!!! error TS1005: ',' expected.
+                              ~~~~~~~~~~~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'asyncIterable'. Either declare one or provide an initializer.
+                                           ~
+!!! error TS1005: ',' expected.
+                                             ~
+!!! error TS1136: Property assignment expected.
+            out.push(await v);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~
+!!! error TS18004: No value exists in scope for the shorthand property 'out'. Either declare one or provide an initializer.
+               ~
+!!! error TS1005: ',' expected.
+                           ~
+!!! error TS2304: Cannot find name 'v'.
+                             ~
+!!! error TS1005: ',' expected.
+        }
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ const: any; for: any; of: any; asyncIterable: any; out: any; "": any; }'.
+        return out;
+    }
+    ~
+!!! error TS1109: Expression expected.
+    

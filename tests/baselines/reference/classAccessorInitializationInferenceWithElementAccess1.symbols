@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/classAccessorInitializationInferenceWithElementAccess1.ts] ////
+
+=== classAccessorInitializationInferenceWithElementAccess1.ts ===
+export class Cls {
+>Cls : Symbol(Cls, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 0))
+
+    accessor x;
+>x : Symbol(Cls.x, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 18))
+
+    accessor y;
+>y : Symbol(Cls.y, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 1, 15))
+
+    accessor z;
+>z : Symbol(Cls.z, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 2, 15))
+
+    accessor 0;
+>0 : Symbol(Cls[0], Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 3, 15))
+
+    constructor(seed: number) {
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 7, 16))
+
+        this['x'] = [seed];
+>this : Symbol(Cls, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 0))
+>'x' : Symbol(Cls.x, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 18))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 7, 16))
+
+        this['y'] = { seed };
+>this : Symbol(Cls, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 0))
+>'y' : Symbol(Cls.y, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 1, 15))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 9, 21))
+
+        this['z'] = `${seed}`;
+>this : Symbol(Cls, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 0))
+>'z' : Symbol(Cls.z, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 2, 15))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 7, 16))
+
+        this[0] = [seed];
+>this : Symbol(Cls, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 0, 0))
+>0 : Symbol(Cls[0], Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 3, 15))
+>seed : Symbol(seed, Decl(classAccessorInitializationInferenceWithElementAccess1.ts, 7, 16))
+    }
+}
+

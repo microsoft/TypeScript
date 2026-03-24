@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 //// function foo(): void { /*x*/console.log('a');/*y*/ }
 
 goTo.select("x","y");

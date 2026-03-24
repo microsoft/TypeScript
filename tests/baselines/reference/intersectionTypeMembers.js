@@ -70,6 +70,7 @@ const defg: D & E & F & G = {
 
 
 //// [intersectionTypeMembers.js]
+"use strict";
 // An intersection type has those members that are present in any of its constituent types,
 // with types that are intersections of the respective members in the constituent types
 var abc;
@@ -83,7 +84,7 @@ xyz.x.c = "hello";
 var f;
 var s = f("hello");
 var n = f(42);
-var de = {
+const de = {
     nested: {
         doublyNested: {
             d: 'yes',
@@ -93,7 +94,7 @@ var de = {
         other: { g: 101 }
     }
 };
-var defg = {
+const defg = {
     nested: {
         doublyNested: {
             d: 'yes',

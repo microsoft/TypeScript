@@ -12,6 +12,7 @@ var i: I = {
 }
 
 //// [symbolProperty20.js]
+"use strict";
 var i = {
     [Symbol.iterator]: s => s,
     [Symbol.toStringTag](n) { return n; }

@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts] ////
+
+=== returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts ===
+declare function outer1(arg: { prop: any }): void;
+>outer1 : Symbol(outer1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 0))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 24))
+>prop : Symbol(prop, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 30))
+
+declare function outer2(arg: { prop: unknown }): void;
+>outer2 : Symbol(outer2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 50))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 1, 24))
+>prop : Symbol(prop, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 1, 30))
+
+declare function inner1<T extends (arg: string) => any>(arg: T): T;
+>inner1 : Symbol(inner1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 1, 54))
+>T : Symbol(T, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 3, 24))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 3, 35))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 3, 56))
+>T : Symbol(T, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 3, 24))
+>T : Symbol(T, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 3, 24))
+
+const result1 = inner1((arg) => arg);
+>result1 : Symbol(result1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 5, 5))
+>inner1 : Symbol(inner1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 1, 54))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 5, 24))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 5, 24))
+
+outer1({
+>outer1 : Symbol(outer1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 0))
+
+  prop: inner1((arg) => arg),
+>prop : Symbol(prop, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 7, 8))
+>inner1 : Symbol(inner1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 1, 54))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 8, 16))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 8, 16))
+
+});
+
+outer2({
+>outer2 : Symbol(outer2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 50))
+
+  prop: inner1((arg) => arg),
+>prop : Symbol(prop, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 11, 8))
+>inner1 : Symbol(inner1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 1, 54))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 12, 16))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 12, 16))
+
+});
+
+declare function inner2<T>(arg: T & ((arg: string) => any)): T;
+>inner2 : Symbol(inner2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 13, 3))
+>T : Symbol(T, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 15, 24))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 15, 27))
+>T : Symbol(T, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 15, 24))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 15, 38))
+>T : Symbol(T, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 15, 24))
+
+const result2 = inner2((arg) => arg);
+>result2 : Symbol(result2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 17, 5))
+>inner2 : Symbol(inner2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 13, 3))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 17, 24))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 17, 24))
+
+outer1({
+>outer1 : Symbol(outer1, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 0))
+
+  prop: inner2((arg) => arg),
+>prop : Symbol(prop, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 19, 8))
+>inner2 : Symbol(inner2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 13, 3))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 20, 16))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 20, 16))
+
+});
+
+outer2({
+>outer2 : Symbol(outer2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 0, 50))
+
+  prop: inner2((arg) => arg),
+>prop : Symbol(prop, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 23, 8))
+>inner2 : Symbol(inner2, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 13, 3))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 24, 16))
+>arg : Symbol(arg, Decl(returnTypeInferenceContextualTypeIgnoreAnyUnknown1.ts, 24, 16))
+
+});
+

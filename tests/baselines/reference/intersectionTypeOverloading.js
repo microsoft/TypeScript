@@ -18,6 +18,7 @@ var y: any;
 
 
 //// [intersectionTypeOverloading.js]
+"use strict";
 // Check that order is preserved in intersection types for purposes of
 // overload resolution
 var fg;

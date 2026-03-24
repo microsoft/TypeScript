@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //@Filename: file.tsx
-//// declare module JSX {
+//// declare namespace JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }

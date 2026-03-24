@@ -22,11 +22,11 @@ export const kSymbol = Symbol("my-symbol");
 export function b(value) {
 >b : (value: import("./a").WithSymbol) => import("./a").WithSymbol
 >  : ^     ^^                        ^^^^^                        
->value : import("a").WithSymbol
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>value : import("./a").WithSymbol
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     return value;
->value : import("a").WithSymbol
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>value : import("./a").WithSymbol
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

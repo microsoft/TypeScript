@@ -8,8 +8,8 @@ let x = 1;
 >  : ^
 
 export function foo(y: number) {
->foo : (y: number) => boolean
->    : ^ ^^      ^^^^^^^^^^^^
+>foo : (y: number) => boolean | undefined
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 

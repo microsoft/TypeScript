@@ -1,3 +1,4 @@
+// @target: es2015
 interface Boolean {
     doStuff(): string;
 }
@@ -7,8 +8,8 @@ interface NotBoolean {
 }
 
 var x = true;
-var a: Boolean;
-var b: NotBoolean;
+declare var a: Boolean;
+declare var b: NotBoolean;
 
 a = x;
 a = b;

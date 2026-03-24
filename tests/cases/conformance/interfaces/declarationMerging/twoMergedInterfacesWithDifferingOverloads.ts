@@ -1,3 +1,4 @@
+// @target: es2015
 // interfaces that merge must not have members that conflict
 
 interface A {

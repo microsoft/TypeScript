@@ -9,7 +9,7 @@ parserExportAssignment9.ts(6,3): error TS1319: A default export can only be used
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
     }
     
-    module Bar {
+    namespace Bar {
       export default bar;
       ~~~~~~~~~~~~~~~~~~~
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.

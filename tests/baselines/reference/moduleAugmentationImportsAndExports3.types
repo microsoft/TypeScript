@@ -10,7 +10,7 @@ export class B {
 >B : B
 >  : ^
 
-    n: number;
+    n!: number;
 >n : number
 >  : ^^^^^^
 }
@@ -49,8 +49,8 @@ namespace N {
 }
 
 declare module "./f1" {
->"./f1" : typeof import("f1")
->       : ^^^^^^^^^^^^^^^^^^^
+>"./f1" : typeof import("./f1")
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     import {B} from "./f2";
 >B : any
@@ -94,7 +94,7 @@ import {A} from "./f1";
 
 import "./f3";
 
-let a: A;
+declare let a: A;
 >a : A
 >  : ^
 

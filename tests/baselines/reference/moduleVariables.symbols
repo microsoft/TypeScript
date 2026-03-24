@@ -7,7 +7,7 @@ declare var console: any;
 var x = 1;
 >x : Symbol(x, Decl(moduleVariables.ts, 2, 3))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
 
     export var x = 2;
@@ -18,7 +18,7 @@ module M {
 >x : Symbol(x, Decl(moduleVariables.ts, 4, 14))
 }
  
-module M {
+namespace M {
 >M : Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
 
     console.log(x); // 2
@@ -26,7 +26,7 @@ module M {
 >x : Symbol(x, Decl(moduleVariables.ts, 4, 14))
 }
  
-module M {
+namespace M {
 >M : Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
 
     var x = 3;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @lib: es5
 declare class Enumerator {
     public atEnd(): boolean;

@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     export class C {
         m(fn:{ (n:number):string; },n2:number):string {
             return fn(n2);

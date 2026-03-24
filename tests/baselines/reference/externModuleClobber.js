@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/externModuleClobber.ts] ////
 
 //// [externModuleClobber.ts]
-declare module EM {
+declare namespace EM {
 	export class Position { }
 
 	export class EC {
@@ -16,6 +16,7 @@ x = ec.getPosition();
 
 
 //// [externModuleClobber.js]
+"use strict";
 var x;
 var ec = new EM.EC();
 x = ec.getPosition();

@@ -7,9 +7,8 @@ class C<T> { a: T; }
 interface C<T> { }
 
 //// [a.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 //// [b.js]
+"use strict";

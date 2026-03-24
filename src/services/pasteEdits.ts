@@ -5,6 +5,7 @@ import {
     fileShouldUseJavaScriptRequire,
     findAncestor,
     findIndex,
+    findTokenOnLeftOfPosition,
     forEachChild,
     formatting,
     getNewLineOrDefaultFromHost,
@@ -50,11 +51,16 @@ export function pasteEditsProvider(
     return { edits: changes, fixId };
 }
 
+interface CopiedFromInfo {
+    file: SourceFile;
+    range: TextRange[];
+}
+
 function pasteEdits(
     targetFile: SourceFile,
     pastedText: string[],
     pasteLocations: TextRange[],
-    copiedFrom: { file: SourceFile; range: TextRange[]; } | undefined,
+    copiedFrom: CopiedFromInfo | undefined,
     host: LanguageServiceHost,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
@@ -93,11 +99,13 @@ function pasteEdits(
                 }
                 statements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
             });
-            const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()), { pos: copiedFrom.range[0].pos, end: copiedFrom.range[copiedFrom.range.length - 1].end });
-            Debug.assertIsDefined(originalProgram);
+            Debug.assertIsDefined(originalProgram, "no original program found");
+            const originalProgramTypeChecker = originalProgram.getTypeChecker();
+            const usageInfoRange = getUsageInfoRangeForPasteEdits(copiedFrom);
+            const usage = getUsageInfo(copiedFrom.file, statements, originalProgramTypeChecker, getExistingLocals(updatedFile, statements, originalProgramTypeChecker), usageInfoRange);
             const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram, host, !!copiedFrom.file.commonJsModuleIndicator);
             addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
-            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgram.getTypeChecker(), updatedProgram, importAdder);
+            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgramTypeChecker, updatedProgram, importAdder);
         }
         else {
             const context: CodeFixContextBase = {
@@ -166,4 +174,19 @@ function pasteEdits(
             actualPastedText ?? pastedText[i],
         );
     });
+}
+
+/**
+ * Adjusts the range for `getUsageInfo` to correctly include identifiers at the edges of the copied text.
+ */
+function getUsageInfoRangeForPasteEdits({ file: sourceFile, range }: CopiedFromInfo) {
+    const pos = range[0].pos;
+    const end = range[range.length - 1].end;
+    const startToken = getTokenAtPosition(sourceFile, pos);
+    const endToken = findTokenOnLeftOfPosition(sourceFile, pos) ?? getTokenAtPosition(sourceFile, end);
+    // Since the range is only used to check identifiers, we do not need to adjust range when the tokens at the edges are not identifiers.
+    return {
+        pos: isIdentifier(startToken) && pos <= startToken.getStart(sourceFile) ? startToken.getFullStart() : pos,
+        end: isIdentifier(endToken) && end === endToken.getEnd() ? textChanges.getAdjustedEndPosition(sourceFile, endToken, {}) : end,
+    };
 }

@@ -2,6 +2,7 @@ enumAssignability.ts(9,1): error TS2322: Type 'F' is not assignable to type 'E'.
 enumAssignability.ts(10,1): error TS2322: Type 'E' is not assignable to type 'F'.
 enumAssignability.ts(11,1): error TS2322: Type '1' is not assignable to type 'E'.
 enumAssignability.ts(12,1): error TS2322: Type '1' is not assignable to type 'F'.
+enumAssignability.ts(20,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 enumAssignability.ts(29,9): error TS2322: Type 'E' is not assignable to type 'string'.
 enumAssignability.ts(30,9): error TS2322: Type 'E' is not assignable to type 'boolean'.
 enumAssignability.ts(31,9): error TS2322: Type 'E' is not assignable to type 'Date'.
@@ -27,7 +28,7 @@ enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B
   'E' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'E'.
 
 
-==== enumAssignability.ts (22 errors) ====
+==== enumAssignability.ts (23 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     
     enum E { A }
@@ -51,11 +52,13 @@ enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B
     var x: number = e; // ok
     x = f; // ok
     
-    module Others {
+    namespace Others {
         var a: any = e; // ok
     
         class C {
             foo: string;
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
         var ac: C;
         interface I {

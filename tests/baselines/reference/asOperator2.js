@@ -5,4 +5,5 @@ var x = 23 as string;
 
 
 //// [asOperator2.js]
+"use strict";
 var x = 23;

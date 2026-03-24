@@ -2,5 +2,5 @@
 
 === parserModuleDeclaration12.ts ===
 
-module A.string {
+namespace A.string {
 }

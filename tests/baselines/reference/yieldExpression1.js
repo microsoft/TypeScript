@@ -13,6 +13,7 @@ function* b(): IterableIterator<number> {
 
 
 //// [yieldExpression1.js]
+"use strict";
 function* a() {
     yield;
     yield 0;

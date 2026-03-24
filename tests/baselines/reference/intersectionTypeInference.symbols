@@ -12,7 +12,7 @@ function extend<T, U>(obj1: T, obj2: U): T & U {
 >T : Symbol(T, Decl(intersectionTypeInference.ts, 0, 16))
 >U : Symbol(U, Decl(intersectionTypeInference.ts, 0, 18))
 
-    var result: T & U;
+    var result!: T & U;
 >result : Symbol(result, Decl(intersectionTypeInference.ts, 1, 7))
 >T : Symbol(T, Decl(intersectionTypeInference.ts, 0, 16))
 >U : Symbol(U, Decl(intersectionTypeInference.ts, 0, 18))

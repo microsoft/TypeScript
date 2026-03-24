@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts] ////
 
 //// [moduleWithStatementsOfEveryKind.ts]
-module A {
+namespace A {
     class A { s: string }
     class AA<T> { s: T }
     interface I { id: number }
@@ -11,7 +11,7 @@ module A {
         id: number;
     }
 
-    module Module {
+    namespace Module {
         class A { s: string }
     }
     enum Color { Blue, Red }
@@ -30,7 +30,7 @@ module A {
     }
 }
 
-module Y {
+namespace Y {
     export class A { s: string }
     export class AA<T> { s: T }
     export interface I { id: number }
@@ -40,7 +40,7 @@ module Y {
         id: number;
     }
 
-    export module Module {
+    export namespace Module {
         class A { s: string }
     }
     export enum Color { Blue, Red }
@@ -61,56 +61,23 @@ module Y {
 
 
 //// [moduleWithStatementsOfEveryKind.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+"use strict";
 var A;
 (function (A_1) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
-    var AA = /** @class */ (function () {
-        function AA() {
-        }
-        return AA;
-    }());
-    var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(AA));
-    var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return BB;
-    }(A));
-    var Module;
+    class A {
+    }
+    class AA {
+    }
+    class B extends AA {
+    }
+    class BB extends A {
+    }
+    let Module;
     (function (Module) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
+        class A {
+        }
     })(Module || (Module = {}));
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -120,50 +87,31 @@ var A;
         return 2;
     }
     var array = null;
-    var fn = function (s) {
+    var fn = (s) => {
         return 'hello ' + s;
     };
     var ol = { s: 'hello', id: 2, isvalid: true };
 })(A || (A = {}));
 var Y;
 (function (Y) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     Y.A = A;
-    var AA = /** @class */ (function () {
-        function AA() {
-        }
-        return AA;
-    }());
+    class AA {
+    }
     Y.AA = AA;
-    var B = /** @class */ (function (_super) {
-        __extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(AA));
+    class B extends AA {
+    }
     Y.B = B;
-    var BB = /** @class */ (function (_super) {
-        __extends(BB, _super);
-        function BB() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return BB;
-    }(A));
+    class BB extends A {
+    }
     Y.BB = BB;
-    var Module;
+    let Module;
     (function (Module) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
+        class A {
+        }
     })(Module = Y.Module || (Y.Module = {}));
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -174,7 +122,7 @@ var Y;
     }
     Y.F = F;
     Y.array = null;
-    Y.fn = function (s) {
+    Y.fn = (s) => {
         return 'hello ' + s;
     };
     Y.ol = { s: 'hello', id: 2, isvalid: true };

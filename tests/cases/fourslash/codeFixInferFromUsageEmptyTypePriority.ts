@@ -1,4 +1,6 @@
 /// <reference path='fourslash.ts' />
+
+// @stableTypeOrdering: true
 // @strict: true
 // based on acorn, translated to TS
 
@@ -10,4 +12,4 @@
 ////  var beforeExpr = !!conf.beforeExpr;
 ////};
 
-verify.rangeAfterCodeFix("label: any, conf: { keyword?: any; beforeExpr?: any; } | undefined",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("label: any, conf: { beforeExpr?: any; keyword?: any; } | undefined",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

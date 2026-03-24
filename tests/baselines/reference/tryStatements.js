@@ -21,6 +21,7 @@ function fn() {
 }
 
 //// [tryStatements.js]
+"use strict";
 function fn() {
     try { }
     catch (_a) { }

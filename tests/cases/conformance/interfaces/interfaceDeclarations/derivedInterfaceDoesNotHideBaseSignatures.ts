@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived interfaces no longer hide signatures from base types, so these signatures are always compatible.
 interface Base {
     (): string;

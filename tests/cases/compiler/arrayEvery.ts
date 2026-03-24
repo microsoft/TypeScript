@@ -1,3 +1,4 @@
+// @target: es2015
 const foo: (number | string)[] = ['aaa'];
 
 const isString = (x: unknown): x is string => typeof x === 'string';

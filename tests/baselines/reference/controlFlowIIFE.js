@@ -76,6 +76,7 @@ function f6() {
 }
 
 //// [controlFlowIIFE.js]
+"use strict";
 function f1() {
     let x = getStringOrNumber();
     if (typeof x === "string") {

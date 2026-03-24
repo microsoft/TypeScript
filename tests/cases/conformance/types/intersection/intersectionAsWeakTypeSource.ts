@@ -1,3 +1,4 @@
+// @target: es2015
 interface X { x: string }
 interface Y { y: number }
 interface Z { z?: boolean }

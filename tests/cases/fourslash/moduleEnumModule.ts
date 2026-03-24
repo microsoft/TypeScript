@@ -1,12 +1,12 @@
 /// <reference path="fourslash.ts" />
 
-////module A {
+////namespace A {
 ////    var o;
 ////}
 ////enum A {
 ////    /**/c
 ////}
-////module A {
+////namespace A {
 ////    var p;
 ////}
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @lib: es6
 type Page = {close(): Promise<void>; content(): Promise<string>};

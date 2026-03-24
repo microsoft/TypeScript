@@ -1,6 +1,7 @@
+// @target: es2015
 //@jsx: preserve
 //@filename: file1.tsx
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 }
 

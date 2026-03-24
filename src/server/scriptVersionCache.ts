@@ -632,6 +632,7 @@ export class LineNode implements LineCollection {
 
     walk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker): void {
         // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
+        if (this.children.length === 0) return;
         let childIndex = 0;
         let childCharCount = this.children[childIndex].charCount();
         // find sub-tree containing start

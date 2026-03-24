@@ -1,3 +1,4 @@
+// @target: es2015
 export {}
 export interface Option<T> {
 	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;

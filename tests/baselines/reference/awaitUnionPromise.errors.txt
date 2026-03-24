@@ -1,0 +1,25 @@
+awaitUnionPromise.ts(13,11): error TS2322: Type 'null' is not assignable to type 'IAsyncEnumerator<number>'.
+
+
+==== awaitUnionPromise.ts (1 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/18186
+    
+    class AsyncEnumeratorDone { };
+    
+    interface IAsyncEnumerator<T> {
+        next1(): Promise<T | AsyncEnumeratorDone>;
+        next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
+        next3(): Promise<T | {}>;
+        next4(): Promise<T | { x: string }>;
+    }
+    
+    async function main() {
+        const x: IAsyncEnumerator<number> = null;
+              ~
+!!! error TS2322: Type 'null' is not assignable to type 'IAsyncEnumerator<number>'.
+        let a = await x.next1();
+        let b = await x.next2();
+        let c = await x.next3();
+        let d = await x.next4();
+    }
+    

@@ -9,7 +9,8 @@ takesCallback((a: number, b: number) => {});
 
 
 //// [signatureLengthMismatchCall.js]
+"use strict";
 function takesCallback(fn) {
     // ...
 }
-takesCallback(function (a, b) { });
+takesCallback((a, b) => { });

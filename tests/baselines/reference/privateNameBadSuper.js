@@ -11,6 +11,7 @@ class A extends B {
 }
 
 //// [privateNameBadSuper.js]
+"use strict";
 var _A_x;
 class B {
 }

@@ -12,6 +12,7 @@ errorOnMissingReturn.a = "";
 
 
 //// [isolatedDeclarationErrors.js]
+"use strict";
 function errorOnAssignmentBelowDecl() { }
 errorOnAssignmentBelowDecl.a = "";
 const errorOnAssignmentBelow = () => { };

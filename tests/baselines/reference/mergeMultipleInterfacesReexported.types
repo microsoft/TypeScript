@@ -28,8 +28,8 @@ export interface EventList {
 
 === foo.ts ===
 declare module './index' {
->'./index' : typeof import("index")
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>'./index' : typeof import(".")
+>          : ^^^^^^^^^^^^^^^^^^
 
     interface EventList {
         p1: []
@@ -42,8 +42,8 @@ export {};
 
 === bar.ts ===
 declare module './index' {
->'./index' : typeof import("index")
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>'./index' : typeof import(".")
+>          : ^^^^^^^^^^^^^^^^^^
 
     interface EventList {
         p2: []

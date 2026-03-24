@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 const enum E { A, B, C }
 
 function foo<T extends number>(x: T) {

@@ -88,7 +88,7 @@ export var r5: typeof i2;
 >i2 : I
 >   : ^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -179,7 +179,7 @@ function foo() { }
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

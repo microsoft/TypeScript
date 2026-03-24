@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 function foo<T>() { return '' }
 class C<T> {
     bar() {

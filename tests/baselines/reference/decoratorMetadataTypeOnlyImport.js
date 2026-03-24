@@ -29,12 +29,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    __decorate([
-        Decorator,
-        __metadata("design:type", Object)
-    ], Foo.prototype, "myList", void 0);
-    return Foo;
-}());
+class Foo {
+}
+__decorate([
+    Decorator,
+    __metadata("design:type", Object)
+], Foo.prototype, "myList", void 0);

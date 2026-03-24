@@ -19,6 +19,7 @@ class C {
 
 
 //// [uniqueSymbolsDeclarationsInJsErrors-out.js]
+"use strict";
 class C {
 }
 

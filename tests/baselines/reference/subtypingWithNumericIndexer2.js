@@ -19,7 +19,7 @@ interface B2 extends A {
     [x: number]: Derived2; // ok
 }
 
-module Generics {
+namespace Generics {
     interface A<T extends Derived> {
         [x: number]: T;
     }
@@ -46,4 +46,5 @@ module Generics {
 }
 
 //// [subtypingWithNumericIndexer2.js]
+"use strict";
 // Derived type indexer must be subtype of base type indexer

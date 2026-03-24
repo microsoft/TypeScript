@@ -195,11 +195,15 @@ C1.prototype.await;
 // await in decorators
 declare const dec: any;
 >dec : any
+>    : ^^^
 
 @(await dec)
 >(await dec) : any
+>            : ^^^
 >await dec : any
+>          : ^^^
 >dec : any
+>    : ^^^
 
 class C {
 >C : C

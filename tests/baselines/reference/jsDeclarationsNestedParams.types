@@ -15,10 +15,10 @@ class X {
     async cancel({reason, code}) {}
 >cancel : ({ reason, code }: {    reason: string | null;    code: string | null;}) => Promise<any>
 >       : ^                ^^           ^^         ^^^^^        ^^         ^^^^^ ^^^^^            
->reason : string
->       : ^^^^^^
->code : string
->     : ^^^^^^
+>reason : string | null
+>       : ^^^^^^^^^^^^^
+>code : string | null
+>     : ^^^^^^^^^^^^^
 }
 
 class Y {
@@ -37,8 +37,8 @@ class Y {
     async cancel({reason, suberr}) {}
 >cancel : ({ reason, suberr }: {    reason: string | null;    suberr: {        reason: string | null;        code: string | null;    };}) => Promise<any>
 >       : ^                  ^^           ^^         ^^^^^          ^^               ^^         ^^^^^            ^^         ^^^^^     ^ ^^^^^            
->reason : string
->       : ^^^^^^
+>reason : string | null
+>       : ^^^^^^^^^^^^^
 >suberr : { reason: string | null; code: string | null; }
 >       : ^^^^^^^^^^         ^^^^^^^^^^^^         ^^^^^^^
 }

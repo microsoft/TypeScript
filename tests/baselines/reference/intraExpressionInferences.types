@@ -817,7 +817,7 @@ interface Opts<TParams, TDone, TMapped> {
 
 function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
->        : ^       ^^     ^^       ^^       ^^                             ^^^^^^      ^^       ^^^^^^^^^^^^
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >options : Opts<TParams, TDone, TMapped>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -871,7 +871,7 @@ example({
 >example({    fetch: (params: Params) => 123,    map: (number) => String(number)}) : (params: Params) => string
 >                                                                                  : ^      ^^^^^^^^^^^^^^^^^^^
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
->        : ^       ^^     ^^       ^^       ^^                             ^^^^^^      ^^       ^^^^^^^^^^^^
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >{    fetch: (params: Params) => 123,    map: (number) => String(number)} : { fetch: (params: Params) => number; map: (number: number) => string; }
 >                                                                         : ^^^^^^^^^^      ^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -905,7 +905,7 @@ example({
 >example({    fetch: (params: Params, foo: number) => 123,    map: (number) => String(number)}) : (params: Params) => string
 >                                                                                               : ^      ^^^^^^^^^^^^^^^^^^^
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
->        : ^       ^^     ^^       ^^       ^^                             ^^^^^^      ^^       ^^^^^^^^^^^^
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >{    fetch: (params: Params, foo: number) => 123,    map: (number) => String(number)} : { fetch: (params: Params, foo: number) => number; map: (number: number) => string; }
 >                                                                                      : ^^^^^^^^^^      ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -941,7 +941,7 @@ example({
 >example({    fetch: (params: Params, foo) => 123,    map: (number) => String(number)}) : (params: Params) => string
 >                                                                                       : ^      ^^^^^^^^^^^^^^^^^^^
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
->        : ^       ^^     ^^       ^^       ^^                             ^^^^^^      ^^       ^^^^^^^^^^^^
+>        : ^       ^^     ^^       ^^       ^^                             ^^^^^^               ^^^^^^^^^^^^
 >{    fetch: (params: Params, foo) => 123,    map: (number) => String(number)} : { fetch: (params: Params, foo: number) => number; map: (number: number) => string; }
 >                                                                              : ^^^^^^^^^^      ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 

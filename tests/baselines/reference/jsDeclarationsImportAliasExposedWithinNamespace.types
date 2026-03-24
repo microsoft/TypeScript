@@ -59,16 +59,16 @@ const testFnTypes = {
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
 >       : ^     ^^                 ^^^^^             
->input : import("file2").testFnTypes.input
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : import("./file2.js").testFnTypes.input
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
 >                          : ^^^^^^^
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->input : import("file2").testFnTypes.input
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : import("./file2.js").testFnTypes.input
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'number' : "number"
 >         : ^^^^^^^^
 

@@ -1,6 +1,7 @@
-module A {
+// @target: es2015
+namespace A {
 
-    export module B {
+    export namespace B {
         export function createB(): B {
             return null;
         }

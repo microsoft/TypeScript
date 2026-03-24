@@ -1,4 +1,5 @@
-declare module M {
-  declare module M2 {
+// @target: es2015
+declare namespace M {
+  declare namespace M2 {
   }
 }

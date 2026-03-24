@@ -17,6 +17,7 @@ f2(x);
 f2(y);
 
 //// [genericInstantiationEquivalentToObjectLiteral.js]
+"use strict";
 var x;
 var y;
 x = y;

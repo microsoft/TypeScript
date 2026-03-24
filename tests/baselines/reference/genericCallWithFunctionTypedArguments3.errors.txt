@@ -1,0 +1,32 @@
+genericCallWithFunctionTypedArguments3.ts(10,12): error TS2454: Variable 'u' is used before being assigned.
+genericCallWithFunctionTypedArguments3.ts(13,14): error TS2454: Variable 'a' is used before being assigned.
+genericCallWithFunctionTypedArguments3.ts(20,15): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== genericCallWithFunctionTypedArguments3.ts (3 errors) ====
+    // No inference is made from function typed arguments which have multiple call signatures
+    
+    var a: {
+        (x: boolean): boolean;
+        (x: string): any;
+    }
+    
+    function foo4<T, U>(cb: (x: T) => U) {
+        var u: U;
+        return u;
+               ~
+!!! error TS2454: Variable 'u' is used before being assigned.
+    }
+    
+    var r = foo4(a); // T is {} (candidates boolean and string), U is any (candidates any and boolean)
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    var b: {
+        <T>(x: boolean): T;
+        <T>(x: T): any;
+    }
+    
+    var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.

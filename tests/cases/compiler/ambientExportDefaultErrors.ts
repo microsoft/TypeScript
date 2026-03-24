@@ -1,4 +1,8 @@
+// @module: commonjs
+// @target: es2015
 // @filename: foo.d.ts
+// @noUncheckedSideEffectImports: false
+
 export default 2 + 2;
 export as namespace Foo;
 

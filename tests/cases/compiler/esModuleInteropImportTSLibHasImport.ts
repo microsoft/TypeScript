@@ -1,3 +1,4 @@
+// @strict: false
 // @esModuleInterop: true
 // @importHelpers: true
 // @noEmitHelpers: true

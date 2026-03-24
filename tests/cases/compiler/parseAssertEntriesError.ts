@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @module: nodenext
 // @declaration: true
@@ -17,8 +18,8 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 // @filename: /index.ts
 export type LocalInterface =
-    & import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface
-    & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface;
+    & import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface
+    & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface;
 
-export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface);
-export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface);
+export const a = (null as any as import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface);
+export const b = (null as any as import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface);

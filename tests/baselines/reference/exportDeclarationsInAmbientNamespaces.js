@@ -11,4 +11,5 @@ Q.try(() => { });
 
 
 //// [exportDeclarationsInAmbientNamespaces.js]
-Q.try(function () { });
+"use strict";
+Q.try(() => { });

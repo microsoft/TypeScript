@@ -13,6 +13,7 @@ export default "";
 
 
 //// [checkJsdocTypeTagOnExportAssignment4.js]
+"use strict";
 //// [a.js]
 "use strict";
 /**

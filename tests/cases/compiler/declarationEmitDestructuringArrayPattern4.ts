@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 var [...a5] = [1, 2, 3];
 var [x14, ...a6] = [1, 2, 3];

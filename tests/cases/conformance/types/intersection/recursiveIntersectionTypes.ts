@@ -1,4 +1,5 @@
-﻿type LinkedList<T> = T & { next: LinkedList<T> };
+﻿// @target: es2015
+type LinkedList<T> = T & { next: LinkedList<T> };
 
 interface Entity {
     name: string;

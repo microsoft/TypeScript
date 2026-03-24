@@ -2,7 +2,6 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
-    arrayFrom,
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
@@ -50,6 +49,7 @@ import {
     Debug,
     Declaration,
     deduplicate,
+    defaultHoverMaximumTruncationLength,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
@@ -234,7 +234,6 @@ import {
     Node,
     NodeArray,
     NodeFlags,
-    nodeIsSynthesized,
     noop,
     normalizePath,
     normalizeSpans,
@@ -1383,9 +1382,8 @@ export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefin
 }
 
 export function getDefaultCompilerOptions(): CompilerOptions {
-    // Always default to "ScriptTarget.ES5" for the language service
     return {
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.LatestStandard,
         jsx: JsxEmit.Preserve,
     };
 }
@@ -1604,7 +1602,6 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideInlayHints",
     "getSupportedCodeFixes",
     "getPasteEdits",
-    "getImports",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2277,7 +2274,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2296,13 +2293,27 @@ export function createLanguageService(
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo), /*flags*/ undefined, verbosityLevel)),
                 documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                 tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined,
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo));
+        const { symbolKind, displayParts, documentation, tags, canIncreaseVerbosityLevel } = typeChecker.runWithCancellationToken(
+            cancellationToken,
+            typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    typeChecker,
+                    symbol,
+                    sourceFile,
+                    getContainerNode(nodeForQuickInfo),
+                    nodeForQuickInfo,
+                    /*semanticMeaning*/ undefined,
+                    /*alias*/ undefined,
+                    maximumLength ?? defaultHoverMaximumTruncationLength,
+                    verbosityLevel,
+                ),
+        );
         return {
             kind: symbolKind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
@@ -2310,6 +2321,7 @@ export function createLanguageService(
             displayParts,
             documentation,
             tags,
+            canIncreaseVerbosityLevel,
         };
     }
 
@@ -2469,7 +2481,7 @@ export function createLanguageService(
     function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false, excludeLibFiles = false): NavigateToItem[] {
         synchronizeHostData();
         const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles, excludeLibFiles);
+        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles, excludeLibFiles, program);
     }
 
     function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean) {
@@ -3367,18 +3379,6 @@ export function createLanguageService(
         );
     }
 
-    function getImports(fileName: string): readonly string[] {
-        synchronizeHostData();
-        const file = getValidSourceFile(fileName);
-        let imports: Set<string> | undefined;
-        for (const specifier of file.imports) {
-            if (nodeIsSynthesized(specifier)) continue;
-            const name = program.getResolvedModuleFromModuleSpecifier(specifier, file)?.resolvedModule?.resolvedFileName;
-            if (name) (imports ??= new Set()).add(name);
-        }
-        return imports ? arrayFrom(imports) : emptyArray;
-    }
-
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3453,7 +3453,6 @@ export function createLanguageService(
         preparePasteEditsForFile,
         getPasteEdits,
         mapCode,
-        getImports,
     };
 
     switch (languageServiceMode) {
@@ -3546,6 +3545,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
+        case SyntaxKind.JsxNamespacedName:
             return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;
@@ -3574,6 +3574,7 @@ function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symb
  * @internal
  */
 export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
+    contextualType = contextualType.getNonNullableType();
     const name = getNameFromPropertyName(node.name);
     if (!name) return emptyArray;
     if (!contextualType.isUnion()) {

@@ -1,11 +1,12 @@
-module A {
+// @target: es2015
+namespace A {
 
     interface B {
         name: string;
         value: number;
     }
 
-    export module B {
+    export namespace B {
         export function createB(): number {
             return null;
         }

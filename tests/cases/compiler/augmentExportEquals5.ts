@@ -1,8 +1,9 @@
-// @module: amd
+// @target: es2015
+// @module: commonjs
 
 // @filename: express.d.ts
 
-declare module Express {
+declare namespace Express {
     export interface Request { }
     export interface Response { }
     export interface Application { }

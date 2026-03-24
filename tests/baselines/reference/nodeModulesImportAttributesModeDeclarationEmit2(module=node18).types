@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesModeDeclarationEmit2.ts] ////
+
+=== /index.ts ===
+import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : RequireInterface
+>                 : ^^^^^^^^^^^^^^^^
+
+import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+>ImportInterface : ImportInterface
+>                : ^^^^^^^^^^^^^^^
+
+export interface LocalInterface extends RequireInterface, ImportInterface {}
+
+import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : any
+>                 : ^^^
+>Req : any
+>    : ^^^
+
+import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
+>ImportInterface : any
+>                : ^^^
+>Imp : any
+>    : ^^^
+
+export interface Loc extends Req, Imp {}
+
+export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+>RequireInterface : RequireInterface
+>                 : ^^^^^^^^^^^^^^^^
+
+export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+>ImportInterface : ImportInterface
+>                : ^^^^^^^^^^^^^^^
+
+=== /node_modules/pkg/import.d.ts ===
+
+export interface ImportInterface {}
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}

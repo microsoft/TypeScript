@@ -42,7 +42,7 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
-declare module ts {
+declare namespace ts {
     export const Diagnostics: typeof import("../../../src/compiler/diagnosticInformationMap.generated").Diagnostics;
     export type MapKey = string | number;
     export interface Map<T> {
@@ -128,7 +128,8 @@ declare module ts {
         allowSyntheticDefaultImports?: boolean;
         allowNonTsExtensions?: boolean;
         resolveJsonModule?: boolean;
-        [key: string]: string | number | boolean | undefined;
+        lib?: string[];
+        [key: string]: string | number | boolean | string[] | undefined;
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
@@ -361,7 +362,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineCompletions(preferences?: UserPreferences): void;
-        baselineQuickInfo(): void;
+        baselineQuickInfo(verbosityLevels?: VerbosityLevels, maximumLength?: number): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
@@ -472,7 +473,6 @@ declare namespace FourSlashInterface {
             }
         }): void;
         baselineMapCode(ranges: Range[][], changes: string[]): void;
-        getImports(fileName: string, imports: string[]): void;
     }
     class edit {
         caretPosition(): Marker;
@@ -701,6 +701,9 @@ declare namespace FourSlashInterface {
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
         readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    }
+    interface VerbosityLevels {
+        [markerName: string]: number | number[] | undefined;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

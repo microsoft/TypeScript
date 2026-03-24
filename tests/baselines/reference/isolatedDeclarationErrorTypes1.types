@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorTypes1.ts] ////
+
+=== isolatedDeclarationErrorTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60192
+
+import { Unresolved } from "foo";
+>Unresolved : any
+>           : ^^^
+
+export const foo1 = (type?: Unresolved): void => {};
+>foo1 : (type?: Unresolved) => void
+>     : ^    ^^^          ^^^^^    
+>(type?: Unresolved): void => {} : (type?: Unresolved) => void
+>                                : ^    ^^^          ^^^^^    
+>type : any
+>     : ^^^
+
+export const foo2 = (type?: Unresolved | undefined): void => {};
+>foo2 : (type?: Unresolved | undefined) => void
+>     : ^    ^^^                      ^^^^^    
+>(type?: Unresolved | undefined): void => {} : (type?: Unresolved | undefined) => void
+>                                            : ^    ^^^                      ^^^^^    
+>type : any
+>     : ^^^
+
+export const foo3 = (type: Unresolved): void => {};
+>foo3 : (type: Unresolved) => void
+>     : ^    ^^          ^^^^^    
+>(type: Unresolved): void => {} : (type: Unresolved) => void
+>                               : ^    ^^          ^^^^^    
+>type : Unresolved
+>     : ^^^^^^^^^^
+

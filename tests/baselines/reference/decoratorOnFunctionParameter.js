@@ -9,11 +9,11 @@ function direct(@dec this: C) { return this.n; }
 function called(@dec() this: C) { return this.n; }
 
 //// [decoratorOnFunctionParameter.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.n = true;
     }
-    return C;
-}());
+}
 function direct() { return this.n; }
 function called() { return this.n; }

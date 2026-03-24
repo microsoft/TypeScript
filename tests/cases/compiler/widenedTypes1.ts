@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var a = null;
 var b = undefined;
 

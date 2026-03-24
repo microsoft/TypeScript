@@ -40,11 +40,11 @@ function F(x: string): number { return 42; }
 >F : Symbol(F, Decl(everyTypeWithAnnotationAndInitializer.ts, 12, 1))
 >x : Symbol(x, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 11))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 44))
 
     export class A {
->A : Symbol(A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+>A : Symbol(A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(everyTypeWithAnnotationAndInitializer.ts, 17, 20))
@@ -66,8 +66,8 @@ var aString: string = 'this is a string';
 
 var aDate: Date = new Date(12);
 >aDate : Symbol(aDate, Decl(everyTypeWithAnnotationAndInitializer.ts, 26, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var anObject: Object = new Object();
 >anObject : Symbol(anObject, Decl(everyTypeWithAnnotationAndInitializer.ts, 27, 3))
@@ -133,10 +133,10 @@ var aModule: typeof M = M;
 var aClassInModule: M.A = new M.A();
 >aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithAnnotationAndInitializer.ts, 44, 3))
 >M : Symbol(M, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 44))
->A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
->M.A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+>A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 13))
+>M.A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 13))
 >M : Symbol(M, Decl(everyTypeWithAnnotationAndInitializer.ts, 14, 44))
->A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 10))
+>A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInitializer.ts, 16, 13))
 
 var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
 >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithAnnotationAndInitializer.ts, 45, 3))

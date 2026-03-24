@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: packages/core/src/index.d.ts
 export * from "./utils";
 export { default as SvgIcon } from "./SvgIcon";

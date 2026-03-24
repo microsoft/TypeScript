@@ -21,6 +21,7 @@ function foo3(): Foo[] {
 var y: Foo[] = [{a: ''}]
 
 //// [deepElaborationsIntoArrowExpressions.js]
+"use strict";
 const a = {
     y: () => "b"
 };

@@ -48,6 +48,7 @@ function f8(): string | null {
 }
 
 //// [functionsWithImplicitReturnTypeAssignableToUndefined.js]
+"use strict";
 function f1() {
     if (Math.random() < 0.5)
         return true;

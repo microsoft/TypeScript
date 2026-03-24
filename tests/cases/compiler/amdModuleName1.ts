@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 ///<amd-module name='NamedModule'/>
 class Foo {

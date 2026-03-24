@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @typeRoots: /types,/node_modules,/node_modules/@types
 // @types: @scoped/typescache,@scoped/nodemodulescache,@scoped/attypescache,@mangled/typescache,@mangled/nodemodulescache,@mangled/attypescache

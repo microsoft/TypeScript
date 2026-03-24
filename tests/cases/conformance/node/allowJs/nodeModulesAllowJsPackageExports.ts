@@ -1,9 +1,11 @@
-// @module: node16,nodenext
+// @target: es2022
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @allowJs: true
 // @checkJs: true
 // @outDir: out
 // @filename: index.js
+// @rootDir: .
 // esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
@@ -47,6 +49,9 @@ mjsi;
 typei;
 // @filename: node_modules/inner/index.d.ts
 // cjs format file
+export const implicitCjsSource = true;
+// @filename: node_modules/inner/test.d.ts
+// cjs format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
@@ -55,6 +60,9 @@ export { mjs };
 export { type };
 // @filename: node_modules/inner/index.d.mts
 // esm format file
+export const mjsSource = true;
+// @filename: node_modules/inner/test.d.mts
+// esm format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
@@ -62,6 +70,9 @@ export { cjs };
 export { mjs };
 export { type };
 // @filename: node_modules/inner/index.d.cts
+// cjs format file
+export const cjsSource = true;
+// @filename: node_modules/inner/test.d.cts
 // cjs format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";

@@ -1,8 +1,9 @@
+// @target: es2015
 //@module: amd
 //@filename: m1.ts
 
 class foo {}
-module foo {
+namespace foo {
     const enum E { X }
 }
 

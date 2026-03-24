@@ -25,8 +25,8 @@ function fn1() { return null; }
 var s: string = fn1 `${ undefined }`;
 >s : string
 >  : ^^^^^^
->fn1 `${ undefined }` : string
->                     : ^^^^^^
+>fn1 `${ undefined }` : never
+>                     : ^^^^^
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
 >    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
 >`${ undefined }` : string
@@ -74,8 +74,8 @@ function fn2() { return undefined; }
 var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >d1 : Date
 >   : ^^^^
->fn2 `${ 0 }${ undefined }` : any
->                           : ^^^
+>fn2 `${ 0 }${ undefined }` : undefined
+>                           : ^^^^^^^^^
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
 >    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >`${ 0 }${ undefined }` : string
@@ -86,10 +86,10 @@ var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >          : ^^^^^^^^^
 
 var d2       = fn2 `${ 0 }${ undefined }`; // any
->d2 : any
->   : ^^^
->fn2 `${ 0 }${ undefined }` : any
->                           : ^^^
+>d2 : undefined
+>   : ^^^^^^^^^
+>fn2 `${ 0 }${ undefined }` : undefined
+>                           : ^^^^^^^^^
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
 >    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >`${ 0 }${ undefined }` : string
@@ -112,8 +112,8 @@ d1.foo(); // error
 d2();     // no error (typed as any)
 >d2() : any
 >     : ^^^
->d2 : any
->   : ^^^
+>d2 : undefined
+>   : ^^^^^^^^^
 
 // Generic and non-generic overload where generic overload is the only candidate
 fn2 `${ 0 }${ '' }`; // OK

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare var a;
 
 // parentheses should be omitted

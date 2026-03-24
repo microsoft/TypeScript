@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStaticAccessor.js]
+"use strict";
 const field3 = "field3";
 let C = (() => {
     var _a, _C_field1_accessor_storage, _C__a_accessor_storage, _C__b_accessor_storage;

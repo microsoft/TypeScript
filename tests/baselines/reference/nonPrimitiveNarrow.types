@@ -5,12 +5,12 @@ class Narrow {
 >Narrow : Narrow
 >       : ^^^^^^
 
-    narrowed: boolean
+    narrowed!: boolean
 >narrowed : boolean
 >         : ^^^^^^^
 }
 
-var a: object
+declare var a: object;
 >a : object
 >  : ^^^^^^
 
@@ -60,17 +60,17 @@ if (typeof a === 'number') {
 >        : ^^^
 }
 
-var b: object | null
->b : object
->  : ^^^^^^
+declare var b: object | null;
+>b : object | null
+>  : ^^^^^^^^^^^^^
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
 >                      : ^^^^^^^
 >typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->b : object
->  : ^^^^^^
+>b : object | null
+>  : ^^^^^^^^^^^^^
 >'object' : "object"
 >         : ^^^^^^^^
 
@@ -79,8 +79,8 @@ if (typeof b === 'object') {
 >             : ^^^^^^
 >b.toString : () => string
 >           : ^^^^^^      
->b : object
->  : ^^^^^^
+>b : object | null
+>  : ^^^^^^^^^^^^^
 >toString : () => string
 >         : ^^^^^^      
 

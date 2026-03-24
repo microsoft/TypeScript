@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/exportImportAndClodule.ts] ////
 
 //// [exportImportAndClodule.ts]
-module K {
+namespace K {
     export class L {
         constructor(public name: string) { }
     }
-    export module L {
+    export namespace L {
         export var y = 12;
         export interface Point {
             x: number;
@@ -13,7 +13,7 @@ module K {
         }
     }
 }
-module M {
+namespace M {
     export import D = K.L;
 }
 var o: { name: string };
@@ -22,14 +22,14 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 
 //// [exportImportAndClodule.js]
+"use strict";
 var K;
 (function (K) {
-    var L = /** @class */ (function () {
-        function L(name) {
+    class L {
+        constructor(name) {
             this.name = name;
         }
-        return L;
-    }());
+    }
     K.L = L;
     (function (L) {
         L.y = 12;

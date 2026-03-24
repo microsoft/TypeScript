@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2017
 // @lib: es2018
 // @noTypesAndSymbols: true

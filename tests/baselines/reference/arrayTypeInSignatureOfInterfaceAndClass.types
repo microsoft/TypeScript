@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts] ////
 
 === arrayTypeInSignatureOfInterfaceAndClass.ts ===
-declare module WinJS {
+declare namespace WinJS {
 >WinJS : typeof WinJS
 >      : ^^^^^^^^^^^^
 
@@ -12,19 +12,19 @@ declare module WinJS {
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
 >then : <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void) => Promise<U>
 >     : ^ ^^       ^^^                        ^^     ^^^                          ^^        ^^^                       ^^^^^          
->success : (value: T) => Promise<U>
->        : ^     ^^ ^^^^^          
+>success : ((value: T) => Promise<U>) | undefined
+>        : ^^     ^^ ^^^^^          ^^^^^^^^^^^^^
 >value : T
 >      : ^
->error : (error: any) => Promise<U>
->      : ^     ^^   ^^^^^          
+>error : ((error: any) => Promise<U>) | undefined
+>      : ^^     ^^   ^^^^^          ^^^^^^^^^^^^^
 >error : any
->progress : (progress: any) => void
->         : ^        ^^   ^^^^^    
+>progress : ((progress: any) => void) | undefined
+>         : ^^        ^^   ^^^^^    ^^^^^^^^^^^^^
 >progress : any
     }
 }
-declare module Data {
+declare namespace Data {
 >Data : typeof Data
 >     : ^^^^^^^^^^^
 

@@ -1,0 +1,20 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== emitCompoundExponentiationAssignmentWithIndexingOnLHS1.ts (0 errors) ====
+    var array0 = [1, 2, 3]
+    var i0 = 0;
+    array0[++i0] **= 2;
+    
+    var array1 = [1, 2, 3]
+    var i1 = 0;
+    array1[++i1] **= array1[++i1] **= 2;
+    
+    var array2 = [1, 2, 3]
+    var i2 = 0;
+    array2[++i2] **= array2[++i2] ** 2;
+    
+    var array3 = [2, 2, 3];
+    var j0 = 0, j1 = 1;
+    array3[j0++] **= array3[j1++] **= array3[j0++] **= 1;

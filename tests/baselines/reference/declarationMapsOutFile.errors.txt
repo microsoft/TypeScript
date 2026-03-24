@@ -1,0 +1,24 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== a.ts (0 errors) ====
+    export class Foo {
+        doThing(x: {a: number}) {
+            return {b: x.a};
+        }
+        static make() {
+            return new Foo();
+        }
+    }
+==== index.ts (0 errors) ====
+    import {Foo} from "./a";
+    
+    const c = new Foo();
+    c.doThing({a: 42});
+    
+    export let x = c.doThing({a: 12});
+    export { c, Foo };
+    

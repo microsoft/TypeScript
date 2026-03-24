@@ -18,8 +18,19 @@ class B extends A {
     }
 }
 
+/**
+ * @extends { A }
+ * @constructor
+ */
+class C extends A {
+    constructor() {
+        super();
+    }
+}
+
 
 //// [foo.js]
+"use strict";
 /**
  * @constructor
  */
@@ -31,6 +42,15 @@ class A {
  * @constructor
  */
 class B extends A {
+    constructor() {
+        super();
+    }
+}
+/**
+ * @extends { A }
+ * @constructor
+ */
+class C extends A {
     constructor() {
         super();
     }

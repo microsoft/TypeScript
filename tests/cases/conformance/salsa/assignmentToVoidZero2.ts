@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: assignmentToVoidZero2.js
 // @declaration: true
 // @module: commonjs

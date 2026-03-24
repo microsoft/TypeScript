@@ -1,3 +1,4 @@
+// @target: es2015
 const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
 const b: Required<{ b?: 1; x: 1 }> = { b: 1, x: 1 };
 export let A = a;

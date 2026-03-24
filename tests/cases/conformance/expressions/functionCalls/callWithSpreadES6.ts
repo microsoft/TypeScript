@@ -1,3 +1,4 @@
+// @strict: false
 // @target: ES6
 
 interface X {

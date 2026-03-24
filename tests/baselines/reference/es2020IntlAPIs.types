@@ -266,8 +266,8 @@ console.log(regionNamesInEnglish.of('US'));
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->regionNamesInEnglish.of('US') : string
->                              : ^^^^^^
+>regionNamesInEnglish.of('US') : string | undefined
+>                              : ^^^^^^^^^^^^^^^^^^
 >regionNamesInEnglish.of : (code: string) => string | undefined
 >                        : ^    ^^      ^^^^^                  
 >regionNamesInEnglish : Intl.DisplayNames
@@ -288,8 +288,8 @@ console.log(regionNamesInTraditionalChinese.of('US'));
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->regionNamesInTraditionalChinese.of('US') : string
->                                         : ^^^^^^
+>regionNamesInTraditionalChinese.of('US') : string | undefined
+>                                         : ^^^^^^^^^^^^^^^^^^
 >regionNamesInTraditionalChinese.of : (code: string) => string | undefined
 >                                   : ^    ^^      ^^^^^                  
 >regionNamesInTraditionalChinese : Intl.DisplayNames
@@ -434,8 +434,8 @@ console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB'));
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->(new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB') : string
->                                                                   : ^^^^^^
+>(new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB') : string | undefined
+>                                                                   : ^^^^^^^^^^^^^^^^^^
 >(new Intl.DisplayNames(undefined, {type: 'language'})).of : (code: string) => string | undefined
 >                                                          : ^    ^^      ^^^^^                  
 >(new Intl.DisplayNames(undefined, {type: 'language'})) : Intl.DisplayNames

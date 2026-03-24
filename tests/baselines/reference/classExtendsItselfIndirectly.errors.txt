@@ -1,28 +1,40 @@
 classExtendsItselfIndirectly.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
 classExtendsItselfIndirectly.ts(1,17): error TS2449: Class 'E' used before its declaration.
+classExtendsItselfIndirectly.ts(1,21): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classExtendsItselfIndirectly.ts(3,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly.ts(3,21): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 classExtendsItselfIndirectly.ts(5,7): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly.ts(5,21): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
 classExtendsItselfIndirectly.ts(7,7): error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
 classExtendsItselfIndirectly.ts(7,21): error TS2449: Class 'E2' used before its declaration.
+classExtendsItselfIndirectly.ts(7,29): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 classExtendsItselfIndirectly.ts(9,7): error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly.ts(9,29): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
 classExtendsItselfIndirectly.ts(11,7): error TS2506: 'E2' is referenced directly or indirectly in its own base expression.
+classExtendsItselfIndirectly.ts(11,29): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
 
 
-==== classExtendsItselfIndirectly.ts (8 errors) ====
+==== classExtendsItselfIndirectly.ts (14 errors) ====
     class C extends E { foo: string; } // error
           ~
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
                     ~
 !!! error TS2449: Class 'E' used before its declaration.
 !!! related TS2728 classExtendsItselfIndirectly.ts:5:7: 'E' is declared here.
+                        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     
     class D extends C { bar: string; }
           ~
 !!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+                        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     
     class E extends D { baz: number; }
           ~
 !!! error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+                        ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
     
     class C2<T> extends E2<T> { foo: T; } // error
           ~~
@@ -30,11 +42,17 @@ classExtendsItselfIndirectly.ts(11,7): error TS2506: 'E2' is referenced directly
                         ~~
 !!! error TS2449: Class 'E2' used before its declaration.
 !!! related TS2728 classExtendsItselfIndirectly.ts:11:7: 'E2' is declared here.
+                                ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     
     class D2<T> extends C2<T> { bar: T; }
           ~~
 !!! error TS2506: 'D2' is referenced directly or indirectly in its own base expression.
+                                ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     
     class E2<T> extends D2<T> { baz: T; }
           ~~
 !!! error TS2506: 'E2' is referenced directly or indirectly in its own base expression.
+                                ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.

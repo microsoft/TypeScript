@@ -9,9 +9,11 @@ import { Observable } from "./observable"
 >(<any>Observable.prototype).map = function() { } : () => void
 >                                                 : ^^^^^^^^^^
 >(<any>Observable.prototype).map : any
+>                                : ^^^
 >(<any>Observable.prototype) : any
 >                            : ^^^
 ><any>Observable.prototype : any
+>                          : ^^^
 >Observable.prototype : Observable<any>
 >                     : ^^^^^^^^^^^^^^^
 >Observable : typeof Observable
@@ -24,8 +26,8 @@ import { Observable } from "./observable"
 >               : ^^^^^^^^^^
 
 declare module "./observable" {
->"./observable" : typeof import("observable")
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./observable" : typeof import("./observable")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
@@ -60,7 +62,7 @@ declare module "./observable" {
 >b : number
 >  : ^^^^^^
 
-    module Z {}
+    namespace Z {}
 }
 
 === observable.ts ===

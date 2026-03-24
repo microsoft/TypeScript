@@ -2,12 +2,12 @@ genericFunduleInModule2.ts(11,8): error TS2749: 'A.B' refers to a value, but is 
 
 
 ==== genericFunduleInModule2.ts (1 errors) ====
-    module A {
+    namespace A {
         export function B<T>(x: T) { return x; }
     }
     
-    module A {
-        export module B {
+    namespace A {
+        export namespace B {
             export var x = 1;
         }
     }

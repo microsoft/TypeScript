@@ -259,7 +259,7 @@ interface String {
 }
 
 interface ArrayBuffer {
-    readonly [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "ArrayBuffer";
 }
 
 interface DataView<TArrayBuffer extends ArrayBufferLike> {

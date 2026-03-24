@@ -1,3 +1,4 @@
+// @target: es2015
 interface Foo<T extends Foo<T, C>, C> {
   foo(bar: C): void;
 }

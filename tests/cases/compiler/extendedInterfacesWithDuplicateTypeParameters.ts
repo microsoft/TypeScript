@@ -1,3 +1,4 @@
+// @target: es2015
 interface InterfaceWithMultipleTypars<A, A> { // should error
 	bar(): void;
 }

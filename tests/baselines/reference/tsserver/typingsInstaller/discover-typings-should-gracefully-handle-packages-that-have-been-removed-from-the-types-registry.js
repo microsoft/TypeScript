@@ -6,7 +6,6 @@
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -48,7 +47,11 @@ ts.JsTyping.discoverTypings::
         "bar"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","bar"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:

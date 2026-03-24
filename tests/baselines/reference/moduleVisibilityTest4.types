@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleVisibilityTest4.ts] ////
 
 === moduleVisibilityTest4.ts ===
-module M {
+namespace M {
     export type nums = number;
 >nums : number
 >     : ^^^^^^

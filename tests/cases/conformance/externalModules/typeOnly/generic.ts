@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @Filename: /a.ts
 export class A<T> { a!: T }
 export type { A as B };

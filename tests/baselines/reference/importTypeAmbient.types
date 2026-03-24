@@ -110,6 +110,7 @@ class Bar2 {
 
     constructor(input?: any) {}
 >input : any
+>      : ^^^
 }
 
 let shim: typeof import("foo2") = {

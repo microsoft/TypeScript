@@ -1,8 +1,9 @@
+// @target: es2015
 //@jsx: react
 //@module: commonjs
 
 //@filename: file.tsx
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;

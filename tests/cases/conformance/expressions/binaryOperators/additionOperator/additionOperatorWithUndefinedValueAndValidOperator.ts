@@ -1,11 +1,12 @@
+// @target: es2015
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 
 enum E { a, b, c }
 
-var a: any;
-var b: number;
-var c: E;
-var d: string;
+declare var a: any;
+declare var b: number;
+declare var c: E;
+declare var d: string;
 
 // undefined + any
 var r1: any = undefined + a;

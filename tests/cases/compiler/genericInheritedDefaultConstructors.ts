@@ -1,3 +1,4 @@
+// @target: es2015
 // repro from #8166
 interface Constructor<T> {
     new(...args: any[]): T;

@@ -1,0 +1,48 @@
+subtypingWithObjectMembers4.ts(4,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers4.ts(8,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers4.ts(12,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembers4.ts(16,5): error TS2564: Property 'fooo' has no initializer and is not definitely assigned in the constructor.
+
+
+==== subtypingWithObjectMembers4.ts (4 errors) ====
+    // subtyping when property names do not match
+    
+    class Base {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Derived extends Base {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class A {
+        foo: Base;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class B extends A {
+        fooo: Derived; // ok, inherits foo
+        ~~~~
+!!! error TS2564: Property 'fooo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class A2 {
+        1: Base; 
+    }
+    
+    class B2 extends A2 {
+        1.1: Derived; // ok, inherits 1
+    }
+    
+    class A3 {
+        '1': Base;
+    }
+    
+    class B3 extends A3 {
+        '1.1': Derived; // ok, inherits '1'
+    }

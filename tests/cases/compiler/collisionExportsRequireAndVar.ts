@@ -1,14 +1,15 @@
+// @target: es2015
 //@module: amd
 //@filename: collisionExportsRequireAndVar_externalmodule.ts
 export function foo() {
 }
 var exports = 1;
 var require = "require";
-module m1 {
+namespace m1 {
     var exports = 0;
     var require = "require";
 }
-module m2 {
+namespace m2 {
     export var exports = 0;
     export var require = "require";
 }
@@ -16,11 +17,11 @@ module m2 {
 //@filename: collisionExportsRequireAndVar_globalFile.ts
 var exports = 0;
 var require = "require";
-module m3 {
+namespace m3 {
     var exports = 0;
     var require = "require";
 }
-module m4 {
+namespace m4 {
     export var exports = 0;
     export var require = "require";
 }

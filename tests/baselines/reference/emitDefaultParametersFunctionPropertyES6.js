@@ -9,6 +9,7 @@ var obj2 = {
 }
 
 //// [emitDefaultParametersFunctionPropertyES6.js]
+"use strict";
 var obj2 = {
     func1(y = 10, ...rest) { },
     func2(x = "hello") { },

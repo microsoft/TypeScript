@@ -4,8 +4,7 @@
 // @lib: dom, esnext
 // @jsx: react
 // @esModuleInterop: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // https://github.com/microsoft/TypeScript/issues/56688
 
 // @filename: node_modules/@types/react/index.d.ts

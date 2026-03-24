@@ -29,17 +29,17 @@ const enum D {
 >B : Symbol(D.B, Decl(t1.ts, 10, 6))
 >C : Symbol(D.C, Decl(t1.ts, 10, 9))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(t1.ts, 11, 1))
 
     export var x;
 >x : Symbol(x, Decl(t1.ts, 13, 14))
 }
-module N {
+namespace N {
 >N : Symbol(N, Decl(t1.ts, 14, 1))
 
     export interface I {
->I : Symbol(I, Decl(t1.ts, 15, 10))
+>I : Symbol(I, Decl(t1.ts, 15, 13))
     }
 }
 type T = number;

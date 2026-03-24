@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/constEnumMergingWithValues4.ts] ////
 
 === m1.ts ===
-module foo {
+namespace foo {
     const enum E { X }
 >E : E
 >  : ^
@@ -9,7 +9,7 @@ module foo {
 >  : ^^^
 }
 
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 

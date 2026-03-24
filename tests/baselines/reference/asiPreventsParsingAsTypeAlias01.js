@@ -9,6 +9,7 @@ type
 Foo = string;
 
 //// [asiPreventsParsingAsTypeAlias01.js]
+"use strict";
 var type;
 var string;
 var Foo;

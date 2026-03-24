@@ -11,3 +11,4 @@ interface I2 extends I {
 
 
 //// [genericSignatureInheritance2.js]
+"use strict";

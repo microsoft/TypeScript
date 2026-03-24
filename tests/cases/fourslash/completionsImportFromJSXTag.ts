@@ -21,7 +21,7 @@
 
 verify.applyCodeActionFromCompletion("", {
   name: "Box",
-  source: "/Box",
+  source: "./Box",
   description: `Add import from "./Box"`,
   newFileContent: `import { Box } from "./Box";
 

@@ -5,7 +5,7 @@ const x = require('./ch').x
 >x : Symbol(x, Decl(main.js, 0, 5))
 >require('./ch').x : Symbol(x, Decl(ch.js, 3, 8))
 >require : Symbol(require)
->'./ch' : Symbol("ch", Decl(ch.js, 0, 0))
+>'./ch' : Symbol("./ch", Decl(ch.js, 0, 0))
 >x : Symbol(x, Decl(ch.js, 3, 8))
 
 x

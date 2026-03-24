@@ -26,8 +26,8 @@ goTo.eachMarker(() => {
     verify.completions({
         includes: {
             name: "fail",
-            source: "/node_modules/foo/index",
-            sourceDisplay: "./node_modules/foo/index",
+            source: "foo",
+            sourceDisplay: "foo",
             text: "const fail: number",
             kind: "const",
             kindModifiers: "export,declare",
@@ -40,8 +40,8 @@ goTo.eachMarker(() => {
     verify.completions({
         includes: {
             name: "fail",
-            source: "/node_modules/foo/index",
-            sourceDisplay: "./node_modules/foo/index",
+            source: "foo",
+            sourceDisplay: "foo",
             text: "const fail: number",
             kind: "const",
             kindModifiers: "export,declare",

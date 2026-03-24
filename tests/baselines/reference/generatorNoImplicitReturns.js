@@ -11,6 +11,7 @@ function* testGenerator () {
 
 
 //// [generatorNoImplicitReturns.js]
+"use strict";
 function* testGenerator() {
     if (Math.random() > 0.5) {
         return;

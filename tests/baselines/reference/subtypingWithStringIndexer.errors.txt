@@ -27,7 +27,7 @@ subtypingWithStringIndexer.ts(36,11): error TS2415: Class 'B4<T>' incorrectly ex
         [x: string]: Derived2; // ok
     }
     
-    module Generics {
+    namespace Generics {
         class A<T extends Base> {
             [x: string]: T;
         }

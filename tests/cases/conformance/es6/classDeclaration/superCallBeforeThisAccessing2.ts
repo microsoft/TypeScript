@@ -1,4 +1,6 @@
-﻿class Base {
+﻿// @strict: false
+// @target: es2015
+class Base {
     constructor(c) { }
 }
 class D extends Base {

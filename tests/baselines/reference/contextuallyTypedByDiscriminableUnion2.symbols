@@ -1,0 +1,122 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion2.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion2.ts ===
+// https://github.com/microsoft/TypeScript/issues/62256
+
+type Identifiable = { id: string };
+>Identifiable : Symbol(Identifiable, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+>id : Symbol(id, Decl(contextuallyTypedByDiscriminableUnion2.ts, 2, 21))
+
+interface EnableA {
+>EnableA : Symbol(EnableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 2, 35))
+
+  readonly enableA: true;
+>enableA : Symbol(EnableA.enableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 4, 19))
+
+  // this introduces a conflicting property with some of the other members of MyComponentProps
+  // making relevant final union members reduced nevers
+  readonly enableB: true;
+>enableB : Symbol(EnableA.enableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 5, 25))
+}
+
+interface DisableA {
+>DisableA : Symbol(DisableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 1))
+
+  readonly enableA?: false;
+>enableA : Symbol(DisableA.enableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 11, 20))
+}
+
+interface EnableB {
+>EnableB : Symbol(EnableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 13, 1))
+
+  readonly enableB?: true;
+>enableB : Symbol(EnableB.enableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 15, 19))
+}
+
+interface DisableB {
+>DisableB : Symbol(DisableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 17, 1))
+
+  readonly enableB: false;
+>enableB : Symbol(DisableB.enableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 19, 20))
+}
+
+export interface EnableD<I extends Identifiable> {
+>EnableD : Symbol(EnableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 21, 1))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 23, 25))
+>Identifiable : Symbol(Identifiable, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+
+  readonly enableD: true;
+>enableD : Symbol(EnableD.enableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 23, 50))
+
+  readonly value: I["id"] | null;
+>value : Symbol(EnableD.value, Decl(contextuallyTypedByDiscriminableUnion2.ts, 24, 25))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 23, 25))
+
+  readonly setItem: (item: I | null) => void;
+>setItem : Symbol(EnableD.setItem, Decl(contextuallyTypedByDiscriminableUnion2.ts, 25, 33))
+>item : Symbol(item, Decl(contextuallyTypedByDiscriminableUnion2.ts, 26, 21))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 23, 25))
+}
+
+export interface DisableD<I extends Identifiable> {
+>DisableD : Symbol(DisableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 27, 1))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 29, 26))
+>Identifiable : Symbol(Identifiable, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+
+  readonly enableD: false;
+>enableD : Symbol(DisableD.enableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 29, 51))
+
+  readonly value: I["id"];
+>value : Symbol(DisableD.value, Decl(contextuallyTypedByDiscriminableUnion2.ts, 30, 26))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 29, 26))
+
+  readonly setItem: (item: I) => void;
+>setItem : Symbol(DisableD.setItem, Decl(contextuallyTypedByDiscriminableUnion2.ts, 31, 26))
+>item : Symbol(item, Decl(contextuallyTypedByDiscriminableUnion2.ts, 32, 21))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 29, 26))
+}
+
+type MyComponentProps<I extends Identifiable> = (EnableA | DisableA) &
+>MyComponentProps : Symbol(MyComponentProps, Decl(contextuallyTypedByDiscriminableUnion2.ts, 33, 1))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 35, 22))
+>Identifiable : Symbol(Identifiable, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+>EnableA : Symbol(EnableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 2, 35))
+>DisableA : Symbol(DisableA, Decl(contextuallyTypedByDiscriminableUnion2.ts, 9, 1))
+
+  (EnableB | DisableB) &
+>EnableB : Symbol(EnableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 13, 1))
+>DisableB : Symbol(DisableB, Decl(contextuallyTypedByDiscriminableUnion2.ts, 17, 1))
+
+  (DisableD<I> | EnableD<I>);
+>DisableD : Symbol(DisableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 27, 1))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 35, 22))
+>EnableD : Symbol(EnableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 21, 1))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 35, 22))
+
+const MyComponent = <I extends Identifiable>(props: MyComponentProps<I>) => {};
+>MyComponent : Symbol(MyComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 39, 5))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 39, 21))
+>Identifiable : Symbol(Identifiable, Decl(contextuallyTypedByDiscriminableUnion2.ts, 0, 0))
+>props : Symbol(props, Decl(contextuallyTypedByDiscriminableUnion2.ts, 39, 45))
+>MyComponentProps : Symbol(MyComponentProps, Decl(contextuallyTypedByDiscriminableUnion2.ts, 33, 1))
+>I : Symbol(I, Decl(contextuallyTypedByDiscriminableUnion2.ts, 39, 21))
+
+declare const item: string | null;
+>item : Symbol(item, Decl(contextuallyTypedByDiscriminableUnion2.ts, 41, 13))
+
+MyComponent({
+>MyComponent : Symbol(MyComponent, Decl(contextuallyTypedByDiscriminableUnion2.ts, 39, 5))
+
+  enableD: true,
+>enableD : Symbol(enableD, Decl(contextuallyTypedByDiscriminableUnion2.ts, 43, 13))
+
+  value: item,
+>value : Symbol(value, Decl(contextuallyTypedByDiscriminableUnion2.ts, 44, 16))
+>item : Symbol(item, Decl(contextuallyTypedByDiscriminableUnion2.ts, 41, 13))
+
+  setItem: (item) => {},
+>setItem : Symbol(setItem, Decl(contextuallyTypedByDiscriminableUnion2.ts, 45, 14))
+>item : Symbol(item, Decl(contextuallyTypedByDiscriminableUnion2.ts, 46, 12))
+
+});
+

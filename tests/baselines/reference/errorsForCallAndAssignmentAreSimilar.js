@@ -21,6 +21,7 @@ function minimalExample1() {
 }
 
 //// [errorsForCallAndAssignmentAreSimilar.js]
+"use strict";
 function minimalExample1() {
     function foo(x) {
     }
@@ -28,7 +29,7 @@ function minimalExample1() {
         { kind: "bluray", },
         { kind: "hdpvd", }
     ]);
-    var ds = [
+    const ds = [
         { kind: "bluray", },
         { kind: "hdpvd", }
     ];

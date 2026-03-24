@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveFlowNode,
     canHaveLocals,
     canHaveSymbol,
     CaseBlock,
@@ -45,7 +46,6 @@ import {
     DeleteExpression,
     DestructuringAssignment,
     DiagnosticArguments,
-    DiagnosticCategory,
     DiagnosticMessage,
     DiagnosticRelatedInformation,
     Diagnostics,
@@ -82,11 +82,11 @@ import {
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAlwaysStrict,
     getAssignedExpandoInitializer,
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
     getCombinedModifierFlags,
-    getCombinedNodeFlags,
     getContainingClass,
     getEffectiveContainerForJSDocTemplateTag,
     getElementOrPropertyAccessName,
@@ -105,19 +105,15 @@ import {
     getNameOfDeclaration,
     getNameOrArgument,
     getNodeId,
-    getRangesWhere,
     getRightMostAssignedExpression,
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
     getSpanOfTokenAtPosition,
-    getStrictOptionValue,
     getSymbolNameForPrivateIdentifier,
     getTextOfIdentifierOrLiteral,
     getThisContainer,
-    getTokenPosOfNode,
     HasContainerFlags,
     hasDynamicName,
-    HasFlowNode,
     hasJSDocNodes,
     HasLocals,
     hasSyntacticModifier,
@@ -163,7 +159,6 @@ import {
     isExternalModule,
     isExternalOrCommonJsModule,
     isForInOrOfStatement,
-    isFunctionDeclaration,
     isFunctionLike,
     isFunctionLikeDeclaration,
     isFunctionLikeOrClassStaticBlockDeclaration,
@@ -203,6 +198,7 @@ import {
     isParenthesizedExpression,
     isPartOfParameterDeclaration,
     isPartOfTypeQuery,
+    isPotentiallyExecutableNode,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
     isPrologueDirective,
@@ -216,8 +212,6 @@ import {
     isSignedNumericLiteral,
     isSourceFile,
     isSpecialPropertyDeclaration,
-    isStatement,
-    isStatementButNotDeclaration,
     isStatic,
     isString,
     isStringLiteralLike,
@@ -285,10 +279,8 @@ import {
     setParentRecursive,
     setValueDeclaration,
     ShorthandPropertyAssignment,
-    shouldPreserveConstEnums,
     SignatureDeclaration,
     skipParentheses,
-    sliceAfter,
     some,
     SourceFile,
     SpreadElement,
@@ -301,7 +293,6 @@ import {
     symbolName,
     SymbolTable,
     SyntaxKind,
-    TextRange,
     ThisExpression,
     ThrowStatement,
     tokenToString,
@@ -314,8 +305,6 @@ import {
     TypeOfExpression,
     TypeParameterDeclaration,
     unescapeLeadingUnderscores,
-    unreachableCodeIsError,
-    unusedLabelIsError,
     VariableDeclaration,
     WhileStatement,
     WithStatement,
@@ -499,6 +488,7 @@ export const enum ContainerFlags {
     HasLocals = 1 << 5,
     IsInterface = 1 << 6,
     IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
+    PropagatesThisKeyword = 1 << 8,
 }
 
 /** @internal */
@@ -543,6 +533,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var inReturnPosition: boolean;
     var hasFlowEffects: boolean;
 
     // state used for emit helpers
@@ -563,7 +554,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var classifiableNames: Set<__String>;
 
     var unreachableFlow = createFlowNode(FlowFlags.Unreachable, /*node*/ undefined, /*antecedent*/ undefined);
-    var reportedUnreachableFlow = createFlowNode(FlowFlags.Unreachable, /*node*/ undefined, /*antecedent*/ undefined);
     var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
     /* eslint-enable no-var */
 
@@ -590,7 +580,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
         // Attach debugging information if necessary
         Debug.attachFlowNodeDebugInfo(unreachableFlow);
-        Debug.attachFlowNodeDebugInfo(reportedUnreachableFlow);
 
         if (!file.locals) {
             tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
@@ -622,13 +611,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        inReturnPosition = false;
         hasFlowEffects = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-        if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
+        if (getAlwaysStrict(opts) && !file.isDeclarationFile) {
             // bind in strict mode source files with alwaysStrict option
             return true;
         }
@@ -967,7 +957,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveContainer = container;
         const saveThisParentContainer = thisParentContainer;
         const savedBlockScopeContainer = blockScopeContainer;
+        const savedInReturnPosition = inReturnPosition;
 
+        if (node.kind === SyntaxKind.ArrowFunction && node.body.kind !== SyntaxKind.Block) inReturnPosition = true;
         // Depending on what kind of node this is, we may have to adjust the current container
         // and block-container.   If the current node is a container, then it is automatically
         // considered the current block-container as well.  Also, for containers that we know
@@ -1009,6 +1001,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const saveExceptionTarget = currentExceptionTarget;
             const saveActiveLabelList = activeLabelList;
             const saveHasExplicitReturn = hasExplicitReturn;
+            const saveSeenThisKeyword = seenThisKeyword;
             const isImmediatelyInvoked = (
                 containerFlags & ContainerFlags.IsFunctionExpression &&
                 !hasSyntacticModifier(node, ModifierFlags.Async) &&
@@ -1031,19 +1024,22 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentContinueTarget = undefined;
             activeLabelList = undefined;
             hasExplicitReturn = false;
+            seenThisKeyword = false;
             bindChildren(node);
-            // Reset all reachability check related flags on node (for incremental scenarios)
-            node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
+            // Reset flags (for incremental scenarios)
+            node.flags &= ~(NodeFlags.ReachabilityAndEmitFlags | NodeFlags.ContainsThis);
             if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                 node.flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
                 (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).endFlowNode = currentFlow;
             }
+            if (seenThisKeyword) {
+                node.flags |= NodeFlags.ContainsThis;
+            }
             if (node.kind === SyntaxKind.SourceFile) {
                 node.flags |= emitFlags;
                 (node as SourceFile).endFlowNode = currentFlow;
             }
-
             if (currentReturnTarget) {
                 addAntecedent(currentReturnTarget, currentFlow);
                 currentFlow = finishFlowLabel(currentReturnTarget);
@@ -1060,17 +1056,21 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentExceptionTarget = saveExceptionTarget;
             activeLabelList = saveActiveLabelList;
             hasExplicitReturn = saveHasExplicitReturn;
+            seenThisKeyword = containerFlags & ContainerFlags.PropagatesThisKeyword ? saveSeenThisKeyword || seenThisKeyword : saveSeenThisKeyword;
         }
         else if (containerFlags & ContainerFlags.IsInterface) {
+            const saveSeenThisKeyword = seenThisKeyword;
             seenThisKeyword = false;
             bindChildren(node);
             Debug.assertNotNode(node, isIdentifier); // ContainsThis cannot overlap with HasExtendedUnicodeEscape on Identifier
             node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            seenThisKeyword = saveSeenThisKeyword;
         }
         else {
             bindChildren(node);
         }
 
+        inReturnPosition = savedInReturnPosition;
         container = saveContainer;
         thisParentContainer = saveThisParentContainer;
         blockScopeContainer = savedBlockScopeContainer;
@@ -1098,15 +1098,29 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Most nodes aren't valid in an assignment pattern, so we clear the value here
         // and set it before we descend into nodes that could actually be part of an assignment pattern.
         inAssignmentPattern = false;
-        if (checkUnreachable(node)) {
+
+        // Clear Unreachable flag from previous binding (for incremental scenarios)
+        if (isPotentiallyExecutableNode(node)) {
+            (node as Mutable<Node>).flags &= ~NodeFlags.Unreachable;
+        }
+
+        if (currentFlow === unreachableFlow) {
+            if (canHaveFlowNode(node)) {
+                node.flowNode = undefined;
+            }
+            if (isPotentiallyExecutableNode(node)) {
+                (node as Mutable<Node>).flags |= NodeFlags.Unreachable;
+            }
             bindEachChild(node);
             bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
-        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && (!options.allowUnreachableCode || node.kind === SyntaxKind.ReturnStatement)) {
-            (node as HasFlowNode).flowNode = currentFlow;
+
+        if (SyntaxKind.FirstStatement <= node.kind && node.kind <= SyntaxKind.LastStatement && canHaveFlowNode(node)) {
+            node.flowNode = currentFlow;
         }
+
         switch (node.kind) {
             case SyntaxKind.WhileStatement:
                 bindWhileStatement(node as WhileStatement);
@@ -1309,9 +1323,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
-                    (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) || isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
+                const left = skipParentheses(expr.left);
+                const right = skipParentheses(expr.right);
+                return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+                    isNarrowingTypeofOperands(right, left) || isNarrowingTypeofOperands(left, right) ||
+                    (isBooleanLiteral(right) && isNarrowingExpression(left) || isBooleanLiteral(left) && isNarrowingExpression(right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
@@ -1525,13 +1541,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindForStatement(node: ForStatement): void {
         const preLoopLabel = setContinueTarget(node, createLoopLabel());
         const preBodyLabel = createBranchLabel();
+        const preIncrementorLabel = createBranchLabel();
         const postLoopLabel = createBranchLabel();
         bind(node.initializer);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = preLoopLabel;
         bindCondition(node.condition, preBodyLabel, postLoopLabel);
         currentFlow = finishFlowLabel(preBodyLabel);
-        bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
+        bindIterativeStatement(node.statement, postLoopLabel, preIncrementorLabel);
+        addAntecedent(preIncrementorLabel, currentFlow);
+        currentFlow = finishFlowLabel(preIncrementorLabel);
         bind(node.incrementor);
         addAntecedent(preLoopLabel, currentFlow);
         currentFlow = finishFlowLabel(postLoopLabel);
@@ -1571,7 +1590,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+        const savedInReturnPosition = inReturnPosition;
+        inReturnPosition = true;
         bind(node.expression);
+        inReturnPosition = savedInReturnPosition;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -1776,8 +1798,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         };
         bind(node.label);
         bind(node.statement);
-        if (!activeLabelList.referenced && !options.allowUnusedLabels) {
-            errorOrSuggestionOnNode(unusedLabelIsError(options), node.label, Diagnostics.Unused_label);
+        if (!activeLabelList.referenced) {
+            (node.label as Mutable<Node>).flags |= NodeFlags.Unreachable;
         }
         activeLabelList = activeLabelList.next;
         addAntecedent(postStatementLabel, currentFlow);
@@ -2016,10 +2038,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         hasFlowEffects = false;
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenTrue = currentFlow;
+        }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
+        if (inReturnPosition) {
+            node.flowNodeWhenFalse = currentFlow;
+        }
         bind(node.colonToken);
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);
@@ -2720,24 +2748,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, ...args));
     }
 
-    function errorOrSuggestionOnNode(isError: boolean, node: Node, message: DiagnosticMessage): void {
-        errorOrSuggestionOnRange(isError, node, node, message);
-    }
-
-    function errorOrSuggestionOnRange(isError: boolean, startNode: Node, endNode: Node, message: DiagnosticMessage): void {
-        addErrorOrSuggestionDiagnostic(isError, { pos: getTokenPosOfNode(startNode, file), end: endNode.end }, message);
-    }
-
-    function addErrorOrSuggestionDiagnostic(isError: boolean, range: TextRange, message: DiagnosticMessage): void {
-        const diag = createFileDiagnostic(file, range.pos, range.end - range.pos, message);
-        if (isError) {
-            file.bindDiagnostics.push(diag);
-        }
-        else {
-            file.bindSuggestionDiagnostics = append(file.bindSuggestionDiagnostics, { ...diag, category: DiagnosticCategory.Suggestion });
-        }
-    }
-
     function bind(node: Node | undefined): void {
         if (!node) {
             return;
@@ -2850,6 +2860,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             case SyntaxKind.ThisKeyword:
+                if (node.kind === SyntaxKind.ThisKeyword) {
+                    seenThisKeyword = true;
+                }
                 // TODO: Why use `isExpression` here? both Identifier and ThisKeyword are expressions.
                 if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                     (node as Identifier | ThisExpression).flowNode = currentFlow;
@@ -3770,93 +3783,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
         }
     }
-
-    // reachability checks
-
-    function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
-        const instanceState = getModuleInstanceState(node);
-        return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && shouldPreserveConstEnums(options));
-    }
-
-    function checkUnreachable(node: Node): boolean {
-        if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-            return false;
-        }
-        if (currentFlow === unreachableFlow) {
-            const reportError =
-                // report error on all statements except empty ones
-                (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
-                // report error on class declarations
-                node.kind === SyntaxKind.ClassDeclaration ||
-                // report errors on enums with preserved emit
-                isEnumDeclarationWithPreservedEmit(node, options) ||
-                // report error on instantiated modules
-                (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
-
-            if (reportError) {
-                currentFlow = reportedUnreachableFlow;
-
-                if (!options.allowUnreachableCode) {
-                    // unreachable code is reported if
-                    // - user has explicitly asked about it AND
-                    // - statement is in not ambient context (statements in ambient context is already an error
-                    //   so we should not report extras) AND
-                    //   - node is not variable statement OR
-                    //   - node is block scoped variable statement OR
-                    //   - node is not block scoped variable statement and at least one variable declaration has initializer
-                    //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
-                    //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
-                    const isError = unreachableCodeIsError(options) &&
-                        !(node.flags & NodeFlags.Ambient) &&
-                        (
-                            !isVariableStatement(node) ||
-                            !!(getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped) ||
-                            node.declarationList.declarations.some(d => !!d.initializer)
-                        );
-
-                    eachUnreachableRange(node, options, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
-                }
-            }
-        }
-        return true;
-    }
-}
-
-function isEnumDeclarationWithPreservedEmit(node: Node, options: CompilerOptions): boolean {
-    return node.kind === SyntaxKind.EnumDeclaration && (!isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(options));
-}
-
-function eachUnreachableRange(node: Node, options: CompilerOptions, cb: (start: Node, last: Node) => void): void {
-    if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
-        const { statements } = node.parent;
-        const slice = sliceAfter(statements, node);
-        getRangesWhere(slice, isExecutableStatement, (start, afterEnd) => cb(slice[start], slice[afterEnd - 1]));
-    }
-    else {
-        cb(node, node);
-    }
-
-    // As opposed to a pure declaration like an `interface`
-    function isExecutableStatement(s: Statement): boolean {
-        // Don't remove statements that can validly be used before they appear.
-        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
-            // `var x;` may declare a variable used above
-            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.BlockScoped)) && s.declarationList.declarations.some(d => !d.initializer));
-    }
-
-    function isPurelyTypeDeclaration(s: Statement): boolean {
-        switch (s.kind) {
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-                return true;
-            case SyntaxKind.ModuleDeclaration:
-                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
-            case SyntaxKind.EnumDeclaration:
-                return !isEnumDeclarationWithPreservedEmit(s, options);
-            default:
-                return false;
-        }
-    }
 }
 
 /** @internal */
@@ -3918,6 +3844,9 @@ export function getContainerFlags(node: Node): ContainerFlags {
             // falls through
         case SyntaxKind.Constructor:
         case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
         case SyntaxKind.MethodSignature:
         case SyntaxKind.CallSignature:
         case SyntaxKind.JSDocSignature:
@@ -3925,17 +3854,20 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.FunctionType:
         case SyntaxKind.ConstructSignature:
         case SyntaxKind.ConstructorType:
-        case SyntaxKind.ClassStaticBlockDeclaration:
-            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.PropagatesThisKeyword;
+
+        case SyntaxKind.JSDocImportTag:
+            // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.PropagatesThisKeyword;
 
         case SyntaxKind.FunctionExpression:
-        case SyntaxKind.ArrowFunction:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
+
+        case SyntaxKind.ArrowFunction:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression | ContainerFlags.PropagatesThisKeyword;
 
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;
-        case SyntaxKind.PropertyDeclaration:
-            return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : 0;
 
         case SyntaxKind.CatchClause:
         case SyntaxKind.ForStatement:

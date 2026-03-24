@@ -7,6 +7,7 @@ class X {
 }
 
 //// [asyncFunctionReturnType.2.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/47291
 class X {
     f = async () => this;

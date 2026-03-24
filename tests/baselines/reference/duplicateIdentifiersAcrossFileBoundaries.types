@@ -29,11 +29,11 @@ class Foo {
 >  : ^^^^^^
 }
 
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 
-    export module F {
+    export namespace F {
 >F : typeof F
 >  : ^^^^^^^^
 
@@ -63,7 +63,7 @@ var v = 3;
 >3 : 3
 >  : ^
 
-module Foo {
+namespace Foo {
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 
@@ -72,7 +72,7 @@ module Foo {
 >  : ^^^^^^
 }
 
-declare module N {
+declare namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

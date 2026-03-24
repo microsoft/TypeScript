@@ -6,9 +6,10 @@ nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' is not assignable to t
   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
 nativeToBoxedTypes.ts(15,1): error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
   'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.
+nativeToBoxedTypes.ts(15,7): error TS2454: Variable 'Sym' is used before being assigned.
 
 
-==== nativeToBoxedTypes.ts (4 errors) ====
+==== nativeToBoxedTypes.ts (5 errors) ====
     var N = new Number();
     var n = 100;
     n = N;
@@ -36,3 +37,5 @@ nativeToBoxedTypes.ts(15,1): error TS2322: Type 'Symbol' is not assignable to ty
     ~~~
 !!! error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
 !!! error TS2322:   'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.
+          ~~~
+!!! error TS2454: Variable 'Sym' is used before being assigned.

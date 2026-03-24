@@ -2,7 +2,7 @@
 
 === decrementOperatorWithUnsupportedStringType.ts ===
 // -- operator on string type
-var STRING: string;
+declare var STRING: string;
 >STRING : string
 >       : ^^^^^^
 
@@ -36,7 +36,7 @@ class A {
 >"" : ""
 >   : ^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

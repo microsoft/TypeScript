@@ -1,3 +1,4 @@
+// @target: es2015
 declare const dec: any;
 
 class C { n = true; }

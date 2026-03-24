@@ -51,19 +51,19 @@ declare class A {
     /**
      * @type object
      */
-    foo: object;
+    foo: object | undefined;
     /**
      * @type object
      */
-    bar: object;
+    bar: object | undefined;
     /**
      * @type object
      */
-    baz: object;
+    baz: object | undefined;
     /**
      * @type object
      */
-    options: object;
+    options: object | undefined;
     get arguments(): {
         bar: {};
     };

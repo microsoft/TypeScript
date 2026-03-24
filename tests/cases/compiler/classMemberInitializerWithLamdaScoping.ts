@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5
 declare var console: {
     log(msg?: any): void;

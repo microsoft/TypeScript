@@ -47,6 +47,7 @@ import {
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAlwaysStrict,
     getEffectiveBaseTypeNode,
     getEmitFlags,
     getEmitModuleKind,
@@ -57,7 +58,6 @@ import {
     getOriginalNode,
     getParseTreeNode,
     getProperties,
-    getStrictOptionValue,
     getTextOfNode,
     hasDecorators,
     hasSyntacticModifier,
@@ -836,7 +836,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
     }
 
     function visitSourceFile(node: SourceFile) {
-        const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
+        const alwaysStrict = getAlwaysStrict(compilerOptions) &&
             !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
             !isJsonSourceFile(node);
 
@@ -879,7 +879,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         const facts = getClassFacts(node);
-        const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
+        const promoteToIIFE = languageVersion < ScriptTarget.ES2015 &&
             !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
 
         if (
@@ -1055,6 +1055,10 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
         if (parametersWithPropertyAssignments) {
             for (const parameter of parametersWithPropertyAssignments) {
+                // Ignore parameter properties with destructured names; we will have errored on them earlier.
+                if (!isIdentifier(parameter.name)) {
+                    continue;
+                }
                 const parameterProperty = factory.createPropertyDeclaration(
                     /*modifiers*/ undefined,
                     parameter.name,
@@ -2282,11 +2286,11 @@ export function transformTypeScript(context: TransformationContext): Transformer
      * @param node The import clause node.
      */
     function visitImportClause(node: ImportClause): VisitResult<ImportClause> | undefined {
-        Debug.assert(!node.isTypeOnly);
+        Debug.assert(node.phaseModifier !== SyntaxKind.TypeKeyword);
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
         const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-        return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings) : undefined;
+        return (name || namedBindings) ? factory.updateImportClause(node, node.phaseModifier, name, namedBindings) : undefined;
     }
 
     /**

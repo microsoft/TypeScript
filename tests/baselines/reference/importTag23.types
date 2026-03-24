@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/importTag23.ts] ////
+
+=== /a.ts ===
+export interface I {
+    foo(): void;
+>foo : () => void
+>    : ^^^^^^    
+}
+
+=== /b.js ===
+/**
+ * @import * as NS from './a'
+ */
+
+/** @implements {NS.I} */
+export class C {}
+>C : C
+>  : ^
+

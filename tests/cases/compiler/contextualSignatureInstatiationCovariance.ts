@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface Animal { x }
 interface TallThing { x2 }
 interface Giraffe extends Animal, TallThing { y }

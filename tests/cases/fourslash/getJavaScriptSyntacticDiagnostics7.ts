@@ -2,6 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////module M { }
+////namespace M { }
 
 verify.baselineSyntacticDiagnostics();

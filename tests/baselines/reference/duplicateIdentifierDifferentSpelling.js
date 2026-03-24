@@ -10,11 +10,11 @@ var X = { 0b11: '', 3: '' };
 
 
 //// [duplicateIdentifierDifferentSpelling.js]
-var A = /** @class */ (function () {
-    function A() {
-        this[3] = '';
+"use strict";
+class A {
+    constructor() {
+        this[0b11] = '';
         this[3] = '';
     }
-    return A;
-}());
-var X = { 3: '', 3: '' };
+}
+var X = { 0b11: '', 3: '' };

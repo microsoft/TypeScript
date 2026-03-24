@@ -1,3 +1,4 @@
+// @target: es2015
 interface Properties {
     property1: string;
     __property2: string;

@@ -57,9 +57,42 @@ exports.x = void 0;
 exports.x = 1;
 //// [f2.js]
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 // all mutations below are illegal and should be fixed
-var stuff = require("./f1");
+const stuff = __importStar(require("./f1"));
 var n = 'baz';
 stuff.x = 0;
 stuff['x'] = 1;
@@ -78,34 +111,18 @@ stuff[n]++;
 (stuff['blah'])++;
 (stuff[n])++;
 for (stuff.x in []) { }
-for (var _i = 0, _a = []; _i < _a.length; _i++) {
-    stuff.x = _a[_i];
-}
+for (stuff.x of []) { }
 for (stuff['x'] in []) { }
-for (var _b = 0, _c = []; _b < _c.length; _b++) {
-    stuff['x'] = _c[_b];
-}
+for (stuff['x'] of []) { }
 for (stuff.blah in []) { }
-for (var _d = 0, _e = []; _d < _e.length; _d++) {
-    stuff.blah = _e[_d];
-}
+for (stuff.blah of []) { }
 for (stuff[n] in []) { }
-for (var _f = 0, _g = []; _f < _g.length; _f++) {
-    stuff[n] = _g[_f];
-}
+for (stuff[n] of []) { }
 for ((stuff.x) in []) { }
-for (var _h = 0, _j = []; _h < _j.length; _h++) {
-    (stuff.x) = _j[_h];
-}
+for ((stuff.x) of []) { }
 for ((stuff['x']) in []) { }
-for (var _k = 0, _l = []; _k < _l.length; _k++) {
-    (stuff['x']) = _l[_k];
-}
+for ((stuff['x']) of []) { }
 for ((stuff.blah) in []) { }
-for (var _m = 0, _o = []; _m < _o.length; _m++) {
-    (stuff.blah) = _o[_m];
-}
+for ((stuff.blah) of []) { }
 for ((stuff[n]) in []) { }
-for (var _p = 0, _q = []; _p < _q.length; _p++) {
-    (stuff[n]) = _q[_p];
-}
+for ((stuff[n]) of []) { }

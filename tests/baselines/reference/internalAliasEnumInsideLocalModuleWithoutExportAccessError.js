@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts] ////
 
 //// [internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts]
-export module a {
+export namespace a {
     export enum weekend {
         Friday,
         Saturday,
@@ -9,7 +9,7 @@ export module a {
     }
 }
 
-export module c {
+export namespace c {
     import b = a.weekend;
     export var bVal: b = b.Sunday;
 }
@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.a = void 0;
 var a;
 (function (a) {
-    var weekend;
+    let weekend;
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
         weekend[weekend["Saturday"] = 1] = "Saturday";

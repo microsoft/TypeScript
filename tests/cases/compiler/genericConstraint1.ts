@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T> {
     public bar2<U extends T>(x: T, y: U): T {
         return null;

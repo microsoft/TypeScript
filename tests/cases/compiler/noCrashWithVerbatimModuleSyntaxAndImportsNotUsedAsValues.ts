@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @verbatimModuleSyntax: true
 // @importsNotUsedAsValues: error
 // @ignoreDeprecations: 5.0

@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts] ////
 
 === noImplicitAnyParametersInAmbientModule.ts ===
-declare module D_M {
+declare namespace D_M {
 >D_M : Symbol(D_M, Decl(noImplicitAnyParametersInAmbientModule.ts, 0, 0))
 
     // No implicit-'any' errors.
     function dm_f1(): void;
->dm_f1 : Symbol(dm_f1, Decl(noImplicitAnyParametersInAmbientModule.ts, 0, 20))
+>dm_f1 : Symbol(dm_f1, Decl(noImplicitAnyParametersInAmbientModule.ts, 0, 23))
 
     // No implicit-'any' errors.
     function dm_f2(x): void;

@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @noEmitHelpers: true
 // @lib: es5,es2015.promise
 // @allowJs: true

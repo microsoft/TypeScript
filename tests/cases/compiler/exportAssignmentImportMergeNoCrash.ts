@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @filename: assignment.ts
 export default {
     foo: 12

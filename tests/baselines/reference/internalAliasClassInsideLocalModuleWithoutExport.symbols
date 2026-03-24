@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExport.ts] ////
 
 === internalAliasClassInsideLocalModuleWithoutExport.ts ===
-export module x {
+export namespace x {
 >x : Symbol(x, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 0))
 
     export class c {
->c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 17))
+>c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 20))
 
         foo(a: number) {
 >foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
@@ -17,20 +17,20 @@ export module x {
     }
 }
 
-export module m2 {
+export namespace m2 {
 >m2 : Symbol(m2, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 6, 1))
 
-    export module m3 {
->m3 : Symbol(m3, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 8, 18))
+    export namespace m3 {
+>m3 : Symbol(m3, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 8, 21))
 
         import c = x.c;
->c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 9, 22))
+>c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 9, 25))
 >x : Symbol(x, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 0))
->c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 17))
+>c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 20))
 
         export var cProp = new c();
 >cProp : Symbol(cProp, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 11, 18))
->c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 9, 22))
+>c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 9, 25))
 
         var cReturnVal = cProp.foo(10);
 >cReturnVal : Symbol(cReturnVal, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 12, 11))

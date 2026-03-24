@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: classExtendsItselfIndirectly_file1.ts
 class C extends E { foo: string; } // error
 

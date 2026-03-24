@@ -8,6 +8,7 @@ function* g(): IterableIterator<(x: string) => number, (x: string) => number> {
 }
 
 //// [generatorTypeCheck26.js]
+"use strict";
 function* g() {
     yield x => x.length;
     yield* [x => x.length];

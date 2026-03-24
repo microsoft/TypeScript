@@ -4,4 +4,5 @@
 X.f();
 
 //// [separate1-1.js]
+"use strict";
 X.f();

@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @declaration: true
 import { Record } from "./a";
 export type Foo<K extends string> = Record<K, number>;

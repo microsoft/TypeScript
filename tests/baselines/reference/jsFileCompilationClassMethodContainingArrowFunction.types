@@ -9,6 +9,7 @@ class c {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
         let x = a => this.method(a);
 >x : (a: any) => void
@@ -16,6 +17,7 @@ class c {
 >a => this.method(a) : (a: any) => void
 >                    : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >this.method(a) : void
 >               : ^^^^
 >this.method : (a: any) => void
@@ -25,6 +27,7 @@ class c {
 >method : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
     }
 }
 

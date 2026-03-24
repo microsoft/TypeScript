@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo {
 	private pvar = 0;
 	constructor() {

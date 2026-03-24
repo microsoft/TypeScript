@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: false
 
 declare var union: null | { a: number, b: string };

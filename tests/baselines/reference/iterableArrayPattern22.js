@@ -4,4 +4,5 @@
 var [...a] = { 0: "", 1: true };
 
 //// [iterableArrayPattern22.js]
+"use strict";
 var [...a] = { 0: "", 1: true };

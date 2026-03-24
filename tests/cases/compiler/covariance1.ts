@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
 
     interface X { m1:number; }
     export class XX implements X { constructor(public m1:number) { } }

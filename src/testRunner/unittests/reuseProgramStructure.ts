@@ -358,9 +358,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         const baselines: string[] = [];
         baselineProgram(baselines, initialProgram);
 
-        const afterNpmInstallProgram = updateProgram(initialProgram, rootFiles.map(f => f.name), options, f => {
-            f[1].text = f[1].text.updateReferences(`/// <reference no-default-lib="true"/>`);
-        }, filesAfterNpmInstall);
+        const afterNpmInstallProgram = updateProgram(initialProgram, rootFiles.map(f => f.name), options, ts.noop, filesAfterNpmInstall);
         baselineProgram(baselines, afterNpmInstallProgram);
 
         runBaseline("fetches imports after npm install", baselines);
@@ -400,7 +398,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
             {
                 name: "f1.ts",
                 text: SourceText.New(
-                    `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
+                    `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>`,
                     `import { B } from './b1';${newLine}export let BB = B;`,
                     "declare module './b1' { interface B { y: string; } }",
                 ),
@@ -770,6 +768,35 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         baselineProgram(baselines, program5);
         baselineDiagnostics(baselines, program4);
         runBaseline("handles file preprocessing dignostics when diagnostics are not queried", baselines);
+    });
+
+    it("isSourceFileDefaultLibrary is preserved after program reuse", () => {
+        const libFile = { name: "/lib.d.ts", text: SourceText.New("", "", "declare var console: any;") };
+        const mainFile = { name: "/main.ts", text: SourceText.New("", "", "var x = 1;") };
+        const files = [libFile, mainFile];
+
+        const host = createTestCompilerHost(files, target);
+        host.getDefaultLibFileName = () => "/lib.d.ts";
+
+        const options: ts.CompilerOptions = { target };
+        const program1 = ts.createProgram(["/main.ts"], options, host) as ProgramWithSourceTexts;
+        program1.sourceTexts = files;
+        program1.host = host;
+        program1.version = 1;
+
+        const libSourceFile1 = program1.getSourceFile("/lib.d.ts")!;
+        assert.isDefined(libSourceFile1, "lib file should exist in program 1");
+        assert.isTrue(program1.isSourceFileDefaultLibrary(libSourceFile1), "lib file should be a default library in program 1");
+
+        // Update main file only (code change) -> should trigger complete structure reuse
+        mainFile.text = mainFile.text.updateProgram("var x = 2;");
+        const host2 = createTestCompilerHost(files, target, program1);
+        host2.getDefaultLibFileName = () => "/lib.d.ts";
+        const program2 = ts.createProgram(["/main.ts"], options, host2, program1);
+
+        const libSourceFile2 = program2.getSourceFile("/lib.d.ts")!;
+        assert.isDefined(libSourceFile2, "lib file should exist in program 2");
+        assert.isTrue(program2.isSourceFileDefaultLibrary(libSourceFile2), "lib file should still be a default library in program 2 after reuse");
     });
 });
 

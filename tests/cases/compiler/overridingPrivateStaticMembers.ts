@@ -1,3 +1,4 @@
+// @target: es2015
 class Base2 {
     private static y: { foo: string };
 }

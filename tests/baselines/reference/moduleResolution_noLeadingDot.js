@@ -8,4 +8,5 @@ true;
 
 
 //// [a.js]
+"use strict";
 true;

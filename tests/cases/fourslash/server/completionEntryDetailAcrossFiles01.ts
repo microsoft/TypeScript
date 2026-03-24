@@ -1,6 +1,8 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: a.js
 //// /**
 ////  * Modify the parameter

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declFileTypeofModule.ts] ////
 
 === declFileTypeofModule.ts ===
-module m1 {
+namespace m1 {
 >m1 : Symbol(m1, Decl(declFileTypeofModule.ts, 0, 0))
 
     export var c: string;
@@ -15,7 +15,7 @@ var m1_2: typeof m1;
 >m1_2 : Symbol(m1_2, Decl(declFileTypeofModule.ts, 4, 3))
 >m1 : Symbol(m1, Decl(declFileTypeofModule.ts, 0, 0))
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(declFileTypeofModule.ts, 4, 20))
 
     export var d: typeof m2;

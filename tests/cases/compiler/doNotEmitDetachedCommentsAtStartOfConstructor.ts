@@ -1,4 +1,5 @@
-﻿// @removeComments: true
+﻿// @target: es2015
+// @removeComments: true
 class A {
     constructor() {
         // Single Line Comment

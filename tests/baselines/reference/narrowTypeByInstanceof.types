@@ -58,7 +58,9 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
     let a = elementA.resource().path;
 >a : any
+>  : ^^^
 >elementA.resource().path : any
+>                         : ^^^
 >elementA.resource() : any
 >                    : ^^^
 >elementA.resource : () => any
@@ -72,7 +74,9 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
     let b = elementB.resource().path;
 >b : any
+>  : ^^^
 >elementB.resource().path : any
+>                         : ^^^
 >elementB.resource() : any
 >                    : ^^^
 >elementB.resource : () => any
@@ -102,7 +106,9 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
     let a = elementA.range();
 >a : any
+>  : ^^^
 >elementA.range() : any
+>                 : ^^^
 >elementA.range : () => any
 >               : ^^^^^^   
 >elementA : Match
@@ -112,7 +118,9 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 
     let b = elementB.range();
 >b : any
+>  : ^^^
 >elementB.range() : any
+>                 : ^^^
 >elementB.range : () => any
 >               : ^^^^^^   
 >elementB : Match

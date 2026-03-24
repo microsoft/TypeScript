@@ -9,10 +9,7 @@ import * as vpath from "./_namespaces/vpath.js";
 import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
-import {
-    harnessSessionLibLocation,
-    harnessTypingInstallerCacheLocation,
-} from "./harnessLanguageService.js";
+import { harnessTypingInstallerCacheLocation } from "./harnessLanguageService.js";
 import { ensureWatchablePath } from "./watchUtils.js";
 
 export const enum FourSlashTestType {
@@ -86,6 +83,10 @@ export interface TextSpan {
     end: number;
 }
 
+export interface VerbosityLevels {
+    [markerName: string]: number | number[] | undefined;
+}
+
 // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
 // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
 // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
@@ -101,7 +102,7 @@ const enum MetadataOptionNames {
 const fileMetadataNames = [MetadataOptionNames.fileName, MetadataOptionNames.emitThisFile, MetadataOptionNames.resolveReference, MetadataOptionNames.symlink];
 
 function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
-    const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5, newLine: ts.NewLineKind.CarriageReturnLineFeed };
+    const settings: ts.CompilerOptions = { ...ts.getDefaultCompilerOptions(), jsx: undefined, newLine: ts.NewLineKind.CarriageReturnLineFeed };
     Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
     return settings;
 }
@@ -363,11 +364,6 @@ export class TestState {
             }
         }
 
-        const libName = (name: string) =>
-            this.testType !== FourSlashTestType.Server ?
-                name :
-                `${harnessSessionLibLocation}/${name}`;
-
         let configParseResult: ts.ParsedCommandLine | undefined;
         if (configFileName) {
             const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
@@ -418,27 +414,6 @@ export class TestState {
                 const importedFilePath = this.basePath + "/" + importedFile.fileName;
                 this.addMatchedInputFile(importedFilePath, exts);
             });
-
-            // Check if no-default-lib flag is false and if so add default library
-            if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(
-                    libName(Harness.Compiler.defaultLibFileName),
-                    Harness.Compiler.getDefaultLibrarySourceFile()!.text,
-                    /*isRootFile*/ false,
-                );
-
-                compilationOptions.lib?.forEach(fileName => {
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                    ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    if (libFile) {
-                        this.languageServiceAdapterHost.addScript(
-                            libName(fileName),
-                            libFile.text,
-                            /*isRootFile*/ false,
-                        );
-                    }
-                });
-            }
         }
         else {
             // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
@@ -451,24 +426,6 @@ export class TestState {
                     this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                 }
             });
-
-            if (!compilationOptions.noLib) {
-                const seen = new Set<string>();
-                const addSourceFile = (fileName: string) => {
-                    if (seen.has(fileName)) return;
-                    seen.add(fileName);
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                    ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    this.languageServiceAdapterHost.addScript(libName(fileName), libFile.text, /*isRootFile*/ false);
-                    if (!ts.some(libFile.libReferenceDirectives)) return;
-                    for (const directive of libFile.libReferenceDirectives) {
-                        addSourceFile(`lib.${directive.fileName}.d.ts`);
-                    }
-                };
-
-                addSourceFile(Harness.Compiler.defaultLibFileName);
-                compilationOptions.lib?.forEach(addSourceFile);
-            }
         }
 
         for (const file of testData.files) {
@@ -556,7 +513,13 @@ export class TestState {
     }
     private tryGetFileContent(fileName: string): string | undefined {
         const script = this.languageServiceAdapterHost.getScriptInfo(fileName);
-        return script && script.content;
+        if (script) return script.content;
+        try {
+            return this.languageServiceAdapterHost.vfs.readFileSync(fileName, "utf8");
+        }
+        catch {
+            return undefined;
+        }
     }
 
     // Entry points from fourslash.ts
@@ -2451,19 +2414,33 @@ export class TestState {
         return result;
     }
 
-    public baselineQuickInfo(): void {
-        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
-            marker: { ...marker, name },
-            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
-        }));
+    public baselineQuickInfo(verbosityLevels?: VerbosityLevels, maximumLength?: number): void {
+        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
+            const verbosityLevel = toArray(verbosityLevels?.[name]);
+            const items = verbosityLevel.map(verbosityLevel => {
+                const item: ts.QuickInfo & { verbosityLevel?: number; } | undefined = this.languageService.getQuickInfoAtPosition(
+                    marker.fileName,
+                    marker.position,
+                    maximumLength,
+                    verbosityLevel,
+                );
+                if (item) item.verbosityLevel = verbosityLevel;
+                return {
+                    marker: { ...marker, name },
+                    item,
+                };
+            });
+            return items;
+        }).flat();
         const annotations = this.annotateContentWithTooltips(
             result,
             "quickinfo",
             item => item.textSpan,
-            ({ displayParts, documentation, tags }) => [
+            ({ displayParts, documentation, tags, verbosityLevel }) => [
                 ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
                 ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
                 ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
+                ...(verbosityLevel !== undefined ? [`(verbosity level: ${verbosityLevel})`] : []),
             ],
         );
         this.baseline("QuickInfo", annotations + "\n\n" + stringify(result));
@@ -2585,9 +2562,9 @@ export class TestState {
         const sorted = items.slice();
         // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
         sorted.sort((q1, q2) =>
-            q1.marker.fileName === q1.marker.fileName
+            q1.marker.fileName === q2.marker.fileName
                 ? (q1.marker.position > q2.marker.position ? -1 : 1)
-                : (q1.marker.fileName > q1.marker.fileName ? 1 : -1)
+                : (q1.marker.fileName > q2.marker.fileName ? 1 : -1)
         );
         const files = new Map<string, string[]>();
         let previous: T | undefined;
@@ -3069,7 +3046,7 @@ export class TestState {
     private verifyFileContent(fileName: string, text: string) {
         const actual = this.getFileContent(fileName);
         if (actual !== text) {
-            throw new Error(`verifyFileContent failed:\n${showTextDiff(text, actual)}`);
+            throw new Error(`verifyFileContent in file '${fileName}' failed:\n${showTextDiff(text, actual)}`);
         }
     }
 
@@ -3404,10 +3381,11 @@ export class TestState {
         return ts.first(ranges);
     }
 
-    private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string) {
+    private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string, fileName?: string) {
         const removeWhitespace = (s: string): string => includeWhitespace ? s : this.removeWhitespace(s);
         if (removeWhitespace(actualText) !== removeWhitespace(expectedText)) {
-            this.raiseError(`Actual range text doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
+            const addFileName = fileName ? ` in file '${fileName}'` : "";
+            this.raiseError(`Actual range text${addFileName} doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
         }
     }
 
@@ -3485,7 +3463,7 @@ export class TestState {
             const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
             const newRange = updateTextRangeForTextChanges(this.getOnlyRange(this.activeFile.fileName), change.textChanges);
             const actualText = newText.slice(newRange.pos, newRange.end);
-            this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent);
+            this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent, change.fileName);
         }
         else {
             if (newFileContent === undefined) throw ts.Debug.fail();
@@ -3497,7 +3475,7 @@ export class TestState {
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
                 const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
-                this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
+                this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent, change.fileName);
             }
             for (const newFileName in newFileContent) {
                 ts.Debug.assert(changes.some(c => c.fileName === newFileName), "No change in file", () => newFileName);
@@ -4638,28 +4616,6 @@ ${changes.join("\n// ---\n")}
 ${after}`;
         this.baseline("mapCode", baseline, ".mapCode.ts");
     }
-
-    public verifyGetImports(fileName: string, expectedImports: string[]): void {
-        const actualImports = this.languageService.getImports(fileName);
-        if (actualImports.length !== expectedImports.length) {
-            throw new Error(`Expected ${expectedImports.length} imports for ${fileName}, got ${actualImports.length}
-    Expected:
-${expectedImports}
-    Actual:
-${actualImports}
-`);
-        }
-        for (let i = 0; i < expectedImports.length; i++) {
-            if (actualImports[i] !== expectedImports[i]) {
-                throw new Error(`Expected at ${fileName} index ${i}: ${expectedImports[i]}, got ${actualImports[i]}
-    Expected:
-${expectedImports}
-    Actual:
-${actualImports}
-`);
-            }
-        }
-    }
 }
 
 function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {
@@ -4876,18 +4832,6 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
         }
     }
 
-    // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-    const config = ts.find(files, isConfig);
-    if (config) {
-        let directive = getNonFileNameOptionInFileList(files);
-        if (!directive) {
-            directive = getNonFileNameOptionInObject(globalOptions);
-        }
-        if (directive) {
-            throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
-        }
-    }
-
     return {
         markerPositions,
         markers,
@@ -4900,24 +4844,6 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
 
 function isConfig(file: FourSlashFile): boolean {
     return Harness.getConfigNameFromFileName(file.fileName) !== undefined;
-}
-
-function getNonFileNameOptionInFileList(files: FourSlashFile[]): string | undefined {
-    return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
-}
-
-function getNonFileNameOptionInObject(optionObject: { [s: string]: string; }): string | undefined {
-    for (const option in optionObject) {
-        switch (option) {
-            case MetadataOptionNames.fileName:
-            case MetadataOptionNames.baselineFile:
-            case MetadataOptionNames.emitThisFile:
-                break;
-            default:
-                return option;
-        }
-    }
-    return undefined;
 }
 
 const enum State {

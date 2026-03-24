@@ -1,3 +1,4 @@
+// @target: es2015
 type A = {
     [key: string,]: string;
 };

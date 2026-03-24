@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/genericCloduleInModule.ts] ////
 
 //// [genericCloduleInModule.ts]
-module A {
+namespace A {
     export class B<T> {
         foo() { }
         static bar() { }
     }
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }
@@ -15,15 +15,13 @@ var b: A.B<number>;
 b.foo();
 
 //// [genericCloduleInModule.js]
+"use strict";
 var A;
 (function (A) {
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        B.prototype.foo = function () { };
-        B.bar = function () { };
-        return B;
-    }());
+    class B {
+        foo() { }
+        static bar() { }
+    }
     A.B = B;
     (function (B) {
         B.x = 1;

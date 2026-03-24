@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #15680
 
 // This is a contrived class. We could do the same thing with Observables, etc.

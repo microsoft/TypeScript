@@ -11,6 +11,7 @@ function f1() {
 
     var n: any = f0();
 >n : any
+>  : ^^^
 >f0() : void
 >     : ^^^^
 >f0 : () => void

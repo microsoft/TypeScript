@@ -1,6 +1,7 @@
+// @target: es2015
 interface I {
     new (...args: any[]): string;
     new (): number;
 }
-var tag: I;
+declare var tag: I;
 tag `Hello world!`;

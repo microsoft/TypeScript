@@ -1,3 +1,4 @@
+// @target: es2015
 var a: any;
 var b: number;
 

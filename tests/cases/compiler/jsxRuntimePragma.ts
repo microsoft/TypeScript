@@ -1,4 +1,6 @@
-// @jsx: react,react-jsx,react-jsxdev
+// @module: commonjs
+// @target: es2015
+// @jsx: react,react-jsx,react-jsxdev,preserve
 // @filename: one.tsx
 /// <reference path="/.lib/react16.d.ts" />
 /* @jsxRuntime classic */

@@ -1,4 +1,6 @@
-// @module: node16,nodenext
+// @target: es2022
+// @strict: false
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json
@@ -16,11 +18,11 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 // @filename: /index.ts
 export type LocalInterface =
-    & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
-    & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+    & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
+    & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
 
-export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
-export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
 // @filename: /other.ts
 // missing assert:
 export type LocalInterface =

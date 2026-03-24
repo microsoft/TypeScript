@@ -435,7 +435,7 @@
 // /*FIND ALL REFS*/<|type [|{| isWriteAccess: true, isDefinition: true |}T|] = { }|>
 // enum E { }
 // namespace N { }
-// module M { }
+// namespace M { }
 // --- (line: 12) skipped ---
 
   // === Definitions ===
@@ -447,7 +447,7 @@
   // /*FIND ALL REFS*/<|type [|T|] = { }|>
   // enum E { }
   // namespace N { }
-  // module M { }
+  // namespace M { }
   // --- (line: 12) skipped ---
 
   // === Details ===
@@ -504,7 +504,7 @@
 // type T = { }
 // /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] { }|>
 // namespace N { }
-// module M { }
+// namespace M { }
 // function fn() {}
 // --- (line: 13) skipped ---
 
@@ -516,7 +516,7 @@
   // type T = { }
   // /*FIND ALL REFS*/<|enum [|E|] { }|>
   // namespace N { }
-  // module M { }
+  // namespace M { }
   // function fn() {}
   // --- (line: 13) skipped ---
 
@@ -553,7 +553,7 @@
 // type T = { }
 // enum E { }
 // /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}N|] { }|>
-// module M { }
+// namespace M { }
 // function fn() {}
 // var x;
 // --- (line: 14) skipped ---
@@ -565,7 +565,7 @@
   // type T = { }
   // enum E { }
   // /*FIND ALL REFS*/<|namespace [|N|] { }|>
-  // module M { }
+  // namespace M { }
   // function fn() {}
   // var x;
   // --- (line: 14) skipped ---
@@ -602,7 +602,7 @@
 // type T = { }
 // enum E { }
 // namespace N { }
-// /*FIND ALL REFS*/<|module [|{| isWriteAccess: true, isDefinition: true |}M|] { }|>
+// /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}M|] { }|>
 // function fn() {}
 // var x;
 // let y;
@@ -614,7 +614,7 @@
   // type T = { }
   // enum E { }
   // namespace N { }
-  // /*FIND ALL REFS*/<|module [|M|] { }|>
+  // /*FIND ALL REFS*/<|namespace [|M|] { }|>
   // function fn() {}
   // var x;
   // let y;
@@ -651,7 +651,7 @@
 // --- (line: 8) skipped ---
 // enum E { }
 // namespace N { }
-// module M { }
+// namespace M { }
 // /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}fn|]() {}|>
 // var x;
 // let y;
@@ -663,7 +663,7 @@
   // --- (line: 8) skipped ---
   // enum E { }
   // namespace N { }
-  // module M { }
+  // namespace M { }
   // /*FIND ALL REFS*/<|function [|fn|]() {}|>
   // var x;
   // let y;
@@ -720,7 +720,7 @@
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // --- (line: 9) skipped ---
 // namespace N { }
-// module M { }
+// namespace M { }
 // function fn() {}
 // /*FIND ALL REFS*/<|var [|{| isDefinition: true |}x|];|>
 // let y;
@@ -732,7 +732,7 @@
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
   // --- (line: 9) skipped ---
   // namespace N { }
-  // module M { }
+  // namespace M { }
   // function fn() {}
   // /*FIND ALL REFS*/<|var [|x|];|>
   // let y;
@@ -781,7 +781,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // --- (line: 10) skipped ---
-// module M { }
+// namespace M { }
 // function fn() {}
 // var x;
 // /*FIND ALL REFS*/<|let [|{| isDefinition: true |}y|];|>
@@ -794,7 +794,7 @@
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
   // --- (line: 10) skipped ---
-  // module M { }
+  // namespace M { }
   // function fn() {}
   // var x;
   // /*FIND ALL REFS*/<|let [|y|];|>

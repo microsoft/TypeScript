@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 
 // @filename: map.ts
@@ -12,7 +13,7 @@ declare module "./observable" {
     class Bar {}
     let y: number, z: string;
     let {a: x, b: x1}: {a: number, b: number};
-    module Z {}
+    namespace Z {}
 }
 
 // @filename: observable.ts

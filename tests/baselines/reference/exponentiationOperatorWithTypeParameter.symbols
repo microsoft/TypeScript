@@ -8,19 +8,19 @@ function foo<T>(t: T) {
 >t : Symbol(t, Decl(exponentiationOperatorWithTypeParameter.ts, 1, 16))
 >T : Symbol(T, Decl(exponentiationOperatorWithTypeParameter.ts, 1, 13))
 
-    var a: any;
+    var a!: any;
 >a : Symbol(a, Decl(exponentiationOperatorWithTypeParameter.ts, 2, 7))
 
-    var b: boolean;
+    var b!: boolean;
 >b : Symbol(b, Decl(exponentiationOperatorWithTypeParameter.ts, 3, 7))
 
-    var c: number;
+    var c!: number;
 >c : Symbol(c, Decl(exponentiationOperatorWithTypeParameter.ts, 4, 7))
 
-    var d: string;
+    var d!: string;
 >d : Symbol(d, Decl(exponentiationOperatorWithTypeParameter.ts, 5, 7))
 
-    var e: {};
+    var e!: {};
 >e : Symbol(e, Decl(exponentiationOperatorWithTypeParameter.ts, 6, 7))
 
     var r1a1 = a ** t;

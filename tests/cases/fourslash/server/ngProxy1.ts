@@ -3,6 +3,7 @@
 // @Filename: tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "plugins": [
 ////             { "name": "quickinfo-augmeneter", "message": "hello world" }
 ////         ]

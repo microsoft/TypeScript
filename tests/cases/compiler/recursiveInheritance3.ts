@@ -1,3 +1,4 @@
+// @target: es2015
 class C implements I {
     public foo(x: any) { return x; }
     private x = 1;

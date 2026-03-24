@@ -1,3 +1,5 @@
+// @target: es2015
+//@strict: false
 //@noImplicitAny: true
 var foo = function bar() {
     let intermediate: [string];

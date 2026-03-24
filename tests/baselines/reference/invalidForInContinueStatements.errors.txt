@@ -3,10 +3,11 @@ invalidForInContinueStatements.ts(8,19): error TS1115: A 'continue' statement ca
 invalidForInContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
 invalidForInContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
 invalidForInContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+invalidForInContinueStatements.ts(33,1): error TS1344: 'A label is not allowed here.
 invalidForInContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 
 
-==== invalidForInContinueStatements.ts (6 errors) ====
+==== invalidForInContinueStatements.ts (7 errors) ====
     // All errors
     
     // naked continue not allowed
@@ -50,6 +51,8 @@ invalidForInContinueStatements.ts(37,5): error TS1115: A 'continue' statement ca
     
     // label on non-loop statement
     NINE:
+    ~~~~
+!!! error TS1344: 'A label is not allowed here.
     var y = 12;
     
     for (var x in {}) {

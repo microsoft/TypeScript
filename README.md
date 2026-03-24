@@ -1,7 +1,7 @@
 
 # TypeScript
 
-[![GitHub Actions CI](https://github.com/microsoft/TypeScript/workflows/CI/badge.svg)](https://github.com/microsoft/TypeScript/actions?query=workflow%3ACI)
+[![CI](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/microsoft/TypeScript/badge)](https://securityscorecards.dev/viewer/?uri=github.com/microsoft/TypeScript)
@@ -26,6 +26,16 @@ npm install -D typescript@next
 ```
 
 ## Contribute
+
+**NOTE: Code changes in this repo are now limited to a small category of fixes**:
+
+ * Crashes that were introduced in 5.9 or 6.0 that *also* repro in 7.0 *and* have a portable fix *and* don't incur other behavioral changes
+ * Security issues
+ * Language service crashes that substantially impact mainline usage
+ * Serious regressions from 5.9 (these must *seriously* impact a *large* proportion of users)
+
+Most bug fixes should be submitted to the [typescript-go](https://github.com/microsoft/TypeScript-go) repository.
+Feature additions and behavorial changes are currently on pause until TypeScript 7.0 is completed.
 
 There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md) to TypeScript.
 * [Submit bugs](https://github.com/microsoft/TypeScript/issues) and help us verify fixes as they are checked in.

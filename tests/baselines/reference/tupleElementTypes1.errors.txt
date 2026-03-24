@@ -1,0 +1,7 @@
+tupleElementTypes1.ts(1,30): error TS2322: Type 'undefined' is not assignable to type 'number'.
+
+
+==== tupleElementTypes1.ts (1 errors) ====
+    var [a, b]: [number, any] = [undefined, undefined];
+                                 ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.

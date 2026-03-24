@@ -18,6 +18,7 @@
 
 
 //// [scannerS7.8.4_A7.1_T4.js]
+"use strict";
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
 /**
@@ -29,3 +30,5 @@
  */
 //CHECK#
 "\u000G";
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+// This code is governed by the BSD license found in the LICENSE file.

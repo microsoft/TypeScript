@@ -53,12 +53,15 @@ var x4: T4;
 
 type T5 = any;
 >T5 : any
+>   : ^^^
 
 var x5: any;
 >x5 : any
+>   : ^^^
 
 var x5: T5;
 >x5 : any
+>   : ^^^
 
 interface I6 { x : string }
 >x : string

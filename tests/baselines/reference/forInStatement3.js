@@ -8,6 +8,7 @@ function F<T>() {
 }
 
 //// [forInStatement3.js]
+"use strict";
 function F() {
     var expr;
     for (var a in expr) {

@@ -22,6 +22,6 @@ import a from "./a.js";
 >  : ^^^^^^
 
 import dir from "./dir";
->dir : "dir.js"
->    : ^^^^^^^^
+>dir : any
+>    : ^^^
 

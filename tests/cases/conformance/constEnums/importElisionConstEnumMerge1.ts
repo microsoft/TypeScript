@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @Filename: enum.ts
 export const enum Enum {
   One = 1,

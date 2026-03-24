@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 //// const x = "str";
 //// function assert1(condition: any, msg?: string): /*1*/ ;
 //// function assert2(condition: any, msg?: string): /*2*/ { }

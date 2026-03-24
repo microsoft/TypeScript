@@ -6,4 +6,5 @@ f()
 
 
 //// [neverIntersectionNotCallable.js]
+"use strict";
 f();

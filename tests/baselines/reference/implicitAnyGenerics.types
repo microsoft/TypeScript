@@ -52,10 +52,10 @@ class D<T> {
 }
 
 var d = new D(null);
->d : D<any>
->  : ^^^^^^
->new D(null) : D<any>
->            : ^^^^^^
+>d : D<null>
+>  : ^^^^^^^
+>new D(null) : D<null>
+>            : ^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -87,14 +87,15 @@ var d4 = new D(<any>1);
 >D : typeof D
 >  : ^^^^^^^^
 ><any>1 : any
+>       : ^^^
 >1 : 1
 >  : ^
 
 var d5: D<any> = new D(null);
 >d5 : D<any>
 >   : ^^^^^^
->new D(null) : D<any>
->            : ^^^^^^
+>new D(null) : D<null>
+>            : ^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -110,6 +111,7 @@ foo()
 
 foo<any>();
 >foo<any>() : any
+>           : ^^^
 >foo : <T>() => T
 >    : ^ ^^^^^^^ 
 

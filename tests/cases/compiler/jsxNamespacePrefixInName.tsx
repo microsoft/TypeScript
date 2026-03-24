@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 
 var justElement1 = <a:element />;

@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/genericClassesRedeclaration.ts] ////
 
 === genericClassesRedeclaration.ts ===
-declare module TypeScript {
+declare namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(genericClassesRedeclaration.ts, 0, 0), Decl(genericClassesRedeclaration.ts, 37, 1))
 
     interface IIndexable<T> {
->IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 27), Decl(genericClassesRedeclaration.ts, 39, 27))
+>IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 30), Decl(genericClassesRedeclaration.ts, 39, 30))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 1, 25), Decl(genericClassesRedeclaration.ts, 40, 25))
 
         [s: string]: T;
@@ -15,7 +15,7 @@ declare module TypeScript {
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : Symbol(createIntrinsicsObject, Decl(genericClassesRedeclaration.ts, 3, 5), Decl(genericClassesRedeclaration.ts, 42, 5))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 4, 36))
->IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 27), Decl(genericClassesRedeclaration.ts, 39, 27))
+>IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 30), Decl(genericClassesRedeclaration.ts, 39, 30))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 4, 36))
 
     interface IHashTable<T> {
@@ -192,11 +192,11 @@ declare module TypeScript {
     }
 }
 
-declare module TypeScript {
+declare namespace TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(genericClassesRedeclaration.ts, 0, 0), Decl(genericClassesRedeclaration.ts, 37, 1))
 
     interface IIndexable<T> {
->IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 27), Decl(genericClassesRedeclaration.ts, 39, 27))
+>IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 30), Decl(genericClassesRedeclaration.ts, 39, 30))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 1, 25), Decl(genericClassesRedeclaration.ts, 40, 25))
 
         [s: string]: T;
@@ -206,7 +206,7 @@ declare module TypeScript {
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : Symbol(createIntrinsicsObject, Decl(genericClassesRedeclaration.ts, 3, 5), Decl(genericClassesRedeclaration.ts, 42, 5))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 43, 36))
->IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 27), Decl(genericClassesRedeclaration.ts, 39, 27))
+>IIndexable : Symbol(IIndexable, Decl(genericClassesRedeclaration.ts, 0, 30), Decl(genericClassesRedeclaration.ts, 39, 30))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 43, 36))
 
     interface IHashTable<T> {

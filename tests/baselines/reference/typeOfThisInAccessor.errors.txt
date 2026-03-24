@@ -1,0 +1,37 @@
+typeOfThisInAccessor.ts(14,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== typeOfThisInAccessor.ts (1 errors) ====
+    class C {
+        get x() {
+            var r = this; // C
+            return 1;
+        }
+    
+        static get y() {
+            var r2 = this; // typeof C
+            return 1;
+        }
+    }
+    
+    class D<T> {
+        a: T;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        get x() {
+            var r = this; // D<T>
+            return 1;
+        }
+    
+        static get y() {
+            var r2 = this; // typeof D
+            return 1;
+        }
+    }
+    
+    var x = {
+        get a() {
+            var r3 = this; // any
+            return 1;
+        }
+    }

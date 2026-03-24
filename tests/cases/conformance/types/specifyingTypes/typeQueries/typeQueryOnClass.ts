@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C<T> {
     constructor(x: number);
     constructor(x: string);

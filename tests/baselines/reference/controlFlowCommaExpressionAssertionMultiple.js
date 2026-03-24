@@ -18,6 +18,7 @@ function func2(foo: any, bar: any, baz: any) {
 
 
 //// [controlFlowCommaExpressionAssertionMultiple.js]
+"use strict";
 function Narrow(value) { }
 function func(foo, bar) {
     Narrow(foo), Narrow(bar);

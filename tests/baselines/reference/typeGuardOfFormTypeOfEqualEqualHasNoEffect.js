@@ -3,10 +3,10 @@
 //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts]
 class C { private p: string };
 
-var strOrNum: string | number;
-var strOrBool: string | boolean;
-var numOrBool: number | boolean
-var strOrC: string | C;
+declare var strOrNum: string | number;
+declare var strOrBool: string | boolean;
+declare var numOrBool: number | boolean;
+declare var strOrC: string | C;
 
 // typeof x == s has not effect on typeguard
 if (typeof strOrNum == "string") {
@@ -38,16 +38,10 @@ else {
 }
 
 //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 ;
-var strOrNum;
-var strOrBool;
-var numOrBool;
-var strOrC;
 // typeof x == s has not effect on typeguard
 if (typeof strOrNum == "string") {
     var r1 = strOrNum; // string | number

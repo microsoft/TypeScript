@@ -40,61 +40,72 @@ class C1 {
 }
 
 switch (Math.random()) {
-    case 0:
+    case 0: {
         await using d20 = { async [Symbol.asyncDispose]() {} };
         break;
+    }
 
-    case 1:
+    case 1: {
         await using d21 = { async [Symbol.asyncDispose]() {} };
         break;
+    }
+
+    default: {
+        await using d22 = { async [Symbol.asyncDispose]() {} };
+    }
 }
 
 if (true)
     switch (0) {
-        case 0:
-            await using d22 = { async [Symbol.asyncDispose]() {} };
+        case 0: {
+            await using d23 = { async [Symbol.asyncDispose]() {} };
             break;
+        }
+
+        default: {
+            await using d24 = { async [Symbol.asyncDispose]() {} };
+        }
     }
 
 try {
-    await using d23 = { async [Symbol.asyncDispose]() {} };
-}
-catch {
-    await using d24 = { async [Symbol.asyncDispose]() {} };
-}
-finally {
     await using d25 = { async [Symbol.asyncDispose]() {} };
 }
-
-if (true) {
+catch {
     await using d26 = { async [Symbol.asyncDispose]() {} };
 }
-else {
+finally {
     await using d27 = { async [Symbol.asyncDispose]() {} };
 }
 
-while (true) {
+if (true) {
     await using d28 = { async [Symbol.asyncDispose]() {} };
+}
+else {
+    await using d29 = { async [Symbol.asyncDispose]() {} };
+}
+
+while (true) {
+    await using d30 = { async [Symbol.asyncDispose]() {} };
     break;
 }
 
 do {
-    await using d29 = { async [Symbol.asyncDispose]() {} };
+    await using d31 = { async [Symbol.asyncDispose]() {} };
     break;
 }
 while (true);
 
 for (;;) {
-    await using d30 = { async [Symbol.asyncDispose]() {} };
+    await using d32 = { async [Symbol.asyncDispose]() {} };
     break;
 }
 
 for (const x in {}) {
-    await using d31 = { async [Symbol.asyncDispose]() {} };
+    await using d33 = { async [Symbol.asyncDispose]() {} };
 }
 
 for (const x of []) {
-    await using d32 = { async [Symbol.asyncDispose]() {} };
+    await using d34 = { async [Symbol.asyncDispose]() {} };
 }
 
 export {};
@@ -131,50 +142,59 @@ class C1 {
     await using d19 = { async [Symbol.asyncDispose]() { } };
 }
 switch (Math.random()) {
-    case 0:
+    case 0: {
         await using d20 = { async [Symbol.asyncDispose]() { } };
         break;
-    case 1:
+    }
+    case 1: {
         await using d21 = { async [Symbol.asyncDispose]() { } };
         break;
+    }
+    default: {
+        await using d22 = { async [Symbol.asyncDispose]() { } };
+    }
 }
 if (true)
     switch (0) {
-        case 0:
-            await using d22 = { async [Symbol.asyncDispose]() { } };
+        case 0: {
+            await using d23 = { async [Symbol.asyncDispose]() { } };
             break;
+        }
+        default: {
+            await using d24 = { async [Symbol.asyncDispose]() { } };
+        }
     }
 try {
-    await using d23 = { async [Symbol.asyncDispose]() { } };
-}
-catch {
-    await using d24 = { async [Symbol.asyncDispose]() { } };
-}
-finally {
     await using d25 = { async [Symbol.asyncDispose]() { } };
 }
-if (true) {
+catch {
     await using d26 = { async [Symbol.asyncDispose]() { } };
 }
-else {
+finally {
     await using d27 = { async [Symbol.asyncDispose]() { } };
 }
-while (true) {
+if (true) {
     await using d28 = { async [Symbol.asyncDispose]() { } };
-    break;
 }
-do {
+else {
     await using d29 = { async [Symbol.asyncDispose]() { } };
-    break;
-} while (true);
-for (;;) {
+}
+while (true) {
     await using d30 = { async [Symbol.asyncDispose]() { } };
     break;
 }
-for (const x in {}) {
+do {
     await using d31 = { async [Symbol.asyncDispose]() { } };
+    break;
+} while (true);
+for (;;) {
+    await using d32 = { async [Symbol.asyncDispose]() { } };
+    break;
+}
+for (const x in {}) {
+    await using d33 = { async [Symbol.asyncDispose]() { } };
 }
 for (const x of []) {
-    await using d32 = { async [Symbol.asyncDispose]() { } };
+    await using d34 = { async [Symbol.asyncDispose]() { } };
 }
 export {};

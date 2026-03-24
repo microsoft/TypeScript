@@ -10,6 +10,7 @@ function outer() {
 }
 
 //// [constDeclarationShadowedByVarDeclaration2.js]
+"use strict";
 // No errors, const declaration is not shadowed
 function outer() {
     const x = 0;

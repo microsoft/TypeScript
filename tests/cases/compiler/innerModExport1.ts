@@ -1,4 +1,5 @@
-module Outer {
+// @target: es2015
+namespace Outer {
 
     // inner mod 1
     var non_export_var: number;

@@ -1,0 +1,35 @@
+/index.ts(3,1): error TS1361: 'pkgRequire' cannot be used as a value because it was imported using 'import type'.
+/index.ts(4,1): error TS1361: 'pkgImport' cannot be used as a value because it was imported using 'import type'.
+
+
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+      "name": "pkg",
+      "version": "1.0.0",
+      "exports": {
+        ".": {
+          "import": "./index.mjs",
+          "require": "./index.js"
+        }
+      }
+    }
+    
+==== /node_modules/pkg/index.d.mts (0 errors) ====
+    declare const _default: "esm";
+    export default _default;
+    
+==== /node_modules/pkg/index.d.ts (0 errors) ====
+    declare const _exports: "cjs";
+    export = _exports;
+    
+==== /index.ts (2 errors) ====
+    import type pkgRequire from "pkg" with { "resolution-mode": "require" };
+    import type pkgImport from "pkg" with { "resolution-mode": "import" };
+    pkgRequire;
+    ~~~~~~~~~~
+!!! error TS1361: 'pkgRequire' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /index.ts:1:8: 'pkgRequire' was imported here.
+    pkgImport;
+    ~~~~~~~~~
+!!! error TS1361: 'pkgImport' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /index.ts:2:8: 'pkgImport' was imported here.

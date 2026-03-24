@@ -1,0 +1,11 @@
+declarationEmitInferredTypeAlias4.ts(4,12): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== declarationEmitInferredTypeAlias4.ts (1 errors) ====
+    function f<A>() {
+        type Foo<T> = T | { x: Foo<T> };
+        var x: Foo<A[]>;
+        return x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }

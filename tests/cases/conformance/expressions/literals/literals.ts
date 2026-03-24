@@ -1,4 +1,4 @@
-//@target: ES5
+//@target: ES5, ES2015
 
 //typeof null is Null
 //typeof true is Boolean

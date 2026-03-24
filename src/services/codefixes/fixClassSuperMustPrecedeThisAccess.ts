@@ -38,7 +38,7 @@ registerCodeFix({
     fixIds: [fixId],
     getAllCodeActions(context) {
         const { sourceFile } = context;
-        const seenClasses = new Map<number, true>(); // Ensure we only do this once per class.
+        const seenClasses = new Set<number>(); // Ensure we only do this once per class.
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const nodes = getNodes(diag.file, diag.start);
             if (!nodes) return;

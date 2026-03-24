@@ -1,4 +1,5 @@
-declare module Module {
+// @target: es2015
+declare namespace Module {
     class C extends D {
     }
     export class B extends Module.C {

@@ -1,3 +1,4 @@
+// @target: es2015
 var b = new Boolean();
 b = 1; // Error
 b = "a"; // Error
@@ -8,5 +9,5 @@ o = b; // OK
 
 b = true; // OK
 
-var b2:boolean;
+declare var b2:boolean;
 b = b2; // OK

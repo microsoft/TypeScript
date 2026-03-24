@@ -4,13 +4,14 @@
 foo(): Bar { }
 function Foo      () ¬   { }
 4+:5
-module M {
+namespace M {
 function a(
     : T) { }
 }
 var x       =
 
 //// [parserSkippedTokens16.js]
+"use strict";
 foo();
 Bar;
 { }

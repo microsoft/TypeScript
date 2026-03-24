@@ -1,3 +1,4 @@
+// @target: es2015
 const createCacheReducer = <N extends string, QR>(
     queries: Cache<N, QR>["queries"],
 ) => {

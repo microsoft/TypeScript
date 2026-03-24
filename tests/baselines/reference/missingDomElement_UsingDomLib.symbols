@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/missingDomElement_UsingDomLib.ts] ////
+
+=== missingDomElement_UsingDomLib.ts ===
+interface HTMLMissingElement {}
+>HTMLMissingElement : Symbol(HTMLMissingElement, Decl(missingDomElement_UsingDomLib.ts, 0, 0))
+
+(({}) as any as HTMLMissingElement).textContent;
+>HTMLMissingElement : Symbol(HTMLMissingElement, Decl(missingDomElement_UsingDomLib.ts, 0, 0))
+

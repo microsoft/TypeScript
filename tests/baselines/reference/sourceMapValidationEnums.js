@@ -16,6 +16,7 @@ enum e3 {
 }
 
 //// [sourceMapValidationEnums.js]
+"use strict";
 var e;
 (function (e) {
     e[e["x"] = 0] = "x";

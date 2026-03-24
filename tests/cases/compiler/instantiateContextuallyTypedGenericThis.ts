@@ -1,3 +1,4 @@
+// @target: es2015
 interface JQuery {
     each<T>(
         collection: T[], callback: (this: T, dit: T) => T

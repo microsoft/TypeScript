@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 
 // @filename: file1.ts

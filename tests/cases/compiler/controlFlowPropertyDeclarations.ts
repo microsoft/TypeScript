@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // Repro from ##8913
 
 declare var require:any;

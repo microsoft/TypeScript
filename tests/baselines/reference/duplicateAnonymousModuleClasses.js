@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/duplicateAnonymousModuleClasses.ts] ////
 
 //// [duplicateAnonymousModuleClasses.ts]
-module F {
+namespace F {
 
     class Helper {
 
@@ -10,7 +10,7 @@ module F {
 }
 
 
-module F {
+namespace F {
     
     // Should not be an error
     class Helper {
@@ -19,7 +19,7 @@ module F {
 
 }
 
-module Foo {
+namespace Foo {
 
     class Helper {
 
@@ -28,7 +28,7 @@ module Foo {
 }
 
 
-module Foo {
+namespace Foo {
     
     // Should not be an error
     class Helper {
@@ -37,8 +37,8 @@ module Foo {
 
 }
 
-module Gar {
-    module Foo {
+namespace Gar {
+    namespace Foo {
 
         class Helper {
 
@@ -47,7 +47,7 @@ module Gar {
     }
 
 
-    module Foo {
+    namespace Foo {
     
         // Should not be an error
         class Helper {
@@ -59,54 +59,37 @@ module Gar {
 
 
 //// [duplicateAnonymousModuleClasses.js]
+"use strict";
 var F;
 (function (F) {
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(F || (F = {}));
 (function (F) {
     // Should not be an error
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(F || (F = {}));
 var Foo;
 (function (Foo) {
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(Foo || (Foo = {}));
 (function (Foo) {
     // Should not be an error
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(Foo || (Foo = {}));
 var Gar;
 (function (Gar) {
-    var Foo;
+    let Foo;
     (function (Foo) {
-        var Helper = /** @class */ (function () {
-            function Helper() {
-            }
-            return Helper;
-        }());
+        class Helper {
+        }
     })(Foo || (Foo = {}));
     (function (Foo) {
         // Should not be an error
-        var Helper = /** @class */ (function () {
-            function Helper() {
-            }
-            return Helper;
-        }());
+        class Helper {
+        }
     })(Foo || (Foo = {}));
 })(Gar || (Gar = {}));

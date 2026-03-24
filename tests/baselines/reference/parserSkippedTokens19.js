@@ -4,3 +4,4 @@
 \ declare var v;
 
 //// [parserSkippedTokens19.js]
+"use strict";

@@ -1,11 +1,14 @@
+// @target: es2015
 // @filename: file.tsx
 // @jsx: preserve
-// @module: amd
-// @noLib: true
+// @module: commonjs
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @lib: es5
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react')
+
+declare function log(...args: any[]): void;
 
 export interface ClickableProps {
     children?: string;
@@ -53,7 +56,7 @@ const b3 = <MainButton {...{to: 10000}} {...obj} />;
 const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 const b6 = <MainButton {...obj2} />;
-const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
+const b7 = <MainButton {...{onClick: () => { log("hi") }}} />;
 const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
 const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;

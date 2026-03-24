@@ -1,5 +1,4 @@
-/// <reference no-default-lib="true"/>
-
+// @target: es2015
 interface Boolean {}
 interface IArguments {}
 interface Function {}

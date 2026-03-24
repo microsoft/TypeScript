@@ -1,4 +1,5 @@
-// @target: es5
+// @strict: false
+// @target: es5, es2015
 var b: boolean;
 class C {
     get [b]() { return 0;}

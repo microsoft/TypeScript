@@ -16,7 +16,6 @@ export * from "./lib"
 export const x: number
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -46,20 +45,8 @@ Output::
 
 
 
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /user/username/workspace/solution/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
   {}
 
 Program root files: []
