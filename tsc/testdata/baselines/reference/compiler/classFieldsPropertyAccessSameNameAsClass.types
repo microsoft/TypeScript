@@ -1,0 +1,139 @@
+//// [tests/cases/compiler/classFieldsPropertyAccessSameNameAsClass.ts] ////
+
+=== classFieldsPropertyAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : MyEnum
+
+    Foo = "FooValue",
+>Foo : MyEnum.Foo
+>"FooValue" : "FooValue"
+
+    Bar = "BarValue",
+>Bar : MyEnum.Bar
+>"BarValue" : "BarValue"
+}
+
+// Class declarations with self-reference - alias is same-name, so bug is invisible
+// but these still serve as regression tests
+export class Foo {
+>Foo : Foo
+
+    static instance = new Foo();
+>instance : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+    type: MyEnum = MyEnum.Foo;
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+
+    getType(): MyEnum {
+>getType : () => MyEnum
+
+        return this.type || MyEnum.Foo;
+>this.type || MyEnum.Foo : MyEnum
+>this.type : MyEnum
+>this : this
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+    }
+}
+
+declare const obj: { Bar: string };
+>obj : { Bar: string; }
+>Bar : string
+
+export class Bar {
+>Bar : Bar
+
+    static instance = new Bar();
+>instance : Bar
+>new Bar() : Bar
+>Bar : typeof Bar
+
+    prop = obj.Bar;
+>prop : string
+>obj.Bar : string
+>obj : { Bar: string; }
+>Bar : string
+
+    method() {
+>method : () => string
+
+        return obj.Bar;
+>obj.Bar : string
+>obj : { Bar: string; }
+>Bar : string
+    }
+}
+
+class Other {
+>Other : Other
+
+    static Baz = 42;
+>Baz : number
+>42 : 42
+}
+
+export class Baz {
+>Baz : Baz
+
+    static instance = new Baz();
+>instance : Baz
+>new Baz() : Baz
+>Baz : typeof Baz
+
+    prop = Other.Baz;
+>prop : number
+>Other.Baz : number
+>Other : typeof Other
+>Baz : number
+}
+
+// Class EXPRESSION with self-reference and transformable static fields.
+// At target < ES2022, the class fields transformer creates a temp variable alias,
+// so property access names must not be incorrectly substituted.
+declare const obj2: { Qux: number };
+>obj2 : { Qux: number; }
+>Qux : number
+
+const MyClass = class Qux {
+>MyClass : typeof Qux
+>class Qux {    static ref = new Qux();    static count = Qux.ref ? 1 : 0;    prop = obj2.Qux;    method() {        return MyEnum.Foo;    }} : typeof Qux
+>Qux : typeof Qux
+
+    static ref = new Qux();
+>ref : Qux
+>new Qux() : Qux
+>Qux : typeof Qux
+
+    static count = Qux.ref ? 1 : 0;
+>count : number
+>Qux.ref ? 1 : 0 : 0 | 1
+>Qux.ref : Qux
+>Qux : typeof Qux
+>ref : Qux
+>1 : 1
+>0 : 0
+
+    prop = obj2.Qux;
+>prop : number
+>obj2.Qux : number
+>obj2 : { Qux: number; }
+>Qux : number
+
+    method() {
+>method : () => MyEnum
+
+        return MyEnum.Foo;
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+    }
+}
+
+

@@ -1,0 +1,140 @@
+//// [tests/cases/compiler/legacyDecoratorsEnumAccessSameNameAsClass.ts] ////
+
+=== legacyDecoratorsEnumAccessSameNameAsClass.ts ===
+export enum MyEnum {
+>MyEnum : MyEnum
+
+    Foo = "FooValue",
+>Foo : MyEnum.Foo
+>"FooValue" : "FooValue"
+
+    Bar = "BarValue",
+>Bar : MyEnum.Bar
+>"BarValue" : "BarValue"
+}
+
+function myDecorator(target: any) {
+>myDecorator : (target: any) => any
+>target : any
+
+    return target;
+>target : any
+}
+
+// Enum member access should not be renamed
+@myDecorator
+>myDecorator : (target: any) => any
+
+export class Foo {
+>Foo : Foo
+
+    type: MyEnum = MyEnum.Foo;
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+
+    getType(): MyEnum {
+>getType : () => MyEnum
+
+        return this.type || MyEnum.Foo;
+>this.type || MyEnum.Foo : MyEnum
+>this.type : MyEnum
+>this : this
+>type : MyEnum
+>MyEnum.Foo : MyEnum.Foo
+>MyEnum : typeof MyEnum
+>Foo : MyEnum.Foo
+    }
+}
+
+// Property access on object should not rename the property name
+declare const obj: { Bar: string };
+>obj : { Bar: string; }
+>Bar : string
+
+@myDecorator
+>myDecorator : (target: any) => any
+
+export class Bar {
+>Bar : Bar
+
+    prop = obj.Bar;
+>prop : string
+>obj.Bar : string
+>obj : { Bar: string; }
+>Bar : string
+
+    method() {
+>method : () => string
+
+        return obj.Bar;
+>obj.Bar : string
+>obj : { Bar: string; }
+>Bar : string
+    }
+}
+
+// Nested property access should not rename the innermost name
+declare const nested: { a: { Baz: number } };
+>nested : { a: { Baz: number; }; }
+>a : { Baz: number; }
+>Baz : number
+
+@myDecorator
+>myDecorator : (target: any) => any
+
+export class Baz {
+>Baz : Baz
+
+    prop = nested.a.Baz;
+>prop : number
+>nested.a.Baz : number
+>nested.a : { Baz: number; }
+>nested : { a: { Baz: number; }; }
+>a : { Baz: number; }
+>Baz : number
+}
+
+// Static member of another class should not rename the property name
+class Other {
+>Other : Other
+
+    static Qux = 42;
+>Qux : number
+>42 : 42
+}
+
+@myDecorator
+>myDecorator : (target: any) => any
+
+export class Qux {
+>Qux : Qux
+
+    prop = Other.Qux;
+>prop : number
+>Other.Qux : number
+>Other : typeof Other
+>Qux : number
+}
+
+// Standalone reference to the class SHOULD still be renamed (self-reference)
+@myDecorator
+>myDecorator : (target: any) => any
+
+export class SelfRef {
+>SelfRef : SelfRef
+
+    static instance = new SelfRef();
+>instance : SelfRef
+>new SelfRef() : SelfRef
+>SelfRef : typeof SelfRef
+
+    method() {
+>method : () => typeof SelfRef
+
+        return SelfRef;
+>SelfRef : typeof SelfRef
+    }
+}
+

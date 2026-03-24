@@ -36,6 +36,8 @@ func (tx *LegacyDecoratorsTransformer) visit(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindIdentifier:
 		return tx.visitIdentifier(node.AsIdentifier())
+	case ast.KindPropertyAccessExpression:
+		return tx.visitPropertyAccessExpression(node.AsPropertyAccessExpression())
 	case ast.KindDecorator:
 		// Decorators are elided. They will be emitted as part of `visitClassDeclaration`.
 		return nil
@@ -74,6 +76,17 @@ func (tx *LegacyDecoratorsTransformer) visitIdentifier(node *ast.Identifier) *as
 		if _, ok := tx.classAliases[d.AsNode()]; ok && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(node.AsNode())) == tx.EmitContext().MostOriginal(d.AsNode()) {
 			return tx.classAliases[d.AsNode()]
 		}
+	}
+	return node.AsNode()
+}
+
+func (tx *LegacyDecoratorsTransformer) visitPropertyAccessExpression(node *ast.PropertyAccessExpression) *ast.Node {
+	// Visit the expression but not the name, since property access names should not be substituted.
+	// Strada's onSubstituteNode only fires for EmitHint.Expression, which excludes the
+	// .name of PropertyAccessExpression.
+	expression := tx.Visitor().VisitNode(node.Expression)
+	if expression != node.Expression {
+		return tx.Factory().UpdatePropertyAccessExpression(node, expression, node.QuestionDotToken, node.Name())
 	}
 	return node.AsNode()
 }
@@ -502,6 +515,11 @@ func (tx *LegacyDecoratorsTransformer) hasInternalStaticReference(node *ast.Clas
 	isOrContainsStaticSelfReference = func(n *ast.Node) bool {
 		if ast.IsIdentifier(n) && tx.referenceResolver.GetReferencedValueDeclaration(tx.EmitContext().MostOriginal(n)) == classNode {
 			return true
+		}
+		// For PropertyAccessExpression, only check the expression, not the name.
+		// The .Name() is a property access name, not a value reference to the class.
+		if ast.IsPropertyAccessExpression(n) {
+			return isOrContainsStaticSelfReference(n.Expression())
 		}
 		return n.ForEachChild(isOrContainsStaticSelfReference)
 	}
