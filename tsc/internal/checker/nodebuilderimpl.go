@@ -983,7 +983,7 @@ func (b *NodeBuilderImpl) lookupSymbolChainWorker(symbol *ast.Symbol, meaning as
 	if !isTypeParameter && (b.ctx.enclosingDeclaration != nil || b.ctx.flags&nodebuilder.FlagsUseFullyQualifiedType != 0) && (b.ctx.internalFlags&nodebuilder.InternalFlagsDoNotIncludeSymbolChain == 0) {
 		res := b.getSymbolChain(symbol, meaning /*endOfChain*/, true, yieldModuleSymbol)
 		chain = res
-		debug.CheckDefined(chain)
+		debug.Assert(chain != nil)
 		debug.Assert(len(chain) > 0)
 	} else {
 		chain = append(chain, symbol)

@@ -2191,7 +2191,7 @@ func (tx *esDecoratorTransformer) visitAssignmentRestElement(node *ast.Node) *as
 }
 
 func (tx *esDecoratorTransformer) visitArrayAssignmentElement(node *ast.Node) *ast.Node {
-	debug.AssertNode(node, ast.IsArrayBindingOrAssignmentElement)
+	debug.Assert(ast.IsArrayBindingOrAssignmentElement(node))
 	if ast.IsSpreadElement(node) {
 		return tx.visitAssignmentRestElement(node)
 	}
@@ -2254,7 +2254,7 @@ func (tx *esDecoratorTransformer) visitAssignmentRestProperty(node *ast.Node) *a
 }
 
 func (tx *esDecoratorTransformer) visitObjectAssignmentElement(node *ast.Node) *ast.Node {
-	debug.AssertNode(node, ast.IsObjectBindingOrAssignmentElement)
+	debug.Assert(ast.IsObjectBindingOrAssignmentElement(node))
 	if ast.IsSpreadAssignment(node) {
 		return tx.visitAssignmentRestProperty(node)
 	}

@@ -73,7 +73,7 @@ func (ch *optionalChainTransformer) visitPropertyOrElementAccessExpression(node 
 		return ch.visitOptionalExpression(node.AsNode(), captureThisArg, isDelete)
 	}
 	expression := ch.Visitor().VisitNode(node.Expression())
-	debug.AssertNotNode(expression, ast.IsSyntheticReferenceExpression)
+	debug.Assert(expression == nil || !ast.IsSyntheticReferenceExpression(expression))
 
 	var thisArg *ast.Expression
 	if captureThisArg {
@@ -133,11 +133,11 @@ func isNonNullChain(node *ast.Node) bool {
 }
 
 func flattenChain(chain *ast.Node) flattenResult {
-	debug.AssertNotNode(chain, isNonNullChain)
+	debug.Assert(!isNonNullChain(chain))
 	links := []*ast.Node{chain}
 	for !ast.IsTaggedTemplateExpression(chain) && chain.QuestionDotToken() == nil {
 		chain = ast.SkipPartiallyEmittedExpressions(chain.Expression())
-		debug.AssertNotNode(chain, isNonNullChain)
+		debug.Assert(!isNonNullChain(chain))
 		links = append([]*ast.Node{chain}, links...)
 	}
 	return flattenResult{chain.Expression(), links}

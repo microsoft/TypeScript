@@ -5566,7 +5566,7 @@ func getJSDocParamAnnotation(
 	tabstopCounter *int,
 ) string {
 	if isSnippet {
-		debug.AssertIsDefined(tabstopCounter)
+		debug.Assert(tabstopCounter != nil)
 	}
 	if initializer != nil {
 		paramName = getJSDocParamNameWithInitializer(paramName, initializer)
@@ -5577,7 +5577,7 @@ func getJSDocParamAnnotation(
 	if isJS {
 		t := "*"
 		if isObject {
-			debug.AssertNil(dotDotDotToken, `Cannot annotate a rest parameter with type 'object'.`)
+			debug.Assert(dotDotDotToken == nil, `Cannot annotate a rest parameter with type 'object'.`)
 			t = "object"
 		} else {
 			if initializer != nil {

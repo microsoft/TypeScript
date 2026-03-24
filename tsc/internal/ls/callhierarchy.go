@@ -205,7 +205,7 @@ func getCallHierarchyItemName(program *compiler.Program, node *ast.Node) (text s
 			kwPos := scanner.SkipTrivia(sourceFile.Text(), moveRangePastModifiers(node).Pos())
 			return "(anonymous)", kwPos, kwPos + 5 // "class".length
 		}
-		debug.AssertIsDefined(declName, "Expected call hierarchy item to have a name")
+		debug.Assert(declName != nil, "Expected call hierarchy item to have a name")
 	}
 
 	if ast.IsIdentifier(declName) {

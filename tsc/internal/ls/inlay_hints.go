@@ -314,7 +314,7 @@ func (s *inlayHintState) typeToInlayHintParts(t *checker.Type) lsproto.StringOrI
 	idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
 	// !!! Avoid type node reuse so we collect identifier symbols.
 	typeNode := s.checker.TypeToTypeNode(t, nil /*enclosingDeclaration*/, flags, idToSymbol)
-	debug.AssertIsDefined(typeNode, "should always get typenode")
+	debug.Assert(typeNode != nil, "should always get typenode")
 	return lsproto.StringOrInlayHintLabelParts{
 		InlayHintLabelParts: new(s.getInlayHintLabelParts(typeNode, idToSymbol)),
 	}
@@ -326,7 +326,7 @@ func (s *inlayHintState) typePredicateToInlayHintParts(typePredicate *checker.Ty
 	idToSymbol := make(map[*ast.IdentifierNode]*ast.Symbol)
 	// !!! Avoid type node reuse so we collect identifier symbols.
 	typeNode := s.checker.TypePredicateToTypePredicateNode(typePredicate, nil /*enclosingDeclaration*/, flags, idToSymbol)
-	debug.AssertIsDefined(typeNode, "should always get typePredicateNode")
+	debug.Assert(typeNode != nil, "should always get typePredicateNode")
 	return lsproto.StringOrInlayHintLabelParts{
 		InlayHintLabelParts: new(s.getInlayHintLabelParts(typeNode, idToSymbol)),
 	}

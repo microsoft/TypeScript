@@ -439,7 +439,7 @@ func (w *formatSpanWorker) processChildNodes(
 	parentStartLine int,
 	parentDynamicIndentation *dynamicIndenter,
 ) {
-	debug.AssertIsDefined(nodes)
+	debug.Assert(nodes != nil)
 	debug.Assert(!ast.PositionIsSynthesized(nodes.Pos()))
 	debug.Assert(!ast.PositionIsSynthesized(nodes.End()))
 

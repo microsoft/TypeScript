@@ -434,7 +434,7 @@ func (tx *classFieldsTransformer) visitAccessorFieldResult(node *ast.Node) *ast.
 	case ast.KindGetAccessor, ast.KindSetAccessor:
 		return tx.visitClassElement(node)
 	default:
-		debug.AssertMissingNode(node, "Expected node to either be a PropertyDeclaration, GetAccessorDeclaration, or SetAccessorDeclaration")
+		debug.FailBadSyntaxKind(node, "Expected node to either be a PropertyDeclaration, GetAccessorDeclaration, or SetAccessorDeclaration")
 		return nil
 	}
 }
@@ -766,7 +766,7 @@ func (tx *classFieldsTransformer) setClassElementAndVisitEachChild(node *ast.Nod
 }
 
 func (tx *classFieldsTransformer) getHoistedFunctionName(node *ast.Node) *ast.IdentifierNode {
-	debug.AssertNode(node.Name(), ast.IsPrivateIdentifier)
+	debug.Assert(node.Name() != nil && ast.IsPrivateIdentifier(node.Name()))
 	info := tx.accessPrivateIdentifier(node.Name())
 	debug.Assert(info != nil, "Undeclared private name for property declaration.")
 	if info.kind == printer.PrivateIdentifierKindMethod {
@@ -1475,7 +1475,7 @@ func (tx *classFieldsTransformer) visitBinaryExpression(node *ast.BinaryExpressi
 
 		if isNamedEvaluationAnd(tx.EmitContext(), node.AsNode(), tx.isAnonymousClassNeedingAssignedName) {
 			node = transformNamedEvaluation(tx.EmitContext(), node.AsNode(), false, "").AsBinaryExpression()
-			debug.AssertNode(node.AsNode(), func(node *ast.Node) bool { return ast.IsAssignmentExpression(node, false) })
+			debug.Assert(node.AsNode() != nil && ast.IsAssignmentExpression(node.AsNode(), false))
 		}
 
 		left := ast.SkipOuterExpressions(node.Left, ast.OEKPartiallyEmittedExpressions|ast.OEKParentheses)
@@ -3282,7 +3282,7 @@ func (tx *classFieldsTransformer) visitAssignmentRestProperty(node *ast.Node) *a
 }
 
 func (tx *classFieldsTransformer) visitObjectAssignmentElement(node *ast.Node) *ast.Node {
-	debug.AssertNode(node, ast.IsObjectBindingOrAssignmentElement)
+	debug.Assert(node != nil && ast.IsObjectBindingOrAssignmentElement(node))
 	if ast.IsSpreadAssignment(node) {
 		return tx.visitAssignmentRestProperty(node)
 	}

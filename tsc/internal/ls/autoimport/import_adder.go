@@ -456,7 +456,7 @@ func getNameForExportedSymbol(symbol *ast.Symbol, preferCapitalized bool) string
 		if name != "" {
 			return name
 		}
-		debug.AssertIsDefined(symbol.Parent, "Expected exported symbol to have module symbol as parent")
+		debug.Assert(symbol.Parent != nil, "Expected exported symbol to have module symbol as parent")
 		return lsutil.ModuleSymbolToValidIdentifier(symbol.Parent, preferCapitalized)
 	}
 	return symbol.Name

@@ -21,7 +21,7 @@ func FailBadSyntaxKind(node interface{ KindString() string }, message ...any) {
 	} else {
 		msg = fmt.Sprint(message...)
 	}
-	Fail(fmt.Sprintf("%s\r\nNode %s was unexpected.", msg, node.KindString()))
+	Fail(fmt.Sprintf("%s\nNode %s was unexpected.", msg, node.KindString()))
 }
 
 func AssertNever(member any, message ...any) {
@@ -32,12 +32,30 @@ func AssertNever(member any, message ...any) {
 		msg = fmt.Sprint(message...)
 	}
 	var detail string
-	if member, ok := member.(interface{ KindString() string }); ok {
-		detail = member.KindString()
-	} else if member, ok := member.(fmt.Stringer); ok {
-		detail = member.String()
+	if m, ok := member.(interface{ KindString() string }); ok {
+		detail = m.KindString()
+	} else if m, ok := member.(fmt.Stringer); ok {
+		detail = m.String()
 	} else {
 		detail = fmt.Sprintf("%v", member)
 	}
 	Fail(fmt.Sprintf("%s %s", msg, detail))
+}
+
+func Assert(value bool, message ...any) {
+	if value {
+		return
+	}
+	assertSlow(message...)
+}
+
+func assertSlow(message ...any) {
+	// See https://dave.cheney.net/2020/05/02/mid-stack-inlining-in-go
+	var msg string
+	if len(message) > 0 {
+		msg = "False expression: " + fmt.Sprint(message...)
+	} else {
+		msg = "False expression."
+	}
+	Fail(msg)
 }

@@ -676,7 +676,8 @@ func getExportEqualsLocalSymbol(importedSymbol *ast.Symbol, checker *checker.Che
 	if importedSymbol.Flags&ast.SymbolFlagsAlias != 0 {
 		return checker.GetImmediateAliasedSymbol(importedSymbol)
 	}
-	decl := debug.CheckDefined(importedSymbol.ValueDeclaration)
+	decl := importedSymbol.ValueDeclaration
+	debug.Assert(decl != nil)
 	switch {
 	case ast.IsExportAssignment(decl):
 		return decl.Expression().Symbol()

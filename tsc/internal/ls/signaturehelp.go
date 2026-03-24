@@ -1266,7 +1266,7 @@ func getArgumentListInfoForTemplate(tagExpression *ast.TaggedTemplateExpression,
 		argumentCount = len(tagExpression.Template.AsTemplateExpression().TemplateSpans.Nodes) + 1
 	}
 	if argumentIndex != 0 {
-		debug.AssertLessThan(argumentIndex, argumentCount)
+		debug.Assert(argumentIndex < argumentCount)
 	}
 	return &argumentListInfo{
 		isTypeParameterList: false,
