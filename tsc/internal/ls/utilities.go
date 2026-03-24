@@ -1397,3 +1397,7 @@ func getAncestorTypeNode(node *ast.Node) *ast.Node {
 	})
 	return lastTypeNode
 }
+
+func isSourceFileWithGlobalExports(node *ast.Node) bool {
+	return node != nil && ast.IsSourceFile(node) && node.AsSourceFile().GlobalExports != nil
+}

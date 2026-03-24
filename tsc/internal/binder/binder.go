@@ -836,7 +836,7 @@ func (b *Binder) bindNamespaceExportDeclaration(node *ast.Node) {
 	case !node.Parent.AsSourceFile().IsDeclarationFile:
 		b.errorOnNode(node, diagnostics.Global_module_exports_may_only_appear_in_declaration_files)
 	default:
-		b.declareSymbol(ast.GetSymbolTable(&b.file.Symbol.GlobalExports), b.file.Symbol, node, ast.SymbolFlagsAlias, ast.SymbolFlagsAliasExcludes)
+		b.declareSymbol(ast.GetSymbolTable(&b.file.GlobalExports), b.file.Symbol, node, ast.SymbolFlagsAlias, ast.SymbolFlagsAliasExcludes)
 	}
 }
 
@@ -1012,8 +1012,14 @@ func (b *Binder) bindFunctionOrConstructorType(node *ast.Node) {
 	typeLiteralSymbol.Members[symbol.Name] = symbol
 }
 
-func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbol) {
-	symbol.AssignmentDeclarationMembers.Add(node)
+func (b *Binder) addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbol) {
+	exports := ast.GetExports(symbol)
+	assignmentSymbol := exports[ast.InternalSymbolNameAssignmentDeclaration]
+	if assignmentSymbol == nil {
+		assignmentSymbol = b.newSymbol(ast.SymbolFlagsNone, ast.InternalSymbolNameAssignmentDeclaration)
+		exports[ast.InternalSymbolNameAssignmentDeclaration] = assignmentSymbol
+	}
+	assignmentSymbol.Declarations = append(assignmentSymbol.Declarations, node)
 }
 
 func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
@@ -1056,7 +1062,7 @@ func (b *Binder) bindDeferredExpandoAssignment(node *ast.Node) {
 	if symbol = getInitializerSymbol(symbol); symbol != nil {
 		if ast.HasDynamicName(node) {
 			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
-			addLateBoundAssignmentDeclarationToSymbol(node, symbol)
+			b.addLateBoundAssignmentDeclarationToSymbol(node, symbol)
 		} else {
 			// We declare expandos only when there are no non-expando declarations for that name.
 			exports := ast.GetExports(symbol)
@@ -1123,7 +1129,7 @@ func (b *Binder) bindThisPropertyAssignment(node *ast.Node) {
 	if classSymbol, symbolTable := b.getThisClassAndSymbolTable(); symbolTable != nil {
 		if ast.HasDynamicName(node) {
 			b.declareSymbolEx(symbolTable, classSymbol, node, ast.SymbolFlagsProperty, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, true /*isComputedName*/)
-			addLateBoundAssignmentDeclarationToSymbol(node, classSymbol)
+			b.addLateBoundAssignmentDeclarationToSymbol(node, classSymbol)
 		} else {
 			b.declareSymbolEx(symbolTable, classSymbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, false /*isComputedName*/)
 		}
