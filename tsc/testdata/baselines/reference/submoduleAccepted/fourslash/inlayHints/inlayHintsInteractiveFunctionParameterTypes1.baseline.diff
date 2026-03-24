@@ -10,7 +10,17 @@
      },
      {
        "value": ": "
-@@= skipped -116, +117 lines =@@
+@@= skipped -9, +10 lines =@@
+       "value": "("
+     },
+     {
+-      "value": "d"
++      "value": "d",
++      "location": {},
+     },
+     {
+       "value": ": "
+@@= skipped -107, +108 lines =@@
        "value": "("
      },
      {
@@ -60,16 +70,7 @@
      },
      {
        "value": "?"
-@@= skipped -12, +13 lines =@@
-       "value": "number"
-     },
-     {
--      "value": " | "
--    },
--    {
--      "value": "undefined"
--    },
--    {
+@@= skipped -21, +22 lines =@@
        "value": "; "
      },
      {
@@ -79,7 +80,7 @@
      },
      {
        "value": "("
-@@= skipped -27, +22 lines =@@
+@@= skipped -18, +19 lines =@@
        "value": "; "
      },
      {

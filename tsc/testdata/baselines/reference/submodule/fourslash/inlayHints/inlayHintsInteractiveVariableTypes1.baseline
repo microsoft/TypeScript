@@ -169,7 +169,20 @@
       "value": " "
     },
     {
-      "value": "a"
+      "value": "a",
+      "location": {
+        "uri": "file:///inlayHintsInteractiveVariableTypes1.ts",
+        "range": {
+          "start": {
+            "line": 19,
+            "character": 21
+          },
+          "end": {
+            "line": 19,
+            "character": 22
+          }
+        }
+      }
     },
     {
       "value": ": "

@@ -137,7 +137,20 @@ foo3(a => {
       "value": "("
     },
     {
-      "value": "d"
+      "value": "d",
+      "location": {
+        "uri": "file:///inlayHintsFunctionParameterTypes1.ts",
+        "range": {
+          "start": {
+            "line": 7,
+            "character": 27
+          },
+          "end": {
+            "line": 7,
+            "character": 28
+          }
+        }
+      }
     },
     {
       "value": ": "

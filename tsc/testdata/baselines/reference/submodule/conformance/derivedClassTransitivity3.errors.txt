@@ -1,6 +1,6 @@
 derivedClassTransitivity3.ts(18,1): error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
   Types of property 'foo' are incompatible.
-    Type '(x: string, y?: number) => void' is not assignable to type '(x: string, y: string) => void'.
+    Type '(x: string, y?: number | undefined) => void' is not assignable to type '(x: string, y: string) => void'.
       Types of parameters 'y' and 'y' are incompatible.
         Type 'string' is not assignable to type 'number'.
 
@@ -27,7 +27,7 @@ derivedClassTransitivity3.ts(18,1): error TS2322: Type 'E<string>' is not assign
     ~
 !!! error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type '(x: string, y?: number) => void' is not assignable to type '(x: string, y: string) => void'.
+!!! error TS2322:     Type '(x: string, y?: number | undefined) => void' is not assignable to type '(x: string, y: string) => void'.
 !!! error TS2322:       Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
     var r = c.foo('', '');

@@ -1,0 +1,12 @@
+--- old.inlayHintsInteractiveVariableTypes1.baseline
++++ new.inlayHintsInteractiveVariableTypes1.baseline
+@@= skipped -128, +128 lines =@@
+       "value": " "
+     },
+     {
+-      "value": "a"
++      "value": "a",
++      "location": {},
+     },
+     {
+       "value": ": "

@@ -110,7 +110,7 @@ new [|cb|]();`
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
 		},
 		{
-			Message: "The signature '(tag: 'xmp'): void' of 't.createElement' is deprecated.",
+			Message: "The signature '(tag: \"xmp\"): void' of 't.createElement' is deprecated.",
 			Code:    &lsproto.IntegerOrString{Integer: new(int32(6387))},
 			Range:   f.Ranges()[6].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagDeprecated},
