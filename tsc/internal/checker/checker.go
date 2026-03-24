@@ -1689,15 +1689,38 @@ func (c *Checker) getSuggestedLibForNonExistentName(name string) string {
 	return ""
 }
 
-func (c *Checker) getPrimitiveAliasSymbols() {
-	var symbols []*ast.Symbol
-	for _, name := range []string{"string", "number", "boolean", "object", "bigint", "symbol"} {
-		symbols = append(symbols, c.newSymbol(ast.SymbolFlagsTypeAlias, name))
-	}
-}
-
 func (c *Checker) getSuggestedSymbolForNonexistentSymbol(location *ast.Node, outerName string, meaning ast.SymbolFlags) *ast.Symbol {
 	return c.resolveNameForSymbolSuggestion(location, outerName, meaning, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)
+}
+
+var primitiveTypeAliasSuggestions = sync.OnceValue(func() map[string]*ast.Symbol {
+	result := make(map[string]*ast.Symbol, 6)
+	for _, e := range []struct{ primitive, builtin string }{
+		{"string", "String"},
+		{"number", "Number"},
+		{"boolean", "Boolean"},
+		{"object", "Object"},
+		{"bigint", "BigInt"},
+		{"symbol", "Symbol"},
+	} {
+		sym := &ast.Symbol{}
+		sym.Flags = ast.SymbolFlagsTypeAlias | ast.SymbolFlagsTransient
+		sym.Name = e.primitive
+		result[e.builtin] = sym
+	}
+	return result
+})
+
+func getPrimitiveTypeAliasSuggestions(symbols ast.SymbolTable) iter.Seq[*ast.Symbol] {
+	return func(yield func(*ast.Symbol) bool) {
+		for builtinName, suggestion := range primitiveTypeAliasSuggestions() {
+			if _, ok := symbols[builtinName]; ok {
+				if !yield(suggestion) {
+					return
+				}
+			}
+		}
+	}
 }
 
 func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name string, meaning ast.SymbolFlags) *ast.Symbol {
@@ -1705,16 +1728,11 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 	if symbol != nil {
 		return symbol
 	}
-	allSymbols := slices.AppendSeq(make([]*ast.Symbol, 0, len(symbols)), maps.Values(symbols))
+	var extras iter.Seq[*ast.Symbol]
 	if meaning&ast.SymbolFlagsGlobalLookup != 0 {
-		for _, s := range []string{"stringString", "numberNumber", "booleanBoolean", "objectObject", "bigintBigInt", "symbolSymbol"} {
-			if _, ok := symbols[s[len(s)/2:]]; ok {
-				allSymbols = append(allSymbols, c.newSymbol(ast.SymbolFlagsTypeAlias, s[:len(s)/2]))
-			}
-		}
+		extras = getPrimitiveTypeAliasSuggestions(symbols)
 	}
-	c.sortSymbols(allSymbols)
-	return c.getSpellingSuggestionForName(name, allSymbols, meaning)
+	return c.getSpellingSuggestionForName(name, core.ConcatenateSeq(maps.Values(symbols), extras), meaning)
 }
 
 // Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is
@@ -1730,7 +1748,7 @@ func (c *Checker) getSuggestionForSymbolNameLookup(symbols ast.SymbolTable, name
 //   - Whose length differs from the target name by more than 0.34 of the length of the name.
 //   - Whose levenshtein distance is more than 0.4 of the length of the name (0.4 allows 1 substitution/transposition
 //     for every 5 characters, and 1 insertion/deletion at 3 characters)
-func (c *Checker) getSpellingSuggestionForName(name string, symbols []*ast.Symbol, meaning ast.SymbolFlags) *ast.Symbol {
+func (c *Checker) getSpellingSuggestionForName(name string, symbols iter.Seq[*ast.Symbol], meaning ast.SymbolFlags) *ast.Symbol {
 	getCandidateName := func(candidate *ast.Symbol) string {
 		candidateName := ast.SymbolName(candidate)
 		if len(candidateName) == 0 || candidateName[0] == '"' || candidateName[0] == '\xFE' {
@@ -1747,7 +1765,7 @@ func (c *Checker) getSpellingSuggestionForName(name string, symbols []*ast.Symbo
 		}
 		return ""
 	}
-	return core.GetSpellingSuggestion(name, symbols, getCandidateName)
+	return core.GetSpellingSuggestion(name, symbols, getCandidateName, c.compareSymbols)
 }
 
 func (c *Checker) onSuccessfullyResolvedSymbol(errorLocation *ast.Node, result *ast.Symbol, meaning ast.SymbolFlags, lastLocation *ast.Node, associatedDeclarationForContainingInitializerOrBindingName *ast.Node, withinDeferredContext bool) {
@@ -4643,7 +4661,7 @@ func (c *Checker) checkMemberForOverrideModifier(node *ast.Node, staticType *Typ
 }
 
 func (c *Checker) getSuggestedSymbolForNonexistentClassMember(name string, baseType *Type) *ast.Symbol {
-	return c.getSpellingSuggestionForName(name, c.getPropertiesOfType(baseType), ast.SymbolFlagsClassMember)
+	return c.getSpellingSuggestionForName(name, slices.Values(c.getPropertiesOfType(baseType)), ast.SymbolFlagsClassMember)
 }
 
 func (c *Checker) checkIndexConstraints(t *Type, symbol *ast.Symbol, isStaticIndex bool) {
@@ -11174,7 +11192,7 @@ func (c *Checker) getSuggestedSymbolForNonexistentProperty(name *ast.Node, conta
 			return c.isValidPropertyAccessForCompletions(parent, containingType, prop)
 		})
 	}
-	return c.getSpellingSuggestionForName(name.Text(), props, ast.SymbolFlagsValue)
+	return c.getSpellingSuggestionForName(name.Text(), slices.Values(props), ast.SymbolFlagsValue)
 }
 
 // Checks if an existing property access is valid for completions purposes.
@@ -15395,9 +15413,7 @@ func (c *Checker) tryGetQualifiedNameAsValue(node *ast.Node) *ast.Symbol {
 }
 
 func (c *Checker) getSuggestedSymbolForNonexistentModule(name *ast.Node, targetModule *ast.Symbol) *ast.Symbol {
-	exports := slices.Collect(maps.Values(c.getExportsOfModule(targetModule)))
-	c.sortSymbols(exports)
-	return c.getSpellingSuggestionForName(name.Text(), exports, ast.SymbolFlagsModuleMember)
+	return c.getSpellingSuggestionForName(name.Text(), maps.Values(c.getExportsOfModule(targetModule)), ast.SymbolFlagsModuleMember)
 }
 
 func (c *Checker) getFullyQualifiedName(symbol *ast.Symbol, containingLocation *ast.Node) string {
@@ -26497,7 +26513,7 @@ func (c *Checker) typeHasStaticProperty(propName string, containingType *Type) b
 }
 
 func (c *Checker) getSuggestionForNonexistentProperty(name string, containingType *Type) string {
-	symbol := c.getSpellingSuggestionForName(name, c.getPropertiesOfType(containingType), ast.SymbolFlagsValue)
+	symbol := c.getSpellingSuggestionForName(name, slices.Values(c.getPropertiesOfType(containingType)), ast.SymbolFlagsValue)
 	if symbol != nil {
 		return symbol.Name
 	}
@@ -26526,8 +26542,8 @@ func (c *Checker) getSuggestionForNonexistentIndexSignature(objectType *Type, ex
 }
 
 func (c *Checker) getSuggestedTypeForNonexistentStringLiteralType(source *Type, target *Type) *Type {
-	candidates := core.Filter(target.Types(), func(t *Type) bool { return t.flags&TypeFlagsStringLiteral != 0 })
-	return core.GetSpellingSuggestion(getStringLiteralValue(source), candidates, getStringLiteralValue)
+	candidates := core.FilterSeq(target.Types(), func(t *Type) bool { return t.flags&TypeFlagsStringLiteral != 0 })
+	return core.GetSpellingSuggestion(getStringLiteralValue(source), candidates, getStringLiteralValue, CompareTypes)
 }
 
 func getIndexNodeForAccessExpression(accessNode *ast.Node) *ast.Node {

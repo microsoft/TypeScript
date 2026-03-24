@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"maps"
 	"math"
 	"strconv"
 	"strings"
@@ -951,11 +952,7 @@ func (p *regExpParser) scanCharacterClassEscape() bool {
 }
 
 func (p *regExpParser) getSpellingSuggestionForUnicodePropertyName(name string) string {
-	candidates := make([]string, 0, len(nonBinaryUnicodeProperties))
-	for k := range nonBinaryUnicodeProperties {
-		candidates = append(candidates, k)
-	}
-	return core.GetSpellingSuggestion(name, candidates, func(s string) string { return s })
+	return core.GetSpellingSuggestionForStrings(name, maps.Keys(nonBinaryUnicodeProperties))
 }
 
 func (p *regExpParser) getSpellingSuggestionForUnicodePropertyValue(propertyName string, value string) string {
@@ -963,25 +960,15 @@ func (p *regExpParser) getSpellingSuggestionForUnicodePropertyValue(propertyName
 	if values == nil {
 		return ""
 	}
-	candidates := make([]string, 0, values.Len())
-	for k := range values.Keys() {
-		candidates = append(candidates, k)
-	}
-	return core.GetSpellingSuggestion(value, candidates, func(s string) string { return s })
+	return core.GetSpellingSuggestionForStrings(value, maps.Keys(values.Keys()))
 }
 
 func (p *regExpParser) getSpellingSuggestionForUnicodePropertyNameOrValue(name string) string {
-	var candidates []string
-	for k := range valuesOfNonBinaryUnicodeProperties["General_Category"].Keys() {
-		candidates = append(candidates, k)
-	}
-	for k := range binaryUnicodeProperties.Keys() {
-		candidates = append(candidates, k)
-	}
-	for k := range binaryUnicodePropertiesOfStrings.Keys() {
-		candidates = append(candidates, k)
-	}
-	return core.GetSpellingSuggestion(name, candidates, func(s string) string { return s })
+	return core.GetSpellingSuggestionForStrings(name, core.ConcatenateSeq(
+		maps.Keys(valuesOfNonBinaryUnicodeProperties["General_Category"].Keys()),
+		maps.Keys(binaryUnicodeProperties.Keys()),
+		maps.Keys(binaryUnicodePropertiesOfStrings.Keys()),
+	))
 }
 
 func (p *regExpParser) scanWordCharacters() string {
@@ -1062,11 +1049,7 @@ func (p *regExpParser) run() {
 		if !p.groupSpecifiers[reference.name] {
 			p.error(diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end-reference.pos, reference.name)
 			if len(p.groupSpecifiers) > 0 {
-				specifiers := make([]string, 0, len(p.groupSpecifiers))
-				for k := range p.groupSpecifiers {
-					specifiers = append(specifiers, k)
-				}
-				suggestion := core.GetSpellingSuggestion(reference.name, specifiers, func(s string) string { return s })
+				suggestion := core.GetSpellingSuggestionForStrings(reference.name, maps.Keys(p.groupSpecifiers))
 				if suggestion != "" {
 					p.error(diagnostics.Did_you_mean_0, reference.pos, reference.end-reference.pos, suggestion)
 				}

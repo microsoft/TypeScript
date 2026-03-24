@@ -492,7 +492,7 @@ func (c *Checker) getSuggestedSymbolForNonexistentJSXAttribute(name string, cont
 	if jsxSpecific != nil {
 		return jsxSpecific
 	}
-	return c.getSpellingSuggestionForName(name, properties, ast.SymbolFlagsValue)
+	return c.getSpellingSuggestionForName(name, slices.Values(properties), ast.SymbolFlagsValue)
 }
 
 func (c *Checker) getJSXFragmentType(node *ast.Node) *Type {
