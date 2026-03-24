@@ -182,8 +182,8 @@ class testClass {
 class constructorTestClass {
     constructor(arg1, arg\u0032, arg\u0033, arg4) {
         this.arg1 = arg1;
-        this.arg2 = arg2;
-        this.arg3 = arg3;
+        this.arg\u0032 = arg\u0032;
+        this.arg\u0033 = arg\u0033;
         this.arg4 = arg4;
     }
 }
