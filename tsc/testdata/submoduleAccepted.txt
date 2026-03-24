@@ -211,3 +211,21 @@ conformance/typedefMultipleTypeParameters.types.diff
 conformance/typesWithSpecializedCallSignatures.types.diff
 conformance/typesWithSpecializedConstructSignatures.types.diff
 conformance/unionTypeReduction2.types.diff
+
+## _jsxFileName path ##
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).js.diff
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).js.diff
+compiler/commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=force).js.diff
+compiler/jsxEmptyExpressionNotCountedAsChild(jsx=react-jsxdev).js.diff
+compiler/jsxRuntimePragma(jsx=react-jsxdev).js.diff
+compiler/reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformChildren(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformCustomImport(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformCustomImportPragma(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformKeyProp(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformKeyPropCustomImport(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformSubstitutesNames(jsx=react-jsxdev).js.diff
+conformance/jsxJsxsCjsTransformSubstitutesNamesFragment(jsx=react-jsxdev).js.diff
+conformance/tsxReactEmit8(jsx=react-jsxdev).js.diff
