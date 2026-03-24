@@ -72,3 +72,13 @@ type SubTup2TrailingVariadicWithTrailingFixedElements<T extends unknown[]> = T e
 
 type SubTup2TrailingVariadicWithTrailingFixedElementsTest = SubTup2TrailingVariadicWithTrailingFixedElements<[...a: 0[], b: 1, c: 2, d: 3]>;
 type SubTup2TrailingVariadicWithTrailingFixedElementsTest2 = SubTup2TrailingVariadicWithTrailingFixedElements<[...a: 0[], b: 1, c: 2, d: 3, e: 4]>;
+
+// repro #63005 - should not crash when implied arity consumes entire source tuple
+type SubTup2RestAndTrailingVariadic3<T extends unknown[]> = T extends [
+    ...(infer C)[],
+    ...infer B extends [any, any, any]
+]
+    ? [C, ...B]
+    : never;
+
+type SubTup2RestAndTrailingVariadic3Test = SubTup2RestAndTrailingVariadic3<[...a: 0[], b: 1, c: 2]>;

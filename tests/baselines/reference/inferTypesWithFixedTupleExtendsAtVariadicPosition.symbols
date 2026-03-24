@@ -160,3 +160,26 @@ type SubTup2TrailingVariadicWithTrailingFixedElementsTest2 = SubTup2TrailingVari
 >SubTup2TrailingVariadicWithTrailingFixedElementsTest2 : Symbol(SubTup2TrailingVariadicWithTrailingFixedElementsTest2, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 68, 140))
 >SubTup2TrailingVariadicWithTrailingFixedElements : Symbol(SubTup2TrailingVariadicWithTrailingFixedElements, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 58, 129))
 
+// repro #63005 - should not crash when implied arity consumes entire source tuple
+type SubTup2RestAndTrailingVariadic3<T extends unknown[]> = T extends [
+>SubTup2RestAndTrailingVariadic3 : Symbol(SubTup2RestAndTrailingVariadic3, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 69, 147))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 72, 37))
+>T : Symbol(T, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 72, 37))
+
+    ...(infer C)[],
+>C : Symbol(C, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 73, 13))
+
+    ...infer B extends [any, any, any]
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 74, 12))
+
+]
+    ? [C, ...B]
+>C : Symbol(C, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 73, 13))
+>B : Symbol(B, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 74, 12))
+
+    : never;
+
+type SubTup2RestAndTrailingVariadic3Test = SubTup2RestAndTrailingVariadic3<[...a: 0[], b: 1, c: 2]>;
+>SubTup2RestAndTrailingVariadic3Test : Symbol(SubTup2RestAndTrailingVariadic3Test, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 77, 12))
+>SubTup2RestAndTrailingVariadic3 : Symbol(SubTup2RestAndTrailingVariadic3, Decl(inferTypesWithFixedTupleExtendsAtVariadicPosition.ts, 69, 147))
+
