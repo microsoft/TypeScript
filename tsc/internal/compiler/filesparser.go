@@ -191,6 +191,26 @@ type filesParser struct {
 	maxDepth       int
 }
 
+var parseTaskDataPool = sync.Pool{
+	New: func() any {
+		return &parseTaskData{
+			tasks: make(map[string]*parseTask, 1),
+		}
+	},
+}
+
+func getParseTaskData(task *parseTask) *parseTaskData {
+	td := parseTaskDataPool.Get().(*parseTaskData)
+	td.tasks[task.normalizedFilePath] = task
+	td.lowestDepth = math.MaxInt
+	return td
+}
+
+func putParseTaskData(td *parseTaskData) {
+	clear(td.tasks)
+	parseTaskDataPool.Put(td)
+}
+
 type parseTaskData struct {
 	// map of tasks by file casing
 	tasks           map[string]*parseTask
@@ -208,10 +228,11 @@ func (w *filesParser) parse(loader *fileLoader, tasks []*parseTask) {
 func (w *filesParser) start(loader *fileLoader, tasks []*parseTask, depth int) {
 	for i, task := range tasks {
 		task.path = loader.toPath(task.normalizedFilePath)
-		data, loaded := w.taskDataByPath.LoadOrStore(task.path, &parseTaskData{
-			tasks:       map[string]*parseTask{task.normalizedFilePath: task},
-			lowestDepth: math.MaxInt,
-		})
+		candidate := getParseTaskData(task)
+		data, loaded := w.taskDataByPath.LoadOrStore(task.path, candidate)
+		if loaded {
+			putParseTaskData(candidate)
+		}
 
 		w.wg.Queue(func() {
 			data.mu.Lock()
