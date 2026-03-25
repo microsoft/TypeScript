@@ -54,7 +54,7 @@ export const x = (() => null! as ExpandRecursively<G>)();
 
 
 function makeV() {
->makeV : () => { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
+>makeV : () => { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
 
   type X<T> = {
 >X : { readonly readonlyProperty: T; field: T; method(p: T): T; fnField: (p: T) => T; writeOnlyProperty: T; property: T; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
@@ -92,12 +92,12 @@ function makeV() {
 >p : number | T
    }
   return null! as X<number>
->null! as X<number> : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
+>null! as X<number> : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
 >null! : never
 }
 
 export const v = makeV();
->v : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
->makeV() : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
->makeV : () => { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | T; set divergentProperty(p: number | T); }
+>v : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>makeV() : { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
+>makeV : () => { readonly readonlyProperty: number; field: number; method(p: number): number; fnField: (p: number) => number; writeOnlyProperty: number; property: number; get divergentProperty(): string | number; set divergentProperty(p: number); }
 

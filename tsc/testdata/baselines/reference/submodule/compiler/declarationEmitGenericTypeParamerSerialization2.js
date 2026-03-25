@@ -66,40 +66,6 @@ export declare const v: {
     fnField: (p: number) => number;
     writeOnlyProperty: number;
     property: number;
-    get divergentProperty(): string | T;
-    set divergentProperty(p: number | T);
+    get divergentProperty(): string | number;
+    set divergentProperty(p: number);
 };
-
-
-//// [DtsFileErrors]
-
-
-declarationEmitGenericTypeParamerSerialization2.d.ts(17,39): error TS2304: Cannot find name 'T'.
-declarationEmitGenericTypeParamerSerialization2.d.ts(18,39): error TS2304: Cannot find name 'T'.
-
-
-==== declarationEmitGenericTypeParamerSerialization2.d.ts (2 errors) ====
-    export declare const x: {
-        readonly readonlyProperty: string;
-        field: string;
-        method: (p: string) => string;
-        fnField: (p: string) => string;
-        writeOnlyProperty: string;
-        property: string;
-        divergentProperty: string;
-    };
-    export declare const v: {
-        readonly readonlyProperty: number;
-        field: number;
-        method(p: number): number;
-        fnField: (p: number) => number;
-        writeOnlyProperty: number;
-        property: number;
-        get divergentProperty(): string | T;
-                                          ~
-!!! error TS2304: Cannot find name 'T'.
-        set divergentProperty(p: number | T);
-                                          ~
-!!! error TS2304: Cannot find name 'T'.
-    };
-    
