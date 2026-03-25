@@ -124,7 +124,8 @@ func CompileFilesEx(
 	for _, file := range inputFiles {
 		fileName := tspath.GetNormalizedAbsolutePath(file.UnitName, currentDirectory)
 
-		if !tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
+		if !tspath.FileExtensionIs(fileName, tspath.ExtensionJson) &&
+			!tspath.FileExtensionIs(fileName, tspath.ExtensionTsBuildInfo) {
 			programFileNames = append(programFileNames, fileName)
 		}
 	}

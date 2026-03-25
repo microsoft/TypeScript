@@ -1,11 +1,6 @@
 --- old.parserRealSource11.errors.txt
 +++ new.parserRealSource11.errors.txt
-@@= skipped -0, +0 lines =@@
--parserRealSource11.ts(4,21): error TS6053: File 'typescript.ts' not found.
- parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
- parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.
- parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
-@@= skipped -44, +43 lines =@@
+@@= skipped -44, +44 lines =@@
  parserRealSource11.ts(219,33): error TS2304: Cannot find name 'NodeType'.
  parserRealSource11.ts(231,30): error TS2304: Cannot find name 'Emitter'.
  parserRealSource11.ts(231,48): error TS2304: Cannot find name 'TokenID'.
@@ -278,22 +273,7 @@
  parserRealSource11.ts(2312,42): error TS2304: Cannot find name 'ControlFlowContext'.
  parserRealSource11.ts(2320,36): error TS2304: Cannot find name 'TypeFlow'.
  parserRealSource11.ts(2331,19): error TS2304: Cannot find name 'NodeType'.
-@@= skipped -9, +9 lines =@@
- parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
-
-
--==== parserRealSource11.ts (511 errors) ====
-+==== parserRealSource11.ts (510 errors) ====
-     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
-     // See LICENSE.txt in the project root for complete license information.
-     
-     ///<reference path='typescript.ts' />
--                        ~~~~~~~~~~~~~
--!!! error TS6053: File 'typescript.ts' not found.
-     
-     namespace TypeScript {
-         export class ASTSpan {
-@@= skipped -329, +327 lines =@@
+@@= skipped -338, +338 lines =@@
                  emitter.recordSourceMappingStart(this);
                  emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false);
                                                         ~~~~~~~

@@ -1,11 +1,6 @@
 --- old.parserRealSource12.errors.txt
 +++ new.parserRealSource12.errors.txt
-@@= skipped -0, +0 lines =@@
--parserRealSource12.ts(4,21): error TS6053: File 'typescript.ts' not found.
- parserRealSource12.ts(8,19): error TS2304: Cannot find name 'AST'.
- parserRealSource12.ts(8,32): error TS2304: Cannot find name 'AST'.
- parserRealSource12.ts(8,38): error TS2304: Cannot find name 'AST'.
-@@= skipped -154, +153 lines =@@
+@@= skipped -154, +154 lines =@@
  parserRealSource12.ts(371,84): error TS2304: Cannot find name 'AST'.
  parserRealSource12.ts(378,62): error TS2304: Cannot find name 'DoWhileStatement'.
  parserRealSource12.ts(378,88): error TS2304: Cannot find name 'AST'.
@@ -41,22 +36,7 @@
  parserRealSource12.ts(465,81): error TS2304: Cannot find name 'AST'.
  parserRealSource12.ts(469,39): error TS2304: Cannot find name 'ASTList'.
  parserRealSource12.ts(473,42): error TS2304: Cannot find name 'ASTList'.
-@@= skipped -40, +40 lines =@@
- parserRealSource12.ts(524,30): error TS2304: Cannot find name 'ASTList'.
-
-
--==== parserRealSource12.ts (209 errors) ====
-+==== parserRealSource12.ts (208 errors) ====
-     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
-     // See LICENSE.txt in the project root for complete license information.
-     
-     ///<reference path='typescript.ts' />
--                        ~~~~~~~~~~~~~
--!!! error TS6053: File 'typescript.ts' not found.
-     
-     namespace TypeScript {
-         export interface IAstWalker {
-@@= skipped -701, +699 lines =@@
+@@= skipped -741, +741 lines =@@
      
              export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
                                                        ~~~~~

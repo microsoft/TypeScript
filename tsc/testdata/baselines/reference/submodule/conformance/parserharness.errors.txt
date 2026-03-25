@@ -1,3 +1,7 @@
+parserharness.ts(16,21): error TS6053: File '../compiler/io.ts' not found.
+parserharness.ts(17,21): error TS6053: File '../compiler/typescript.ts' not found.
+parserharness.ts(18,21): error TS6053: File '../services/typescriptServices.ts' not found.
+parserharness.ts(19,21): error TS6053: File 'diff.ts' not found.
 parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
 parserharness.ts(22,13): error TS7005: Variable 'it' implicitly has an 'any' type.
 parserharness.ts(23,13): error TS7005: Variable 'describe' implicitly has an 'any' type.
@@ -203,7 +207,7 @@ parserharness.ts(2067,41): error TS18048: 'comparison' is possibly 'undefined'.
 parserharness.ts(2067,62): error TS18048: 'comparison' is possibly 'undefined'.
 
 
-==== parserharness.ts (189 errors) ====
+==== parserharness.ts (193 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -220,9 +224,17 @@ parserharness.ts(2067,62): error TS18048: 'comparison' is possibly 'undefined'.
     //
     
     ///<reference path='..\compiler\io.ts'/>
+                        ~~~~~~~~~~~~~~~~~
+!!! error TS6053: File '../compiler/io.ts' not found.
     ///<reference path='..\compiler\typescript.ts'/>
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6053: File '../compiler/typescript.ts' not found.
     ///<reference path='..\services\typescriptServices.ts' />
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6053: File '../services/typescriptServices.ts' not found.
     ///<reference path='diff.ts'/>
+                        ~~~~~~~
+!!! error TS6053: File 'diff.ts' not found.
     
     declare var assert: Harness.Assert;
                         ~~~~~~~~~~~~~~

@@ -1,3 +1,4 @@
+parserRealSource13.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource13.ts(8,35): error TS2304: Cannot find name 'AST'.
 parserRealSource13.ts(9,39): error TS2304: Cannot find name 'AST'.
 parserRealSource13.ts(10,34): error TS2304: Cannot find name 'AST'.
@@ -115,11 +116,13 @@ parserRealSource13.ts(132,51): error TS2304: Cannot find name 'AST'.
 parserRealSource13.ts(135,36): error TS2552: Cannot find name 'NodeType'. Did you mean 'nodeType'?
 
 
-==== parserRealSource13.ts (115 errors) ====
+==== parserRealSource13.ts (116 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
+                        ~~~~~~~~~~~~~
+!!! error TS6053: File 'typescript.ts' not found.
     
     namespace TypeScript.AstWalkerWithDetailCallback {
         export interface AstWalkerDetailCallback {

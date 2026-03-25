@@ -1,3 +1,4 @@
+parserRealSource11.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
 parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.
 parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
@@ -510,11 +511,13 @@ parserRealSource11.ts(2356,30): error TS2304: Cannot find name 'Emitter'.
 parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== parserRealSource11.ts (510 errors) ====
+==== parserRealSource11.ts (511 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
+                        ~~~~~~~~~~~~~
+!!! error TS6053: File 'typescript.ts' not found.
     
     namespace TypeScript {
         export class ASTSpan {

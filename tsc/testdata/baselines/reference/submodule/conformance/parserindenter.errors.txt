@@ -1,3 +1,4 @@
+parserindenter.ts(16,21): error TS6053: File 'formatting.ts' not found.
 parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndenationResolver'.
 parserindenter.ts(22,33): error TS2304: Cannot find name 'IndentationBag'.
 parserindenter.ts(24,42): error TS2304: Cannot find name 'Dictionary_int_int'.
@@ -135,7 +136,7 @@ parserindenter.ts(735,42): error TS2304: Cannot find name 'TokenSpan'.
 parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
 
 
-==== parserindenter.ts (135 errors) ====
+==== parserindenter.ts (136 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -152,6 +153,8 @@ parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
     //
     
     ///<reference path='formatting.ts' />
+                        ~~~~~~~~~~~~~
+!!! error TS6053: File 'formatting.ts' not found.
     
     
     namespace Formatting {

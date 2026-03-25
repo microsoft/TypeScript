@@ -1,14 +1,6 @@
 --- old.parserharness.errors.txt
 +++ new.parserharness.errors.txt
-@@= skipped -0, +0 lines =@@
--parserharness.ts(16,21): error TS6053: File '../compiler/io.ts' not found.
--parserharness.ts(17,21): error TS6053: File '../compiler/typescript.ts' not found.
--parserharness.ts(18,21): error TS6053: File '../services/typescriptServices.ts' not found.
--parserharness.ts(19,21): error TS6053: File 'diff.ts' not found.
- parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
- parserharness.ts(22,13): error TS7005: Variable 'it' implicitly has an 'any' type.
- parserharness.ts(23,13): error TS7005: Variable 'describe' implicitly has an 'any' type.
-@@= skipped -72, +68 lines =@@
+@@= skipped -72, +72 lines =@@
    No index signature with a parameter of type 'string' was found on type '{}'.
  parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
  parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
@@ -161,34 +153,7 @@
  parserharness.ts(2050,26): error TS2352: Conversion of type 'undefined' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
  parserharness.ts(2055,78): error TS2345: Argument of type 'BaselineOptions | undefined' is not assignable to parameter of type 'BaselineOptions'.
    Type 'undefined' is not assignable to type 'BaselineOptions'.
-@@= skipped -12, +12 lines =@@
- parserharness.ts(2067,62): error TS18048: 'comparison' is possibly 'undefined'.
-
-
--==== parserharness.ts (193 errors) ====
-+==== parserharness.ts (189 errors) ====
-     //﻿
-     // Copyright (c) Microsoft Corporation.  All rights reserved.
-     // 
-@@= skipped -17, +17 lines =@@
-     //
-     
-     ///<reference path='..\compiler\io.ts'/>
--                        ~~~~~~~~~~~~~~~~~
--!!! error TS6053: File '../compiler/io.ts' not found.
-     ///<reference path='..\compiler\typescript.ts'/>
--                        ~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS6053: File '../compiler/typescript.ts' not found.
-     ///<reference path='..\services\typescriptServices.ts' />
--                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--!!! error TS6053: File '../services/typescriptServices.ts' not found.
-     ///<reference path='diff.ts'/>
--                        ~~~~~~~
--!!! error TS6053: File 'diff.ts' not found.
-     
-     declare var assert: Harness.Assert;
-                         ~~~~~~~~~~~~~~
-@@= skipped -897, +889 lines =@@
+@@= skipped -926, +926 lines =@@
  !!! error TS2503: Cannot find namespace 'TypeScript'.
                  var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
                                          ~~~~~~~~~~

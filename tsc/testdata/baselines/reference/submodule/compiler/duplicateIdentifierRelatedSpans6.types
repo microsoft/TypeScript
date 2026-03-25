@@ -4,7 +4,7 @@
 /// <reference path="./file1" />
 
 declare module "someMod" {
->"someMod" : any
+>"someMod" : typeof import("someMod")
 
     export interface TopLevel {
         duplicate1(): number;
@@ -19,3 +19,18 @@ declare module "someMod" {
 }
 export {};
 
+=== file1.ts ===
+declare module "someMod" {
+>"someMod" : typeof import("someMod")
+
+    export interface TopLevel {
+        duplicate1: () => string;
+>duplicate1 : () => string
+
+        duplicate2: () => string;
+>duplicate2 : () => string
+
+        duplicate3: () => string;
+>duplicate3 : () => string
+    }
+}

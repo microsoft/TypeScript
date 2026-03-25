@@ -1,3 +1,4 @@
+parserRealSource8.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource8.ts(9,41): error TS2304: Cannot find name 'ScopeChain'.
 parserRealSource8.ts(10,39): error TS2304: Cannot find name 'TypeFlow'.
 parserRealSource8.ts(11,43): error TS2304: Cannot find name 'ModuleDeclaration'.
@@ -133,11 +134,13 @@ parserRealSource8.ts(453,38): error TS2304: Cannot find name 'NodeType'.
 parserRealSource8.ts(454,35): error TS2552: Cannot find name 'Catch'. Did you mean 'Cache'?
 
 
-==== parserRealSource8.ts (133 errors) ====
+==== parserRealSource8.ts (134 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
+                        ~~~~~~~~~~~~~
+!!! error TS6053: File 'typescript.ts' not found.
     
     namespace TypeScript {
     

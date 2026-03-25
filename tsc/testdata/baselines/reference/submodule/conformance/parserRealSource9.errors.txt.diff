@@ -1,11 +1,6 @@
 --- old.parserRealSource9.errors.txt
 +++ new.parserRealSource9.errors.txt
-@@= skipped -0, +0 lines =@@
--parserRealSource9.ts(4,21): error TS6053: File 'typescript.ts' not found.
- parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
- parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.
- parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
-@@= skipped -9, +8 lines =@@
+@@= skipped -9, +9 lines =@@
  parserRealSource9.ts(67,54): error TS2304: Cannot find name 'SignatureGroup'.
  parserRealSource9.ts(67,77): error TS2304: Cannot find name 'SymbolScope'.
  parserRealSource9.ts(67,104): error TS2304: Cannot find name 'Type'.
@@ -23,20 +18,7 @@
  parserRealSource9.ts(197,20): error TS2339: Property 'bound' does not exist on type 'Symbol'.
  parserRealSource9.ts(200,28): error TS2304: Cannot find name 'SymbolScope'.
  parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
-
-
--==== parserRealSource9.ts (39 errors) ====
-+==== parserRealSource9.ts (38 errors) ====
-     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
-     // See LICENSE.txt in the project root for complete license information.
-     
-     ///<reference path='typescript.ts' />
--                        ~~~~~~~~~~~~~
--!!! error TS6053: File 'typescript.ts' not found.
-     
-     namespace TypeScript {
-         export class Binder {
-@@= skipped -115, +113 lines =@@
+@@= skipped -115, +115 lines =@@
                          // check that last parameter has an array type
                          var lastParam = <ParameterSymbol>signature.parameters[paramLen - 1];
                                           ~~~~~~~~~~~~~~~

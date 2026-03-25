@@ -33,6 +33,8 @@ declare module "someMod" {
 export {};
 
 
+//// [file1.js]
+"use strict";
 //// [file2.js]
 "use strict";
 /// <reference path="./file1" />

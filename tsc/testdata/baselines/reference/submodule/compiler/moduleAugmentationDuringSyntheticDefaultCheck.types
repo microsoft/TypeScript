@@ -35,3 +35,25 @@ declare module "moment" {
 >tz : () => string
     }
 }
+=== idx.ts ===
+import * as _moment from "moment";
+>_moment : { default: () => _moment.Moment; }
+
+declare module "moment" {
+>"moment" : () => Moment
+
+    interface Moment {
+        strftime(pattern: string): string;
+>strftime : { (pattern: string): string; (pattern: string): string; }
+>pattern : string
+    }
+}
+declare module "moment-timezone" {
+>"moment-timezone" : { default: () => Moment; }
+
+    interface Moment {
+        strftime(pattern: string): string;
+>strftime : { (pattern: string): string; (pattern: string): string; }
+>pattern : string
+    }
+}
