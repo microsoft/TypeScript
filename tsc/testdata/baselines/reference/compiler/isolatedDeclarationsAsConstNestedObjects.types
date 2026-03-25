@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/isolatedDeclarationsAsConstNestedObjects.ts] ////
+
+=== isolatedDeclarationsAsConstNestedObjects.ts ===
+export const obj1 = { $and: [{ $expr: true }] } as const;
+>obj1 : { readonly $and: readonly [{ readonly $expr: true; }]; }
+>{ $and: [{ $expr: true }] } as const : { readonly $and: readonly [{ readonly $expr: true; }]; }
+>{ $and: [{ $expr: true }] } : { readonly $and: readonly [{ readonly $expr: true; }]; }
+>$and : readonly [{ readonly $expr: true; }]
+>[{ $expr: true }] : readonly [{ readonly $expr: true; }]
+>{ $expr: true } : { readonly $expr: true; }
+>$expr : true
+>true : true
+

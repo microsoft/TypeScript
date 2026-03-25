@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/isolatedDeclarationsAsConstNestedObjects.ts] ////
+
+=== isolatedDeclarationsAsConstNestedObjects.ts ===
+export const obj1 = { $and: [{ $expr: true }] } as const;
+>obj1 : Symbol(obj1, Decl(isolatedDeclarationsAsConstNestedObjects.ts, 0, 12))
+>$and : Symbol($and, Decl(isolatedDeclarationsAsConstNestedObjects.ts, 0, 21))
+>$expr : Symbol($expr, Decl(isolatedDeclarationsAsConstNestedObjects.ts, 0, 30))
+>const : Symbol(const)
+

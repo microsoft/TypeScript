@@ -22,7 +22,16 @@
  declare let c3: 10;
  declare let c4: -10;
  declare let c5: 10;
-@@= skipped -78, +78 lines =@@
+@@= skipped -13, +13 lines =@@
+ declare let vc1: "abc";
+ declare let a1: readonly [];
+ declare let a2: readonly [1, 2, 3];
+-declare let a3: readonly [10, "hello", true];
++declare let a3: readonly [10, 'hello', true];
+ declare let a4: readonly [1, 2, 3];
+ declare let a5: number[];
+ declare let a6: readonly number[];
+@@= skipped -65, +65 lines =@@
      };
  };
  declare let q1: 10;
