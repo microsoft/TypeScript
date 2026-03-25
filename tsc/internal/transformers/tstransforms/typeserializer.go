@@ -16,8 +16,9 @@ type metadataSerializer struct {
 }
 
 type metadataSerializerContext struct {
-	currentLexicalScope *ast.Node
-	currentNameScope    *ast.Node
+	currentLexicalScope              *ast.Node
+	currentNameScope                 *ast.Node
+	serializingConditionalTypeBranch bool
 }
 
 func newMetadataSerializer(resolver printer.EmitResolver, f *printer.NodeFactory, ec *printer.EmitContext, strictNullChecks bool) *metadataSerializer {
@@ -212,6 +213,9 @@ func (s *metadataSerializer) serializeTypeNode(node *ast.Node) *ast.Node {
 	case ast.KindUnionType:
 		return s.serializeUnionOrIntersectionConstituents(node.AsUnionTypeNode().Types.Nodes, false)
 	case ast.KindConditionalType:
+		oldState := s.c.serializingConditionalTypeBranch
+		s.c.serializingConditionalTypeBranch = true
+		defer func() { s.c.serializingConditionalTypeBranch = oldState }()
 		return s.serializeUnionOrIntersectionConstituents([]*ast.Node{node.AsConditionalTypeNode().TrueType, node.AsConditionalTypeNode().FalseType}, false)
 	case ast.KindTypeOperator:
 		if node.AsTypeOperatorNode().Operator == ast.KindReadonlyKeyword {
@@ -313,10 +317,6 @@ func (s *metadataSerializer) serializeLiteralOfLiteralTypeNode(node *ast.Node) *
 	return nil
 }
 
-func isConditionalTypeBranch(n *ast.Node) bool {
-	return n.Parent != nil && ast.IsConditionalTypeNode(n.Parent) && (n.Parent.AsConditionalTypeNode().TrueType == n || n.Parent.AsConditionalTypeNode().FalseType == n)
-}
-
 /**
 * Serializes a TypeReferenceNode to an appropriate JS constructor value for use with decorator type metadata.
 * @param node The type reference node.
@@ -330,7 +330,7 @@ func (s *metadataSerializer) serializeTypeReferenceNode(node *ast.TypeReferenceN
 	switch kind {
 	case printer.TypeReferenceSerializationKindUnknown:
 		// From conditional type type reference that cannot be resolved is Similar to any or unknown
-		if ast.FindAncestor(node.AsNode(), isConditionalTypeBranch) != nil {
+		if s.c.serializingConditionalTypeBranch {
 			return s.f.NewIdentifier("Object")
 		}
 
@@ -395,7 +395,7 @@ func (s *metadataSerializer) serializeEntityNameAsExpression(node *ast.EntityNam
 		name := node.Clone(s.f)
 		name.Loc = node.Loc
 		s.ec.UnsetOriginal(name)                              // make this identifier emulate a parse node, making it behave correctly when inspected by the module transforms
-		name.Parent = s.ec.ParseNode(s.c.currentLexicalScope) // ensure the parent is set to a parse tree node.
+		name.Parent = s.ec.ParseNode(s.c.currentLexicalScope) //nolint:customlint // ensure the parent is set to a parse tree node.
 		return name
 	case ast.KindQualifiedName:
 		return s.serializeQualifiedNameAsExpression(node.AsQualifiedName())

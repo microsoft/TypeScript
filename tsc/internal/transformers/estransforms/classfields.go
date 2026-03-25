@@ -119,6 +119,8 @@ type classFieldsTransformer struct {
 	// switches to the outer lexical environment. Used by visitThisExpression() to apply
 	// the outer environment's substitution without requiring currentClassElement to be static.
 	insideComputedPropertyName bool
+	parentNode                 *ast.Node
+	currentNode                *ast.Node
 
 	// Visitors
 	modifierVisitor                *ast.NodeVisitor
@@ -243,6 +245,18 @@ func (tx *classFieldsTransformer) visitModifier(node *ast.Node) *ast.Node {
 	return nil
 }
 
+func (tx *classFieldsTransformer) pushNode(node *ast.Node) (grandparentNode *ast.Node) {
+	grandparentNode = tx.parentNode
+	tx.parentNode = tx.currentNode
+	tx.currentNode = node
+	return grandparentNode
+}
+
+func (tx *classFieldsTransformer) popNode(grandparentNode *ast.Node) {
+	tx.currentNode = tx.parentNode
+	tx.parentNode = grandparentNode
+}
+
 // visitForSubstitution visits nodes solely for class alias substitution in subtrees
 // that don't contain class field or lexical this/super transforms. It substitutes
 // identifiers that reference class declarations with their aliases, while skipping
@@ -260,6 +274,9 @@ func (tx *classFieldsTransformer) visitForSubstitution(node *ast.Node) *ast.Node
 
 // visit is the main visitor.
 func (tx *classFieldsTransformer) visit(node *ast.Node) *ast.Node {
+	grandparentNode := tx.pushNode(node)
+	defer tx.popNode(grandparentNode)
+
 	if node.SubtreeFacts()&(ast.SubtreeContainsClassFields|ast.SubtreeContainsLexicalThisOrSuper) == 0 {
 		if tx.currentClassContainer != nil && len(tx.classAliases) > 0 {
 			// Continue visiting for alias substitution even in non-class-field subtrees.
@@ -461,6 +478,9 @@ func (tx *classFieldsTransformer) visitIdentifier(node *ast.Identifier) *ast.Nod
 // by visitExpressionStatement, which preserves them so the runtime throws a SyntaxError.
 func (tx *classFieldsTransformer) visitPrivateIdentifier(node *ast.Node) *ast.Node {
 	if !tx.shouldTransformPrivateElementsOrClassStaticBlocks {
+		return node
+	}
+	if tx.parentNode != nil && ast.IsStatement(tx.parentNode) {
 		return node
 	}
 	result := tx.Factory().NewIdentifier("")
@@ -2755,7 +2775,7 @@ func (tx *classFieldsTransformer) transformPropertyWorker(property *ast.Property
 
 	initializer := tx.Visitor().VisitNode(property.Initializer)
 	propertyOriginalNode := tx.EmitContext().MostOriginal(property.AsNode())
-	if ast.IsParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.Parent) && ast.IsIdentifier(propertyName) {
+	if ast.IsParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.Parent) && ast.IsIdentifier(propertyName) { //nolint:customlint // MostOriginal returns parse-tree nodes, and this parent relationship is intentional.
 		// A parameter-property declaration always overrides the initializer. The only time a parameter-property
 		// declaration *should* have an initializer is when decorators have added initializers that need to run before
 		// any other initializer

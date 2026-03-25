@@ -2059,7 +2059,7 @@ func (tx *CommonJSModuleTransformer) visitExpressionIdentifier(node *ast.Identif
 		if importDeclaration != nil {
 			if ast.IsImportClause(importDeclaration) {
 				reference := tx.Factory().NewPropertyAccessExpression(
-					tx.Factory().NewGeneratedNameForNode(importDeclaration.Parent),
+					tx.Factory().NewGeneratedNameForNode(importDeclaration.Parent), //nolint:customlint // Resolver returns parse-tree declarations; Parent is used to find the owning import declaration.
 					nil, /*questionDotToken*/
 					tx.Factory().NewIdentifier("default"),
 					ast.NodeFlagsNone,

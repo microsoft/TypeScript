@@ -634,7 +634,7 @@ func (tx *JSXTransformer) createReactNamespace(reactNamespace string, parent *as
 
 	// Set the parent that is in parse tree
 	// this makes sure that parent chain is intact for checker to traverse complete scope tree
-	react.Parent = tx.EmitContext().ParseNode(parent)
+	react.Parent = tx.EmitContext().ParseNode(parent) //nolint:customlint // Parent is intentionally wired to a parse-tree node for resolver traversal.
 
 	// If the identifier refers to an exported member of a namespace, substitute with
 	// a qualified namespace property access (e.g., `React` -> `M.React`).

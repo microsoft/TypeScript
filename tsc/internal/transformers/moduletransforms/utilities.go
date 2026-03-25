@@ -10,10 +10,10 @@ import (
 )
 
 func isDeclarationNameOfEnumOrNamespace(emitContext *printer.EmitContext, node *ast.IdentifierNode) bool {
-	if original := emitContext.MostOriginal(node); original != nil && original.Parent != nil {
-		switch original.Parent.Kind {
+	if original := emitContext.MostOriginal(node); original != nil && original.Parent != nil { //nolint:customlint // MostOriginal yields parse-tree nodes and this helper intentionally inspects parse-tree parents.
+		switch original.Parent.Kind { //nolint:customlint // MostOriginal yields parse-tree nodes and this helper intentionally inspects parse-tree parents.
 		case ast.KindEnumDeclaration, ast.KindModuleDeclaration:
-			return original == original.Parent.Name()
+			return original == original.Parent.Name() //nolint:customlint // MostOriginal yields parse-tree nodes and this helper intentionally inspects parse-tree parents.
 		}
 	}
 	return false
