@@ -14,7 +14,7 @@ const x = 10;
 tsgo 
 ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
-[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6046: [0mArgument for '--module' option must be: 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'node18', 'node20', 'nodenext', 'preserve'.
+[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6046: [0mArgument for '--module' option must be: 'commonjs', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'node18', 'node20', 'nodenext', 'preserve'.
 
 [7m3[0m         "module": "none",
 [7m [0m [91m                  ~~~~~~[0m

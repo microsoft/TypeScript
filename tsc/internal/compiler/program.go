@@ -723,6 +723,10 @@ func (p *Program) verifyCompilerOptions() {
 		createRemovedOptionDiagnostic("module", "UMD", "")
 	}
 
+	if options.ModuleResolution == core.ModuleResolutionKindClassic {
+		createRemovedOptionDiagnostic("moduleResolution", "Classic", "")
+	}
+
 	if options.AlwaysStrict.IsFalse() {
 		createRemovedOptionDiagnostic("alwaysStrict", "false", "")
 	}
