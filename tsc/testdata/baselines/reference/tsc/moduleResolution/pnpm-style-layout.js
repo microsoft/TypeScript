@@ -89,7 +89,6 @@ const button: Button = createButton();
         "target": "es5",
         "module": "esnext",
         "lib": ["ES5"],
-        "moduleResolution": "node",
         "outDir": "dist",
     },
     "include": ["src"],
@@ -248,10 +247,10 @@ Resolving real path for '/home/src/projects/component-type-checker/node_modules/
 [7m3[0m         "target": "es5",
 [7m [0m [91m                  ~~~~~[0m
 
-[96mtsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+[96mtsconfig.json[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
   Visit https://aka.ms/ts6 for migration information.
 
-[7m7[0m         "outDir": "dist",
+[7m6[0m         "outDir": "dist",
 [7m [0m [91m        ~~~~~~~~[0m
 
 ../../../../tslibs/TS/Lib/lib.es5.d.ts

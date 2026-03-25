@@ -12,7 +12,6 @@ export default hello.hello
 {
     "compilerOptions": {
         "composite": true,
-        "moduleResolution": "node",
         "module": "commonjs",
         "resolveJsonModule": true,
         "esModuleInterop": true,

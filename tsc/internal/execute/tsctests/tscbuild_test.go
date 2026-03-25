@@ -2631,7 +2631,6 @@ func TestBuildResolveJsonModule(t *testing.T) {
 			{
 				"compilerOptions": {
 					"composite": %t,
-					"moduleResolution": "node",
 					"module": "commonjs",
 					"resolveJsonModule": true,
 					"esModuleInterop": true,

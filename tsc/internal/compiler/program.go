@@ -739,6 +739,10 @@ func (p *Program) verifyCompilerOptions() {
 		createRemovedOptionDiagnostic("allowSyntheticDefaultImports", "false", "")
 	}
 
+	if options.ModuleResolution == core.ModuleResolutionKindNode10 {
+		createRemovedOptionDiagnostic("moduleResolution", "node10", "")
+	}
+
 	if options.StrictPropertyInitialization.IsTrue() && !options.GetStrictOptionValue(options.StrictNullChecks) {
 		createDiagnosticForOptionName(diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks")
 	}

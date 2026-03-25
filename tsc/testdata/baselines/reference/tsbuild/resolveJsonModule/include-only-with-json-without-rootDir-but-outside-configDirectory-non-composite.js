@@ -12,7 +12,6 @@ export default hello.hello
 {
     "compilerOptions": {
         "composite": false,
-        "moduleResolution": "node",
         "module": "commonjs",
         "resolveJsonModule": true,
         "esModuleInterop": true,
@@ -34,10 +33,10 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project/tsconfig.json'...
 
-[96mproject/tsconfig.json[0m:[93m9[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+[96mproject/tsconfig.json[0m:[93m8[0m:[93m9[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
   Visit https://aka.ms/ts6 for migration information.
 
-[7m9[0m         "outDir": "dist",
+[7m8[0m         "outDir": "dist",
 [7m [0m [91m        ~~~~~~~~[0m
 
 TSFILE:  /home/src/workspaces/solution/project/dist/src/index.js
@@ -49,7 +48,7 @@ hello.json
 project/src/index.ts
    Matched by include pattern 'src/**/*' in 'project/tsconfig.json'
 
-Found 1 error in project/tsconfig.json[90m:9[0m
+Found 1 error in project/tsconfig.json[90m:8[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>

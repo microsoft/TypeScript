@@ -2851,6 +2851,19 @@ func isVariableDeclarationInitializedWithRequireHelper(node *Node, allowAccessed
 		IsRequireCall(initializer, true /*requireStringLiteralLikeArgument*/)
 }
 
+func GetModuleSpecifierOfBareOrAccessedRequire(node *Node) *Node {
+	if isVariableDeclarationInitializedWithRequireHelper(node, false /*allowAccessedRequire*/) {
+		return node.Initializer().Arguments()[0]
+	}
+	if isVariableDeclarationInitializedWithRequireHelper(node, true /*allowAccessedRequire*/) {
+		leftmost := GetLeftmostAccessExpression(node.Initializer())
+		if IsRequireCall(leftmost, true /*requireStringLiteralLikeArgument*/) {
+			return leftmost.Arguments()[0]
+		}
+	}
+	return nil
+}
+
 func IsModuleExportsAccessExpression(node *Node) bool {
 	if IsAccessExpression(node) && IsModuleIdentifier(node.Expression()) {
 		if name := GetElementOrPropertyAccessName(node); name != nil {
