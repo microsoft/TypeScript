@@ -136,26 +136,26 @@ func (c *Checker) getWithAlternativeContainers(container *ast.Symbol, symbol *as
 	}
 	// we potentially have a symbol which is a member of the instance side of something - look for a variable in scope with the container's type
 	// which may be acting like a namespace (eg, `Symbol` acts like a namespace when looking up `Symbol.toStringTag`)
-	var firstVariableMatch *ast.Symbol
+	var variableMatches []*ast.Symbol
 	if (meaning == ast.SymbolFlagsValue &&
 		container.Flags&leftMeaning == 0) &&
 		container.Flags&ast.SymbolFlagsType != 0 &&
 		c.getDeclaredTypeOfSymbol(container).flags&TypeFlagsObject != 0 {
 		c.someSymbolTableInScope(enclosingDeclaration, func(t ast.SymbolTable, _ symbolTableID, _ bool, _ bool, _ *ast.Node) bool {
+			found := false
 			for _, s := range t {
 				if s.Flags&leftMeaning != 0 && c.getTypeOfSymbol(s) == c.getDeclaredTypeOfSymbol(container) {
-					firstVariableMatch = s
-					return true
+					variableMatches = append(variableMatches, s)
+					found = true
 				}
 			}
-			return false
+			return found
 		})
+		c.sortSymbols(variableMatches)
 	}
 
 	var res []*ast.Symbol
-	if firstVariableMatch != nil {
-		res = append(res, firstVariableMatch)
-	}
+	res = append(res, variableMatches...)
 	res = append(res, additionalContainers...)
 	res = append(res, container)
 	if objectLiteralContainer != nil {
