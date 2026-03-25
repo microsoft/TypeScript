@@ -604,6 +604,14 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
+    get operator(): SyntaxKind | undefined {
+        switch (this.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+                return ((this.data >> 24) & 0x3f) as SyntaxKind;
+        }
+    }
+
     // Children properties
     get argument(): RemoteNode | undefined {
         return this.getNamedChild("argument") as RemoteNode;

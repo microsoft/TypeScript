@@ -9,6 +9,12 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
+func init() {
+	if ast.KindLastUnaryOperator > 0x3f {
+		panic(fmt.Sprintf("KindLastUnaryOperator (%d) exceeds the 6-bit definedBits capacity (max 63)", ast.KindLastUnaryOperator))
+	}
+}
+
 const (
 	NodeOffsetKind = iota * 4
 	NodeOffsetPos
@@ -188,26 +194,30 @@ const (
 // | 0b10  | Extended  | The byte offset of the node's extended data into the **extended node data** section. |
 // | 0b11  | Reserved  | Reserved for future use.                                                             |
 //
-// In all node data types, the remaining 6 bits of the first byte are used to encode booleans specific to the node type:
+// In all node data types, the remaining 6 bits of the first byte are used to encode small values specific to the node
+// type. For most node types, these are individual boolean flags. For unary expressions, all 6 bits encode the operator's
+// SyntaxKind value (e.g., PlusPlusToken=45, TildeToken=54), which fits because KindLastUnaryOperator (54) <= 0x3f (63).
 //
-// | Node type                 | Bits 2-5 | Bit 1         | Bit 0                           |
-// | ------------------------- | -------- | ------------- | ------------------------------- |
-// | `ImportSpecifier`         |          |               | `isTypeOnly`                    |
-// | `ImportClause`            |          |               | `isTypeOnly`                    |
-// | `ExportSpecifier`         |          |               | `isTypeOnly`                    |
-// | `ImportEqualsDeclaration` |          |               | `isTypeOnly`                    |
-// | `ExportDeclaration`       |          |               | `isTypeOnly`                    |
-// | `ImportTypeNode`          |          |               | `isTypeOf`                      |
-// | `ExportAssignment`        |          |               | `isExportEquals`                |
-// | `Block`                   |          |               | `multiline`                     |
-// | `ArrayLiteralExpression`  |          |               | `multiline`                     |
-// | `ObjectLiteralExpression` |          |               | `multiline`                     |
-// | `JsxText`                 |          |               | `containsOnlyTriviaWhiteSpaces` |
-// | `JSDocTypeLiteral`        |          |               | `isArrayType`                   |
-// | `JsDocPropertyTag`        |          | `isNameFirst` | `isBracketed`                   |
-// | `JsDocParameterTag`       |          | `isNameFirst` | `isBracketed`                   |
-// | `VariableDeclarationList` |          | is `const`    | is `let`                        |
-// | `ImportAttributes`        |          | is `assert`   | `multiline`                     |
+// | Node type                    | Bits 0-5                              | Notes                          |
+// | ---------------------------- | ------------------------------------- | ------------------------------ |
+// | `ImportSpecifier`            | Bit 0: `isTypeOnly`                   |                                |
+// | `ImportClause`               | Bit 0: `isTypeOnly`, Bit 1: `isDefer` |                                |
+// | `ExportSpecifier`            | Bit 0: `isTypeOnly`                   |                                |
+// | `ImportEqualsDeclaration`    | Bit 0: `isTypeOnly`                   |                                |
+// | `ExportDeclaration`          | Bit 0: `isTypeOnly`                   |                                |
+// | `ImportTypeNode`             | Bit 0: `isTypeOf`                     |                                |
+// | `ExportAssignment`           | Bit 0: `isExportEquals`               |                                |
+// | `Block`                      | Bit 0: `multiline`                    |                                |
+// | `ArrayLiteralExpression`     | Bit 0: `multiline`                    |                                |
+// | `ObjectLiteralExpression`    | Bit 0: `multiline`                    |                                |
+// | `JsxText`                    | Bit 0: `containsOnlyTriviaWhiteSpaces`|                                |
+// | `JSDocTypeLiteral`           | Bit 0: `isArrayType`                  |                                |
+// | `JsDocPropertyTag`           | Bit 0: `isBracketed`, Bit 1: `isNameFirst` |                           |
+// | `JsDocParameterTag`          | Bit 0: `isBracketed`, Bit 1: `isNameFirst` |                           |
+// | `VariableDeclarationList`    | Bit 0: is `let`, Bit 1: is `const`    |                                |
+// | `ImportAttributes`           | Bit 0: `multiline`, Bit 1: is `assert`|                                |
+// | `PrefixUnaryExpression`      | Bits 0-5: operator SyntaxKind         | e.g., `!`, `~`, `++`, `--`    |
+// | `PostfixUnaryExpression`     | Bits 0-5: operator SyntaxKind         | e.g., `++`, `--`               |
 //
 // The remaining 3 bytes of the node data field vary by data type:
 //
@@ -922,6 +932,12 @@ func getNodeDefinedData(node *ast.Node) uint32 {
 	case ast.KindImportAttributes:
 		n := node.AsImportAttributes()
 		return uint32(boolToByte(n.MultiLine))<<24 | uint32(boolToByte(n.Token == ast.KindAssertKeyword))<<25
+	case ast.KindPrefixUnaryExpression:
+		n := node.AsPrefixUnaryExpression()
+		return uint32(n.Operator&0x3f) << 24
+	case ast.KindPostfixUnaryExpression:
+		n := node.AsPostfixUnaryExpression()
+		return uint32(n.Operator&0x3f) << 24
 	}
 	return 0
 }

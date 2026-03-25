@@ -374,6 +374,50 @@ func TestDecodeSourceFile_FunctionExpressionEmptyParams(t *testing.T) {
 	assert.Equal(t, len(funcExpr.Parameters.Nodes), 0)
 }
 
+func TestDecodeSourceFile_PostfixUnaryOperator(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile("let i = 0; i++;")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	exprStmt := decoded.Statements.Nodes[1].AsExpressionStatement()
+	postfix := exprStmt.Expression.AsPostfixUnaryExpression()
+	assert.Equal(t, postfix.Operator, ast.KindPlusPlusToken)
+	assert.Equal(t, postfix.Operand.Kind, ast.KindIdentifier)
+}
+
+func TestDecodeSourceFile_PrefixUnaryOperator(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile("let x = true; !x;")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	exprStmt := decoded.Statements.Nodes[1].AsExpressionStatement()
+	prefix := exprStmt.Expression.AsPrefixUnaryExpression()
+	assert.Equal(t, prefix.Operator, ast.KindExclamationToken)
+	assert.Equal(t, prefix.Operand.Kind, ast.KindIdentifier)
+}
+
+func TestDecodeSourceFile_PostfixDecrement(t *testing.T) {
+	t.Parallel()
+	sf := parseSourceFile("let n = 5; n--;")
+	buf, err := encoder.EncodeSourceFile(sf)
+	assert.NilError(t, err)
+
+	decoded, err := encoder.DecodeSourceFile(buf)
+	assert.NilError(t, err)
+
+	exprStmt := decoded.Statements.Nodes[1].AsExpressionStatement()
+	postfix := exprStmt.Expression.AsPostfixUnaryExpression()
+	assert.Equal(t, postfix.Operator, ast.KindMinusMinusToken)
+}
+
 func BenchmarkDecodeSourceFile(b *testing.B) {
 	repo.SkipIfNoTypeScriptSubmodule(b)
 	filePath := filepath.Join(repo.TypeScriptSubmodulePath(), "src/compiler/checker.ts")

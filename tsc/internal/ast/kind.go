@@ -424,6 +424,7 @@ const (
 	KindLastJSDocTagNode        = KindJSDocImportTag
 	KindFirstContextualKeyword  = KindAbstractKeyword
 	KindLastContextualKeyword   = KindDeferKeyword
+	KindLastUnaryOperator       = KindTildeToken
 	KindComment                 = KindSingleLineCommentTrivia | KindMultiLineCommentTrivia
 	KindFirstTriviaToken        = KindSingleLineCommentTrivia
 	KindLastTriviaToken         = KindConflictMarkerTrivia

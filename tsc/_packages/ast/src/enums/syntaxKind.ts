@@ -395,6 +395,7 @@ export var SyntaxKind: any;
     SyntaxKind[SyntaxKind["LastJSDocTagNode"] = 344] = "LastJSDocTagNode";
     SyntaxKind[SyntaxKind["FirstContextualKeyword"] = 127] = "FirstContextualKeyword";
     SyntaxKind[SyntaxKind["LastContextualKeyword"] = 166] = "LastContextualKeyword";
+    SyntaxKind[SyntaxKind["LastUnaryOperator"] = 54] = "LastUnaryOperator";
     SyntaxKind[SyntaxKind["Comment"] = 3] = "Comment";
     SyntaxKind[SyntaxKind["FirstTriviaToken"] = 2] = "FirstTriviaToken";
     SyntaxKind[SyntaxKind["LastTriviaToken"] = 6] = "LastTriviaToken";

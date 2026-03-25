@@ -394,6 +394,7 @@ export enum SyntaxKind {
     LastJSDocTagNode = JSDocImportTag,
     FirstContextualKeyword = AbstractKeyword,
     LastContextualKeyword = DeferKeyword,
+    LastUnaryOperator = TildeToken,
     Comment = SingleLineCommentTrivia | MultiLineCommentTrivia,
     FirstTriviaToken = SingleLineCommentTrivia,
     LastTriviaToken = ConflictMarkerTrivia,

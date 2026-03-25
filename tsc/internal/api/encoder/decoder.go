@@ -1301,11 +1301,11 @@ func (d *astDecoder) createChildrenNode(kind ast.Kind, data uint32, childIndices
 		node := d.factory.NewJSDocTypeLiteral(tags, isArrayType)
 		return node, nil
 
-	// Nodes with special non-child fields that are not encoded
+	// Nodes with operator encoded in definedBits
 	case ast.KindPrefixUnaryExpression:
-		return d.factory.NewPrefixUnaryExpression(0, d.singleChild(childIndices)), nil
+		return d.factory.NewPrefixUnaryExpression(ast.Kind(definedBits), d.singleChild(childIndices)), nil
 	case ast.KindPostfixUnaryExpression:
-		return d.factory.NewPostfixUnaryExpression(d.singleChild(childIndices), 0), nil
+		return d.factory.NewPostfixUnaryExpression(d.singleChild(childIndices), ast.Kind(definedBits)), nil
 	case ast.KindMetaProperty:
 		return d.factory.NewMetaProperty(0, d.singleChild(childIndices)), nil
 	case ast.KindTypeOperator:
