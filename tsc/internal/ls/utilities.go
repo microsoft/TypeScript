@@ -143,9 +143,9 @@ func getPossibleTypeArgumentsInfo(tokenIn *ast.Node, sourceFile *ast.SourceFile)
 			}
 			remainingLessThanTokens--
 		case ast.KindGreaterThanGreaterThanGreaterThanToken:
-			remainingLessThanTokens = +3
+			remainingLessThanTokens += 3
 		case ast.KindGreaterThanGreaterThanToken:
-			remainingLessThanTokens = +2
+			remainingLessThanTokens += 2
 		case ast.KindGreaterThanToken:
 			remainingLessThanTokens++
 		case ast.KindCloseBraceToken:
