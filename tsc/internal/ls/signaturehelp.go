@@ -535,7 +535,10 @@ func (l *LanguageService) itemInfoForParameters(candidateSignature *checker.Sign
 	var displayParts strings.Builder
 	if len(signatureHelpTypeParameters) != 0 {
 		displayParts.WriteString(scanner.TokenToString(ast.KindLessThanToken))
-		for _, typeParameter := range signatureHelpTypeParameters {
+		for i, typeParameter := range signatureHelpTypeParameters {
+			if i > 0 {
+				displayParts.WriteString(", ")
+			}
 			displayParts.WriteString(*typeParameter.parameterInfo.Label.String)
 		}
 		displayParts.WriteString(scanner.TokenToString(ast.KindGreaterThanToken))

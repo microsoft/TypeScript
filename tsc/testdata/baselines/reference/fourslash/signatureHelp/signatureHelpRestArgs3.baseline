@@ -23,7 +23,7 @@
     "item": {
       "signatures": [
         {
-          "label": "assign<T extends {}U>(target: T, source: U): T & U",
+          "label": "assign<T extends {}, U>(target: T, source: U): T & U",
           "documentation": {
             "kind": "markdown",
             "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
@@ -47,7 +47,7 @@
           "activeParameter": 1
         },
         {
-          "label": "assign<T extends {}UV>(target: T, source1: U, source2: V): T & U & V",
+          "label": "assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V",
           "documentation": {
             "kind": "markdown",
             "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
@@ -78,7 +78,7 @@
           "activeParameter": 1
         },
         {
-          "label": "assign<T extends {}UVW>(target: T, source1: U, source2: V, source3: W): T & U & V & W",
+          "label": "assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W",
           "documentation": {
             "kind": "markdown",
             "value": "Copy the values of all of the enumerable own properties from one or more source objects to a\ntarget object. Returns the target object."
