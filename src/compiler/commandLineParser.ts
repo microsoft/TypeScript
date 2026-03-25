@@ -237,7 +237,6 @@ const libEntries: [string, string][] = [
     ["es2025.iterator", "lib.es2025.iterator.d.ts"],
     ["es2025.promise", "lib.es2025.promise.d.ts"],
     ["es2025.regexp", "lib.es2025.regexp.d.ts"],
-    ["es2025.json", "lib.es2025.json.d.ts"],
     // Fallback for backward compatibility
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
