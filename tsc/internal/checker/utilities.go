@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/debug"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/module"
@@ -274,6 +275,33 @@ func isExclamationToken(node *ast.Node) bool {
 
 func isOptionalDeclaration(declaration *ast.Node) bool {
 	return ast.HasQuestionToken(declaration)
+}
+
+func (c *Checker) isOptionalParameter(node *ast.Node) bool {
+	// !!! TODO: JSDoc support
+	if ast.IsParameter(node) && node.QuestionToken() != nil {
+		return true
+	}
+	if !ast.IsParameter(node) {
+		return false
+	}
+	if node.Initializer() != nil {
+		signature := c.getSignatureFromDeclaration(node.Parent)
+		parameterIndex := core.FindIndex(node.Parent.Parameters(), func(p *ast.ParameterDeclarationNode) bool { return p == node })
+		debug.Assert(parameterIndex >= 0)
+		// Only consider syntactic or instantiated parameters as optional, not `void` parameters as this function is used
+		// in grammar checks and checking for `void` too early results in parameter types widening too early
+		// and causes some noImplicitAny errors to be lost.
+		return parameterIndex >= c.getMinArgumentCountEx(signature, MinArgumentCountFlagsStrongArityForUntypedJS|MinArgumentCountFlagsVoidIsNonOptional)
+	}
+	iife := ast.GetImmediatelyInvokedFunctionExpression(node.Parent)
+	if iife != nil {
+		parameterIndex := core.FindIndex(node.Parent.Parameters(), func(p *ast.ParameterDeclarationNode) bool { return p == node })
+		return node.Type() == nil &&
+			node.AsParameterDeclaration().DotDotDotToken == nil &&
+			parameterIndex >= len(c.getEffectiveCallArguments(iife))
+	}
+	return false
 }
 
 func isEmptyArrayLiteral(expression *ast.Node) bool {

@@ -458,7 +458,7 @@ func (b *NodeBuilderImpl) pseudoTypeEquivalentToType(t *pseudochecker.PseudoType
 		}
 		for i, p := range pt.Parameters {
 			targetParam := targetSig.parameters[i]
-			if p.Optional != isOptionalDeclaration(targetParam.ValueDeclaration) {
+			if p.Optional != b.ch.isOptionalParameter(targetParam.ValueDeclaration) {
 				if reportErrors {
 					b.ctx.tracker.ReportInferenceFallback(p.Name.Parent)
 				}

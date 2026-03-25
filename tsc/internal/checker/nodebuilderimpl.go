@@ -1598,8 +1598,7 @@ func (b *NodeBuilderImpl) symbolToParameterDeclaration(parameterSymbol *ast.Symb
 		dotDotDotToken = b.f.NewToken(ast.KindDotDotDotToken)
 	}
 	name := b.parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration)
-	// TODO: isOptionalParameter on emit resolver here is silly - hoist to checker and reexpose on emit resolver?
-	isOptional := parameterDeclaration != nil && b.ch.GetEmitResolver().isOptionalParameter(parameterDeclaration) || parameterSymbol.CheckFlags&ast.CheckFlagsOptionalParameter != 0
+	isOptional := parameterDeclaration != nil && b.ch.isOptionalParameter(parameterDeclaration) || parameterSymbol.CheckFlags&ast.CheckFlagsOptionalParameter != 0
 	var questionToken *ast.Node
 	if isOptional {
 		questionToken = b.f.NewToken(ast.KindQuestionToken)
