@@ -47,7 +47,7 @@ jobs:
       - run: npx hereby build
 
   release-build:
-    if: ${{ github.repository == 'microsoft/typescript-go' }}
+    if: ${{ github.repository == 'microsoft/typescript-go' && github.event_name != 'merge_group' }}
     runs-on: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=azure-linux-3']
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
