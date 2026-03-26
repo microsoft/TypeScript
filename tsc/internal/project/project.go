@@ -166,6 +166,19 @@ func (p *Project) Name() string {
 	return p.configFileName
 }
 
+// DisplayName returns a short, human-readable name for the project,
+// relative to the given workspace root directory.
+// For configured projects, this is the config file path made relative.
+// For inferred projects, this is the last component of the current directory.
+func (p *Project) DisplayName(cwd string) string {
+	if p.Kind == KindInferred {
+		return tspath.GetBaseFileName(p.currentDirectory)
+	}
+	return tspath.ConvertToRelativePath(p.configFileName, tspath.ComparePathsOptions{
+		CurrentDirectory: cwd,
+	})
+}
+
 func (p *Project) ID() tspath.Path {
 	return p.configFilePath
 }

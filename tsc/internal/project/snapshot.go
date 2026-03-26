@@ -331,6 +331,7 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		customConfigFileName,
 		session.parseCache,
 		session.extendedConfigCache,
+		session.client,
 	)
 
 	if len(change.ataChanges) != 0 {

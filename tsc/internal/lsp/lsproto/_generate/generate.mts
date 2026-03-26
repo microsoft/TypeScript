@@ -264,6 +264,28 @@ const customStructures: Structure[] = [
         ],
         documentation: "Result for the initializeAPISession request.",
     },
+    {
+        name: "ProjectInfoParams",
+        properties: [
+            {
+                name: "textDocument",
+                type: { kind: "reference", name: "TextDocumentIdentifier" },
+                documentation: "The text document to get project info for.",
+            },
+        ],
+        documentation: "Parameters for the custom/projectInfo request.",
+    },
+    {
+        name: "ProjectInfoResult",
+        properties: [
+            {
+                name: "configFilePath",
+                type: { kind: "base", name: "string" },
+                documentation: "The absolute path to the config file (e.g. /path/to/tsconfig.json) for the project that contains this file, or an empty string if the file is in an inferred project.",
+            },
+        ],
+        documentation: "Result for the custom/projectInfo request.",
+    },
 ];
 
 const customEnumerations: Enumeration[] = [
@@ -378,6 +400,14 @@ const customRequests: Request[] = [
         messageDirection: "clientToServer",
         documentation: "Custom request to initialize an API session.",
     },
+    {
+        method: "custom/projectInfo",
+        typeName: "CustomProjectInfoRequest",
+        params: { kind: "reference", name: "ProjectInfoParams" },
+        result: { kind: "reference", name: "ProjectInfoResult" },
+        messageDirection: "clientToServer",
+        documentation: "Returns project information (e.g. the tsconfig.json path) for a given text document.",
+    },
 ];
 
 const customTypeAliases: TypeAlias[] = [
@@ -477,6 +507,18 @@ function patchAndPreprocessModel() {
                     registerOptionsUnionType = { kind: "or", items: registrationOptionTypes };
                     prop.type = registerOptionsUnionType;
                 }
+            }
+
+            // Replace ProgressParams.value with a proper union type
+            if (structure.name === "ProgressParams" && prop.name === "value" && prop.type.kind === "reference" && prop.type.name === "LSPAny") {
+                prop.type = {
+                    kind: "or",
+                    items: [
+                        { kind: "reference", name: "WorkDoneProgressBegin" },
+                        { kind: "reference", name: "WorkDoneProgressReport" },
+                        { kind: "reference", name: "WorkDoneProgressEnd" },
+                    ],
+                };
             }
         }
     }

@@ -94,5 +94,17 @@
     "Deduplicate packages with the same name and version.": {
         "category": "Message",
         "code": 100011
+    },
+    "Loading": {
+        "category": "Message",
+        "code": 100012
+    },
+    "Project '{0}'": {
+        "category": "Message",
+        "code": 100014
+    },
+    "Installing types for '{0}'": {
+        "category": "Message",
+        "code": 100013
     }
 }

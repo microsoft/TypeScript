@@ -9,7 +9,8 @@
         "skipLibCheck": true,
         "resolveJsonModule": true,
         "sourceMap": true,
-        "noEmit": true
+        "noEmit": true,
+        "types": ["node"]
     },
     "include": ["./src/**/*"]
 }

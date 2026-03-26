@@ -4292,6 +4292,12 @@ var Set_the_number_of_projects_to_build_concurrently = &Message{code: 100009, ca
 
 var Deduplicate_packages_with_the_same_name_and_version = &Message{code: 100011, category: CategoryMessage, key: "Deduplicate_packages_with_the_same_name_and_version_100011", text: "Deduplicate packages with the same name and version."}
 
+var Loading = &Message{code: 100012, category: CategoryMessage, key: "Loading_100012", text: "Loading"}
+
+var Installing_types_for_0 = &Message{code: 100013, category: CategoryMessage, key: "Installing_types_for_0_100013", text: "Installing types for '{0}'"}
+
+var Project_0 = &Message{code: 100014, category: CategoryMessage, key: "Project_0_100014", text: "Project '{0}'"}
+
 func keyToMessage(key Key) *Message {
 	switch key {
 	case "Unterminated_string_literal_1002":
@@ -8584,6 +8590,12 @@ func keyToMessage(key Key) *Message {
 		return Set_the_number_of_projects_to_build_concurrently
 	case "Deduplicate_packages_with_the_same_name_and_version_100011":
 		return Deduplicate_packages_with_the_same_name_and_version
+	case "Loading_100012":
+		return Loading
+	case "Installing_types_for_0_100013":
+		return Installing_types_for_0
+	case "Project_0_100014":
+		return Project_0
 	default:
 		return nil
 	}

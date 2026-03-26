@@ -58,6 +58,9 @@ func newLSPPipe() (*LSPReader, *LSPWriter) {
 // ServerRequestHandler handles server-initiated requests and returns the response to send back.
 type ServerRequestHandler func(ctx context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage
 
+// ServerNotificationHandler handles server-initiated notifications (e.g., $/progress).
+type ServerNotificationHandler func(ctx context.Context, req *lsproto.RequestMessage)
+
 // LSPClient provides infrastructure for communicating with an LSP server in tests.
 type LSPClient struct {
 	Server       *lsp.Server
@@ -69,6 +72,10 @@ type LSPClient struct {
 	// OnServerRequest handles server-initiated requests (e.g., workspace/configuration).
 	// If nil, all server requests receive a MethodNotFound error.
 	onServerRequest ServerRequestHandler
+
+	// OnServerNotification handles server-initiated notifications (e.g., $/progress).
+	// If nil, notifications are ignored.
+	OnServerNotification ServerNotificationHandler
 
 	// Async message handling
 	pendingRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
@@ -162,7 +169,9 @@ func (c *LSPClient) MessageRouter(ctx context.Context) error {
 				return err
 			}
 		case jsonrpc.MessageKindNotification:
-			// Server-initiated notifications (e.g., publishDiagnostics) are currently ignored
+			if c.OnServerNotification != nil {
+				c.OnServerNotification(ctx, msg.AsRequest())
+			}
 		}
 	}
 }

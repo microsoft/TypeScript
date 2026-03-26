@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
@@ -13,4 +14,6 @@ type Client interface {
 	PublishDiagnostics(ctx context.Context, params *lsproto.PublishDiagnosticsParams) error
 	RefreshInlayHints(ctx context.Context) error
 	RefreshCodeLens(ctx context.Context) error
+	ProgressStart(message *diagnostics.Message, args ...any)
+	ProgressFinish(message *diagnostics.Message, args ...any)
 }

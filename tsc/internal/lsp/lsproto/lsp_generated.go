@@ -11770,7 +11770,7 @@ type ProgressParams struct {
 	Token IntegerOrString `json:"token"`
 
 	// The progress data.
-	Value any `json:"value"`
+	Value WorkDoneProgressBeginOrReportOrEnd `json:"value"`
 }
 
 var _ json.UnmarshalerFrom = (*ProgressParams)(nil)
@@ -22208,6 +22208,116 @@ func (s *InitializeAPISessionResult) UnmarshalJSONFrom(dec *json.Decoder) error 
 	return nil
 }
 
+// Parameters for the custom/projectInfo request.
+type ProjectInfoParams struct {
+	// The text document to get project info for.
+	TextDocument TextDocumentIdentifier `json:"textDocument"`
+}
+
+func (s *ProjectInfoParams) TextDocumentURI() DocumentUri {
+	return s.TextDocument.Uri
+}
+
+var _ json.UnmarshalerFrom = (*ProjectInfoParams)(nil)
+
+func (s *ProjectInfoParams) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingTextDocument uint = 1 << iota
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"textDocument"`:
+			missing &^= missingTextDocument
+			if err := json.UnmarshalDecode(dec, &s.TextDocument); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingTextDocument != 0 {
+			missingProps = append(missingProps, "textDocument")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
+}
+
+// Result for the custom/projectInfo request.
+type ProjectInfoResult struct {
+	// The absolute path to the config file (e.g. /path/to/tsconfig.json) for the project that contains this file, or an empty string if the file is in an inferred project.
+	ConfigFilePath string `json:"configFilePath"`
+}
+
+var _ json.UnmarshalerFrom = (*ProjectInfoResult)(nil)
+
+func (s *ProjectInfoResult) UnmarshalJSONFrom(dec *json.Decoder) error {
+	const (
+		missingConfigFilePath uint = 1 << iota
+		_missingLast
+	)
+	missing := _missingLast - 1
+
+	if k := dec.PeekKind(); k != '{' {
+		return fmt.Errorf("expected object start, but encountered %v", k)
+	}
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	for dec.PeekKind() != '}' {
+		name, err := dec.ReadValue()
+		if err != nil {
+			return err
+		}
+		switch string(name) {
+		case `"configFilePath"`:
+			missing &^= missingConfigFilePath
+			if err := json.UnmarshalDecode(dec, &s.ConfigFilePath); err != nil {
+				return err
+			}
+		default:
+			// Ignore unknown properties.
+		}
+	}
+
+	if _, err := dec.ReadToken(); err != nil {
+		return err
+	}
+
+	if missing != 0 {
+		var missingProps []string
+		if missing&missingConfigFilePath != 0 {
+			missingProps = append(missingProps, "configFilePath")
+		}
+		return fmt.Errorf("missing required properties: %s", strings.Join(missingProps, ", "))
+	}
+
+	return nil
+}
+
 // CallHierarchyItemData is a placeholder for custom data preserved on a CallHierarchyItem.
 type CallHierarchyItemData struct{}
 
@@ -23614,6 +23724,8 @@ func unmarshalParams(method Method, data []byte) (any, error) {
 		return unmarshalEmpty(data)
 	case MethodCustomInitializeAPISession:
 		return unmarshalPtrTo[InitializeAPISessionParams](data)
+	case MethodCustomProjectInfo:
+		return unmarshalPtrTo[ProjectInfoParams](data)
 	case MethodWorkspaceDidChangeWorkspaceFolders:
 		return unmarshalPtrTo[DidChangeWorkspaceFoldersParams](data)
 	case MethodWindowWorkDoneProgressCancel:
@@ -23825,6 +23937,8 @@ func unmarshalResult(method Method, data []byte) (any, error) {
 		return unmarshalValue[StopCPUProfileResponse](data)
 	case MethodCustomInitializeAPISession:
 		return unmarshalValue[CustomInitializeAPISessionResponse](data)
+	case MethodCustomProjectInfo:
+		return unmarshalValue[CustomProjectInfoResponse](data)
 	default:
 		return unmarshalAny(data)
 	}
@@ -24143,6 +24257,8 @@ const (
 	MethodCustomStopCPUProfile Method = "custom/stopCPUProfile"
 	// Custom request to initialize an API session.
 	MethodCustomInitializeAPISession Method = "custom/initializeAPISession"
+	// Returns project information (e.g. the tsconfig.json path) for a given text document.
+	MethodCustomProjectInfo Method = "custom/projectInfo"
 	// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 	// folder configuration changes.
 	MethodWorkspaceDidChangeWorkspaceFolders Method = "workspace/didChangeWorkspaceFolders"
@@ -24692,6 +24808,12 @@ type CustomInitializeAPISessionResponse = *InitializeAPISessionResult
 
 // Type mapping info for `custom/initializeAPISession`
 var CustomInitializeAPISessionInfo = RequestInfo[*InitializeAPISessionParams, CustomInitializeAPISessionResponse]{Method: MethodCustomInitializeAPISession}
+
+// Response type for `custom/projectInfo`
+type CustomProjectInfoResponse = *ProjectInfoResult
+
+// Type mapping info for `custom/projectInfo`
+var CustomProjectInfoInfo = RequestInfo[*ProjectInfoParams, CustomProjectInfoResponse]{Method: MethodCustomProjectInfo}
 
 // Type mapping info for `workspace/didChangeWorkspaceFolders`
 var WorkspaceDidChangeWorkspaceFoldersInfo = NotificationInfo[*DidChangeWorkspaceFoldersParams]{Method: MethodWorkspaceDidChangeWorkspaceFolders}
@@ -25642,6 +25764,56 @@ func (o *LocationOrLocationUriOnly) UnmarshalJSONFrom(dec *json.Decoder) error {
 		return nil
 	}
 	return fmt.Errorf("invalid LocationOrLocationUriOnly: %s", data)
+}
+
+type WorkDoneProgressBeginOrReportOrEnd struct {
+	Begin  *WorkDoneProgressBegin
+	Report *WorkDoneProgressReport
+	End    *WorkDoneProgressEnd
+}
+
+var _ json.MarshalerTo = (*WorkDoneProgressBeginOrReportOrEnd)(nil)
+
+func (o *WorkDoneProgressBeginOrReportOrEnd) MarshalJSONTo(enc *json.Encoder) error {
+	assertOnlyOne("exactly one element of WorkDoneProgressBeginOrReportOrEnd should be set", o.Begin != nil, o.Report != nil, o.End != nil)
+
+	if o.Begin != nil {
+		return json.MarshalEncode(enc, o.Begin)
+	}
+	if o.Report != nil {
+		return json.MarshalEncode(enc, o.Report)
+	}
+	if o.End != nil {
+		return json.MarshalEncode(enc, o.End)
+	}
+	panic("unreachable")
+}
+
+var _ json.UnmarshalerFrom = (*WorkDoneProgressBeginOrReportOrEnd)(nil)
+
+func (o *WorkDoneProgressBeginOrReportOrEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
+	*o = WorkDoneProgressBeginOrReportOrEnd{}
+
+	data, err := dec.ReadValue()
+	if err != nil {
+		return err
+	}
+	var vBegin WorkDoneProgressBegin
+	if err := json.Unmarshal(data, &vBegin); err == nil {
+		o.Begin = &vBegin
+		return nil
+	}
+	var vReport WorkDoneProgressReport
+	if err := json.Unmarshal(data, &vReport); err == nil {
+		o.Report = &vReport
+		return nil
+	}
+	var vEnd WorkDoneProgressEnd
+	if err := json.Unmarshal(data, &vEnd); err == nil {
+		o.End = &vEnd
+		return nil
+	}
+	return fmt.Errorf("invalid WorkDoneProgressBeginOrReportOrEnd: %s", data)
 }
 
 type TextEditOrAnnotatedTextEditOrSnippetTextEdit struct {

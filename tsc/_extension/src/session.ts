@@ -1,6 +1,9 @@
 import * as vscode from "vscode";
+import { ActiveJsTsEditorTracker } from "./activeJsTsEditorTracker";
 import { Client } from "./client";
 import { registerCodeLensShowLocationsCommand } from "./commands";
+import { ManagedFileContextManager } from "./managedFileContext";
+import { ProjectStatus } from "./projectStatus";
 import { setupStatusBar } from "./statusBar";
 import { TelemetryReporter } from "./telemetryReporting";
 import { getExe } from "./util";
@@ -91,6 +94,7 @@ class Session implements vscode.Disposable {
     private outputChannel: vscode.LogOutputChannel;
     private traceOutputChannel: vscode.LogOutputChannel;
     private telemetryReporter: TelemetryReporter;
+    private initializedEventEmitter: vscode.EventEmitter<void>;
 
     constructor(
         outputChannel: vscode.LogOutputChannel,
@@ -103,6 +107,7 @@ class Session implements vscode.Disposable {
         this.outputChannel = outputChannel;
         this.traceOutputChannel = traceOutputChannel;
         this.telemetryReporter = telemetryReporter;
+        this.initializedEventEmitter = initializedEventEmitter;
         this.registerCommands();
     }
 
@@ -110,6 +115,22 @@ class Session implements vscode.Disposable {
         const exe = await getExe(context);
         await this.client.start(exe);
         this.disposables.push(setupStatusBar(exe.version));
+
+        // Set up active editor tracker and UI features
+        const activeEditorTracker = new ActiveJsTsEditorTracker();
+        this.disposables.push(activeEditorTracker);
+
+        const managedFileContext = new ManagedFileContextManager(activeEditorTracker);
+        this.disposables.push(managedFileContext);
+
+        const projectStatus = new ProjectStatus(this.client, activeEditorTracker, this.initializedEventEmitter.event);
+        this.disposables.push(projectStatus);
+
+        // If already initialized, fire immediately so projectStatus picks it up
+        if (this.client.isInitialized) {
+            this.initializedEventEmitter.fire();
+        }
+
         await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", true);
     }
 

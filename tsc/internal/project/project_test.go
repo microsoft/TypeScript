@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
@@ -302,5 +303,169 @@ func TestPushDiagnostics(t *testing.T) {
 		calls := utils.Client().PublishDiagnosticsCalls()
 		// Should not have any calls since inferred projects don't have tsconfig.json
 		assert.Equal(t, len(calls), 0, "expected no PublishDiagnostics calls for inferred projects")
+	})
+}
+
+func TestDisplayName(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	t.Run("configured project returns relative config path", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/tsconfig.json": `{}`,
+			"/home/projects/index.ts":      "export const x = 1;",
+		}
+		session, _ := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/index.ts"))
+		assert.NilError(t, err)
+
+		snapshot := session.Snapshot()
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/tsconfig.json"))
+		assert.Assert(t, configured != nil)
+		assert.Equal(t, configured.DisplayName("/home/projects"), "tsconfig.json")
+	})
+
+	t.Run("configured project with nested config", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/sub/tsconfig.json": `{}`,
+			"/home/projects/sub/index.ts":      "export const x = 1;",
+		}
+		session, _ := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/sub/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/sub/index.ts"))
+		assert.NilError(t, err)
+
+		snapshot := session.Snapshot()
+		configured := snapshot.ProjectCollection.ConfiguredProject(tspath.Path("/home/projects/sub/tsconfig.json"))
+		assert.Assert(t, configured != nil)
+		assert.Equal(t, configured.DisplayName("/home/projects"), "sub/tsconfig.json")
+	})
+
+	t.Run("inferred project returns directory base name", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/index.ts": "export const x = 1;",
+		}
+		session, _ := projecttestutil.SetupWithOptions(files, &project.SessionOptions{
+			CurrentDirectory:       "/home/projects",
+			DefaultLibraryPath:     bundled.LibPath(),
+			PositionEncoding:       lsproto.PositionEncodingKindUTF8,
+			WatchEnabled:           true,
+			LoggingEnabled:         true,
+			PushDiagnosticsEnabled: true,
+		})
+		session.DidOpenFile(context.Background(), "file:///home/projects/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/index.ts"))
+		assert.NilError(t, err)
+
+		snapshot := session.Snapshot()
+		inferred := snapshot.ProjectCollection.InferredProject()
+		assert.Assert(t, inferred != nil)
+		name := inferred.DisplayName("/home")
+		assert.Equal(t, name, "projects")
+	})
+}
+
+func TestProgressNotifications(t *testing.T) {
+	t.Parallel()
+	if !bundled.Embedded {
+		t.Skip("bundled files are not embedded")
+	}
+
+	t.Run("emits progress for configured project loading", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/tsconfig.json": `{}`,
+			"/home/projects/index.ts":      "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/index.ts"))
+		assert.NilError(t, err)
+
+		startCalls := utils.Client().ProgressStartCalls()
+		finishCalls := utils.Client().ProgressFinishCalls()
+
+		assert.Assert(t, len(startCalls) > 0, "expected at least one ProgressStart call")
+		assert.Assert(t, len(finishCalls) > 0, "expected at least one ProgressFinish call")
+
+		foundProjectStart := false
+		for _, call := range startCalls {
+			if call.Message == diagnostics.Project_0 {
+				foundProjectStart = true
+				break
+			}
+		}
+		assert.Assert(t, foundProjectStart, "expected ProgressStart with Project_0 message")
+
+		foundProjectFinish := false
+		for _, call := range finishCalls {
+			if call.Message == diagnostics.Project_0 {
+				foundProjectFinish = true
+				break
+			}
+		}
+		assert.Assert(t, foundProjectFinish, "expected ProgressFinish with Project_0 message")
+	})
+
+	t.Run("emits progress for inferred project loading", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/index.ts": "export const x = 1;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/index.ts", 1, "export const x = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/index.ts"))
+		assert.NilError(t, err)
+
+		startCalls := utils.Client().ProgressStartCalls()
+		finishCalls := utils.Client().ProgressFinishCalls()
+
+		assert.Assert(t, len(startCalls) > 0, "expected at least one ProgressStart call")
+		assert.Assert(t, len(finishCalls) > 0, "expected at least one ProgressFinish call")
+
+		foundProjectStart := false
+		for _, call := range startCalls {
+			if call.Message == diagnostics.Project_0 {
+				foundProjectStart = true
+				break
+			}
+		}
+		assert.Assert(t, foundProjectStart, "expected ProgressStart with Project_0 message")
+	})
+
+	t.Run("each start has a matching finish", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/tsconfig.json": `{}`,
+			"/home/projects/a.ts":          "export const a = 1;",
+			"/home/projects/b.ts":          "export const b = 2;",
+		}
+		session, utils := projecttestutil.Setup(files)
+		session.DidOpenFile(context.Background(), "file:///home/projects/a.ts", 1, "export const a = 1;", lsproto.LanguageKindTypeScript)
+		_, err := session.GetLanguageService(context.Background(), lsproto.DocumentUri("file:///home/projects/a.ts"))
+		assert.NilError(t, err)
+
+		startCalls := utils.Client().ProgressStartCalls()
+		finishCalls := utils.Client().ProgressFinishCalls()
+
+		starts := 0
+		finishes := 0
+		for _, call := range startCalls {
+			if call.Message == diagnostics.Project_0 {
+				starts++
+			}
+		}
+		for _, call := range finishCalls {
+			if call.Message == diagnostics.Project_0 {
+				finishes++
+			}
+		}
+		assert.Equal(t, starts, finishes, "ProgressStart and ProgressFinish calls for Project_0 should be balanced")
 	})
 }

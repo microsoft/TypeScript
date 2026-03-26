@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/api"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 	"github.com/microsoft/typescript-go/internal/locale"
@@ -187,6 +188,8 @@ type Server struct {
 	npmInstall func(cwd string, args []string) ([]byte, error)
 
 	cpuProfiler pprof.CPUProfiler
+
+	projectProgress *projectLoadingProgress
 }
 
 func (s *Server) Session() *project.Session { return s.session }
@@ -279,6 +282,20 @@ func (s *Server) RefreshCodeLens(ctx context.Context) error {
 		return fmt.Errorf("failed to refresh code lens: %w", err)
 	}
 	return nil
+}
+
+// ProgressStart implements project.Client.
+func (s *Server) ProgressStart(message *diagnostics.Message, args ...any) {
+	if s.projectProgress != nil {
+		s.projectProgress.start(message, args...)
+	}
+}
+
+// ProgressFinish implements project.Client.
+func (s *Server) ProgressFinish(message *diagnostics.Message, args ...any) {
+	if s.projectProgress != nil {
+		s.projectProgress.finish(message, args...)
+	}
 }
 
 func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, error) {
@@ -698,6 +715,7 @@ var handlers = sync.OnceValue(func() handlerMap {
 	registerRequestHandler(handlers, lsproto.CustomStopCPUProfileInfo, (*Server).handleStopCPUProfile)
 
 	registerRequestHandler(handlers, lsproto.CustomInitializeAPISessionInfo, (*Server).handleInitializeAPISession)
+	registerRequestHandler(handlers, lsproto.CustomProjectInfoInfo, (*Server).handleProjectInfo)
 	return handlers
 })
 
@@ -916,6 +934,9 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 
 	s.initializeParams = params
 	s.clientCapabilities = lsproto.ResolveClientCapabilities(params.Capabilities)
+	if s.clientCapabilities.Window.WorkDoneProgress {
+		s.projectProgress = newProjectLoadingProgress(s)
+	}
 
 	capabilitiesJSON, err := json.MarshalIndent(&s.clientCapabilities, "", "\t")
 	if err != nil {
@@ -1513,4 +1534,19 @@ func (s *Server) handleStopCPUProfile(_ context.Context, _ lsproto.NoParams, _ *
 	}
 	s.logger.Info("CPU profile saved to: ", filePath)
 	return &lsproto.ProfileResult{File: filePath}, nil
+}
+
+func (s *Server) handleProjectInfo(ctx context.Context, params *lsproto.ProjectInfoParams, _ *lsproto.RequestMessage) (lsproto.CustomProjectInfoResponse, error) {
+	uri := params.TextDocument.Uri
+	defaultProject, _, _, err := s.session.GetLanguageServiceAndProjectsForFile(ctx, uri)
+	if err != nil {
+		return nil, err
+	}
+	configFilePath := ""
+	if defaultProject != nil && defaultProject.Kind == project.KindConfigured {
+		configFilePath = defaultProject.Name()
+	}
+	return &lsproto.ProjectInfoResult{
+		ConfigFilePath: configFilePath,
+	}, nil
 }

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -32,6 +33,10 @@ func (noopClient) PublishDiagnostics(ctx context.Context, params *lsproto.Publis
 func (noopClient) RefreshInlayHints(ctx context.Context) error { return nil }
 
 func (noopClient) RefreshCodeLens(ctx context.Context) error { return nil }
+
+func (noopClient) ProgressStart(message *diagnostics.Message, args ...any) {}
+
+func (noopClient) ProgressFinish(message *diagnostics.Message, args ...any) {}
 
 // TestExtendedConfigCacheRefCounting tests the invariant that each ExtendedSourceFile
 // of a config in the ConfigFileRegistry is ref'd exactly once per config that extends it,
