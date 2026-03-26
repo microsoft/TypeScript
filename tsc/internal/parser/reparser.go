@@ -588,7 +588,8 @@ func findMatchingParameter(fun *ast.Node, parameterTag *ast.JSDocParameterTag, j
 	}
 	for parameterIndex, parameter := range fun.Parameters() {
 		if parameter.Name().Kind == ast.KindIdentifier {
-			if parameterTag.Name().Kind == ast.KindIdentifier && parameter.Name().Text() == parameterTag.Name().Text() {
+			if parameterTag.Name().Kind == ast.KindIdentifier &&
+				((parameter.Name().Text() == parameterTag.Name().Text()) || (parameterIndex == tagIndex && len(parameterTag.Name().Text()) == 0)) {
 				return parameter.AsParameterDeclaration(), true
 			}
 		} else if parameterIndex == tagIndex {

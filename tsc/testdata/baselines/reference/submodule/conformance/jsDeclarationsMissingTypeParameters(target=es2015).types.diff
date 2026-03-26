@@ -14,8 +14,8 @@
  function y(func) { return; }
 ->y : (func: (arg0: any[]) => any) => void
 ->func : (arg0: any[]) => any
-+>y : (func: any) => void
-+>func : any
++>y : (func: function) => void
++>func : function
 
  /**
   * @return {(Array.<> | null)} list of devices

@@ -12,13 +12,15 @@
 -prefixPostfix.js(13,12): error TS1014: A rest parameter must be last in a parameter list.
 -prefixPostfix.js(14,21): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
  prefixPostfix.js(14,21): error TS1005: '}' expected.
- prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
- prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
- prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
-
-
+-prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
+-prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
+-prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
+-
+-
 -==== prefixPostfix.js (14 errors) ====
-+==== prefixPostfix.js (6 errors) ====
++
++
++==== prefixPostfix.js (3 errors) ====
      /**
       * @param {number![]} x - number[]
       * @param {!number[]} y - number[]
@@ -56,3 +58,14 @@
                          ~
  !!! error TS1005: '}' expected.
       * @param {number extends number ? true : false} l - conditional types work
+      * @param {[number, number?]} m - [number, (number | undefined)?]
+      */
+     function f(x, y, z, a, b, c, e, f, g, h, i, j, k, l, m) {
+-                        ~
+-!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+-                                          ~
+-!!! error TS7006: Parameter 'h' implicitly has an 'any' type.
+-                                                   ~
+-!!! error TS7006: Parameter 'k' implicitly has an 'any' type.
+     }
+     

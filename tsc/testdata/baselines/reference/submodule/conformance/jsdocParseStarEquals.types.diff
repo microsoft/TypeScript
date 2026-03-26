@@ -15,6 +15,6 @@
  function cbf(f) {
 ->cbf : (f?: (() => any) | undefined) => void
 ->f : (() => any) | undefined
-+>cbf : (f: any) => void
-+>f : any
++>cbf : (f: function) => void
++>f : function
  }

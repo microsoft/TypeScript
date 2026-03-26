@@ -6,17 +6,17 @@
  * @return {function(this: string, number): number}
  */
 function id1(c) {
->id1 : (c: any) => function
->c : any
+>id1 : (c: function) => function
+>c : function
 
     return c
->c : any
+>c : function
 }
 
 var x = id1(function (n) { return this.length + n });
 >x : function
 >id1(function (n) { return this.length + n }) : function
->id1 : (c: any) => function
+>id1 : (c: function) => function
 >function (n) { return this.length + n } : (n: any) => any
 >n : any
 >this.length + n : any
@@ -30,11 +30,11 @@ var x = id1(function (n) { return this.length + n });
  * @return {function(new: { length: number }, number): number}
  */
 function id2(c) {
->id2 : (c: any) => function
->c : any
+>id2 : (c: function) => function
+>c : function
 
     return c
->c : any
+>c : function
 }
 
 class C {
@@ -56,7 +56,7 @@ class C {
 var y = id2(C);
 >y : function
 >id2(C) : function
->id2 : (c: any) => function
+>id2 : (c: function) => function
 >C : typeof C
 
 var z = new y(12);
@@ -103,7 +103,7 @@ function D(n) {
 var y2 = id2(D);
 >y2 : function
 >id2(D) : function
->id2 : (c: any) => function
+>id2 : (c: function) => function
 >D : (n: number) => void
 
 var z2 = new y2(33);
@@ -123,17 +123,17 @@ z2.length;
  * @return {D}
  */
 var construct = function(dref) { return new dref(33); }
->construct : (dref: any) => D
->function(dref) { return new dref(33); } : (dref: any) => D
->dref : any
+>construct : (dref: function) => D
+>function(dref) { return new dref(33); } : (dref: function) => D
+>dref : function
 >new dref(33) : any
->dref : any
+>dref : function
 >33 : 33
 
 var z3 = construct(D);
 >z3 : D
 >construct(D) : D
->construct : (dref: any) => D
+>construct : (dref: function) => D
 >D : (n: number) => void
 
 z3.length;
@@ -164,7 +164,7 @@ var E = function(n) {
 var y3 = id2(E);
 >y3 : function
 >id2(E) : function
->id2 : (c: any) => function
+>id2 : (c: function) => function
 >E : (n: number) => void
 
 // Repro from #39229

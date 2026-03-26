@@ -9,7 +9,7 @@
  /** @param {function (Array)} func Invoked
   */
 -declare function y(func: (arg0: any[]) => any): void;
-+declare function y(func: any): void;
++declare function y(func: function): void;
  /**
   * @return {(Array.<> | null)} list of devices
   */

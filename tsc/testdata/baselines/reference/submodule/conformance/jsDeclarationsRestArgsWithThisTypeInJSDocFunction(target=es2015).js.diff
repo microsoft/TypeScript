@@ -10,5 +10,5 @@
       * @param {function(this:Object, ...*):*} functionDeclaration
       */
 -    method(functionDeclaration: (this: Object, ...args: any[]) => any): void;
-+    method(functionDeclaration: any): void;
++    method(functionDeclaration: function): void;
  }

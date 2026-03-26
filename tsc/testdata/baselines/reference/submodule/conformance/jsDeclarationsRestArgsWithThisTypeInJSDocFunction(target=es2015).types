@@ -8,7 +8,7 @@ export class Clazz {
    * @param {function(this:Object, ...*):*} functionDeclaration
    */
   method(functionDeclaration) {}
->method : (functionDeclaration: any) => void
->functionDeclaration : any
+>method : (functionDeclaration: function) => void
+>functionDeclaration : function
 }
 

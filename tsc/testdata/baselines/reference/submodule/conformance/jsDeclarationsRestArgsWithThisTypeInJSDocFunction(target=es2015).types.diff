@@ -6,6 +6,6 @@
    method(functionDeclaration) {}
 ->method : (functionDeclaration: (this: Object, ...args: any[]) => any) => void
 ->functionDeclaration : (this: Object, ...arg1: any[]) => any
-+>method : (functionDeclaration: any) => void
-+>functionDeclaration : any
++>method : (functionDeclaration: function) => void
++>functionDeclaration : function
  }

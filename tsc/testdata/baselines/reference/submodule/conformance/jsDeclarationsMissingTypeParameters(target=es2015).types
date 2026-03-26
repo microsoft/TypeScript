@@ -12,8 +12,8 @@ function x(y) { }
 /** @param {function (Array)} func Invoked
  */
 function y(func) { return; }
->y : (func: any) => void
->func : any
+>y : (func: function) => void
+>func : function
 
 /**
  * @return {(Array.<> | null)} list of devices

@@ -4,8 +4,8 @@
 -<no content>
 +a.js(1,5): error TS1047: A rest parameter cannot be optional.
 +a.js(3,12): error TS2370: A rest parameter must be of an array type.
++a.js(11,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +a.js(11,21): error TS1005: '}' expected.
-+a.js(12,14): error TS7006: Parameter 'f' implicitly has an 'any' type.
 +
 +
 +==== a.js (4 errors) ====
@@ -25,10 +25,11 @@
 +    
 +    
 +    /** @param {function():*=} f */
++                ~~~~~~~~
++!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
++!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
 +                        ~
 +!!! error TS1005: '}' expected.
 +    function cbf(f) {
-+                 ~
-+!!! error TS7006: Parameter 'f' implicitly has an 'any' type.
 +    }
 +    

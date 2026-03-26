@@ -1,0 +1,22 @@
+--- old.paramTagWrapping.types
++++ new.paramTagWrapping.types
+@@= skipped -33, +33 lines =@@
+  * Arg z.
+  */
+ function bad(x, y, z) {
+->bad : (x: any, y: any, z: any) => void
++>bad : (x: any, y: number, z: number) => void
+ >x : any
+->y : any
+->z : any
++>y : number
++>z : number
+ }
+
+ bad(1, 2, 3)
+ >bad(1, 2, 3) : void
+->bad : (x: any, y: any, z: any) => void
++>bad : (x: any, y: number, z: number) => void
+ >1 : 1
+ >2 : 2
+ >3 : 3

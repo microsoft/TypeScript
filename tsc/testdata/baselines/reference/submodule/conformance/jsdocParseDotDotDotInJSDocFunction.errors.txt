@@ -1,5 +1,5 @@
+a.js(2,13): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 a.js(2,21): error TS1005: '}' expected.
-a.js(3,12): error TS7006: Parameter 'callback' implicitly has an 'any' type.
 a.js(8,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 a.js(8,20): error TS1005: '}' expected.
 
@@ -7,11 +7,12 @@ a.js(8,20): error TS1005: '}' expected.
 ==== a.js (4 errors) ====
     // from bcryptjs
     /** @param {function(...[*])} callback */
+                ~~~~~~~~
+!!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
+!!! related TS2728 lib.es5.d.ts:--:--: 'Function' is declared here.
                         ~
 !!! error TS1005: '}' expected.
     function g(callback) {
-               ~~~~~~~~
-!!! error TS7006: Parameter 'callback' implicitly has an 'any' type.
         callback([1], [2], [3])
     }
     
