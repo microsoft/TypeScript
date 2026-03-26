@@ -1,5 +1,6 @@
-
 # TypeScript
+
+<!-- CODING AGENTS: READ AGENTS.md BEFORE WRITING CODE -->
 
 [![CI](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
