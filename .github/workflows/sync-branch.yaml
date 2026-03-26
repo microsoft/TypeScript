@@ -64,7 +64,7 @@ jobs:
           git commit -m 'Update LKG'
           git push
 
-      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@7676a9e9baa8a77a92206e4a9d434bbe45c81959 # master
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: "I've pulled main into ${{ inputs.branch_name }} for you."

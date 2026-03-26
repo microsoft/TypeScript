@@ -60,7 +60,7 @@ jobs:
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 'lts/*'
-      - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
+      - uses: microsoft/TypeScript-Twoslash-Repro-Action@896a8519c4a94659aae0e27c9c92d6115bfb6ad8 # master
         with:
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
           issue: ${{ github.event.inputs.issue }}
