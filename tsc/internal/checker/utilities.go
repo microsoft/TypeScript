@@ -977,6 +977,11 @@ func isThisTypeParameter(t *Type) bool {
 }
 
 func isClassInstanceProperty(node *ast.Node) bool {
+	if ast.IsInJSFile(node) && ast.IsExpandoPropertyDeclaration(node) {
+		left := node.AsBinaryExpression().Left
+		return (!ast.IsBindableStaticAccessExpression(left, false /*excludeThisKeyword*/) || !ast.IsPrototypeAccess(left.Expression())) &&
+			!ast.IsBindableStaticNameExpression(left, true /*excludeThisKeyword*/)
+	}
 	return node.Parent != nil && ast.IsClassLike(node.Parent) && ast.IsPropertyDeclaration(node) && !ast.HasAccessorModifier(node)
 }
 

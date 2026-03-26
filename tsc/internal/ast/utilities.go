@@ -1384,7 +1384,7 @@ func IsThisParameter(node *Node) bool {
 
 func IsBindableStaticAccessExpression(node *Node, excludeThisKeyword bool) bool {
 	return IsPropertyAccessExpression(node) &&
-		(!excludeThisKeyword && node.Expression().Kind == KindThisKeyword || IsIdentifier(node.Name()) && IsBindableStaticNameExpression(node.Expression() /*excludeThisKeyword*/, true)) ||
+		(!excludeThisKeyword && node.Expression().Kind == KindThisKeyword || IsIdentifier(node.Name()) && IsBindableStaticNameExpression(node.Expression(), true /*excludeThisKeyword*/)) ||
 		IsBindableStaticElementAccessExpression(node, excludeThisKeyword)
 }
 
@@ -1393,6 +1393,15 @@ func IsBindableStaticElementAccessExpression(node *Node, excludeThisKeyword bool
 		((!excludeThisKeyword && node.Expression().Kind == KindThisKeyword) ||
 			IsEntityNameExpression(node.Expression()) ||
 			IsBindableStaticAccessExpression(node.Expression(), true /*excludeThisKeyword*/))
+}
+
+func IsPrototypeAccess(node *Node) bool {
+	if IsBindableStaticAccessExpression(node, false /*excludeThisKeyword*/) {
+		if name := GetElementOrPropertyAccessName(node); name != nil {
+			return name.Text() == "prototype"
+		}
+	}
+	return false
 }
 
 func IsLiteralLikeElementAccess(node *Node) bool {
@@ -1629,7 +1638,7 @@ func IsEntityNameExpressionEx(node *Node, allowJS bool) bool {
 }
 
 func IsPropertyAccessEntityNameExpression(node *Node, allowJS bool) bool {
-	return IsPropertyAccessExpression(node) && node.Name().Kind == KindIdentifier && IsEntityNameExpressionEx(node.Expression(), allowJS)
+	return IsPropertyAccessExpression(node) && IsIdentifier(node.Name()) && IsEntityNameExpressionEx(node.Expression(), allowJS)
 }
 
 func isElementAccessEntityNameExpression(node *Node, allowJS bool) bool {
@@ -4477,10 +4486,7 @@ func findCloneInNode(node *Node, original *Node) *Node {
 }
 
 func IsExpandoPropertyDeclaration(node *Node) bool {
-	if node == nil {
-		return false
-	}
-	return IsPropertyAccessExpression(node) || IsElementAccessExpression(node) || IsBinaryExpression(node)
+	return node != nil && IsBinaryExpression(node)
 }
 
 // IsSuperProperty checks if a node is super.x or super[x].

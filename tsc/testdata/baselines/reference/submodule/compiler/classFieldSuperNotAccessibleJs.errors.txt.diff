@@ -1,19 +1,25 @@
 --- old.classFieldSuperNotAccessibleJs.errors.txt
 +++ new.classFieldSuperNotAccessibleJs.errors.txt
 @@= skipped -0, +0 lines =@@
--index.js(20,22): error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
--index.js(23,22): error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
--index.js(26,22): error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
--index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
 +index.js(7,14): error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
 +index.js(9,9): error TS7053: Element implicitly has an 'any' type because expression of type '"literalElementAccess"' can't be used to index type 'YaddaBase'.
 +  Property 'literalElementAccess' does not exist on type 'YaddaBase'.
+ index.js(20,22): error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
+ index.js(23,22): error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
+-index.js(26,22): error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
+-index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
+-
+-
+-==== index.js (4 errors) ====
 +index.js(26,22): error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
 +index.js(29,22): error TS2339: Property 'literalElementAccess' does not exist on type 'YaddaBase'.
-
-
- ==== index.js (4 errors) ====
-@@= skipped -11, +12 lines =@@
++
++
++==== index.js (6 errors) ====
+     // https://github.com/microsoft/TypeScript/issues/55884
+     
+     class YaddaBase {
+@@= skipped -11, +14 lines =@@
              this.roots = "hi";
              /** @type number */
              this.justProp;
@@ -27,18 +33,7 @@
      
              this.b()
          }
-@@= skipped -13, +18 lines =@@
-     class DerivedYadda extends YaddaBase {
-         get rootTests() {
-             return super.roots;
--                         ~~~~~
--!!! error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
-         }
-         get fooTests() {
-             return super.foo;
--                         ~~~
--!!! error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
-         }
+@@= skipped -24, +29 lines =@@
          get justPropTests() {
              return super.justProp;
                           ~~~~~~~~
