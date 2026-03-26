@@ -3,9 +3,8 @@ package tsoptions
 import (
 	"strings"
 
-	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfsmatch"
 )
 
 func getWildcardDirectories(include []string, exclude []string, comparePathsOptions tspath.ComparePathsOptions) map[string]bool {
@@ -26,15 +25,7 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 		return nil
 	}
 
-	rawExcludeRegex := vfs.GetRegularExpressionForWildcard(exclude, comparePathsOptions.CurrentDirectory, "exclude")
-	var excludeRegex *regexp2.Regexp
-	if rawExcludeRegex != "" {
-		flags := regexp2.ECMAScript
-		if !comparePathsOptions.UseCaseSensitiveFileNames {
-			flags |= regexp2.IgnoreCase
-		}
-		excludeRegex = regexp2.MustCompile(rawExcludeRegex, regexp2.RegexOptions(flags))
-	}
+	excludeMatcher := vfsmatch.NewSpecMatcher(exclude, comparePathsOptions.CurrentDirectory, vfsmatch.UsageExclude, comparePathsOptions.UseCaseSensitiveFileNames)
 
 	wildcardDirectories := make(map[string]bool)
 	wildCardKeyToPath := make(map[string]string)
@@ -43,10 +34,8 @@ func getWildcardDirectories(include []string, exclude []string, comparePathsOpti
 
 	for _, file := range include {
 		spec := tspath.NormalizeSlashes(tspath.CombinePaths(comparePathsOptions.CurrentDirectory, file))
-		if excludeRegex != nil {
-			if matched, _ := excludeRegex.MatchString(spec); matched {
-				continue
-			}
+		if excludeMatcher != nil && excludeMatcher.MatchString(spec) {
+			continue
 		}
 
 		match := getWildcardDirectoryFromSpec(spec, comparePathsOptions.UseCaseSensitiveFileNames)
@@ -100,9 +89,6 @@ func toCanonicalKey(path string, useCaseSensitiveFileNames bool) string {
 	return strings.ToLower(path)
 }
 
-// wildcardDirectoryPattern matches paths with wildcard characters
-var wildcardDirectoryPattern = regexp2.MustCompile(`^[^*?]*(?=\/[^/]*[*?])`, 0)
-
 // wildcardDirectoryMatch represents the result of a wildcard directory match
 type wildcardDirectoryMatch struct {
 	Key       string
@@ -111,27 +97,30 @@ type wildcardDirectoryMatch struct {
 }
 
 func getWildcardDirectoryFromSpec(spec string, useCaseSensitiveFileNames bool) *wildcardDirectoryMatch {
-	match, _ := wildcardDirectoryPattern.FindStringMatch(spec)
-	if match != nil {
-		// We check this with a few `Index` calls because it's more efficient than complex regex
-		questionWildcardIndex := strings.Index(spec, "?")
-		starWildcardIndex := strings.Index(spec, "*")
-		lastDirectorySeparatorIndex := strings.LastIndexByte(spec, tspath.DirectorySeparator)
+	// Find the first occurrence of a wildcard character
+	firstWildcard := strings.IndexAny(spec, "*?")
+	if firstWildcard != -1 {
+		// Find the last directory separator before the wildcard
+		lastSepBeforeWildcard := strings.LastIndexByte(spec[:firstWildcard], tspath.DirectorySeparator)
+		if lastSepBeforeWildcard != -1 {
+			path := spec[:lastSepBeforeWildcard]
+			lastDirectorySeparatorIndex := strings.LastIndexByte(spec, tspath.DirectorySeparator)
 
-		// Determine if this should be watched recursively
-		recursive := (questionWildcardIndex != -1 && questionWildcardIndex < lastDirectorySeparatorIndex) ||
-			(starWildcardIndex != -1 && starWildcardIndex < lastDirectorySeparatorIndex)
+			// Determine if this should be watched recursively:
+			// recursive if the wildcard appears in a directory segment (not just the final file segment)
+			recursive := firstWildcard < lastDirectorySeparatorIndex
 
-		return &wildcardDirectoryMatch{
-			Key:       toCanonicalKey(match.String(), useCaseSensitiveFileNames),
-			Path:      match.String(),
-			Recursive: recursive,
+			return &wildcardDirectoryMatch{
+				Key:       toCanonicalKey(path, useCaseSensitiveFileNames),
+				Path:      path,
+				Recursive: recursive,
+			}
 		}
 	}
 
 	if lastSepIndex := strings.LastIndexByte(spec, tspath.DirectorySeparator); lastSepIndex != -1 {
 		lastSegment := spec[lastSepIndex+1:]
-		if vfs.IsImplicitGlob(lastSegment) {
+		if vfsmatch.IsImplicitGlob(lastSegment) {
 			path := tspath.RemoveTrailingDirectorySeparator(spec)
 			return &wildcardDirectoryMatch{
 				Key:       toCanonicalKey(path, useCaseSensitiveFileNames),

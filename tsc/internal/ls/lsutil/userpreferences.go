@@ -4,11 +4,10 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfsmatch"
 )
 
 func NewDefaultUserPreferences() *UserPreferences {
@@ -751,20 +750,8 @@ func (p *UserPreferences) Set(name string, value any) bool {
 	return true
 }
 
-func (p *UserPreferences) ParsedAutoImportFileExcludePatterns(useCaseSensitiveFileNames bool) []*regexp2.Regexp {
-	if len(p.AutoImportFileExcludePatterns) == 0 {
-		return nil
-	}
-	var patterns []*regexp2.Regexp
-	for _, spec := range p.AutoImportFileExcludePatterns {
-		pattern := vfs.GetSubPatternFromSpec(spec, "", vfs.UsageExclude, vfs.WildcardMatcher{})
-		if pattern != "" {
-			if re := vfs.GetRegexFromPattern(pattern, useCaseSensitiveFileNames); re != nil {
-				patterns = append(patterns, re)
-			}
-		}
-	}
-	return patterns
+func (p *UserPreferences) ParsedAutoImportFileExcludePatterns(useCaseSensitiveFileNames bool) *vfsmatch.SpecMatcher {
+	return vfsmatch.NewSpecMatcher(p.AutoImportFileExcludePatterns, "", vfsmatch.UsageExclude, useCaseSensitiveFileNames)
 }
 
 func (p *UserPreferences) IsModuleSpecifierExcluded(moduleSpecifier string) bool {

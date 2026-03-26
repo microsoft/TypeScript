@@ -15,6 +15,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfsmatch"
 )
 
 const (
@@ -326,7 +327,7 @@ func (p *ParsedCommandLine) PossiblyMatchesFileName(fileName string) bool {
 	}
 
 	for _, include := range p.ConfigFile.configFileSpecs.validatedIncludeSpecs {
-		if !strings.ContainsAny(include, "*?") && !vfs.IsImplicitGlob(include) {
+		if !strings.ContainsAny(include, "*?") && !vfsmatch.IsImplicitGlob(include) {
 			includePath := tspath.ToPath(include, p.GetCurrentDirectory(), p.UseCaseSensitiveFileNames())
 			if includePath == path {
 				return true

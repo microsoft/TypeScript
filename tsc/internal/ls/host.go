@@ -18,7 +18,7 @@ type Host interface {
 	// Used for module specifier completions.
 	// ! Do not use for anything else, as this violates the principle that
 	// the host is a snapshot-in-time.
-	ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth *int) []string
+	ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string
 	GetDirectories(path string) []string
 	DirectoryExists(path string) bool
 }

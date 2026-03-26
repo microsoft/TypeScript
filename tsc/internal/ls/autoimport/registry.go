@@ -9,7 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/checker"
@@ -26,6 +25,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/symlinks"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfsmatch"
 )
 
 type newProgramStructure int
@@ -1069,16 +1069,13 @@ func (b *registryBuilder) buildProjectBucket(
 	var skippedFileCount int
 	var combinedStats extractorStats
 
-outer:
 	for _, file := range program.GetSourceFiles() {
 		if isIgnoredFile(program, file) {
 			continue
 		}
-		for _, excludePattern := range fileExcludePatterns {
-			if matched, _ := excludePattern.MatchString(file.FileName()); matched {
-				skippedFileCount++
-				continue outer
-			}
+		if fileExcludePatterns != nil && fileExcludePatterns.MatchString(file.FileName()) {
+			skippedFileCount++
+			continue
 		}
 		// Skip all node_modules files - they are always handled by node_modules buckets.
 		// This simplifies the logic and ensures exports are indexed consistently.
@@ -1252,7 +1249,7 @@ func (b *registryBuilder) extractPackage(
 	packageJson *packagejson.InfoCacheEntry,
 	packageName string,
 	projectReferenceOutputs map[tspath.Path]string,
-	fileExcludePatterns []*regexp2.Regexp,
+	fileExcludePatterns *vfsmatch.SpecMatcher,
 ) *perPackageExtractionResult {
 	if packageJson == nil || !packageJson.DirectoryExists {
 		return nil
@@ -1265,15 +1262,10 @@ func (b *registryBuilder) extractPackage(
 	}
 
 	var skippedEntrypoints int
-	if len(fileExcludePatterns) > 0 {
+	if fileExcludePatterns != nil {
 		count := len(packageEntrypoints)
 		packageEntrypoints = slices.DeleteFunc(packageEntrypoints, func(entrypoint *module.ResolvedEntrypoint) bool {
-			for _, excludePattern := range fileExcludePatterns {
-				if matched, _ := excludePattern.MatchString(entrypoint.ResolvedFileName); matched {
-					return true
-				}
-			}
-			return false
+			return fileExcludePatterns.MatchString(entrypoint.ResolvedFileName)
 		})
 		skippedEntrypoints = count - len(packageEntrypoints)
 	}

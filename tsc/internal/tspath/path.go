@@ -338,7 +338,50 @@ func ResolveTripleslashReference(moduleName string, containingFile string) strin
 }
 
 func GetNormalizedPathComponents(path string, currentDirectory string) []string {
-	return reducePathComponents(GetPathComponents(path, currentDirectory))
+	combined := CombinePaths(currentDirectory, path)
+	return getNormalizedPathComponentsFromCombined(combined)
+}
+
+func getNormalizedPathComponentsFromCombined(path string) []string {
+	rootLength := GetRootLength(path)
+	// Always include the root component (empty string for relative paths).
+	components := make([]string, 1, 8)
+	components[0] = path[:rootLength]
+
+	for i := rootLength; i < len(path); {
+		// Skip directory separators (handles consecutive separators and trailing '/').
+		for i < len(path) && path[i] == '/' {
+			i++
+		}
+		if i >= len(path) {
+			break
+		}
+
+		start := i
+		for i < len(path) && path[i] != '/' {
+			i++
+		}
+		component := path[start:i]
+
+		if component == "" || component == "." {
+			continue
+		}
+		if component == ".." {
+			if len(components) > 1 {
+				if components[len(components)-1] != ".." {
+					components = components[:len(components)-1]
+					continue
+				}
+			} else if components[0] != "" {
+				// If this is an absolute path, we can't go above the root.
+				continue
+			}
+		}
+
+		components = append(components, component)
+	}
+
+	return components
 }
 
 func GetNormalizedAbsolutePathWithoutRoot(fileName string, currentDirectory string) string {

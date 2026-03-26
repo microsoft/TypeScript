@@ -20,7 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/project/logging"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/vfsmatch"
 )
 
 type Snapshot struct {
@@ -153,8 +153,8 @@ func (s *Snapshot) GetDirectories(path string) []string {
 	return s.fs.fs.GetAccessibleEntries(path).Directories
 }
 
-func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth *int) []string {
-	return vfs.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
+func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []string, excludes []string, includes []string, depth int) []string {
+	return vfsmatch.ReadDirectory(s.fs.fs, currentDir, path, extensions, excludes, includes, depth)
 }
 
 type APISnapshotRequest struct {
