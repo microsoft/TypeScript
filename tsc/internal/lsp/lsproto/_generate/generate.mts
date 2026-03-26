@@ -1684,7 +1684,7 @@ function generateCode() {
         }
 
         const paramType = request.params ? resolveType(request.params) : undefined;
-        const paramGoType = paramType ? (paramType.needsPointer ? `*${paramType.name}` : paramType.name) : "any";
+        const paramGoType = paramType ? (paramType.needsPointer ? `*${paramType.name}` : paramType.name) : "NoParams";
 
         writeLine(`// Type mapping info for \`${request.method}\``);
         if (responseTypeName) {

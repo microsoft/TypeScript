@@ -247,7 +247,7 @@ func (s *Server) RefreshDiagnostics(ctx context.Context) error {
 		return nil
 	}
 
-	if _, err := sendClientRequest(ctx, s, lsproto.WorkspaceDiagnosticRefreshInfo, nil); err != nil {
+	if _, err := sendClientRequest(ctx, s, lsproto.WorkspaceDiagnosticRefreshInfo, lsproto.NoParams{}); err != nil {
 		return fmt.Errorf("failed to refresh diagnostics: %w", err)
 	}
 
@@ -264,7 +264,7 @@ func (s *Server) RefreshInlayHints(ctx context.Context) error {
 		return nil
 	}
 
-	if _, err := sendClientRequest(ctx, s, lsproto.WorkspaceInlayHintRefreshInfo, nil); err != nil {
+	if _, err := sendClientRequest(ctx, s, lsproto.WorkspaceInlayHintRefreshInfo, lsproto.NoParams{}); err != nil {
 		return fmt.Errorf("failed to refresh inlay hints: %w", err)
 	}
 	return nil
@@ -275,7 +275,7 @@ func (s *Server) RefreshCodeLens(ctx context.Context) error {
 		return nil
 	}
 
-	if _, err := sendClientRequest(ctx, s, lsproto.WorkspaceCodeLensRefreshInfo, nil); err != nil {
+	if _, err := sendClientRequest(ctx, s, lsproto.WorkspaceCodeLensRefreshInfo, lsproto.NoParams{}); err != nil {
 		return fmt.Errorf("failed to refresh code lens: %w", err)
 	}
 	return nil
@@ -1122,12 +1122,12 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 	return nil
 }
 
-func (s *Server) handleShutdown(ctx context.Context, params any, _ *lsproto.RequestMessage) (lsproto.ShutdownResponse, error) {
+func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lsproto.RequestMessage) (lsproto.ShutdownResponse, error) {
 	s.session.Close()
 	return lsproto.ShutdownResponse{}, nil
 }
 
-func (s *Server) handleExit(ctx context.Context, params any) error {
+func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
 	return io.EOF
 }
 
@@ -1473,7 +1473,7 @@ func (s *Server) NpmInstall(cwd string, args []string) ([]byte, error) {
 
 // Developer/debugging command handlers
 
-func (s *Server) handleRunGC(_ context.Context, _ any, _ *lsproto.RequestMessage) (lsproto.RunGCResponse, error) {
+func (s *Server) handleRunGC(_ context.Context, _ lsproto.NoParams, _ *lsproto.RequestMessage) (lsproto.RunGCResponse, error) {
 	pprof.RunGC()
 	s.logger.Info("GC triggered")
 	return lsproto.Null{}, nil
@@ -1506,7 +1506,7 @@ func (s *Server) handleStartCPUProfile(_ context.Context, params *lsproto.Profil
 	return lsproto.Null{}, nil
 }
 
-func (s *Server) handleStopCPUProfile(_ context.Context, _ any, _ *lsproto.RequestMessage) (*lsproto.ProfileResult, error) {
+func (s *Server) handleStopCPUProfile(_ context.Context, _ lsproto.NoParams, _ *lsproto.RequestMessage) (*lsproto.ProfileResult, error) {
 	filePath, err := s.cpuProfiler.StopCPUProfile()
 	if err != nil {
 		return nil, err

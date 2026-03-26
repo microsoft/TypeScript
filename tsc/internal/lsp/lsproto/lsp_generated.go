@@ -24253,7 +24253,7 @@ var TextDocumentTypeDefinitionInfo = RequestInfo[*TypeDefinitionParams, TypeDefi
 type WorkspaceFoldersResponse = WorkspaceFoldersOrNull
 
 // Type mapping info for `workspace/workspaceFolders`
-var WorkspaceWorkspaceFoldersInfo = RequestInfo[any, WorkspaceFoldersResponse]{Method: MethodWorkspaceWorkspaceFolders}
+var WorkspaceWorkspaceFoldersInfo = RequestInfo[NoParams, WorkspaceFoldersResponse]{Method: MethodWorkspaceWorkspaceFolders}
 
 // Response type for `workspace/configuration`
 type ConfigurationResponse = []any
@@ -24283,7 +24283,7 @@ var TextDocumentFoldingRangeInfo = RequestInfo[*FoldingRangeParams, FoldingRange
 type FoldingRangeRefreshResponse = Null
 
 // Type mapping info for `workspace/foldingRange/refresh`
-var WorkspaceFoldingRangeRefreshInfo = RequestInfo[any, FoldingRangeRefreshResponse]{Method: MethodWorkspaceFoldingRangeRefresh}
+var WorkspaceFoldingRangeRefreshInfo = RequestInfo[NoParams, FoldingRangeRefreshResponse]{Method: MethodWorkspaceFoldingRangeRefresh}
 
 // Response type for `textDocument/declaration`
 type DeclarationResponse = LocationOrLocationsOrDeclarationLinksOrNull
@@ -24343,7 +24343,7 @@ var TextDocumentSemanticTokensRangeInfo = RequestInfo[*SemanticTokensRangeParams
 type SemanticTokensRefreshResponse = Null
 
 // Type mapping info for `workspace/semanticTokens/refresh`
-var WorkspaceSemanticTokensRefreshInfo = RequestInfo[any, SemanticTokensRefreshResponse]{Method: MethodWorkspaceSemanticTokensRefresh}
+var WorkspaceSemanticTokensRefreshInfo = RequestInfo[NoParams, SemanticTokensRefreshResponse]{Method: MethodWorkspaceSemanticTokensRefresh}
 
 // Response type for `window/showDocument`
 type ShowDocumentResponse = *ShowDocumentResult
@@ -24409,7 +24409,7 @@ var TextDocumentInlineValueInfo = RequestInfo[*InlineValueParams, InlineValueRes
 type InlineValueRefreshResponse = Null
 
 // Type mapping info for `workspace/inlineValue/refresh`
-var WorkspaceInlineValueRefreshInfo = RequestInfo[any, InlineValueRefreshResponse]{Method: MethodWorkspaceInlineValueRefresh}
+var WorkspaceInlineValueRefreshInfo = RequestInfo[NoParams, InlineValueRefreshResponse]{Method: MethodWorkspaceInlineValueRefresh}
 
 // Response type for `textDocument/inlayHint`
 type InlayHintResponse = InlayHintsOrNull
@@ -24427,7 +24427,7 @@ var InlayHintResolveInfo = RequestInfo[*InlayHint, InlayHintResolveResponse]{Met
 type InlayHintRefreshResponse = Null
 
 // Type mapping info for `workspace/inlayHint/refresh`
-var WorkspaceInlayHintRefreshInfo = RequestInfo[any, InlayHintRefreshResponse]{Method: MethodWorkspaceInlayHintRefresh}
+var WorkspaceInlayHintRefreshInfo = RequestInfo[NoParams, InlayHintRefreshResponse]{Method: MethodWorkspaceInlayHintRefresh}
 
 // Response type for `textDocument/diagnostic`
 type DocumentDiagnosticResponse = RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport
@@ -24445,7 +24445,7 @@ var WorkspaceDiagnosticInfo = RequestInfo[*WorkspaceDiagnosticParams, WorkspaceD
 type DiagnosticRefreshResponse = Null
 
 // Type mapping info for `workspace/diagnostic/refresh`
-var WorkspaceDiagnosticRefreshInfo = RequestInfo[any, DiagnosticRefreshResponse]{Method: MethodWorkspaceDiagnosticRefresh}
+var WorkspaceDiagnosticRefreshInfo = RequestInfo[NoParams, DiagnosticRefreshResponse]{Method: MethodWorkspaceDiagnosticRefresh}
 
 // Response type for `textDocument/inlineCompletion`
 type InlineCompletionResponse = InlineCompletionListOrItemsOrNull
@@ -24487,7 +24487,7 @@ var InitializeInfo = RequestInfo[*InitializeParams, InitializeResponse]{Method: 
 type ShutdownResponse = Null
 
 // Type mapping info for `shutdown`
-var ShutdownInfo = RequestInfo[any, ShutdownResponse]{Method: MethodShutdown}
+var ShutdownInfo = RequestInfo[NoParams, ShutdownResponse]{Method: MethodShutdown}
 
 // Response type for `window/showMessageRequest`
 type ShowMessageResponse = MessageActionItemOrNull
@@ -24589,7 +24589,7 @@ var CodeLensResolveInfo = RequestInfo[*CodeLens, CodeLensResolveResponse]{Method
 type CodeLensRefreshResponse = Null
 
 // Type mapping info for `workspace/codeLens/refresh`
-var WorkspaceCodeLensRefreshInfo = RequestInfo[any, CodeLensRefreshResponse]{Method: MethodWorkspaceCodeLensRefresh}
+var WorkspaceCodeLensRefreshInfo = RequestInfo[NoParams, CodeLensRefreshResponse]{Method: MethodWorkspaceCodeLensRefresh}
 
 // Response type for `textDocument/documentLink`
 type DocumentLinkResponse = DocumentLinksOrNull
@@ -24661,7 +24661,7 @@ var CustomTextDocumentClosingTagCompletionInfo = RequestInfo[*TextDocumentPositi
 type RunGCResponse = Null
 
 // Type mapping info for `custom/runGC`
-var CustomRunGCInfo = RequestInfo[any, RunGCResponse]{Method: MethodCustomRunGC}
+var CustomRunGCInfo = RequestInfo[NoParams, RunGCResponse]{Method: MethodCustomRunGC}
 
 // Response type for `custom/saveHeapProfile`
 type SaveHeapProfileResponse = *ProfileResult
@@ -24685,7 +24685,7 @@ var CustomStartCPUProfileInfo = RequestInfo[*ProfileParams, StartCPUProfileRespo
 type StopCPUProfileResponse = *ProfileResult
 
 // Type mapping info for `custom/stopCPUProfile`
-var CustomStopCPUProfileInfo = RequestInfo[any, StopCPUProfileResponse]{Method: MethodCustomStopCPUProfile}
+var CustomStopCPUProfileInfo = RequestInfo[NoParams, StopCPUProfileResponse]{Method: MethodCustomStopCPUProfile}
 
 // Response type for `custom/initializeAPISession`
 type CustomInitializeAPISessionResponse = *InitializeAPISessionResult
@@ -24724,7 +24724,7 @@ var NotebookDocumentDidCloseInfo = NotificationInfo[*DidCloseNotebookDocumentPar
 var InitializedInfo = NotificationInfo[*InitializedParams]{Method: MethodInitialized}
 
 // Type mapping info for `exit`
-var ExitInfo = NotificationInfo[any]{Method: MethodExit}
+var ExitInfo = NotificationInfo[NoParams]{Method: MethodExit}
 
 // Type mapping info for `workspace/didChangeConfiguration`
 var WorkspaceDidChangeConfigurationInfo = NotificationInfo[*DidChangeConfigurationParams]{Method: MethodWorkspaceDidChangeConfiguration}
