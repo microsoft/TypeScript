@@ -444,6 +444,9 @@ func (ch *PseudoChecker) typeFromArrayLiteral(node *ast.ArrayLiteralExpression) 
 	if !ch.canGetTypeFromArrayLiteral(node) {
 		return NewPseudoTypeInferred(node.AsNode())
 	}
+	if IsInConstContext(node.AsNode()) && isContextuallyTyped(node.AsNode()) {
+		return NewPseudoTypeInferred(node.AsNode()) // expr in an as const cast with a contextual type has variable readonly state, bail
+	}
 	// we are in a const context producing a tuple type, there are no spread elements
 	results := make([]*PseudoType, 0, len(node.Elements.Nodes))
 	for _, e := range node.Elements.Nodes {
@@ -672,7 +675,10 @@ func isContextuallyTyped(node *ast.Node) bool {
 		if ast.IsCallExpression(n) {
 			return true
 		}
-		if (ast.IsVariableParameterOrProperty(n) || ast.IsAssertionExpression(n)) && n.Type() != nil {
+		if ast.IsSatisfiesExpression(n) {
+			return true
+		}
+		if (ast.IsVariableParameterOrProperty(n) || ast.IsAssertionExpression(n)) && n.Type() != nil && !ast.IsConstAssertion(n) {
 			return true
 		}
 		return ast.IsJsxElement(n) || ast.IsJsxExpression(n)
