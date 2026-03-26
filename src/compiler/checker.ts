@@ -53030,7 +53030,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let current: Node = node;
         while (current) {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
-                return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                return grammarErrorOnNode(node, Diagnostics.Jump_target_0_cannot_cross_function_boundary, node.label ? node.label.text : "");
             }
 
             switch (current.kind) {
