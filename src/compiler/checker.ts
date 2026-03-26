@@ -52971,8 +52971,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
         // Even non-bindable names are allowed as late-bound implied index signatures so long as the name is a simple `a.b.c` type name expression
-        if (isNonBindableDynamicName(node) && !isEntityNameExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
-            return grammarErrorOnNode(node, message);
+        if (isNonBindableDynamicName(node)) {
+            // Allow element access expressions with string/number literal arguments on entity name expressions
+            // This enables enum member references like `Type['3x14']` to be used as computed property names
+            if (isElementAccessExpression(node)) {
+                if (isStringOrNumberLiteralExpression(node.argumentExpression) && isEntityNameExpression(node.expression)) {
+                    return;
+                }
+            }
+            if (!isEntityNameExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
+                return grammarErrorOnNode(node, message);
+            }
         }
     }
 
