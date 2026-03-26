@@ -2,11 +2,11 @@ package modulespecifiers
 
 import (
 	"fmt"
+	"regexp"
 	"slices"
 	"strings"
 	"sync"
 
-	"github.com/dlclark/regexp2"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -17,13 +17,13 @@ import (
 )
 
 type regexPatternCacheKey struct {
-	pattern string
-	opts    regexp2.RegexOptions
+	pattern         string
+	caseInsensitive bool
 }
 
 var (
 	regexPatternCacheMu sync.RWMutex
-	regexPatternCache   = make(map[regexPatternCacheKey]*regexp2.Regexp)
+	regexPatternCache   = make(map[regexPatternCacheKey]*regexp.Regexp)
 )
 
 func comparePathsByRedirect(a ModulePath, b ModulePath, useCaseSensitiveFileNames bool) int {
@@ -46,16 +46,15 @@ func IsExcludedByRegex(moduleSpecifier string, excludes []string) bool {
 		if re == nil {
 			continue
 		}
-		match, _ := re.MatchString(moduleSpecifier)
-		if match {
+		if re.MatchString(moduleSpecifier) {
 			return true
 		}
 	}
 	return false
 }
 
-func stringToRegex(pattern string) *regexp2.Regexp {
-	options := regexp2.RegexOptions(regexp2.ECMAScript)
+func stringToRegex(pattern string) *regexp.Regexp {
+	caseInsensitive := false
 
 	if len(pattern) > 2 && pattern[0] == '/' {
 		lastSlash := strings.LastIndex(pattern, "/")
@@ -75,15 +74,13 @@ func stringToRegex(pattern string) *regexp2.Regexp {
 				for _, flag := range flags {
 					switch flag {
 					case 'i':
-						options |= regexp2.IgnoreCase
-					case 'u':
-						options |= regexp2.Unicode
+						caseInsensitive = true
 					}
 				}
 			}
 		}
 	}
-	key := regexPatternCacheKey{pattern, options}
+	key := regexPatternCacheKey{pattern, caseInsensitive}
 
 	regexPatternCacheMu.RLock()
 	re, ok := regexPatternCache[key]
@@ -107,7 +104,12 @@ func stringToRegex(pattern string) *regexp2.Regexp {
 	pattern = strings.Clone(pattern)
 	key.pattern = pattern
 
-	compiled, err := regexp2.Compile(pattern, options)
+	compilePattern := pattern
+	if caseInsensitive {
+		compilePattern = "(?i:" + pattern + ")"
+	}
+
+	compiled, err := regexp.Compile(compilePattern)
 	if err != nil {
 		regexPatternCache[key] = nil
 		return nil
