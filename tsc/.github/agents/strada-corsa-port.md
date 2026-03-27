@@ -19,4 +19,4 @@ Instructions
   - Tip: to run a single baseline test from the submodule, run go test ./internal/testrunner -run '^TestSubmodule/NAME_OF_TEST_FILE'
   - Run npx hereby baseline-accept to adopt the baseline changes.
   - Run git diff 'testdata/**/*.diff'. If your change is correct, these diff files will be reduced or completely deleted.
-- Iterate until you are satisfied with your change. Commit everything, including the baseline changes in testdata, and open a PR.
+- Iterate until you are satisfied with your change. Commit everything, including the baseline changes in testdata.
