@@ -2,10 +2,13 @@ package project
 
 import (
 	"context"
+	"strings"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
 	"gotest.tools/v3/assert"
 )
@@ -161,9 +164,93 @@ func TestRefCountingCaches(t *testing.T) {
 			// Entry should now be gone (refCount 0, deleted)
 			mainEntry, ok := session.parseCache.entries.Load(NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind))
 			if ok {
-				t.Logf("Entry still exists with refCount=%d, deleted=%v", mainEntry.refCount, mainEntry.deleted)
+				t.Logf("Entry still exists with refCount=%d", mainEntry.refCount)
 			}
 			assert.Assert(t, !ok, "entry should be deleted after program is disposed")
+		})
+
+		t.Run("fallback rebuild does not double-ref changed file", func(t *testing.T) {
+			t.Parallel()
+
+			testFiles := map[string]any{
+				"/user/username/projects/myproject/src/main.ts":  "const x = 1;",
+				"/user/username/projects/myproject/src/utils.ts": "export const util = 1;",
+			}
+			session := setup(testFiles)
+			mainURI := lsproto.DocumentUri("file:///user/username/projects/myproject/src/main.ts")
+			session.DidOpenFile(context.Background(), mainURI, 1, testFiles["/user/username/projects/myproject/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			_, err := session.GetLanguageService(context.Background(), mainURI)
+			assert.NilError(t, err)
+
+			session.DidChangeFile(context.Background(), mainURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+				{
+					WholeDocument: &lsproto.TextDocumentContentChangeWholeDocument{
+						Text: "import { util } from \"./utils\";\nconst x = util;",
+					},
+				},
+			})
+
+			lsAfter, err := session.GetLanguageService(context.Background(), mainURI)
+			assert.NilError(t, err)
+			session.WaitForBackgroundTasks()
+
+			project := session.Snapshot().ProjectCollection.InferredProject()
+			assert.Assert(t, project != nil)
+			assert.Equal(t, project.ProgramUpdateKind, ProgramUpdateKindNewFiles)
+
+			main := lsAfter.GetProgram().GetSourceFile("/user/username/projects/myproject/src/main.ts")
+			mainKey := NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind)
+			mainEntry, ok := session.parseCache.entries.Load(mainKey)
+			assert.Assert(t, ok)
+			assert.Equal(t, mainEntry.refCount, 1)
+
+			session.DidCloseFile(context.Background(), mainURI)
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+			session.WaitForBackgroundTasks()
+
+			_, ok = session.parseCache.entries.Load(mainKey)
+			assert.Assert(t, !ok)
+		})
+
+		t.Run("case-only duplicate loads are released on dispose", func(t *testing.T) {
+			t.Parallel()
+
+			testFiles := map[string]any{
+				"/user/username/projects/myproject/src/main.ts":  "import { util as a } from \"./utils\";\nimport { util as b } from \"./UTILS\";\nconst x = a + b;",
+				"/user/username/projects/myproject/src/utils.ts": "export const util = 1;",
+			}
+			session := setup(testFiles)
+			mainURI := lsproto.DocumentUri("file:///user/username/projects/myproject/src/main.ts")
+			session.DidOpenFile(context.Background(), mainURI, 1, testFiles["/user/username/projects/myproject/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
+
+			ls, err := session.GetLanguageService(context.Background(), mainURI)
+			assert.NilError(t, err)
+
+			var projectEntries int
+			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
+					projectEntries++
+				}
+				return true
+			})
+			assert.Equal(t, projectEntries, 3)
+
+			utils := ls.GetProgram().GetSourceFile("/user/username/projects/myproject/src/utils.ts")
+			assert.Assert(t, utils != nil)
+
+			session.DidCloseFile(context.Background(), mainURI)
+			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
+			session.WaitForBackgroundTasks()
+
+			projectEntries = 0
+			session.parseCache.entries.Range(func(key ParseCacheKey, _ *refCountCacheEntry[*ast.SourceFile]) bool {
+				if strings.HasPrefix(key.FileName, "/user/username/projects/myproject/src/") {
+					projectEntries++
+				}
+				return true
+			})
+			assert.Equal(t, projectEntries, 0)
 		})
 	})
 
@@ -187,12 +274,50 @@ func TestRefCountingCaches(t *testing.T) {
 			config := snapshot.ConfigFileRegistry.GetConfig("/user/username/projects/myproject/tsconfig.json")
 			assert.Equal(t, config.ExtendedSourceFiles()[0], "/user/username/projects/myproject/tsconfig.base.json")
 			extendedConfigEntry, _ := session.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
-			assert.Equal(t, extendedConfigEntry.refCount, 1)
+			assert.Equal(t, len(extendedConfigEntry.owners), 1)
 
 			session.DidCloseFile(context.Background(), "file:///user/username/projects/myproject/src/main.ts")
 			session.DidOpenFile(context.Background(), "untitled:Untitled-1", 1, "", lsproto.LanguageKindTypeScript)
 			session.WaitForBackgroundTasks()
-			assert.Equal(t, extendedConfigEntry.refCount, 0)
+			_, ok := session.extendedConfigCache.entries.Load("/user/username/projects/myproject/tsconfig.base.json")
+			assert.Equal(t, ok, false)
+		})
+
+		t.Run("release cache entries for unretained clone", func(t *testing.T) {
+			t.Parallel()
+
+			session := setup(files)
+			uri := lsproto.DocumentUri("file:///user/username/projects/myproject/src/main.ts")
+			baseSnapshot := session.Snapshot()
+			extendedConfigPath := tspath.Path("/user/username/projects/myproject/tsconfig.base.json")
+			clone := baseSnapshot.Clone(context.Background(), SnapshotChange{
+				reason: UpdateReasonRequestedLanguageServiceProjectNotLoaded,
+				ResourceRequest: ResourceRequest{
+					Documents: []lsproto.DocumentUri{uri},
+				},
+			}, baseSnapshot.fs.overlays, session)
+
+			project := clone.GetDefaultProject(uri)
+			assert.Assert(t, project != nil)
+			assert.Equal(t, project.ProgramLastUpdate, clone.id)
+
+			main := project.Program.GetSourceFile("/user/username/projects/myproject/src/main.ts")
+			mainKey := NewParseCacheKey(main.ParseOptions(), main.Hash, main.ScriptKind)
+			mainEntry, ok := session.parseCache.entries.Load(mainKey)
+			assert.Assert(t, ok)
+			assert.Equal(t, mainEntry.refCount, 1)
+
+			extendedConfigEntry, ok := session.extendedConfigCache.entries.Load(extendedConfigPath)
+			assert.Assert(t, ok)
+			assert.Equal(t, len(extendedConfigEntry.owners), 1)
+
+			clone.Deref(session)
+
+			_, ok = session.parseCache.entries.Load(mainKey)
+			assert.Assert(t, !ok)
+
+			_, ok = session.extendedConfigCache.entries.Load(extendedConfigPath)
+			assert.Assert(t, !ok)
 		})
 	})
 }

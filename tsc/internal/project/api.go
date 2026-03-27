@@ -6,13 +6,15 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 )
 
+// APIOpenProject opens a project and returns a ref'd snapshot.
+// The caller must call snapshot.Deref(s) when done.
 func (s *Session) APIOpenProject(ctx context.Context, configFileName string, apiFileChanges FileChangeSummary) (*Project, *Snapshot, error) {
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
 
 	fileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
 	mergeFileChangeSummary(&fileChanges, apiFileChanges)
-	newSnapshot := s.UpdateSnapshot(ctx, overlays, SnapshotChange{
+	newSnapshot := s.updateSnapshotRef(ctx, overlays, SnapshotChange{
 		fileChanges: fileChanges,
 		ataChanges:  ataChanges,
 		apiRequest: &APISnapshotRequest{
@@ -32,7 +34,8 @@ func (s *Session) APIOpenProject(ctx context.Context, configFileName string, api
 	return project, newSnapshot, nil
 }
 
-// APIUpdateWithFileChanges creates a new snapshot incorporating the given file changes.
+// APIUpdateWithFileChanges creates a new snapshot incorporating the given
+// file changes. Returns a ref'd snapshot; caller must Deref when done.
 func (s *Session) APIUpdateWithFileChanges(ctx context.Context, apiFileChanges FileChangeSummary) *Snapshot {
 	s.snapshotUpdateMu.Lock()
 	defer s.snapshotUpdateMu.Unlock()
@@ -40,11 +43,9 @@ func (s *Session) APIUpdateWithFileChanges(ctx context.Context, apiFileChanges F
 	fileChanges, overlays, ataChanges, _ := s.flushChanges(ctx)
 	mergeFileChangeSummary(&fileChanges, apiFileChanges)
 
-	newSnapshot := s.UpdateSnapshot(ctx, overlays, SnapshotChange{
+	return s.updateSnapshotRef(ctx, overlays, SnapshotChange{
 		apiRequest:  &APISnapshotRequest{},
 		fileChanges: fileChanges,
 		ataChanges:  ataChanges,
 	})
-
-	return newSnapshot
 }

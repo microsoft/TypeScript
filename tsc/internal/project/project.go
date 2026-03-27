@@ -326,6 +326,20 @@ func (p *Project) CreateProgram() CreateProgramResult {
 		newProgram, programCloned = p.Program.UpdateProgram(p.dirtyFilePath, p.host)
 		if programCloned {
 			updateKind = ProgramUpdateKindCloned
+			for _, file := range newProgram.SourceFiles() {
+				if file.Path() != p.dirtyFilePath {
+					// UpdateProgram acquired the changed file only, so we need to ref everything else
+					p.host.builder.parseCache.Ref(NewParseCacheKey(file.ParseOptions(), file.Hash, file.ScriptKind))
+				}
+			}
+			for _, file := range newProgram.DuplicateSourceFiles() {
+				p.host.builder.parseCache.Ref(NewParseCacheKey(file.ParseOptions, file.Hash, file.ScriptKind))
+			}
+		} else if newFile := newProgram.GetSourceFileByPath(p.dirtyFilePath); newFile != nil {
+			// UpdateProgram always acquires the dirty file before deciding whether it can
+			// reuse the old program. If it falls back to a full rebuild, release that
+			// speculative acquire so the rebuilt program is the only remaining owner.
+			p.host.builder.parseCache.Deref(NewParseCacheKey(newFile.ParseOptions(), newFile.Hash, newFile.ScriptKind))
 		}
 	} else {
 		var typingsLocation string

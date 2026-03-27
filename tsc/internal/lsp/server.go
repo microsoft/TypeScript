@@ -795,34 +795,32 @@ func registerLanguageServiceWithAutoImportsRequestHandler[Req lsproto.HasTextDoc
 		if req.Params != nil {
 			params = req.Params.(Req)
 		}
-		languageService, snapshot, err := s.session.GetLanguageServiceAndSnapshot(ctx, params.TextDocumentURI())
-		if err != nil {
-			return nil, err
-		}
-		return func() error {
-			defer s.recover(req)
-			resp, lsErr := fn(s, ctx, languageService, params)
-			if errors.Is(lsErr, ls.ErrNeedsAutoImports) {
-				languageService, lsErr = s.session.GetLanguageServiceWithAutoImports(ctx, snapshot, params.TextDocumentURI())
+		return s.session.WithLanguageServiceAndSnapshot(ctx, params.TextDocumentURI(), func(languageService *ls.LanguageService, snapshot *project.Snapshot) (func() error, error) {
+			return func() error {
+				defer s.recover(req)
+				resp, lsErr := fn(s, ctx, languageService, params)
+				if errors.Is(lsErr, ls.ErrNeedsAutoImports) {
+					languageService, lsErr = s.session.GetLanguageServiceWithAutoImports(ctx, snapshot, params.TextDocumentURI())
+					if lsErr != nil {
+						return lsErr
+					}
+					if ctx.Err() != nil {
+						return ctx.Err()
+					}
+					resp, lsErr = fn(s, ctx, languageService, params)
+					if errors.Is(lsErr, ls.ErrNeedsAutoImports) {
+						panic(info.Method + " returned ErrNeedsAutoImports even after enabling auto imports")
+					}
+				}
 				if lsErr != nil {
 					return lsErr
 				}
 				if ctx.Err() != nil {
 					return ctx.Err()
 				}
-				resp, lsErr = fn(s, ctx, languageService, params)
-				if errors.Is(lsErr, ls.ErrNeedsAutoImports) {
-					panic(info.Method + " returned ErrNeedsAutoImports even after enabling auto imports")
-				}
-			}
-			if lsErr != nil {
-				return lsErr
-			}
-			if ctx.Err() != nil {
-				return ctx.Err()
-			}
-			return s.sendResult(req.ID, resp)
-		}, nil
+				return s.sendResult(req.ID, resp)
+			}, nil
+		})
 	}
 }
 
@@ -883,11 +881,13 @@ func (c *crossProjectOrchestrator) GetProjectsForFile(ctx context.Context, uri l
 
 func (c *crossProjectOrchestrator) GetProjectsLoadingProjectTree(ctx context.Context, requestedProjectTrees *collections.Set[tspath.Path]) iter.Seq[ls.Project] {
 	return func(yield func(ls.Project) bool) {
-		for _, p := range c.server.session.GetSnapshotLoadingProjectTree(ctx, requestedProjectTrees).ProjectCollection.Projects() {
-			if !yield(p) {
-				return
+		c.server.session.WithSnapshotLoadingProjectTree(ctx, requestedProjectTrees, func(snapshot *project.Snapshot) {
+			for _, p := range snapshot.ProjectCollection.Projects() {
+				if !yield(p) {
+					return
+				}
 			}
-		}
+		})
 	}
 }
 
@@ -1302,16 +1302,19 @@ func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, ls *ls.Language
 }
 
 func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.WorkspaceSymbolParams, reqMsg *lsproto.RequestMessage) (lsproto.WorkspaceSymbolResponse, error) {
-	snapshot := s.session.GetSnapshotLoadingProjectTree(ctx, nil)
-	defer s.recover(reqMsg)
-
-	programs := core.Map(snapshot.ProjectCollection.Projects(), (*project.Project).GetProgram)
-	return ls.ProvideWorkspaceSymbols(
-		ctx,
-		programs,
-		snapshot.Converters(),
-		snapshot.UserPreferences(),
-		params.Query)
+	var resp lsproto.WorkspaceSymbolResponse
+	var lsErr error
+	s.session.WithSnapshotLoadingProjectTree(ctx, nil, func(snapshot *project.Snapshot) {
+		defer s.recover(reqMsg)
+		programs := core.Map(snapshot.ProjectCollection.Projects(), (*project.Project).GetProgram)
+		resp, lsErr = ls.ProvideWorkspaceSymbols(
+			ctx,
+			programs,
+			snapshot.Converters(),
+			snapshot.UserPreferences(),
+			params.Query)
+	})
+	return resp, lsErr
 }
 
 func (s *Server) handleDocumentSymbol(ctx context.Context, ls *ls.LanguageService, params *lsproto.DocumentSymbolParams) (lsproto.DocumentSymbolResponse, error) {

@@ -471,6 +471,8 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 		configFileName := s.toAbsoluteFileName(params.OpenProject)
 		_, newSnapshot, err := s.projectSession.APIOpenProject(ctx, configFileName, fileChanges)
 		if err != nil {
+			// APIOpenProject returns a ref'd snapshot even on error; release it.
+			newSnapshot.Deref(s.projectSession)
 			return nil, fmt.Errorf("%w: failed to load project: %w", ErrClientError, err)
 		}
 		snapshot = newSnapshot
@@ -489,6 +491,9 @@ func (s *Session) handleUpdateSnapshot(ctx context.Context, params *UpdateSnapsh
 	s.snapshotsMu.Lock()
 	sd, exists := s.snapshots[handle]
 	if exists {
+		// Same snapshot already stored — release the caller's ref since
+		// the stored snapshot already has one, and bump the API refcount.
+		snapshot.Deref(s.projectSession)
 		sd.refCount++
 	} else {
 		sd = &snapshotData{
@@ -552,6 +557,8 @@ func (s *Session) handleRelease(ctx context.Context, params *ReleaseParams) (any
 	sd.refCount--
 	if sd.refCount <= 0 {
 		delete(s.snapshots, snapshotHandle)
+		// Release the API session's ref on the project snapshot.
+		sd.snapshot.Deref(s.projectSession)
 	}
 	s.snapshotsMu.Unlock()
 	return true, nil

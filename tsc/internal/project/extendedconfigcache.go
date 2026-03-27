@@ -20,11 +20,10 @@ type ExtendedConfigCacheEntry struct {
 	Hash xxh3.Uint128
 }
 
-type ExtendedConfigCache = RefCountCache[tspath.Path, *ExtendedConfigCacheEntry, ExtendedConfigParseArgs]
+type ExtendedConfigCache = OwnerCache[tspath.Path, *ExtendedConfigCacheEntry, ExtendedConfigParseArgs]
 
 func NewExtendedConfigCache() *ExtendedConfigCache {
-	return NewRefCountCache(
-		RefCountCacheOptions{},
+	return NewOwnerCache(
 		func(path tspath.Path, args ExtendedConfigParseArgs) *ExtendedConfigCacheEntry {
 			result := &ExtendedConfigCacheEntry{
 				ExtendedConfigCacheEntry: tsoptions.ParseExtendedConfig(args.FileName, path, args.ResolutionStack, args.Host, args.Cache),

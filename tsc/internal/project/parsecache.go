@@ -35,6 +35,5 @@ func NewParseCache(options RefCountCacheOptions) *ParseCache {
 			file.Hash = fh.Hash()
 			return file
 		},
-		nil,
 	)
 }

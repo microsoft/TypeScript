@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
+	"github.com/zeebo/xxh3"
 )
 
 type libResolution struct {
@@ -65,6 +66,12 @@ type redirectsFile struct {
 	target   tspath.Path
 }
 
+type DuplicateSourceFile struct {
+	ParseOptions ast.SourceFileParseOptions
+	Hash         xxh3.Uint128
+	ScriptKind   core.ScriptKind
+}
+
 var _ ast.HasFileName = (*redirectsFile)(nil)
 
 func (r *redirectsFile) FileName() string {
@@ -76,8 +83,14 @@ func (r *redirectsFile) Path() tspath.Path {
 }
 
 type processedFiles struct {
-	resolver                      *module.Resolver
-	files                         []*ast.SourceFile
+	resolver *module.Resolver
+	files    []*ast.SourceFile
+	// duplicateSourceFiles tracks parsed files loaded during program construction
+	// that were later dropped from the final program, such as losing filename
+	// casing variants for the same path or files hidden behind package redirect
+	// deduplication. Their parse-cache acquires still need to be balanced when
+	// the program is disposed.
+	duplicateSourceFiles          []*DuplicateSourceFile
 	filesByPath                   map[tspath.Path]*ast.SourceFile
 	projectReferenceFileMapper    *projectReferenceFileMapper
 	missingFiles                  []string

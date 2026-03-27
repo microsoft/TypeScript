@@ -38,10 +38,10 @@ func (noopClient) ProgressStart(message *diagnostics.Message, args ...any) {}
 
 func (noopClient) ProgressFinish(message *diagnostics.Message, args ...any) {}
 
-// TestExtendedConfigCacheRefCounting tests the invariant that each ExtendedSourceFile
-// of a config in the ConfigFileRegistry is ref'd exactly once per config that extends it,
-// and deref'd exactly once when that config is removed.
-func TestExtendedConfigCacheRefCounting(t *testing.T) {
+// TestExtendedConfigCacheOwnership tests the invariant that each ExtendedSourceFile
+// of a config in the ConfigFileRegistry is owned exactly once per snapshot that
+// references it, and released exactly once when that snapshot is removed.
+func TestExtendedConfigCacheOwnership(t *testing.T) {
 	t.Parallel()
 
 	if !bundled.Embedded {
@@ -83,12 +83,12 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 		openUntitled(session)
 	}
 
-	refCount := func(session *Session, path tspath.Path) int {
+	ownerCount := func(session *Session, path tspath.Path) int {
 		entry, ok := session.extendedConfigCache.entries.Load(path)
 		if !ok {
 			return 0
 		}
-		return entry.refCount
+		return len(entry.owners)
 	}
 
 	assertNoEntry := func(t *testing.T, session *Session, fileName string) {
@@ -98,7 +98,7 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 		assert.Equal(t, ok, false)
 	}
 
-	expectedExtendedRefCounts := func(session *Session, snapshot *Snapshot) map[tspath.Path]int {
+	expectedExtendedOwnerCounts := func(session *Session, snapshot *Snapshot) map[tspath.Path]int {
 		result := make(map[tspath.Path]int)
 		for _, cfg := range snapshot.ConfigFileRegistry.configs {
 			if cfg.commandLine == nil || cfg.commandLine.ConfigFile == nil {
@@ -111,12 +111,12 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 		return result
 	}
 
-	assertExtendedRefCountsMatchRegistry := func(t *testing.T, session *Session, snapshot *Snapshot) {
+	assertExtendedOwnerCountsMatchRegistry := func(t *testing.T, session *Session, snapshot *Snapshot) {
 		t.Helper()
-		expected := expectedExtendedRefCounts(session, snapshot)
+		expected := expectedExtendedOwnerCounts(session, snapshot)
 		for path, want := range expected {
-			got := refCount(session, path)
-			assert.Equal(t, got, want, "extended config %s refCount mismatch", path)
+			got := ownerCount(session, path)
+			assert.Equal(t, got, want, "extended config %s owner count mismatch", path)
 		}
 	}
 
@@ -159,8 +159,8 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 		}
 		assert.Equal(t, rootCount, 1)
 
-		// And the cache refcounts should match the registry's deduped list.
-		assertExtendedRefCountsMatchRegistry(t, session, snapshot)
+		// And the cache owner counts should match the registry's deduped list.
+		assertExtendedOwnerCountsMatchRegistry(t, session, snapshot)
 
 		flushCloseProject(session, lsproto.DocumentUri("file:///project/src/main.ts"))
 		assertNoEntry(t, session, "/project/tsconfig.base1.json")
@@ -173,7 +173,7 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 
 		// This test is descriptive, not prescriptive. This seems bad and unintentional,
 		// but is here to show that while the problem exists in the underlying config parsing
-		// API, it doesn't disrupt the cache ref counting.
+		// API, it doesn't disrupt cache ownership.
 		files := map[string]any{
 			"/project/tsconfig.json": `{
 				"extends": ["./Shared.json", "./shared.json"]
@@ -225,19 +225,17 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 		assert.Equal(t, session.toPath(extended[0]), session.toPath("/project/shared.json"))
 	})
 
-	t.Run("transitive extended config ref counting with new project", func(t *testing.T) {
+	t.Run("transitive extended config ownership with new project", func(t *testing.T) {
 		t.Parallel()
 
 		// Scenario: transitive extends chain where a new project reuses a cached
-		// extended config without reparsing it, which should still ref the transitive deps.
+		// extended config without reparsing it, which should still acquire the transitive deps.
 		//
 		// projectA/tsconfig.json extends shared/tsconfig.base.json extends shared/tsconfig.common.json
 		// projectB/tsconfig.json extends shared/tsconfig.base.json extends shared/tsconfig.common.json
 		//
 		// When projectB is opened AFTER projectA, tsconfig.base.json is retrieved from cache
-		// (not reparsed), so tsconfig.common.json doesn't get Acquired again. But when projectA
-		// is closed, tsconfig.common.json gets deref'd. If projectB didn't properly ref
-		// tsconfig.common.json, it will be deleted and cause a panic on next snapshot clone.
+		// (not reparsed), so tsconfig.common.json still needs projectB's snapshot ownership.
 		files := map[string]any{
 			"/user/username/projects/shared/tsconfig.common.json": `{
 					"compilerOptions": { "strict": true }
@@ -262,16 +260,16 @@ func TestExtendedConfigCacheRefCounting(t *testing.T) {
 		// Step 1: Open file in projectA - this parses the full extends chain
 		session.DidOpenFile(context.Background(), "file:///user/username/projects/projectA/src/main.ts", 1, files["/user/username/projects/projectA/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
 
-		// Verify extended configs are in cache with correct ref counts
+		// Verify extended configs are in cache with correct owner counts
 		baseEntry, baseOk := session.extendedConfigCache.entries.Load("/user/username/projects/shared/tsconfig.base.json")
 		commonEntry, commonOk := session.extendedConfigCache.entries.Load("/user/username/projects/shared/tsconfig.common.json")
 		assert.Assert(t, baseOk, "tsconfig.base.json should be in cache")
 		assert.Assert(t, commonOk, "tsconfig.common.json should be in cache")
-		assert.Equal(t, baseEntry.refCount, 1)
-		assert.Equal(t, commonEntry.refCount, 1)
+		assert.Equal(t, len(baseEntry.owners), 1)
+		assert.Equal(t, len(commonEntry.owners), 1)
 
 		// Step 2: Open file in projectB - this should acquire tsconfig.base.json from cache
-		// (not reparse it), and should also ref tsconfig.common.json (but doesn't due to bug)
+		// (not reparse it), and should also acquire tsconfig.common.json.
 		session.DidOpenFile(context.Background(), "file:///user/username/projects/projectB/src/main.ts", 1, files["/user/username/projects/projectB/src/main.ts"].(string), lsproto.LanguageKindTypeScript)
 
 		// Step 3: Close projectA file and open an unrelated file to force projectA cleanup

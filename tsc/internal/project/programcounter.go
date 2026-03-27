@@ -11,6 +11,8 @@ type programCounter struct {
 	refs map[*compiler.Program]int32
 }
 
+// Ref increments the reference count for a program. If the program is not
+// yet tracked, it is added with a reference count of 1.
 func (c *programCounter) Ref(program *compiler.Program) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -25,7 +27,7 @@ func (c *programCounter) Deref(program *compiler.Program) bool {
 	defer c.mu.Unlock()
 	count, ok := c.refs[program]
 	if !ok {
-		panic("program not found in counter")
+		return false
 	}
 	count--
 	if count < 0 {
