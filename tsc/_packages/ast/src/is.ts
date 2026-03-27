@@ -1174,7 +1174,32 @@ export function isPropertyNameLiteral(node: Node): boolean {
 }
 
 export function isTypeNode(node: Node): node is TypeNode {
-    return node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode;
+    return isTypeNodeKind(node.kind);
+}
+
+function isTypeNodeKind(kind: SyntaxKind): boolean {
+    return kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode
+        || kind === SyntaxKind.AnyKeyword
+        || kind === SyntaxKind.UnknownKeyword
+        || kind === SyntaxKind.NumberKeyword
+        || kind === SyntaxKind.BigIntKeyword
+        || kind === SyntaxKind.ObjectKeyword
+        || kind === SyntaxKind.BooleanKeyword
+        || kind === SyntaxKind.StringKeyword
+        || kind === SyntaxKind.SymbolKeyword
+        || kind === SyntaxKind.VoidKeyword
+        || kind === SyntaxKind.UndefinedKeyword
+        || kind === SyntaxKind.NeverKeyword
+        || kind === SyntaxKind.IntrinsicKeyword
+        || kind === SyntaxKind.ExpressionWithTypeArguments
+        || kind === SyntaxKind.JSDocAllType
+        || kind === SyntaxKind.JSDocNullableType
+        || kind === SyntaxKind.JSDocNonNullableType
+        || kind === SyntaxKind.JSDocOptionalType
+        || kind === SyntaxKind.JSDocVariadicType
+        || kind === SyntaxKind.JSDocTypeExpression
+        || kind === SyntaxKind.JSDocTypeLiteral
+        || kind === SyntaxKind.JSDocSignature;
 }
 
 export function isStatement(node: Node): node is Statement {
