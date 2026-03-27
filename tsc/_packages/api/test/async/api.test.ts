@@ -2012,6 +2012,41 @@ export type Pair = [string, number];
             await api.close();
         }
     });
+
+    test("printNode with terminateUnterminatedLiterals option", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/main.ts": `const foo = /asdfasf;`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+
+            // Find the regex literal node
+            let regexNode: import("@typescript/ast").Node | undefined;
+            sourceFile.forEachChild(function visit(node) {
+                if (node.kind === SyntaxKind.RegularExpressionLiteral) {
+                    regexNode = node;
+                    return;
+                }
+                node.forEachChild(visit);
+            });
+            assert.ok(regexNode, "Should find a regex literal");
+
+            // Without the option, regex is printed as-is
+            const textWithout = await project.emitter.printNode(regexNode);
+            assert.strictEqual(textWithout, "/asdfasf");
+
+            // With the option, the closing slash is added
+            const textWith = await project.emitter.printNode(regexNode, { terminateUnterminatedLiterals: true });
+            assert.strictEqual(textWith, "/asdfasf/");
+        }
+        finally {
+            await api.close();
+        }
+    });
 });
 
 describe("modifierFlags", () => {

@@ -992,6 +992,9 @@ func (p *Printer) emitLiteral(node *ast.LiteralLikeNode, flags getLiteralTextFla
 	if p.Options.NeverAsciiEscape {
 		flags |= getLiteralTextFlagsNeverAsciiEscape
 	}
+	if p.Options.TerminateUnterminatedLiterals {
+		flags |= getLiteralTextFlagsTerminateUnterminatedLiterals
+	}
 
 	text := p.getLiteralTextOfNode(node, nil /*sourceFile*/, flags)
 

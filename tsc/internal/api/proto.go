@@ -734,7 +734,10 @@ type TypeToTypeNodeParams struct {
 
 // PrintNodeParams are the parameters for the printNode method.
 type PrintNodeParams struct {
-	Data string `json:"data"` // base64-encoded binary AST data
+	Data                          string `json:"data"` // base64-encoded binary AST data
+	PreserveSourceNewlines        bool   `json:"preserveSourceNewlines,omitempty"`
+	NeverAsciiEscape              bool   `json:"neverAsciiEscape,omitempty"`
+	TerminateUnterminatedLiterals bool   `json:"terminateUnterminatedLiterals,omitempty"`
 }
 
 // CheckerTypeParams are parameters for checker methods that operate on a type.

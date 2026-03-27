@@ -926,6 +926,9 @@ func getNodeDefinedData(node *ast.Node) uint32 {
 	case ast.KindJsxText:
 		n := node.AsJsxText()
 		return uint32(boolToByte(n.ContainsOnlyTriviaWhiteSpaces)) << 24
+	case ast.KindRegularExpressionLiteral:
+		n := node.AsRegularExpressionLiteral()
+		return uint32(boolToByte(n.TokenFlags&ast.TokenFlagsUnterminated != 0)) << 24
 	case ast.KindVariableDeclarationList:
 		n := node.AsVariableDeclarationList()
 		return (uint32(n.Flags&ast.NodeFlagsBlockScoped) << 24)

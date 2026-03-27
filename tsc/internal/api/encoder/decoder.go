@@ -268,7 +268,11 @@ func (d *astDecoder) createStringNode(kind ast.Kind, data uint32, definedBits ui
 	case ast.KindBigIntLiteral:
 		return d.factory.NewBigIntLiteral(text, 0), nil
 	case ast.KindRegularExpressionLiteral:
-		return d.factory.NewRegularExpressionLiteral(text, 0), nil
+		var tokenFlags ast.TokenFlags
+		if definedBits&1 != 0 {
+			tokenFlags = ast.TokenFlagsUnterminated
+		}
+		return d.factory.NewRegularExpressionLiteral(text, tokenFlags), nil
 	case ast.KindNoSubstitutionTemplateLiteral:
 		return d.factory.NewNoSubstitutionTemplateLiteral(text, 0), nil
 	case ast.KindJsxText:

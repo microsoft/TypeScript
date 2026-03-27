@@ -282,6 +282,7 @@ export class Project {
     readonly program: Program;
     readonly checker: Checker;
     readonly emitter: Emitter;
+    private client: Client;
 
     constructor(
         data: ProjectResponse,
@@ -295,6 +296,7 @@ export class Project {
         this.configFileName = data.configFileName;
         this.compilerOptions = data.compilerOptions;
         this.rootFiles = data.rootFiles;
+        this.client = client;
         this.program = new Program(
             snapshotId,
             this.id,
@@ -720,6 +722,12 @@ export class Checker {
     }
 }
 
+export interface PrintNodeOptions {
+    preserveSourceNewlines?: boolean;
+    neverAsciiEscape?: boolean;
+    terminateUnterminatedLiterals?: boolean;
+}
+
 export class Emitter {
     private client: Client;
 
@@ -727,10 +735,13 @@ export class Emitter {
         this.client = client;
     }
 
-    printNode(node: Node): string {
+    printNode(node: Node, options: PrintNodeOptions = {}): string {
         const encoded = encodeNode(node);
         const base64 = uint8ArrayToBase64(encoded);
-        return this.client.apiRequest<string>("printNode", { data: base64 });
+        return this.client.apiRequest<string>("printNode", {
+            data: base64,
+            ...options,
+        });
     }
 }
 

@@ -1378,7 +1378,11 @@ func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (s
 		return "", fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
 	}
 
-	p := printer.NewPrinter(printer.PrinterOptions{}, printer.PrintHandlers{}, nil)
+	p := printer.NewPrinter(printer.PrinterOptions{
+		PreserveSourceNewlines:        params.PreserveSourceNewlines,
+		NeverAsciiEscape:              params.NeverAsciiEscape,
+		TerminateUnterminatedLiterals: params.TerminateUnterminatedLiterals,
+	}, printer.PrintHandlers{}, nil)
 	return p.Emit(node, nil), nil
 }
 
