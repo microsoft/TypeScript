@@ -1089,6 +1089,13 @@ func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project],
 						dirtyFilePath = ""
 						break
 					}
+					// package.json changes can affect module resolution and package
+					// identity (e.g. dedup decisions), so they must always trigger
+					// a full rebuild rather than a single-file clone.
+					if tspath.GetBaseFileName(string(path)) == "package.json" {
+						dirtyFilePath = ""
+						break
+					}
 					if dirtyFilePath == "" {
 						dirtyFilePath = path
 					} else if dirtyFilePath != path {

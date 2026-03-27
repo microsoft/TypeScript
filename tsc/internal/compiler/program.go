@@ -274,7 +274,9 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path, newHost CompilerHos
 	// If this file is part of a package redirect group (same package installed in multiple
 	// node_modules locations), we need to rebuild the program because the redirect targets
 	// might need recalculation.
-	if _, exists := p.redirectFilesByPath[changedFilePath]; exists {
+	_, inRedirectFiles := p.redirectFilesByPath[changedFilePath]
+	_, isRedirectTarget := p.redirectTargetsMap[changedFilePath]
+	if inRedirectFiles || isRedirectTarget {
 		return NewProgram(newOpts), false
 	}
 
