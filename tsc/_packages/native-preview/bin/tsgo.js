@@ -5,13 +5,13 @@ import { execFileSync } from "node:child_process";
 
 const exe = getExePath();
 
-if (typeof process.execve === "function") {
+if (process.platform !== "win32" && typeof process.execve === "function") {
     // > v22.15.0
     try {
         process.execve(exe, [exe, ...process.argv.slice(2)]);
     }
     catch {
-        // not available on windows, ignore the error and fallback
+        // may not be available, ignore the error and fallback
     }
 }
 
