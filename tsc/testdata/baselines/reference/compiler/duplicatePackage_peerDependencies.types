@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/duplicatePackage_peerDependencies.ts] ////
+
+=== /src/a.ts ===
+import { Foo as FooA } from "a";
+>Foo : typeof FooA
+>FooA : typeof FooA
+
+import { Foo as FooB } from "b";
+>Foo : typeof FooA
+>FooB : typeof FooA
+
+// Both should be the same type because the packages are deduplicated.
+let x: FooA = new FooB();
+>x : FooA
+>new FooB() : FooA
+>FooB : typeof FooA
+
+let y: FooB = new FooA();
+>y : FooA
+>new FooA() : FooA
+>FooA : typeof FooA
+
+=== /node_modules/a/index.d.ts ===
+export { Foo } from "foo";
+>Foo : typeof import("foo").Foo
+
+=== /node_modules/a/node_modules/foo/index.d.ts ===
+export class Foo { private x; }
+>Foo : Foo
+>x : any
+
+=== /node_modules/b/index.d.ts ===
+export { Foo } from "foo";
+>Foo : typeof import("foo").Foo
+
+=== /node_modules/b/node_modules/foo/index.d.ts ===
+export class Foo { private x; }
+>Foo : Foo
+>x : any
+
