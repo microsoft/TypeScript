@@ -1672,7 +1672,7 @@
         {
           "name": "param {number} [a=3] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -2796,7 +2796,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {number} [param0.a=3] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -3920,7 +3920,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {*} param0.a \r\n* @param {Object} param0.o \r\n* @param {*} param0.o.b \r\n* @param {*} param0.o.c ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -5044,7 +5044,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {*} param0.a \r\n* @param {Object} param0.o \r\n* @param {*} param0.o.b \r\n* @param {[number, boolean]} [param0.o.c=[1, true]] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -6168,7 +6168,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {(number | boolean)[]} [param0.a=[1, true]] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -7292,7 +7292,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {*} [param0.a=random()] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {

@@ -23,7 +23,22 @@
 ////function i(foo, bar) {}
 
 verify.completions(
-    { marker: ["0", "3", "4"], exact: ["foo", "bar"] },
-    { marker: "1", exact: "bar" },
-    { marker: "2", exact: ["canary", "canoodle"] },
+    {
+        marker: ["0", "3", "4"],
+        exact: [
+            { name: "foo", kind: "parameter", sortText: completion.SortText.LocationPriority + "0" },
+            { name: "bar", kind: "parameter", sortText: completion.SortText.LocationPriority + "1" },
+        ],
+    },
+    {
+        marker: "1",
+        exact: { name: "bar", kind: "parameter", sortText: completion.SortText.LocationPriority + "1" },
+    },
+    {
+        marker: "2",
+        exact: [
+            { name: "canary", kind: "parameter", sortText: completion.SortText.LocationPriority + "1" },
+            { name: "canoodle", kind: "parameter", sortText: completion.SortText.LocationPriority + "2" },
+        ],
+    },
 );

@@ -2740,7 +2740,7 @@
         {
           "name": "param value ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -2753,7 +2753,7 @@
         {
           "name": "param maximumFractionDigits ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "111",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -3877,7 +3877,7 @@
         {
           "name": "param param0 ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -3890,7 +3890,7 @@
         {
           "name": "param b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "111",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -5014,7 +5014,7 @@
         {
           "name": "@param b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -6138,7 +6138,7 @@
         {
           "name": "param param0 ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -7262,7 +7262,7 @@
         {
           "name": "param param0 ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -8386,7 +8386,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {number} [param0.a=1] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -8399,7 +8399,7 @@
         {
           "name": "param {*} b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "111",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -9523,7 +9523,7 @@
         {
           "name": "@param {*} b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -10647,7 +10647,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {Object} [param0.b={ a: 1, c: 3 }] \r\n* @param {*} param0.b.a \r\n* @param {*} param0.b.c ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -11771,7 +11771,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {Object} param0.a \r\n* @param {*} param0.a.b \r\n* @param {*} param0.a.c \r\n* @param {*} param0.d ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -12895,7 +12895,7 @@
         {
           "name": "param {*} param0 ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -14019,7 +14019,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {*} param0.a ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -15143,7 +15143,7 @@
         {
           "name": "param {*} a ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -16267,7 +16267,7 @@
         {
           "name": "param {Object} param1 \r\n* @param {*} param1.b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "111",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -17391,7 +17391,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {*} param0.b \r\n* @param {...*} param0.c ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -17404,7 +17404,7 @@
         {
           "name": "param {...*} a ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "111",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -18528,7 +18528,7 @@
         {
           "name": "param {...*} param0 ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -19652,7 +19652,7 @@
         {
           "name": "param {...*} a ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {
@@ -20776,7 +20776,7 @@
         {
           "name": "param {*} [a] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "kindModifiers": "",
           "displayParts": [
             {

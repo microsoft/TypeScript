@@ -1580,7 +1580,7 @@
         {
           "name": "@param b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "insertText": "@param b ${1}",
           "isSnippet": true,
           "kindModifiers": "",
@@ -2706,7 +2706,7 @@
         {
           "name": "@param {*} b ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "insertText": "@param {${1:*}} b ${2}",
           "isSnippet": true,
           "kindModifiers": "",
@@ -3832,7 +3832,7 @@
         {
           "name": "param {Object} param0 \r\n* @param {Object} [param0.b={ a: 1, c: 3 }] \r\n* @param {*} param0.b.a \r\n* @param {*} param0.b.c ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "insertText": "param {Object} param0 ${1}\r\n* @param {Object} [param0.b={ a: 1, c: 3 }] ${2}\r\n* @param {${3:*}} param0.b.a ${4}\r\n* @param {${5:*}} param0.b.c ${6}",
           "isSnippet": true,
           "kindModifiers": "",
@@ -4958,7 +4958,7 @@
         {
           "name": "param {...*} a ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "insertText": "param {...${1:*}} a ${2}",
           "isSnippet": true,
           "kindModifiers": "",
@@ -6084,7 +6084,7 @@
         {
           "name": "param {number} [a=3] ",
           "kind": "",
-          "sortText": "11",
+          "sortText": "110",
           "insertText": "param {number} [a=3] ${1}",
           "isSnippet": true,
           "kindModifiers": "",

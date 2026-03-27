@@ -431,7 +431,7 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
             return undefined;
         }
 
-        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
+        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority + String(fn.parameters.indexOf(param)) as Completions.SortText };
     });
 }
 
