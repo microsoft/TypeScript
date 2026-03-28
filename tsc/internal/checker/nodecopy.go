@@ -331,23 +331,23 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		if resultObjectType == nil {
 			return nil
 		}
-		return b.f.UpdateIndexedAccessTypeNode(node.AsIndexedAccessTypeNode(), resultObjectType, visitor.VisitNode(node.AsIndexedAccessTypeNode().IndexType))
+		return b.setTextRange(b.f.UpdateIndexedAccessTypeNode(node.AsIndexedAccessTypeNode(), resultObjectType, visitor.VisitNode(node.AsIndexedAccessTypeNode().IndexType)), node)
 	}
 	tryVisitKeyOf := func(node *ast.Node) *ast.Node {
 		t := tryVisitSimpleTypeNode(node.AsTypeOperatorNode().Type)
 		if t == nil {
 			return nil
 		}
-		return b.f.UpdateTypeOperatorNode(node.AsTypeOperatorNode(), t)
+		return b.setTextRange(b.f.UpdateTypeOperatorNode(node.AsTypeOperatorNode(), t), node)
 	}
 	tryVisitTypeQuery := func(node *ast.Node) *ast.Node {
 		introducesError, exprName, _ := trackExistingEntityName(node.AsTypeQueryNode().ExprName, nil)
 		if !introducesError {
-			return b.f.UpdateTypeQueryNode(
+			return b.setTextRange(b.f.UpdateTypeQueryNode(
 				node.AsTypeQueryNode(),
 				exprName,
 				visitor.VisitNodes(node.AsTypeQueryNode().TypeArguments),
-			)
+			), node)
 		}
 
 		serializedName := b.serializeTypeName(node.AsTypeQueryNode().ExprName, true, visitor.VisitNodes(node.AsTypeQueryNode().TypeArguments))
@@ -374,11 +374,11 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 		introducesError, newName, _ := trackExistingEntityName(node.AsTypeReferenceNode().TypeName, nil)
 		if !introducesError {
 			typeArguments := visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments)
-			return b.f.UpdateTypeReferenceNode(
+			return b.setTextRange(b.f.UpdateTypeReferenceNode(
 				node.AsTypeReferenceNode(),
 				newName,
 				typeArguments,
-			)
+			), node)
 		} else {
 			serializedName := b.serializeTypeName(node.AsTypeReferenceNode().TypeName, false, visitor.VisitNodes(node.AsTypeReferenceNode().TypeArguments))
 			if serializedName != nil {
@@ -401,7 +401,7 @@ func getExistingNodeTreeVisitor(b *NodeBuilderImpl, bound *recoveryBoundary) *as
 				return tryVisitKeyOf(innerNode)
 			}
 		}
-		return visitor.VisitEachChild(node)
+		return visitor.VisitNode(node)
 	}
 	visitExistingNodeTreeSymbolsWorker := func(node *ast.Node) *ast.Node {
 		factory := b.f

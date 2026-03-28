@@ -9,16 +9,7 @@
  >obj : { a: number; b: 0 | 1; c: string; }
  >a : number
  >b : 0 | 1
-@@= skipped -211, +211 lines =@@
- }
-
- function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
-->f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
-+>f4 : <K extends string>(a: {    [key: string]: number;}[K], b: number) => void
- >a : number
- >key : string
- >b : number
-@@= skipped -229, +229 lines =@@
+@@= skipped -440, +440 lines =@@
  // Repros from #30938
 
  function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {

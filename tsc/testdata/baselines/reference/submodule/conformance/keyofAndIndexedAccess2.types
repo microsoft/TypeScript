@@ -213,7 +213,7 @@ function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: numb
 }
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
->f4 : <K extends string>(a: {    [key: string]: number;}[K], b: number) => void
+>f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
 >a : number
 >key : string
 >b : number

@@ -720,7 +720,7 @@ function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [.
 }
 
 function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
->f15 : <T extends string[], U extends T>(k0: keyof T, k1: keyof [    ...T], k2: keyof [    ...U], k3: keyof [    1,    2,    ...T]) => void
+>f15 : <T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) => void
 >k0 : keyof T
 >k1 : keyof [...T]
 >k2 : keyof [...U]
