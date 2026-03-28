@@ -11940,7 +11940,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return containerObjectType;
                 }
             }
-            const type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, checkMode));
+            const initType = checkDeclarationInitializer(declaration, checkMode);
+            const type = widenTypeInferredFromInitializer(declaration, initType);
+            // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+            if (isPropertyDeclaration(declaration) && declaration.name && isIdentifier(declaration.name) && declaration.name.text === "D") { console.log("getTypeForVariableLikeDeclaration D: initType=", typeToString(initType), "widenedType=", typeToString(type), "checkMode=", checkMode); }
             return addOptionality(type, isProperty, isOptional);
         }
 
@@ -12449,7 +12452,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
     // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
     function getWidenedTypeForVariableLikeDeclaration(declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | JSDocPropertyLikeTag, reportErrors?: boolean): Type {
-        return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, CheckMode.Normal), declaration, reportErrors);
+        const innerType = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, CheckMode.Normal);
+        const result = widenTypeForVariableLikeDeclaration(innerType, declaration, reportErrors);
+        // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+        if (isPropertyDeclaration(declaration)) { console.log("getWidenedTypeForVariableLikeDeclaration PropertyDecl: declName=", isIdentifier(declaration.name) ? declaration.name.text : "?", "innerType=", innerType ? typeToString(innerType) : "undefined", "result=", typeToString(result)); }
+        return result;
     }
 
     function getTypeFromImportAttributes(node: ImportAttributes): Type {
@@ -12546,8 +12553,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!links.type && !isParameterOfContextSensitiveSignature(symbol)) {
                 links.type = type;
             }
+            // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+            if ((symbol.escapedName as string) === "D" && symbol.valueDeclaration && isPropertyDeclaration(symbol.valueDeclaration)) { console.log("D getTypeOfVar (computed):", typeToString(type), "links.type:", links.type ? typeToString(links.type) : "none", new Error().stack?.split('\n').slice(1,6).join(' | ')); }
             return type;
         }
+        // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+        if ((symbol.escapedName as string) === "D" && symbol.valueDeclaration && isPropertyDeclaration(symbol.valueDeclaration)) { console.log("D getTypeOfVar (cached):", typeToString(links.type), new Error().stack?.split('\n').slice(1,6).join(' | ')); }
         return links.type;
     }
 
@@ -12648,6 +12659,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || isJSDocPropertyLikeTag(declaration)
         ) {
             type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
+            // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+            if (isPropertyDeclaration(declaration) && declaration.name && (declaration.name as any).text === "D") { console.log("D property type =", typeToString(type)); }
         }
         // getTypeOfSymbol dispatches some JS merges incorrectly because their symbol flags are not mutually exclusive.
         // Re-dispatch based on valueDeclaration.kind instead.
@@ -12964,6 +12977,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
         }
         if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
+            // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+            if ((symbol.escapedName as string) === "D" && symbol.valueDeclaration && isPropertyDeclaration(symbol.valueDeclaration)) { const t = getTypeOfVariableOrParameterOrProperty(symbol); console.log("getTypeOfSymbol D (Variable|Property):", typeToString(t), "checkFlags:", checkFlags); return t; }
             return getTypeOfVariableOrParameterOrProperty(symbol);
         }
         if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
@@ -34998,6 +35013,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : writeOnly || isWriteOnlyAccess(node) ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+            // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+            if (isPropertyDeclaration(prop?.valueDeclaration) && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) { console.log("checkPropAccess: prop=", symbolToString(prop), "propType=", typeToString(propType), "checkFlags=", getCheckFlags(prop)); }
         }
 
         return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
@@ -35047,6 +35064,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getFlowTypeOfProperty(node, prop);
         }
         propType = getNarrowableTypeForReference(propType, node, checkMode);
+        // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+        if (prop && (prop.name as string) === "D") { console.log("getFlowTypeOfAccessExpression: propType =", typeToString(propType)); }
         // If strict null checks and strict property initialization checks are enabled, if we have
         // a this.xxx property access, if the property is an instance property without an initializer,
         // and if we are in a constructor of the same class as the property declaration, assume that
@@ -35072,6 +35091,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             assumeUninitialized = true;
         }
         const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
+        // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+        if (prop && (prop.name as string) === "D") { console.log("getFlowTypeOfAccessExpression: flowType =", typeToString(flowType)); }
         if (assumeUninitialized && !containsUndefinedType(propType) && containsUndefinedType(flowType)) {
             error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
             // Return the declared type to reduce follow-on errors
@@ -41374,6 +41395,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = getQuickTypeOfExpression(initializer) || (contextualType ?
             checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal) :
             checkExpressionCached(initializer, checkMode));
+        // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+        if (isPropertyDeclaration(declaration)) { console.log("checkDeclarationInitializer PropertyDecl: checkMode=", checkMode, "initKind=", initializer.kind, "type=", typeToString(type)); }
         if (isParameter(isBindingElement(declaration) ? walkUpBindingElementsAndPatterns(declaration) : declaration)) {
             if (declaration.name.kind === SyntaxKind.ObjectBindingPattern && isObjectLiteralType(type)) {
                 return padObjectLiteralType(type as ObjectType, declaration.name);
@@ -46630,6 +46653,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let hasDuplicateDefaultClause = false;
 
         const expressionType = checkExpression(node.expression);
+        // @ts-ignore DEBUG CODE ONLY, REMOVE ME WHEN DONE
+        console.log("checkSwitchStatement: expressionType =", typeToString(expressionType), "nodeExprKind=", node.expression.kind, "isPAE=", isPropertyAccessExpression(node.expression));
 
         forEach(node.caseBlock.clauses, clause => {
             // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
