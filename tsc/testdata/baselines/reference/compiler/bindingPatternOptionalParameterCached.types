@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/bindingPatternOptionalParameterCached.ts] ////
+
+=== bindingPatternOptionalParameterCached.ts ===
+// https://github.com/microsoft/typescript-go/issues/3276
+
+// There should be no error in this test, but previously there was because of the
+// declaration of mock. Commenting it out would make the error disappear.
+
+export const mock: I = {
+>mock : I
+>{    m: (_) => {},} : { m: (_: { x: boolean; } | undefined) => void; }
+
+    m: (_) => {},
+>m : (_: { x: boolean; } | undefined) => void
+>(_) => {} : (_: { x: boolean; } | undefined) => void
+>_ : { x: boolean; } | undefined
+
+};
+
+export interface I {
+    m({ x }?: { x: boolean }): void
+>m : ({ x }?: { x: boolean; }) => void
+>x : boolean
+>x : boolean
+}
+

@@ -17190,14 +17190,12 @@ func (c *Checker) getTypeForBindingElement(declaration *ast.Node) *Type {
 // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
 // assigned by contextual typing.
 func (c *Checker) getTypeForBindingElementParent(node *ast.Node, checkMode CheckMode) *Type {
-	if checkMode != CheckModeNormal {
-		return c.getTypeForVariableLikeDeclaration(node, false /*includeOptionality*/, checkMode)
-	}
-	symbol := c.getSymbolOfDeclaration(node)
-	if symbol != nil {
-		resolvedType := c.valueSymbolLinks.Get(symbol).resolvedType
-		if resolvedType != nil {
-			return resolvedType
+	if checkMode == CheckModeNormal {
+		// We can use a cached resolved type if no optionality was included in that type.
+		if symbol := c.getSymbolOfDeclaration(node); symbol != nil {
+			if resolvedType := c.valueSymbolLinks.Get(symbol).resolvedType; resolvedType != nil && !(c.strictNullChecks && isOptionalDeclaration(node)) {
+				return resolvedType
+			}
 		}
 	}
 	return c.getTypeForVariableLikeDeclaration(node, false /*includeOptionality*/, checkMode)
