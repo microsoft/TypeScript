@@ -1105,6 +1105,53 @@ func (c *Checker) getMatchingUnionConstituentForType(unionType *Type, t *Type) *
 	return c.getConstituentTypeForKeyType(unionType, propType)
 }
 
+func (c *Checker) buildTemplateLiteralTrieFromTypes(templateTypes []*Type) *templateLiteralTrieNode {
+	root := &templateLiteralTrieNode{}
+	for _, t := range templateTypes {
+		prefix := t.AsTemplateLiteralType().texts[0]
+		node := root
+		for _, ch := range []byte(prefix) {
+			if node.children == nil {
+				node.children = make(map[byte]*templateLiteralTrieNode)
+			}
+			child := node.children[ch]
+			if child == nil {
+				child = &templateLiteralTrieNode{}
+				node.children[ch] = child
+			}
+			node = child
+		}
+		node.types = append(node.types, t)
+	}
+	return root
+}
+
+func (c *Checker) findMatchingTemplateLiteralInTrie(trie *templateLiteralTrieNode, source *Type, compareTypes TypeComparer) *Type {
+	value := source.AsLiteralType().Value().(string)
+	node := trie
+	// Check root candidates (empty-prefix templates like `${string}`)
+	for _, t := range node.types {
+		if c.isTypeMatchedByTemplateLiteralType(source, t.AsTemplateLiteralType(), compareTypes) {
+			return t
+		}
+	}
+	for _, ch := range []byte(value) {
+		if node.children == nil {
+			return nil
+		}
+		node = node.children[ch]
+		if node == nil {
+			return nil
+		}
+		for _, t := range node.types {
+			if c.isTypeMatchedByTemplateLiteralType(source, t.AsTemplateLiteralType(), compareTypes) {
+				return t
+			}
+		}
+	}
+	return nil
+}
+
 // Return the name of a discriminant property for which it was possible and feasible to construct a map of
 // constituent types keyed by the literal types of the property by that name in each constituent type. Return
 // an empty string if no such discriminant property exists.

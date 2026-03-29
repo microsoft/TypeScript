@@ -1218,6 +1218,11 @@ type TemplateLiteralType struct {
 func (t *TemplateLiteralType) Texts() []string { return t.texts }
 func (t *TemplateLiteralType) Types() []*Type  { return t.types }
 
+type templateLiteralTrieNode struct {
+	children map[byte]*templateLiteralTrieNode
+	types    []*Type // template literal types whose prefix ends at this node
+}
+
 type StringMappingType struct {
 	ConstrainedType
 	target *Type
