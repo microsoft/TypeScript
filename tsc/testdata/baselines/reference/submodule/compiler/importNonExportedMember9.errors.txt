@@ -1,4 +1,4 @@
-b.js(1,10): error TS2616: 'Foo' can only be imported by using 'import Foo = require("./a")' or a default import.
+b.js(1,10): error TS2597: 'Foo' can only be imported by using a 'require' call or by using a default import.
 
 
 ==== a.ts (0 errors) ====
@@ -8,4 +8,4 @@ b.js(1,10): error TS2616: 'Foo' can only be imported by using 'import Foo = requ
 ==== b.js (1 errors) ====
     import { Foo } from './a';
              ~~~
-!!! error TS2616: 'Foo' can only be imported by using 'import Foo = require("./a")' or a default import.
+!!! error TS2597: 'Foo' can only be imported by using a 'require' call or by using a default import.
