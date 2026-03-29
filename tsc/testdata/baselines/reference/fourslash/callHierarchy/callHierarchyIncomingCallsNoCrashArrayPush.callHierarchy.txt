@@ -1,0 +1,64 @@
+// === Call Hierarchy ===
+╭ name: push
+├ kind: method
+├ file: bundled:///libs/lib.es5.d.ts
+├ span:
+│ ╭ bundled:///libs/lib.es5.d.ts:1341:5-1345:33
+│ │ 1341:     /**
+│ │           ^^^
+│ │ 1342:      * Appends new elements to the end of an array, and returns the new length of the array.
+│ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 1343:      * @param items New elements to add to the array.
+│ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 1344:      */
+│ │       ^^^^^^^
+│ │ 1345:     push(...items: T[]): number;
+│ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ bundled:///libs/lib.es5.d.ts:1345:5-1345:9
+│ │ 1345:     push(...items: T[]): number;
+│ │           ^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: trim
+│ │ ├ kind: function
+│ │ ├ file: /callHierarchyIncomingCallsNoCrashArrayPush.ts
+│ │ ├ span:
+│ │ │ ╭ /callHierarchyIncomingCallsNoCrashArrayPush.ts:5:1-15:2
+│ │ │ │  5: async function trim(packageNames: string[]) {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  6:   const nameOrPkgs = packageNames.filter(Boolean);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  7:   const names = [];
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │  8:   for (const nameOrPkg of nameOrPkgs) {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │  9:     try {
+│ │ │ │     ^^^^^^^^^
+│ │ │ │ 10:       names.push(nameOrPkg);
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 11:     } catch (error) {
+│ │ │ │     ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 12:     }
+│ │ │ │     ^^^^^
+│ │ │ │ 13:   }
+│ │ │ │     ^^^
+│ │ │ │ 14:   return names;
+│ │ │ │     ^^^^^^^^^^^^^^^
+│ │ │ │ 15: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /callHierarchyIncomingCallsNoCrashArrayPush.ts:5:16-5:20
+│ │ │ │ 5: async function trim(packageNames: string[]) {
+│ │ │ │                   ^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /callHierarchyIncomingCallsNoCrashArrayPush.ts:10:13-10:17
+│ │ │ 10:       names.push(nameOrPkg);
+│ │ │                 ^^^^
+│ ╰ ╰
+╰ outgoing: none

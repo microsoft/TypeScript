@@ -2350,7 +2350,7 @@ func (f *FourslashTest) VerifyBaselineCallHierarchy(t *testing.T) {
 	for _, callHierarchyItem := range *prepareResult.CallHierarchyItems {
 		seen := make(map[callHierarchyItemKey]bool)
 		itemFileName := callHierarchyItem.Uri.FileName()
-		script := f.getScriptInfo(itemFileName)
+		script := f.getOrLoadScriptInfo(itemFileName)
 		formatCallHierarchyItem(t, f, script, &result, *callHierarchyItem, callHierarchyItemDirectionRoot, seen, "")
 	}
 
@@ -2472,7 +2472,7 @@ func formatCallHierarchyItem(
 			result.WriteString("├ incoming:\n")
 			for i, incomingCall := range incomingCalls.values {
 				fromFileName := incomingCall.From.Uri.FileName()
-				fromFile := f.getScriptInfo(fromFileName)
+				fromFile := f.getOrLoadScriptInfo(fromFileName)
 				result.WriteString(prefix)
 				result.WriteString("│ ╭ from:\n")
 				formatCallHierarchyItem(t, f, fromFile, result, *incomingCall.From, callHierarchyItemDirectionIncoming, seen, prefix+"│ │ ")
@@ -2503,7 +2503,7 @@ func formatCallHierarchyItem(
 			result.WriteString("├ outgoing:\n")
 			for i, outgoingCall := range outgoingCalls.values {
 				toFileName := outgoingCall.To.Uri.FileName()
-				toFile := f.getScriptInfo(toFileName)
+				toFile := f.getOrLoadScriptInfo(toFileName)
 				result.WriteString(prefix)
 				result.WriteString("│ ╭ to:\n")
 				formatCallHierarchyItem(t, f, toFile, result, *outgoingCall.To, callHierarchyItemDirectionOutgoing, seen, prefix+"│ │ ")
@@ -3000,6 +3000,18 @@ func (f *FourslashTest) editScript(t *testing.T, fileName string, start int, end
 
 func (f *FourslashTest) getScriptInfo(fileName string) *scriptInfo {
 	return f.scriptInfos[fileName]
+}
+
+func (f *FourslashTest) getOrLoadScriptInfo(fileName string) *scriptInfo {
+	if script := f.getScriptInfo(fileName); script != nil {
+		return script
+	}
+	if content, ok := f.vfs.ReadFile(fileName); ok {
+		script := newScriptInfo(fileName, content)
+		f.scriptInfos[fileName] = script
+		return script
+	}
+	return nil
 }
 
 // !!! expected tags
