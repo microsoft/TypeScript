@@ -11601,11 +11601,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
     // assigned by contextual typing.
     function getTypeForBindingElementParent(node: BindingElementGrandparent, checkMode: CheckMode) {
-        if (checkMode !== CheckMode.Normal) {
-            return getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
+        if (checkMode === CheckMode.Normal) {
+            // We can use a cached resolved type if no optionality was included in that type.
+            const symbol = getSymbolOfDeclaration(node);
+            if (symbol) {
+                const type = getSymbolLinks(symbol).type;
+                if (type && !(strictNullChecks && isOptionalDeclaration(node))) {
+                    return type;
+                }
+            }
         }
-        const symbol = getSymbolOfDeclaration(node);
-        return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
+        return getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
     }
 
     function getRestType(source: Type, properties: PropertyName[], symbol: Symbol | undefined): Type {
