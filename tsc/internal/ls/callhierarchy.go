@@ -258,7 +258,7 @@ func getCallHierarchyItemContainerName(node *ast.Node) string {
 				}
 			}
 		}
-		if ast.IsModuleBlock(parent.Parent.Parent.Parent) {
+		if parent.Parent.Parent != nil && parent.Parent.Parent.Parent != nil && ast.IsModuleBlock(parent.Parent.Parent.Parent) {
 			modParent := parent.Parent.Parent.Parent.Parent
 			if ast.IsModuleDeclaration(modParent) {
 				if name := modParent.Name(); name != nil && ast.IsIdentifier(name) {

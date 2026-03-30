@@ -1,0 +1,50 @@
+// === Call Hierarchy ===
+╭ name: push
+├ kind: method
+├ file: bundled:///libs/lib.es5.d.ts
+├ span:
+│ ╭ bundled:///libs/lib.es5.d.ts:1341:5-1345:33
+│ │ 1341:     /**
+│ │           ^^^
+│ │ 1342:      * Appends new elements to the end of an array, and returns the new length of the array.
+│ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 1343:      * @param items New elements to add to the array.
+│ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 1344:      */
+│ │       ^^^^^^^
+│ │ 1345:     push(...items: T[]): number;
+│ │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ bundled:///libs/lib.es5.d.ts:1345:5-1345:9
+│ │ 1345:     push(...items: T[]): number;
+│ │           ^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: onSave
+│ │ ├ kind: function
+│ │ ├ file: /main.ts
+│ │ ├ span:
+│ │ │ ╭ /main.ts:2:12-5:4
+│ │ │ │ 2:   onSave = () => {
+│ │ │ │               ^^^^^^^
+│ │ │ │ 3:     const values = [];
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     values.push(1);
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:   };
+│ │ │ │    ^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /main.ts:2:3-2:9
+│ │ │ │ 2:   onSave = () => {
+│ │ │ │      ^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /main.ts:4:12-4:16
+│ │ │ 4:     values.push(1);
+│ │ │               ^^^^
+│ ╰ ╰
+╰ outgoing: none
