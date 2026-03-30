@@ -441,6 +441,16 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetBigIntType)
 	case string(MethodGetESSymbolType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetESSymbolType)
+	case string(MethodGetSyntacticDiagnostics):
+		return s.handleGetSyntacticDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
+	case string(MethodGetSemanticDiagnostics):
+		return s.handleGetSemanticDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
+	case string(MethodGetSuggestionDiagnostics):
+		return s.handleGetSuggestionDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
+	case string(MethodGetDeclarationDiagnostics):
+		return s.handleGetDeclarationDiagnostics(ctx, parsed.(*GetDiagnosticsParams))
+	case string(MethodGetConfigFileParsingDiagnostics):
+		return s.handleGetConfigFileParsingDiagnostics(ctx, parsed.(*GetProjectDiagnosticsParams))
 	default:
 		return nil, fmt.Errorf("unknown method: %s", method)
 	}
@@ -1769,4 +1779,117 @@ func (s *Session) toFileChangeSummary(changes *APIFileChanges) project.FileChang
 		summary.IncludesWatchChangeOutsideNodeModules = true
 	}
 	return summary
+}
+
+// handleGetSyntacticDiagnostics returns syntactic diagnostics for a file or all files.
+func (s *Session) handleGetSyntacticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
+	if err != nil {
+		return nil, err
+	}
+
+	diags := program.GetSyntacticDiagnostics(ctx, sourceFile)
+	return NewDiagnosticResponses(diags), nil
+}
+
+// handleGetSemanticDiagnostics returns semantic diagnostics for a file or all files.
+func (s *Session) handleGetSemanticDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
+	if err != nil {
+		return nil, err
+	}
+
+	diags := program.GetSemanticDiagnostics(ctx, sourceFile)
+	return NewDiagnosticResponses(diags), nil
+}
+
+// handleGetSuggestionDiagnostics returns suggestion diagnostics for a file or all files.
+func (s *Session) handleGetSuggestionDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
+	if err != nil {
+		return nil, err
+	}
+
+	diags := program.GetSuggestionDiagnostics(ctx, sourceFile)
+	return NewDiagnosticResponses(diags), nil
+}
+
+// handleGetDeclarationDiagnostics returns declaration diagnostics for a file or all files.
+func (s *Session) handleGetDeclarationDiagnostics(ctx context.Context, params *GetDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	sourceFile, err := s.resolveOptionalSourceFile(program, params.File)
+	if err != nil {
+		return nil, err
+	}
+
+	diags := program.GetDeclarationDiagnostics(ctx, sourceFile)
+	return NewDiagnosticResponses(diags), nil
+}
+
+// handleGetConfigFileParsingDiagnostics returns config file parsing diagnostics.
+func (s *Session) handleGetConfigFileParsingDiagnostics(ctx context.Context, params *GetProjectDiagnosticsParams) ([]*DiagnosticResponse, error) {
+	sd, err := s.getSnapshotData(params.Snapshot)
+	if err != nil {
+		return nil, err
+	}
+
+	program, err := sd.getProgram(params.Project)
+	if err != nil {
+		return nil, err
+	}
+
+	diags := program.GetConfigFileParsingDiagnostics()
+	return NewDiagnosticResponses(diags), nil
+}
+
+// resolveOptionalSourceFile resolves an optional DocumentIdentifier to a source file.
+// Returns nil if the identifier is nil (meaning all files).
+func (s *Session) resolveOptionalSourceFile(program *compiler.Program, file *DocumentIdentifier) (*ast.SourceFile, error) {
+	if file == nil {
+		return nil, nil
+	}
+	sourceFile := program.GetSourceFile(file.ToFileName())
+	if sourceFile == nil {
+		return nil, fmt.Errorf("%w: source file not found: %v", ErrClientError, file)
+	}
+	return sourceFile, nil
 }

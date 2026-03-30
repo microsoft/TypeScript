@@ -11,6 +11,7 @@ import type { FileSystem } from "@typescript/api/fs";
 import {
     API,
     type ConditionalType,
+    DiagnosticCategory,
     type IndexedAccessType,
     type IndexType,
     ModifierFlags,
@@ -2258,6 +2259,140 @@ describe("VariableDeclarationList - BlockScoped flags", () => {
     });
 });
 
+describe("Program - diagnostics", () => {
+    test("getSyntacticDiagnostics", () => {
+        const source = `const x: = 1;`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": source,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getSyntacticDiagnostics("/src/index.ts");
+            assert.deepEqual(diags, [{
+                fileName: "/src/index.ts",
+                ...rangeOf(source, "="),
+                code: 1110,
+                category: DiagnosticCategory.Error,
+                text: "Type expected.",
+            }]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getSemanticDiagnostics with messageChain and relatedInformation", () => {
+        const source = `interface Props { callback: (x: string) => void }\nconst p: Props = { callback: (x: number) => {} };`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": source,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getSemanticDiagnostics("/src/index.ts");
+            const declRange = rangeOf(source, "callback", 0);
+            const assignRange = rangeOf(source, "callback", 1);
+            assert.deepEqual(diags, [{
+                fileName: "/src/index.ts",
+                ...assignRange,
+                code: 2322,
+                category: DiagnosticCategory.Error,
+                text: "Type '(x: number) => void' is not assignable to type '(x: string) => void'.",
+                messageChain: [{
+                    fileName: "/src/index.ts",
+                    ...assignRange,
+                    code: 2328,
+                    category: DiagnosticCategory.Error,
+                    text: "Types of parameters 'x' and 'x' are incompatible.",
+                    messageChain: [{
+                        fileName: "/src/index.ts",
+                        ...assignRange,
+                        code: 2322,
+                        category: DiagnosticCategory.Error,
+                        text: "Type 'string' is not assignable to type 'number'.",
+                    }],
+                }],
+                relatedInformation: [{
+                    fileName: "/src/index.ts",
+                    ...declRange,
+                    code: 6500,
+                    category: DiagnosticCategory.Message,
+                    text: "The expected type comes from property 'callback' which is declared here on type 'Props'",
+                }],
+            }]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getSuggestionDiagnostics", () => {
+        const source = `export function f() { const x = 1; return x; }\nconst _unused = 1;\n`;
+        const api = spawnAPI({
+            "/tsconfig.json": "{}",
+            "/src/index.ts": source,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getSuggestionDiagnostics("/src/index.ts");
+            assert.deepEqual(diags, [{
+                fileName: "/src/index.ts",
+                ...rangeOf(source, "_unused"),
+                code: 6133,
+                category: DiagnosticCategory.Suggestion,
+                text: "'_unused' is declared but its value is never read.",
+                reportsUnnecessary: true,
+            }]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getConfigFileParsingDiagnostics", () => {
+        const config = `{ "compilerOptions": { "target": "invalid" } }`;
+        const api = spawnAPI({
+            "/tsconfig.json": config,
+            "/src/index.ts": `export const x = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getConfigFileParsingDiagnostics();
+            assert.deepEqual(diags, [{
+                fileName: "/tsconfig.json",
+                ...rangeOf(config, `"invalid"`),
+                code: 6046,
+                category: DiagnosticCategory.Error,
+                text: "Argument for '--target' option must be: 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'es2023', 'es2024', 'es2025', 'esnext'.",
+            }]);
+        }
+        finally {
+            api.close();
+        }
+    });
+
+    test("getDeclarationDiagnostics", () => {
+        const api = spawnAPI({
+            "/tsconfig.json": `{ "compilerOptions": { "declaration": true } }`,
+            "/src/index.ts": `export const x: number = 1;`,
+        });
+        try {
+            const snapshot = api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const diags = project.program.getDeclarationDiagnostics("/src/index.ts");
+            assert.deepEqual(diags, []);
+        }
+        finally {
+            api.close();
+        }
+    });
+});
+
 test("Benchmarks", () => {
     runBenchmarks({ singleIteration: true });
 });
@@ -2278,4 +2413,16 @@ function spawnAPIWithFS(files: Record<string, string> = { ...defaultFiles }): { 
         fs,
     });
     return { api, fs };
+}
+
+/** Returns `{ pos, end }` for the nth (0-based, default 0) occurrence of `searchString` in `source`. */
+function rangeOf(source: string, searchString: string, occurrence: number = 0): { pos: number; end: number; } {
+    let index = -1;
+    for (let i = 0; i <= occurrence; i++) {
+        index = source.indexOf(searchString, index + 1);
+        if (index === -1) {
+            throw new Error(`Occurrence ${occurrence} of "${searchString}" not found in source`);
+        }
+    }
+    return { pos: index, end: index + searchString.length };
 }

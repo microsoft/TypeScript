@@ -1,3 +1,4 @@
+import type { DiagnosticCategory } from "#enums/diagnosticCategory";
 import type { ElementFlags } from "#enums/elementFlags";
 import type { ObjectFlags } from "#enums/objectFlags";
 import type { TypeFlags } from "#enums/typeFlags";
@@ -173,4 +174,30 @@ export interface IndexInfo {
     readonly valueType: Type;
     /** Whether the index signature is readonly */
     readonly isReadonly: boolean;
+}
+
+/**
+ * A diagnostic message from the TypeScript compiler.
+ */
+export interface Diagnostic {
+    /** File name of the source file this diagnostic belongs to, if any */
+    readonly fileName?: string;
+    /** Start position of the diagnostic */
+    readonly pos: number;
+    /** End position of the diagnostic */
+    readonly end: number;
+    /** Diagnostic error code */
+    readonly code: number;
+    /** Diagnostic category (error, warning, suggestion, message) */
+    readonly category: DiagnosticCategory;
+    /** Localized diagnostic message text */
+    readonly text: string;
+    /** Whether this diagnostic highlights unnecessary code */
+    readonly reportsUnnecessary?: boolean;
+    /** Whether this diagnostic highlights deprecated code */
+    readonly reportsDeprecated?: boolean;
+    /** Chained diagnostic messages */
+    readonly messageChain?: readonly Diagnostic[];
+    /** Related diagnostic information */
+    readonly relatedInformation?: readonly Diagnostic[];
 }
