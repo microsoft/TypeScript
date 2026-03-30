@@ -28433,6 +28433,9 @@ func (c *Checker) getContextualType(node *ast.Node, contextFlags ContextFlags) *
 	case ast.KindArrayLiteralExpression:
 		t := c.getApparentTypeOfContextualType(parent, contextFlags)
 		elementIndex := ast.IndexOfNode(parent.Elements(), node)
+		if elementIndex < 0 {
+			return nil
+		}
 		firstSpreadIndex, lastSpreadIndex := c.getSpreadIndices(parent)
 		return c.getContextualTypeForElementExpression(t, elementIndex, len(parent.Elements()), firstSpreadIndex, lastSpreadIndex)
 	case ast.KindConditionalExpression:
